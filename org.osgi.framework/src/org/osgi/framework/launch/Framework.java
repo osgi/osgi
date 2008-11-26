@@ -75,7 +75,8 @@ public interface Framework extends Bundle {
 	 * This method does nothing if called when this Framework is in the
 	 * {@link #STARTING}, {@link #ACTIVE} or {@link #STOPPING} states.
 	 * 
-	 * @throws BundleException If this Framework could not be initialized.
+	 * @throws BundleException
+	 *             If this Framework could not be initialized.
 	 */
 	public void init() throws BundleException;
 
@@ -90,32 +91,37 @@ public interface Framework extends Bundle {
 	 * <p>
 	 * A Framework Event is returned to indicate why this Framework has stopped.
 	 * 
-	 * @param timeout Maximum number of milliseconds to wait until this
-	 *        Framework has completely stopped. A value of zero will wait
-	 *        indefinitely.
+	 * @param timeout
+	 *            Maximum number of milliseconds to wait until this Framework
+	 *            has completely stopped. A value of zero will wait
+	 *            indefinitely.
 	 * @return A Framework Event indicating the reason this method returned. The
 	 *         following <code>FrameworkEvent</code> types may be returned by
 	 *         this method.
 	 *         <ul>
 	 *         <li>{@link FrameworkEvent#STOPPED STOPPED} - This Framework has
-	 *         been stopped. </li> <li>{@link FrameworkEvent#STOPPED_UPDATE
-	 *         STOPPED_UPDATE} - This Framework has been updated which has
-	 *         shutdown and will now restart.</li> <li>
-	 *         {@link FrameworkEvent#STOPPED_BOOTCLASSPATH_MODIFIED
+	 *         been stopped. </li>
+	 *         <li>{@link FrameworkEvent#STOPPED_UPDATE STOPPED_UPDATE} - This
+	 *         Framework has been updated which has shutdown and will now
+	 *         restart.</li>
+	 *         <li> {@link FrameworkEvent#STOPPED_BOOTCLASSPATH_MODIFIED
 	 *         STOPPED_BOOTCLASSPATH_MODIFIED} - This Framework has been stopped
 	 *         and a bootclasspath extension bundle has been installed or
 	 *         updated. The VM must be restarted in order for the changed boot
-	 *         class path to take affect. </li> <li>{@link FrameworkEvent#ERROR
-	 *         ERROR} - The Framework encountered an error while shutting down
-	 *         or an error has occurred which forced the framework to shutdown.
-	 *         </li> <li> {@link FrameworkEvent#INFO INFO} - This method has
-	 *         timed out and returned before this Framework has stopped.</li>
+	 *         class path to take affect. </li>
+	 *         <li>{@link FrameworkEvent#ERROR ERROR} - The Framework
+	 *         encountered an error while shutting down or an error has occurred
+	 *         which forced the framework to shutdown. </li>
+	 *         <li> {@link FrameworkEvent#INFO INFO} - This method has timed out
+	 *         and returned before this Framework has stopped.</li>
 	 *         </ul>
-	 * @throws InterruptedException If another thread interrupted the current
-	 *         thread before or while the current thread was waiting for this
-	 *         Framework to completely stop. The <i>interrupted status</i> of
-	 *         the current thread is cleared when this exception is thrown.
-	 * @throws IllegalArgumentException If the value of timeout is negative.
+	 * @throws InterruptedException
+	 *             If another thread interrupted the current thread before or
+	 *             while the current thread was waiting for this Framework to
+	 *             completely stop. The <i>interrupted status</i> of the
+	 *             current thread is cleared when this exception is thrown.
+	 * @throws IllegalArgumentException
+	 *             If the value of timeout is negative.
 	 */
 	public FrameworkEvent waitForStop(long timeout) throws InterruptedException;
 
@@ -131,27 +137,26 @@ public interface Framework extends Bundle {
 	 * bundle's persistent <i>autostart setting</i>. This means some bundles
 	 * will not be started, some will be started with <i>eager activation</i>
 	 * and some will be started with their <i>declared activation</i> policy.
-	 * <ul>
-	 * <li>If this Framework implements the optional <i>Start Level Service
-	 * Specification</i>, then the start level of this Framework is moved to the
-	 * start level specified by the
+	 * If this Framework implements the optional <i>Start Level Service
+	 * Specification</i>, then the start level of this Framework is moved to
+	 * the start level specified by the
 	 * {@link Constants#FRAMEWORK_BEGINNING_STARTLEVEL beginning start level}
 	 * framework property, as described in the <i>Start Level Service
 	 * Specification</i>. If this framework property is not specified, then the
-	 * start level of this Framework is moved to start level one (1).</li>
-	 * </ul>
-	 * Any exceptions that occur during bundle starting must be wrapped in a
+	 * start level of this Framework is moved to start level one (1). Any
+	 * exceptions that occur during bundle starting must be wrapped in a
 	 * {@link BundleException} and then published as a framework event of type
-	 * {@link FrameworkEvent#ERROR}</li>
-	 * </li>
+	 * {@link FrameworkEvent#ERROR} </li>
 	 * <li>This Framework's state is set to {@link #ACTIVE}.</li>
 	 * <li>A framework event of type {@link FrameworkEvent#STARTED} is fired</li>
 	 * </ol>
 	 * 
-	 * @throws BundleException If this Framework could not be started.
-	 * @throws java.lang.SecurityException If the caller does not have the
-	 *         appropriate <code>AdminPermission[this,EXECUTE]</code>, and the
-	 *         Java Runtime Environment supports permissions.
+	 * @throws BundleException
+	 *             If this Framework could not be started.
+	 * @throws java.lang.SecurityException
+	 *             If the caller does not have the appropriate
+	 *             <code>AdminPermission[this,EXECUTE]</code>, and the Java
+	 *             Runtime Environment supports permissions.
 	 * @see "Start Level Service Specification"
 	 */
 	public void start() throws BundleException;
@@ -160,14 +165,17 @@ public interface Framework extends Bundle {
 	 * Start this Framework.
 	 * 
 	 * <p>
-	 * Calling this method is the same as calling {@link #start()}. There are no
-	 * start options for the Framework.
+	 * Calling this method is the same as calling {@link #start()}. There are
+	 * no start options for the Framework.
 	 * 
-	 * @param options Ignored. There are no start options for the Framework.
-	 * @throws BundleException If this Framework could not be started.
-	 * @throws java.lang.SecurityException If the caller does not have the
-	 *         appropriate <code>AdminPermission[this,EXECUTE]</code>, and the
-	 *         Java Runtime Environment supports permissions.
+	 * @param options
+	 *            Ignored. There are no start options for the Framework.
+	 * @throws BundleException
+	 *             If this Framework could not be started.
+	 * @throws java.lang.SecurityException
+	 *             If the caller does not have the appropriate
+	 *             <code>AdminPermission[this,EXECUTE]</code>, and the Java
+	 *             Runtime Environment supports permissions.
 	 * @see #start()
 	 */
 	public void start(int options) throws BundleException;
@@ -181,17 +189,12 @@ public interface Framework extends Bundle {
 	 * <ol>
 	 * <li>This Framework's state is set to {@link #STOPPING}.</li>
 	 * <li>All installed bundles must be stopped without changing each bundle's
-	 * persistent <i>autostart setting</i>.
-	 * <ul>
-	 * <li>If this Framework implements the optional <i>Start Level Service
-	 * Specification</i>, then the start level of this Framework is moved to
-	 * start level zero (0), as described in the <i>Start Level Service
-	 * Specification</i>.</li>
-	 * </ul>
-	 * Any exceptions that occur during bundle stopping must be wrapped in a
-	 * {@link BundleException} and then published as a framework event of type
-	 * {@link FrameworkEvent#ERROR}</li>
-	 * </li>
+	 * persistent <i>autostart setting</i>. If this Framework implements the
+	 * optional <i>Start Level Service Specification</i>, then the start level
+	 * of this Framework is moved to start level zero (0), as described in the
+	 * <i>Start Level Service Specification</i>. Any exceptions that occur
+	 * during bundle stopping must be wrapped in a {@link BundleException} and
+	 * then published as a framework event of type {@link FrameworkEvent#ERROR}</li>
 	 * <li>Unregister all services registered by this Framework.</li>
 	 * <li>Event handling is disabled.</li>
 	 * <li>This Framework's state is set to {@link #RESOLVED}.</li>
@@ -204,11 +207,12 @@ public interface Framework extends Bundle {
 	 * After being stopped, this Framework may be discarded, initialized or
 	 * started.
 	 * 
-	 * @throws BundleException If stopping this Framework could not be
-	 *         initiated.
-	 * @throws java.lang.SecurityException If the caller does not have the
-	 *         appropriate <code>AdminPermission[this,EXECUTE]</code>, and the
-	 *         Java Runtime Environment supports permissions.
+	 * @throws BundleException
+	 *             If stopping this Framework could not be initiated.
+	 * @throws java.lang.SecurityException
+	 *             If the caller does not have the appropriate
+	 *             <code>AdminPermission[this,EXECUTE]</code>, and the Java
+	 *             Runtime Environment supports permissions.
 	 * @see "Start Level Service Specification"
 	 */
 	public void stop() throws BundleException;
@@ -220,12 +224,14 @@ public interface Framework extends Bundle {
 	 * Calling this method is the same as calling {@link #stop()}. There are no
 	 * stop options for the Framework.
 	 * 
-	 * @param options Ignored. There are no stop options for the Framework.
-	 * @throws BundleException If stopping this Framework could not be
-	 *         initiated.
-	 * @throws java.lang.SecurityException If the caller does not have the
-	 *         appropriate <code>AdminPermission[this,EXECUTE]</code>, and the
-	 *         Java Runtime Environment supports permissions.
+	 * @param options
+	 *            Ignored. There are no stop options for the Framework.
+	 * @throws BundleException
+	 *             If stopping this Framework could not be initiated.
+	 * @throws java.lang.SecurityException
+	 *             If the caller does not have the appropriate
+	 *             <code>AdminPermission[this,EXECUTE]</code>, and the Java
+	 *             Runtime Environment supports permissions.
 	 * @see #stop()
 	 */
 	public void stop(int options) throws BundleException;
@@ -236,10 +242,12 @@ public interface Framework extends Bundle {
 	 * <p>
 	 * This method always throws a BundleException.
 	 * 
-	 * @throws BundleException This Framework cannot be uninstalled.
-	 * @throws java.lang.SecurityException If the caller does not have the
-	 *         appropriate <code>AdminPermission[this,LIFECYCLE]</code>, and the
-	 *         Java Runtime Environment supports permissions.
+	 * @throws BundleException
+	 *             This Framework cannot be uninstalled.
+	 * @throws java.lang.SecurityException
+	 *             If the caller does not have the appropriate
+	 *             <code>AdminPermission[this,LIFECYCLE]</code>, and the Java
+	 *             Runtime Environment supports permissions.
 	 */
 	public void uninstall() throws BundleException;
 
@@ -256,11 +264,13 @@ public interface Framework extends Bundle {
 	 * Framework.</li>
 	 * </ol>
 	 * 
-	 * @throws BundleException If stopping and restarting this Framework could
-	 *         not be initiated.
-	 * @throws java.lang.SecurityException If the caller does not have the
-	 *         appropriate <code>AdminPermission[this,LIFECYCLE]</code>, and the
-	 *         Java Runtime Environment supports permissions.
+	 * @throws BundleException
+	 *             If stopping and restarting this Framework could not be
+	 *             initiated.
+	 * @throws java.lang.SecurityException
+	 *             If the caller does not have the appropriate
+	 *             <code>AdminPermission[this,LIFECYCLE]</code>, and the Java
+	 *             Runtime Environment supports permissions.
 	 */
 	public void update() throws BundleException;
 
@@ -271,13 +281,16 @@ public interface Framework extends Bundle {
 	 * Calling this method is the same as calling {@link #update()} except that
 	 * any provided InputStream is immediately closed.
 	 * 
-	 * @param in Any provided InputStream is immediately closed before returning
-	 *        from this method and otherwise ignored.
-	 * @throws BundleException If stopping and restarting this Framework could
-	 *         not be initiated.
-	 * @throws java.lang.SecurityException If the caller does not have the
-	 *         appropriate <code>AdminPermission[this,LIFECYCLE]</code>, and the
-	 *         Java Runtime Environment supports permissions.
+	 * @param in
+	 *            Any provided InputStream is immediately closed before
+	 *            returning from this method and otherwise ignored.
+	 * @throws BundleException
+	 *             If stopping and restarting this Framework could not be
+	 *             initiated.
+	 * @throws java.lang.SecurityException
+	 *             If the caller does not have the appropriate
+	 *             <code>AdminPermission[this,LIFECYCLE]</code>, and the Java
+	 *             Runtime Environment supports permissions.
 	 */
 	public void update(InputStream in) throws BundleException;
 
@@ -296,9 +309,10 @@ public interface Framework extends Bundle {
 	 * Framework is also a System Bundle.
 	 * 
 	 * @return The string &quot;<code>System Bundle</code>&quot;.
-	 * @throws java.lang.SecurityException If the caller does not have the
-	 *         appropriate <code>AdminPermission[this,METADATA]</code>, and the
-	 *         Java Runtime Environment supports permissions.
+	 * @throws java.lang.SecurityException
+	 *             If the caller does not have the appropriate
+	 *             <code>AdminPermission[this,METADATA]</code>, and the Java
+	 *             Runtime Environment supports permissions.
 	 * @see Bundle#getLocation()
 	 * @see Constants#SYSTEM_BUNDLE_LOCATION
 	 */
@@ -307,9 +321,9 @@ public interface Framework extends Bundle {
 	/**
 	 * Returns the symbolic name of this Framework. The symbolic name is unique
 	 * for the implementation of the framework. However, the symbolic name
-	 * &quot;<code>system.bundle</code>&quot; must be recognized as an alias to
-	 * the implementation-defined symbolic name since this Framework is also a
-	 * System Bundle.
+	 * &quot;<code>system.bundle</code>&quot; must be recognized as an alias
+	 * to the implementation-defined symbolic name since this Framework is also
+	 * a System Bundle.
 	 * 
 	 * @return The symbolic name of this Framework.
 	 * @see Bundle#getSymbolicName()
