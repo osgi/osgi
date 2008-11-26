@@ -1,3 +1,9 @@
+-include : ../osgi.companion/layout.bnd
 javadoc= org.osgi.framework.*,org.osgi.service.*,org.osgi.util.*,info.dmtree.*
+
+servlet = ${repo;org.osgi.impl.bundle.servlet}
+saxon 	= ${repo;com.icl.saxon}
+jar2xml	= ../org.osgi.tools/src
+xml2mif	= ../org.osgi.tools/src
 
 
