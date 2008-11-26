@@ -1,0 +1,71 @@
+# provides the assignment of specifications to the different
+# verticals like core, mobile, enterprise, etc
+
+specs 						= ${uniq; ${core.specs},       ${cmpn.specs},       ${mobile.specs}}
+spec.packages		 		= ${uniq;${core.packages}, ${cmpn.packages}, ${mobile.packages}}
+
+
+ees 						= \
+ ee.minimum, \
+ ee.foundation
+ 
+core.specs = org.osgi.framework, \
+ org.osgi.service.condpermadmin, \
+ org.osgi.service.packageadmin, \
+ org.osgi.service.permissionadmin, \
+ org.osgi.service.startlevel, \
+ org.osgi.service.url
+
+core.packages = ${replace;$(core.specs);^.*$;$0.*}, org.osgi.service.framework.*
+
+cmpn.specs = \
+	 org.osgi.application, \
+	 org.osgi.service.application, \
+	 org.osgi.service.blueprint, \
+	 org.osgi.service.cm, \
+	 org.osgi.service.component, \
+	 org.osgi.service.command, \
+	 org.osgi.service.deploymentadmin, \
+	 org.osgi.service.device, \
+	 org.osgi.service.event, \
+	 org.osgi.service.http, \
+	 org.osgi.service.io, \
+	 org.osgi.service.log, \
+	 org.osgi.service.metatype, \
+	 org.osgi.service.monitor, \
+	 org.osgi.service.prefs, \
+	 org.osgi.service.provisioning, \
+	 org.osgi.service.threadio, \
+	 org.osgi.service.upnp, \
+	 org.osgi.service.useradmin, \
+	 org.osgi.service.wireadmin, \
+	 org.osgi.util.measurement, \
+	 org.osgi.util.position, \
+	 org.osgi.util.gsm, \
+	 org.osgi.util.mobile, \
+	 org.osgi.util.tracker, \
+	 org.osgi.util.xml, \
+	 info.dmtree
+
+cmpn.packages = ${replace;$(cmpn.specs);^.*$;$0.*}
+
+mobile.specs = \
+	 info.dmtree, \
+	 org.osgi.application, \
+	 org.osgi.service.application, \
+	 org.osgi.service.cm, \
+	 org.osgi.service.component, \
+	 org.osgi.service.deploymentadmin, \
+	 org.osgi.service.event, \
+	 org.osgi.service.io, \
+	 org.osgi.service.log, \
+	 org.osgi.service.metatype, \
+	 org.osgi.service.monitor, \
+	 org.osgi.service.prefs, \
+	 org.osgi.util.gsm, \
+	 org.osgi.util.mobile, \
+	 org.osgi.util.tracker, \
+	 org.osgi.util.xml
+
+mobile.packages = ${replace;$(mobile.specs);^.*$;$0.*}
+ 
