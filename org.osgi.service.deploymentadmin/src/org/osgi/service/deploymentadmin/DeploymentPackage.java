@@ -58,6 +58,17 @@ import org.osgi.framework.Version;
  */
 public interface DeploymentPackage {
 	/**
+	 * The name of the Deployment Package. This name is the same name as that
+	 * specified in the DeploymentPackage-SymbolicName Manifest header.
+	 */
+	String EVENT_DEPLOYMENTPACKAGE_NAME = "deploymentpackage.name";
+
+	/**
+	 * The human readable name of the DP localized to the default locale.
+	 */
+	String EVENT_DEPLOYMENTPACKAGE_READABLENAME = "deploymentpackage.readablename";
+
+	/**
 	 * The currently installed version of the Deployment Package. The attribute
 	 * is not present, if no version is installed:
 	 * <ul>
@@ -77,11 +88,6 @@ public interface DeploymentPackage {
 	 * The value for this event must be a Version object.
 	 */
 	String EVENT_DEPLOYMENTPACKAGE_NEXTVERSION = "deploymentpackage.nextversion";
-
-	/**
-	 * The human readable name of the DP localized to the default locale.
-	 */
-	String EVENT_DEPLOYMENTPACKAGE_READABLENAME = "deploymentpackage.readablename";
 
 	/**
 	 * Gives back the state of the deployment package whether it is stale or
