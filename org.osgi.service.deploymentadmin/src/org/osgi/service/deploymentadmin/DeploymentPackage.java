@@ -57,6 +57,31 @@ import org.osgi.framework.Version;
  * is not accessible any more.
  */
 public interface DeploymentPackage {
+	/**
+	 * The currently installed version of the Deployment Package. The attribute
+	 * is not present, if no version is installed:
+	 * <ul>
+	 * <li>in the INSTALL event, when an installDeploymentPackage was called
+	 * and no earlier version is present
+	 * <li> in the COMPLETE event after the _successfully_ completing an
+	 * uninstallDeploymentPackage call
+	 * </ul>
+	 * The value for this event must be a Version object.
+	 */
+	String EVENT_DEPLOYMENTPACKAGE_CURRENTVERSION = "deploymentpackage.currentversion";
+
+	/**
+	 * The version of DP after the successful completion of the install
+	 * operation (used in INSTALL event only).
+	 * 
+	 * The value for this event must be a Version object.
+	 */
+	String EVENT_DEPLOYMENTPACKAGE_NEXTVERSION = "deploymentpackage.nextversion";
+
+	/**
+	 * The human readable name of the DP localized to the default locale.
+	 */
+	String EVENT_DEPLOYMENTPACKAGE_READABLENAME = "deploymentpackage.readablename";
 
 	/**
 	 * Gives back the state of the deployment package whether it is stale or
@@ -90,8 +115,8 @@ public interface DeploymentPackage {
 	 * Returns the Deployment Package human readable name.
 	 * 
 	 * This method returns the localized human readable name as set with the
-	 * <code>DeploymentPackage-Name</code> manifest header using the default locale. If no header is
-	 * set, this method will return <code>null</code>.
+	 * <code>DeploymentPackage-Name</code> manifest header using the default
+	 * locale. If no header is set, this method will return <code>null</code>.
 	 * 
 	 * @return The human readable name of the deployment package or
 	 *         <code>null</code> if header is not set.
@@ -125,10 +150,11 @@ public interface DeploymentPackage {
 	 * the deployment package. This method returns an absolute URL that is
 	 * defined by this header. The Deployment Admin service must provide this
 	 * icon as a local resource. That is, the Deployment Admin must make a local
-	 * copy of the default locale.
-	 * The returned <code>URL</code>'s must point to a local resource.
+	 * copy of the default locale. The returned <code>URL</code>'s must point
+	 * to a local resource.
 	 * 
-	 * @return An absolute URL to a local (device resident) image resource or <code>null</code> if not found
+	 * @return An absolute URL to a local (device resident) image resource or
+	 *         <code>null</code> if not found
 	 */
 	URL getIcon();
 
