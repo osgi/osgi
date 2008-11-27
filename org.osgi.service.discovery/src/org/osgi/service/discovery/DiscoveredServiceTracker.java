@@ -18,13 +18,10 @@ package org.osgi.service.discovery;
 
 /**
  * Interface of trackers for discovered remote services. <br>
- * When such a service is registered with the Framework, then {@link Discovery}
- * will notify it about remote services matching its criteria and will keep
- * notifying it on changes of information known to Discovery regarding this
- * services.
- * 
- * The match criteria are interface and filter and are provided as service
- * properties.
+ * When such a service is registered with the framework, then {@link Discovery}
+ * will notify it about remote services matching one of the provided criteria
+ * and will keep notifying it on changes of information known to Discovery
+ * regarding this services.
  * 
  * <code>Discovery</code> may deliver notifications on discovered services to a
  * <code>DiscoveredServiceTracker</code> out of order and may concurrently call
@@ -35,22 +32,25 @@ package org.osgi.service.discovery;
 public interface DiscoveredServiceTracker {
 
 	/**
-	 * Property describing service interface this tracker is interested in.
-	 * Value of this property is of type String. Property is optional, may be
+	 * Property describing service interfaces this tracker is interested in.
+	 * Value of this property is of type String[]. Property is optional, may be
 	 * null.
 	 */
-	public static final String PROP_KEY_MATCH_CRITERIA_INTERFACE = "osgi.discovery.interest.interface";
+	public static final String PROP_KEY_MATCH_CRITERIA_INTERFACES = "osgi.discovery.interest.interfaces";
 
 	/**
-	 * Property describing filter for services this tracker is interested in.
-	 * Value of this property is of type String. Property is optional, may be
+	 * Property describing filters for services this tracker is interested in.
+	 * Value of this property is of type String[]. Property is optional, may be
 	 * null.
 	 */
-	public static final String PROP_KEY_MATCH_CRITERIA_FILTER = "osgi.discovery.interest.filter";
+	public static final String PROP_KEY_MATCH_CRITERIA_FILTERS = "osgi.discovery.interest.filters";
 
 	/**
 	 * Receives notification that information known to Discovery regarding a
-	 * remote service has changed.
+	 * remote service has changed. <br>
+	 * The tracker is only notified about remote services which fulfill the
+	 * matching criteria, either one of the interfaces or one of the filters,
+	 * provided as properties of this service.
 	 * 
 	 * @param notification
 	 *            the <code>DiscoveredServiceNotification</code> object
