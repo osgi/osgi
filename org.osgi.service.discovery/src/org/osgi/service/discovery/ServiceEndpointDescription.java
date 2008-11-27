@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * The ServiceEndpointDescription interface describes an endpoint of a service.
+ * This interface describes an endpoint of a service. 
  * This class can be considered as a wrapper around the property map associated
  * with a service and its endpoint. It provides an API to conveniently access
  * the most important properties of the service.
@@ -54,7 +54,7 @@ public interface ServiceEndpointDescription {
 	 *         service (endpoint). The collection is never null or empty but
 	 *         contains at least one service interface.
 	 */
-	Collection /* <? extends String> */getInterfaceNames();
+	Collection /* <? extends String> */getProvidedInterfaces();
 
 	/**
 	 * @param interfaceName
