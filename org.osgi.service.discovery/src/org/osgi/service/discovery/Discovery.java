@@ -30,21 +30,22 @@ import java.util.Map;
 public interface Discovery {
 
 	/**
-	 * Property identifying Discovery's default strategy for distribution of published
-	 * service information. It's up to the Discovery service to provide and
-	 * support this property. Value of this property is of type String.
+	 * Property identifying Discovery's default strategy for distribution of
+	 * published service information. It's up to the Discovery service to
+	 * provide and support this property. Value of this property is of type
+	 * String.
 	 */
 	public static final String PROP_KEY_PUBLISH_STRATEGY = "osgi.discovery.strategy.publication";
 
 	/**
-	 * Constant for a "push" publication strategy: published service information is
-	 * actively pushed to the network for discovery.
+	 * Constant for a "push" publication strategy: published service information
+	 * is actively pushed to the network for discovery.
 	 */
 	public static final String PROP_VAL_PUBLISH_STRATEGY_PUSH = "push";
 
 	/**
-	 * Constant for a "pull" publication strategy: published service information is
-	 * available just upon lookup requests.
+	 * Constant for a "pull" publication strategy: published service information
+	 * is available just upon lookup requests.
 	 */
 	public static final String PROP_VAL_PUBLISH_STRATEGY_PULL = "pull";
 
@@ -65,7 +66,7 @@ public interface Discovery {
 	 */
 	Collection /* <? extends ServiceEndpointDescription> */findService(
 			String interfaceName, String filter);
-	
+
 	/**
 	 * Asynchronous version of <code>Discovery.findService(String interfaceName,
 	 * String filter)</code> method.
@@ -110,13 +111,13 @@ public interface Discovery {
 	 *            {@link ServiceEndpointDescription} for the publication process
 	 *            if they are provided.
 	 * 
-	 * @return an instance of <code>ServiceEndpointDescription</code> or null if
-	 *         the publishing failed
+	 * @return an instance of <code>ServicePublication</code> or null if the
+	 *         publishing failed.
 	 * 
 	 * @throws IllegalArgumentException
 	 *             if <code>javaInterfacesAndVersions</code> is null or empty
 	 */
-	ServiceEndpointDescription publishService(
+	ServicePublication publishService(
 			Map/* <String, String> */javaInterfacesAndVersions,
 			Map/* <String, String> */javaInterfacesAndEndpointInterfaces,
 			Map/* <String, Object> */properties);
@@ -145,50 +146,16 @@ public interface Discovery {
 	 *            , {@link #PROP_VAL_PUBLISH_STRATEGY_PUSH} or any other
 	 *            strategy supported by Discovery.
 	 * 
-	 * @return an instance of <code>ServiceEndpointDescription</code> or null if
-	 *         the publishing failed
+	 * @return an instance of <code>ServicePublication</code> or null if the
+	 *         publishing failed
 	 * 
 	 * @throws IllegalArgumentException
 	 *             if <code>javaInterfacesAndVersions</code> is null or empty or
 	 *             if not supported <code>publishStrategy</code> has been
 	 *             provided.
 	 */
-	ServiceEndpointDescription publishService(
+	ServicePublication publishService(
 			Map/* <String, String> */javaInterfacesAndVersions,
 			Map/* <String, String> */javaInterfacesAndEndpointInterfaces,
 			Map/* <String, Object> */properties, String publishStrategy);
-
-	/**
-	 * Updates a service publication. <br>
-	 * Depending on Discovery's implementation and underlying protocol it may
-	 * result in an update or new re-publication of the service.
-	 * 
-	 * @param serviceEndpointDescription
-	 *            identifies the previously published service whose publication
-	 *            needs to be updated.
-	 * @param newProperties
-	 *            new set of service endpoint properties. It may be null.
-	 * 
-	 * @return new ServiceEndpointDescription identifying the published service
-	 * 
-	 * @throws IllegalArgumentException
-	 *             if <code>serviceEndpointDescription</code> is null or
-	 *             invalid.
-	 */
-	ServiceEndpointDescription updateService(
-			ServiceEndpointDescription serviceEndpointDescription,
-			Map/* <String, Object> */newProperties);
-
-	/**
-	 * Make the given service un-discoverable. The previous publish request for
-	 * a service is undone.
-	 * 
-	 * @param serviceEndpointDescription
-	 *            ServiceEndpointDescription of the service to unpublish.
-	 * 
-	 * @throws IllegalArgumentException
-	 *             if <code>serviceEndpointDescription</code> is null or
-	 *             invalid.
-	 */
-	void unpublishService(ServiceEndpointDescription serviceEndpointDescription);
 }
