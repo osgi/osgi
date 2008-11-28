@@ -31,61 +31,76 @@ public interface Condition {
 	 * A Condition object that will always evaluate to true and that is never
 	 * postponed.
 	 */
-	public final static Condition	TRUE	= new BooleanCondition(true);
+	public final static Condition TRUE = new BooleanCondition(true);
 
 	/**
 	 * A Condition object that will always evaluate to false and that is never
 	 * postponed.
 	 */
-	public final static Condition	FALSE	= new BooleanCondition(false);
+	public final static Condition FALSE = new BooleanCondition(false);
 
 	/**
 	 * Returns whether the evaluation must be postponed until the end of the
-	 * permission check. This method returns <code>true</code> if the evaluation
-	 * of the Condition must be postponed until the end of the permission check.
-	 * If this method returns <code>false</code>, this Condition must be able to
-	 * directly answer the {@link #isSatisfied()} method. In other words,
-	 * isSatisfied() will return very quickly since no external sources, such as
-	 * for example users, need to be consulted.
+	 * permission check. If this method returns <code>false</code> (or this
+	 * Condition is immutable), then this Condition must be able to directly
+	 * answer the {@link #isSatisfied()} method. In other words, isSatisfied()
+	 * will return very quickly since no external sources, such as for example
+	 * users or networks, need to be consulted. <br/> This method must always
+	 * return the same value whenever it is called so that the Conditional
+	 * Permission Admin can cache its result.
 	 * 
 	 * @return <code>true</code> to indicate the evaluation must be postponed.
 	 *         Otherwise, <code>false</code> if the evaluation can be
-	 *         immediately performed.
+	 *         performed immediately.
 	 */
 	boolean isPostponed();
 
 	/**
-	 * Returns whether the Condition is satisfied.
+	 * Returns whether the Condition is satisfied. This method is only called
+	 * for immediate Conditon objects or immutable postponed conditions, and
+	 * must always be called inside a permission check. Mutable postponed
+	 * Condition objects will be called with the grouped version
+	 * {@link #isSatisfied(Condition[],Dictionary)} at the end of the permission
+	 * check.
 	 * 
 	 * @return <code>true</code> to indicate the Conditions is satisfied.
-	 *         Otherwise, <code>false</code> if the Condition is not satisfied.
+	 *         Otherwise, <code>false</code> if the Condition is not
+	 *         satisfied.
 	 */
 	boolean isSatisfied();
 
 	/**
-	 * Returns whether the Condition is mutable.
+	 * Returns whether the Condition is mutable. A Condition can go from mutable (<code>true</code>)
+	 * to immutable (<code>false</code>) over time but never from immutable (<code>false</code>)
+	 * to mutable (<code>true</code>).
 	 * 
-	 * @return <code>true</code> to indicate the value returned by
-	 *         {@link #isSatisfied()} can change. Otherwise, <code>false</code>
-	 *         if the value returned by {@link #isSatisfied()} will not change.
+	 * @return <code>true</code> {@link #isSatisfied()} can change. Otherwise,
+	 *         <code>false</code> if the value returned by
+	 *         {@link #isSatisfied()} will not change for this condition.
 	 */
 	boolean isMutable();
 
 	/**
-	 * Returns whether a the set of Conditions are satisfied. Although this
-	 * method is not static, it must be implemented as if it were static. All of
-	 * the passed Conditions will be of the same type and will correspond to the
-	 * class type of the object on which this method is invoked.
+	 * Returns whether a the set of Condition objects are satisfied. Although
+	 * this method is not static, it must be implemented as if it were static.
+	 * All of the passed Condition objects will be of the same type and will
+	 * correspond to the class type of the object on which this method is
+	 * invoked.This method must be called inside a permission check only.
 	 * 
-	 * @param conditions The array of Conditions.
-	 * @param context A Dictionary object that implementors can use to track
-	 *        state. If this method is invoked multiple times in the same
-	 *        permission evaluation, the same Dictionary will be passed multiple
-	 *        times. The SecurityManager treats this Dictionary as an opaque
-	 *        object and simply creates an empty dictionary and passes it to
-	 *        subsequent invocations if multiple invocations are needed.
-	 * @return <code>true</code> if all the Conditions are satisfied. Otherwise,
-	 *         <code>false</code> if one of the Conditions is not satisfied.
+	 * @param conditions
+	 *            The array of Condition objects, which must all be of the same
+	 *            class and mutable. The receiver must be one of those Condition
+	 *            objects.
+	 * @param context
+	 *            A Dictionary object that implementors can use to track state.
+	 *            If this method is invoked multiple times in the same
+	 *            permission check, the same Dictionary will be passed multiple
+	 *            times. The SecurityManager treats this Dictionary as an opaque
+	 *            object and simply creates an empty dictionary and passes it to
+	 *            subsequent invocations if multiple invocations are needed.
+	 * @return <code>true</code> if all the Condition objects are satisfied.
+	 *         Otherwise, <code>false</code> if one of the Condition objects
+	 *         is not satisfied.
 	 */
 	boolean isSatisfied(Condition conditions[], Dictionary context);
 
@@ -96,7 +111,7 @@ public interface Condition {
  * {@link Condition#TRUE} constants.
  */
 final class BooleanCondition implements Condition {
-	private final boolean	satisfied;
+	private final boolean satisfied;
 
 	BooleanCondition(boolean satisfied) {
 		this.satisfied = satisfied;
