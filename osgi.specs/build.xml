@@ -62,6 +62,7 @@
 			<param name="ee.latest" value="${minimum-latest}"/>
 		</antcall>
 
+		<!--
 		<antcall target="-eediff">
 			<param name="ee" value="foundation"/>
 			<param name="ee.latest.jar" value="${foundation-latest.jar}"/>
@@ -69,7 +70,7 @@
 			<param name="ee.latest" value="${foundation-latest}"/>
 			<param name="ee.previous" value="${foundation-previous}"/>
 		</antcall>
-
+		-->
 		</target>
 		
 	<target name="-eediff">
