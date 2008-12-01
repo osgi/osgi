@@ -1,9 +1,21 @@
 -include : ../osgi.companion/layout.bnd
-javadoc= org.osgi.framework.*,org.osgi.service.*,org.osgi.util.*,info.dmtree.*
+javadoc					= org.osgi.framework.*,org.osgi.service.*,org.osgi.util.*,info.dmtree.*
 
-servlet = ${repo;org.osgi.impl.bundle.servlet}
-saxon 	= ${repo;com.icl.saxon}
-jar2xml	= ../org.osgi.tools/src
-xml2mif	= ../org.osgi.tools/src
+minimum-latest 			= 1.2.0
+minimum-previous		= 1.1.3
+foundation-latest 		= 1.1.0
+foundation-previous		= 1.0.0
 
+servlet 				= ${repo;org.osgi.impl.bundle.servlet}
+saxon 					= ${repo;com.icl.saxon}
+jar2xml					= ../org.osgi.tools/src:${repo;org.apache.bcel}:../org.osgi.test.tool/src
+xml2mif					= ../org.osgi.tools/src
+
+dependencyfinder 		= ${repo;org.apache.jakarta.oro}:${repo;org.apache.log4j}:${repo;com.jeantessier.dependencyfinder}
+
+
+minimum-latest.jar  	= ${repo;ee.minimum;[${minimum-latest},${minimum-latest}]}
+minimum-previous.jar	= ${repo;ee.minimum;[${minimum-previous},${minimum-previous}]}
+foundation-latest.jar 	= ${repo;ee.foundation;[${foundation-latest},${foundation-latest}]}
+foundation-previous.jar = ${repo;ee.foundation;[${foundation-previous},${foundation-previous}]}
 

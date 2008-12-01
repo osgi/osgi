@@ -9,7 +9,7 @@
 				<title>Changes from <xsl:value-of select="differences/old"/> to <xsl:value-of select="differences/new"/></title>
 			</head>
 			<body>
-				<h1 class="Heading2">Changes from <xsl:value-of select="differences/old"/> to <xsl:value-of select="differences/new"/></h1>
+				<h1 class="Heading2">Changes for <xsl:value-of select="differences/name"/> from <xsl:value-of select="differences/old"/> to <xsl:value-of select="differences/new"/></h1>
 				<h2 class="Heading3">New Packages</h2>
 				<xsl:for-each select="//new-packages/*">
 					<xsl:sort select="."/>
