@@ -19,6 +19,8 @@ package org.osgi.service.discovery;
 import java.util.Collection;
 import java.util.Map;
 
+import org.osgi.framework.InvalidSyntaxException;
+
 /**
  * Interface of the Discovery service. This service allows to publish services
  * exposed for remote access as well as to search for remote services. <BR>
@@ -63,9 +65,12 @@ public interface Discovery {
 	 *         collection is empty if none was found. The collection represents
 	 *         a snapshot and as such is not going to be updated in case other
 	 *         matching services become available at a later point of time.
+	 * @throws InvalidSyntaxException
+	 *             if filter contains an invalid filter string that cannot be
+	 *             parsed.
 	 */
 	Collection /* <? extends ServiceEndpointDescription> */findService(
-			String interfaceName, String filter);
+			String interfaceName, String filter) throws InvalidSyntaxException;
 
 	/**
 	 * Asynchronous version of <code>Discovery.findService(String interfaceName,
@@ -82,12 +87,16 @@ public interface Discovery {
 	 * @param callback
 	 *            to notify about the asynchronous response of the find
 	 *            operation
+	 * @throws InvalidSyntaxException
+	 *             if filter contains an invalid filter string that cannot be
+	 *             parsed.
 	 * @throws IllegalArgumentException
 	 *             if callback is null
+	 * 
 	 * @see #findService(String, String)
 	 */
 	void findService(String interfaceName, String filter,
-			FindServiceCallback callback);
+			FindServiceCallback callback) throws InvalidSyntaxException;
 
 	/**
 	 * Publish the provided service meta-data. <br>
@@ -106,16 +115,23 @@ public interface Discovery {
 	 *            for a java interface. The map may be null.
 	 * @param properties
 	 *            a bag of service properties (key-value pairs) to be published.
-	 *            It may be null. Note that Discovery might make use of certain
-	 *            standard properties like the ones defined by
-	 *            {@link ServiceEndpointDescription} for the publication process
-	 *            if they are provided.
+	 *            It may be null. Property keys are handled in a case
+	 *            insensitive manner (as OSGi Framework does). Note that
+	 *            Discovery might make use of certain standard properties like
+	 *            the ones defined by {@link ServiceEndpointDescription} for the
+	 *            publication process if they are provided.
 	 * 
 	 * @return an instance of <code>ServicePublication</code> or null if the
 	 *         publishing failed.
 	 * 
 	 * @throws IllegalArgumentException
-	 *             if <code>javaInterfacesAndVersions</code> is null or empty
+	 *             If one of the following is true: <br>
+	 *             <ul>
+	 *             <li> <code>javaInterfacesAndVersions</code> is null or empty</li>
+	 *             <li>
+	 *             <code>properties<code> contains case variants of the same key name.
+	 *             </li>
+	 *             </ul>
 	 */
 	ServicePublication publishService(
 			Map/* <String, String> */javaInterfacesAndVersions,
@@ -136,10 +152,11 @@ public interface Discovery {
 	 *            for a java interface. The map may be null.
 	 * @param properties
 	 *            a bag of service properties (key-value pairs) to be published.
-	 *            It may be null. Note that Discovery might make use of certain
-	 *            standard properties, e.g. the ones defined by
-	 *            {@link ServiceEndpointDescription}, for the publication
-	 *            process if they are provided.
+	 *            It may be null. Property keys are handled in a case
+	 *            insensitive manner (as OSGi Framework does). Note that
+	 *            Discovery might make use of certain standard properties like
+	 *            the ones defined by {@link ServiceEndpointDescription} for the
+	 *            publication process if they are provided.
 	 * @param publishStrategy
 	 *            strategy for distribution of the published service
 	 *            information. It may be {@link #PROP_VAL_PUBLISH_STRATEGY_PULL}
@@ -150,9 +167,15 @@ public interface Discovery {
 	 *         publishing failed
 	 * 
 	 * @throws IllegalArgumentException
-	 *             if <code>javaInterfacesAndVersions</code> is null or empty or
-	 *             if not supported <code>publishStrategy</code> has been
-	 *             provided.
+	 *             If one of the following is true: <br>
+	 *             <ul>
+	 *             <li> <code>javaInterfacesAndVersions</code> is null or empty</li>
+	 *             <li>
+	 *             <code>properties<code> contains case variants of the same key name.
+	 *             </li>
+	 *             <li>if not supported <code>publishStrategy</code> has been
+	 *             provided.</li>
+	 *             </ul>
 	 */
 	ServicePublication publishService(
 			Map/* <String, String> */javaInterfacesAndVersions,
