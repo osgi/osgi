@@ -120,24 +120,49 @@ Commons Logging ----------------------------------------------------------------
 Copyright               Copyright (c) 2004 Apache Software Foundation, All Rights Reserved
 Used                    transaction, distributed
 URL                     http://commons.apache.org/logging/
+License					licenses/ASL-2.0.txt
 Modifications           none
 
 org.apache.cxf.dosgi.singlebundle -------------------------------------------------------
 Copyright               Copyright (c) 2004 Apache Software Foundation, All Rights Reserved
 Used                    distributed
 URL                     http://cxf.apache.org/
+License					licenses/ASL-2.0.txt
 Modifications           none (this was made specially for us, but is in the general apache build)
 
-org.apache.felix.main  -------------------------------------------------------
+org.apache.felix.main  --------------------------------------------------------------------
 Copyright               Copyright (c) 2004 Apache Software Foundation, All Rights Reserved
 Used                    general testing
 URL                     http://felix.apache.org/
+License					licenses/ASL-2.0.txt
 Modifications           none
 
-org.apache.felix.scr  -------------------------------------------------------
+org.apache.felix.scr  ----------------------------------------------------------------------
 Copyright               Copyright (c) 2004 Apache Software Foundation, All Rights Reserved
 Used                    general testing
 URL                     http://felix.apache.org/
+License					licenses/ASL-2.0.txt
+Modifications           none
+
+org.apache.log4j      ----------------------------------------------------------------------
+Copyright               Copyright (c) 2004 Apache Software Foundation, All Rights Reserved
+Used                    for dependency finder, used in processing ees
+URL                     http://logging.apache.org/log4j
+License					licenses/ASL-2.0.txt
+Modifications           none
+
+org.apache.jakarta.oro  --------------------------------------------------------------------
+Copyright               Copyright (c) 2004 Apache Software Foundation, All Rights Reserved
+Used                    for dependency finder, used in processing ees
+URL                     http://jakarta.apache.org/oro/
+License					licenses/ASL-2.0.txt
+Modifications           none
+
+org.jeantessier.dependencyfinder ---------------------------------------------------------
+Copyright                Copyright (c) 2001-2008, Jean Tessier,  All rights reserved.
+Used                    for dependency finder, used in processing ees
+URL                     http://depfind.sourceforge.net/
+License					licenses/JEANTESSIER.txt
 Modifications           none
 
 
