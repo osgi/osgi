@@ -2,5 +2,5 @@ Bundle-Description					: Contains the OSGi minimum execution environment stubbed
 Bundle-Version						: 1.2.0.$(project.build)
 Bundle-RequiredExecutionEnvironment	: OSGi/Minimum-1.2
 
-Export-Package						: java.*
+Export-Package						: java.*, javax.*
 Include-Resource 					: legal/about.html, legal/LICENSE
