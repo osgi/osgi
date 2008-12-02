@@ -22,9 +22,11 @@ import java.util.Properties;
 import java.util.TimerTask;
 import java.util.Vector;
 
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.service.discovery.DiscoveredServiceNotification;
 import org.osgi.service.discovery.DiscoveredServiceTracker;
 import org.osgi.service.discovery.ServiceEndpointDescription;
+import org.osgi.service.log.LogService;
 
 /**
  * A TimerTask that compares in its run method the registered filters with the
@@ -55,8 +57,13 @@ public class InformListenerTask extends TimerTask {
 	 */
 	public void run() {
 		if (discovery.getRegisteredServiceTracker().size() != 0) {
-			Collection/* <ServiceEndpointDescription> */descriptions = discovery
-					.findService(null, null);
+			Collection descriptions = null;
+			try {
+				descriptions = discovery.findService(null, null);
+			} catch (InvalidSyntaxException e) {
+				discovery.getLogService().log(LogService.LOG_ERROR,
+						"findService threw an exception ", e);
+			}
 			Vector availableServices = new Vector();
 			notifyAvailableServices(descriptions, availableServices);
 			// notify all about unavailable services
@@ -157,15 +164,17 @@ public class InformListenerTask extends TimerTask {
 						// description matches the specified filter
 						// and
 						// is new to him
-						l.serviceChanged(new DiscoveredServiceNotificationImpl(
-								descr, DiscoveredServiceNotification.AVAILABLE));
+						l
+								.serviceChanged(new DiscoveredServiceNotificationImpl(
+										descr,
+										DiscoveredServiceNotification.AVAILABLE));
 					}
 				}
 			} else {
 				// We assume this is the first run. We notify listeners that the
 				// matching service is available
-				l.serviceChanged(new DiscoveredServiceNotificationImpl(
-						descr, DiscoveredServiceNotification.AVAILABLE));
+				l.serviceChanged(new DiscoveredServiceNotificationImpl(descr,
+						DiscoveredServiceNotification.AVAILABLE));
 			}
 		}
 	}
