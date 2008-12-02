@@ -25,7 +25,6 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.impl.service.discovery.jcs.JCSHandlerImpl;
 import org.osgi.impl.service.discovery.slp.SLPHandlerImpl;
 import org.osgi.service.discovery.Discovery;
 import org.osgi.service.log.LogService;
@@ -40,14 +39,9 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  */
 public class Activator implements BundleActivator {
 	private ServiceRegistration slpHandlerRegistration;
-	private ServiceRegistration jcsHandlerRegistration;
 	private LogService logService = DEFAULT_LogService;
 	private ServiceTracker logServiceTracker;
-
 	private SLPHandlerImpl slpDiscovery;
-	
-	private JCSHandlerImpl jcsDiscovery;
-
 	private ServiceRegistration commandProvider;
 
 	/**
@@ -61,8 +55,6 @@ public class Activator implements BundleActivator {
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(final BundleContext context) throws Exception {
-//		 commandProvider = context.registerService(CommandProvider.class
-//				.getName(), new DiscoveryCommandProvider(context), null);
 
 		logServiceTracker = new ServiceTracker(context, LogService.class
 				.getName(), new ServiceTrackerCustomizer() {
@@ -93,20 +85,15 @@ public class Activator implements BundleActivator {
 		});
 		logServiceTracker.open();
 
-//		slpDiscovery = new SLPHandlerImpl(context, logService);
-//		slpDiscovery.init();
+		slpDiscovery = new SLPHandlerImpl(context, logService);
+		slpDiscovery.init();
 		
-		jcsDiscovery = new JCSHandlerImpl(context, logService);
-		jcsDiscovery.init();
 		Dictionary props = new Hashtable();
 		// TODO: make the instance configurable, e.g. via CAS or DS
-//		props.put("ProtocolName", "jSLP 1.0.0");
-//		slpHandlerRegistration = context.registerService(Discovery.class
-//				.getName(), slpDiscovery, props);
-		props = new Hashtable();
-		props.put("ProtocolName", "JCS 1.3");
-		jcsHandlerRegistration = context.registerService(Discovery.class
-				.getName(), jcsDiscovery, props);
+		props.put("ProtocolName", "jSLP 1.0.0");
+		slpHandlerRegistration = context.registerService(Discovery.class
+				.getName(), slpDiscovery, props);
+
 
 		logService.log(LogService.LOG_INFO, "discovery service started");
 	}
@@ -133,11 +120,6 @@ public class Activator implements BundleActivator {
 			slpHandlerRegistration = null;
 		}
 
-		if (jcsHandlerRegistration != null) {
-			jcsHandlerRegistration.unregister();
-			jcsHandlerRegistration = null;
-		}
-		
 		if (logServiceTracker != null) {
 			logServiceTracker.close();
 			logServiceTracker = null;
@@ -146,11 +128,6 @@ public class Activator implements BundleActivator {
 		if (slpDiscovery != null) {
 			slpDiscovery.destroy();
 			slpDiscovery = null;
-		}
-		
-		if(jcsDiscovery != null) {
-			jcsDiscovery.destroy();
-			jcsDiscovery = null;
 		}
 	}
 
@@ -168,10 +145,6 @@ public class Activator implements BundleActivator {
 
 		if (slpDiscovery != null) {
 			slpDiscovery.setLogService(logService);
-		}
-		
-		if(jcsDiscovery != null) {
-			jcsDiscovery.setLogService(logService);
 		}
 	}
 

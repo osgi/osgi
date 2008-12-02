@@ -48,7 +48,7 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 	// Java interfaces and associated ServiceURLs. Each interface has its own
 	// ServiceURL.
 	private Map/* <String, ServiceURL> */serviceURLs;
-	
+
 	private static final String ARRAYELEMENTSEPERATOR = ",";
 
 	public SLPServiceDescriptionAdapter(final Map interfacesAndVersions,
@@ -129,8 +129,7 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 			}
 		}
 		// added version and endpoint-interface information to the properties
-		properties.put(Constants.OBJECTCLASS, buff
-				.toString());
+		properties.put(Constants.OBJECTCLASS, buff.toString());
 		buff = new StringBuffer();
 		for (int j = 0; j < versions.length; j++) {
 			buff.append(versions[j]);
@@ -150,7 +149,7 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 			}
 			properties
 					.put(
-							ServiceEndpointDescription.PROP_KEY_PROTOCOL_SPECIFIC_INTERFACE_NAME,
+							ServiceEndpointDescription.PROP_KEY_ENDPOINT_INTERFACE_NAME,
 							buff.toString());
 		}
 	}
@@ -206,7 +205,7 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 	 * 
 	 * @see org.osgi.service.discovery.ServiceEndpointDescription#getInterfaceNames()
 	 */
-	public Collection getInterfaceNames() {
+	public Collection getProvidedInterfaces() {
 		return javaInterfaceAndVersions.keySet();
 	}
 
@@ -214,7 +213,7 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 	 * 
 	 * @see org.osgi.service.discovery.ServiceEndpointDescription#getProtocolSpecificInterfaceName(java.lang.String)
 	 */
-	public String getProtocolSpecificInterfaceName(String interfaceName) {
+	public String getEndpointInterfaceName(String interfaceName) {
 		return (String) javaAndEndpointInterfaces.get(interfaceName);
 	}
 
@@ -233,7 +232,7 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 	public URL getLocation() {
 		try {
 			return new URL((String) properties
-					.get(ServiceEndpointDescription.PROP_KEY_SERVICE_LOCATION));
+					.get(ServiceEndpointDescription.PROP_KEY_LOCATION));
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
@@ -282,8 +281,7 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 
 		// add interface as property to enable LDAP filtering on it
 		if (interfaceName != null) {
-			path = appendPropertyToURLPath(path,
-					Constants.OBJECTCLASS,
+			path = appendPropertyToURLPath(path, Constants.OBJECTCLASS,
 					interfaceName);
 		}
 		if (version != null)
@@ -292,7 +290,7 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 		if (endpointInterface != null)
 			path = appendPropertyToURLPath(
 					path,
-					ServiceEndpointDescription.PROP_KEY_PROTOCOL_SPECIFIC_INTERFACE_NAME,
+					ServiceEndpointDescription.PROP_KEY_ENDPOINT_INTERFACE_NAME,
 					endpointInterface);
 
 		String protocol = null;
@@ -390,14 +388,13 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 
 		// Put interface and version information to properties since base for
 		// matching
-		properties.put(Constants.OBJECTCLASS,
-				new String[] { interfaceName });
+		properties.put(Constants.OBJECTCLASS, new String[] { interfaceName });
 		properties.put(ServiceEndpointDescription.PROP_KEY_VERSION,
 				new String[] { version });
 
 		// Get endpoint-interface if it exists
 		Object endpointInterfacesValue = properties
-				.get(ServiceEndpointDescription.PROP_KEY_PROTOCOL_SPECIFIC_INTERFACE_NAME);
+				.get(ServiceEndpointDescription.PROP_KEY_ENDPOINT_INTERFACE_NAME);
 		if (endpointInterfacesValue instanceof String) {
 			javaAndEndpointInterfaces.put(interfaceName,
 					endpointInterfacesValue);
@@ -612,35 +609,48 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 			return false;
 		}
 		ServiceEndpointDescription descr = (ServiceEndpointDescription) serviceDescription;
-		if (properties != null && descr.getProperties() == null) {
+		Map sdJavaInterfaceAndVersions = new HashMap();
+		Map sdJavaAndEndpointInterfaces = new HashMap();
+		Iterator interfaces = descr.getProvidedInterfaces().iterator();
+		while (interfaces.hasNext()) {
+			String interfaceName = (String) interfaces.next();
+			sdJavaInterfaceAndVersions.put(interfaceName, descr
+					.getVersion(interfaceName));
+			if (descr.getEndpointInterfaceName(interfaceName) != null) {
+				sdJavaAndEndpointInterfaces.put(interfaceName, descr
+						.getEndpointInterfaceName(interfaceName));
+			}
+		}
+		// interface and versions field
+		if (!((javaInterfaceAndVersions == sdJavaInterfaceAndVersions) || (javaInterfaceAndVersions != null && javaInterfaceAndVersions
+				.equals(sdJavaInterfaceAndVersions)))) {
 			return false;
 		}
-		if (properties == null && descr.getProperties() != null) {
+		// interface and endpoints field
+		if (!((javaAndEndpointInterfaces == sdJavaAndEndpointInterfaces) || (javaAndEndpointInterfaces != null && javaAndEndpointInterfaces
+				.equals(sdJavaAndEndpointInterfaces)))) {
 			return false;
 		}
-		if (properties == null && descr.getProperties() == null) {
-			return true;
-		}
-		// if (properties.size() != descr.getProperties().size()) {
-		// return false;
-		// }
-		Iterator it = properties.keySet().iterator();
-		while (it.hasNext()) {
-			String key = (String) it.next();
-			if (descr.getProperties().containsKey(key)) {
-				if (descr.getProperty(key) instanceof String
-						&& (properties.get(key) instanceof String[])) {
-					if (!properties.get(key).toString().equals(
-							(descr.getProperty(key)))) {
-						return false;
-					}
-				} else {
-					if (!properties.get(key).equals(descr.getProperty(key))) {
+		// properties field
+		if (properties != descr.getProperties()) {
+			if (properties != null && descr.getProperties() != null) {
+				if (properties.isEmpty() && !descr.getProperties().isEmpty()) {
+					return false;
+				}
+				Iterator it = properties.keySet().iterator();
+				while (it.hasNext()) {
+					String nextKey = (String) it.next();
+					if (descr.getProperty(nextKey) != null) {
+						if (properties.get(nextKey).equals(
+								descr.getProperty(nextKey))) {
+
+						} else {
+							return false;
+						}
+					} else {
 						return false;
 					}
 				}
-			} else {
-				return false;
 			}
 		}
 		return true;
@@ -648,6 +658,7 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 
 	/**
 	 * TODO implement hashCode() appropriatly
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	public int hashCode() {

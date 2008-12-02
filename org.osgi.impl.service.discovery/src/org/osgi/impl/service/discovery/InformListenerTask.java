@@ -17,15 +17,14 @@
 package org.osgi.impl.service.discovery;
 
 import java.util.Collection;
-import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Properties;
 import java.util.TimerTask;
 import java.util.Vector;
 
-import org.osgi.framework.Filter;
-import org.osgi.service.discovery.Discovery;
+import org.osgi.service.discovery.DiscoveredServiceNotification;
+import org.osgi.service.discovery.DiscoveredServiceTracker;
 import org.osgi.service.discovery.ServiceEndpointDescription;
-import org.osgi.service.discovery.ServiceListener;
 
 /**
  * A TimerTask that compares in its run method the registered filters with the
@@ -35,7 +34,7 @@ import org.osgi.service.discovery.ServiceListener;
  * @author Thomas Kiesslich
  */
 public class InformListenerTask extends TimerTask {
-	private Discovery discovery;
+	private AbstractDiscovery discovery;
 
 	private Collection/* <ServiceEndpointDescription> */lastLookupResult = null;
 
@@ -46,7 +45,7 @@ public class InformListenerTask extends TimerTask {
 	 * @param disco
 	 *            the Instance of Discovery to get the published services from
 	 */
-	public InformListenerTask(Discovery disco) {
+	public InformListenerTask(AbstractDiscovery disco) {
 		discovery = disco;
 	}
 
@@ -55,17 +54,15 @@ public class InformListenerTask extends TimerTask {
 	 * @see java.lang.Runnable#run()
 	 */
 	public void run() {
-		synchronized (AbstractDiscovery.getListenerAndFilter()) {
-			if (AbstractDiscovery.getListenerAndFilter().size() != 0) {
-				Collection/* <ServiceEndpointDescription> */descriptions = discovery
-						.findService(null, null);
-				Vector availableServices = new Vector();
-				notifyAvailableServices(descriptions, availableServices);
-				// notify all about unavailable services
-				notifyUnavailableServices(availableServices);
-				// now store the last find result for the next check
-				lastLookupResult = descriptions;
-			}
+		if (discovery.getRegisteredServiceTracker().size() != 0) {
+			Collection/* <ServiceEndpointDescription> */descriptions = discovery
+					.findService(null, null);
+			Vector availableServices = new Vector();
+			notifyAvailableServices(descriptions, availableServices);
+			// notify all about unavailable services
+			notifyUnavailableServices(availableServices);
+			// now store the last find result for the next check
+			lastLookupResult = descriptions;
 		}
 	}
 
@@ -81,13 +78,14 @@ public class InformListenerTask extends TimerTask {
 			ServiceEndpointDescription descr = (ServiceEndpointDescription) descrIt
 					.next();
 			// walk over the registered listeners
-			Iterator it = AbstractDiscovery.getListenerAndFilter().keySet()
+			Iterator it = discovery.getRegisteredServiceTracker().keySet()
 					.iterator();
 			while (it.hasNext()) {
-				ServiceListener listener = (ServiceListener) it.next();
+				DiscoveredServiceTracker listener = (DiscoveredServiceTracker) it
+						.next();
 				notifiyAvailableServicePerListener(availableServices, descr,
-						listener, (Filter) AbstractDiscovery
-								.getListenerAndFilter().get(listener));
+						listener, (Properties) discovery
+								.getRegisteredServiceTracker().get(listener));
 			}
 		}
 	}
@@ -101,12 +99,14 @@ public class InformListenerTask extends TimerTask {
 			int i = 0;
 			while (llrIt.hasNext()) {
 				if (!availableServices.contains(new Integer(i))) {
-					Iterator it = AbstractDiscovery.getListenerAndFilter()
+					Iterator it = discovery.getRegisteredServiceTracker()
 							.keySet().iterator();
 					while (it.hasNext()) {
-						ServiceListener l = (ServiceListener) it.next();
-						l.serviceUnavailable((ServiceEndpointDescription) llrIt
-								.next());
+						DiscoveredServiceTracker l = (DiscoveredServiceTracker) it
+								.next();
+						l.serviceChanged(new DiscoveredServiceNotificationImpl(
+								(ServiceEndpointDescription) llrIt.next(),
+								DiscoveredServiceNotification.UNAVAILABLE));
 					}
 				}
 				i++;
@@ -118,14 +118,16 @@ public class InformListenerTask extends TimerTask {
 	 * @param availableServices
 	 * @param descr
 	 * @param l
-	 * @param f
+	 * @param props
 	 */
 	private void notifiyAvailableServicePerListener(Vector availableServices,
-			ServiceEndpointDescription descr, ServiceListener l, Filter f) {
+			ServiceEndpointDescription descr, DiscoveredServiceTracker l,
+			Properties props) {
 		// check if the listener filter matches the given
 		// description properties. That prerequisites that all information of a
 		// service description are in its properties bag
-		if ((f == null) || (f.match(new Hashtable(descr.getProperties())))) {
+		boolean matches = discovery.checkMatch(descr, props);
+		if (matches) {
 			// check if this is the first run
 			if (lastLookupResult != null && lastLookupResult.size() > 0) {
 				// it's not
@@ -148,19 +150,22 @@ public class InformListenerTask extends TimerTask {
 						// description matches the specified filter
 						// and
 						// does exist before
-						l.serviceModified(sed, descr);
+						l.serviceChanged(new DiscoveredServiceNotificationImpl(
+								descr, DiscoveredServiceNotification.MODIFIED));
 					} else {
 						// notify a listener that a service
 						// description matches the specified filter
 						// and
 						// is new to him
-						l.serviceAvailable(descr);
+						l.serviceChanged(new DiscoveredServiceNotificationImpl(
+								descr, DiscoveredServiceNotification.AVAILABLE));
 					}
 				}
 			} else {
 				// We assume this is the first run. We notify listeners that the
 				// matching service is available
-				l.serviceAvailable(descr);
+				l.serviceChanged(new DiscoveredServiceNotificationImpl(
+						descr, DiscoveredServiceNotification.AVAILABLE));
 			}
 		}
 	}

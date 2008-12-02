@@ -24,7 +24,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Timer;
 
 import org.osgi.framework.BundleContext;
@@ -32,6 +31,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.discovery.AbstractDiscovery;
 import org.osgi.impl.service.discovery.InformListenerTask;
 import org.osgi.service.discovery.ServiceEndpointDescription;
+import org.osgi.service.discovery.ServicePublication;
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
@@ -56,7 +56,7 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 	private Locator locator = null;
 	private Advertiser advertiser = null;
 
-	private final int POLLDELAY = 20000; // 20 sec
+	private final int POLLDELAY = 10000; // 10 sec
 
 	private Timer t = null;
 
@@ -85,8 +85,10 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 	public void destroy() {
 		locatorTracker.close();
 		advertiserTracker.close();
-		t.cancel();
-		t = null;
+		if (t != null) {
+			t.cancel();
+			t = null;
+		}
 		super.destroy();
 	}
 
@@ -110,8 +112,8 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 	 * 
 	 * @see org.osgi.impl.service.discovery.ProtocolHandler#findService(org.osgi.service.discovery.ServiceDescription)
 	 */
-	public Collection/*<ServiceEndpointDescription>*/ findService(final String interfaceName,
-			final String filter) {
+	public Collection/* <ServiceEndpointDescription> */findService(
+			final String interfaceName, final String filter) {
 		validateFilter(filter);
 		List result = new ArrayList();
 		// check whether SLP-Locator service exists
@@ -169,10 +171,11 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 			buff.append(result.size());
 			buff.append("; services = ");
 			Iterator it = result.iterator();
-			while(it.hasNext()) {
+			while (it.hasNext()) {
 				buff.append("(");
-				Iterator/*String*/ ifNames = ((ServiceEndpointDescription) it.next()).getInterfaceNames().iterator();
-				while(ifNames.hasNext()) {
+				Iterator/* String */ifNames = ((ServiceEndpointDescription) it
+						.next()).getProvidedInterfaces().iterator();
+				while (ifNames.hasNext()) {
 					buff.append((String) ifNames.next());
 					if (ifNames.hasNext()) {
 						buff.append(",");
@@ -191,15 +194,14 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 		return result;
 	}
 
-	// TODO: think whether we need a version with autopublish parameter
 	/**
 	 * @see org.osgi.service.discovery.Discovery#publishService(java.util.Map,
-	 *      java.util.Map, java.util.Map, boolean)
+	 *      java.util.Map, java.util.Map, String)
 	 */
-	public ServiceEndpointDescription publishService(
+	public ServicePublication publishService(
 			Map/* <String, String> */javaInterfacesAndVersions,
 			Map/* <String, String> */javaInterfacesAndEndpointInterfaces,
-			Map/* <String, Object> */properties, boolean autopublish) {
+			Map/* <String, Object> */properties, String strategy) {
 		SLPServiceDescriptionAdapter svcDescr;
 		try {
 			svcDescr = new SLPServiceDescriptionAdapter(
@@ -211,16 +213,17 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 					e1);
 			return null;
 		}
-		// TODO: act according autopublish parameter
+		// TODO: act according strategy parameter
 		Advertiser advertiser = getAdvertiser();
 		if (advertiser != null) {
 			log(LogService.LOG_DEBUG, "Following service is published: "
 					+ svcDescr);
 
-			Iterator interfaces = svcDescr.getInterfaceNames().iterator();
-			while(interfaces.hasNext()) {
+			Iterator interfaces = svcDescr.getProvidedInterfaces().iterator();
+			while (interfaces.hasNext()) {
 				try {
-					advertiser.register(svcDescr.getServiceURL((String) interfaces.next()),
+					advertiser.register(svcDescr
+							.getServiceURL((String) interfaces.next()),
 							new Hashtable(svcDescr.getProperties()));
 				} catch (ServiceLocationException e) {
 					e.printStackTrace();
@@ -232,7 +235,7 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 		}
 		// inform the listener about the new available service
 		notifyListenersOnNewServiceDescription(svcDescr);
-		return svcDescr;
+		return new ServicePublicationImpl(this, svcDescr);
 	}
 
 	/**
@@ -247,8 +250,9 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 			SLPServiceDescriptionAdapter slpSvcDescr = (SLPServiceDescriptionAdapter) serviceDescription;
 			Advertiser advertiser = getAdvertiser();
 			if (advertiser != null) {
-				Iterator interfaceNames = slpSvcDescr.getInterfaceNames().iterator();
-				while(interfaceNames.hasNext()) {
+				Iterator interfaceNames = slpSvcDescr.getProvidedInterfaces()
+						.iterator();
+				while (interfaceNames.hasNext()) {
 					String interfaceName = (String) interfaceNames.next();
 					try {
 						log(LogService.LOG_DEBUG, "unpublish service "
@@ -334,14 +338,5 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 			setAdvertiser(null);
 			log(LogService.LOG_INFO, "unbound Advertiser");
 		}
-	}
-
-	/**
-	 * For test purposes only.
-	 * 
-	 * @return
-	 */
-	protected Set getListener() {
-		return getListenerAndFilter().keySet();
 	}
 }

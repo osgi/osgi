@@ -23,14 +23,18 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Properties;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.discovery.DiscoveredServiceNotification;
+import org.osgi.service.discovery.DiscoveredServiceTracker;
 import org.osgi.service.discovery.Discovery;
 import org.osgi.service.discovery.FindServiceCallback;
 import org.osgi.service.discovery.ServiceEndpointDescription;
-import org.osgi.service.discovery.ServiceListener;
+import org.osgi.service.discovery.ServicePublication;
 import org.osgi.service.log.LogService;
 
 /**
@@ -49,7 +53,6 @@ public abstract class AbstractDiscovery implements Discovery {
 
 	private LogService logService;
 	private boolean autoPublish = DEFAULT_AUTOPUBLISH;
-	private static Map listenerAndFilter = null;
 
 	// TODO do we need a logService as parameter??
 	public AbstractDiscovery(final BundleContext context,
@@ -65,11 +68,10 @@ public abstract class AbstractDiscovery implements Discovery {
 		log(LogService.LOG_DEBUG, "init");
 
 		// TODO read this from config rather than system property
-		autoPublish = System.getProperty(Discovery.OSGI_DISCOVERY,
-				Discovery.OSGI_DISCOVERY_AUTO_PUBLISH).equalsIgnoreCase(
-				Discovery.OSGI_DISCOVERY_AUTO_PUBLISH);
+		autoPublish = System.getProperty(Discovery.PROP_KEY_PUBLISH_STRATEGY,
+				Discovery.PROP_VAL_PUBLISH_STRATEGY_PUSH).equalsIgnoreCase(
+				Discovery.PROP_VAL_PUBLISH_STRATEGY_PUSH);
 
-		listenerAndFilter = new HashMap();
 	}
 
 	/**
@@ -77,12 +79,6 @@ public abstract class AbstractDiscovery implements Discovery {
 	 */
 	protected void destroy() {
 		log(LogService.LOG_DEBUG, "destroy");
-		if (listenerAndFilter != null) {
-			synchronized (listenerAndFilter) {
-				listenerAndFilter.clear();
-			}
-			listenerAndFilter = null;
-		}
 	}
 
 	/**
@@ -104,59 +100,16 @@ public abstract class AbstractDiscovery implements Discovery {
 	}
 
 	/**
-	 * 
-	 * @see org.osgi.service.discovery.Discovery#addServiceListener(org.osgi.service.discovery.RemoteServiceListener,
-	 *      java.lang.String)
-	 */
-	public void addServiceListener(ServiceListener listener, String filter) {
-		if (listener == null) {
-			throw new IllegalArgumentException("listener cannot be null");
-		}
-		Filter f = getFilterFromString(filter);
-		synchronized (listenerAndFilter) {
-			// TODO: the same listener object might be registered with several
-			// filters. Our Map is not capable of multiple keys. Discuss whether
-			// it's the required behaviour.
-			listenerAndFilter.put(listener, f);
-			log(LogService.LOG_DEBUG, "listener added successfully. Listener: "
-					+ listener + "; filter: " + filter);
-		}
-	}
-
-	/**
-	 * @see org.osgi.service.discovery.Discovery#addServiceListener(org.osgi.service.discovery.RemoteServiceListener)
-	 */
-	public void addServiceListener(final ServiceListener listener) {
-		addServiceListener(listener, null);
-	}
-
-	/**
-	 * @see org.osgi.service.discovery.Discovery#removeServiceListener(org.osgi.service.discovery.RemoteServiceListener)
-	 */
-	public void removeServiceListener(final ServiceListener listener) {
-		if (listener == null) {
-			return;
-		}
-		synchronized (listenerAndFilter) {
-			boolean removed = (null == listenerAndFilter.remove(listener));
-			log(
-					LogService.LOG_DEBUG,
-					removed == true ? "listener removed successfull"
-							: "listener which had to be removed wasn't registered.");
-		}
-	}
-
-	/*
 	 * @see org.osgi.service.discovery.Discovery#publishService(java.util.Map,
 	 *      java.util.Map, java.util.Map)
 	 */
-	public ServiceEndpointDescription publishService(
+	public ServicePublication publishService(
 			Map/* <String, String> */javaInterfacesAndVersions,
 			Map/* <String, String> */javaInterfacesAndEndpointInterfaces,
 			Map/* <String, Object> */properties) {
 		return publishService(javaInterfacesAndVersions,
 				javaInterfacesAndEndpointInterfaces, properties,
-				this.autoPublish);
+				Discovery.PROP_VAL_PUBLISH_STRATEGY_PUSH);
 	}
 
 	/**
@@ -223,87 +176,152 @@ public abstract class AbstractDiscovery implements Discovery {
 		if (serviceDescription == null)
 			throw new IllegalArgumentException(
 					"serviceDescription must not be null.");
-		String ifName = (String) serviceDescription.getInterfaceNames().iterator().next();
-		if (serviceDescription.getInterfaceNames() == null
-				|| serviceDescription.getInterfaceNames().size() <= 0
-				|| ifName == null
-				|| ifName.length() <= 0) {
+		if (serviceDescription.getProvidedInterfaces() == null) {
+			throw new IllegalArgumentException(
+					"Given set of Java interfaces must not be null");
+		}
+		String ifName = (String) serviceDescription.getProvidedInterfaces()
+				.iterator().next();
+		if (serviceDescription.getProvidedInterfaces() == null
+				|| serviceDescription.getProvidedInterfaces().size() <= 0
+				|| ifName == null || ifName.length() <= 0) {
 			throw new IllegalArgumentException(
 					"serviceDescription must contain at least one service interface name.");
 		}
 	}
 
+	protected Map getRegisteredServiceTracker() {
+		Map l = new HashMap();
+		try {
+			ServiceReference[] refs = context.getServiceReferences(
+					DiscoveredServiceTracker.class.getName(), null);
+			if (refs != null) {
+				for (int i = 0; i < refs.length; i++) {
+					Properties props = new Properties();
+					String[] keys = refs[i].getPropertyKeys();
+					for (int k = 0; (keys != null) && (k < keys.length); k++) {
+						if (refs[i].getProperty(keys[k]) instanceof String[]) {
+							props.put(keys[k], (String[]) refs[i]
+									.getProperty(keys[k]));
+						} else {
+							props.put(keys[k], refs[i].getProperty(keys[k]));
+						}
+					}
+					l.put((DiscoveredServiceTracker) context
+							.getService(refs[i]), props);
+				}
+			}
+		} catch (InvalidSyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return l;
+	}
+
 	protected void notifyListenersOnNewServiceDescription(
 			ServiceEndpointDescription svcDescr) {
-		synchronized (listenerAndFilter) {
-			Iterator it = listenerAndFilter.keySet().iterator();
-			while (it.hasNext()) {
-				ServiceListener sl = (ServiceListener) it.next();
-				Filter filter = (Filter) listenerAndFilter.get(sl);
-				// inform it if the listener has no Filter set
-				// or the filter matches the criteria
-				if (filter == null
-						|| (filter != null && filter.match(new Hashtable(
-								svcDescr.getProperties())))) {
-					try {
-						sl.serviceAvailable(svcDescr);
-					} catch (Exception e) {
-						log(
-								LogService.LOG_ERROR,
-								"Exceptions where thrown while notifying about a new remote service.",
-								e);
-					}
+		// can we iterate over that array w/o threadsafety??
+		Map discoveredSTs = getRegisteredServiceTracker();
+		Iterator it = discoveredSTs.keySet().iterator();
+		while (it.hasNext()) {
+			DiscoveredServiceTracker st = (DiscoveredServiceTracker) it.next();
+			Properties props = (Properties) discoveredSTs.get(st);
+			boolean notify = checkMatch(svcDescr, props);
+
+			if (notify) {
+				try {
+					st.serviceChanged(new DiscoveredServiceNotificationImpl(
+							svcDescr, DiscoveredServiceNotification.AVAILABLE));
+				} catch (Exception e) {
+					log(
+							LogService.LOG_ERROR,
+							"Exceptions where thrown while notifying about a new remote service.",
+							e);
 				}
+
 			}
 		}
 	}
 
 	protected void notifyListenersOnRemovedServiceDescription(
 			ServiceEndpointDescription svcDescr) {
-		synchronized (listenerAndFilter) {
-			Iterator it = listenerAndFilter.keySet().iterator();
-			while (it.hasNext()) {
-				ServiceListener sl = (ServiceListener) it.next();
-				Filter filter = (Filter) listenerAndFilter.get(sl);
-				// inform it if the listener has no Filter set
-				// or the filter matches the criteria
-				if (filter == null
-						|| (filter != null && filter.match(new Hashtable(
-								svcDescr.getProperties())))) {
-					try {
-						sl.serviceUnavailable(svcDescr);
-					} catch (Exception e) {
-						log(
-								LogService.LOG_ERROR,
-								"Exceptions where thrown while notifying about removal of a remote service.",
-								e);
-					}
+		Map discoveredSTs = getRegisteredServiceTracker();
+		Iterator it = discoveredSTs.keySet().iterator();
+		while (it.hasNext()) {
+			DiscoveredServiceTracker st = (DiscoveredServiceTracker) it.next();
+			Properties props = (Properties) discoveredSTs.get(st);
+			// inform it if the listener has no Filter set
+			// or the filter matches the criteria
+			boolean notify = checkMatch(svcDescr, props);
+			if (notify) {
+
+				try {
+					st
+							.serviceChanged(new DiscoveredServiceNotificationImpl(
+									svcDescr,
+									DiscoveredServiceNotification.UNAVAILABLE));
+				} catch (Exception e) {
+					log(
+							LogService.LOG_ERROR,
+							"Exceptions where thrown while notifying about removal of a remote service.",
+							e);
 				}
 			}
 		}
+
+	}
+
+	public boolean checkMatch(ServiceEndpointDescription svcDescr,
+			Properties props) {
+		String interfaceFilter = (String) props
+				.getProperty(DiscoveredServiceTracker.PROP_KEY_MATCH_CRITERIA_INTERFACES);
+		String filter = (String) props
+				.getProperty(DiscoveredServiceTracker.PROP_KEY_MATCH_CRITERIA_FILTERS);
+		boolean notify = false;
+		if (interfaceFilter == null && filter == null) {
+			notify = true;
+		} else {
+			if (interfaceFilter != null) {
+				Iterator ifIt = svcDescr.getProvidedInterfaces().iterator();
+				while (ifIt.hasNext()) {
+					if (interfaceFilter.indexOf((String) ifIt.next()) >= 0) {
+						notify = true;
+					}
+				}
+			}
+			if (filter != null) {
+				try {
+					Filter f = getContext().createFilter(filter);
+					if (f.match(new Hashtable(svcDescr.getProperties()))) {
+						notify = true;
+					}
+				} catch (InvalidSyntaxException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return notify;
 	}
 
 	protected void notifyListenersOnModifiedServiceDescription(
-			ServiceEndpointDescription oldSvcDescr,
-			ServiceEndpointDescription newSvcDescr) {
-		synchronized (listenerAndFilter) {
-			Iterator it = listenerAndFilter.keySet().iterator();
-			while (it.hasNext()) {
-				ServiceListener sl = (ServiceListener) it.next();
-				Filter filter = (Filter) listenerAndFilter.get(sl);
-				// inform it if the listener has no Filter set
-				// or the filter matches the criteria
-				if (filter == null
-						|| (filter != null && filter.match(new Hashtable(
-								oldSvcDescr.getProperties())))) {
-					try {
-						sl.serviceModified(oldSvcDescr, newSvcDescr);
-					} catch (Exception e) {
-						log(
-								LogService.LOG_ERROR,
-								"Exceptions where thrown while notifying about modification of a remote service.",
-								e);
-					}
+			ServiceEndpointDescription svcDescr) {
+		Map discoveredSTs = getRegisteredServiceTracker();
+		Iterator it = discoveredSTs.keySet().iterator();
+		while (it.hasNext()) {
+			DiscoveredServiceTracker st = (DiscoveredServiceTracker) it.next();
+			Properties props = (Properties) discoveredSTs.get(st);
+			// inform it if the listener has no Filter set
+			// or the filter matches the criteria
+			boolean notify = checkMatch(svcDescr, props);
+			if (notify) {
+				try {
+					st.serviceChanged(new DiscoveredServiceNotificationImpl(
+							svcDescr, DiscoveredServiceNotification.MODIFIED));
+				} catch (Exception e) {
+					log(
+							LogService.LOG_ERROR,
+							"Exceptions where thrown while notifying about modification of a remote service.",
+							e);
 				}
 			}
 		}
@@ -325,13 +343,6 @@ public abstract class AbstractDiscovery implements Discovery {
 	}
 
 	/**
-	 * @return the listenerAndFilter
-	 */
-	protected static Map getListenerAndFilter() {
-		return listenerAndFilter;
-	}
-	
-	/**
 	 * 
 	 * @see org.osgi.service.discovery.Discovery#findService(java.lang.String,
 	 *      java.lang.String, org.osgi.service.discovery.FindServiceCallback)
@@ -346,7 +357,7 @@ public abstract class AbstractDiscovery implements Discovery {
 			public void run() {
 				try {
 					// do lookup
-					Collection/*<ServiceEndpointDescription>*/ services = findService(
+					Collection/* <ServiceEndpointDescription> */services = findService(
 							interfaceName, filter);
 					// return result via callback
 					try {
