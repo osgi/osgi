@@ -389,7 +389,9 @@ public abstract class ApplicationDescriptor {
 	 * <p>
 	 * The <code>Map</code> argument of the  method contains startup 
 	 * arguments for the application. The keys used in the Map must be non-null, 
-	 * non-empty <code>String<code> objects.
+	 * non-empty <code>String<code> objects. The argument values must be
+     * of primitive types, wrapper classes of primitive types, <code>String</code>
+     * or arrays or collections of these.
      * <p>
      * The created schedules have a unique identifier within the scope of this
      * <code>ApplicationDescriptor</code>. This identifier can be specified
@@ -431,6 +433,9 @@ public abstract class ApplicationDescriptor {
      *               <li> {@link ApplicationException#APPLICATION_SCHEDULING_FAILED}
      *                 if the scheduling failed due to some internal reason
      *                 (e.g. persistent storage error).
+     *               <li> {@link ApplicationException#APPLICATION_INVALID_STARTUP_ARGUMENT}
+     *                 if t a specified startup argument doesn't satisfy the 
+	 *                 type or value constraints of startup arguments.
      *              </ul>
 	 * @throws SecurityException
 	 *             if the caller doesn't have "schedule"
