@@ -123,7 +123,7 @@ public interface DeploymentPackage {
 	 * This method returns the localized human readable name as set with the
 	 * <code>DeploymentPackage-Name</code> manifest header using the default
 	 * locale. If no header is set, this method will return <code>null</code>.
-	 * 
+	 *
 	 * @return The human readable name of the deployment package or
 	 *         <code>null</code> if header is not set.
 	 */
@@ -151,14 +151,14 @@ public interface DeploymentPackage {
 	/**
 	 * Returns a URL pointing to an image that represents the icon for this
 	 * Deployment Package.
-	 * 
+	 *
 	 * The <code>DeploymentPackage-Icon</code> header can set an icon for the
 	 * the deployment package. This method returns an absolute URL that is
 	 * defined by this header. The Deployment Admin service must provide this
 	 * icon as a local resource. That is, the Deployment Admin must make a local
-	 * copy of the default locale. The returned <code>URL</code>'s must point
+	 * copy of the specified icon. The returned <code>URL</code>'s must point
 	 * to a local resource.
-	 * 
+	 *
 	 * @return An absolute URL to a local (device resident) image resource or
 	 *         <code>null</code> if not found
 	 */
