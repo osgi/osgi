@@ -111,10 +111,10 @@ public interface LinkBundle extends Bundle {
 	LinkBundle getCompanionLinkBundle();
 
 	/**
-	 * Updates this link bundle and its companion link bundle with the 
-	 * specified link manifest.
+	 * Updates this child link bundle and its companion parent link bundle with
+	 * the specified link manifest.
 	 * @param linkManifest the link manifest to update to.
-	 * @throws BundleException If the update fails.
+	 * @throws BundleException If the update fails or if this is a parent link bundle.
 	 */
 	void update(Map /*<String, String>*/linkManifest) throws BundleException;
 
