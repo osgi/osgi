@@ -18,7 +18,7 @@ package org.osgi.impl.service.discovery;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Properties;
+import java.util.Map;
 import java.util.TimerTask;
 import java.util.Vector;
 
@@ -64,6 +64,7 @@ public class InformListenerTask extends TimerTask {
 				discovery.getLogService().log(LogService.LOG_ERROR,
 						"findService threw an exception ", e);
 			}
+			//TODO: do we really need that Vector availableServices? why not just take "descriptions"  
 			Vector availableServices = new Vector();
 			notifyAvailableServices(descriptions, availableServices);
 			// notify all about unavailable services
@@ -85,14 +86,13 @@ public class InformListenerTask extends TimerTask {
 			ServiceEndpointDescription descr = (ServiceEndpointDescription) descrIt
 					.next();
 			// walk over the registered listeners
-			Iterator it = discovery.getRegisteredServiceTracker().keySet()
-					.iterator();
+			Map tracker = discovery.getRegisteredServiceTracker();
+			Iterator it = tracker.keySet().iterator();
 			while (it.hasNext()) {
 				DiscoveredServiceTracker listener = (DiscoveredServiceTracker) it
 						.next();
 				notifiyAvailableServicePerListener(availableServices, descr,
-						listener, (Properties) discovery
-								.getRegisteredServiceTracker().get(listener));
+						listener, (Map) tracker.get(listener));
 			}
 		}
 	}
@@ -122,6 +122,8 @@ public class InformListenerTask extends TimerTask {
 	}
 
 	/**
+	 * TODO: Verify that notification logic doesn't repeat notifications to trackers 
+	 * 
 	 * @param availableServices
 	 * @param descr
 	 * @param l
@@ -129,7 +131,7 @@ public class InformListenerTask extends TimerTask {
 	 */
 	private void notifiyAvailableServicePerListener(Vector availableServices,
 			ServiceEndpointDescription descr, DiscoveredServiceTracker l,
-			Properties props) {
+			Map props) {
 		// check if the listener filter matches the given
 		// description properties. That prerequisites that all information of a
 		// service description are in its properties bag
@@ -152,6 +154,7 @@ public class InformListenerTask extends TimerTask {
 						index = new Integer(0);
 						availableServices.add(sed);
 					}
+					
 					if (index != null) {
 						// notify a listener that a service
 						// description matches the specified filter

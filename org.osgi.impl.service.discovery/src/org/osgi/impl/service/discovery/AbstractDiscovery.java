@@ -23,9 +23,9 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Properties;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -40,8 +40,6 @@ import org.osgi.service.log.LogService;
 /**
  * Discovery reference implementation. This implementation supports any protocol
  * implementation that implements the {@link ProtocolHandler} interface.
- * 
- * TODO: add support for second protocol, e.g. JGroups, JCS
  * 
  * @author Tim Diekmann
  * @author Thomas Kiesslich
@@ -192,29 +190,30 @@ public abstract class AbstractDiscovery implements Discovery {
 
 	protected Map getRegisteredServiceTracker() {
 		Map l = new HashMap();
+		ServiceReference[] refs = null;
 		try {
-			ServiceReference[] refs = context.getServiceReferences(
-					DiscoveredServiceTracker.class.getName(), null);
-			if (refs != null) {
-				for (int i = 0; i < refs.length; i++) {
-					Properties props = new Properties();
-					String[] keys = refs[i].getPropertyKeys();
-					for (int k = 0; (keys != null) && (k < keys.length); k++) {
-						if (refs[i].getProperty(keys[k]) instanceof String[]) {
-							props.put(keys[k], (String[]) refs[i]
-									.getProperty(keys[k]));
-						} else {
-							props.put(keys[k], refs[i].getProperty(keys[k]));
-						}
-					}
-					l.put((DiscoveredServiceTracker) context
-							.getService(refs[i]), props);
-				}
-			}
+			refs = context.getServiceReferences(DiscoveredServiceTracker.class
+					.getName(), null);
 		} catch (InvalidSyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log(LogService.LOG_ERROR, "Unexpected exception.");
 		}
+		if (refs != null) {
+			for (int i = 0; i < refs.length; i++) {
+				HashMap props = new HashMap();
+				String[] keys = refs[i].getPropertyKeys();
+				for (int k = 0; (keys != null) && (k < keys.length); k++) {
+					if (refs[i].getProperty(keys[k]) instanceof String[]) {
+						props.put(keys[k], (String[]) refs[i]
+								.getProperty(keys[k]));
+					} else {
+						props.put(keys[k], refs[i].getProperty(keys[k]));
+					}
+				}
+				l.put((DiscoveredServiceTracker) context.getService(refs[i]),
+						props);
+			}
+		}
+
 		return l;
 	}
 
@@ -225,9 +224,8 @@ public abstract class AbstractDiscovery implements Discovery {
 		Iterator it = discoveredSTs.keySet().iterator();
 		while (it.hasNext()) {
 			DiscoveredServiceTracker st = (DiscoveredServiceTracker) it.next();
-			Properties props = (Properties) discoveredSTs.get(st);
-			boolean notify = checkMatch(svcDescr, props);
-
+			Map trackerProps = (Map) discoveredSTs.get(st);
+			boolean notify = checkMatch(svcDescr, trackerProps);
 			if (notify) {
 				try {
 					st.serviceChanged(new DiscoveredServiceNotificationImpl(
@@ -249,10 +247,10 @@ public abstract class AbstractDiscovery implements Discovery {
 		Iterator it = discoveredSTs.keySet().iterator();
 		while (it.hasNext()) {
 			DiscoveredServiceTracker st = (DiscoveredServiceTracker) it.next();
-			Properties props = (Properties) discoveredSTs.get(st);
+			Map trackerProps = (Map) discoveredSTs.get(st);
 			// inform it if the listener has no Filter set
 			// or the filter matches the criteria
-			boolean notify = checkMatch(svcDescr, props);
+			boolean notify = checkMatch(svcDescr, trackerProps);
 			if (notify) {
 
 				try {
@@ -272,31 +270,41 @@ public abstract class AbstractDiscovery implements Discovery {
 	}
 
 	public boolean checkMatch(ServiceEndpointDescription svcDescr,
-			Properties props) {
-		String interfaceFilter = (String) props
-				.getProperty(DiscoveredServiceTracker.PROP_KEY_MATCH_CRITERIA_INTERFACES);
-		String filter = (String) props
-				.getProperty(DiscoveredServiceTracker.PROP_KEY_MATCH_CRITERIA_FILTERS);
+			Map/* String, Object */trackerProperties) {
+		String[] interfaceFilter = (String[]) trackerProperties
+				.get(DiscoveredServiceTracker.PROP_KEY_MATCH_CRITERIA_INTERFACES);
+		String[] filter = (String[]) trackerProperties
+				.get(DiscoveredServiceTracker.PROP_KEY_MATCH_CRITERIA_FILTERS);
 		boolean notify = false;
 		if (interfaceFilter == null && filter == null) {
 			notify = true;
 		} else {
 			if (interfaceFilter != null) {
-				Iterator ifIt = svcDescr.getProvidedInterfaces().iterator();
-				while (ifIt.hasNext()) {
-					if (interfaceFilter.indexOf((String) ifIt.next()) >= 0) {
+				// check whether tracker's interface-list contains one of SED's
+				// interfaces
+				for (int i = 0; i < interfaceFilter.length; i++) {
+					if (svcDescr.getProvidedInterfaces().contains(
+							interfaceFilter[i])) {
 						notify = true;
 					}
 				}
 			}
 			if (filter != null) {
-				try {
-					Filter f = getContext().createFilter(filter);
-					if (f.match(new Hashtable(svcDescr.getProperties()))) {
-						notify = true;
+				// check whether one filter of tracker's filter-list matches to
+				// SED's properties
+				for (int i = 0; i < filter.length; i++) {
+					try {
+						Filter f = getContext().createFilter(filter[i]);
+						if (f.match(new Hashtable(svcDescr.getProperties()))) {
+							notify = true;
+						}
+					} catch (InvalidSyntaxException e) {
+						String errMsg = "A filter provided by a DiscoveredServiceTracker is invalid.";
+						errMsg += " Filter = " + filter[i];
+						errMsg += "; DiscoveredServiceTracker service.id = "
+								+ trackerProperties.get(Constants.SERVICE_ID);
+						log(LogService.LOG_WARNING, errMsg, e);
 					}
-				} catch (InvalidSyntaxException e) {
-					e.printStackTrace();
 				}
 			}
 		}
@@ -309,10 +317,10 @@ public abstract class AbstractDiscovery implements Discovery {
 		Iterator it = discoveredSTs.keySet().iterator();
 		while (it.hasNext()) {
 			DiscoveredServiceTracker st = (DiscoveredServiceTracker) it.next();
-			Properties props = (Properties) discoveredSTs.get(st);
+			Map trackerProps = (Map) discoveredSTs.get(st);
 			// inform it if the listener has no Filter set
 			// or the filter matches the criteria
-			boolean notify = checkMatch(svcDescr, props);
+			boolean notify = checkMatch(svcDescr, trackerProps);
 			if (notify) {
 				try {
 					st.serviceChanged(new DiscoveredServiceNotificationImpl(
