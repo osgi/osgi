@@ -78,21 +78,38 @@ public interface CompositeBundleFactory {
 	 * header(s):
 	 * <ul>
 	 * <li> {@link Constants#BUNDLE_VERSION Bundle-Version} the bundle version
-	 * used for the child composite bundle and its companion composite bundle.
+	 * used for the child composite bundle and its companion composite bundle.</li>
 	 * <li> {@link Constants#IMPORT_PACKAGE Import-Package} the packages which
 	 * are imported from the parent framework by the child composite bundle and
 	 * are exported to the child framework by the companion composite bundle.</li>
 	 * <li>{@link Constants#EXPORT_PACKAGE Export-Package} the packages which
 	 * are imported from the child framework by the companion composite bundle
 	 * and are exported to the parent framework by the child composite bundle.</li>
-	 * <li>{@link #COMPOSITE_SERVICE_FILTER_IMPORT LinkServiceFilter-Import} the
+	 * <li>{@link #COMPOSITE_SERVICE_FILTER_IMPORT CompositeServiceFilter-Import} the
 	 * service filters which are acquired from the parent framework by the child
 	 * composite bundle and are registered in the child framework by the
 	 * companion composite bundle.</li>
-	 * <li>{@link #COMPOSITE_SERVICE_FILTER_EXPORT LinkServiceFilter-Export} the
+	 * <li>{@link #COMPOSITE_SERVICE_FILTER_EXPORT CompositeServiceFilter-Export} the
 	 * service filters which are acquired from the child framework by the
 	 * companion composite bundle and are registered in the parent framework by
 	 * the child composite bundle.</li>
+	 * <li>{@link Constants#BUNDLE_MANIFESTVERSION Bundle-ManifestVersion} the 
+	 * bundle manifest version.  If this header is not specified then the default
+	 * is to use version 2.  A BundleException is thrown if this header is 
+	 * specified and the version is less than 2.</li>
+	 * </ul>
+	 * The composite manifest map must not contain the following headers. If a 
+	 * composite manifest map does contain one of the following headers then 
+	 * a BundleException is thrown:
+	 * <ul>
+	 * <li> {@link Constants#BUNDLE_ACTIVATIONPOLICY Bundle-ActivationPolicy}</li>
+	 * <li> {@link Constants#BUNDLE_ACTIVATOR Bundle-Activator}</li>
+	 * <li> {@link Constants#BUNDLE_CLASSPATH Bundle-ClassPath}</li>
+	 * <li> {@link Constants#BUNDLE_LOCALIZATION Bundle-Localization}</li>
+	 * <li> {@link Constants#BUNDLE_NATIVECODE Bundle-NativeCode}</li>
+	 * <li> {@link Constants#DYNAMICIMPORT_PACKAGE DynamicImport-Package}</li>
+	 * <li> {@link Constants#FRAGMENT_HOST Fragment-Host}</li>
+	 * <li> {@link Constants#REQUIRE_BUNDLE Require-Bundle}</li>
 	 * </ul>
 	 * <li>A child framework is create which uses a storage area under the child
 	 * composite bundle's associated persistent storage. Note that if the
