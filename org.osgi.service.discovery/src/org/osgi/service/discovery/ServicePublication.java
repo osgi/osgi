@@ -56,9 +56,9 @@ public interface ServicePublication {
 
 	/**
 	 * Optional ServiceRegistration property which contains a collection of
-	 * interface names with their associated version attributes separated by a
-	 * colon e.g. 'my.company.foo:1.3.5 my.company.zoo:2.3.5'. In case no
-	 * version has been provided for an interface, Discovery may use the
+	 * interface names with their associated version attributes separated by
+	 * {@link #SEPARATOR} e.g. 'my.company.foo:1.3.5 my.company.zoo:2.3.5'. In
+	 * case no version has been provided for an interface, Discovery may use the
 	 * String-value of <code>org.osgi.framework.Version.emptyVersion</code>
 	 * constant. <br>
 	 * Value of this property is of type Collection (<? extends String>).
@@ -68,7 +68,7 @@ public interface ServicePublication {
 	/**
 	 * Optional ServiceRegistration property which contains a collection of
 	 * interface names with their associated (non-Java) endpoint interface names
-	 * separated by a colon e.g.:<br>
+	 * separated by {@link #SEPARATOR} e.g.:<br>
 	 * 'my.company.foo:MyWebService my.company.zoo:MyWebService'.<br>
 	 * This (non-Java) endpoint interface name is usually a communication
 	 * protocol specific interface, for instance a web service interface name.
@@ -104,4 +104,9 @@ public interface ServicePublication {
 	 * endpoint. Value of this property is of type <code>String<code>.
 	 */
 	public static final String PROP_KEY_ENDPOINT_ID = "osgi.remote.endpoint.id";
+
+	/**
+	 * Separator for key value pairs.
+	 */
+	public static final String SEPARATOR = ":";
 }

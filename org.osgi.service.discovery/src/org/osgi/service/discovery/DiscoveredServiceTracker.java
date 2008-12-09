@@ -33,14 +33,16 @@ public interface DiscoveredServiceTracker {
 
 	/**
 	 * Property describing service interfaces this tracker is interested in.
-	 * Value of this property is of type Collection (<? extends String>).
+	 * Value of this property is of type Collection (<? extends String>).<br>
 	 * Property is optional, may be null.
 	 */
 	public static final String PROP_KEY_MATCH_CRITERIA_INTERFACES = "osgi.discovery.interest.interfaces";
 
 	/**
 	 * Property describing filters for services this tracker is interested in.
-	 * Value of this property is of type Collection (<? extends String>).
+	 * Value of this property is of type Collection (<? extends String>). See
+	 * {@link ServicePublication} for some standard property keys used to
+	 * publish service metadata. <br>
 	 * Property is optional, may be null.
 	 */
 	public static final String PROP_KEY_MATCH_CRITERIA_FILTERS = "osgi.discovery.interest.filters";
