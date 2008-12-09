@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.Map;
 
 /**
  * An installed bundle in the Framework.
@@ -212,6 +213,23 @@ public interface Bundle {
 	 * @see #stop(int)
 	 */
 	public static final int	STOP_TRANSIENT			= 0x00000001;
+
+	/**
+	 * Request that all certificates used to sign the bundle be returned.
+	 * 
+	 * @since 1.5
+	 * @see #getSignerCertificates(int)
+	 */
+	public final static int	SIGNERS_ALL				= 1;
+
+	/**
+	 * Request that only certificates used to sign the bundle that are trusted
+	 * by the framework be returned.
+	 * 
+	 * @since 1.5
+	 * @see #getSignerCertificates(int)
+	 */
+	public final static int	SIGNERS_TRUSTED			= 2;
 
 	/**
 	 * Returns this bundle's current state.
@@ -672,7 +690,7 @@ public interface Bundle {
 	 * 
 	 * @see Constants#BUNDLE_LOCALIZATION
 	 */
-	public Dictionary getHeaders();
+	public Dictionary/* <String,String> */getHeaders();
 
 	/**
 	 * Returns this bundle's unique identifier. This bundle is assigned a unique
@@ -895,7 +913,7 @@ public interface Bundle {
 	 * @see Constants#BUNDLE_LOCALIZATION
 	 * @since 1.3
 	 */
-	public Dictionary getHeaders(String locale);
+	public Dictionary/* <String,String> */getHeaders(String locale);
 
 	/**
 	 * Returns the symbolic name of this bundle as specified by its
@@ -976,7 +994,7 @@ public interface Bundle {
 	 *         uninstalled.
 	 * @throws java.io.IOException If there is an I/O error.
 	 */
-	public Enumeration getResources(String name) throws IOException;
+	public Enumeration/* <URL> */getResources(String name) throws IOException;
 
 	/**
 	 * Returns an Enumeration of all the paths (<code>String</code> objects)
@@ -1006,7 +1024,7 @@ public interface Bundle {
 	 *         uninstalled.
 	 * @since 1.3
 	 */
-	public Enumeration getEntryPaths(String path);
+	public Enumeration/* <String> */getEntryPaths(String path);
 
 	/**
 	 * Returns a URL to the entry at the specified path in this bundle. This
@@ -1111,7 +1129,7 @@ public interface Bundle {
 	 *         fragment are returned.
 	 * @since 1.3
 	 */
-	public Enumeration findEntries(String path, String filePattern,
+	public Enumeration/* <URL> */findEntries(String path, String filePattern,
 			boolean recurse);
 
 	/**
@@ -1135,4 +1153,29 @@ public interface Bundle {
 	 * @since 1.4
 	 */
 	public BundleContext getBundleContext();
+
+	/**
+	 * Return the certificates for the signers of the bundle and the certificate
+	 * chains for those signers.
+	 * 
+	 * @param signersType If {@link #SIGNERS_ALL} is specified, then information
+	 *        on all signers is returned. If {@link #SIGNERS_TRUSTED} is
+	 *        specified, then only information on the signers trusted by the
+	 *        framework is returned.
+	 * @return The <code>X509Certificate</code>s for the signers of the bundle
+	 *         and the <code>X509Certificate</code> chains for those signers.
+	 *         The keys of the <code>Map</code> are the
+	 *         <code>X509Certificate</code>s of the signers of the bundle. The
+	 *         value for a key is a <code>List</code> containing the
+	 *         <code>X509Certificate</code> chain for the signer. The first item
+	 *         in the <code>List</code> is the signer's
+	 *         <code>X509Certificate</code> which is then followed by the rest
+	 *         of the <code>X509Certificate</code> chain.
+	 * @throws IllegalArgumentException If the specified
+	 *         <code>signersType</code> is not {@link #SIGNERS_ALL} or
+	 *         {@link #SIGNERS_TRUSTED}.
+	 * @since 1.5
+	 */
+	public Map/* <X509Certificate, List<X509Certificate>> */getSignerCertificates(
+			int signersType);
 }
