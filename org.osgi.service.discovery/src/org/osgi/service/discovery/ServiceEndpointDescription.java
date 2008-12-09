@@ -21,33 +21,14 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * This interface describes an endpoint of a service. 
- * This class can be considered as a wrapper around the property map associated
- * with a service and its endpoint. It provides an API to conveniently access
- * the most important properties of the service.
+ * This interface describes an endpoint of a service. This class can be
+ * considered as a wrapper around the property map of a published service and
+ * its endpoint. It provides an API to conveniently access the most important
+ * properties of the service.
  * 
  * @version $Revision$
  */
 public interface ServiceEndpointDescription {
-	/**
-	 * Property identifying (non-Java) endpoint interface. Property value is of type String.
-	 */
-	public final String PROP_KEY_ENDPOINT_INTERFACE_NAME = "osgi.remote.endpoint.interface";
-
-	/**
-	 * Property uniquely identifying the endpoint. 
-	 */
-	public final String PROP_KEY_ENDPOINT_ID = "osgi.remote.endpoint.id";
-
-	/**
-	 * Property identifying service version.
-	 */
-	public final String PROP_KEY_VERSION = "service.version";
-
-	/**
-	  * Property identifying service location.
-	 */
-	public final String PROP_KEY_LOCATION = "osgi.remote.endpoint.location";
 
 	/**
 	 * @return full qualified service interface names provided by the advertised
