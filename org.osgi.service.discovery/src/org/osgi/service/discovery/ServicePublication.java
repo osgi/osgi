@@ -32,8 +32,7 @@ package org.osgi.service.discovery;
  * property is mandatory when a <code>ServicePublication</code> service is
  * registered.<br>
  * In case a particular publication strategy should be applied when publishing
- * this service, then provide
- * {@link org.osgi.service.discovery.Discovery#PROP_KEY_PUBLISH_STRATEGY} as
+ * this service, then provide {@link Discovery#PROP_KEY_PUBLISH_STRATEGY} as
  * part of registration.<br>
  * 
  * Also important is that it's not guaranteed that after registering a
@@ -48,28 +47,38 @@ package org.osgi.service.discovery;
 public interface ServicePublication {
 
 	/**
-	 * Mandatory ServiceRegistration property which contains the list of
-	 * interface names offered by the advertised service endpoint. Value of this
-	 * property is of type String (whitespace-separated list).
+	 * Mandatory ServiceRegistration property which contains a collection of
+	 * full qualified interface names offered by the advertised service
+	 * endpoint. Value of this property is of type Collection (<? extends
+	 * String>).
 	 */
 	public static final String PROP_KEY_SERVICE_INTERFACE_NAME = "service.interface";
 
 	/**
-	 * Optional ServiceRegistration property which contains a list of interface
-	 * names with their associated version attributes separated by a colon e.g.
-	 * 'my.company.foo:1.3.5 my.company.zoo:2.3.5'. In case no version has been
-	 * provided for an interface, Discovery may use the String-value of
-	 * <code>org.osgi.framework.Version.emptyVersion</code> constant. <br>
-	 * Value of this property is of type String (whitespace-separated list).
+	 * Optional ServiceRegistration property which contains a collection of
+	 * interface names with their associated version attributes separated by a
+	 * colon e.g. 'my.company.foo:1.3.5 my.company.zoo:2.3.5'. In case no
+	 * version has been provided for an interface, Discovery may use the
+	 * String-value of <code>org.osgi.framework.Version.emptyVersion</code>
+	 * constant. <br>
+	 * Value of this property is of type Collection (<? extends String>).
 	 */
 	public static final String PROP_KEY_SERVICE_INTERFACE_VERSION = "service.interface.version";
 
 	/**
-	 * Optional ServiceRegistration property which contains a list of interface
-	 * names with their associated (non-Java) endpoint interface names separated
-	 * by a colon e.g.:<br>
+	 * Optional ServiceRegistration property which contains a collection of
+	 * interface names with their associated (non-Java) endpoint interface names
+	 * separated by a colon e.g.:<br>
 	 * 'my.company.foo:MyWebService my.company.zoo:MyWebService'.<br>
-	 * Value of this property is of type String (whitespace-separated list).
+	 * This (non-Java) endpoint interface name is usually a communication
+	 * protocol specific interface, for instance a web service interface name.
+	 * Though this information is usually contained in accompanying properties
+	 * e.g. a wsdl file, Discovery usually doesn't read and interprets such
+	 * service meta-data. Providing this information explicitly, might allow
+	 * external non-Java applications find services based on this endpoint
+	 * interface.
+	 * 
+	 * Value of this property is of type Collection (<? extends String>).
 	 */
 	public static final String PROP_KEY_ENDPOINT_INTERFACE_NAME = "osgi.remote.endpoint.interface";
 

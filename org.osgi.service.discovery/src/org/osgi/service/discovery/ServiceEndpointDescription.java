@@ -31,36 +31,58 @@ import java.util.Map;
 public interface ServiceEndpointDescription {
 
 	/**
-	 * @return full qualified service interface names provided by the advertised
-	 *         service (endpoint). The collection is never null or empty but
-	 *         contains at least one service interface.
+	 * Returns the value of the property with key
+	 * {@link ServicePublication#PROP_KEY_SERVICE_INTERFACE_NAME}.
+	 * 
+	 * @return service interface names provided by the advertised service
+	 *         (endpoint). The collection is never null or empty but contains at
+	 *         least one service interface.
 	 */
 	Collection /* <? extends String> */getProvidedInterfaces();
 
 	/**
-	 * @param interfaceName
-	 *            for which its communication protocol specific version should
-	 *            be returned. It might be for instance a web service interface
-	 *            name. Though this information is usually contained in
-	 *            according interface descriptions, e.g. a wsdl file, it can
-	 *            optionally be provided here as well since discovery usually
-	 *            doesn't read and interprets such accompanying descriptions.
+	 * Returns non-Java endpoint interface name associated with the given
+	 * interface. Value of the property with key
+	 * {@link ServicePublication#PROP_KEY_ENDPOINT_INTERFACE_NAME} is used by
+	 * this operation.
 	 * 
-	 * @return The protocol specific service interface name.
+	 * @param interfaceName
+	 *            for which its non-Java endpoint interface name should be
+	 *            returned. 
+	 *            
+	 * @return non-Java endpoint interface name. Null, if it hasn't been
+	 *         provided.
 	 */
 	String getEndpointInterfaceName(String interfaceName);
 
 	/**
+	 * Returns version of the given interface. Value of the property with key
+	 * {@link ServicePublication#PROP_KEY_SERVICE_INTERFACE_VERSION} is used by
+	 * this operation.
+	 * 
 	 * @param interfaceName
 	 *            for which its version should be returned.
-	 * @return The service interface/implementation version.
+	 * @return Version of given service interface. Null, if it hasn't been
+	 *         provided.
 	 */
 	String getVersion(String interfaceName);
 
 	/**
-	 * @return The URL of the service location.
+	 * Returns the value of the property with key
+	 * {@link ServicePublication#PROP_KEY_ENDPOINT_LOCATION}.
+	 * 
+	 * @return The URL of the service location. Null, if it hasn't been
+	 *         provided.
 	 */
 	URL getLocation();
+
+	/**
+	 * Returns the value of the property with key
+	 * {@link ServicePublication#PROP_KEY_ENDPOINT_ID}.
+	 * 
+	 * @return Unique id of service endpoint. Null, if it hasn't been provided.
+	 */
+	String getEndpointID();
 
 	/**
 	 * Getter method for the property value of a given key.
