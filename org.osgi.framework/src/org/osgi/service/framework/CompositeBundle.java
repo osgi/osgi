@@ -44,8 +44,7 @@ import org.osgi.framework.launch.Framework;
  * framework by the companion composite bundle.</li>
  * </ul>
  * <p>
- * A parent composite bundle does the following as specified by the link
- * manifest map:
+ * A parent composite bundle does the following as specified by the manifest map:
  * <ul>
  * <li>Exports packages to the child framework from the parent framework.</li>
  * <li>Imports packages from the child framework that are exported to the parent
@@ -78,9 +77,9 @@ import org.osgi.framework.launch.Framework;
  * <p>
  * The child framework may be persistently started and stopped by persistently
  * starting and stopping the child composite bundle, but it is still possible to
- * initialize and start the child framework explicitly while the child link
+ * initialize and start the child framework explicitly while the child composite
  * bundle is not persistently started. This allows for the child framework to be
- * initialized and populated with a set of bundles before starting the link
+ * initialized and populated with a set of bundles before starting the composite
  * bundle. The set of bundles installed into the child framework are considered
  * the bundles which compose the child composite bundle.
  * <p>
@@ -99,7 +98,11 @@ import org.osgi.framework.launch.Framework;
  * @version $Revision: 5897 $
  */
 public interface CompositeBundle extends Bundle {
+	
+	/** The child composite bundle type */
 	public static final int TYPE_CHILD = 0x01;
+	
+	/** The parent composite bundle type */
 	public static final int TYPE_PARENT = 0x02;
 
 	/**
@@ -115,20 +118,20 @@ public interface CompositeBundle extends Bundle {
 	 * Returns the companion composite bundle associated with this composite
 	 * bundle. The companion bundle is installed in the companion framework.
 	 * 
-	 * @return the companion link bundle.
+	 * @return the companion bundle.
 	 */
 	CompositeBundle getCompanionComposite();
 
 	/**
 	 * Updates this child composite bundle and its companion parent composite
-	 * bundle with the specified link manifest.
+	 * bundle with the specified manifest.
 	 * 
-	 * @param linkManifest
-	 *            the link manifest to update to.
+	 * @param compositeManifest
+	 *            the new composite manifest.
 	 * @throws BundleException
 	 *             If the update fails or if this is a parent composite bundle.
 	 */
-	void update(Map /* <String, String> */linkManifest) throws BundleException;
+	void update(Map /* <String, String> */compositeManifest) throws BundleException;
 
 	/**
 	 * Returns the type of composite bundle this is. A value of

@@ -56,7 +56,7 @@ public interface CompositeBundleFactory {
 	 * The following steps are required to create a child composite bundle:
 	 * <ol>
 	 * <li>If a bundle containing the same location string is already installed,
-	 * then if the Bundle object is a child <code>LinkBundle</code> then that
+	 * then if the Bundle object is a child <code>CompositeBundle</code> then that
 	 * composite bundle is returned; otherwise a BundleException is thrown
 	 * indicating that an incompatible bundle is already installed at the
 	 * specified location.</li>
@@ -122,7 +122,7 @@ public interface CompositeBundleFactory {
 	 * <li>The child composite bundle's state is set to INSTALLED.</li>
 	 * <li>A bundle event of type {@link BundleEvent#INSTALLED} is fired for the
 	 * child composite bundle.
-	 * <li>The <code>LinkBundle</code> object for the newly child composite
+	 * <li>The <code>CompositeBundle</code> object for the newly child composite
 	 * bundle is returned
 	 * </ol>
 	 * <p>
