@@ -1155,22 +1155,23 @@ public interface Bundle {
 	public BundleContext getBundleContext();
 
 	/**
-	 * Return the certificates for the signers of the bundle and the certificate
-	 * chains for those signers.
+	 * Return the certificates for the signers of this bundle and the
+	 * certificate chains for those signers.
 	 * 
 	 * @param signersType If {@link #SIGNERS_ALL} is specified, then information
-	 *        on all signers is returned. If {@link #SIGNERS_TRUSTED} is
-	 *        specified, then only information on the signers trusted by the
-	 *        framework is returned.
-	 * @return The <code>X509Certificate</code>s for the signers of the bundle
+	 *        on all signers of this bundle is returned. If
+	 *        {@link #SIGNERS_TRUSTED} is specified, then only information on
+	 *        the signers of this bundle trusted by the framework is returned.
+	 * @return The <code>X509Certificate</code>s for the signers of this bundle
 	 *         and the <code>X509Certificate</code> chains for those signers.
 	 *         The keys of the <code>Map</code> are the
-	 *         <code>X509Certificate</code>s of the signers of the bundle. The
+	 *         <code>X509Certificate</code>s of the signers of this bundle. The
 	 *         value for a key is a <code>List</code> containing the
 	 *         <code>X509Certificate</code> chain for the signer. The first item
 	 *         in the <code>List</code> is the signer's
 	 *         <code>X509Certificate</code> which is then followed by the rest
-	 *         of the <code>X509Certificate</code> chain.
+	 *         of the <code>X509Certificate</code> chain. The returned
+	 *         <code>Map</code> will be empty if there are no signers.
 	 * @throws IllegalArgumentException If the specified
 	 *         <code>signersType</code> is not {@link #SIGNERS_ALL} or
 	 *         {@link #SIGNERS_TRUSTED}.
