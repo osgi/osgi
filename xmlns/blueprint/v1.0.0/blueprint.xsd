@@ -8,7 +8,7 @@
 
     <!-- Schema elements for core component declarations -->
 
-    <xsd:complexType name="identifiedType" abstract="true">
+    <xsd:complexType name="TidentifiedType" abstract="true">
         <xsd:attribute name="id" type="xsd:ID">
         </xsd:attribute>
     </xsd:complexType>
@@ -66,7 +66,7 @@
    <xsd:attributeGroup name="componentAttributes">
         <xsd:attribute name="class" type="xsd:string"/>
         <xsd:attribute name="scope" type="xsd:string"/>
-        <xsd:attribute name="lazy-init" default="default" type="defaultable-boolean"/>
+        <xsd:attribute name="lazy-init" default="default" type="Tdefaultable-boolean"/>
         <xsd:attribute name="depends-on" type="xsd:string"/>
         <xsd:attribute name="init-method" type="xsd:string"/>
         <xsd:attribute name="destroy-method" type="xsd:string"/>
@@ -143,7 +143,7 @@
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:element name="property" type="propertyType"/>
+    <xsd:element name="property" type="TpropertyType"/>
 
     <xsd:element name="ref">
         <xsd:complexType>
@@ -179,11 +179,11 @@
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:element name="list" type="listOrSetType"/>
-    <xsd:element name="set" type="listOrSetType"/>
-    <xsd:element name="map" type="mapType"/>
-    <xsd:element name="entry" type="entryType"/>
-    <xsd:element name="props" type="propsType"/>
+    <xsd:element name="list" type="TlistOrSetType"/>
+    <xsd:element name="set" type="TlistOrSetType"/>
+    <xsd:element name="map" type="TmapType"/>
+    <xsd:element name="entry" type="TentryType"/>
+    <xsd:element name="props" type="TpropsType"/>
     <xsd:element name="key">
         <xsd:complexType>
 	    	<xsd:group ref="keyElement"/>
@@ -197,7 +197,7 @@
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:complexType name="propertyType">
+    <xsd:complexType name="TpropertyType">
         <xsd:sequence>
             <xsd:element ref="description" minOccurs="0"/>
 	        <xsd:group ref="valueElement"/>
@@ -210,21 +210,21 @@
   <!-- Collection Types -->
 
     <!-- base collection type -->
-    <xsd:complexType name="baseCollectionType"/>
+    <xsd:complexType name="TbaseCollectionType"/>
 
     <!-- base type for collections that have (possibly) typed nested values -->
-    <xsd:complexType name="typedCollectionType">
+    <xsd:complexType name="TtypedCollectionType">
         <xsd:complexContent>
-            <xsd:extension base="baseCollectionType">
+            <xsd:extension base="TbaseCollectionType">
                 <xsd:attribute name="value-type" type="xsd:string"/>
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
 
     <!-- 'map' element type -->
-    <xsd:complexType name="mapType">
+    <xsd:complexType name="TmapType">
         <xsd:complexContent>
-            <xsd:extension base="typedCollectionType">
+            <xsd:extension base="TtypedCollectionType">
                 <xsd:sequence>
                     <xsd:choice minOccurs="0" maxOccurs="unbounded">
                         <xsd:element ref="entry"/>
@@ -236,7 +236,7 @@
     </xsd:complexType>
 
     <!-- 'entry' element type -->
-    <xsd:complexType name="entryType">
+    <xsd:complexType name="TentryType">
         <xsd:sequence>
             <xsd:element ref="key" minOccurs="0"/>
             <xsd:group ref="valueElement"/>
@@ -248,18 +248,18 @@
     </xsd:complexType>
 
     <!-- 'list' and 'set' collection type -->
-    <xsd:complexType name="listOrSetType">
+    <xsd:complexType name="TlistOrSetType">
         <xsd:complexContent>
-            <xsd:extension base="typedCollectionType">
+            <xsd:extension base="TtypedCollectionType">
                 <xsd:group ref="valueElement" minOccurs="0" maxOccurs="unbounded"/>
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
 
     <!-- 'props' collection type -->
-    <xsd:complexType name="propsType">
+    <xsd:complexType name="TpropsType">
         <xsd:complexContent>
-            <xsd:extension base="baseCollectionType">
+            <xsd:extension base="TbaseCollectionType">
                 <xsd:sequence>
                     <xsd:choice minOccurs="0" maxOccurs="unbounded">
                         <xsd:element ref="prop"/>
@@ -270,7 +270,7 @@
     </xsd:complexType>
 
     <!-- simple internal types -->
-    <xsd:simpleType name="defaultable-boolean">
+    <xsd:simpleType name="Tdefaultable-boolean">
         <xsd:restriction base="xsd:NMTOKEN">
             <xsd:enumeration value="default"/>
             <xsd:enumeration value="true"/>
@@ -298,9 +298,9 @@
 
     <xsd:complexType name="Treference">
       <xsd:complexContent>
-        <xsd:extension base="identifiedType">
+        <xsd:extension base="TidentifiedType">
           <xsd:sequence minOccurs="0" maxOccurs="unbounded">
-            <xsd:element name="interfaces" type="listOrSetType" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="interfaces" type="TlistOrSetType" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="listener" type="Tlistener" minOccurs="0" maxOccurs="unbounded"/>
           </xsd:sequence>
           <xsd:attribute name="interface" use="optional" type="xsd:token"/>
@@ -384,7 +384,7 @@
 
    <xsd:complexType name="Tservice">
       <xsd:complexContent>
-        <xsd:extension base="identifiedType">
+        <xsd:extension base="TidentifiedType">
           <xsd:choice>
           	<xsd:group ref="serviceElements"/>
           	<!-- nested component declaration -->
@@ -401,8 +401,8 @@
    
    <xsd:group name="serviceElements">
           <xsd:sequence>
-            <xsd:element name="interfaces" type="listOrSetType" minOccurs="0"/>
-            <xsd:element name="service-properties" minOccurs="0" type="mapType"/>
+            <xsd:element name="interfaces" type="TlistOrSetType" minOccurs="0"/>
+            <xsd:element name="service-properties" minOccurs="0" type="TmapType"/>
             <xsd:element name="registration-listener" type="TserviceRegistrationListener" 
                    minOccurs="0" maxOccurs="unbounded"/>
           </xsd:sequence>
