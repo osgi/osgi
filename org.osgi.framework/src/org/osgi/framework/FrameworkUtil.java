@@ -28,6 +28,8 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.security.auth.x500.X500Principal;
+
 /**
  * Framework Utility class.
  * 
@@ -60,17 +62,137 @@ public class FrameworkUtil {
 	 * as the framework implementation-specific Filter implementation returned
 	 * by {@link BundleContext#createFilter(String)}.
 	 * 
-	 * @param filter The filter string.
+	 * @param filter
+	 *            The filter string.
 	 * @return A <code>Filter</code> object encapsulating the filter string.
-	 * @throws InvalidSyntaxException If <code>filter</code> contains an invalid
-	 *         filter string that cannot be parsed.
-	 * @throws NullPointerException If <code>filter</code> is null.
+	 * @throws InvalidSyntaxException
+	 *             If <code>filter</code> contains an invalid filter string that
+	 *             cannot be parsed.
+	 * @throws NullPointerException
+	 *             If <code>filter</code> is null.
 	 * 
 	 * @see Filter
 	 */
 	public static Filter createFilter(String filter)
 			throws InvalidSyntaxException {
 		return FilterImpl.newInstance(filter);
+	}
+
+	/**
+	 * Matches a Distinguished Name (DN) chain against a pattern. DNs can be
+	 * matched using wildcards. A wildcard ('*' \u002A) replaces all possible
+	 * values. Due to the structure of the DN, the comparison is more
+	 * complicated than string-based wildcard matching.
+	 * <p>
+	 * A wildcard can stand for zero or more DNs in a chain, a number of
+	 * relative distinguished names (RDNs) within a DN, or the value of a single
+	 * RDN. The DNs in the chain and the matching pattern are canonicalized
+	 * before processing. This means, among other things, that spaces must be
+	 * ignored, except in values.
+	 * </p>
+	 * <p>
+	 * The format of a wildcard match pattern is:
+	 * 
+	 * <pre>
+	 * matchPattern	::= dn-match ( ';' dn-match ) *
+	 * dn-match 	::= ( '*' | rdn-match ) ( ',' rdn-match ) * | '-'
+	 * rdn-match 	::= name '=' value-match
+	 * value-match 	::= '*' | value-star
+	 * value-star 	::= &lt; value, requires escaped '*' and '-' &gt;
+	 * </pre>
+	 * 
+	 * </p>
+	 * <p>
+	 * The most simple case is a single wildcard; it must match any DN. A
+	 * wildcard can also replace the first list of RDNs of a DN. The first RDNs
+	 * are the least significant. Such lists of matched RDNs can be empty.
+	 * </p>
+	 * <p>
+	 * For example, a match pattern with a wildcard that matches all all DNs
+	 * that end with RDNs of o=ACME and c=US would look like this:
+	 * 
+	 * <pre>
+	 * *, o=ACME, c=US
+	 * </pre>
+	 * 
+	 * This match pattern would match the following DNs:
+	 * 
+	 * <pre>
+	 * cn = Bugs Bunny, o = ACME, c = US
+	 * ou = Carots, cn=Daffy Duck, o=ACME, c=US
+	 * street = 9C\, Avenue St. Drézéry, o=ACME, c=US
+	 * dc=www, dc=acme, dc=com, o=ACME, c=US
+	 * o=ACME, c=US
+	 * </pre>
+	 * 
+	 * The following DNs would not match:
+	 * 
+	 * <pre>
+	 * street = 9C\, Avenue St. Drézéry, o=ACME, c=FR
+	 * dc=www, dc=acme, dc=com, c=US
+	 * </pre>
+	 * 
+	 * If a wildcard is used for a value of an RDN, the value must be exactly *.
+	 * The wildcard must match any value, and no substring matching must be
+	 * done. For example:
+	 * 
+	 * <pre>
+	 * cn=*,o=ACME,c=*
+	 * </pre>
+	 * 
+	 * This match pattern with wildcard must match the following DNs:
+	 * 
+	 * <pre>
+	 * cn=Bugs Bunny,o=ACME,c=US
+	 * cn = Daffy Duck , o = ACME , c = US
+	 * cn=Road Runner, o=ACME, c=NL
+	 * </pre>
+	 * 
+	 * But not:
+	 * 
+	 * <pre>
+	 * o=ACME, c=NL
+	 * dc=acme.com, cn=Bugs Bunny, o=ACME, c=US
+	 * </pre>
+	 * 
+	 * </p>
+	 * <p>
+	 * A match pattern may contain a chain of DN match patterns. The
+	 * semicolon(';' \u0038) must be used to separate DN match patterns in a
+	 * chain. Wildcards can also be used to match against a complete DN within a
+	 * chain.
+	 * <p>
+	 * <p>
+	 * The following example matches a certificate signed by Tweety Inc. in the
+	 * US.
+	 * 
+	 * <pre>
+	 * * ; ou=S &amp; V, o=Tweety Inc., c=US
+	 * </pre>
+	 * 
+	 * The wildcard ('*') matches zero or one DN in the chain, however,
+	 * sometimes it is necessary to match a longer chain. The minus sign ('-'
+	 * \u002D) represents zero or more DNs, whereas the asterisk only represents
+	 * a single DN. For example, to match a DN where the Tweety Inc. is in the
+	 * DN chain, use the following expression:
+	 * 
+	 * <pre>
+	 * - ; *, o=Tweety Inc., c=US
+	 * </pre>
+	 * 
+	 * </p>
+	 * 
+	 * @param dnChain
+	 *            A DN chain. Each element of the chain must be of type
+	 *            {@link String} and use the format defined in RFC 2253.
+	 * @param matchPattern
+	 *            a pattern to match the DN chain against
+	 * @return true of the pattern matches the DN chain; otherwise false is
+	 *         returned
+	 */
+	public static boolean matchDistinguishedNameChain(String matchPattern,
+			List /* <String> */dnChain) {
+		return DNChainMatching.match(matchPattern, new ArrayList(dnChain));
 	}
 
 	/**
@@ -186,7 +308,7 @@ public class FrameworkUtil {
 	 * 
 	 * <pre>
 	 * Dictionary d = new Hashtable();
-	 * d.put(&quot;cn&quot;, new String[] {&quot;a&quot;, &quot;b&quot;, &quot;c&quot;});
+	 * d.put(&quot;cn&quot;, new String[] { &quot;a&quot;, &quot;b&quot;, &quot;c&quot; });
 	 * </pre>
 	 * 
 	 * d will match <code>(cn=a)</code> and also <code>(cn=b)</code>
@@ -205,9 +327,11 @@ public class FrameworkUtil {
 		 * will be thrown with a human readable message where the filter became
 		 * unparsable.
 		 * 
-		 * @param filterString the filter string.
-		 * @exception InvalidSyntaxException If the filter parameter contains an
-		 *            invalid filter string that cannot be parsed.
+		 * @param filterString
+		 *            the filter string.
+		 * @exception InvalidSyntaxException
+		 *                If the filter parameter contains an invalid filter
+		 *                string that cannot be parsed.
 		 */
 		static FilterImpl newInstance(String filterString)
 				throws InvalidSyntaxException {
@@ -221,8 +345,9 @@ public class FrameworkUtil {
 		 * referenced service's properties. The keys are case insensitively
 		 * matched with this <code>Filter</code>.
 		 * 
-		 * @param reference The reference to the service whose properties are
-		 *        used in the match.
+		 * @param reference
+		 *            The reference to the service whose properties are used in
+		 *            the match.
 		 * @return <code>true</code> if the service's properties match this
 		 *         <code>Filter</code>; <code>false</code> otherwise.
 		 */
@@ -236,12 +361,14 @@ public class FrameworkUtil {
 		 * values. The keys are case insensitively matched with this
 		 * <code>Filter</code>.
 		 * 
-		 * @param dictionary The <code>Dictionary</code> whose keys are used in
-		 *        the match.
+		 * @param dictionary
+		 *            The <code>Dictionary</code> whose keys are used in the
+		 *            match.
 		 * @return <code>true</code> if the <code>Dictionary</code>'s keys and
 		 *         values match this filter; <code>false</code> otherwise.
-		 * @throws IllegalArgumentException If <code>dictionary</code> contains
-		 *         case variants of the same key name.
+		 * @throws IllegalArgumentException
+		 *             If <code>dictionary</code> contains case variants of the
+		 *             same key name.
 		 */
 		public boolean match(Dictionary dictionary) {
 			return match0(new CaseInsensitiveDictionary(dictionary));
@@ -253,8 +380,9 @@ public class FrameworkUtil {
 		 * <code>Dictionary</code>'s keys and values. The keys are case
 		 * sensitively matched with this <code>Filter</code>.
 		 * 
-		 * @param dictionary The <code>Dictionary</code> whose keys are used in
-		 *        the match.
+		 * @param dictionary
+		 *            The <code>Dictionary</code> whose keys are used in the
+		 *            match.
 		 * @return <code>true</code> if the <code>Dictionary</code>'s keys and
 		 *         values match this filter; <code>false</code> otherwise.
 		 * @since 1.3
@@ -278,89 +406,88 @@ public class FrameworkUtil {
 				sb.append('(');
 
 				switch (op) {
-					case AND : {
-						sb.append('&');
+				case AND: {
+					sb.append('&');
 
-						FilterImpl[] filters = (FilterImpl[]) value;
-						for (int i = 0, size = filters.length; i < size; i++) {
-							sb.append(filters[i].toString());
+					FilterImpl[] filters = (FilterImpl[]) value;
+					for (int i = 0, size = filters.length; i < size; i++) {
+						sb.append(filters[i].toString());
+					}
+
+					break;
+				}
+
+				case OR: {
+					sb.append('|');
+
+					FilterImpl[] filters = (FilterImpl[]) value;
+					for (int i = 0, size = filters.length; i < size; i++) {
+						sb.append(filters[i].toString());
+					}
+
+					break;
+				}
+
+				case NOT: {
+					sb.append('!');
+					sb.append(value.toString());
+
+					break;
+				}
+
+				case SUBSTRING: {
+					sb.append(attr);
+					sb.append('=');
+
+					String[] substrings = (String[]) value;
+
+					for (int i = 0, size = substrings.length; i < size; i++) {
+						String substr = substrings[i];
+
+						if (substr == null) /* * */{
+							sb.append('*');
+						} else /* xxx */{
+							sb.append(encodeValue(substr));
 						}
-
-						break;
 					}
 
-					case OR : {
-						sb.append('|');
+					break;
+				}
+				case EQUAL: {
+					sb.append(attr);
+					sb.append('=');
+					sb.append(encodeValue(value.toString()));
 
-						FilterImpl[] filters = (FilterImpl[]) value;
-						for (int i = 0, size = filters.length; i < size; i++) {
-							sb.append(filters[i].toString());
-						}
+					break;
+				}
+				case GREATER: {
+					sb.append(attr);
+					sb.append(">="); //$NON-NLS-1$
+					sb.append(encodeValue(value.toString()));
 
-						break;
-					}
+					break;
+				}
+				case LESS: {
+					sb.append(attr);
+					sb.append("<="); //$NON-NLS-1$
+					sb.append(encodeValue(value.toString()));
 
-					case NOT : {
-						sb.append('!');
-						sb.append(value.toString());
+					break;
+				}
+				case APPROX: {
+					sb.append(attr);
+					sb.append("~="); //$NON-NLS-1$
+					sb.append(encodeValue(approxString(value.toString())));
 
-						break;
-					}
+					break;
+				}
 
-					case SUBSTRING : {
-						sb.append(attr);
-						sb.append('=');
+				case PRESENT: {
+					sb.append(attr);
+					sb.append("=*"); //$NON-NLS-1$
 
-						String[] substrings = (String[]) value;
-
-						for (int i = 0, size = substrings.length; i < size; i++) {
-							String substr = substrings[i];
-
-							if (substr == null) /* * */{
-								sb.append('*');
-							}
-							else /* xxx */{
-								sb.append(encodeValue(substr));
-							}
-						}
-
-						break;
-					}
-					case EQUAL : {
-						sb.append(attr);
-						sb.append('=');
-						sb.append(encodeValue(value.toString()));
-
-						break;
-					}
-					case GREATER : {
-						sb.append(attr);
-						sb.append(">="); //$NON-NLS-1$
-						sb.append(encodeValue(value.toString()));
-
-						break;
-					}
-					case LESS : {
-						sb.append(attr);
-						sb.append("<="); //$NON-NLS-1$
-						sb.append(encodeValue(value.toString()));
-
-						break;
-					}
-					case APPROX : {
-						sb.append(attr);
-						sb.append("~="); //$NON-NLS-1$
-						sb.append(encodeValue(approxString(value.toString())));
-
-						break;
-					}
-
-					case PRESENT : {
-						sb.append(attr);
-						sb.append("=*"); //$NON-NLS-1$
-
-						break;
-					}
+					break;
+				}
 				}
 
 				sb.append(')');
@@ -381,7 +508,8 @@ public class FrameworkUtil {
 		 * This implementation returns the result of calling
 		 * <code>this.toString().equals(obj.toString()</code>.
 		 * 
-		 * @param obj The object to compare against this <code>Filter</code>.
+		 * @param obj
+		 *            The object to compare against this <code>Filter</code>.
 		 * @return If the other object is a <code>Filter</code> object, then
 		 *         returns the result of calling
 		 *         <code>this.toString().equals(obj.toString()</code>;
@@ -413,27 +541,27 @@ public class FrameworkUtil {
 		}
 
 		/** filter operation */
-		private final int					op;
-		private static final int			EQUAL		= 1;
-		private static final int			APPROX		= 2;
-		private static final int			GREATER		= 3;
-		private static final int			LESS		= 4;
-		private static final int			PRESENT		= 5;
-		private static final int			SUBSTRING	= 6;
-		private static final int			AND			= 7;
-		private static final int			OR			= 8;
-		private static final int			NOT			= 9;
+		private final int op;
+		private static final int EQUAL = 1;
+		private static final int APPROX = 2;
+		private static final int GREATER = 3;
+		private static final int LESS = 4;
+		private static final int PRESENT = 5;
+		private static final int SUBSTRING = 6;
+		private static final int AND = 7;
+		private static final int OR = 8;
+		private static final int NOT = 9;
 
 		/** filter attribute or null if operation AND, OR or NOT */
-		private final String				attr;
+		private final String attr;
 		/** filter operands */
-		private final Object				value;
+		private final Object value;
 
 		/* normalized filter string for topLevel Filter object */
-		private transient volatile String	filterString;
+		private transient volatile String filterString;
 
 		/* true if root Filter object */
-		private final boolean				topLevel;
+		private final boolean topLevel;
 
 		FilterImpl(boolean topLevel, int operation, String attr, Object value) {
 			this.topLevel = topLevel;
@@ -446,57 +574,58 @@ public class FrameworkUtil {
 		 * Internal match routine. Dictionary parameter must support
 		 * case-insensitive get.
 		 * 
-		 * @param properties A dictionary whose keys are used in the match.
+		 * @param properties
+		 *            A dictionary whose keys are used in the match.
 		 * @return If the Dictionary's keys match the filter, return
 		 *         <code>true</code>. Otherwise, return <code>false</code>.
 		 */
 		private boolean match0(Dictionary properties) {
 			switch (op) {
-				case AND : {
-					FilterImpl[] filters = (FilterImpl[]) value;
-					for (int i = 0, size = filters.length; i < size; i++) {
-						if (!filters[i].match0(properties)) {
-							return false;
-						}
+			case AND: {
+				FilterImpl[] filters = (FilterImpl[]) value;
+				for (int i = 0, size = filters.length; i < size; i++) {
+					if (!filters[i].match0(properties)) {
+						return false;
 					}
-
-					return true;
 				}
 
-				case OR : {
-					FilterImpl[] filters = (FilterImpl[]) value;
-					for (int i = 0, size = filters.length; i < size; i++) {
-						if (filters[i].match0(properties)) {
-							return true;
-						}
+				return true;
+			}
+
+			case OR: {
+				FilterImpl[] filters = (FilterImpl[]) value;
+				for (int i = 0, size = filters.length; i < size; i++) {
+					if (filters[i].match0(properties)) {
+						return true;
 					}
-
-					return false;
 				}
 
-				case NOT : {
-					FilterImpl filter = (FilterImpl) value;
+				return false;
+			}
 
-					return !filter.match0(properties);
-				}
+			case NOT: {
+				FilterImpl filter = (FilterImpl) value;
 
-				case SUBSTRING :
-				case EQUAL :
-				case GREATER :
-				case LESS :
-				case APPROX : {
-					Object prop = (properties == null) ? null : properties
-							.get(attr);
+				return !filter.match0(properties);
+			}
 
-					return compare(op, prop, value);
-				}
+			case SUBSTRING:
+			case EQUAL:
+			case GREATER:
+			case LESS:
+			case APPROX: {
+				Object prop = (properties == null) ? null : properties
+						.get(attr);
 
-				case PRESENT : {
-					Object prop = (properties == null) ? null : properties
-							.get(attr);
+				return compare(op, prop, value);
+			}
 
-					return prop != null;
-				}
+			case PRESENT: {
+				Object prop = (properties == null) ? null : properties
+						.get(attr);
+
+				return prop != null;
+			}
 			}
 
 			return false;
@@ -505,7 +634,8 @@ public class FrameworkUtil {
 		/**
 		 * Encode the value string such that '(', '*', ')' and '\' are escaped.
 		 * 
-		 * @param value unencoded value string.
+		 * @param value
+		 *            unencoded value string.
 		 * @return encoded value string.
 		 */
 		private static String encodeValue(String value) {
@@ -521,16 +651,16 @@ public class FrameworkUtil {
 				char c = output[i];
 
 				switch (c) {
-					case '(' :
-					case '*' :
-					case ')' :
-					case '\\' : {
-						output[cursor] = '\\';
-						cursor++;
-						encoded = true;
+				case '(':
+				case '*':
+				case ')':
+				case '\\': {
+					output[cursor] = '\\';
+					cursor++;
+					encoded = true;
 
-						break;
-					}
+					break;
+				}
 				}
 
 				output[cursor] = c;
@@ -700,69 +830,66 @@ public class FrameworkUtil {
 		private boolean compare_String(int operation, String string,
 				Object value2) {
 			switch (operation) {
-				case SUBSTRING : {
-					String[] substrings = (String[]) value2;
-					int pos = 0;
-					for (int i = 0, size = substrings.length; i < size; i++) {
-						String substr = substrings[i];
+			case SUBSTRING: {
+				String[] substrings = (String[]) value2;
+				int pos = 0;
+				for (int i = 0, size = substrings.length; i < size; i++) {
+					String substr = substrings[i];
 
-						if (i + 1 < size) /* if this is not that last substr */{
-							if (substr == null) /* * */{
-								String substr2 = substrings[i + 1];
+					if (i + 1 < size) /* if this is not that last substr */{
+						if (substr == null) /* * */{
+							String substr2 = substrings[i + 1];
 
-								if (substr2 == null) /* ** */
-									continue; /* ignore first star */
-								/* *xxx */
-								int index = string.indexOf(substr2, pos);
-								if (index == -1) {
-									return false;
-								}
-
-								pos = index + substr2.length();
-								if (i + 2 < size) // if there are more
-									// substrings, increment
-									// over the string we just
-									// matched; otherwise need
-									// to do the last substr
-									// check
-									i++;
-							}
-							else /* xxx */{
-								int len = substr.length();
-								if (string.regionMatches(pos, substr, 0, len)) {
-									pos += len;
-								}
-								else {
-									return false;
-								}
-							}
-						}
-						else /* last substr */{
-							if (substr == null) /* * */{
-								return true;
-							}
+							if (substr2 == null) /* ** */
+								continue; /* ignore first star */
 							/* xxx */
-							return string.endsWith(substr);
+							int index = string.indexOf(substr2, pos);
+							if (index == -1) {
+								return false;
+							}
+
+							pos = index + substr2.length();
+							if (i + 2 < size) // if there are more
+								// substrings, increment
+								// over the string we just
+								// matched; otherwise need
+								// to do the last substr
+								// check
+								i++;
+						} else /* xxx */{
+							int len = substr.length();
+							if (string.regionMatches(pos, substr, 0, len)) {
+								pos += len;
+							} else {
+								return false;
+							}
 						}
+					} else /* last substr */{
+						if (substr == null) /* * */{
+							return true;
+						}
+						/* xxx */
+						return string.endsWith(substr);
 					}
+				}
 
-					return true;
-				}
-				case EQUAL : {
-					return string.equals(value2);
-				}
-				case APPROX : {
-					string = approxString(string);
-					String string2 = approxString((String) value2);
+				return true;
+			}
+			case EQUAL: {
+				return string.equals(value2);
+			}
+			case APPROX: {
+				string = approxString(string);
+				String string2 = approxString((String) value2);
 
-					return string.equalsIgnoreCase(string2);
-				}
-				case GREATER : {
-					return string.compareTo((String) value2) >= 0;
-				}
-				case LESS : {
-					return string.compareTo((String) value2) <= 0;
-				}
+				return string.equalsIgnoreCase(string2);
+			}
+			case GREATER: {
+				return string.compareTo((String) value2) >= 0;
+			}
+			case LESS: {
+				return string.compareTo((String) value2) <= 0;
+			}
 			}
 			return false;
 		}
@@ -770,19 +897,19 @@ public class FrameworkUtil {
 		private boolean compare_Integer(int operation, int intval, Object value2) {
 			int intval2 = Integer.parseInt(((String) value2).trim());
 			switch (operation) {
-				case SUBSTRING : {
-					return false;
-				}
-				case APPROX :
-				case EQUAL : {
-					return intval == intval2;
-				}
-				case GREATER : {
-					return intval >= intval2;
-				}
-				case LESS : {
-					return intval <= intval2;
-				}
+			case SUBSTRING: {
+				return false;
+			}
+			case APPROX:
+			case EQUAL: {
+				return intval == intval2;
+			}
+			case GREATER: {
+				return intval >= intval2;
+			}
+			case LESS: {
+				return intval <= intval2;
+			}
 			}
 			return false;
 		}
@@ -790,19 +917,19 @@ public class FrameworkUtil {
 		private boolean compare_Long(int operation, long longval, Object value2) {
 			long longval2 = Long.parseLong(((String) value2).trim());
 			switch (operation) {
-				case SUBSTRING : {
-					return false;
-				}
-				case APPROX :
-				case EQUAL : {
-					return longval == longval2;
-				}
-				case GREATER : {
-					return longval >= longval2;
-				}
-				case LESS : {
-					return longval <= longval2;
-				}
+			case SUBSTRING: {
+				return false;
+			}
+			case APPROX:
+			case EQUAL: {
+				return longval == longval2;
+			}
+			case GREATER: {
+				return longval >= longval2;
+			}
+			case LESS: {
+				return longval <= longval2;
+			}
 			}
 			return false;
 		}
@@ -810,19 +937,19 @@ public class FrameworkUtil {
 		private boolean compare_Byte(int operation, byte byteval, Object value2) {
 			byte byteval2 = Byte.parseByte(((String) value2).trim());
 			switch (operation) {
-				case SUBSTRING : {
-					return false;
-				}
-				case APPROX :
-				case EQUAL : {
-					return byteval == byteval2;
-				}
-				case GREATER : {
-					return byteval >= byteval2;
-				}
-				case LESS : {
-					return byteval <= byteval2;
-				}
+			case SUBSTRING: {
+				return false;
+			}
+			case APPROX:
+			case EQUAL: {
+				return byteval == byteval2;
+			}
+			case GREATER: {
+				return byteval >= byteval2;
+			}
+			case LESS: {
+				return byteval <= byteval2;
+			}
 			}
 			return false;
 		}
@@ -831,19 +958,19 @@ public class FrameworkUtil {
 				Object value2) {
 			short shortval2 = Short.parseShort(((String) value2).trim());
 			switch (operation) {
-				case SUBSTRING : {
-					return false;
-				}
-				case APPROX :
-				case EQUAL : {
-					return shortval == shortval2;
-				}
-				case GREATER : {
-					return shortval >= shortval2;
-				}
-				case LESS : {
-					return shortval <= shortval2;
-				}
+			case SUBSTRING: {
+				return false;
+			}
+			case APPROX:
+			case EQUAL: {
+				return shortval == shortval2;
+			}
+			case GREATER: {
+				return shortval >= shortval2;
+			}
+			case LESS: {
+				return shortval <= shortval2;
+			}
 			}
 			return false;
 		}
@@ -852,25 +979,25 @@ public class FrameworkUtil {
 				Object value2) {
 			char charval2 = (((String) value2).trim()).charAt(0);
 			switch (operation) {
-				case SUBSTRING : {
-					return false;
-				}
-				case EQUAL : {
-					return charval == charval2;
-				}
-				case APPROX : {
-					return (charval == charval2)
-							|| (Character.toUpperCase(charval) == Character
-									.toUpperCase(charval2))
-							|| (Character.toLowerCase(charval) == Character
-									.toLowerCase(charval2));
-				}
-				case GREATER : {
-					return charval >= charval2;
-				}
-				case LESS : {
-					return charval <= charval2;
-				}
+			case SUBSTRING: {
+				return false;
+			}
+			case EQUAL: {
+				return charval == charval2;
+			}
+			case APPROX: {
+				return (charval == charval2)
+						|| (Character.toUpperCase(charval) == Character
+								.toUpperCase(charval2))
+						|| (Character.toLowerCase(charval) == Character
+								.toLowerCase(charval2));
+			}
+			case GREATER: {
+				return charval >= charval2;
+			}
+			case LESS: {
+				return charval <= charval2;
+			}
 			}
 			return false;
 		}
@@ -880,15 +1007,15 @@ public class FrameworkUtil {
 			boolean boolval2 = new Boolean(((String) value2).trim())
 					.booleanValue();
 			switch (operation) {
-				case SUBSTRING : {
-					return false;
-				}
-				case APPROX :
-				case EQUAL : 
-				case GREATER : 
-				case LESS : {
-					return boolval == boolval2;
-				}
+			case SUBSTRING: {
+				return false;
+			}
+			case APPROX:
+			case EQUAL:
+			case GREATER:
+			case LESS: {
+				return boolval == boolval2;
+			}
 			}
 			return false;
 		}
@@ -897,19 +1024,19 @@ public class FrameworkUtil {
 				Object value2) {
 			float floatval2 = Float.parseFloat(((String) value2).trim());
 			switch (operation) {
-				case SUBSTRING : {
-					return false;
-				}
-				case APPROX :
-				case EQUAL : {
-					return Float.compare(floatval, floatval2) == 0;
-				}
-				case GREATER : {
-					return Float.compare(floatval, floatval2) >= 0;
-				}
-				case LESS : {
-					return Float.compare(floatval, floatval2) <= 0;
-				}
+			case SUBSTRING: {
+				return false;
+			}
+			case APPROX:
+			case EQUAL: {
+				return Float.compare(floatval, floatval2) == 0;
+			}
+			case GREATER: {
+				return Float.compare(floatval, floatval2) >= 0;
+			}
+			case LESS: {
+				return Float.compare(floatval, floatval2) <= 0;
+			}
 			}
 			return false;
 		}
@@ -918,32 +1045,31 @@ public class FrameworkUtil {
 				Object value2) {
 			double doubleval2 = Double.parseDouble(((String) value2).trim());
 			switch (operation) {
-				case SUBSTRING : {
-					return false;
-				}
-				case APPROX :
-				case EQUAL : {
-					return Double.compare(doubleval, doubleval2) == 0;
-				}
-				case GREATER : {
-					return Double.compare(doubleval, doubleval2) >= 0;
-				}
-				case LESS : {
-					return Double.compare(doubleval, doubleval2) <= 0;
-				}
+			case SUBSTRING: {
+				return false;
+			}
+			case APPROX:
+			case EQUAL: {
+				return Double.compare(doubleval, doubleval2) == 0;
+			}
+			case GREATER: {
+				return Double.compare(doubleval, doubleval2) >= 0;
+			}
+			case LESS: {
+				return Double.compare(doubleval, doubleval2) <= 0;
+			}
 			}
 			return false;
 		}
 
-		private static final Class[]	constructorType	= new Class[] {String.class};
+		private static final Class[] constructorType = new Class[] { String.class };
 
 		private boolean compare_Comparable(int operation, Comparable value1,
 				Object value2) {
 			Constructor constructor;
 			try {
 				constructor = value1.getClass().getConstructor(constructorType);
-			}
-			catch (NoSuchMethodException e) {
+			} catch (NoSuchMethodException e) {
 				return false;
 			}
 			try {
@@ -951,32 +1077,29 @@ public class FrameworkUtil {
 					AccessController.doPrivileged(new SetAccessibleAction(
 							constructor));
 				value2 = constructor
-						.newInstance(new Object[] {((String) value2).trim()});
-			}
-			catch (IllegalAccessException e) {
+						.newInstance(new Object[] { ((String) value2).trim() });
+			} catch (IllegalAccessException e) {
 				return false;
-			}
-			catch (InvocationTargetException e) {
+			} catch (InvocationTargetException e) {
 				return false;
-			}
-			catch (InstantiationException e) {
+			} catch (InstantiationException e) {
 				return false;
 			}
 
 			switch (operation) {
-				case SUBSTRING : {
-					return false;
-				}
-				case APPROX : 
-				case EQUAL : {
-					return value1.compareTo(value2) == 0;
-				}
-				case GREATER : {
-					return value1.compareTo(value2) >= 0;
-				}
-				case LESS : {
-					return value1.compareTo(value2) <= 0;
-				}
+			case SUBSTRING: {
+				return false;
+			}
+			case APPROX:
+			case EQUAL: {
+				return value1.compareTo(value2) == 0;
+			}
+			case GREATER: {
+				return value1.compareTo(value2) >= 0;
+			}
+			case LESS: {
+				return value1.compareTo(value2) <= 0;
+			}
 			}
 			return false;
 		}
@@ -986,8 +1109,7 @@ public class FrameworkUtil {
 			Constructor constructor;
 			try {
 				constructor = value1.getClass().getConstructor(constructorType);
-			}
-			catch (NoSuchMethodException e) {
+			} catch (NoSuchMethodException e) {
 				return false;
 			}
 			try {
@@ -995,28 +1117,25 @@ public class FrameworkUtil {
 					AccessController.doPrivileged(new SetAccessibleAction(
 							constructor));
 				value2 = constructor
-						.newInstance(new Object[] {((String) value2).trim()});
-			}
-			catch (IllegalAccessException e) {
+						.newInstance(new Object[] { ((String) value2).trim() });
+			} catch (IllegalAccessException e) {
 				return false;
-			}
-			catch (InvocationTargetException e) {
+			} catch (InvocationTargetException e) {
 				return false;
-			}
-			catch (InstantiationException e) {
+			} catch (InstantiationException e) {
 				return false;
 			}
 
 			switch (operation) {
-				case SUBSTRING : {
-					return false;
-				}
-				case APPROX :
-				case EQUAL :
-				case GREATER : 
-				case LESS : {
-					return value1.equals(value2);
-				}
+			case SUBSTRING: {
+				return false;
+			}
+			case APPROX:
+			case EQUAL:
+			case GREATER:
+			case LESS: {
+				return value1.equals(value2);
+			}
 			}
 			return false;
 		}
@@ -1027,7 +1146,8 @@ public class FrameworkUtil {
 		 * This implementation removes white spaces. This is the minimum
 		 * implementation allowed by the OSGi spec.
 		 * 
-		 * @param input Input string.
+		 * @param input
+		 *            Input string.
 		 * @return String ready for APPROX comparison.
 		 */
 		private static String approxString(String input) {
@@ -1055,9 +1175,9 @@ public class FrameworkUtil {
 		 * parent.
 		 */
 		private static class Parser {
-			private final String	filterstring;
-			private final char[]	filterChars;
-			private int				pos;
+			private final String filterstring;
+			private final char[] filterChars;
+			private int pos;
 
 			Parser(String filterstring) {
 				this.filterstring = filterstring;
@@ -1069,8 +1189,7 @@ public class FrameworkUtil {
 				FilterImpl filter;
 				try {
 					filter = parse_filter(true);
-				}
-				catch (ArrayIndexOutOfBoundsException e) {
+				} catch (ArrayIndexOutOfBoundsException e) {
 					throw new InvalidSyntaxException(
 							"Filter ended abruptly", filterstring); //$NON-NLS-1$
 				}
@@ -1117,18 +1236,18 @@ public class FrameworkUtil {
 				char c = filterChars[pos];
 
 				switch (c) {
-					case '&' : {
-						pos++;
-						return parse_and(topLevel);
-					}
-					case '|' : {
-						pos++;
-						return parse_or(topLevel);
-					}
-					case '!' : {
-						pos++;
-						return parse_not(topLevel);
-					}
+				case '&': {
+					pos++;
+					return parse_and(topLevel);
+				}
+				case '|': {
+					pos++;
+					return parse_or(topLevel);
+				}
+				case '!': {
+					pos++;
+					return parse_not(topLevel);
+				}
 				}
 				return parse_item(topLevel);
 			}
@@ -1194,52 +1313,52 @@ public class FrameworkUtil {
 				skipWhiteSpace();
 
 				switch (filterChars[pos]) {
-					case '~' : {
-						if (filterChars[pos + 1] == '=') {
-							pos += 2;
-							return new FilterImpl(topLevel, FilterImpl.APPROX,
-									attr, parse_value());
-						}
-						break;
+				case '~': {
+					if (filterChars[pos + 1] == '=') {
+						pos += 2;
+						return new FilterImpl(topLevel, FilterImpl.APPROX,
+								attr, parse_value());
 					}
-					case '>' : {
-						if (filterChars[pos + 1] == '=') {
-							pos += 2;
-							return new FilterImpl(topLevel, FilterImpl.GREATER,
-									attr, parse_value());
-						}
-						break;
+					break;
+				}
+				case '>': {
+					if (filterChars[pos + 1] == '=') {
+						pos += 2;
+						return new FilterImpl(topLevel, FilterImpl.GREATER,
+								attr, parse_value());
 					}
-					case '<' : {
-						if (filterChars[pos + 1] == '=') {
-							pos += 2;
-							return new FilterImpl(topLevel, FilterImpl.LESS,
-									attr, parse_value());
-						}
-						break;
+					break;
+				}
+				case '<': {
+					if (filterChars[pos + 1] == '=') {
+						pos += 2;
+						return new FilterImpl(topLevel, FilterImpl.LESS, attr,
+								parse_value());
 					}
-					case '=' : {
-						if (filterChars[pos + 1] == '*') {
-							int oldpos = pos;
-							pos += 2;
-							skipWhiteSpace();
-							if (filterChars[pos] == ')') {
-								return new FilterImpl(topLevel,
-										FilterImpl.PRESENT, attr, null);
-							}
-							pos = oldpos;
+					break;
+				}
+				case '=': {
+					if (filterChars[pos + 1] == '*') {
+						int oldpos = pos;
+						pos += 2;
+						skipWhiteSpace();
+						if (filterChars[pos] == ')') {
+							return new FilterImpl(topLevel, FilterImpl.PRESENT,
+									attr, null);
 						}
+						pos = oldpos;
+					}
 
-						pos++;
-						Object string = parse_substring();
+					pos++;
+					Object string = parse_substring();
 
-						if (string instanceof String) {
-							return new FilterImpl(topLevel, FilterImpl.EQUAL,
-									attr, string);
-						}
-						return new FilterImpl(topLevel, FilterImpl.SUBSTRING,
-								attr, string);
+					if (string instanceof String) {
+						return new FilterImpl(topLevel, FilterImpl.EQUAL, attr,
+								string);
 					}
+					return new FilterImpl(topLevel, FilterImpl.SUBSTRING, attr,
+							string);
+				}
 				}
 
 				throw new InvalidSyntaxException("Invalid operator: "
@@ -1282,26 +1401,26 @@ public class FrameworkUtil {
 					char c = filterChars[pos];
 
 					switch (c) {
-						case ')' : {
-							break parseloop;
-						}
+					case ')': {
+						break parseloop;
+					}
 
-						case '(' : {
-							throw new InvalidSyntaxException("Invalid value: "
-									+ filterstring.substring(pos), filterstring); //$NON-NLS-1$
-						}
+					case '(': {
+						throw new InvalidSyntaxException("Invalid value: "
+								+ filterstring.substring(pos), filterstring); //$NON-NLS-1$
+					}
 
-						case '\\' : {
-							pos++;
-							c = filterChars[pos];
-							/* fall through into default */
-						}
+					case '\\': {
+						pos++;
+						c = filterChars[pos];
+						/* fall through into default */
+					}
 
-						default : {
-							sb.append(c);
-							pos++;
-							break;
-						}
+					default: {
+						sb.append(c);
+						pos++;
+						break;
+					}
 					}
 				}
 
@@ -1322,43 +1441,43 @@ public class FrameworkUtil {
 					char c = filterChars[pos];
 
 					switch (c) {
-						case ')' : {
-							if (sb.length() > 0) {
-								operands.add(sb.toString());
-							}
-
-							break parseloop;
+					case ')': {
+						if (sb.length() > 0) {
+							operands.add(sb.toString());
 						}
 
-						case '(' : {
-							throw new InvalidSyntaxException("Invalid value: "
-									+ filterstring.substring(pos), filterstring); //$NON-NLS-1$
+						break parseloop;
+					}
+
+					case '(': {
+						throw new InvalidSyntaxException("Invalid value: "
+								+ filterstring.substring(pos), filterstring); //$NON-NLS-1$
+					}
+
+					case '*': {
+						if (sb.length() > 0) {
+							operands.add(sb.toString());
 						}
 
-						case '*' : {
-							if (sb.length() > 0) {
-								operands.add(sb.toString());
-							}
+						sb.setLength(0);
 
-							sb.setLength(0);
+						operands.add(null);
+						pos++;
 
-							operands.add(null);
-							pos++;
+						break;
+					}
 
-							break;
-						}
+					case '\\': {
+						pos++;
+						c = filterChars[pos];
+						/* fall through into default */
+					}
 
-						case '\\' : {
-							pos++;
-							c = filterChars[pos];
-							/* fall through into default */
-						}
-
-						default : {
-							sb.append(c);
-							pos++;
-							break;
-						}
+					default: {
+						sb.append(c);
+						pos++;
+						break;
+					}
 					}
 				}
 
@@ -1396,15 +1515,16 @@ public class FrameworkUtil {
 	 * Filter implementation.
 	 */
 	private static class CaseInsensitiveDictionary extends Dictionary {
-		private final Dictionary	dictionary;
-		private final String[]		keys;
+		private final Dictionary dictionary;
+		private final String[] keys;
 
 		/**
 		 * Create a case insensitive dictionary from the specified dictionary.
 		 * 
 		 * @param dictionary
-		 * @throws IllegalArgumentException If <code>dictionary</code> contains
-		 *         case variants of the same key name.
+		 * @throws IllegalArgumentException
+		 *             If <code>dictionary</code> contains case variants of the
+		 *             same key name.
 		 */
 		CaseInsensitiveDictionary(Dictionary dictionary) {
 			if (dictionary == null) {
@@ -1472,7 +1592,7 @@ public class FrameworkUtil {
 	 * Filter implementation.
 	 */
 	private static class ServiceReferenceDictionary extends Dictionary {
-		private final ServiceReference	reference;
+		private final ServiceReference reference;
 
 		ServiceReferenceDictionary(ServiceReference reference) {
 			this.reference = reference;
@@ -1511,7 +1631,7 @@ public class FrameworkUtil {
 	}
 
 	private static class SetAccessibleAction implements PrivilegedAction {
-		private final AccessibleObject	accessible;
+		private final AccessibleObject accessible;
 
 		SetAccessibleAction(AccessibleObject accessible) {
 			this.accessible = accessible;
@@ -1520,6 +1640,450 @@ public class FrameworkUtil {
 		public Object run() {
 			accessible.setAccessible(true);
 			return null;
+		}
+	}
+
+	/**
+	 * This class contains a method to match a distinguished name (DN) chain
+	 * against and DN chain pattern.
+	 * <p>
+	 * The format of DNs are given in RFC 2253. We represent a signature chain
+	 * for an X.509 certificate as a semicolon separated list of DNs. This is
+	 * what we refer to as the DN chain. Each DN is made up of relative
+	 * distinguished names (RDN) which in turn are made up of key value pairs.
+	 * For example:
+	 * 
+	 * <pre>
+	 *   cn=ben+ou=research,o=ACME,c=us;ou=Super CA,c=CA
+	 * </pre>
+	 * 
+	 * is made up of two DNs: "<code>cn=ben+ou=research,o=ACME,c=us</code>
+	 * " and " <code>ou=Super CA,c=CA</code>
+	 * ". The first DN is made of of three RDNs: "
+	 * <code>cn=ben+ou=research</code>" and "<code>o=ACME</code>" and "
+	 * <code>c=us</code>". The first RDN has two name value pairs: "
+	 * <code>cn=ben</code>" and "<code>ou=research</code>".
+	 * <p>
+	 * A chain pattern makes use of wildcards ('*' or '-') to match against DNs,
+	 * and wildcards ('*') to match againts DN prefixes, and value. If a DN in a
+	 * match pattern chain is made up of a wildcard ("*"), that wildcard will
+	 * match zero or one DNs in the chain. If a DN in a match pattern chain is
+	 * made up of a wildcard ("-"), that wildcard will match zero or more DNs in
+	 * the chain. If the first RDN of a DN is the wildcard ("*"), that DN will
+	 * match any other DN with the same suffix (the DN with the wildcard RDN
+	 * removed). If a value of a name/value pair is a wildcard ("*"), the value
+	 * will match any value for that name.
+	 */
+	private static class DNChainMatching {
+		private static final String MINUS_WILDCARD = "-";
+		private static final String STAR_WILDCARD = "*";
+
+		/**
+		 * Check the name/value pairs of the rdn against the pattern.
+		 * 
+		 * @param rdn
+		 *            ArrayList of name value pairs for a given RDN.
+		 * @param rdnPattern
+		 *            ArrayList of name value pattern pairs.
+		 * @return true if the list of name value pairs match the pattern.
+		 */
+		private static boolean rdnmatch(ArrayList rdn, ArrayList rdnPattern) {
+			if (rdn.size() != rdnPattern.size())
+				return false;
+			for (int i = 0; i < rdn.size(); i++) {
+				String rdnNameValue = (String) rdn.get(i);
+				String patNameValue = (String) rdnPattern.get(i);
+				int rdnNameEnd = rdnNameValue.indexOf('=');
+				int patNameEnd = patNameValue.indexOf('=');
+				if (rdnNameEnd != patNameEnd
+						|| !rdnNameValue.regionMatches(0, patNameValue, 0,
+								rdnNameEnd)) {
+					return false;
+				}
+				String patValue = patNameValue.substring(patNameEnd);
+				String rdnValue = rdnNameValue.substring(rdnNameEnd);
+				if (!rdnValue.equals(patValue)
+						&& !patValue.equals("=*") && !patValue.equals("=#16012a")) { //$NON-NLS-1$ //$NON-NLS-2$
+					return false;
+				}
+			}
+			return true;
+		}
+
+		private static boolean dnmatch(ArrayList dn, ArrayList dnPattern) {
+			int dnStart = 0;
+			int patStart = 0;
+			int patLen = dnPattern.size();
+			if (patLen == 0) {
+				return false;
+			}
+			if (dnPattern.get(0).equals(STAR_WILDCARD)) {
+				patStart = 1;
+				patLen--;
+			}
+			if (dn.size() < patLen) {
+				return false;
+			} else if (dn.size() > patLen) {
+				if (!dnPattern.get(0).equals(STAR_WILDCARD)) {
+					// If the number of rdns do not match we must have a prefix
+					// map
+					return false;
+				}
+				// The rdnPattern and rdn must have the same number of elements
+				dnStart = dn.size() - patLen;
+			}
+			for (int i = 0; i < patLen; i++) {
+				if (!rdnmatch((ArrayList) dn.get(i + dnStart),
+						(ArrayList) dnPattern.get(i + patStart))) {
+					return false;
+				}
+			}
+			return true;
+		}
+
+		/**
+		 * Parses a distinguished name chain and returns an ArrayList where each
+		 * element represents a distinguished name (DN) in the chain of DNs.
+		 * Each element will be either a String, if the element represents a
+		 * wildcard ("*" or "-"), or an ArrayList representing an RDN. Each
+		 * element in the RDN ArrayList will be a String, if the element
+		 * represents a wildcard ("*"), or an ArrayList of Strings, each String
+		 * representing a name/value pair in the RDN.
+		 * 
+		 * @param dnChain
+		 * @return a list of DNs.
+		 * @throws IllegalArgumentException
+		 */
+		private static ArrayList parseDNchain(String dnChain)
+				throws IllegalArgumentException {
+			ArrayList parsed = new ArrayList();
+			int startIndex = 0;
+			startIndex = skipSpaces(dnChain, startIndex);
+			while (startIndex < dnChain.length()) {
+				int endIndex = startIndex;
+				boolean inQuote = false;
+				out: while (endIndex < dnChain.length()) {
+					char c = dnChain.charAt(endIndex);
+					switch (c) {
+					case '"':
+						inQuote = !inQuote;
+						break;
+					case '\\':
+						endIndex++; // skip the escaped char
+						break;
+					case ';':
+						if (!inQuote)
+							break out;
+					}
+					endIndex++;
+				}
+				if (endIndex > dnChain.length()) {
+					throw new IllegalArgumentException("unterminated escape"); //$NON-NLS-1$
+				}
+				parsed.add(dnChain.substring(startIndex, endIndex));
+				startIndex = endIndex + 1;
+				startIndex = skipSpaces(dnChain, startIndex);
+			}
+			parseDNchainRDNs(parsed);
+			return parsed;
+		}
+
+		private static List parseDNchainRDNs(List chain) {
+			// Now we parse is a list of strings, lets make ArrayList of rdn out
+			// of
+			// them
+			for (int i = 0; i < chain.size(); i++) {
+				String dn = (String) chain.get(i);
+				if (dn.equals(STAR_WILDCARD) || dn.equals(MINUS_WILDCARD))
+					continue;
+				ArrayList rdns = new ArrayList();
+				if (dn.charAt(0) == '*') {
+					if (dn.charAt(1) != ',')
+						throw new IllegalArgumentException(
+								"invalid wildcard prefix"); //$NON-NLS-1$
+					rdns.add(STAR_WILDCARD); //$NON-NLS-1$
+					dn = new X500Principal(dn.substring(2))
+							.getName(X500Principal.CANONICAL);
+				} else {
+					dn = new X500Principal(dn).getName(X500Principal.CANONICAL);
+				}
+				// Now dn is a nice CANONICAL DN
+				parseDN(dn, rdns);
+				chain.set(i, rdns);
+			}
+			if (chain.size() == 0) {
+				throw new IllegalArgumentException("empty DN chain"); //$NON-NLS-1$
+			}
+			return chain;
+		}
+
+		/**
+		 * Increment startIndex until the end of dnChain is hit or until it is
+		 * the index of a non-space character.
+		 */
+		private static int skipSpaces(String dnChain, int startIndex) {
+			while (startIndex < dnChain.length()
+					&& dnChain.charAt(startIndex) == ' ')
+				startIndex++;
+			return startIndex;
+		}
+
+		/**
+		 * Takes a distinguished name in canonical form and fills in the
+		 * rdnArray with the extracted RDNs.
+		 * 
+		 * @param dn
+		 *            the distinguished name in canonical form.
+		 * @param rdnArray
+		 *            the array to fill in with RDNs extracted from the dn
+		 * @throws IllegalArgumentException
+		 *             if a formatting error is found.
+		 */
+		private static void parseDN(String dn, ArrayList rdnArray)
+				throws IllegalArgumentException {
+			int startIndex = 0;
+			char c = '\0';
+			ArrayList nameValues = new ArrayList();
+			while (startIndex < dn.length()) {
+				int endIndex;
+				for (endIndex = startIndex; endIndex < dn.length(); endIndex++) {
+					c = dn.charAt(endIndex);
+					if (c == ',' || c == '+')
+						break;
+					if (c == '\\') {
+						endIndex++; // skip the escaped char
+					}
+				}
+				if (endIndex > dn.length())
+					throw new IllegalArgumentException(
+							"unterminated escape " + dn); //$NON-NLS-1$
+				nameValues.add(dn.substring(startIndex, endIndex));
+				if (c != '+') {
+					rdnArray.add(nameValues);
+					if (endIndex != dn.length())
+						nameValues = new ArrayList();
+					else
+						nameValues = null;
+				}
+				startIndex = endIndex + 1;
+			}
+			if (nameValues != null) {
+				throw new IllegalArgumentException(
+						"improperly terminated DN " + dn); //$NON-NLS-1$
+			}
+		}
+
+		/**
+		 * This method will return an 'index' which points to a non-wild-card DN
+		 * or the end-of-arraylist.
+		 */
+		private static int skipWildCards(List dnChainPattern,
+				int dnChainPatternIndex) throws IllegalArgumentException {
+			int i;
+			for (i = dnChainPatternIndex; i < dnChainPattern.size(); i++) {
+				Object dnPattern = dnChainPattern.get(i);
+				if (dnPattern instanceof String) {
+					if (!dnPattern.equals(STAR_WILDCARD)
+							&& !dnPattern.equals(MINUS_WILDCARD)) {
+						throw new IllegalArgumentException(
+								"expected wild-card in DN pattern"); //$NON-NLS-1$
+					}
+					// otherwise continue skipping over wild cards
+				} else if (dnPattern instanceof ArrayList) {
+					// if its an arraylist then we have our 'non-wild-card' DN
+					break;
+				} else {
+					// unknown member of the DNChainPattern
+					throw new IllegalArgumentException(
+							"expected String or Arraylist in DN Pattern"); //$NON-NLS-1$
+				}
+			}
+			// i either points to end-of-arraylist, or to the first
+			// non-wild-card
+			// pattern
+			// after dnChainPatternIndex
+			return i;
+		}
+
+		/**
+		 * recursively attempt to match the DNChain, and the DNChainPattern
+		 * where DNChain is of the format: "DN;DN;DN;" and DNChainPattern is of
+		 * the format: "DNPattern;*;DNPattern" (or combinations of this)
+		 */
+		private static boolean dnChainMatch(List dnChain, int dnChainIndex,
+				List dnChainPattern, int dnChainPatternIndex)
+				throws IllegalArgumentException {
+			if (dnChainIndex >= dnChain.size()) {
+				return false;
+			}
+			if (dnChainPatternIndex >= dnChainPattern.size()) {
+				return false;
+			}
+			// check to see what the pattern starts with
+			Object dnPattern = dnChainPattern.get(dnChainPatternIndex);
+			if (dnPattern instanceof String) {
+				if (!dnPattern.equals(STAR_WILDCARD)
+						&& !dnPattern.equals(MINUS_WILDCARD)) {
+					throw new IllegalArgumentException(
+							"expected wild-card in DN pattern"); //$NON-NLS-1$
+				}
+				// here we are processing a wild card as the first DN
+				// skip all wild-card DN's
+				if (dnPattern.equals(MINUS_WILDCARD))
+					dnChainPatternIndex = skipWildCards(dnChainPattern,
+							dnChainPatternIndex);
+				else
+					dnChainPatternIndex++; // only skip the '*' wildcard
+				if (dnChainPatternIndex >= dnChainPattern.size()) {
+					// return true iff the wild card is '-' or if we are at the
+					// end of the chain
+					return dnPattern.equals(MINUS_WILDCARD) ? true : dnChain
+							.size() - 1 == dnChainIndex;
+				}
+				//
+				// we will now recursively call to see if the rest of the
+				// DNChainPattern
+				// matches increasingly smaller portions of the rest of the
+				// DNChain
+				//
+				if (dnPattern.equals(STAR_WILDCARD))
+					// '*' option: only wildcard on 0 or 1
+					return dnChainMatch(dnChain, dnChainIndex, dnChainPattern,
+							dnChainPatternIndex)
+							|| dnChainMatch(dnChain, dnChainIndex + 1,
+									dnChainPattern, dnChainPatternIndex);
+
+				for (int i = dnChainIndex; i < dnChain.size(); i++) {
+					// '-' option: wildcard 0 or more
+					if (dnChainMatch(dnChain, i, dnChainPattern,
+							dnChainPatternIndex)) {
+						return true;
+					}
+				}
+				// if we are here, then we didn't find a match.. fall through to
+				// failure
+			} else if (dnPattern instanceof ArrayList) {
+				// here we have to do a deeper check for each DN in the pattern
+				// until we hit a wild card
+				do {
+					if (!dnmatch((ArrayList) dnChain.get(dnChainIndex),
+							(ArrayList) dnPattern)) {
+						return false;
+					}
+					// go to the next set of DN's in both chains
+					dnChainIndex++;
+					dnChainPatternIndex++;
+					// if we finished the pattern then it all matched
+					if ((dnChainIndex >= dnChain.size())
+							&& (dnChainPatternIndex >= dnChainPattern.size())) {
+						return true;
+					}
+					// if the DN Chain is finished, but the pattern isn't
+					// finished
+					// then if the rest of the pattern is not wildcard then we
+					// are
+					// done
+					if (dnChainIndex >= dnChain.size()) {
+						dnChainPatternIndex = skipWildCards(dnChainPattern,
+								dnChainPatternIndex);
+						// return TRUE iff the pattern index moved past the
+						// array-size
+						// (implying that the rest of the pattern is all
+						// wild-cards)
+						return (dnChainPatternIndex >= dnChainPattern.size());
+					}
+					// if the pattern finished, but the chain continues then we
+					// have
+					// a mis-match
+					if (dnChainPatternIndex >= dnChainPattern.size()) {
+						return false;
+					}
+					// get the next DN Pattern
+					dnPattern = dnChainPattern.get(dnChainPatternIndex);
+					if (dnPattern instanceof String) {
+						if (!dnPattern.equals(STAR_WILDCARD)
+								&& !dnPattern.equals(MINUS_WILDCARD)) {
+							throw new IllegalArgumentException(
+									"expected wild-card in DN pattern"); //$NON-NLS-1$
+						}
+						// if the next DN is a 'wild-card', then we will recurse
+						return dnChainMatch(dnChain, dnChainIndex,
+								dnChainPattern, dnChainPatternIndex);
+					} else if (!(dnPattern instanceof ArrayList)) {
+						throw new IllegalArgumentException(
+								"expected String or Arraylist in DN Pattern"); //$NON-NLS-1$
+					}
+					// if we are here, then we will just continue to the match
+					// the
+					// next set of DN's from the DNChain, and the DNChainPattern
+					// since both are array-lists
+				} while (true);
+				// should never reach here?
+			} else {
+				throw new IllegalArgumentException(
+						"expected String or Arraylist in DN Pattern"); //$NON-NLS-1$
+			}
+			// if we get here, the the default return is 'mis-match'
+			return false;
+		}
+
+		/**
+		 * Matches a distinguished name chain against a pattern of a
+		 * distinguished name chain.
+		 * 
+		 * @param dnChain
+		 * @param pattern
+		 *            the pattern of distinguished name (DN) chains to match
+		 *            against the dnChain. Wildcards ("*" or "-") can be used in
+		 *            three cases:
+		 *            <ol>
+		 *            <li>As a DN. In this case, the DN will consist of just the
+		 *            "*" or "-". When "*" is used it will match zero or one
+		 *            DNs. When "-" is used it will match zero or more DNs. For
+		 *            example, "cn=me,c=US;*;cn=you" will match
+		 *            "cn=me,c=US";cn=you" and "cn=me,c=US;cn=her;cn=you". The
+		 *            pattern "cn=me,c=US;-;cn=you" will match
+		 *            "cn=me,c=US";cn=you" and
+		 *            "cn=me,c=US;cn=her;cn=him;cn=you".
+		 *            <li>As a DN prefix. In this case, the DN must start with
+		 *            "*,". The wild card will match zero or more RDNs at the
+		 *            start of a DN. For example, "*,cn=me,c=US;cn=you" will
+		 *            match "cn=me,c=US";cn=you" and
+		 *            "ou=my org unit,o=my org,cn=me,c=US;cn=you"</li>
+		 *            <li>As a value. In this case the value of a name value
+		 *            pair in an RDN will be a "*". The wildcard will match any
+		 *            value for the given name. For example, "cn=*,c=US;cn=you"
+		 *            will match "cn=me,c=US";cn=you" and "cn=her,c=US;cn=you",
+		 *            but it will not match "ou=my org unit,c=US;cn=you". If the
+		 *            wildcard does not occur by itself in the value, it will
+		 *            not be used as a wildcard. In other words,
+		 *            "cn=m*,c=US;cn=you" represents the common name of "m*" not
+		 *            any common name starting with "m".</li>
+		 *            </ol>
+		 * @return true if dnChain matches the pattern.
+		 * @throws IllegalArgumentException
+		 */
+		static boolean match(String pattern, List/* <String> */dnChain) {
+			List parsedDNChain;
+			List parsedDNPattern;
+			try {
+				parsedDNChain = parseDNchainRDNs(dnChain);
+			} catch (IllegalArgumentException e) {
+				System.err.println(e.getMessage() + ": " + dnChain); //$NON-NLS-1$
+				return false;
+			}
+			try {
+				parsedDNPattern = parseDNchain(pattern);
+			} catch (IllegalArgumentException e) {
+				System.err.println(e.getMessage() + ": " + pattern); //$NON-NLS-1$
+				return false;
+			}
+			try {
+				return dnChainMatch(parsedDNChain, 0, parsedDNPattern, 0);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return false;
 		}
 	}
 }
