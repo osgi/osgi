@@ -16,13 +16,14 @@
 
 package org.osgi.service.condpermadmin;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 
 /**
  * Condition to test if the signer of a bundle matches or does not match a
@@ -52,65 +53,6 @@ import org.osgi.framework.Bundle;
  * @version $Revision$
  */
 public class BundleSignerCondition {
-	/*
-	 * NOTE: A framework implementor may also choose to replace this class in
-	 * their distribution with a class that directly interfaces with the
-	 * framework implementation. This replacement class MUST NOT alter the
-	 * public/protected signature of this class.
-	 */
-
-	/*
-	 * This class will load the BundleSignerCondition class in the package named
-	 * by the org.osgi.vendor.condpermadmin package. This class will delegate
-	 * getCondition methods calls to the vendor BundleSignerCondition class.
-	 */
-	
-	private static class ImplHolder implements PrivilegedAction {
-		private static final String	packageProperty	= "org.osgi.vendor.condpermadmin";
-		static final Method	getCondition;
-		static {
-			getCondition = (Method) AccessController.doPrivileged(new ImplHolder());
-		}
-
-		private ImplHolder() {
-		}
-
-		public Object run() {
-			String packageName = System
-			.getProperty(packageProperty);
-			if (packageName == null) {
-				throw new NoClassDefFoundError(packageProperty
-						+ " property not set");
-			}
-			
-			Class delegateClass;
-			try {
-				delegateClass = Class.forName(packageName
-						+ ".BundleSignerCondition");
-			}
-			catch (ClassNotFoundException e) {
-				throw new NoClassDefFoundError(e.toString());
-			}
-			
-			Method result;
-			try {
-				result = delegateClass.getMethod("getCondition",
-						new Class[] {Bundle.class,
-						ConditionInfo.class		});
-			}
-			catch (NoSuchMethodException e) {
-				throw new NoSuchMethodError(e.toString());
-			}
-			
-			if (!Modifier.isStatic(result.getModifiers())) {
-				throw new NoSuchMethodError(
-						"getCondition method must be static");
-			}
-			
-			return result;
-		}
-	}
-	
 	private static final String	CONDITION_TYPE	= "org.osgi.service.condpermadmin.BundleSignerCondition";
 
 	/**
@@ -140,24 +82,27 @@ public class BundleSignerCondition {
 			throw new IllegalArgumentException("Illegal number of args: "
 					+ args.length);
 
-		try {
-			try {
-				return (Condition) ImplHolder.getCondition.invoke(null, new Object[] {
-						bundle, info});
+		Map signers = bundle.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
+		if (signers.size() == 0)
+			return Condition.FALSE;
+
+		boolean match = false;
+		for (Iterator iSigners = signers.values().iterator(); iSigners
+				.hasNext();) {
+			ArrayList/* <X509Certificate> */signerCerts = (ArrayList) iSigners
+					.next();
+			ArrayList/* <String> */dnChain = new ArrayList(signerCerts.size());
+			for (Iterator iCerts = signerCerts.iterator(); iCerts.hasNext();)
+				dnChain.add(((X509Certificate) iSigners.next()).getSubjectDN()
+						.getName());
+			if (FrameworkUtil.matchDistinguishedNameChain(args[0], dnChain)) {
+				match = true;
+				break;
 			}
-			catch (InvocationTargetException e) {
-				throw e.getTargetException();
-			}
 		}
-		catch (Error e) {
-			throw e;
-		}
-		catch (RuntimeException e) {
-			throw e;
-		}
-		catch (Throwable e) {
-			throw new RuntimeException(e);
-		}
+
+		boolean negate = (args.length == 2) ? "!".equals(args[1]) : false;
+		return negate ^ match ? Condition.TRUE : Condition.FALSE;
 	}
 
 	private BundleSignerCondition() {
