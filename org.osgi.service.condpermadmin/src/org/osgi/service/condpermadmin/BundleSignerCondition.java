@@ -82,13 +82,13 @@ public class BundleSignerCondition {
 			throw new IllegalArgumentException("Illegal number of args: "
 					+ args.length);
 
-		Map signers = bundle.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
+		Map/* <X509Certificate, List<X509Certificate>> */signers = bundle
+				.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
 		boolean match = false;
 		for (Iterator iSigners = signers.values().iterator(); iSigners
 				.hasNext();) {
-			ArrayList/* <X509Certificate> */signerCerts = (ArrayList) iSigners
-					.next();
-			ArrayList/* <String> */dnChain = new ArrayList(signerCerts.size());
+			List/* <X509Certificate> */signerCerts = (List) iSigners.next();
+			List/* <String> */dnChain = new ArrayList(signerCerts.size());
 			for (Iterator iCerts = signerCerts.iterator(); iCerts.hasNext();)
 				dnChain.add(((X509Certificate) iSigners.next()).getSubjectDN()
 						.getName());
