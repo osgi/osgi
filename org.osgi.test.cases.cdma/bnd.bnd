@@ -1,0 +1,16 @@
+Bundle-Version: 3.0.0.${project.build}
+
+Private-Package						= org.osgi.test.cases.template
+
+-buildpath							= \
+	org.osgi.service.template;					version=project	, \
+	osgi;									version=4.0		, \
+	ee.minimum												, \
+	${junit}
+
+-testpath							= \
+	org.eclipse.osgi;		version=3.5; 	framework=org.eclipse.osgi.launch.Equinox, \
+	com.springsource.junit; version=3.8;    export="junit.framework;version=3.8"
+
+-testbundles						= \
+	org.osgi.impl.service.template; version=project
