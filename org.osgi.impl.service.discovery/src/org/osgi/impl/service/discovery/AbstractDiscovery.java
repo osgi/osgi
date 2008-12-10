@@ -34,7 +34,6 @@ import org.osgi.service.discovery.DiscoveredServiceTracker;
 import org.osgi.service.discovery.Discovery;
 import org.osgi.service.discovery.FindServiceCallback;
 import org.osgi.service.discovery.ServiceEndpointDescription;
-import org.osgi.service.discovery.ServicePublication;
 import org.osgi.service.log.LogService;
 
 /**
@@ -51,6 +50,8 @@ public abstract class AbstractDiscovery implements Discovery {
 
 	private LogService logService;
 	private boolean autoPublish = DEFAULT_AUTOPUBLISH;
+
+
 
 	// TODO do we need a logService as parameter??
 	public AbstractDiscovery(final BundleContext context,
@@ -69,7 +70,6 @@ public abstract class AbstractDiscovery implements Discovery {
 		autoPublish = System.getProperty(Discovery.PROP_KEY_PUBLISH_STRATEGY,
 				Discovery.PROP_VAL_PUBLISH_STRATEGY_PUSH).equalsIgnoreCase(
 				Discovery.PROP_VAL_PUBLISH_STRATEGY_PUSH);
-
 	}
 
 	/**
@@ -95,19 +95,6 @@ public abstract class AbstractDiscovery implements Discovery {
 		if (getLogService() != null) {
 			getLogService().log(logLevel, msg, e);
 		}
-	}
-
-	/**
-	 * @see org.osgi.service.discovery.Discovery#publishService(java.util.Map,
-	 *      java.util.Map, java.util.Map)
-	 */
-	public ServicePublication publishService(
-			Map/* <String, String> */javaInterfacesAndVersions,
-			Map/* <String, String> */javaInterfacesAndEndpointInterfaces,
-			Map/* <String, Object> */properties) {
-		return publishService(javaInterfacesAndVersions,
-				javaInterfacesAndEndpointInterfaces, properties,
-				Discovery.PROP_VAL_PUBLISH_STRATEGY_PUSH);
 	}
 
 	/**
@@ -377,6 +364,7 @@ public abstract class AbstractDiscovery implements Discovery {
 								e);
 					}
 				} catch (Exception e) {
+					e.printStackTrace();
 					log(LogService.LOG_ERROR,
 							"Failed to execute async findService", e);
 				}
