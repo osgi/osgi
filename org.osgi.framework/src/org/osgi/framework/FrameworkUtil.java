@@ -2076,14 +2076,14 @@ public class FrameworkUtil {
 			try {
 				parsedDNChain = parseDNchain(dnChain);
 			} catch (IllegalArgumentException e) {
-				throw new IllegalArgumentException("Invalid DN chain: <"
-						+ toString(dnChain) + "> " + e.getMessage());
+				throw (IllegalArgumentException) new IllegalArgumentException(
+						"Invalid DN chain: " + toString(dnChain)).initCause(e);
 			}
 			try {
 				parsedDNPattern = parseDNchainPattern(pattern);
 			} catch (IllegalArgumentException e) {
-				throw new IllegalArgumentException("Invalid match pattern: <"
-						+ pattern + "> " + e.getMessage());
+				throw (IllegalArgumentException) new IllegalArgumentException(
+						"Invalid match pattern: " + pattern).initCause(e);
 			}
 			return dnChainMatch(parsedDNChain, 0, parsedDNPattern, 0);
 		}
