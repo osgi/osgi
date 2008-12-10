@@ -90,7 +90,7 @@ public class BundleSignerCondition {
 			List/* <X509Certificate> */signerCerts = (List) iSigners.next();
 			List/* <String> */dnChain = new ArrayList(signerCerts.size());
 			for (Iterator iCerts = signerCerts.iterator(); iCerts.hasNext();)
-				dnChain.add(((X509Certificate) iSigners.next()).getSubjectDN()
+				dnChain.add(((X509Certificate) iCerts.next()).getSubjectDN()
 						.getName());
 			if (FrameworkUtil.matchDistinguishedNameChain(args[0], dnChain)) {
 				match = true;
