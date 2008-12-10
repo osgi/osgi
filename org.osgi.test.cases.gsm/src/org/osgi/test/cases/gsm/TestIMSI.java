@@ -16,54 +16,27 @@
  * ============================================================================
  */
 
-package unittests;
+package org.osgi.test.cases.gsm;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Dictionary;
-import java.util.Enumeration;
+import junit.framework.TestCase;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleException;
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.condpermadmin.Condition;
 import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.util.gsm.IMSICondition;
-import junit.framework.TestCase;
 
 public class TestIMSI extends TestCase {
+	private BundleContext	context;
+	private Bundle			bundle;
+
+	public void setBundleContext(BundleContext context) {
+		this.context = context;
+		bundle = this.context.getBundle();
+	}
+	
 	public static final String SYSTEM_IMSI = System.getProperty("org.osgi.util.gsm.imsi");
 	public static final String OTHER_IMSI = "123456789012345";
-	public static final Bundle bundle = new DummyBundle();
-	
-	
-	public static class DummyBundle implements Bundle {
-		public int getState() { throw new IllegalStateException(); }
-		public void start() throws BundleException { throw new IllegalStateException(); }
-		public void stop() throws BundleException { throw new IllegalStateException(); }
-		public void update() throws BundleException { throw new IllegalStateException(); }
-		public void update(InputStream in) throws BundleException { throw new IllegalStateException(); }
-		public void uninstall() throws BundleException { throw new IllegalStateException(); }
-		public Dictionary getHeaders() { throw new IllegalStateException(); }
-		public long getBundleId() { throw new IllegalStateException(); }
-		public String getLocation() { throw new IllegalStateException(); }
-		public ServiceReference[] getRegisteredServices() { throw new IllegalStateException(); }
-		public ServiceReference[] getServicesInUse() { throw new IllegalStateException(); }
-		public boolean hasPermission(Object permission) { throw new IllegalStateException(); }
-		public URL getResource(String name) { throw new IllegalStateException(); }
-		public Dictionary getHeaders(String locale) { throw new IllegalStateException(); }
-		public String getSymbolicName() { throw new IllegalStateException(); }
-		public Class loadClass(String name) throws ClassNotFoundException { throw new IllegalStateException(); }
-		public Enumeration getResources(String name) throws IOException { throw new IllegalStateException(); }
-		public Enumeration getEntryPaths(String path) { throw new IllegalStateException(); }
-		public URL getEntry(String name) { throw new IllegalStateException(); }
-		public long getLastModified() { throw new IllegalStateException(); }
-		public Enumeration findEntries(String path, String filePattern, boolean recurse) { throw new IllegalStateException(); }
-		public BundleContext getBundleContext() { throw new IllegalStateException(); }
-		public void start(int activation) throws BundleException { throw new IllegalStateException(); }
-		public void stop(int activation) throws BundleException { throw new IllegalStateException(); }
-	}
 	
 	public void testBasic() throws Exception {
 		Condition imsi = (Condition) IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{SYSTEM_IMSI}));
@@ -105,6 +78,5 @@ public class TestIMSI extends TestCase {
 
 		IMSI = (Condition) IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{"777*"}));
 		assertFalse(IMSI.isSatisfied());
-		
 	}
 }
