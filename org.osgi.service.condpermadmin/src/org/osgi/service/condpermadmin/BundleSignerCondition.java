@@ -83,9 +83,6 @@ public class BundleSignerCondition {
 					+ args.length);
 
 		Map signers = bundle.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
-		if (signers.size() == 0)
-			return Condition.FALSE;
-
 		boolean match = false;
 		for (Iterator iSigners = signers.values().iterator(); iSigners
 				.hasNext();) {
