@@ -30,6 +30,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.discovery.AbstractDiscovery;
 import org.osgi.impl.service.discovery.InformListenerTask;
+import org.osgi.service.discovery.Discovery;
 import org.osgi.service.discovery.ServiceEndpointDescription;
 import org.osgi.service.discovery.ServicePublication;
 import org.osgi.service.log.LogService;
@@ -52,9 +53,12 @@ import ch.ethz.iks.slp.ServiceURL;
 public class SLPHandlerImpl extends AbstractDiscovery {
 	private ServiceTracker locatorTracker = null;
 	private ServiceTracker advertiserTracker = null;
+	private ServiceTracker spTracker = null;
 
 	private Locator locator = null;
 	private Advertiser advertiser = null;
+
+	private List servicePublications = new ArrayList();
 
 	private final int POLLDELAY = 10000; // 10 sec
 
@@ -72,17 +76,21 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 				new LocatorServiceTracker(context));
 		advertiserTracker = new ServiceTracker(context, Advertiser.class
 				.getName(), new AdvertiserServiceTracker(context));
+		spTracker = new ServiceTracker(context, ServicePublication.class
+				.getName(), new ServicePublicationTracker(context));
 	}
 
 	public void init() {
 		super.init();
 		locatorTracker.open();
 		advertiserTracker.open();
+		spTracker.open();
 		t = new Timer(false);
 		t.schedule(new InformListenerTask(this), 0, POLLDELAY);
 	}
 
 	public void destroy() {
+		spTracker.close();
 		locatorTracker.close();
 		advertiserTracker.close();
 		if (t != null) {
@@ -195,23 +203,22 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 	}
 
 	/**
-	 * @see org.osgi.service.discovery.Discovery#publishService(java.util.Map,
-	 *      java.util.Map, java.util.Map, String)
+	 * 
 	 */
-	public ServicePublication publishService(
-			Map/* <String, String> */javaInterfacesAndVersions,
-			Map/* <String, String> */javaInterfacesAndEndpointInterfaces,
+	public void publishService(Collection/* <String> */javaInterfaces,
+			Collection/* <String> */javaInterfacesAndVersions,
+			Collection/* <String> */javaInterfacesAndEndpointInterfaces,
 			Map/* <String, Object> */properties, String strategy) {
 		SLPServiceDescriptionAdapter svcDescr;
 		try {
-			svcDescr = new SLPServiceDescriptionAdapter(
+			svcDescr = new SLPServiceDescriptionAdapter(javaInterfaces,
 					javaInterfacesAndVersions,
 					javaInterfacesAndEndpointInterfaces, properties);
 		} catch (ServiceLocationException e1) {
 			e1.printStackTrace();
 			log(LogService.LOG_ERROR, "Unable to create Service Description",
 					e1);
-			return null;
+			return;
 		}
 		// TODO: act according strategy parameter
 		Advertiser advertiser = getAdvertiser();
@@ -235,7 +242,6 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 		}
 		// inform the listener about the new available service
 		notifyListenersOnNewServiceDescription(svcDescr);
-		return new ServicePublicationImpl(this, svcDescr);
 	}
 
 	/**
@@ -339,4 +345,59 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 			log(LogService.LOG_INFO, "unbound Advertiser");
 		}
 	}
+
+	/**
+	 * @author kt32483
+	 * 
+	 */
+	private class ServicePublicationTracker implements ServiceTrackerCustomizer {
+
+		private BundleContext context = null;
+
+		public ServicePublicationTracker(BundleContext ctx) {
+			context = ctx;
+		}
+
+		/**
+		 * @see org.osgi.util.tracker.ServiceTrackerCustomizer#addingService(org.osgi.framework.ServiceReference)
+		 */
+		public Object addingService(ServiceReference arg0) {
+			ServicePublication sp = (ServicePublication) context
+					.getService(arg0);
+			servicePublications.add(sp);
+			publishService(
+					(Collection) arg0
+							.getProperty(ServicePublication.PROP_KEY_SERVICE_INTERFACE_NAME),
+					(Collection) arg0
+							.getProperty(ServicePublication.PROP_KEY_SERVICE_INTERFACE_VERSION),
+					(Collection) arg0
+							.getProperty(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME),
+					(Map) arg0
+							.getProperty(ServicePublication.PROP_KEY_SERVICE_PROPERTIES),
+					Discovery.PROP_VAL_PUBLISH_STRATEGY_PUSH);
+			return sp;
+		}
+
+		/**
+		 * @see org.osgi.util.tracker.ServiceTrackerCustomizer#modifiedService(org.osgi.framework.ServiceReference,
+		 *      java.lang.Object)
+		 */
+		public void modifiedService(ServiceReference arg0, Object arg1) {
+			ServicePublication sp = (ServicePublication) context
+					.getService(arg0);
+			servicePublications.remove(sp);
+			servicePublications.add(sp);
+		}
+
+		/**
+		 * @see org.osgi.util.tracker.ServiceTrackerCustomizer#removedService(org.osgi.framework.ServiceReference,
+		 *      java.lang.Object)
+		 */
+		public void removedService(ServiceReference arg0, Object arg1) {
+			ServicePublication sp = (ServicePublication) context
+					.getService(arg0);
+			servicePublications.remove(sp);
+		}
+	}
+
 }
