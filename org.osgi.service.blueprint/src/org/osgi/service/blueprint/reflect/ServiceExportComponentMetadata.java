@@ -51,7 +51,7 @@ public interface ServiceExportComponentMetadata extends ComponentMetadata {
 	
 	/**
 	 * The component that is to be exported as a service. Value must refer to a component and
-	 * therefore be either a ComponentValue, ReferenceValue, or ReferenceNameValue.
+	 * therefore be either a ComponentValue or ReferenceValue.
 	 * 
 	 * @return the component to be exported as a service.
 	 */
