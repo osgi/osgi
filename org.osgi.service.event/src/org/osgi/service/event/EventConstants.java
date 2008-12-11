@@ -73,8 +73,10 @@ public interface EventConstants {
 	public static final String	EVENT_FILTER		= "event.filter";
 
 	/**
-	 * The Distinguished Name of the signer of the bundle relevant to the event.
-	 * The type of the value for this event property is <code>String</code>.
+	 * The Distinguished Names of the signers of the bundle relevant to the
+	 * event. The type of the value for this event property is
+	 * <code>String</code> if there is a single signer or <code>String[]</code>
+	 * if there are multiple signers.
 	 */
 	public static final String	BUNDLE_SIGNER		= "bundle.signer";
 
