@@ -80,18 +80,18 @@ public class FrameworkUtil {
 
 	/**
 	 * Matches a Distinguished Name (DN) chain against a pattern. DNs can be
-	 * matched using wild-cards. A wild-card ('*' \u002A) replaces all possible
+	 * matched using wildcards. A wildcard ('*' \u002A) replaces all possible
 	 * values. Due to the structure of the DN, the comparison is more
-	 * complicated than string-based wild-card matching.
+	 * complicated than string-based wildcard matching.
 	 * <p>
-	 * A wild-card can stand for zero or more DNs in a chain, a number of
+	 * A wildcard can stand for zero or more DNs in a chain, a number of
 	 * relative distinguished names (RDNs) within a DN, or the value of a single
 	 * RDN. The DNs in the chain and the matching pattern are canonicalized
 	 * before processing. This means, among other things, that spaces must be
 	 * ignored, except in values.
 	 * </p>
 	 * <p>
-	 * The format of a wild-card match pattern is:
+	 * The format of a wildcard match pattern is:
 	 * 
 	 * <pre>
 	 * matchPattern	::= dn-match ( ';' dn-match ) *
@@ -103,12 +103,12 @@ public class FrameworkUtil {
 	 * 
 	 * </p>
 	 * <p>
-	 * The most simple case is a single wild-card; it must match any DN. A
-	 * wild-card can also replace the first list of RDNs of a DN. The first RDNs
+	 * The most simple case is a single wildcard; it must match any DN. A
+	 * wildcard can also replace the first list of RDNs of a DN. The first RDNs
 	 * are the least significant. Such lists of matched RDNs can be empty.
 	 * </p>
 	 * <p>
-	 * For example, a match pattern with a wild-card that matches all all DNs
+	 * For example, a match pattern with a wildcard that matches all all DNs
 	 * that end with RDNs of o=ACME and c=US would look like this:
 	 * 
 	 * <pre>
@@ -132,15 +132,15 @@ public class FrameworkUtil {
 	 * dc=www, dc=acme, dc=com, c=US
 	 * </pre>
 	 * 
-	 * If a wild-card is used for a value of an RDN, the value must be exactly *.
-	 * The wild-card must match any value, and no substring matching must be
+	 * If a wildcard is used for a value of an RDN, the value must be exactly *.
+	 * The wildcard must match any value, and no substring matching must be
 	 * done. For example:
 	 * 
 	 * <pre>
 	 * cn=*,o=ACME,c=*
 	 * </pre>
 	 * 
-	 * This match pattern with wild-card must match the following DNs:
+	 * This match pattern with wildcard must match the following DNs:
 	 * 
 	 * <pre>
 	 * cn=Bugs Bunny,o=ACME,c=US
@@ -159,7 +159,7 @@ public class FrameworkUtil {
 	 * <p>
 	 * A match pattern may contain a chain of DN match patterns. The
 	 * semicolon(';' \u0038) must be used to separate DN match patterns in a
-	 * chain. Wild-cards can also be used to match against a complete DN within a
+	 * chain. Wildcards can also be used to match against a complete DN within a
 	 * chain.
 	 * <p>
 	 * <p>
@@ -170,7 +170,7 @@ public class FrameworkUtil {
 	 * * ; ou=S &amp; V, o=Tweety Inc., c=US
 	 * </pre>
 	 * 
-	 * The wild-card ('*') matches zero or one DN in the chain, however,
+	 * The wildcard ('*') matches zero or one DN in the chain, however,
 	 * sometimes it is necessary to match a longer chain. The minus sign ('-'
 	 * \u002D) represents zero or more DNs, whereas the asterisk only represents
 	 * a single DN. For example, to match a DN where the Tweety Inc. is in the
@@ -1666,14 +1666,14 @@ public class FrameworkUtil {
 	 * <code>c=us</code>". The first RDN has two name value pairs: "
 	 * <code>cn=ben</code>" and "<code>ou=research</code>".
 	 * <p>
-	 * A chain pattern makes use of wild-cards ('*' or '-') to match against DNs,
-	 * and wild-cards ('*') to match againts DN prefixes, and value. If a DN in a
-	 * match pattern chain is made up of a wild-card ("*"), that wild-card will
+	 * A chain pattern makes use of wildcards ('*' or '-') to match against DNs,
+	 * and wildcards ('*') to match againts DN prefixes, and value. If a DN in a
+	 * match pattern chain is made up of a wildcard ("*"), that wildcard will
 	 * match zero or one DNs in the chain. If a DN in a match pattern chain is
-	 * made up of a wild-card ("-"), that wild-card will match zero or more DNs in
-	 * the chain. If the first RDN of a DN is the wild-card ("*"), that DN will
-	 * match any other DN with the same suffix (the DN with the wild-card RDN
-	 * removed). If a value of a name/value pair is a wild-card ("*"), the value
+	 * made up of a wildcard ("-"), that wildcard will match zero or more DNs in
+	 * the chain. If the first RDN of a DN is the wildcard ("*"), that DN will
+	 * match any other DN with the same suffix (the DN with the wildcard RDN
+	 * removed). If a value of a name/value pair is a wildcard ("*"), the value
 	 * will match any value for that name.
 	 */
 	private static class DNChainMatching {
@@ -1747,9 +1747,9 @@ public class FrameworkUtil {
 		 * Parses a distinguished name chain pattern and returns an ArrayList
 		 * where each element represents a distinguished name (DN) in the chain
 		 * of DNs. Each element will be either a String, if the element
-		 * represents a wild-card ("*" or "-"), or an ArrayList representing an
+		 * represents a wildcard ("*" or "-"), or an ArrayList representing an
 		 * RDN. Each element in the RDN ArrayList will be a String, if the
-		 * element represents a wild-card ("*"), or an ArrayList of Strings, each
+		 * element represents a wildcard ("*"), or an ArrayList of Strings, each
 		 * String representing a name/value pair in the RDN.
 		 * 
 		 * @param dnChain
@@ -1881,7 +1881,7 @@ public class FrameworkUtil {
 		}
 
 		/**
-		 * This method will return an 'index' which points to a non-wild-card DN
+		 * This method will return an 'index' which points to a non-wildcard DN
 		 * or the end-of-arraylist.
 		 */
 		private static int skipWildCards(List dnChainPattern,
@@ -1893,11 +1893,11 @@ public class FrameworkUtil {
 					if (!dnPattern.equals(STAR_WILDCARD)
 							&& !dnPattern.equals(MINUS_WILDCARD)) {
 						throw new IllegalArgumentException(
-								"expected wild-card in DN pattern"); //$NON-NLS-1$
+								"expected wildcard in DN pattern"); //$NON-NLS-1$
 					}
 					// otherwise continue skipping over wild cards
 				} else if (dnPattern instanceof ArrayList) {
-					// if its an arraylist then we have our 'non-wild-card' DN
+					// if its an arraylist then we have our 'non-wildcard' DN
 					break;
 				} else {
 					// unknown member of the DNChainPattern
@@ -1906,7 +1906,7 @@ public class FrameworkUtil {
 				}
 			}
 			// i either points to end-of-arraylist, or to the first
-			// non-wild-card
+			// non-wildcard
 			// pattern
 			// after dnChainPatternIndex
 			return i;
@@ -1932,10 +1932,10 @@ public class FrameworkUtil {
 				if (!dnPattern.equals(STAR_WILDCARD)
 						&& !dnPattern.equals(MINUS_WILDCARD)) {
 					throw new IllegalArgumentException(
-							"expected wild-card in DN pattern"); //$NON-NLS-1$
+							"expected wildcard in DN pattern"); //$NON-NLS-1$
 				}
 				// here we are processing a wild card as the first DN
-				// skip all wild-card DN's
+				// skip all wildcard DN's
 				if (dnPattern.equals(MINUS_WILDCARD))
 					dnChainPatternIndex = skipWildCards(dnChainPattern,
 							dnChainPatternIndex);
@@ -1996,7 +1996,7 @@ public class FrameworkUtil {
 						// return TRUE iff the pattern index moved past the
 						// array-size
 						// (implying that the rest of the pattern is all
-						// wild-cards)
+						// wildcards)
 						return (dnChainPatternIndex >= dnChainPattern.size());
 					}
 					// if the pattern finished, but the chain continues then we
@@ -2011,9 +2011,9 @@ public class FrameworkUtil {
 						if (!dnPattern.equals(STAR_WILDCARD)
 								&& !dnPattern.equals(MINUS_WILDCARD)) {
 							throw new IllegalArgumentException(
-									"expected wild-card in DN pattern"); //$NON-NLS-1$
+									"expected wildcard in DN pattern"); //$NON-NLS-1$
 						}
-						// if the next DN is a 'wild-card', then we will recurse
+						// if the next DN is a 'wildcard', then we will recurse
 						return dnChainMatch(dnChain, dnChainIndex,
 								dnChainPattern, dnChainPatternIndex);
 					} else if (!(dnPattern instanceof ArrayList)) {
@@ -2041,7 +2041,7 @@ public class FrameworkUtil {
 		 * @param dnChain
 		 * @param pattern
 		 *            the pattern of distinguished name (DN) chains to match
-		 *            against the dnChain. Wild-cards ("*" or "-") can be used in
+		 *            against the dnChain. Wildcards ("*" or "-") can be used in
 		 *            three cases:
 		 *            <ol>
 		 *            <li>As a DN. In this case, the DN will consist of just the
@@ -2058,12 +2058,12 @@ public class FrameworkUtil {
 		 *            match "cn=me,c=US";cn=you" and
 		 *            "ou=my org unit,o=my org,cn=me,c=US;cn=you"</li>
 		 *            <li>As a value. In this case the value of a name value
-		 *            pair in an RDN will be a "*". The wild-card will match any
+		 *            pair in an RDN will be a "*". The wildcard will match any
 		 *            value for the given name. For example, "cn=*,c=US;cn=you"
 		 *            will match "cn=me,c=US";cn=you" and "cn=her,c=US;cn=you",
 		 *            but it will not match "ou=my org unit,c=US;cn=you". If the
-		 *            wild-card does not occur by itself in the value, it will
-		 *            not be used as a wild-card. In other words,
+		 *            wildcard does not occur by itself in the value, it will
+		 *            not be used as a wildcard. In other words,
 		 *            "cn=m*,c=US;cn=you" represents the common name of "m*" not
 		 *            any common name starting with "m".</li>
 		 *            </ol>
