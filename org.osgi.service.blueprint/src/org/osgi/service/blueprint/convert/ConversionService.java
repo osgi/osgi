@@ -31,6 +31,6 @@ public interface ConversionService {
 	 * checked because callers should expect that not all source objects
 	 * can be successfully converted.
 	 */
-	Object convert(Object fromValue Class toType) throws Exception
+	Object convert(Object fromValue, Class toType) throws Exception;
 	
 }
