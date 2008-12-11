@@ -306,7 +306,7 @@
           <xsd:attribute name="interface" use="optional" type="xsd:token"/>
           <xsd:attribute name="filter" use="optional" type="xsd:string"/>
           <xsd:attribute name="component-name" type="xsd:string" use="optional"/>
-          <xsd:attribute name="availability" use="optional" type="Tavailability" default="required"/>
+          <xsd:attribute name="availability" use="optional" type="Tavailability" default="mandatory"/>
         </xsd:extension>
       </xsd:complexContent>
     </xsd:complexType>
@@ -335,7 +335,7 @@
    
    <xsd:simpleType name="Tavailability">
         <xsd:restriction base="xsd:token">
-            <xsd:enumeration value="required"/>
+            <xsd:enumeration value="mandatory"/>
             <xsd:enumeration value="optional"/>
         </xsd:restriction>
    </xsd:simpleType>
