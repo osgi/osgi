@@ -16,6 +16,7 @@
 
 package org.osgi.impl.service.discovery;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -38,7 +39,7 @@ import org.osgi.service.log.LogService;
 public class InformListenerTask extends TimerTask {
 	private AbstractDiscovery discovery;
 
-	private Collection/* <ServiceEndpointDescription> */lastLookupResult = null;
+	private Collection/* <ServiceEndpointDescription> */lastLookupResult = new ArrayList();
 
 	/**
 	 * 
@@ -64,13 +65,16 @@ public class InformListenerTask extends TimerTask {
 				discovery.getLogService().log(LogService.LOG_ERROR,
 						"findService threw an exception ", e);
 			}
-			//TODO: do we really need that Vector availableServices? why not just take "descriptions"  
+			// TODO: do we really need that Vector availableServices? why not
+			// just take "descriptions"
 			Vector availableServices = new Vector();
 			notifyAvailableServices(descriptions, availableServices);
 			// notify all about unavailable services
 			notifyUnavailableServices(availableServices);
 			// now store the last find result for the next check
-			lastLookupResult = descriptions;
+			synchronized (lastLookupResult) {
+				lastLookupResult = new ArrayList(descriptions);
+			}
 		}
 	}
 
@@ -102,27 +106,32 @@ public class InformListenerTask extends TimerTask {
 	 */
 	private void notifyUnavailableServices(Vector availableServices) {
 		if (lastLookupResult != null) {
-			Iterator llrIt = lastLookupResult.iterator();
-			int i = 0;
-			while (llrIt.hasNext()) {
-				if (!availableServices.contains(new Integer(i))) {
-					Iterator it = discovery.getRegisteredServiceTracker()
-							.keySet().iterator();
-					while (it.hasNext()) {
-						DiscoveredServiceTracker l = (DiscoveredServiceTracker) it
-								.next();
-						l.serviceChanged(new DiscoveredServiceNotificationImpl(
-								(ServiceEndpointDescription) llrIt.next(),
-								DiscoveredServiceNotification.UNAVAILABLE));
+			synchronized (lastLookupResult) {
+				Iterator llrIt = lastLookupResult.iterator();
+				int i = 0;
+				while (llrIt.hasNext()) {
+					if (!availableServices.contains(new Integer(i))) {
+						Iterator it = discovery.getRegisteredServiceTracker()
+								.keySet().iterator();
+						while (it.hasNext()) {
+							DiscoveredServiceTracker l = (DiscoveredServiceTracker) it
+									.next();
+							l
+									.serviceChanged(new DiscoveredServiceNotificationImpl(
+											(ServiceEndpointDescription) llrIt
+													.next(),
+											DiscoveredServiceNotification.UNAVAILABLE));
+						}
 					}
+					i++;
 				}
-				i++;
 			}
 		}
 	}
 
 	/**
-	 * TODO: Verify that notification logic doesn't repeat notifications to trackers 
+	 * TODO: Verify that notification logic doesn't repeat notifications to
+	 * trackers
 	 * 
 	 * @param availableServices
 	 * @param descr
@@ -139,38 +148,44 @@ public class InformListenerTask extends TimerTask {
 		if (matches) {
 			// check if this is the first run
 			if (lastLookupResult != null && lastLookupResult.size() > 0) {
-				// it's not
-				Iterator it = lastLookupResult.iterator();
-				while (it.hasNext()) {
-					Integer index = null;
-					ServiceEndpointDescription sed = (ServiceEndpointDescription) it
-							.next();
-					// look up the last result map to see if we already know
-					// that description
-					// TODO we currently have not idea if a service description
-					// has changed or not. There is ID that identifies a service
-					// description. Should that ID part of the spec??
-					if (sed.equals(descr)) {
-						index = new Integer(0);
-						availableServices.add(sed);
-					}
-					
-					if (index != null) {
-						// notify a listener that a service
-						// description matches the specified filter
-						// and
-						// does exist before
-						l.serviceChanged(new DiscoveredServiceNotificationImpl(
-								descr, DiscoveredServiceNotification.MODIFIED));
-					} else {
-						// notify a listener that a service
-						// description matches the specified filter
-						// and
-						// is new to him
-						l
-								.serviceChanged(new DiscoveredServiceNotificationImpl(
-										descr,
-										DiscoveredServiceNotification.AVAILABLE));
+				synchronized (lastLookupResult) {
+					// it's not
+					Iterator it = lastLookupResult.iterator();
+					while (it.hasNext()) {
+						Integer index = null;
+						ServiceEndpointDescription sed = (ServiceEndpointDescription) it
+								.next();
+						// look up the last result map to see if we already know
+						// that description
+						// TODO we currently have not idea if a service
+						// description
+						// has changed or not. There is ID that identifies a
+						// service
+						// description. Should that ID part of the spec??
+						if (sed.equals(descr)) {
+							index = new Integer(0);
+							availableServices.add(sed);
+						}
+
+						if (index != null) {
+							// notify a listener that a service
+							// description matches the specified filter
+							// and
+							// does exist before
+							l
+									.serviceChanged(new DiscoveredServiceNotificationImpl(
+											descr,
+											DiscoveredServiceNotification.MODIFIED));
+						} else {
+							// notify a listener that a service
+							// description matches the specified filter
+							// and
+							// is new to him
+							l
+									.serviceChanged(new DiscoveredServiceNotificationImpl(
+											descr,
+											DiscoveredServiceNotification.AVAILABLE));
+						}
 					}
 				}
 			} else {
