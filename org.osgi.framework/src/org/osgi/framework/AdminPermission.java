@@ -17,9 +17,20 @@
 package org.osgi.framework;
 
 import java.io.IOException;
-import java.security.*;
+import java.security.AccessController;
+import java.security.BasicPermission;
+import java.security.Permission;
+import java.security.PermissionCollection;
+import java.security.PrivilegedAction;
 import java.security.cert.X509Certificate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A bundle's authority to perform specific privileged administrative operations
