@@ -130,6 +130,7 @@ public interface CompositeBundle extends Bundle {
 	 *            the new composite manifest.
 	 * @throws BundleException
 	 *             If the update fails or if this is a parent composite bundle.
+	 * @see CompositeBundleFactory#newChildCompositeBundle(Map, String, Map)
 	 */
 	void update(Map /* <String, String> */compositeManifest) throws BundleException;
 

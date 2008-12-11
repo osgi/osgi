@@ -31,7 +31,7 @@ import org.osgi.framework.launch.Framework;
 // TODO javadoc needs review
 public interface CompositeBundleFactory {
 	/**
-	 * Manifest header (named &quot;CompositeServiceFilter-Import;) identifying
+	 * Manifest header (named &quot;CompositeServiceFilter-Import&quot;) identifying
 	 * the service filters that are used by a child composite bundle to select
 	 * services that will be registered into a child framework from a parent
 	 * composite bundle.
@@ -39,7 +39,7 @@ public interface CompositeBundleFactory {
 	public static final String COMPOSITE_SERVICE_FILTER_IMPORT = "CompositeServiceFilter-Import";
 
 	/**
-	 * Manifest header (named &quot;CompositeServiceFilter-Export;) identifying
+	 * Manifest header (named &quot;CompositeServiceFilter-Export&quot;) identifying
 	 * the service filters that are used by a parent composite bundle to select
 	 * services that will be registered into a parent framework from a child
 	 * composite bundle.
@@ -111,13 +111,12 @@ public interface CompositeBundleFactory {
 	 * <li> {@link Constants#FRAGMENT_HOST Fragment-Host}</li>
 	 * <li> {@link Constants#REQUIRE_BUNDLE Require-Bundle}</li>
 	 * </ul>
-	 * <li>A child framework is create which uses a storage area under the child
+	 * <li>A child framework is created which uses a storage area under the child
 	 * composite bundle's associated persistent storage. Note that if the
 	 * framework configuration property {@link Constants#FRAMEWORK_STORAGE
 	 * org.osgi.framework.storage} is specified in the framework config then it
-	 * is ignored and a storage area located under the child composite bundle's
-	 * associated persistent storage area is used.</li>
-	 * <li>The child framework is initialized (see {@link Framework#init()}.
+	 * is ignored.</li>
+	 * <li>The child framework is initialized (see {@link Framework#init()}).
 	 * <li>A parent composite bundle is installed into the child framework</li>
 	 * <li>The child composite bundle's state is set to INSTALLED.</li>
 	 * <li>A bundle event of type {@link BundleEvent#INSTALLED} is fired for the
