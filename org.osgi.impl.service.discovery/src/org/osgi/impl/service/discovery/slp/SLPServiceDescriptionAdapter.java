@@ -1,7 +1,9 @@
 package org.osgi.impl.service.discovery.slp;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
+import java.net.ServerSocket;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -48,10 +50,13 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 	private Collection /* <String> */javaInterfaceAndVersions; // optional
 	private Collection /* <String> */javaAndEndpointInterfaces; // optional
 	private Map/* <String, Object> */properties; // optional
+	private String endpointID;
 
 	// Java interfaces and associated ServiceURLs. Each interface has its own
 	// ServiceURL.
 	private Map/* <String, ServiceURL> */serviceURLs;
+
+	private static int port = -1;
 
 	/**
 	 * 
@@ -64,8 +69,8 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 	public SLPServiceDescriptionAdapter(
 			final Collection/* <String */interfaceNames,
 			final Collection/* <String> */interfacesAndVersions,
-			final Collection/* <String> */endPointInterfaces, final Map props)
-			throws ServiceLocationException {
+			final Collection/* <String> */endPointInterfaces, final Map props,
+			final String endpntID) throws ServiceLocationException {
 		// check the java interface map for validity
 		if (interfacesAndVersions == null) {
 			throw new IllegalArgumentException(
@@ -78,7 +83,7 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 
 		// create and copy collections and maps
 		javaInterfaces = new ArrayList(interfaceNames);
-		if (javaInterfaceAndVersions != null) {
+		if (interfacesAndVersions != null) {
 			javaInterfaceAndVersions = new ArrayList(interfacesAndVersions);
 		}
 		if (endPointInterfaces != null) {
@@ -89,6 +94,7 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 			properties.putAll(props);
 		}
 
+		endpointID = endpntID;
 		addInterfacesAndVersionsToProperties();
 	}
 
@@ -131,10 +137,9 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 				while (versionIterator.hasNext()) {
 					String interfaceAndVersion = (String) versionIterator
 							.next();
-					if (interfaceAndVersion.indexOf(currentInterface) > 0) {
-						version = interfaceAndVersion
-								.substring(interfaceAndVersion
-										.indexOf(ServicePublication.SEPARATOR));
+					if (interfaceAndVersion.indexOf(currentInterface) >= 0) {
+						version = interfaceAndVersion;
+
 					}
 				}
 			}
@@ -143,10 +148,10 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 				// endpoint IF
 				Iterator endpIterator = javaAndEndpointInterfaces.iterator();
 				while (endpIterator.hasNext()) {
-					String endpInteraface = (String) endpIterator.next();
-					if (endpInteraface.indexOf(currentInterface) > 0) {
-						endpointInterface = endpInteraface
-								.substring(endpInteraface
+					String endpInterface = (String) endpIterator.next();
+					if (endpInterface.indexOf(currentInterface) > 0) {
+						endpointInterface = endpInterface
+								.substring(endpInterface
 										.indexOf(ServicePublication.SEPARATOR));
 					}
 				}
@@ -233,7 +238,7 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 
 	/**
 	 * 
-	 * @see org.osgi.service.discovery.ServiceEndpointDescription#getInterfaceNames()
+	 * @see org.osgi.service.discovery.ServiceEndpointDescription#getProvidedInterfaces()
 	 */
 	public Collection getProvidedInterfaces() {
 		return javaInterfaces;
@@ -241,10 +246,10 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 
 	/**
 	 * 
-	 * @see org.osgi.service.discovery.ServiceEndpointDescription#getProtocolSpecificInterfaceName(java.lang.String)
+	 * @see org.osgi.service.discovery.ServiceEndpointDescription#getEndpointInterfaceName(java.lang.String)
 	 */
 	public String getEndpointInterfaceName(String interfaceName) {
-		if (javaAndEndpointInterfaces != null) {
+		if (javaAndEndpointInterfaces != null && interfaceName != null) {
 			Iterator it = javaAndEndpointInterfaces.iterator();
 			while (it.hasNext()) {
 				StringTokenizer tokenizer = new StringTokenizer((String) it
@@ -262,7 +267,7 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 	 * @see org.osgi.service.discovery.ServiceEndpointDescription#getVersion(java.lang.String)
 	 */
 	public String getVersion(String interfaceName) {
-		if (javaInterfaceAndVersions != null) {
+		if (javaInterfaceAndVersions != null && interfaceName != null) {
 			Iterator it = javaInterfaceAndVersions.iterator();
 			while (it.hasNext()) {
 				StringTokenizer tokenizer = new StringTokenizer((String) it
@@ -390,6 +395,13 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 				// TODO log and rethrow
 			}
 		}
+		if (port == null) {
+			try {
+				port = String.valueOf(findFreePort());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		int lifetime = lifeTime != null ? lifeTime.intValue()
 				: ServiceURL.LIFETIME_DEFAULT;
 		String interf = convertJavaInterface2Path(interfaceName);
@@ -402,6 +414,20 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 		buff.append("/");
 		buff.append(path);
 		return new ServiceURL(buff.toString(), lifetime);
+	}
+
+	/**
+	 * 
+	 * @return an unused port
+	 * @throws IOException
+	 */
+	private static synchronized int findFreePort() throws IOException {
+		if (port == -1) {
+			ServerSocket server = new ServerSocket(0);
+			port = server.getLocalPort();
+			server.close();
+		}
+		return port;
 	}
 
 	/**
@@ -453,14 +479,13 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 			// TODO log error
 			version = SLPServiceDescriptionAdapter.UnknownVersion;
 		}
-		javaInterfaceAndFilters.add(interfaceName
-				+ ServicePublication.SEPARATOR + version);
+		javaInterfaceAndFilters.add(version);
 
 		// Put interface and version information to properties since base for
 		// matching
-		properties.put(Constants.OBJECTCLASS, new String[] { interfaceName });
+		properties.put(Constants.OBJECTCLASS, interfaceName);
 		properties.put(ServicePublication.PROP_KEY_SERVICE_INTERFACE_VERSION,
-				new String[] { version });
+				version);
 
 		// Get endpoint-interface if it exists
 		Object endpointInterfacesValue = properties
@@ -737,8 +762,11 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 		return super.hashCode();
 	}
 
+	/**
+	 * 
+	 * @see org.osgi.service.discovery.ServiceEndpointDescription#getEndpointID()
+	 */
 	public String getEndpointID() {
-		// TODO Auto-generated method stub
-		return null;
+		return endpointID;
 	}
 }

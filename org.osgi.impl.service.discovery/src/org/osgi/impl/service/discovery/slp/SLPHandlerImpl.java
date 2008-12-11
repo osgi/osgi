@@ -20,6 +20,8 @@ package org.osgi.impl.service.discovery.slp;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -58,7 +60,7 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 	private Locator locator = null;
 	private Advertiser advertiser = null;
 
-	private List servicePublications = new ArrayList();
+	private Map publicationAndSED = Collections.synchronizedMap(new HashMap());
 
 	private final int POLLDELAY = 10000; // 10 sec
 
@@ -165,6 +167,16 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 					// if the value is not a String we cannot handle that value!
 					// This is a limitation of the API.
 					value = attributes.substring(attributes.indexOf("=") + 1);
+					if (value instanceof String) {
+						String val = (String) value;
+						if (val.startsWith("[")) {
+							val = val.substring(1);
+						}
+						if (val.endsWith("]")) {
+							val = val.substring(0, val.length() - 1);
+						}
+						value = val;
+					}
 					descriptionAdapter.addProperty(key, value);
 				}
 				log(LogService.LOG_DEBUG, "adding serviceURL=" + url);
@@ -205,33 +217,34 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 	/**
 	 * 
 	 */
-	public void publishService(Collection/* <String> */javaInterfaces,
+	private ServiceEndpointDescription publishService(
+			Collection/* <String> */javaInterfaces,
 			Collection/* <String> */javaInterfacesAndVersions,
 			Collection/* <String> */javaInterfacesAndEndpointInterfaces,
-			Map/* <String, Object> */properties, String strategy) {
+			Map/* <String, Object> */properties, String strategy,
+			String endpointID) {
 		SLPServiceDescriptionAdapter svcDescr;
 		try {
 			svcDescr = new SLPServiceDescriptionAdapter(javaInterfaces,
 					javaInterfacesAndVersions,
-					javaInterfacesAndEndpointInterfaces, properties);
+					javaInterfacesAndEndpointInterfaces, properties, endpointID);
 		} catch (ServiceLocationException e1) {
 			e1.printStackTrace();
 			log(LogService.LOG_ERROR, "Unable to create Service Description",
 					e1);
-			return;
+			return null;
 		}
 		// TODO: act according strategy parameter
 		Advertiser advertiser = getAdvertiser();
 		if (advertiser != null) {
-			log(LogService.LOG_DEBUG, "Following service is published: "
-					+ svcDescr);
-
 			Iterator interfaces = svcDescr.getProvidedInterfaces().iterator();
 			while (interfaces.hasNext()) {
 				try {
 					advertiser.register(svcDescr
 							.getServiceURL((String) interfaces.next()),
 							new Hashtable(svcDescr.getProperties()));
+					log(LogService.LOG_DEBUG, "Following service is published: "
+							+ svcDescr);
 				} catch (ServiceLocationException e) {
 					e.printStackTrace();
 					log(LogService.LOG_ERROR, "failed registering service", e);
@@ -242,12 +255,13 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 		}
 		// inform the listener about the new available service
 		notifyListenersOnNewServiceDescription(svcDescr);
+		return svcDescr;
 	}
 
 	/**
 	 * @see org.osgi.service.discovery.Discovery#unpublish(org.osgi.service.discovery.ServiceEndpointDescription)
 	 */
-	public void unpublishService(
+	private void unpublishService(
 			final ServiceEndpointDescription serviceDescription) {
 		validateServiceDescription(serviceDescription);
 		log(LogService.LOG_DEBUG, "unpublish service "
@@ -261,11 +275,11 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 				while (interfaceNames.hasNext()) {
 					String interfaceName = (String) interfaceNames.next();
 					try {
-						log(LogService.LOG_DEBUG, "unpublish service "
-								+ slpSvcDescr.getServiceURL(interfaceName));
+
 						advertiser.deregister(slpSvcDescr
 								.getServiceURL(interfaceName));
-
+						log(LogService.LOG_DEBUG, "service "
+								+ slpSvcDescr.getServiceURL(interfaceName) + " unpublished");
 						// inform listeners about removal
 						notifyListenersOnRemovedServiceDescription(serviceDescription);
 					} catch (ServiceLocationException e) {
@@ -362,10 +376,20 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 		 * @see org.osgi.util.tracker.ServiceTrackerCustomizer#addingService(org.osgi.framework.ServiceReference)
 		 */
 		public Object addingService(ServiceReference arg0) {
+			ServicePublication sp = publishServicePublication(arg0);
+			return sp;
+		}
+
+		/**
+		 * 
+		 * @param arg0
+		 * @return
+		 */
+		private ServicePublication publishServicePublication(
+				ServiceReference arg0) {
 			ServicePublication sp = (ServicePublication) context
 					.getService(arg0);
-			servicePublications.add(sp);
-			publishService(
+			ServiceEndpointDescription sed = publishService(
 					(Collection) arg0
 							.getProperty(ServicePublication.PROP_KEY_SERVICE_INTERFACE_NAME),
 					(Collection) arg0
@@ -374,7 +398,10 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 							.getProperty(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME),
 					(Map) arg0
 							.getProperty(ServicePublication.PROP_KEY_SERVICE_PROPERTIES),
-					Discovery.PROP_VAL_PUBLISH_STRATEGY_PUSH);
+					Discovery.PROP_VAL_PUBLISH_STRATEGY_PUSH,
+					(String) arg0
+							.getProperty(ServicePublication.PROP_KEY_ENDPOINT_ID));
+			publicationAndSED.put(sp, sed);
 			return sp;
 		}
 
@@ -383,10 +410,8 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 		 *      java.lang.Object)
 		 */
 		public void modifiedService(ServiceReference arg0, Object arg1) {
-			ServicePublication sp = (ServicePublication) context
-					.getService(arg0);
-			servicePublications.remove(sp);
-			servicePublications.add(sp);
+			unpublishServicePublication(arg0);
+			publishServicePublication(arg0);
 		}
 
 		/**
@@ -394,9 +419,20 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 		 *      java.lang.Object)
 		 */
 		public void removedService(ServiceReference arg0, Object arg1) {
+			unpublishServicePublication(arg0);
+		}
+
+		/**
+		 * 
+		 * @param srvReference
+		 *            the given reference to the service to unpublish
+		 */
+		private void unpublishServicePublication(ServiceReference srvReference) {
 			ServicePublication sp = (ServicePublication) context
-					.getService(arg0);
-			servicePublications.remove(sp);
+					.getService(srvReference);
+			unpublishService((ServiceEndpointDescription) publicationAndSED
+					.get(sp));
+			publicationAndSED.remove(sp);
 		}
 	}
 
