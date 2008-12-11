@@ -35,5 +35,5 @@ public interface Converter {
 	 * checked because callers should expect that not all source objects
 	 * can be successfully converted.
 	 */
-	Object convert(Object source) throws RuntimeException;
+	Object convert(Object source) throws Exception;
 }
