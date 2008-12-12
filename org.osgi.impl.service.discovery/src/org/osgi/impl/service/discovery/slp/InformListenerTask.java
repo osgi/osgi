@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package org.osgi.impl.service.discovery;
+package org.osgi.impl.service.discovery.slp;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.TimerTask;
-import java.util.Vector;
 
-import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.impl.service.discovery.DiscoveredServiceNotificationImpl;
 import org.osgi.service.discovery.DiscoveredServiceNotification;
 import org.osgi.service.discovery.DiscoveredServiceTracker;
 import org.osgi.service.discovery.ServiceEndpointDescription;
-import org.osgi.service.log.LogService;
 
 /**
  * A TimerTask that compares in its run method the registered filters with the
@@ -37,7 +36,7 @@ import org.osgi.service.log.LogService;
  * @author Thomas Kiesslich
  */
 public class InformListenerTask extends TimerTask {
-	private AbstractDiscovery discovery;
+	private SLPHandlerImpl discovery;
 
 	private Collection/* <ServiceEndpointDescription> */lastLookupResult = new ArrayList();
 
@@ -48,7 +47,7 @@ public class InformListenerTask extends TimerTask {
 	 * @param disco
 	 *            the Instance of Discovery to get the published services from
 	 */
-	public InformListenerTask(AbstractDiscovery disco) {
+	public InformListenerTask(SLPHandlerImpl disco) {
 		discovery = disco;
 	}
 
@@ -59,15 +58,10 @@ public class InformListenerTask extends TimerTask {
 	public void run() {
 		if (discovery.getRegisteredServiceTracker().size() != 0) {
 			Collection descriptions = null;
-			try {
-				descriptions = discovery.findService(null, null);
-			} catch (InvalidSyntaxException e) {
-				discovery.getLogService().log(LogService.LOG_ERROR,
-						"findService threw an exception ", e);
-			}
+			descriptions = discovery.findService(null, null);
 			// TODO: do we really need that Vector availableServices? why not
 			// just take "descriptions"
-			Vector availableServices = new Vector();
+			List availableServices = new ArrayList();
 			notifyAvailableServices(descriptions, availableServices);
 			// notify all about unavailable services
 			notifyUnavailableServices(availableServices);
@@ -84,7 +78,7 @@ public class InformListenerTask extends TimerTask {
 	 */
 	private void notifyAvailableServices(
 			Collection/* <ServiceEndpointDescription> */descriptions,
-			Vector availableServices) {
+			List availableServices) {
 		Iterator descrIt = descriptions.iterator();
 		while (descrIt.hasNext()) {
 			ServiceEndpointDescription descr = (ServiceEndpointDescription) descrIt
@@ -104,7 +98,7 @@ public class InformListenerTask extends TimerTask {
 	/**
 	 * @param availableServices
 	 */
-	private void notifyUnavailableServices(Vector availableServices) {
+	private void notifyUnavailableServices(List availableServices) {
 		if (lastLookupResult != null) {
 			synchronized (lastLookupResult) {
 				Iterator llrIt = lastLookupResult.iterator();
@@ -138,7 +132,7 @@ public class InformListenerTask extends TimerTask {
 	 * @param l
 	 * @param props
 	 */
-	private void notifiyAvailableServicePerListener(Vector availableServices,
+	private void notifiyAvailableServicePerListener(List availableServices,
 			ServiceEndpointDescription descr, DiscoveredServiceTracker l,
 			Map props) {
 		// check if the listener filter matches the given
