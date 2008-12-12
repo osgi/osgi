@@ -272,11 +272,4 @@ public class DeploymentException extends Exception {
 	public int getCode() {
 		return code;
 	}
-
-	/**
-	 * @return Returns the message.
-	 */
-	public String getMessage() {
-	    return super.getMessage();
-	}
 }
