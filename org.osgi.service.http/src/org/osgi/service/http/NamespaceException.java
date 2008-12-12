@@ -58,4 +58,31 @@ public class NamespaceException extends Exception {
 	public Throwable getException() {
 		return getCause();
 	}
+	
+	/**
+	 * Returns the cause of this exception or <code>null</code> if no cause was
+	 * set.
+	 * 
+	 * @return The cause of this exception or <code>null</code> if no cause was
+	 *         set.
+	 * @since 1.2
+	 */
+	public Throwable getCause() {
+		return super.getCause();
+	}
+
+	/**
+	 * Initializes the cause of this exception to the specified value.
+	 * 
+	 * @param cause The cause of this exception.
+	 * @return This exception.
+	 * @throws IllegalArgumentException If the specified cause is this
+	 *         exception.
+	 * @throws IllegalStateException If the cause of this exception has already
+	 *         been set.
+	 * @since 1.2
+	 */
+	public Throwable initCause(Throwable cause) {
+		return super.initCause(cause);
+	}
 }

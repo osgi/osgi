@@ -140,6 +140,17 @@ public class ApplicationException extends Exception {
 	}
 
 	/**
+	 * Returns the cause of this exception or <code>null</code> if no cause was
+	 * set.
+	 * 
+	 * @return The cause of this exception or <code>null</code> if no cause was
+	 *         set.
+	 */
+	public Throwable getCause() {
+		return super.getCause();
+	}
+
+	/**
 	 * Returns the error code associated with this exception.
 	 * 
 	 * @return The error code of this exception.
