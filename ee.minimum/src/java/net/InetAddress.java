@@ -18,14 +18,26 @@
  */
 
 package java.net;
-public final class InetAddress implements java.io.Serializable {
+public class InetAddress implements java.io.Serializable {
 	public byte[] getAddress() { return null; }
 	public static java.net.InetAddress[] getAllByName(java.lang.String var0) throws java.net.UnknownHostException { return null; }
+	public static java.net.InetAddress getByAddress(java.lang.String var0, byte[] var1) throws java.net.UnknownHostException { return null; }
+	public static java.net.InetAddress getByAddress(byte[] var0) throws java.net.UnknownHostException { return null; }
 	public static java.net.InetAddress getByName(java.lang.String var0) throws java.net.UnknownHostException { return null; }
+	public java.lang.String getCanonicalHostName() { return null; }
 	public java.lang.String getHostAddress() { return null; }
 	public java.lang.String getHostName() { return null; }
 	public static java.net.InetAddress getLocalHost() throws java.net.UnknownHostException { return null; }
+	public boolean isAnyLocalAddress() { return false; }
+	public boolean isLinkLocalAddress() { return false; }
+	public boolean isLoopbackAddress() { return false; }
+	public boolean isMCGlobal() { return false; }
+	public boolean isMCLinkLocal() { return false; }
+	public boolean isMCNodeLocal() { return false; }
+	public boolean isMCOrgLocal() { return false; }
+	public boolean isMCSiteLocal() { return false; }
 	public boolean isMulticastAddress() { return false; }
-	private InetAddress() { } /* generated constructor to prevent compiler adding default public constructor */
+	public boolean isSiteLocalAddress() { return false; }
+	InetAddress() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

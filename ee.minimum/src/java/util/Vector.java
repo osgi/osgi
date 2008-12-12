@@ -18,7 +18,7 @@
  */
 
 package java.util;
-public class Vector extends java.util.AbstractList implements java.io.Serializable, java.lang.Cloneable, java.util.List {
+public class Vector extends java.util.AbstractList implements java.io.Serializable, java.lang.Cloneable, java.util.List, java.util.RandomAccess {
 	public Vector() { }
 	public Vector(int var0) { }
 	public Vector(int var0, int var1) { }

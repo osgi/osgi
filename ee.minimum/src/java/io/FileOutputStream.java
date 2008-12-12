@@ -20,6 +20,7 @@
 package java.io;
 public class FileOutputStream extends java.io.OutputStream {
 	public FileOutputStream(java.io.File var0) throws java.io.FileNotFoundException { }
+	public FileOutputStream(java.io.File var0, boolean var1) throws java.io.FileNotFoundException { }
 	public FileOutputStream(java.io.FileDescriptor var0) { }
 	public FileOutputStream(java.lang.String var0) throws java.io.FileNotFoundException { }
 	public FileOutputStream(java.lang.String var0, boolean var1) throws java.io.FileNotFoundException { }

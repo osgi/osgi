@@ -28,6 +28,7 @@ public final class System {
 	public static java.lang.String getProperty(java.lang.String var0, java.lang.String var1) { return null; }
 	public static java.lang.SecurityManager getSecurityManager() { return null; }
 	public static int identityHashCode(java.lang.Object var0) { return 0; }
+	public static void load(java.lang.String var0) { }
 	public static void loadLibrary(java.lang.String var0) { }
 	public static java.lang.String mapLibraryName(java.lang.String var0) { return null; }
 	public static void runFinalization() { }
@@ -35,6 +36,7 @@ public final class System {
 	public static void setIn(java.io.InputStream var0) { }
 	public static void setOut(java.io.PrintStream var0) { }
 	public static void setProperties(java.util.Properties var0) { }
+	public static java.lang.String setProperty(java.lang.String var0, java.lang.String var1) { return null; }
 	public static void setSecurityManager(java.lang.SecurityManager var0) { }
 	public final static java.io.PrintStream err; static { err = null; }
 	public final static java.io.InputStream in; static { in = null; }

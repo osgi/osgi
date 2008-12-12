@@ -25,6 +25,7 @@ public final class Double extends java.lang.Number implements java.lang.Comparab
 	public int compareTo(java.lang.Double var0) { return 0; }
 	public int compareTo(java.lang.Object var0) { return 0; }
 	public static long doubleToLongBits(double var0) { return 0l; }
+	public static long doubleToRawLongBits(double var0) { return 0l; }
 	public double doubleValue() { return 0.0d; }
 	public float floatValue() { return 0.0f; }
 	public int intValue() { return 0; }

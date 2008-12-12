@@ -22,13 +22,18 @@ public abstract class DatagramSocketImpl implements java.net.SocketOptions {
 	public DatagramSocketImpl() { }
 	protected abstract void bind(int var0, java.net.InetAddress var1) throws java.net.SocketException;
 	protected abstract void close();
+	protected void connect(java.net.InetAddress var0, int var1) throws java.net.SocketException { }
 	protected abstract void create() throws java.net.SocketException;
+	protected void disconnect() { }
 	protected java.io.FileDescriptor getFileDescriptor() { return null; }
 	protected int getLocalPort() { return 0; }
 	protected abstract int getTimeToLive() throws java.io.IOException;
 	protected abstract void join(java.net.InetAddress var0) throws java.io.IOException;
+	protected abstract void joinGroup(java.net.SocketAddress var0, java.net.NetworkInterface var1) throws java.io.IOException;
 	protected abstract void leave(java.net.InetAddress var0) throws java.io.IOException;
+	protected abstract void leaveGroup(java.net.SocketAddress var0, java.net.NetworkInterface var1) throws java.io.IOException;
 	protected abstract int peek(java.net.InetAddress var0) throws java.io.IOException;
+	protected abstract int peekData(java.net.DatagramPacket var0) throws java.io.IOException;
 	protected abstract void receive(java.net.DatagramPacket var0) throws java.io.IOException;
 	protected abstract void send(java.net.DatagramPacket var0) throws java.io.IOException;
 	protected abstract void setTimeToLive(int var0) throws java.io.IOException;

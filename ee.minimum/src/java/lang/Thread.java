@@ -25,10 +25,14 @@ public class Thread implements java.lang.Runnable {
 	public Thread(java.lang.String var0) { }
 	public Thread(java.lang.ThreadGroup var0, java.lang.Runnable var1) { }
 	public Thread(java.lang.ThreadGroup var0, java.lang.Runnable var1, java.lang.String var2) { }
+	public Thread(java.lang.ThreadGroup var0, java.lang.Runnable var1, java.lang.String var2, long var3) { }
 	public Thread(java.lang.ThreadGroup var0, java.lang.String var1) { }
 	public static int activeCount() { return 0; }
 	public final void checkAccess() { }
 	public static java.lang.Thread currentThread() { return null; }
+	public void destroy() { }
+	public static void dumpStack() { }
+	public static int enumerate(java.lang.Thread[] var0) { return 0; }
 	public java.lang.ClassLoader getContextClassLoader() { return null; }
 	public final java.lang.String getName() { return null; }
 	public final int getPriority() { return 0; }

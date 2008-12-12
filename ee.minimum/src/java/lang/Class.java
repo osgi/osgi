@@ -19,6 +19,7 @@
 
 package java.lang;
 public final class Class implements java.io.Serializable {
+	public boolean desiredAssertionStatus() { return false; }
 	public static java.lang.Class forName(java.lang.String var0) throws java.lang.ClassNotFoundException { return null; }
 	public static java.lang.Class forName(java.lang.String var0, boolean var1, java.lang.ClassLoader var2) throws java.lang.ClassNotFoundException { return null; }
 	public java.lang.ClassLoader getClassLoader() { return null; }
@@ -41,6 +42,7 @@ public final class Class implements java.io.Serializable {
 	public java.lang.reflect.Method[] getMethods() { return null; }
 	public int getModifiers() { return 0; }
 	public java.lang.String getName() { return null; }
+	public java.lang.Package getPackage() { return null; }
 	public java.security.ProtectionDomain getProtectionDomain() { return null; }
 	public java.net.URL getResource(java.lang.String var0) { return null; }
 	public java.io.InputStream getResourceAsStream(java.lang.String var0) { return null; }

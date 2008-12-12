@@ -29,7 +29,11 @@ public class GregorianCalendar extends java.util.Calendar {
 	public void add(int var0, int var1) { }
 	protected void computeFields() { }
 	protected void computeTime() { }
+	public int getGreatestMinimum(int var0) { return 0; }
 	public final java.util.Date getGregorianChange() { return null; }
+	public int getLeastMaximum(int var0) { return 0; }
+	public int getMaximum(int var0) { return 0; }
+	public int getMinimum(int var0) { return 0; }
 	public boolean isLeapYear(int var0) { return false; }
 	public void roll(int var0, boolean var1) { }
 	public void setGregorianChange(java.util.Date var0) { }

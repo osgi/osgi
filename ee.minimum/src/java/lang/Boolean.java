@@ -23,7 +23,9 @@ public final class Boolean implements java.io.Serializable {
 	public Boolean(boolean var0) { }
 	public boolean booleanValue() { return false; }
 	public static boolean getBoolean(java.lang.String var0) { return false; }
+	public static java.lang.String toString(boolean var0) { return null; }
 	public static java.lang.Boolean valueOf(java.lang.String var0) { return null; }
+	public static java.lang.Boolean valueOf(boolean var0) { return null; }
 	public final static java.lang.Boolean FALSE; static { FALSE = null; }
 	public final static java.lang.Boolean TRUE; static { TRUE = null; }
 	public final static java.lang.Class TYPE; static { TYPE = null; }

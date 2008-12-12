@@ -22,10 +22,11 @@ public class SimpleTimeZone extends java.util.TimeZone {
 	public SimpleTimeZone(int var0, java.lang.String var1) { }
 	public SimpleTimeZone(int var0, java.lang.String var1, int var2, int var3, int var4, int var5, int var6, int var7, int var8, int var9) { }
 	public SimpleTimeZone(int var0, java.lang.String var1, int var2, int var3, int var4, int var5, int var6, int var7, int var8, int var9, int var10) { }
-	public int getDSTSavings() { return 0; }
+	public SimpleTimeZone(int var0, java.lang.String var1, int var2, int var3, int var4, int var5, int var6, int var7, int var8, int var9, int var10, int var11, int var12) { }
 	public int getOffset(int var0, int var1, int var2, int var3, int var4, int var5) { return 0; }
 	public int getRawOffset() { return 0; }
 	public boolean inDaylightTime(java.util.Date var0) { return false; }
+	public void setDSTSavings(int var0) { }
 	public void setEndRule(int var0, int var1, int var2) { }
 	public void setEndRule(int var0, int var1, int var2, int var3) { }
 	public void setEndRule(int var0, int var1, int var2, int var3, boolean var4) { }
@@ -35,5 +36,8 @@ public class SimpleTimeZone extends java.util.TimeZone {
 	public void setStartRule(int var0, int var1, int var2, int var3, boolean var4) { }
 	public void setStartYear(int var0) { }
 	public boolean useDaylightTime() { return false; }
+	public final static int STANDARD_TIME = 1;
+	public final static int UTC_TIME = 2;
+	public final static int WALL_TIME = 0;
 }
 

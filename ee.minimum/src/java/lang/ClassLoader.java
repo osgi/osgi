@@ -21,14 +21,18 @@ package java.lang;
 public abstract class ClassLoader {
 	protected ClassLoader() { }
 	protected ClassLoader(java.lang.ClassLoader var0) { }
+	public void clearAssertionStatus() { }
 	protected final java.lang.Class defineClass(java.lang.String var0, byte[] var1, int var2, int var3) throws java.lang.ClassFormatError { return null; }
 	protected final java.lang.Class defineClass(java.lang.String var0, byte[] var1, int var2, int var3, java.security.ProtectionDomain var4) throws java.lang.ClassFormatError { return null; }
+	protected java.lang.Package definePackage(java.lang.String var0, java.lang.String var1, java.lang.String var2, java.lang.String var3, java.lang.String var4, java.lang.String var5, java.lang.String var6, java.net.URL var7) { return null; }
 	protected java.lang.Class findClass(java.lang.String var0) throws java.lang.ClassNotFoundException { return null; }
 	protected java.lang.String findLibrary(java.lang.String var0) { return null; }
 	protected final java.lang.Class findLoadedClass(java.lang.String var0) { return null; }
 	protected java.net.URL findResource(java.lang.String var0) { return null; }
 	protected java.util.Enumeration findResources(java.lang.String var0) throws java.io.IOException { return null; }
 	protected final java.lang.Class findSystemClass(java.lang.String var0) throws java.lang.ClassNotFoundException { return null; }
+	protected java.lang.Package getPackage(java.lang.String var0) { return null; }
+	protected java.lang.Package[] getPackages() { return null; }
 	public final java.lang.ClassLoader getParent() { return null; }
 	public java.net.URL getResource(java.lang.String var0) { return null; }
 	public java.io.InputStream getResourceAsStream(java.lang.String var0) { return null; }
@@ -40,6 +44,9 @@ public abstract class ClassLoader {
 	public java.lang.Class loadClass(java.lang.String var0) throws java.lang.ClassNotFoundException { return null; }
 	protected java.lang.Class loadClass(java.lang.String var0, boolean var1) throws java.lang.ClassNotFoundException { return null; }
 	protected final void resolveClass(java.lang.Class var0) { }
+	public void setClassAssertionStatus(java.lang.String var0, boolean var1) { }
+	public void setDefaultAssertionStatus(boolean var0) { }
+	public void setPackageAssertionStatus(java.lang.String var0, boolean var1) { }
 	protected final void setSigners(java.lang.Class var0, java.lang.Object[] var1) { }
 }
 

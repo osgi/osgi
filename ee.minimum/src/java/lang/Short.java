@@ -23,12 +23,15 @@ public final class Short extends java.lang.Number implements java.lang.Comparabl
 	public Short(short var0) { }
 	public int compareTo(java.lang.Object var0) { return 0; }
 	public int compareTo(java.lang.Short var0) { return 0; }
+	public static java.lang.Short decode(java.lang.String var0) { return null; }
 	public double doubleValue() { return 0.0d; }
 	public float floatValue() { return 0.0f; }
 	public int intValue() { return 0; }
 	public long longValue() { return 0l; }
 	public static short parseShort(java.lang.String var0) { return 0; }
 	public static short parseShort(java.lang.String var0, int var1) { return 0; }
+	public static java.lang.String toString(short var0) { return null; }
+	public static java.lang.Short valueOf(java.lang.String var0) { return null; }
 	public static java.lang.Short valueOf(java.lang.String var0, int var1) { return null; }
 	public final static short MAX_VALUE = 32767;
 	public final static short MIN_VALUE = -32768;

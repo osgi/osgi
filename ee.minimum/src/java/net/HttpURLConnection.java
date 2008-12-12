@@ -23,10 +23,12 @@ public abstract class HttpURLConnection extends java.net.URLConnection {
 	public abstract void disconnect();
 	public java.io.InputStream getErrorStream() { return null; }
 	public static boolean getFollowRedirects() { return false; }
+	public boolean getInstanceFollowRedirects() { return false; }
 	public java.lang.String getRequestMethod() { return null; }
 	public int getResponseCode() throws java.io.IOException { return 0; }
 	public java.lang.String getResponseMessage() throws java.io.IOException { return null; }
 	public static void setFollowRedirects(boolean var0) { }
+	public void setInstanceFollowRedirects(boolean var0) { }
 	public void setRequestMethod(java.lang.String var0) throws java.net.ProtocolException { }
 	public abstract boolean usingProxy();
 	public final static int HTTP_ACCEPTED = 202;
@@ -64,6 +66,7 @@ public abstract class HttpURLConnection extends java.net.URLConnection {
 	public final static int HTTP_UNSUPPORTED_TYPE = 415;
 	public final static int HTTP_USE_PROXY = 305;
 	public final static int HTTP_VERSION = 505;
+	protected boolean instanceFollowRedirects;
 	protected java.lang.String method;
 	protected int responseCode;
 	protected java.lang.String responseMessage;

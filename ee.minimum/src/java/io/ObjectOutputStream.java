@@ -47,6 +47,7 @@ public class ObjectOutputStream extends java.io.OutputStream implements java.io.
 	public void writeShort(int var0) throws java.io.IOException { }
 	protected void writeStreamHeader() throws java.io.IOException { }
 	public void writeUTF(java.lang.String var0) throws java.io.IOException { }
+	public void writeUnshared(java.lang.Object var0) throws java.io.IOException { }
 	public static abstract class PutField {
 		public PutField() { }
 		public abstract void put(java.lang.String var0, byte var1);
@@ -58,7 +59,7 @@ public class ObjectOutputStream extends java.io.OutputStream implements java.io.
 		public abstract void put(java.lang.String var0, java.lang.Object var1);
 		public abstract void put(java.lang.String var0, short var1);
 		public abstract void put(java.lang.String var0, boolean var1);
-		public abstract void write(java.io.ObjectOutput var0) throws java.io.IOException;
+		/** @deprecated */ public abstract void write(java.io.ObjectOutput var0) throws java.io.IOException;
 	}
 }
 

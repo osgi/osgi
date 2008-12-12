@@ -27,6 +27,8 @@ public final class URL implements java.io.Serializable {
 	public URL(java.net.URL var0, java.lang.String var1, java.net.URLStreamHandler var2) throws java.net.MalformedURLException { }
 	public java.lang.String getAuthority() { return null; }
 	public final java.lang.Object getContent() throws java.io.IOException { return null; }
+	public final java.lang.Object getContent(java.lang.Class[] var0) throws java.io.IOException { return null; }
+	public int getDefaultPort() { return 0; }
 	public java.lang.String getFile() { return null; }
 	public java.lang.String getHost() { return null; }
 	public java.lang.String getPath() { return null; }

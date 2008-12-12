@@ -28,6 +28,7 @@ public final class Integer extends java.lang.Number implements java.lang.Compara
 	public float floatValue() { return 0.0f; }
 	public static java.lang.Integer getInteger(java.lang.String var0) { return null; }
 	public static java.lang.Integer getInteger(java.lang.String var0, int var1) { return null; }
+	public static java.lang.Integer getInteger(java.lang.String var0, java.lang.Integer var1) { return null; }
 	public int intValue() { return 0; }
 	public long longValue() { return 0l; }
 	public static int parseInt(java.lang.String var0) { return 0; }

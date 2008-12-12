@@ -34,7 +34,7 @@ public class SecurityManager {
 	public void checkListen(int var0) { }
 	public void checkMemberAccess(java.lang.Class var0, int var1) { }
 	public void checkMulticast(java.net.InetAddress var0) { }
-	public void checkMulticast(java.net.InetAddress var0, byte var1) { }
+	/** @deprecated */ public void checkMulticast(java.net.InetAddress var0, byte var1) { }
 	public void checkPackageAccess(java.lang.String var0) { }
 	public void checkPackageDefinition(java.lang.String var0) { }
 	public void checkPermission(java.security.Permission var0) { }

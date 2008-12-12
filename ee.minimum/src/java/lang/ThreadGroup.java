@@ -32,6 +32,7 @@ public class ThreadGroup {
 	public final int getMaxPriority() { return 0; }
 	public final java.lang.String getName() { return null; }
 	public final java.lang.ThreadGroup getParent() { return null; }
+	public final void interrupt() { }
 	public final boolean isDaemon() { return false; }
 	public boolean isDestroyed() { return false; }
 	public void list() { }

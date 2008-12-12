@@ -41,6 +41,7 @@ public class ObjectInputStream extends java.io.InputStream implements java.io.Ob
 	public short readShort() throws java.io.IOException { return 0; }
 	protected void readStreamHeader() throws java.io.IOException { }
 	public java.lang.String readUTF() throws java.io.IOException { return null; }
+	public java.lang.Object readUnshared() throws java.io.IOException, java.lang.ClassNotFoundException { return null; }
 	public int readUnsignedByte() throws java.io.IOException { return 0; }
 	public int readUnsignedShort() throws java.io.IOException { return 0; }
 	public void registerValidation(java.io.ObjectInputValidation var0, int var1) throws java.io.InvalidObjectException, java.io.NotActiveException { }

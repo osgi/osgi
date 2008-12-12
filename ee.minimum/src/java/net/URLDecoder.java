@@ -20,6 +20,7 @@
 package java.net;
 public class URLDecoder {
 	public URLDecoder() { }
-	public static java.lang.String decode(java.lang.String var0) { return null; }
+	/** @deprecated */ public static java.lang.String decode(java.lang.String var0) { return null; }
+	public static java.lang.String decode(java.lang.String var0, java.lang.String var1) throws java.io.UnsupportedEncodingException { return null; }
 }
 

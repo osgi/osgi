@@ -24,6 +24,7 @@ public class ByteArrayOutputStream extends java.io.OutputStream {
 	public void reset() { }
 	public int size() { return 0; }
 	public byte[] toByteArray() { return null; }
+	public java.lang.String toString(java.lang.String var0) throws java.io.UnsupportedEncodingException { return null; }
 	public void write(int var0) { }
 	public void write(byte[] var0, int var1, int var2) { }
 	public void writeTo(java.io.OutputStream var0) throws java.io.IOException { }

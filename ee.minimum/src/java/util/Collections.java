@@ -24,13 +24,18 @@ public class Collections {
 	public static void copy(java.util.List var0, java.util.List var1) { }
 	public static java.util.Enumeration enumeration(java.util.Collection var0) { return null; }
 	public static void fill(java.util.List var0, java.lang.Object var1) { }
+	public static int indexOfSubList(java.util.List var0, java.util.List var1) { return 0; }
+	public static int lastIndexOfSubList(java.util.List var0, java.util.List var1) { return 0; }
+	public static java.util.ArrayList list(java.util.Enumeration var0) { return null; }
 	public static java.lang.Object max(java.util.Collection var0) { return null; }
 	public static java.lang.Object max(java.util.Collection var0, java.util.Comparator var1) { return null; }
 	public static java.lang.Object min(java.util.Collection var0) { return null; }
 	public static java.lang.Object min(java.util.Collection var0, java.util.Comparator var1) { return null; }
 	public static java.util.List nCopies(int var0, java.lang.Object var1) { return null; }
+	public static boolean replaceAll(java.util.List var0, java.lang.Object var1, java.lang.Object var2) { return false; }
 	public static void reverse(java.util.List var0) { }
 	public static java.util.Comparator reverseOrder() { return null; }
+	public static void rotate(java.util.List var0, int var1) { }
 	public static void shuffle(java.util.List var0) { }
 	public static void shuffle(java.util.List var0, java.util.Random var1) { }
 	public static java.util.Set singleton(java.lang.Object var0) { return null; }
@@ -38,6 +43,7 @@ public class Collections {
 	public static java.util.Map singletonMap(java.lang.Object var0, java.lang.Object var1) { return null; }
 	public static void sort(java.util.List var0) { }
 	public static void sort(java.util.List var0, java.util.Comparator var1) { }
+	public static void swap(java.util.List var0, int var1, int var2) { }
 	public static java.util.Collection synchronizedCollection(java.util.Collection var0) { return null; }
 	public static java.util.List synchronizedList(java.util.List var0) { return null; }
 	public static java.util.Map synchronizedMap(java.util.Map var0) { return null; }
