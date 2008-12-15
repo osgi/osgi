@@ -41,6 +41,7 @@ cmpn.specs = \
 	 org.osgi.service.wireadmin, \
 	 org.osgi.util.measurement, \
 	 org.osgi.util.position, \
+	 org.osgi.util.cdma, \
 	 org.osgi.util.gsm, \
 	 org.osgi.util.mobile, \
 	 org.osgi.util.tracker, \
@@ -63,6 +64,7 @@ mobile.specs = \
 	 org.osgi.service.monitor, \
 	 org.osgi.service.prefs, \
 	 org.osgi.util.gsm, \
+	 org.osgi.util.cdma, \
 	 org.osgi.util.mobile, \
 	 org.osgi.util.tracker, \
 	 org.osgi.util.xml
