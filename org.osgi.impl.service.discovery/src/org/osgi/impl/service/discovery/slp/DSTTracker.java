@@ -27,10 +27,17 @@ public class DSTTracker implements ServiceTrackerCustomizer {
 
 	private SLPHandlerImpl discovery = null;
 
-	private Map dsTrackers = Collections.synchronizedMap(new HashMap());
+	// Map of DiscoveredServiceTracker, property map
+	private Map/* <DiscoveredServiceTracker, Map> */dsTrackers = Collections
+			.synchronizedMap(new HashMap());
 
 	private BundleContext context = null;
 
+	/**
+	 * 
+	 * @param ctx
+	 * @param disco
+	 */
 	public DSTTracker(final BundleContext ctx, final SLPHandlerImpl disco) {
 		context = ctx;
 		discovery = disco;
@@ -44,9 +51,10 @@ public class DSTTracker implements ServiceTrackerCustomizer {
 				.getService(arg0);
 		if (!dsTrackers.keySet().contains(tracker)) {
 			addTracker(arg0);
+			notifyOnAvailableSEDs(tracker);
+			return tracker;
 		}
-		notifyOnAvailableSEDs(arg0);
-		return tracker;
+		return null;
 	}
 
 	/**
@@ -60,7 +68,7 @@ public class DSTTracker implements ServiceTrackerCustomizer {
 			dsTrackers.remove(tracker);
 		}
 		addTracker(arg0);
-		notifyOnAvailableSEDs(arg0);
+		notifyOnAvailableSEDs(tracker);
 	}
 
 	/**
@@ -82,22 +90,20 @@ public class DSTTracker implements ServiceTrackerCustomizer {
 	 * @param tracker
 	 *            the just registered or modified DiscoveredServiceTracker
 	 */
-	private void notifyOnAvailableSEDs(final ServiceReference tracker) {
-		synchronized (discovery.getInMemoryCache()) {
-			if (discovery.getInMemoryCache() != null
-					&& discovery.getInMemoryCache().isEmpty()) {
-				Iterator it = discovery.getInMemoryCache().iterator();
+	private void notifyOnAvailableSEDs(final DiscoveredServiceTracker tracker) {
+		synchronized (discovery.getCachedServices()) {
+			if (discovery.getCachedServices() != null
+					&& !discovery.getCachedServices().isEmpty()) {
+				Iterator it = discovery.getCachedServices().iterator();
 				while (it.hasNext()) {
 					ServiceEndpointDescription svcDescr = (ServiceEndpointDescription) it
 							.next();
-					DiscoveredServiceTracker dsTracker = (DiscoveredServiceTracker) context
-							.getService(tracker);
-					if (discovery.checkMatch(svcDescr, (Map) dsTrackers
-							.get(dsTracker))) {
+					if (SLPHandlerImpl.isTrackerInterestedInSED(svcDescr, (Map) dsTrackers
+							.get(tracker))) {
 						DiscoveredServiceNotificationImpl impl = new DiscoveredServiceNotificationImpl(
 								svcDescr,
 								DiscoveredServiceNotification.AVAILABLE);
-						dsTracker.serviceChanged(impl);
+						tracker.serviceChanged(impl);
 					}
 				}
 			}

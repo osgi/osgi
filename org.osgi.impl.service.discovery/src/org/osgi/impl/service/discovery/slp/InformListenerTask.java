@@ -82,14 +82,16 @@ public class InformListenerTask extends TimerTask {
 		while (descrIt.hasNext()) {
 			ServiceEndpointDescription descr = (ServiceEndpointDescription) descrIt
 					.next();
-			// walk over the registered listeners
+			// walk over the registered service tracker
 			Map tracker = discovery.getRegisteredServiceTracker();
-			Iterator it = tracker.keySet().iterator();
-			while (it.hasNext()) {
-				DiscoveredServiceTracker listener = (DiscoveredServiceTracker) it
-						.next();
-				notifiyAvailableServicePerListener(availableServices, descr,
-						listener, (Map) tracker.get(listener));
+			synchronized (tracker) {
+				Iterator it = tracker.keySet().iterator();
+				while (it.hasNext()) {
+					DiscoveredServiceTracker listener = (DiscoveredServiceTracker) it
+							.next();
+					notifiyAvailableServicePerListener(availableServices,
+							descr, listener, (Map) tracker.get(listener));
+				}
 			}
 		}
 	}
@@ -104,16 +106,22 @@ public class InformListenerTask extends TimerTask {
 				int i = 0;
 				while (llrIt.hasNext()) {
 					if (!availableServices.contains(new Integer(i))) {
-						Iterator it = discovery.getRegisteredServiceTracker()
-								.keySet().iterator();
-						while (it.hasNext()) {
-							DiscoveredServiceTracker l = (DiscoveredServiceTracker) it
-									.next();
-							l
-									.serviceChanged(new DiscoveredServiceNotificationImpl(
-											(ServiceEndpointDescription) llrIt
-													.next(),
-											DiscoveredServiceNotification.UNAVAILABLE));
+						Map tracker = discovery.getRegisteredServiceTracker();
+						synchronized (tracker) {
+							Iterator it = tracker.keySet().iterator();
+							while (it.hasNext()) {
+								DiscoveredServiceTracker l = (DiscoveredServiceTracker) it
+										.next();
+								ServiceEndpointDescription sed = (ServiceEndpointDescription) llrIt
+										.next();
+								if (SLPHandlerImpl.isTrackerInterestedInSED(sed,
+										(Map) tracker.get(l))) {
+									l
+											.serviceChanged(new DiscoveredServiceNotificationImpl(
+													sed,
+													DiscoveredServiceNotification.UNAVAILABLE));
+								}
+							}
 						}
 					}
 					i++;
@@ -137,7 +145,7 @@ public class InformListenerTask extends TimerTask {
 		// check if the listener filter matches the given
 		// description properties. That prerequisites that all information of a
 		// service description are in its properties bag
-		boolean matches = discovery.checkMatch(descr, props);
+		boolean matches = SLPHandlerImpl.isTrackerInterestedInSED(descr, props);
 		if (matches) {
 			// check if this is the first run
 			if (lastLookupResult != null && lastLookupResult.size() > 0) {

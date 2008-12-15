@@ -22,10 +22,11 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 public class ServicePublicationTracker implements ServiceTrackerCustomizer {
 
 	private BundleContext context = null;
-	
+
 	private SLPHandlerImpl discovery = null;
-	
-	private Map publicationAndSED = Collections.synchronizedMap(new HashMap());
+
+	private Map/* <ServiceReference, ServiceEndpointDescription> */publicationAndSED = Collections
+			.synchronizedMap(new HashMap());
 
 	public ServicePublicationTracker(BundleContext ctx, SLPHandlerImpl disco) {
 		context = ctx;
@@ -56,28 +57,27 @@ public class ServicePublicationTracker implements ServiceTrackerCustomizer {
 	public void removedService(ServiceReference arg0, Object arg1) {
 		unpublishServicePublication(arg0);
 	}
-	
+
 	/**
 	 * 
 	 * @param arg0
 	 * @return
 	 */
-	private ServicePublication publishServicePublication(
-			ServiceReference arg0) {
-		ServicePublication sp = (ServicePublication) context
-				.getService(arg0);
-		ServiceEndpointDescription sed = discovery.publishService(
-				(Collection) arg0
-						.getProperty(ServicePublication.PROP_KEY_SERVICE_INTERFACE_NAME),
-				(Collection) arg0
-						.getProperty(ServicePublication.PROP_KEY_SERVICE_INTERFACE_VERSION),
-				(Collection) arg0
-						.getProperty(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME),
-				(Map) arg0
-						.getProperty(ServicePublication.PROP_KEY_SERVICE_PROPERTIES),
-				Discovery.PROP_VAL_PUBLISH_STRATEGY_PUSH,
-				(String) arg0
-						.getProperty(ServicePublication.PROP_KEY_ENDPOINT_ID));
+	private ServicePublication publishServicePublication(ServiceReference arg0) {
+		ServicePublication sp = (ServicePublication) context.getService(arg0);
+		ServiceEndpointDescription sed = discovery
+				.publishService(
+						(Collection) arg0
+								.getProperty(ServicePublication.PROP_KEY_SERVICE_INTERFACE_NAME),
+						(Collection) arg0
+								.getProperty(ServicePublication.PROP_KEY_SERVICE_INTERFACE_VERSION),
+						(Collection) arg0
+								.getProperty(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME),
+						(Map) arg0
+								.getProperty(ServicePublication.PROP_KEY_SERVICE_PROPERTIES),
+						Discovery.PROP_VAL_PUBLISH_STRATEGY_PUSH,
+						(String) arg0
+								.getProperty(ServicePublication.PROP_KEY_ENDPOINT_ID));
 		publicationAndSED.put(arg0, sed);
 		return sp;
 	}
@@ -88,8 +88,9 @@ public class ServicePublicationTracker implements ServiceTrackerCustomizer {
 	 *            the given reference to the service to unpublish
 	 */
 	private void unpublishServicePublication(ServiceReference srvReference) {
-		discovery.unpublishService((ServiceEndpointDescription) publicationAndSED
-				.get(srvReference));
+		discovery
+				.unpublishService((ServiceEndpointDescription) publicationAndSED
+						.get(srvReference));
 		publicationAndSED.remove(srvReference);
 	}
 }
