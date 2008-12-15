@@ -304,6 +304,9 @@ public class SLPHandlerImpl implements Discovery {
 				+ serviceDescription.toString());
 		if (serviceDescription instanceof SLPServiceDescriptionAdapter) {
 			SLPServiceDescriptionAdapter slpSvcDescr = (SLPServiceDescriptionAdapter) serviceDescription;
+			//remove it from in memory cache
+			inMemoryCache.remove(slpSvcDescr);
+			//unregister it via SLP
 			Advertiser advertiser = getAdvertiser();
 			if (advertiser != null) {
 				Iterator interfaceNames = slpSvcDescr.getProvidedInterfaces()
