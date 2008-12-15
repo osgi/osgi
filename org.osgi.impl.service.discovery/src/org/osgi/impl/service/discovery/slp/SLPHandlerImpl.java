@@ -21,7 +21,6 @@ package org.osgi.impl.service.discovery.slp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -33,7 +32,6 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-import org.osgi.impl.service.discovery.DiscoveredServiceNotificationImpl;
 import org.osgi.service.discovery.DiscoveredServiceNotification;
 import org.osgi.service.discovery.DiscoveredServiceTracker;
 import org.osgi.service.discovery.Discovery;
@@ -62,21 +60,24 @@ public class SLPHandlerImpl implements Discovery {
 	private ServiceTracker advertiserTracker = null;
 	private ServiceTracker spTracker = null;
 
+	private DSTTracker discoTrackerCustomizer = null;
+	private ServiceTracker discoTracker = null;
+
 	private Locator locator = null;
 	private Advertiser advertiser = null;
-
-	private Map publicationAndSED = Collections.synchronizedMap(new HashMap());
 
 	private final int POLLDELAY = 10000; // 10 sec
 
 	private Timer t = null;
-	
+
 	private static final boolean DEFAULT_AUTOPUBLISH = true;
 
 	private final BundleContext context;
 
 	private LogService logService;
 	private boolean autoPublish = DEFAULT_AUTOPUBLISH;
+
+	private List inMemoryCache = Collections.synchronizedList(new ArrayList());
 
 	/**
 	 * 
@@ -91,8 +92,7 @@ public class SLPHandlerImpl implements Discovery {
 				new LocatorServiceTracker(context));
 		advertiserTracker = new ServiceTracker(context, Advertiser.class
 				.getName(), new AdvertiserServiceTracker(context));
-		spTracker = new ServiceTracker(context, ServicePublication.class
-				.getName(), new ServicePublicationTracker(context));
+
 	}
 
 	public void init() {
@@ -102,13 +102,21 @@ public class SLPHandlerImpl implements Discovery {
 				Discovery.PROP_VAL_PUBLISH_STRATEGY_PUSH);
 		locatorTracker.open();
 		advertiserTracker.open();
+		spTracker = new ServiceTracker(context, ServicePublication.class
+				.getName(), new ServicePublicationTracker(context, this));
 		spTracker.open();
+		discoTrackerCustomizer = new DSTTracker(context, this);
+		discoTracker = new ServiceTracker(context,
+				DiscoveredServiceTracker.class.getName(),
+				discoTrackerCustomizer);
+		discoTracker.open();
 		t = new Timer(false);
 		t.schedule(new InformListenerTask(this), 0, POLLDELAY);
 	}
 
 	public void destroy() {
 		log(LogService.LOG_DEBUG, "destroy");
+		discoTracker.close();
 		spTracker.close();
 		locatorTracker.close();
 		advertiserTracker.close();
@@ -141,13 +149,12 @@ public class SLPHandlerImpl implements Discovery {
 	public Collection/* <ServiceEndpointDescription> */findService(
 			final String interfaceName, final String filter) {
 		validateFilter(filter);
-		List result = new ArrayList();
 		// check whether SLP-Locator service exists
 		Locator locator = getLocator();
 		if (locator == null) {
 			log(LogService.LOG_WARNING,
 					"No SLP-Locator. Find operation is not executed.");
-			return result;
+			return new ArrayList();
 		}
 		// TODO first look at cache
 		// find appropriate services
@@ -162,8 +169,9 @@ public class SLPHandlerImpl implements Discovery {
 			// interface is not java???
 		} catch (Exception e) {
 			log(LogService.LOG_ERROR, "Failed to find service", e);
-			return result;
+			return new ArrayList();
 		}
+		inMemoryCache.clear();
 		// iterate through found services and retrieve their attributes
 		while (se.hasMoreElements()) {
 			try {
@@ -196,44 +204,51 @@ public class SLPHandlerImpl implements Discovery {
 					descriptionAdapter.addProperty(key, value);
 				}
 				log(LogService.LOG_DEBUG, "adding serviceURL=" + url);
-				result.add(descriptionAdapter); // add to the result list
+				inMemoryCache.add(descriptionAdapter);
 			} catch (Exception e) {
 				log(LogService.LOG_ERROR, "Failed to find service", e);
 			}
 		}
-		if (!result.isEmpty()) {
+		if (!inMemoryCache.isEmpty()) {
 			StringBuffer buff = new StringBuffer();
 			buff.append("number of services = ");
-			buff.append(result.size());
+			buff.append(inMemoryCache.size());
 			buff.append("; services = ");
-			Iterator it = result.iterator();
-			while (it.hasNext()) {
-				buff.append("(");
-				Iterator/* String */ifNames = ((ServiceEndpointDescription) it
-						.next()).getProvidedInterfaces().iterator();
-				while (ifNames.hasNext()) {
-					buff.append((String) ifNames.next());
-					if (ifNames.hasNext()) {
-						buff.append(",");
+			synchronized (inMemoryCache) {
+				Iterator it = inMemoryCache.iterator();
+				while (it.hasNext()) {
+					buff.append("(");
+					ServiceEndpointDescription sed = (ServiceEndpointDescription) it
+							.next();
+					Collection interfaces = sed.getProvidedInterfaces();
+					if (interfaces == null) {
+						log(LogService.LOG_ERROR, "no interfaces provided by " + sed);
+						break;
 					}
-				}
-				buff.append(")");
-				if (it.hasNext()) {
-					buff.append(",(");
+					Iterator/* String */ifNames = interfaces.iterator();
+					while (ifNames.hasNext()) {
+						buff.append((String) ifNames.next());
+						if (ifNames.hasNext()) {
+							buff.append(",");
+						}
+					}
+					buff.append(")");
+					if (it.hasNext()) {
+						buff.append(",(");
+					}
 				}
 			}
 			log(LogService.LOG_DEBUG, buff.toString());
 		} else {
 			log(LogService.LOG_DEBUG, "0 services found");
 		}
-		// TODO add to cache
-		return result;
+		return new ArrayList(inMemoryCache);
 	}
 
 	/**
 	 * 
 	 */
-	private ServiceEndpointDescription publishService(
+	protected ServiceEndpointDescription publishService(
 			Collection/* <String> */javaInterfaces,
 			Collection/* <String> */javaInterfacesAndVersions,
 			Collection/* <String> */javaInterfacesAndEndpointInterfaces,
@@ -259,8 +274,8 @@ public class SLPHandlerImpl implements Discovery {
 					advertiser.register(svcDescr
 							.getServiceURL((String) interfaces.next()),
 							new Hashtable(svcDescr.getProperties()));
-					log(LogService.LOG_DEBUG, "Following service is published: "
-							+ svcDescr);
+					log(LogService.LOG_DEBUG,
+							"Following service is published: " + svcDescr);
 				} catch (ServiceLocationException e) {
 					e.printStackTrace();
 					log(LogService.LOG_ERROR, "failed registering service", e);
@@ -277,7 +292,7 @@ public class SLPHandlerImpl implements Discovery {
 	/**
 	 * @see org.osgi.service.discovery.Discovery#unpublish(org.osgi.service.discovery.ServiceEndpointDescription)
 	 */
-	private void unpublishService(
+	protected void unpublishService(
 			final ServiceEndpointDescription serviceDescription) {
 		validateServiceDescription(serviceDescription);
 		log(LogService.LOG_DEBUG, "unpublish service "
@@ -295,7 +310,8 @@ public class SLPHandlerImpl implements Discovery {
 						advertiser.deregister(slpSvcDescr
 								.getServiceURL(interfaceName));
 						log(LogService.LOG_DEBUG, "service "
-								+ slpSvcDescr.getServiceURL(interfaceName) + " unpublished");
+								+ slpSvcDescr.getServiceURL(interfaceName)
+								+ " unpublished");
 						// inform listeners about removal
 						notifyListenersOnRemovedServiceDescription(serviceDescription);
 					} catch (ServiceLocationException e) {
@@ -376,82 +392,6 @@ public class SLPHandlerImpl implements Discovery {
 		}
 	}
 
-	/**
-	 * @author kt32483
-	 * 
-	 */
-	private class ServicePublicationTracker implements ServiceTrackerCustomizer {
-
-		private BundleContext context = null;
-
-		public ServicePublicationTracker(BundleContext ctx) {
-			context = ctx;
-		}
-
-		/**
-		 * @see org.osgi.util.tracker.ServiceTrackerCustomizer#addingService(org.osgi.framework.ServiceReference)
-		 */
-		public Object addingService(ServiceReference arg0) {
-			ServicePublication sp = publishServicePublication(arg0);
-			return sp;
-		}
-
-		/**
-		 * 
-		 * @param arg0
-		 * @return
-		 */
-		private ServicePublication publishServicePublication(
-				ServiceReference arg0) {
-			ServicePublication sp = (ServicePublication) context
-					.getService(arg0);
-			ServiceEndpointDescription sed = publishService(
-					(Collection) arg0
-							.getProperty(ServicePublication.PROP_KEY_SERVICE_INTERFACE_NAME),
-					(Collection) arg0
-							.getProperty(ServicePublication.PROP_KEY_SERVICE_INTERFACE_VERSION),
-					(Collection) arg0
-							.getProperty(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME),
-					(Map) arg0
-							.getProperty(ServicePublication.PROP_KEY_SERVICE_PROPERTIES),
-					Discovery.PROP_VAL_PUBLISH_STRATEGY_PUSH,
-					(String) arg0
-							.getProperty(ServicePublication.PROP_KEY_ENDPOINT_ID));
-			publicationAndSED.put(sp, sed);
-			return sp;
-		}
-
-		/**
-		 * @see org.osgi.util.tracker.ServiceTrackerCustomizer#modifiedService(org.osgi.framework.ServiceReference,
-		 *      java.lang.Object)
-		 */
-		public void modifiedService(ServiceReference arg0, Object arg1) {
-			unpublishServicePublication(arg0);
-			publishServicePublication(arg0);
-		}
-
-		/**
-		 * @see org.osgi.util.tracker.ServiceTrackerCustomizer#removedService(org.osgi.framework.ServiceReference,
-		 *      java.lang.Object)
-		 */
-		public void removedService(ServiceReference arg0, Object arg1) {
-			unpublishServicePublication(arg0);
-		}
-
-		/**
-		 * 
-		 * @param srvReference
-		 *            the given reference to the service to unpublish
-		 */
-		private void unpublishServicePublication(ServiceReference srvReference) {
-			ServicePublication sp = (ServicePublication) context
-					.getService(srvReference);
-			unpublishService((ServiceEndpointDescription) publicationAndSED
-					.get(sp));
-			publicationAndSED.remove(sp);
-		}
-	}
-	
 	/**
 	 * 
 	 */
@@ -549,32 +489,7 @@ public class SLPHandlerImpl implements Discovery {
 	}
 
 	protected Map getRegisteredServiceTracker() {
-		Map l = new HashMap();
-		ServiceReference[] refs = null;
-		try {
-			refs = context.getServiceReferences(DiscoveredServiceTracker.class
-					.getName(), null);
-		} catch (InvalidSyntaxException e) {
-			log(LogService.LOG_ERROR, "Unexpected exception.");
-		}
-		if (refs != null) {
-			for (int i = 0; i < refs.length; i++) {
-				Map props = new HashMap();
-				String[] keys = refs[i].getPropertyKeys();
-				for (int k = 0; (keys != null) && (k < keys.length); k++) {
-					if (refs[i].getProperty(keys[k]) instanceof String[]) {
-						props.put(keys[k], (String[]) refs[i]
-								.getProperty(keys[k]));
-					} else {
-						props.put(keys[k], refs[i].getProperty(keys[k]));
-					}
-				}
-				l.put((DiscoveredServiceTracker) context.getService(refs[i]),
-						props);
-			}
-		}
-
-		return l;
+		return discoTrackerCustomizer.getDsTrackers();
 	}
 
 	protected void notifyListenersOnNewServiceDescription(
@@ -631,36 +546,45 @@ public class SLPHandlerImpl implements Discovery {
 
 	public boolean checkMatch(ServiceEndpointDescription svcDescr,
 			Map/* String, Object */trackerProperties) {
-		String[] interfaceFilter = (String[]) trackerProperties
+		Collection interfaceFilter = (Collection) trackerProperties
 				.get(DiscoveredServiceTracker.PROP_KEY_MATCH_CRITERIA_INTERFACES);
-		String[] filter = (String[]) trackerProperties
+		Collection filter = (Collection) trackerProperties
 				.get(DiscoveredServiceTracker.PROP_KEY_MATCH_CRITERIA_FILTERS);
 		boolean notify = false;
 		if (interfaceFilter == null && filter == null) {
 			notify = true;
 		} else {
-			if (interfaceFilter != null) {
+			if (interfaceFilter != null && !interfaceFilter.isEmpty()) {
 				// check whether tracker's interface-list contains one of SED's
 				// interfaces
-				for (int i = 0; i < interfaceFilter.length; i++) {
-					if (svcDescr.getProvidedInterfaces().contains(
-							interfaceFilter[i])) {
+				Iterator it = interfaceFilter.iterator();
+				while (it.hasNext()) {
+					Collection interfaces = svcDescr.getProvidedInterfaces();
+					if (interfaces == null) {
+						log(LogService.LOG_ERROR, "no interfaces provided by " + svcDescr);
+						break;
+					}
+					if (interfaces.contains((String) it.next())) {
 						notify = true;
 					}
 				}
 			}
-			if (filter != null) {
+
+			if (filter != null && !filter.isEmpty()) {
 				// check whether one filter of tracker's filter-list matches to
 				// SED's properties
-				for (int i = 0; i < filter.length; i++) {
+				Iterator it = filter.iterator();
+				while (it.hasNext()) {
+					String currentFilter = (String) it.next();
 					try {
-						Filter f = getContext().createFilter(filter[i]);
+						Filter f = getContext().createFilter(currentFilter);
 						if (f.match(new Hashtable(svcDescr.getProperties()))) {
 							notify = true;
 						}
 					} catch (InvalidSyntaxException e) {
+						e.printStackTrace();
 						String errMsg = "A filter provided by a DiscoveredServiceTracker is invalid.";
-						errMsg += " Filter = " + filter[i];
+						errMsg += " Filter = " + currentFilter;
 						errMsg += "; DiscoveredServiceTracker service.id = "
 								+ trackerProperties.get(Constants.SERVICE_ID);
 						log(LogService.LOG_WARNING, errMsg, e);
@@ -709,7 +633,7 @@ public class SLPHandlerImpl implements Discovery {
 		}
 		return f;
 	}
-	
+
 	/**
 	 * 
 	 * @see org.osgi.service.discovery.Discovery#findService(java.lang.String,
@@ -744,6 +668,13 @@ public class SLPHandlerImpl implements Discovery {
 			}
 		});
 		executor.start();
+	}
+
+	/**
+	 * @return the inMemoryCache
+	 */
+	public List getInMemoryCache() {
+		return inMemoryCache;
 	}
 
 }

@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimerTask;
 
-import org.osgi.impl.service.discovery.DiscoveredServiceNotificationImpl;
 import org.osgi.service.discovery.DiscoveredServiceNotification;
 import org.osgi.service.discovery.DiscoveredServiceTracker;
 import org.osgi.service.discovery.ServiceEndpointDescription;

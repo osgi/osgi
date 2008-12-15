@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.osgi.impl.service.discovery;
+package org.osgi.impl.service.discovery.slp;
 
 import org.osgi.service.discovery.DiscoveredServiceNotification;
 import org.osgi.service.discovery.ServiceEndpointDescription;

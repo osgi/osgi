@@ -47,9 +47,9 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 	public static final String ESCAPING_CHARACTER = "\\";
 
 	private Collection /* <String> */javaInterfaces; // mandatory
-	private Collection /* <String> */javaInterfaceAndVersions; // optional
-	private Collection /* <String> */javaAndEndpointInterfaces; // optional
-	private Map/* <String, Object> */properties; // optional
+	private Collection /* <String> */javaInterfaceAndVersions = new ArrayList(); // optional
+	private Collection /* <String> */javaAndEndpointInterfaces = new ArrayList(); // optional
+	private Map/* <String, Object> */properties = new HashMap(); // optional
 	private String endpointID;
 
 	// Java interfaces and associated ServiceURLs. Each interface has its own
@@ -89,7 +89,6 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 		if (endPointInterfaces != null) {
 			javaAndEndpointInterfaces = new ArrayList(endPointInterfaces);
 		}
-		properties = new HashMap();
 		if (props != null) {
 			properties.putAll(props);
 		}
@@ -105,6 +104,7 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 	public SLPServiceDescriptionAdapter(final ServiceURL serviceURL) {
 		javaInterfaceAndVersions = new ArrayList();
 		javaAndEndpointInterfaces = new ArrayList();
+		javaInterfaces = new ArrayList();
 		properties = new HashMap();
 		serviceURLs = new HashMap();
 
@@ -252,10 +252,14 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 		if (javaAndEndpointInterfaces != null && interfaceName != null) {
 			Iterator it = javaAndEndpointInterfaces.iterator();
 			while (it.hasNext()) {
-				StringTokenizer tokenizer = new StringTokenizer((String) it
-						.next(), ServicePublication.SEPARATOR);
-				if (interfaceName.equals(tokenizer.nextToken())) {
-					return tokenizer.nextToken();
+				String t = (String) it.next();
+				if (!t.equals("")) {
+					StringTokenizer tokenizer = new StringTokenizer(t,
+							ServicePublication.SEPARATOR);
+					String token = tokenizer.nextToken();
+					if (interfaceName.equals(token)) {
+						return tokenizer.nextToken();
+					}
 				}
 			}
 		}
@@ -451,7 +455,7 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 			throw new IllegalArgumentException(
 					"Interface information is missing!");
 		}
-
+		javaInterfaces.add(interfaceName);
 		// Retrieve additional properties from SLP ServiceURL itself
 		properties.put("slp.serviceURL", serviceURL);
 		properties.put("type", serviceURL.getServiceType().toString());
@@ -706,9 +710,15 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 		ServiceEndpointDescription descr = (ServiceEndpointDescription) serviceDescription;
 		List sdJavaInterfaceAndVersions = new ArrayList();
 		List sdJavaAndEndpointInterfaces = new ArrayList();
-		Iterator interfaces = descr.getProvidedInterfaces().iterator();
-		while (interfaces.hasNext()) {
-			String interfaceName = (String) interfaces.next();
+		Collection interfaces = descr.getProvidedInterfaces();
+		if (interfaces == null) {
+			throw new RuntimeException(
+					"The service does not contain requiered parameter interfaces. "
+							+ descr);
+		}
+		Iterator interfacesIterator = interfaces.iterator();
+		while (interfacesIterator.hasNext()) {
+			String interfaceName = (String) interfacesIterator.next();
 			sdJavaInterfaceAndVersions.add(interfaceName
 					+ ServicePublication.SEPARATOR
 					+ descr.getVersion(interfaceName));
@@ -759,7 +769,26 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 	 * @see java.lang.Object#hashCode()
 	 */
 	public int hashCode() {
-		return super.hashCode();
+		int result = 17;
+		Iterator it = javaInterfaces.iterator();
+		while (it.hasNext()) {
+			result = 37 * result + ((String) it.next()).hashCode();
+		}
+		it = javaAndEndpointInterfaces.iterator();
+		while (it.hasNext()) {
+			result = 37 * result + ((String) it.next()).hashCode();
+		}
+		it = javaInterfaceAndVersions.iterator();
+		while (it.hasNext()) {
+			result = 37 * result + ((String) it.next()).hashCode();
+		}
+		result = 37 * result + endpointID.hashCode();
+		result = 37 * result + serviceURLs.hashCode(); // TODO implement more
+														// exacting
+		result = 37 * result + properties.hashCode(); // TODO implement more
+														// exacting
+		result = 37 * result + port;
+		return result;
 	}
 
 	/**
