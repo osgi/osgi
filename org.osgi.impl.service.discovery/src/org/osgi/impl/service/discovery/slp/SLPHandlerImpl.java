@@ -35,7 +35,6 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.discovery.DiscoveredServiceNotification;
 import org.osgi.service.discovery.DiscoveredServiceTracker;
 import org.osgi.service.discovery.Discovery;
-import org.osgi.service.discovery.FindServiceCallback;
 import org.osgi.service.discovery.ServiceEndpointDescription;
 import org.osgi.service.discovery.ServicePublication;
 import org.osgi.service.log.LogService;
@@ -632,42 +631,6 @@ public class SLPHandlerImpl implements Discovery {
 			}
 		}
 		return f;
-	}
-
-	/**
-	 * 
-	 * @see org.osgi.service.discovery.Discovery#findService(java.lang.String,
-	 *      java.lang.String, org.osgi.service.discovery.FindServiceCallback)
-	 */
-	public void findService(final String interfaceName, final String filter,
-			final FindServiceCallback callback) {
-		if (callback == null) {
-			throw new IllegalArgumentException("callback must not be null");
-		}
-		validateFilter(filter);
-		Thread executor = new Thread(new Runnable() {
-			public void run() {
-				try {
-					// do lookup
-					Collection/* <ServiceEndpointDescription> */services = findService(
-							interfaceName, filter);
-					// return result via callback
-					try {
-						callback.servicesFound(services);
-					} catch (Exception e) {
-						log(
-								LogService.LOG_ERROR,
-								"Exceptions where thrown in the callback of findService operation.",
-								e);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-					log(LogService.LOG_ERROR,
-							"Failed to execute async findService", e);
-				}
-			}
-		});
-		executor.start();
 	}
 
 	/**
