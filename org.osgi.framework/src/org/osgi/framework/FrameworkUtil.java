@@ -191,6 +191,7 @@ public class FrameworkUtil {
 	 *         returned
 	 * @throws IllegalArgumentException
 	 *             if the match pattern or the DN chain is invalid.
+	 * @since 1.5
 	 */
 	public static boolean matchDistinguishedNameChain(String matchPattern,
 			List /* <String> */dnChain) {
