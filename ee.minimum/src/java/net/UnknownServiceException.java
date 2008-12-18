@@ -2,7 +2,7 @@
  * $Revision$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2007). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
