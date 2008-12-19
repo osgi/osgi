@@ -31,9 +31,6 @@ package org.osgi.service.discovery;
  * Please note that providing the {@link #PROP_KEY_SERVICE_INTERFACE_NAME}
  * property is mandatory when a <code>ServicePublication</code> service is
  * registered.<br>
- * In case a particular publication strategy should be applied when publishing
- * this service, then provide {@link Discovery#PROP_KEY_PUBLISH_STRATEGY} as
- * part of registration.<br>
  * 
  * Also important is that it's not guaranteed that after registering a
  * <code>ServicePublication</code> object its service metadata is actually

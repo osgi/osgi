@@ -17,11 +17,15 @@
 package org.osgi.service.discovery;
 
 /**
- * Interface of the Discovery service. This service allows to publish services
- * exposed for remote access as well as to search for remote services. Register
- * a {@link ServicePublication} service in order to publish service metadata and
- * or a {@link DiscoveredServiceTracker} service in order to search for remote
- * services.<BR>
+ * Discovery registers a service implementing this interface. This service is
+ * registered with extra properties identified at the beginning of this
+ * interface to denote the name of the product providing Discovery
+ * functionality, its version, vendor, used protocols etc.. 
+ * 
+ * Discovery allows to publish services exposed for remote access as well as to
+ * search for remote services. Register a {@link ServicePublication} service in
+ * order to publish service metadata and or a {@link DiscoveredServiceTracker}
+ * service in order to search for remote services.<BR>
  * Discovery service implementations usually rely on some discovery protocols or
  * other information distribution means.
  * 
@@ -30,22 +34,24 @@ package org.osgi.service.discovery;
 public interface Discovery {
 
 	/**
-	 * ServiceRegistration property identifying Discovery's default strategy for
-	 * distribution of published service information. It's up to the Discovery
-	 * service to provide and support this property. Value of this property is
-	 * of type String.
+	 * Service Registration property for the name of the Discovery product.
 	 */
-	public static final String PROP_KEY_PUBLISH_STRATEGY = "osgi.discovery.strategy.publication";
+	static final String PROP_KEY_PRODUCT_NAME = "osgi.remote.discovery.product";
 
 	/**
-	 * Constant for a "push" publication strategy: published service information
-	 * is actively pushed to the network for discovery.
+	 * Service Registration property for the version of the Discovery product.
 	 */
-	public static final String PROP_VAL_PUBLISH_STRATEGY_PUSH = "push";
+	static final String PROP_KEY_PRODUCT_VERSION = "osgi.remote.discovery.product.version";
 
 	/**
-	 * Constant for a "pull" publication strategy: published service information
-	 * is available just upon lookup requests.
+	 * Service Registration property for the Discovery product vendor name.
 	 */
-	public static final String PROP_VAL_PUBLISH_STRATEGY_PULL = "pull";
+	static final String PROP_KEY_VENDOR_NAME = "osgi.remote.discovery.vendor";
+
+	/**
+	 * Service Registration property that lists the discovery protocols used by
+	 * this Discovery service. Value of this property is of type Collection (<?
+	 * extends String>).
+	 */
+	static final String PROP_KEY_SUPPORTED_PROTOCOLS = "osgi.remote.discovery.supported_protocols";
 }
