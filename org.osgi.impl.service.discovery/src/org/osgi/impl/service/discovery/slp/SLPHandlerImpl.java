@@ -55,6 +55,26 @@ import ch.ethz.iks.slp.ServiceURL;
  * 
  */
 public class SLPHandlerImpl implements Discovery {
+	/**
+	 * ServiceRegistration property identifying Discovery's default strategy for
+	 * distribution of published service information. It's up to the Discovery
+	 * service to provide and support this property. Value of this property is
+	 * of type String.
+	 */
+	public static final String PROP_KEY_PUBLISH_STRATEGY = "osgi.discovery.strategy.publication";
+
+	/**
+	 * Constant for a "push" publication strategy: published service information
+	 * is actively pushed to the network for discovery.
+	 */
+	public static final String PROP_VAL_PUBLISH_STRATEGY_PUSH = "push";
+
+	/**
+	 * Constant for a "pull" publication strategy: published service information
+	 * is available just upon lookup requests.
+	 */
+	public static final String PROP_VAL_PUBLISH_STRATEGY_PULL = "pull";
+
 	private ServiceTracker locatorTracker = null;
 	private ServiceTracker advertiserTracker = null;
 	private ServiceTracker spTracker = null;
@@ -97,9 +117,9 @@ public class SLPHandlerImpl implements Discovery {
 
 	public void init() {
 		log(LogService.LOG_DEBUG, "init");
-		autoPublish = System.getProperty(Discovery.PROP_KEY_PUBLISH_STRATEGY,
-				Discovery.PROP_VAL_PUBLISH_STRATEGY_PUSH).equalsIgnoreCase(
-				Discovery.PROP_VAL_PUBLISH_STRATEGY_PUSH);
+		autoPublish = System.getProperty(SLPHandlerImpl.PROP_KEY_PUBLISH_STRATEGY,
+				SLPHandlerImpl.PROP_VAL_PUBLISH_STRATEGY_PUSH).equalsIgnoreCase(
+						SLPHandlerImpl.PROP_VAL_PUBLISH_STRATEGY_PUSH);
 		locatorTracker.open();
 		advertiserTracker.open();
 		spTracker = new ServiceTracker(context, ServicePublication.class

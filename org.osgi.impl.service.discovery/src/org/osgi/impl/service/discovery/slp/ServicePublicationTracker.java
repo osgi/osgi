@@ -75,7 +75,7 @@ public class ServicePublicationTracker implements ServiceTrackerCustomizer {
 								.getProperty(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME),
 						(Map) arg0
 								.getProperty(ServicePublication.PROP_KEY_SERVICE_PROPERTIES),
-						Discovery.PROP_VAL_PUBLISH_STRATEGY_PUSH,
+						SLPHandlerImpl.PROP_VAL_PUBLISH_STRATEGY_PUSH,
 						(String) arg0
 								.getProperty(ServicePublication.PROP_KEY_ENDPOINT_ID));
 		publicationAndSED.put(arg0, sed);
