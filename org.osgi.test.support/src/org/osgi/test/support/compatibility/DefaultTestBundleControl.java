@@ -7,8 +7,6 @@ import java.util.Comparator;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -31,8 +29,9 @@ public abstract class DefaultTestBundleControl extends TestCase {
 	/* @GuardedBy("this") */
 	private BundleContext	context;
 	
-	private Map serviceRegistry = new HashMap();
-    Hashtable       fetchedServices = new Hashtable();
+	private final Map		serviceRegistry	= new HashMap();
+	private final Map		fetchedServices	= new HashMap();
+	
     String webServer = "/";
 
 	/**
@@ -274,23 +273,36 @@ public abstract class DefaultTestBundleControl extends TestCase {
     	return context.getServiceReference(clazz.getName()) != null;
     }
 
-    public void registerService(String clazz, Object service, Dictionary properties) throws Exception {
+    public void registerService(String clazz, Object service,
+			Dictionary properties) throws Exception {
     	ServiceRegistration sr = context.registerService(clazz, service, properties);
-    	serviceRegistry.put(service, sr);
+    	synchronized (serviceRegistry) {
+			serviceRegistry.put(service, sr);
+		}
     }
 
     public void unregisterService(Object service) {
-    	ServiceRegistration sr = (ServiceRegistration) serviceRegistry.remove(service);
-    	if (sr != null) {
-    		sr.unregister();
+    	ServiceRegistration sr;
+		synchronized (serviceRegistry) {
+			sr = (ServiceRegistration) serviceRegistry.remove(service);
+		}
+    	if (sr == null) {
+			fail("trying to unregister a service which is not currently registered");
     	}
+    	sr.unregister();
     }
     
     public void unregisterAllServices() {
-    	for (Iterator i = serviceRegistry.values().iterator(); i.hasNext(); ) {
-    		ServiceRegistration sr = (ServiceRegistration) i.next();
-    		sr.unregister();
+    	ServiceRegistration[] srs;
+		synchronized (serviceRegistry) {
+			srs = (ServiceRegistration[]) serviceRegistry.values().toArray(
+					new ServiceRegistration[serviceRegistry.size()]);
+			serviceRegistry.clear();
     	}
+
+        for (int l = srs.length, i = 0; i < l; i++) {
+			srs[i].unregister();
+		}
     }
     
     private void passNotEquals(String message, Object expected, Object actual) {
@@ -330,8 +342,7 @@ public abstract class DefaultTestBundleControl extends TestCase {
         ServiceReference[] refs = getContext().getServiceReferences(clazz.getName(), filter);
 
         if(refs == null) {
-            throw new NullPointerException(
-                    "Can't get service reference for " + clazz.getName());
+            fail("Can't get service reference for " + clazz.getName() + filter);
         }
 
         ServiceReference chosenRef = pickServiceReference(refs);
@@ -339,29 +350,40 @@ public abstract class DefaultTestBundleControl extends TestCase {
         Object service = getContext().getService(chosenRef);
 
         if(service == null) {
-            throw new NullPointerException(
-                    "Can't get service for " + clazz.getName());
+            fail("Can't get service for " + clazz.getName() + filter);
         }
 
         /* Save the service and its reference */
-        fetchedServices.put(service, chosenRef);
+        synchronized (fetchedServices) {
+			fetchedServices.put(service, chosenRef);
+		}
 
         return service;
     }
 
     public void ungetService(Object service) {
-        ServiceReference ref = (ServiceReference) fetchedServices.get(service);
+        ServiceReference ref;
+		synchronized (fetchedServices) {
+			ref = (ServiceReference) fetchedServices.remove(service);
+		}
 
+		if (ref == null) {
+			fail("trying to unget a service which is not currently bound");
+		}
+		
         getContext().ungetService(ref);
-        fetchedServices.remove(service);
     }
     
     public void ungetAllServices() {
-        Enumeration e = fetchedServices.keys();
+    	ServiceReference[] refs;
+    	synchronized (fetchedServices) {
+    		refs = (ServiceReference[]) fetchedServices.values().toArray(
+					new ServiceReference[fetchedServices.size()]);
+    		fetchedServices.clear();
+    	}
 
-        while(e.hasMoreElements()) {
-            Object service = e.nextElement();
-            ungetService(service);
+        for (int l = refs.length, i = 0; i < l; i++) {
+			getContext().ungetService(refs[i]);
         }
     }
     
@@ -407,7 +429,7 @@ public abstract class DefaultTestBundleControl extends TestCase {
     }
 
     private long serviceid(ServiceReference s) {
-	    Long sid = (Long) s.getProperty(Constants.SERVICE_RANKING);
+	    Long sid = (Long) s.getProperty(Constants.SERVICE_ID);
 
 	    return sid.longValue();
     }
@@ -437,13 +459,13 @@ public abstract class DefaultTestBundleControl extends TestCase {
             return b;
         }
         catch(BundleException e) {
-            System.out.println("Not able to install testbundle " + bundleName);
-            System.out.println("Nested " + e.getNestedException());
+            log("Not able to install testbundle " + bundleName);
+			log("Nested " + e.getNestedException());
             e.printStackTrace();
             throw e;
         }
         catch(Exception e) {
-            System.out.println("Not able to install testbundle " + bundleName);
+            log("Not able to install testbundle " + bundleName);
             e.printStackTrace();
             throw e;
         }
