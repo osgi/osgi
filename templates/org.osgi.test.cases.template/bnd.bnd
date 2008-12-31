@@ -8,9 +8,10 @@ Private-Package						= org.osgi.test.cases.template
 	ee.minimum												, \
 	${junit}
 
--testpath							= \
-	org.eclipse.osgi;		version=3.5; 	framework=org.eclipse.osgi.launch.Equinox, \
-	com.springsource.junit; version=3.8;    export="junit.framework;version=3.8"
-
--testbundles						= \
+-runbundles						= \
 	org.osgi.impl.service.template; version=project
+
+-runproperties					= report=true
+
+Test-Cases: ${classes;extending;*TestCase}
+	
