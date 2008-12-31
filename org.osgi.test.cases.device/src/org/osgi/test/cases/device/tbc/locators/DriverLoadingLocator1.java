@@ -1,10 +1,13 @@
 package org.osgi.test.cases.device.tbc.locators;
 
-import java.io.InputStream;
 import java.io.IOException;
-import java.util.Dictionary;
+import java.io.InputStream;
 import java.net.URL;
-import java.security.*;
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
+import java.util.Dictionary;
+
 import org.osgi.test.cases.device.tbc.TestBundleControl;
 
 /**
@@ -16,7 +19,7 @@ import org.osgi.test.cases.device.tbc.TestBundleControl;
  */
 public class DriverLoadingLocator1 implements
 		org.osgi.service.device.DriverLocator {
-	private TestBundleControl	master	= null;
+	final TestBundleControl	master;
 
 	/**
 	 * @param master the master of test case - used for logging
@@ -33,7 +36,7 @@ public class DriverLoadingLocator1 implements
 	 *          be used in the driver loading test
 	 */
 	public String[] findDrivers(Dictionary props) {
-		log("searching for drivers");
+		master.log("searching for drivers");
 		String[] toReturn = new String[3];
 		toReturn[0] = "Driver_Common";
 		toReturn[1] = "Driver_Winner";
@@ -55,22 +58,22 @@ public class DriverLoadingLocator1 implements
 			return (InputStream) AccessController
 					.doPrivileged(new PrivilegedExceptionAction() {
 						public Object run() throws Exception {
-							log("loading for " + id);
+							master.log("loading for " + id);
 							if ("Driver_Winner".equals(id)) {
-								URL url = new URL(TestBundleControl.tcHome
+								URL url = new URL(master.getWebServer()
 										+ "drv4.jar");
 								return url.openStream();
 							}
 							else
 								if ("Driver_Common".equals(id)) {
-									URL url = new URL(TestBundleControl.tcHome
+									URL url = new URL(master.getWebServer()
 											+ "drv2.jar");
 									return url.openStream();
 								}
 								else
 									if ("Driver_NotMatch".equals(id)) {
 										URL url = new URL(
-												TestBundleControl.tcHome
+												master.getWebServer()
 														+ "drv5.jar");
 										return url.openStream();
 									}
@@ -89,7 +92,4 @@ public class DriverLoadingLocator1 implements
 		}
 	}
 
-	private void log(String toLog) {
-		System.out.println(toLog);
-	}
 }

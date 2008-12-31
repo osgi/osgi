@@ -1,11 +1,15 @@
 package org.osgi.test.cases.device.tbc.locators;
 
-import java.io.*;
-import java.net.*;
-import java.security.*;
-import java.util.*;
-import org.osgi.service.device.*;
-import org.osgi.test.cases.device.tbc.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
+import java.util.Dictionary;
+
+import org.osgi.service.device.DriverLocator;
+import org.osgi.test.cases.device.tbc.TestBundleControl;
 
 /**
  * The locator that will find the redirecting driver and later will find the
@@ -15,7 +19,7 @@ import org.osgi.test.cases.device.tbc.*;
  * @version 1.0
  */
 public class RedirectionLocator1 implements DriverLocator {
-	private TestBundleControl	master	= null;
+	final TestBundleControl	master;
 
 	public RedirectionLocator1(TestBundleControl master) {
 		this.master = master;
@@ -25,11 +29,11 @@ public class RedirectionLocator1 implements DriverLocator {
 	 * Searches for drivers
 	 * 
 	 * @param props the properties of the registed Device service
-	 * @retunrs a one element String array that contains the id of the
+	 * @returns a one element String array that contains the id of the
 	 *          redirecting driver
 	 */
 	public String[] findDrivers(Dictionary props) {
-		logRemark("searching for " + props.get("deviceID"));
+		master.log("searching for " + props.get("deviceID"));
 		String[] toReturn = new String[1];
 		toReturn[0] = "redirecting_driver";
 		return toReturn;
@@ -47,16 +51,18 @@ public class RedirectionLocator1 implements DriverLocator {
 			return (InputStream) AccessController
 					.doPrivileged(new PrivilegedExceptionAction() {
 						public Object run() throws Exception {
-							logRemark("loading for " + id);
+							master.log("loading for " + id);
 							if ("redirecting_driver".equals(id)) {
 								try {
-									URL url = new URL(TestBundleControl.tcHome
+									URL url = new URL(master.getWebServer()
 											+ "drv6.jar");
 									return url.openStream();
 								}
 								catch (Exception e) {
 									e.printStackTrace();
-									log("error while reading the /drivers/basicdrv.jar resource");
+									master
+											.log("redirection locator 1",
+													"error while reading the /drivers/basicdrv.jar resource");
 									return null;
 								}
 							}
@@ -64,18 +70,21 @@ public class RedirectionLocator1 implements DriverLocator {
 								if ("Driver_Winner".equals(id)) {
 									try {
 										URL url = new URL(
-												TestBundleControl.tcHome
+												master.getWebServer()
 														+ "drv4.jar");
 										return url.openStream();
 									}
 									catch (Exception e) {
 										e.printStackTrace();
-										log("error while reading the /drivers/basicdrv.jar resource");
+										master
+												.log("redirection locator 1",
+														"error while reading the /drivers/basicdrv.jar resource");
 										return null;
 									}
 								}
 								else {
-									log("invalid dirver ID passed " + id);
+									master.log("redirection locator 1",
+											"invalid dirver ID passed " + id);
 									return null;
 								}
 						}
@@ -86,11 +95,4 @@ public class RedirectionLocator1 implements DriverLocator {
 		}
 	}
 
-	private void log(String toLog) {
-		master.log("redirection locator 1", toLog);
-	}
-
-	private void logRemark(String toLog) {
-		System.out.println();
-	}
 }

@@ -1,7 +1,9 @@
-Bundle-Name:                            ${p}.drv4
-Bundle-Activator: 						${p}.drv4.WinnerDriver
+t = ${p}.drv4
+Bundle-SymbolicName:                    ${t}
+Bundle-Name:                            ${t}
+Bundle-Activator: 						${t}.WinnerDriver
 Bundle-Version:                         4.2
-Private-Package:                        ${p}.drv4.*
+Private-Package:                        ${t}.*
 Bundle-Description: A driver that will win the bidding (through selector)
 
 #Manifest-Version: 1.0

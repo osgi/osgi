@@ -1,7 +1,9 @@
-Bundle-Name:                            ${p}.drv7
-Bundle-Activator: 						${p}.drv7.StandAloneDriver
+t = ${p}.drv7
+Bundle-SymbolicName:                    ${t}
+Bundle-Name:                            ${t}
+Bundle-Activator: 						${t}.StandAloneDriver
 Bundle-Version:                         4.2
-Private-Package:                        ${p}.drv7.*
+Private-Package:                        ${t}.*
 Bundle-Description: A driver that will be installed manually (not through a locator service)
 
 #Manifest-Version: 1.0

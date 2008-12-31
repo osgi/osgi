@@ -1,4 +1,4 @@
-t = ${p}.dev2
+t = ${p}.dev0
 Bundle-SymbolicName:                    ${t}
 Bundle-Name:                            ${t}
 Bundle-Activator: 						${t}.BasicDevice

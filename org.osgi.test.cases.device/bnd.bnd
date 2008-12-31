@@ -1,11 +1,16 @@
 Bundle-Version: 4.2.0.${project.build}
-
+Export-Package: 		${p}.tbc;-split-package:=first
 Private-Package						= ${p}.tbc.*, \
 	org.osgi.test.support.*
 
 Include-Resource					= \
+	dev0.jar, \
 	dev1.jar, \
 	dev2.jar, \
+	dev3.jar, \
+	dev4.jar, \
+	dev20.jar, \
+	dev100.jar, \
 	drv1.jar, \
 	drv2.jar, \
 	drv3.jar, \

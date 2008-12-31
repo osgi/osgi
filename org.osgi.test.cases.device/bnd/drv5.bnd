@@ -1,7 +1,9 @@
-Bundle-Name:                            ${p}.drv5
-Bundle-Activator: 						${p}.drv5.NotMatchingDriver
+t = ${p}.drv5
+Bundle-SymbolicName:                    ${t}
+Bundle-Name:                            ${t}
+Bundle-Activator: 						${t}.NotMatchingDriver
 Bundle-Version:                         4.2
-Private-Package:                        ${p}.drv5.*
+Private-Package:                        ${t}.*
 Bundle-Description: A driver that will return MATCH_NONE and should be rejected
 
 #Manifest-Version: 1.0

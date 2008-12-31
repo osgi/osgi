@@ -1,7 +1,9 @@
-Bundle-Name:                            ${p}.dev1
-Bundle-Activator: 						${p}.dev1.BasicDevice
+t = ${p}.dev1
+Bundle-SymbolicName:                    ${t}
+Bundle-Name:                            ${t}
+Bundle-Activator: 						${t}.BasicDevice
 Bundle-Version:                         4.2
-Private-Package:                        ${p}.dev1.*
+Private-Package:                        ${t}.*
 Bundle-Description: basic device implementation
 
 #Manifest-Version: 1.0

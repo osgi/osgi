@@ -1,9 +1,6 @@
 package org.osgi.test.cases.device.tbc;
 
-import java.util.Hashtable;
-
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.device.DriverLocator;
@@ -25,7 +22,6 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * @version 1.0
  */
 public class TestBundleControl extends DefaultTestBundleControl {
-	ServiceRegistration			testCaseSR			= null;
 	private int					message				= -1;
 	/**
 	 * Constant for no message in the post box
@@ -39,24 +35,19 @@ public class TestBundleControl extends DefaultTestBundleControl {
 	 * Constant for ERROR message in the post box
 	 */
 	public static final int		MESSAGE_ERROR		= 1;
-	private BundleContext		bc					= null;
-	public static String		tcHome				= null;
 	public boolean				noDriverFoundCalled	= false;
 	private int					timeout				= 100;
-	private String[]			methods				= {"standaloneDriverTest",
-			"deviceDetectionTest", "driverLoadingTest", "defaultSelectionTest",
-			"redirectionTest"						};
+	private ServiceRegistration	tbcReg;
 
-	public void prepare() throws Exception {
+	protected void setUp() {
 		log("Test bundle control started Ok.");
-		this.bc = getContext();
-		tcHome = getWebServer();
-		bc.registerService(TestBundleControl.class
+		tbcReg = getContext().registerService(
+				TestBundleControl.class
 				.getName(), this, null);
 	}
-
-	public String[] getMethods() {
-		return methods;
+	
+	protected void tearDown() {
+		tbcReg.unregister();
 	}
 
 	public int setMessage(int m) {
@@ -77,23 +68,23 @@ public class TestBundleControl extends DefaultTestBundleControl {
 	/**
 	 * Tests driver handling when there are no locator services registered
 	 */
-	public void standaloneDriverTest() throws Exception {
-		Hashtable sysProps = System.getProperties();
+	public void testStandaloneDriver() {
 		Bundle deviceBundle_1 = null;
 		Bundle deviceBundle_2 = null;
 		Bundle driverBundle_1 = null;
 		Bundle driverBundle_2 = null;
 		String subtest = "standalone driver test";
 		try {
-			sysProps.put("device.test.mode", "0");
 			log(
 					subtest,
-					"installing and starting device bundle 1 (standart device from the device detection test)");
-			deviceBundle_1 = bc.installBundle(tcHome + "dev1.jar");
+					"installing and starting device bundle 0 (standart device from the device detection test)");
+			deviceBundle_1 = getContext().installBundle(
+					getWebServer() + "dev0.jar");
 			deviceBundle_1.start();
 			log(subtest,
 					"installing and starting device bundle 2 (standalone test device)");
-			deviceBundle_2 = bc.installBundle(tcHome + "dev2.jar");
+			deviceBundle_2 = getContext().installBundle(
+					getWebServer() + "dev20.jar");
 			deviceBundle_2.start();
 			
 			
@@ -102,7 +93,8 @@ public class TestBundleControl extends DefaultTestBundleControl {
 			log(
 					subtest,
 					"installing driver one - it should attatch to device 2 (standalone test device)");
-			driverBundle_2 = bc.installBundle(tcHome + "drv7.jar");
+			driverBundle_2 = getContext().installBundle(
+					getWebServer() + "drv7.jar");
 			driverBundle_2.start();
 			// wait for driver to attach or to be rejected
 			waitFor(subtest, "device attachment");
@@ -114,14 +106,16 @@ public class TestBundleControl extends DefaultTestBundleControl {
 			//
 			log(subtest,
 					"installing and starting basic driver bundle - it should attach to device 1");
-			driverBundle_1 = bc.installBundle(tcHome + "drv1.jar");
+			driverBundle_1 = getContext().installBundle(
+					getWebServer() + "drv1.jar");
 			driverBundle_1.start();
 			// wait for driver to attach or to be rejected
 			waitFor(subtest, "device attachment");
 			
 			
 			log(subtest, "registering a locator service");
-			ServiceRegistration reg = bc.registerService(DriverLocator.class
+			ServiceRegistration reg = getContext()
+					.registerService(DriverLocator.class
 					.getName(), new EmptyLocator(this), null);
 			log(
 					subtest,
@@ -132,10 +126,14 @@ public class TestBundleControl extends DefaultTestBundleControl {
 			reg.unregister();
 			log(subtest,
 					"installing driver 2. It should attach to device 2 again");
-			driverBundle_2 = bc.installBundle(tcHome + "drv7.jar");
+			driverBundle_2 = getContext().installBundle(
+					getWebServer() + "drv7.jar");
 			driverBundle_2.start();
 			// wait for driver to attach or to be rejected
 			waitFor(subtest, "device attachment");
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
 		}
 		finally {
 			try {
@@ -171,20 +169,19 @@ public class TestBundleControl extends DefaultTestBundleControl {
 	 * the corresponding drivers are installed (which is the only way to check
 	 * if the device manager has detected a device registration))
 	 */
-	public void deviceDetectionTest() {
-		Hashtable sysProps = System.getProperties();
+	public void testDeviceDetection() {
 		Bundle deviceBundle = null;
 		String subtest = "basic test";
 		log(subtest, "registering services");
-		ServiceRegistration locatorSR = bc.registerService(
+		ServiceRegistration locatorSR = getContext().registerService(
 				"org.osgi.service.device.DriverLocator", new BasicTestLocator(
 						this), null);
 		for (int i = 0; i < 5; i++) {
 			noDriverFoundCalled = false;
 			log(subtest, "installing bundle! Test mode = " + i);
 			try {
-				sysProps.put("device.test.mode", String.valueOf(i));
-				deviceBundle = bc.installBundle(tcHome + "dev1.jar");
+				deviceBundle = getContext().installBundle(
+						getWebServer() + "dev" + String.valueOf(i) + ".jar");
 				deviceBundle.start();
 				// wait for drivers to attach or to be rejected
 				// default timeout is 5 seconds. On slower hosts increase the
@@ -240,34 +237,33 @@ public class TestBundleControl extends DefaultTestBundleControl {
 	 * Tests the correct behaviour of the device manager against registred
 	 * driver locators and driver selectors
 	 */
-	public void driverLoadingTest() {
+	public void testDriverLoading() {
 		String subtest = "driver loading test";
 		log(subtest, "registering locators and selector");
 		// registering locators
-		ServiceRegistration locator1SR = bc.registerService(
+		ServiceRegistration locator1SR = getContext().registerService(
 				"org.osgi.service.device.DriverLocator",
 				new DriverLoadingLocator1(this), null);
-		ServiceRegistration locator2SR = bc.registerService(
+		ServiceRegistration locator2SR = getContext().registerService(
 				"org.osgi.service.device.DriverLocator",
 				new DriverLoadingLocator2(this), null);
-		ServiceRegistration locator3SR = bc.registerService(
+		ServiceRegistration locator3SR = getContext().registerService(
 				"org.osgi.service.device.DriverLocator",
 				new DriverLoadingLocator3(this), null);
 		// registering selector
-		ServiceRegistration selector = bc.registerService(
+		ServiceRegistration selector = getContext().registerService(
 				"org.osgi.service.device.DriverSelector",
 				new DriverLoadingTestSelector1(this), null);
 		// registering one selector more - this should be ignored
-		ServiceRegistration uselessSelector = bc.registerService(
+		ServiceRegistration uselessSelector = getContext().registerService(
 				"org.osgi.service.device.DriverSelector",
 				new DriverLoadingTestSelector2(this), null);
-		Hashtable sysProps = System.getProperties();
-		sysProps.put("device.test.mode", "100");
 		// install the bundle representing the device
 		Bundle deviceBundle = null;
 		try {
 			log(subtest, "installing device bundle");
-			deviceBundle = bc.installBundle(tcHome + "dev1.jar");
+			deviceBundle = getContext().installBundle(
+					getWebServer() + "dev100.jar");
 			deviceBundle.start();
 			waitFor(subtest, "device attachment");
 		}
@@ -302,17 +298,16 @@ public class TestBundleControl extends DefaultTestBundleControl {
 	/**
 	 * Tests the default selection algorythm
 	 */
-	public void defaultSelectionTest() {
+	public void testDefaultSelection() {
 		String subtest = "default selection test";
-		Hashtable sysProps = System.getProperties();
-		sysProps.put("device.test.mode", "100");
-		ServiceRegistration locatorSR = bc.registerService(
+		ServiceRegistration locatorSR = getContext().registerService(
 				"org.osgi.service.device.DriverLocator",
 				new DefaultSelectionLocator(this), null);
 		Bundle deviceBundle = null;
 		try {
 			log(subtest, "installing device bundle");
-			deviceBundle = bc.installBundle(tcHome + "dev1.jar");
+			deviceBundle = getContext().installBundle(
+					getWebServer() + "dev100.jar");
 			deviceBundle.start();
 			waitFor(subtest, "device attachment");
 		}
@@ -342,17 +337,16 @@ public class TestBundleControl extends DefaultTestBundleControl {
 	/**
 	 * Tests rediretion
 	 */
-	public void redirectionTest() {
-		Hashtable sysProps = System.getProperties();
-		sysProps.put("device.test.mode", "100");
+	public void testRedirection() {
 		String subtest = "redirection test";
-		ServiceRegistration locator1SR = bc.registerService(
+		ServiceRegistration locator1SR = getContext().registerService(
 				"org.osgi.service.device.DriverLocator",
 				new RedirectionLocator1(this), null);
 		Bundle deviceBundle = null;
 		try {
 			log(subtest, "installing device bundle");
-			deviceBundle = bc.installBundle(tcHome + "dev1.jar");
+			deviceBundle = getContext().installBundle(
+					getWebServer() + "dev100.jar");
 			deviceBundle.start();
 			waitFor(subtest, "device attachment");
 			/*
@@ -407,11 +401,11 @@ public class TestBundleControl extends DefaultTestBundleControl {
 	/*-------------------------------- utility methods --------------------------------------------*/
 	/*---------------------------------------------------------------------------------------------*/
 	private void uninstallDrivers() {
-		Bundle[] bundles = bc.getBundles();
+		Bundle[] bundles = getContext().getBundles();
 		for (int i = 0; i < bundles.length; i++) {
 			try {
-				if ("test_driver".equals(bundles[i].getHeaders().get(
-						"Bundle-Category"))) {
+				if (bundles[i].getSymbolicName().startsWith(
+						"org.osgi.test.cases.device.drv")) {
 					bundles[i].uninstall();
 				}
 			}
@@ -450,11 +444,6 @@ public class TestBundleControl extends DefaultTestBundleControl {
 	}
 
 	public void log(String subtest, String toLog) {
-		try {
-			log("[" + subtest + "] " + toLog);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+		log("[" + subtest + "] " + toLog);
 	}
 }

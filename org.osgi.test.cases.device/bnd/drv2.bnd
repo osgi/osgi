@@ -1,7 +1,9 @@
-Bundle-Name:                            ${p}.drv2
-Bundle-Activator: 						${p}.drv2.CommonDriver
+t = ${p}.drv2
+Bundle-SymbolicName:                    ${t}
+Bundle-Name:                            ${t}
+Bundle-Activator: 						${t}.CommonDriver
 Bundle-Version:                         4.2
-Private-Package:                        ${p}.drv2.*
+Private-Package:                        ${t}.*
 Bundle-Description: A driver that will lose the bidding (through selector)
 
 #Manifest-Version: 1.0

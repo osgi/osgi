@@ -1,7 +1,9 @@
-Bundle-Name:                            ${p}.drv1
-Bundle-Activator: 						${p}.drv1.DeviceDetectionTestDriver
+t = ${p}.drv1
+Bundle-SymbolicName:                    ${t}
+Bundle-Name:                            ${t}
+Bundle-Activator: 						${t}.DeviceDetectionTestDriver
 Bundle-Version:                         4.2
-Private-Package:                        ${p}.drv1.*
+Private-Package:                        ${t}.*
 Bundle-Description: A basic driver implementation
 
 #Manifest-Version: 1.0

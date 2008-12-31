@@ -1,11 +1,15 @@
 package org.osgi.test.cases.device.tbc.locators;
 
-import java.io.*;
-import java.net.*;
-import java.security.*;
-import java.util.*;
-import org.osgi.service.device.*;
-import org.osgi.test.cases.device.tbc.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
+import java.util.Dictionary;
+
+import org.osgi.service.device.DriverLocator;
+import org.osgi.test.cases.device.tbc.TestBundleControl;
 
 /**
  * Locator used in the default selection test. Finds 3 drivers
@@ -14,7 +18,7 @@ import org.osgi.test.cases.device.tbc.*;
  * @version 1.0
  */
 public class DefaultSelectionLocator implements DriverLocator {
-	private TestBundleControl	master	= null;
+	final TestBundleControl	master;
 
 	/**
 	 * @param master the master of test case - used for logging
@@ -31,7 +35,7 @@ public class DefaultSelectionLocator implements DriverLocator {
 	 *          be filtered from the default selection algorythm
 	 */
 	public String[] findDrivers(Dictionary props) {
-		log("searching for " + props.get("deviceID"));
+		master.log("searching for " + props.get("deviceID"));
 		String[] toReturn = new String[3];
 		toReturn[0] = "Driver_Winner";
 		toReturn[1] = "Driver_Common";
@@ -49,31 +53,32 @@ public class DefaultSelectionLocator implements DriverLocator {
 	 *         id.
 	 */
 	public InputStream loadDriver(final String id) throws IOException {
-		log("loading for " + id);
+		master.log("loading for " + id);
 		try {
 			return (InputStream) AccessController
 					.doPrivileged(new PrivilegedExceptionAction() {
 						public Object run() throws Exception {
 							if ("Driver_Winner".equals(id)) {
-								URL url = new URL(TestBundleControl.tcHome
+								URL url = new URL(master.getWebServer()
 										+ "drv4.jar");
 								return url.openStream();
 							}
 							else
 								if ("Driver_Common".equals(id)) {
-									URL url = new URL(TestBundleControl.tcHome
+									URL url = new URL(master.getWebServer()
 											+ "drv2.jar");
 									return url.openStream();
 								}
 								else
 									if ("Driver_Concurent".equals(id)) {
 										URL url = new URL(
-												TestBundleControl.tcHome
+												master.getWebServer()
 														+ "drv3.jar");
 										return url.openStream();
 									}
 									else {
-										log("unknown driver ID passed " + id);
+										master.log("unknown driver ID passed "
+												+ id);
 										return null;
 									}
 						}
@@ -84,7 +89,4 @@ public class DefaultSelectionLocator implements DriverLocator {
 		}
 	}
 
-	private void log(String toLog) {
-		System.out.println(toLog);
-	}
 }

@@ -1,4 +1,4 @@
-package org.osgi.test.cases.device.dev1;
+package org.osgi.test.cases.device.dev4;
 
 import java.util.Hashtable;
 
@@ -41,13 +41,14 @@ public class BasicDevice implements BundleActivator, Device {
 		// get the master of this test case - it is used for logging
 		masterRef = bc.getServiceReference(TestBundleControl.class.getName());
 		master = (TestBundleControl) bc.getService(masterRef);
-		// org.osgi.service.device.Device with matching driver
+		// org.osgi.service.device.Driver but does not set
+		// DEVICE_CATEGOR property - it must be recognized too
 		Hashtable h = new Hashtable();
-		h.put("deviceID", "basicDevice_noDevice");
-		h.put("DEVICE_CATEGORY", category);
+		h.put("deviceID", "basicDevice_noCategory");
 		h.put("device.test", Boolean.TRUE);
-		log("Registering device that doesn't implement Device and there is a driver for it");
-		deviceSR = bc.registerService("java.lang.Object", this, h);
+		log("Registering device that implements Device but does not set DEVICE_CATEGORY property");
+		deviceSR = bc
+				.registerService("org.osgi.service.device.Device", this, h);
 	}
 
 	/**

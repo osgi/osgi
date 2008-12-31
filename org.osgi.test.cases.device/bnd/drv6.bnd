@@ -1,7 +1,9 @@
-Bundle-Name:                            ${p}.drv6
-Bundle-Activator: 						${p}.drv6.RedirectingDriver
+t = ${p}.drv6
+Bundle-SymbolicName:                    ${t}
+Bundle-Name:                            ${t}
+Bundle-Activator: 						${t}.RedirectingDriver
 Bundle-Version:                         4.2
-Private-Package:                        ${p}.drv6.*
+Private-Package:                        ${t}.*
 Bundle-Description: A driver that will redirect the device manager to another driver
 
 #Manifest-Version: 1.0

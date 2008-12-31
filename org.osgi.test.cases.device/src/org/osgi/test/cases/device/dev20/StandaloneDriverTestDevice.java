@@ -1,4 +1,4 @@
-package org.osgi.test.cases.device.dev2;
+package org.osgi.test.cases.device.dev20;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;

@@ -1,11 +1,14 @@
 package org.osgi.test.cases.device.tbc.locators;
 
-import java.io.*;
-import java.net.*;
-import java.security.*;
-import java.util.*;
-import org.osgi.service.device.*;
-import org.osgi.test.cases.device.tbc.*;
+import java.io.InputStream;
+import java.net.URL;
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
+import java.util.Dictionary;
+
+import org.osgi.service.device.DriverLocator;
+import org.osgi.test.cases.device.tbc.TestBundleControl;
 
 /**
  * The locator used in the device detection test. For all IDs it retunrs an
@@ -13,7 +16,7 @@ import org.osgi.test.cases.device.tbc.*;
  * the whole test case)
  */
 public class BasicTestLocator implements DriverLocator {
-	private TestBundleControl	master	= null;
+	final TestBundleControl	master;
 
 	/**
 	 * @param master the master of test case - used for logging
@@ -30,7 +33,7 @@ public class BasicTestLocator implements DriverLocator {
 	 *          "deviceID" from the props Dictionary
 	 */
 	public String[] findDrivers(Dictionary props) {
-		log("searching for " + props.get("deviceID"));
+		master.log("searching for " + props.get("deviceID"));
 		String[] toReturn = new String[1];
 		toReturn[0] = (String) props.get("deviceID");
 		return toReturn;
@@ -44,26 +47,23 @@ public class BasicTestLocator implements DriverLocator {
 	 * @return an InputStream to the basicdrv.jar bundle
 	 */
 	public InputStream loadDriver(String id) {
-		log("loading for " + id);
+		master.log("loading for " + id);
 		try {
 			return (InputStream) AccessController
 					.doPrivileged(new PrivilegedExceptionAction() {
 						public Object run() throws Exception {
-							URL url = new URL(TestBundleControl.tcHome
+							URL url = new URL(master.getWebServer()
 									+ "drv1.jar");
-							InputStream is = url.openStream();
 							return url.openStream();
 						}
 					});
 		}
 		catch (PrivilegedActionException e) {
 			e.getException().printStackTrace();
-			log("error while reading the /drivers/basicdrv.jar resource");
+			master
+					.log("error while reading the /drivers/basicdrv.jar resource");
 			return null;
 		}
 	}
 
-	private void log(String toLog) {
-		System.out.println(toLog);
-	}
 }
