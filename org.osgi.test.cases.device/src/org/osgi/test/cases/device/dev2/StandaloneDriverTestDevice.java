@@ -12,7 +12,7 @@ import java.util.Hashtable;
  * @author ProSyst
  * @version 1.0
  */
-public class StadnaloneDriverTestDevice implements BundleActivator {
+public class StandaloneDriverTestDevice implements BundleActivator {
 	private ServiceRegistration	deviceSR	= null;
 	private String[]			category	= {"test"};
 

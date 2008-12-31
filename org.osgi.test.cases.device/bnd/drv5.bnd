@@ -1,0 +1,17 @@
+Bundle-Name:                            ${p}.drv5
+Bundle-Activator: 						${p}.drv5.NotMatchingDriver
+Bundle-Version:                         4.2
+Private-Package:                        ${p}.drv5.*
+Bundle-Description: A driver that will return MATCH_NONE and should be rejected
+
+#Manifest-Version: 1.0
+#Bundle-Vendor: ProSyst, Bulgaria
+#Bundle-Version: 1.0
+#Bundle-Name: test.cases.device.drv5
+#Bundle-DocURL: http://www.prosyst.bg
+#Bundle-Activator: org.osgi.test.cases.device.drv5.NotMatchingDriver
+#Bundle-Category: test_driver
+#Import-Package: org.osgi.service.device; specification-version="1.1", org.osgi.test.cases.device.tbc, org.osgi.framework
+
+
+

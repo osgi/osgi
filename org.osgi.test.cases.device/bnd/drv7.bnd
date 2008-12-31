@@ -1,0 +1,19 @@
+Bundle-Name:                            ${p}.drv7
+Bundle-Activator: 						${p}.drv7.StandAloneDriver
+Bundle-Version:                         4.2
+Private-Package:                        ${p}.drv7.*
+Bundle-Description: A driver that will be installed manually (not through a locator service)
+
+#Manifest-Version: 1.0
+#Bundle-Vendor: ProSyst, Bulgaria
+#Bundle-Version: 1.0.0
+#Bundle-Name: test.cases.device.drv7
+#Bundle-DocURL: http://www.prosyst.bg
+#Bundle-Activator: org.osgi.test.cases.device.drv7.StandAloneDriver
+#Bundle-Category: test_driver
+#Import-Package: org.osgi.service.device; specification-version="1.1", org.osgi.test.cases.device.tbc, org.osgi.framework
+
+
+
+
+

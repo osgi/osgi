@@ -1,14 +1,22 @@
 package org.osgi.test.cases.device.tbc;
 
-import java.lang.reflect.*;
 import java.util.Hashtable;
 
-import org.osgi.framework.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.device.DriverLocator;
-import org.osgi.test.cases.device.tbc.locators.*;
-import org.osgi.test.cases.device.tbc.selectors.*;
-import org.osgi.test.cases.util.DefaultTestBundleControl;
-import org.osgi.test.service.TestCaseLink;
+import org.osgi.test.cases.device.tbc.locators.BasicTestLocator;
+import org.osgi.test.cases.device.tbc.locators.DefaultSelectionLocator;
+import org.osgi.test.cases.device.tbc.locators.DriverLoadingLocator1;
+import org.osgi.test.cases.device.tbc.locators.DriverLoadingLocator2;
+import org.osgi.test.cases.device.tbc.locators.DriverLoadingLocator3;
+import org.osgi.test.cases.device.tbc.locators.EmptyLocator;
+import org.osgi.test.cases.device.tbc.locators.RedirectionLocator1;
+import org.osgi.test.cases.device.tbc.selectors.DriverLoadingTestSelector1;
+import org.osgi.test.cases.device.tbc.selectors.DriverLoadingTestSelector2;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * The activator of the device access test case

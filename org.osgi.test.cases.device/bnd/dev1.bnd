@@ -1,0 +1,18 @@
+Bundle-Name:                            ${p}.dev1
+Bundle-Activator: 						${p}.dev1.BasicDevice
+Bundle-Version:                         4.2
+Private-Package:                        ${p}.dev1.*
+Bundle-Description: basic device implementation
+
+#Manifest-Version: 1.0
+#Bundle-Vendor: OSGi Alliance
+#Bundle-Version: 1.2.1
+#Bundle-Activator: org.osgi.test.cases.device.dev1.BasicDevice
+#Bundle-DocUrl: http://www.prosyst.bg
+#Bundle-Name: test.cases.device.dev1
+#Import-Package: org.osgi.service.device; specification-version="1.1", org.osgi.test.cases.device.tbc, org.osgi.framework
+
+
+
+
+
