@@ -22,7 +22,9 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 
 /**
- * A surrogate bundle represents a composite bundle within a child framework.  
+ * A surrogate bundle is installed in a child framework, and is the child-facing
+ * representation of the composite bundle in the parent framework.
+ * <p>  
  * A surrogate bundle does the following as specified by the composite manifest:
  * <ul>
  * <li>Exports packages to the child framework from the parent framework. These
@@ -30,7 +32,7 @@ import org.osgi.framework.BundleException;
  * framework.</li>
  * <li>Imports packages from the child framework. These packages are exported
  * by the composite bundle installed in the parent framework.</li>
- * <li>Registers services with the child framework from the parent framework.
+ * <li>Registers services from the parent framework with the child framework.
  * These services are acquired by the composite bundle installed in the 
  * parent framework.</li>
  * <li>Acquires services from the child framework.  These services are 
@@ -41,8 +43,7 @@ import org.osgi.framework.BundleException;
  */
 public interface SurrogateBundle extends Bundle {
 	/**
-	 * Returns the bundle context of the composite bundle which this
-	 * surrogate bundle represents.
+	 * Returns the bundle context of the associated composite bundle.
 	 * @return the bundle context of the composite bundle.  A value 
 	 * of <code>null</code> is returned if the composite bundle does 
 	 * not have a valid bundle context.

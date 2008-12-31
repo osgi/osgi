@@ -35,17 +35,17 @@ import org.osgi.framework.launch.Framework;
 public interface CompositeBundleFactory {
 	/**
 	 * Manifest header (named &quot;CompositeServiceFilter-Import&quot;)
-	 * identifying the service filters that are used by a child composite bundle
-	 * to select services that will be registered into a child framework from a
-	 * parent composite bundle.
+	 * identifying the service filters that are used by a composite bundle
+	 * to select services that will be registered into a child framework by its
+	 * associated surrogate bundle.
 	 */
 	public static final String	COMPOSITE_SERVICE_FILTER_IMPORT	= "CompositeServiceFilter-Import";
 
 	/**
 	 * Manifest header (named &quot;CompositeServiceFilter-Export&quot;)
-	 * identifying the service filters that are used by a parent composite
+	 * identifying the service filters that are used by a surrogate
 	 * bundle to select services that will be registered into a parent framework
-	 * from a child composite bundle.
+	 * by its associated composite bundle.
 	 */
 	public static final String	COMPOSITE_SERVICE_FILTER_EXPORT	= "CompositeServiceFilter-Export";
 
@@ -53,20 +53,21 @@ public interface CompositeBundleFactory {
 	 * Installs a <code>CompositeBundle</code>. The composite bundle has a new
 	 * child <code>Framework</code> associated with it and a surrogate bundle
 	 * which is installed in the child framework. Composite bundles share
-	 * packages and services between parent framework they are installed in and
-	 * the the child framework.
+	 * packages and services between the parent framework they are installed in and
+	 * the child framework.
 	 * <p>
 	 * The following steps are required to create a composite bundle:
 	 * <ol>
-	 * <li>If a bundle containing the same location string is already installed,
-	 * then if the Bundle object is a <code>CompositeBundle</code> then that
-	 * composite bundle is returned; otherwise a BundleException is thrown
-	 * indicating that an incompatible bundle is already installed at the
+	 * <li>If a bundle containing the same location string is already installed
+	 * and the Bundle object is a <code>CompositeBundle</code>, then that
+	 * composite bundle is returned; otherwise a <code>BundleException</code> 
+	 * is thrown indicating that an incompatible bundle is already installed at the
 	 * specified location.</li>
 	 * <li>The composite bundle's associated resources are allocated. The
 	 * associated resources minimally consist of a unique identifier and a
-	 * persistent storage area. If this step fails, a BundleException is thrown.
-	 * <li>The compositeManifest map is used to provide the headers for the
+	 * persistent storage area. If this step fails, a <code>BundleException</code> 
+	 * is thrown.</li>
+	 * <li>The <code>compositeManifest</code> map is used to provide the headers for the
 	 * composite bundle and its surrogate bundle.
 	 * <p>
 	 * If composite manifest map does not contain the following header(s) then a
@@ -75,7 +76,7 @@ public interface CompositeBundleFactory {
 	 * <li> {@link Constants#BUNDLE_SYMBOLICNAME Bundle-SymbolicName} the
 	 * symbolic name used for the composite bundle and its surrogate bundle.
 	 * </ul>
-	 * </p>
+	 * </p><p>
 	 * The composite manifest map may optionally contain the following
 	 * header(s):
 	 * <ul>
@@ -97,42 +98,44 @@ public interface CompositeBundleFactory {
 	 * the parent framework by the composite bundle.</li>
 	 * <li>{@link Constants#BUNDLE_MANIFESTVERSION Bundle-ManifestVersion} the
 	 * bundle manifest version. If this header is not specified then the default
-	 * is to use version 2. A BundleException is thrown if this header is
+	 * is to use version 2. A <code>BundleException</code> is thrown if this header is
 	 * specified and the version is less than 2.</li>
 	 * </ul>
+	 * </p><p>
 	 * The composite manifest map must not contain the following headers. If a
 	 * composite manifest map does contain one of the following headers then a
-	 * BundleException is thrown:
+	 * <code>BundleException</code> is thrown:
 	 * <ul>
 	 * <li> {@link Constants#BUNDLE_ACTIVATIONPOLICY Bundle-ActivationPolicy}</li>
 	 * <li> {@link Constants#BUNDLE_ACTIVATOR Bundle-Activator}</li>
 	 * <li> {@link Constants#BUNDLE_CLASSPATH Bundle-ClassPath}</li>
 	 * <li> {@link Constants#BUNDLE_LOCALIZATION Bundle-Localization}</li>
 	 * <li> {@link Constants#BUNDLE_NATIVECODE Bundle-NativeCode}</li>
-	 * <li> {@link Constants#DYNAMICIMPORT_PACKAGE DynamicImport-Package}</li>
 	 * <li> {@link Constants#FRAGMENT_HOST Fragment-Host}</li>
+	 * <li> {@link Constants#DYNAMICIMPORT_PACKAGE DynamicImport-Package}</li>
 	 * <li> {@link Constants#REQUIRE_BUNDLE Require-Bundle}</li>
 	 * </ul>
-	 * <li>A child framework is created which uses a storage area under the
-	 * composite bundle's associated persistent storage. Note that if the
-	 * framework configuration property {@link Constants#FRAMEWORK_STORAGE
-	 * org.osgi.framework.storage} is specified in the framework config then it
-	 * is ignored.</li>
+	 * </li>
+	 * <li>A child framework is created which uses a storage area associated with
+	 * the composite bundle's persistent storage. The framework configuration 
+	 * property {@link Constants#FRAMEWORK_STORAGE org.osgi.framework.storage}, 
+	 * if specified, is ignored.</li>
 	 * <li>The child framework is initialized (see {@link Framework#init()}).
-	 * <li>A surrogate bundle is installed into the child framework</li>
+	 * <li>A surrogate bundle is created and installed into the child framework.</li>
 	 * <li>The composite bundle's state is set to INSTALLED.</li>
 	 * <li>A bundle event of type {@link BundleEvent#INSTALLED} is fired for the
 	 * composite bundle.
-	 * <li>The <code>CompositeBundle</code> object for the newly composite
-	 * bundle is returned
+	 * <li>The <code>CompositeBundle</code> object for the new composite
+	 * bundle is returned.
 	 * </ol>
 	 * <p>
 	 * 
-	 * @param frameworkConfig the child framework configuration.
-	 * @param location the bundle location used for the child composite bundle
-	 *        and its companion bundle.
-	 * @param compositeManifest the manifest used to create the composite bundle
-	 * @return A new child composite bundle.
+	 * @param frameworkConfig A map containing configuration parameters used to 
+	 *        initialize and launch the child framework.
+	 * @param location The bundle location used for the composite and surrogate bundles.
+	 * @param compositeManifest A map containing the manifest used to create the composite
+	 *        and surrogate bundles
+	 * @return A new composite bundle in INSTALLED state.
 	 * @throws BundleException If the composite manifest is invalid or there is
 	 *         some other problem with installing the composite bundle.
 	 * @throws SecurityException If the caller does not have
