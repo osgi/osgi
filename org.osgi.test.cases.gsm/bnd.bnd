@@ -1,6 +1,6 @@
 Bundle-Version: 4.2.0.${project.build}
 
-Private-Package						= org.osgi.test.cases.cdma
+Private-Package						= org.osgi.test.cases.gsm
 
 -buildpath							= \
 	org.osgi.util.gsm;					version=project	, \
@@ -8,9 +8,11 @@ Private-Package						= org.osgi.test.cases.cdma
 	ee.minimum												, \
 	${junit}
 
--testpath							= \
-	org.eclipse.osgi;		version=3.5; 	framework=org.eclipse.osgi.launch.Equinox, \
-	com.springsource.junit; version=3.8;    export="junit.framework;version=3.8"
-
--testbundles						= \
+-runbundles						= \
 	osgi.cmpn; version=latest
+
+-runproperties					= \
+	org.osgi.util.gsm.imei=012345678901234, \
+	org.osgi.util.gsm.imsi=012345678901234
+
+Test-Cases: ${classes;extending;*TestCase}

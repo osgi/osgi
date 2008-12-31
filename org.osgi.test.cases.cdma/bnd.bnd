@@ -8,9 +8,12 @@ Private-Package						= org.osgi.test.cases.cdma
 	ee.minimum												, \
 	${junit}
 
--testpath							= \
-	org.eclipse.osgi;		version=3.5; 	framework=org.eclipse.osgi.launch.Equinox, \
-	com.springsource.junit; version=3.8;    export="junit.framework;version=3.8"
-
--testbundles						= \
+-runbundles						= \
 	osgi.cmpn; version=latest
+
+-runproperties					= \
+	org.osgi.util.cdma.esn=89abcdef, \
+	org.osgi.util.cdma.meid=23456789abcdef
+
+Test-Cases: ${classes;extending;*TestCase}
+	
