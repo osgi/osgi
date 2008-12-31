@@ -1,6 +1,6 @@
 Bundle-Version: 4.2.0.${project.build}
 
-Private-Package						= org.osgi.test.cases.gsm
+Private-Package						= ${p}.*
 
 -buildpath							= \
 	org.osgi.util.gsm;					version=project	, \

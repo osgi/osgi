@@ -1,6 +1,6 @@
 Bundle-Version: 3.0.0.${project.build}
 
-Private-Package						= org.osgi.test.cases.template
+Private-Package						= ${p}.*
 
 -buildpath							= \
 	org.osgi.service.template;					version=project	, \
