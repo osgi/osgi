@@ -87,7 +87,7 @@ import org.osgi.framework.launch.Framework;
  * bundle. The set of bundles installed into the child framework are the
  * component bundles which comprise the composite bundle.
  * <p>
- * If the child framework's lifecycle is also tied to the lifecycle of its
+ * The child framework's lifecycle is also tied to the lifecycle of its
  * parent framework. When the parent <code>Framework</code> enters the
  * {@link Bundle#STOPPING STOPPING} state, all active child frameworks of that
  * parent are shutdown using the {@link Framework#stop()} method. The parent
