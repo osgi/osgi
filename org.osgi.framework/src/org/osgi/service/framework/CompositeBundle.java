@@ -39,8 +39,9 @@ import org.osgi.framework.launch.Framework;
  * A framework has one composite bundle for each of its child frameworks. A
  * framework can have zero or more composite bundles installed. A child
  * framework must have one and only one surrogate bundle which represents the
- * composite bundle in the parent framework. In other words, a parent framework 
- * can have many child frameworks but a child framework can have only one parent.
+ * composite bundle in the parent framework. In other words, a parent framework
+ * can have many child frameworks but a child framework can have only one
+ * parent.
  * <p>
  * A composite bundle does the following as specified by the composite manifest
  * map:
@@ -60,9 +61,9 @@ import org.osgi.framework.launch.Framework;
  * A newly created child <code>Framework</code> will be in the
  * {@link Bundle#STARTING STARTING} state. This child <code>Framework</code> can
  * then be used to manage and control the child framework instance. The child
- * framework instance is persistent and uses a storage area associated with 
- * the installed composite bundle. The child framework's lifecycle is tied 
- * to its composite bundle's lifecycle in the following ways:
+ * framework instance is persistent and uses a storage area associated with the
+ * installed composite bundle. The child framework's lifecycle is tied to its
+ * composite bundle's lifecycle in the following ways:
  * <p>
  * <ul>
  * <li>If the composite bundle is marked to be persistently started (see
@@ -73,7 +74,7 @@ import org.osgi.framework.launch.Framework;
  * persistently stopped or its start level is no longer met. Performing
  * operations which transiently stop a composite bundle do not cause the child
  * framework to stop (e.g. {@link Bundle#stop(int) stop(Bundle.STOP_TRANSIENT)},
- * {@link Bundle#update() update}, refreshPackage etc.).</li>
+ * {@link Bundle#update() update}, refreshPackages etc.).</li>
  * <li>If the composite bundle is uninstalled, the child framework's persistent
  * storage area is also uninstalled.</li>
  * </ul>
@@ -86,15 +87,16 @@ import org.osgi.framework.launch.Framework;
  * bundle. The set of bundles installed into the child framework are the
  * component bundles which comprise the composite bundle.
  * <p>
- * If the child framework's lifecycle is also tied to the lifecycle of its parent
- * framework. When the parent <code>Framework</code> enters the
- * {@link Bundle#STOPPING STOPPING} state, all active child frameworks of
- * that parent are shutdown using the {@link Framework#stop()} method.
- * The parent <code>Framework</code> must not enter the {@link Bundle#RESOLVED}
- * state until all the child frameworks have completed their shutdown process.
- * Just as with other Bundles, references to child frameworks become invalid 
- * after the parent framework has completed the shutdown process, and must 
- * not be allowed to re-initialize or re-start the child framework.
+ * If the child framework's lifecycle is also tied to the lifecycle of its
+ * parent framework. When the parent <code>Framework</code> enters the
+ * {@link Bundle#STOPPING STOPPING} state, all active child frameworks of that
+ * parent are shutdown using the {@link Framework#stop()} method. The parent
+ * framework must not enter the {@link Bundle#RESOLVED} state until all the
+ * child frameworks have completed their shutdown process. Just as with other
+ * Bundles, references to child frameworks (or the associated composite and
+ * surrogate bundles) become invalid after the parent framework has completed
+ * the shutdown process, and must not be allowed to re-initialize or re-start
+ * the child framework.
  * 
  * @see SurrogateBundle
  * @ThreadSafe
