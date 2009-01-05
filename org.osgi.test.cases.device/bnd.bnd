@@ -29,8 +29,7 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 
 -runbundles							= \
 	org.osgi.impl.service.log; version=latest, \
-	org.osgi.impl.service.device.manager;  version=latest, \
-	org.osgi.impl.service.device.basicdriverlocator;  version=latest
+	org.osgi.impl.service.device.manager;  version=latest
 
 #Manifest-Version: 1.0
 #Bundle-Name: test.cases.device.tbc

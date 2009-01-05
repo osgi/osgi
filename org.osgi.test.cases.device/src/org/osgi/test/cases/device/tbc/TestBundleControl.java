@@ -22,7 +22,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * @version 1.0
  */
 public class TestBundleControl extends DefaultTestBundleControl {
-	private int					message				= -1;
+	private volatile int		message				= -1;
 	/**
 	 * Constant for no message in the post box
 	 */
@@ -35,12 +35,11 @@ public class TestBundleControl extends DefaultTestBundleControl {
 	 * Constant for ERROR message in the post box
 	 */
 	public static final int		MESSAGE_ERROR		= 1;
-	public boolean				noDriverFoundCalled	= false;
+	private volatile boolean	noDriverFoundCalled	= false;
 	private int					timeout				= 100;
 	private ServiceRegistration	tbcReg;
 
 	protected void setUp() {
-		log("Test bundle control started Ok.");
 		tbcReg = getContext().registerService(
 				TestBundleControl.class
 				.getName(), this, null);
@@ -58,10 +57,18 @@ public class TestBundleControl extends DefaultTestBundleControl {
 		return 0;
 	}
 
-	protected int getMessage() {
+	private int getMessage() {
 		return this.message;
 	}
+	
+	public void setNoDriverFoundCalled(boolean called) {
+		this.noDriverFoundCalled = called;
+	}
 
+	private boolean noDriverFoundCalled() {
+		return this.noDriverFoundCalled;
+	}
+	
 	/*---------------------------------------------------------------------------------------------*/
 	/*------------------------- Test methods ------------------------------------------------------*/
 	/*---------------------------------------------------------------------------------------------*/
@@ -69,39 +76,45 @@ public class TestBundleControl extends DefaultTestBundleControl {
 	 * Tests driver handling when there are no locator services registered
 	 */
 	public void testStandaloneDriver() {
-		Bundle deviceBundle_1 = null;
-		Bundle deviceBundle_2 = null;
+		Bundle deviceBundle_0 = null;
+		Bundle deviceBundle_20 = null;
 		Bundle driverBundle_1 = null;
-		Bundle driverBundle_2 = null;
+		Bundle driverBundle_7 = null;
 		String subtest = "standalone driver test";
 		try {
 			log(
 					subtest,
 					"installing and starting device bundle 0 (standart device from the device detection test)");
-			deviceBundle_1 = getContext().installBundle(
+			deviceBundle_0 = getContext().installBundle(
 					getWebServer() + "dev0.jar");
-			deviceBundle_1.start();
+			deviceBundle_0.start();
 			log(subtest,
 					"installing and starting device bundle 2 (standalone test device)");
-			deviceBundle_2 = getContext().installBundle(
+			deviceBundle_20 = getContext().installBundle(
 					getWebServer() + "dev20.jar");
-			deviceBundle_2.start();
+			deviceBundle_20.start();
 			
 			
-			Thread.sleep(1000); // Give the RI time to settle (this is BAD!!!!!)
+			try {
+				Thread.sleep(1000); // Give the RI time to settle (this is
+									// BAD!!!!!)
+			}
+			catch (InterruptedException ie) {
+				ie.printStackTrace();
+			}
 			
 			log(
 					subtest,
 					"installing driver one - it should attatch to device 2 (standalone test device)");
-			driverBundle_2 = getContext().installBundle(
+			driverBundle_7 = getContext().installBundle(
 					getWebServer() + "drv7.jar");
-			driverBundle_2.start();
+			driverBundle_7.start();
 			// wait for driver to attach or to be rejected
 			waitFor(subtest, "device attachment");
 			
 			//
-			// The next testcase sometimes fails because also the
-			// previously registered dev2 is matched by drv7 ... 
+			// The next test case sometimes fails because also the
+			// previously registered dev20 is matched by drv7 ...
 			// Might be a bug in the RI
 			//
 			log(subtest,
@@ -119,46 +132,37 @@ public class TestBundleControl extends DefaultTestBundleControl {
 					.getName(), new EmptyLocator(this), null);
 			log(
 					subtest,
-					"uninstalling driver 2. This should invoke the findDrivers method for the standalone device");
-			driverBundle_2.uninstall();
+					"uninstalling driver 7. This should invoke the findDrivers method for the standalone device");
+			driverBundle_7.uninstall();
 			waitFor(subtest, "findDrivers call");
 			log(subtest, "removing locator");
 			reg.unregister();
 			log(subtest,
-					"installing driver 2. It should attach to device 2 again");
-			driverBundle_2 = getContext().installBundle(
+					"installing driver 7. It should attach to device 2 again");
+			driverBundle_7 = getContext().installBundle(
 					getWebServer() + "drv7.jar");
-			driverBundle_2.start();
+			driverBundle_7.start();
 			// wait for driver to attach or to be rejected
 			waitFor(subtest, "device attachment");
 		}
-		catch (Exception e) {
-			fail(e.getMessage());
+		catch (BundleException be) {
+			be.printStackTrace();
+			fail(subtest, be.getMessage());
 		}
 		finally {
 			try {
 				if (driverBundle_1 != null)
 					driverBundle_1.uninstall();
+				if (deviceBundle_0 != null)
+					deviceBundle_0.uninstall();
+				if (driverBundle_7 != null)
+					driverBundle_7.uninstall();
+				if (deviceBundle_20 != null)
+					deviceBundle_20.uninstall();
 			}
-			catch (Exception e) {
-			}
-			try {
-				if (deviceBundle_1 != null)
-					deviceBundle_1.uninstall();
-			}
-			catch (Exception e) {
-			}
-			try {
-				if (driverBundle_2 != null)
-					driverBundle_2.uninstall();
-			}
-			catch (Exception e) {
-			}
-			try {
-				if (deviceBundle_2 != null)
-					deviceBundle_2.uninstall();
-			}
-			catch (Exception e) {
+			catch (BundleException be) {
+				be.printStackTrace();
+				fail(subtest, be.getMessage());
 			}
 		}
 		log(subtest, "finished");
@@ -177,7 +181,7 @@ public class TestBundleControl extends DefaultTestBundleControl {
 				"org.osgi.service.device.DriverLocator", new BasicTestLocator(
 						this), null);
 		for (int i = 0; i < 5; i++) {
-			noDriverFoundCalled = false;
+			setNoDriverFoundCalled(false);
 			log(subtest, "installing bundle! Test mode = " + i);
 			try {
 				deviceBundle = getContext().installBundle(
@@ -187,7 +191,7 @@ public class TestBundleControl extends DefaultTestBundleControl {
 				// default timeout is 5 seconds. On slower hosts increase the
 				// timeout by setting
 				// the osgi.test.device.timeout property to a higher value
-				// timeout is calculated with the folloing formula:
+				// timeout is calculated with the following formula:
 				// osgi.test.device.timeout * 100 milliseconds
 				// so the default value for osgi.testdevice.timeout is 50.
 				// Setting a lower value will decrease the timeout. Setting to
@@ -195,9 +199,9 @@ public class TestBundleControl extends DefaultTestBundleControl {
 				waitFor(subtest, "device detection");
 				// wait a specific timeout for the noDriverFoundMethod to be
 				// called
-				if ((i == 2) || (i == 3)) {
+				if (i == 2) {
 					int counter = 0;
-					while (!noDriverFoundCalled && counter++ < 100) {
+					while (!noDriverFoundCalled() && counter++ < 100) {
 						try {
 							Thread.sleep(timeout);
 						}
@@ -205,13 +209,19 @@ public class TestBundleControl extends DefaultTestBundleControl {
 							ie.printStackTrace();
 						}
 					}
-					if (noDriverFoundCalled)
+					if (noDriverFoundCalled())
 						log(subtest, "noDriverFound called OK");
+					else 
+						fail(subtest, "noDriverFound not called");
+				}
+				else {
+					if (noDriverFoundCalled())
+						fail(subtest, "noDriverFound called");
 				}
 			}
 			catch (BundleException be) {
 				be.printStackTrace();
-				log(subtest, "Error while installing basice device bundle");
+				fail(subtest, "Error while installing basic device bundle");
 			}
 			finally {
 				if (deviceBundle != null) {
@@ -220,7 +230,7 @@ public class TestBundleControl extends DefaultTestBundleControl {
 					}
 					catch (BundleException be) {
 						be.printStackTrace();
-						/* Nothing to do about this!!! */
+						fail(subtest, be.getMessage());
 					}
 					/*
 					 * the device manager is not obliged to remove idle drivers
@@ -234,7 +244,7 @@ public class TestBundleControl extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Tests the correct behaviour of the device manager against registred
+	 * Tests the correct behavior of the device manager against registered
 	 * driver locators and driver selectors
 	 */
 	public void testDriverLoading() {
@@ -269,8 +279,7 @@ public class TestBundleControl extends DefaultTestBundleControl {
 		}
 		catch (BundleException be) {
 			be.printStackTrace();
-			log("driver loading test",
-					"Error while installing the device bundle");
+			fail(subtest, "Error while installing the device bundle");
 		}
 		finally {
 			if (deviceBundle != null) {
@@ -279,7 +288,7 @@ public class TestBundleControl extends DefaultTestBundleControl {
 				}
 				catch (BundleException be) {
 					be.printStackTrace();
-					/* Nothing to do about this!!! */
+					fail(subtest, be.getMessage());
 				}
 			}
 			locator1SR.unregister();
@@ -296,7 +305,7 @@ public class TestBundleControl extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Tests the default selection algorythm
+	 * Tests the default selection algorithm
 	 */
 	public void testDefaultSelection() {
 		String subtest = "default selection test";
@@ -313,7 +322,7 @@ public class TestBundleControl extends DefaultTestBundleControl {
 		}
 		catch (BundleException be) {
 			be.printStackTrace();
-			log(subtest, "Error while installing the device bundle");
+			fail(subtest, "Error while installing the device bundle");
 		}
 		finally {
 			if (deviceBundle != null) {
@@ -322,7 +331,7 @@ public class TestBundleControl extends DefaultTestBundleControl {
 				}
 				catch (BundleException be) {
 					be.printStackTrace();
-					/* Nothing to do about this!!! */
+					fail(subtest, be.getMessage());
 				}
 			}
 			locatorSR.unregister();
@@ -356,7 +365,7 @@ public class TestBundleControl extends DefaultTestBundleControl {
 			 * called.
 			 */
 			// REMOVED
-			//      // FIX - as locators may be called in a differenr thread I have
+			// // FIX - as locators may be called in a different thread I have
 			// to
 			//      // set some kind of timeout before checking the flag
 			//      for (int i = 0; (i < 1000) && !RedirectionLocator2.called; i++) {
@@ -376,7 +385,7 @@ public class TestBundleControl extends DefaultTestBundleControl {
 		}
 		catch (BundleException be) {
 			be.printStackTrace();
-			log("redirection test", "Error while installing the device bundle");
+			fail(subtest, "Error while installing the device bundle");
 		}
 		finally {
 			if (deviceBundle != null) {
@@ -385,7 +394,7 @@ public class TestBundleControl extends DefaultTestBundleControl {
 				}
 				catch (BundleException be) {
 					be.printStackTrace();
-					/* Nothing to do about this!!! */
+					fail(subtest, be.getMessage());
 				}
 			}
 			locator1SR.unregister();
@@ -403,14 +412,17 @@ public class TestBundleControl extends DefaultTestBundleControl {
 	private void uninstallDrivers() {
 		Bundle[] bundles = getContext().getBundles();
 		for (int i = 0; i < bundles.length; i++) {
+			Bundle b = bundles[i];
 			try {
-				if (bundles[i].getSymbolicName().startsWith(
+				if (b.getSymbolicName().startsWith(
 						"org.osgi.test.cases.device.drv")) {
-					bundles[i].uninstall();
+					log("uninstalling " + b);
+					b.uninstall();
 				}
 			}
-			catch (Throwable t) {
-				/* ignore and proceed with the next bundle */
+			catch (BundleException be) {
+				be.printStackTrace();
+				fail(be.getMessage());
 			}
 		}
 	}
@@ -432,18 +444,22 @@ public class TestBundleControl extends DefaultTestBundleControl {
 				log(subtest, message + " OK");
 				break;
 			case TestBundleControl.MESSAGE_NONE :
-				log(subtest, message + " timed out!");
+				fail(subtest, message + " timed out!");
 				break;
 			case TestBundleControl.MESSAGE_ERROR :
-				log(subtest, "error message received do " + message);
+				fail(subtest, "error message received do " + message);
 				break;
 			default :
-				log(subtest, "unkown message received");
+				fail(subtest, "unkown message received");
 		}
 		setMessage(TestBundleControl.MESSAGE_NONE);
 	}
 
 	public void log(String subtest, String toLog) {
 		log("[" + subtest + "] " + toLog);
+	}
+	
+	public void fail(String subtest, String toLog) {
+		fail("[" + subtest + "] " + toLog);
 	}
 }

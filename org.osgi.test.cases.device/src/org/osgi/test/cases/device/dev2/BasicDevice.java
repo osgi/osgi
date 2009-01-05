@@ -65,7 +65,7 @@ public class BasicDevice implements BundleActivator, Device {
 	 * devices that implement org.osgi.service.device.Device.
 	 */
 	public void noDriverFound() {
-		master.noDriverFoundCalled = true;
+		master.setNoDriverFoundCalled(true);
 	}
 
 	/* Calls the log method of the master test case */

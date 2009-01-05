@@ -6,7 +6,6 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.device.Device;
 import org.osgi.test.cases.device.tbc.TestBundleControl;
 
 /**
@@ -16,7 +15,7 @@ import org.osgi.test.cases.device.tbc.TestBundleControl;
  * @author ProSyst
  * @version 1.0
  */
-public class BasicDevice implements BundleActivator, Device {
+public class BasicDevice implements BundleActivator {
 	private ServiceRegistration	deviceSR	= null;
 	private String[]			category	= {"test"};
 	private TestBundleControl	master		= null;
@@ -58,14 +57,6 @@ public class BasicDevice implements BundleActivator, Device {
 	public void stop(BundleContext bc) {
 		deviceSR.unregister();
 		bc.ungetService(masterRef);
-	}
-
-	/**
-	 * Should be called when no dirver is found for this device - only for
-	 * devices that implement org.osgi.service.device.Device.
-	 */
-	public void noDriverFound() {
-		master.noDriverFoundCalled = true;
 	}
 
 	/* Calls the log method of the master test case */
