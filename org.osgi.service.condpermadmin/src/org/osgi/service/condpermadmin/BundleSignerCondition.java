@@ -73,7 +73,8 @@ public class BundleSignerCondition {
 	 *        then the second argument is ignored.
 	 * @return A Condition which checks the signers of the specified bundle.
 	 */
-	public static Condition getCondition(Bundle bundle, ConditionInfo info) {
+	public static Condition getCondition(final Bundle bundle,
+			final ConditionInfo info) {
 		if (!CONDITION_TYPE.equals(info.getType()))
 			throw new IllegalArgumentException(
 					"ConditionInfo must be of type \"" + CONDITION_TYPE + "\"");
@@ -89,9 +90,10 @@ public class BundleSignerCondition {
 				.hasNext();) {
 			List/* <X509Certificate> */signerCerts = (List) iSigners.next();
 			List/* <String> */dnChain = new ArrayList(signerCerts.size());
-			for (Iterator iCerts = signerCerts.iterator(); iCerts.hasNext();)
+			for (Iterator iCerts = signerCerts.iterator(); iCerts.hasNext();) {
 				dnChain.add(((X509Certificate) iCerts.next()).getSubjectDN()
 						.getName());
+			}
 			if (FrameworkUtil.matchDistinguishedNameChain(args[0], dnChain)) {
 				match = true;
 				break;

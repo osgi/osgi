@@ -192,7 +192,7 @@ public final class AdminPermission extends BasicPermission {
 	 * 
 	 * @serial
 	 */
-	private String				filter;
+	private String				filterString;
 
 	/**
 	 * The actions in canonical form.
@@ -224,7 +224,7 @@ public final class AdminPermission extends BasicPermission {
 	 * holds a Filter matching object used to evaluate the filter in implies.
 	 * This is not initialized until necessary, and then cached in this object
 	 */
-	private transient Filter	filterImpl;
+	private transient Filter	filter;
 
 	/**
 	 * Creates a new <code>AdminPermission</code> object that matches all
@@ -288,7 +288,7 @@ public final class AdminPermission extends BasicPermission {
 		super(createName(bundle));
 		this.bundle = bundle;
 		this.wildcard = false;
-		this.filter = null;
+		this.filterString = null;
 		this.action_mask = getMask(actions);
 	}
 
@@ -330,7 +330,7 @@ public final class AdminPermission extends BasicPermission {
 						: (a.bundle == null ? false
 								: bundle.getBundleId() == a.bundle
 										.getBundleId()))
-				&& (filter == null ? a.filter == null : filter.equals(a.filter));
+				&& (filterString == null ? a.filterString == null : filterString.equals(a.filterString));
 	}
 
 	/**
@@ -457,18 +457,17 @@ public final class AdminPermission extends BasicPermission {
 		if ((action_mask & target.action_mask) != target.action_mask)
 			return false;
 		// if passed in a filter, puke
-		if (target.filter != null)
+		if (target.filterString != null)
 			throw new RuntimeException("Cannot imply a filter"); //$NON-NLS-1$
 		// special case - only wildcard implies wildcard
 		if (target.wildcard)
 			return wildcard;
 
 		// check our name
-		if (filter != null) {
+		if (filterString != null) {
 			// it's a filter
-			Filter filterImpl = getFilterImpl();
-			return filterImpl != null
-					&& filterImpl.match(target.getProperties());
+			Filter f = getFilter();
+			return (f != null) && f.match(target.getProperties());
 		}
 		else
 			if (wildcard) {
@@ -477,7 +476,7 @@ public final class AdminPermission extends BasicPermission {
 			}
 			else {
 				// it's a bundle id
-				return bundle.equals(target.bundle);
+				return bundle.getBundleId() == target.bundle.getBundleId();
 			}
 	}
 
@@ -488,7 +487,7 @@ public final class AdminPermission extends BasicPermission {
 	 * @return A new <code>PermissionCollection</code> object.
 	 */
 	public PermissionCollection newPermissionCollection() {
-		return (new AdminPermissionCollection());
+		return new AdminPermissionCollection();
 	}
 
 	/**
@@ -503,11 +502,11 @@ public final class AdminPermission extends BasicPermission {
 		// name must be either * or a filter
 		if (filter.equals("*")) { //$NON-NLS-1$
 			this.wildcard = true;
-			this.filter = null;
+			this.filterString = null;
 		}
 		else {
 			this.wildcard = false;
-			this.filter = filter;
+			this.filterString = filter;
 		}
 		this.bundle = null;
 		this.action_mask = action_mask;
@@ -773,18 +772,41 @@ public final class AdminPermission extends BasicPermission {
 		return bundleProperties;
 	}
 
-	private static class SignerWrapper extends Object {
-		private Bundle	bundle;
-		private String	pattern;
+	/**
+	 * Used for Filter matching on signer key.
+	 * 
+	 */
+	private static class SignerWrapper {
+		private final Bundle	bundle;
+		private final String	pattern;
 
+		/**
+		 * String constructor used by the filter matching algorithm to construct
+		 * SignerWrappers from the attribute value in the filter string.
+		 * 
+		 * @param pattern Attribute value in the filter string.
+		 */
 		public SignerWrapper(String pattern) {
 			this.pattern = pattern;
+			this.bundle = null;
 		}
 
+		/**
+		 * Used by implies to build the properties for a filter match.
+		 * 
+		 * @param bundle The bundle whose signers are to be matched.
+		 */
 		SignerWrapper(Bundle bundle) {
 			this.bundle = bundle;
+			this.pattern = null;
 		}
 
+		/**
+		 * Used by the filter matching algorithm to
+		 * 
+		 * @param o SignerWrapper to compare against.
+		 * @return true if the DN name chain matches the pattern.
+		 */
 		public boolean equals(Object o) {
 			if (!(o instanceof SignerWrapper))
 				return false;
@@ -820,24 +842,24 @@ public final class AdminPermission extends BasicPermission {
 	}
 
 	/**
-	 * Called by <tt><@link AdminPermission#implies(Permission)></tt> on an
-	 * AdminPermission which was constructed with a filter. This method loads a
-	 * FilterImpl with the filter specification of this AdminPermission. The
-	 * filter is cached so this work only happens once.
+	 * Called by <code>implies</code> on an AdminPermission which was
+	 * constructed with a filter. This method creates a Filter object with the
+	 * filter string specified for this AdminPermission. The Filter is cached so
+	 * this work only happens once.
 	 * 
 	 * This method should only be called on an AdminPermission which was
 	 * constructed with a filter
 	 * 
-	 * @return a filterImpl for this bundle
+	 * @return a Filter for this bundle
 	 */
-	private Filter getFilterImpl() {
-		if (filterImpl == null) {
+	private Filter getFilter() {
+		if (filter == null) {
 			try {
-				int pos = filter.indexOf("signer"); //$NON-NLS-1$
+				int pos = filterString.indexOf("signer"); //$NON-NLS-1$
 				if (pos != -1) {
 
 					// there may be a signer attribute
-					StringBuffer filterBuf = new StringBuffer(filter);
+					StringBuffer filterBuf = new StringBuffer(filterString);
 					int numAsteriskFound = 0; // use as offset to replace in
 					// buffer
 
@@ -851,7 +873,7 @@ public final class AdminPermission extends BasicPermission {
 
 						// consume whitespace
 						while (walkbackPos >= 0
-								&& Character.isWhitespace(filter
+								&& Character.isWhitespace(filterString
 										.charAt(walkbackPos))) {
 							walkbackPos--;
 						}
@@ -861,34 +883,34 @@ public final class AdminPermission extends BasicPermission {
 						}
 
 						// check to see if we have unescaped '('
-						if (filter.charAt(walkbackPos) != '('
-								|| (walkbackPos > 0 && filter
+						if (filterString.charAt(walkbackPos) != '('
+								|| (walkbackPos > 0 && filterString
 										.charAt(walkbackPos - 1) == '\\')) {
 							// '(' was escaped or not there
-							pos = filter.indexOf("signer", pos + 6); //$NON-NLS-1$
+							pos = filterString.indexOf("signer", pos + 6); //$NON-NLS-1$
 							continue;
 						}
 						pos += 6; // skip over 'signer'
 
 						// found signer - consume whitespace before '='
-						while (Character.isWhitespace(filter.charAt(pos))) {
+						while (Character.isWhitespace(filterString.charAt(pos))) {
 							pos++;
 						}
 
 						// look for '='
-						if (filter.charAt(pos) != '=') {
+						if (filterString.charAt(pos) != '=') {
 							// attr was signerx - keep looking
-							pos = filter.indexOf("signer", pos); //$NON-NLS-1$
+							pos = filterString.indexOf("signer", pos); //$NON-NLS-1$
 							continue;
 						}
 						pos++; // skip over '='
 
 						// found signer value - escape '*'s
-						while (!(filter.charAt(pos) == ')' && filter
+						while (!(filterString.charAt(pos) == ')' && filterString
 								.charAt(pos - 1) != '\\')) {
 							// only add an escape if it is not already escaped
-							if (filter.charAt(pos) == '*'
-									&& filter.charAt(pos - 1) != '\\') {
+							if (filterString.charAt(pos) == '*'
+									&& filterString.charAt(pos - 1) != '\\') {
 								filterBuf.insert(pos + numAsteriskFound, '\\');
 								numAsteriskFound++;
 							}
@@ -896,18 +918,18 @@ public final class AdminPermission extends BasicPermission {
 						}
 
 						// end of signer value - look for more?
-						pos = filter.indexOf("signer", pos); //$NON-NLS-1$
+						pos = filterString.indexOf("signer", pos); //$NON-NLS-1$
 					} // end while (pos != -1)
-					filter = filterBuf.toString();
+					filterString = filterBuf.toString();
 				} // end if (pos != -1)
 
-				filterImpl = FrameworkUtil.createFilter(filter);
+				filter = FrameworkUtil.createFilter(filterString);
 			}
 			catch (InvalidSyntaxException e) {
 				// we will return null
 			}
 		}
-		return filterImpl;
+		return filter;
 	}
 
 	/**
@@ -927,7 +949,7 @@ public final class AdminPermission extends BasicPermission {
 		// call getActions to make sure actions field is initialized
 		if (actions == null)
 			getActions();
-		if (filter == null && !wildcard)
+		if (filterString == null && !wildcard)
 			throw new UnsupportedOperationException("cannot serialize"); //$NON-NLS-1$
 		s.defaultWriteObject();
 	}
@@ -1015,7 +1037,7 @@ final class AdminPermissionCollection extends PermissionCollection {
 	 */
 	public boolean implies(Permission permission) {
 		if (!(permission instanceof AdminPermission))
-			return (false);
+			return false;
 
 		AdminPermission target = (AdminPermission) permission;
 
@@ -1036,6 +1058,6 @@ final class AdminPermissionCollection extends PermissionCollection {
 	 */
 
 	public Enumeration elements() {
-		return (Collections.enumeration(permissions.values()));
+		return Collections.enumeration(permissions.values());
 	}
 }
