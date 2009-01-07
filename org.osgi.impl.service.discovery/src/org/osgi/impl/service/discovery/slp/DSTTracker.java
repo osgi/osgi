@@ -17,7 +17,7 @@ import org.osgi.service.discovery.ServiceEndpointDescription;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
- * This class monitors the lifecycle of DiscoveredServicetrackers. They will be
+ * This class monitors the lifecycle of DiscoveredServiceTrackers. They will be
  * notified on registration and modification if any service has been published.
  * 
  * @author kt32483

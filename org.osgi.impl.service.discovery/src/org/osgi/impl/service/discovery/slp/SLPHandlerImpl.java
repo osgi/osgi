@@ -48,6 +48,9 @@ import ch.ethz.iks.slp.ServiceLocationException;
 import ch.ethz.iks.slp.ServiceURL;
 
 /**
+ * This class is a Distributed OSGi Discovery Service implementation based on
+ * SLP using jSLP.
+ * 
  * TODO: remove printStackTrace and do logging instead
  * 
  * @author Phillip Konradi
@@ -60,6 +63,8 @@ public class SLPHandlerImpl implements Discovery {
 	 * distribution of published service information. It's up to the Discovery
 	 * service to provide and support this property. Value of this property is
 	 * of type String.
+	 * 
+	 * TODO do we support this property?
 	 */
 	public static final String PROP_KEY_PUBLISH_STRATEGY = "osgi.discovery.strategy.publication";
 
@@ -85,7 +90,7 @@ public class SLPHandlerImpl implements Discovery {
 	private Locator locator = null;
 	private Advertiser advertiser = null;
 
-	private final int POLLDELAY = 10000; // 10 sec
+	// private final int POLLDELAY = 10000; // 10 sec
 
 	private Timer t = null;
 
@@ -94,15 +99,18 @@ public class SLPHandlerImpl implements Discovery {
 	private static BundleContext context;
 
 	private LogService logService;
-	private boolean autoPublish = DEFAULT_AUTOPUBLISH;
+	// private boolean autoPublish = DEFAULT_AUTOPUBLISH;
 
 	private List/* <SLPServiceDescriptionAdapter> */inMemoryCache = Collections
 			.synchronizedList(new ArrayList());
 
 	/**
+	 * Constructor.
 	 * 
 	 * @param context
+	 *            the BundleContext of the containing bundle.
 	 * @param logService
+	 *            a LogService instance
 	 */
 	public SLPHandlerImpl(final BundleContext context,
 			final LogService logService) {
@@ -115,11 +123,15 @@ public class SLPHandlerImpl implements Discovery {
 
 	}
 
+	/**
+	 * Initialization method called by Activator.
+	 */
 	public void init() {
 		log(LogService.LOG_DEBUG, "init");
-		autoPublish = System.getProperty(SLPHandlerImpl.PROP_KEY_PUBLISH_STRATEGY,
-				SLPHandlerImpl.PROP_VAL_PUBLISH_STRATEGY_PUSH).equalsIgnoreCase(
-						SLPHandlerImpl.PROP_VAL_PUBLISH_STRATEGY_PUSH);
+		// autoPublish = System
+		// .getProperty(SLPHandlerImpl.PROP_KEY_PUBLISH_STRATEGY,
+		// SLPHandlerImpl.PROP_VAL_PUBLISH_STRATEGY_PUSH)
+		// .equalsIgnoreCase(SLPHandlerImpl.PROP_VAL_PUBLISH_STRATEGY_PUSH);
 		locatorTracker.open();
 		advertiserTracker.open();
 		spTracker = new ServiceTracker(context, ServicePublication.class
@@ -134,6 +146,9 @@ public class SLPHandlerImpl implements Discovery {
 		// t.schedule(new InformListenerTask(this), 0, POLLDELAY);
 	}
 
+	/**
+	 * Shutdown method called by Activator.
+	 */
 	public void destroy() {
 		log(LogService.LOG_DEBUG, "destroy");
 		discoTracker.close();
@@ -163,9 +178,19 @@ public class SLPHandlerImpl implements Discovery {
 	}
 
 	/**
+	 * This method looks up a service given by its interface name and filter. It
+	 * does a full lookup and stores the result in the in memory cache.
 	 * 
-	 * @see org.osgi.impl.service.discovery.ProtocolHandler#findService(org.osgi.service.discovery.ServiceDescription)
+	 * @param interfaceName
+	 *            the interface name of the service to find
+	 * @param filter
+	 *            a LDAP filter expression that defines the required services as
+	 *            well
+	 * @return a collection of SErviceEndPointDescription objects, an empty
+	 *         collection if nothing has been found
+	 * 
 	 */
+	// TODO make it thread safe
 	public Collection/* <ServiceEndpointDescription> */findService(
 			final String interfaceName, final String filter) {
 		validateFilter(filter);
@@ -192,13 +217,13 @@ public class SLPHandlerImpl implements Discovery {
 			return new ArrayList();
 		}
 		inMemoryCache.clear();
-		// iterate through found services and retrieve their attributes
+		// iterate over the found services and retrieve their attributes
 		while (se.hasMoreElements()) {
 			try {
 				ServiceURL url = (ServiceURL) se.next();
 				log(LogService.LOG_DEBUG, "try to find attributes for " + url);
 				ServiceLocationEnumeration a = locator.findAttributes(url,
-						null, null); // takes some time :-(
+						null, null);
 				SLPServiceDescriptionAdapter descriptionAdapter = new SLPServiceDescriptionAdapter(
 						url);
 				while (a.hasMoreElements()) {
@@ -209,7 +234,7 @@ public class SLPHandlerImpl implements Discovery {
 							attributes.length() - 1);
 					key = attributes.substring(0, attributes.indexOf("="));
 					// if the value is not a String we cannot handle that value!
-					// This is a limitation of the API.
+					// This is a limitation of the jSLP API.
 					value = attributes.substring(attributes.indexOf("=") + 1);
 					if (value instanceof String) {
 						String val = (String) value;
@@ -231,6 +256,7 @@ public class SLPHandlerImpl implements Discovery {
 				log(LogService.LOG_ERROR, "Failed to find service", e);
 			}
 		}
+		// log result
 		if (!inMemoryCache.isEmpty()) {
 			StringBuffer buff = new StringBuffer();
 			buff.append("number of services = ");
@@ -269,7 +295,23 @@ public class SLPHandlerImpl implements Discovery {
 	}
 
 	/**
+	 * Publishes a service.
 	 * 
+	 * @param javaInterfaces
+	 *            collection of java interface names
+	 * @param javaInterfacesAndVersions
+	 *            collection of versions, where the order of the version must
+	 *            match the order of the java interfaces
+	 * @param javaInterfacesAndEndpointInterfaces
+	 *            optional collection of endpointinterface names, where the
+	 *            order must match the order of the java interfaces
+	 * @param properties
+	 *            map of properties; keys must be Strings, values are of type
+	 *            object
+	 * @param strategy
+	 *            optional string that defines the publish strategy
+	 * @return a ServiceEndpointDescription or null, if an error occurred during
+	 *         creation of the ServiceDescription
 	 */
 	protected ServiceEndpointDescription publishService(
 			Collection/* <String> */javaInterfaces,
@@ -315,7 +357,13 @@ public class SLPHandlerImpl implements Discovery {
 	}
 
 	/**
-	 * @see org.osgi.service.discovery.Discovery#unpublish(org.osgi.service.discovery.ServiceEndpointDescription)
+	 * Un publishes a given service description.
+	 * 
+	 * @param serviceDescription
+	 *            the service to unpublish
+	 * @throws IllegalArgumentException
+	 *             if serviceDescription is null or does not contain at least
+	 *             one java interface
 	 */
 	protected void unpublishService(
 			final ServiceEndpointDescription serviceDescription) {
@@ -324,9 +372,9 @@ public class SLPHandlerImpl implements Discovery {
 				+ serviceDescription.toString());
 		if (serviceDescription instanceof SLPServiceDescriptionAdapter) {
 			SLPServiceDescriptionAdapter slpSvcDescr = (SLPServiceDescriptionAdapter) serviceDescription;
-			//remove it from in memory cache
+			// remove it from in memory cache
 			inMemoryCache.remove(slpSvcDescr);
-			//unregister it via SLP
+			// unregister it via SLP
 			Advertiser advertiser = getAdvertiser();
 			if (advertiser != null) {
 				Iterator interfaceNames = slpSvcDescr.getProvidedInterfaces()
@@ -356,9 +404,9 @@ public class SLPHandlerImpl implements Discovery {
 	}
 
 	/**
-	 * Private tracker class to track the locator services.
+	 * Private tracker class to track the jSLP locator services.
 	 * 
-	 * @author kt32483
+	 * @author Thomas Kiesslich
 	 * 
 	 */
 	private class LocatorServiceTracker implements ServiceTrackerCustomizer {
@@ -389,7 +437,9 @@ public class SLPHandlerImpl implements Discovery {
 	}
 
 	/**
+	 * Private tracker class to track the jSLP advertiser services.
 	 * 
+	 * @author Thomas Kiesslich
 	 */
 	private class AdvertiserServiceTracker implements ServiceTrackerCustomizer {
 		BundleContext context = null;
@@ -448,18 +498,6 @@ public class SLPHandlerImpl implements Discovery {
 	}
 
 	/**
-	 * 
-	 * @return
-	 */
-	protected boolean isAutoPublish() {
-		return autoPublish;
-	}
-
-	protected void setAutoPublish(boolean autoPublish) {
-		this.autoPublish = autoPublish;
-	}
-
-	/**
 	 * This method tries to create a Filter object from a given String via the
 	 * {@link BundleContext#createFilter(String)}. This is used by the
 	 * findService methods.
@@ -491,7 +529,14 @@ public class SLPHandlerImpl implements Discovery {
 	}
 
 	/**
+	 * This method checks if a given ServiceEndpointDescrioption follows the
+	 * minimal requirements.
+	 * 
 	 * @param serviceDescription
+	 *            the given ServiceEndpointDescription
+	 * @throws IllegalArgumentException
+	 *             if serviceDescription is null or does not contain at least
+	 *             one java interface
 	 */
 	protected void validateServiceDescription(
 			ServiceEndpointDescription serviceDescription) {
@@ -513,8 +558,13 @@ public class SLPHandlerImpl implements Discovery {
 	}
 
 	/**
+	 * Returns a Map of all registered DiscoveredServiceTracker trackers.
 	 * 
-	 * @return
+	 * TODO should it be a copy of the map for thread safety? This could lead to
+	 * failures during usage of the copy. But we do not block the Tracker,
+	 * registrations and deregistrations of DSTs.
+	 * 
+	 * @return a Map of all registered DiscoveredServiceTracker trackers.
 	 */
 	protected Map getRegisteredServiceTracker() {
 		return discoTrackerCustomizer.getDsTrackers();
@@ -552,8 +602,10 @@ public class SLPHandlerImpl implements Discovery {
 	}
 
 	/**
+	 * Notifies all DSTTrackers about an unpublished service.
 	 * 
 	 * @param svcDescr
+	 *            the unpublished ServiceEndpointDescription
 	 */
 	protected void notifyListenersOnRemovedServiceDescription(
 			ServiceEndpointDescription svcDescr) {
@@ -682,12 +734,14 @@ public class SLPHandlerImpl implements Discovery {
 	}
 
 	/**
+	 * Validates a LDAP filter string for correctness.
 	 * 
 	 * @param filter
-	 * @return
+	 *            the LDAP filter string
+	 * @return the Filter object or throws IllegalArgumentException if the
+	 *         string is not a correct LDAP filter.
 	 */
 	protected Filter validateFilter(final String filter) {
-		// check validity of the given filter
 		Filter f = null;
 		if (filter != null) {
 			try {
@@ -702,6 +756,9 @@ public class SLPHandlerImpl implements Discovery {
 	}
 
 	/**
+	 * Returns the complete in MemoryCache. TODO should it be a copy for thread
+	 * safety?
+	 * 
 	 * @return the inMemoryCache
 	 */
 	public List getCachedServices() {

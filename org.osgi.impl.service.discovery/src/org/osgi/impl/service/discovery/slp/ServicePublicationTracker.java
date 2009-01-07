@@ -10,13 +10,12 @@ import java.util.Map;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.discovery.Discovery;
 import org.osgi.service.discovery.ServiceEndpointDescription;
 import org.osgi.service.discovery.ServicePublication;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
- * @author kt32483
+ * @author Thomas Kiesslich
  * 
  */
 public class ServicePublicationTracker implements ServiceTrackerCustomizer {
