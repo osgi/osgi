@@ -16,7 +16,7 @@
 package org.osgi.service.blueprint.reflect;
 
 import java.util.Collection;
-import java.util.Dictionary;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -75,10 +75,10 @@ public interface ServiceExportComponentMetadata extends ComponentMetadata {
 	/**
 	 * The user declared properties to be advertised with the service.
 	 * 
-	 * @return Dictionary containing the set of user declared service properties (may be
+	 * @return Map containing the set of user declared service properties (may be
 	 * empty if no properties were specified).
 	 */
-	Dictionary getServiceProperties();
+	Map getServiceProperties();
 
 	/**
 	 * The ranking value to use when advertising the service
