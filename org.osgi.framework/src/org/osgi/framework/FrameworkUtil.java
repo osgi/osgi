@@ -80,7 +80,7 @@ public class FrameworkUtil {
 
 	/**
 	 * Match a Distinguished Name (DN) chain against a pattern. DNs can be
-	 * matched using wildcards. A wildcard ('*' \u002A) replaces all possible
+	 * matched using wildcards. A wildcard ('*' \\u002A) replaces all possible
 	 * values. Due to the structure of the DN, the comparison is more
 	 * complicated than string-based wildcard matching.
 	 * <p>
@@ -89,7 +89,6 @@ public class FrameworkUtil {
 	 * RDN. The DNs in the chain and the matching pattern are canonicalized
 	 * before processing. This means, among other things, that spaces must be
 	 * ignored, except in values.
-	 * </p>
 	 * <p>
 	 * The format of a wildcard match pattern is:
 	 * 
@@ -100,13 +99,10 @@ public class FrameworkUtil {
 	 * value-match 	::= '*' | value-star
 	 * value-star 	::= &lt; value, requires escaped '*' and '-' &gt;
 	 * </pre>
-	 * 
-	 * </p>
 	 * <p>
 	 * The most simple case is a single wildcard; it must match any DN. A
 	 * wildcard can also replace the first list of RDNs of a DN. The first RDNs
 	 * are the least significant. Such lists of matched RDNs can be empty.
-	 * </p>
 	 * <p>
 	 * For example, a match pattern with a wildcard that matches all all DNs
 	 * that end with RDNs of o=ACME and c=US would look like this:
@@ -155,32 +151,28 @@ public class FrameworkUtil {
 	 * dc=acme.com, cn=Bugs Bunny, o=ACME, c=US
 	 * </pre>
 	 * 
-	 * </p>
 	 * <p>
 	 * A match pattern may contain a chain of DN match patterns. The
 	 * semicolon(';' \u0038) must be used to separate DN match patterns in a
 	 * chain. Wildcards can also be used to match against a complete DN within a
 	 * chain.
 	 * <p>
-	 * <p>
 	 * The following example matches a certificate signed by Tweety Inc. in the
 	 * US.
-	 * 
+	 * </p>
 	 * <pre>
 	 * * ; ou=S &amp; V, o=Tweety Inc., c=US
 	 * </pre>
-	 * 
+	 * <p>
 	 * The wildcard ('*') matches zero or one DN in the chain, however,
 	 * sometimes it is necessary to match a longer chain. The minus sign ('-'
-	 * \u002D) represents zero or more DNs, whereas the asterisk only represents
+	 * \\u002D) represents zero or more DNs, whereas the asterisk only represents
 	 * a single DN. For example, to match a DN where the Tweety Inc. is in the
 	 * DN chain, use the following expression:
-	 * 
+	 * </p>
 	 * <pre>
 	 * - ; *, o=Tweety Inc., c=US
 	 * </pre>
-	 * 
-	 * </p>
 	 * 
 	 * @param matchPattern The pattern against which to match the DN chain.
 	 * @param dnChain The DN chain to match against the specified pattern. Each
