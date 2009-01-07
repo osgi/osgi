@@ -12,12 +12,12 @@
 		<echo>${javadoc}</echo>
 		<javadoc doclet="org.osgi.tools.xmldoclet.XmlDoclet" docletpath="../org.osgi.tools/src" encoding="utf-8" packagenames="${javadoc}">
 			<sourcepath>
-				<dirset dir="${workspace}">
+				<dirset dir="${project.workspace}">
 					<include name="*/src" />
 				</dirset>
 			</sourcepath>
 			<classpath>
-				<dirset dir="${workspace}">
+				<dirset dir="${project.workspace}">
 					<include name="*/src" />
 				</dirset>
 				<pathelement location="${servlet}" />

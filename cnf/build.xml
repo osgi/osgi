@@ -37,9 +37,9 @@
 		<bndprepare basedir="${projectdir}" print="false" top="${release.dir}"/>
 		<!-- Now we have the same properties set as bnd 
 		-->
-
+			
 		<taskdef resource="org/osgi/tools/build/ant/taskdef.properties" classpath="${repo}/org.osgi.tools.btool/org.osgi.tools.btool-latest.jar" />
-		<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${workspace}/licensed/ant-contrib/ant-contrib-0.6.jar" />
+		<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${project.workspace}/licensed/ant-contrib/ant-contrib-0.6.jar" />
 
 		
 		<!-- mark init has been run -->
@@ -62,7 +62,7 @@
 	     Test
 	-->
 	<target name="test" depends="compile">
-		<bnd command="test" exceptions="true" basedir="${project}"/>
+		<bnd command="test" exceptions="true" basedir="${projectdir}"/>
 	</target>
 
 	<!--
@@ -115,7 +115,7 @@
 		<antcall target="-interleave">
 			<param name="x" value="before.${item.jarFile}" />
 		</antcall>
-		<bndproject basedir="${project}"/>
+		<bndproject basedir="${projectdir}"/>
 	</target>
 
 	<target name="-jar" depends="-btool,-signjar" />
@@ -151,7 +151,7 @@
 
 		<btool jar="${target}/${item.jarFile}" 
 			failok="${btool.failok}" 
-			eclipse="${project}" 
+			eclipse="${projectdir}" 
 			analyse="${btool.analyse}" 
 			showmanifest="${btool.showmanifest}" 
 			includeProperty="include.${item.jarFile}" 
@@ -171,7 +171,7 @@
 	</target>
 
 	<target name="-signjar" if="sign.${item.jarFile}">
-		<signjar jar="${target}/${item.jarFile}" signedjar="${target}/${item.jarFile}.signed" keystore="${workspace}/cnf/keystore" storepass="testtest" keypass="testtest" alias="test" />
+		<signjar jar="${target}/${item.jarFile}" signedjar="${target}/${item.jarFile}.signed" keystore="${project.workspace}/cnf/keystore" storepass="testtest" keypass="testtest" alias="test" />
 	</target>
 
 
@@ -221,6 +221,7 @@
 		<echo>project.testpath:       ${project.testpath}</echo>
 		<echo>project.dependson:      ${project.dependson}</echo>
 		<echo>project.bootclasspath:  ${project.bootclasspath}</echo>
+		<echo>project.workspace:      ${project.workspace}</echo>
 		<echo>javac:                  ${javac}</echo>
 		<echo>p:                      ${p}</echo>
 		<echo>btool.manifestVersion:  ${btool.manifestVersion}</echo>
@@ -249,10 +250,4 @@
 		<fail message="This ant script should never be directly called." />
 	</target>
 
-	<!--
-		Check out the projects that are part of the build.
-	-->
-	<target name="co" depends="init">
-		<cvs cvsRoot=":pserver:www2.osgi.org:/cvshome/build" dest="${workspace}" package="${specs},${impls},${tests}" />
-	</target>
 </project>
