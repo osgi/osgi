@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.template;
+package org.osgi.test.cases.transaction;
 
 import junit.framework.TestCase;
 

@@ -1,17 +1,20 @@
-Bundle-Version: 3.0.0.${project.build}
+Bundle-Version: 4.2.0.${project.build}
+Bundle-RequiredExecutionEnvironment = J2SE-1.5
 
 Private-Package						= ${p}.*
 
 -buildpath							= \
-	org.osgi.service.template;					version=project	, \
-	osgi;									version=4.0		, \
-	ee.minimum												, \
+	ee.j2se;								version=1.4,\
+	osgi;									version=4.2,\
 	${junit}
 
+-runsystempackages=javax.naming,javax.security.auth
 -runbundles						= \
-	org.osgi.impl.service.template; version=project
+	org.osgi.impl.bundle.transaction; version=project
+#-runbundles=org.osgi.tools.console
 
 -runproperties					= report=true
 
 Test-Cases: ${classes;extending;*TestCase}
+
 	
