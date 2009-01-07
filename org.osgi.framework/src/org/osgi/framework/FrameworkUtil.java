@@ -79,7 +79,7 @@ public class FrameworkUtil {
 	}
 
 	/**
-	 * Matches a Distinguished Name (DN) chain against a pattern. DNs can be
+	 * Match a Distinguished Name (DN) chain against a pattern. DNs can be
 	 * matched using wildcards. A wildcard ('*' \u002A) replaces all possible
 	 * values. Due to the structure of the DN, the comparison is more
 	 * complicated than string-based wildcard matching.
@@ -119,7 +119,7 @@ public class FrameworkUtil {
 	 * 
 	 * <pre>
 	 * cn = Bugs Bunny, o = ACME, c = US
-	 * ou = Carots, cn=Daffy Duck, o=ACME, c=US
+	 * ou = Carrots, cn=Daffy Duck, o=ACME, c=US
 	 * street = 9C\, Avenue St. Drézéry, o=ACME, c=US
 	 * dc=www, dc=acme, dc=com, o=ACME, c=US
 	 * o=ACME, c=US
@@ -182,15 +182,14 @@ public class FrameworkUtil {
 	 * 
 	 * </p>
 	 * 
-	 * @param dnChain
-	 *            A DN chain. Each element of the chain must be of type
-	 *            {@link String} and use the format defined in RFC 2253.
-	 * @param matchPattern
-	 *            a pattern to match the DN chain against
-	 * @return true of the pattern matches the DN chain; otherwise false is
-	 *         returned
-	 * @throws IllegalArgumentException
-	 *             if the match pattern or the DN chain is invalid.
+	 * @param matchPattern The pattern against which to match the DN chain.
+	 * @param dnChain The DN chain to match against the specified pattern. Each
+	 *        element of the chain must be of type <code>String</code> and use
+	 *        the format defined in RFC 2253.
+	 * @return <code>true</code> If the pattern matches the DN chain; otherwise
+	 *         <code>false</code> is returned.
+	 * @throws IllegalArgumentException If the specified match pattern or DN
+	 *         chain is invalid.
 	 * @since 1.5
 	 */
 	public static boolean matchDistinguishedNameChain(String matchPattern,
@@ -198,6 +197,39 @@ public class FrameworkUtil {
 		return DNChainMatching.match(matchPattern, new ArrayList(dnChain));
 	}
 
+	/**
+	 * Return a <code>BundleReference</code> for the specified bundle class.
+	 * 
+	 * @param classFromBundle A class loaded from a bundle.
+	 * @return A <code>BundleReference</code> for the specified bundle class.
+	 * @throws IllegalArgumentException If the class was not loaded by a bundle
+	 *         class loader.
+	 * @since 1.5
+	 */
+	public static BundleReference getBundleReference(final Class classFromBundle) {
+		// We use doPriv since the caller may not have permission
+		// to call getClassLoader.
+		final Bundle bundle = (Bundle) AccessController
+				.doPrivileged(new PrivilegedAction() {
+					public Object run() {
+						try {
+							return ((BundleReference) classFromBundle
+									.getClassLoader()).getBundle();
+						}
+						catch (ClassCastException e) {
+							IllegalArgumentException iae = new IllegalArgumentException();
+							iae.initCause(e);
+							throw iae;
+						}
+					}
+				});
+		// We use an anonymous class to avoid leaking the ClassLoader object.
+		return new BundleReference() {
+			public Bundle getBundle() {
+				return bundle;
+			}
+		};
+	}
 	/**
 	 * RFC 1960-based Filter. Filter objects can be created by calling the
 	 * constructor with the desired filter string. A Filter object can be called
