@@ -158,6 +158,13 @@ URL                     http://jakarta.apache.org/oro/
 License					licenses/ASL-2.0.txt
 Modifications           none
 
+org.apache.geronimo.specs.*  --------------------------------------------------------------------
+Copyright               Copyright Apache Software Foundation, All Rights Reserved
+Used                    in org.osgi.impl.bundle.transaction
+URL                     http://geronimo.apache.org/
+License					licenses/ASL-2.0.txt
+Modifications           none
+
 org.jeantessier.dependencyfinder ---------------------------------------------------------
 Copyright                Copyright (c) 2001-2008, Jean Tessier,  All rights reserved.
 Used                    for dependency finder, used in processing ees
