@@ -26,6 +26,8 @@ cmpn.specs = \
 	 org.osgi.service.component, \
 	 org.osgi.service.command, \
 	 org.osgi.service.deploymentadmin, \
+	 org.osgi.service.discovery, \
+	 org.osgi.service.distribution, \
 	 org.osgi.service.device, \
 	 org.osgi.service.event, \
 	 org.osgi.service.http, \
