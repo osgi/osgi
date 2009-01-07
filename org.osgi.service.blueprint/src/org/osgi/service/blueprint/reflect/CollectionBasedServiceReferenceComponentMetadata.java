@@ -36,7 +36,7 @@ public interface CollectionBasedServiceReferenceComponentMetadata extends
 		/**
 		 * The type of collection to be created.
 		 * 
-		 * @return Class object for the specified collection type (List, Set, Map).
+		 * @return Class object for the specified collection type (List, Set).
 		 */
 		Class getCollectionType();
 	
