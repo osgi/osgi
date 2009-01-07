@@ -1,17 +1,12 @@
--buildpath=ee.j2se;version=1.4,\
- osgi;version=4.0,\
- org.apache.geronimo.specs.geronimo-j2ee-connector_1.5_spec;version=2.0,\
- org.apache.geronimo.specs.geronimo-jta_1.1_spec;version=1.1.1,\
- org.apache.geronimo.transaction;version=2.1.1,\
- org.apache.commons-logging;version=1.0.4,\
- ${junit}
+Bundle-Description				= OSGi Transaction reference implementation by ProSyst.
+Bundle-Version					= 4.2.0.${project.build}
 
-Private-Package = org.osgi.impl.bundle.transaction,\
+Private-Package = ${p}.*,\
  org.apache.*,\
  javax.resource.*
  
-Bundle-Activator: org.osgi.impl.bundle.transaction.Activator
-
+Bundle-Activator: ${p}.Activator
+Bundle-RequiredExecutionEnvironment = J2SE-1.5
 Import-Package =\
  org.apache.avalon.framework.logger;resolution:=optional,\
  org.apache.log;resolution:=optional,\
@@ -23,15 +18,15 @@ Import-Package =\
  *
 
 Export-Package =\
-	javax.transaction;version=1.1,\
-	javax.transaction.xa;version=1.1
+	javax.transaction;version=1.1;-split-package:=first,\
+	javax.transaction.xa;version=1.1;-split-package:=first
 
-Bundle-RequiredExecutionEnvironment = J2SE-1.5
-
--runsystempackages=javax.naming,javax.security.auth
--runproperties=report=true
-
-Test-Cases=${classes;extending;*TestCase}
-
-#-runbundles=org.osgi.tools.console
+-buildpath = \
+	org.apache.geronimo.specs.geronimo-j2ee-connector_1.5_spec;version=2.0,\
+	org.apache.geronimo.specs.geronimo-jta_1.1_spec;version=1.1.1,\
+	ee.j2se;version=1.4,\
+	osgi;version=4.2,\
+	org.apache.geronimo.transaction;version=2.1.1,\
+	org.apache.commons-logging;version=1.0.4,\
+	${junit}
 
