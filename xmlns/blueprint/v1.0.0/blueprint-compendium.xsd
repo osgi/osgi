@@ -34,7 +34,7 @@
     	
     <xsd:complexType name="TpropertyPlaceholder">
       <xsd:complexContent>
-        <xsd:extension base="osgi:identifiedType">
+        <xsd:extension base="osgi:TidentifiedType">
           <xsd:sequence minOccurs="0" maxOccurs="1">
              <!-- nested properties declaration -->
              <xsd:element name="default-properties" type="osgi:propsType" minOccurs="0" maxOccurs="1"/>
@@ -71,7 +71,7 @@
  	
     <xsd:complexType name="TmanagedServiceFactory">
     	<xsd:complexContent>
-    		<xsd:extension base="osgi:identifiedType">
+    		<xsd:extension base="osgi:TidentifiedType">
     			<xsd:sequence>
 	                <xsd:group ref="osgi:serviceElements"/>
                     <xsd:element name="managed-component" type="TmanagedComponent" minOccurs="1" maxOccurs="1"/>

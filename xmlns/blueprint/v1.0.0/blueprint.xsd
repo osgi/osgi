@@ -296,21 +296,12 @@
             <xsd:enumeration value="false"/>
         </xsd:restriction>
     </xsd:simpleType>
-   
-     <!-- Elements from Spring Dynamic Modules project -->
     
     <xsd:attributeGroup name="defaults">
       <xsd:attribute name="default-timeout" type="xsd:long" default="300000"/>
       <xsd:attribute name="default-availability" type="Tavailability" default="mandatory"/>
     </xsd:attributeGroup>
     
-    <xsd:simpleType name="TdefaultCardinalityOptions">
-        <xsd:restriction base="xsd:string">
-            <xsd:enumeration value="1..X"/>           
-            <xsd:enumeration value="0..X"/>
-        </xsd:restriction>
-    </xsd:simpleType>
-	
     <!-- reference -->
     <xsd:element name="reference" type="TsingleReference"/>
 
