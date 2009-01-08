@@ -11,12 +11,13 @@ ees 						= \
  
 core.specs = org.osgi.framework, \
  org.osgi.service.condpermadmin, \
+ org.osgi.service.framework, \
  org.osgi.service.packageadmin, \
  org.osgi.service.permissionadmin, \
  org.osgi.service.startlevel, \
  org.osgi.service.url
 
-core.packages = ${replace;$(core.specs);^.*$;$0.*}, org.osgi.service.framework.*
+core.packages = ${replace;$(core.specs);^.*$;$0.*}
 
 cmpn.specs = \
 	 org.osgi.application, \
