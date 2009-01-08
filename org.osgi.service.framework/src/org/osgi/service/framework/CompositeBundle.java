@@ -100,7 +100,7 @@ import org.osgi.framework.launch.Framework;
  * 
  * @see SurrogateBundle
  * @ThreadSafe
- * @version $Revision: 5897 $
+ * @version $Revision$
  */
 public interface CompositeBundle extends Bundle {
 	/**

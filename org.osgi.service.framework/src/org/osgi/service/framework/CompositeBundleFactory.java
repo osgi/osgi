@@ -29,7 +29,7 @@ import org.osgi.framework.launch.Framework;
  * with the Framework.
  * 
  * @ThreadSafe
- * @version $Revision: 5897 $
+ * @version $Revision$
  */
 // TODO javadoc needs review
 public interface CompositeBundleFactory {
