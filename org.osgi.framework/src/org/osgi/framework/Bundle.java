@@ -1179,4 +1179,18 @@ public interface Bundle {
 	 */
 	public Map/* <X509Certificate, List<X509Certificate>> */getSignerCertificates(
 			int signersType);
+	
+	/**
+	 * Returns the version of this bundle as specified by its
+	 * <code>Bundle-Version</code> manifest header. If this bundle does not have a
+	 * specified version then {@link Version#emptyVersion} is returned.
+	 * 
+	 * <p>
+	 * This method must continue to return this bundle's version while
+	 * this bundle is in the <code>UNINSTALLED</code> state.
+	 * 
+	 * @return The version of this bundle.
+	 * @since 1.5
+	 */
+	public Version getVersion();
 }

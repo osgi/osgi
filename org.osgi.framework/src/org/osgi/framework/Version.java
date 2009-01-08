@@ -48,8 +48,7 @@ public class Version implements Comparable {
 	private static final String	SEPARATOR		= ".";					//$NON-NLS-1$
 
 	/**
-	 * The empty version "0.0.0". Equivalent to calling
-	 * <code>new Version(0,0,0)</code>.
+	 * The empty version "0.0.0".
 	 */
 	public static final Version	emptyVersion	= new Version(0, 0, 0);
 
