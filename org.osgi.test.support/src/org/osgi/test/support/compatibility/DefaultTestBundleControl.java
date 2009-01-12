@@ -10,59 +10,73 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.TestCase;
-
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.test.support.OSGiTestCase;
 
 /**
  * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
  *
  */
-public abstract class DefaultTestBundleControl extends TestCase {
-	
-	/* @GuardedBy("this") */
-	private BundleContext	context;
+public abstract class DefaultTestBundleControl extends OSGiTestCase {
 	
 	private final Map		serviceRegistry	= new HashMap();
 	private final Map		fetchedServices	= new HashMap();
-	
-    String webServer = "/";
-
-	/**
-	 * THis method is called by the JUnit runner for OSGi, and gives us a Bundle
-	 * Context.
-	 */
-	public synchronized void setBundleContext(BundleContext context) {
-		this.context = context;
-		URL base = context.getBundle().getEntry("/");
-		if (base != null) {
-			webServer = base.toString();
-		}
-	}
-
-	/**
-	 * Returns the current Bundle Context
-	 */
-
-	public synchronized BundleContext getContext() {
-		if (context == null)
-			fail("No valid Bundle context said, are you running in OSGi Test mode?");
-
-		return context;
-	}
+	private volatile String	webServer;
 
 	/**
 	 * This returned a web server but we will just now, it is mostly used in
 	 * installBundle and there we get the bundle from our resources.
 	 */
 	public String getWebServer() {
-		return webServer;
+		String w = webServer;
+		if (w == null) {
+			URL base = getContext().getBundle().getEntry("/");
+			w = (base == null) ? "/" : base.toExternalForm();
+			webServer = w;
+		}
+		return w;
+	}
+
+	/**
+	 * This method is called before a test is executed.
+	 * 
+	 * @throws Exception
+	 * @see junit.framework.TestCase#setUp()
+	 */
+	protected void setUp() throws Exception {
+		setState(); // call old version of setUp if it has been implemented.
+	}
+
+	/**
+	 * This method is called after a test is executed.
+	 * 
+	 * @throws Exception
+	 * @see junit.framework.TestCase#tearDown()
+	 */
+	protected void tearDown() throws Exception {
+		clearState(); // call old version of tearDown if it has been
+						// implemented.
+	}
+
+	/**
+	 * Old version of setUp.
+	 * 
+	 * @throws Exception
+	 */
+	protected void setState() throws Exception {
+	}
+
+	/**
+	 * Old version of tearDown.
+	 * 
+	 * @throws Exception
+	 */
+	protected void clearState() throws Exception {
 	}
 	
 	/**
@@ -78,7 +92,7 @@ public abstract class DefaultTestBundleControl extends TestCase {
 	public void failException(String message, Class expectedExceptionClass) {
         fail(message + " expected:[" + expectedExceptionClass.getName() + "] and got nothing");
 	}
-	
+
 	public void pass(String passMessage) {
 		System.out.println(passMessage);
 	}
@@ -270,12 +284,13 @@ public abstract class DefaultTestBundleControl extends TestCase {
     }
     
     public boolean serviceAvailable(Class clazz) {
-    	return context.getServiceReference(clazz.getName()) != null;
+    	return getContext().getServiceReference(clazz.getName()) != null;
     }
 
     public void registerService(String clazz, Object service,
 			Dictionary properties) throws Exception {
-    	ServiceRegistration sr = context.registerService(clazz, service, properties);
+    	ServiceRegistration sr = getContext().registerService(clazz, service,
+				properties);
     	synchronized (serviceRegistry) {
 			serviceRegistry.put(service, sr);
 		}
@@ -452,7 +467,7 @@ public abstract class DefaultTestBundleControl extends TestCase {
             URL    url = new URL(bundleName);
             InputStream in = url.openStream();
  
-            Bundle        b = context.installBundle(bundleName, in);
+            Bundle b = getContext().installBundle(bundleName, in);
             if (start) {
             	b.start();
             }
