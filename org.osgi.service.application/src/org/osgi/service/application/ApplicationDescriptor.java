@@ -434,7 +434,7 @@ public abstract class ApplicationDescriptor {
      *                 if the scheduling failed due to some internal reason
      *                 (e.g. persistent storage error).
      *               <li> {@link ApplicationException#APPLICATION_INVALID_STARTUP_ARGUMENT}
-     *                 if t a specified startup argument doesn't satisfy the 
+     *                 if the specified startup argument doesn't satisfy the 
 	 *                 type or value constraints of startup arguments.
      *              </ul>
 	 * @throws SecurityException
