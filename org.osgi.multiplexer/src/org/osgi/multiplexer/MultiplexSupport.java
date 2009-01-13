@@ -1,4 +1,4 @@
-package org.osgi.framework.multiplexer;
+package org.osgi.multiplexer;
 
 /**
  * This is a simple API intended to allow multiple frameworks in the same JVM to
