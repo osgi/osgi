@@ -42,6 +42,8 @@ public class PermissionPermissionsControl extends DefaultTestBundleControl {
 
 	public void testSecurity() throws Exception {
 		try {
+			System.out.println(System.getSecurityManager());
+			assertNotNull(System.getSecurityManager());
 			permissionAdmin.setDefaultPermissions(null);
 			fail("Were able to set default permissions without "
 					+ "admin permission");

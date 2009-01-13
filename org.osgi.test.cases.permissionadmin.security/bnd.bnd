@@ -2,7 +2,7 @@ Bundle-Description		: Permission Admin Test
 Private-Package			: ${p}.tbc, org.osgi.test.support.*
 Include-Resource		: {META-INF/permissions.perm=tbc.perm}
 
--sign					: test; password:=testtest
+#-sign					: test; password:=testtest
 
 -buildpath				: \
 	osgi,			\
@@ -10,5 +10,4 @@ Include-Resource		: {META-INF/permissions.perm=tbc.perm}
 	ee.minimum, 	\
 	org.osgi.test.support; 		version=project
 
--runproperties			:	org.osgi.framework.security=osgi
-
+-runproperties			: org.osgi.framework.security=osgi
