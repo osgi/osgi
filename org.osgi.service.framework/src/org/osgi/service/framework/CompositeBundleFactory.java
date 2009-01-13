@@ -100,6 +100,10 @@ public interface CompositeBundleFactory {
 	 * bundle manifest version. If this header is not specified then the default
 	 * is to use version 2. A <code>BundleException</code> is thrown if this header is
 	 * specified and the version is less than 2.</li>
+	 * <li>{@link Constants#REQUIRE_BUNDLE Require-Bundle} a bundle from the parent
+	 * which is required by the child. Support for this header is experimental: a 
+	 * <code>BundleException</code> should be thrown if the header is present and
+	 * the framework doesn't support it.
 	 * </ul>
 	 * </p><p>
 	 * The composite manifest map must not contain the following headers. If a
@@ -113,7 +117,6 @@ public interface CompositeBundleFactory {
 	 * <li> {@link Constants#BUNDLE_NATIVECODE Bundle-NativeCode}</li>
 	 * <li> {@link Constants#FRAGMENT_HOST Fragment-Host}</li>
 	 * <li> {@link Constants#DYNAMICIMPORT_PACKAGE DynamicImport-Package}</li>
-	 * <li> {@link Constants#REQUIRE_BUNDLE Require-Bundle}</li>
 	 * </ul>
 	 * </li>
 	 * <li>A child framework is created which uses a storage area associated with

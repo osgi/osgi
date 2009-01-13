@@ -120,9 +120,18 @@ public interface CompositeBundle extends Bundle {
 
 	/**
 	 * Updates this composite bundle with the specified manifest.
+	 * <p>
+	 * Similar to normal bundle updates, the packages exported by a composite or
+	 * surrogate bundle can not change as a result of calling update: the
+	 * previous package exports must be available to other consuming bundles (in
+	 * either the parent or child framework) until the
+	 * PackageAdmin.refreshPackages method has been called to refresh the
+	 * composite, or the parent Framework is re-launched.
 	 * 
-	 * @param compositeManifest the new composite manifest.
-	 * @throws BundleException If the update fails.
+	 * @param compositeManifest
+	 *            the new composite manifest.
+	 * @throws BundleException
+	 *             If the update fails.
 	 * @see CompositeBundleFactory#installCompositeBundle(Map, String, Map)
 	 */
 	void update(Map /* <String, String> */compositeManifest)
