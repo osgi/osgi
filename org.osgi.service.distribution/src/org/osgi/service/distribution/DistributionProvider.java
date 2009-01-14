@@ -83,26 +83,24 @@ public interface DistributionProvider {
      */
     ServiceReference[] getPublishedServices();
 
-    /**
-     * Provides access to extra properties set by the DistributionProvider on
-     * endpoints, as they will appear on client side proxies given an exposed
-     * ServiceReference. 
-     * These properties are not always available on the server-side
-     * ServiceReference of the published
-     * service but will be on the remote client side proxy to this service.
-     * This API provides access to these extra properties from the publishing
-     * side.
-     * E.g. a service is exposed remotely, the distribution software is configured
-     * to add transactionality to the remote service. Because of this, on the 
-     * client-side proxy the property osgi.intents=”transactionality” is set. 
-     * However, these intents are *not* always set on the original
-     * ServiceRegistration on the server-side since on the server side the service
-     * object is a local pojo which doesn’t provide transactionality by itself.
-     * This QoS is added by the distribution.
-     * This API provides access to these extra properties from the server-side.
-     * 
-     * @param sr A ServiceReference of a published service.
-     * @return The map of extra properties.
-     */
+	/**
+	 * Provides access to extra properties set by the DistributionProvider on
+	 * endpoints, as they will appear on client side proxies given an exposed
+	 * ServiceReference. These properties are not always available on the
+	 * server-side ServiceReference of the published service but will be on the
+	 * remote client side proxy to this service. This API provides access to
+	 * these extra properties from the publishing side. E.g. a service is
+	 * exposed remotely, the distribution software is configured to add
+	 * transactionality to the remote service. Because of this, on the
+	 * client-side proxy the property osgi.intents="transactionality" is set.
+	 * However, these intents are *not* always set on the original
+	 * ServiceRegistration on the server-side since on the server side the
+	 * service object is a local pojo which doesn't provide transactionality by
+	 * itself. This QoS is added by the distribution. This API provides access
+	 * to these extra properties from the server-side.
+	 * 
+	 * @param sr A ServiceReference of a published service.
+	 * @return The map of extra properties.
+	 */
     Map getPublicationProperties(ServiceReference sr);
 }
