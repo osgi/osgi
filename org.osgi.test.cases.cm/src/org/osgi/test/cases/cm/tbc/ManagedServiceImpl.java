@@ -27,9 +27,10 @@
  */
 package org.osgi.test.cases.cm.tbc;
 
-import java.util.*;
-import org.osgi.service.cm.*;
-import org.osgi.test.cases.util.*;
+import java.util.Dictionary;
+
+import org.osgi.service.cm.ManagedService;
+import org.osgi.test.support.compatibility.Semaphore;
 
 public class ManagedServiceImpl implements ManagedService {
 	Dictionary	properties;

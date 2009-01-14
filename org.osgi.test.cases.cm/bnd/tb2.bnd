@@ -1,15 +1,15 @@
-Manifest-Version: 1.0
 Bundle-SymbolicName: ${p}.tb2
 Bundle-Name: test.cases.cm.tb2
 Bundle-Description: Configuration Management Test R4 - event from different bundles test.
-Bundle-Version: 1.0
-Bundle-Activator: org.osgi.test.cases.cm.tb2.Activator
+Bundle-Version: 4.2.0.${project.build}
+Bundle-Activator: ${p}.tb2.Activator
 Bundle-Vendor: IBM
 Bundle-DocURL: http://www.osgi.org/
 Bundle-ContactAddress: info@mail.osgi.org
 Bundle-Category: osgi,test
 Bundle-Copyright: ${copyright}
-Comment: Created by $(DELIVER) at $(DATE)
-$(IMPORT-PACKAGE)
-$(EXPORT-PACKAGE)
+
+Private-Package						= \
+	${p}.tb2.*, \
+	${p}.common
 

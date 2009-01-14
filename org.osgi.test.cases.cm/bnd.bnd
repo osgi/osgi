@@ -1,0 +1,34 @@
+Bundle-SymbolicName: ${p}.tbc
+Bundle-Name: test.cases.cm.tbc
+Bundle-Version						: 4.2.0.${project.build}
+Bundle-Description: Configuration Management Test R4
+Bundle-Vendor: OSGi Alliance
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+
+Private-Package						= \
+	org.osgi.test.support.*, \
+	${p}.tbc.*, \
+	${p}.common
+
+Include-Resource					= \
+	tb1.jar, \
+	tb2.jar
+	
+Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+
+-buildpath							= \
+    org.osgi.test.support;                  version=latest , \
+	osgi;									version=4.0.1	, \
+	ee.minimum; version=1.2											, \
+	${junit}
+
+-runbundles							= \
+	org.osgi.impl.service.cm; version=latest, \
+	osgi; version=latest
+
+-runproperties = report=true
+
+
+

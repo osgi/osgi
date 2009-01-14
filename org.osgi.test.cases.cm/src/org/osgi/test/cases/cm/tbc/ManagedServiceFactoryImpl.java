@@ -27,9 +27,12 @@
  */
 package org.osgi.test.cases.cm.tbc;
 
-import java.util.*;
-import org.osgi.service.cm.*;
-import org.osgi.test.cases.util.*;
+import java.util.Dictionary;
+import java.util.Hashtable;
+
+import org.osgi.service.cm.ConfigurationException;
+import org.osgi.service.cm.ManagedServiceFactory;
+import org.osgi.test.support.compatibility.Semaphore;
 
 public class ManagedServiceFactoryImpl implements ManagedServiceFactory {
 	String		name;

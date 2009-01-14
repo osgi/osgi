@@ -28,11 +28,15 @@
 package org.osgi.test.cases.cm.tbc;
 
 // import java.math.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Vector;
+import java.util.List;
 import java.util.Locale;
+
+import junit.framework.AssertionFailedError;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
@@ -47,9 +51,8 @@ import org.osgi.service.cm.ManagedService;
 import org.osgi.service.cm.ManagedServiceFactory;
 import org.osgi.test.cases.cm.common.ConfigurationListenerImpl;
 import org.osgi.test.cases.cm.common.Synchronizer;
-import org.osgi.test.cases.util.AssertionFailedError;
-import org.osgi.test.cases.util.DefaultTestBundleControl;
-import org.osgi.test.cases.util.Semaphore;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.compatibility.Semaphore;
 
 public class CMControl extends DefaultTestBundleControl {
 	private ConfigurationAdmin	cm;
@@ -60,14 +63,9 @@ public class CMControl extends DefaultTestBundleControl {
 
 	// public static final String SERVICE_BUNDLE_LOCATION =
 	// "service.bundleLocation";
-	/*
-	 * public String[] getMethods() { return new String[] { "testStuff" }; }
-	 */
-	public boolean checkPrerequisites() {
-		return serviceAvailable(ConfigurationAdmin.class);
-	}
 
-	public void prepare() throws Exception {
+	protected void setUp() throws Exception {
+		assertTrue(serviceAvailable(ConfigurationAdmin.class));
 		cm = (ConfigurationAdmin) getService(ConfigurationAdmin.class);
 		// populate the created configurations so that
 		// listConfigurations can return these configurations
@@ -77,26 +75,13 @@ public class CMControl extends DefaultTestBundleControl {
 		cleanCM();
 	}
 
-	public void unprepare() throws Exception {
-		cleanCM();
-	}
-
-	public void setState() throws Exception {
-		cleanCM();
-	}
-
-	public void clearState() throws Exception {
+	protected void tearDown() throws Exception {
 		cleanCM();
 		unregisterAllServices();
+		ungetService(cm);
 	}
 
 	/** *** Test methods **** */
-	public void __testConfiguration() throws Exception {
-		String pid = getPackage();
-		Configuration conf = null;
-		/* Get a brand new configuration */
-		conf = cm.getConfiguration(pid);
-	}
 
 	/**
 	 * Test that the methods throws IllegalStateException when operating on a
@@ -271,11 +256,11 @@ public class CMControl extends DefaultTestBundleControl {
 		assertTrue("Equal configurations", equals(conf, conf2));
 		/* Try to update with illegal configuration types */
 		Hashtable illegalprops = new Hashtable();
-		Vector v = new Vector();
-		v.addElement("a string");
-		v.addElement(Locale.getDefault());
+		Collection v = new ArrayList();
+		v.add("a string");
+		v.add(Locale.getDefault());
 		illegalprops.put("somekey", "somevalue");
-		illegalprops.put("antoherkey", v);
+		illegalprops.put("anotherkey", v);
 		String message = "updating with illegal properties";
 		try {
 			conf2.update(illegalprops);
@@ -299,7 +284,7 @@ public class CMControl extends DefaultTestBundleControl {
 	 * @spec Configuration.getPid()
 	 * @throws Exception
 	 */
-	public void _testEquals() throws Exception {
+	public void testEquals() throws Exception {
 		Configuration conf1 = cm.getConfiguration("pidA");
 		Configuration conf2 = cm.getConfiguration("pidA");
 		assertEquals("Equal configurations", conf1, conf2);
@@ -432,8 +417,8 @@ public class CMControl extends DefaultTestBundleControl {
 		props.put("CharacterKey", new Character('N'));
 		props.put("BooleanKey", new Boolean(true));
 
-		Vector v = new Vector();
-		v.addElement("stringvalue");
+		Collection v = new ArrayList();
+		v.add("stringvalue");
 		// ### is now invalid ....
 		// v.addElement(new Integer(12));
 		// v.addElement(new Long(-29));
@@ -447,7 +432,7 @@ public class CMControl extends DefaultTestBundleControl {
 		// v.addElement(new Boolean(true));
 		// v.addElement(new String[] {"firststring", "secondstring"});
 		// ### end invalid
-		props.put("vectorkey", v);
+		props.put("collectionkey", v);
 		props.put("StringArray", new String[] {"string1", "string2"});
 		props.put("IntegerArray",
 				new Integer[] {new Integer(1), new Integer(2)});
@@ -474,11 +459,10 @@ public class CMControl extends DefaultTestBundleControl {
 		props.put("BooleanArray", new Boolean[] {new Boolean(true),
 				new Boolean(false)});
 
-		Vector v1 = new Vector();
-		v1.addElement(new Vector());
-		v1.addElement("Anystring");
-
 		// ### invalid
+		// Vector v1 = new Vector();
+		// v1.addElement(new Vector());
+		// v1.addElement("Anystring");
 		// props.put("VectorArray", new Vector[] {v1, new Vector()});
 
 		props.put("CAPITALkey", "CAPITALvalue");
@@ -511,14 +495,14 @@ public class CMControl extends DefaultTestBundleControl {
 			/* Check that we got the correct exception */
 			assertException(message, IllegalArgumentException.class, e);
 		}
-		/* TODO: Add more illegal types (inside vectors etc) */
+		/* TODO: Add more illegal types (inside collections etc) */
 	}
 
 	public void testUpdatedProperties() throws Exception {
 		/* Put all legal types in the properties and update */
 		/* Get the properties again */
 		/* Check if the properties are equals */
-		/* Check if ths properties have preserved the case */
+		/* Check if the properties have preserved the case */
 		/* Check if the properties are case independent */
 	}
 
@@ -572,9 +556,9 @@ public class CMControl extends DefaultTestBundleControl {
 			String location) throws Exception {
 		final int NUMBER_OF_CONFIGS = 3;
 		String factorypid = "somefactorypid";
-		Vector pids = new Vector();
-		Vector configs = new Vector();
-		pids.addElement(factorypid);
+		List pids = new ArrayList();
+		List configs = new ArrayList();
+		pids.add(factorypid);
 		for (int i = 0; i < NUMBER_OF_CONFIGS; i++) {
 			Configuration conf = null;
 			if (withLocation) {
@@ -583,7 +567,7 @@ public class CMControl extends DefaultTestBundleControl {
 			else {
 				conf = cm.createFactoryConfiguration(factorypid);
 			}
-			configs.addElement(conf);
+			configs.add(conf);
 			trace("pid: " + conf.getPid());
 			assertTrue("Unique pid", !pids.contains(conf.getPid()));
 			assertEquals("Correct factory pid", factorypid, conf
@@ -591,10 +575,10 @@ public class CMControl extends DefaultTestBundleControl {
 			assertNull("No properties", conf.getProperties());
 			assertEquals("Correct location", location, conf.getBundleLocation());
 			/* Add the pid to the list */
-			pids.addElement(conf.getPid());
+			pids.add(conf.getPid());
 		}
 		for (int i = 0; i < configs.size(); i++) {
-			Configuration conf = (Configuration)configs.elementAt(i);
+			Configuration conf = (Configuration) configs.get(i);
 			conf.delete();
 		}
 	}
@@ -877,7 +861,7 @@ public class CMControl extends DefaultTestBundleControl {
 			tb.start();
 			failException(message, BundleException.class);
 		}
-		catch (Throwable e) {
+		catch (BundleException e) {
 			/* Check that we got the correct exception */
 			assertException(message, BundleException.class, e);
 		}
@@ -1084,15 +1068,6 @@ public class CMControl extends DefaultTestBundleControl {
 		Hashtable props = new Hashtable();
 		props.put(Constants.SERVICE_PID, pid);
 		/* TODO: Testa registered service.pid with other String */
-		registerService(ManagedService.class.getName(), ms, props);
-		return ms;
-	}
-
-	private ManagedServiceImpl createManagedService(Integer pid, Semaphore s)
-			throws Exception {
-		ManagedServiceImpl ms = new ManagedServiceImpl(s);
-		Hashtable props = new Hashtable();
-		props.put(Constants.SERVICE_PID, pid);
 		registerService(ManagedService.class.getName(), ms, props);
 		return ms;
 	}
