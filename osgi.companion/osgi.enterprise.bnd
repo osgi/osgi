@@ -1,0 +1,14 @@
+Bundle-Description				: \
+	OSGi Service Platform Release ${version;=;${enterprise.release.version}} version ${enterprise.release.version}, \
+	Enterprise Interfaces and Classes for use in compiling bundles.
+
+Bundle-Version					: ${enterprise.release.version}
+DynamicImport-Package			: *
+Import-Package					: *; resolution:=optional
+
+Export-Package 					: ${enterprise.packages}
+
+Include-Resource 				: legal/about.html, \
+  								  legal/LICENSE, \
+  								  xmlns/blueprint=../xmlns/blueprint
+  								  

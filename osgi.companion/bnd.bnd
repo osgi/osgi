@@ -8,6 +8,8 @@ bin.includes				= \
 	osgi.core.jar, \
 	osgi.cmpn.jar, \
 	osgi.mobile.jar, \
+	osgi.enterprise.jar, \
+	osgi.proposed.jar, \
 	osgi.min.jar, \
 	ee.minimum.jar, \
 	ee.foundation.jar, \
@@ -33,5 +35,7 @@ bin.includes				= \
 japi.osgi.core 				= ${replace;$(core.specs);.+;+$0}
 japi.osgi.cmpn 				= ${replace;$(cmpn.specs);.+;+$0}
 japi.osgi.mobile 			= ${replace;$(mobile.specs);.+;+$0}
+japi.osgi.enterprise		= ${replace;$(enterprise.specs);.+;+$0}
+japi.osgi.proposed			= ${replace;$(proposed.specs);.+;+$0}
 
 -include : layout.bnd

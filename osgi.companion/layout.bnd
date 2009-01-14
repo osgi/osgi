@@ -1,8 +1,9 @@
 # provides the assignment of specifications to the different
 # verticals like core, mobile, enterprise, etc
 
-specs 						= ${uniq; ${core.specs},       ${cmpn.specs},       ${mobile.specs}}
-spec.packages		 		= ${uniq;${core.packages}, ${cmpn.packages}, ${mobile.packages}}
+specs 						= ${uniq; ${core.specs}, ${cmpn.specs}, ${mobile.specs}, ${enterprise.specs}, ${proposed.specs}}
+spec.packages		 		= ${uniq; ${core.packages}, ${cmpn.packages}, ${mobile.packages}, ${enterprise.packages}, ${proposed.packages}}
+javadoc.packages		 	= ${uniq; ${core.packages}, ${cmpn.packages}, ${mobile.packages}}
 
 
 ees 						= \
@@ -53,6 +54,13 @@ cmpn.specs = \
 
 cmpn.packages = ${replace;$(cmpn.specs);^.*$;$0.*}
 
+enterprise.specs = \
+	 org.osgi.service.blueprint, \
+	 org.osgi.service.discovery, \
+	 org.osgi.service.distribution
+
+enterprise.packages = ${replace;$(enterprise.specs);^.*$;$0.*}
+
 mobile.specs = \
 	 info.dmtree, \
 	 org.osgi.application, \
@@ -74,3 +82,8 @@ mobile.specs = \
 
 mobile.packages = ${replace;$(mobile.specs);^.*$;$0.*}
  
+proposed.specs = \
+	 org.osgi.multiplexer, \
+	 org.osgi.service.framework
+
+proposed.packages = ${replace;$(proposed.specs);^.*$;$0.*}

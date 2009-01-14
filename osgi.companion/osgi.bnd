@@ -12,4 +12,5 @@ Include-Resource 				: legal/about.html, \
   								  xmlns/metatype=../xmlns/metatype, \
   								  xmlns/scr=../xmlns/scr, \
   								  xmlns/app=../xmlns/app, \
-  								  xmlns/dd=../xmlns/dd
+  								  xmlns/dd=../xmlns/dd, \
+  								  xmlns/blueprint=../xmlns/blueprint

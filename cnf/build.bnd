@@ -69,6 +69,8 @@ osgi.release.version		= ${osgi.version}.${project.build}
 core.release.version		= ${osgi.release.version}
 cmpn.release.version		= ${osgi.release.version}
 mobile.release.version		= ${osgi.release.version}
+enterprise.release.version	= ${osgi.release.version}
+proposed.release.version	= ${osgi.release.version}
 
 # Documentation
 Bundle-Copyright       	= ${copyright}

@@ -1,0 +1,12 @@
+Bundle-Description				: \
+	OSGi Service Platform Release ${version;=;${proposed.release.version}} version ${proposed.release.version}, \
+	Proposed Interfaces and Classes for use in compiling bundles.
+
+Bundle-Version					: ${proposed.release.version}
+DynamicImport-Package			: *
+Import-Package					: *; resolution:=optional
+
+Export-Package 					: ${proposed.packages}
+
+Include-Resource 				: legal/about.html, \
+  								  legal/LICENSE
