@@ -14,5 +14,4 @@ Private-Package						= \
 	${p}.common
 
 Include-Resource					= \
-	META-INF/permission.perm=tb1.perm
-
+	{META-INF/permissions.perm=tb1.perm}

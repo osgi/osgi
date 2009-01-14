@@ -658,25 +658,30 @@ public class CMControl extends DefaultTestBundleControl {
 		props.put("key", "value1");
 		trace("Create and register a new ConfigurationListener");
 		cl = createConfigurationListener(synchronizer);
-		conf.update(props);
-		trace("Wait until the ConfigurationListener has gotten the update");
 		try {
+			conf.update(props);
+			trace("Wait until the ConfigurationListener has gotten the update");
 			assertTrue("Update done", synchronizer
 					.waitForSignal(SIGNAL_WAITING_TIME));
 			assertEquals("Config event pid match", pid, cl.getPid());
 			assertEquals("Config event type match",
 					ConfigurationEvent.CM_UPDATED, cl.getType());
 			assertNull("Config Factory event pid null", cl.getFactoryPid());
+			assertNotNull("Config event reference null", cl.getReference());
 			ConfigurationAdmin admin = (ConfigurationAdmin) getContext()
 					.getService(cl.getReference());
-			assertNotNull("Configuration Admin from event", admin);
-			Configuration config = admin.getConfiguration(cl.getPid());
-			assertNotNull("Configuration from event", config);
-			assertEqualProperties("Properties match", conf.getProperties(),
-					config.getProperties());
+			try {
+				assertNotNull("Configuration Admin from event", admin);
+				Configuration config = admin.getConfiguration(cl.getPid());
+				assertNotNull("Configuration from event", config);
+				assertEqualProperties("Properties match", conf.getProperties(),
+						config.getProperties());
+			}
+			finally {
+				getContext().ungetService(cl.getReference());
+			}
 		}
 		finally {
-			getContext().ungetService(cl.getReference());
 			removeConfigurationListener(cl);
 		}
 	}
@@ -719,16 +724,22 @@ public class CMControl extends DefaultTestBundleControl {
 					ConfigurationEvent.CM_UPDATED, cl.getType());
 			assertEquals("Config Factory event pid match", factorypid, cl
 					.getFactoryPid());
+			assertNotNull("Config Factory event reference null", cl
+					.getReference());
 			ConfigurationAdmin admin = (ConfigurationAdmin) getContext()
 					.getService(cl.getReference());
-			assertNotNull("Configuration Admin from event", admin);
-			Configuration config = admin.getConfiguration(cl.getPid());
-			assertNotNull("Configuration from event", config);
-			assertEqualProperties("Properties match", conf.getProperties(),
-					config.getProperties());
+			try {
+				assertNotNull("Configuration Admin from event", admin);
+				Configuration config = admin.getConfiguration(cl.getPid());
+				assertNotNull("Configuration from event", config);
+				assertEqualProperties("Properties match", conf.getProperties(),
+						config.getProperties());
+			}
+			finally {
+				getContext().ungetService(cl.getReference());
+			}
 		}
 		finally {
-			getContext().ungetService(cl.getReference());
 			removeConfigurationListener(cl);
 		}
 	}
@@ -778,14 +789,21 @@ public class CMControl extends DefaultTestBundleControl {
 			assertEquals("Config event type match",
 					ConfigurationEvent.CM_DELETED, cl.getType(2));
 			assertNull("Config Factory event pid null", cl.getFactoryPid(2));
-			ConfigurationAdmin admin = (ConfigurationAdmin) getContext()
-					.getService(cl.getReference(2));
-			assertNotNull("Configuration Admin from event", admin);
-			Configuration[] configs = admin.listConfigurations("(service.pid=" + pid + ")");
-			assertNull("The configuration exists in CM!", configs);
+			assertNotNull("Config Factory event reference null", cl
+					.getReference(2));
+			try {
+				ConfigurationAdmin admin = (ConfigurationAdmin) getContext()
+						.getService(cl.getReference(2));
+				assertNotNull("Configuration Admin from event", admin);
+				Configuration[] configs = admin
+						.listConfigurations("(service.pid=" + pid + ")");
+				assertNull("The configuration exists in CM!", configs);
+			}
+			finally {
+				getContext().ungetService(cl.getReference(2));
+			}
 		}
 		finally {
-			getContext().ungetService(cl.getReference());
 			removeConfigurationListener(cl);
 		}
 	}
@@ -830,14 +848,22 @@ public class CMControl extends DefaultTestBundleControl {
 					ConfigurationEvent.CM_DELETED, cl.getType());
 			assertEquals("Config Factory event pid match", factorypid, cl
 					.getFactoryPid());
+			assertNotNull("Config Factory event reference null", cl
+					.getReference());
 			ConfigurationAdmin admin = (ConfigurationAdmin) getContext()
 					.getService(cl.getReference());
-			assertNotNull("Configuration Admin from event", admin);
-			Configuration[] configs = admin.listConfigurations("(service.factoryPid=" + factorypid + ")");
-			assertNull("The configuration exists in CM!", configs);
+			try {
+				assertNotNull("Configuration Admin from event", admin);
+				Configuration[] configs = admin
+						.listConfigurations("(service.factoryPid=" + factorypid
+								+ ")");
+				assertNull("The configuration exists in CM!", configs);
+			}
+			finally {
+				getContext().ungetService(cl.getReference());
+			}
 		}
 		finally {
-			getContext().ungetService(cl.getReference());
 			removeConfigurationListener(cl);
 		}
 	}

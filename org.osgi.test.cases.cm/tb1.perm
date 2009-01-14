@@ -6,7 +6,7 @@
 # line in PermissionInfo encoded format.
 # See org.osgi.service.permissionadmin.PermissionInfo
 
-(org.osgi.framework.PackagePermission "*" "export,import")
+${permissions;packages}
 #the line below is intentionally commented out so we test if the framework
 #prevents the bundle from registering the configuration listener
 #(org.osgi.framework.ServicePermission "ConfigurationListener" "register")

@@ -27,8 +27,12 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 -runbundles							= \
 	org.osgi.impl.service.cm; version=latest, \
 	osgi; version=latest
+#	org.apache.felix.configadmin; version=latest, \
+#	org.eclipse.equinox.cm; version=latest, \
 
--runproperties = report=true
+-runproperties = report=true, \
+	org.osgi.framework.security=osgi
+
 
 
 
