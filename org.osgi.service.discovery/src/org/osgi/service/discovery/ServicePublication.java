@@ -39,7 +39,7 @@ package org.osgi.service.discovery;
  * case variants of the same key name, a supported publication strategy used and
  * the actual publication via Discovery mechanisms has to succeed.
  * 
- * @version $Revision: 5970 $
+ * @version $Revision$
  */
 public interface ServicePublication {
 

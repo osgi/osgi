@@ -19,7 +19,7 @@ package org.osgi.service.discovery;
 /**
  * Interface for notification on discovered services.
  * 
- * @version $Revision: 5970 $
+ * @version $Revision$
  */
 public interface DiscoveredServiceNotification {
 
