@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2009). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package org.osgi.service.cm;
 
 import java.util.Dictionary;
+
 import org.osgi.framework.ServiceReference;
 
 /**
@@ -115,6 +116,9 @@ public class ConfigurationEvent {
 		this.type = type;
 		this.factoryPid = factoryPid;
 		this.pid = pid;
+		if ((reference == null) || (pid == null)) {
+			throw new NullPointerException("reference and pid must not be null");
+		}
 	}
 
 	/**
