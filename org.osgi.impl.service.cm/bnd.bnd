@@ -10,5 +10,6 @@ Private-Package					= ${p}
 Export-Package 					= org.osgi.service.cm;-split-package:=first
 
 -buildpath						= \
+    org.osgi.service.cm;	version=project, \
 	ee.j2se;					version=1.4, \
 	osgi;						version=4.0
