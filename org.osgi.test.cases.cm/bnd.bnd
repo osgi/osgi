@@ -1,5 +1,3 @@
-Bundle-SymbolicName: ${p}.tbc
-Bundle-Name: test.cases.cm.tbc
 Bundle-Version						: 4.2.0.${project.build}
 Bundle-Description: Configuration Management Test R4
 Bundle-Vendor: OSGi Alliance
