@@ -84,6 +84,7 @@ mobile.packages = ${replace;$(mobile.specs);^.*$;$0.*}
  
 proposed.specs = \
 	 org.osgi.multiplexer, \
-	 org.osgi.service.framework
+	 org.osgi.service.framework, \
+	 org.osgi.service.obr
 
 proposed.packages = ${replace;$(proposed.specs);^.*$;$0.*}
