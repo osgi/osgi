@@ -6,7 +6,8 @@
 bin.includes				= \
 	osgi.core.tests.jar, \
 	osgi.cmpn.tests.jar, \
-	osgi.mobile.tests.jar
+	osgi.mobile.tests.jar, \
+	osgi.enterprise.tests.jar
 
 
 # The following line builds all these files and publishes them to 
@@ -16,6 +17,7 @@ bin.includes				= \
     osgi.ri, \
 	${build.core.tests}, \
 	${build.cmpn.tests}, \
+	${build.enterprise.tests}, \
 	${build.mobile.tests} \
  }
 
@@ -24,11 +26,12 @@ bin.includes				= \
 # Build the osgi spec files
 -sub       = osgi*.bnd
 
-build.tests                 = ${uniq; ${build.core.tests}, ${build.cmpn.tests}, ${build.mobile.tests}}
+build.tests                 = ${uniq; ${build.core.tests}, ${build.cmpn.tests}, ${build.mobile.tests}, ${build.enterprise.tests}}
 
 
 build.core.tests = \
     org.osgi.test.cases.activationpolicy, \
+    org.osgi.test.cases.framework, \
     org.osgi.test.cases.framework.classloading, \
     org.osgi.test.cases.framework.classpath, \
     org.osgi.test.cases.framework.div, \
@@ -36,7 +39,6 @@ build.core.tests = \
     org.osgi.test.cases.framework.filter, \
     org.osgi.test.cases.framework.fragments, \
     org.osgi.test.cases.framework.lifecycle, \
-    org.osgi.test.cases.framework.registry, \
     org.osgi.test.cases.framework.syncbundlelistener, \
     org.osgi.test.cases.packageadmin.tc1, \
     org.osgi.test.cases.packageadmin.tc2, \
@@ -52,16 +54,18 @@ build.core.tests = \
 
 build.cmpn.tests = \
     org.osgi.test.cases.application, \
+    org.osgi.test.cases.cdma, \
     org.osgi.test.cases.cm, \
     org.osgi.test.cases.component, \
-    org.osgi.test.cases.device, \
     org.osgi.test.cases.deploymentadmin.mo, \
     org.osgi.test.cases.deploymentadmin.tc1, \
     org.osgi.test.cases.deploymentadmin.tc2, \
+    org.osgi.test.cases.device, \
     org.osgi.test.cases.dmt.tc1, \
     org.osgi.test.cases.dmt.tc2, \
     org.osgi.test.cases.dmt.tc3, \
     org.osgi.test.cases.event, \
+    org.osgi.test.cases.gsm, \
     org.osgi.test.cases.http, \
     org.osgi.test.cases.io, \
     org.osgi.test.cases.log, \
@@ -80,6 +84,7 @@ build.cmpn.tests = \
 
 build.mobile.tests = \
 	org.osgi.test.cases.application, \
+	org.osgi.test.cases.cdma, \
 	org.osgi.test.cases.cm, \
 	org.osgi.test.cases.component, \
 	org.osgi.test.cases.deploymentadmin.mo, \
@@ -88,6 +93,7 @@ build.mobile.tests = \
 	org.osgi.test.cases.dmt.tc1, \
 	org.osgi.test.cases.dmt.tc2, \
 	org.osgi.test.cases.dmt.tc3, \
+	org.osgi.test.cases.gsm, \
 	org.osgi.test.cases.event, \
 	org.osgi.test.cases.io, \
 	org.osgi.test.cases.log, \
@@ -97,4 +103,8 @@ build.mobile.tests = \
 	org.osgi.test.cases.prefs, \
 	org.osgi.test.cases.tracker, \
 	org.osgi.test.cases.xml
+
+build.enterprise.tests = \
+	org.osgi.test.cases.transaction
+	
 	 

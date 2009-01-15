@@ -1,0 +1,19 @@
+Bundle-Description				: \
+	OSGi Service Platform Release ${version;=;${enterprise.release.version}} version ${enterprise.release.version}, \
+	Enterprise Reference Implementations.
+
+Bundle-Version					: ${enterprise.release.version}
+Bundle-Activator				: org.osgi.tools.group.Group
+
+Include-Resource				: \
+        ${replace;${build.enterprise.impls};(.+);${release.target}/$1.jar}, \
+	  	\
+	 	\
+		apache/LICENSE=../licensed/licenses/ASL-2.0.txt, \
+	 	NOTICE=../osgi.companion/legal/NOTICE.txt, \
+	 	about.html=../osgi.companion/legal/about-ri.html
+ 
+Private-Package					: \
+	org.osgi.tools.group
+
+

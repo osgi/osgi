@@ -6,6 +6,7 @@
 bin.includes				= \
 	osgi.cmpn.impls.jar, \
 	osgi.mobile.impls.jar, \
+	osgi.enterprise.impls.jar, \
     org.osgi.internal
 
 
@@ -17,6 +18,7 @@ bin.includes				= \
     org.osgi.internal, \
 	${build.cmpn.impls}, \
 	${build.mobile.impls}, \
+	${build.enterprise.impls}, \
  }
 
 -buildpath 					= \
@@ -26,7 +28,7 @@ bin.includes				= \
 # Build the osgi spec files
 -sub       = osgi*.bnd
 
-build.impls                 = ${uniq;                      ${build.cmpn.impls}, ${build.mobile.impls}}
+build.impls                 = ${uniq; ${build.cmpn.impls}, ${build.mobile.impls}, ${build.enterprise.impls}}
 
 build.cmpn.impls = \
 	org.osgi.impl.service.log, \
@@ -48,7 +50,8 @@ build.cmpn.impls = \
 	org.osgi.impl.service.upnp.cp , \
 	org.osgi.impl.service.upnp.cd , \
 	org.osgi.impl.service.useradmin , \
-	org.osgi.impl.service.wireadmin 
+	org.osgi.impl.service.wireadmin, \
+	org.osgi.impl.service.discovery 
 
 build.mobile.impls = \
    	org.osgi.impl.service.log , \
@@ -63,3 +66,8 @@ build.mobile.impls = \
   	org.osgi.impl.service.prefs , \
   	org.osgi.impl.service.policy , \
   	org.osgi.impl.bundle.midletcontainer
+  	
+build.enterprise.impls = \
+	org.osgi.impl.service.discovery, \
+	org.osgi.impl.bundle.transaction 
+  	

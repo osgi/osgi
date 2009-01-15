@@ -1,12 +1,12 @@
 Bundle-Description				: \
-	OSGi Service Platform Release ${version;=;${cmpn.release.version}} version ${cmpn.release.version}, \
-	Compendium Test Case Bundles.
+	OSGi Service Platform Release ${version;=;${enterprise.release.version}} version ${enterprise.release.version}, \
+	Enterprise Test Case Bundles.
 
-Bundle-Version					: ${cmpn.release.version}
+Bundle-Version					: ${enterprise.release.version}
 Bundle-Activator				: org.osgi.tools.group.Group
 
 Include-Resource				: \
-	${replace;${build.cmpn.tests};(.+);${release.target}/$1.jar}, \
+	${replace;${build.enterprise.tests};(.+);${release.target}/$1.jar}, \
     \
     NOTICE=../osgi.companion/legal/NOTICE.txt, \
  	about.html=../osgi.companion/legal/about-ri.html
