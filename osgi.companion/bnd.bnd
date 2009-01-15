@@ -20,8 +20,8 @@ bin.includes				= \
 # the repository (if they are deployable)
 
 -dependson 					= ${uniq; \
-	${specs}, \
-	${ees} \
+	${ees}, \
+	${specs} \
  }
 
 -buildpath 					= \
