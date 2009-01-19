@@ -80,9 +80,13 @@ public interface Framework extends Bundle {
 	 * @throws BundleException
 	 *             If this Framework could not be initialized.
 	 * @throws java.lang.SecurityException
-	 *             If the caller does not have the appropriate
-	 *             <code>AdminPermission[this,EXECUTE]</code>, and the Java
-	 *             Runtime Environment supports permissions.
+	 *             If the Java Runtime Environment supports permissions
+	 *             and the caller does not have the appropriate
+	 *             <code>AdminPermission[this,EXECUTE]</code> or if there is 
+	 *             a security manager already installed and 
+	 *             the {@link Constants#FRAMEWORK_SECURITY} configuration
+	 *             property is set.
+	 *             
 	 */
 	public void init() throws BundleException;
 

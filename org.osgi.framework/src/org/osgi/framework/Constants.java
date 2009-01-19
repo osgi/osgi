@@ -1149,6 +1149,9 @@ public interface Constants {
 	 * <li> osgi - Enables a security manager that supports all security aspects
 	 * of the OSGi R4 specification (including postponed conditions).</li>
 	 * </ul>
+	 * If specified and there is a security manager already installed then a 
+	 * <code>SecurityException</code> must be thrown when the Framework is 
+	 * initialized.
 	 * 
 	 * @since 1.5
 	 */
