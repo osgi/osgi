@@ -18,8 +18,8 @@ package org.osgi.impl.service.discovery.slp;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.TimerTask;
 
@@ -56,17 +56,16 @@ public class InformListenerTask extends TimerTask {
 	 */
 	public void run() {
 		if (discovery.getRegisteredServiceTracker().size() != 0) {
-			Collection descriptions = null;
-			descriptions = discovery.findService(null, null);
-			// TODO: do we really need that Vector availableServices? why not
-			// just take "descriptions"
-			List availableServices = new ArrayList();
-			notifyAvailableServices(descriptions, availableServices);
-			// notify all about unavailable services
-			notifyUnavailableServices(availableServices);
+			Collection allAvailableServices = discovery.findService(null, null);
+			notifyAvailableServices(allAvailableServices);
+			
+			// notify all about vanished services
+			Collection vanishedServices = new HashSet(lastLookupResult);
+			vanishedServices.removeAll(allAvailableServices);			
+			notifyUnavailableServices(vanishedServices);
 			// now store the last find result for the next check
 			synchronized (lastLookupResult) {
-				lastLookupResult = new ArrayList(descriptions);
+				lastLookupResult = new ArrayList(allAvailableServices);
 			}
 		}
 	}
@@ -75,22 +74,19 @@ public class InformListenerTask extends TimerTask {
 	 * @param descriptions
 	 * @param availableServices
 	 */
-	private void notifyAvailableServices(
-			Collection/* <ServiceEndpointDescription> */descriptions,
-			List availableServices) {
+	private void notifyAvailableServices(Collection/* <ServiceEndpointDescription> */ descriptions) {
 		Iterator descrIt = descriptions.iterator();
 		while (descrIt.hasNext()) {
 			ServiceEndpointDescription descr = (ServiceEndpointDescription) descrIt
 					.next();
 			// walk over the registered service tracker
-			Map tracker = discovery.getRegisteredServiceTracker();
-			synchronized (tracker) {
-				Iterator it = tracker.keySet().iterator();
+			Map trackers = discovery.getRegisteredServiceTracker();
+			synchronized (trackers) {
+				Iterator it = trackers.keySet().iterator();
 				while (it.hasNext()) {
-					DiscoveredServiceTracker listener = (DiscoveredServiceTracker) it
+					DiscoveredServiceTracker tracker = (DiscoveredServiceTracker) it
 							.next();
-					notifiyAvailableServicePerListener(availableServices,
-							descr, listener, (Map) tracker.get(listener));
+					notifyAvailableServicePerListener(descr, tracker, (Map) trackers.get(tracker));
 				}
 			}
 		}
@@ -99,32 +95,23 @@ public class InformListenerTask extends TimerTask {
 	/**
 	 * @param availableServices
 	 */
-	private void notifyUnavailableServices(List availableServices) {
-		if (lastLookupResult != null) {
-			synchronized (lastLookupResult) {
-				Iterator llrIt = lastLookupResult.iterator();
-				int i = 0;
-				while (llrIt.hasNext()) {
-					if (!availableServices.contains(new Integer(i))) {
-						Map tracker = discovery.getRegisteredServiceTracker();
-						synchronized (tracker) {
-							Iterator it = tracker.keySet().iterator();
-							while (it.hasNext()) {
-								DiscoveredServiceTracker l = (DiscoveredServiceTracker) it
-										.next();
-								ServiceEndpointDescription sed = (ServiceEndpointDescription) llrIt
-										.next();
-								if (SLPHandlerImpl.isTrackerInterestedInSED(sed,
-										(Map) tracker.get(l))) {
-									l
-											.serviceChanged(new DiscoveredServiceNotificationImpl(
-													sed,
-													DiscoveredServiceNotification.UNAVAILABLE));
-								}
-							}
-						}
+	private void notifyUnavailableServices(Collection vanishedServices) {
+		Iterator svcDescrIt = vanishedServices.iterator();
+		while (svcDescrIt.hasNext()) {
+			ServiceEndpointDescription sed = (ServiceEndpointDescription) svcDescrIt.next();
+
+			Map trackers = discovery.getRegisteredServiceTracker();
+			synchronized (trackers) {
+				Iterator trackerIt = trackers.keySet().iterator();
+				while (trackerIt.hasNext()) {
+					DiscoveredServiceTracker tracker = (DiscoveredServiceTracker) trackerIt
+							.next();
+					if (SLPHandlerImpl.isTrackerInterestedInSED(sed,
+							(Map) trackers.get(tracker))) {
+						tracker.serviceChanged(new DiscoveredServiceNotificationImpl(
+										sed,
+										DiscoveredServiceNotification.UNAVAILABLE));
 					}
-					i++;
 				}
 			}
 		}
@@ -135,66 +122,45 @@ public class InformListenerTask extends TimerTask {
 	 * trackers
 	 * 
 	 * @param availableServices
-	 * @param descr
-	 * @param l
-	 * @param props
+	 * @param svcDescr
+	 * @param tracker
+	 * @param trackerProps
 	 */
-	private void notifiyAvailableServicePerListener(List availableServices,
-			ServiceEndpointDescription descr, DiscoveredServiceTracker l,
-			Map props) {
+	private void notifyAvailableServicePerListener(ServiceEndpointDescription svcDescr, DiscoveredServiceTracker tracker,
+			Map trackerProps) {
 		// check if the listener filter matches the given
 		// description properties. That prerequisites that all information of a
 		// service description are in its properties bag
-		boolean matches = SLPHandlerImpl.isTrackerInterestedInSED(descr, props);
-		if (matches) {
-			// check if this is the first run
-			if (lastLookupResult != null && lastLookupResult.size() > 0) {
+		if (SLPHandlerImpl.isTrackerInterestedInSED(svcDescr, trackerProps)) {
+			if (lastLookupResult != null) {
 				synchronized (lastLookupResult) {
-					// it's not
-					Iterator it = lastLookupResult.iterator();
-					while (it.hasNext()) {
-						Integer index = null;
-						ServiceEndpointDescription sed = (ServiceEndpointDescription) it
-								.next();
-						// look up the last result map to see if we already know
-						// that description
+					// if we already know that service
+					if(lastLookupResult.contains(svcDescr))
+					{
+						// then check whether it has been modified
 						// TODO we currently have not idea if a service
 						// description
 						// has changed or not. There is ID that identifies a
 						// service
 						// description. Should that ID part of the spec??
-						if (sed.equals(descr)) {
-							index = new Integer(0);
-							availableServices.add(sed);
-						}
-
-						if (index != null) {
-							// notify a listener that a service
-							// description matches the specified filter
-							// and
-							// does exist before
-							l
-									.serviceChanged(new DiscoveredServiceNotificationImpl(
-											descr,
-											DiscoveredServiceNotification.MODIFIED));
-						} else {
-							// notify a listener that a service
-							// description matches the specified filter
-							// and
-							// is new to him
-							l
-									.serviceChanged(new DiscoveredServiceNotificationImpl(
-											descr,
-											DiscoveredServiceNotification.AVAILABLE));
+						boolean modified = false;
+						if(modified)
+						{
+							tracker.serviceChanged(new DiscoveredServiceNotificationImpl(
+								svcDescr,
+								DiscoveredServiceNotification.MODIFIED));
 						}
 					}
+					else{
+						// notify listener that a service description matches the specified filter
+						// and is new to him
+						tracker
+								.serviceChanged(new DiscoveredServiceNotificationImpl(
+										svcDescr,
+										DiscoveredServiceNotification.AVAILABLE));
+					}					
 				}
-			} else {
-				// We assume this is the first run. We notify listeners that the
-				// matching service is available
-				l.serviceChanged(new DiscoveredServiceNotificationImpl(descr,
-						DiscoveredServiceNotification.AVAILABLE));
-			}
+			} 
 		}
 	}
 }
