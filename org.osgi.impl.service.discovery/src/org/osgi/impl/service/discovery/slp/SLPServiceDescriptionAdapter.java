@@ -782,11 +782,12 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 		while (it.hasNext()) {
 			result = 37 * result + ((String) it.next()).hashCode();
 		}
-		result = 37 * result + endpointID.hashCode();
+		if (endpointID != null)
+			result = 37 * result + endpointID.hashCode();
 		result = 37 * result + serviceURLs.hashCode(); // TODO implement more
-														// exacting
+		// exacting
 		result = 37 * result + properties.hashCode(); // TODO implement more
-														// exacting
+		// exacting
 		result = 37 * result + port;
 		return result;
 	}

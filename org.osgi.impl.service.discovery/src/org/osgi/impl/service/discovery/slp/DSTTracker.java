@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.osgi.framework.BundleContext;
@@ -21,15 +22,14 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  * notified on registration and modification if any service has been published.
  * 
  * @author kt32483
- * 
+ * TODO: replace arg0 arg names with more descriptive ones
  */
 public class DSTTracker implements ServiceTrackerCustomizer {
 
 	private SLPHandlerImpl discovery = null;
 
 	// Map of DiscoveredServiceTracker, property map
-	private Map/* <DiscoveredServiceTracker, Map> */dsTrackers = Collections
-			.synchronizedMap(new HashMap());
+	private Map/* <DiscoveredServiceTracker, Map> */dsTrackers = null;
 
 	private BundleContext context = null;
 
@@ -41,6 +41,7 @@ public class DSTTracker implements ServiceTrackerCustomizer {
 	public DSTTracker(final BundleContext ctx, final SLPHandlerImpl disco) {
 		context = ctx;
 		discovery = disco;
+		dsTrackers = Collections.synchronizedMap(new HashMap());
 	}
 
 	/**
@@ -64,6 +65,7 @@ public class DSTTracker implements ServiceTrackerCustomizer {
 	public void modifiedService(final ServiceReference arg0, final Object arg1) {
 		DiscoveredServiceTracker tracker = (DiscoveredServiceTracker) context
 				.getService(arg0);
+		//TODO: implement removal or addition of interfaces/filters. Current simple remove and add tracker leads to repeated notifications.
 		if (dsTrackers.keySet().contains(tracker)) {
 			dsTrackers.remove(tracker);
 		}
@@ -91,19 +93,20 @@ public class DSTTracker implements ServiceTrackerCustomizer {
 	 *            the just registered or modified DiscoveredServiceTracker
 	 */
 	private void notifyOnAvailableSEDs(final DiscoveredServiceTracker tracker) {
-		synchronized (discovery.getCachedServices()) {
-			if (discovery.getCachedServices() != null
-					&& !discovery.getCachedServices().isEmpty()) {
+		List cachedServices = discovery.getCachedServices();
+		if (cachedServices != null)
+		{
+			synchronized (cachedServices) {
 				Iterator it = discovery.getCachedServices().iterator();
 				while (it.hasNext()) {
 					ServiceEndpointDescription svcDescr = (ServiceEndpointDescription) it
 							.next();
 					if (SLPHandlerImpl.isTrackerInterestedInSED(svcDescr, (Map) dsTrackers
 							.get(tracker))) {
-						DiscoveredServiceNotificationImpl impl = new DiscoveredServiceNotificationImpl(
-								svcDescr,
-								DiscoveredServiceNotification.AVAILABLE);
-						tracker.serviceChanged(impl);
+						tracker
+								.serviceChanged(new DiscoveredServiceNotificationImpl(
+										svcDescr,
+										DiscoveredServiceNotification.AVAILABLE));
 					}
 				}
 			}
@@ -118,9 +121,12 @@ public class DSTTracker implements ServiceTrackerCustomizer {
 	 *            DiscoveredServiceTracker
 	 */
 	private void addTracker(final ServiceReference ref) {
+		// Retrieve current service properties (required later when modified to compute the actual modification)
 		Map props = new HashMap();
 		String[] keys = ref.getPropertyKeys();
+		//TODO: Why add all properties and not only the few required once?
 		for (int k = 0; (keys != null) && (k < keys.length); k++) {
+			//TODO: why differ between collection and others?
 			if (ref.getProperty(keys[k]) instanceof Collection) {
 				props.put(keys[k], (Collection) ref.getProperty(keys[k]));
 			} else {

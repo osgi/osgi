@@ -42,8 +42,7 @@ public class Activator implements BundleActivator {
 	private LogService logService = DEFAULT_LogService;
 	private ServiceTracker logServiceTracker;
 	private SLPHandlerImpl slpDiscovery;
-	private ServiceRegistration commandProvider;
-
+	
 	/**
 	 * Start is called when the bundle is started. Creates an instance of the
 	 * implementation and registers the object as a service in the OSGi service
@@ -71,6 +70,7 @@ public class Activator implements BundleActivator {
 
 			public void modifiedService(ServiceReference reference,
 					Object service) {
+				//TODO: Why change our logger if some Logger have changed?
 				LogService logger = (LogService) context.getService(reference);
 
 				setLogService(logger);
@@ -90,6 +90,7 @@ public class Activator implements BundleActivator {
 		
 		Dictionary props = new Hashtable();
 		// TODO: make the instance configurable, e.g. via CAS or DS
+		// TODO: use the standard property names defined by RFC 119
 		props.put("ProtocolName", "jSLP 1.0.0");
 		slpHandlerRegistration = context.registerService(Discovery.class
 				.getName(), slpDiscovery, props);
@@ -109,11 +110,6 @@ public class Activator implements BundleActivator {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		logService.log(LogService.LOG_INFO, "stop discovery service");
-
-		if (commandProvider != null) {
-			commandProvider.unregister();
-			commandProvider = null;
-		}
 
 		if (slpHandlerRegistration != null) {
 			slpHandlerRegistration.unregister();

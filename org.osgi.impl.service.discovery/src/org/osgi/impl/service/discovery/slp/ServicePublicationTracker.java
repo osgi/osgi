@@ -24,12 +24,12 @@ public class ServicePublicationTracker implements ServiceTrackerCustomizer {
 
 	private SLPHandlerImpl discovery = null;
 
-	private Map/* <ServiceReference, ServiceEndpointDescription> */publicationAndSED = Collections
-			.synchronizedMap(new HashMap());
+	private Map/* <ServiceReference, ServiceEndpointDescription> */publicationAndSED = null;
 
 	public ServicePublicationTracker(BundleContext ctx, SLPHandlerImpl disco) {
 		context = ctx;
 		discovery = disco;
+		publicationAndSED = Collections.synchronizedMap(new HashMap());
 	}
 
 	/**
