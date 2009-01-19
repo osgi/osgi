@@ -44,10 +44,12 @@ import org.osgi.framework.FrameworkEvent;
  * <code>null</code>. The framework instance must copy any information needed
  * from the configuration argument since the configuration argument can be
  * changed after the Framework has been created.
- * 
  * <p>
  * A newly constructed Framework must be in the {@link #INSTALLED} state.
- * 
+ * <p>
+ * When constructing a Framework a <code>SecurityException</code> is thrown
+ * if the caller does not have <code>AllPermission</code>, and the Java 
+ * Runtime Environment supports permissions.
  * @ThreadSafe
  * @version $Revision$
  */
@@ -77,6 +79,10 @@ public interface Framework extends Bundle {
 	 * 
 	 * @throws BundleException
 	 *             If this Framework could not be initialized.
+	 * @throws java.lang.SecurityException
+	 *             If the caller does not have the appropriate
+	 *             <code>AdminPermission[this,EXECUTE]</code>, and the Java
+	 *             Runtime Environment supports permissions.
 	 */
 	public void init() throws BundleException;
 
