@@ -66,58 +66,56 @@ public class SLPHandlerImpl implements Discovery {
 	 * 
 	 * TODO do we support this property?
 	 */
-	public static final String PROP_KEY_PUBLISH_STRATEGY = "osgi.discovery.strategy.publication";
+	public static final String		PROP_KEY_PUBLISH_STRATEGY							= "osgi.discovery.strategy.publication";
 
 	/**
 	 * Constant for a "push" publication strategy: published service information
 	 * is actively pushed to the network for discovery.
 	 */
-	public static final String PROP_VAL_PUBLISH_STRATEGY_PUSH = "push";
+	public static final String		PROP_VAL_PUBLISH_STRATEGY_PUSH						= "push";
 
 	/**
 	 * Constant for a "pull" publication strategy: published service information
 	 * is available just upon lookup requests.
 	 */
-	public static final String PROP_VAL_PUBLISH_STRATEGY_PULL = "pull";
+	public static final String		PROP_VAL_PUBLISH_STRATEGY_PULL						= "pull";
 
-	private ServiceTracker locatorTracker = null;
-	private ServiceTracker advertiserTracker = null;
-	private ServiceTracker spTracker = null;
+	private ServiceTracker			locatorTracker										= null;
+	private ServiceTracker			advertiserTracker									= null;
+	private ServiceTracker			spTracker											= null;
 
-	private DSTTracker discoTrackerCustomizer = null;
-	private ServiceTracker discoTracker = null;
+	private DSTTracker				discoTrackerCustomizer								= null;
+	private ServiceTracker			discoTracker										= null;
 
-	private Locator locator = null;
-	private Advertiser advertiser = null;
+	private Locator					locator												= null;
+	private Advertiser				advertiser											= null;
 
-	private final int POLLDELAY = 10000; // 10
+	private final int				POLLDELAY											= 10000;									// 10
 	// sec
 
-	private Timer t = null;
+	private Timer					t													= null;
 
 	// private static final boolean DEFAULT_AUTOPUBLISH = true;
 
-	private static BundleContext context;
+	private static BundleContext	context;
 
-	private LogService logService;
+	private LogService				logService;
 	// private boolean autoPublish = DEFAULT_AUTOPUBLISH;
 
-	private List /* <SLPServiceDescriptionAdapter> */inMemoryCache = Collections
-			.synchronizedList(new ArrayList());
+	private List					/* <SLPServiceDescriptionAdapter> */inMemoryCache	= Collections
+																								.synchronizedList(new ArrayList());
 
 	/**
 	 * Constructor.
 	 * 
-	 * @param context
-	 *            the BundleContext of the containing bundle.
-	 * @param logService
-	 *            a LogService instance
+	 * @param context the BundleContext of the containing bundle.
+	 * @param logService a LogService instance
 	 */
 	public SLPHandlerImpl(final BundleContext context,
 			final LogService logService) {
 		this.logService = logService;
 		SLPHandlerImpl.context = context; // TODO: making it static var is not
-											// good I'd say.
+		// good I'd say.
 		locatorTracker = new ServiceTracker(context, Locator.class.getName(),
 				new LocatorServiceTracker(context));
 		advertiserTracker = new ServiceTracker(context, Advertiser.class
@@ -183,11 +181,9 @@ public class SLPHandlerImpl implements Discovery {
 	 * This method looks up a service given by its interface name and filter. It
 	 * does a full lookup and stores the result in the in memory cache.
 	 * 
-	 * @param interfaceName
-	 *            the interface name of the service to find
-	 * @param filter
-	 *            a LDAP filter expression that defines the required services as
-	 *            well
+	 * @param interfaceName the interface name of the service to find
+	 * @param filter a LDAP filter expression that defines the required services
+	 *        as well
 	 * @return a collection of SErviceEndPointDescription objects, an empty
 	 *         collection if nothing has been found
 	 * 
@@ -217,7 +213,8 @@ public class SLPHandlerImpl implements Discovery {
 			se = locator.findServices(svcURL.getServiceType(), null, filter);
 			// TODO: in case result is empty do a search implying that service
 			// interface is not java???
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			log(LogService.LOG_ERROR, "Failed to find service", e);
 			return new ArrayList();
 		}
@@ -259,8 +256,15 @@ public class SLPHandlerImpl implements Discovery {
 				log(LogService.LOG_DEBUG,
 						"adding service endpoint description "
 								+ descriptionAdapter);
-				result.add(descriptionAdapter);
-			} catch (Exception e) {
+				if (descriptionAdapter.getProvidedInterfaces() != null) {
+					result.add(descriptionAdapter);
+				}
+				else {
+					log(LogService.LOG_ERROR, "no interfaces provided by "
+							+ descriptionAdapter);
+				}
+			}
+			catch (Exception e) {
 				log(LogService.LOG_ERROR, "Failed to find service", e);
 			}
 		}
@@ -276,13 +280,6 @@ public class SLPHandlerImpl implements Discovery {
 				buff.append("(");
 				ServiceEndpointDescription sed = (ServiceEndpointDescription) it
 						.next();
-				Collection interfaces = sed.getProvidedInterfaces();
-				// TODO: do this check already before
-				if (interfaces == null) {
-					log(LogService.LOG_ERROR, "no interfaces provided by "
-							+ sed);
-					break;
-				}
 				buff.append(sed);
 				buff.append(")");
 				if (it.hasNext()) {
@@ -290,15 +287,14 @@ public class SLPHandlerImpl implements Discovery {
 				}
 			}
 			log(LogService.LOG_DEBUG, buff.toString());
-		} else {
+		}
+		else {
 			log(LogService.LOG_DEBUG, "0 services found");
 		}
 
 		// update inMemoryCache
 		// makes the update atomic
 		synchronized (inMemoryCache) {
-			// TODO: why do we clear the cache? Don't make assumptions about its
-			// use.
 			inMemoryCache.clear(); // this works only because this method will
 			// be called to find ALL services in the network.
 			inMemoryCache.addAll(result);
@@ -309,19 +305,15 @@ public class SLPHandlerImpl implements Discovery {
 	/**
 	 * Publishes a service.
 	 * 
-	 * @param javaInterfaces
-	 *            collection of java interface names
-	 * @param javaInterfacesAndVersions
-	 *            collection of versions, where the order of the version must
-	 *            match the order of the java interfaces
-	 * @param javaInterfacesAndEndpointInterfaces
-	 *            optional collection of endpointinterface names, where the
-	 *            order must match the order of the java interfaces
-	 * @param properties
-	 *            map of properties; keys must be Strings, values are of type
-	 *            object
-	 * @param strategy
-	 *            optional string that defines the publish strategy
+	 * @param javaInterfaces collection of java interface names
+	 * @param javaInterfacesAndVersions collection of versions, where the order
+	 *        of the version must match the order of the java interfaces
+	 * @param javaInterfacesAndEndpointInterfaces optional collection of
+	 *        endpointinterface names, where the order must match the order of
+	 *        the java interfaces
+	 * @param properties map of properties; keys must be Strings, values are of
+	 *        type object
+	 * @param strategy optional string that defines the publish strategy
 	 * @return a ServiceEndpointDescription or null, if an error occurred during
 	 *         creation of the ServiceDescription
 	 */
@@ -331,21 +323,23 @@ public class SLPHandlerImpl implements Discovery {
 			Collection/* <String> */javaInterfacesAndEndpointInterfaces,
 			Map/* <String, Object> */properties, String strategy,
 			String endpointID) {
-		SLPServiceDescriptionAdapter svcDescr;
-		try {
-			svcDescr = new SLPServiceDescriptionAdapter(javaInterfaces,
-					javaInterfacesAndVersions,
-					javaInterfacesAndEndpointInterfaces, properties, endpointID);
-		} catch (ServiceLocationException e1) {
-			e1.printStackTrace();
-			log(LogService.LOG_ERROR, "Unable to create Service Description",
-					e1);
-			return null;
-		}
 		// TODO: act according strategy parameter
 		Advertiser advertiser = getAdvertiser();
-		// TODO: do this check earlier
 		if (advertiser != null) {
+			SLPServiceDescriptionAdapter svcDescr;
+			try {
+				svcDescr = new SLPServiceDescriptionAdapter(javaInterfaces,
+						javaInterfacesAndVersions,
+						javaInterfacesAndEndpointInterfaces, properties,
+						endpointID);
+			}
+			catch (ServiceLocationException e1) {
+				e1.printStackTrace();
+				log(LogService.LOG_ERROR,
+						"Unable to create Service Description", e1);
+				return null;
+			}
+
 			// Publish each interface of the service separately
 			Iterator interfaces = svcDescr.getProvidedInterfaces().iterator();
 			while (interfaces.hasNext()) {
@@ -355,30 +349,32 @@ public class SLPHandlerImpl implements Discovery {
 							new Hashtable(svcDescr.getProperties()));
 					log(LogService.LOG_DEBUG,
 							"Following service is published: " + svcDescr);
-				} catch (ServiceLocationException e) {
+				}
+				catch (ServiceLocationException e) {
 					e.printStackTrace();
 					log(LogService.LOG_ERROR, "failed registering service", e);
 				}
 			}
-		} else {
+
+			// TODO: Why to cache local available services?
+			// add it to the available Services
+			inMemoryCache.add(svcDescr);
+			// inform the listener about the new available service
+			notifyListenersOnNewServiceDescription(svcDescr);
+			return svcDescr;
+		}
+		else {
 			log(LogService.LOG_WARNING, "no Advertiser");
 		}
-		//TODO: Why to cache local available services?
-		// add it to the available Services
-		inMemoryCache.add(svcDescr);
-		// inform the listener about the new available service
-		notifyListenersOnNewServiceDescription(svcDescr);
-		return svcDescr;
+		return null;
 	}
 
 	/**
-	 * Un publishes a given service description.
+	 * Unpublishes a given service description.
 	 * 
-	 * @param serviceDescription
-	 *            the service to unpublish
-	 * @throws IllegalArgumentException
-	 *             if serviceDescription is null or does not contain at least
-	 *             one java interface
+	 * @param serviceDescription the service to unpublish
+	 * @throws IllegalArgumentException if serviceDescription is null or does
+	 *         not contain at least one java interface
 	 */
 	protected void unpublishService(
 			final ServiceEndpointDescription serviceDescription) {
@@ -407,14 +403,16 @@ public class SLPHandlerImpl implements Discovery {
 								+ " unpublished");
 						// inform listeners about removal
 						notifyListenersOnRemovedServiceDescription(serviceDescription);
-					} catch (ServiceLocationException e) {
+					}
+					catch (ServiceLocationException e) {
 						e.printStackTrace();
 						log(LogService.LOG_ERROR,
 								"failed to deregister service for interface "
 										+ interfaceName, e);
 					}
 				}
-			} else {
+			}
+			else {
 				log(LogService.LOG_WARNING, "no Advertiser");
 			}
 		}
@@ -427,14 +425,26 @@ public class SLPHandlerImpl implements Discovery {
 	 * 
 	 */
 	private class LocatorServiceTracker implements ServiceTrackerCustomizer {
-		BundleContext context = null;
+		BundleContext	context	= null;
 
 		public LocatorServiceTracker(BundleContext bc) {
 			context = bc;
 		}
 
 		public Object addingService(ServiceReference reference) {
-			//TODO: use it only we haven't got a service yet
+			// TODO: use it only we haven't got a service yet
+			if (getLocator() == null) {
+				Locator loc = setLocatorService(reference);
+				return loc;
+			}
+			return null;
+		}
+
+		/**
+		 * @param reference
+		 * @return
+		 */
+		private Locator setLocatorService(ServiceReference reference) {
 			Locator loc = (Locator) context.getService(reference);
 			setLocator(loc);
 			log(LogService.LOG_INFO, "bound Locator");
@@ -442,17 +452,23 @@ public class SLPHandlerImpl implements Discovery {
 		}
 
 		public void modifiedService(ServiceReference reference, Object service) {
-			//TODO: Do we have to react to this event?
-			Locator loc = (Locator) context.getService(reference);
-			setLocator(loc);
-			log(LogService.LOG_INFO, "rebound Locator");
+			// TODO: Do we have to react to this event?
+			// Locator loc = (Locator) context.getService(reference);
+			// setLocator(loc);
+			// log(LogService.LOG_INFO, "rebound Locator");
 		}
 
 		public void removedService(ServiceReference reference, Object service) {
 			context.ungetService(reference);
-			//TODO: check whether we can get another service instance
-			setLocator(null);
-			log(LogService.LOG_INFO, "unbound Locator");
+			ServiceReference ref = context.getServiceReference(Locator.class
+					.getName());
+			if (ref != null) {
+				setLocatorService(ref);
+			}
+			else {
+				setLocator(null);
+				log(LogService.LOG_INFO, "unbound Locator");
+			}
 		}
 	}
 
@@ -462,7 +478,7 @@ public class SLPHandlerImpl implements Discovery {
 	 * @author Thomas Kiesslich
 	 */
 	private class AdvertiserServiceTracker implements ServiceTrackerCustomizer {
-		BundleContext context = null;
+		BundleContext	context	= null;
 
 		public AdvertiserServiceTracker(BundleContext bc) {
 			context = bc;
@@ -509,8 +525,8 @@ public class SLPHandlerImpl implements Discovery {
 	}
 
 	/**
-	 * @param logService
-	 *            the reference to the LogService which get called for logging
+	 * @param logService the reference to the LogService which get called for
+	 *        logging
 	 * 
 	 */
 	public void setLogService(final LogService logService) {
@@ -518,15 +534,14 @@ public class SLPHandlerImpl implements Discovery {
 	}
 
 	/**
-	 * This method create a Filter object from a given LDPA filter string via the
-	 * {@link BundleContext#createFilter(String)}.
-	 * This method may also be used to validate the correctness of a filter string. 
+	 * This method create a Filter object from a given LDPA filter string via
+	 * the {@link BundleContext#createFilter(String)}. This method may also be
+	 * used to validate the correctness of a filter string.
 	 * 
-	 * @param filter
-	 *            a String that represents an LDAP filter
+	 * @param filter a String that represents an LDAP filter
 	 * @return the created Filter object, or null if filter is null
-	 * @throws IllegalArgumentException
-	 *             if a Filter object could not be created with the given String
+	 * @throws IllegalArgumentException if a Filter object could not be created
+	 *         with the given String
 	 */
 	protected Filter getFilterFromString(String filter)
 			throws IllegalArgumentException {
@@ -536,14 +551,15 @@ public class SLPHandlerImpl implements Discovery {
 		Filter f = null;
 		try {
 			f = context.createFilter(filter);
-		} catch (InvalidSyntaxException e) {
-			// TODO: add filter
-			throw new IllegalArgumentException("filter is not an LDAP filter");
+		}
+		catch (InvalidSyntaxException e) {
+			throw new IllegalArgumentException("filter [" + filter
+					+ "] is not an LDAP filter");
 		}
 		if (f == null) {
-			// TODO: add filter
 			throw new IllegalArgumentException(
-					"cannot create an LDAP filter with given filter parameter");
+					"cannot create an LDAP filter with given filter [" + filter
+							+ "] parameter");
 		}
 		return f;
 	}
@@ -552,11 +568,9 @@ public class SLPHandlerImpl implements Discovery {
 	 * This method checks if a given ServiceEndpointDescrioption follows the
 	 * minimal requirements.
 	 * 
-	 * @param serviceDescription
-	 *            the given ServiceEndpointDescription
-	 * @throws IllegalArgumentException
-	 *             if serviceDescription is null or does not contain at least
-	 *             one java interface
+	 * @param serviceDescription the given ServiceEndpointDescription
+	 * @throws IllegalArgumentException if serviceDescription is null or does
+	 *         not contain at least one java interface
 	 */
 	protected void validateServiceDescription(
 			ServiceEndpointDescription serviceDescription) {
@@ -609,7 +623,8 @@ public class SLPHandlerImpl implements Discovery {
 								.serviceChanged(new DiscoveredServiceNotificationImpl(
 										svcDescr,
 										DiscoveredServiceNotification.AVAILABLE));
-					} catch (Exception e) {
+					}
+					catch (Exception e) {
 						log(
 								LogService.LOG_ERROR,
 								"Exceptions where thrown while notifying about a new remote service.",
@@ -624,8 +639,7 @@ public class SLPHandlerImpl implements Discovery {
 	/**
 	 * Notifies all DSTTrackers about an unpublished service.
 	 * 
-	 * @param svcDescr
-	 *            the unpublished ServiceEndpointDescription
+	 * @param svcDescr the unpublished ServiceEndpointDescription
 	 */
 	protected void notifyListenersOnRemovedServiceDescription(
 			ServiceEndpointDescription svcDescr) {
@@ -644,7 +658,8 @@ public class SLPHandlerImpl implements Discovery {
 								.serviceChanged(new DiscoveredServiceNotificationImpl(
 										svcDescr,
 										DiscoveredServiceNotification.UNAVAILABLE));
-					} catch (Exception e) {
+					}
+					catch (Exception e) {
 						log(
 								LogService.LOG_ERROR,
 								"Exceptions where thrown while notifying about removal of a remote service.",
@@ -675,22 +690,23 @@ public class SLPHandlerImpl implements Discovery {
 		boolean notify = false;
 		if (interfaceCriteria == null && filter == null) {
 			notify = true;
-		} else {
-			// if interface-criteria are defined on tracker 
+		}
+		else {
+			// if interface-criteria are defined on tracker
 			if (interfaceCriteria != null && !interfaceCriteria.isEmpty()) {
-				// then check whether tracker's interface-list contains one of SED's interfaces
+				// then check whether tracker's interface-list contains one of
+				// SED's interfaces
 				Collection svcInterfaces = svcDescr.getProvidedInterfaces();
 				if (svcInterfaces == null) {
 					throw new RuntimeException("no interfaces provided");
 				}
 				Collection intersectionResult = new HashSet(interfaceCriteria);
 				intersectionResult.retainAll(svcInterfaces);
-				if(intersectionResult.size() > 0)
-				{
-					notify = true;					
+				if (intersectionResult.size() > 0) {
+					notify = true;
 				}
 			}
-			
+
 			// if filter-criteria are defined on tracker
 			if (filter != null && !filter.isEmpty()) {
 				// check whether one filter of tracker's filter-list matches to
@@ -703,7 +719,8 @@ public class SLPHandlerImpl implements Discovery {
 						if (f.match(new Hashtable(svcDescr.getProperties()))) {
 							notify = true;
 						}
-					} catch (InvalidSyntaxException e) {
+					}
+					catch (InvalidSyntaxException e) {
 						e.printStackTrace();
 						String errMsg = "A filter provided by a DiscoveredServiceTracker is invalid.";
 						errMsg += " Filter = " + currentFilter;
@@ -732,14 +749,14 @@ public class SLPHandlerImpl implements Discovery {
 				Map trackerProps = (Map) discoveredSTs.get(st);
 				// inform it if the listener has no Filter set
 				// or the filter matches the criteria
-				if (isTrackerInterestedInSED(svcDescr,
-						trackerProps)) {
+				if (isTrackerInterestedInSED(svcDescr, trackerProps)) {
 					try {
 						st
 								.serviceChanged(new DiscoveredServiceNotificationImpl(
 										svcDescr,
 										DiscoveredServiceNotification.MODIFIED));
-					} catch (Exception e) {
+					}
+					catch (Exception e) {
 						log(
 								LogService.LOG_ERROR,
 								"Exceptions where thrown while notifying about modification of a remote service.",

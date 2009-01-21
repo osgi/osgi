@@ -138,11 +138,7 @@ public class InformListenerTask extends TimerTask {
 					if(lastLookupResult.contains(svcDescr))
 					{
 						// then check whether it has been modified
-						// TODO we currently have not idea if a service
-						// description
-						// has changed or not. There is ID that identifies a
-						// service
-						// description. Should that ID part of the spec??
+						// TODO use endpoint id to identify a sed
 						boolean modified = false;
 						if(modified)
 						{
