@@ -38,18 +38,17 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  * 
  */
 public class Activator implements BundleActivator {
-	private ServiceRegistration slpHandlerRegistration;
-	private LogService logService = DEFAULT_LogService;
-	private ServiceTracker logServiceTracker;
-	private SLPHandlerImpl slpDiscovery;
-	
+	private ServiceRegistration	slpHandlerRegistration;
+	private LogService			logService	= DEFAULT_LogService;
+	private ServiceTracker		logServiceTracker;
+	private SLPHandlerImpl		slpDiscovery;
+
 	/**
 	 * Start is called when the bundle is started. Creates an instance of the
 	 * implementation and registers the object as a service in the OSGi service
 	 * registry.
 	 * 
-	 * @param context
-	 *            BundleContext
+	 * @param context BundleContext
 	 * @throws java.lang.Exception
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
@@ -58,28 +57,33 @@ public class Activator implements BundleActivator {
 		logServiceTracker = new ServiceTracker(context, LogService.class
 				.getName(), new ServiceTrackerCustomizer() {
 
+			private LogService	logger	= null;
+
 			public Object addingService(ServiceReference reference) {
-				// TODO: does it mean that we change our logService each time a
-				// new one comes?
-				LogService logger = (LogService) context.getService(reference);
-
-				setLogService(logger);
-
-				return logger;
+				if (logger == null) {
+					LogService logger = (LogService) context
+							.getService(reference);
+					setLogService(logger);
+					return logger;
+				}
+				return null;
 			}
 
 			public void modifiedService(ServiceReference reference,
 					Object service) {
-				//TODO: Why change our logger if some Logger have changed?
-				LogService logger = (LogService) context.getService(reference);
-
-				setLogService(logger);
 			}
 
 			public void removedService(ServiceReference reference,
 					Object service) {
 				context.ungetService(reference);
-				setLogService(null);
+				ServiceReference serviceRef = context
+						.getServiceReference(LogService.class.getName());
+				if (serviceRef == null) {
+					setLogService(null);
+				}
+				else {
+					setLogService((LogService) context.getService(serviceRef));
+				}
 			}
 
 		});
@@ -87,14 +91,14 @@ public class Activator implements BundleActivator {
 
 		slpDiscovery = new SLPHandlerImpl(context, logService);
 		slpDiscovery.init();
-		
+
 		Dictionary props = new Hashtable();
 		// TODO: make the instance configurable, e.g. via CAS or DS
-		// TODO: use the standard property names defined by RFC 119
-		props.put("ProtocolName", "jSLP 1.0.0");
+		props.put(Discovery.PROP_KEY_VENDOR_NAME,
+				"Siemens Enterprise Communications GmbH & Co KG");
+		props.put(Discovery.PROP_KEY_SUPPORTED_PROTOCOLS, "jSLP 1.0.0");
 		slpHandlerRegistration = context.registerService(Discovery.class
 				.getName(), slpDiscovery, props);
-
 
 		logService.log(LogService.LOG_INFO, "discovery service started");
 	}
@@ -103,8 +107,7 @@ public class Activator implements BundleActivator {
 	 * Stop is called by the framework when the bundle is stopped. All internal
 	 * resources are cleaned up and services unregistered.
 	 * 
-	 * @param context
-	 *            BundleContext
+	 * @param context BundleContext
 	 * @throws java.lang.Exception
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
@@ -129,13 +132,13 @@ public class Activator implements BundleActivator {
 
 	/**
 	 * 
-	 * @param loggerLogService
-	 *            instance to set
+	 * @param loggerLogService instance to set
 	 */
 	void setLogService(LogService logger) {
 		if (logger != null) {
 			logService = logger;
-		} else {
+		}
+		else {
 			logService = DEFAULT_LogService;
 		}
 
@@ -147,28 +150,51 @@ public class Activator implements BundleActivator {
 	/**
 	 * 
 	 */
-	private static LogService DEFAULT_LogService = new LogService() {
-		private final String[] LEVELS = new String[] { "[FATAL] ", "[ERROR] ",
-				"[WARNING] ", "[INFO] ", "[DEBUG] " };
+	private static LogService	DEFAULT_LogService	= new LogService() {
+														private final String[]	LEVELS	= new String[] {
+			"[FATAL] ", "[ERROR] ", "[WARNING] ", "[INFO] ", "[DEBUG] "					};
 
-		public void log(int level, String message) {
-			System.out.println(LEVELS[level] + message);
-		}
+														public void log(
+																int level,
+																String message) {
+															System.out
+																	.println(LEVELS[level]
+																			+ message);
+														}
 
-		public void log(int level, String message, Throwable exception) {
-			System.out.println(LEVELS[level] + message + ", "
-					+ exception.getMessage());
-		}
+														public void log(
+																int level,
+																String message,
+																Throwable exception) {
+															System.out
+																	.println(LEVELS[level]
+																			+ message
+																			+ ", "
+																			+ exception
+																					.getMessage());
+														}
 
-		public void log(ServiceReference sr, int level, String message) {
-			System.out.println(LEVELS[level] + message);
-		}
+														public void log(
+																ServiceReference sr,
+																int level,
+																String message) {
+															System.out
+																	.println(LEVELS[level]
+																			+ message);
+														}
 
-		public void log(ServiceReference sr, int level, String message,
-				Throwable exception) {
-			System.out.println(LEVELS[level] + message + ", "
-					+ exception.getMessage());
-		}
+														public void log(
+																ServiceReference sr,
+																int level,
+																String message,
+																Throwable exception) {
+															System.out
+																	.println(LEVELS[level]
+																			+ message
+																			+ ", "
+																			+ exception
+																					.getMessage());
+														}
 
-	};
+													};
 }
