@@ -74,7 +74,7 @@ public interface ListenerHook {
 		 * 
 		 * @return The context of the bundle which added the listener.
 		 */
-		public BundleContext getBundleContext();
+		BundleContext getBundleContext();
 
 		/**
 		 * Return the filter string with which the listener was added.
@@ -83,6 +83,18 @@ public interface ListenerHook {
 		 *         be <code>null</code> if the listener was added without a
 		 *         filter.
 		 */
-		public String getFilter();
+		String getFilter();
+		
+		/**
+		 * Equality is based on the bundle and the filter. This hash code must 
+		 * return the same hashcode for two info objects that have the same
+		 * bundle and filter string (literally).
+		 */
+		int hashCode();
+		
+		/**
+		 * Equality is based on the bundle and the filter.
+		 */
+		boolean equals(Object other);
 	}
 }
