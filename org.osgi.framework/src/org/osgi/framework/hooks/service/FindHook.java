@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008 2009). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,9 +47,9 @@ public interface FindHook {
 	 *        of a call to
 	 *        {@link BundleContext#getAllServiceReferences(String, String)}
 	 * @param references A <code>Collection</code> of Service References to be
-	 *        returned as a result of the find operation. The method
-	 *        implementation may remove service references from the collection
-	 *        to prevent the references from being returned to the bundle
+	 *        returned as a result of the find operation. The implementation of
+	 *        this method may remove service references from the collection to
+	 *        prevent the references from being returned to the bundle
 	 *        performing the find operation. The collection supports all the
 	 *        optional <code>Collection</code> operations except
 	 *        <code>add</code> and <code>addAll</code>. Attempting to add to the

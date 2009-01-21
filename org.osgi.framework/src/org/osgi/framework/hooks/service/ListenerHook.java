@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2009). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -84,17 +84,24 @@ public interface ListenerHook {
 		 *         filter.
 		 */
 		String getFilter();
-		
+
 		/**
-		 * Equality is based on the bundle and the filter. This hash code must 
-		 * return the same hashcode for two info objects that have the same
-		 * bundle and filter string (literally).
+		 * Compares this <code>ListenerInfo</code> to another
+		 * <code>ListenerInfo</code>.
+		 * 
+		 * @param obj The object to compare against this
+		 *        <code>ListenerInfo</code>.
+		 * @return <code>true</code> if the other object is a
+		 *         <code>ListenerInfo</code> object and both objects refer to
+		 *         the same listener.
+		 */
+		boolean equals(Object obj);
+
+		/**
+		 * Returns the hash code for this <code>ListenerInfo</code>.
+		 * 
+		 * @return The hash code of this <code>ListenerInfo</code>.
 		 */
 		int hashCode();
-		
-		/**
-		 * Equality is based on the bundle and the filter.
-		 */
-		boolean equals(Object other);
 	}
 }

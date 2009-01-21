@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008 2009). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,17 +21,17 @@ import java.util.Collection;
 import org.osgi.framework.ServiceEvent;
 
 /**
- * OSGi Framework Service Publish Hook Service.
+ * OSGi Framework Service Event Hook Service.
  * 
  * <p>
  * Bundles registering this service will be called during framework service
- * publish (register, modify, and unregister service) operations.
+ * (register, modify, and unregister service) operations.
  * 
  * @ThreadSafe
  * @version $Revision$
  */
 
-public interface PublishHook {
+public interface EventHook {
 	/**
 	 * Event hook method. This method is called prior to service event delivery
 	 * when a publishing bundle registers, modifies or unregisters a service.
@@ -40,13 +40,14 @@ public interface PublishHook {
 	 * @param event The service event to be delivered.
 	 * @param contexts A <code>Collection</code> of Bundle Contexts for bundles
 	 *        which have listeners to which the specified event will be
-	 *        delivered. The method implementation may remove bundle contexts
-	 *        from the collection to prevent the event from being delivered to
-	 *        the associated bundles. The collection supports all the optional
-	 *        <code>Collection</code> operations except <code>add</code> and
-	 *        <code>addAll</code>. Attempting to add to the collection will
-	 *        result in an <code>UnsupportedOperationException</code>. The
-	 *        collection is not synchronized.
+	 *        delivered. The implementation of this method may remove bundle
+	 *        contexts from the collection to prevent the event from being
+	 *        delivered to the associated bundles. The collection supports all
+	 *        the optional <code>Collection</code> operations except
+	 *        <code>add</code> and <code>addAll</code>. Attempting to add to the
+	 *        collection will result in an
+	 *        <code>UnsupportedOperationException</code>. The collection is not
+	 *        synchronized.
 	 */
 	void event(ServiceEvent event,
 			Collection/* <? extends BundleContext> */contexts);
