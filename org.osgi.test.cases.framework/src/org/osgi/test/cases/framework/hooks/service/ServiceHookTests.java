@@ -33,9 +33,9 @@ import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.hooks.service.EventHook;
 import org.osgi.framework.hooks.service.FindHook;
 import org.osgi.framework.hooks.service.ListenerHook;
-import org.osgi.framework.hooks.service.PublishHook;
 import org.osgi.test.support.OSGiTestCase;
 
 public class ServiceHookTests extends OSGiTestCase {
@@ -330,9 +330,10 @@ public class ServiceHookTests extends OSGiTestCase {
 		}
 	}
 
-	public void testPublishHook01() {
-		final String testMethodName = "testPublishHook01"; //$NON-NLS-1$
-		// test the FindHook is called and can remove a reference from the results
+	public void testEventHook01() {
+		final String testMethodName = "testEventHook01"; //$NON-NLS-1$
+		// test the EventHook is called and can remove a reference from the
+		// results
 		Runnable runIt = new Runnable() {
 			public void run() {
 				// nothing
@@ -362,7 +363,7 @@ public class ServiceHookTests extends OSGiTestCase {
 		}
 
 		final Filter filter = tmpFilter;
-		PublishHook hook1 = new PublishHook() {
+		EventHook hook1 = new EventHook() {
 			public void event(ServiceEvent event, Collection contexts) {
 				try {
 					if (!filter.match(event.getServiceReference())) {
@@ -395,7 +396,7 @@ public class ServiceHookTests extends OSGiTestCase {
 				}
 			}
 		};
-		PublishHook hook2 = new PublishHook() {
+		EventHook hook2 = new EventHook() {
 			public void event(ServiceEvent event, Collection contexts) {
 				try {
 					if (!filter.match(event.getServiceReference())) {
@@ -431,9 +432,10 @@ public class ServiceHookTests extends OSGiTestCase {
 
 		Hashtable props = new Hashtable();
 		props.put("name", testMethodName); //$NON-NLS-1$
-		// register publish hook 1
-		props.put(Constants.SERVICE_DESCRIPTION, "publish hook 1"); //$NON-NLS-1$
-		ServiceRegistration regHook = testContext.registerService(PublishHook.class.getName(), hook1, props);
+		// register event hook 1
+		props.put(Constants.SERVICE_DESCRIPTION, "event hook 1"); //$NON-NLS-1$
+		ServiceRegistration regHook = testContext.registerService(
+				EventHook.class.getName(), hook1, props);
 
 		ServiceRegistration reg1 = null;
 		try {
@@ -479,8 +481,9 @@ public class ServiceHookTests extends OSGiTestCase {
 			}
 			assertEquals("hooks called", 0, hookCalled[0]); //$NON-NLS-1$
 
-			props.put(Constants.SERVICE_DESCRIPTION, "publish hook 2"); //$NON-NLS-1$
-			regHook = testContext.registerService(PublishHook.class.getName(), hook2, props);
+			props.put(Constants.SERVICE_DESCRIPTION, "event hook 2"); //$NON-NLS-1$
+			regHook = testContext.registerService(EventHook.class.getName(),
+					hook2, props);
 
 			synchronized (events) {
 				events.clear();
