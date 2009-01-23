@@ -21,6 +21,7 @@ package org.osgi.impl.service.discovery.slp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -102,8 +103,8 @@ public class SLPHandlerImpl implements Discovery {
 	private LogService				logService;
 	// private boolean autoPublish = DEFAULT_AUTOPUBLISH;
 
-	private List					/* <SLPServiceDescriptionAdapter> */inMemoryCache	= Collections
-																								.synchronizedList(new ArrayList());
+	private Collection					/* <SLPServiceDescriptionAdapter> */inMemoryCache	= Collections
+																								.synchronizedSet(new HashSet());
 
 	/**
 	 * Constructor.
@@ -291,16 +292,22 @@ public class SLPHandlerImpl implements Discovery {
 		else {
 			log(LogService.LOG_DEBUG, "0 services found");
 		}
-
-		// update inMemoryCache
-		// makes the update atomic
-		synchronized (inMemoryCache) {
-			inMemoryCache.clear(); // this works only because this method will
-			// be called to find ALL services in the network.
+		//it was a full search
+		if(interfaceName == null && filter == null) {
+			//atomic compound operation
+			synchronized (inMemoryCache) {
+				inMemoryCache.clear(); // this works only because this method will
+				// be called to find ALL services in the network.
+				inMemoryCache.addAll(result);
+			}
+		} else {
+			// add only just found entries
 			inMemoryCache.addAll(result);
 		}
+
 		return result;
 	}
+
 
 	/**
 	 * Publishes a service.
@@ -598,10 +605,10 @@ public class SLPHandlerImpl implements Discovery {
 	 * failures during usage of the copy. But we do not block the Tracker,
 	 * registrations and deregistrations of DSTs.
 	 * 
-	 * @return a Map of all registered DiscoveredServiceTracker trackers.
+	 * @return a copied Map of all registered DiscoveredServiceTracker trackers.
 	 */
 	protected Map getRegisteredServiceTracker() {
-		return discoTrackerCustomizer.getDsTrackers();
+		return new HashMap(discoTrackerCustomizer.getDsTrackers());
 	}
 
 	/**
@@ -770,9 +777,9 @@ public class SLPHandlerImpl implements Discovery {
 	/**
 	 * Returns the complete in MemoryCache.
 	 * 
-	 * @return a shallow copy of the inMemoryCache
+	 * @return a "shallow" copy of the inMemoryCache
 	 */
 	public List getCachedServices() {
-		return (List) (new ArrayList(inMemoryCache)).clone();
+		return new ArrayList(inMemoryCache);
 	}
 }
