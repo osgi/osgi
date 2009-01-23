@@ -12,7 +12,6 @@ ees 						= \
  
 core.specs = org.osgi.framework, \
  org.osgi.service.condpermadmin, \
- org.osgi.service.framework, \
  org.osgi.service.packageadmin, \
  org.osgi.service.permissionadmin, \
  org.osgi.service.startlevel, \
