@@ -1,6 +1,8 @@
 Bundle-Version: 1.0.0.${project.build}
 
-Private-Package						= ${p}.tbc.*, \
+Private-Package						= \
+	${p}.tbc.*, \
+  	${p}.util.* , \
 	org.osgi.test.support.*
 
 Include-Resource	=  \	
