@@ -1,0 +1,13 @@
+Bundle-SymbolicName: ${p}.register
+Bundle-Name: ${p}.register
+Bundle-Description: Filtered ServicePermissiont Test R4 - registration permission test
+Bundle-Version: 4.2.0.${project.build}
+Bundle-Activator: ${p}.register.RegisterActivator
+Bundle-Vendor: NTT
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+Bundle-Copyright: ${copyright}
+
+Private-Package						= \
+	${p}.register.*
