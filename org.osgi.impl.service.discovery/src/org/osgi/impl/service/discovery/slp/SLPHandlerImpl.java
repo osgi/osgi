@@ -229,6 +229,7 @@ public class SLPHandlerImpl implements Discovery {
 				ServiceLocationEnumeration a = locator.findAttributes(url,
 						null, null);
 				// TODO: check for failed call
+				//TODO check returning match if mandatory properties are set, if not log and ignore that service 
 				SLPServiceDescriptionAdapter descriptionAdapter = new SLPServiceDescriptionAdapter(
 						url);
 				while (a.hasMoreElements()) {
@@ -312,6 +313,9 @@ public class SLPHandlerImpl implements Discovery {
 	/**
 	 * Publishes a service.
 	 * 
+	 * TODO: publish also for every endpoint interface
+	 * TODO: use endpointLocation as service URL if given
+	 * 
 	 * @param javaInterfaces collection of java interface names
 	 * @param javaInterfacesAndVersions collection of versions, where the order
 	 *        of the version must match the order of the java interfaces
@@ -363,7 +367,6 @@ public class SLPHandlerImpl implements Discovery {
 				}
 			}
 
-			// TODO: Why to cache local available services?
 			// add it to the available Services
 			inMemoryCache.add(svcDescr);
 			// inform the listener about the new available service
@@ -459,10 +462,6 @@ public class SLPHandlerImpl implements Discovery {
 		}
 
 		public void modifiedService(ServiceReference reference, Object service) {
-			// TODO: Do we have to react to this event?
-			// Locator loc = (Locator) context.getService(reference);
-			// setLocator(loc);
-			// log(LogService.LOG_INFO, "rebound Locator");
 		}
 
 		public void removedService(ServiceReference reference, Object service) {
