@@ -10,4 +10,7 @@ Bundle-Category: osgi,test
 Bundle-Copyright: ${copyright}
 
 Private-Package						= \
-	${p}.register.*, ${p}.util.*
+	${p}.register.*
+Import-Package = \
+	${p}.util.*
+		
