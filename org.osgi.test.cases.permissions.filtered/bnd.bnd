@@ -1,8 +1,7 @@
 Bundle-Version: 1.0.0.${project.build}
 
 Private-Package						= \
-	${p}.tbc, \
- 	org.osgi.test.support
+	${p}.tbc
 
 Include-Resource	= \
 	www/register.jar=register.jar
@@ -13,7 +12,6 @@ Export-Package = \
 Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
 
 -buildpath							= \
-	org.osgi.test.support;                  version=project , \
 	osgi;									version=latest	, \
 	ee.foundation											, \
 	${junit}
@@ -22,9 +20,3 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 	report=true, \
 	org.osgi.framework.security=osgi
 	
-	
--runbundles							= \
-	org.osgi.impl.service.log; version=project, \
-	org.osgi.impl.service.cm;  version=project, \
-	org.osgi.impl.service.http; version=project, \
-	org.osgi.impl.bundle.servlet

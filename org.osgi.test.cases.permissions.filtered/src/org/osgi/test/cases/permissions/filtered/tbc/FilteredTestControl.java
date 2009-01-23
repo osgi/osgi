@@ -1,9 +1,13 @@
 package org.osgi.test.cases.permissions.filtered.tbc;
 
 import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.URL;
 import java.security.AllPermission;
 import java.util.Hashtable;
 import java.util.Properties;
+
+import junit.framework.TestCase;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -13,15 +17,14 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.permissions.filtered.util.IServiceRegister;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
- * @author kondou
+ * @author kondou,ikuo
  * 
  *         This is the TestCase to confirm the behavior of Service Permission.
  * 
  */
-public class FilteredTestControl extends DefaultTestBundleControl {
+public class FilteredTestControl extends TestCase {
 	private BundleContext context;
 
 	private PermissionAdmin permAdmin;
@@ -35,12 +38,12 @@ public class FilteredTestControl extends DefaultTestBundleControl {
 	// private static String REGISTER_BUNDLE_BUNDLELOCATION =
 	// "test.sp.register";
 
-	// public void setBundleContext(BundleContext context) {
-	// this.context = context;
-	// }
+	public void setBundleContext(BundleContext context) {
+		this.context = context;
+	}
 
 	public void setUp() {
-		context = super.getContext();
+		// context = getContext();
 		ServiceReference ref = context
 				.getServiceReference(PermissionAdmin.class.getName());
 		if (ref == null) {
@@ -85,7 +88,11 @@ public class FilteredTestControl extends DefaultTestBundleControl {
 
 		Bundle regBundle = null;
 
-		regBundle = installBundle(getWebServer() + "www/register.jar", false);
+		URL url = context.getBundle().getResource("www/register.jar");
+		InputStream is = url.openStream();
+		regBundle = context.installBundle("www/register.jar", is);
+		is.close();
+
 		// File fileReg = new File(REGISTER_BUNDLE_LOCATION);
 		// FileInputStream fisReg = new FileInputStream(fileReg);
 		// regBundle = context.installBundle(REGISTER_BUNDLE_BUNDLELOCATION,

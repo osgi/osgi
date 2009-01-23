@@ -9,6 +9,4 @@ Bundle-Category: osgi,test
 
 Private-Package	= \
 	${p}.register
-
-# Import-Package = \
-#	org.osgi.framework, ${p}.util
+	
