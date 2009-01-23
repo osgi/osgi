@@ -6,14 +6,15 @@ Private-Package						= ${p}.*
 	org.osgi.service.discovery;				version=project	, \
 	org.osgi.impl.service.discovery;		version=project	, \
 	osgi;									version=4.2		, \
-	ee.j2se;                                version=1.4, \												, \
+	ee.j2se;                                version=1.4, \
+	org.osgi.test.support;                  version=project, \
 	${junit}
 
 -runbundles							= \
 	org.osgi.impl.service.discovery; 		version=project, \
-	org.apache.jcs, \
+	org.osgi.test.support;                  version=project, \
+	osgi;                                   version=4.2, \
 	org.apache.commons-logging, \
-	edu.oswego.cs.dl.util.concurrent, \
-	ch.ethz.iks.slp, \
-	org.osgi.impl.service.log
+	ch.ethz.iks.slp
 
+#	org.osgi.impl.service.log
