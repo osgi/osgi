@@ -1,10 +1,10 @@
 Bundle-Version: 1.0.0.${project.build}
 
 Private-Package						= \
-	${p}.tbc.*, \
- 	org.osgi.test.support.*
+	${p}.tbc, \
+ 	org.osgi.test.support
 
-Include-Resource	=  \	
+Include-Resource	= \
 	www/register.jar=register.jar
 	
 Export-Package = \
