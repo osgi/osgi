@@ -38,7 +38,7 @@
 
 		<available file="bnd.bnd" property="use.bnd" />
 
-		<bndprepare basedir="${projectdir}" print="false" top="${release.dir}"/>
+		<bndprepare basedir="${projectdir}" print="false" top="${top}"/>
 		<!-- Now we have the same properties set as bnd 
 		-->
 			
@@ -48,22 +48,22 @@
 		
 		<!-- mark init has been run -->
 		<property name="initialized" value="set" />
-		<echo>Enter project ${project.name} (${release.target} ${release.dir})</echo>
+		<echo>Enter project ${project.name} (${top} ${release.target})</echo>
 	</target>
 
 	<!-- 
 		DEPENDENCIES
 		Build project dependencies. The execution of the dependencies is
 		restricted to 1 level because bnd calculates the dependencies. This
-		is controlled through the release.dir property. If this is set, the method
+		is controlled through the top property. If this is set, the method
 		will not execute. This method will set that property and it will set
 		it in the child ant.
 	-->
-	<target name="dependencies" depends="init" if="project.dependson" unless="release.dir">
-		<property name="release.dir" value="${target}" />
-		<echo>dependencies ${release.dir}</echo>
+	<target name="dependencies" depends="init" if="project.dependson" unless="top">
+		<property name="top" value="${target}" />
+		<echo>dependencies ${top}</echo>
 		<subant target="publish" inheritAll="false" buildpath="${project.dependson}">
-			<property name="release.dir" value="${release.dir}" />
+			<property name="top" value="${top}" />
 		</subant>
 	</target>
 
@@ -197,8 +197,8 @@
 	    RELEASE
 	    Copy the JAR file to the osgi.released directory.
 	-->
-	<target name="release" depends="init" if="release.dir">
-		<copy todir="${release.dir}" verbose="${verbose}" preservelastmodified="true">
+	<target name="release" depends="init" if="top">
+		<copy todir="${top}" verbose="${verbose}" preservelastmodified="true">
 			<fileset dir="${target}" includes="${bin.includes}" />
 		</copy>
 	</target>
