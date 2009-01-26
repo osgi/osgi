@@ -34,8 +34,6 @@ import ch.ethz.iks.slp.ServiceURL;
  * @version $Revision$
  */
 public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription {
-	public static final String UnknownVersion = "*";
-
 	// reserved are: `(' / `)' / `,' / `\' / `!' / `<' / `=' / `>' / `~' / CTL
 	// TODO: handle CTL
 	public static final String RESERVED_CHARS_IN_ATTR_VALUES = "(),\\!<>=~";
@@ -46,7 +44,9 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 
 	public static final String ESCAPING_CHARACTER = "\\";
 
-	private Collection /* <String> */javaInterfaces; // mandatory
+	private static int port = -1; //TODO: why is it static? It's looked only once for a free port and then never again even if that one is already used.
+
+	private Collection /* <String> */javaInterfaces = new ArrayList(); // mandatory
 	private Collection /* <String> */javaInterfaceAndVersions = new ArrayList(); // optional
 	private Collection /* <String> */javaAndEndpointInterfaces = new ArrayList(); // optional
 	private Map/* <String, Object> */properties = new HashMap(); // optional
@@ -54,9 +54,8 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 
 	// Java interfaces and associated ServiceURLs. Each interface has its own
 	// ServiceURL.
-	private Map/* <String, ServiceURL> */serviceURLs;
+	private Map/* <String, ServiceURL> */serviceURLs = new HashMap();
 
-	private static int port = -1;
 
 	/**
 	 * 
@@ -82,12 +81,12 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 		}
 
 		// create and copy collections and maps
-		javaInterfaces = new ArrayList(interfaceNames);
+		javaInterfaces.addAll(interfaceNames);
 		if (interfacesAndVersions != null) {
-			javaInterfaceAndVersions = new ArrayList(interfacesAndVersions);
+			javaInterfaceAndVersions.addAll(interfacesAndVersions);
 		}
 		if (endPointInterfaces != null) {
-			javaAndEndpointInterfaces = new ArrayList(endPointInterfaces);
+			javaAndEndpointInterfaces.addAll(endPointInterfaces);
 		}
 		if (props != null) {
 			properties.putAll(props);
@@ -102,12 +101,6 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 	 * @param serviceURL
 	 */
 	public SLPServiceDescriptionAdapter(final ServiceURL serviceURL) {
-		javaInterfaceAndVersions = new ArrayList();
-		javaAndEndpointInterfaces = new ArrayList();
-		javaInterfaces = new ArrayList();
-		properties = new HashMap();
-		serviceURLs = new HashMap();
-
 		String interfaceName = retrieveDataFromServiceURL(serviceURL,
 				javaInterfaces, javaInterfaceAndVersions,
 				javaAndEndpointInterfaces, properties);
@@ -124,7 +117,6 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 			throws ServiceLocationException {
 		// Create a service url for each interface and gather also version and
 		// endpoint-interface information.
-		serviceURLs = new HashMap();
 		Iterator intfIterator = javaInterfaces.iterator();
 		// walk over the provided interfaces
 		for (int i = 0; intfIterator.hasNext(); i++) {
@@ -481,7 +473,7 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 			version = (String) versionsValue;
 		} else {
 			// TODO log error
-			version = SLPServiceDescriptionAdapter.UnknownVersion;
+			version = org.osgi.framework.Version.emptyVersion.toString();
 		}
 		javaInterfaceAndFilters.add(version);
 
@@ -769,27 +761,43 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 	 * @see java.lang.Object#hashCode()
 	 */
 	public int hashCode() {
-		int result = 17;
-		Iterator it = javaInterfaces.iterator();
-		while (it.hasNext()) {
-			result = 37 * result + ((String) it.next()).hashCode();
+		// In case endpointID has been provided by DSW / another Discovery or has been generated generated 
+		if(this.endpointID != null)
+		{
+			return this.endpointID.hashCode();
 		}
-		it = javaAndEndpointInterfaces.iterator();
-		while (it.hasNext()) {
-			result = 37 * result + ((String) it.next()).hashCode();
+		else {
+			int result = 17;
+			
+			Iterator it = javaInterfaces.iterator();
+			while (it.hasNext()) {
+				result = 37 * result + ((String) it.next()).hashCode();
+			}
+			
+			it = javaAndEndpointInterfaces.iterator();
+			while (it.hasNext()) {
+				result = 37 * result + ((String) it.next()).hashCode();
+			}
+			
+			it = javaInterfaceAndVersions.iterator();
+			while (it.hasNext()) {
+				result = 37 * result + ((String) it.next()).hashCode();
+			}
+			
+			if (endpointID != null)
+				result = 37 * result + endpointID.hashCode();
+
+			result = 37 * result + properties.hashCode(); // TODO implement more
+			
+			/* not significant member variables but rather derived/composite values
+			 * 
+			result = 37 * result + serviceURLs.hashCode(); // TODO implement more
+			// exacting
+			result = 37 * result + port;
+			*/
+			
+			return result;
 		}
-		it = javaInterfaceAndVersions.iterator();
-		while (it.hasNext()) {
-			result = 37 * result + ((String) it.next()).hashCode();
-		}
-		if (endpointID != null)
-			result = 37 * result + endpointID.hashCode();
-		result = 37 * result + serviceURLs.hashCode(); // TODO implement more
-		// exacting
-		result = 37 * result + properties.hashCode(); // TODO implement more
-		// exacting
-		result = 37 * result + port;
-		return result;
 	}
 
 	/**
