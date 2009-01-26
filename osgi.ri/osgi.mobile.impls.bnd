@@ -6,7 +6,7 @@ Bundle-Version					: ${mobile.release.version}
 Bundle-Activator				: org.osgi.tools.group.Group
 
 Include-Resource				: \
-	${replace;${build.mobile.impls};(.+);${release.target}/$1.jar}, \
+    ${repo;${build.mobile.impls};0;HIGHEST}, \
   	\
 	${repo;org.osgi.impl.bundle.servlet;2.1}, \
   	${repo;org.eclipse.equinox.ds}, \
