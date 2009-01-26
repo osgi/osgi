@@ -28,8 +28,12 @@
 	-->
 
 	<target name="init" unless="initialized">
+		<!-- The following two properties are local to this file to get bootstrapped. 
+		   The actual properties to be used should be project.dir, and project.workspace. These
+		properties are set by bnd -->
 		<dirname property="projectdir" file="${ant.file}" />
 		<dirname property="workspacedir" file="${projectdir}" />
+		
 		<taskdef resource="aQute/bnd/ant/taskdef.properties" classpath="${workspacedir}/licensed/repo/biz.aQute.bnd/biz.aQute.bnd-latest.jar" />
 
 		<available file="bnd.bnd" property="use.bnd" />
@@ -49,12 +53,17 @@
 
 	<!-- 
 		DEPENDENCIES
-		Build project dependencies.
+		Build project dependencies. The execution of the dependencies is
+		restricted to 1 level because bnd calculates the dependencies. This
+		is controlled through the release.dir property. If this is set, the method
+		will not execute. This method will set that property and it will set
+		it in the child ant.
 	-->
-	<target name="dependencies" depends="init" if="project.dependson" unless="donotrecurse">
+	<target name="dependencies" depends="init" if="project.dependson" unless="release.dir">
+		<property name="release.dir" value="${target}" />
+		<echo>dependencies ${release.dir}</echo>
 		<subant target="publish" inheritAll="false" buildpath="${project.dependson}">
-			<property name="release.dir" value="${target}" />
-			<property name="donotrecurse" value="true" />
+			<property name="release.dir" value="${release.dir}" />
 		</subant>
 	</target>
 
