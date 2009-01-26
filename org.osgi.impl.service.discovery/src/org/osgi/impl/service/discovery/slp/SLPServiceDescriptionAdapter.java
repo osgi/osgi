@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -699,64 +698,53 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 		if (!(serviceDescription instanceof ServiceEndpointDescription)) {
 			return false;
 		}
+		
 		ServiceEndpointDescription descr = (ServiceEndpointDescription) serviceDescription;
-		List sdJavaInterfaceAndVersions = new ArrayList();
-		List sdJavaAndEndpointInterfaces = new ArrayList();
-		Collection interfaces = descr.getProvidedInterfaces();
-		if (interfaces == null) {
+		
+		//if one has an EndpointID
+		if(this.endpointID != null || descr.getEndpointID() != null)
+		{
+			if(this.endpointID != null)
+				return this.endpointID.equals(descr.getEndpointID());
+			else
+				// we don't have an endpointID but only the other.
+				return false; 
+		}
+		
+		Collection descrInterfaces = descr.getProvidedInterfaces();
+		if (descrInterfaces == null) {
 			throw new RuntimeException(
 					"The service does not contain requiered parameter interfaces. "
 							+ descr);
 		}
-		Iterator interfacesIterator = interfaces.iterator();
+		
+		if(this.javaInterfaces.size() != descrInterfaces.size())
+			return false;
+		
+		// compare interface names, versions and endpoint interface names
+		Iterator interfacesIterator = this.javaInterfaces.iterator();
 		while (interfacesIterator.hasNext()) {
 			String interfaceName = (String) interfacesIterator.next();
-			sdJavaInterfaceAndVersions.add(interfaceName
-					+ ServicePublication.SEPARATOR
-					+ descr.getVersion(interfaceName));
-			if (descr.getEndpointInterfaceName(interfaceName) != null) {
-				sdJavaAndEndpointInterfaces.add(interfaceName
-						+ ServicePublication.SEPARATOR
-						+ descr.getEndpointInterfaceName(interfaceName));
-			}
-		}
-		// interface and versions field
-		if (!((javaInterfaceAndVersions == sdJavaInterfaceAndVersions) || (javaInterfaceAndVersions != null && javaInterfaceAndVersions
-				.equals(sdJavaInterfaceAndVersions)))) {
-			return false;
-		}
-		// interface and endpoints field
-		if (!((javaAndEndpointInterfaces == sdJavaAndEndpointInterfaces) || (javaAndEndpointInterfaces != null && javaAndEndpointInterfaces
-				.equals(sdJavaAndEndpointInterfaces)))) {
-			return false;
-		}
-		// properties field
-		if (properties != descr.getProperties()) {
-			if (properties != null && descr.getProperties() != null) {
-				if (properties.isEmpty() && !descr.getProperties().isEmpty()) {
-					return false;
-				}
-				Iterator it = properties.keySet().iterator();
-				while (it.hasNext()) {
-					String nextKey = (String) it.next();
-					if (descr.getProperty(nextKey) != null) {
-						if (properties.get(nextKey).equals(
-								descr.getProperty(nextKey))) {
+			
+			if(!descrInterfaces.contains(interfaceName))
+				return false;
+			
+			String version = getVersion(interfaceName);
+			if( (version != null && (!version.equals(descr.getVersion(interfaceName))))
+					|| (version == null && descr.getVersion(interfaceName) != null) )
+				return false;
 
-						} else {
-							return false;
-						}
-					} else {
-						return false;
-					}
-				}
-			}
+			String endpointInterface = getEndpointInterfaceName(interfaceName);
+			if( (endpointInterface != null && (!endpointInterface.equals(descr.getEndpointInterfaceName(interfaceName))))
+					|| (endpointInterface == null && descr.getEndpointInterfaceName(interfaceName) != null) )
+				return false;
 		}
-		return true;
+		
+		// compare properties field
+		return properties.equals(descr.getProperties());
 	}
 
 	/**
-	 * TODO implement hashCode() appropriatly
 	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
