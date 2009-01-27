@@ -44,6 +44,16 @@ public class Semaphore {
 	}
 	
 	/**
+	 * Waits until a signal is (or has been) given.
+	 */
+	public synchronized void waitForSignal(long timeout) throws InterruptedException {
+		while (count == 0) {
+			super.wait(timeout);
+		}
+		count--;
+	}
+	
+	/**
 	 * Give the signal.
 	 */
 	public synchronized void signal() {
