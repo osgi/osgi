@@ -6,7 +6,7 @@ Bundle-Version					: ${enterprise.release.version}
 Bundle-Activator				: org.osgi.tools.group.Group
 
 Include-Resource				: \
-        ${replace;${build.enterprise.impls};(.+);${release.target}/$1.jar}, \
+        ${repo;${build.enterprise.impls}}, \
 	  	\
 	 	\
 		apache/LICENSE=../licensed/licenses/ASL-2.0.txt, \
