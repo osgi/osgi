@@ -94,23 +94,21 @@ public class DSTTracker implements ServiceTrackerCustomizer {
 			final Map matchingCriteria) {
 		List cachedServices = discovery.getCachedServices();
 		if (cachedServices != null) {
-			synchronized (cachedServices) {
-				Iterator it = cachedServices.iterator();
-				while (it.hasNext()) {
-					ServiceEndpointDescription svcDescr = (ServiceEndpointDescription) it
-							.next();
-					if (SLPHandlerImpl.isTrackerInterestedInSED(svcDescr,
-							matchingCriteria)) {
-						tracker
-								.serviceChanged(new DiscoveredServiceNotificationImpl(
-										svcDescr,
-										DiscoveredServiceNotification.AVAILABLE));
-					}
+			Iterator it = cachedServices.iterator();
+			while (it.hasNext()) {
+				ServiceEndpointDescription svcDescr = (ServiceEndpointDescription) it
+						.next();
+				if (SLPHandlerImpl.isTrackerInterestedInSED(svcDescr,
+						matchingCriteria)) {
+					tracker
+							.serviceChanged(new DiscoveredServiceNotificationImpl(
+									svcDescr,
+									DiscoveredServiceNotification.AVAILABLE));
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * This method fills a map with key value pairs, where the key is
 	 * {@link#DiscoveredServiceTracker.PROP_KEY_MATCH_CRITERIA_INTERFACES} or
@@ -121,7 +119,8 @@ public class DSTTracker implements ServiceTrackerCustomizer {
 	 * @param serviceReference
 	 * @return a map that contains two entries where the value contains the
 	 *         added properties. It returns empty values if no new properties
-	 *         have been found. It returns null values if the new properties are null or empty
+	 *         have been found. It returns null values if the new properties are
+	 *         null or empty
 	 */
 	private Map determineChangedFilterProperties(
 			DiscoveredServiceTracker tracker, ServiceReference serviceReference) {
@@ -217,15 +216,13 @@ public class DSTTracker implements ServiceTrackerCustomizer {
 	 * @param tracker
 	 */
 	private void removeTracker(DiscoveredServiceTracker tracker) {
-		if (dsTrackers.keySet().contains(tracker)) {
-			dsTrackers.remove(tracker);
-		}
+		dsTrackers.remove(tracker);
 	}
 
 	/**
 	 * @return the dsTrackers
 	 */
 	public Map getDsTrackers() {
-		return dsTrackers;
+		return new HashMap(dsTrackers);
 	}
 }

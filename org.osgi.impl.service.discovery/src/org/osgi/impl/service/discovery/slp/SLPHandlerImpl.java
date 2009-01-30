@@ -1,10 +1,11 @@
 /* 
  * $Header$
  * 
- * (c) Copyright 2008 Siemens Communications
+ * Copyright (c) 2009 Siemens Enterprise Communications GmbH & Co. KG, Germany
+ * All rights reserved.
  *
  * This material, including documentation and any related computer programs,
- * is protected by copyright controlled by Siemens Communications and its licensors. 
+ * is protected by copyright controlled by Siemens Enterprise Communications GmbH & Co. KG and its licensors. 
  * All rights are reserved.
  * 
  * These materials have been contributed  to the Open Services Gateway 
@@ -103,7 +104,7 @@ public class SLPHandlerImpl implements Discovery {
 	private LogService				logService;
 	// private boolean autoPublish = DEFAULT_AUTOPUBLISH;
 
-	private Collection					/* <SLPServiceDescriptionAdapter> */inMemoryCache	= Collections
+	private Collection				/* <SLPServiceDescriptionAdapter> */inMemoryCache	= Collections
 																								.synchronizedSet(new HashSet());
 
 	/**
@@ -144,7 +145,7 @@ public class SLPHandlerImpl implements Discovery {
 				discoTrackerCustomizer);
 		discoTracker.open();
 		t = new Timer(false);
-		t.schedule(new InformListenerTask(this), 0, POLLDELAY);
+		t.schedule(new InformListenerTask(this), 1, POLLDELAY);
 	}
 
 	/**
@@ -207,7 +208,7 @@ public class SLPHandlerImpl implements Discovery {
 		// find appropriate services
 		ServiceLocationEnumeration se;
 		try {
-			ServiceURL svcURL = SLPServiceDescriptionAdapter.createServiceURL(
+			ServiceURL svcURL = SLPServiceEndpointDescription.createServiceURL(
 					interfaceName, null, null, null);
 			log(LogService.LOG_DEBUG, "try to find services with URL="
 					+ svcURL.toString());
@@ -229,8 +230,9 @@ public class SLPHandlerImpl implements Discovery {
 				ServiceLocationEnumeration a = locator.findAttributes(url,
 						null, null);
 				// TODO: check for failed call
-				//TODO check returning match if mandatory properties are set, if not log and ignore that service 
-				SLPServiceDescriptionAdapter descriptionAdapter = new SLPServiceDescriptionAdapter(
+				// TODO check returning match if mandatory properties are set,
+				// if not log and ignore that service
+				SLPServiceEndpointDescription descriptionAdapter = new SLPServiceEndpointDescription(
 						url);
 				while (a.hasMoreElements()) {
 					// TODO: introduce a separator util
@@ -293,15 +295,17 @@ public class SLPHandlerImpl implements Discovery {
 		else {
 			log(LogService.LOG_DEBUG, "0 services found");
 		}
-		//it was a full search
-		if(interfaceName == null && filter == null) {
-			//atomic compound operation
+		// it was a full search
+		if (interfaceName == null && filter == null) {
+			// atomic compound operation
 			synchronized (inMemoryCache) {
-				inMemoryCache.clear(); // this works only because this method will
+				inMemoryCache.clear(); // this works only because this method
+				// will
 				// be called to find ALL services in the network.
 				inMemoryCache.addAll(result);
 			}
-		} else {
+		}
+		else {
 			// add only just found entries
 			inMemoryCache.addAll(result);
 		}
@@ -309,12 +313,11 @@ public class SLPHandlerImpl implements Discovery {
 		return result;
 	}
 
-
 	/**
 	 * Publishes a service.
 	 * 
-	 * TODO: publish also for every endpoint interface
-	 * TODO: use endpointLocation as service URL if given
+	 * TODO: publish also for every endpoint interface TODO: use
+	 * endpointLocation as service URL if given
 	 * 
 	 * @param javaInterfaces collection of java interface names
 	 * @param javaInterfacesAndVersions collection of versions, where the order
@@ -337,9 +340,9 @@ public class SLPHandlerImpl implements Discovery {
 		// TODO: act according strategy parameter
 		Advertiser advertiser = getAdvertiser();
 		if (advertiser != null) {
-			SLPServiceDescriptionAdapter svcDescr;
+			SLPServiceEndpointDescription svcDescr;
 			try {
-				svcDescr = new SLPServiceDescriptionAdapter(javaInterfaces,
+				svcDescr = new SLPServiceEndpointDescription(javaInterfaces,
 						javaInterfacesAndVersions,
 						javaInterfacesAndEndpointInterfaces, properties,
 						endpointID);
@@ -394,8 +397,8 @@ public class SLPHandlerImpl implements Discovery {
 
 		// TODO How about using SLPServiceDescriptionAdapter instead of
 		// ServiceEndpointDescription classes, since it's anyway a SLPDiscovery?
-		if (serviceDescription instanceof SLPServiceDescriptionAdapter) {
-			SLPServiceDescriptionAdapter slpSvcDescr = (SLPServiceDescriptionAdapter) serviceDescription;
+		if (serviceDescription instanceof SLPServiceEndpointDescription) {
+			SLPServiceEndpointDescription slpSvcDescr = (SLPServiceEndpointDescription) serviceDescription;
 			// remove it from in memory cache
 			inMemoryCache.remove(slpSvcDescr);
 			// unregister it via SLP
@@ -617,27 +620,22 @@ public class SLPHandlerImpl implements Discovery {
 	protected void notifyListenersOnNewServiceDescription(
 			ServiceEndpointDescription svcDescr) {
 		Map discoveredSTs = getRegisteredServiceTracker();
-		synchronized (discoveredSTs) {
-			Iterator it = discoveredSTs.keySet().iterator();
-			while (it.hasNext()) {
-				DiscoveredServiceTracker st = (DiscoveredServiceTracker) it
-						.next();
-				Map trackerProps = (Map) discoveredSTs.get(st);
-				if (isTrackerInterestedInSED(svcDescr, trackerProps)) {
-					try {
-						st
-								.serviceChanged(new DiscoveredServiceNotificationImpl(
-										svcDescr,
-										DiscoveredServiceNotification.AVAILABLE));
-					}
-					catch (Exception e) {
-						log(
-								LogService.LOG_ERROR,
-								"Exceptions where thrown while notifying about a new remote service.",
-								e);
-					}
-
+		Iterator it = discoveredSTs.keySet().iterator();
+		while (it.hasNext()) {
+			DiscoveredServiceTracker st = (DiscoveredServiceTracker) it.next();
+			Map trackerProps = (Map) discoveredSTs.get(st);
+			if (isTrackerInterestedInSED(svcDescr, trackerProps)) {
+				try {
+					st.serviceChanged(new DiscoveredServiceNotificationImpl(
+							svcDescr, DiscoveredServiceNotification.AVAILABLE));
 				}
+				catch (Exception e) {
+					log(
+							LogService.LOG_ERROR,
+							"Exceptions where thrown while notifying about a new remote service.",
+							e);
+				}
+
 			}
 		}
 	}
@@ -650,31 +648,55 @@ public class SLPHandlerImpl implements Discovery {
 	protected void notifyListenersOnRemovedServiceDescription(
 			ServiceEndpointDescription svcDescr) {
 		Map discoveredSTs = getRegisteredServiceTracker();
-		synchronized (discoveredSTs) {
-			Iterator it = discoveredSTs.keySet().iterator();
-			while (it.hasNext()) {
-				DiscoveredServiceTracker st = (DiscoveredServiceTracker) it
-						.next();
-				Map trackerProps = (Map) discoveredSTs.get(st);
-				// inform it if the listener has no Filter set
-				// or the filter matches the criteria
-				if (isTrackerInterestedInSED(svcDescr, trackerProps)) {
-					try {
-						st
-								.serviceChanged(new DiscoveredServiceNotificationImpl(
-										svcDescr,
-										DiscoveredServiceNotification.UNAVAILABLE));
-					}
-					catch (Exception e) {
-						log(
-								LogService.LOG_ERROR,
-								"Exceptions where thrown while notifying about removal of a remote service.",
-								e);
-					}
+		Iterator it = discoveredSTs.keySet().iterator();
+		while (it.hasNext()) {
+			DiscoveredServiceTracker st = (DiscoveredServiceTracker) it.next();
+			Map trackerProps = (Map) discoveredSTs.get(st);
+			// inform it if the listener has no Filter set
+			// or the filter matches the criteria
+			if (isTrackerInterestedInSED(svcDescr, trackerProps)) {
+				try {
+					st
+							.serviceChanged(new DiscoveredServiceNotificationImpl(
+									svcDescr,
+									DiscoveredServiceNotification.UNAVAILABLE));
+				}
+				catch (Exception e) {
+					log(
+							LogService.LOG_ERROR,
+							"Exceptions where thrown while notifying about removal of a remote service.",
+							e);
 				}
 			}
 		}
+	}
 
+	/**
+	 * 
+	 * @param svcDescr
+	 */
+	protected void notifyListenersOnModifiedServiceDescription(
+			ServiceEndpointDescription svcDescr) {
+		Map discoveredSTs = getRegisteredServiceTracker();
+		Iterator it = discoveredSTs.keySet().iterator();
+		while (it.hasNext()) {
+			DiscoveredServiceTracker st = (DiscoveredServiceTracker) it.next();
+			Map trackerProps = (Map) discoveredSTs.get(st);
+			// inform it if the listener has no Filter set
+			// or the filter matches the criteria
+			if (isTrackerInterestedInSED(svcDescr, trackerProps)) {
+				try {
+					st.serviceChanged(new DiscoveredServiceNotificationImpl(
+							svcDescr, DiscoveredServiceNotification.MODIFIED));
+				}
+				catch (Exception e) {
+					log(
+							LogService.LOG_ERROR,
+							"Exceptions where thrown while notifying about modification of a remote service.",
+							e);
+				}
+			}
+		}
 	}
 
 	/**
@@ -738,39 +760,6 @@ public class SLPHandlerImpl implements Discovery {
 			}
 		}
 		return notify;
-	}
-
-	/**
-	 * 
-	 * @param svcDescr
-	 */
-	protected void notifyListenersOnModifiedServiceDescription(
-			ServiceEndpointDescription svcDescr) {
-		Map discoveredSTs = getRegisteredServiceTracker();
-		synchronized (discoveredSTs) {
-			Iterator it = discoveredSTs.keySet().iterator();
-			while (it.hasNext()) {
-				DiscoveredServiceTracker st = (DiscoveredServiceTracker) it
-						.next();
-				Map trackerProps = (Map) discoveredSTs.get(st);
-				// inform it if the listener has no Filter set
-				// or the filter matches the criteria
-				if (isTrackerInterestedInSED(svcDescr, trackerProps)) {
-					try {
-						st
-								.serviceChanged(new DiscoveredServiceNotificationImpl(
-										svcDescr,
-										DiscoveredServiceNotification.MODIFIED));
-					}
-					catch (Exception e) {
-						log(
-								LogService.LOG_ERROR,
-								"Exceptions where thrown while notifying about modification of a remote service.",
-								e);
-					}
-				}
-			}
-		}
 	}
 
 	/**
