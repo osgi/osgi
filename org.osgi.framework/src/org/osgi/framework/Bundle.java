@@ -1171,7 +1171,9 @@ public interface Bundle {
 	 *         in the <code>List</code> is the signer's
 	 *         <code>X509Certificate</code> which is then followed by the rest
 	 *         of the <code>X509Certificate</code> chain. The returned
-	 *         <code>Map</code> will be empty if there are no signers.
+	 *         <code>Map</code> will be empty if there are no signers. The
+	 *         returned <code>Map</code> is the property of the caller who is
+	 *         free to modify it.
 	 * @throws IllegalArgumentException If the specified
 	 *         <code>signersType</code> is not {@link #SIGNERS_ALL} or
 	 *         {@link #SIGNERS_TRUSTED}.
