@@ -1,12 +1,10 @@
 /* 
- * $Header$
- * 
- * Copyright (c) 2009 Siemens Enterprise Communications GmbH & Co. KG, Germany
- * All rights reserved.
+ * Copyright (c) 2008, 2009 Siemens Enterprise Communications GmbH & Co. KG, 
+ * Germany. All rights reserved.
  *
  * This material, including documentation and any related computer programs,
- * is protected by copyright controlled by Siemens Enterprise Communications GmbH & Co. KG and its licensors. 
- * All rights are reserved.
+ * is protected by copyright controlled by Siemens Enterprise Communications 
+ * GmbH & Co. KG and its licensors. All rights are reserved.
  * 
  * These materials have been contributed  to the Open Services Gateway 
  * Initiative (OSGi)as "MEMBER LICENSED MATERIALS" as defined in, and subject 
@@ -136,14 +134,14 @@ public class SLPHandlerImpl implements Discovery {
 		// .equalsIgnoreCase(SLPHandlerImpl.PROP_VAL_PUBLISH_STRATEGY_PUSH);
 		locatorTracker.open();
 		advertiserTracker.open();
-		spTracker = new ServiceTracker(context, ServicePublication.class
-				.getName(), new ServicePublicationTracker(context, this));
-		spTracker.open();
 		discoTrackerCustomizer = new DSTTracker(context, this);
 		discoTracker = new ServiceTracker(context,
 				DiscoveredServiceTracker.class.getName(),
 				discoTrackerCustomizer);
 		discoTracker.open();
+		spTracker = new ServiceTracker(context, ServicePublication.class
+				.getName(), new ServicePublicationTracker(context, this));
+		spTracker.open();
 		t = new Timer(false);
 		t.schedule(new InformListenerTask(this), 1, POLLDELAY);
 	}

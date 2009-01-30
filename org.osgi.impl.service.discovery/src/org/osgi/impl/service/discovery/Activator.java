@@ -1,11 +1,10 @@
 /* 
- * $Header$
- * 
- * (c) Copyright 2008 Siemens Communications
+ * Copyright (c) 2008, 2009 Siemens Enterprise Communications GmbH & Co. KG, 
+ * Germany. All rights reserved.
  *
  * This material, including documentation and any related computer programs,
- * is protected by copyright controlled by Siemens Communications and its licensors. 
- * All rights are reserved.
+ * is protected by copyright controlled by Siemens Enterprise Communications 
+ * GmbH & Co. KG and its licensors. All rights are reserved.
  * 
  * These materials have been contributed  to the Open Services Gateway 
  * Initiative (OSGi)as "MEMBER LICENSED MATERIALS" as defined in, and subject 
