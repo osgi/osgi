@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2009). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -201,27 +201,33 @@ public class FrameworkUtil {
 	public static BundleReference getBundleReference(final Class classFromBundle) {
 		// We use doPriv since the caller may not have permission
 		// to call getClassLoader.
-		final Bundle bundle = (Bundle) AccessController
-				.doPrivileged(new PrivilegedAction() {
-					public Object run() {
-						try {
-							return ((BundleReference) classFromBundle
-									.getClassLoader()).getBundle();
-						}
-						catch (ClassCastException e) {
-							IllegalArgumentException iae = new IllegalArgumentException();
-							iae.initCause(e);
-							throw iae;
-						}
-					}
-				});
-		// We use an anonymous class to avoid leaking the ClassLoader object.
-		return new BundleReference() {
-			public Bundle getBundle() {
-				return bundle;
+		Object cl = AccessController.doPrivileged(new PrivilegedAction() {
+			public Object run() {
+				return classFromBundle.getClassLoader();
 			}
-		};
+		});
+		
+		if (cl instanceof BundleReference) {
+			// We use a static inner class to avoid leaking the ClassLoader
+			// object.
+			return new BundleHolder(((BundleReference) cl).getBundle());
+		}
+		throw new IllegalArgumentException();
 	}
+
+	/**
+	 * Static inner bundle holder class.
+	 */
+	private static class BundleHolder implements BundleReference {
+		private final Bundle	bundle;
+		BundleHolder(Bundle bundle) {
+			this.bundle = bundle;
+		}
+		public Bundle getBundle() {
+			return bundle;
+		}
+	}
+	
 	/**
 	 * RFC 1960-based Filter. Filter objects can be created by calling the
 	 * constructor with the desired filter string. A Filter object can be called
@@ -345,6 +351,27 @@ public class FrameworkUtil {
 	 * type will evaluate to <code>false</code> .
 	 */
 	private static class FilterImpl implements Filter {
+		/* filter operators */
+		private static final int EQUAL = 1;
+		private static final int APPROX = 2;
+		private static final int GREATER = 3;
+		private static final int LESS = 4;
+		private static final int PRESENT = 5;
+		private static final int SUBSTRING = 6;
+		private static final int AND = 7;
+		private static final int OR = 8;
+		private static final int NOT = 9;
+
+		/** filter operation */
+		private final int op;
+		/** filter attribute or null if operation AND, OR or NOT */
+		private final String attr;
+		/** filter operands */
+		private final Object value;
+
+		/* normalized filter string for Filter object */
+		private transient volatile String filterString;
+
 		/**
 		 * Constructs a {@link FilterImpl} object. This filter object may be
 		 * used to match a {@link ServiceReference} or a Dictionary.
@@ -363,6 +390,12 @@ public class FrameworkUtil {
 		static FilterImpl newInstance(String filterString)
 				throws InvalidSyntaxException {
 			return new Parser(filterString).parse();
+		}
+
+		FilterImpl(int operation, String attr, Object value) {
+			this.op = operation;
+			this.attr = attr;
+			this.value = value;
 		}
 
 		/**
@@ -427,42 +460,57 @@ public class FrameworkUtil {
 		 * @return This <code>Filter</code>'s filter string.
 		 */
 		public String toString() {
-			String result = this.filterString;
+			String result = filterString;
 			if (result == null) {
-				StringBuffer sb = new StringBuffer();
-				sb.append('(');
+				filterString = result = normalize();
+			}
+			return result;
+		}
 
-				switch (op) {
-				case AND: {
+		/**
+		 * Returns this <code>Filter</code>'s normalized filter string.
+		 * <p>
+		 * The filter string is normalized by removing whitespace which does not
+		 * affect the meaning of the filter.
+		 * 
+		 * @return This <code>Filter</code>'s filter string.
+		 */
+		private String normalize() {
+			StringBuffer sb = new StringBuffer();
+			sb.append('(');
+
+			switch (op) {
+				case AND : {
 					sb.append('&');
 
 					FilterImpl[] filters = (FilterImpl[]) value;
 					for (int i = 0, size = filters.length; i < size; i++) {
-						sb.append(filters[i].toString());
+						sb.append(filters[i].normalize());
 					}
 
 					break;
 				}
 
-				case OR: {
+				case OR : {
 					sb.append('|');
 
 					FilterImpl[] filters = (FilterImpl[]) value;
 					for (int i = 0, size = filters.length; i < size; i++) {
-						sb.append(filters[i].toString());
+						sb.append(filters[i].normalize());
 					}
 
 					break;
 				}
 
-				case NOT: {
+				case NOT : {
 					sb.append('!');
-					sb.append(value.toString());
+					FilterImpl filter = (FilterImpl) value;
+					sb.append(filter.normalize());
 
 					break;
 				}
 
-				case SUBSTRING: {
+				case SUBSTRING : {
 					sb.append(attr);
 					sb.append('=');
 
@@ -473,59 +521,54 @@ public class FrameworkUtil {
 
 						if (substr == null) /* * */{
 							sb.append('*');
-						} else /* xxx */{
+						}
+						else /* xxx */{
 							sb.append(encodeValue(substr));
 						}
 					}
 
 					break;
 				}
-				case EQUAL: {
+				case EQUAL : {
 					sb.append(attr);
 					sb.append('=');
-					sb.append(encodeValue(value.toString()));
+					sb.append(encodeValue((String) value));
 
 					break;
 				}
-				case GREATER: {
+				case GREATER : {
 					sb.append(attr);
-					sb.append(">="); //$NON-NLS-1$
-					sb.append(encodeValue(value.toString()));
+					sb.append(">=");
+					sb.append(encodeValue((String) value));
 
 					break;
 				}
-				case LESS: {
+				case LESS : {
 					sb.append(attr);
-					sb.append("<="); //$NON-NLS-1$
-					sb.append(encodeValue(value.toString()));
+					sb.append("<=");
+					sb.append(encodeValue((String) value));
 
 					break;
 				}
-				case APPROX: {
+				case APPROX : {
 					sb.append(attr);
-					sb.append("~="); //$NON-NLS-1$
-					sb.append(encodeValue(approxString(value.toString())));
+					sb.append("~=");
+					sb.append(encodeValue(approxString((String) value)));
 
 					break;
 				}
 
-				case PRESENT: {
+				case PRESENT : {
 					sb.append(attr);
-					sb.append("=*"); //$NON-NLS-1$
+					sb.append("=*"); 
 
 					break;
-				}
-				}
-
-				sb.append(')');
-
-				result = sb.toString();
-				if (topLevel) /* only hold onto String object at toplevel */{
-					this.filterString = result;
 				}
 			}
 
-			return result;
+			sb.append(')');
+
+			return sb.toString();
 		}
 
 		/**
@@ -546,11 +589,11 @@ public class FrameworkUtil {
 			if (obj == this) {
 				return true;
 			}
-
+		
 			if (!(obj instanceof Filter)) {
 				return false;
 			}
-
+		
 			return this.toString().equals(obj.toString());
 		}
 
@@ -565,36 +608,6 @@ public class FrameworkUtil {
 		 */
 		public int hashCode() {
 			return this.toString().hashCode();
-		}
-
-		/** filter operation */
-		private final int op;
-		private static final int EQUAL = 1;
-		private static final int APPROX = 2;
-		private static final int GREATER = 3;
-		private static final int LESS = 4;
-		private static final int PRESENT = 5;
-		private static final int SUBSTRING = 6;
-		private static final int AND = 7;
-		private static final int OR = 8;
-		private static final int NOT = 9;
-
-		/** filter attribute or null if operation AND, OR or NOT */
-		private final String attr;
-		/** filter operands */
-		private final Object value;
-
-		/* normalized filter string for topLevel Filter object */
-		private transient volatile String filterString;
-
-		/* true if root Filter object */
-		private final boolean topLevel;
-
-		FilterImpl(boolean topLevel, int operation, String attr, Object value) {
-			this.topLevel = topLevel;
-			this.op = operation;
-			this.attr = attr;
-			this.value = value;
 		}
 
 		/**
@@ -1215,38 +1228,40 @@ public class FrameworkUtil {
 			FilterImpl parse() throws InvalidSyntaxException {
 				FilterImpl filter;
 				try {
-					filter = parse_filter(true);
+					filter = parse_filter();
 				} catch (ArrayIndexOutOfBoundsException e) {
 					throw new InvalidSyntaxException(
-							"Filter ended abruptly", filterstring); //$NON-NLS-1$
+							"Filter ended abruptly",
+							filterstring); 
 				}
 
 				if (pos != filterChars.length) {
 					throw new InvalidSyntaxException(
-							"Extraneous trailing characters: " + filterstring.substring(pos), filterstring); //$NON-NLS-1$
+							"Extraneous trailing characters: "
+									+ filterstring.substring(pos), filterstring); 
 				}
 				return filter;
 			}
 
-			private FilterImpl parse_filter(boolean topLevel)
+			private FilterImpl parse_filter()
 					throws InvalidSyntaxException {
 				FilterImpl filter;
 				skipWhiteSpace();
 
 				if (filterChars[pos] != '(') {
 					throw new InvalidSyntaxException("Missing '(': "
-							+ filterstring.substring(pos), filterstring); //$NON-NLS-1$
+							+ filterstring.substring(pos), filterstring); 
 				}
 
 				pos++;
 
-				filter = parse_filtercomp(topLevel);
+				filter = parse_filtercomp();
 
 				skipWhiteSpace();
 
 				if (filterChars[pos] != ')') {
 					throw new InvalidSyntaxException("Missing ')': "
-							+ filterstring.substring(pos), filterstring); //$NON-NLS-1$
+							+ filterstring.substring(pos), filterstring); 
 				}
 
 				pos++;
@@ -1256,7 +1271,7 @@ public class FrameworkUtil {
 				return filter;
 			}
 
-			private FilterImpl parse_filtercomp(boolean topLevel)
+			private FilterImpl parse_filtercomp()
 					throws InvalidSyntaxException {
 				skipWhiteSpace();
 
@@ -1265,75 +1280,75 @@ public class FrameworkUtil {
 				switch (c) {
 				case '&': {
 					pos++;
-					return parse_and(topLevel);
+					return parse_and();
 				}
 				case '|': {
 					pos++;
-					return parse_or(topLevel);
+					return parse_or();
 				}
 				case '!': {
 					pos++;
-					return parse_not(topLevel);
+					return parse_not();
 				}
 				}
-				return parse_item(topLevel);
+				return parse_item();
 			}
 
-			private FilterImpl parse_and(boolean topLevel)
+			private FilterImpl parse_and()
 					throws InvalidSyntaxException {
 				skipWhiteSpace();
 
 				if (filterChars[pos] != '(') {
 					throw new InvalidSyntaxException("Missing '(': "
-							+ filterstring.substring(pos), filterstring); //$NON-NLS-1$
+							+ filterstring.substring(pos), filterstring); 
 				}
 
 				List operands = new ArrayList(10);
 
 				while (filterChars[pos] == '(') {
-					FilterImpl child = parse_filter(false);
+					FilterImpl child = parse_filter();
 					operands.add(child);
 				}
 
-				return new FilterImpl(topLevel, FilterImpl.AND, null, operands
+				return new FilterImpl(FilterImpl.AND, null, operands
 						.toArray(new FilterImpl[operands.size()]));
 			}
 
-			private FilterImpl parse_or(boolean topLevel)
+			private FilterImpl parse_or()
 					throws InvalidSyntaxException {
 				skipWhiteSpace();
 
 				if (filterChars[pos] != '(') {
 					throw new InvalidSyntaxException("Missing '(': "
-							+ filterstring.substring(pos), filterstring); //$NON-NLS-1$
+							+ filterstring.substring(pos), filterstring); 
 				}
 
 				List operands = new ArrayList(10);
 
 				while (filterChars[pos] == '(') {
-					FilterImpl child = parse_filter(false);
+					FilterImpl child = parse_filter();
 					operands.add(child);
 				}
 
-				return new FilterImpl(topLevel, FilterImpl.OR, null, operands
+				return new FilterImpl(FilterImpl.OR, null, operands
 						.toArray(new FilterImpl[operands.size()]));
 			}
 
-			private FilterImpl parse_not(boolean topLevel)
+			private FilterImpl parse_not()
 					throws InvalidSyntaxException {
 				skipWhiteSpace();
 
 				if (filterChars[pos] != '(') {
 					throw new InvalidSyntaxException("Missing '(': "
-							+ filterstring.substring(pos), filterstring); //$NON-NLS-1$
+							+ filterstring.substring(pos), filterstring); 
 				}
 
-				FilterImpl child = parse_filter(false);
+				FilterImpl child = parse_filter();
 
-				return new FilterImpl(topLevel, FilterImpl.NOT, null, child);
+				return new FilterImpl(FilterImpl.NOT, null, child);
 			}
 
-			private FilterImpl parse_item(boolean topLevel)
+			private FilterImpl parse_item()
 					throws InvalidSyntaxException {
 				String attr = parse_attr();
 
@@ -1343,7 +1358,7 @@ public class FrameworkUtil {
 				case '~': {
 					if (filterChars[pos + 1] == '=') {
 						pos += 2;
-						return new FilterImpl(topLevel, FilterImpl.APPROX,
+						return new FilterImpl(FilterImpl.APPROX,
 								attr, parse_value());
 					}
 					break;
@@ -1351,7 +1366,7 @@ public class FrameworkUtil {
 				case '>': {
 					if (filterChars[pos + 1] == '=') {
 						pos += 2;
-						return new FilterImpl(topLevel, FilterImpl.GREATER,
+						return new FilterImpl(FilterImpl.GREATER,
 								attr, parse_value());
 					}
 					break;
@@ -1359,7 +1374,7 @@ public class FrameworkUtil {
 				case '<': {
 					if (filterChars[pos + 1] == '=') {
 						pos += 2;
-						return new FilterImpl(topLevel, FilterImpl.LESS, attr,
+						return new FilterImpl(FilterImpl.LESS, attr,
 								parse_value());
 					}
 					break;
@@ -1370,7 +1385,7 @@ public class FrameworkUtil {
 						pos += 2;
 						skipWhiteSpace();
 						if (filterChars[pos] == ')') {
-							return new FilterImpl(topLevel, FilterImpl.PRESENT,
+							return new FilterImpl(FilterImpl.PRESENT,
 									attr, null);
 						}
 						pos = oldpos;
@@ -1380,16 +1395,16 @@ public class FrameworkUtil {
 					Object string = parse_substring();
 
 					if (string instanceof String) {
-						return new FilterImpl(topLevel, FilterImpl.EQUAL, attr,
+						return new FilterImpl(FilterImpl.EQUAL, attr,
 								string);
 					}
-					return new FilterImpl(topLevel, FilterImpl.SUBSTRING, attr,
+					return new FilterImpl(FilterImpl.SUBSTRING, attr,
 							string);
 				}
 				}
 
 				throw new InvalidSyntaxException("Invalid operator: "
-						+ filterstring.substring(pos), filterstring); //$NON-NLS-1$
+						+ filterstring.substring(pos), filterstring); 
 			}
 
 			private String parse_attr() throws InvalidSyntaxException {
@@ -1415,7 +1430,7 @@ public class FrameworkUtil {
 
 				if (length == 0) {
 					throw new InvalidSyntaxException("Missing attr: "
-							+ filterstring.substring(pos), filterstring); //$NON-NLS-1$
+							+ filterstring.substring(pos), filterstring); 
 				}
 
 				return new String(filterChars, begin, length);
@@ -1434,7 +1449,7 @@ public class FrameworkUtil {
 
 					case '(': {
 						throw new InvalidSyntaxException("Invalid value: "
-								+ filterstring.substring(pos), filterstring); //$NON-NLS-1$
+								+ filterstring.substring(pos), filterstring); 
 					}
 
 					case '\\': {
@@ -1453,7 +1468,7 @@ public class FrameworkUtil {
 
 				if (sb.length() == 0) {
 					throw new InvalidSyntaxException("Missing value: "
-							+ filterstring.substring(pos), filterstring); //$NON-NLS-1$
+							+ filterstring.substring(pos), filterstring); 
 				}
 
 				return sb.toString();
@@ -1478,7 +1493,7 @@ public class FrameworkUtil {
 
 					case '(': {
 						throw new InvalidSyntaxException("Invalid value: "
-								+ filterstring.substring(pos), filterstring); //$NON-NLS-1$
+								+ filterstring.substring(pos), filterstring); 
 					}
 
 					case '*': {
@@ -1512,7 +1527,7 @@ public class FrameworkUtil {
 
 				if (size == 0) {
 					throw new InvalidSyntaxException("Missing value: "
-							+ filterstring.substring(pos), filterstring); //$NON-NLS-1$
+							+ filterstring.substring(pos), filterstring); 
 				}
 
 				if (size == 1) {
@@ -1730,7 +1745,8 @@ public class FrameworkUtil {
 				String patValue = patNameValue.substring(patNameEnd);
 				String rdnValue = rdnNameValue.substring(rdnNameEnd);
 				if (!rdnValue.equals(patValue)
-						&& !patValue.equals("=*") && !patValue.equals("=#16012a")) { //$NON-NLS-1$ //$NON-NLS-2$
+						&& !patValue.equals("=*")
+						&& !patValue.equals("=#16012a")) {  
 					return false;
 				}
 			}
@@ -1808,7 +1824,7 @@ public class FrameworkUtil {
 					endIndex++;
 				}
 				if (endIndex > dnChain.length()) {
-					throw new IllegalArgumentException("unterminated escape"); //$NON-NLS-1$
+					throw new IllegalArgumentException("unterminated escape"); 
 				}
 				parsed.add(dnChain.substring(startIndex, endIndex));
 				startIndex = endIndex + 1;
@@ -1832,8 +1848,8 @@ public class FrameworkUtil {
 				if (dn.charAt(0) == '*') {
 					if (dn.charAt(1) != ',')
 						throw new IllegalArgumentException(
-								"invalid wildcard prefix"); //$NON-NLS-1$
-					rdns.add(STAR_WILDCARD); //$NON-NLS-1$
+								"invalid wildcard prefix");
+					rdns.add(STAR_WILDCARD); 
 					dn = new X500Principal(dn.substring(2))
 							.getName(X500Principal.CANONICAL);
 				} else {
@@ -1844,7 +1860,7 @@ public class FrameworkUtil {
 				chain.set(i, rdns);
 			}
 			if (chain.size() == 0) {
-				throw new IllegalArgumentException("empty DN chain"); //$NON-NLS-1$
+				throw new IllegalArgumentException("empty DN chain"); 
 			}
 			return chain;
 		}
@@ -1888,7 +1904,8 @@ public class FrameworkUtil {
 				}
 				if (endIndex > dn.length())
 					throw new IllegalArgumentException(
-							"unterminated escape " + dn); //$NON-NLS-1$
+							"unterminated escape "
+							+ dn); 
 				nameValues.add(dn.substring(startIndex, endIndex));
 				if (c != '+') {
 					rdnArray.add(nameValues);
@@ -1901,7 +1918,8 @@ public class FrameworkUtil {
 			}
 			if (nameValues != null) {
 				throw new IllegalArgumentException(
-						"improperly terminated DN " + dn); //$NON-NLS-1$
+						"improperly terminated DN "
+						+ dn); 
 			}
 		}
 
@@ -1918,7 +1936,7 @@ public class FrameworkUtil {
 					if (!dnPattern.equals(STAR_WILDCARD)
 							&& !dnPattern.equals(MINUS_WILDCARD)) {
 						throw new IllegalArgumentException(
-								"expected wildcard in DN pattern"); //$NON-NLS-1$
+								"expected wildcard in DN pattern"); 
 					}
 					// otherwise continue skipping over wild cards
 				} else if (dnPattern instanceof ArrayList) {
@@ -1927,7 +1945,7 @@ public class FrameworkUtil {
 				} else {
 					// unknown member of the DNChainPattern
 					throw new IllegalArgumentException(
-							"expected String or Arraylist in DN Pattern"); //$NON-NLS-1$
+							"expected String or Arraylist in DN Pattern"); 
 				}
 			}
 			// i either points to end-of-arraylist, or to the first
@@ -1957,7 +1975,7 @@ public class FrameworkUtil {
 				if (!dnPattern.equals(STAR_WILDCARD)
 						&& !dnPattern.equals(MINUS_WILDCARD)) {
 					throw new IllegalArgumentException(
-							"expected wildcard in DN pattern"); //$NON-NLS-1$
+							"expected wildcard in DN pattern"); 
 				}
 				// here we are processing a wild card as the first DN
 				// skip all wildcard DN's
@@ -2036,14 +2054,14 @@ public class FrameworkUtil {
 						if (!dnPattern.equals(STAR_WILDCARD)
 								&& !dnPattern.equals(MINUS_WILDCARD)) {
 							throw new IllegalArgumentException(
-									"expected wildcard in DN pattern"); //$NON-NLS-1$
+									"expected wildcard in DN pattern"); 
 						}
 						// if the next DN is a 'wildcard', then we will recurse
 						return dnChainMatch(dnChain, dnChainIndex,
 								dnChainPattern, dnChainPatternIndex);
 					} else if (!(dnPattern instanceof ArrayList)) {
 						throw new IllegalArgumentException(
-								"expected String or Arraylist in DN Pattern"); //$NON-NLS-1$
+								"expected String or Arraylist in DN Pattern"); 
 					}
 					// if we are here, then we will just continue to the match
 					// the
@@ -2053,7 +2071,7 @@ public class FrameworkUtil {
 				// should never reach here?
 			} else {
 				throw new IllegalArgumentException(
-						"expected String or Arraylist in DN Pattern"); //$NON-NLS-1$
+						"expected String or Arraylist in DN Pattern"); 
 			}
 			// if we get here, the the default return is 'mis-match'
 			return false;
