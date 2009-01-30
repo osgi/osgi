@@ -37,7 +37,7 @@ public abstract class OSGiTestCase extends TestCase {
 	public BundleContext getContext() {
 		BundleContext c = context;
 		if (c == null) {
-			fail("No valid Bundle context said, are you running in OSGi Test mode?");
+			fail("No Bundle context set, are you running in OSGi Test mode?");
 		}
 		return c;
 	}
