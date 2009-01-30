@@ -37,25 +37,31 @@ import ch.ethz.iks.slp.ServiceURL;
  */
 public class JSlpSED {
 
-	private String				interfaceName		= null;
-	private String				version				= null;
-	private String				endpointInterface	= null;
-	private Map					properties			= null;
+	private String							interfaceName		= null;
+	private String							version				= null;
+	private String							endpointInterface	= null;
+	private Map								properties			= null;
 
-	private SLPServiceEndpointDescription slpServiceDescr = null;
-	private static final String	LINE_SEPARATOR		= System
-															.getProperty("line.separator");
+	private SLPServiceEndpointDescription	slpServiceDescr		= null;
+	private static final String				LINE_SEPARATOR		= System
+																		.getProperty("line.separator");
 
-	public JSlpSED(SLPServiceEndpointDescription descr) {
+	/**
+	 * Constructor.
+	 * 
+	 * @param descr the composit of this object
+	 */
+	public JSlpSED(final SLPServiceEndpointDescription descr) {
 		slpServiceDescr = descr;
 	}
 
 	/**
+	 * Adds a property to the existing map.
 	 * 
-	 * @param key
-	 * @param value
+	 * @param key property key
+	 * @param value the value of the key
 	 */
-	public void addProperty(String key, Object value) {
+	public void addProperty(final String key, final Object value) {
 
 		if (key.equals(ServicePublication.PROP_KEY_SERVICE_INTERFACE_NAME)) {
 			interfaceName = (String) value;
@@ -64,13 +70,20 @@ public class JSlpSED {
 		if (key.equals(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME)) {
 			endpointInterface = combineValue((String) value);
 		}
+
 		if (key.equals(ServicePublication.PROP_KEY_SERVICE_INTERFACE_VERSION)) {
 			version = combineValue((String) value);
 		}
 		properties.put(key, value);
 	}
-	
-	private String combineValue(String value) {
+
+	/**
+	 * Preceding a value with the interface name and a separator.
+	 * 
+	 * @param value  to append
+	 * @return the complete string
+	 */
+	private String combineValue(final String value) {
 		return interfaceName + ServicePublication.SEPARATOR + value;
 	}
 
@@ -84,7 +97,7 @@ public class JSlpSED {
 	/**
 	 * @param interfaceName the interfaceName to set
 	 */
-	public void setInterfaceName(String interfaceName) {
+	public void setInterfaceName(final String interfaceName) {
 		this.interfaceName = interfaceName;
 	}
 
@@ -98,7 +111,7 @@ public class JSlpSED {
 	/**
 	 * @param version the version to set
 	 */
-	public void setVersion(String version) {
+	public void setVersion(final String version) {
 		this.version = version;
 	}
 
@@ -112,7 +125,7 @@ public class JSlpSED {
 	/**
 	 * @param endpointInterface the endpointInterface to set
 	 */
-	public void setEndpointInterface(String endpointInterface) {
+	public void setEndpointInterface(final String endpointInterface) {
 		this.endpointInterface = endpointInterface;
 	}
 
@@ -126,13 +139,12 @@ public class JSlpSED {
 	/**
 	 * @param properties the properties to set
 	 */
-	public void setProperties(Map properties) {
+	public void setProperties(final Map properties) {
 		this.properties = properties;
 	}
 
 	/**
-	 * adds the endpointinterfaces and versions to the properties map and
-	 * creates a service url per interface
+	 * adds the endpoint interfaces and versions to the properties map
 	 * 
 	 * @throws ServiceLocationException
 	 */
@@ -142,8 +154,9 @@ public class JSlpSED {
 		// and
 		// endpoint-interface information.
 
-		slpServiceDescr.put(interfaceName, SLPServiceEndpointDescription.createServiceURL(interfaceName, version,
-				endpointInterface, properties));
+		slpServiceDescr.put(interfaceName, SLPServiceEndpointDescription
+				.createServiceURL(interfaceName, version, endpointInterface,
+						properties));
 		if (properties == null) {
 			properties = new HashMap();
 		}

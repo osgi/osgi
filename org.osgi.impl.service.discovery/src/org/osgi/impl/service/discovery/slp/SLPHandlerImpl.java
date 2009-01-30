@@ -99,10 +99,10 @@ public class SLPHandlerImpl implements Discovery {
 
 	private static BundleContext	context;
 
-	private LogService				logService;
+	private static LogService		logService;
 	// private boolean autoPublish = DEFAULT_AUTOPUBLISH;
 
-	private Collection				/* <SLPServiceDescriptionAdapter> */inMemoryCache	= Collections
+	private static Collection		/* <SLPServiceDescriptionAdapter> */inMemoryCache	= Collections
 																								.synchronizedSet(new HashSet());
 
 	/**
@@ -111,9 +111,8 @@ public class SLPHandlerImpl implements Discovery {
 	 * @param context the BundleContext of the containing bundle.
 	 * @param logService a LogService instance
 	 */
-	public SLPHandlerImpl(final BundleContext context,
-			final LogService logService) {
-		this.logService = logService;
+	public SLPHandlerImpl(final BundleContext context, final LogService logger) {
+		logService = logger;
 		SLPHandlerImpl.context = context; // TODO: making it static var is not
 		// good I'd say.
 		locatorTracker = new ServiceTracker(context, Locator.class.getName(),
@@ -134,7 +133,7 @@ public class SLPHandlerImpl implements Discovery {
 		// .equalsIgnoreCase(SLPHandlerImpl.PROP_VAL_PUBLISH_STRATEGY_PUSH);
 		locatorTracker.open();
 		advertiserTracker.open();
-		discoTrackerCustomizer = new DSTTracker(context, this);
+		discoTrackerCustomizer = new DSTTracker(context);
 		discoTracker = new ServiceTracker(context,
 				DiscoveredServiceTracker.class.getName(),
 				discoTrackerCustomizer);
@@ -430,104 +429,20 @@ public class SLPHandlerImpl implements Discovery {
 	}
 
 	/**
-	 * Private tracker class to track the jSLP locator services.
-	 * 
-	 * @author Thomas Kiesslich
 	 * 
 	 */
-	private class LocatorServiceTracker implements ServiceTrackerCustomizer {
-		BundleContext	context	= null;
-
-		public LocatorServiceTracker(BundleContext bc) {
-			context = bc;
-		}
-
-		public Object addingService(ServiceReference reference) {
-			// TODO: use it only we haven't got a service yet
-			if (getLocator() == null) {
-				Locator loc = setLocatorService(reference);
-				return loc;
-			}
-			return null;
-		}
-
-		/**
-		 * @param reference
-		 * @return
-		 */
-		private Locator setLocatorService(ServiceReference reference) {
-			Locator loc = (Locator) context.getService(reference);
-			setLocator(loc);
-			log(LogService.LOG_INFO, "bound Locator");
-			return loc;
-		}
-
-		public void modifiedService(ServiceReference reference, Object service) {
-		}
-
-		public void removedService(ServiceReference reference, Object service) {
-			context.ungetService(reference);
-			ServiceReference ref = context.getServiceReference(Locator.class
-					.getName());
-			if (ref != null) {
-				setLocatorService(ref);
-			}
-			else {
-				setLocator(null);
-				log(LogService.LOG_INFO, "unbound Locator");
-			}
-		}
-	}
-
-	/**
-	 * Private tracker class to track the jSLP advertiser services.
-	 * 
-	 * @author Thomas Kiesslich
-	 */
-	private class AdvertiserServiceTracker implements ServiceTrackerCustomizer {
-		BundleContext	context	= null;
-
-		public AdvertiserServiceTracker(BundleContext bc) {
-			context = bc;
-		}
-
-		public Object addingService(final ServiceReference reference) {
-			Advertiser adv = (Advertiser) context.getService(reference);
-			setAdvertiser(adv);
-			log(LogService.LOG_INFO, "bound Advertiser");
-			return adv;
-		}
-
-		public void modifiedService(final ServiceReference reference,
-				Object service) {
-			Advertiser adv = (Advertiser) context.getService(reference);
-			setAdvertiser(adv);
-			log(LogService.LOG_INFO, "rebound Advertiser");
-		}
-
-		public void removedService(final ServiceReference reference,
-				Object service) {
-			context.ungetService(reference);
-			setAdvertiser(null);
-			log(LogService.LOG_INFO, "unbound Advertiser");
+	protected static synchronized void log(int logLevel, String msg) {
+		if (logService != null) {
+			logService.log(logLevel, msg);
 		}
 	}
 
 	/**
 	 * 
 	 */
-	protected void log(int logLevel, String msg) {
-		if (this.logService != null) {
-			this.logService.log(logLevel, msg);
-		}
-	}
-
-	/**
-	 * 
-	 */
-	protected void log(int logLevel, String msg, Exception e) {
-		if (this.logService != null) {
-			this.logService.log(logLevel, msg, e);
+	protected static synchronized void log(int logLevel, String msg, Exception e) {
+		if (logService != null) {
+			logService.log(logLevel, msg, e);
 		}
 	}
 
@@ -536,8 +451,8 @@ public class SLPHandlerImpl implements Discovery {
 	 *        logging
 	 * 
 	 */
-	public void setLogService(final LogService logService) {
-		this.logService = logService;
+	public static void setLogService(final LogService logger) {
+		logService = logger;
 	}
 
 	/**
@@ -609,6 +524,34 @@ public class SLPHandlerImpl implements Discovery {
 	 */
 	protected Map getRegisteredServiceTracker() {
 		return new HashMap(discoTrackerCustomizer.getDsTrackers());
+	}
+
+	/**
+	 * This method informs a just registered or modified service tracker if a
+	 * service matches its properties.
+	 * 
+	 * TODO: add suppression of informing trackers twice for the same SED
+	 * 
+	 * @param tracker the just registered or modified DiscoveredServiceTracker
+	 */
+	public static void notifyOnAvailableSEDs(
+			final DiscoveredServiceTracker tracker, final Map matchingCriteria) {
+		List cachedServices = getCachedServices();
+		System.out.println(cachedServices.size()
+				+ " services are registered in Discovery.");
+		if (cachedServices != null) {
+			Iterator it = cachedServices.iterator();
+			while (it.hasNext()) {
+				ServiceEndpointDescription svcDescr = (ServiceEndpointDescription) it
+						.next();
+				if (isTrackerInterestedInSED(svcDescr, matchingCriteria)) {
+					tracker
+							.serviceChanged(new DiscoveredServiceNotificationImpl(
+									svcDescr,
+									DiscoveredServiceNotification.AVAILABLE));
+				}
+			}
+		}
 	}
 
 	/**
@@ -765,7 +708,91 @@ public class SLPHandlerImpl implements Discovery {
 	 * 
 	 * @return a "shallow" copy of the inMemoryCache
 	 */
-	public List getCachedServices() {
+	public static List getCachedServices() {
 		return new ArrayList(inMemoryCache);
+	}
+
+	/**
+	 * Private tracker class to track the jSLP locator services.
+	 * 
+	 * @author Thomas Kiesslich
+	 * 
+	 */
+	private class LocatorServiceTracker implements ServiceTrackerCustomizer {
+		BundleContext	context	= null;
+
+		public LocatorServiceTracker(BundleContext bc) {
+			context = bc;
+		}
+
+		public Object addingService(ServiceReference reference) {
+			// TODO: use it only we haven't got a service yet
+			if (getLocator() == null) {
+				Locator loc = setLocatorService(reference);
+				return loc;
+			}
+			return null;
+		}
+
+		/**
+		 * @param reference
+		 * @return
+		 */
+		private Locator setLocatorService(ServiceReference reference) {
+			Locator loc = (Locator) context.getService(reference);
+			setLocator(loc);
+			log(LogService.LOG_INFO, "bound Locator");
+			return loc;
+		}
+
+		public void modifiedService(ServiceReference reference, Object service) {
+		}
+
+		public void removedService(ServiceReference reference, Object service) {
+			context.ungetService(reference);
+			ServiceReference ref = context.getServiceReference(Locator.class
+					.getName());
+			if (ref != null) {
+				setLocatorService(ref);
+			}
+			else {
+				setLocator(null);
+				log(LogService.LOG_INFO, "unbound Locator");
+			}
+		}
+	}
+
+	/**
+	 * Private tracker class to track the jSLP advertiser services.
+	 * 
+	 * @author Thomas Kiesslich
+	 */
+	private class AdvertiserServiceTracker implements ServiceTrackerCustomizer {
+		BundleContext	context	= null;
+
+		public AdvertiserServiceTracker(BundleContext bc) {
+			context = bc;
+		}
+
+		public Object addingService(final ServiceReference reference) {
+			Advertiser adv = (Advertiser) context.getService(reference);
+			setAdvertiser(adv);
+			log(LogService.LOG_INFO, "bound Advertiser");
+			return adv;
+		}
+
+		public void modifiedService(final ServiceReference reference,
+				Object service) {
+			Advertiser adv = (Advertiser) context.getService(reference);
+			setAdvertiser(adv);
+			log(LogService.LOG_INFO, "rebound Advertiser");
+		}
+
+		public void removedService(final ServiceReference reference,
+				Object service) {
+			context.ungetService(reference);
+			setAdvertiser(null);
+			log(LogService.LOG_INFO, "unbound Advertiser");
+		}
 	}
 }

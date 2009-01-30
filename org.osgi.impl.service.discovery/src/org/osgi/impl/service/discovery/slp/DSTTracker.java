@@ -22,14 +22,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.discovery.DiscoveredServiceNotification;
 import org.osgi.service.discovery.DiscoveredServiceTracker;
-import org.osgi.service.discovery.ServiceEndpointDescription;
+import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
@@ -39,8 +37,6 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  * @author kt32483 TODO: replace arg0 arg names with more descriptive ones
  */
 public class DSTTracker implements ServiceTrackerCustomizer {
-
-	private SLPHandlerImpl	discovery										= null;
 
 	// Map of DiscoveredServiceTracker, property map
 	private Map			/* <DiscoveredServiceTracker, Map> */dsTrackers	= null;
@@ -52,23 +48,25 @@ public class DSTTracker implements ServiceTrackerCustomizer {
 	 * @param ctx
 	 * @param disco
 	 */
-	public DSTTracker(final BundleContext ctx, final SLPHandlerImpl disco) {
+	public DSTTracker(final BundleContext ctx) {
 		context = ctx;
-		discovery = disco;
 		dsTrackers = Collections.synchronizedMap(new HashMap());
 	}
 
 	/**
 	 * @see org.osgi.util.tracker.ServiceTrackerCustomizer#addingService(org.osgi.framework.ServiceReference)
 	 */
-	public Object addingService(final ServiceReference arg0) {
+	public Object addingService(final ServiceReference dstTrackerReference) {
 		DiscoveredServiceTracker tracker = (DiscoveredServiceTracker) context
-				.getService(arg0);
+				.getService(dstTrackerReference);
 		if (!dsTrackers.keySet().contains(tracker)) {
-			addTracker(arg0);
+			SLPHandlerImpl.log(LogService.LOG_INFO, "adding service tracker "
+					+ tracker);
+			addTracker(dstTrackerReference);
 			Map changedFilterCriteria = determineChangedFilterProperties(
-					tracker, arg0);
-			notifyOnAvailableSEDs(tracker, changedFilterCriteria);
+					tracker, dstTrackerReference);
+			SLPHandlerImpl
+					.notifyOnAvailableSEDs(tracker, changedFilterCriteria);
 			return tracker;
 		}
 		return null;
@@ -78,49 +76,27 @@ public class DSTTracker implements ServiceTrackerCustomizer {
 	 * @see org.osgi.util.tracker.ServiceTrackerCustomizer#modifiedService(org.osgi.framework.ServiceReference,
 	 *      java.lang.Object)
 	 */
-	public void modifiedService(final ServiceReference arg0, final Object arg1) {
+	public void modifiedService(final ServiceReference dstTrackerReference, final Object arg1) {
 		DiscoveredServiceTracker tracker = (DiscoveredServiceTracker) context
-				.getService(arg0);
+				.getService(dstTrackerReference);
 		Map changedFilterCriteria = determineChangedFilterProperties(tracker,
-				arg0);
-		removeTracker(tracker);
-		addTracker(arg0);
-		notifyOnAvailableSEDs(tracker, changedFilterCriteria);
+				dstTrackerReference);
+		SLPHandlerImpl.log(LogService.LOG_INFO, "modified service tracker "
+				+ tracker + " ;changedFilter = " + changedFilterCriteria);
+		dsTrackers.remove(tracker);
+		addTracker(dstTrackerReference);
+		SLPHandlerImpl.notifyOnAvailableSEDs(tracker, changedFilterCriteria);
 	}
 
 	/**
 	 * @see org.osgi.util.tracker.ServiceTrackerCustomizer#removedService(org.osgi.framework.ServiceReference,
 	 *      java.lang.Object)
 	 */
-	public void removedService(final ServiceReference arg0, final Object arg1) {
+	public void removedService(final ServiceReference dstTrackerReference, final Object arg1) {
 		DiscoveredServiceTracker tracker = (DiscoveredServiceTracker) context
-				.getService(arg0);
-		removeTracker(tracker);
-	}
-
-	/**
-	 * This method informs a just registered or modified service tracker if a
-	 * service matches its properties.
-	 * 
-	 * @param tracker the just registered or modified DiscoveredServiceTracker
-	 */
-	private void notifyOnAvailableSEDs(final DiscoveredServiceTracker tracker,
-			final Map matchingCriteria) {
-		List cachedServices = discovery.getCachedServices();
-		if (cachedServices != null) {
-			Iterator it = cachedServices.iterator();
-			while (it.hasNext()) {
-				ServiceEndpointDescription svcDescr = (ServiceEndpointDescription) it
-						.next();
-				if (SLPHandlerImpl.isTrackerInterestedInSED(svcDescr,
-						matchingCriteria)) {
-					tracker
-							.serviceChanged(new DiscoveredServiceNotificationImpl(
-									svcDescr,
-									DiscoveredServiceNotification.AVAILABLE));
-				}
-			}
-		}
+				.getService(dstTrackerReference);
+		SLPHandlerImpl.log(LogService.LOG_INFO, "removing service tracker " + tracker);
+		dsTrackers.remove(tracker);
 	}
 
 	/**
@@ -227,14 +203,7 @@ public class DSTTracker implements ServiceTrackerCustomizer {
 	}
 
 	/**
-	 * @param tracker
-	 */
-	private void removeTracker(DiscoveredServiceTracker tracker) {
-		dsTrackers.remove(tracker);
-	}
-
-	/**
-	 * @return the dsTrackers
+	 * @return a new instance of dsTracker map
 	 */
 	public Map getDsTrackers() {
 		return new HashMap(dsTrackers);

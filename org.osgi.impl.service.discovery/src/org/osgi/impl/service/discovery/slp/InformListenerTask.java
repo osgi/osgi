@@ -29,6 +29,7 @@ import org.osgi.service.discovery.DiscoveredServiceNotification;
 import org.osgi.service.discovery.DiscoveredServiceTracker;
 import org.osgi.service.discovery.ServiceEndpointDescription;
 import org.osgi.service.discovery.ServicePublication;
+import org.osgi.service.log.LogService;
 
 /**
  * A TimerTask that compares in its run method the registered filters with the
@@ -53,14 +54,14 @@ public class InformListenerTask extends TimerTask {
 	 * TODO: only run InformListenerTask if there's an existing
 	 * DiscoveredTracker with non-null interfaces and filters props. Otherwise
 	 * for example on the server-side, Discovery ends up rediscovering the local
-	 * service that it's just advertized.
+	 * service that it's just advertised.
 	 * 
 	 * @see java.lang.Runnable#run()
 	 */
 	public void run() {
 		Map registeredServiceTracker = discovery.getRegisteredServiceTracker();
-		if (registeredServiceTracker.size() != 0) {
-			Collection /* <ServiceEndpointDescription> */lastLookupResult = discovery
+		if (registeredServiceTracker.size() > 0) {
+			Collection /* <ServiceEndpointDescription> */lastLookupResult = SLPHandlerImpl
 					.getCachedServices();
 			Collection allAvailableServices = discovery.findService(null, null);
 			notifyAvailableServices(allAvailableServices, lastLookupResult,
@@ -113,6 +114,8 @@ public class InformListenerTask extends TimerTask {
 						.next();
 				if (SLPHandlerImpl.isTrackerInterestedInSED(sed, (Map) trackers
 						.get(tracker))) {
+					SLPHandlerImpl.log(LogService.LOG_INFO, this.getClass().getName() + ": Notify " + tracker
+							+ " about the GONE service " + sed);
 					tracker
 							.serviceChanged(new DiscoveredServiceNotificationImpl(
 									sed,
@@ -240,6 +243,8 @@ public class InformListenerTask extends TimerTask {
 						}
 					}
 					if (modified) {
+						SLPHandlerImpl.log(LogService.LOG_INFO, this.getClass().getName() + ": Notify " + tracker
+								+ " about the MODIFIED service " + svcDescr);
 						tracker
 								.serviceChanged(new DiscoveredServiceNotificationImpl(
 										svcDescr,
@@ -250,6 +255,8 @@ public class InformListenerTask extends TimerTask {
 					// notify listener that a service description matches
 					// the specified filter
 					// and is new to him
+					SLPHandlerImpl.log(LogService.LOG_INFO, this.getClass().getName() + ": Notify " + tracker
+							+ " about the NEW service " + svcDescr);
 					tracker
 							.serviceChanged(new DiscoveredServiceNotificationImpl(
 									svcDescr,

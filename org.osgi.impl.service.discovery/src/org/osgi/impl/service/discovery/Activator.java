@@ -142,7 +142,7 @@ public class Activator implements BundleActivator {
 		}
 
 		if (slpDiscovery != null) {
-			slpDiscovery.setLogService(logService);
+			SLPHandlerImpl.setLogService(logService);
 		}
 	}
 
