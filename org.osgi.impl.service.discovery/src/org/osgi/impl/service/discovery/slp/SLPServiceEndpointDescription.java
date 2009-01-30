@@ -85,11 +85,11 @@ public class SLPServiceEndpointDescription implements
 			final Collection/* <String> */endPointInterfaces, final Map props,
 			final String endpntID) throws ServiceLocationException {
 		// check the java interface map for validity
-		if (interfacesAndVersions == null) {
+		if (interfaceNames == null) {
 			throw new IllegalArgumentException(
 					"Given set of Java interfaces must not be null.");
 		}
-		if (interfacesAndVersions.size() <= 0) {
+		if (interfaceNames.size() <= 0) {
 			throw new IllegalArgumentException(
 					"Given set of Java interfaces must contain at least one service interface name.");
 		}
@@ -142,9 +142,11 @@ public class SLPServiceEndpointDescription implements
 
 	public Map getProperties() {
 		Map result = new HashMap();
-		Iterator it = listOfJSLPSEDs.values().iterator();
-		while (it.hasNext()) {
-			result.putAll(((JSlpSED) it.next()).getProperties());
+		synchronized (listOfJSLPSEDs) {
+			Iterator it = listOfJSLPSEDs.values().iterator();
+			while (it.hasNext()) {
+				result.putAll(((JSlpSED) it.next()).getProperties());
+			}
 		}
 		return result;
 	}
@@ -163,9 +165,11 @@ public class SLPServiceEndpointDescription implements
 	 */
 	public String toString() {
 		StringBuffer sb = new StringBuffer("Service:" + LINE_SEPARATOR);
-		Iterator it = listOfJSLPSEDs.values().iterator();
-		while (it.hasNext()) {
-			sb.append((JSlpSED) it.next());
+		synchronized (listOfJSLPSEDs) {
+			Iterator it = listOfJSLPSEDs.values().iterator();
+			while (it.hasNext()) {
+				sb.append((JSlpSED) it.next());
+			}
 		}
 		return sb.toString();
 	}
@@ -176,9 +180,11 @@ public class SLPServiceEndpointDescription implements
 	 */
 	public Collection getProvidedInterfaces() {
 		List l = new ArrayList();
-		Iterator it = listOfJSLPSEDs.values().iterator();
-		while (it.hasNext()) {
-			l.add(((JSlpSED) it.next()).getInterfaceName());
+		synchronized (listOfJSLPSEDs) {
+			Iterator it = listOfJSLPSEDs.values().iterator();
+			while (it.hasNext()) {
+				l.add(((JSlpSED) it.next()).getInterfaceName());
+			}
 		}
 		return l;
 	}
@@ -230,9 +236,11 @@ public class SLPServiceEndpointDescription implements
 	 * @param value
 	 */
 	public void addProperty(String key, Object value) {
-		Iterator it = listOfJSLPSEDs.values().iterator();
-		while (it.hasNext()) {
-			((JSlpSED) it.next()).addProperty(key, value);
+		synchronized (listOfJSLPSEDs) {
+			Iterator it = listOfJSLPSEDs.values().iterator();
+			while (it.hasNext()) {
+				((JSlpSED) it.next()).addProperty(key, value);
+			}
 		}
 	}
 
@@ -385,7 +393,7 @@ public class SLPServiceEndpointDescription implements
 
 		// Put interface and version information to properties since base for
 		// matching
-		properties.put(Constants.OBJECTCLASS, interfaceName);
+		properties.put(Constants.OBJECTCLASS, new String[] {interfaceName});
 		properties.put(ServicePublication.PROP_KEY_SERVICE_INTERFACE_VERSION,
 				version);
 
@@ -630,11 +638,13 @@ public class SLPServiceEndpointDescription implements
 							+ descr);
 		}
 		boolean found = false;
-		Iterator it = listOfJSLPSEDs.values().iterator();
-		while (it.hasNext()) {
-			JSlpSED sed = (JSlpSED) it.next();
-			if (sed.equals(serviceDescription)) {
-				found = true;
+		synchronized (listOfJSLPSEDs) {
+			Iterator it = listOfJSLPSEDs.values().iterator();
+			while (it.hasNext()) {
+				JSlpSED sed = (JSlpSED) it.next();
+				if (sed.equals(serviceDescription)) {
+					found = true;
+				}
 			}
 		}
 		return found;
@@ -652,10 +662,11 @@ public class SLPServiceEndpointDescription implements
 		}
 		else {
 			int result = 17;
-
-			Iterator it = listOfJSLPSEDs.values().iterator();
-			while (it.hasNext()) {
-				result = 37 * result + ((JSlpSED) it.next()).hashCode();
+			synchronized (listOfJSLPSEDs) {
+				Iterator it = listOfJSLPSEDs.values().iterator();
+				while (it.hasNext()) {
+					result = 37 * result + ((JSlpSED) it.next()).hashCode();
+				}
 			}
 
 			if (endpointID != null)

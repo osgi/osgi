@@ -49,6 +49,10 @@ public class InformListenerTask extends TimerTask {
 	}
 
 	/**
+	 * TODO: only run InformListenerTask if there's an existing
+	 * DiscoveredTracker with non-null interfaces and filters props. Otherwise
+	 * for example on the server-side, Discovery ends up rediscovering the local
+	 * service that it's just advertized.
 	 * 
 	 * @see java.lang.Runnable#run()
 	 */
@@ -58,11 +62,13 @@ public class InformListenerTask extends TimerTask {
 			Collection /* <ServiceEndpointDescription> */lastLookupResult = discovery
 					.getCachedServices();
 			Collection allAvailableServices = discovery.findService(null, null);
-			notifyAvailableServices(allAvailableServices, lastLookupResult, registeredServiceTracker);
+			notifyAvailableServices(allAvailableServices, lastLookupResult,
+					registeredServiceTracker);
 			// notify all about vanished services
 			Collection vanishedServices = new HashSet(lastLookupResult);
 			vanishedServices.removeAll(allAvailableServices);
-			notifyUnavailableServices(vanishedServices, registeredServiceTracker);
+			notifyUnavailableServices(vanishedServices,
+					registeredServiceTracker);
 		}
 	}
 
@@ -93,7 +99,8 @@ public class InformListenerTask extends TimerTask {
 	/**
 	 * @param availableServices
 	 */
-	private void notifyUnavailableServices(Collection vanishedServices, Map trackers) {
+	private void notifyUnavailableServices(Collection vanishedServices,
+			Map trackers) {
 		Iterator svcDescrIt = vanishedServices.iterator();
 		while (svcDescrIt.hasNext()) {
 			ServiceEndpointDescription sed = (ServiceEndpointDescription) svcDescrIt
