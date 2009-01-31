@@ -25,32 +25,38 @@ import org.osgi.test.support.PermissionTestCase;
 
 public class PackagePermissionTests extends PermissionTestCase {
 
+	public void testInvalidPackagePermissions() {
+		invalidPackagePermission("a.b.c", "x");
+		invalidPackagePermission("a.b.c", "   get  ,  x   ");
+		invalidPackagePermission("a.b.c", "");
+		invalidPackagePermission("a.b.c", "      ");
+		invalidPackagePermission("a.b.c", null);
+		invalidPackagePermission("a.b.c", ",");
+		invalidPackagePermission("a.b.c", ",xxx");
+		invalidPackagePermission("a.b.c", "xxx,");
+		invalidPackagePermission("a.b.c", "import,");
+		invalidPackagePermission("a.b.c", "export,   ");
+		invalidPackagePermission("a.b.c", "importme,");
+		invalidPackagePermission("a.b.c", "exportme,");
+		invalidPackagePermission("a.b.c", ",import");
+		invalidPackagePermission("a.b.c", ",export");
+		invalidPackagePermission("a.b.c", "   importme   ");
+		invalidPackagePermission("a.b.c", "   exportme     ");
+		invalidPackagePermission("a.b.c", "   impor");
+		invalidPackagePermission("a.b.c", "   expor"); 
+	}
+
 	public void testPackagePermission() {
-		badPackagePermission("a.b.c", "x"); //$NON-NLS-1$ //$NON-NLS-2$
-		badPackagePermission("a.b.c", "   get  ,  x   "); //$NON-NLS-1$ //$NON-NLS-2$
-		badPackagePermission("a.b.c", ""); //$NON-NLS-1$ //$NON-NLS-2$
-		badPackagePermission("a.b.c", "      "); //$NON-NLS-1$ //$NON-NLS-2$
-		badPackagePermission("a.b.c", null); //$NON-NLS-1$
-		badPackagePermission("a.b.c", ","); //$NON-NLS-1$ //$NON-NLS-2$
-		badPackagePermission("a.b.c", ",xxx"); //$NON-NLS-1$ //$NON-NLS-2$
-		badPackagePermission("a.b.c", "xxx,"); //$NON-NLS-1$ //$NON-NLS-2$
-		badPackagePermission("a.b.c", "import,"); //$NON-NLS-1$ //$NON-NLS-2$
-		badPackagePermission("a.b.c", "export,   "); //$NON-NLS-1$ //$NON-NLS-2$
-		badPackagePermission("a.b.c", "importme,"); //$NON-NLS-1$ //$NON-NLS-2$
-		badPackagePermission("a.b.c", "exportme,"); //$NON-NLS-1$ //$NON-NLS-2$
-		badPackagePermission("a.b.c", ",import"); //$NON-NLS-1$ //$NON-NLS-2$
-		badPackagePermission("a.b.c", ",export"); //$NON-NLS-1$ //$NON-NLS-2$
-		badPackagePermission("a.b.c", "   importme   "); //$NON-NLS-1$ //$NON-NLS-2$
-		badPackagePermission("a.b.c", "   exportme     "); //$NON-NLS-1$ //$NON-NLS-2$
-		badPackagePermission("a.b.c", "   impor"); //$NON-NLS-1$ //$NON-NLS-2$
-		badPackagePermission("a.b.c", "   expor"); //$NON-NLS-1$ //$NON-NLS-2$
+		Permission op = new PropertyPermission("java.home", "read"); 
 
-		Permission op = new PropertyPermission("java.home", "read"); //$NON-NLS-1$ //$NON-NLS-2$
-
-		PackagePermission p11 = new PackagePermission("com.foo.service1", "    IMPORT,export   "); //$NON-NLS-1$ //$NON-NLS-2$
-		PackagePermission p12 = new PackagePermission("com.foo.service1", "EXPORT  ,   import"); //$NON-NLS-1$ //$NON-NLS-2$
-		PackagePermission p13 = new PackagePermission("com.foo.service1", "expORT   "); //$NON-NLS-1$ //$NON-NLS-2$
-		PackagePermission p14 = new PackagePermission("com.foo.service1", "    Import    "); //$NON-NLS-1$ //$NON-NLS-2$
+		PackagePermission p11 = new PackagePermission("com.foo.service1",
+				"    IMPORT,export   ");
+		PackagePermission p12 = new PackagePermission("com.foo.service1",
+				"EXPORT  ,   import");
+		PackagePermission p13 = new PackagePermission("com.foo.service1",
+				"expORT   ");
+		PackagePermission p14 = new PackagePermission("com.foo.service1",
+				"    Import    "); 
 
 		shouldImply(p11, p11);
 		shouldImply(p11, p12);
@@ -134,10 +140,11 @@ public class PackagePermissionTests extends PermissionTestCase {
 
 		checkEnumeration(pc.elements(), false);
 
-		PackagePermission p21 = new PackagePermission("com.foo.service2", "import"); //$NON-NLS-1$ //$NON-NLS-2$
-		PackagePermission p22 = new PackagePermission("com.foo.*", "import"); //$NON-NLS-1$ //$NON-NLS-2$
-		PackagePermission p23 = new PackagePermission("com.*", "import"); //$NON-NLS-1$ //$NON-NLS-2$
-		PackagePermission p24 = new PackagePermission("*", "import"); //$NON-NLS-1$ //$NON-NLS-2$
+		PackagePermission p21 = new PackagePermission("com.foo.service2",
+				"import");
+		PackagePermission p22 = new PackagePermission("com.foo.*", "import");
+		PackagePermission p23 = new PackagePermission("com.*", "import");
+		PackagePermission p24 = new PackagePermission("*", "import"); 
 
 		shouldImply(p21, p21);
 		shouldImply(p22, p21);
@@ -222,10 +229,10 @@ public class PackagePermissionTests extends PermissionTestCase {
 		testSerialization(p24);
 	}
 	
-	protected void badPackagePermission(String name, String actions) {
+	private void invalidPackagePermission(String name, String actions) {
 		try {
 			PackagePermission p = new PackagePermission(name, actions);
-			fail(p + " created with invalid actions"); //$NON-NLS-1$
+			fail(p + " created with invalid actions"); 
 		}
 		catch (IllegalArgumentException e) {
 			// expected

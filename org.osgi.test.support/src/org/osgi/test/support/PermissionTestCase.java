@@ -28,61 +28,64 @@ import java.util.NoSuchElementException;
 public abstract class PermissionTestCase extends OSGiTestCase {
 
 	protected void checkEnumeration(Enumeration en, boolean isEmpty) {
-		assertEquals(en + " empty state is invalid", !isEmpty, en.hasMoreElements()); //$NON-NLS-1$
+		assertEquals(en + " empty state is invalid", !isEmpty, en
+				.hasMoreElements()); 
 		try {
 			while (en.hasMoreElements()) {
 				en.nextElement();
 			}
 		} catch (NoSuchElementException e) {
-			fail(en + " threw NoSuchElementException"); //$NON-NLS-1$
+			fail(en + " threw NoSuchElementException"); 
 		}
 
 		try {
 			en.nextElement();
-			fail(en + " is empty but didn't throw NoSuchElementException"); //$NON-NLS-1$
+			fail(en + " is empty but didn't throw NoSuchElementException"); 
 		} catch (NoSuchElementException e) {
 			// expected
 		}
 	}
 
 	protected void shouldImply(Permission p1, Permission p2) {
-		assertTrue(p1 + " does not imply " + p2, p1.implies(p2)); //$NON-NLS-1$
+		assertTrue(p1 + " does not imply " + p2, p1.implies(p2)); 
 	}
 
 	protected void shouldNotImply(Permission p1, Permission p2) {
-		assertFalse(p1 + " does imply " + p2, p1.implies(p2)); //$NON-NLS-1$
+		assertFalse(p1 + " does imply " + p2, p1.implies(p2)); 
 	}
 
 	protected void shouldImply(PermissionCollection p1, Permission p2) {
-		assertTrue(p1 + " does not imply " + p2, p1.implies(p2)); //$NON-NLS-1$
+		assertTrue(p1 + " does not imply " + p2, p1.implies(p2)); 
 	}
 
 	protected void shouldNotImply(PermissionCollection p1, Permission p2) {
-		assertFalse(p1 + " does imply " + p2, p1.implies(p2)); //$NON-NLS-1$
+		assertFalse(p1 + " does imply " + p2, p1.implies(p2)); 
 	}
 
 	protected void shouldEqual(Permission p1, Permission p2) {
-		assertEquals(p1 + " does not equal " + p2, p1, p2); //$NON-NLS-1$
-		assertEquals(p2 + " does not equal " + p1, p2, p1); //$NON-NLS-1$
+		assertEquals(p1 + " does not equal " + p2, p1, p2); 
+		assertEquals(p1 + " hashcodes do not equal " + p2, p1.hashCode(), p2
+				.hashCode()); 
 	}
 
 	protected void shouldNotEqual(Permission p1, Permission p2) {
-		assertFalse(p1 + " does equal " + p2, p1.equals(p2)); //$NON-NLS-1$
-		assertFalse(p1 + " does equal " + p2, p2.equals(p1)); //$NON-NLS-1$
+		assertFalse(p1 + " does equal " + p2, p1.equals(p2)); 
+		assertFalse(p1 + " hashcodes equal " + p2, p1.hashCode() == p2
+				.hashCode()); 
 	}
 
 	protected void shouldAdd(PermissionCollection p1, Permission p2) {
 		try {
 			p1.add(p2);
 		} catch (Exception e) {
-			fail(p1 + " will not add " + p2); //$NON-NLS-1$
+			fail(p1 + " will not add " + p2); 
 		}
 	}
 
 	protected void shouldNotAdd(PermissionCollection p1, Permission p2) {
 		try {
 			p1.add(p2);
-			fail(p1 + " will add " + p2); //$NON-NLS-1$
+			fail(p1 + " will add " + p2); 
 		} catch (Exception e) {
 			// expected
 		}
@@ -103,8 +106,6 @@ public abstract class PermissionTestCase extends OSGiTestCase {
 			Permission p2 = (Permission) in.readObject();
 
 			shouldEqual(p1, p2);
-			shouldImply(p1, p2);
-			shouldImply(p2, p1);
 		} catch (Exception e) {
 			fail("serialization error", e);
 		}

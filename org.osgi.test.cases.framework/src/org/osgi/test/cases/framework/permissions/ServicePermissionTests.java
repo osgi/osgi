@@ -25,32 +25,38 @@ import org.osgi.test.support.PermissionTestCase;
 
 public class ServicePermissionTests extends PermissionTestCase {
 
+	public void testInvalidServicePermissions() {
+		invalidServicePermission("a.b.c", "x");
+		invalidServicePermission("a.b.c", "   get  ,  x   ");
+		invalidServicePermission("a.b.c", "");
+		invalidServicePermission("a.b.c", "      ");
+		invalidServicePermission("a.b.c", null);
+		invalidServicePermission("a.b.c", ",");
+		invalidServicePermission("a.b.c", ",xxx");
+		invalidServicePermission("a.b.c", "xxx,");
+		invalidServicePermission("a.b.c", "get,");
+		invalidServicePermission("a.b.c", "register,   ");
+		invalidServicePermission("a.b.c", "getme,");
+		invalidServicePermission("a.b.c", "registerme,");
+		invalidServicePermission("a.b.c", ",get");
+		invalidServicePermission("a.b.c", ",register");
+		invalidServicePermission("a.b.c", "   getme   ");
+		invalidServicePermission("a.b.c", "   registerme     ");
+		invalidServicePermission("a.b.c", "   ge");
+		invalidServicePermission("a.b.c", "   registe"); 
+	}
+
 	public void testServicePermission() {
-		badServicePermission("a.b.c", "x"); //$NON-NLS-1$ //$NON-NLS-2$
-		badServicePermission("a.b.c", "   get  ,  x   "); //$NON-NLS-1$ //$NON-NLS-2$
-		badServicePermission("a.b.c", ""); //$NON-NLS-1$ //$NON-NLS-2$
-		badServicePermission("a.b.c", "      "); //$NON-NLS-1$ //$NON-NLS-2$
-		badServicePermission("a.b.c", null); //$NON-NLS-1$
-		badServicePermission("a.b.c", ","); //$NON-NLS-1$ //$NON-NLS-2$
-		badServicePermission("a.b.c", ",xxx"); //$NON-NLS-1$ //$NON-NLS-2$
-		badServicePermission("a.b.c", "xxx,"); //$NON-NLS-1$ //$NON-NLS-2$
-		badServicePermission("a.b.c", "get,"); //$NON-NLS-1$ //$NON-NLS-2$
-		badServicePermission("a.b.c", "register,   "); //$NON-NLS-1$ //$NON-NLS-2$
-		badServicePermission("a.b.c", "getme,"); //$NON-NLS-1$ //$NON-NLS-2$
-		badServicePermission("a.b.c", "registerme,"); //$NON-NLS-1$ //$NON-NLS-2$
-		badServicePermission("a.b.c", ",get"); //$NON-NLS-1$ //$NON-NLS-2$
-		badServicePermission("a.b.c", ",register"); //$NON-NLS-1$ //$NON-NLS-2$
-		badServicePermission("a.b.c", "   getme   "); //$NON-NLS-1$ //$NON-NLS-2$
-		badServicePermission("a.b.c", "   registerme     "); //$NON-NLS-1$ //$NON-NLS-2$
-		badServicePermission("a.b.c", "   ge"); //$NON-NLS-1$ //$NON-NLS-2$
-		badServicePermission("a.b.c", "   registe"); //$NON-NLS-1$ //$NON-NLS-2$
+		Permission op = new PropertyPermission("java.home", "read"); 
 
-		Permission op = new PropertyPermission("java.home", "read"); //$NON-NLS-1$ //$NON-NLS-2$
-
-		ServicePermission p11 = new ServicePermission("com.foo.service1", "    GET,register   "); //$NON-NLS-1$ //$NON-NLS-2$
-		ServicePermission p12 = new ServicePermission("com.foo.service1", "REGISTER  ,   get"); //$NON-NLS-1$ //$NON-NLS-2$
-		ServicePermission p13 = new ServicePermission("com.foo.service1", "regisTER   "); //$NON-NLS-1$ //$NON-NLS-2$
-		ServicePermission p14 = new ServicePermission("com.foo.service1", "    Get    "); //$NON-NLS-1$ //$NON-NLS-2$
+		ServicePermission p11 = new ServicePermission("com.foo.service1",
+				"    GET,register   ");
+		ServicePermission p12 = new ServicePermission("com.foo.service1",
+				"REGISTER  ,   get");
+		ServicePermission p13 = new ServicePermission("com.foo.service1",
+				"regisTER   ");
+		ServicePermission p14 = new ServicePermission("com.foo.service1",
+				"    Get    "); 
 
 		shouldImply(p11, p11);
 		shouldImply(p11, p12);
@@ -142,10 +148,10 @@ public class ServicePermissionTests extends PermissionTestCase {
 
 		checkEnumeration(pc.elements(), false);
 
-		ServicePermission p21 = new ServicePermission("com.foo.service2", "get"); //$NON-NLS-1$ //$NON-NLS-2$
-		ServicePermission p22 = new ServicePermission("com.foo.*", "get"); //$NON-NLS-1$ //$NON-NLS-2$
-		ServicePermission p23 = new ServicePermission("com.*", "get"); //$NON-NLS-1$ //$NON-NLS-2$
-		ServicePermission p24 = new ServicePermission("*", "get"); //$NON-NLS-1$ //$NON-NLS-2$
+		ServicePermission p21 = new ServicePermission("com.foo.service2", "get");
+		ServicePermission p22 = new ServicePermission("com.foo.*", "get");
+		ServicePermission p23 = new ServicePermission("com.*", "get");
+		ServicePermission p24 = new ServicePermission("*", "get"); 
 
 		shouldImply(p21, p21);
 		shouldImply(p22, p21);
@@ -230,10 +236,10 @@ public class ServicePermissionTests extends PermissionTestCase {
 		testSerialization(p24);
 	}
 	
-	protected void badServicePermission(String name, String actions) {
+	private void invalidServicePermission(String name, String actions) {
 		try {
 			ServicePermission p = new ServicePermission(name, actions);
-			fail(p + " created with invalid actions"); //$NON-NLS-1$
+			fail(p + " created with invalid actions"); 
 		}
 		catch (IllegalArgumentException e) {
 			// expected

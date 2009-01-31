@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2009). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package org.osgi.framework;
 
 import java.io.IOException;
+import java.io.InvalidObjectException;
 import java.security.AccessController;
 import java.security.BasicPermission;
 import java.security.Permission;
@@ -24,7 +25,6 @@ import java.security.PermissionCollection;
 import java.security.PrivilegedAction;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -87,7 +87,7 @@ import java.util.Map;
  */
 
 public final class AdminPermission extends BasicPermission {
-	static final long			serialVersionUID			= 307051004521261705L;
+	static final long			serialVersionUID			= 407051004521261705L;
 
 	/**
 	 * The action string <code>class</code> (Value is "class"). The
@@ -180,58 +180,45 @@ public final class AdminPermission extends BasicPermission {
 	private final static int	ACTION_NONE					= 0;
 
 	/**
-	 * Indicates that this AdminPermission refers to all bundles
-	 * 
-	 * @serial
-	 */
-	private boolean				wildcard;
-
-	/**
-	 * An x.500 distinguished name used to match a bundle's signature - only
-	 * used if wildcard is false and bundle = null
-	 * 
-	 * @serial
-	 */
-	private String				filterString;
-
-	/**
 	 * The actions in canonical form.
 	 * 
 	 * @serial
 	 */
-	private String				actions						= null;
+	private volatile String		actions						= null;
 
 	/**
 	 * The actions mask.
+	 * 
+	 * @GuardedBy this
 	 */
-	private transient int		action_mask					= ACTION_NONE;
+	private transient int		action_mask;
 
 	/**
-	 * The bundle governed by this AdminPermission - only used if wildcard is
-	 * false and filter == null
+	 * If this AdminPermission was constructed with a filter, this holds a
+	 * Filter matching object used to evaluate the filter in implies.
+	 * 
+	 * @GuardedBy this
 	 */
-	transient Bundle			bundle;
+	private transient Filter	filter;
+
+	/**
+	 * The bundle governed by this AdminPermission - only used if filter == null
+	 */
+	transient final Bundle		bundle;
 
 	/**
 	 * If this AdminPermission was constructed with a bundle, this dictionary
 	 * holds the properties of that bundle, used to match a filter in implies.
 	 * This is not initialized until necessary, and then cached in this object.
 	 */
-	transient Dictionary		bundleProperties;
-
-	/**
-	 * If this AdminPermission was constructed with a filter, this dictionary
-	 * holds a Filter matching object used to evaluate the filter in implies.
-	 * This is not initialized until necessary, and then cached in this object
-	 */
-	private transient Filter	filter;
+	private transient volatile Dictionary	bundleProperties;
 
 	/**
 	 * Creates a new <code>AdminPermission</code> object that matches all
 	 * bundles and has all actions. Equivalent to AdminPermission("*","*");
 	 */
 	public AdminPermission() {
-		this("*", AdminPermission.ACTION_ALL); //$NON-NLS-1$
+		this(null, ACTION_ALL); 
 	}
 
 	/**
@@ -262,34 +249,33 @@ public final class AdminPermission extends BasicPermission {
 	 *        <code>listener</code>, <code>metadata</code>, <code>resolve</code>
 	 *        , <code>resource</code>, <code>startlevel</code> or
 	 *        <code>context</code>. A value of "*" or <code>null</code>
-	 *        indicates all actions
+	 *        indicates all actions.
 	 */
 	public AdminPermission(String filter, String actions) {
 		// arguments will be null if called from a PermissionInfo defined with
 		// no args
-		this((filter == null ? "*" : filter), //$NON-NLS-1$
-				getMask((actions == null ? "*" : actions)) //$NON-NLS-1$
-		);
+		this(parseFilter(filter), parseActions(actions));
 	}
 
 	/**
 	 * Creates a new <code>AdminPermission</code> object to be used by the code
 	 * that must check a <code>Permission</code> object.
+	 * <code>AdminPermission</code> objects created with this constructor cannot
+	 * be added to an <code>AdminPermission</code> permission collection.
 	 * 
 	 * @param bundle A bundle
 	 * @param actions <code>class</code>, <code>execute</code>,
 	 *        <code>extensionLifecycle</code>, <code>lifecycle</code>,
 	 *        <code>listener</code>, <code>metadata</code>, <code>resolve</code>
 	 *        , <code>resource</code>, <code>startlevel</code>,
-	 *        <code>context</code>.
+	 *        <code>context</code>. A value of "*" or <code>null</code>
+	 *        indicates all actions.
 	 * @since 1.3
 	 */
 	public AdminPermission(Bundle bundle, String actions) {
 		super(createName(bundle));
 		this.bundle = bundle;
-		this.wildcard = false;
-		this.filterString = null;
-		this.action_mask = getMask(actions);
+		setTransients(null, parseActions(actions));
 	}
 
 	/**
@@ -307,117 +293,362 @@ public final class AdminPermission extends BasicPermission {
 	}
 
 	/**
-	 * Determines the equality of two <code>AdminPermission</code> objects.
+	 * Package private constructor used by AdminPermissionCollection.
 	 * 
-	 * @param obj The object being compared for equality with this object.
-	 * @return <code>true</code> if <code>obj</code> is equivalent to this
-	 *         <code>AdminPermission</code>; <code>false</code> otherwise.
+	 * @param filter name filter or <code>null</code> for wildcard.
+	 * @param mask action mask
 	 */
-	public boolean equals(Object obj) {
-		if (obj == this) {
-			return true;
-		}
-
-		if (!(obj instanceof AdminPermission)) {
-			return false;
-		}
-
-		AdminPermission a = (AdminPermission) obj;
-
-		return (action_mask == a.action_mask)
-				&& (wildcard == a.wildcard)
-				&& (bundle == null ? a.bundle == null
-						: (a.bundle == null ? false
-								: bundle.getBundleId() == a.bundle
-										.getBundleId()))
-				&& (filterString == null ? a.filterString == null : filterString.equals(a.filterString));
+	AdminPermission(Filter filter, int mask) {
+		super((filter == null) ? "*" : filter.toString());
+		this.bundle = null;
+		setTransients(filter, mask);
 	}
 
 	/**
-	 * Returns the hash code value for this object.
+	 * Called by constructors and when deserialized.
 	 * 
-	 * @return Hash code value for this object.
+	 * @param filter Permission's filter or <code>null</code> for wildcard.
+	 * @param mask action mask
 	 */
-	public int hashCode() {
-		return getName().hashCode() ^ getActions().hashCode();
+	private synchronized void setTransients(Filter filter, int mask) {
+		this.filter = filter;
+		if ((mask == ACTION_NONE) || ((mask & ACTION_ALL) != mask)) {
+			throw new IllegalArgumentException("invalid action string");
+		}
+		this.action_mask = mask;
 	}
 
 	/**
-	 * Returns the canonical string representation of the
-	 * <code>AdminPermission</code> actions.
-	 * 
+	 * Returns the current action mask.
 	 * <p>
-	 * Always returns present <code>AdminPermission</code> actions in the
-	 * following order: <code>class</code>, <code>execute</code>,
-	 * <code>extensionLifecycle</code>, <code>lifecycle</code>,
-	 * <code>listener</code>, <code>metadata</code>, <code>resolve</code>,
-	 * <code>resource</code>, <code>startlevel</code>, <code>context</code>.
+	 * Used by the AdminPermissionCollection class.
 	 * 
-	 * @return Canonical string representation of the
-	 *         <code>AdminPermission</code> actions.
+	 * @return Current action mask.
 	 */
-	public String getActions() {
-		if (actions == null) {
-			StringBuffer sb = new StringBuffer();
+	synchronized int getActionsMask() {
+		return action_mask;
+	}
 
-			if ((action_mask & ACTION_CLASS) == ACTION_CLASS) {
-				sb.append(CLASS);
-				sb.append(',');
-			}
-
-			if ((action_mask & ACTION_EXECUTE) == ACTION_EXECUTE) {
-				sb.append(EXECUTE);
-				sb.append(',');
-			}
-
-			if ((action_mask & ACTION_EXTENSIONLIFECYCLE) == ACTION_EXTENSIONLIFECYCLE) {
-				sb.append(EXTENSIONLIFECYCLE);
-				sb.append(',');
-			}
-
-			if ((action_mask & ACTION_LIFECYCLE) == ACTION_LIFECYCLE) {
-				sb.append(LIFECYCLE);
-				sb.append(',');
-			}
-
-			if ((action_mask & ACTION_LISTENER) == ACTION_LISTENER) {
-				sb.append(LISTENER);
-				sb.append(',');
-			}
-
-			if ((action_mask & ACTION_METADATA) == ACTION_METADATA) {
-				sb.append(METADATA);
-				sb.append(',');
-			}
-
-			if ((action_mask & ACTION_RESOLVE) == ACTION_RESOLVE) {
-				sb.append(RESOLVE);
-				sb.append(',');
-			}
-
-			if ((action_mask & ACTION_RESOURCE) == ACTION_RESOURCE) {
-				sb.append(RESOURCE);
-				sb.append(',');
-			}
-
-			if ((action_mask & ACTION_STARTLEVEL) == ACTION_STARTLEVEL) {
-				sb.append(STARTLEVEL);
-				sb.append(',');
-			}
-
-			if ((action_mask & ACTION_CONTEXT) == ACTION_CONTEXT) {
-				sb.append(CONTEXT);
-				sb.append(',');
-			}
-
-			// remove trailing comma
-			if (sb.length() > 0) {
-				sb.setLength(sb.length() - 1);
-			}
-
-			actions = sb.toString();
+	/**
+	 * Parse action string into action mask.
+	 * 
+	 * @param actions Action string.
+	 * @return action mask.
+	 */
+	private static int parseActions(String actions) {
+		if ((actions == null) || actions.equals("*")) {
+			return ACTION_ALL;
 		}
-		return actions;
+	
+		boolean seencomma = false;
+	
+		int mask = ACTION_NONE;
+	
+		if (actions == null) {
+			return mask;
+		}
+	
+		char[] a = actions.toCharArray();
+	
+		int i = a.length - 1;
+		if (i < 0)
+			return mask;
+	
+		while (i != -1) {
+			char c;
+	
+			// skip whitespace
+			while ((i != -1)
+					&& ((c = a[i]) == ' ' || c == '\r' || c == '\n'
+							|| c == '\f' || c == '\t'))
+				i--;
+	
+			// check for the known strings
+			int matchlen;
+	
+			if (i >= 4 && (a[i - 4] == 'c' || a[i - 4] == 'C')
+					&& (a[i - 3] == 'l' || a[i - 3] == 'L')
+					&& (a[i - 2] == 'a' || a[i - 2] == 'A')
+					&& (a[i - 1] == 's' || a[i - 1] == 'S')
+					&& (a[i] == 's' || a[i] == 'S')) {
+				matchlen = 5;
+				mask |= ACTION_CLASS | ACTION_RESOLVE;
+	
+			}
+			else
+				if (i >= 6 && (a[i - 6] == 'e' || a[i - 6] == 'E')
+						&& (a[i - 5] == 'x' || a[i - 5] == 'X')
+						&& (a[i - 4] == 'e' || a[i - 4] == 'E')
+						&& (a[i - 3] == 'c' || a[i - 3] == 'C')
+						&& (a[i - 2] == 'u' || a[i - 2] == 'U')
+						&& (a[i - 1] == 't' || a[i - 1] == 'T')
+						&& (a[i] == 'e' || a[i] == 'E')) {
+					matchlen = 7;
+					mask |= ACTION_EXECUTE | ACTION_RESOLVE;
+	
+				}
+				else
+					if (i >= 17 && (a[i - 17] == 'e' || a[i - 17] == 'E')
+							&& (a[i - 16] == 'x' || a[i - 16] == 'X')
+							&& (a[i - 15] == 't' || a[i - 15] == 'T')
+							&& (a[i - 14] == 'e' || a[i - 14] == 'E')
+							&& (a[i - 13] == 'n' || a[i - 13] == 'N')
+							&& (a[i - 12] == 's' || a[i - 12] == 'S')
+							&& (a[i - 11] == 'i' || a[i - 11] == 'I')
+							&& (a[i - 10] == 'o' || a[i - 10] == 'O')
+							&& (a[i - 9] == 'n' || a[i - 9] == 'N')
+							&& (a[i - 8] == 'l' || a[i - 8] == 'L')
+							&& (a[i - 7] == 'i' || a[i - 7] == 'I')
+							&& (a[i - 6] == 'f' || a[i - 6] == 'F')
+							&& (a[i - 5] == 'e' || a[i - 5] == 'E')
+							&& (a[i - 4] == 'c' || a[i - 4] == 'C')
+							&& (a[i - 3] == 'y' || a[i - 3] == 'Y')
+							&& (a[i - 2] == 'c' || a[i - 2] == 'C')
+							&& (a[i - 1] == 'l' || a[i - 1] == 'L')
+							&& (a[i] == 'e' || a[i] == 'E')) {
+						matchlen = 18;
+						mask |= ACTION_EXTENSIONLIFECYCLE;
+	
+					}
+					else
+						if (i >= 8 && (a[i - 8] == 'l' || a[i - 8] == 'L')
+								&& (a[i - 7] == 'i' || a[i - 7] == 'I')
+								&& (a[i - 6] == 'f' || a[i - 6] == 'F')
+								&& (a[i - 5] == 'e' || a[i - 5] == 'E')
+								&& (a[i - 4] == 'c' || a[i - 4] == 'C')
+								&& (a[i - 3] == 'y' || a[i - 3] == 'Y')
+								&& (a[i - 2] == 'c' || a[i - 2] == 'C')
+								&& (a[i - 1] == 'l' || a[i - 1] == 'L')
+								&& (a[i] == 'e' || a[i] == 'E')) {
+							matchlen = 9;
+							mask |= ACTION_LIFECYCLE;
+	
+						}
+						else
+							if (i >= 7 && (a[i - 7] == 'l' || a[i - 7] == 'L')
+									&& (a[i - 6] == 'i' || a[i - 6] == 'I')
+									&& (a[i - 5] == 's' || a[i - 5] == 'S')
+									&& (a[i - 4] == 't' || a[i - 4] == 'T')
+									&& (a[i - 3] == 'e' || a[i - 3] == 'E')
+									&& (a[i - 2] == 'n' || a[i - 2] == 'N')
+									&& (a[i - 1] == 'e' || a[i - 1] == 'E')
+									&& (a[i] == 'r' || a[i] == 'R')) {
+								matchlen = 8;
+								mask |= ACTION_LISTENER;
+	
+							}
+							else
+								if (i >= 7
+										&& (a[i - 7] == 'm' || a[i - 7] == 'M')
+										&& (a[i - 6] == 'e' || a[i - 6] == 'E')
+										&& (a[i - 5] == 't' || a[i - 5] == 'T')
+										&& (a[i - 4] == 'a' || a[i - 4] == 'A')
+										&& (a[i - 3] == 'd' || a[i - 3] == 'D')
+										&& (a[i - 2] == 'a' || a[i - 2] == 'A')
+										&& (a[i - 1] == 't' || a[i - 1] == 'T')
+										&& (a[i] == 'a' || a[i] == 'A')) {
+									matchlen = 8;
+									mask |= ACTION_METADATA;
+	
+								}
+								else
+									if (i >= 6
+											&& (a[i - 6] == 'r' || a[i - 6] == 'R')
+											&& (a[i - 5] == 'e' || a[i - 5] == 'E')
+											&& (a[i - 4] == 's' || a[i - 4] == 'S')
+											&& (a[i - 3] == 'o' || a[i - 3] == 'O')
+											&& (a[i - 2] == 'l' || a[i - 2] == 'L')
+											&& (a[i - 1] == 'v' || a[i - 1] == 'V')
+											&& (a[i] == 'e' || a[i] == 'E')) {
+										matchlen = 7;
+										mask |= ACTION_RESOLVE;
+	
+									}
+									else
+										if (i >= 7
+												&& (a[i - 7] == 'r' || a[i - 7] == 'R')
+												&& (a[i - 6] == 'e' || a[i - 6] == 'E')
+												&& (a[i - 5] == 's' || a[i - 5] == 'S')
+												&& (a[i - 4] == 'o' || a[i - 4] == 'O')
+												&& (a[i - 3] == 'u' || a[i - 3] == 'U')
+												&& (a[i - 2] == 'r' || a[i - 2] == 'R')
+												&& (a[i - 1] == 'c' || a[i - 1] == 'C')
+												&& (a[i] == 'e' || a[i] == 'E')) {
+											matchlen = 8;
+											mask |= ACTION_RESOURCE
+													| ACTION_RESOLVE;
+	
+										}
+										else
+											if (i >= 9
+													&& (a[i - 9] == 's' || a[i - 9] == 'S')
+													&& (a[i - 8] == 't' || a[i - 8] == 'T')
+													&& (a[i - 7] == 'a' || a[i - 7] == 'A')
+													&& (a[i - 6] == 'r' || a[i - 6] == 'R')
+													&& (a[i - 5] == 't' || a[i - 5] == 'T')
+													&& (a[i - 4] == 'l' || a[i - 4] == 'L')
+													&& (a[i - 3] == 'e' || a[i - 3] == 'E')
+													&& (a[i - 2] == 'v' || a[i - 2] == 'V')
+													&& (a[i - 1] == 'e' || a[i - 1] == 'E')
+													&& (a[i] == 'l' || a[i] == 'L')) {
+												matchlen = 10;
+												mask |= ACTION_STARTLEVEL;
+	
+											}
+											else
+												if (i >= 6
+														&& (a[i - 6] == 'c' || a[i - 6] == 'C')
+														&& (a[i - 5] == 'o' || a[i - 5] == 'O')
+														&& (a[i - 4] == 'n' || a[i - 4] == 'N')
+														&& (a[i - 3] == 't' || a[i - 3] == 'T')
+														&& (a[i - 2] == 'e' || a[i - 2] == 'E')
+														&& (a[i - 1] == 'x' || a[i - 1] == 'X')
+														&& (a[i] == 't' || a[i] == 'T')) {
+													matchlen = 7;
+													mask |= ACTION_CONTEXT;
+	
+												}
+												else
+													if (i >= 0 &&
+	
+													(a[i] == '*')) {
+														matchlen = 1;
+														mask |= ACTION_ALL;
+	
+													}
+													else {
+														// parse error
+														throw new IllegalArgumentException(
+																"invalid permission: "
+																		+ actions); 
+													}
+	
+			// make sure we didn't just match the tail of a word
+			// like "ackbarfstartlevel". Also, skip to the comma.
+			seencomma = false;
+			while (i >= matchlen && !seencomma) {
+				switch (a[i - matchlen]) {
+					case ',' :
+						seencomma = true;
+						/* FALLTHROUGH */
+					case ' ' :
+					case '\r' :
+					case '\n' :
+					case '\f' :
+					case '\t' :
+						break;
+					default :
+						throw new IllegalArgumentException(
+								"invalid permission: " + actions); 
+				}
+				i--;
+			}
+	
+			// point i at the location of the comma minus one (or -1).
+			i -= matchlen;
+		}
+	
+		if (seencomma) {
+			throw new IllegalArgumentException("invalid permission: " + 
+					actions);
+		}
+	
+		return mask;
+	}
+
+	synchronized Filter getFilter() {
+		return filter;
+	}
+
+	/**
+	 * Parse filter string into a Filter object.
+	 * 
+	 * @param filterString The filter string to parse.
+	 * @return a Filter for this bundle. If the specified filterString is
+	 *         <code>null</code> or equals "*", then <code>null</code> is
+	 *         returned to indicate a wildcard.
+	 */
+	private static Filter parseFilter(String filterString) {
+		if ((filterString == null) || filterString.equals("*")) {
+			return null;
+		}
+		int pos = filterString.indexOf("signer");
+		if (pos != -1) {
+
+			// there may be a signer attribute
+			StringBuffer filterBuf = new StringBuffer(filterString);
+			int numAsteriskFound = 0; // use as offset to replace in
+			// buffer
+
+			int walkbackPos; // temp pos
+
+			// find occurences of (signer= and escape out *'s
+			while (pos != -1) {
+
+				// walk back and look for '(' to see if this is an attr
+				walkbackPos = pos - 1;
+
+				// consume whitespace
+				while (walkbackPos >= 0
+						&& Character.isWhitespace(filterString
+								.charAt(walkbackPos))) {
+					walkbackPos--;
+				}
+				if (walkbackPos < 0) {
+					// filter is invalid - FilterImpl will throw error
+					break;
+				}
+
+				// check to see if we have unescaped '('
+				if (filterString.charAt(walkbackPos) != '('
+						|| (walkbackPos > 0 && filterString
+								.charAt(walkbackPos - 1) == '\\')) {
+					// '(' was escaped or not there
+					pos = filterString.indexOf("signer", pos + 6);
+					continue;
+				}
+				pos += 6; // skip over 'signer'
+
+				// found signer - consume whitespace before '='
+				while (Character.isWhitespace(filterString.charAt(pos))) {
+					pos++;
+				}
+
+				// look for '='
+				if (filterString.charAt(pos) != '=') {
+					// attr was signerx - keep looking
+					pos = filterString.indexOf("signer", pos);
+					continue;
+				}
+				pos++; // skip over '='
+
+				// found signer value - escape '*'s
+				while (!(filterString.charAt(pos) == ')' && filterString
+						.charAt(pos - 1) != '\\')) {
+					// only add an escape if it is not already escaped
+					if (filterString.charAt(pos) == '*'
+							&& filterString.charAt(pos - 1) != '\\') {
+						filterBuf.insert(pos + numAsteriskFound, '\\');
+						numAsteriskFound++;
+					}
+					pos++;
+				}
+
+				// end of signer value - look for more?
+				pos = filterString.indexOf("signer", pos);
+			} // end while (pos != -1)
+			filterString = filterBuf.toString();
+		} // end if (pos != -1)
+		
+		try {
+			return FrameworkUtil.createFilter(filterString);
+		}
+		catch (InvalidSyntaxException e) {
+			IllegalArgumentException iae = new IllegalArgumentException(
+					"invalid filter");
+			iae.initCause(e);
+			throw iae;
+		}
 	}
 
 	/**
@@ -446,38 +677,122 @@ public final class AdminPermission extends BasicPermission {
 	 * 
 	 * @return <code>true</code> if the specified permission is implied by this
 	 *         object; <code>false</code> otherwise.
-	 * @throws RuntimeException if specified permission was not constructed with
-	 *         a bundle or "*"
+	 * @throws UnsupportedOperationException If this permission was constructed
+	 *         with a Bundle.
+	 * @throws IllegalArgumentException If specified permission was not
+	 *         constructed with a Bundle or "*".
 	 */
 	public boolean implies(Permission p) {
-		if (!(p instanceof AdminPermission))
+		if (!(p instanceof AdminPermission)) {
 			return false;
-		AdminPermission target = (AdminPermission) p;
-		// check actions first - much faster
-		if ((action_mask & target.action_mask) != target.action_mask)
-			return false;
-		// if passed in a filter, puke
-		if (target.filterString != null)
-			throw new RuntimeException("Cannot imply a filter"); //$NON-NLS-1$
-		// special case - only wildcard implies wildcard
-		if (target.wildcard)
-			return wildcard;
-
-		// check our name
-		if (filterString != null) {
-			// it's a filter
-			Filter f = getFilter();
-			return (f != null) && f.match(target.getProperties());
 		}
-		else
-			if (wildcard) {
-				// it's "*"
-				return true;
+		AdminPermission requested = (AdminPermission) p;
+		if (bundle != null) {
+			throw new UnsupportedOperationException(
+					"implies cannot be called because this permission constructed with a Bundle");
+		}
+		// if requested permission has a filter, then it is an invalid argument
+		if (requested.getFilter() != null) {
+			throw new IllegalArgumentException(
+					"argument must be constructed with a Bundle or filter of *");
+		}
+		// check actions first - much faster
+		int targetMask = requested.getActionsMask();
+		if ((getActionsMask() & targetMask) != targetMask) {
+			return false;
+		}
+	
+		// Get our filter
+		Filter f = getFilter();
+		if (f == null) {
+			// it's "*"
+			return true;
+		}
+		// is requested a wildcard filter?
+		if (requested.bundle == null) {
+			return false;
+		}
+		return f.match(requested.getProperties());
+	}
+
+	/**
+	 * Returns the canonical string representation of the
+	 * <code>AdminPermission</code> actions.
+	 * 
+	 * <p>
+	 * Always returns present <code>AdminPermission</code> actions in the
+	 * following order: <code>class</code>, <code>execute</code>,
+	 * <code>extensionLifecycle</code>, <code>lifecycle</code>,
+	 * <code>listener</code>, <code>metadata</code>, <code>resolve</code>,
+	 * <code>resource</code>, <code>startlevel</code>, <code>context</code>.
+	 * 
+	 * @return Canonical string representation of the
+	 *         <code>AdminPermission</code> actions.
+	 */
+	public String getActions() {
+		String result = actions;
+		if (result == null) {
+			StringBuffer sb = new StringBuffer();
+	
+			int mask = getActionsMask();
+			if ((mask & ACTION_CLASS) == ACTION_CLASS) {
+				sb.append(CLASS);
+				sb.append(',');
 			}
-			else {
-				// it's a bundle id
-				return bundle.getBundleId() == target.bundle.getBundleId();
+	
+			if ((mask & ACTION_EXECUTE) == ACTION_EXECUTE) {
+				sb.append(EXECUTE);
+				sb.append(',');
 			}
+	
+			if ((mask & ACTION_EXTENSIONLIFECYCLE) == ACTION_EXTENSIONLIFECYCLE) {
+				sb.append(EXTENSIONLIFECYCLE);
+				sb.append(',');
+			}
+	
+			if ((mask & ACTION_LIFECYCLE) == ACTION_LIFECYCLE) {
+				sb.append(LIFECYCLE);
+				sb.append(',');
+			}
+	
+			if ((mask & ACTION_LISTENER) == ACTION_LISTENER) {
+				sb.append(LISTENER);
+				sb.append(',');
+			}
+	
+			if ((mask & ACTION_METADATA) == ACTION_METADATA) {
+				sb.append(METADATA);
+				sb.append(',');
+			}
+	
+			if ((mask & ACTION_RESOLVE) == ACTION_RESOLVE) {
+				sb.append(RESOLVE);
+				sb.append(',');
+			}
+	
+			if ((mask & ACTION_RESOURCE) == ACTION_RESOURCE) {
+				sb.append(RESOURCE);
+				sb.append(',');
+			}
+	
+			if ((mask & ACTION_STARTLEVEL) == ACTION_STARTLEVEL) {
+				sb.append(STARTLEVEL);
+				sb.append(',');
+			}
+	
+			if ((mask & ACTION_CONTEXT) == ACTION_CONTEXT) {
+				sb.append(CONTEXT);
+				sb.append(',');
+			}
+	
+			// remove trailing comma
+			if (sb.length() > 0) {
+				sb.setLength(sb.length() - 1);
+			}
+	
+			actions = result = sb.toString();
+		}
+		return result;
 	}
 
 	/**
@@ -491,248 +806,70 @@ public final class AdminPermission extends BasicPermission {
 	}
 
 	/**
-	 * Package private constructor used by AdminPermissionCollection.
+	 * Determines the equality of two <code>AdminPermission</code> objects.
 	 * 
-	 * @param filter name filter
-	 * @param action_mask mask
+	 * @param obj The object being compared for equality with this object.
+	 * @return <code>true</code> if <code>obj</code> is equivalent to this
+	 *         <code>AdminPermission</code>; <code>false</code> otherwise.
 	 */
-	AdminPermission(String filter, int action_mask) {
-		super(filter);
+	public boolean equals(Object obj) {
+		if (obj == this) {
+			return true;
+		}
 
-		// name must be either * or a filter
-		if (filter.equals("*")) { //$NON-NLS-1$
-			this.wildcard = true;
-			this.filterString = null;
+		if (!(obj instanceof AdminPermission)) {
+			return false;
 		}
-		else {
-			this.wildcard = false;
-			this.filterString = filter;
-		}
-		this.bundle = null;
-		this.action_mask = action_mask;
+
+		AdminPermission ap = (AdminPermission) obj;
+
+		return (getActionsMask() == ap.getActionsMask())
+				&& ((bundle == ap.bundle) || ((bundle != null) && bundle
+						.equals(ap.bundle)))
+				&& (getFilter() == null ? ap.getFilter() == null : getFilter()
+						.equals(ap.getFilter()));
 	}
 
 	/**
-	 * Parse action string into action mask.
+	 * Returns the hash code value for this object.
 	 * 
-	 * @param actions Action string.
-	 * @return action mask.
+	 * @return Hash code value for this object.
 	 */
-	private static int getMask(String actions) {
-
-		boolean seencomma = false;
-
-		int mask = ACTION_NONE;
-
-		if (actions == null) {
-			return mask;
+	public int hashCode() {
+		int h = 31 * 17 + getName().hashCode();
+		h = 31 * h + getActions().hashCode();
+		if (bundle != null) {
+			h = 31 * h + bundle.hashCode();
 		}
+		return h;
+	}
 
-		char[] a = actions.toCharArray();
-
-		int i = a.length - 1;
-		if (i < 0)
-			return mask;
-
-		while (i != -1) {
-			char c;
-
-			// skip whitespace
-			while ((i != -1)
-					&& ((c = a[i]) == ' ' || c == '\r' || c == '\n'
-							|| c == '\f' || c == '\t'))
-				i--;
-
-			// check for the known strings
-			int matchlen;
-
-			if (i >= 4 && (a[i - 4] == 'c' || a[i - 4] == 'C')
-					&& (a[i - 3] == 'l' || a[i - 3] == 'L')
-					&& (a[i - 2] == 'a' || a[i - 2] == 'A')
-					&& (a[i - 1] == 's' || a[i - 1] == 'S')
-					&& (a[i] == 's' || a[i] == 'S')) {
-				matchlen = 5;
-				mask |= ACTION_CLASS | ACTION_RESOLVE;
-
-			}
-			else
-				if (i >= 6 && (a[i - 6] == 'e' || a[i - 6] == 'E')
-						&& (a[i - 5] == 'x' || a[i - 5] == 'X')
-						&& (a[i - 4] == 'e' || a[i - 4] == 'E')
-						&& (a[i - 3] == 'c' || a[i - 3] == 'C')
-						&& (a[i - 2] == 'u' || a[i - 2] == 'U')
-						&& (a[i - 1] == 't' || a[i - 1] == 'T')
-						&& (a[i] == 'e' || a[i] == 'E')) {
-					matchlen = 7;
-					mask |= ACTION_EXECUTE | ACTION_RESOLVE;
-
-				}
-				else
-					if (i >= 17 && (a[i - 17] == 'e' || a[i - 17] == 'E')
-							&& (a[i - 16] == 'x' || a[i - 16] == 'X')
-							&& (a[i - 15] == 't' || a[i - 15] == 'T')
-							&& (a[i - 14] == 'e' || a[i - 14] == 'E')
-							&& (a[i - 13] == 'n' || a[i - 13] == 'N')
-							&& (a[i - 12] == 's' || a[i - 12] == 'S')
-							&& (a[i - 11] == 'i' || a[i - 11] == 'I')
-							&& (a[i - 10] == 'o' || a[i - 10] == 'O')
-							&& (a[i - 9] == 'n' || a[i - 9] == 'N')
-							&& (a[i - 8] == 'l' || a[i - 8] == 'L')
-							&& (a[i - 7] == 'i' || a[i - 7] == 'I')
-							&& (a[i - 6] == 'f' || a[i - 6] == 'F')
-							&& (a[i - 5] == 'e' || a[i - 5] == 'E')
-							&& (a[i - 4] == 'c' || a[i - 4] == 'C')
-							&& (a[i - 3] == 'y' || a[i - 3] == 'Y')
-							&& (a[i - 2] == 'c' || a[i - 2] == 'C')
-							&& (a[i - 1] == 'l' || a[i - 1] == 'L')
-							&& (a[i] == 'e' || a[i] == 'E')) {
-						matchlen = 18;
-						mask |= ACTION_EXTENSIONLIFECYCLE;
-
-					}
-					else
-						if (i >= 8 && (a[i - 8] == 'l' || a[i - 8] == 'L')
-								&& (a[i - 7] == 'i' || a[i - 7] == 'I')
-								&& (a[i - 6] == 'f' || a[i - 6] == 'F')
-								&& (a[i - 5] == 'e' || a[i - 5] == 'E')
-								&& (a[i - 4] == 'c' || a[i - 4] == 'C')
-								&& (a[i - 3] == 'y' || a[i - 3] == 'Y')
-								&& (a[i - 2] == 'c' || a[i - 2] == 'C')
-								&& (a[i - 1] == 'l' || a[i - 1] == 'L')
-								&& (a[i] == 'e' || a[i] == 'E')) {
-							matchlen = 9;
-							mask |= ACTION_LIFECYCLE;
-
-						}
-						else
-							if (i >= 7 && (a[i - 7] == 'l' || a[i - 7] == 'L')
-									&& (a[i - 6] == 'i' || a[i - 6] == 'I')
-									&& (a[i - 5] == 's' || a[i - 5] == 'S')
-									&& (a[i - 4] == 't' || a[i - 4] == 'T')
-									&& (a[i - 3] == 'e' || a[i - 3] == 'E')
-									&& (a[i - 2] == 'n' || a[i - 2] == 'N')
-									&& (a[i - 1] == 'e' || a[i - 1] == 'E')
-									&& (a[i] == 'r' || a[i] == 'R')) {
-								matchlen = 8;
-								mask |= ACTION_LISTENER;
-
-							}
-							else
-								if (i >= 7
-										&& (a[i - 7] == 'm' || a[i - 7] == 'M')
-										&& (a[i - 6] == 'e' || a[i - 6] == 'E')
-										&& (a[i - 5] == 't' || a[i - 5] == 'T')
-										&& (a[i - 4] == 'a' || a[i - 4] == 'A')
-										&& (a[i - 3] == 'd' || a[i - 3] == 'D')
-										&& (a[i - 2] == 'a' || a[i - 2] == 'A')
-										&& (a[i - 1] == 't' || a[i - 1] == 'T')
-										&& (a[i] == 'a' || a[i] == 'A')) {
-									matchlen = 8;
-									mask |= ACTION_METADATA;
-
-								}
-								else
-									if (i >= 6
-											&& (a[i - 6] == 'r' || a[i - 6] == 'R')
-											&& (a[i - 5] == 'e' || a[i - 5] == 'E')
-											&& (a[i - 4] == 's' || a[i - 4] == 'S')
-											&& (a[i - 3] == 'o' || a[i - 3] == 'O')
-											&& (a[i - 2] == 'l' || a[i - 2] == 'L')
-											&& (a[i - 1] == 'v' || a[i - 1] == 'V')
-											&& (a[i] == 'e' || a[i] == 'E')) {
-										matchlen = 7;
-										mask |= ACTION_RESOLVE;
-
-									}
-									else
-										if (i >= 7
-												&& (a[i - 7] == 'r' || a[i - 7] == 'R')
-												&& (a[i - 6] == 'e' || a[i - 6] == 'E')
-												&& (a[i - 5] == 's' || a[i - 5] == 'S')
-												&& (a[i - 4] == 'o' || a[i - 4] == 'O')
-												&& (a[i - 3] == 'u' || a[i - 3] == 'U')
-												&& (a[i - 2] == 'r' || a[i - 2] == 'R')
-												&& (a[i - 1] == 'c' || a[i - 1] == 'C')
-												&& (a[i] == 'e' || a[i] == 'E')) {
-											matchlen = 8;
-											mask |= ACTION_RESOURCE
-													| ACTION_RESOLVE;
-
-										}
-										else
-											if (i >= 9
-													&& (a[i - 9] == 's' || a[i - 9] == 'S')
-													&& (a[i - 8] == 't' || a[i - 8] == 'T')
-													&& (a[i - 7] == 'a' || a[i - 7] == 'A')
-													&& (a[i - 6] == 'r' || a[i - 6] == 'R')
-													&& (a[i - 5] == 't' || a[i - 5] == 'T')
-													&& (a[i - 4] == 'l' || a[i - 4] == 'L')
-													&& (a[i - 3] == 'e' || a[i - 3] == 'E')
-													&& (a[i - 2] == 'v' || a[i - 2] == 'V')
-													&& (a[i - 1] == 'e' || a[i - 1] == 'E')
-													&& (a[i] == 'l' || a[i] == 'L')) {
-												matchlen = 10;
-												mask |= ACTION_STARTLEVEL;
-
-											}
-											else
-												if (i >= 6
-														&& (a[i - 6] == 'c' || a[i - 6] == 'C')
-														&& (a[i - 5] == 'o' || a[i - 5] == 'O')
-														&& (a[i - 4] == 'n' || a[i - 4] == 'N')
-														&& (a[i - 3] == 't' || a[i - 3] == 'T')
-														&& (a[i - 2] == 'e' || a[i - 2] == 'E')
-														&& (a[i - 1] == 'x' || a[i - 1] == 'X')
-														&& (a[i] == 't' || a[i] == 'T')) {
-													matchlen = 7;
-													mask |= ACTION_CONTEXT;
-
-												}
-												else
-													if (i >= 0 &&
-
-													(a[i] == '*')) {
-														matchlen = 1;
-														mask |= ACTION_ALL;
-
-													}
-													else {
-														// parse error
-														throw new IllegalArgumentException(
-																"invalid permission: " + actions); //$NON-NLS-1$
-													}
-
-			// make sure we didn't just match the tail of a word
-			// like "ackbarfstartlevel". Also, skip to the comma.
-			seencomma = false;
-			while (i >= matchlen && !seencomma) {
-				switch (a[i - matchlen]) {
-					case ',' :
-						seencomma = true;
-						/* FALLTHROUGH */
-					case ' ' :
-					case '\r' :
-					case '\n' :
-					case '\f' :
-					case '\t' :
-						break;
-					default :
-						throw new IllegalArgumentException(
-								"invalid permission: " + actions); //$NON-NLS-1$
-				}
-				i--;
-			}
-
-			// point i at the location of the comma minus one (or -1).
-			i -= matchlen;
+	/**
+	 * WriteObject is called to save the state of this permission object to a
+	 * stream. The actions are serialized, and the superclass takes care of the
+	 * name.
+	 */
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+			throws IOException {
+		if (bundle != null) {
+			throw new InvalidObjectException("cannot serialize");
 		}
+		// Write out the actions. The superclass takes care of the name
+		// call getActions to make sure actions field is initialized
+		if (actions == null)
+			getActions();
+		s.defaultWriteObject();
+	}
 
-		if (seencomma) {
-			throw new IllegalArgumentException("invalid permission: " + //$NON-NLS-1$
-					actions);
-		}
-
-		return mask;
+	/**
+	 * readObject is called to restore the state of this permission from a
+	 * stream.
+	 */
+	private synchronized void readObject(java.io.ObjectInputStream s)
+			throws IOException, ClassNotFoundException {
+		// Read in the data, then initialize the transients
+		s.defaultReadObject();
+		setTransients(parseFilter(getName()), parseActions(actions));
 	}
 
 	/**
@@ -747,46 +884,44 @@ public final class AdminPermission extends BasicPermission {
 	 * @return a dictionary of properties for this bundle
 	 */
 	private Dictionary getProperties() {
-		if (bundleProperties == null) {
-			bundleProperties = new Hashtable();
-
+		Dictionary result = bundleProperties;
+		if (result == null) {
+			final Dictionary dict = new Hashtable(4);
 			AccessController.doPrivileged(new PrivilegedAction() {
 				public Object run() {
-					// set Id
-					bundleProperties.put("id", new Long(bundle.getBundleId())); //$NON-NLS-1$
-
-					// set location
-					bundleProperties.put("location", bundle.getLocation()); //$NON-NLS-1$
-
-					// set name
-					if (bundle.getSymbolicName() != null)
-						bundleProperties.put("name", bundle.getSymbolicName()); //$NON-NLS-1$
-
-					// set signers
-					bundleProperties.put("signer", new SignerWrapper(bundle)); //$NON-NLS-1$
-
+					dict.put("id", new Long(bundle.getBundleId())); 
+					dict.put("location", bundle.getLocation()); 
+					String name = bundle.getSymbolicName();
+					if (name != null) {
+						dict.put("name", name); 
+					}
+					SignerProperty signer = new SignerProperty(bundle);
+					if (signer.isBundleSigned()) {
+						dict.put("signer", signer); 
+					}
 					return null;
 				}
 			});
+			bundleProperties = result = dict;
 		}
-		return bundleProperties;
+		return result;
 	}
 
 	/**
 	 * Used for Filter matching on signer key.
 	 * 
 	 */
-	private static class SignerWrapper {
+	private static class SignerProperty {
 		private final Bundle	bundle;
 		private final String	pattern;
 
 		/**
 		 * String constructor used by the filter matching algorithm to construct
-		 * SignerWrappers from the attribute value in the filter string.
+		 * SignerPropertys from the attribute value in the filter string.
 		 * 
 		 * @param pattern Attribute value in the filter string.
 		 */
-		public SignerWrapper(String pattern) {
+		public SignerProperty(String pattern) {
 			this.pattern = pattern;
 			this.bundle = null;
 		}
@@ -796,7 +931,7 @@ public final class AdminPermission extends BasicPermission {
 		 * 
 		 * @param bundle The bundle whose signers are to be matched.
 		 */
-		SignerWrapper(Bundle bundle) {
+		SignerProperty(Bundle bundle) {
 			this.bundle = bundle;
 			this.pattern = null;
 		}
@@ -804,13 +939,13 @@ public final class AdminPermission extends BasicPermission {
 		/**
 		 * Used by the filter matching algorithm to
 		 * 
-		 * @param o SignerWrapper to compare against.
+		 * @param o SignerProperty to compare against.
 		 * @return true if the DN name chain matches the pattern.
 		 */
 		public boolean equals(Object o) {
-			if (!(o instanceof SignerWrapper))
+			if (!(o instanceof SignerProperty))
 				return false;
-			SignerWrapper other = (SignerWrapper) o;
+			SignerProperty other = (SignerProperty) o;
 			Bundle matchBundle = bundle != null ? bundle : other.bundle;
 			String matchPattern = bundle != null ? other.pattern : pattern;
 			Map/* <X509Certificate, List<X509Certificate>> */signers = matchBundle
@@ -833,136 +968,20 @@ public final class AdminPermission extends BasicPermission {
 		public int hashCode() {
 			// It is not possible to make unique hash codes for this object
 			// because of the way equals is implemented to behave differently
-			// when
-			// the fields are null. This is an inner class that is only used
-			// for filter evaluations. No need to make its hashcode unique
+			// when the fields are null. This is an inner class that is only
+			// used. for filter evaluations. No need to make its hashcode unique
 			// for map usage.
 			return 31;
 		}
-	}
 
-	/**
-	 * Called by <code>implies</code> on an AdminPermission which was
-	 * constructed with a filter. This method creates a Filter object with the
-	 * filter string specified for this AdminPermission. The Filter is cached so
-	 * this work only happens once.
-	 * 
-	 * This method should only be called on an AdminPermission which was
-	 * constructed with a filter
-	 * 
-	 * @return a Filter for this bundle
-	 */
-	private Filter getFilter() {
-		if (filter == null) {
-			try {
-				int pos = filterString.indexOf("signer"); //$NON-NLS-1$
-				if (pos != -1) {
-
-					// there may be a signer attribute
-					StringBuffer filterBuf = new StringBuffer(filterString);
-					int numAsteriskFound = 0; // use as offset to replace in
-					// buffer
-
-					int walkbackPos; // temp pos
-
-					// find occurences of (signer= and escape out *'s
-					while (pos != -1) {
-
-						// walk back and look for '(' to see if this is an attr
-						walkbackPos = pos - 1;
-
-						// consume whitespace
-						while (walkbackPos >= 0
-								&& Character.isWhitespace(filterString
-										.charAt(walkbackPos))) {
-							walkbackPos--;
-						}
-						if (walkbackPos < 0) {
-							// filter is invalid - FilterImpl will throw error
-							break;
-						}
-
-						// check to see if we have unescaped '('
-						if (filterString.charAt(walkbackPos) != '('
-								|| (walkbackPos > 0 && filterString
-										.charAt(walkbackPos - 1) == '\\')) {
-							// '(' was escaped or not there
-							pos = filterString.indexOf("signer", pos + 6); //$NON-NLS-1$
-							continue;
-						}
-						pos += 6; // skip over 'signer'
-
-						// found signer - consume whitespace before '='
-						while (Character.isWhitespace(filterString.charAt(pos))) {
-							pos++;
-						}
-
-						// look for '='
-						if (filterString.charAt(pos) != '=') {
-							// attr was signerx - keep looking
-							pos = filterString.indexOf("signer", pos); //$NON-NLS-1$
-							continue;
-						}
-						pos++; // skip over '='
-
-						// found signer value - escape '*'s
-						while (!(filterString.charAt(pos) == ')' && filterString
-								.charAt(pos - 1) != '\\')) {
-							// only add an escape if it is not already escaped
-							if (filterString.charAt(pos) == '*'
-									&& filterString.charAt(pos - 1) != '\\') {
-								filterBuf.insert(pos + numAsteriskFound, '\\');
-								numAsteriskFound++;
-							}
-							pos++;
-						}
-
-						// end of signer value - look for more?
-						pos = filterString.indexOf("signer", pos); //$NON-NLS-1$
-					} // end while (pos != -1)
-					filterString = filterBuf.toString();
-				} // end if (pos != -1)
-
-				filter = FrameworkUtil.createFilter(filterString);
+		boolean isBundleSigned() {
+			if (bundle == null) {
+				return false;
 			}
-			catch (InvalidSyntaxException e) {
-				// we will return null
-			}
+			Map/* <X509Certificate, List<X509Certificate>> */signers = bundle
+					.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
+			return !signers.isEmpty();
 		}
-		return filter;
-	}
-
-	/**
-	 * Returns the current action mask.
-	 * <p>
-	 * Used by the AdminPermissionCollection class.
-	 * 
-	 * @return Current action mask.
-	 */
-	int getMask() {
-		return action_mask;
-	}
-
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-			throws IOException {
-		// Write out the actions. The superclass takes care of the name
-		// call getActions to make sure actions field is initialized
-		if (actions == null)
-			getActions();
-		if (filterString == null && !wildcard)
-			throw new UnsupportedOperationException("cannot serialize"); //$NON-NLS-1$
-		s.defaultWriteObject();
-	}
-
-	/**
-	 * readObject is called to restore the state of this permission from a
-	 * stream.
-	 */
-	private synchronized void readObject(java.io.ObjectInputStream s)
-			throws IOException, ClassNotFoundException {
-		// Read in the action, then initialize the rest
-		s.defaultReadObject();
-		action_mask = getMask(actions);
 	}
 }
 
@@ -975,8 +994,17 @@ final class AdminPermissionCollection extends PermissionCollection {
 	 * Collection of permissions.
 	 * 
 	 * @serial
+	 * @GuardedBy this
 	 */
-	private Hashtable			permissions;
+	private final Hashtable		permissions;
+
+	/**
+	 * Boolean saying if "*" is in the collection.
+	 * 
+	 * @serial
+	 * @GuardedBy this
+	 */
+	private boolean				all_allowed;
 
 	/**
 	 * Create an empty AdminPermissions object.
@@ -1001,26 +1029,39 @@ final class AdminPermissionCollection extends PermissionCollection {
 	 *            read-only.
 	 */
 	public void add(Permission permission) {
-		if (!(permission instanceof AdminPermission))
-			throw new IllegalArgumentException("invalid permission: " + //$NON-NLS-1$
-					permission);
-		if (isReadOnly())
-			throw new SecurityException("attempt to add a Permission to a " + //$NON-NLS-1$
-					"readonly AdminCollection"); //$NON-NLS-1$
-		AdminPermission ap = (AdminPermission) permission;
-		AdminPermission existing = (AdminPermission) permissions.get(ap
-				.getName());
-		if (existing != null) {
-			int oldMask = existing.getMask();
-			int newMask = ap.getMask();
-
-			if (oldMask != newMask) {
-				permissions.put(existing.getName(), new AdminPermission(
-						existing.getName(), oldMask | newMask));
-			}
+		if (!(permission instanceof AdminPermission)) {
+			throw new IllegalArgumentException("invalid permission: "
+					+ permission);
 		}
-		else {
-			permissions.put(ap.getName(), ap);
+		if (isReadOnly()) {
+			throw new SecurityException("attempt to add a Permission to a "
+					+ "readonly PermissionCollection"); 
+		}
+		final AdminPermission ap = (AdminPermission) permission;
+		if (ap.bundle != null) {
+			throw new IllegalArgumentException("cannot add to collection: "
+					+ ap);
+		}
+		final String name = ap.getName();
+		synchronized (this) {
+			AdminPermission existing = (AdminPermission) permissions.get(name);
+			if (existing != null) {
+				int oldMask = existing.getActionsMask();
+				int newMask = ap.getActionsMask();
+
+				if (oldMask != newMask) {
+					permissions.put(name, new AdminPermission(existing
+							.getFilter(), oldMask | newMask));
+				}
+			}
+			else {
+				permissions.put(name, ap);
+			}
+			if (!all_allowed) {
+				if (name.equals("*")) {
+					all_allowed = true;
+				}
+			}
 		}
 	}
 
@@ -1036,17 +1077,37 @@ final class AdminPermissionCollection extends PermissionCollection {
 	 *         <code>false</code> otherwise.
 	 */
 	public boolean implies(Permission permission) {
-		if (!(permission instanceof AdminPermission))
+		if (!(permission instanceof AdminPermission)) {
 			return false;
+		}
 
-		AdminPermission target = (AdminPermission) permission;
+		AdminPermission requested = (AdminPermission) permission;
+		// if requested permission has a filter, then it is an invalid argument
+		if (requested.getFilter() != null) {
+			throw new IllegalArgumentException(
+					"argument must be constructed with a Bundle or filter of *");
+		}
+		synchronized (this) {
+			// short circuit if the "*" Permission was added
+			if (all_allowed) {
+				AdminPermission x = (AdminPermission) permissions.get("*");
+				if (x != null) {
+					final int effective = x.getActionsMask();
+					final int desired = requested.getActionsMask();
+					if ((effective & desired) == desired) {
+						return true;
+					}
+				}
+			}
+		}
 
 		// just iterate one by one
 		Iterator permItr = permissions.values().iterator();
-
-		while (permItr.hasNext())
-			if (((AdminPermission) permItr.next()).implies(target))
+		while (permItr.hasNext()) {
+			if (((AdminPermission) permItr.next()).implies(requested)) {
 				return true;
+			}
+		}
 		return false;
 	}
 
@@ -1058,6 +1119,6 @@ final class AdminPermissionCollection extends PermissionCollection {
 	 */
 
 	public Enumeration elements() {
-		return Collections.enumeration(permissions.values());
+		return permissions.elements();
 	}
 }
