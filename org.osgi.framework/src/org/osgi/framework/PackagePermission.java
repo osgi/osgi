@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2009). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,8 @@ import java.io.IOException;
 import java.security.BasicPermission;
 import java.security.Permission;
 import java.security.PermissionCollection;
-import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashMap;
+import java.util.Hashtable;
 
 /**
  * A bundle's authority to import or export a package.
@@ -66,17 +65,20 @@ public final class PackagePermission extends BasicPermission {
 	private final static int	ACTION_ALL			= ACTION_EXPORT
 															| ACTION_IMPORT;
 	private final static int	ACTION_NONE			= 0;
+
 	/**
 	 * The actions mask.
+	 * 
+	 * @GuardedBy this
 	 */
-	private transient int		action_mask			= ACTION_NONE;
+	private transient int		action_mask;
 
 	/**
 	 * The actions in canonical form.
 	 * 
 	 * @serial
 	 */
-	private String				actions				= null;
+	private volatile String		actions				= null;
 
 	/**
 	 * Defines the authority to import and/or export a package within the OSGi
@@ -106,7 +108,7 @@ public final class PackagePermission extends BasicPermission {
 	 */
 
 	public PackagePermission(String name, String actions) {
-		this(name, getMask(actions));
+		this(name, parseActions(actions));
 	}
 
 	/**
@@ -117,7 +119,7 @@ public final class PackagePermission extends BasicPermission {
 	 */
 	PackagePermission(String name, int mask) {
 		super(name);
-		init(mask);
+		setTransients(mask);
 	}
 
 	/**
@@ -125,12 +127,22 @@ public final class PackagePermission extends BasicPermission {
 	 * 
 	 * @param mask action mask
 	 */
-	private void init(int mask) {
+	private synchronized void setTransients(int mask) {
 		if ((mask == ACTION_NONE) || ((mask & ACTION_ALL) != mask)) {
 			throw new IllegalArgumentException("invalid action string");
 		}
-
 		action_mask = mask;
+	}
+
+	/**
+	 * Returns the current action mask.
+	 * <p>
+	 * Used by the PackagePermissionCollection class.
+	 * 
+	 * @return Current action mask.
+	 */
+	synchronized int getActionsMask() {
+		return action_mask;
 	}
 
 	/**
@@ -139,7 +151,7 @@ public final class PackagePermission extends BasicPermission {
 	 * @param actions Action string.
 	 * @return action mask.
 	 */
-	private static int getMask(String actions) {
+	private static int parseActions(String actions) {
 		boolean seencomma = false;
 
 		int mask = ACTION_NONE;
@@ -252,9 +264,10 @@ public final class PackagePermission extends BasicPermission {
 
 	public boolean implies(Permission p) {
 		if (p instanceof PackagePermission) {
-			PackagePermission pp = (PackagePermission) p;
+			PackagePermission requested = (PackagePermission) p;
 
-			return ((action_mask & pp.action_mask) == pp.action_mask)
+			int targetMask = requested.getActionsMask();
+			return ((getActionsMask() & targetMask) == targetMask)
 					&& super.implies(p);
 		}
 
@@ -273,26 +286,28 @@ public final class PackagePermission extends BasicPermission {
 	 *         <code>PackagePermission</code> actions.
 	 */
 
-	public synchronized String getActions() {
-		if (actions == null) {
+	public String getActions() {
+		String result = actions;
+		if (result == null) {
 			StringBuffer sb = new StringBuffer();
 			boolean comma = false;
 
-			if ((action_mask & ACTION_EXPORT) == ACTION_EXPORT) {
+			int mask = getActionsMask();
+			if ((mask & ACTION_EXPORT) == ACTION_EXPORT) {
 				sb.append(EXPORT);
 				comma = true;
 			}
 
-			if ((action_mask & ACTION_IMPORT) == ACTION_IMPORT) {
+			if ((mask & ACTION_IMPORT) == ACTION_IMPORT) {
 				if (comma)
 					sb.append(',');
 				sb.append(IMPORT);
 			}
 
-			actions = sb.toString();
+			actions = result = sb.toString();
 		}
 
-		return actions;
+		return result;
 	}
 
 	/**
@@ -330,7 +345,7 @@ public final class PackagePermission extends BasicPermission {
 
 		PackagePermission pp = (PackagePermission) obj;
 
-		return (action_mask == pp.action_mask)
+		return (getActionsMask() == pp.getActionsMask())
 				&& getName().equals(pp.getName());
 	}
 
@@ -341,18 +356,9 @@ public final class PackagePermission extends BasicPermission {
 	 */
 
 	public int hashCode() {
-		return getName().hashCode() ^ getActions().hashCode();
-	}
-
-	/**
-	 * Returns the current action mask.
-	 * <p>
-	 * Used by the PackagePermissionCollection class.
-	 * 
-	 * @return Current action mask.
-	 */
-	int getMask() {
-		return action_mask;
+		int h = 31 * 17 + getName().hashCode();
+		h = 31 * h + getActions().hashCode();
+		return h;
 	}
 
 	/**
@@ -360,7 +366,6 @@ public final class PackagePermission extends BasicPermission {
 	 * stream. The actions are serialized, and the superclass takes care of the
 	 * name.
 	 */
-
 	private synchronized void writeObject(java.io.ObjectOutputStream s)
 			throws IOException {
 		// Write out the actions. The superclass takes care of the name
@@ -378,7 +383,7 @@ public final class PackagePermission extends BasicPermission {
 			throws IOException, ClassNotFoundException {
 		// Read in the action, then initialize the rest
 		s.defaultReadObject();
-		init(getMask(actions));
+		setTransients(parseActions(actions));
 	}
 }
 
@@ -398,7 +403,7 @@ final class PackagePermissionCollection extends PermissionCollection {
 	 * @serial
 	 * @GuardedBy this
 	 */
-	private final HashMap	permissions;
+	private final Hashtable	permissions;
 
 	/**
 	 * Boolean saying if "*" is in the collection.
@@ -413,7 +418,7 @@ final class PackagePermissionCollection extends PermissionCollection {
 	 */
 
 	public PackagePermissionCollection() {
-		permissions = new HashMap();
+		permissions = new Hashtable();
 		all_allowed = false;
 	}
 
@@ -432,23 +437,25 @@ final class PackagePermissionCollection extends PermissionCollection {
 	 */
 
 	public void add(final Permission permission) {
-		if (!(permission instanceof PackagePermission))
+		if (!(permission instanceof PackagePermission)) {
 			throw new IllegalArgumentException("invalid permission: "
 					+ permission);
-		if (isReadOnly())
+		}
+		if (isReadOnly()) {
 			throw new SecurityException("attempt to add a Permission to a "
 					+ "readonly PermissionCollection");
+		}
 
 		final PackagePermission pp = (PackagePermission) permission;
 		final String name = pp.getName();
-		final int newMask = pp.getMask();
 
 		synchronized (this) {
 			final PackagePermission existing = (PackagePermission) permissions
 					.get(name);
 
 			if (existing != null) {
-				final int oldMask = existing.getMask();
+				final int oldMask = existing.getActionsMask();
+				final int newMask = pp.getActionsMask();
 				if (oldMask != newMask) {
 					permissions.put(name, new PackagePermission(name, oldMask
 							| newMask));
@@ -460,8 +467,9 @@ final class PackagePermissionCollection extends PermissionCollection {
 			}
 
 			if (!all_allowed) {
-				if (name.equals("*"))
+				if (name.equals("*")) {
 					all_allowed = true;
+				}
 			}
 		}
 	}
@@ -479,11 +487,12 @@ final class PackagePermissionCollection extends PermissionCollection {
 	 */
 
 	public boolean implies(final Permission permission) {
-		if (!(permission instanceof PackagePermission))
+		if (!(permission instanceof PackagePermission)) {
 			return false;
-		final PackagePermission pp = (PackagePermission) permission;
-		String name = pp.getName();
-		final int desired = pp.getMask();
+		}
+		final PackagePermission requested = (PackagePermission) permission;
+		String name = requested.getName();
+		final int desired = requested.getActionsMask();
 		PackagePermission x;
 		int effective = 0;
 
@@ -492,9 +501,10 @@ final class PackagePermissionCollection extends PermissionCollection {
 			if (all_allowed) {
 				x = (PackagePermission) permissions.get("*");
 				if (x != null) {
-					effective |= x.getMask();
-					if ((effective & desired) == desired)
+					effective |= x.getActionsMask();
+					if ((effective & desired) == desired) {
 						return true;
+					}
 				}
 			}
 			x = (PackagePermission) permissions.get(name);
@@ -504,9 +514,10 @@ final class PackagePermissionCollection extends PermissionCollection {
 		// name looking for matches on a.b.*
 		if (x != null) {
 			// we have a direct hit!
-			effective |= x.getMask();
-			if ((effective & desired) == desired)
+			effective |= x.getActionsMask();
+			if ((effective & desired) == desired) {
 				return true;
+			}
 		}
 		// work our way up the tree...
 		int last, offset;
@@ -517,9 +528,10 @@ final class PackagePermissionCollection extends PermissionCollection {
 				x = (PackagePermission) permissions.get(name);
 			}
 			if (x != null) {
-				effective |= x.getMask();
-				if ((effective & desired) == desired)
+				effective |= x.getActionsMask();
+				if ((effective & desired) == desired) {
 					return true;
+				}
 			}
 			offset = last - 1;
 		}
@@ -535,7 +547,7 @@ final class PackagePermissionCollection extends PermissionCollection {
 	 * @return Enumeration of all <code>PackagePermission</code> objects.
 	 */
 
-	public synchronized Enumeration elements() {
-		return Collections.enumeration(permissions.values());
+	public Enumeration elements() {
+		return permissions.elements();
 	}
 }
