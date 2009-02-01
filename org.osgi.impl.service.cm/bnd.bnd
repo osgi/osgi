@@ -1,0 +1,15 @@
+Bundle-Activator				= ${p}.CMActivator
+Bundle-Description				= OSGi Configuration Administration Reference Implementation by ProSyst GmbH.
+Bundle-Version					= 2.1.1.${project.build}
+Export-Service					= org.osgi.service.cm.ConfigurationAdmin
+Import-Service					= org.osgi.service.log.LogService
+
+Bundle-RequiredExecutionEnvironment= J2SE-1.4
+
+Private-Package					= ${p}
+Export-Package 					= org.osgi.service.cm;-split-package:=first
+
+-buildpath						= \
+    org.osgi.service.cm;	version=project, \
+	ee.j2se;					version=1.4, \
+	osgi;						version=4.0
