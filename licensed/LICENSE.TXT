@@ -144,6 +144,13 @@ URL                     http://felix.apache.org/
 License					licenses/ASL-2.0.txt
 Modifications           none
 
+org.apache.felix.configadmin  ----------------------------------------------------------------------
+Copyright               Copyright (c) 2009 Apache Software Foundation, All Rights Reserved
+Used                    general testing
+URL                     http://felix.apache.org/
+License					licenses/ASL-2.0.txt
+Modifications           none
+
 org.apache.log4j      ----------------------------------------------------------------------
 Copyright               Copyright (c) 2004 Apache Software Foundation, All Rights Reserved
 Used                    for dependency finder, used in processing ees

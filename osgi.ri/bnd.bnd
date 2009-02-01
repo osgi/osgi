@@ -36,7 +36,6 @@ build.cmpn.impls = \
 	org.osgi.impl.bundle.jaxp, \
 	org.osgi.impl.bundle.autoconf, \
 	org.osgi.impl.service.application, \
-	org.osgi.impl.service.cm, \
 	org.osgi.impl.service.device.basicdriverlocator, \
 	org.osgi.impl.service.device.manager , \
 	org.osgi.impl.service.http , \
@@ -58,7 +57,6 @@ build.mobile.impls = \
   	org.osgi.impl.bundle.jaxp , \
   	org.osgi.impl.bundle.autoconf , \
   	org.osgi.impl.service.application , \
-  	org.osgi.impl.service.cm , \
   	org.osgi.impl.service.deploymentadmin , \
   	org.osgi.impl.service.dmt , \
   	org.osgi.impl.service.io , \

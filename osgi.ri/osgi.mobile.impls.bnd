@@ -12,6 +12,7 @@ Include-Resource				: \
   	${repo;org.eclipse.equinox.ds}, \
   	${repo;org.eclipse.equinox.event}, \
  	${repo;org.eclipse.equinox.metatype}, \
+	${repo;org.apache.felix.configadmin}, \
  	\
 	apache/LICENSE=../licensed/licenses/ASL-2.0.txt, \
  	NOTICE=../osgi.companion/legal/NOTICE.txt, \
