@@ -10,7 +10,7 @@ Private-Package						= ${p}.*
 
 -runbundles						= \
 	org.osgi.impl.service.log; version=project, \
-	org.osgi.impl.service.cm;  version=latest
+	org.apache.felix.configadmin;  version=latest
 
 -runproperties					= report=true
 

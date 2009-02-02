@@ -45,7 +45,7 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 
 -runbundles							= \
 	org.osgi.impl.service.log; version=latest, \
-	org.osgi.impl.service.cm;  version=latest, \
+	org.apache.felix.configadmin;  version=latest, \
 	org.eclipse.equinox.event;  version=latest, \
 	org.osgi.impl.bundle.jaxp;  version=project, \
 	org.osgi.impl.service.deploymentadmin; version=latest, \

@@ -26,6 +26,6 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 
 -runbundles							= \
 	org.osgi.impl.service.log; version=latest, \
-	org.osgi.impl.service.cm;  version=latest, \
+	org.apache.felix.configadmin;  version=latest, \
 	org.osgi.impl.service.http; version=latest, \
 	org.osgi.impl.bundle.servlet
