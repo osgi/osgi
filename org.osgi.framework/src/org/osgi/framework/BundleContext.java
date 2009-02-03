@@ -18,7 +18,8 @@ package org.osgi.framework;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.Dictionary;
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * A bundle's execution context within the Framework. The context is used to
@@ -225,7 +226,7 @@ public interface BundleContext {
 	 * @return An array of <code>Bundle</code> objects, one object per
 	 *         installed bundle.
 	 */
-	public Bundle[] getBundles();
+	public Collection< ? extends Bundle> getBundles();
 
 	/**
 	 * Adds the specified <code>ServiceListener</code> object with the
@@ -468,7 +469,7 @@ public interface BundleContext {
 	 * @see ServiceFactory
 	 */
 	public ServiceRegistration registerService(String[] clazzes,
-			Object service, Dictionary properties);
+			Object service, Map<String, Object> properties);
 
 	/**
 	 * Registers the specified service object with the specified properties
@@ -476,12 +477,11 @@ public interface BundleContext {
 	 * 
 	 * <p>
 	 * This method is otherwise identical to
-	 * {@link #registerService(java.lang.String[], java.lang.Object,
-	 * java.util.Dictionary)} and is provided as a convenience when
-	 * <code>service</code> will only be registered under a single class name.
-	 * Note that even in this case the value of the service's
-	 * {@link Constants#OBJECTCLASS} property will be an array of strings,
-	 * rather than just a single string.
+	 * {@link #registerService(java.lang.String[], java.lang.Object, java.util.Map)}
+	 * and is provided as a convenience when <code>service</code> will only be
+	 * registered under a single class name. Note that even in this case the
+	 * value of the service's {@link Constants#OBJECTCLASS} property will be an
+	 * array of strings, rather than just a single string.
 	 * 
 	 * @param clazz The class name under which the service can be located.
 	 * @param service The service object or a <code>ServiceFactory</code>
@@ -495,10 +495,10 @@ public interface BundleContext {
 	 * @throws java.lang.IllegalStateException If this BundleContext is no
 	 *         longer valid.
 	 * @see #registerService(java.lang.String[], java.lang.Object,
-	 *      java.util.Dictionary)
+	 *      java.util.Map)
 	 */
 	public ServiceRegistration registerService(String clazz, Object service,
-			Dictionary properties);
+			Map<String, Object> properties);
 
 	/**
 	 * Returns an array of <code>ServiceReference</code> objects. The returned
@@ -570,7 +570,8 @@ public interface BundleContext {
 	 * @throws java.lang.IllegalStateException If this BundleContext is no
 	 *         longer valid.
 	 */
-	public ServiceReference[] getServiceReferences(String clazz, String filter)
+	public Collection< ? extends ServiceReference> getServiceReferences(
+			String clazz, String filter)
 			throws InvalidSyntaxException;
 
 	/**
@@ -633,7 +634,8 @@ public interface BundleContext {
 	 *         longer valid.
 	 * @since 1.3
 	 */
-	public ServiceReference[] getAllServiceReferences(String clazz,
+	public Collection< ? extends ServiceReference> getAllServiceReferences(
+			String clazz,
 			String filter) throws InvalidSyntaxException;
 
 	/**

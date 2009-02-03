@@ -21,12 +21,13 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Dictionary;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.security.auth.x500.X500Principal;
 
@@ -185,8 +186,9 @@ public class FrameworkUtil {
 	 * @since 1.5
 	 */
 	public static boolean matchDistinguishedNameChain(String matchPattern,
-			List /* <String> */dnChain) {
-		return DNChainMatching.match(matchPattern, new ArrayList(dnChain));
+			List<String> dnChain) {
+		return DNChainMatching.match(matchPattern, new ArrayList<String>(
+				dnChain));
 	}
 
 	/**
@@ -198,11 +200,13 @@ public class FrameworkUtil {
 	 *         class loader.
 	 * @since 1.5
 	 */
-	public static BundleReference getBundleReference(final Class classFromBundle) {
+	public static BundleReference getBundleReference(
+			final Class< ? > classFromBundle) {
 		// We use doPriv since the caller may not have permission
 		// to call getClassLoader.
-		Object cl = AccessController.doPrivileged(new PrivilegedAction() {
-			public Object run() {
+		ClassLoader cl = AccessController
+				.doPrivileged(new PrivilegedAction<ClassLoader>() {
+					public ClassLoader run() {
 				return classFromBundle.getClassLoader();
 			}
 		});
@@ -412,7 +416,7 @@ public class FrameworkUtil {
 		 *         <code>Filter</code>; <code>false</code> otherwise.
 		 */
 		public boolean match(ServiceReference reference) {
-			return match0(new ServiceReferenceDictionary(reference));
+			return match0(new ServiceReferenceMap(reference));
 		}
 
 		/**
@@ -430,8 +434,8 @@ public class FrameworkUtil {
 		 *             If <code>dictionary</code> contains case variants of the
 		 *             same key name.
 		 */
-		public boolean match(Dictionary dictionary) {
-			return match0(new CaseInsensitiveDictionary(dictionary));
+		public boolean match(Map<String, Object> dictionary) {
+			return match0(new CaseInsensitiveMap(dictionary));
 		}
 
 		/**
@@ -447,7 +451,7 @@ public class FrameworkUtil {
 		 *         values match this filter; <code>false</code> otherwise.
 		 * @since 1.3
 		 */
-		public boolean matchCase(Dictionary dictionary) {
+		public boolean matchCase(Map<String, Object> dictionary) {
 			return match0(dictionary);
 		}
 
@@ -619,7 +623,7 @@ public class FrameworkUtil {
 		 * @return If the Dictionary's keys match the filter, return
 		 *         <code>true</code>. Otherwise, return <code>false</code>.
 		 */
-		private boolean match0(Dictionary properties) {
+		private boolean match0(Map<String, Object> properties) {
 			switch (op) {
 			case AND: {
 				FilterImpl[] filters = (FilterImpl[]) value;
@@ -718,9 +722,9 @@ public class FrameworkUtil {
 				return compare_String(operation, (String) value1, value2);
 			}
 
-			Class clazz = value1.getClass();
+			Class< ? > clazz = value1.getClass();
 			if (clazz.isArray()) {
-				Class type = clazz.getComponentType();
+				Class< ? > type = clazz.getComponentType();
 				if (type.isPrimitive()) {
 					return compare_PrimitiveArray(operation, type, value1,
 							value2);
@@ -728,7 +732,10 @@ public class FrameworkUtil {
 				return compare_ObjectArray(operation, (Object[]) value1, value2);
 			}
 			if (value1 instanceof Collection) {
-				return compare_Collection(operation, (Collection) value1,
+				@SuppressWarnings("unchecked")
+				Collection<Object> collection = (Collection<Object>) value1;
+				return compare_Collection(operation,
+						collection,
 						value2);
 			}
 			if (value1 instanceof Integer) {
@@ -764,16 +771,18 @@ public class FrameworkUtil {
 						.booleanValue(), value2);
 			}
 			if (value1 instanceof Comparable) {
-				return compare_Comparable(operation, (Comparable) value1,
+				@SuppressWarnings("unchecked")
+				Comparable<Object> comparable = (Comparable<Object>) value1;
+				return compare_Comparable(operation, comparable,
 						value2);
 			}
 			return compare_Unknown(operation, value1, value2); // RFC 59
 		}
 
 		private boolean compare_Collection(int operation,
-				Collection collection, Object value2) {
-			for (Iterator iterator = collection.iterator(); iterator.hasNext();) {
-				if (compare(operation, iterator.next(), value2)) {
+				Collection<Object> collection, Object value2) {
+			for (Object o : collection) {
+				if (compare(operation, o, value2)) {
 					return true;
 				}
 			}
@@ -790,7 +799,7 @@ public class FrameworkUtil {
 			return false;
 		}
 
-		private boolean compare_PrimitiveArray(int operation, Class type,
+		private boolean compare_PrimitiveArray(int operation, Class< ? > type,
 				Object primarray, Object value2) {
 			if (Integer.TYPE.isAssignableFrom(type)) {
 				int[] array = (int[]) primarray;
@@ -1102,11 +1111,12 @@ public class FrameworkUtil {
 			return false;
 		}
 
-		private static final Class[] constructorType = new Class[] { String.class };
+		private static final Class< ? >[]	constructorType	= new Class< ? >[] {String.class};
 
-		private boolean compare_Comparable(int operation, Comparable value1,
+		private boolean compare_Comparable(int operation,
+				Comparable<Object> value1,
 				Object value2) {
-			Constructor constructor;
+			Constructor< ? > constructor;
 			try {
 				constructor = value1.getClass().getConstructor(constructorType);
 			} catch (NoSuchMethodException e) {
@@ -1146,7 +1156,7 @@ public class FrameworkUtil {
 
 		private boolean compare_Unknown(int operation, Object value1,
 				Object value2) {
-			Constructor constructor;
+			Constructor< ? > constructor;
 			try {
 				constructor = value1.getClass().getConstructor(constructorType);
 			} catch (NoSuchMethodException e) {
@@ -1303,7 +1313,7 @@ public class FrameworkUtil {
 							+ filterstring.substring(pos), filterstring); 
 				}
 
-				List operands = new ArrayList(10);
+				List<FilterImpl> operands = new ArrayList<FilterImpl>(10);
 
 				while (filterChars[pos] == '(') {
 					FilterImpl child = parse_filter();
@@ -1323,7 +1333,7 @@ public class FrameworkUtil {
 							+ filterstring.substring(pos), filterstring); 
 				}
 
-				List operands = new ArrayList(10);
+				List<FilterImpl> operands = new ArrayList<FilterImpl>(10);
 
 				while (filterChars[pos] == '(') {
 					FilterImpl child = parse_filter();
@@ -1477,7 +1487,7 @@ public class FrameworkUtil {
 			private Object parse_substring() throws InvalidSyntaxException {
 				StringBuffer sb = new StringBuffer(filterChars.length - pos);
 
-				List operands = new ArrayList(10);
+				List<String> operands = new ArrayList<String>(10);
 
 				parseloop: while (true) {
 					char c = filterChars[pos];
@@ -1556,8 +1566,9 @@ public class FrameworkUtil {
 	 * operation using a String key as no other operations are used by the
 	 * Filter implementation.
 	 */
-	private static class CaseInsensitiveDictionary extends Dictionary {
-		private final Dictionary dictionary;
+	private static class CaseInsensitiveMap extends
+			AbstractMap<String, Object> {
+		private final Map<String, Object>	dictionary;
 		private final String[] keys;
 
 		/**
@@ -1568,33 +1579,27 @@ public class FrameworkUtil {
 		 *             If <code>dictionary</code> contains case variants of the
 		 *             same key name.
 		 */
-		CaseInsensitiveDictionary(Dictionary dictionary) {
+		CaseInsensitiveMap(Map<String, Object> dictionary) {
 			if (dictionary == null) {
 				this.dictionary = null;
 				this.keys = new String[0];
 				return;
 			}
 			this.dictionary = dictionary;
-			List keyList = new ArrayList(dictionary.size());
-			for (Enumeration e = dictionary.keys(); e.hasMoreElements();) {
-				Object k = e.nextElement();
-				if (k instanceof String) {
-					String key = (String) k;
-					for (Iterator i = keyList.iterator(); i.hasNext();) {
-						if (key.equalsIgnoreCase((String) i.next())) {
-							throw new IllegalArgumentException();
-						}
+			List<String> keyList = new ArrayList<String>(dictionary.size());
+			for (String key : dictionary.keySet()) {
+				for (String k : keyList) {
+					if (key.equalsIgnoreCase(k)) {
+						throw new IllegalArgumentException();
 					}
 					keyList.add(key);
 				}
 			}
-			this.keys = (String[]) keyList.toArray(new String[keyList.size()]);
+			this.keys = keyList.toArray(new String[keyList.size()]);
 		}
 
-		public Object get(Object o) {
-			String k = (String) o;
-			for (int i = 0, length = keys.length; i < length; i++) {
-				String key = keys[i];
+		public Object get(String k) {
+			for (String key : keys) {
 				if (key.equalsIgnoreCase(k)) {
 					return dictionary.get(key);
 				}
@@ -1602,27 +1607,8 @@ public class FrameworkUtil {
 			return null;
 		}
 
-		public boolean isEmpty() {
-			throw new UnsupportedOperationException();
-		}
-
-		public Enumeration keys() {
-			throw new UnsupportedOperationException();
-		}
-
-		public Enumeration elements() {
-			throw new UnsupportedOperationException();
-		}
-
-		public Object put(Object key, Object value) {
-			throw new UnsupportedOperationException();
-		}
-
-		public Object remove(Object key) {
-			throw new UnsupportedOperationException();
-		}
-
-		public int size() {
+		@Override
+		public Set<java.util.Map.Entry<String, Object>> entrySet() {
 			throw new UnsupportedOperationException();
 		}
 	}
@@ -1633,46 +1619,29 @@ public class FrameworkUtil {
 	 * operation using a String key as no other operations are used by the
 	 * Filter implementation.
 	 */
-	private static class ServiceReferenceDictionary extends Dictionary {
+	private static class ServiceReferenceMap extends
+			AbstractMap<String, Object> {
 		private final ServiceReference reference;
 
-		ServiceReferenceDictionary(ServiceReference reference) {
+		ServiceReferenceMap(ServiceReference reference) {
 			this.reference = reference;
 		}
 
-		public Object get(Object key) {
+		public Object get(String key) {
 			if (reference == null) {
 				return null;
 			}
-			return reference.getProperty((String) key);
+			return reference.getProperty(key);
 		}
 
-		public boolean isEmpty() {
-			throw new UnsupportedOperationException();
-		}
-
-		public Enumeration keys() {
-			throw new UnsupportedOperationException();
-		}
-
-		public Enumeration elements() {
-			throw new UnsupportedOperationException();
-		}
-
-		public Object put(Object key, Object value) {
-			throw new UnsupportedOperationException();
-		}
-
-		public Object remove(Object key) {
-			throw new UnsupportedOperationException();
-		}
-
-		public int size() {
+		@Override
+		public Set<java.util.Map.Entry<String, Object>> entrySet() {
 			throw new UnsupportedOperationException();
 		}
 	}
 
-	private static class SetAccessibleAction implements PrivilegedAction {
+	private static class SetAccessibleAction implements
+			PrivilegedAction<Object> {
 		private final AccessibleObject accessible;
 
 		SetAccessibleAction(AccessibleObject accessible) {
@@ -2113,7 +2082,7 @@ public class FrameworkUtil {
 		 * @return true if dnChain matches the pattern.
 		 * @throws IllegalArgumentException
 		 */
-		static boolean match(String pattern, List/* <String> */dnChain) {
+		static boolean match(String pattern, List<String> dnChain) {
 			List parsedDNChain;
 			List parsedDNPattern;
 			try {

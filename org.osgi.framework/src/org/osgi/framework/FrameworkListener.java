@@ -16,7 +16,6 @@
 
 package org.osgi.framework;
 
-import java.util.EventListener;
 
 /**
  * A <code>FrameworkEvent</code> listener. <code>FrameworkListener</code> is
@@ -38,7 +37,7 @@ import java.util.EventListener;
  * @version $Revision$
  */
 
-public interface FrameworkListener extends EventListener {
+public interface FrameworkListener {
 
 	/**
 	 * Receives notification of a general <code>FrameworkEvent</code> object.

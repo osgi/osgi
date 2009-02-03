@@ -16,7 +16,7 @@
 
 package org.osgi.framework;
 
-import java.util.Dictionary;
+import java.util.Map;
 
 /**
  * A registered service.
@@ -30,7 +30,7 @@ import java.util.Dictionary;
  * The <code>ServiceRegistration</code> object may be used to update the
  * properties of the service or to unregister the service.
  * 
- * @see BundleContext#registerService(String[],Object,Dictionary)
+ * @see BundleContext#registerService(String[],Object,Map)
  * @ThreadSafe
  * @version $Revision$
  */
@@ -75,7 +75,7 @@ public interface ServiceRegistration {
 	 * @throws IllegalArgumentException If <code>properties</code> contains
 	 *         case variants of the same key name.
 	 */
-	public void setProperties(Dictionary properties);
+	public void setProperties(Map<String, Object> properties);
 
 	/**
 	 * Unregisters a service. Remove a <code>ServiceRegistration</code> object

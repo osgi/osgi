@@ -16,6 +16,9 @@
 
 package org.osgi.framework;
 
+import java.util.Collection;
+import java.util.Set;
+
 /**
  * A reference to a service.
  * 
@@ -47,7 +50,7 @@ package org.osgi.framework;
  * @version $Revision$
  */
 
-public interface ServiceReference extends Comparable {
+public interface ServiceReference extends Comparable<ServiceReference> {
 	/**
 	 * Returns the property value to which the specified property key is mapped
 	 * in the properties <code>Dictionary</code> object of the service
@@ -83,12 +86,12 @@ public interface ServiceReference extends Comparable {
 	 * This method is <i>case-preserving </i>; this means that every key in the
 	 * returned array must have the same case as the corresponding key in the
 	 * properties <code>Dictionary</code> that was passed to the
-	 * {@link BundleContext#registerService(String[],Object,java.util.Dictionary)}
-	 * or {@link ServiceRegistration#setProperties} methods.
+	 * {@link BundleContext#registerService(String[],Object,java.util.Map)} or
+	 * {@link ServiceRegistration#setProperties} methods.
 	 * 
 	 * @return An array of property keys.
 	 */
-	public String[] getPropertyKeys();
+	public Set<String> getPropertyKeys();
 
 	/**
 	 * Returns the bundle that registered the service referenced by this
@@ -100,9 +103,9 @@ public interface ServiceReference extends Comparable {
 	 * unregistered.
 	 * 
 	 * @return The bundle that registered the service referenced by this
-	 *         <code>ServiceReference</code> object; <code>null</code> if
-	 *         that service has already been unregistered.
-	 * @see BundleContext#registerService(String[],Object,java.util.Dictionary)
+	 *         <code>ServiceReference</code> object; <code>null</code> if that
+	 *         service has already been unregistered.
+	 * @see BundleContext#registerService(String[],Object,java.util.Map)
 	 */
 	public Bundle getBundle();
 
@@ -118,7 +121,7 @@ public interface ServiceReference extends Comparable {
 	 * 
 	 * @since 1.1
 	 */
-	public Bundle[] getUsingBundles();
+	public Collection< ? extends Bundle> getUsingBundles();
 
 	/**
 	 * Tests if the bundle that registered the service referenced by this
@@ -178,5 +181,5 @@ public interface ServiceReference extends Comparable {
 	 *         instance as this <code>ServiceReference</code>.
 	 * @since 1.4
 	 */
-	public int compareTo(Object reference);
+	public int compareTo(ServiceReference reference);
 }

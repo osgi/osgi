@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.security.BasicPermission;
 import java.security.Permission;
 import java.security.PermissionCollection;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
@@ -403,7 +404,7 @@ final class PackagePermissionCollection extends PermissionCollection {
 	 * @serial
 	 * @GuardedBy this
 	 */
-	private final Hashtable	permissions;
+	private final Hashtable<String, PackagePermission>	permissions;
 
 	/**
 	 * Boolean saying if "*" is in the collection.
@@ -418,7 +419,7 @@ final class PackagePermissionCollection extends PermissionCollection {
 	 */
 
 	public PackagePermissionCollection() {
-		permissions = new Hashtable();
+		permissions = new Hashtable<String, PackagePermission>();
 		all_allowed = false;
 	}
 
@@ -450,7 +451,7 @@ final class PackagePermissionCollection extends PermissionCollection {
 		final String name = pp.getName();
 
 		synchronized (this) {
-			final PackagePermission existing = (PackagePermission) permissions
+			final PackagePermission existing = permissions
 					.get(name);
 
 			if (existing != null) {
@@ -463,7 +464,7 @@ final class PackagePermissionCollection extends PermissionCollection {
 				}
 			}
 			else {
-				permissions.put(name, permission);
+				permissions.put(name, pp);
 			}
 
 			if (!all_allowed) {
@@ -499,7 +500,7 @@ final class PackagePermissionCollection extends PermissionCollection {
 		synchronized (this) {
 			// short circuit if the "*" Permission was added
 			if (all_allowed) {
-				x = (PackagePermission) permissions.get("*");
+				x = permissions.get("*");
 				if (x != null) {
 					effective |= x.getActionsMask();
 					if ((effective & desired) == desired) {
@@ -507,7 +508,7 @@ final class PackagePermissionCollection extends PermissionCollection {
 					}
 				}
 			}
-			x = (PackagePermission) permissions.get(name);
+			x = permissions.get(name);
 		}
 		// strategy:
 		// Check for full match first. Then work our way up the
@@ -525,7 +526,7 @@ final class PackagePermissionCollection extends PermissionCollection {
 		while ((last = name.lastIndexOf(".", offset)) != -1) {
 			name = name.substring(0, last + 1) + "*";
 			synchronized (this) {
-				x = (PackagePermission) permissions.get(name);
+				x = permissions.get(name);
 			}
 			if (x != null) {
 				effective |= x.getActionsMask();
@@ -546,8 +547,10 @@ final class PackagePermissionCollection extends PermissionCollection {
 	 * 
 	 * @return Enumeration of all <code>PackagePermission</code> objects.
 	 */
-
-	public Enumeration elements() {
-		return permissions.elements();
+	public synchronized Enumeration<Permission> elements() {
+		@SuppressWarnings("unchecked")
+		Enumeration<Permission> result = (Enumeration) Collections
+				.enumeration(permissions.values());
+		return result;
 	}
 }

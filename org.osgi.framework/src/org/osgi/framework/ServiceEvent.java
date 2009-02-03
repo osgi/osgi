@@ -16,7 +16,6 @@
 
 package org.osgi.framework;
 
-import java.util.EventObject;
 
 /**
  * An event from the Framework describing a service lifecycle change.
@@ -35,7 +34,7 @@ import java.util.EventObject;
  * @version $Revision$
  */
 
-public class ServiceEvent extends EventObject {
+public class ServiceEvent {
 	static final long				serialVersionUID	= 8792901483909409299L;
 	/**
 	 * Reference to the service that had a change occur in its lifecycle.
@@ -56,7 +55,7 @@ public class ServiceEvent extends EventObject {
 	 * <p>
 	 * The value of <code>REGISTERED</code> is 0x00000001.
 	 * 
-	 * @see BundleContext#registerService(String[],Object,java.util.Dictionary)
+	 * @see BundleContext#registerService(String[],Object,java.util.Map)
 	 */
 	public final static int			REGISTERED			= 0x00000001;
 
@@ -120,7 +119,6 @@ public class ServiceEvent extends EventObject {
 	 * 	that had a lifecycle change.
 	 */
 	public ServiceEvent(int type, ServiceReference reference) {
-		super(reference);
 		this.reference = reference;
 		this.type = type;
 	}

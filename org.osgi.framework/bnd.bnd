@@ -2,4 +2,3 @@
 nodeploy						=true
 
 -buildpath = \
-	ee.minimum;					version=1.2

@@ -16,7 +16,6 @@
 
 package org.osgi.framework;
 
-import java.util.EventListener;
 
 /**
  * A <code>ServiceEvent</code> listener. <code>ServiceListener</code> is a
@@ -54,7 +53,7 @@ import java.util.EventListener;
  * @version $Revision$
  */
 
-public interface ServiceListener extends EventListener {
+public interface ServiceListener {
 	/**
 	 * Receives notification that a service has had a lifecycle change.
 	 * 

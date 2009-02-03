@@ -40,7 +40,7 @@ import java.util.StringTokenizer;
  * @version $Revision$
  */
 
-public class Version implements Comparable {
+public class Version implements Comparable<Version> {
 	private final int			major;
 	private final int			minor;
 	private final int			micro;
@@ -170,9 +170,7 @@ public class Version implements Comparable {
 		if (micro < 0) {
 			throw new IllegalArgumentException("negative micro"); //$NON-NLS-1$
 		}
-		char[] chars = qualifier.toCharArray();
-		for (int i = 0, length = chars.length; i < length; i++) {
-	        char ch = chars[i];
+		for (char ch : qualifier.toCharArray()) {
 			if (('A' <= ch) && (ch <= 'Z')) {
 				continue;
 			}
@@ -266,7 +264,7 @@ public class Version implements Comparable {
 	 */
 	public String toString() {
 		int q = qualifier.length();
-		StringBuffer result = new StringBuffer(20 + q);
+		StringBuilder result = new StringBuilder(20 + q);
 		result.append(major);
 		result.append(SEPARATOR);
 		result.append(minor);
@@ -334,19 +332,17 @@ public class Version implements Comparable {
 	 * major, minor and micro components are equal and the qualifier component
 	 * is equal (using <code>String.compareTo</code>).
 	 * 
-	 * @param object The <code>Version</code> object to be compared.
+	 * @param other The <code>Version</code> object to be compared.
 	 * @return A negative integer, zero, or a positive integer if this object is
 	 *         less than, equal to, or greater than the specified
 	 *         <code>Version</code> object.
 	 * @throws ClassCastException If the specified object is not a
 	 *         <code>Version</code>.
 	 */
-	public int compareTo(Object object) {
-		if (object == this) { // quicktest
+	public int compareTo(Version other) {
+		if (other == this) { // quicktest
 			return 0;
 		}
-
-		Version other = (Version) object;
 
 		int result = major - other.major;
 		if (result != 0) {

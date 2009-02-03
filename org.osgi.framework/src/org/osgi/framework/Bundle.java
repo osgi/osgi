@@ -19,8 +19,10 @@ package org.osgi.framework;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Dictionary;
-import java.util.Enumeration;
+import java.security.Permission;
+import java.security.cert.X509Certificate;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -690,7 +692,7 @@ public interface Bundle {
 	 * 
 	 * @see Constants#BUNDLE_LOCALIZATION
 	 */
-	public Dictionary/* <String,String> */getHeaders();
+	public Map<String, String> getHeaders();
 
 	/**
 	 * Returns this bundle's unique identifier. This bundle is assigned a unique
@@ -760,7 +762,7 @@ public interface Bundle {
 	 * @see ServiceReference
 	 * @see ServicePermission
 	 */
-	public ServiceReference[] getRegisteredServices();
+	public Collection< ? extends ServiceReference> getRegisteredServices();
 
 	/**
 	 * Returns this bundle's <code>ServiceReference</code> list for all
@@ -786,7 +788,7 @@ public interface Bundle {
 	 * @see ServiceReference
 	 * @see ServicePermission
 	 */
-	public ServiceReference[] getServicesInUse();
+	public Collection< ? extends ServiceReference> getServicesInUse();
 
 	/**
 	 * Determines if this bundle has the specified permissions.
@@ -817,7 +819,7 @@ public interface Bundle {
 	 * @throws java.lang.IllegalStateException If this bundle has been
 	 *         uninstalled.
 	 */
-	public boolean hasPermission(Object permission);
+	public boolean hasPermission(Permission permission);
 
 	/**
 	 * Find the specified resource from this bundle's class loader.
@@ -913,7 +915,7 @@ public interface Bundle {
 	 * @see Constants#BUNDLE_LOCALIZATION
 	 * @since 1.3
 	 */
-	public Dictionary/* <String,String> */getHeaders(String locale);
+	public Map<String, String> getHeaders(String locale);
 
 	/**
 	 * Returns the symbolic name of this bundle as specified by its
@@ -963,7 +965,7 @@ public interface Bundle {
 	 *         uninstalled.
 	 * @since 1.3
 	 */
-	public Class loadClass(String name) throws ClassNotFoundException;
+	public Class< ? > loadClass(String name) throws ClassNotFoundException;
 
 	/**
 	 * Find the specified resources from this bundle's class loader.
@@ -994,7 +996,7 @@ public interface Bundle {
 	 *         uninstalled.
 	 * @throws java.io.IOException If there is an I/O error.
 	 */
-	public Enumeration/* <URL> */getResources(String name) throws IOException;
+	public Iterable<URL> getResources(String name) throws IOException;
 
 	/**
 	 * Returns an Enumeration of all the paths (<code>String</code> objects)
@@ -1024,7 +1026,7 @@ public interface Bundle {
 	 *         uninstalled.
 	 * @since 1.3
 	 */
-	public Enumeration/* <String> */getEntryPaths(String path);
+	public Iterable<String> getEntryPaths(String path);
 
 	/**
 	 * Returns a URL to the entry at the specified path in this bundle. This
@@ -1129,7 +1131,7 @@ public interface Bundle {
 	 *         fragment are returned.
 	 * @since 1.3
 	 */
-	public Enumeration/* <URL> */findEntries(String path, String filePattern,
+	public Iterable<URL> findEntries(String path, String filePattern,
 			boolean recurse);
 
 	/**
@@ -1179,7 +1181,7 @@ public interface Bundle {
 	 *         {@link #SIGNERS_TRUSTED}.
 	 * @since 1.5
 	 */
-	public Map/* <X509Certificate, List<X509Certificate>> */getSignerCertificates(
+	public Map<X509Certificate, List<X509Certificate>> getSignerCertificates(
 			int signersType);
 	
 	/**

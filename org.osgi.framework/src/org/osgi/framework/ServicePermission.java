@@ -372,7 +372,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 	 * @serial
 	 * @GuardedBy this
 	 */
-	private final Hashtable	permissions;
+	private final Hashtable<String, ServicePermission>	permissions;
 
 	/**
 	 * Boolean saying if "*" is in the collection.
@@ -387,7 +387,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 	 */
 
 	public ServicePermissionCollection() {
-		permissions = new Hashtable();
+		permissions = new Hashtable<String, ServicePermission>();
 		all_allowed = false;
 	}
 
@@ -418,7 +418,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 		final String name = sp.getName();
 
 		synchronized (this) {
-			final ServicePermission existing = (ServicePermission) permissions.get(name);
+			final ServicePermission existing = permissions.get(name);
 			
 			if (existing != null) {
 				final int oldMask = existing.getActionsMask();
@@ -429,7 +429,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 				}
 			}
 			else {
-				permissions.put(name, permission);
+				permissions.put(name, sp);
 			}
 			
 			if (!all_allowed) {
@@ -464,7 +464,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 		synchronized (this) {
 			// short circuit if the "*" Permission was added
 			if (all_allowed) {
-				x = (ServicePermission) permissions.get("*");
+				x = permissions.get("*");
 				if (x != null) {
 					effective |= x.getActionsMask();
 					if ((effective & desired) == desired) {
@@ -472,7 +472,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 					}
 				}
 			}
-			x = (ServicePermission) permissions.get(name);
+			x = permissions.get(name);
 		}
 		// strategy:
 		// Check for full match first. Then work our way up the
@@ -490,7 +490,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 		while ((last = name.lastIndexOf(".", offset)) != -1) {
 			name = name.substring(0, last + 1) + "*";
 			synchronized (this) {
-				x = (ServicePermission) permissions.get(name);
+				x = permissions.get(name);
 			}
 			if (x != null) {
 				effective |= x.getActionsMask();
@@ -512,7 +512,9 @@ final class ServicePermissionCollection extends PermissionCollection {
 	 * @return Enumeration of all the ServicePermission objects.
 	 */
 
-	public Enumeration elements() {
-		return permissions.elements();
+	public synchronized Enumeration<Permission> elements() {
+		@SuppressWarnings("unchecked")
+		Enumeration<Permission> result = (Enumeration) permissions.elements();
+		return result;
 	}
 }

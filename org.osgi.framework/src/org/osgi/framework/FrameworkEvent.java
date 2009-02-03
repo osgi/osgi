@@ -16,7 +16,6 @@
 
 package org.osgi.framework;
 
-import java.util.EventObject;
 
 /**
  * A general event from the Framework.
@@ -35,7 +34,7 @@ import java.util.EventObject;
  * @version $Revision$
  */
 
-public class FrameworkEvent extends EventObject {
+public class FrameworkEvent {
 	static final long		serialVersionUID				= 207051004521261705L;
 	/**
 	 * Bundle related to the event.
@@ -183,22 +182,6 @@ public class FrameworkEvent extends EventObject {
 	public final static int	STOPPED_BOOTCLASSPATH_MODIFIED	= 0x00000100;
 
 	/**
-	 * Creates a Framework event.
-	 * 
-	 * @param type The event type.
-	 * @param source The event source object. This may not be <code>null</code>.
-	 * @deprecated As of 1.2. This constructor is deprecated in favor of using
-	 *             the other constructor with the System Bundle as the event
-	 *             source.
-	 */
-	public FrameworkEvent(int type, Object source) {
-		super(source);
-		this.type = type;
-		this.bundle = null;
-		this.throwable = null;
-	}
-
-	/**
 	 * Creates a Framework event regarding the specified bundle.
 	 * 
 	 * @param type The event type.
@@ -207,7 +190,6 @@ public class FrameworkEvent extends EventObject {
 	 *        <code>null</code> if there is no related exception.
 	 */
 	public FrameworkEvent(int type, Bundle bundle, Throwable throwable) {
-		super(bundle);
 		this.type = type;
 		this.bundle = bundle;
 		this.throwable = throwable;

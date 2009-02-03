@@ -16,7 +16,6 @@
 
 package org.osgi.framework;
 
-import java.util.EventListener;
 
 /**
  * A <code>BundleEvent</code> listener. <code>BundleListener</code> is a
@@ -37,7 +36,7 @@ import java.util.EventListener;
  * @version $Revision$
  */
 
-public interface BundleListener extends EventListener {
+public interface BundleListener {
 	/**
 	 * Receives notification that a bundle has had a lifecycle change.
 	 * 

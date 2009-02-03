@@ -25,8 +25,8 @@ import java.security.PermissionCollection;
 import java.security.PrivilegedAction;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -211,7 +211,7 @@ public final class AdminPermission extends BasicPermission {
 	 * holds the properties of that bundle, used to match a filter in implies.
 	 * This is not initialized until necessary, and then cached in this object.
 	 */
-	private transient volatile Dictionary	bundleProperties;
+	private transient volatile Map<String, Object>	bundleProperties;
 
 	/**
 	 * Creates a new <code>AdminPermission</code> object that matches all
@@ -883,11 +883,12 @@ public final class AdminPermission extends BasicPermission {
 	 * 
 	 * @return a dictionary of properties for this bundle
 	 */
-	private Dictionary getProperties() {
-		Dictionary result = bundleProperties;
+	private Map<String, Object> getProperties() {
+		Map<String, Object> result = bundleProperties;
 		if (result == null) {
-			final Dictionary dict = new Hashtable(4);
-			AccessController.doPrivileged(new PrivilegedAction() {
+			final Map<String, Object> dict = new HashMap<String, Object>(
+					4);
+			AccessController.doPrivileged(new PrivilegedAction<Object>() {
 				public Object run() {
 					dict.put("id", new Long(bundle.getBundleId())); 
 					dict.put("location", bundle.getLocation()); 
@@ -948,15 +949,13 @@ public final class AdminPermission extends BasicPermission {
 			SignerProperty other = (SignerProperty) o;
 			Bundle matchBundle = bundle != null ? bundle : other.bundle;
 			String matchPattern = bundle != null ? other.pattern : pattern;
-			Map/* <X509Certificate, List<X509Certificate>> */signers = matchBundle
+			Map<X509Certificate, List<X509Certificate>> signers = matchBundle
 					.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
-			for (Iterator iSigners = signers.values().iterator(); iSigners
-					.hasNext();) {
-				List/* <X509Certificate> */signerCerts = (List) iSigners.next();
-				List/* <String> */dnChain = new ArrayList(signerCerts.size());
-				for (Iterator iCerts = signerCerts.iterator(); iCerts.hasNext();)
-					dnChain.add(((X509Certificate) iCerts.next())
-							.getSubjectDN().getName());
+			for (List<X509Certificate> signerCerts : signers.values()) {
+				List<String> dnChain = new ArrayList<String>(signerCerts.size());
+				for (X509Certificate cert : signerCerts) {
+					dnChain.add(cert.getSubjectDN().getName());
+				}
 				if (FrameworkUtil.matchDistinguishedNameChain(matchPattern,
 						dnChain)) {
 					return true;
@@ -978,7 +977,7 @@ public final class AdminPermission extends BasicPermission {
 			if (bundle == null) {
 				return false;
 			}
-			Map/* <X509Certificate, List<X509Certificate>> */signers = bundle
+			Map<X509Certificate, List<X509Certificate>> signers = bundle
 					.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
 			return !signers.isEmpty();
 		}
@@ -996,7 +995,7 @@ final class AdminPermissionCollection extends PermissionCollection {
 	 * @serial
 	 * @GuardedBy this
 	 */
-	private final Hashtable		permissions;
+	private final Hashtable<String, AdminPermission>	permissions;
 
 	/**
 	 * Boolean saying if "*" is in the collection.
@@ -1012,7 +1011,7 @@ final class AdminPermissionCollection extends PermissionCollection {
 	 */
 
 	public AdminPermissionCollection() {
-		permissions = new Hashtable();
+		permissions = new Hashtable<String, AdminPermission>();
 	}
 
 	/**
@@ -1044,7 +1043,7 @@ final class AdminPermissionCollection extends PermissionCollection {
 		}
 		final String name = ap.getName();
 		synchronized (this) {
-			AdminPermission existing = (AdminPermission) permissions.get(name);
+			AdminPermission existing = permissions.get(name);
 			if (existing != null) {
 				int oldMask = existing.getActionsMask();
 				int newMask = ap.getActionsMask();
@@ -1090,7 +1089,7 @@ final class AdminPermissionCollection extends PermissionCollection {
 		synchronized (this) {
 			// short circuit if the "*" Permission was added
 			if (all_allowed) {
-				AdminPermission x = (AdminPermission) permissions.get("*");
+				AdminPermission x = permissions.get("*");
 				if (x != null) {
 					final int effective = x.getActionsMask();
 					final int desired = requested.getActionsMask();
@@ -1102,9 +1101,9 @@ final class AdminPermissionCollection extends PermissionCollection {
 		}
 
 		// just iterate one by one
-		Iterator permItr = permissions.values().iterator();
+		Iterator<AdminPermission> permItr = permissions.values().iterator();
 		while (permItr.hasNext()) {
-			if (((AdminPermission) permItr.next()).implies(requested)) {
+			if ((permItr.next()).implies(requested)) {
 				return true;
 			}
 		}
@@ -1117,8 +1116,9 @@ final class AdminPermissionCollection extends PermissionCollection {
 	 * 
 	 * @return Enumeration of all <code>AdminPermission</code> objects.
 	 */
-
-	public Enumeration elements() {
-		return permissions.elements();
+	public Enumeration<Permission> elements() {
+		@SuppressWarnings("unchecked")
+		Enumeration<Permission> result = (Enumeration) permissions.elements();
+		return result;
 	}
 }

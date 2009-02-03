@@ -442,7 +442,7 @@ final class BundlePermissionCollection extends PermissionCollection {
 	 * @serial
 	 * @GuardedBy this
 	 */
-	private final HashMap		permissions;
+	private final HashMap<String, BundlePermission>	permissions;
 
 	/**
 	 * Boolean saying if "*" is in the collection.
@@ -458,7 +458,7 @@ final class BundlePermissionCollection extends PermissionCollection {
 	 */
 
 	public BundlePermissionCollection() {
-		permissions = new HashMap();
+		permissions = new HashMap<String, BundlePermission>();
 		all_allowed = false;
 	}
 
@@ -487,7 +487,7 @@ final class BundlePermissionCollection extends PermissionCollection {
 		final int newMask = bp.getMask();
 
 		synchronized (this) {
-			final BundlePermission existing = (BundlePermission) permissions
+			final BundlePermission existing = permissions
 					.get(name);
 
 			if (existing != null) {
@@ -499,7 +499,7 @@ final class BundlePermissionCollection extends PermissionCollection {
 				}
 			}
 			else {
-				permissions.put(name, permission);
+				permissions.put(name, bp);
 			}
 
 			if (!all_allowed) {
@@ -533,14 +533,14 @@ final class BundlePermissionCollection extends PermissionCollection {
 		// short circuit if the "*" Permission was added
 		synchronized (this) {
 			if (all_allowed) {
-				x = (BundlePermission) permissions.get("*");
+				x = permissions.get("*");
 				if (x != null) {
 					effective |= x.getMask();
 					if ((effective & desired) == desired)
 						return true;
 				}
 			}
-			x = (BundlePermission) permissions.get(name);
+			x = permissions.get(name);
 		}
 		// strategy:
 		// Check for full match first. Then work our way up the
@@ -557,7 +557,7 @@ final class BundlePermissionCollection extends PermissionCollection {
 		while ((last = name.lastIndexOf(".", offset)) != -1) {
 			name = name.substring(0, last + 1) + "*";
 			synchronized (this) {
-				x = (BundlePermission) permissions.get(name);
+				x = permissions.get(name);
 			}
 			if (x != null) {
 				effective |= x.getMask();
@@ -577,8 +577,10 @@ final class BundlePermissionCollection extends PermissionCollection {
 	 * 
 	 * @return Enumeration of all <code>BundlePermission</code> objects.
 	 */
-
-	public synchronized Enumeration elements() {
-		return Collections.enumeration(permissions.values());
+	public synchronized Enumeration<Permission> elements() {
+		@SuppressWarnings("unchecked")
+		Enumeration<Permission> result = (Enumeration) Collections
+				.enumeration(permissions.values());
+		return result;
 	}
 }

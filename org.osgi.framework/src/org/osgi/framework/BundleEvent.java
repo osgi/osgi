@@ -16,7 +16,6 @@
 
 package org.osgi.framework;
 
-import java.util.EventObject;
 
 /**
  * An event from the Framework describing a bundle lifecycle change.
@@ -35,7 +34,7 @@ import java.util.EventObject;
  * @version $Revision$
  */
 
-public class BundleEvent extends EventObject {
+public class BundleEvent {
 	static final long		serialVersionUID	= 4080640865971756012L;
 	/**
 	 * Bundle that had a change occur in its lifecycle.
@@ -176,7 +175,6 @@ public class BundleEvent extends EventObject {
 	 */
 
 	public BundleEvent(int type, Bundle bundle) {
-		super(bundle);
 		this.bundle = bundle;
 		this.type = type;
 	}

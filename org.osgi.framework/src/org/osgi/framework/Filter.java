@@ -15,7 +15,7 @@
  */
 package org.osgi.framework;
 
-import java.util.Dictionary;
+import java.util.Map;
 
 /**
  * An RFC 1960-based Filter.
@@ -69,7 +69,7 @@ public interface Filter {
 	 * @throws IllegalArgumentException If <code>dictionary</code> contains case
 	 *         variants of the same key name.
 	 */
-	public boolean match(Dictionary dictionary);
+	public boolean match(Map<String, Object> dictionary);
 
 	/**
 	 * Returns this <code>Filter</code>'s filter string.
@@ -119,5 +119,5 @@ public interface Filter {
 	 *         values match this filter; <code>false</code> otherwise.
 	 * @since 1.3
 	 */
-	public boolean matchCase(Dictionary dictionary);
+	public boolean matchCase(Map<String, Object> dictionary);
 }
