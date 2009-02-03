@@ -110,38 +110,57 @@ public class SLPServiceEndpointDescription implements
 			throw new IllegalArgumentException(
 					"Given set of Java interfaces must contain at least one service interface name.");
 		}
+		
+		// separate given interface and version strings and put it in a map 
+		Map interfaceAndVersionsMap = new HashMap();		
+		if (interfacesAndVersions != null) {
+			Iterator versionIterator = interfacesAndVersions.iterator();
+			while (versionIterator.hasNext()) {
+				String interfaceAndVersion = (String) versionIterator
+						.next();
+				int separatorIndex = interfaceAndVersion.indexOf(ServicePublication.SEPARATOR);
+				// if separator doesn't exist or it's index is invalid (at the very beginning, at the very end)
+				if (separatorIndex <= 0 || (separatorIndex+1) == interfaceAndVersion.length()) {
+					break;
+				}
+				String interfaceName = interfaceAndVersion.substring(0, separatorIndex);
+				String version = interfaceAndVersion.substring(separatorIndex+1);
+				if(interfaceName != null && interfaceName.length() > 0 && version != null && version.length() > 0){
+					interfaceAndVersionsMap.put(interfaceName, version);					
+				}
+			}
+		}
+		
+		// separate given java interface and endpoint interface and put it in a map 
+		Map endPointInterfacesMap = new HashMap();		
+		if (endPointInterfaces != null) {
+			Iterator endpIterator = endPointInterfaces.iterator();
+			while (endpIterator.hasNext()) {
+				String interfaceAndEndpoint = (String) endpIterator.next();
+				int separatorIndex = interfaceAndEndpoint.indexOf(ServicePublication.SEPARATOR);
+				// if separator doesn't exist or it's index is invalid (at the very beginning, at the very end)
+				if (separatorIndex <= 0 || (separatorIndex+1) == interfaceAndEndpoint.length()) {
+					break;
+				}
+				String interfaceName = interfaceAndEndpoint.substring(0, separatorIndex);
+				String endpInterface = interfaceAndEndpoint.substring(separatorIndex+1);
+				if(interfaceName != null && interfaceName.length() > 0 && endpInterface != null && endpInterface.length() > 0){
+					endPointInterfacesMap.put(interfaceName, endpInterface);					
+				}
+			}
+		}
+	
+		// create interface-specific SEDs  
 		Iterator it = interfaceNames.iterator();
 		while (it.hasNext()) {
 			String ifName = (String) it.next();
-			String version = null;
-			String endpointInterface = null;
-			if (interfacesAndVersions != null) {
-				Iterator versionIterator = interfacesAndVersions.iterator();
-				while (versionIterator.hasNext()) {
-					String interfaceAndVersion = (String) versionIterator
-							.next();
-					if (interfaceAndVersion.indexOf(ifName) >= 0) {
-						version = interfaceAndVersion;
-					}
-				}
-			}
-			if (endPointInterfaces != null) {
-				// walk over the endpoint interfaces to find the corresponding
-				// endpoint IF
-				Iterator endpIterator = endPointInterfaces.iterator();
-				while (endpIterator.hasNext()) {
-					String endpInterface = (String) endpIterator.next();
-					if (endpInterface.indexOf(ifName) >= 0) {
-						endpointInterface = endpInterface;
-					}
-				}
-			}
+			
 			JSlpSED jslpSED = new JSlpSED(this);
 			jslpSED.setInterfaceName(ifName);
-			jslpSED.setVersion(version);
-			jslpSED.setEndpointInterface(endpointInterface);
+			jslpSED.setVersion((String)interfaceAndVersionsMap.get(ifName));
+			jslpSED.setEndpointInterface((String)endPointInterfacesMap.get(ifName));
 			jslpSED.setProperties(props);
-			jslpSED.addInterfacesAndVersionsToProperties();
+			jslpSED.addInterfacesAndVersionsToProperties();//TODO: check
 			listOfJSLPSEDs.put(ifName, jslpSED);
 		}
 		this.endpointID = endpntID;
@@ -365,6 +384,8 @@ public class SLPServiceEndpointDescription implements
 	 * @return
 	 */
 	private JSlpSED retrieveDataFromServiceURL(final ServiceURL serviceURL) {
+		Map properties = new HashMap();
+		
 		// retrieve main interface
 		String interfaceName = convertPath2JavaInterface(serviceURL
 				.getServiceType().getConcreteTypeName());
@@ -372,10 +393,10 @@ public class SLPServiceEndpointDescription implements
 			throw new IllegalArgumentException(
 					"Interface information is missing!");
 		}
-		JSlpSED jslpSED = new JSlpSED(this);
-		jslpSED.setInterfaceName(interfaceName);
+		// Put interface information to properties since base for matching
+		properties.put(Constants.OBJECTCLASS, new String[] {interfaceName});//TODO check whether OBJECTCLASSS is the right key
+		
 		// Retrieve additional properties from SLP ServiceURL itself
-		Map properties = new HashMap();
 		properties.put("slp.serviceURL", serviceURL);
 		properties.put("type", serviceURL.getServiceType().toString());
 		if (serviceURL.getHost() != null) {
@@ -393,35 +414,38 @@ public class SLPServiceEndpointDescription implements
 		// retrieve properties from ServiceURL attributes
 		retrievePropertiesFromPath(serviceURL.getURLPath(), properties);
 
+		JSlpSED jslpSED = new JSlpSED(this);
+		jslpSED.setInterfaceName(interfaceName);
+		
 		// Get version info
-		String version;
 		Object versionsValue = properties
 				.get(ServicePublication.PROP_KEY_SERVICE_INTERFACE_VERSION);
-		if (versionsValue != null) {
-			version = interfaceName + ServicePublication.SEPARATOR
-					+ (String) versionsValue;
+		if (versionsValue != null && versionsValue instanceof String) {
+			jslpSED.setVersion((String) versionsValue);
 		}
 		else {
-			// TODO log error
-			version = interfaceName + ServicePublication.SEPARATOR
-					+ org.osgi.framework.Version.emptyVersion.toString();
-		}
-		jslpSED.setVersion(version);
-
-		// Put interface and version information to properties since base for
-		// matching
-		properties.put(Constants.OBJECTCLASS, new String[] {interfaceName});
+			// TODO version optional -> check whether we shouldn't treat it as error here and anywhere else
+			// TODO log error 
+			jslpSED.setVersion(org.osgi.framework.Version.emptyVersion.toString());
+		}		
+		// Overwrite version property with a interface:version value style since base for matching
 		properties.put(ServicePublication.PROP_KEY_SERVICE_INTERFACE_VERSION,
-				version);
+				interfaceName + ServicePublication.SEPARATOR
+				+ jslpSED.getVersion());
 
 		// Get endpoint-interface if it exists
 		String endpointInterfacesValue = (String) properties
 				.get(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME);
 		if (endpointInterfacesValue != null) {
-			jslpSED.setEndpointInterface(interfaceName
-					+ ServicePublication.SEPARATOR + endpointInterfacesValue);
+			jslpSED.setEndpointInterface(endpointInterfacesValue);
 		}
+		// Overwrite endpoint-interface property with a interface:endpoint-interface value style since base for matching
+		properties.put(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME,
+				interfaceName + ServicePublication.SEPARATOR
+				+ jslpSED.getEndpointInterface());
+		
 		jslpSED.setProperties(properties);
+		
 		return jslpSED;
 	}
 
