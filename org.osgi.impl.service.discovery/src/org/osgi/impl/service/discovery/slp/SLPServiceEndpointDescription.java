@@ -641,11 +641,13 @@ public class SLPServiceEndpointDescription implements
 
 		// if one has an EndpointID
 		if (this.endpointID != null || descr.getEndpointID() != null) {
-			if (this.endpointID != null)
+			if (this.endpointID != null) {
 				return this.endpointID.equals(descr.getEndpointID());
-			else
+			}
+			else {
 				// we don't have an endpointID but only the other.
 				return false;
+			}
 		}
 
 		Collection descrInterfaces = descr.getProvidedInterfaces();
@@ -674,8 +676,8 @@ public class SLPServiceEndpointDescription implements
 	public int hashCode() {
 		// In case endpointID has been provided by DSW / another Discovery or
 		// has been generated
-		if (this.endpointID != null) {
-			return this.endpointID.hashCode();
+		if (endpointID != null) {
+			return endpointID.hashCode();
 		}
 		else {
 			int result = 17;

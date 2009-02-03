@@ -19,7 +19,6 @@ package org.osgi.impl.service.discovery.slp;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -67,7 +66,7 @@ public class InformListenerTask extends TimerTask {
 			notifyAvailableServices(allAvailableServices, lastLookupResult,
 					registeredServiceTracker);
 			// notify all about vanished services
-			Collection vanishedServices = new HashSet(lastLookupResult);
+			Collection vanishedServices = new ArrayList(lastLookupResult);
 			vanishedServices.removeAll(allAvailableServices);
 			notifyUnavailableServices(vanishedServices,
 					registeredServiceTracker);
@@ -254,7 +253,7 @@ public class InformListenerTask extends TimerTask {
 				else {
 					// notify listener that a service description matches
 					// the specified filter
-					// and is new to him
+					// and is new to it
 					SLPHandlerImpl.log(LogService.LOG_INFO, this.getClass().getName() + ": Notify " + tracker
 							+ " about the NEW service " + svcDescr);
 					tracker
