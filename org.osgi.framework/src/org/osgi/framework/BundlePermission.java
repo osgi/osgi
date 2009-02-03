@@ -499,7 +499,7 @@ final class BundlePermissionCollection extends PermissionCollection {
 				}
 			}
 			else {
-				permissions.put(name, permission);
+				permissions.put(name, bp);
 			}
 
 			if (!all_allowed) {

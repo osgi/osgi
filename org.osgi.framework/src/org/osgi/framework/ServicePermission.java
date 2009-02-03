@@ -429,7 +429,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 				}
 			}
 			else {
-				permissions.put(name, permission);
+				permissions.put(name, sp);
 			}
 			
 			if (!all_allowed) {

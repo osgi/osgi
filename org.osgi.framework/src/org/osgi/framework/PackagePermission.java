@@ -463,7 +463,7 @@ final class PackagePermissionCollection extends PermissionCollection {
 				}
 			}
 			else {
-				permissions.put(name, permission);
+				permissions.put(name, pp);
 			}
 
 			if (!all_allowed) {

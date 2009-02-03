@@ -954,9 +954,10 @@ public final class AdminPermission extends BasicPermission {
 					.hasNext();) {
 				List/* <X509Certificate> */signerCerts = (List) iSigners.next();
 				List/* <String> */dnChain = new ArrayList(signerCerts.size());
-				for (Iterator iCerts = signerCerts.iterator(); iCerts.hasNext();)
+				for (Iterator iCerts = signerCerts.iterator(); iCerts.hasNext();) {
 					dnChain.add(((X509Certificate) iCerts.next())
 							.getSubjectDN().getName());
+				}
 				if (FrameworkUtil.matchDistinguishedNameChain(matchPattern,
 						dnChain)) {
 					return true;
