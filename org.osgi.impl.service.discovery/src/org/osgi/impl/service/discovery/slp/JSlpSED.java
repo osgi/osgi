@@ -18,14 +18,10 @@
 package org.osgi.impl.service.discovery.slp;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 import org.osgi.service.discovery.ServiceEndpointDescription;
 import org.osgi.service.discovery.ServicePublication;
 
-import ch.ethz.iks.slp.ServiceLocationException;
 import ch.ethz.iks.slp.ServiceURL;
 
 /**
@@ -40,7 +36,6 @@ public class JSlpSED {
 	private String							interfaceName		= null;
 	private String							version				= null;
 	private String							endpointInterface	= null;
-	private Map								properties			= null;
 
 	private SLPServiceEndpointDescription	slpServiceDescr		= null;
 	private static final String				LINE_SEPARATOR		= System
@@ -68,19 +63,23 @@ public class JSlpSED {
 		}
 
 		if (key.equals(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME)) {
-			endpointInterface = combineValue((String) value);
+			if (!((String) value).startsWith(interfaceName)) {
+				endpointInterface = combineValue((String) value);
+			}
 		}
 
 		if (key.equals(ServicePublication.PROP_KEY_SERVICE_INTERFACE_VERSION)) {
-			version = combineValue((String) value);
+			if (!((String) value).startsWith(interfaceName)) {
+				version = combineValue((String) value);
+			}
 		}
-		properties.put(key, value);
+		// properties.put(key, value);
 	}
 
 	/**
 	 * Preceding a value with the interface name and a separator.
 	 * 
-	 * @param value  to append
+	 * @param value to append
 	 * @return the complete string
 	 */
 	private String combineValue(final String value) {
@@ -130,50 +129,6 @@ public class JSlpSED {
 	}
 
 	/**
-	 * @return the properties
-	 */
-	public Map getProperties() {
-		return properties;
-	}
-
-	/**
-	 * @param properties the properties to set
-	 */
-	public void setProperties(final Map properties) {
-		this.properties = properties;
-	}
-
-	/**
-	 * adds the endpoint interfaces and versions to the properties map
-	 * 
-	 * @throws ServiceLocationException
-	 */
-	public void addInterfacesAndVersionsToProperties()
-			throws ServiceLocationException {
-		// Create a service url for each interface and gather also version
-		// and
-		// endpoint-interface information.
-
-		slpServiceDescr.put(interfaceName, SLPServiceEndpointDescription
-				.createServiceURL(interfaceName, version, endpointInterface,
-						properties));
-		if (properties == null) {
-			properties = new HashMap();
-		}
-		properties.put(ServicePublication.PROP_KEY_SERVICE_INTERFACE_NAME,
-				interfaceName);
-		if (version != null) {
-			properties.put(
-					ServicePublication.PROP_KEY_SERVICE_INTERFACE_VERSION,
-					version);
-		}
-		if (endpointInterface != null) {
-			properties.put(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME,
-					endpointInterface);
-		}
-	}
-
-	/**
 	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
@@ -209,7 +164,8 @@ public class JSlpSED {
 			return false;
 
 		// compare properties field
-		return properties.equals(descr.getProperties());
+		// return properties.equals(descr.getProperties());
+		return true;
 	}
 
 	/**
@@ -228,7 +184,7 @@ public class JSlpSED {
 			result = 37 * result + version.hashCode();
 		}
 
-		result = 37 * result + properties.hashCode();
+		// result = 37 * result + properties.hashCode();
 		// TODO implement more
 
 		/*
@@ -256,19 +212,6 @@ public class JSlpSED {
 				.append(svcURL != null ? svcURL.toString() : "").append(
 						LINE_SEPARATOR);
 		sb.append("properties=" + LINE_SEPARATOR);
-		String key;
-		Object value;
-		for (Iterator i = properties.keySet().iterator(); i.hasNext();) {
-			key = (String) i.next();
-			value = properties.get(key);
-			if (value == null) {
-				value = "<null>";
-			}
-
-			sb.append(key).append("=").append(value.toString()).append(
-					LINE_SEPARATOR);
-		}
-
 		return sb.toString();
 	}
 }
