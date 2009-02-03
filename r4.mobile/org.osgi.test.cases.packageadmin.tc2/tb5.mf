@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Bundle-Name: test.cases.packageadmin.tc2.tb5
-Bundle-Description: Exporting Packages, updating
-Bundle-Vendor: Ericsson
-Bundle-Version: 1.3
-Bundle-Activator: $(p).tb5.TB5Activator
-$(IMPORT-PACKAGE)
-$(EXPORT-PACKAGE)

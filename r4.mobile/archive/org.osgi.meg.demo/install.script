@@ -1,9 +1,0 @@
-# initial steps
-#################################
-
-setNodeAcl . Add=*&Exec=*&Get=*&Delete=*&Replace=*
-
-# install an application
-#################################
-
-x ./OSGi/deploy/install file:../../org.osgi.meg.demo/tm.txt

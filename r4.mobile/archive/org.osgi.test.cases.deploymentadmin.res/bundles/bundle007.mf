@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Bundle-SymbolicName: bundles.tb7
-Bundle-Version: 1.0
-Bundle-Activator: br.org.cesar.bundles.tb7.ManagedServiceFactoryImpl
-$(EXPORT-PACKAGE)
-$(IMPORT-PACKAGE)
-$(PRIVATE-PACKAGE)
-

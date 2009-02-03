@@ -1,4 +1,0 @@
-vendor=MOTOROLA
-provider=CESAR
-location=RECIFE
-country=BRAZIL

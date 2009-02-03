@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-DeploymentPackage-SymbolicName: installation_fails
-DeploymentPackage-Version: 1.0.0
-
-Name: simple_resource.xml
-Resource-Processor: org.osgi.test.cases.deployment.bundles.rp3
-
-Name: conf.txt
-Resource-Processor: org.neverfound.rp

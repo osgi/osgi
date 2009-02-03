@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Bundle-Name: ${p}.tb13a
-Bundle-SymbolicName: ${p}.tb13a
-Bundle-ManifestVersion: 2
-Bundle-Version: 1
-Export-Package: ${p}.exports.service;${p}.exports.listener;include:="*";version="0.0.0",${p}.exports.service;version="1.0.0"
-$(IMPORT-PACKAGE)
-$(PRIVATE-PACKAGE)
-

@@ -1,7 +1,0 @@
-Manifest-Version: 1.0
-DeploymentPackage-SymbolicName: simple_nonsigned_bundle_dp
-DeploymentPackage-Version: 1.0.0
-
-Name: unsignedbundle.jar
-Bundle-SymbolicName: bundles.unsigned
-Bundle-Version: 1.0

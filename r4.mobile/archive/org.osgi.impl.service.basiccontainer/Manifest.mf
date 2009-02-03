@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Bundle-Name: BasicContainer
-Bundle-SymbolicName: ${p}
-Bundle-Vendor: Nokia
-Bundle-Version: 1.0
-Bundle-Activator: $(p).Activator
-$(EXPORT-PACKAGE)
-$(IMPORT-PACKAGE)
-$(PRIVATE-PACKAGE)

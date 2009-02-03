@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Bundle-Name: org.osgi.test.cases.framework.dynpkgimport.tlx
-Bundle-Description: Dynamic package import test lib x
-Bundle-Vendor: OSGi Alliance
-Bundle-Version: 1.0.0
-Bundle-Category: lib
-$(IMPORT-PACKAGE)
-$(EXPORT-PACKAGE)

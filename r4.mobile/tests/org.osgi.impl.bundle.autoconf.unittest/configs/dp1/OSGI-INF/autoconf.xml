@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<mt:MetaData xmlns:mt="http://www.osgi.org/xmlns/metatype/v1.0.0">
-	<Designate pid="integrationtests.managedservice1.pid" 
-			bundle="osgi-dp:integrationtests.managedservice1">
-		<Object ocdref="ocd1">
-			<Attribute adref="increment" content="3"/>
-		</Object>
-	</Designate>
-</mt:MetaData>

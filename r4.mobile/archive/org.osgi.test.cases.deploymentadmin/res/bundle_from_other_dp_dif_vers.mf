@@ -1,7 +1,0 @@
-Manifest-Version: 1.0
-DeploymentPackage-Name: bundle_from_other_dp_dif_vers
-DeploymentPackage-Version: 1.0.0
-
-Name: bundle001.jar
-Bundle-SymbolicName: bundles.tb1
-Bundle-Version: 1.5

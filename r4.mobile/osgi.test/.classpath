@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry sourcepath="/org.osgi.impl.bundle.servlet/src" kind="lib" path="/licensed/jar/servlet.jar"/>
-	<classpathentry kind="lib" path="/licensed/jar/saxon.jar"/>
-	<classpathentry sourcepath="/org.osgi.test.cases/src" kind="lib" path="/osgi.released/osgi.internal.jar"/>
-	<classpathentry sourcepath="/osgi.released/ee.foundation.jar" kind="lib" path="/osgi.released/ee.foundation.jar"/>
-	<classpathentry kind="output" path="src"/>
-</classpath>

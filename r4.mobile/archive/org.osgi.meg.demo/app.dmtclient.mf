@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Bundle-Name: AppDmtClient
-Bundle-SymbolicName: ${p}.app.dmtclient
-Bundle-Activator: ${p}.app.dmtclient.ClientActivator
-${EXPORT-PACKAGE}
-${IMPORT-PACKAGE}
-${PRIVATE-PACKAGE}
-

@@ -1,7 +1,0 @@
-Manifest-Version: 1.0
-Bundle-Activator: com.nokia.test.exampleresourceprocessor.db.DbResourceProcessor
-Bundle-SymbolicName: com.nokia.test.exampleresourceprocessor.db.DbResourceProcessor
-Bundle-Version: 1.0
-$(EXPORT-PACKAGE)
-$(IMPORT-PACKAGE)
-$(PRIVATE-PACKAGE)

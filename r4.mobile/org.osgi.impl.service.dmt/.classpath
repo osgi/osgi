@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry path="src" kind="src"/>
-	<classpathentry path="/info.dmtree" combineaccessrules="false" kind="src"/>
-	<classpathentry path="/osgi.released/osgi.jar" kind="lib" sourcepath="/osgi.released/osgi.jar"/>
-	<classpathentry path="/osgi.released/ee.foundation.jar" kind="lib" sourcepath="/osgi.released/ee.foundation.jar"/>
-	<classpathentry path="/licensed/jar/saxon.jar" kind="lib"/>
-	<classpathentry path="src" kind="output"/>
-</classpath>

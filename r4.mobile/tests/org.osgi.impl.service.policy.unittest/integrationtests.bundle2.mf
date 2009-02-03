@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Bundle-Name: IntegrationTestBundle2
-Bundle-SymbolicName: TestBundle2
-Bundle-Vendor: Nokia
-Bundle-Version: 1.0
-$(EXPORT-PACKAGE)
-$(IMPORT-PACKAGE)
-$(PRIVATE-PACKAGE)

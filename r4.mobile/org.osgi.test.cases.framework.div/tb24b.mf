@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Bundle-Name: ${p}.tb24b
-Bundle-SymbolicName: ${p}.tb24b
-Bundle-Version: 4
-Bundle-ManifestVersion: 2
-Import-Package: ${p}.tb24a;version="1.0.0"
-Export-Package: ${p}.tb24b;version="1.0.0"
-$(PRIVATE-PACKAGE)

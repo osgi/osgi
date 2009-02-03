@@ -1,7 +1,0 @@
-Manifest-Version: 1.0
-Bundle-Name: com.provider.messages
-Bundle-SymbolicName: com.provider.messages
-Bundle-Version: 1
-$(IMPORT-PACKAGE)
-Export-Package: com.provider.messages
-$(PRIVATE-PACKAGE)

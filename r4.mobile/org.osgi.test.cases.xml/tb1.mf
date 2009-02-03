@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Bundle-Name: XMLTestBundle1
-Bundle-Vendor: Espial Group Inc.
-Bundle-Version: 4.0
-Bundle-Activator: org.osgi.util.xml.XMLParserActivator
-$(IMPORT-PACKAGE)
-$(EXPORT-PACKAGE)
-
-
