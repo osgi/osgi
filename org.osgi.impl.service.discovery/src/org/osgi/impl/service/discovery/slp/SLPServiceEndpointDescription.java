@@ -159,8 +159,10 @@ public class SLPServiceEndpointDescription implements
 			jslpSED.setInterfaceName(ifName);
 			jslpSED.setVersion((String)interfaceAndVersionsMap.get(ifName));
 			jslpSED.setEndpointInterface((String)endPointInterfacesMap.get(ifName));
-			jslpSED.setProperties(props);
-			jslpSED.addInterfacesAndVersionsToProperties();//TODO: check
+			
+//	Broken code		
+//			jslpSED.setProperties(props);
+//			jslpSED.addInterfacesAndVersionsToProperties();//TODO: check
 			listOfJSLPSEDs.put(ifName, jslpSED);
 		}
 		this.endpointID = endpntID;
@@ -181,7 +183,8 @@ public class SLPServiceEndpointDescription implements
 		synchronized (listOfJSLPSEDs) {
 			Iterator it = listOfJSLPSEDs.values().iterator();
 			while (it.hasNext()) {
-				result.putAll(((JSlpSED) it.next()).getProperties());
+//				Broken code		
+//				result.putAll(((JSlpSED) it.next()).getProperties());
 			}
 		}
 		return result;
@@ -444,7 +447,8 @@ public class SLPServiceEndpointDescription implements
 				interfaceName + ServicePublication.SEPARATOR
 				+ jslpSED.getEndpointInterface());
 		
-		jslpSED.setProperties(properties);
+//		Broken code		
+		//		jslpSED.setProperties(properties);
 		
 		return jslpSED;
 	}
