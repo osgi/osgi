@@ -486,18 +486,25 @@ public class SLPServiceEndpointDescription implements
 		String versionsValue = (String) props
 				.get(ServicePublication.PROP_KEY_SERVICE_INTERFACE_VERSION);
 		if (versionsValue != null) {
-			if (!versionsValue.startsWith(interfaceName)) {
-				versionsValue = interfaceName + ServicePublication.SEPARATOR
-						+ versionsValue;
-			}
 			version = versionsValue;
 		}
 		else {
 			// TODO log error
-			version = interfaceName + ServicePublication.SEPARATOR
-					+ org.osgi.framework.Version.emptyVersion.toString();
+			version = org.osgi.framework.Version.emptyVersion.toString();
 		}
 		jslpSED.setVersion(version);
+		
+		// Put interface and version information to properties since base for
+		// matching
+		Collection interfaceNames = new ArrayList();
+		interfaceNames.add(interfaceName);
+		props.put(ServicePublication.PROP_KEY_SERVICE_INTERFACE_NAME,
+				interfaceNames);
+
+		Collection versions = new ArrayList();
+		versions.add(interfaceName + ServicePublication.SEPARATOR + version);
+		props.put(ServicePublication.PROP_KEY_SERVICE_INTERFACE_VERSION,
+				versions);
 
 		// Get endpoint-interface if it exists
 		String endpointInterfacesValue = (String) props
