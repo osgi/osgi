@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.osgi.framework.Constants;
 import org.osgi.service.discovery.ServiceEndpointDescription;
 import org.osgi.service.discovery.ServicePublication;
 
@@ -88,6 +87,22 @@ public class SLPServiceEndpointDescription implements
 	private final Map			listOfJSLPSEDs							= Collections
 																				.synchronizedMap(new HashMap());
 
+	private Map					properties								= new HashMap();
+
+	private static final String	STRING_LIFETIME							= "lifetime";
+
+	private static final String	STRING_PORT								= "port";
+
+	private static final String	STRING_HOST								= "host";
+
+	private static final String	STRING_PROTOCOL							= "protocol";
+
+	private static final String	SLP_SERVICEURL							= "slp.servieURL";
+
+	private static final String	STRING_TYPE								= "type";
+
+	private static final String	STRING_SERVICE_OSGI						= "service:osgi";
+
 	/**
 	 * 
 	 * @param interfaceNames
@@ -97,7 +112,7 @@ public class SLPServiceEndpointDescription implements
 	 * @throws ServiceLocationException
 	 */
 	public SLPServiceEndpointDescription(
-			final Collection/* <String */interfaceNames,
+			final Collection/* <String> */interfaceNames,
 			final Collection/* <String> */interfacesAndVersions,
 			final Collection/* <String> */endPointInterfaces, final Map props,
 			final String endpntID) throws ServiceLocationException {
@@ -159,13 +174,58 @@ public class SLPServiceEndpointDescription implements
 			jslpSED.setInterfaceName(ifName);
 			jslpSED.setVersion((String)interfaceAndVersionsMap.get(ifName));
 			jslpSED.setEndpointInterface((String)endPointInterfacesMap.get(ifName));
-			
-//	Broken code		
-//			jslpSED.setProperties(props);
-//			jslpSED.addInterfacesAndVersionsToProperties();//TODO: check
 			listOfJSLPSEDs.put(ifName, jslpSED);
 		}
 		this.endpointID = endpntID;
+		if (props != null) {
+			this.properties = new HashMap(props);
+		}
+		addInterfacesAndVersionsToProperties(interfaceNames,
+				interfacesAndVersions, endPointInterfaces, endpntID);
+	}
+
+	/**
+	 * adds the endpoint interfaces and versions to the properties map
+	 * 
+	 * @throws ServiceLocationException
+	 */
+	private void addInterfacesAndVersionsToProperties(
+			Collection interfaceNames, Collection versions,
+			Collection endPointInterfaces, String endPntID)
+			throws ServiceLocationException {
+		// Create a service url for each interface and gather also version
+		// and
+		// endpoint-interface information.
+		synchronized (listOfJSLPSEDs) {
+			Iterator it = listOfJSLPSEDs.values().iterator();
+			while (it.hasNext()) {
+				JSlpSED slpSED = (JSlpSED) it.next();
+				serviceURLs.put(slpSED.getInterfaceName(),
+						SLPServiceEndpointDescription.createServiceURL(slpSED
+								.getInterfaceName(), slpSED.getVersion(),
+								slpSED.getEndpointInterface(), properties));
+
+			}
+		}
+
+		if (properties == null) {
+			properties = new HashMap();
+		}
+		properties.put(ServicePublication.PROP_KEY_SERVICE_INTERFACE_NAME,
+				interfaceNames);
+		if (versions != null) {
+			properties.put(
+					ServicePublication.PROP_KEY_SERVICE_INTERFACE_VERSION,
+					versions);
+		}
+		if (endPointInterfaces != null) {
+			properties.put(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME,
+					endPointInterfaces);
+		}
+
+		if (endPntID != null) {
+			properties.put(ServicePublication.PROP_KEY_ENDPOINT_ID, endPntID);
+		}
 	}
 
 	/**
@@ -179,15 +239,7 @@ public class SLPServiceEndpointDescription implements
 	}
 
 	public Map getProperties() {
-		Map result = new HashMap();
-		synchronized (listOfJSLPSEDs) {
-			Iterator it = listOfJSLPSEDs.values().iterator();
-			while (it.hasNext()) {
-//				Broken code		
-//				result.putAll(((JSlpSED) it.next()).getProperties());
-			}
-		}
-		return result;
+		return new HashMap(properties);
 	}
 
 	public Object getProperty(final String key) {
@@ -209,6 +261,18 @@ public class SLPServiceEndpointDescription implements
 			while (it.hasNext()) {
 				sb.append((JSlpSED) it.next());
 			}
+		}
+		String key;
+		Object value;
+		for (Iterator i = properties.keySet().iterator(); i.hasNext();) {
+			key = (String) i.next();
+			value = properties.get(key);
+			if (value == null) {
+				value = "<null>";
+			}
+
+			sb.append(key).append("=").append(value.toString()).append(
+					LINE_SEPARATOR);
 		}
 		return sb.toString();
 	}
@@ -300,7 +364,8 @@ public class SLPServiceEndpointDescription implements
 
 		// add interface as property to enable LDAP filtering on it
 		if (interfaceName != null) {
-			path = appendPropertyToURLPath(path, Constants.OBJECTCLASS,
+			path = appendPropertyToURLPath(path,
+					ServicePublication.PROP_KEY_SERVICE_INTERFACE_NAME,
 					interfaceName);
 		}
 		if (version != null)
@@ -319,10 +384,10 @@ public class SLPServiceEndpointDescription implements
 
 		// init from properties if given
 		if (properties != null) {
-			protocol = (String) properties.get("protocol");
-			host = (String) properties.get("host");
-			port = (String) properties.get("port");
-			lifeTime = (Integer) properties.get("lifetime");
+			protocol = (String) properties.get(STRING_PROTOCOL);
+			host = (String) properties.get(STRING_HOST);
+			port = (String) properties.get(STRING_PORT);
+			lifeTime = (Integer) properties.get(STRING_LIFETIME);
 		}
 		if (host == null) {
 			String hostname = null;
@@ -354,7 +419,7 @@ public class SLPServiceEndpointDescription implements
 				: ServiceURL.LIFETIME_DEFAULT;
 		String interf = convertJavaInterface2Path(interfaceName);
 		StringBuffer buff = new StringBuffer();
-		buff.append("service:osgi");
+		buff.append(STRING_SERVICE_OSGI);
 		buff.append(interf);
 		buff.append((protocol != null ? protocol + "://" : "://"));
 		buff.append(host);
@@ -387,8 +452,6 @@ public class SLPServiceEndpointDescription implements
 	 * @return
 	 */
 	private JSlpSED retrieveDataFromServiceURL(final ServiceURL serviceURL) {
-		Map properties = new HashMap();
-		
 		// retrieve main interface
 		String interfaceName = convertPath2JavaInterface(serviceURL
 				.getServiceType().getConcreteTypeName());
@@ -396,59 +459,54 @@ public class SLPServiceEndpointDescription implements
 			throw new IllegalArgumentException(
 					"Interface information is missing!");
 		}
-		// Put interface information to properties since base for matching
-		properties.put(Constants.OBJECTCLASS, new String[] {interfaceName});//TODO check whether OBJECTCLASSS is the right key
-		
 		// Retrieve additional properties from SLP ServiceURL itself
-		properties.put("slp.serviceURL", serviceURL);
-		properties.put("type", serviceURL.getServiceType().toString());
+		Map props = new HashMap();
+		props.put(SLP_SERVICEURL, serviceURL);
+		props.put(STRING_TYPE, serviceURL.getServiceType().toString());
 		if (serviceURL.getHost() != null) {
-			properties.put("host", serviceURL.getHost());
+			props.put(STRING_HOST, serviceURL.getHost());
 		}
 		if (serviceURL.getPort() != 0) {
-			properties.put("port", (new Integer(serviceURL.getPort()))
+			props.put(STRING_PORT, (new Integer(serviceURL.getPort()))
 					.toString());
 		}
 		if (serviceURL.getProtocol() != null) {
-			properties.put("protocol", serviceURL.getProtocol());
+			props.put(STRING_PROTOCOL, serviceURL.getProtocol());
 		}
-		properties.put("lifetime", new Integer(serviceURL.getLifetime()));
+		props.put(STRING_LIFETIME, new Integer(serviceURL.getLifetime()));
 
 		// retrieve properties from ServiceURL attributes
-		retrievePropertiesFromPath(serviceURL.getURLPath(), properties);
+		retrievePropertiesFromPath(serviceURL.getURLPath(), props);
 
 		JSlpSED jslpSED = new JSlpSED(this);
 		jslpSED.setInterfaceName(interfaceName);
 		
 		// Get version info
-		Object versionsValue = properties
+		String version = null;
+		String versionsValue = (String) props
 				.get(ServicePublication.PROP_KEY_SERVICE_INTERFACE_VERSION);
-		if (versionsValue != null && versionsValue instanceof String) {
-			jslpSED.setVersion((String) versionsValue);
+		if (versionsValue != null) {
+			if (!versionsValue.startsWith(interfaceName)) {
+				versionsValue = interfaceName + ServicePublication.SEPARATOR
+						+ versionsValue;
+			}
+			version = versionsValue;
 		}
 		else {
-			// TODO version optional -> check whether we shouldn't treat it as error here and anywhere else
-			// TODO log error 
-			jslpSED.setVersion(org.osgi.framework.Version.emptyVersion.toString());
-		}		
-		// Overwrite version property with a interface:version value style since base for matching
-		properties.put(ServicePublication.PROP_KEY_SERVICE_INTERFACE_VERSION,
-				interfaceName + ServicePublication.SEPARATOR
-				+ jslpSED.getVersion());
+			// TODO log error
+			version = interfaceName + ServicePublication.SEPARATOR
+					+ org.osgi.framework.Version.emptyVersion.toString();
+		}
+		jslpSED.setVersion(version);
 
 		// Get endpoint-interface if it exists
-		String endpointInterfacesValue = (String) properties
+		String endpointInterfacesValue = (String) props
 				.get(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME);
 		if (endpointInterfacesValue != null) {
 			jslpSED.setEndpointInterface(endpointInterfacesValue);
 		}
-		// Overwrite endpoint-interface property with a interface:endpoint-interface value style since base for matching
-		properties.put(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME,
-				interfaceName + ServicePublication.SEPARATOR
-				+ jslpSED.getEndpointInterface());
 		
-//		Broken code		
-		//		jslpSED.setProperties(properties);
+		properties = props;
 		
 		return jslpSED;
 	}
@@ -684,6 +742,12 @@ public class SLPServiceEndpointDescription implements
 					"The service does not contain requiered parameter interfaces. "
 							+ descr);
 		}
+
+		if (!filterSLPSpecificProperties(properties).equals(
+				filterSLPSpecificProperties(descr.getProperties()))) {
+			return false;
+		}
+
 		boolean found = false;
 		synchronized (listOfJSLPSEDs) {
 			Iterator it = listOfJSLPSEDs.values().iterator();
@@ -694,7 +758,19 @@ public class SLPServiceEndpointDescription implements
 				}
 			}
 		}
+
 		return found;
+	}
+
+	private Map filterSLPSpecificProperties(Map in) {
+		Map out = new HashMap(in);
+		out.remove(SLP_SERVICEURL);
+		out.remove(STRING_LIFETIME);
+		out.remove(STRING_PORT);
+		out.remove(STRING_PROTOCOL);
+		out.remove(STRING_TYPE);
+		out.remove(STRING_HOST);
+		return out;
 	}
 
 	/**
