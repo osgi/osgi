@@ -255,7 +255,7 @@ public class SLPHandlerImpl implements Discovery {
 					descriptionAdapter.addProperty(key, value);
 				}
 				log(LogService.LOG_DEBUG,
-						"adding service endpoint description "
+						"findService: adding service endpoint description to result list: "
 								+ descriptionAdapter);
 				if (descriptionAdapter.getProvidedInterfaces() != null) {
 					result.add(descriptionAdapter);

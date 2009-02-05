@@ -203,15 +203,14 @@ public class JSlpSED {
 	 */
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
-		sb.append("interface=").append(interfaceName).append(LINE_SEPARATOR);
+		sb.append("\tinterface=").append(interfaceName).append(LINE_SEPARATOR);
 		if (version != null) {
-			sb.append("version=").append(version).append(LINE_SEPARATOR);
+			sb.append("\tversion=").append(version).append(LINE_SEPARATOR);
 		}
 		ServiceURL svcURL = slpServiceDescr.getServiceURL(interfaceName);
-		sb.append("serviceURL=")
+		sb.append("\tserviceURL=")
 				.append(svcURL != null ? svcURL.toString() : "").append(
 						LINE_SEPARATOR);
-		sb.append("properties=" + LINE_SEPARATOR);
 		return sb.toString();
 	}
 }

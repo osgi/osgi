@@ -54,19 +54,19 @@ public class SLPServiceEndpointDescription implements
 		ServiceEndpointDescription {
 	// reserved are: `(' / `)' / `,' / `\' / `!' / `<' / `=' / `>' / `~' / CTL
 	// TODO: handle CTL
-	public static final String RESERVED_CHARS_IN_ATTR_VALUES = "(),\\!<>=~;/?:@&=+";
+	public static final String	RESERVED_CHARS_IN_ATTR_VALUES			= "(),\\!<>=~;/?:@&=+";
 
 	// RFC2608: Any character except reserved, * / CR / LF / HTAB / `_'.
-	public static final String RESERVED_CHARS_IN_ATTR_KEYS = RESERVED_CHARS_IN_ATTR_VALUES
+	public static final String	RESERVED_CHARS_IN_ATTR_KEYS				= RESERVED_CHARS_IN_ATTR_VALUES
 																				+ '*'
 																				+ 0x0D
 																				+ 0x0A
 																				+ 0x09
 																				+ '_';
 
-	public static final String ESCAPING_CHARACTER = "\\";
+	public static final String	ESCAPING_CHARACTER						= "\\";
 
-	private static int port = -1; // TODO
+	private static int			port									= -1;										// TODO
 
 	// private Collection /* <String> */javaInterfaces = new ArrayList(); //
 	// mandatory
@@ -75,33 +75,33 @@ public class SLPServiceEndpointDescription implements
 	// private Collection /* <String> */javaAndEndpointInterfaces = new
 	// ArrayList(); // optional
 	// private Map /* <String, Object> */properties = new HashMap(); // optional
-	private String endpointID;
+	private String				endpointID;
 
 	// Java interfaces and associated ServiceURLs. Each interface has its own
 	// ServiceURL.
-	private Map /* <String, ServiceURL> */serviceURLs = new HashMap();
+	private Map				/* <String, ServiceURL> */serviceURLs	= new HashMap();
 
-	private static final String LINE_SEPARATOR = System
-			.getProperty("line.separator");
+	private static final String	LINE_SEPARATOR							= System
+																				.getProperty("line.separator");
 
-	private final Map listOfJSLPSEDs = Collections
-			.synchronizedMap(new HashMap());
+	private final Map			listOfJSLPSEDs							= Collections
+																				.synchronizedMap(new HashMap());
 
-	private Map properties = new HashMap();
+	private Map					properties								= new HashMap();
 
-	private static final String STRING_LIFETIME = "lifetime";
+	private static final String	STRING_LIFETIME							= "lifetime";
 
-	private static final String STRING_PORT = "port";
+	private static final String	STRING_PORT								= "port";
 
-	private static final String STRING_HOST = "host";
+	private static final String	STRING_HOST								= "host";
 
-	private static final String STRING_PROTOCOL = "protocol";
+	private static final String	STRING_PROTOCOL							= "protocol";
 
-	private static final String SLP_SERVICEURL = "slp.servieURL";
+	private static final String	SLP_SERVICEURL							= "slp.servieURL";
 
-	private static final String STRING_TYPE = "type";
+	private static final String	STRING_TYPE								= "type";
 
-	private static final String STRING_SERVICE_OSGI = "service:osgi";
+	private static final String	STRING_SERVICE_OSGI						= "service:osgi";
 
 	/**
 	 * 
@@ -131,35 +131,48 @@ public class SLPServiceEndpointDescription implements
 		if (interfacesAndVersions != null) {
 			Iterator versionIterator = interfacesAndVersions.iterator();
 			while (versionIterator.hasNext()) {
-				String interfaceAndVersion = (String) versionIterator
-						.next();
-				int separatorIndex = interfaceAndVersion.indexOf(ServicePublication.SEPARATOR);
-				// if separator doesn't exist or it's index is invalid (at the very beginning, at the very end)
-				if (separatorIndex <= 0 || (separatorIndex+1) == interfaceAndVersion.length()) {
+				String interfaceAndVersion = (String) versionIterator.next();
+				int separatorIndex = interfaceAndVersion
+						.indexOf(ServicePublication.SEPARATOR);
+				// if separator doesn't exist or it's index is invalid (at the
+				// very beginning, at the very end)
+				if (separatorIndex <= 0
+						|| (separatorIndex + 1) == interfaceAndVersion.length()) {
 					break;
 				}
-				String interfaceName = interfaceAndVersion.substring(0, separatorIndex);
-				String version = interfaceAndVersion.substring(separatorIndex+1);
-				if(interfaceName != null && interfaceName.length() > 0 && version != null && version.length() > 0){
+				String interfaceName = interfaceAndVersion.substring(0,
+						separatorIndex);
+				String version = interfaceAndVersion
+						.substring(separatorIndex + 1);
+				if (interfaceName != null && interfaceName.length() > 0
+						&& version != null && version.length() > 0) {
 					interfaceAndVersionsMap.put(interfaceName, version);
 				}
 			}
 		}
 
-		// separate given java interface and endpoint interface and put it in a map 
+		// separate given java interface and endpoint interface and put it in a
+		// map
 		Map endPointInterfacesMap = new HashMap();
 		if (endPointInterfaces != null) {
 			Iterator endpIterator = endPointInterfaces.iterator();
 			while (endpIterator.hasNext()) {
 				String interfaceAndEndpoint = (String) endpIterator.next();
-				int separatorIndex = interfaceAndEndpoint.indexOf(ServicePublication.SEPARATOR);
-				// if separator doesn't exist or it's index is invalid (at the very beginning, at the very end)
-				if (separatorIndex <= 0 || (separatorIndex+1) == interfaceAndEndpoint.length()) {
+				int separatorIndex = interfaceAndEndpoint
+						.indexOf(ServicePublication.SEPARATOR);
+				// if separator doesn't exist or it's index is invalid (at the
+				// very beginning, at the very end)
+				if (separatorIndex <= 0
+						|| (separatorIndex + 1) == interfaceAndEndpoint
+								.length()) {
 					break;
 				}
-				String interfaceName = interfaceAndEndpoint.substring(0, separatorIndex);
-				String endpInterface = interfaceAndEndpoint.substring(separatorIndex+1);
-				if(interfaceName != null && interfaceName.length() > 0 && endpInterface != null && endpInterface.length() > 0){
+				String interfaceName = interfaceAndEndpoint.substring(0,
+						separatorIndex);
+				String endpInterface = interfaceAndEndpoint
+						.substring(separatorIndex + 1);
+				if (interfaceName != null && interfaceName.length() > 0
+						&& endpInterface != null && endpInterface.length() > 0) {
 					endPointInterfacesMap.put(interfaceName, endpInterface);
 				}
 			}
@@ -172,8 +185,9 @@ public class SLPServiceEndpointDescription implements
 
 			JSlpSED jslpSED = new JSlpSED(this);
 			jslpSED.setInterfaceName(ifName);
-			jslpSED.setVersion((String)interfaceAndVersionsMap.get(ifName));
-			jslpSED.setEndpointInterface((String)endPointInterfacesMap.get(ifName));
+			jslpSED.setVersion((String) interfaceAndVersionsMap.get(ifName));
+			jslpSED.setEndpointInterface((String) endPointInterfacesMap
+					.get(ifName));
 			listOfJSLPSEDs.put(ifName, jslpSED);
 		}
 		this.endpointID = endpntID;
@@ -256,23 +270,39 @@ public class SLPServiceEndpointDescription implements
 	 */
 	public String toString() {
 		StringBuffer sb = new StringBuffer("Service:" + LINE_SEPARATOR);
+		if (endpointID != null) {
+			sb.append("EndpointID = ");
+			sb.append(endpointID);
+		}
 		synchronized (listOfJSLPSEDs) {
 			Iterator it = listOfJSLPSEDs.values().iterator();
+			int i = 1;
 			while (it.hasNext()) {
+				sb.append("Interface ");
+				sb.append(i);
+				sb.append(LINE_SEPARATOR);
 				sb.append((JSlpSED) it.next());
+				i++;
 			}
 		}
 		String key;
 		Object value;
-		for (Iterator i = properties.keySet().iterator(); i.hasNext();) {
-			key = (String) i.next();
+		Iterator it = properties.keySet().iterator();
+		if (it.hasNext()) {
+			sb.append("properties=" + LINE_SEPARATOR);
+		}
+		while (it.hasNext()) {
+			key = (String) it.next();
 			value = properties.get(key);
 			if (value == null) {
 				value = "<null>";
 			}
 
-			sb.append(key).append("=").append(value.toString()).append(
-					LINE_SEPARATOR);
+			sb.append("\t");
+			sb.append(key);
+			sb.append("=");
+			sb.append(value.toString());
+			sb.append(LINE_SEPARATOR);
 		}
 		return sb.toString();
 	}
@@ -300,7 +330,8 @@ public class SLPServiceEndpointDescription implements
 		JSlpSED jSED = ((JSlpSED) listOfJSLPSEDs.get(interfaceName));
 		if (jSED != null) {
 			return jSED.getEndpointInterface();
-		} else {
+		}
+		else {
 			return null;
 		}
 	}
@@ -313,7 +344,8 @@ public class SLPServiceEndpointDescription implements
 		JSlpSED jSED = ((JSlpSED) listOfJSLPSEDs.get(interfaceName));
 		if (jSED != null) {
 			return jSED.getVersion();
-		} else {
+		}
+		else {
 			return null;
 		}
 	}
