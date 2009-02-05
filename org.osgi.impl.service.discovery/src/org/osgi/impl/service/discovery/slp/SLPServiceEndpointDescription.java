@@ -54,19 +54,19 @@ public class SLPServiceEndpointDescription implements
 		ServiceEndpointDescription {
 	// reserved are: `(' / `)' / `,' / `\' / `!' / `<' / `=' / `>' / `~' / CTL
 	// TODO: handle CTL
-	public static final String	RESERVED_CHARS_IN_ATTR_VALUES			= "(),\\!<>=~;/?:@&=+";
+	public static final String RESERVED_CHARS_IN_ATTR_VALUES = "(),\\!<>=~;/?:@&=+";
 
 	// RFC2608: Any character except reserved, * / CR / LF / HTAB / `_'.
-	public static final String	RESERVED_CHARS_IN_ATTR_KEYS				= RESERVED_CHARS_IN_ATTR_VALUES
+	public static final String RESERVED_CHARS_IN_ATTR_KEYS = RESERVED_CHARS_IN_ATTR_VALUES
 																				+ '*'
 																				+ 0x0D
 																				+ 0x0A
 																				+ 0x09
 																				+ '_';
 
-	public static final String	ESCAPING_CHARACTER						= "\\";
+	public static final String ESCAPING_CHARACTER = "\\";
 
-	private static int			port									= -1;										// TODO
+	private static int port = -1; // TODO
 
 	// private Collection /* <String> */javaInterfaces = new ArrayList(); //
 	// mandatory
@@ -75,33 +75,33 @@ public class SLPServiceEndpointDescription implements
 	// private Collection /* <String> */javaAndEndpointInterfaces = new
 	// ArrayList(); // optional
 	// private Map /* <String, Object> */properties = new HashMap(); // optional
-	private String				endpointID;
+	private String endpointID;
 
 	// Java interfaces and associated ServiceURLs. Each interface has its own
 	// ServiceURL.
-	private Map				/* <String, ServiceURL> */serviceURLs	= new HashMap();
+	private Map /* <String, ServiceURL> */serviceURLs = new HashMap();
 
-	private static final String	LINE_SEPARATOR							= System
-																				.getProperty("line.separator");
+	private static final String LINE_SEPARATOR = System
+			.getProperty("line.separator");
 
-	private final Map			listOfJSLPSEDs							= Collections
-																				.synchronizedMap(new HashMap());
+	private final Map listOfJSLPSEDs = Collections
+			.synchronizedMap(new HashMap());
 
-	private Map					properties								= new HashMap();
+	private Map properties = new HashMap();
 
-	private static final String	STRING_LIFETIME							= "lifetime";
+	private static final String STRING_LIFETIME = "lifetime";
 
-	private static final String	STRING_PORT								= "port";
+	private static final String STRING_PORT = "port";
 
-	private static final String	STRING_HOST								= "host";
+	private static final String STRING_HOST = "host";
 
-	private static final String	STRING_PROTOCOL							= "protocol";
+	private static final String STRING_PROTOCOL = "protocol";
 
-	private static final String	SLP_SERVICEURL							= "slp.servieURL";
+	private static final String SLP_SERVICEURL = "slp.servieURL";
 
-	private static final String	STRING_TYPE								= "type";
+	private static final String STRING_TYPE = "type";
 
-	private static final String	STRING_SERVICE_OSGI						= "service:osgi";
+	private static final String STRING_SERVICE_OSGI = "service:osgi";
 
 	/**
 	 * 
@@ -125,9 +125,9 @@ public class SLPServiceEndpointDescription implements
 			throw new IllegalArgumentException(
 					"Given set of Java interfaces must contain at least one service interface name.");
 		}
-		
-		// separate given interface and version strings and put it in a map 
-		Map interfaceAndVersionsMap = new HashMap();		
+
+		// separate given interface and version strings and put it in a map
+		Map interfaceAndVersionsMap = new HashMap();
 		if (interfacesAndVersions != null) {
 			Iterator versionIterator = interfacesAndVersions.iterator();
 			while (versionIterator.hasNext()) {
@@ -141,13 +141,13 @@ public class SLPServiceEndpointDescription implements
 				String interfaceName = interfaceAndVersion.substring(0, separatorIndex);
 				String version = interfaceAndVersion.substring(separatorIndex+1);
 				if(interfaceName != null && interfaceName.length() > 0 && version != null && version.length() > 0){
-					interfaceAndVersionsMap.put(interfaceName, version);					
+					interfaceAndVersionsMap.put(interfaceName, version);
 				}
 			}
 		}
-		
+
 		// separate given java interface and endpoint interface and put it in a map 
-		Map endPointInterfacesMap = new HashMap();		
+		Map endPointInterfacesMap = new HashMap();
 		if (endPointInterfaces != null) {
 			Iterator endpIterator = endPointInterfaces.iterator();
 			while (endpIterator.hasNext()) {
@@ -160,16 +160,16 @@ public class SLPServiceEndpointDescription implements
 				String interfaceName = interfaceAndEndpoint.substring(0, separatorIndex);
 				String endpInterface = interfaceAndEndpoint.substring(separatorIndex+1);
 				if(interfaceName != null && interfaceName.length() > 0 && endpInterface != null && endpInterface.length() > 0){
-					endPointInterfacesMap.put(interfaceName, endpInterface);					
+					endPointInterfacesMap.put(interfaceName, endpInterface);
 				}
 			}
 		}
-	
-		// create interface-specific SEDs  
+
+		// create interface-specific SEDs
 		Iterator it = interfaceNames.iterator();
 		while (it.hasNext()) {
 			String ifName = (String) it.next();
-			
+
 			JSlpSED jslpSED = new JSlpSED(this);
 			jslpSED.setInterfaceName(ifName);
 			jslpSED.setVersion((String)interfaceAndVersionsMap.get(ifName));
@@ -306,7 +306,12 @@ public class SLPServiceEndpointDescription implements
 	 * @see org.osgi.service.discovery.ServiceEndpointDescription#getVersion(java.lang.String)
 	 */
 	public String getVersion(String interfaceName) {
-		return ((JSlpSED) listOfJSLPSEDs.get(interfaceName)).getVersion();
+		JSlpSED jSED = ((JSlpSED) listOfJSLPSEDs.get(interfaceName));
+		if (jSED != null) {
+			return jSED.getVersion();
+		} else {
+			return null;
+		}
 	}
 
 	/**
@@ -480,7 +485,7 @@ public class SLPServiceEndpointDescription implements
 
 		JSlpSED jslpSED = new JSlpSED(this);
 		jslpSED.setInterfaceName(interfaceName);
-		
+
 		// Get version info
 		String version = null;
 		String versionsValue = (String) props
@@ -493,7 +498,7 @@ public class SLPServiceEndpointDescription implements
 			version = org.osgi.framework.Version.emptyVersion.toString();
 		}
 		jslpSED.setVersion(version);
-		
+
 		// Put interface and version information to properties since base for
 		// matching
 		Collection interfaceNames = new ArrayList();
@@ -512,9 +517,9 @@ public class SLPServiceEndpointDescription implements
 		if (endpointInterfacesValue != null) {
 			jslpSED.setEndpointInterface(endpointInterfacesValue);
 		}
-		
+
 		properties = props;
-		
+
 		return jslpSED;
 	}
 
