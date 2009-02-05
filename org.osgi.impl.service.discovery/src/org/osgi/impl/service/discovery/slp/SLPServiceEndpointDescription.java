@@ -297,8 +297,12 @@ public class SLPServiceEndpointDescription implements
 	 * @see org.osgi.service.discovery.ServiceEndpointDescription#getEndpointInterfaceName(java.lang.String)
 	 */
 	public String getEndpointInterfaceName(String interfaceName) {
-		return ((JSlpSED) listOfJSLPSEDs.get(interfaceName))
-				.getEndpointInterface();
+		JSlpSED jSED = ((JSlpSED) listOfJSLPSEDs.get(interfaceName));
+		if (jSED != null) {
+			return jSED.getEndpointInterface();
+		} else {
+			return null;
+		}
 	}
 
 	/**
