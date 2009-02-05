@@ -16,23 +16,30 @@
 
 package org.osgi.test.cases.framework.permissions;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
+import java.math.BigInteger;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.Permission;
 import java.security.PermissionCollection;
-import java.util.Collections;
-import java.util.Dictionary;
-import java.util.Enumeration;
+import java.security.Principal;
+import java.security.PublicKey;
+import java.security.SignatureException;
+import java.security.cert.CertificateEncodingException;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateExpiredException;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.PropertyPermission;
+import java.util.Set;
 
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleException;
-import org.osgi.framework.ServiceReference;
-import org.osgi.framework.Version;
+import org.osgi.test.support.AbstractMockBundle;
 import org.osgi.test.support.PermissionTestCase;
 
 public class AdminPermissionTests extends PermissionTestCase {
@@ -64,13 +71,13 @@ public class AdminPermissionTests extends PermissionTestCase {
 
 		invalidAdminPermission("()", "*");
 	}
-	
+
 	public void testDefaultAdminPermission() {
 		AdminPermission p1 = new AdminPermission();
 		AdminPermission p2 = new AdminPermission("*", "*");
 		AdminPermission p3 = new AdminPermission((String) null, null);
 		AdminPermission p4 = new AdminPermission((String) null, p2.getActions());
-		Permission op = new PropertyPermission("java.home", "read"); 
+		Permission op = new PropertyPermission("java.home", "read");
 
 		shouldImply(p1, p2);
 		shouldImply(p2, p1);
@@ -135,12 +142,12 @@ public class AdminPermissionTests extends PermissionTestCase {
 		testSerialization(p3);
 		testSerialization(p4);
 	}
-	
+
 	public void testFilterAdminPermission() {
 		AdminPermission p1 = new AdminPermission("(id=2)", "class");
 		AdminPermission p2 = new AdminPermission(" (id =2)", "class");
-		AdminPermission p3 = new AdminPermission(new BundleStub(2, "test.bsn",
-				"test.location"), "resolve");
+		AdminPermission p3 = new AdminPermission(newMockBundle(2, "test.bsn",
+				"test.location", null), "resolve");
 		AdminPermission p4 = new AdminPermission("(name=test.*)", "resource");
 		AdminPermission p5 = new AdminPermission("(location=test.*)", "*");
 		shouldImply(p1, p3);
@@ -167,8 +174,8 @@ public class AdminPermissionTests extends PermissionTestCase {
 		shouldAdd(pc, new AdminPermission("(id=2)", "class"));
 		shouldAdd(pc, new AdminPermission("(id=2)", "resource"));
 
-		Bundle testBundle1 = new BundleStub(2, "test.bsn", "test.location");
-		Bundle testBundle2 = new BundleStub(1, "test.bsn", "test.location");
+		Bundle testBundle1 = newMockBundle(2, "test.bsn", "test.location", null);
+		Bundle testBundle2 = newMockBundle(1, "test.bsn", "test.location", null);
 		shouldImply(pc, new AdminPermission(testBundle1, "resolve"));
 		shouldImply(pc, new AdminPermission(testBundle1, "class"));
 		shouldImply(pc, new AdminPermission(testBundle1, "resource"));
@@ -195,7 +202,37 @@ public class AdminPermissionTests extends PermissionTestCase {
 		testSerialization(p4);
 		testSerialization(p5);
 	}
-	
+
+	public void testSigners() {
+		AdminPermission ap = new AdminPermission("(signer=\\*, o=ACME, c=US)",
+				"*");
+
+		shouldImply(ap, new AdminPermission(newMockBundle(1, "test.bsn",
+				"test.location", "cn=Bugs Bunny, o=ACME, c=US"), "*"));
+		shouldImply(ap, new AdminPermission(newMockBundle(2, "test.bsn",
+				"test.location", "ou = Carrots, cn=Daffy Duck, o=ACME, c=US"),
+		"*"));
+		shouldImply(ap, new AdminPermission(newMockBundle(3, "test.bsn",
+				"test.location", "dc=www,dc=acme,dc=com,o=ACME,c=US"), "*"));
+		shouldNotImply(ap, new AdminPermission(newMockBundle(4, "test.bsn",
+				"test.location",
+		"street = 9C\\, Avenue St. Drézéry, o=ACME, c=FR"), "*"));
+		shouldNotImply(ap, new AdminPermission(newMockBundle(5, "test.bsn",
+				"test.location", "dc=www, dc=acme, dc=com, c=US"), "*"));
+
+		ap = new AdminPermission("(signer=cn=\\*,o=ACME,c=\\*)", "*");
+		
+		shouldImply(ap, new AdminPermission(newMockBundle(1, "test.bsn",
+				"test.location", "cn = Daffy Duck , o = ACME , c = US"), "*"));
+		shouldImply(ap, new AdminPermission(newMockBundle(1, "test.bsn",
+				"test.location", "cn=Road Runner, o=ACME, c=NL"), "*"));
+		shouldNotImply(ap, new AdminPermission(newMockBundle(1, "test.bsn",
+				"test.location", "o=ACME, c=NL"), "*"));
+		shouldNotImply(ap, new AdminPermission(newMockBundle(1, "test.bsn",
+				"test.location", "dc=acme.com, cn=Bugs Bunny, o=ACME, c=US"),
+				"*"));
+	}
+
 	private void invalidAdminPermission(String name, String actions) {
 		try {
 			AdminPermission p = new AdminPermission(name, actions);
@@ -225,7 +262,7 @@ public class AdminPermissionTests extends PermissionTestCase {
 			// expected
 		}
 	}
-	
+
 	private void invalidImply(PermissionCollection pc, Permission p2) {
 		try {
 			pc.implies(p2);
@@ -235,120 +272,214 @@ public class AdminPermissionTests extends PermissionTestCase {
 			// expected
 		}
 	}
-	
-	private static class BundleStub implements Bundle {
+
+	private Bundle newMockBundle(long id, String name, String location,
+			String dn) {
+		Map /* <X509Certificate, List<X509Certificate>> */testMap = new HashMap();
+		if (dn != null) {
+			Principal principal = new MockPrincipal(dn);
+			X509Certificate cert = new MockX509Certificate(principal);
+			List /* <X509Certificate> */testList = new ArrayList();
+			testList.add(cert);
+			testMap.put(cert, testList);
+		}
+		return new MockBundle(id, name, location, testMap);
+	}
+
+	private static class MockBundle extends AbstractMockBundle {
 		private final long		id;
 		private final String	name;
 		private final String	location;
+		private final Map		signers;
 
-		BundleStub(long id, String name, String location) {
+		MockBundle(long id, String name, String location, Map signers) {
 			this.id = id;
 			this.name = name;
 			this.location = location;
-		}
-
-		public Enumeration findEntries(String arg0, String arg1, boolean arg2) {
-			throw new UnsupportedOperationException();
-		}
-
-		public BundleContext getBundleContext() {
-			throw new UnsupportedOperationException();
+			this.signers = signers;
 		}
 
 		public long getBundleId() {
 			return id;
 		}
 
-		public URL getEntry(String arg0) {
-			throw new UnsupportedOperationException();
-		}
-
-		public Enumeration getEntryPaths(String arg0) {
-			throw new UnsupportedOperationException();
-		}
-
-		public Dictionary getHeaders() {
-			throw new UnsupportedOperationException();
-		}
-
-		public Dictionary getHeaders(String arg0) {
-			throw new UnsupportedOperationException();
-		}
-
-		public long getLastModified() {
-			throw new UnsupportedOperationException();
-		}
-
 		public String getLocation() {
 			return location;
 		}
 
-		public ServiceReference[] getRegisteredServices() {
-			throw new UnsupportedOperationException();
-		}
-
-		public URL getResource(String arg0) {
-			throw new UnsupportedOperationException();
-		}
-
-		public Enumeration getResources(String arg0) throws IOException {
-			throw new UnsupportedOperationException();
-		}
-
-		public ServiceReference[] getServicesInUse() {
-			throw new UnsupportedOperationException();
-		}
-
 		public Map getSignerCertificates(int arg0) {
-			return Collections.EMPTY_MAP;
-		}
-
-		public int getState() {
-			throw new UnsupportedOperationException();
+			return signers;
 		}
 
 		public String getSymbolicName() {
 			return name;
 		}
+	}
 
-		public Version getVersion() {
+	private static class MockX509Certificate extends X509Certificate {
+		private final Principal	principal;
+
+		public MockX509Certificate(Principal principal) {
+			this.principal = principal;
+		}
+
+		public Principal getSubjectDN() {
+			return principal;
+		}
+
+		public boolean equals(Object obj) {
+			if (this == obj) {
+				return true;
+			}
+			if (obj instanceof MockX509Certificate) {
+				return principal.equals(((MockX509Certificate) obj).principal);
+			}
+			return false;
+		}
+
+		public int hashCode() {
+			return principal.hashCode();
+		}
+
+		public String toString() {
+			return principal.toString();
+		}
+
+		public void checkValidity() throws CertificateExpiredException,
+				java.security.cert.CertificateNotYetValidException {
 			throw new UnsupportedOperationException();
 		}
 
-		public boolean hasPermission(Object arg0) {
+		public void checkValidity(Date var0)
+				throws java.security.cert.CertificateExpiredException,
+				java.security.cert.CertificateNotYetValidException {
 			throw new UnsupportedOperationException();
 		}
 
-		public Class loadClass(String arg0) throws ClassNotFoundException {
+		public int getBasicConstraints() {
 			throw new UnsupportedOperationException();
 		}
 
-		public void start() throws BundleException {
+		public Principal getIssuerDN() {
 			throw new UnsupportedOperationException();
 		}
 
-		public void start(int arg0) throws BundleException {
+		public boolean[] getIssuerUniqueID() {
 			throw new UnsupportedOperationException();
 		}
 
-		public void stop() throws BundleException {
+		public boolean[] getKeyUsage() {
 			throw new UnsupportedOperationException();
 		}
 
-		public void stop(int arg0) throws BundleException {
+		public Date getNotAfter() {
 			throw new UnsupportedOperationException();
 		}
 
-		public void uninstall() throws BundleException {
+		public Date getNotBefore() {
 			throw new UnsupportedOperationException();
 		}
 
-		public void update() throws BundleException {
+		public BigInteger getSerialNumber() {
 			throw new UnsupportedOperationException();
 		}
 
-		public void update(InputStream arg0) throws BundleException {
+		public String getSigAlgName() {
 			throw new UnsupportedOperationException();
+		}
+
+		public String getSigAlgOID() {
+			throw new UnsupportedOperationException();
+		}
+
+		public byte[] getSigAlgParams() {
+			throw new UnsupportedOperationException();
+		}
+
+		public byte[] getSignature() {
+			throw new UnsupportedOperationException();
+		}
+
+		public boolean[] getSubjectUniqueID() {
+			throw new UnsupportedOperationException();
+		}
+
+		public byte[] getTBSCertificate() throws CertificateEncodingException {
+			throw new UnsupportedOperationException();
+		}
+
+		public int getVersion() {
+			throw new UnsupportedOperationException();
+		}
+
+		public byte[] getEncoded() throws CertificateEncodingException {
+			throw new UnsupportedOperationException();
+		}
+
+		public PublicKey getPublicKey() {
+			throw new UnsupportedOperationException();
+		}
+
+		public void verify(PublicKey var0)
+				throws java.security.InvalidKeyException,
+				java.security.NoSuchAlgorithmException,
+				java.security.NoSuchProviderException,
+				java.security.SignatureException,
+				java.security.cert.CertificateException {
+			throw new UnsupportedOperationException();
+		}
+
+		public void verify(PublicKey var0, String var1)
+				throws InvalidKeyException, NoSuchAlgorithmException,
+				NoSuchProviderException, SignatureException,
+				CertificateException {
+			throw new UnsupportedOperationException();
+		}
+
+		public Set getCriticalExtensionOIDs() {
+			throw new UnsupportedOperationException();
+		}
+
+		public byte[] getExtensionValue(String var0) {
+			throw new UnsupportedOperationException();
+		}
+
+		public Set getNonCriticalExtensionOIDs() {
+			throw new UnsupportedOperationException();
+		}
+
+		public boolean hasUnsupportedCriticalExtension() {
+			throw new UnsupportedOperationException();
+		}
+	}
+
+	private static class MockPrincipal implements Principal {
+		private final String	name;
+
+		public MockPrincipal(String name) {
+			this.name = name;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public boolean equals(Object obj) {
+			if (this == obj) {
+				return true;
+			}
+			if (obj instanceof MockPrincipal) {
+				return name.equals(((MockPrincipal) obj).name);
+			}
+			return false;
+		}
+
+		public int hashCode() {
+			return name.hashCode();
+		}
+
+		public String toString() {
+			return getName();
 		}
 	}
 }
