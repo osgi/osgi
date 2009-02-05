@@ -20,14 +20,12 @@ package org.osgi.impl.service.discovery.slp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.TimerTask;
 
 import org.osgi.service.discovery.DiscoveredServiceNotification;
 import org.osgi.service.discovery.DiscoveredServiceTracker;
 import org.osgi.service.discovery.ServiceEndpointDescription;
-import org.osgi.service.discovery.ServicePublication;
 import org.osgi.service.log.LogService;
 
 /**
@@ -125,95 +123,6 @@ public class InformListenerTask extends TimerTask {
 	}
 
 	/**
-	 * Compares two instances of ServiceEndpointDescription and evaluates if
-	 * something is different.
-	 * 
-	 * @param oldDescr
-	 * @param newDescr
-	 * @return true if something is different, else false
-	 */
-	private boolean hasSvcDescrChanged(ServiceEndpointDescription oldDescr,
-			ServiceEndpointDescription newDescr) {
-		List sdJavaInterfaceAndVersions = new ArrayList();
-		List sdJavaAndEndpointInterfaces = new ArrayList();
-		Collection interfaces = newDescr.getProvidedInterfaces();
-		if (interfaces == null) {
-			throw new RuntimeException(
-					"The service does not contain requiered parameter interfaces. "
-							+ newDescr);
-		}
-		Iterator interfacesIterator = interfaces.iterator();
-		while (interfacesIterator.hasNext()) {
-			String interfaceName = (String) interfacesIterator.next();
-			sdJavaInterfaceAndVersions.add(interfaceName
-					+ ServicePublication.SEPARATOR
-					+ newDescr.getVersion(interfaceName));
-			if (newDescr.getEndpointInterfaceName(interfaceName) != null) {
-				sdJavaAndEndpointInterfaces.add(interfaceName
-						+ ServicePublication.SEPARATOR
-						+ newDescr.getEndpointInterfaceName(interfaceName));
-			}
-		}
-
-		Collection oldinterfaces = newDescr.getProvidedInterfaces();
-		if (oldinterfaces == null) {
-			throw new RuntimeException(
-					"The service does not contain requiered parameter interfaces. "
-							+ newDescr);
-		}
-		Iterator oldinterfacesIterator = oldinterfaces.iterator();
-		Collection javaInterfaceAndVersions = new ArrayList();
-		Collection javaAndEndpointInterfaces = new ArrayList();
-		while (oldinterfacesIterator.hasNext()) {
-			String interfaceName = (String) oldinterfacesIterator.next();
-			javaInterfaceAndVersions.add(interfaceName
-					+ ServicePublication.SEPARATOR
-					+ newDescr.getVersion(interfaceName));
-			if (newDescr.getEndpointInterfaceName(interfaceName) != null) {
-				javaAndEndpointInterfaces.add(interfaceName
-						+ ServicePublication.SEPARATOR
-						+ newDescr.getEndpointInterfaceName(interfaceName));
-			}
-		}
-		// interface and versions field
-		if (!((javaInterfaceAndVersions == sdJavaInterfaceAndVersions) || (javaInterfaceAndVersions != null && javaInterfaceAndVersions
-				.equals(sdJavaInterfaceAndVersions)))) {
-			return false;
-		}
-		// interface and endpoints field
-		if (!((javaAndEndpointInterfaces == sdJavaAndEndpointInterfaces) || (javaAndEndpointInterfaces != null && javaAndEndpointInterfaces
-				.equals(sdJavaAndEndpointInterfaces)))) {
-			return false;
-		}
-		Map properties = newDescr.getProperties();
-		// properties field
-		if (properties != oldDescr.getProperties()) {
-			if (properties != null && oldDescr.getProperties() != null) {
-				if (properties.isEmpty() && !oldDescr.getProperties().isEmpty()) {
-					return false;
-				}
-				Iterator it = properties.keySet().iterator();
-				while (it.hasNext()) {
-					String nextKey = (String) it.next();
-					if (oldDescr.getProperty(nextKey) != null) {
-						if (properties.get(nextKey).equals(
-								oldDescr.getProperty(nextKey))) {
-
-						}
-						else {
-							return false;
-						}
-					}
-					else {
-						return false;
-					}
-				}
-			}
-		}
-		return true;
-	}
-
-	/**
 	 * 
 	 * @param availableServices
 	 * @param svcDescr
@@ -238,7 +147,7 @@ public class InformListenerTask extends TimerTask {
 					while (it.hasNext()) {
 						oldDescr = (ServiceEndpointDescription) it.next();
 						if (oldDescr.equals(svcDescr)) {
-							modified = hasSvcDescrChanged(oldDescr, svcDescr);
+							modified =  (oldDescr.equals(svcDescr)) ? false : true;
 						}
 					}
 					if (modified) {
