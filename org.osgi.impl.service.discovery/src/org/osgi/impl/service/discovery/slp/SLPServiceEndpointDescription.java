@@ -34,6 +34,7 @@ import java.util.StringTokenizer;
 
 import org.osgi.service.discovery.ServiceEndpointDescription;
 import org.osgi.service.discovery.ServicePublication;
+import org.osgi.service.log.LogService;
 
 import ch.ethz.iks.slp.ServiceLocationException;
 import ch.ethz.iks.slp.ServiceURL;
@@ -97,7 +98,7 @@ public class SLPServiceEndpointDescription implements
 
 	private static final String	STRING_PROTOCOL							= "protocol";
 
-	private static final String	SLP_SERVICEURL							= "slp.servieURL";
+	public static final String	SLP_SERVICEURL							= "slp.servieURL";
 
 	private static final String	STRING_TYPE								= "type";
 
@@ -183,7 +184,7 @@ public class SLPServiceEndpointDescription implements
 		while (it.hasNext()) {
 			String ifName = (String) it.next();
 
-			JSlpSED jslpSED = new JSlpSED(this);
+			JSlpSED jslpSED = new JSlpSED();
 			jslpSED.setInterfaceName(ifName);
 			jslpSED.setVersion((String) interfaceAndVersionsMap.get(ifName));
 			jslpSED.setEndpointInterface((String) endPointInterfacesMap
@@ -496,13 +497,14 @@ public class SLPServiceEndpointDescription implements
 		// retrieve main interface
 		String interfaceName = convertPath2JavaInterface(serviceURL
 				.getServiceType().getConcreteTypeName());
+		SLPHandlerImpl.log(LogService.LOG_DEBUG, "retrieve data from "
+				+ serviceURL + " for interface " + interfaceName);
 		if (interfaceName == null) {
 			throw new IllegalArgumentException(
 					"Interface information is missing!");
 		}
 		// Retrieve additional properties from SLP ServiceURL itself
 		Map props = new HashMap();
-		props.put(SLP_SERVICEURL, serviceURL);
 		props.put(STRING_TYPE, serviceURL.getServiceType().toString());
 		if (serviceURL.getHost() != null) {
 			props.put(STRING_HOST, serviceURL.getHost());
@@ -519,8 +521,12 @@ public class SLPServiceEndpointDescription implements
 		// retrieve properties from ServiceURL attributes
 		retrievePropertiesFromPath(serviceURL.getURLPath(), props);
 
-		JSlpSED jslpSED = new JSlpSED(this);
+		JSlpSED jslpSED = new JSlpSED();
 		jslpSED.setInterfaceName(interfaceName);
+
+		if (serviceURL != null) {
+			jslpSED.setSlpServiceURL(serviceURL);
+		}
 
 		// Get version info
 		String version = null;
@@ -537,21 +543,39 @@ public class SLPServiceEndpointDescription implements
 
 		// Put interface and version information to properties since base for
 		// matching
-		Collection interfaceNames = new ArrayList();
+		// check first if we have to add interfaceNames to the existing list of
+		// interfaces in case of multiple interfaces
+		Collection interfaceNames = (Collection) properties
+				.get(ServicePublication.PROP_KEY_SERVICE_INTERFACE_NAME);
+		if (interfaceNames == null) {
+			interfaceNames = new ArrayList();
+		}
 		interfaceNames.add(interfaceName);
 		props.put(ServicePublication.PROP_KEY_SERVICE_INTERFACE_NAME,
 				interfaceNames);
 
-		Collection versions = new ArrayList();
+		//set version if exists
+		Collection versions = (Collection) properties
+				.get(ServicePublication.PROP_KEY_SERVICE_INTERFACE_VERSION);
+		if (versions == null) {
+			versions = new ArrayList();
+		}
 		versions.add(interfaceName + ServicePublication.SEPARATOR + version);
 		props.put(ServicePublication.PROP_KEY_SERVICE_INTERFACE_VERSION,
 				versions);
 
-		// Get endpoint-interface if it exists
+		// Set endpoint-interface if it exists
+		Collection endpointInterfacesValues = (Collection) properties
+		.get(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME);
+		if (endpointInterfacesValues == null) {
+			endpointInterfacesValues = new ArrayList();
+		}
 		String endpointInterfacesValue = (String) props
 				.get(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME);
 		if (endpointInterfacesValue != null) {
 			jslpSED.setEndpointInterface(endpointInterfacesValue);
+			endpointInterfacesValues.add(endpointInterfacesValue);
+			props.put(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME, endpointInterfacesValues);
 		}
 
 		properties = props;
@@ -840,8 +864,13 @@ public class SLPServiceEndpointDescription implements
 				}
 			}
 
-			if (endpointID != null)
+			if (endpointID != null) {
 				result = 37 * result + endpointID.hashCode();
+			}
+
+			if (properties != null) {
+				result = 37 * result + properties.hashCode();
+			}
 
 			return result;
 		}

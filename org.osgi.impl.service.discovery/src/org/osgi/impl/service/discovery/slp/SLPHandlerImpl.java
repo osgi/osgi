@@ -224,36 +224,37 @@ public class SLPHandlerImpl implements Discovery {
 			try {
 				ServiceURL url = (ServiceURL) se.next();
 				log(LogService.LOG_DEBUG, "try to find attributes for " + url);
-				ServiceLocationEnumeration a = locator.findAttributes(url,
+				/*ServiceLocationEnumeration a = */ locator.findAttributes(url,
 						null, null);
 				// TODO: check for failed call
 				// TODO check returning match if mandatory properties are set,
 				// if not log and ignore that service
 				SLPServiceEndpointDescription descriptionAdapter = new SLPServiceEndpointDescription(
 						url);
-				while (a.hasMoreElements()) {
-					// TODO: introduce a separator util
-					String attributes = (String) a.next();
-					String key = null;
-					Object value = null;
-					attributes = attributes.substring(1,
-							attributes.length() - 1);
-					key = attributes.substring(0, attributes.indexOf("="));
-					// if the value is not a String we cannot handle that value!
-					// This is a limitation of the jSLP API.
-					value = attributes.substring(attributes.indexOf("=") + 1);
-					if (value instanceof String) {
-						String val = (String) value;
-						if (val.startsWith("[")) {
-							val = val.substring(1);
-						}
-						if (val.endsWith("]")) {
-							val = val.substring(0, val.length() - 1);
-						}
-						value = val;
-					}
-					descriptionAdapter.addProperty(key, value);
-				}
+				//it looks like that we don't need that stuff. The url already contains all attributes.
+//				while (a.hasMoreElements()) {
+//					// TODO: introduce a separator util
+//					String attributes = (String) a.next();
+//					String key = null;
+//					Object value = null;
+//					attributes = attributes.substring(1,
+//							attributes.length() - 1);
+//					key = attributes.substring(0, attributes.indexOf("="));
+//					// if the value is not a String we cannot handle that value!
+//					// This is a limitation of the jSLP API.
+//					value = attributes.substring(attributes.indexOf("=") + 1);
+//					if (value instanceof String) {
+//						String val = (String) value;
+//						if (val.startsWith("[")) {
+//							val = val.substring(1);
+//						}
+//						if (val.endsWith("]")) {
+//							val = val.substring(0, val.length() - 1);
+//						}
+//						value = val;
+//					}
+//					descriptionAdapter.addProperty(key, value);
+//				}
 				log(LogService.LOG_DEBUG,
 						"findService: adding service endpoint description to result list: "
 								+ descriptionAdapter);
@@ -273,7 +274,7 @@ public class SLPHandlerImpl implements Discovery {
 		if (!result.isEmpty()) {
 			// TODO move creation of string to log into extra method?
 			StringBuffer buff = new StringBuffer();
-			buff.append("number of services = ");
+			buff.append("findService: number of found services = ");
 			buff.append(result.size());
 			buff.append("; services = ");
 			Iterator it = result.iterator();

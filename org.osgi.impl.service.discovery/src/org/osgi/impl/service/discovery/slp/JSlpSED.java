@@ -33,22 +33,13 @@ import ch.ethz.iks.slp.ServiceURL;
  */
 public class JSlpSED {
 
-	private String							interfaceName		= null;
-	private String							version				= null;
-	private String							endpointInterface	= null;
+	private String				interfaceName		= null;
+	private String				version				= null;
+	private String				endpointInterface	= null;
+	private ServiceURL			slpServiceURL		= null;
 
-	private SLPServiceEndpointDescription	slpServiceDescr		= null;
-	private static final String				LINE_SEPARATOR		= System
-																		.getProperty("line.separator");
-
-	/**
-	 * Constructor.
-	 * 
-	 * @param descr the composit of this object
-	 */
-	public JSlpSED(final SLPServiceEndpointDescription descr) {
-		slpServiceDescr = descr;
-	}
+	private static final String	LINE_SEPARATOR		= System
+															.getProperty("line.separator");
 
 	/**
 	 * Adds a property to the existing map.
@@ -72,6 +63,10 @@ public class JSlpSED {
 			if (!((String) value).startsWith(interfaceName)) {
 				version = combineValue((String) value);
 			}
+		}
+
+		if (key.equals(SLPServiceEndpointDescription.SLP_SERVICEURL)) {
+			slpServiceURL = (ServiceURL) value;
 		}
 		// properties.put(key, value);
 	}
@@ -98,6 +93,20 @@ public class JSlpSED {
 	 */
 	public void setInterfaceName(final String interfaceName) {
 		this.interfaceName = interfaceName;
+	}
+
+	/**
+	 * @return the slpServiceURL
+	 */
+	public ServiceURL getSlpServiceURL() {
+		return slpServiceURL;
+	}
+
+	/**
+	 * @param slpServiceURL the slpServiceURL to set
+	 */
+	public void setSlpServiceURL(ServiceURL slpServiceURL) {
+		this.slpServiceURL = slpServiceURL;
 	}
 
 	/**
@@ -163,8 +172,6 @@ public class JSlpSED {
 						.getEndpointInterfaceName(interfaceName) != null))
 			return false;
 
-		// compare properties field
-		// return properties.equals(descr.getProperties());
 		return true;
 	}
 
@@ -183,9 +190,6 @@ public class JSlpSED {
 		if (version != null) {
 			result = 37 * result + version.hashCode();
 		}
-
-		// result = 37 * result + properties.hashCode();
-		// TODO implement more
 
 		/*
 		 * not significant member variables but rather derived/composite values
@@ -207,10 +211,16 @@ public class JSlpSED {
 		if (version != null) {
 			sb.append("\tversion=").append(version).append(LINE_SEPARATOR);
 		}
-		ServiceURL svcURL = slpServiceDescr.getServiceURL(interfaceName);
-		sb.append("\tserviceURL=")
-				.append(svcURL != null ? svcURL.toString() : "").append(
-						LINE_SEPARATOR);
+		if (endpointInterface != null) {
+			sb.append("\tendpointInterface=").append(endpointInterface).append(
+					LINE_SEPARATOR);
+		}
+		if (slpServiceURL != null) {
+			sb.append("\t")
+					.append(SLPServiceEndpointDescription.SLP_SERVICEURL)
+					.append("=").append(slpServiceURL).append(
+							LINE_SEPARATOR);
+		}
 		return sb.toString();
 	}
 }
