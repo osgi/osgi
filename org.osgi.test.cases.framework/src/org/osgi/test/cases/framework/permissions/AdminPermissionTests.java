@@ -222,13 +222,13 @@ public class AdminPermissionTests extends PermissionTestCase {
 
 		ap = new AdminPermission("(signer=cn=\\*,o=ACME,c=\\*)", "*");
 		
-		shouldImply(ap, new AdminPermission(newMockBundle(1, "test.bsn",
+		shouldImply(ap, new AdminPermission(newMockBundle(6, "test.bsn",
 				"test.location", "cn = Daffy Duck , o = ACME , c = US"), "*"));
-		shouldImply(ap, new AdminPermission(newMockBundle(1, "test.bsn",
+		shouldImply(ap, new AdminPermission(newMockBundle(7, "test.bsn",
 				"test.location", "cn=Road Runner, o=ACME, c=NL"), "*"));
-		shouldNotImply(ap, new AdminPermission(newMockBundle(1, "test.bsn",
+		shouldNotImply(ap, new AdminPermission(newMockBundle(8, "test.bsn",
 				"test.location", "o=ACME, c=NL"), "*"));
-		shouldNotImply(ap, new AdminPermission(newMockBundle(1, "test.bsn",
+		shouldNotImply(ap, new AdminPermission(newMockBundle(9, "test.bsn",
 				"test.location", "dc=acme.com, cn=Bugs Bunny, o=ACME, c=US"),
 				"*"));
 	}
@@ -308,7 +308,7 @@ public class AdminPermissionTests extends PermissionTestCase {
 		}
 
 		public Map getSignerCertificates(int arg0) {
-			return signers;
+			return new HashMap(signers);
 		}
 
 		public String getSymbolicName() {
@@ -319,7 +319,7 @@ public class AdminPermissionTests extends PermissionTestCase {
 	private static class MockX509Certificate extends X509Certificate {
 		private final Principal	principal;
 
-		public MockX509Certificate(Principal principal) {
+		MockX509Certificate(Principal principal) {
 			this.principal = principal;
 		}
 
@@ -456,7 +456,7 @@ public class AdminPermissionTests extends PermissionTestCase {
 	private static class MockPrincipal implements Principal {
 		private final String	name;
 
-		public MockPrincipal(String name) {
+		MockPrincipal(String name) {
 			this.name = name;
 		}
 
