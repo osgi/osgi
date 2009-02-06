@@ -104,7 +104,8 @@ public class DiscoveryTestCase extends TestCase {
 		spprops.put(ServicePublication.PROP_KEY_ENDPOINT_ID, "myid");
 		
 		Collection epifnames = new ArrayList();
-		epifnames.add("osgi:service:" + DiscoveryTestServiceInterface.class.getName() 
+		epifnames.add(DiscoveryTestServiceInterface.class.getName()  + ServicePublication.SEPARATOR
+				+ "osgi:service:" + DiscoveryTestServiceInterface.class.getName() 
 				+ "/version=1.0.0");
 		spprops.put(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME, epifnames);
 		
