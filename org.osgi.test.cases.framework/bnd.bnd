@@ -6,7 +6,18 @@ Private-Package						= org.osgi.test.support.*, \
 	
 Export-Package						= \
 
-Include-Resource					= \
+Include-Resource = \
+	activationpolicy.tbchain1.jar, \
+	activationpolicy.tbchain2.jar, \
+	activationpolicy.tbchain3.jar, \
+	activationpolicy.tbchain4.jar, \
+	activationpolicy.tbchain5.jar, \
+	activationpolicy.tblazy1.jar, \
+	activationpolicy.tblazy2.jar, \
+	activationpolicy.tblazy3.jar, \
+	activationpolicy.tblazy4.jar, \
+	activationpolicy.tblazy5.jar, \
+	activationpolicy.tblazy6.jar
 	
 Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
 

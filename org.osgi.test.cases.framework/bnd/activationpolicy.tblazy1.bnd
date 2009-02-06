@@ -1,0 +1,4 @@
+Bundle-Name:                             ${p}.activationpolicy.tblazy1
+Bundle-Version:                          4.2
+Export-Package:                          ${p}.activationpolicy.tblazy1
+
