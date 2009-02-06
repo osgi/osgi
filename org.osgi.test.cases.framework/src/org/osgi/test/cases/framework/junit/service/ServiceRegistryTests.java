@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.framework.service;
+package org.osgi.test.cases.framework.junit.service;
 
 import java.io.IOException;
 import java.util.Hashtable;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.framework.filter;
+package org.osgi.test.cases.framework.junit.filter;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

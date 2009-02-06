@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.framework.permissions;
+package org.osgi.test.cases.framework.junit.permissions;
 
 import java.security.Permission;
 import java.security.PermissionCollection;

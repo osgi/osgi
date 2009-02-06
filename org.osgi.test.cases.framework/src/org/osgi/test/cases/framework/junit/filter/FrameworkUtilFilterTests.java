@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.framework.filter;
+package org.osgi.test.cases.framework.junit.filter;
 
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;

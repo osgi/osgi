@@ -2,7 +2,8 @@ Bundle-Version						: 4.2.0.${project.build}
 Bundle-Description					: Framework test cases.
 
 Private-Package						= org.osgi.test.support.*, \
-	${p}.*
+	${p}.junit.*
+	
 Export-Package						= \
 
 Include-Resource					= \

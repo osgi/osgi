@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.framework.hooks.service;
+package org.osgi.test.cases.framework.junit.hooks.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
