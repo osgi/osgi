@@ -453,6 +453,7 @@ public class ServiceHookTests extends OSGiTestCase {
 							synchronized (factoryCalled) {
 								factoryCalled[0] = true;
 							}
+							assertNotNull("using bundle null", bundle);
 							ServiceReference reference = registration
 									.getReference();
 							Bundle[] users = reference.getUsingBundles();
@@ -475,6 +476,8 @@ public class ServiceHookTests extends OSGiTestCase {
 							synchronized (factoryCalled) {
 								factoryCalled[1] = true;
 							}
+							assertNotNull("using bundle null", bundle);
+							assertEquals("wrong service", findHook1, service);
 							ServiceReference reference = registration
 									.getReference();
 							Bundle[] users = reference.getUsingBundles();
@@ -789,6 +792,7 @@ public class ServiceHookTests extends OSGiTestCase {
 							synchronized (factoryCalled) {
 								factoryCalled[0] = true;
 							}
+							assertNotNull("using bundle null", bundle);
 							ServiceReference reference = registration
 									.getReference();
 							Bundle[] users = reference.getUsingBundles();
@@ -811,6 +815,8 @@ public class ServiceHookTests extends OSGiTestCase {
 							synchronized (factoryCalled) {
 								factoryCalled[1] = true;
 							}
+							assertNotNull("using bundle null", bundle);
+							assertEquals("wrong service", eventHook1, service);
 							ServiceReference reference = registration
 									.getReference();
 							Bundle[] users = reference.getUsingBundles();
@@ -1152,6 +1158,7 @@ public class ServiceHookTests extends OSGiTestCase {
 							synchronized (factoryCalled) {
 								factoryCalled[0] = true;
 							}
+							assertNotNull("using bundle null", bundle);
 							ServiceReference reference = registration
 									.getReference();
 							Bundle[] users = reference.getUsingBundles();
@@ -1174,6 +1181,9 @@ public class ServiceHookTests extends OSGiTestCase {
 							synchronized (factoryCalled) {
 								factoryCalled[1] = true;
 							}
+							assertNotNull("using bundle null", bundle);
+							assertEquals("wrong service", listenerHook1,
+									service);
 							ServiceReference reference = registration
 									.getReference();
 							Bundle[] users = reference.getUsingBundles();
