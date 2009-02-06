@@ -147,9 +147,8 @@ public interface ConditionalPermissionAdmin {
 	/**
 	 * Creates a new ConditionalPermissionInfo with the specified fields
 	 * suitable for insertion into a {@link ConditionalPermissionUpdate}. The
-	 * {@link ConditionalPermissionInfo#delete() delete} method on
-	 * ConditionalPermissionInfo objects created with this method must throw
-	 * UnsupportedOperationException.
+	 * <code>delete</code> method on ConditionalPermissionInfo objects created
+	 * with this method must throw UnsupportedOperationException.
 	 * 
 	 * @param name The name of the created ConditionalPermissionInfo or
 	 *        <code>null</code> to have a unique name generated when the created
