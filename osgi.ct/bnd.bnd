@@ -105,6 +105,7 @@ build.mobile.tests = \
 	org.osgi.test.cases.xml
 
 build.enterprise.tests = \
+	org.osgi.test.cases.discovery, \
 	org.osgi.test.cases.transaction
 	
 	 
