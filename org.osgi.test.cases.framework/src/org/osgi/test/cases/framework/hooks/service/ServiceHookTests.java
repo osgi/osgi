@@ -425,7 +425,8 @@ public class ServiceHookTests extends OSGiTestCase {
 		final ServiceRegistration reg1 = testContext.registerService(
 				Runnable.class.getName(), runIt, props);
 
-		final AssertionFailedError[] hookError = new AssertionFailedError[] {null};
+		final AssertionFailedError[] factoryError = new AssertionFailedError[] {null};
+		final boolean[] factoryCalled = new boolean[] {false, false};
 		final boolean[] hookCalled = new boolean[] {false};
 		final FindHook findHook1 = new FindHook() {
 			public void find(BundleContext arg0, String arg1, String arg2,
@@ -436,21 +437,33 @@ public class ServiceHookTests extends OSGiTestCase {
 			}
 		};
 		props.put(Constants.SERVICE_DESCRIPTION, "find hook 1");
+		synchronized (factoryCalled) {
+			factoryCalled[0] = false;
+			factoryCalled[1] = false;
+		}
+		synchronized (factoryError) {
+			factoryError[0] = null;
+		}
 		ServiceRegistration regHook1 = testContext.registerService(
 				FindHook.class.getName(), new ServiceFactory() {
 
 					public Object getService(Bundle bundle,
 							ServiceRegistration registration) {
-						synchronized (hookError) {
-							try {
-								ServiceReference reference = registration
-										.getReference();
-								Bundle[] users = reference.getUsingBundles();
-								assertNotNull("service not used by a bundle",
-										users);
+						try {
+							synchronized (factoryCalled) {
+								factoryCalled[0] = true;
 							}
-							catch (AssertionFailedError a) {
-								hookError[0] = a;
+							ServiceReference reference = registration
+									.getReference();
+							Bundle[] users = reference.getUsingBundles();
+							assertNotNull("service not used by a bundle", users);
+							List userList = Arrays.asList(users);
+							assertTrue("missing using bundle", userList
+									.contains(bundle));
+						}
+						catch (AssertionFailedError a) {
+							synchronized (factoryError) {
+								factoryError[0] = a;
 							}
 						}
 						return findHook1;
@@ -458,16 +471,21 @@ public class ServiceHookTests extends OSGiTestCase {
 
 					public void ungetService(Bundle bundle,
 							ServiceRegistration registration, Object service) {
-						synchronized (hookError) {
-							try {
-								ServiceReference reference = registration
-										.getReference();
-								Bundle[] users = reference.getUsingBundles();
-								assertNotNull("service not used by a bundle",
-										users);
+						try {
+							synchronized (factoryCalled) {
+								factoryCalled[1] = true;
 							}
-							catch (AssertionFailedError a) {
-								hookError[0] = a;
+							ServiceReference reference = registration
+									.getReference();
+							Bundle[] users = reference.getUsingBundles();
+							assertNotNull("service not used by a bundle", users);
+							List userList = Arrays.asList(users);
+							assertTrue("missing using bundle", userList
+									.contains(bundle));
+						}
+						catch (AssertionFailedError a) {
+							synchronized (factoryError) {
+								factoryError[0] = a;
 							}
 						}
 					}
@@ -477,9 +495,6 @@ public class ServiceHookTests extends OSGiTestCase {
 			synchronized (hookCalled) {
 				hookCalled[0] = false;
 			}
-			synchronized (hookError) {
-				hookError[0] = null;
-			}
 			ServiceReference[] refs = null;
 			try {
 				refs = testContext.getServiceReferences(Runnable.class
@@ -488,33 +503,34 @@ public class ServiceHookTests extends OSGiTestCase {
 			catch (InvalidSyntaxException e) {
 				fail("Unexpected syntax error", e);
 			}
-			synchronized (hookError) {
-				if (hookError[0] != null) {
-					throw hookError[0];
+			synchronized (factoryError) {
+				if (factoryError[0] != null) {
+					throw factoryError[0];
 				}
 			}
+			synchronized (factoryCalled) {
+				assertTrue("factory getService not called", factoryCalled[0]);
+			}
 			synchronized (hookCalled) {
-				assertTrue("hooks not called", hookCalled[0]);
+				assertTrue("hook not called", hookCalled[0]);
 			}
 			assertNotNull("service refs is null", refs);
 			assertEquals("Wrong number of references", 1, refs.length);
 
-			// test removed services are not in the result
 			List refList = Arrays.asList(refs);
 			assertTrue("missing service 1", refList.contains(reg1
 					.getReference()));
 
-			synchronized (hookError) {
-				hookError[0] = null;
-			}
-
 			regHook1.unregister();
 			regHook1 = null;
 
-			synchronized (hookError) {
-				if (hookError[0] != null) {
-					throw hookError[0];
+			synchronized (factoryError) {
+				if (factoryError[0] != null) {
+					throw factoryError[0];
 				}
+			}
+			synchronized (factoryCalled) {
+				assertTrue("factory ungetService not called", factoryCalled[1]);
 			}
 		}
 		finally {
@@ -746,7 +762,8 @@ public class ServiceHookTests extends OSGiTestCase {
 		// register services
 		Hashtable props = new Hashtable();
 		props.put("name", testMethodName);
-		final AssertionFailedError[] hookError = new AssertionFailedError[] {null};
+		final AssertionFailedError[] factoryError = new AssertionFailedError[] {null};
+		final boolean[] factoryCalled = new boolean[] {false, false};
 		final boolean[] hookCalled = new boolean[] {false};
 		final EventHook eventHook1 = new EventHook() {
 			public void event(ServiceEvent arg0, Collection arg1) {
@@ -756,21 +773,33 @@ public class ServiceHookTests extends OSGiTestCase {
 			}
 		};
 		props.put(Constants.SERVICE_DESCRIPTION, "event hook 1");
+		synchronized (factoryCalled) {
+			factoryCalled[0] = false;
+			factoryCalled[1] = false;
+		}
+		synchronized (factoryError) {
+			factoryError[0] = null;
+		}
 		ServiceRegistration regHook1 = testContext.registerService(
 				EventHook.class.getName(), new ServiceFactory() {
 
 					public Object getService(Bundle bundle,
 							ServiceRegistration registration) {
-						synchronized (hookError) {
-							try {
-								ServiceReference reference = registration
-										.getReference();
-								Bundle[] users = reference.getUsingBundles();
-								assertNotNull("service not used by a bundle",
-										users);
+						try {
+							synchronized (factoryCalled) {
+								factoryCalled[0] = true;
 							}
-							catch (AssertionFailedError a) {
-								hookError[0] = a;
+							ServiceReference reference = registration
+									.getReference();
+							Bundle[] users = reference.getUsingBundles();
+							assertNotNull("service not used by a bundle", users);
+							List userList = Arrays.asList(users);
+							assertTrue("missing using bundle", userList
+									.contains(bundle));
+						}
+						catch (AssertionFailedError a) {
+							synchronized (factoryError) {
+								factoryError[0] = a;
 							}
 						}
 						return eventHook1;
@@ -778,16 +807,21 @@ public class ServiceHookTests extends OSGiTestCase {
 
 					public void ungetService(Bundle bundle,
 							ServiceRegistration registration, Object service) {
-						synchronized (hookError) {
-							try {
-								ServiceReference reference = registration
-										.getReference();
-								Bundle[] users = reference.getUsingBundles();
-								assertNotNull("service not used by a bundle",
-										users);
+						try {
+							synchronized (factoryCalled) {
+								factoryCalled[1] = true;
 							}
-							catch (AssertionFailedError a) {
-								hookError[0] = a;
+							ServiceReference reference = registration
+									.getReference();
+							Bundle[] users = reference.getUsingBundles();
+							assertNotNull("service not used by a bundle", users);
+							List userList = Arrays.asList(users);
+							assertTrue("missing using bundle", userList
+									.contains(bundle));
+						}
+						catch (AssertionFailedError a) {
+							synchronized (factoryError) {
+								factoryError[0] = a;
 							}
 						}
 					}
@@ -796,29 +830,32 @@ public class ServiceHookTests extends OSGiTestCase {
 		synchronized (hookCalled) {
 			hookCalled[0] = false;
 		}
-		synchronized (hookError) {
-			hookError[0] = null;
-		}
 		props.put(Constants.SERVICE_DESCRIPTION, "service 1");
 		final ServiceRegistration reg1 = testContext.registerService(
 				Runnable.class.getName(), runIt, props);
 		try {
-			synchronized (hookError) {
-				if (hookError[0] != null) {
-					throw hookError[0];
+			synchronized (factoryError) {
+				if (factoryError[0] != null) {
+					throw factoryError[0];
 				}
 			}
+			synchronized (factoryCalled) {
+				assertTrue("factory getService not called", factoryCalled[0]);
+			}
 			synchronized (hookCalled) {
-				assertTrue("hooks not called", hookCalled[0]);
+				assertTrue("hook not called", hookCalled[0]);
 			}
 
 			regHook1.unregister();
 			regHook1 = null;
 
-			synchronized (hookError) {
-				if (hookError[0] != null) {
-					throw hookError[0];
+			synchronized (factoryError) {
+				if (factoryError[0] != null) {
+					throw factoryError[0];
 				}
+			}
+			synchronized (factoryCalled) {
+				assertTrue("factory ungetService not called", factoryCalled[1]);
 			}
 		}
 		finally {
@@ -1074,6 +1111,7 @@ public class ServiceHookTests extends OSGiTestCase {
 			}
 		}
 	}
+
 	public void testListenerHook03() {
 		final String testMethodName = "testListenerHook03";
 		final BundleContext testContext = getContext();
@@ -1081,7 +1119,8 @@ public class ServiceHookTests extends OSGiTestCase {
 		// register services
 		Hashtable props = new Hashtable();
 		props.put("name", testMethodName);
-		final AssertionFailedError[] hookError = new AssertionFailedError[] {null};
+		final AssertionFailedError[] factoryError = new AssertionFailedError[] {null};
+		final boolean[] factoryCalled = new boolean[] {false, false};
 		final boolean[] hookCalled = new boolean[] {false};
 		final ListenerHook listenerHook1 = new ListenerHook() {
 			public void added(Collection arg0) {
@@ -1097,21 +1136,33 @@ public class ServiceHookTests extends OSGiTestCase {
 			}
 		};
 		props.put(Constants.SERVICE_DESCRIPTION, "listener hook 1");
+		synchronized (factoryCalled) {
+			factoryCalled[0] = false;
+			factoryCalled[1] = false;
+		}
+		synchronized (factoryError) {
+			factoryError[0] = null;
+		}
 		ServiceRegistration regHook1 = testContext.registerService(
 				ListenerHook.class.getName(), new ServiceFactory() {
 
 					public Object getService(Bundle bundle,
 							ServiceRegistration registration) {
-						synchronized (hookError) {
-							try {
-								ServiceReference reference = registration
-										.getReference();
-								Bundle[] users = reference.getUsingBundles();
-								assertNotNull("service not used by a bundle",
-										users);
+						try {
+							synchronized (factoryCalled) {
+								factoryCalled[0] = true;
 							}
-							catch (AssertionFailedError a) {
-								hookError[0] = a;
+							ServiceReference reference = registration
+									.getReference();
+							Bundle[] users = reference.getUsingBundles();
+							assertNotNull("service not used by a bundle", users);
+							List userList = Arrays.asList(users);
+							assertTrue("missing using bundle", userList
+									.contains(bundle));
+						}
+						catch (AssertionFailedError a) {
+							synchronized (factoryError) {
+								factoryError[0] = a;
 							}
 						}
 						return listenerHook1;
@@ -1119,16 +1170,21 @@ public class ServiceHookTests extends OSGiTestCase {
 
 					public void ungetService(Bundle bundle,
 							ServiceRegistration registration, Object service) {
-						synchronized (hookError) {
-							try {
-								ServiceReference reference = registration
-										.getReference();
-								Bundle[] users = reference.getUsingBundles();
-								assertNotNull("service not used by a bundle",
-										users);
+						try {
+							synchronized (factoryCalled) {
+								factoryCalled[1] = true;
 							}
-							catch (AssertionFailedError a) {
-								hookError[0] = a;
+							ServiceReference reference = registration
+									.getReference();
+							Bundle[] users = reference.getUsingBundles();
+							assertNotNull("service not used by a bundle", users);
+							List userList = Arrays.asList(users);
+							assertTrue("missing using bundle", userList
+									.contains(bundle));
+						}
+						catch (AssertionFailedError a) {
+							synchronized (factoryError) {
+								factoryError[0] = a;
 							}
 						}
 					}
@@ -1137,10 +1193,7 @@ public class ServiceHookTests extends OSGiTestCase {
 		synchronized (hookCalled) {
 			hookCalled[0] = false;
 		}
-		synchronized (hookError) {
-			hookError[0] = null;
-		}
-		
+
 		final ServiceListener testSL = new ServiceListener() {
 			public void serviceChanged(ServiceEvent event) {
 				// do nothing
@@ -1148,22 +1201,28 @@ public class ServiceHookTests extends OSGiTestCase {
 		};
 		testContext.addServiceListener(testSL);
 		try {
-			synchronized (hookError) {
-				if (hookError[0] != null) {
-					throw hookError[0];
+			synchronized (factoryError) {
+				if (factoryError[0] != null) {
+					throw factoryError[0];
 				}
 			}
+			synchronized (factoryCalled) {
+				assertTrue("factory getService not called", factoryCalled[0]);
+			}
 			synchronized (hookCalled) {
-				assertTrue("hooks not called", hookCalled[0]);
+				assertTrue("hook not called", hookCalled[0]);
 			}
 
 			regHook1.unregister();
 			regHook1 = null;
 
-			synchronized (hookError) {
-				if (hookError[0] != null) {
-					throw hookError[0];
+			synchronized (factoryError) {
+				if (factoryError[0] != null) {
+					throw factoryError[0];
 				}
+			}
+			synchronized (factoryCalled) {
+				assertTrue("factory ungetService not called", factoryCalled[1]);
 			}
 		}
 		finally {
