@@ -25,7 +25,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-import java.util.Vector;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Filter;
@@ -47,9 +46,9 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		props.put("room", "bedroom");
 		props.put("channel", new Object[] {new Integer(34), "101"});
 		props.put("status", "(on\\)*"); 
-		Vector vec = new Vector(10, 10);
-		vec.addElement(new Long(150));
-		vec.addElement("100");
+		List vec = new ArrayList(10);
+		vec.add(new Long(150));
+		vec.add("100");
 		props.put("max record time", vec);
 		props.put("canrecord", "true(x)");
 		props.put("shortvalue", new Short((short) 1000));
@@ -70,16 +69,8 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		props.put("primdoublearrayvalue", new double[] {1.1, 2.2, 3.3});
 		props.put("primchararrayvalue", new char[] {'A', 'b', 'C', 'd'});
 		props.put("primbooleanarrayvalue", new boolean[] {false}); 
-		try {
-			props.put("bigintvalue", new BigInteger("4123456"));  
-		} catch (NoClassDefFoundError e) {
-			// ignore
-		}
-		try {
-			props.put("bigdecvalue", new BigDecimal("4.123456"));   
-		} catch (NoClassDefFoundError e) {
-			// ignore
-		}
+		props.put("bigintvalue", new BigInteger("4123456"));
+		props.put("bigdecvalue", new BigDecimal("4.123456"));   
 
 		testFilter("(room=*)", props, ISTRUE);
 		testFilter("(room=bedroom)", props, ISTRUE);
