@@ -1,0 +1,9 @@
+Bundle-Name:                             ${p}.tblazy1
+Bundle-Version:                          4.1
+
+
+Export-Package:                          ${p}.tblazy1
+
+
+CVS-Header:                              $Id: tblazy1.mf 4751 2007-04-06 02:41:54Z bjhargrave $
+

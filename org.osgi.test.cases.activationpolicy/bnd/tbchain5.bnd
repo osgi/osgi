@@ -1,0 +1,11 @@
+Bundle-Name:                             ${p}.tbchain5
+Bundle-Version:                          4.1
+
+
+Export-Package:                          ${p}.tbchain5
+
+
+CVS-Header:                              $Id: tbchain5.mf 4751 2007-04-06 02:41:54Z bjhargrave $
+
+Bundle-ActivationPolicy:                 lazy
+
