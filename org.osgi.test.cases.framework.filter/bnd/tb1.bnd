@@ -1,4 +1,0 @@
-Bundle-Description: Installs several services
-Bundle-Activator: ${p}.tb1.InstallServices
-Export-Package: ${p}.tb1
-
