@@ -1,5 +1,0 @@
-Bundle-SymbolicName:                     ${p}.tblazy5
-Bundle-Version:                          4.1
-Export-Package:                          ${p}.tblazy5
-Bundle-ActivationPolicy:                 lazy
-

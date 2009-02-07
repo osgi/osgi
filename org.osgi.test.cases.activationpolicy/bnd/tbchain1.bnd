@@ -1,5 +1,0 @@
-Bundle-Name:                             ${p}.tbchain1
-Bundle-Version:                          4.1
-Private-Package:                         ${p}.tbchain1
-Bundle-ActivationPolicy:                 lazy
-
