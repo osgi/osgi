@@ -25,12 +25,12 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 public class FilterTests extends DefaultTestBundleControl {
 	private Bundle						tb1;
 
-	public void setUp() throws Exception {
+	protected void setUp() throws Exception {
 		tb1 = installBundle("filter.tb1.jar");
 		tb1.start();
 	}
 
-	public void tearDown() throws Exception {
+	protected void tearDown() throws Exception {
 		tb1.uninstall();
 	}
 	
@@ -228,7 +228,8 @@ public class FilterTests extends DefaultTestBundleControl {
 	/**
 	 * Help function used to sort and log an array of service references.
 	 */
-	public void logRefList(String prefix, ServiceReference refs[], String ids[])
+	private void logRefList(String prefix, ServiceReference refs[],
+			String ids[])
 			throws IOException {
 		
 		if ( refs == null && ids.length ==0 )
