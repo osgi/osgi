@@ -102,8 +102,8 @@ public class SLPHandlerImpl implements Discovery {
 	private static LogService		logService;
 	// private boolean autoPublish = DEFAULT_AUTOPUBLISH;
 
-	private static Collection		/* <SLPServiceDescriptionAdapter> */inMemoryCache	= Collections
-																								.synchronizedSet(new HashSet());
+	private static Map				/* <SLPServiceDescriptionAdapter> */inMemoryCache	= Collections
+																								.synchronizedMap(new HashMap());
 
 	/**
 	 * Constructor.
@@ -218,48 +218,84 @@ public class SLPHandlerImpl implements Discovery {
 			return new ArrayList();
 		}
 
-		Collection result = new ArrayList();
+		Map result = new HashMap();
 		// iterate over the found services and retrieve their attributes
 		while (se.hasMoreElements()) {
 			try {
 				ServiceURL url = (ServiceURL) se.next();
 				log(LogService.LOG_DEBUG, "try to find attributes for " + url);
-				/*ServiceLocationEnumeration a = */ locator.findAttributes(url,
+				ServiceLocationEnumeration a = locator.findAttributes(url,
 						null, null);
 				// TODO: check for failed call
 				// TODO check returning match if mandatory properties are set,
 				// if not log and ignore that service
 				SLPServiceEndpointDescription descriptionAdapter = new SLPServiceEndpointDescription(
 						url);
-				//it looks like that we don't need that stuff. The url already contains all attributes.
-//				while (a.hasMoreElements()) {
-//					// TODO: introduce a separator util
-//					String attributes = (String) a.next();
-//					String key = null;
-//					Object value = null;
-//					attributes = attributes.substring(1,
-//							attributes.length() - 1);
-//					key = attributes.substring(0, attributes.indexOf("="));
-//					// if the value is not a String we cannot handle that value!
-//					// This is a limitation of the jSLP API.
-//					value = attributes.substring(attributes.indexOf("=") + 1);
-//					if (value instanceof String) {
-//						String val = (String) value;
-//						if (val.startsWith("[")) {
-//							val = val.substring(1);
-//						}
-//						if (val.endsWith("]")) {
-//							val = val.substring(0, val.length() - 1);
-//						}
-//						value = val;
-//					}
-//					descriptionAdapter.addProperty(key, value);
-//				}
-				log(LogService.LOG_DEBUG,
-						"findService: adding service endpoint description to result list: "
-								+ descriptionAdapter);
+				// it looks like that we don't need that stuff. The url already
+				// contains all attributes.
+				while (a.hasMoreElements()) {
+					// TODO: introduce a separator util
+					String attributes = (String) a.next();
+					String key = null;
+					Object value = null;
+					attributes = attributes.substring(1,
+							attributes.length() - 1);
+					key = attributes.substring(0, attributes.indexOf("="));
+					if (!(key
+							.equals(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME)
+							|| key
+									.equals(ServicePublication.PROP_KEY_SERVICE_INTERFACE_NAME)
+							|| key
+									.equals(ServicePublication.PROP_KEY_SERVICE_INTERFACE_VERSION) || key
+							.equals(SLPServiceEndpointDescription.SLP_SERVICEURL))) {
+						// if the value is not a String we cannot handle that
+						// value!
+						// This is a limitation of the jSLP API.
+						value = attributes
+								.substring(attributes.indexOf("=") + 1);
+						if (value instanceof String) {
+							String val = (String) value;
+							if (val.startsWith("[")) {
+								val = val.substring(1);
+							}
+							if (val.endsWith("]")) {
+								val = val.substring(0, val.length() - 1);
+							}
+							value = val;
+						}
+						descriptionAdapter.addProperty(key, value);
+					}
+				}
+
 				if (descriptionAdapter.getProvidedInterfaces() != null) {
-					result.add(descriptionAdapter);
+					log(LogService.LOG_DEBUG,
+							"findService: adding service endpoint description to result list: "
+									+ descriptionAdapter);
+					// check if we already have a SED with the endpointID in the
+					// in memory cache
+					if (inMemoryCache.get(descriptionAdapter.getEndpointID()) != null) {
+						// if yes, combine both to a new SED
+						descriptionAdapter = SLPServiceEndpointDescription
+								.mergeServiceEndpointDescriptions(
+										(ServiceEndpointDescription) inMemoryCache
+												.get(descriptionAdapter
+														.getEndpointID()),
+										descriptionAdapter);
+					}
+					// check if we already have a SED with the endpointID in the
+					// result list
+					if (result.get(descriptionAdapter.getEndpointID()) != null) {
+						// if yes, combine both to a new SED
+						descriptionAdapter = SLPServiceEndpointDescription
+								.mergeServiceEndpointDescriptions(
+										(ServiceEndpointDescription) result
+												.get(descriptionAdapter
+														.getEndpointID()),
+										descriptionAdapter);
+					}
+
+					result.put(descriptionAdapter.getEndpointID(),
+							descriptionAdapter);
 				}
 				else {
 					log(LogService.LOG_ERROR, "no interfaces provided by "
@@ -277,7 +313,7 @@ public class SLPHandlerImpl implements Discovery {
 			buff.append("findService: number of found services = ");
 			buff.append(result.size());
 			buff.append("; services = ");
-			Iterator it = result.iterator();
+			Iterator it = result.values().iterator();
 			while (it.hasNext()) {
 				buff.append("(");
 				ServiceEndpointDescription sed = (ServiceEndpointDescription) it
@@ -300,15 +336,15 @@ public class SLPHandlerImpl implements Discovery {
 				inMemoryCache.clear(); // this works only because this method
 				// will
 				// be called to find ALL services in the network.
-				inMemoryCache.addAll(result);
+				inMemoryCache.putAll(result);
 			}
 		}
 		else {
 			// add only just found entries
-			inMemoryCache.addAll(result);
+			inMemoryCache.putAll(result);
 		}
 
-		return result;
+		return result.values();
 	}
 
 	/**
@@ -356,11 +392,12 @@ public class SLPHandlerImpl implements Discovery {
 			Iterator interfaces = svcDescr.getProvidedInterfaces().iterator();
 			while (interfaces.hasNext()) {
 				try {
-					advertiser.register(svcDescr
-							.getServiceURL((String) interfaces.next()),
+					String interfaceName = (String) interfaces.next();
+					advertiser.register(svcDescr.getServiceURL(interfaceName),
 							new Hashtable(svcDescr.getProperties()));
-					log(LogService.LOG_DEBUG,
-							"Following service is published: " + svcDescr);
+					log(LogService.LOG_DEBUG, "Following service: "
+							+ svcDescr.getServiceURL(interfaceName)
+							+ " is published");
 				}
 				catch (ServiceLocationException e) {
 					e.printStackTrace();
@@ -369,7 +406,7 @@ public class SLPHandlerImpl implements Discovery {
 			}
 
 			// add it to the available Services
-			inMemoryCache.add(svcDescr);
+			inMemoryCache.put(svcDescr.getEndpointID(), svcDescr);
 			// inform the listener about the new available service
 			notifyListenersOnNewServiceDescription(svcDescr);
 			return svcDescr;
@@ -397,8 +434,6 @@ public class SLPHandlerImpl implements Discovery {
 		// ServiceEndpointDescription classes, since it's anyway a SLPDiscovery?
 		if (serviceDescription instanceof SLPServiceEndpointDescription) {
 			SLPServiceEndpointDescription slpSvcDescr = (SLPServiceEndpointDescription) serviceDescription;
-			// remove it from in memory cache
-			inMemoryCache.remove(slpSvcDescr);
 			// unregister it via SLP
 			Advertiser advertiser = getAdvertiser();
 			if (advertiser != null) {
@@ -422,6 +457,8 @@ public class SLPHandlerImpl implements Discovery {
 										+ interfaceName, e);
 					}
 				}
+				// remove it from in memory cache
+				inMemoryCache.remove(slpSvcDescr.getEndpointID());
 			}
 			else {
 				log(LogService.LOG_WARNING, "no Advertiser");
@@ -698,6 +735,10 @@ public class SLPHandlerImpl implements Discovery {
 								+ trackerProperties.get(Constants.SERVICE_ID);
 						throw new RuntimeException(e.getMessage());
 					}
+					catch (IllegalStateException isex) {
+						isex.printStackTrace();
+						// ignore it
+					}
 				}
 			}
 		}
@@ -710,7 +751,7 @@ public class SLPHandlerImpl implements Discovery {
 	 * @return a "shallow" copy of the inMemoryCache
 	 */
 	public static List getCachedServices() {
-		return new ArrayList(inMemoryCache);
+		return new ArrayList(inMemoryCache.values());
 	}
 
 	/**

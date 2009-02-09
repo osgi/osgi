@@ -17,7 +17,6 @@
  */
 package org.osgi.impl.service.discovery.slp;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -64,9 +63,8 @@ public class InformListenerTask extends TimerTask {
 			notifyAvailableServices(allAvailableServices, lastLookupResult,
 					registeredServiceTracker);
 			// notify all about vanished services
-			Collection vanishedServices = new ArrayList(lastLookupResult);
-			vanishedServices.removeAll(allAvailableServices);
-			notifyUnavailableServices(vanishedServices,
+			lastLookupResult.removeAll(allAvailableServices);
+			notifyUnavailableServices(lastLookupResult,
 					registeredServiceTracker);
 		}
 	}

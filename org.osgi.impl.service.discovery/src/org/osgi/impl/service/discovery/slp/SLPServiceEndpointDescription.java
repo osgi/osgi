@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.StringTokenizer;
 
 import org.osgi.service.discovery.ServiceEndpointDescription;
@@ -191,12 +192,20 @@ public class SLPServiceEndpointDescription implements
 					.get(ifName));
 			listOfJSLPSEDs.put(ifName, jslpSED);
 		}
-		this.endpointID = endpntID;
+		if (endpntID != null) {
+			this.endpointID = endpntID;
+		}
+		else {
+			// TODO use java.util.UUID
+			this.endpointID = getUUID();
+			System.out.println(endpointID);
+		}
+
 		if (props != null) {
 			this.properties = new HashMap(props);
 		}
 		addInterfacesAndVersionsToProperties(interfaceNames,
-				interfacesAndVersions, endPointInterfaces, endpntID);
+				interfacesAndVersions, endPointInterfaces, endpointID);
 	}
 
 	/**
@@ -206,7 +215,7 @@ public class SLPServiceEndpointDescription implements
 	 */
 	private void addInterfacesAndVersionsToProperties(
 			Collection interfaceNames, Collection versions,
-			Collection endPointInterfaces, String endPntID)
+			Collection endPointInterfaces, String endpntID)
 			throws ServiceLocationException {
 		// Create a service url for each interface and gather also version
 		// and
@@ -238,8 +247,8 @@ public class SLPServiceEndpointDescription implements
 					endPointInterfaces);
 		}
 
-		if (endPntID != null) {
-			properties.put(ServicePublication.PROP_KEY_ENDPOINT_ID, endPntID);
+		if (endpntID != null) {
+			properties.put(ServicePublication.PROP_KEY_ENDPOINT_ID, endpntID);
 		}
 	}
 
@@ -274,6 +283,7 @@ public class SLPServiceEndpointDescription implements
 		if (endpointID != null) {
 			sb.append("EndpointID = ");
 			sb.append(endpointID);
+			sb.append(LINE_SEPARATOR);
 		}
 		synchronized (listOfJSLPSEDs) {
 			Iterator it = listOfJSLPSEDs.values().iterator();
@@ -387,6 +397,10 @@ public class SLPServiceEndpointDescription implements
 				((JSlpSED) it.next()).addProperty(key, value);
 			}
 		}
+		if (key.equals(ServicePublication.PROP_KEY_ENDPOINT_ID)) {
+			endpointID = (String) value;
+		}
+		properties.put(key, value);
 	}
 
 	/**
@@ -521,6 +535,12 @@ public class SLPServiceEndpointDescription implements
 		// retrieve properties from ServiceURL attributes
 		retrievePropertiesFromPath(serviceURL.getURLPath(), props);
 
+		endpointID = (String) props
+				.get(ServicePublication.PROP_KEY_ENDPOINT_ID);
+		if (endpointID == null) {
+			endpointID = getUUID();
+		}
+
 		JSlpSED jslpSED = new JSlpSED();
 		jslpSED.setInterfaceName(interfaceName);
 
@@ -554,7 +574,7 @@ public class SLPServiceEndpointDescription implements
 		props.put(ServicePublication.PROP_KEY_SERVICE_INTERFACE_NAME,
 				interfaceNames);
 
-		//set version if exists
+		// set version if exists
 		Collection versions = (Collection) properties
 				.get(ServicePublication.PROP_KEY_SERVICE_INTERFACE_VERSION);
 		if (versions == null) {
@@ -566,7 +586,7 @@ public class SLPServiceEndpointDescription implements
 
 		// Set endpoint-interface if it exists
 		Collection endpointInterfacesValues = (Collection) properties
-		.get(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME);
+				.get(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME);
 		if (endpointInterfacesValues == null) {
 			endpointInterfacesValues = new ArrayList();
 		}
@@ -575,12 +595,20 @@ public class SLPServiceEndpointDescription implements
 		if (endpointInterfacesValue != null) {
 			jslpSED.setEndpointInterface(endpointInterfacesValue);
 			endpointInterfacesValues.add(endpointInterfacesValue);
-			props.put(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME, endpointInterfacesValues);
+			props.put(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME,
+					endpointInterfacesValues);
 		}
 
 		properties = props;
 
 		return jslpSED;
+	}
+
+	/**
+	 * @return
+	 */
+	private String getUUID() {
+		return String.valueOf((new Random()).nextInt());
 	}
 
 	/**
@@ -893,4 +921,83 @@ public class SLPServiceEndpointDescription implements
 		serviceURLs.put(interfaceName, url);
 	}
 
+	/**
+	 * This method merges to SEDs together if the both have the same endpointID.
+	 * 
+	 * @param descr1 base object
+	 * @param descr2 object to merge
+	 * @return a new SED that combines descr1 and descr2; null if a
+	 *         ServiceLocationException has been occured
+	 */
+	public static SLPServiceEndpointDescription mergeServiceEndpointDescriptions(
+			ServiceEndpointDescription descr1, ServiceEndpointDescription descr2) {
+		SLPHandlerImpl.log(LogService.LOG_DEBUG, "going to merge this stuff: "
+				+ descr1 + " and " + descr2);
+		Collection versions = new ArrayList();
+		Collection interfaces = new ArrayList();
+		Collection endpointInterfaces = new ArrayList();
+		Map properties = new HashMap();
+		// merge interfaces of both SEDs
+		if (!interfaces.containsAll(descr1.getProvidedInterfaces())) {
+			interfaces.addAll(descr1.getProvidedInterfaces());
+		}
+		if (!interfaces.containsAll(descr2.getProvidedInterfaces())) {
+			interfaces.addAll(descr2.getProvidedInterfaces());
+		}
+
+		// merge versions of both SEDs
+		Iterator it = interfaces.iterator();
+		while (it.hasNext()) {
+			String interfaceName = (String) it.next();
+			if ((descr1.getVersion(interfaceName) != null)&& (!versions.contains(interfaceName
+					+ ServicePublication.SEPARATOR
+					+ descr1.getVersion(interfaceName)))) {
+				versions.add(interfaceName + ServicePublication.SEPARATOR
+						+ descr1.getVersion(interfaceName));
+			}
+			if ((descr2.getVersion(interfaceName) != null)&& (!versions.contains(interfaceName
+					+ ServicePublication.SEPARATOR
+					+ descr2.getVersion(interfaceName)))) {
+				versions.add(interfaceName + ServicePublication.SEPARATOR
+						+ descr2.getVersion(interfaceName));
+			}
+		}
+		// merge endpointInterfaces of both SEDs
+		it = interfaces.iterator();
+		while (it.hasNext()) {
+			String interfaceName = (String) it.next();
+			if ((descr1.getEndpointInterfaceName(interfaceName) != null)
+					&& (!endpointInterfaces.contains(interfaceName
+							+ ServicePublication.SEPARATOR
+							+ descr1.getEndpointInterfaceName(interfaceName)))) {
+				endpointInterfaces.add(interfaceName
+						+ ServicePublication.SEPARATOR
+						+ descr1.getEndpointInterfaceName(interfaceName));
+			}
+			if ((descr2.getEndpointInterfaceName(interfaceName) != null)&& (!endpointInterfaces.contains(interfaceName
+					+ ServicePublication.SEPARATOR
+					+ descr2.getEndpointInterfaceName(interfaceName))))  {
+				endpointInterfaces.add(interfaceName
+						+ ServicePublication.SEPARATOR
+						+ descr2.getEndpointInterfaceName(interfaceName));
+			}
+		}
+
+		// merge properties
+		properties.putAll(descr1.getProperties());
+		properties.putAll(descr2.getProperties());
+
+		try {
+			SLPServiceEndpointDescription sed = new SLPServiceEndpointDescription(
+					interfaces, versions, endpointInterfaces, properties,
+					descr1.getEndpointID());
+			return sed;
+		}
+		catch (ServiceLocationException e) {
+			e.printStackTrace();
+			SLPHandlerImpl.log(LogService.LOG_ERROR,
+					"Exception occured during SED creation ", e);
+		}
+		return null;
+	}
 }
