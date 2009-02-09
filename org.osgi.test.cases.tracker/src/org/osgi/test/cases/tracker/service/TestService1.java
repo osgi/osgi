@@ -5,16 +5,14 @@
  * MEMBERS as MEMBER LICENSED MATERIALS under the terms of section 3.2 of the OSGi MEMBER AGREEMENT.
  */
 
-package org.osgi.test.cases.tracker.tb1;
-
+package org.osgi.test.cases.tracker.service;
 
 /**
-   Bundle for exporting packages
-
-   @author Ericsson Telecom AB
-*/
-public interface TestService1
-    {
+ * Bundle for exporting packages
+ * 
+ * @author Ericsson Telecom AB
+ */
+public interface TestService1 {
+	public static final String	NAME	= TestService1.class.getName();
 
 }
-

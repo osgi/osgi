@@ -1,5 +1,6 @@
 Bundle-Version						= 4.0.0.${project.build}
-Private-Package						= ${p}.tbc, org.osgi.test.support.*
+Private-Package						= ${p}.junit, org.osgi.test.support.*
+Export-Package						= ${p}.service
 
 -buildpath							= \
 	org.osgi.util.tracker;					version=project, \

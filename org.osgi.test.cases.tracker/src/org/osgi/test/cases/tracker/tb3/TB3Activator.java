@@ -7,54 +7,35 @@
 
 package org.osgi.test.cases.tracker.tb3;
 
-import java.util.*;
+import java.util.Hashtable;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.test.cases.tracker.service.TestService3;
 
 /**
-   Bundle for exporting packages
+ * Bundle for exporting packages
+ * 
+ * @author Ericsson Telecom AB
+ */
+public class TB3Activator implements BundleActivator {
+	/**
+	 * Starts the bundle. Installs several services later filtered by the tbc
+	 */
+	public void start(BundleContext bc) {
+		Hashtable ts3Props = new Hashtable();
+		ts3Props.put("name", "TestService3");
+		ts3Props.put("version", new Float(1.0));
+		ts3Props.put("compatible", new Float(1.0));
+		ts3Props.put("description", "TestService 3");
 
-   @author Ericsson Telecom AB
-*/
-public class TB3Activator implements BundleActivator
-{
-    BundleContext bc;
-    TestService3 ts3;
-    Properties ts3Props;
-    ServiceRegistration tsr3;
+		bc.registerService(TestService3.class.getName(), new TestService3() {},
+				ts3Props);
+	}
 
-
-    /**
-       Starts the bundle.
-       Installs several services later filtered by the tbc
-    */
-    public void start(BundleContext bc) {
-
-        this.bc=bc;
-
-        ts3 = new TestService3Impl();
-        ts3Props = new Properties();
-        ts3Props.put("name", "TestService3");
-        ts3Props.put("version", new Float(1.0));
-        ts3Props.put("compatible", new Float(1.0));
-        ts3Props.put("description", "TestService 3");
-
-        tsr3 = bc.registerService(TestService3.class.getName(), ts3, ts3Props);
-        System.out.println("### TS3 started");
-    }
-
-    /**
-       Stops the bundle.
-    */
-    public void stop(BundleContext bc) {
-        try
-        {
-            tsr3.unregister();
-
-        }
-        catch (IllegalStateException e) { /* Ignore */ }
-
-        tsr3 = null;
-        ts3 = null;
-    }
+	/**
+	 * Stops the bundle.
+	 */
+	public void stop(BundleContext bc) {
+	}
 }

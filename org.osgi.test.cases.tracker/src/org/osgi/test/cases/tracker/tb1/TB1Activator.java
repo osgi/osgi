@@ -7,55 +7,36 @@
 
 package org.osgi.test.cases.tracker.tb1;
 
-import java.util.*;
+import java.util.Hashtable;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.test.cases.tracker.service.TestService1;
 
 /**
-   Bundle for exporting packages
+ * Bundle for exporting packages
+ * 
+ * @author Ericsson Telecom AB
+ */
+public class TB1Activator implements BundleActivator {
 
-   @author Ericsson Telecom AB
-*/
-public class TB1Activator implements BundleActivator
-{
-    BundleContext bc;
-    TestService1 ts1;
-    Properties ts1Props;
-    ServiceRegistration tsr1;
+	/**
+	 * Starts the bundle. Installs several services later filtered by the tbc
+	 */
+	public void start(BundleContext bc) {
+		Hashtable ts1Props = new Hashtable();
+		ts1Props.put("name", "TestService1");
+		ts1Props.put("version", new Float(1.0));
+		ts1Props.put("compatible", new Float(1.0));
+		ts1Props.put("description", "TestService 1");
 
+		bc.registerService(TestService1.class.getName(), new TestService1() {},
+				ts1Props);
+	}
 
-    /**
-       Starts the bundle.
-       Installs several services later filtered by the tbc
-    */
-    public void start(BundleContext bc) {
-
-        this.bc=bc;
-
-        ts1 = new TestService1Impl();
-        ts1Props = new Properties();
-        ts1Props.put("name", "TestService1");
-        ts1Props.put("version", new Float(1.0));
-        ts1Props.put("compatible", new Float(1.0));
-        ts1Props.put("description", "TestService 1");
-
-        tsr1 = bc.registerService(TestService1.class.getName(), ts1, ts1Props);
-
-        System.out.println("### TS1 started");
-    }
-
-    /**
-       Stops the bundle.
-    */
-    public void stop(BundleContext bc) {
-        try
-        {
-            tsr1.unregister();
-
-        }
-        catch (IllegalStateException e) { /* Ignore */ }
-
-        tsr1 = null;
-        ts1 = null;
-    }
+	/**
+	 * Stops the bundle.
+	 */
+	public void stop(BundleContext bc) {
+	}
 }

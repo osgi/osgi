@@ -7,56 +7,38 @@
 
 package org.osgi.test.cases.tracker.tb2;
 
-import java.util.*;
+import java.util.Hashtable;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.test.cases.tracker.service.TestService2;
 
 /**
-   Bundle for exporting packages
+ * Bundle for exporting packages
+ * 
+ * @author Ericsson Telecom AB
+ */
+public class TB2Activator implements BundleActivator {
 
-   @author Ericsson Telecom AB
-*/
-public class TB2Activator implements BundleActivator
-{
-    BundleContext bc;
-    TestService2 ts2;
-    Properties ts2Props;
-    ServiceRegistration tsr2;
+	/**
+	 * Starts the bundle. Installs several services later filtered by the tbc
+	 */
+	public void start(BundleContext bc) {
+		Hashtable ts2Props = new Hashtable();
+		ts2Props.put("name", "TestService2");
+		ts2Props.put("version", new Float(1.0));
+		ts2Props.put("compatible", new Float(1.0));
+		ts2Props.put("description", "TestService 2");
 
+		bc.registerService(TestService2.class.getName(),
+				new TestService2() {},
+				ts2Props);
 
-    /**
-       Starts the bundle.
-       Installs several services later filtered by the tbc
-    */
-    public void start(BundleContext bc) {
+	}
 
-        this.bc=bc;
-
-        ts2 = new TestService2Impl();
-        ts2Props = new Properties();
-        ts2Props.put("name", "TestService2");
-        ts2Props.put("version", new Float(1.0));
-        ts2Props.put("compatible", new Float(1.0));
-        ts2Props.put("description", "TestService 2");
-
-        tsr2 = bc.registerService(TestService2.class.getName(), ts2, ts2Props);
-
-        System.out.println("### TS2 started");
-
-    }
-
-    /**
-       Stops the bundle.
-    */
-    public void stop(BundleContext bc) {
-        try
-        {
-            tsr2.unregister();
-
-        }
-        catch (IllegalStateException e) { /* Ignore */ }
-
-        tsr2 = null;
-        ts2 = null;
-    }
+	/**
+	 * Stops the bundle.
+	 */
+	public void stop(BundleContext bc) {
+	}
 }
