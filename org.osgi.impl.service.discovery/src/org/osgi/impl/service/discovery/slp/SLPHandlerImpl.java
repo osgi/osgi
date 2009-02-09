@@ -105,6 +105,9 @@ public class SLPHandlerImpl implements Discovery {
 	private static Map				/* <SLPServiceDescriptionAdapter> */inMemoryCache	= Collections
 																								.synchronizedMap(new HashMap());
 
+	private List					localServices										= Collections
+																								.synchronizedList(new ArrayList());
+
 	/**
 	 * Constructor.
 	 * 
@@ -293,9 +296,12 @@ public class SLPHandlerImpl implements Discovery {
 														.getEndpointID()),
 										descriptionAdapter);
 					}
-
-					result.put(descriptionAdapter.getEndpointID(),
-							descriptionAdapter);
+					if (!localServices.contains(descriptionAdapter
+							.getEndpointID())) {
+						//only if this is a remote service we have to add it.
+						result.put(descriptionAdapter.getEndpointID(),
+								descriptionAdapter);
+					}
 				}
 				else {
 					log(LogService.LOG_ERROR, "no interfaces provided by "
@@ -406,6 +412,7 @@ public class SLPHandlerImpl implements Discovery {
 			}
 
 			// add it to the available Services
+			localServices.add(svcDescr.getEndpointID());
 			inMemoryCache.put(svcDescr.getEndpointID(), svcDescr);
 			// inform the listener about the new available service
 			notifyListenersOnNewServiceDescription(svcDescr);
@@ -458,6 +465,7 @@ public class SLPHandlerImpl implements Discovery {
 					}
 				}
 				// remove it from in memory cache
+				localServices.remove(slpSvcDescr.getEndpointID());
 				inMemoryCache.remove(slpSvcDescr.getEndpointID());
 			}
 			else {
@@ -574,7 +582,7 @@ public class SLPHandlerImpl implements Discovery {
 	 */
 	public static void notifyOnAvailableSEDs(
 			final DiscoveredServiceTracker tracker, final Map matchingCriteria) {
-		List cachedServices = getCachedServices();
+		List cachedServices = new ArrayList(inMemoryCache.values());
 		System.out.println(cachedServices.size()
 				+ " services are registered in Discovery.");
 		if (cachedServices != null) {
@@ -746,12 +754,20 @@ public class SLPHandlerImpl implements Discovery {
 	}
 
 	/**
-	 * Returns the complete in MemoryCache.
+	 * Returns the list of known services without the locally published ones.
 	 * 
-	 * @return a "shallow" copy of the inMemoryCache
+	 * @return a list of all remote services
 	 */
-	public static List getCachedServices() {
-		return new ArrayList(inMemoryCache.values());
+	public List getCachedServices() {
+		List result = new ArrayList();
+		Iterator it = inMemoryCache.keySet().iterator();
+		while (it.hasNext()) {
+			String key = (String) it.next();
+			if (! localServices.contains(key)){
+				result.add(inMemoryCache.get(key));
+			}
+		}
+		return result;
 	}
 
 	/**

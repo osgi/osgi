@@ -57,7 +57,7 @@ public class InformListenerTask extends TimerTask {
 	public void run() {
 		Map registeredServiceTracker = discovery.getRegisteredServiceTracker();
 		if (registeredServiceTracker.size() > 0) {
-			Collection /* <ServiceEndpointDescription> */lastLookupResult = SLPHandlerImpl
+			Collection /* <ServiceEndpointDescription> */lastLookupResult = discovery
 					.getCachedServices();
 			Collection allAvailableServices = discovery.findService(null, null);
 			notifyAvailableServices(allAvailableServices, lastLookupResult,
