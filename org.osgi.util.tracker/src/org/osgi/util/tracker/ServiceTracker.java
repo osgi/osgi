@@ -152,15 +152,20 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		this.trackReference = reference;
 		this.trackClass = null;
 		this.customizer = (customizer == null) ? this : customizer;
-		this.listenerFilter = "(" + Constants.SERVICE_ID + "=" + reference.getProperty(Constants.SERVICE_ID).toString() + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		this.listenerFilter = "(" + Constants.SERVICE_ID + "="
+				+ reference.getProperty(Constants.SERVICE_ID).toString() + ")"; 
 		try {
 			this.filter = context.createFilter(listenerFilter);
 		}
-		catch (InvalidSyntaxException e) { // we could only get this exception
-			// if the ServiceReference was
-			// invalid
-			throw (RuntimeException) new IllegalArgumentException(
-					"unexpected InvalidSyntaxException: " + e.getMessage()).initCause(e); //$NON-NLS-1$
+		catch (InvalidSyntaxException e) {
+			/*
+			 * we could only get this exception if the ServiceReference was
+			 * invalid
+			 */
+			IllegalArgumentException iae = new IllegalArgumentException(
+					"unexpected InvalidSyntaxException: " + e.getMessage());
+			iae.initCause(e);
+			throw iae;
 		}
 	}
 
@@ -189,15 +194,20 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		this.trackClass = clazz;
 		this.customizer = (customizer == null) ? this : customizer;
 		// we call clazz.toString to verify clazz is non-null!
-		this.listenerFilter = "(" + Constants.OBJECTCLASS + "=" + clazz.toString() + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		this.listenerFilter = "(" + Constants.OBJECTCLASS + "="
+				+ clazz.toString() + ")"; 
 		try {
 			this.filter = context.createFilter(listenerFilter);
 		}
-		catch (InvalidSyntaxException e) { // we could only get this exception
-			// if the clazz argument was
-			// malformed
-			throw (RuntimeException) new IllegalArgumentException(
-					"unexpected InvalidSyntaxException: " + e.getMessage()).initCause(e); //$NON-NLS-1$
+		catch (InvalidSyntaxException e) {
+			/*
+			 * we could only get this exception if the clazz argument was
+			 * malformed
+			 */
+			IllegalArgumentException iae = new IllegalArgumentException(
+					"unexpected InvalidSyntaxException: " + e.getMessage());
+			iae.initCause(e);
+			throw iae;
 		}
 	}
 
@@ -240,10 +250,10 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		this.listenerFilter = endMatchSupported ? filter.toString() : null;
 		this.filter = filter;
 		this.customizer = (customizer == null) ? this : customizer;
-		if ((context == null) || (filter == null)) { // we throw a NPE here
-			// to
-			// be consistent with the
-			// other constructors
+		if ((context == null) || (filter == null)) {
+			/*
+			 * we throw a NPE here to be consistent with the other constructors
+			 */
 			throw new NullPointerException();
 		}
 	}
@@ -290,7 +300,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 				return;
 			}
 			if (DEBUG) {
-				System.out.println("ServiceTracker.open: " + filter); //$NON-NLS-1$
+				System.out.println("ServiceTracker.open: " + filter); 
 			}
 			t = trackAllServices ? new AllTracked() : new Tracked();
 			synchronized (t) {
@@ -319,7 +329,8 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 				}
 				catch (InvalidSyntaxException e) {
 					throw new RuntimeException(
-							"unexpected InvalidSyntaxException: " + e.getMessage(), e); //$NON-NLS-1$
+							"unexpected InvalidSyntaxException: "
+									+ e.getMessage(), e); 
 				}
 			}
 			tracked = t;
@@ -371,7 +382,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 				return;
 			}
 			if (DEBUG) {
-				System.out.println("ServiceTracker.close: " + filter); //$NON-NLS-1$
+				System.out.println("ServiceTracker.close: " + filter); 
 			}
 			outgoing.close();
 			references = getServiceReferences();
@@ -395,7 +406,8 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		if (DEBUG) {
 			if ((cachedReference == null) && (cachedService == null)) {
 				System.out
-						.println("ServiceTracker.close[cached cleared]: " + filter); //$NON-NLS-1$
+						.println("ServiceTracker.close[cached cleared]: "
+						+ filter); 
 			}
 		}
 	}
@@ -498,7 +510,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 */
 	public Object waitForService(long timeout) throws InterruptedException {
 		if (timeout < 0) {
-			throw new IllegalArgumentException("timeout value is negative"); //$NON-NLS-1$
+			throw new IllegalArgumentException("timeout value is negative"); 
 		}
 		Object object = getService(); 
 		while (object == null) {
@@ -566,12 +578,13 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		if (reference != null) {
 			if (DEBUG) {
 				System.out
-						.println("ServiceTracker.getServiceReference[cached]: " + filter); //$NON-NLS-1$
+						.println("ServiceTracker.getServiceReference[cached]: "
+								+ filter); 
 			}
 			return reference;
 		}
 		if (DEBUG) {
-			System.out.println("ServiceTracker.getServiceReference: " + filter); //$NON-NLS-1$
+			System.out.println("ServiceTracker.getServiceReference: " + filter); 
 		}
 		ServiceReference[] references = getServiceReferences(); 
 		int length = (references == null) ? 0 : references.length;
@@ -687,12 +700,13 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		if (service != null) {
 			if (DEBUG) {
 				System.out
-						.println("ServiceTracker.getService[cached]: " + filter); //$NON-NLS-1$
+						.println("ServiceTracker.getService[cached]: "
+						+ filter); 
 			}
 			return service;
 		}
 		if (DEBUG) {
-			System.out.println("ServiceTracker.getService: " + filter); //$NON-NLS-1$
+			System.out.println("ServiceTracker.getService: " + filter); 
 		}
 		ServiceReference reference = getServiceReference(); 
 		if (reference == null) {
@@ -778,7 +792,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		cachedReference = null; /* clear cached value */
 		cachedService = null; /* clear cached value */
 		if (DEBUG) {
-			System.out.println("ServiceTracker.modified: " + filter); //$NON-NLS-1$
+			System.out.println("ServiceTracker.modified: " + filter); 
 		}
 	}
 
@@ -821,7 +835,8 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 			}
 			if (DEBUG) {
 				System.out
-						.println("ServiceTracker.Tracked.serviceChanged[" + event.getType() + "]: " + reference); //$NON-NLS-1$ //$NON-NLS-2$
+						.println("ServiceTracker.Tracked.serviceChanged["
+						+ event.getType() + "]: " + reference);  
 			}
 
 			switch (event.getType()) {
