@@ -37,7 +37,7 @@
         <xsd:extension base="osgi:TidentifiedType">
           <xsd:sequence minOccurs="0" maxOccurs="1">
              <!-- nested properties declaration -->
-             <xsd:element name="default-properties" type="osgi:propsType" minOccurs="0" maxOccurs="1"/>
+             <xsd:element name="default-properties" type="TdefaultProperties" minOccurs="0" maxOccurs="1"/>
           </xsd:sequence>
           <xsd:attribute name="persistent-id" type="xsd:string" use="required"/>
           <xsd:attribute name="placeholder-prefix" type="xsd:string" use="optional" default="${"/>
@@ -46,6 +46,13 @@
         </xsd:extension>
       </xsd:complexContent>
     </xsd:complexType>
+
+    <xsd:complexType name="TdefaultProperties">
+        <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+             <xsd:element ref="osgi:property"/>
+          </xsd:sequence>	        		
+    </xsd:complexType>
+
 
     <!--  managed-properties  -->
 
