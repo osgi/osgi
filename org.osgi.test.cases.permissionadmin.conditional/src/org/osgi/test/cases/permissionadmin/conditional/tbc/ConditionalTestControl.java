@@ -28,19 +28,22 @@ package org.osgi.test.cases.permissionadmin.conditional.tbc;
 
 import org.osgi.test.cases.permissionadmin.conditional.testcond.TestCondition;
 import org.osgi.test.cases.permissionadmin.conditional.testcond.TestConditionRecursive;
-import org.osgi.test.cases.util.AssertionFailedError;
-import org.osgi.test.cases.util.DefaultTestBundleControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
 
 import org.osgi.framework.*;
 import org.osgi.service.condpermadmin.*;
 import org.osgi.service.permissionadmin.*;
 
 import java.security.AccessControlException;
+import java.security.AllPermission;
 import java.security.Permission;
 import java.util.PropertyPermission;
 import java.util.StringTokenizer;
 import java.util.Enumeration;
 import java.util.Vector;
+
+import junit.framework.AssertionFailedError;
 
 /**
  * Contains the test methods of the conditional permission test case.
@@ -69,73 +72,6 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
   
   private String            BUNDLE_LOCATION_CONDITION = BundleLocationCondition.class.getName();
   private String            BUNDLE_SIGNER_CONDITION = BundleSignerCondition.class.getName();
-  private static String[] methods = new String[] {
-   											      "testConditionInfoCreation", // "TC1"
-                                                  "testConditionalPermissionAdmin", // "TC2"
-                                                  "testNamedConditionalPermissionAdmin", // "TC2_1"
-                                                  "testConditionInfoDeletion", // "TC3"
-                                                  "testBundleLocationCondition", // "TC4"
-                                                  "testBundleSignerCondition", // "TC5"
-                                                  "testMoreConditions", // "TC6"
-                                                  "testConditionalPA_and_PA", //"TC7"
-                                                  "testBundlePermissionInformation", //"TC8"
-                                                  "testCPInfosSetBeforeInstallBundle", //"TC9"
-                                                  "testMultipleBundlesOnStack", //"T10"
-                                                  "testRecursionInChecks", //"T11"
-                                                  "testMutable2Immutable", //"T12"
-                                                  };
-
-  public boolean checkPrerequisites() {
-	    return securityNeeded(true) &&
-		 serviceAvailable(PermissionAdmin.class) && 
-		 serviceAvailable(ConditionalPermissionAdmin.class); 
-  }
-
-  /**
-   * <remove>Prepare for each run. It is important that a test run is properly
-   * initialized and that each case can run standalone. To save a lot
-   * of time in debugging, clean up all possible persistent remains
-   * before the test is run. Clean up is better don in the prepare
-   * because debugging sessions can easily cause the unprepare never
-   * to be called.</remove>
-   */
-  public void prepare() throws Exception {
-    testBundle = installBundle("tb1.jar");
-    testBundleLocation = testBundle.getLocation();
-
-    permBundle = installBundle("tb2.jar");
-    permBundleLocation = permBundle.getLocation();
-
-    domBundle = installBundle("tb3.jar");
-    domBundleLocation = domBundle.getLocation();
-
-    permissionAdmin = (PermissionAdmin)getService(PermissionAdmin.class);
-    conditionalAdmin = (ConditionalPermissionAdmin)getService(ConditionalPermissionAdmin.class);
-    tbc = (ConditionalTBCService)getService(ConditionalTBCService.class);
-    permTBC = (ConditionalPermTBCService)getService(ConditionalPermTBCService.class);
-    domTBC = (ConditionalDomTBCService)getService(ConditionalDomTBCService.class);
-
-    utility = new ConditionalUtility(this, permissionAdmin, conditionalAdmin);
-  }
-
-  /**
-   * <remove>Prepare for each method. It is important that each method can
-   * be executed independently of each other method. Do not keep
-   * state between methods, if possible. This method can be used
-   * to clean up any possible remaining state.</remove>
-   */
-  public void setState() {
-    log("#before each method");
-
-    Enumeration infos = conditionalAdmin.getConditionalPermissionInfos();
-    while ((infos != null) && infos.hasMoreElements()) {
-      ((ConditionalPermissionInfo)infos.nextElement()).delete();
-    }
-
-    permissionAdmin.setPermissions(domBundleLocation, null);
-    permissionAdmin.setPermissions(permBundleLocation, null);
-    permissionAdmin.setPermissions(testBundleLocation, null);
-  }
 
   /**
    * Creates correct and incorrect ConditionInfo.
@@ -236,7 +172,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
    */
   public void testNamedConditionalPermissionAdmin() {//TC2_1
     //1: Test unique names
-    ConditionInfo testCInfo = utility.createTestCInfo(false, false, false, "TestCondition");
+    ConditionInfo testCInfo = utility.createTestCInfo(false, false, false, "TestCondition", testBundle.getBundleId());
     AdminPermission perm1 = new AdminPermission("*", "*");
     AdminPermission perm2 = new AdminPermission("*", AdminPermission.LIFECYCLE);
     PermissionInfo pInfo1 = new PermissionInfo(perm1.getClass().getName(), perm1.getName(), perm1.getActions());
@@ -427,7 +363,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     AdminPermission allPermissions = new AdminPermission("*", "*");
 
     try {
-      TestCondition.setTestBundleLocation(testBundle);
+      Class.forName(TestCondition.class.getName());
     } catch (Exception ex) {
       pass(ex.getMessage());
       //it doesn't work because loadClass method in RI works with the system class loader only
@@ -435,89 +371,109 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
         fail("Please use Target_tck95.launch for successful run of 'testMoreConditions' test case");
     }
 
-    //Check TestCondition_0 and TestCondition_1 at creation and later TestCondition_2 (when the check is performed)
+    // TODO This assumes an ordering not mandated by the specification
+    // implementation assumption:
+    // TestCondition_0 and TestCondion_2 will be executed before TestCondition_1 because they are not postponed
     utility.testPermissions(
       new ConditionInfo[]{
-        utility.createTestCInfo(false, true, false, "TestCondition_0"), // not postponed, satisfied, not mutable
-        utility.createTestCInfo(true,  true, false, "TestCondition_1"), // postponed, satisfied, not mutable
-        utility.createTestCInfo(false, true, true,  "TestCondition_2")  // not postponed, satisfied, mutable
+        utility.createTestCInfo(false, true, false, "TestCondition_0", testBundle.getBundleId()), // not postponed, satisfied, not mutable
+        utility.createTestCInfo(true,  true, false, "TestCondition_1", testBundle.getBundleId()), // postponed, satisfied, not mutable
+        utility.createTestCInfo(false, true, true,  "TestCondition_2", testBundle.getBundleId())  // not postponed, satisfied, mutable
       },
       new AdminPermission[]{permission},
       new AdminPermission[]{permission},     //allowed
       new AdminPermission[]{allPermissions}, //not allowed
-      new String[] {"TestCondition_0", "TestCondition_1", "TestCondition_2"});
+      new String[] {"TestCondition_0", "TestCondition_2", "TestCondition_1"});
 
-    //Check TestCondition_0_1 and TestCondition_2_1 at creation and later two times
-    //TestCondition_1_1 (when every check is performed)
+    // TODO This assumes an ordering not mandated by the specification
+    // implementation assumption:
+    // TestCondition_0_1 and TestCondion_1_1 will be executed before TestCondition_2_1 because they are not postponed
+    // TestConditoin_1_1 will be executed again on a second permission check because it is mutable
     utility.testPermissions(
       new ConditionInfo[]{
-        utility.createTestCInfo(false, true, false, "TestCondition_0_1"), // not postponed, satisfied, not mutable
-        utility.createTestCInfo(false, true, true,  "TestCondition_1_1"), // not postponed, satisfied, mutable
-        utility.createTestCInfo(true,  true, false, "TestCondition_2_1")  // npostponed, satisfied, not mutable
+        utility.createTestCInfo(false, true, false, "TestCondition_0_1", testBundle.getBundleId()), // not postponed, satisfied, not mutable
+        utility.createTestCInfo(false, true, true,  "TestCondition_1_1", testBundle.getBundleId()), // not postponed, satisfied, mutable
+        utility.createTestCInfo(true,  true, false, "TestCondition_2_1", testBundle.getBundleId())  // postponed, satisfied, not mutable
       },
       new AdminPermission[]{permission, permission2},
       new AdminPermission[]{permission, permission2}, //allowed
       new AdminPermission[]{allPermissions},          //not allowed
-      new String[] {"TestCondition_0_1", "TestCondition_2_1", "TestCondition_1_1", "TestCondition_1_1"});
+      new String[] {"TestCondition_0_1", "TestCondition_1_1", "TestCondition_2_1", "TestCondition_1_1"});
 
-    //Check at creation 3 and 4, and then, 4_2, 4_3 and finally 4_1 because it is postponed
+    // TODO This assumes an ordering not mandated by the specification
+    //Check at creation 3 and 4_2 and 4_3, and then 4 and 4_1 because they are postponed
     utility.testPermissions(
         new ConditionInfo[]{
-          utility.createTestCInfo(false, true, false, "TestCondition_3"), // not postponed, satisfied, not mutable
-          utility.createTestCInfo(true,  true, false, "TestCondition_4"), // postponed, satisfied, not mutable
-          utility.createTestCInfo(true,  true, true,  "TestCondition_4_1"), // postponed, satisfied, mutable
-          utility.createTestCInfo(false, true, true, "TestCondition_4_2"), // not postponed, satisfied, mutable
-          utility.createTestCInfo(false, true, true, "TestCondition_4_3"), // not postponed, satisfied, mutable
+          utility.createTestCInfo(false, true, false, "TestCondition_3", testBundle.getBundleId()), // not postponed, satisfied, not mutable
+          utility.createTestCInfo(true,  true, false, "TestCondition_4", testBundle.getBundleId()), // postponed, satisfied, not mutable
+          utility.createTestCInfo(true,  true, true,  "TestCondition_4_1", testBundle.getBundleId()), // postponed, satisfied, mutable
+          utility.createTestCInfo(false, true, true, "TestCondition_4_2", testBundle.getBundleId()), // not postponed, satisfied, mutable
+          utility.createTestCInfo(false, true, true, "TestCondition_4_3", testBundle.getBundleId()), // not postponed, satisfied, mutable
         },
         new AdminPermission[] {permission},
         new AdminPermission[]{permission},     //allowed
         new AdminPermission[]{allPermissions}, //not allowed
-        new String[] {"TestCondition_3", "TestCondition_4", "TestCondition_4_2", "TestCondition_4_3", "TestCondition_4_1"});
+        new String[] {"TestCondition_3", "TestCondition_4_2", "TestCondition_4_3", "TestCondition_4", "TestCondition_4_1"});
 
+    // TODO This assumes an ordering not mandated by the specification
+    // implementation note:
+    // first permission check:
+    // we do not ever check TestCondition_5 because a non-postponed condition 7 is not satisfied
+    // second permission check:
+    // we do not check 6 and 7 because while postponing 5 we check to see if the permission applies first
     utility.testPermissions(
       new ConditionInfo[]{
-        utility.createTestCInfo(true, true, false,  "TestCondition_5"), // postponed, satisfied, not mutable
-        utility.createTestCInfo(false, true, true,  "TestCondition_6"), // not postponed, satisfied, mutable
-        utility.createTestCInfo(false, false, true, "TestCondition_7"), // not postponed, not satisfied, mutable
+        utility.createTestCInfo(true, true, false,  "TestCondition_5", testBundle.getBundleId()), // postponed, satisfied, not mutable
+        utility.createTestCInfo(false, true, true,  "TestCondition_6", testBundle.getBundleId()), // not postponed, satisfied, mutable
+        utility.createTestCInfo(false, false, true, "TestCondition_7", testBundle.getBundleId()), // not postponed, not satisfied, mutable
       },
       new AdminPermission[] {permission},
       new AdminPermission[]{},               //allowed
       new AdminPermission[]{permission, allPermissions}, //not allowed
-      new String[] {"TestCondition_5", "TestCondition_6", "TestCondition_7", "TestCondition_6", "TestCondition_7"});
+      new String[] {"TestCondition_6", "TestCondition_7"});
 
     //Don't check 2nd because 1st is not satisfied
     utility.testPermissions(
         new ConditionInfo[]{
-          utility.createTestCInfo(false, false, false, "TestCondition_8"), // not postponed, not satisfied, not mutable
-          utility.createTestCInfo(false, true, false,  "TestCondition_9"), // not postponed, satisfied, not mutable
+          utility.createTestCInfo(false, false, false, "TestCondition_8", testBundle.getBundleId()), // not postponed, not satisfied, not mutable
+          utility.createTestCInfo(false, true, false,  "TestCondition_9", testBundle.getBundleId()), // not postponed, satisfied, not mutable
         },
         new AdminPermission[] {permission},
-        new AdminPermission[]{allPermissions}, //because they are by default
-        new AdminPermission[]{},//permission, allPermissions
+        new AdminPermission[]{},
+        new AdminPermission[]{permission},
         new String[] {"TestCondition_8"});
 
+    // TODO This assumes an ordering not mandated by the specification
+    // implementation note:
+    // we don not ever check TestCondition_11 because a non-postponed condition 10 is not satisfied
     utility.testPermissions(
       new ConditionInfo[]{
-        utility.createTestCInfo(false, false, true, "TestCondition_10"), // not postponed, not satisfied, mutable
-        utility.createTestCInfo(true, true, false,  "TestCondition_11"), // postponed, satisfied, not mutable
+        utility.createTestCInfo(false, false, true, "TestCondition_10", testBundle.getBundleId()), // not postponed, not satisfied, mutable
+        utility.createTestCInfo(true, true, false,  "TestCondition_11", testBundle.getBundleId()), // postponed, satisfied, not mutable
       },
       new AdminPermission[] {permission},
       new AdminPermission[]{},//allowed
       new AdminPermission[]{permission, allPermissions},//permission, allPermissions
-      new String[] {"TestCondition_11", "TestCondition_10", "TestCondition_10"});
+      new String[] {"TestCondition_10", "TestCondition_10"});
 
-    // Don't check TestCondition_14 because TestCondition_12 is not satisfied
+    // TODO This assumes an ordering not mandated by the specification
+    // Don't check TestCondition_14 or 15 because TestCondition_12 is not satisfied
+    // implementation note:
+    // first permission check:
+    // we do not ever check 14 and 15 because a non-postponed condition 12 is not satisfied
+    // second permission check:
+    // we do not check 12 14 and 15 because while postponing 12 we check to see if the permission applies first
     utility.testPermissions(
       new ConditionInfo[]{
-        utility.createTestCInfo(true,  false, true, "TestCondition_12"), // postponed, not satisfied, mutable
-        utility.createTestCInfo(false, true, false, "TestCondition_13"), // postponed, satisfied, not mutable
-        utility.createTestCInfo(true,  true, true,  "TestCondition_14"), // postponed, satisfied, not mutable
-        utility.createTestCInfo(true,  true, false, "TestCondition_15"), // postponed, satisfied, not mutable
+        utility.createTestCInfo(true,  false, true, "TestCondition_12", testBundle.getBundleId()), // postponed, not satisfied, mutable
+        utility.createTestCInfo(false, true, false, "TestCondition_13", testBundle.getBundleId()), // not postponed, satisfied, not mutable
+        utility.createTestCInfo(true,  true, true,  "TestCondition_14", testBundle.getBundleId()), // postponed, satisfied, mutable
+        utility.createTestCInfo(true,  true, false, "TestCondition_15", testBundle.getBundleId()), // postponed, satisfied, not mutable
       },
       new AdminPermission[] {permission},
       new AdminPermission[]{},//allowed
-      new AdminPermission[]{permission, allPermissions},//permission, allPermissions
-      new String[] {"TestCondition_13", "TestCondition_15", "TestCondition_12"});//according 9.5.1 and fig 9.38
+      new AdminPermission[]{permission, allPermissions},
+      new String[] {"TestCondition_13", "TestCondition_12"});//according 9.5.1 and fig 9.38
   }
 
   /**
@@ -622,7 +578,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
    */
   public void testMultipleBundlesOnStack() {//TC10
     try {
-      TestCondition.setTestBundleLocation(testBundle);
+        Class.forName(TestCondition.class.getName());
     } catch (Exception ex) {
       pass(ex.getMessage());
       //it doesn't work because loadClass method in RI works with the system class loader only
@@ -633,13 +589,6 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     ConditionInfo blcA = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[] { testBundleLocation });
     ConditionInfo blcB = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[] { permBundleLocation });
     ConditionInfo blcC = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[] { domBundleLocation });
-
-    ConditionInfo ic  = utility.createTestCInfo(false, true, false, "TestCondition_100"); // not postponed, satisfied, immutable
-    ConditionInfo ic0 = utility.createTestCInfo(false, false, true, "TestCondition_101"); // not postponed, satisfied, mutable
-    ConditionInfo ic1 = utility.createTestCInfo(false, true,  true, "TestCondition_102"); // not postponed, satisfied, mutable
-    ConditionInfo ic2 = utility.createTestCInfo(false, true,  true, "TestCondition_103"); // not postponed, satisfied, mutable
-    ConditionInfo pc1 = utility.createTestCInfo(true,  false, true, "TestCondition_104"); // postponed, satisfied, mutable
-    ConditionInfo pc2 = utility.createTestCInfo(true,  true,  true, "TestCondition_105"); // postponed, satisfied, mutable
 
     AdminPermission permissionP = new AdminPermission("*", AdminPermission.LIFECYCLE);
     AdminPermission permissionQ = new AdminPermission("*", AdminPermission.EXECUTE);
@@ -661,6 +610,13 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     cpi[2][0] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { cInfo },
         new Permission[] { pp, sp });
 
+    ConditionInfo ic  = utility.createTestCInfo(false, true, false, "TestCondition_100", testBundle.getBundleId()); // not postponed, satisfied, immutable
+    ConditionInfo ic0 = utility.createTestCInfo(false, false, true, "TestCondition_101", testBundle.getBundleId()); // not postponed, not satisfied, mutable
+    ConditionInfo ic1 = utility.createTestCInfo(false, true,  true, "TestCondition_102", testBundle.getBundleId()); // not postponed, satisfied, mutable
+    ConditionInfo ic2 = utility.createTestCInfo(false, true,  true, "TestCondition_103", testBundle.getBundleId()); // not postponed, satisfied, mutable
+    ConditionInfo pc1 = utility.createTestCInfo(true,  false, true, "TestCondition_104", testBundle.getBundleId()); // postponed, not satisfied, mutable
+    ConditionInfo pc2 = utility.createTestCInfo(true,  true,  true, "TestCondition_105", testBundle.getBundleId()); // postponed, satisfied, mutable
+
     cpi[0][1] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcA, ic1, pc1 },
         new Permission[] { permissionP, permissionQ });
     cpi[0][2] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcA, ic2 },
@@ -668,7 +624,13 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     cpi[0][3] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcA, ic },
         new Permission[] { permissionS });
 
-    TestCondition.setTestBundleLocation(permBundle);
+    ic  = utility.createTestCInfo(false, true, false, "TestCondition_100", permBundle.getBundleId()); // not postponed, satisfied, immutable
+    ic0 = utility.createTestCInfo(false, false, true, "TestCondition_101", permBundle.getBundleId()); // not postponed, not satisfied, mutable
+    ic1 = utility.createTestCInfo(false, true,  true, "TestCondition_102", permBundle.getBundleId()); // not postponed, satisfied, mutable
+    ic2 = utility.createTestCInfo(false, true,  true, "TestCondition_103", permBundle.getBundleId()); // not postponed, satisfied, mutable
+    pc1 = utility.createTestCInfo(true,  false, true, "TestCondition_104", permBundle.getBundleId()); // postponed, not satisfied, mutable
+    pc2 = utility.createTestCInfo(true,  true,  true, "TestCondition_105", permBundle.getBundleId()); // postponed, satisfied, mutable
+
     cpi[1][1] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcB, ic1, pc1, pc2 },
         new Permission[] { permissionP, permissionR });
     cpi[1][2] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcB, pc2 },
@@ -676,7 +638,13 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     cpi[1][3] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcB, ic },
         new Permission[] { permissionQ });
 
-    TestCondition.setTestBundleLocation(domBundle);
+    ic  = utility.createTestCInfo(false, true, false, "TestCondition_100", domBundle.getBundleId()); // not postponed, satisfied, immutable
+    ic0 = utility.createTestCInfo(false, false, true, "TestCondition_101", domBundle.getBundleId()); // not postponed, not satisfied, mutable
+    ic1 = utility.createTestCInfo(false, true,  true, "TestCondition_102", domBundle.getBundleId()); // not postponed, satisfied, mutable
+    ic2 = utility.createTestCInfo(false, true,  true, "TestCondition_103", domBundle.getBundleId()); // not postponed, satisfied, mutable
+    pc1 = utility.createTestCInfo(true,  false, true, "TestCondition_104", domBundle.getBundleId()); // postponed, not satisfied, mutable
+    pc2 = utility.createTestCInfo(true,  true,  true, "TestCondition_105", domBundle.getBundleId()); // postponed, satisfied, mutable
+
     cpi[2][1] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcC, ic },
         new Permission[] { permissionQ });
     cpi[2][2] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcC, ic0 },
@@ -695,9 +663,11 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     String[] satisfOrder = TestCondition.getSatisfOrder();
     try {
       String[] order = new String[] {
-          "TestCondition_100", "TestCondition_100", "TestCondition_100",
-          "TestCondition_101", "TestCondition_102", "TestCondition_102",
-          "TestCondition_103", "TestCondition_105", "TestCondition_104",
+          "TestCondition_100", "TestCondition_101", // immediate for tb3; postponed 105
+          "TestCondition_102", "TestCondition_100", // immediate for tb2; postponed 104 and 105
+          "TestCondition_102", "TestCondition_103", // immediate for tb1
+          "TestCondition_105", // postponed for tb3
+          "TestCondition_104", // postponed for tb2; only evaluated 104 because it is not satisfied
       };
       utility.testEqualArrays(order, satisfOrder);
     } catch (AssertionFailedError e) {
@@ -724,7 +694,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
    */
   public void testRecursionInChecks() {//TC11
     try {
-      TestConditionRecursive.setTestBundleLocation(domBundle);
+        Class.forName(TestCondition.class.getName());
     } catch (Exception ex) {
       pass(ex.getMessage());
       //it doesn't work because loadClass method in RI works with the system class loader only
@@ -733,10 +703,9 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     }
 
     ConditionInfo cInfo = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[] { domBundleLocation });
-    ConditionInfo tc1 = new ConditionInfo(TestCondition.class.getName(), 
-        new String[] { "true", "true", "true", "TestConditionNR" }); // postponed, satisfied, mutable
+    ConditionInfo tc1 =utility.createTestCInfo(true, true, true, "TestConditionNR", domBundle.getBundleId());
     ConditionInfo tc2 = new ConditionInfo(TestConditionRecursive.class.getName(), 
-        new String[] { "true", "true", "true", "TestConditionR" }); // postponed, satisfied, mutable
+        new String[] { "true", "true", "true", "TestConditionR", String.valueOf(domBundle.getBundleId())}); // postponed, satisfied, mutable
 
     AdminPermission perm1 = new AdminPermission("*", AdminPermission.EXECUTE);
     AdminPermission perm2 = new AdminPermission("*", AdminPermission.LIFECYCLE);
@@ -779,7 +748,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     TestCondition.satisfOrder.removeAllElements();
     
     try {
-      TestCondition.setTestBundleLocation(testBundle);
+        Class.forName(TestCondition.class.getName());
     } catch (Exception ex) {
       pass(ex.getMessage());
       //it doesn't work because loadClass method in RI works with the system class loader only
@@ -788,10 +757,10 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     }
 
     ConditionInfo cInfo = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[] { testBundleLocation });
-    ConditionInfo tc1  = utility.createTestCInfo(false, false, true, "TestCondition_200"); // not postponed, not satisfied, mutable
-    ConditionInfo tc2  = utility.createTestCInfo(false,  true, true, "TestCondition_201"); // not postponed, satisfied, mutable
-    ConditionInfo tc3  = utility.createTestCInfo( true, false, true, "TestCondition_202"); // postponed, not satisfied, mutable
-    ConditionInfo tc4  = utility.createTestCInfo( true,  true, true, "TestCondition_203"); // postponed, satisfied, mutable
+    ConditionInfo tc1  = utility.createTestCInfo(false, false, true, "TestCondition_200", testBundle.getBundleId()); // not postponed, not satisfied, mutable
+    ConditionInfo tc2  = utility.createTestCInfo(false,  true, true, "TestCondition_201", testBundle.getBundleId()); // not postponed, satisfied, mutable
+    ConditionInfo tc3  = utility.createTestCInfo( true, false, true, "TestCondition_202", testBundle.getBundleId()); // postponed, not satisfied, mutable
+    ConditionInfo tc4  = utility.createTestCInfo( true,  true, true, "TestCondition_203", testBundle.getBundleId()); // postponed, satisfied, mutable
 
     AdminPermission perm1 = new AdminPermission("*", AdminPermission.EXECUTE);
     AdminPermission perm2 = new AdminPermission("*", AdminPermission.LIFECYCLE);
@@ -839,29 +808,58 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
   }
 
   /**
+   * <remove>Prepare for each method. It is important that each method can
+   * be executed independently of each other method. Do not keep
+   * state between methods, if possible. This method can be used
+   * to clean up any possible remaining state.</remove>
+   */
+  public void setState() throws Exception{
+	assertTrue("Must have a security manager", System.getSecurityManager() != null);
+	assertTrue(serviceAvailable(PermissionAdmin.class)); 
+	assertTrue(serviceAvailable(ConditionalPermissionAdmin.class));
+
+	installBundle("testcond.jar", false);
+
+    testBundle = installBundle("tb1.jar");
+    testBundleLocation = testBundle.getLocation();
+
+    permBundle = installBundle("tb2.jar");
+    permBundleLocation = permBundle.getLocation();
+
+    domBundle = installBundle("tb3.jar");
+    domBundleLocation = domBundle.getLocation();
+
+    permissionAdmin = (PermissionAdmin)getService(PermissionAdmin.class);
+    conditionalAdmin = (ConditionalPermissionAdmin)getService(ConditionalPermissionAdmin.class);
+    tbc = (ConditionalTBCService)getService(ConditionalTBCService.class);
+    permTBC = (ConditionalPermTBCService)getService(ConditionalPermTBCService.class);
+    domTBC = (ConditionalDomTBCService)getService(ConditionalDomTBCService.class);
+
+    utility = new ConditionalUtility(this, permissionAdmin, conditionalAdmin);
+    // make sure this bundle has all permissions
+    permissionAdmin.setPermissions(getContext().getBundle().getLocation(), new PermissionInfo[] {new PermissionInfo("(" + AllPermission.class.getName() +")")});
+
+    // make sure the test bundles do not have any location permissions set; SimplePermissionPolicy sets these
+    permissionAdmin.setPermissions(testBundleLocation, null);
+    permissionAdmin.setPermissions(permBundleLocation, null);
+    permissionAdmin.setPermissions(domBundleLocation, null);
+  }
+ 
+  /**
    * Clean up after each method. Notice that during debugging
    * many times the unsetState is never reached.
    */
-  public void unsetState() {
-    log("#after each method");
+  public void clearState() throws Exception{
+	  testBundle.uninstall();
+	  permBundle.uninstall();
+	  domBundle.uninstall();
+	ConditionalPermissionUpdate update = conditionalAdmin.newConditionalPermissionUpdate();
+    update.getConditionalPermissionInfos().clear();
+    update.commit();
+    String[] locations = permissionAdmin.getLocations();
+    if (locations != null)
+    	for (int i = 0; i < locations.length; i++)
+    		permissionAdmin.setPermissions(locations[i], null);
   }
 
-  /**
-   * Clean up after a run.
-   */
-  public void unprepare() {
-    log("#after each run");
-    Enumeration infos = conditionalAdmin.getConditionalPermissionInfos();
-
-    while ((infos != null) && infos.hasMoreElements()) {
-      ((ConditionalPermissionInfo)infos.nextElement()).delete();
-    }
-
-    permissionAdmin.setPermissions(testBundleLocation, null);
-    permissionAdmin.setPermissions(permBundleLocation, null);
-  }
-
-  protected String[] getMethods() {
-    return methods;
-  }
 }

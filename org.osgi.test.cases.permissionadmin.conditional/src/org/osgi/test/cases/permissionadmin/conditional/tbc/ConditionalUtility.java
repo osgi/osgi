@@ -54,12 +54,13 @@ public class ConditionalUtility {
 	}
 	
 	
-	ConditionInfo createTestCInfo(boolean postponed, boolean satisfied, boolean mutable, String name) {
+	ConditionInfo createTestCInfo(boolean postponed, boolean satisfied, boolean mutable, String name, long id) {
     return new ConditionInfo(TestCondition.class.getName(), 
 					new String[]{String.valueOf(postponed), 
 								 String.valueOf(satisfied), 
 								 String.valueOf(mutable),
-                 name});
+								 name,
+								 String.valueOf(id)});
 	}
 	
 	
@@ -264,7 +265,7 @@ public class ConditionalUtility {
       notAllowed(notAllowedPermission[k], SecurityException.class);
     }
     if (testForAllowed) {
-      //alredy order is tested, so only clear the vector
+      //already order is tested, so only clear the vector
       TestCondition.satisfOrder.removeAllElements();
     } else {
       //order not tested yet, test it here

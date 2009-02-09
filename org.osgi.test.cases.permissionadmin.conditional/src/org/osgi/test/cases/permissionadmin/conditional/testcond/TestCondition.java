@@ -13,7 +13,6 @@ public class TestCondition implements Condition {
   private static final String CONDITION_TYPE = TestCondition.class.getName();
   private static final String CONDITION_TYPE2 = TestConditionRecursive.class.getName();
   
-  protected static Bundle testBundle = null;
   public    static Vector satisfOrder = new Vector();
   private   static boolean varmutable;
   
@@ -22,29 +21,30 @@ public class TestCondition implements Condition {
   protected boolean mutable;
   protected String  name;
   protected String  info;
+  protected final long testBundleId;
   
   public TestCondition(Bundle bundle, ConditionInfo info) {
     if (!CONDITION_TYPE.equals(info.getType()) && !CONDITION_TYPE2.equals(info.getType()))
       throw new IllegalArgumentException("ConditionInfo must be of type \"" + CONDITION_TYPE + "\"");
     String[] args = info.getArgs();
-    if (args.length != 4)
+    if (args.length < 4 || args.length > 5)
       throw new IllegalArgumentException("Illegal number of args: " + args.length);
     postponed = (new Boolean(args[0])).booleanValue();
 		satisfied = (new Boolean(args[1])).booleanValue();
 		mutable = (new Boolean(args[2])).booleanValue();
     name = args[3];
     setInfoString(args);
+    if (args.length == 5)
+    	testBundleId = Long.parseLong(args[4]);
+    else
+    	testBundleId = -1;
 	}	
   
   public static Condition getCondition(Bundle bundle, ConditionInfo info) {
-    if (testBundle == bundle) {
-      return new TestCondition(bundle, info);
-    }
+	  TestCondition tc = new TestCondition(bundle, info);
+	  if (tc.testBundleId < 0 || bundle.getBundleId() == tc.testBundleId)
+		  return tc;
     return Condition.FALSE;
-  }
-  
-  public static void setTestBundleLocation(Bundle bundle) {
-    testBundle = bundle;
   }
   
 	public boolean isPostponed() {

@@ -19,10 +19,10 @@ public class TestConditionRecursive extends TestCondition {
   }
 
   public static Condition getCondition(Bundle bundle, ConditionInfo info) {
-    if (testBundle == bundle) {
-      return new TestConditionRecursive(bundle, info);
-    }
-    return Condition.FALSE;
+	  TestConditionRecursive tc = new TestConditionRecursive(bundle, info);
+	  if (tc.testBundleId < 0 || bundle.getBundleId() == tc.testBundleId)
+		  return tc;
+	  return Condition.FALSE;
   }
   
   public static void setPermission(Permission perm) {
