@@ -502,14 +502,9 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
             }
             return b;
         }
-        catch(BundleException e) {
-            log("Not able to install testbundle " + bundleName);
-			log("Nested " + e.getNestedException());
-            e.printStackTrace();
-            throw e;
-        }
         catch(Exception e) {
             log("Not able to install testbundle " + bundleName);
+			log("Nested " + e.getCause());
             e.printStackTrace();
             throw e;
         }
