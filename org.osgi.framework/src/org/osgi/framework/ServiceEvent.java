@@ -16,6 +16,9 @@
 
 package org.osgi.framework;
 
+import org.osgi.framework.bundle.AllServiceListener;
+import org.osgi.framework.bundle.ServiceListener;
+
 
 /**
  * An event from the Framework describing a service lifecycle change.

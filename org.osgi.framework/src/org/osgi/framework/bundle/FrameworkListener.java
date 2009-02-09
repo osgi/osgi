@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-package org.osgi.framework;
+package org.osgi.framework.bundle;
+
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkEvent;
 
 
 /**

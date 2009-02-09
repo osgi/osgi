@@ -14,7 +14,12 @@
  * limitations under the License.
  */
 
-package org.osgi.framework;
+package org.osgi.framework.bundle;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.ServiceEvent;
+import org.osgi.framework.ServicePermission;
+import org.osgi.framework.ServiceReference;
 
 
 /**

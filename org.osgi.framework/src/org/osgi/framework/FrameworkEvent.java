@@ -16,6 +16,8 @@
 
 package org.osgi.framework;
 
+import org.osgi.framework.bundle.FrameworkListener;
+
 
 /**
  * A general event from the Framework.

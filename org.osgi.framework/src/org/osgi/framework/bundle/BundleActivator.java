@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package org.osgi.framework;
+package org.osgi.framework.bundle;
+
+import org.osgi.framework.BundleContext;
 
 /**
  * Customizes the starting and stopping of a bundle.

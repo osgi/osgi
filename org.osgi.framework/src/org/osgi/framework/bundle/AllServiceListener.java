@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-package org.osgi.framework;
+package org.osgi.framework.bundle;
+
+import org.osgi.framework.ServiceEvent;
+import org.osgi.framework.ServicePermission;
 
 /**
  * A <code>ServiceEvent</code> listener that does not filter based upon

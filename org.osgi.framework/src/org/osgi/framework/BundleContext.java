@@ -21,6 +21,12 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.Map;
 
+import org.osgi.framework.bundle.BundleActivator;
+import org.osgi.framework.bundle.BundleListener;
+import org.osgi.framework.bundle.FrameworkListener;
+import org.osgi.framework.bundle.ServiceFactory;
+import org.osgi.framework.bundle.ServiceListener;
+
 /**
  * A bundle's execution context within the Framework. The context is used to
  * grant access to other methods so that this bundle can interact with the
@@ -82,17 +88,17 @@ public interface BundleContext {
 	 * The Framework defines the following standard property keys:
 	 * </p>
 	 * <ul>
-	 * <li>{@link Constants#FRAMEWORK_VERSION} - The OSGi Framework version.
+	 * <li>{@link FrameworkConstants#FRAMEWORK_VERSION} - The OSGi Framework version.
 	 * </li>
-	 * <li>{@link Constants#FRAMEWORK_VENDOR} - The Framework implementation
+	 * <li>{@link FrameworkConstants#FRAMEWORK_VENDOR} - The Framework implementation
 	 * vendor.</li>
-	 * <li>{@link Constants#FRAMEWORK_LANGUAGE} - The language being used. See
+	 * <li>{@link FrameworkConstants#FRAMEWORK_LANGUAGE} - The language being used. See
 	 * ISO 639 for possible values.</li>
-	 * <li>{@link Constants#FRAMEWORK_OS_NAME} - The host computer operating
+	 * <li>{@link FrameworkConstants#FRAMEWORK_OS_NAME} - The host computer operating
 	 * system.</li>
-	 * <li>{@link Constants#FRAMEWORK_OS_VERSION} - The host computer operating
+	 * <li>{@link FrameworkConstants#FRAMEWORK_OS_VERSION} - The host computer operating
 	 * system version number.</li>
-	 * <li>{@link Constants#FRAMEWORK_PROCESSOR} - The host computer processor
+	 * <li>{@link FrameworkConstants#FRAMEWORK_PROCESSOR} - The host computer processor
 	 * name.</li>
 	 * </ul>
 	 * <p>
@@ -100,7 +106,7 @@ public interface BundleContext {
 	 * 
 	 * <p>
 	 * Note: The last four standard properties are used by the
-	 * {@link Constants#BUNDLE_NATIVECODE} <code>Manifest</code> header's
+	 * {@link FrameworkConstants#BUNDLE_NATIVECODE} <code>Manifest</code> header's
 	 * matching algorithm for selecting native language code.
 	 * 
 	 * @param key The name of the requested property.
@@ -244,7 +250,7 @@ public interface BundleContext {
 	 * <p>
 	 * The listener is called if the filter criteria is met. To filter based
 	 * upon the class of the service, the filter should reference the
-	 * {@link Constants#OBJECTCLASS} property. If <code>filter</code> is
+	 * {@link FrameworkConstants#OBJECTCLASS} property. If <code>filter</code> is
 	 * <code>null</code>, all services are considered to match the filter.
 	 * 
 	 * <p>
@@ -416,8 +422,8 @@ public interface BundleContext {
 	 * classes named.
 	 * <li>The Framework adds these service properties to the specified
 	 * <code>Dictionary</code> (which may be <code>null</code>): a property
-	 * named {@link Constants#SERVICE_ID} identifying the registration number of
-	 * the service and a property named {@link Constants#OBJECTCLASS} containing
+	 * named {@link FrameworkConstants#SERVICE_ID} identifying the registration number of
+	 * the service and a property named {@link FrameworkConstants#OBJECTCLASS} containing
 	 * all the specified classes. If any of these properties have already been
 	 * specified by the registering bundle, their values will be overwritten by
 	 * the Framework.
@@ -430,12 +436,12 @@ public interface BundleContext {
 	 * 
 	 * @param clazzes The class names under which the service can be located.
 	 *        The class names in this array will be stored in the service's
-	 *        properties under the key {@link Constants#OBJECTCLASS}.
+	 *        properties under the key {@link FrameworkConstants#OBJECTCLASS}.
 	 * @param service The service object or a <code>ServiceFactory</code>
 	 *        object.
 	 * @param properties The properties for this service. The keys in the
 	 *        properties object must all be <code>String</code> objects. See
-	 *        {@link Constants} for a list of standard service property keys.
+	 *        {@link FrameworkConstants} for a list of standard service property keys.
 	 *        Changes should not be made to this object after calling this
 	 *        method. To update the service's properties the
 	 *        {@link ServiceRegistration#setProperties} method must be called.
@@ -480,7 +486,7 @@ public interface BundleContext {
 	 * {@link #registerService(java.lang.String[], java.lang.Object, java.util.Map)}
 	 * and is provided as a convenience when <code>service</code> will only be
 	 * registered under a single class name. Note that even in this case the
-	 * value of the service's {@link Constants#OBJECTCLASS} property will be an
+	 * value of the service's {@link FrameworkConstants#OBJECTCLASS} property will be an
 	 * array of strings, rather than just a single string.
 	 * 
 	 * @param clazz The class name under which the service can be located.
@@ -545,7 +551,7 @@ public interface BundleContext {
 	 * and were registered under the specified class. The complete list of
 	 * classes of which a service is an instance and which were specified when
 	 * the service was registered is available from the service's
-	 * {@link Constants#OBJECTCLASS} property.
+	 * {@link FrameworkConstants#OBJECTCLASS} property.
 	 * <li>The set is reduced one final time by cycling through each
 	 * <code>ServiceReference</code> object and calling
 	 * {@link ServiceReference#isAssignableTo(Bundle, String)} with the context
@@ -617,7 +623,7 @@ public interface BundleContext {
 	 * and were registered under the specified class. The complete list of
 	 * classes of which a service is an instance and which were specified when
 	 * the service was registered is available from the service's
-	 * {@link Constants#OBJECTCLASS} property.
+	 * {@link FrameworkConstants#OBJECTCLASS} property.
 	 * <li>An array of the remaining <code>ServiceReference</code> objects is
 	 * returned.
 	 * </ol>
@@ -655,10 +661,10 @@ public interface BundleContext {
 	 * specified class.
 	 * <p>
 	 * If multiple such services exist, the service with the highest ranking (as
-	 * specified in its {@link Constants#SERVICE_RANKING} property) is returned.
+	 * specified in its {@link FrameworkConstants#SERVICE_RANKING} property) is returned.
 	 * <p>
 	 * If there is a tie in ranking, the service with the lowest service ID (as
-	 * specified in its {@link Constants#SERVICE_ID} property); that is, the
+	 * specified in its {@link FrameworkConstants#SERVICE_ID} property); that is, the
 	 * service that was registered first is returned.
 	 * 
 	 * @param clazz The class name with which the service was registered.

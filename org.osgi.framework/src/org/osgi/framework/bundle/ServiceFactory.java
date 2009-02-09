@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-package org.osgi.framework;
+package org.osgi.framework.bundle;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 
 /**
  * Allows services to provide customized service objects in the OSGi

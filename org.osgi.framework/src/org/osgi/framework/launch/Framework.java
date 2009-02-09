@@ -20,7 +20,7 @@ import java.io.InputStream;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
-import org.osgi.framework.Constants;
+import org.osgi.framework.FrameworkConstants;
 import org.osgi.framework.FrameworkEvent;
 
 /**
@@ -84,7 +84,7 @@ public interface Framework extends Bundle {
 	 *             and the caller does not have the appropriate
 	 *             <code>AdminPermission[this,EXECUTE]</code> or if there is 
 	 *             a security manager already installed and 
-	 *             the {@link Constants#FRAMEWORK_SECURITY} configuration
+	 *             the {@link FrameworkConstants#FRAMEWORK_SECURITY} configuration
 	 *             property is set.
 	 *             
 	 */
@@ -150,7 +150,7 @@ public interface Framework extends Bundle {
 	 * If this Framework implements the optional <i>Start Level Service
 	 * Specification</i>, then the start level of this Framework is moved to
 	 * the start level specified by the
-	 * {@link Constants#FRAMEWORK_BEGINNING_STARTLEVEL beginning start level}
+	 * {@link FrameworkConstants#FRAMEWORK_BEGINNING_STARTLEVEL beginning start level}
 	 * framework property, as described in the <i>Start Level Service
 	 * Specification</i>. If this framework property is not specified, then the
 	 * start level of this Framework is moved to start level one (1). Any
@@ -324,7 +324,7 @@ public interface Framework extends Bundle {
 	 *             <code>AdminPermission[this,METADATA]</code>, and the Java
 	 *             Runtime Environment supports permissions.
 	 * @see Bundle#getLocation()
-	 * @see Constants#SYSTEM_BUNDLE_LOCATION
+	 * @see FrameworkConstants#SYSTEM_BUNDLE_LOCATION
 	 */
 	public String getLocation();
 
@@ -337,7 +337,7 @@ public interface Framework extends Bundle {
 	 * 
 	 * @return The symbolic name of this Framework.
 	 * @see Bundle#getSymbolicName()
-	 * @see Constants#SYSTEM_BUNDLE_SYMBOLICNAME
+	 * @see FrameworkConstants#SYSTEM_BUNDLE_SYMBOLICNAME
 	 */
 	public String getSymbolicName();
 }

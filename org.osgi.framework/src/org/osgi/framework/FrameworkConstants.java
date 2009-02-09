@@ -28,7 +28,9 @@ package org.osgi.framework;
  * @version $Revision$
  */
 
-public interface Constants {
+public class FrameworkConstants {
+	private FrameworkConstants() {
+	}
 	/**
 	 * Location identifier of the OSGi <i>system bundle </i>, which is defined
 	 * to be &quot;System Bundle&quot;.
@@ -646,9 +648,9 @@ public interface Constants {
 	 *     Bundle-SymbolicName: com.acme.module.test; fragment-attachment:=&quot;never&quot;
 	 * </pre>
 	 * 
-	 * @see Constants#FRAGMENT_ATTACHMENT_ALWAYS
-	 * @see Constants#FRAGMENT_ATTACHMENT_RESOLVETIME
-	 * @see Constants#FRAGMENT_ATTACHMENT_NEVER
+	 * @see FrameworkConstants#FRAGMENT_ATTACHMENT_ALWAYS
+	 * @see FrameworkConstants#FRAGMENT_ATTACHMENT_RESOLVETIME
+	 * @see FrameworkConstants#FRAGMENT_ATTACHMENT_NEVER
 	 * @since 1.3
 	 */
 	public final static String	FRAGMENT_ATTACHMENT_DIRECTIVE			= "fragment-attachment";
@@ -668,7 +670,7 @@ public interface Constants {
 	 *     Bundle-SymbolicName: com.acme.module.test; fragment-attachment:=&quot;always&quot;
 	 * </pre>
 	 * 
-	 * @see Constants#FRAGMENT_ATTACHMENT_DIRECTIVE
+	 * @see FrameworkConstants#FRAGMENT_ATTACHMENT_DIRECTIVE
 	 * @since 1.3
 	 */
 	public final static String	FRAGMENT_ATTACHMENT_ALWAYS				= "always";
@@ -688,7 +690,7 @@ public interface Constants {
 	 *     Bundle-SymbolicName: com.acme.module.test; fragment-attachment:=&quot;resolve-time&quot;
 	 * </pre>
 	 * 
-	 * @see Constants#FRAGMENT_ATTACHMENT_DIRECTIVE
+	 * @see FrameworkConstants#FRAGMENT_ATTACHMENT_DIRECTIVE
 	 * @since 1.3
 	 */
 	public final static String	FRAGMENT_ATTACHMENT_RESOLVETIME			= "resolve-time";
@@ -707,7 +709,7 @@ public interface Constants {
 	 *     Bundle-SymbolicName: com.acme.module.test; fragment-attachment:=&quot;never&quot;
 	 * </pre>
 	 * 
-	 * @see Constants#FRAGMENT_ATTACHMENT_DIRECTIVE
+	 * @see FrameworkConstants#FRAGMENT_ATTACHMENT_DIRECTIVE
 	 * @since 1.3
 	 */
 	public final static String	FRAGMENT_ATTACHMENT_NEVER				= "never";
@@ -860,8 +862,8 @@ public interface Constants {
 	 *     Require-Bundle: com.acme.module.test; resolution:=&quot;optional&quot;
 	 * </pre>
 	 * 
-	 * @see Constants#RESOLUTION_MANDATORY
-	 * @see Constants#RESOLUTION_OPTIONAL
+	 * @see FrameworkConstants#RESOLUTION_MANDATORY
+	 * @see FrameworkConstants#RESOLUTION_OPTIONAL
 	 * @since 1.3
 	 */
 	public final static String	RESOLUTION_DIRECTIVE					= "resolution";
@@ -882,7 +884,7 @@ public interface Constants {
 	 *     Require-Bundle: com.acme.module.test; resolution:=&quot;manditory&quot;
 	 * </pre>
 	 * 
-	 * @see Constants#RESOLUTION_DIRECTIVE
+	 * @see FrameworkConstants#RESOLUTION_DIRECTIVE
 	 * @since 1.3
 	 */
 	public final static String	RESOLUTION_MANDATORY					= "mandatory";
@@ -904,7 +906,7 @@ public interface Constants {
 	 *     Require-Bundle: com.acme.module.test; resolution:=&quot;optional&quot;
 	 * </pre>
 	 * 
-	 * @see Constants#RESOLUTION_DIRECTIVE
+	 * @see FrameworkConstants#RESOLUTION_DIRECTIVE
 	 * @since 1.3
 	 */
 	public final static String	RESOLUTION_OPTIONAL						= "optional";
@@ -1006,8 +1008,8 @@ public interface Constants {
 	 *     Require-Bundle: com.acme.module.test; visibility:=&quot;reexport&quot;
 	 * </pre>
 	 * 
-	 * @see Constants#VISIBILITY_PRIVATE
-	 * @see Constants#VISIBILITY_REEXPORT
+	 * @see FrameworkConstants#VISIBILITY_PRIVATE
+	 * @see FrameworkConstants#VISIBILITY_REEXPORT
 	 * @since 1.3
 	 */
 	public final static String	VISIBILITY_DIRECTIVE					= "visibility";
@@ -1026,7 +1028,7 @@ public interface Constants {
 	 *     Require-Bundle: com.acme.module.test; visibility:=&quot;private&quot;
 	 * </pre>
 	 * 
-	 * @see Constants#VISIBILITY_DIRECTIVE
+	 * @see FrameworkConstants#VISIBILITY_DIRECTIVE
 	 * @since 1.3
 	 */
 	public final static String	VISIBILITY_PRIVATE						= "private";
@@ -1046,7 +1048,7 @@ public interface Constants {
 	 *     Require-Bundle: com.acme.module.test; visibility:=&quot;reexport&quot;
 	 * </pre>
 	 * 
-	 * @see Constants#VISIBILITY_DIRECTIVE
+	 * @see FrameworkConstants#VISIBILITY_DIRECTIVE
 	 * @since 1.3
 	 */
 	public final static String	VISIBILITY_REEXPORT						= "reexport";
@@ -1061,8 +1063,8 @@ public interface Constants {
 	 *     Fragment-Host: system.bundle; extension:=&quot;framework&quot;
 	 * </pre>
 	 * 
-	 * @see Constants#EXTENSION_FRAMEWORK
-	 * @see Constants#EXTENSION_BOOTCLASSPATH
+	 * @see FrameworkConstants#EXTENSION_FRAMEWORK
+	 * @see FrameworkConstants#EXTENSION_BOOTCLASSPATH
 	 * @since 1.3
 	 */
 	public final static String	EXTENSION_DIRECTIVE						= "extension";
@@ -1080,7 +1082,7 @@ public interface Constants {
 	 *     Fragment-Host: system.bundle; extension:=&quot;framework&quot;
 	 * </pre>
 	 * 
-	 * @see Constants#EXTENSION_DIRECTIVE
+	 * @see FrameworkConstants#EXTENSION_DIRECTIVE
 	 * @since 1.3
 	 */
 	public final static String	EXTENSION_FRAMEWORK						= "framework";
@@ -1098,7 +1100,7 @@ public interface Constants {
 	 *     Fragment-Host: system.bundle; extension:=&quot;bootclasspath&quot;
 	 * </pre>
 	 * 
-	 * @see Constants#EXTENSION_DIRECTIVE
+	 * @see FrameworkConstants#EXTENSION_DIRECTIVE
 	 * @since 1.3
 	 */
 	public final static String	EXTENSION_BOOTCLASSPATH					= "bootclasspath";
@@ -1111,9 +1113,9 @@ public interface Constants {
 	 * object returned by the <code>Bundle.getHeaders</code> method.
 	 * 
 	 * @since 1.4
-	 * @see Constants#ACTIVATION_LAZY
-	 * @see Constants#INCLUDE_DIRECTIVE
-	 * @see Constants#EXCLUDE_DIRECTIVE
+	 * @see FrameworkConstants#ACTIVATION_LAZY
+	 * @see FrameworkConstants#INCLUDE_DIRECTIVE
+	 * @see FrameworkConstants#EXCLUDE_DIRECTIVE
 	 */
 	public final static String	BUNDLE_ACTIVATIONPOLICY					= "Bundle-ActivationPolicy";
 
@@ -1134,7 +1136,7 @@ public interface Constants {
 	 *       Bundle-ActivationPolicy: lazy
 	 * </pre>
 	 * 
-	 * @see Constants#BUNDLE_ACTIVATIONPOLICY
+	 * @see FrameworkConstants#BUNDLE_ACTIVATIONPOLICY
 	 * @see Bundle#start(int)
 	 * @see Bundle#START_ACTIVATION_POLICY
 	 * @since 1.4

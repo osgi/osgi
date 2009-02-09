@@ -160,16 +160,16 @@ public interface ServiceReference extends Comparable<ServiceReference> {
 	 * 
 	 * <p>
 	 * If this <code>ServiceReference</code> and the specified
-	 * <code>ServiceReference</code> have the same {@link Constants#SERVICE_ID
+	 * <code>ServiceReference</code> have the same {@link FrameworkConstants#SERVICE_ID
 	 * service id} they are equal. This <code>ServiceReference</code> is less
 	 * than the specified <code>ServiceReference</code> if it has a lower
-	 * {@link Constants#SERVICE_RANKING service ranking} and greater if it has a
+	 * {@link FrameworkConstants#SERVICE_RANKING service ranking} and greater if it has a
 	 * higher service ranking. Otherwise, if this <code>ServiceReference</code>
 	 * and the specified <code>ServiceReference</code> have the same
-	 * {@link Constants#SERVICE_RANKING service ranking}, this
+	 * {@link FrameworkConstants#SERVICE_RANKING service ranking}, this
 	 * <code>ServiceReference</code> is less than the specified
 	 * <code>ServiceReference</code> if it has a higher
-	 * {@link Constants#SERVICE_ID service id} and greater if it has a lower
+	 * {@link FrameworkConstants#SERVICE_ID service id} and greater if it has a lower
 	 * service id.
 	 * 
 	 * @param reference The <code>ServiceReference</code> to be compared.

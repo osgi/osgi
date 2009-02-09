@@ -16,6 +16,10 @@
 
 package org.osgi.framework;
 
+import org.osgi.framework.bundle.BundleActivator;
+import org.osgi.framework.bundle.BundleListener;
+import org.osgi.framework.bundle.SynchronousBundleListener;
+
 
 /**
  * An event from the Framework describing a bundle lifecycle change.
@@ -154,7 +158,7 @@ public class BundleEvent {
 	/**
 	 * The bundle will be lazily activated.
 	 * <p>
-	 * The bundle has a {@link Constants#ACTIVATION_LAZY lazy activation policy}
+	 * The bundle has a {@link FrameworkConstants#ACTIVATION_LAZY lazy activation policy}
 	 * and is waiting to be activated. It is now in the
 	 * {@link Bundle#STARTING STARTING} state and has a valid
 	 * <code>BundleContext</code>. This event is only delivered to

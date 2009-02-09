@@ -25,6 +25,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.osgi.framework.bundle.BundleActivator;
+
 /**
  * An installed bundle in the Framework.
  * 
@@ -106,15 +108,15 @@ public interface Bundle {
 	 * successfully resolved the bundle's code dependencies. These dependencies
 	 * include:
 	 * <ul>
-	 * <li>The bundle's class path from its {@link Constants#BUNDLE_CLASSPATH}
+	 * <li>The bundle's class path from its {@link FrameworkConstants#BUNDLE_CLASSPATH}
 	 * Manifest header.
 	 * <li>The bundle's package dependencies from its
-	 * {@link Constants#EXPORT_PACKAGE} and {@link Constants#IMPORT_PACKAGE}
+	 * {@link FrameworkConstants#EXPORT_PACKAGE} and {@link FrameworkConstants#IMPORT_PACKAGE}
 	 * Manifest headers.
 	 * <li>The bundle's required bundle dependencies from its
-	 * {@link Constants#REQUIRE_BUNDLE} Manifest header.
+	 * {@link FrameworkConstants#REQUIRE_BUNDLE} Manifest header.
 	 * <li>A fragment bundle's host dependency from its
-	 * {@link Constants#FRAGMENT_HOST} Manifest header.
+	 * {@link FrameworkConstants#FRAGMENT_HOST} Manifest header.
 	 * </ul>
 	 * <p>
 	 * Note that the bundle is not active yet. A bundle must be put in the
@@ -137,7 +139,7 @@ public interface Bundle {
 	 * <code>ACTIVE</code> state.
 	 * <p>
 	 * If the bundle has a
-	 * {@link Constants#ACTIVATION_LAZY lazy activation policy}, then the
+	 * {@link FrameworkConstants#ACTIVATION_LAZY lazy activation policy}, then the
 	 * bundle may remain in this state for some time until the activation is
 	 * triggered.
 	 * <p>
@@ -188,7 +190,7 @@ public interface Bundle {
 	/**
 	 * The bundle start operation must activate the bundle according to the
 	 * bundle's declared
-	 * {@link Constants#BUNDLE_ACTIVATIONPOLICY activation policy}.
+	 * {@link FrameworkConstants#BUNDLE_ACTIVATIONPOLICY activation policy}.
 	 * 
 	 * <p>
 	 * This bit may be set when calling {@link #start(int)} to notify the
@@ -196,7 +198,7 @@ public interface Bundle {
 	 * activation policy.
 	 * 
 	 * @since 1.4
-	 * @see Constants#BUNDLE_ACTIVATIONPOLICY
+	 * @see FrameworkConstants#BUNDLE_ACTIVATIONPOLICY
 	 * @see #start(int)
 	 */
 	public static final int	START_ACTIVATION_POLICY	= 0x00000002;
@@ -292,7 +294,7 @@ public interface Bundle {
 	 * 
 	 * <li>If the {@link #START_ACTIVATION_POLICY} option is set and this
 	 * bundle's declared activation policy is
-	 * {@link Constants#ACTIVATION_LAZY lazy} then:
+	 * {@link FrameworkConstants#ACTIVATION_LAZY lazy} then:
 	 * <ul>
 	 * <li>If this bundle's state is <code>STARTING</code> then this method
 	 * returns immediately.
@@ -511,7 +513,7 @@ public interface Bundle {
 	 * 
 	 * <li>The download location of the new version of this bundle is
 	 * determined from either this bundle's
-	 * {@link Constants#BUNDLE_UPDATELOCATION} Manifest header (if available) or
+	 * {@link FrameworkConstants#BUNDLE_UPDATELOCATION} Manifest header (if available) or
 	 * this bundle's original location.
 	 * 
 	 * <li>The location is interpreted in an implementation dependent manner,
@@ -690,7 +692,7 @@ public interface Bundle {
 	 *         appropriate <code>AdminPermission[this,METADATA]</code>, and
 	 *         the Java Runtime Environment supports permissions.
 	 * 
-	 * @see Constants#BUNDLE_LOCALIZATION
+	 * @see FrameworkConstants#BUNDLE_LOCALIZATION
 	 */
 	public Map<String, String> getHeaders();
 
@@ -912,7 +914,7 @@ public interface Bundle {
 	 *         the Java Runtime Environment supports permissions.
 	 * 
 	 * @see #getHeaders()
-	 * @see Constants#BUNDLE_LOCALIZATION
+	 * @see FrameworkConstants#BUNDLE_LOCALIZATION
 	 * @since 1.3
 	 */
 	public Map<String, String> getHeaders(String locale);
