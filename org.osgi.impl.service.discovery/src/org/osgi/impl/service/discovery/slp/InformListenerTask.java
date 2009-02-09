@@ -144,8 +144,8 @@ public class InformListenerTask extends TimerTask {
 					Iterator it = lastLookupResult.iterator();
 					while (it.hasNext()) {
 						oldDescr = (ServiceEndpointDescription) it.next();
-						if (oldDescr.equals(svcDescr)) {
-							modified =  (oldDescr.equals(svcDescr)) ? false : true;
+						if (!oldDescr.equals(svcDescr)) {
+							modified = true;
 						}
 					}
 					if (modified) {
