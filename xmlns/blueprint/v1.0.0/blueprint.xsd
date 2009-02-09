@@ -323,10 +323,16 @@
     
  
     <xsd:complexType name="Tlistener">
-        <xsd:sequence minOccurs="0" maxOccurs="1">
-            <!-- nested component declaration -->
-            <xsd:any namespace="##other" minOccurs="1" maxOccurs="1" processContents="skip"/>
-        </xsd:sequence>
+     	<xsd:choice>
+			<xsd:element ref="ref"/>
+         	<xsd:element ref="component"/>
+			<xsd:element ref="reference"/>
+			<xsd:element ref="service"/>
+         	<xsd:sequence minOccurs="0" maxOccurs="1">
+            	<!-- nested component declaration -->
+            	<xsd:any namespace="##other" minOccurs="1" maxOccurs="1" processContents="skip"/>
+        	</xsd:sequence>
+     	</xsd:choice>        
 
         <!-- shortcut for component references -->
         <xsd:attribute name="ref" type="xsd:string" use="optional"/>
@@ -419,11 +425,17 @@
    </xsd:group>
 
    <xsd:complexType name="TserviceRegistrationListener">
-        <xsd:sequence minOccurs="0" maxOccurs="1">
-            <!-- nested component declaration -->
-            <xsd:any namespace="##other" minOccurs="1" maxOccurs="1" processContents="skip"/>
-        </xsd:sequence>
-
+    	<xsd:choice>
+			<xsd:element ref="ref"/>
+        	<xsd:element ref="component"/>
+			<xsd:element ref="reference"/>
+			<xsd:element ref="service"/>
+        	<xsd:sequence minOccurs="0" maxOccurs="1">
+           		<!-- nested component declaration -->
+           		<xsd:any namespace="##other" minOccurs="1" maxOccurs="1" processContents="skip"/>
+       		</xsd:sequence>
+    	</xsd:choice>        
+ 
         <!-- shortcut for component references -->
         <xsd:attribute name="ref" type="xsd:string" use="optional"/>
         <xsd:attribute name="registration-method" type="xsd:token" use="required"/>
