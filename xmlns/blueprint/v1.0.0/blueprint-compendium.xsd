@@ -60,7 +60,7 @@
      <xsd:simpleType name="TupdateStrategyType">
         <xsd:restriction base="xsd:string">
             <xsd:enumeration value="none"/>
-            <xsd:enumeration value="bean-managed"/>
+            <xsd:enumeration value="component-managed"/>
             <xsd:enumeration value="container-managed"/>
         </xsd:restriction>
      </xsd:simpleType>
