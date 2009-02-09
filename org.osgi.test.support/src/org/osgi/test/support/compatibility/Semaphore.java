@@ -8,8 +8,8 @@ public class Semaphore {
 
 	int count = 0;
 
-	/** 
-	 * Creates a new Semaphore with 0 as a starti value.
+	/**
+	 * Creates a new Semaphore with 0 as a start value.
 	 */
 	public Semaphore() {
 		this(0);
@@ -30,17 +30,8 @@ public class Semaphore {
 	/**
 	 * Waits until a signal is (or has been) given.
 	 */
-	public synchronized void waitForSignal() {
-		while(count == 0) {
-			try {
-				super.wait();
-			}
-			catch(InterruptedException e) {
-			    throw new RuntimeException("Thread " 
-			        + Thread.currentThread().getName() + " was interrupted");
-			}
-		}
-		count--;
+	public void waitForSignal() throws InterruptedException {
+		waitForSignal(0);
 	}
 	
 	/**
@@ -48,7 +39,7 @@ public class Semaphore {
 	 */
 	public synchronized void waitForSignal(long timeout) throws InterruptedException {
 		while (count == 0) {
-			super.wait(timeout);
+			wait(timeout);
 		}
 		count--;
 	}
