@@ -66,7 +66,7 @@ public interface ListenerHook {
 	 * Information about a Service Listener. This interface describes the bundle
 	 * which added the Service Listener and the filter with which it was added.
 	 * 
-	 * @ThreadSafe
+	 * @Immutable
 	 */
 	public interface ListenerInfo {
 		/**
