@@ -1,7 +1,5 @@
 /*
- * $Id$
- *
- * Copyright (c) OSGi Alliance (2000-2001).
+ * Copyright (c) OSGi Alliance (2000-2009).
  * All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
@@ -33,6 +31,8 @@ import java.util.Hashtable;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.test.cases.tracker.service.TestService1;
@@ -524,4 +524,186 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 		assertEquals("ServiceTracker.getTrackingCount() == -1", -1, st
 				.getTrackingCount());
 	}
+	
+	public void testServiceTracker01() {
+		final String testMethodName = "testServiceTracker01"; 
+		// simple ServiceTracker test
+		Runnable runIt = new Runnable() {
+			public void run() {
+				// nothing
+			}
+		};
+		Hashtable props = new Hashtable();
+		props.put(testMethodName, Boolean.TRUE);
+		ServiceRegistration reg = getContext().registerService(
+				Runnable.class.getName(), runIt, props);
+		ServiceTracker testTracker = null;
+		try {
+			final boolean[] results = new boolean[] {false, false, false};
+			ServiceTrackerCustomizer testCustomizer = new ServiceTrackerCustomizer() {
+				public Object addingService(ServiceReference reference) {
+					results[0] = true;
+					return reference;
+				}
+
+				public void modifiedService(ServiceReference reference,
+						Object service) {
+					results[1] = true;
+				}
+
+				public void removedService(ServiceReference reference,
+						Object service) {
+					results[2] = true;
+				}
+			};
+			try {
+				testTracker = new ServiceTracker(
+						getContext(),
+						FrameworkUtil
+								.createFilter("(&(objectClass=java.lang.Runnable)("
+								+ testMethodName + "=true))"), testCustomizer);  
+			}
+			catch (InvalidSyntaxException e) {
+				fail("filter error", e); 
+			}
+			testTracker.open();
+			assertTrue("Did not call addingService", results[0]);
+			assertFalse("Did call modifiedService", results[1]);
+			assertFalse("Did call removedService", results[2]); 
+			clearResults(results);
+
+			// change props to still match
+			props.put("testChangeProp", Boolean.FALSE); 
+			reg.setProperties(props);
+			assertFalse("Did call addingService", results[0]);
+			assertTrue("Did not call modifiedService", results[1]);
+			assertFalse("Did call removedService", results[2]); 
+			clearResults(results);
+
+			// change props to no longer match
+			props.put(testMethodName, Boolean.FALSE);
+			reg.setProperties(props);
+			assertFalse("Did call addingService", results[0]);
+			assertFalse("Did call modifiedService", results[1]);
+			assertTrue("Did not call removedService", results[2]); 
+			clearResults(results);
+
+			// change props to no longer match
+			props.put("testChangeProp", Boolean.TRUE); 
+			reg.setProperties(props);
+			assertFalse("Did call addingService", results[0]);
+			assertFalse("Did call modifiedService", results[1]);
+			assertFalse("Did call removedService", results[2]); 
+			clearResults(results);
+
+			// change props back to match
+			props.put(testMethodName, Boolean.TRUE);
+			reg.setProperties(props);
+			assertTrue("Did not call addingService", results[0]);
+			assertFalse("Did call modifiedService", results[1]);
+			assertFalse("Did call removedService", results[2]); 
+			clearResults(results);
+
+		}
+		finally {
+			if (reg != null)
+				reg.unregister();
+			if (testTracker != null)
+				testTracker.close();
+		}
+	}
+
+	public void testServiceTracker02() {
+		final String testMethodName = "testServiceTracker02"; 
+		// simple ServiceTracker test
+		Runnable runIt = new Runnable() {
+			public void run() {
+				// nothing
+			}
+		};
+		Hashtable props = new Hashtable();
+		props.put(testMethodName, Boolean.FALSE);
+		ServiceRegistration reg = getContext()
+				.registerService(Runnable.class.getName(), runIt, props);
+		ServiceTracker testTracker = null;
+		try {
+			final boolean[] results = new boolean[] {false, false, false};
+			ServiceTrackerCustomizer testCustomizer = new ServiceTrackerCustomizer() {
+				public Object addingService(ServiceReference reference) {
+					results[0] = true;
+					return reference;
+				}
+
+				public void modifiedService(ServiceReference reference,
+						Object service) {
+					results[1] = true;
+				}
+
+				public void removedService(ServiceReference reference,
+						Object service) {
+					results[2] = true;
+				}
+			};
+			try {
+				testTracker = new ServiceTracker(
+						getContext(),
+						FrameworkUtil
+								.createFilter("(&(objectClass=java.lang.Runnable)("
+								+ testMethodName + "=true))"), testCustomizer);  
+			}
+			catch (InvalidSyntaxException e) {
+				fail("filter error", e); 
+			}
+			testTracker.open();
+			assertFalse("Did call addingService", results[0]);
+			assertFalse("Did call modifiedService", results[1]);
+			assertFalse("Did call removedService", results[2]); 
+			clearResults(results);
+
+			// change props to match
+			props.put(testMethodName, Boolean.TRUE);
+			reg.setProperties(props);
+			assertTrue("Did not call addingService", results[0]);
+			assertFalse("Did call modifiedService", results[1]);
+			assertFalse("Did call removedService", results[2]); 
+			clearResults(results);
+
+			// change props to still match
+			props.put("testChangeProp", Boolean.TRUE); 
+			reg.setProperties(props);
+			assertFalse("Did call addingService", results[0]);
+			assertTrue("Did not call modifiedService", results[1]);
+			assertFalse("Did call removedService", results[2]); 
+			clearResults(results);
+
+			// change props to no longer match
+			props.put(testMethodName, Boolean.FALSE);
+			reg.setProperties(props);
+			assertFalse("Did call addingService", results[0]);
+			assertFalse("Did call modifiedService", results[1]);
+			assertTrue("Did not call removedService", results[2]); 
+			clearResults(results);
+
+			// change props to no longer match
+			props.put("testChangeProp", Boolean.FALSE); 
+			reg.setProperties(props);
+			assertFalse("Did call addingService", results[0]);
+			assertFalse("Did call modifiedService", results[1]);
+			assertFalse("Did call removedService", results[2]); 
+			clearResults(results);
+
+		}
+		finally {
+			if (reg != null)
+				reg.unregister();
+			if (testTracker != null)
+				testTracker.close();
+		}
+	}
+
+	private void clearResults(boolean[] results) {
+		for (int i = 0; i < results.length; i++)
+			results[i] = false;
+	}
+
 }
