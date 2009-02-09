@@ -283,6 +283,35 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
         return false;
     }
     
+	private boolean objectEquals(Comparator comparator, List expected,
+			List actual) {
+		if (expected.size() != actual.size())
+			return false;
+
+		boolean result = true;
+
+		for (int i = 0; result && i < expected.size(); i++)
+			result = objectEquals(comparator, expected.get(i), actual.get(i));
+
+		return result;
+	}
+
+	private boolean objectEquals(Comparator comparator, Dictionary expected,
+			Dictionary actual) {
+		if (expected.size() != actual.size())
+			return false;
+
+		boolean result = true;
+
+		for (Enumeration e = expected.keys(); result && e.hasMoreElements();) {
+			Object key = e.nextElement();
+			Object expectedValue = expected.get(key);
+			Object actualValue = actual.get(key);
+			result = objectEquals(comparator, expectedValue, actualValue);
+		}
+		return result;
+	}
+    
     public boolean serviceAvailable(Class clazz) {
     	return getContext().getServiceReference(clazz.getName()) != null;
     }
