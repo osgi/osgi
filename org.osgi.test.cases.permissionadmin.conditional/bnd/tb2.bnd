@@ -12,5 +12,3 @@ Private-Package						= \
 	${p}.tb2.*
 Include-Resource					= \
     OSGI-INF/permissions.perm=OSGI-INF/permissions.perm
-
-#-sign					: test; password:=testtest
