@@ -9,7 +9,8 @@ DynamicImport-Package: org.osgi.test.cases.permissionadmin.conditional.testcond
 
 Private-Package						= \
 	org.osgi.test.support.*, \
-	${p}.tbc.*
+	${p}.tbc.*, \
+	${p}.acc
 
 Include-Resource					= \
 	tb1.jar, \
