@@ -368,10 +368,17 @@
             <xsd:element name="comparator" type="Tcomparator"/>
           </xsd:sequence>
           <xsd:attribute name="comparator-ref" type="xsd:string" use="optional"/>
+		  <xsd:attribute name="member-type" type="TmemberType" use="optional"/>
         </xsd:extension>
       </xsd:complexContent>
     </xsd:complexType>
-	
+
+   <xsd:simpleType name="TmemberType">
+        <xsd:restriction base="xsd:token">
+            <xsd:enumeration value="service-instance"/>
+            <xsd:enumeration value="service-reference"/>
+        </xsd:restriction>
+   </xsd:simpleType>
 	
    <xsd:complexType name="Tcomparator">
      <xsd:choice>
