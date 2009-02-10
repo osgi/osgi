@@ -34,4 +34,6 @@ public interface ConditionalTBCService {
 	public void checkPermission(Permission permission) throws SecurityException;
 	
   public void checkStack(Permission permission) throws SecurityException;
+  
+  public void checkStack2(Permission permission) throws SecurityException;
 }

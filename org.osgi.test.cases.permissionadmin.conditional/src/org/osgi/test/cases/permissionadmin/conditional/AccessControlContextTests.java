@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.permissionadmin.conditional.acc;
+package org.osgi.test.cases.permissionadmin.conditional;
 
 import java.io.FilePermission;
 import java.security.AccessControlContext;
@@ -26,7 +26,6 @@ import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
 import org.osgi.service.condpermadmin.ConditionalPermissionUpdate;
 import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.test.cases.permissionadmin.conditional.tbc.AbstractPermissionAdminTests;
 
 public class AccessControlContextTests extends AbstractPermissionAdminTests {
 	private static final PermissionInfo[] READONLY_INFOS = new PermissionInfo[] {new PermissionInfo("java.io.FilePermission", "<<ALL FILES>>", "read")}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$

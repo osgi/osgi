@@ -27,11 +27,6 @@
 
 package org.osgi.test.cases.permissionadmin.conditional.tbc;
 
-import java.security.Permission;
 
-public interface ConditionalDomTBCService {
-	
-	public void checkPermission(Permission permission) throws SecurityException;
-
-  public void checkStack(Permission permission) throws SecurityException;
+public interface ConditionalDomTBCService extends ConditionalTBCService{
 }

@@ -70,4 +70,8 @@ public class Activator implements BundleActivator, ConditionalPermTBCService {
     service.checkStack(permission);
     context.ungetService(ref);
   }
+
+  public void checkStack2(Permission permission) throws SecurityException {
+	  checkStack(permission);
+  }
 }

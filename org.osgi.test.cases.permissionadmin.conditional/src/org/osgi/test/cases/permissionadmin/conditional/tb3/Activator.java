@@ -31,6 +31,7 @@ import java.security.Permission;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.test.cases.permissionadmin.conditional.tbc.ConditionalDomTBCService;
 
 
@@ -50,5 +51,9 @@ public class Activator implements BundleActivator, ConditionalDomTBCService {
 
   public void checkStack(Permission permission) throws SecurityException {
     checkPermission(permission);
+  }
+
+  public void checkStack2(Permission permission) throws SecurityException {
+	  checkStack(permission);
   }
 }
