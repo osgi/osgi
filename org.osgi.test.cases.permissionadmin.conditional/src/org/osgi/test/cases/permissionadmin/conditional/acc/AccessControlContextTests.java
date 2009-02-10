@@ -22,16 +22,13 @@ import java.security.AccessControlException;
 import java.security.AllPermission;
 import java.util.List;
 
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.condpermadmin.ConditionInfo;
-import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
 import org.osgi.service.condpermadmin.ConditionalPermissionUpdate;
-import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.cases.permissionadmin.conditional.tbc.AbstractPermissionAdminTests;
 
-public class AccessControlContextTests extends OSGiTestCase {
+public class AccessControlContextTests extends AbstractPermissionAdminTests {
 	private static final PermissionInfo[] READONLY_INFOS = new PermissionInfo[] {new PermissionInfo("java.io.FilePermission", "<<ALL FILES>>", "read")}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	private static final PermissionInfo[] READWRITE_INFOS = new PermissionInfo[] {
 	// multiple permission infos
@@ -41,51 +38,6 @@ public class AccessControlContextTests extends OSGiTestCase {
 	private static final ConditionInfo SIGNER_CONDITION1 = new ConditionInfo("org.osgi.service.condpermadmin.BundleSignerCondition", new String[] {"*;cn=test1,c=US"}); //$NON-NLS-1$//$NON-NLS-2$
 	private static final ConditionInfo SIGNER_CONDITION2 = new ConditionInfo("org.osgi.service.condpermadmin.BundleSignerCondition", new String[] {"*;cn=test2,c=US"}); //$NON-NLS-1$//$NON-NLS-2$
 	private static final ConditionInfo NOT_SIGNER_CONDITION1 = new ConditionInfo("org.osgi.service.condpermadmin.BundleSignerCondition", new String[] {"*;cn=test1,c=US", "!"}); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
-
-	private ConditionalPermissionAdmin condPermAdmin;
-	private ServiceReference condPermAdminRef;
-	private PermissionAdmin permAdmin;
-	private ServiceReference permAdminRef;
-
-	protected void setUp() throws Exception {
-		super.setUp();
-		// get condpermadmin
-		condPermAdminRef = getContext().getServiceReference(ConditionalPermissionAdmin.class.getName());
-		assertNotNull("No ConditionalPermissionAdmin available", condPermAdminRef);
-		condPermAdmin = (ConditionalPermissionAdmin) getContext().getService(condPermAdminRef);
-		assertNotNull("No ConditionalPermissionAdmin available", condPermAdmin);
-
-		// get permadmin
-		permAdminRef = getContext().getServiceReference(PermissionAdmin.class.getName());
-		assertNotNull("No PermissionAdmin available", permAdminRef);
-		permAdmin = (PermissionAdmin) getContext().getService(permAdminRef);
-		assertNotNull("No PermissionAdmin available", permAdmin);
-		
-	    // make sure this bundle has all permissions
-	    permAdmin.setPermissions(getContext().getBundle().getLocation(), new PermissionInfo[] {new PermissionInfo("(" + AllPermission.class.getName() +")")});
-	}
-
-	protected void tearDown() throws Exception {
-		// clear any permissions set
-		ConditionalPermissionUpdate update = condPermAdmin.newConditionalPermissionUpdate();
-	    update.getConditionalPermissionInfos().clear();
-	    update.commit();
-	    permAdmin.setDefaultPermissions(null);
-	    String[] locations = permAdmin.getLocations();
-	    if (locations != null)
-	    	for (int i = 0; i < locations.length; i++)
-	    		permAdmin.setPermissions(locations[i], null);
-
-		if (condPermAdminRef != null)
-			getContext().ungetService(condPermAdminRef);
-		condPermAdminRef = null;
-		condPermAdmin = null;
-
-		if (permAdminRef != null)
-			getContext().ungetService(permAdminRef);
-		permAdminRef = null;
-		permAdmin = null;
-	}
 
 	public void testSingleSignerRowAllow() {
 		// test single row with signer condition
