@@ -103,11 +103,11 @@
 	</xsd:complexType>
 
 
-    <!-- config-properties -->
+    <!-- cm-properties -->
 
-    <xsd:element name="config-properties" type="TconfigProperties"/>
+    <xsd:element name="cm-properties" type="TcmProperties"/>
 
-    <xsd:complexType name="TconfigProperties">
+    <xsd:complexType name="TcmProperties">
         <xsd:attribute name="persistent-id" type="xsd:string" use="required"/>
         <xsd:attribute name="update" type="xsd:boolean" use="optional" default="false"/>
     </xsd:complexType>
