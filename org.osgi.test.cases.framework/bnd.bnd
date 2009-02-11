@@ -33,4 +33,5 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 -runbundles							= \
 	
 
--runproperties = report=true
+-runproperties = report=true, \
+    org.osgi.framework.launch.test.class=org.eclipse.osgi.launch.Equinox
