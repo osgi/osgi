@@ -93,8 +93,8 @@ public class ServiceHookTests extends OSGiTestCase {
 									allServices);
 							assertEquals("wrong number of services in hook", 1,
 									references.size());
-							Iterator iter = references.iterator();
-							while (iter.hasNext()) {
+							for (Iterator iter = references.iterator(); iter
+									.hasNext();) {
 								ServiceReference ref = (ServiceReference) iter
 										.next();
 								if (ref.equals(reg1.getReference())) {
@@ -157,8 +157,8 @@ public class ServiceHookTests extends OSGiTestCase {
 									allServices);
 							assertEquals("wrong number of services in hook", 3,
 									references.size());
-							Iterator iter = references.iterator();
-							while (iter.hasNext()) {
+							for (Iterator iter = references.iterator(); iter
+									.hasNext();) {
 								ServiceReference ref = (ServiceReference) iter
 										.next();
 								if (ref.equals(reg2.getReference())) {
@@ -218,8 +218,8 @@ public class ServiceHookTests extends OSGiTestCase {
 									allServices);
 							assertEquals("wrong number of services in hook", 2,
 									references.size());
-							Iterator iter = references.iterator();
-							while (iter.hasNext()) {
+							for (Iterator iter = references.iterator(); iter
+									.hasNext();) {
 								ServiceReference ref = (ServiceReference) iter
 										.next();
 								if (ref.equals(reg2.getReference())) {
@@ -282,8 +282,8 @@ public class ServiceHookTests extends OSGiTestCase {
 									allServices);
 							assertEquals("wrong number of services in hook", 2,
 									references.size());
-							Iterator iter = references.iterator();
-							while (iter.hasNext()) {
+							for (Iterator iter = references.iterator(); iter
+									.hasNext();) {
 								ServiceReference ref = (ServiceReference) iter
 										.next();
 								if (ref.equals(reg1.getReference())) {
@@ -688,8 +688,7 @@ public class ServiceHookTests extends OSGiTestCase {
 			}
 			synchronized (events) {
 				assertEquals("listener not called once", 1, events.size());
-				Iterator iter = events.iterator();
-				while (iter.hasNext()) {
+				for (Iterator iter = events.iterator(); iter.hasNext();) {
 					ServiceEvent event = (ServiceEvent) iter.next();
 					assertEquals("type not registered",
 							ServiceEvent.REGISTERED, event.getType());
@@ -709,8 +708,7 @@ public class ServiceHookTests extends OSGiTestCase {
 			reg1.setProperties(props);
 			synchronized (events) {
 				assertEquals("listener not called once", 1, events.size());
-				Iterator iter = events.iterator();
-				while (iter.hasNext()) {
+				for (Iterator iter = events.iterator(); iter.hasNext();) {
 					ServiceEvent event = (ServiceEvent) iter.next();
 					assertEquals("type not registered", ServiceEvent.MODIFIED,
 							event.getType());
@@ -877,22 +875,20 @@ public class ServiceHookTests extends OSGiTestCase {
 		final String testMethodName = "testListenerHook01";
 		// test the ListenerHook is called
 		final BundleContext testContext = getContext();
-		final Collection result = new ArrayList();
+		final Collection added = new ArrayList();
+		final Collection removed = new ArrayList();
 		final int[] hookCalled = new int[] {0, 0};
 
 		ListenerHook hook1 = new ListenerHook() {
 			public void added(Collection listeners) {
-				synchronized (hookCalled) {
-					hookCalled[0]++;
-				}
-				result.addAll(listeners);
+				hookCalled[0]++;
+				added.addAll(listeners);
 			}
 
 			public void removed(Collection listeners) {
-				synchronized (hookCalled) {
-					hookCalled[1]++;
-				}
-				result.removeAll(listeners);
+				hookCalled[1]++;
+				added.removeAll(listeners);
+				removed.addAll(listeners);
 			}
 		};
 
@@ -904,11 +900,11 @@ public class ServiceHookTests extends OSGiTestCase {
 				ListenerHook.class.getName(), hook1, props);
 
 		try {
-			assertFalse("no service listeners found", result.isEmpty());
+			assertFalse("no service listeners found", added.isEmpty());
 			assertEquals("added not called", 1, hookCalled[0]);
 			assertEquals("removed called", 0, hookCalled[1]);
 
-			int size = result.size();
+			int size = added.size();
 			ServiceListener testSL = new ServiceListener() {
 				public void serviceChanged(ServiceEvent event) {
 					// do nothing
@@ -918,12 +914,12 @@ public class ServiceHookTests extends OSGiTestCase {
 			testContext.addServiceListener(testSL, filterString1);
 			assertEquals("added not called", 2, hookCalled[0]);
 			assertEquals("removed called", 0, hookCalled[1]);
-			assertEquals("listener not added", size + 1, result.size());
-			Iterator iter = result.iterator();
+			assertEquals("listener not added", size + 1, added.size());
 			boolean found = false;
-			while (iter.hasNext()) {
+			for (Iterator iter = added.iterator(); iter.hasNext();) {
 				ListenerHook.ListenerInfo info = (ListenerHook.ListenerInfo) iter
 						.next();
+				assertFalse("isRemoved true", info.isRemoved());
 				BundleContext c = info.getBundleContext();
 				String f = info.getFilter();
 				if ((c == testContext) && (filterString1.equals(f))) {
@@ -936,18 +932,23 @@ public class ServiceHookTests extends OSGiTestCase {
 			if (!found) {
 				fail("listener not found");
 			}
+			for (Iterator iter = removed.iterator(); iter.hasNext();) {
+				ListenerHook.ListenerInfo info = (ListenerHook.ListenerInfo) iter
+						.next();
+				assertTrue("isRemoved true", info.isRemoved());
+			}
 
 			String filterString2 = "(bar=foo)";
 			testContext.addServiceListener(testSL, filterString2);
 			assertEquals("added not called", 3, hookCalled[0]);
 			assertEquals("removed not called", 1, hookCalled[1]);
-			assertEquals("listener not removed and added", size + 1, result
+			assertEquals("listener not removed and added", size + 1, added
 					.size());
-			iter = result.iterator();
 			found = false;
-			while (iter.hasNext()) {
+			for (Iterator iter = added.iterator(); iter.hasNext();) {
 				ListenerHook.ListenerInfo info = (ListenerHook.ListenerInfo) iter
 						.next();
+				assertFalse("isRemoved true", info.isRemoved());
 				BundleContext c = info.getBundleContext();
 				String f = info.getFilter();
 				if ((c == testContext) && (filterString2.equals(f))) {
@@ -963,26 +964,36 @@ public class ServiceHookTests extends OSGiTestCase {
 			if (!found) {
 				fail("listener not found");
 			}
+			for (Iterator iter = removed.iterator(); iter.hasNext();) {
+				ListenerHook.ListenerInfo info = (ListenerHook.ListenerInfo) iter
+						.next();
+				assertTrue("isRemoved true", info.isRemoved());
+			}
 
 			testContext.removeServiceListener(testSL);
 			assertEquals("added called", 3, hookCalled[0]);
 			assertEquals("removed not called", 2, hookCalled[1]);
-			assertEquals("listener not removed", size, result.size());
-			iter = result.iterator();
-			while (iter.hasNext()) {
+			assertEquals("listener not removed", size, added.size());
+			for (Iterator iter = added.iterator(); iter.hasNext();) {
 				ListenerHook.ListenerInfo info = (ListenerHook.ListenerInfo) iter
 						.next();
+				assertFalse("isRemoved true", info.isRemoved());
 				BundleContext c = info.getBundleContext();
 				String f = info.getFilter();
 				if ((c == testContext) && (filterString2.equals(f))) {
 					fail("second listener not removed");
 				}
 			}
+			for (Iterator iter = removed.iterator(); iter.hasNext();) {
+				ListenerHook.ListenerInfo info = (ListenerHook.ListenerInfo) iter
+						.next();
+				assertTrue("isRemoved true", info.isRemoved());
+			}
 
 			testContext.removeServiceListener(testSL);
 			assertEquals("added called", 3, hookCalled[0]);
 			assertEquals("removed called", 2, hookCalled[1]);
-			assertEquals("listener removed", size, result.size());
+			assertEquals("listener removed", size, added.size());
 
 		}
 		catch (InvalidSyntaxException e) {
@@ -1000,22 +1011,20 @@ public class ServiceHookTests extends OSGiTestCase {
 		// test the ListenerHook works with the FilteredServiceListener
 		// optimization in equinox
 		final BundleContext testContext = getContext();
-		final Collection result = new ArrayList();
+		final Collection added = new ArrayList();
+		final Collection removed = new ArrayList();
 		final int[] hookCalled = new int[] {0, 0};
 
 		ListenerHook hook1 = new ListenerHook() {
 			public void added(Collection listeners) {
-				synchronized (hookCalled) {
-					hookCalled[0]++;
-				}
-				result.addAll(listeners);
+				hookCalled[0]++;
+				added.addAll(listeners);
 			}
 
 			public void removed(Collection listeners) {
-				synchronized (hookCalled) {
-					hookCalled[1]++;
-				}
-				result.removeAll(listeners);
+				hookCalled[1]++;
+				added.removeAll(listeners);
+				removed.addAll(listeners);
 			}
 		};
 
@@ -1027,11 +1036,11 @@ public class ServiceHookTests extends OSGiTestCase {
 				ListenerHook.class.getName(), hook1, props);
 
 		try {
-			assertFalse("no service listeners found", result.isEmpty());
+			assertFalse("no service listeners found", added.isEmpty());
 			assertEquals("added not called", 1, hookCalled[0]);
 			assertEquals("removed called", 0, hookCalled[1]);
 
-			int size = result.size();
+			int size = added.size();
 			ServiceListener testSL = new ServiceListener() {
 				public void serviceChanged(ServiceEvent event) {
 					// do nothing
@@ -1041,12 +1050,12 @@ public class ServiceHookTests extends OSGiTestCase {
 			testContext.addServiceListener(testSL, filterString1);
 			assertEquals("added not called", 2, hookCalled[0]);
 			assertEquals("removed called", 0, hookCalled[1]);
-			assertEquals("listener not added", size + 1, result.size());
-			Iterator iter = result.iterator();
+			assertEquals("listener not added", size + 1, added.size());
 			boolean found = false;
-			while (iter.hasNext()) {
+			for (Iterator iter = added.iterator(); iter.hasNext();) {
 				ListenerHook.ListenerInfo info = (ListenerHook.ListenerInfo) iter
 						.next();
+				assertFalse("isRemoved true", info.isRemoved());
 				BundleContext c = info.getBundleContext();
 				String f = info.getFilter();
 				if ((c == testContext) && (filterString1.equals(f))) {
@@ -1059,18 +1068,23 @@ public class ServiceHookTests extends OSGiTestCase {
 			if (!found) {
 				fail("listener not found");
 			}
+			for (Iterator iter = removed.iterator(); iter.hasNext();) {
+				ListenerHook.ListenerInfo info = (ListenerHook.ListenerInfo) iter
+						.next();
+				assertTrue("isRemoved true", info.isRemoved());
+			}
 
 			String filterString2 = null;
 			testContext.addServiceListener(testSL);
 			assertEquals("added not called", 3, hookCalled[0]);
 			assertEquals("removed not called", 1, hookCalled[1]);
-			assertEquals("listener not removed and added", size + 1, result
+			assertEquals("listener not removed and added", size + 1, added
 					.size());
-			iter = result.iterator();
 			found = false;
-			while (iter.hasNext()) {
+			for (Iterator iter = added.iterator(); iter.hasNext();) {
 				ListenerHook.ListenerInfo info = (ListenerHook.ListenerInfo) iter
 						.next();
+				assertFalse("isRemoved true", info.isRemoved());
 				BundleContext c = info.getBundleContext();
 				String f = info.getFilter();
 				if ((c == testContext) && (f == filterString2)) {
@@ -1086,26 +1100,36 @@ public class ServiceHookTests extends OSGiTestCase {
 			if (!found) {
 				fail("listener not found");
 			}
+			for (Iterator iter = removed.iterator(); iter.hasNext();) {
+				ListenerHook.ListenerInfo info = (ListenerHook.ListenerInfo) iter
+						.next();
+				assertTrue("isRemoved true", info.isRemoved());
+			}
 
 			testContext.removeServiceListener(testSL);
 			assertEquals("added called", 3, hookCalled[0]);
 			assertEquals("removed not called", 2, hookCalled[1]);
-			assertEquals("listener not removed", size, result.size());
-			iter = result.iterator();
-			while (iter.hasNext()) {
+			assertEquals("listener not removed", size, added.size());
+			for (Iterator iter = added.iterator(); iter.hasNext();) {
 				ListenerHook.ListenerInfo info = (ListenerHook.ListenerInfo) iter
 						.next();
+				assertFalse("isRemoved true", info.isRemoved());
 				BundleContext c = info.getBundleContext();
 				String f = info.getFilter();
 				if ((c == testContext) && (f == filterString2)) {
 					fail("second listener not removed");
 				}
 			}
+			for (Iterator iter = removed.iterator(); iter.hasNext();) {
+				ListenerHook.ListenerInfo info = (ListenerHook.ListenerInfo) iter
+						.next();
+				assertTrue("isRemoved true", info.isRemoved());
+			}
 
 			testContext.removeServiceListener(testSL);
 			assertEquals("added called", 3, hookCalled[0]);
 			assertEquals("removed called", 2, hookCalled[1]);
-			assertEquals("listener removed", size, result.size());
+			assertEquals("listener removed", size, added.size());
 
 		}
 		catch (InvalidSyntaxException e) {
