@@ -16,11 +16,10 @@
 package org.osgi.service.blueprint.reflect;
 
 /**
- * A value represented by an anonymous local component definition - this could be a 
- * component, reference, reference-collection or service definition.
+ * A value specified to be null via the <null/> element.
  */
-public interface ComponentValue extends Value {
+public interface NullValue extends Value {
 
-	ComponentMetadata getComponentMetadata();
+	static final NullValue NULL = new NullValue() {};
 	
 }
