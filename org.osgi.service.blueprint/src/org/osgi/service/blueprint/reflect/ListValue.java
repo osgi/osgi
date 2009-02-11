@@ -20,6 +20,11 @@ import java.util.List;
 /**
  * A list-based value. Members of the List are instances of Value.
  */
-public interface ListValue extends Value, List/*<Value>*/ {
+public interface ListValue extends Value {
+
+    /**
+     * The List (of Value objects) for this List-based value
+     */
+	List getList();
 
 }

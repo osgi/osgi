@@ -22,6 +22,11 @@ import java.util.Map;
  * values themselves.
  * 
  */
-public interface MapValue extends Value, Map/*<Value,Value>*/ {
+public interface MapValue extends Value {
+	
+	/**
+	 * The Map of Value->Value mappings for this map-based value
+	 */
+	Map getMap();
 
 }

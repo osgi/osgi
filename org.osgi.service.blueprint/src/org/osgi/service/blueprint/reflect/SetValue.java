@@ -20,6 +20,10 @@ import java.util.Set;
 /**
  * A set-based value. Members of the set are instances of Value.
  */
-public interface SetValue extends Value, Set/*<Value>*/ {
+public interface SetValue extends Value {
 
+    /**
+     * The Set (of Value objects) for this set-based value
+     */
+	Set getSet();
 }
