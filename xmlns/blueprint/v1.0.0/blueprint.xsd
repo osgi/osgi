@@ -369,6 +369,7 @@
           </xsd:sequence>
           <xsd:attribute name="comparator-ref" type="xsd:string" use="optional"/>
 		  <xsd:attribute name="member-type" type="TmemberType" use="optional"/>
+		  <xsd:attribute name="ordering-basis" type="TorderingBasis" use="optional"/>
         </xsd:extension>
       </xsd:complexContent>
     </xsd:complexType>
@@ -382,16 +383,15 @@
 	
    <xsd:complexType name="Tcomparator">
      <xsd:choice>
-         <xsd:element name="natural" type="TnaturalOrdering"/>
-         <xsd:sequence minOccurs="1" maxOccurs="1">
+		<xsd:element ref="ref"/>
+      	<xsd:element ref="component"/>
+		<xsd:element ref="reference"/>
+		<xsd:element ref="service"/>
+        <xsd:sequence minOccurs="1" maxOccurs="1">
             <!-- nested component declaration -->
             <xsd:any namespace="##other" minOccurs="1" maxOccurs="1" processContents="skip"/>
         </xsd:sequence>
      </xsd:choice>
-   </xsd:complexType>
-	
-   <xsd:complexType name="TnaturalOrdering">
-     <xsd:attribute name="basis" type="TorderingBasis" use="required"/>
    </xsd:complexType>
 	
    <xsd:simpleType name="TorderingBasis">
