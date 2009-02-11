@@ -477,9 +477,16 @@ public class SLPServiceEndpointDescription implements
 		StringBuffer buff = new StringBuffer();
 		buff.append(STRING_SERVICE_OSGI);
 		buff.append(interf);
-		buff.append((protocol != null ? protocol + "://" : "://"));
-		buff.append(host);
-		buff.append((port != null ? ":" + port : ""));
+//		if (properties == null || properties.get(ServicePublication.PROP_KEY_ENDPOINT_LOCATION) == null) {
+			buff.append((protocol != null ? protocol + "://" : "://"));
+			buff.append(host);
+			buff.append((port != null ? ":" + port : ""));
+//		}
+//		else {
+//			buff.append(".");
+//			buff.append(properties
+//					.get(ServicePublication.PROP_KEY_ENDPOINT_LOCATION));
+//		}
 		buff.append("/");
 		buff.append(path);
 		return new ServiceURL(buff.toString(), lifetime);
@@ -949,15 +956,17 @@ public class SLPServiceEndpointDescription implements
 		Iterator it = interfaces.iterator();
 		while (it.hasNext()) {
 			String interfaceName = (String) it.next();
-			if ((descr1.getVersion(interfaceName) != null)&& (!versions.contains(interfaceName
-					+ ServicePublication.SEPARATOR
-					+ descr1.getVersion(interfaceName)))) {
+			if ((descr1.getVersion(interfaceName) != null)
+					&& (!versions.contains(interfaceName
+							+ ServicePublication.SEPARATOR
+							+ descr1.getVersion(interfaceName)))) {
 				versions.add(interfaceName + ServicePublication.SEPARATOR
 						+ descr1.getVersion(interfaceName));
 			}
-			if ((descr2.getVersion(interfaceName) != null)&& (!versions.contains(interfaceName
-					+ ServicePublication.SEPARATOR
-					+ descr2.getVersion(interfaceName)))) {
+			if ((descr2.getVersion(interfaceName) != null)
+					&& (!versions.contains(interfaceName
+							+ ServicePublication.SEPARATOR
+							+ descr2.getVersion(interfaceName)))) {
 				versions.add(interfaceName + ServicePublication.SEPARATOR
 						+ descr2.getVersion(interfaceName));
 			}
@@ -974,9 +983,10 @@ public class SLPServiceEndpointDescription implements
 						+ ServicePublication.SEPARATOR
 						+ descr1.getEndpointInterfaceName(interfaceName));
 			}
-			if ((descr2.getEndpointInterfaceName(interfaceName) != null)&& (!endpointInterfaces.contains(interfaceName
-					+ ServicePublication.SEPARATOR
-					+ descr2.getEndpointInterfaceName(interfaceName))))  {
+			if ((descr2.getEndpointInterfaceName(interfaceName) != null)
+					&& (!endpointInterfaces.contains(interfaceName
+							+ ServicePublication.SEPARATOR
+							+ descr2.getEndpointInterfaceName(interfaceName)))) {
 				endpointInterfaces.add(interfaceName
 						+ ServicePublication.SEPARATOR
 						+ descr2.getEndpointInterfaceName(interfaceName));

@@ -217,6 +217,7 @@ public class SLPHandlerImpl implements Discovery {
 			// interface is not java???
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 			log(LogService.LOG_ERROR, "Failed to find service", e);
 			return new ArrayList();
 		}
