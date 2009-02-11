@@ -28,7 +28,7 @@ import org.osgi.framework.BundleContext;
  * addition and removal.
  * 
  * <p>
- * There is a extremely rare case in which removed notification can be made
+ * There is an extremely rare case in which removed notification can be made
  * before added notification if two threads are racing to add and remove the
  * same service listener. Because this hook is called synchronously during
  * service listener addition and removal, the Framework cannot guarantee
