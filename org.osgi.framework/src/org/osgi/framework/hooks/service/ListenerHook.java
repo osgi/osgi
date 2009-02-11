@@ -27,6 +27,15 @@ import org.osgi.framework.BundleContext;
  * Bundles registering this service will be called during service listener
  * addition and removal.
  * 
+ * <p>
+ * There is a extremely rare case in which removed notification can be made
+ * before added notification if two threads are racing to add and remove the
+ * same service listener. Because this hook is called synchronously during
+ * service listener addition and removal, the Framework cannot guarantee
+ * in-order delivery of added and removed notification for a given service
+ * listener. The {@link ListenerInfo#isRemoved()} method can be used to detect
+ * this rare occurrence.
+ * 
  * @ThreadSafe
  * @version $Revision$
  */
@@ -66,7 +75,7 @@ public interface ListenerHook {
 	 * Information about a Service Listener. This interface describes the bundle
 	 * which added the Service Listener and the filter with which it was added.
 	 * 
-	 * @Immutable
+	 * @ThreadSafe
 	 */
 	public interface ListenerInfo {
 		/**
@@ -86,14 +95,31 @@ public interface ListenerHook {
 		String getFilter();
 
 		/**
+		 * Return the state of the listener for this addition and removal life
+		 * cycle. Initially this method will return <code>false</code>
+		 * indicating the listener has been added but has not been removed.
+		 * After the listener has been removed, this method must always return
+		 * <code>true</code>.
+		 * 
+		 * @return <code>false</code> if the listener has not been been removed,
+		 *         <code>true</code> otherwise.
+		 */
+		boolean isRemoved();
+
+		/**
 		 * Compares this <code>ListenerInfo</code> to another
+		 * <code>ListenerInfo</code>. Two <code>ListenerInfo</code>s are equals
+		 * if they refer to the same listener for a given addition and removal
+		 * life cycle. If the same listener is added again, it must have a
+		 * different <code>ListenerInfo</code> which is not equal to this
 		 * <code>ListenerInfo</code>.
 		 * 
 		 * @param obj The object to compare against this
 		 *        <code>ListenerInfo</code>.
 		 * @return <code>true</code> if the other object is a
 		 *         <code>ListenerInfo</code> object and both objects refer to
-		 *         the same listener.
+		 *         the same listener for a given addition and removal life
+		 *         cycle.
 		 */
 		boolean equals(Object obj);
 
