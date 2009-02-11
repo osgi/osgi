@@ -243,6 +243,9 @@ public class FrameworkEvent extends EventObject {
 	 * <li>{@link #INFO}
 	 * <li>{@link #PACKAGES_REFRESHED}
 	 * <li>{@link #STARTLEVEL_CHANGED}
+	 * <li>{@link #STOPPED}
+	 * <li>{@link #STOPPED_BOOTCLASSPATH_MODIFIED}
+	 * <li>{@link #STOPPED_UPDATE}
 	 * </ul>
 	 * 
 	 * @return The type of state change.
