@@ -192,44 +192,28 @@ public class FrameworkUtil {
 	}
 
 	/**
-	 * Return a <code>BundleReference</code> for the specified bundle class.
+	 * Return a <code>Bundle</code> for the specified bundle class.
 	 * 
 	 * @param classFromBundle A class loaded from a bundle.
-	 * @return A <code>BundleReference</code> for the specified bundle class.
-	 * @throws IllegalArgumentException If the class was not loaded by a bundle
-	 *         class loader.
+	 * @return A <code>Bundle</code> for the specified bundle class or
+	 *         <code>null</code> if the class was not loaded by a bundle class
+	 *         loader.
 	 * @since 1.5
 	 */
-	public static BundleReference getBundleReference(
-			final Class< ? > classFromBundle) {
+	public static Bundle getBundle(final Class< ? > classFromBundle) {
 		// We use doPriv since the caller may not have permission
 		// to call getClassLoader.
 		ClassLoader cl = AccessController
 				.doPrivileged(new PrivilegedAction<ClassLoader>() {
 					public ClassLoader run() {
-				return classFromBundle.getClassLoader();
-			}
-		});
-		
-		if (cl instanceof BundleReference) {
-			// We use a static inner class to avoid leaking the ClassLoader
-			// object.
-			return new BundleHolder(((BundleReference) cl).getBundle());
-		}
-		throw new IllegalArgumentException();
-	}
+						return classFromBundle.getClassLoader();
+					}
+				});
 
-	/**
-	 * Static inner bundle holder class.
-	 */
-	private static class BundleHolder implements BundleReference {
-		private final Bundle	bundle;
-		BundleHolder(Bundle bundle) {
-			this.bundle = bundle;
+		if (cl instanceof BundleReference) {
+			return ((BundleReference) cl).getBundle();
 		}
-		public Bundle getBundle() {
-			return bundle;
-		}
+		return null;
 	}
 	
 	/**
