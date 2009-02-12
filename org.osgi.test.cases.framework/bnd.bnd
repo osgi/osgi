@@ -19,7 +19,9 @@ Include-Resource = \
 	activationpolicy.tblazy4.jar, \
 	activationpolicy.tblazy5.jar, \
 	activationpolicy.tblazy6.jar, \
-	filter.tb1.jar
+	filter.tb1.jar, \
+	launch.tb1.jar, \
+	launch.tb2.jar
 	
 Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
 
