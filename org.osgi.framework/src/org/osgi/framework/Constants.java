@@ -394,11 +394,13 @@ public interface Constants {
 	/**
 	 * Framework environment property (named
 	 * &quot;org.osgi.framework.bootdelegation&quot;) identifying packages for
-	 * which the Framework must delegate class loading to the boot class path.
+	 * which the Framework must delegate class loading to the parent class loader
+	 * of the bundle.
 	 * <p>
 	 * The value of this property may be retrieved by calling the
 	 * <code>BundleContext.getProperty</code> method.
 	 * 
+	 * @see #FRAMEWORK_BUNDLE_PARENT org.osgi.framework.bundle.parent
 	 * @since 1.3
 	 */
 	public static final String	FRAMEWORK_BOOTDELEGATION				= "org.osgi.framework.bootdelegation";
@@ -1267,4 +1269,43 @@ public interface Constants {
 	 * @since 1.5
 	 */
 	public final static String	FRAMEWORK_BEGINNING_STARTLEVEL			= "org.osgi.framework.startlevel";
+
+	/**
+	 * Specifies the parent class loader of the bundle class loaders. 
+	 * @since 1.5
+	 */
+	public final static String FRAMEWORK_BUNDLE_PARENT 					= "org.osgi.framework.bundle.parent";
+
+	/**
+	 * Specifies the use of the application class loader as the 
+	 * parent of the bundle class loaders.
+	 * @since 1.5
+	 * @see #FRAMEWORK_BUNDLE_PARENT org.osgi.framework.bundle.parent
+	 */
+	public final static String FRAMEWORK_BUNDLE_PARENT_APP = "app"; //$NON-NLS-1$
+
+	/**
+	 * Specifies the use of the extension class loader as the 
+	 * parent of the bundle class loaders.
+	 * @since 1.5
+	 * @see #FRAMEWORK_BUNDLE_PARENT org.osgi.framework.bundle.parent
+	 */
+	public final static String FRAMEWORK_BUNDLE_PARENT_EXT = "ext"; //$NON-NLS-1$
+
+	/**
+	 * Specifies the use of the boot class loader as the 
+	 * parent of the bundle class loaders.
+	 * @since 1.5
+	 * @see #FRAMEWORK_BUNDLE_PARENT org.osgi.framework.bundle.parent
+	 */
+	public final static String FRAMEWORK_BUNDLE_PARENT_BOOT = "boot";
+
+	/**
+	 * Specifies the use of the framework class loader as the 
+	 * parent of the bundle class loaders.  The framework class loader
+	 * is the class loader used to load the framework implementation.
+	 * @since 1.5
+	 * @see #FRAMEWORK_BUNDLE_PARENT org.osgi.framework.bundle.parent
+	 */
+	public final static String FRAMEWORK_BUNDLE_PARENT_FRAMEWORK = "framework";
 }
