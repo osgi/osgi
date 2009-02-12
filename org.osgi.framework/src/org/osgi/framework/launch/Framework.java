@@ -26,30 +26,11 @@ import org.osgi.framework.FrameworkEvent;
 /**
  * A Framework instance. A Framework is also known as a System Bundle.
  * 
- * The <i>main</i> class of a framework implementation must implement this
- * interface. The instantiator of the framework implementation class then has a
- * Framework object and can then use the methods of this interface to manage and
- * control the created framework instance.
+ * <p>
+ * Framework instances are created using a {@link FrameworkFactory}. The methods
+ * of this interface can be used to manage and control the created framework
+ * instance.
  * 
- * <p>
- * The <i>main</i> class of a framework implementation must provide a public
- * constructor that takes a single argument of type <code>Map</code>. This
- * configuration argument provides this Framework with framework properties to
- * configure the framework instance.
- * <p>
- * If framework properties are not provided by the configuration argument, this
- * Framework must use some reasonable default configuration appropriate for the
- * current VM. For example, the system packages for the current execution
- * environment should be properly exported. The configuration argument may be
- * <code>null</code>. The framework instance must copy any information needed
- * from the configuration argument since the configuration argument can be
- * changed after the Framework has been created.
- * <p>
- * A newly constructed Framework must be in the {@link #INSTALLED} state.
- * <p>
- * When constructing a Framework a <code>SecurityException</code> is thrown
- * if the caller does not have <code>AllPermission</code>, and the Java 
- * Runtime Environment supports permissions.
  * @ThreadSafe
  * @version $Revision$
  */
@@ -88,7 +69,7 @@ public interface Framework extends Bundle {
 	 *             property is set.
 	 *             
 	 */
-	public void init() throws BundleException;
+	void init() throws BundleException;
 
 	/**
 	 * Wait until this Framework has completely stopped. The <code>stop</code>
@@ -133,7 +114,7 @@ public interface Framework extends Bundle {
 	 * @throws IllegalArgumentException
 	 *             If the value of timeout is negative.
 	 */
-	public FrameworkEvent waitForStop(long timeout) throws InterruptedException;
+	FrameworkEvent waitForStop(long timeout) throws InterruptedException;
 
 	/**
 	 * Start this Framework.
@@ -169,7 +150,7 @@ public interface Framework extends Bundle {
 	 *             Runtime Environment supports permissions.
 	 * @see "Start Level Service Specification"
 	 */
-	public void start() throws BundleException;
+	void start() throws BundleException;
 
 	/**
 	 * Start this Framework.
@@ -188,7 +169,7 @@ public interface Framework extends Bundle {
 	 *             Runtime Environment supports permissions.
 	 * @see #start()
 	 */
-	public void start(int options) throws BundleException;
+	void start(int options) throws BundleException;
 
 	/**
 	 * Stop this Framework.
@@ -225,7 +206,7 @@ public interface Framework extends Bundle {
 	 *             Runtime Environment supports permissions.
 	 * @see "Start Level Service Specification"
 	 */
-	public void stop() throws BundleException;
+	void stop() throws BundleException;
 
 	/**
 	 * Stop this Framework.
@@ -244,7 +225,7 @@ public interface Framework extends Bundle {
 	 *             Runtime Environment supports permissions.
 	 * @see #stop()
 	 */
-	public void stop(int options) throws BundleException;
+	void stop(int options) throws BundleException;
 
 	/**
 	 * The Framework cannot be uninstalled.
@@ -259,7 +240,7 @@ public interface Framework extends Bundle {
 	 *             <code>AdminPermission[this,LIFECYCLE]</code>, and the Java
 	 *             Runtime Environment supports permissions.
 	 */
-	public void uninstall() throws BundleException;
+	void uninstall() throws BundleException;
 
 	/**
 	 * Stop and restart this Framework.
@@ -282,7 +263,7 @@ public interface Framework extends Bundle {
 	 *             <code>AdminPermission[this,LIFECYCLE]</code>, and the Java
 	 *             Runtime Environment supports permissions.
 	 */
-	public void update() throws BundleException;
+	void update() throws BundleException;
 
 	/**
 	 * Stop and restart this Framework.
@@ -302,7 +283,7 @@ public interface Framework extends Bundle {
 	 *             <code>AdminPermission[this,LIFECYCLE]</code>, and the Java
 	 *             Runtime Environment supports permissions.
 	 */
-	public void update(InputStream in) throws BundleException;
+	void update(InputStream in) throws BundleException;
 
 	/**
 	 * Returns the Framework unique identifier. This Framework is assigned the
@@ -311,7 +292,7 @@ public interface Framework extends Bundle {
 	 * @return 0.
 	 * @see Bundle#getBundleId()
 	 */
-	public long getBundleId();
+	long getBundleId();
 
 	/**
 	 * Returns the Framework location identifier. This Framework is assigned the
@@ -326,7 +307,7 @@ public interface Framework extends Bundle {
 	 * @see Bundle#getLocation()
 	 * @see Constants#SYSTEM_BUNDLE_LOCATION
 	 */
-	public String getLocation();
+	String getLocation();
 
 	/**
 	 * Returns the symbolic name of this Framework. The symbolic name is unique
@@ -339,5 +320,5 @@ public interface Framework extends Bundle {
 	 * @see Bundle#getSymbolicName()
 	 * @see Constants#SYSTEM_BUNDLE_SYMBOLICNAME
 	 */
-	public String getSymbolicName();
+	String getSymbolicName();
 }
