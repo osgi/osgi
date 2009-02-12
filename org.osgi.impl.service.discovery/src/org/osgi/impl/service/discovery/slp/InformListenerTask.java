@@ -17,7 +17,6 @@
  */
 package org.osgi.impl.service.discovery.slp;
 
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TimerTask;
@@ -57,13 +56,16 @@ public class InformListenerTask extends TimerTask {
 	public void run() {
 		Map registeredServiceTracker = discovery.getRegisteredServiceTracker();
 		if (registeredServiceTracker.size() > 0) {
-			Collection /* <ServiceEndpointDescription> */lastLookupResult = discovery
+			Map /* <ServiceEndpointDescription> */lastLookupResult = discovery
 					.getCachedServices();
-			Collection allAvailableServices = discovery.findService(null, null);
+			Map allAvailableServices = discovery.findService(null, null);
 			notifyAvailableServices(allAvailableServices, lastLookupResult,
 					registeredServiceTracker);
 			// notify all about vanished services
-			lastLookupResult.removeAll(allAvailableServices);
+			Iterator it = allAvailableServices.keySet().iterator();
+			while(it.hasNext()){
+				lastLookupResult.remove(it.next());
+			}
 			notifyUnavailableServices(lastLookupResult,
 					registeredServiceTracker);
 		}
@@ -73,12 +75,12 @@ public class InformListenerTask extends TimerTask {
 	 * @param descriptions
 	 * @param availableServices
 	 */
-	private void notifyAvailableServices(Collection/*
+	private void notifyAvailableServices(Map/*
 													 * <ServiceEndpointDescription
 													 * >
 													 */descriptions,
-			Collection lastLookupResult, Map trackers) {
-		Iterator descrIt = descriptions.iterator();
+			Map lastLookupResult, Map trackers) {
+		Iterator descrIt = descriptions.values().iterator();
 		while (descrIt.hasNext()) {
 			ServiceEndpointDescription descr = (ServiceEndpointDescription) descrIt
 					.next();
@@ -96,9 +98,9 @@ public class InformListenerTask extends TimerTask {
 	/**
 	 * @param availableServices
 	 */
-	private void notifyUnavailableServices(Collection vanishedServices,
+	private void notifyUnavailableServices(Map vanishedServices,
 			Map trackers) {
-		Iterator svcDescrIt = vanishedServices.iterator();
+		Iterator svcDescrIt = vanishedServices.values().iterator();
 		while (svcDescrIt.hasNext()) {
 			ServiceEndpointDescription sed = (ServiceEndpointDescription) svcDescrIt
 					.next();
@@ -109,7 +111,10 @@ public class InformListenerTask extends TimerTask {
 						.next();
 				if (SLPHandlerImpl.isTrackerInterestedInSED(sed, (Map) trackers
 						.get(tracker))) {
-					SLPHandlerImpl.log(LogService.LOG_INFO, this.getClass().getName() + ": Notify " + tracker
+					SLPHandlerImpl.log(LogService.LOG_INFO, this.getClass()
+							.getName()
+							+ ": Notify "
+							+ tracker
 							+ " about the GONE service " + sed);
 					tracker
 							.serviceChanged(new DiscoveredServiceNotificationImpl(
@@ -130,26 +135,23 @@ public class InformListenerTask extends TimerTask {
 	private void notifyAvailableServicePerListener(
 			ServiceEndpointDescription svcDescr,
 			DiscoveredServiceTracker tracker, Map trackerProps,
-			Collection lastLookupResult) {
+			Map lastLookupResult) {
 		// check if the listener filter matches the given
 		// description properties. That prerequisites that all information of a
 		// service description are in its properties bag
 		if (SLPHandlerImpl.isTrackerInterestedInSED(svcDescr, trackerProps)) {
 			if (lastLookupResult != null) {
 				// if we already know that service
-				if (lastLookupResult.contains(svcDescr)) {
+				if (lastLookupResult.containsKey(svcDescr.getEndpointID())) {
 					// check whether it has been modified
-					ServiceEndpointDescription oldDescr = null;
-					boolean modified = false;
-					Iterator it = lastLookupResult.iterator();
-					while (it.hasNext()) {
-						oldDescr = (ServiceEndpointDescription) it.next();
-						if (!oldDescr.equals(svcDescr)) {
-							modified = true;
-						}
-					}
-					if (modified) {
-						SLPHandlerImpl.log(LogService.LOG_INFO, this.getClass().getName() + ": Notify " + tracker
+					//TODO: this does not work because the endpoint ids are identical
+					if (!((ServiceEndpointDescription) lastLookupResult
+							.get(svcDescr.getEndpointID())).equals(svcDescr)) {
+						//if yes
+						SLPHandlerImpl.log(LogService.LOG_INFO, this.getClass()
+								.getName()
+								+ ": Notify "
+								+ tracker
 								+ " about the MODIFIED service " + svcDescr);
 						tracker
 								.serviceChanged(new DiscoveredServiceNotificationImpl(
@@ -161,8 +163,12 @@ public class InformListenerTask extends TimerTask {
 					// notify listener that a service description matches
 					// the specified filter
 					// and is new to it
-					SLPHandlerImpl.log(LogService.LOG_INFO, this.getClass().getName() + ": Notify " + tracker
-							+ " about the NEW service " + svcDescr);
+					SLPHandlerImpl.log(LogService.LOG_INFO, this.getClass()
+							.getName()
+							+ ": Notify "
+							+ tracker
+							+ " about the NEW service "
+							+ svcDescr);
 					tracker
 							.serviceChanged(new DiscoveredServiceNotificationImpl(
 									svcDescr,

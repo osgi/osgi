@@ -191,16 +191,16 @@ public class SLPHandlerImpl implements Discovery {
 	 * 
 	 */
 	// TODO make it thread safe
-	public Collection/* <ServiceEndpointDescription> */findService(
+	public Map/* <ServiceEndpointDescription> */findService(
 			final String interfaceName, final String filter) {
 		getFilterFromString(filter);
-
+		Map result = new HashMap();
 		// check whether SLP-Locator service exists
 		Locator locator = getLocator();
 		if (locator == null) {
 			log(LogService.LOG_WARNING,
 					"No SLP-Locator. Find operation is not executed.");
-			return Collections.EMPTY_LIST;
+			return result;
 		}
 
 		// TODO first look at cache
@@ -219,10 +219,9 @@ public class SLPHandlerImpl implements Discovery {
 		catch (Exception e) {
 			e.printStackTrace();
 			log(LogService.LOG_ERROR, "Failed to find service", e);
-			return new ArrayList();
+			return result;
 		}
 
-		Map result = new HashMap();
 		// iterate over the found services and retrieve their attributes
 		while (se.hasMoreElements()) {
 			try {
@@ -351,7 +350,7 @@ public class SLPHandlerImpl implements Discovery {
 			inMemoryCache.putAll(result);
 		}
 
-		return result.values();
+		return result;
 	}
 
 	/**
@@ -759,16 +758,8 @@ public class SLPHandlerImpl implements Discovery {
 	 * 
 	 * @return a list of all remote services
 	 */
-	public List getCachedServices() {
-//		List result = new ArrayList();
-//		Iterator it = inMemoryCache.keySet().iterator();
-//		while (it.hasNext()) {
-//			String key = (String) it.next();
-//			if (! localServices.contains(key)){
-//				result.add(inMemoryCache.get(key));
-//			}
-//		}
-		return new ArrayList(inMemoryCache.values());
+	public Map getCachedServices() {
+		return new HashMap(inMemoryCache);
 	}
 
 	/**

@@ -155,22 +155,33 @@ public class JSlpSED {
 							+ descr);
 		}
 
+		// compare interface names
 		if (!descrInterfaces.contains(interfaceName)) {
 			return false;
 		}
 
-		// compare interface names, versions and endpoint interface names
+		// compare versions 
 		if ((version != null && (!version.equals(descr
 				.getVersion(interfaceName))))
 				|| (version == null && descr.getVersion(interfaceName) != null)) {
 			return false;
 		}
 
+		//compare endpoint interfaces
 		if ((endpointInterface != null && (!endpointInterface.equals(descr
 				.getEndpointInterfaceName(interfaceName))))
 				|| (endpointInterface == null && descr
-						.getEndpointInterfaceName(interfaceName) != null))
+						.getEndpointInterfaceName(interfaceName) != null)) {
 			return false;
+		}
+
+		// compare slpServiceURL
+		if ((slpServiceURL != null && (!slpServiceURL.equals((String) descr
+				.getProperty(SLPServiceEndpointDescription.SLP_SERVICEURL))))
+				|| (slpServiceURL == null && descr
+						.getProperty(SLPServiceEndpointDescription.SLP_SERVICEURL) != null)) {
+			return false;
+		}
 
 		return true;
 	}
@@ -183,6 +194,7 @@ public class JSlpSED {
 		int result = 17;
 
 		result = 37 * result + interfaceName.hashCode();
+		
 		if (endpointInterface != null) {
 			result = 37 * result + endpointInterface.hashCode();
 		}
@@ -190,13 +202,10 @@ public class JSlpSED {
 		if (version != null) {
 			result = 37 * result + version.hashCode();
 		}
-
-		/*
-		 * not significant member variables but rather derived/composite values
-		 * 
-		 * result = 37 result + serviceURLs.hashCode(); // TODO implement more
-		 * // exacting result = 37 result + port;
-		 */
+		
+		if (slpServiceURL != null) {
+			result = 37 * result + slpServiceURL.hashCode();
+		}
 
 		return result;
 	}
@@ -218,8 +227,7 @@ public class JSlpSED {
 		if (slpServiceURL != null) {
 			sb.append("\t")
 					.append(SLPServiceEndpointDescription.SLP_SERVICEURL)
-					.append("=").append(slpServiceURL).append(
-							LINE_SEPARATOR);
+					.append("=").append(slpServiceURL).append(LINE_SEPARATOR);
 		}
 		return sb.toString();
 	}
