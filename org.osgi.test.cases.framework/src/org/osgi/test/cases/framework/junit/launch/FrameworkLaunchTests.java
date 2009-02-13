@@ -543,7 +543,8 @@ public class FrameworkLaunchTests extends OSGiTestCase {
         static PermissionCollection all = new AllPermissionCollection();
 
         public PermissionCollection getPermissions(ProtectionDomain domain) {
-        	System.out.println("Returning all permission for " + domain == null ? null : domain.getCodeSource());
+        	// causes recursive permission check (StackOverflowError)
+        	// System.out.println("Returning all permission for " + domain == null ? null : domain.getCodeSource());
         	return all;
         }
         public PermissionCollection getPermissions(CodeSource codesource) {
@@ -552,7 +553,8 @@ public class FrameworkLaunchTests extends OSGiTestCase {
         }
 
         public boolean implies(ProtectionDomain domain, Permission permission) {
-        	System.out.println("Granting permission for " + domain == null ? null : domain.getCodeSource());
+        	// causes recursive permission check (StackOverflowError)
+        	// System.out.println("Granting permission for " + domain == null ? null : domain.getCodeSource());
         	return true;
         }
 
