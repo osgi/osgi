@@ -36,6 +36,7 @@ import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.service.startlevel.StartLevel;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.compatibility.MethodCall;
 
 /**
  * Contains the test methods of the permission signature test case.
