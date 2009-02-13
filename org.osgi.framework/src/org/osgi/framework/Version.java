@@ -115,26 +115,26 @@ public class Version implements Comparable {
 	 *         formatted.
 	 */
 	public Version(String version) {
-		int major = 0;
-		int minor = 0;
-		int micro = 0;
-		String qualifier = ""; //$NON-NLS-1$
+		int maj = 0;
+		int min = 0;
+		int mic = 0;
+		String qual = ""; //$NON-NLS-1$
 
 		try {
 			StringTokenizer st = new StringTokenizer(version, SEPARATOR, true);
-			major = Integer.parseInt(st.nextToken());
+			maj = Integer.parseInt(st.nextToken());
 
 			if (st.hasMoreTokens()) {
 				st.nextToken(); // consume delimiter
-				minor = Integer.parseInt(st.nextToken());
+				min = Integer.parseInt(st.nextToken());
 
 				if (st.hasMoreTokens()) {
 					st.nextToken(); // consume delimiter
-					micro = Integer.parseInt(st.nextToken());
+					mic = Integer.parseInt(st.nextToken());
 
 					if (st.hasMoreTokens()) {
 						st.nextToken(); // consume delimiter
-						qualifier = st.nextToken();
+						qual = st.nextToken();
 
 						if (st.hasMoreTokens()) {
 							throw new IllegalArgumentException("invalid format"); //$NON-NLS-1$
@@ -147,10 +147,10 @@ public class Version implements Comparable {
 			throw new IllegalArgumentException("invalid format"); //$NON-NLS-1$
 		}
 
-		this.major = major;
-		this.minor = minor;
-		this.micro = micro;
-		this.qualifier = qualifier;
+		major = maj;
+		minor = min;
+		micro = mic;
+		qualifier = qual;
 		validate();
 	}
 
