@@ -860,6 +860,9 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
    * many times the unsetState is never reached.
    */
   public void clearState() throws Exception{
+	  ungetService(tbc);
+	  ungetService(permTBC);
+	  ungetService(domTBC);
 	  testBundle.uninstall();
 	  permBundle.uninstall();
 	  domBundle.uninstall();
@@ -870,6 +873,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     if (locations != null)
     	for (int i = 0; i < locations.length; i++)
     		permissionAdmin.setPermissions(locations[i], null);
+    ungetAllServices();
   }
 
 }
