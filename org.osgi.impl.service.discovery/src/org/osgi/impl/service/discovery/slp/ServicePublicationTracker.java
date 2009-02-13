@@ -34,11 +34,11 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  */
 public class ServicePublicationTracker implements ServiceTrackerCustomizer {
 
-	private BundleContext context = null;
+	private BundleContext	context																	= null;
 
-	private SLPHandlerImpl discovery = null;
+	private SLPHandlerImpl	discovery																= null;
 
-	private Map/* <ServiceReference, ServiceEndpointDescription> */publicationAndSED = null;
+	private Map				/* <ServiceReference, ServiceEndpointDescription> */publicationAndSED	= null;
 
 	public ServicePublicationTracker(BundleContext ctx, SLPHandlerImpl disco) {
 		context = ctx;
@@ -97,8 +97,7 @@ public class ServicePublicationTracker implements ServiceTrackerCustomizer {
 
 	/**
 	 * 
-	 * @param srvReference
-	 *            the given reference to the service to unpublish
+	 * @param srvReference the given reference to the service to unpublish
 	 */
 	private void unpublishServicePublication(ServiceReference srvReference) {
 		discovery

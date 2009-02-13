@@ -52,9 +52,7 @@ import ch.ethz.iks.slp.ServiceURL;
  * This class is a Distributed OSGi Discovery Service implementation based on
  * SLP using jSLP.
  * 
- * TODO: remove printStackTrace and do logging instead
- * 
- * @author Phillip Konradi
+ * @author Philipp Konradi
  * @author Thomas Kiesslich
  */
 public class SLPHandlerImpl implements Discovery {
@@ -80,6 +78,13 @@ public class SLPHandlerImpl implements Discovery {
 	 */
 	public static final String		PROP_VAL_PUBLISH_STRATEGY_PULL						= "pull";
 
+	private static BundleContext	context;
+
+	private static LogService		logService;
+
+	private static Map				/* <SLPServiceDescriptionAdapter> */inMemoryCache	= Collections
+																								.synchronizedMap(new HashMap());
+
 	private ServiceTracker			locatorTracker										= null;
 	private ServiceTracker			advertiserTracker									= null;
 	private ServiceTracker			spTracker											= null;
@@ -90,23 +95,13 @@ public class SLPHandlerImpl implements Discovery {
 	private Locator					locator												= null;
 	private Advertiser				advertiser											= null;
 
-	private final int				POLLDELAY											= 10000;									// 10
-	// sec
+	// polldelay of 10 sec; TODO make it configurable
+	private final int				POLLDELAY											= 10000;
 
 	private Timer					t													= null;
 
-	// private static final boolean DEFAULT_AUTOPUBLISH = true;
-
-	private static BundleContext	context;
-
-	private static LogService		logService;
-	// private boolean autoPublish = DEFAULT_AUTOPUBLISH;
-
-	private static Map				/* <SLPServiceDescriptionAdapter> */inMemoryCache	= Collections
-																								.synchronizedMap(new HashMap());
-
-//	private List					localServices										= Collections
-//																								.synchronizedList(new ArrayList());
+	// private List localServices = Collections.synchronizedList(new
+	// ArrayList());
 
 	/**
 	 * Constructor.
@@ -296,13 +291,12 @@ public class SLPHandlerImpl implements Discovery {
 														.getEndpointID()),
 										descriptionAdapter);
 					}
-//					if (!localServices.contains(descriptionAdapter
-//							.getEndpointID())) {
-						//only if this is a remote service we have to add it.
+					// if (!localServices.contains(descriptionAdapter
+					// .getEndpointID())) {
+					// only if this is a remote service we have to add it.
 						result.put(descriptionAdapter.getEndpointID(),
 								descriptionAdapter);
 					}
-//				}
 				else {
 					log(LogService.LOG_ERROR, "no interfaces provided by "
 							+ descriptionAdapter);
@@ -339,9 +333,7 @@ public class SLPHandlerImpl implements Discovery {
 		if (interfaceName == null && filter == null) {
 			// atomic compound operation
 			synchronized (inMemoryCache) {
-				inMemoryCache.clear(); // this works only because this method
-				// will
-				// be called to find ALL services in the network.
+				inMemoryCache.clear();
 				inMemoryCache.putAll(result);
 			}
 		}
@@ -388,7 +380,6 @@ public class SLPHandlerImpl implements Discovery {
 						endpointID);
 			}
 			catch (ServiceLocationException e1) {
-				e1.printStackTrace();
 				log(LogService.LOG_ERROR,
 						"Unable to create Service Description", e1);
 				return null;
@@ -406,13 +397,12 @@ public class SLPHandlerImpl implements Discovery {
 							+ " is published");
 				}
 				catch (ServiceLocationException e) {
-					e.printStackTrace();
 					log(LogService.LOG_ERROR, "failed registering service", e);
 				}
 			}
 
 			// add it to the available Services
-//			localServices.add(svcDescr.getEndpointID());
+			// localServices.add(svcDescr.getEndpointID());
 			inMemoryCache.put(svcDescr.getEndpointID(), svcDescr);
 			// inform the listener about the new available service
 			notifyListenersOnNewServiceDescription(svcDescr);
@@ -458,14 +448,13 @@ public class SLPHandlerImpl implements Discovery {
 						notifyListenersOnRemovedServiceDescription(serviceDescription);
 					}
 					catch (ServiceLocationException e) {
-						e.printStackTrace();
 						log(LogService.LOG_ERROR,
 								"failed to deregister service for interface "
 										+ interfaceName, e);
 					}
 				}
 				// remove it from in memory cache
-//				localServices.remove(slpSvcDescr.getEndpointID());
+				// localServices.remove(slpSvcDescr.getEndpointID());
 				inMemoryCache.remove(slpSvcDescr.getEndpointID());
 			}
 			else {
@@ -736,7 +725,6 @@ public class SLPHandlerImpl implements Discovery {
 						}
 					}
 					catch (InvalidSyntaxException e) {
-						e.printStackTrace();
 						String errMsg = "A filter provided by a DiscoveredServiceTracker is invalid.";
 						errMsg += " Filter = " + currentFilter;
 						errMsg += "; DiscoveredServiceTracker service.id = "
@@ -744,6 +732,7 @@ public class SLPHandlerImpl implements Discovery {
 						throw new RuntimeException(e.getMessage());
 					}
 					catch (IllegalStateException isex) {
+						// TODO: check whether this catch block is needed.
 						isex.printStackTrace();
 						// ignore it
 					}
@@ -777,6 +766,7 @@ public class SLPHandlerImpl implements Discovery {
 
 		public Object addingService(ServiceReference reference) {
 			// TODO: use it only we haven't got a service yet
+			// TODO: handle DiscoveredServiceTrackers added/modified/removed in the time when locator was away.
 			if (getLocator() == null) {
 				Locator loc = setLocatorService(reference);
 				return loc;

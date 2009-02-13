@@ -54,7 +54,8 @@ import ch.ethz.iks.slp.ServiceURL;
  */
 public class SLPServiceEndpointDescription implements
 		ServiceEndpointDescription {
-	// reserved are: `(' / `)' / `,' / `\' / `!' / `<' / `=' / `>' / `~' / CTL
+	// RFC2608: reserved are: `(' / `)' / `,' / `\' / `!' / `<' / `=' / `>' /
+	// `~' / CTL
 	// TODO: handle CTL
 	public static final String	RESERVED_CHARS_IN_ATTR_VALUES			= "(),\\!<>=~;/?:@&=+";
 
@@ -68,28 +69,8 @@ public class SLPServiceEndpointDescription implements
 
 	public static final String	ESCAPING_CHARACTER						= "\\";
 
-	private static int			port									= -1;										// TODO
-
-	// private Collection /* <String> */javaInterfaces = new ArrayList(); //
-	// mandatory
-	// private Collection /* <String> */javaInterfaceAndVersions = new
-	// ArrayList(); // optional
-	// private Collection /* <String> */javaAndEndpointInterfaces = new
-	// ArrayList(); // optional
-	// private Map /* <String, Object> */properties = new HashMap(); // optional
-	private String				endpointID;
-
-	// Java interfaces and associated ServiceURLs. Each interface has its own
-	// ServiceURL.
-	private Map				/* <String, ServiceURL> */serviceURLs	= new HashMap();
-
 	private static final String	LINE_SEPARATOR							= System
 																				.getProperty("line.separator");
-
-	private final Map			listOfJSLPSEDs							= Collections
-																				.synchronizedMap(new HashMap());
-
-	private Map					properties								= new HashMap();
 
 	private static final String	STRING_LIFETIME							= "lifetime";
 
@@ -104,6 +85,19 @@ public class SLPServiceEndpointDescription implements
 	private static final String	STRING_TYPE								= "type";
 
 	private static final String	STRING_SERVICE_OSGI						= "service:osgi";
+
+	private static int			port									= -1;										// TODO
+
+	private String				endpointID								= null;
+
+	// Java interfaces and associated ServiceURLs. Each interface has its own
+	// ServiceURL.
+	private Map				/* <String, ServiceURL> */serviceURLs	= new HashMap();
+
+	private final Map			listOfJSLPSEDs							= Collections
+																				.synchronizedMap(new HashMap());
+
+	private Map					properties								= new HashMap();
 
 	/**
 	 * 
@@ -366,14 +360,24 @@ public class SLPServiceEndpointDescription implements
 	 * @see org.osgi.impl.service.discovery.ProtocolSpecificServiceDescription#getLocation()
 	 */
 	public URL getLocation() {
-		try {
-			return new URL(
-					(String) getProperty(ServicePublication.PROP_KEY_ENDPOINT_LOCATION));
+		Object urlObject = getProperty(ServicePublication.PROP_KEY_ENDPOINT_LOCATION);
+		if (urlObject instanceof URL) {
+			return (URL) urlObject;
 		}
-		catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-		return null;
+		else
+			if (urlObject instanceof String) {
+				try {
+					return new URL((String) urlObject);
+				}
+				catch (MalformedURLException e) {
+					throw new RuntimeException(e.getMessage());
+				}
+			}
+			else {
+				throw new RuntimeException(
+						"Service location property is not of expected type URL or String. Property = "
+								+ urlObject.toString());
+			}
 	}
 
 	/**
@@ -459,16 +463,18 @@ public class SLPServiceEndpointDescription implements
 				host = hostname;
 			}
 			catch (UnknownHostException e) {
-				e.printStackTrace();
+				SLPHandlerImpl
+						.log(
+								LogService.LOG_ERROR,
+								"Exception occured while trying to get the name of local host.",
+								e);
 				// TODO log and rethrow
 			}
 		}
 		if (port == null) {
-			try {
-				port = String.valueOf(findFreePort());
-			}
-			catch (IOException e) {
-				e.printStackTrace();
+			int freePort = findFreePort();
+			if (freePort > 0) {
+				port = String.valueOf(freePort);
 			}
 		}
 		int lifetime = lifeTime != null ? lifeTime.intValue()
@@ -493,15 +499,23 @@ public class SLPServiceEndpointDescription implements
 	}
 
 	/**
+	 * TODO: move to utils
 	 * 
 	 * @return an unused port
-	 * @throws IOException
 	 */
-	private static synchronized int findFreePort() throws IOException {
+	private static synchronized int findFreePort() {
+		// TODO check usage of static var port here
 		if (port == -1) {
-			ServerSocket server = new ServerSocket(0);
-			port = server.getLocalPort();
-			server.close();
+			ServerSocket server;
+			try {
+				server = new ServerSocket(0);
+				port = server.getLocalPort();
+				server.close();
+			}
+			catch (IOException e) {
+				// getting free port failed. Return current port value, which is
+				// -1;
+			}
 		}
 		return port;
 	}
@@ -625,43 +639,32 @@ public class SLPServiceEndpointDescription implements
 	 */
 	public static void retrievePropertiesFromPath(String path,
 			final Map properties) {
-		try {
-			if (path != null && path.trim() != "") {
-				path = path.substring(2); // strip off the "/?" in front of
-				// the
-				// path
+		if (path != null && path.trim() != "") {
+			// strip off the "/?" in front of the path
+			path = path.substring(2);
 
-				StringTokenizer st = new StringTokenizer(path, "=,");
+			StringTokenizer st = new StringTokenizer(path, "=,");
 
-				String key;
-				String value;
+			String key;
+			String value;
 
-				try {
-					while (st.hasMoreTokens()) {
-						key = deescapeReservedChars(st.nextToken());
+			while (st.hasMoreTokens()) {
+				key = deescapeReservedChars(st.nextToken());
 
-						if (st.hasMoreTokens()) {
-							value = st.nextToken();
-						}
-						else {
-							value = "";
-						}
-
-						// TODO check whether got list of values --> create
-						// array. This should be done befor deescaping chars.
-
-						value = deescapeReservedChars(value);
-
-						properties.put(key, value);
-					}
+				if (st.hasMoreTokens()) {
+					value = st.nextToken();
 				}
-				catch (Exception e) {
-					e.printStackTrace();
+				else {
+					value = "";
 				}
+
+				// TODO check whether got list of values --> create
+				// array. This should be done befor deescaping chars.
+
+				value = deescapeReservedChars(value);
+
+				properties.put(key, value);
 			}
-		}
-		catch (Exception e) {
-			return;
 		}
 	}
 
@@ -1004,7 +1007,6 @@ public class SLPServiceEndpointDescription implements
 			return sed;
 		}
 		catch (ServiceLocationException e) {
-			e.printStackTrace();
 			SLPHandlerImpl.log(LogService.LOG_ERROR,
 					"Exception occured during SED creation ", e);
 		}

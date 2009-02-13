@@ -33,13 +33,13 @@ import ch.ethz.iks.slp.ServiceURL;
  */
 public class JSlpSED {
 
+	private static final String	LINE_SEPARATOR		= System
+															.getProperty("line.separator");
+
 	private String				interfaceName		= null;
 	private String				version				= null;
 	private String				endpointInterface	= null;
 	private ServiceURL			slpServiceURL		= null;
-
-	private static final String	LINE_SEPARATOR		= System
-															.getProperty("line.separator");
 
 	/**
 	 * Adds a property to the existing map.

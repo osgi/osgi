@@ -34,7 +34,7 @@ import org.osgi.service.log.LogService;
  * @author Thomas Kiesslich
  */
 public class InformListenerTask extends TimerTask {
-	private SLPHandlerImpl	discovery;
+	private SLPHandlerImpl	discovery	= null;
 
 	/**
 	 * 

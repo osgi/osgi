@@ -54,6 +54,13 @@ public class DSTTracker implements ServiceTrackerCustomizer {
 	}
 
 	/**
+	 * @return a new instance of dsTracker map
+	 */
+	public Map getDsTrackers() {
+		return new HashMap(dsTrackers);
+	}
+
+	/**
 	 * @see org.osgi.util.tracker.ServiceTrackerCustomizer#addingService(org.osgi.framework.ServiceReference)
 	 */
 	public Object addingService(final ServiceReference dstTrackerReference) {
@@ -76,7 +83,8 @@ public class DSTTracker implements ServiceTrackerCustomizer {
 	 * @see org.osgi.util.tracker.ServiceTrackerCustomizer#modifiedService(org.osgi.framework.ServiceReference,
 	 *      java.lang.Object)
 	 */
-	public void modifiedService(final ServiceReference dstTrackerReference, final Object arg1) {
+	public void modifiedService(final ServiceReference dstTrackerReference,
+			final Object arg1) {
 		DiscoveredServiceTracker tracker = (DiscoveredServiceTracker) context
 				.getService(dstTrackerReference);
 		Map changedFilterCriteria = determineChangedFilterProperties(tracker,
@@ -92,10 +100,12 @@ public class DSTTracker implements ServiceTrackerCustomizer {
 	 * @see org.osgi.util.tracker.ServiceTrackerCustomizer#removedService(org.osgi.framework.ServiceReference,
 	 *      java.lang.Object)
 	 */
-	public void removedService(final ServiceReference dstTrackerReference, final Object arg1) {
+	public void removedService(final ServiceReference dstTrackerReference,
+			final Object arg1) {
 		DiscoveredServiceTracker tracker = (DiscoveredServiceTracker) context
 				.getService(dstTrackerReference);
-		SLPHandlerImpl.log(LogService.LOG_INFO, "removing service tracker " + tracker);
+		SLPHandlerImpl.log(LogService.LOG_INFO, "removing service tracker "
+				+ tracker);
 		dsTrackers.remove(tracker);
 	}
 
@@ -200,12 +210,5 @@ public class DSTTracker implements ServiceTrackerCustomizer {
 								.getProperty(DiscoveredServiceTracker.PROP_KEY_MATCH_CRITERIA_FILTERS));
 		dsTrackers.put((DiscoveredServiceTracker) context.getService(ref),
 				props);
-	}
-
-	/**
-	 * @return a new instance of dsTracker map
-	 */
-	public Map getDsTrackers() {
-		return new HashMap(dsTrackers);
 	}
 }
