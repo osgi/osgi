@@ -176,8 +176,8 @@ public interface ServiceReference extends Comparable {
 	 *         <code>ServiceReference</code> is less than, equal to, or greater
 	 *         than the specified <code>ServiceReference</code>.
 	 * @throws IllegalArgumentException If the specified
-	 *         <code>ServiceReference</code> was not created by the framework
-	 *         instance as this <code>ServiceReference</code>.
+	 *         <code>ServiceReference</code> was not created by the same
+	 *         framework instance as this <code>ServiceReference</code>.
 	 * @since 1.4
 	 */
 	public int compareTo(Object reference);
