@@ -6,8 +6,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.security.CodeSource;
+import java.security.Permission;
+import java.security.PermissionCollection;
+import java.security.Policy;
+import java.security.ProtectionDomain;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -210,14 +217,14 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 			assertNull("BundleContext is not null after stop", framework.getBundleContext());
 		}
 		catch (BundleException e) {
-			fail("Unexpected BundleException initializing", e);
+			fail("Unexpected BundleException stopping", e);
 		}
 		catch (InterruptedException e) {
-			fail("Unexpected InterruptedException initializing", e);
+			fail("Unexpected InterruptedException waiting for stop", e);
 		}
-		// if the framework was not STARTING or ACTIVE then we assume the waitForStop returned immediately with a FrameworkEvent.STOPPED 
-		//and does not change the state of the framework
-		int expectedState = (previousState & (Bundle.STARTING | Bundle.ACTIVE)) != 0 ? Bundle.RESOLVED : previousState;
+		// if the framework was not STARTING STOPPING or ACTIVE then we assume the waitForStop returned immediately with a FrameworkEvent.STOPPED 
+		// and does not change the state of the framework
+		int expectedState = (previousState & (Bundle.STARTING | Bundle.ACTIVE | Bundle.STOPPING)) != 0 ? Bundle.RESOLVED : previousState;
 		assertEquals("Wrong framework state after init", expectedState, framework.getState());
 	}
 
@@ -228,14 +235,18 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		Thread waitForStop = waitForStopThread(framework, 10000, result, failureException);
 		waitForStop.start();
 		try {
+			Thread.sleep(500);
 			framework.update();
 		} catch (BundleException e) {
 			fail("Failed to update the framework", e); //$NON-NLS-1$
 		}
+		catch (InterruptedException e) {
+			fail("Unexpected interruption", e);
+		}
 		try {
 			waitForStop.join();
 		} catch (InterruptedException e) {
-			fail("unexpected interuption", e); //$NON-NLS-1$
+			fail("Unexpected interruption", e); //$NON-NLS-1$
 		}
 		if (failureException[0] != null)
 			fail("Error occurred while waiting", failureException[0]); //$NON-NLS-1$
@@ -480,25 +491,92 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 
 	public void testSecurity() {
 		if (System.getSecurityManager() != null) {
-			System.err.println("Can only testSecurity in launch tests when no initial SecurityManager is set");
+			System.err
+					.println("Can only testSecurity in launch tests when no initial SecurityManager is set");
 			return;
 		}
-		Map configuration = getConfiguration(getName());
-		configuration.put(Constants.FRAMEWORK_SECURITY, "osgi");
-		Framework framework = createFramework(configuration);
-		initFramework(framework);
-		assertNotNull("Null SecurityManager", System.getSecurityManager());
-		stopFramework(framework);
-		assertNull("SecurityManager is not null", System.getSecurityManager());
-
-		System.setSecurityManager(new SecurityManager());
+		Policy previous = Policy.getPolicy();
+		Policy.setPolicy(new AllPolicy());
 		try {
-			framework.start();
-			fail("Expected an exception when starting with a SecurityManager already set");
-		} catch (Exception e) {
-			// expected
-		} finally {
-			System.setSecurityManager(null);
+			Map configuration = getConfiguration(getName());
+			configuration.put(Constants.FRAMEWORK_SECURITY, "osgi");
+			Framework framework = createFramework(configuration);
+			initFramework(framework);
+			assertNotNull("Null SecurityManager", System.getSecurityManager());
+			stopFramework(framework);
+			assertNull("SecurityManager is not null", System
+					.getSecurityManager());
+
+			System.setSecurityManager(new SecurityManager());
+			try {
+				framework.start();
+				fail("Expected an exception when starting with a SecurityManager already set");
+			}
+			catch (Exception e) {
+				// expected
+			}
+			finally {
+				System.setSecurityManager(null);
+			}
+		}
+		finally {
+			Policy.setPolicy(previous);
 		}
 	}
+
+	public void testWaitForStop() {
+		Framework framework = createFramework(getConfiguration(getName()));
+		startFramework(framework);
+		FrameworkEvent event = null;
+		try {
+			event = framework.waitForStop(1000);
+		}
+		catch (InterruptedException e) {
+			fail("Unexpected interuption", e);
+		}
+		assertNotNull("Wait for stop event is null", event);
+		assertEquals("Wrong event type", FrameworkEvent.INFO, event.getType());
+		
+	}
+
+    static class AllPolicy extends Policy {
+        static PermissionCollection all = new AllPermissionCollection();
+
+        public PermissionCollection getPermissions(ProtectionDomain domain) {
+        	System.out.println("Returning all permission for " + domain == null ? null : domain.getCodeSource());
+        	return all;
+        }
+        public PermissionCollection getPermissions(CodeSource codesource) {
+            System.out.println("Returning all permission for " + codesource);
+            return all;
+        }
+
+        public boolean implies(ProtectionDomain domain, Permission permission) {
+        	System.out.println("Granting permission for " + domain == null ? null : domain.getCodeSource());
+        	return true;
+        }
+
+        public void refresh() {
+        }
+    }
+
+    static class AllPermissionCollection extends PermissionCollection {
+        private static final long serialVersionUID = 1L;
+        private static Vector     list             = new Vector();
+
+        {
+            setReadOnly();
+        }
+
+        public void add(Permission permission) {
+        }
+
+        public Enumeration elements() {
+            return list.elements();
+        }
+
+        public boolean implies(Permission permission) {
+            return true;
+        }
+    }
 }
