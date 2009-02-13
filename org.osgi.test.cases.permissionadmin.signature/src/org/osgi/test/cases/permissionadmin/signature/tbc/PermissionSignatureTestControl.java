@@ -459,7 +459,7 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
     String extensionBundleLocation = getInstallBundleLocation(extensionBundleName);
     
     Vector permissions = utility.getPInfosForAdminPermisssion(
-        AdminPermission.EXTENSIONLIFECYCLE,
+        AdminPermission.EXTENSIONLIFECYCLE + ',' + AdminPermission.LIFECYCLE,
         -1, // extension bundle is not yet installed  
         extensionBundleLocation,  // ?
         null);  

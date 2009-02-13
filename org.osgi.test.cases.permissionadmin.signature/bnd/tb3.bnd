@@ -7,7 +7,10 @@ Bundle-DocURL: http://www.osgi.org/
 Bundle-ContactAddress: info@mail.osgi.org
 Bundle-Category: osgi,test
 Bundle-Copyright: ${copyright}
-Fragment-Host: system.bundle; extension:=bootclasspath
+Fragment-Host: system.bundle
 
 Private-Package						= \
 	${p}.tb3.*
+Import-Package: !*
+
+-failok: true
