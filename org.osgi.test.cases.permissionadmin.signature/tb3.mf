@@ -1,7 +1,0 @@
-Manifest-Version: 1.0
-Bundle-Name: ${p}.tb3
-Bundle-SymbolicName: ${p}.tb3
-Bundle-Version: 4
-Bundle-Activator: $(p).tb3.Activator
-Fragment-Host: system.bundle; extension:=bootclasspath
-

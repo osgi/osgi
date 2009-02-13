@@ -26,24 +26,16 @@
  */
 package org.osgi.test.cases.permissionadmin.signature.tbc;
 
-import org.osgi.framework.*;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Vector;
 
-import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
+import org.osgi.framework.AdminPermission;
+import org.osgi.framework.Bundle;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.service.startlevel.StartLevel;
-
-//import org.osgi.service.cm.ConfigurationPermission;
-
-import org.osgi.test.cases.util.DefaultTestBundleControl;
-import org.osgi.test.cases.util.MethodCall;
-
-import java.io.InputStream;
-
-import java.net.URL;
-
-import java.util.Vector;
-//import java.util.Hashtable;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * Contains the test methods of the permission signature test case.
@@ -103,13 +95,9 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
   } 
   
   
-  public boolean checkPrerequisites() {
-	    return securityNeeded(true) &&
-		 serviceAvailable(PermissionAdmin.class); 
-  }
-
-
-  public void prepare() throws Exception {
+  public void setUp() throws Exception {
+	assertTrue("Must have a security manager", System.getSecurityManager() != null);
+	assertTrue(serviceAvailable(PermissionAdmin.class)); 
     testBundle = installBundle("tb1.jar");
     testBundleLocation = testBundle.getLocation();
     
@@ -126,9 +114,9 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
     
     extensionBundleName = SignatureResource.getString("extensionBundle.name");
     
-    tbc = (PermissionSignatureTBCService)getRegistry().getService(PermissionSignatureTBCService.class);
-    permissionAdmin = (PermissionAdmin)getRegistry().getService(PermissionAdmin.class);
-    StartLevel startLevelService = (StartLevel)getRegistry().getService(StartLevel.class);
+    tbc = (PermissionSignatureTBCService) getService(PermissionSignatureTBCService.class);
+    permissionAdmin = (PermissionAdmin) getService(PermissionAdmin.class);
+    StartLevel startLevelService = (StartLevel) getService(StartLevel.class);
     if (startLevelService != null) {
       startLevel = startLevelService.getStartLevel();
       initialBundleStartLevel = startLevelService.getInitialBundleStartLevel();
@@ -136,18 +124,16 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
     }
 
     utility = new PermissionSignatureUtility(this, tbc, getContext()); 
-  }
 
-  /**
-   * <remove>Prepare for each method. It is important that each method can
-   * be executed independently of each other method. Do not keep
-   * state between methods, if possible. This method can be used
-   * to clean up any possible remaining state.</remove> 
-   */
-  public void setState() throws Exception {
     permissionAdmin.setPermissions(testBundleLocation, null);
     //uninstallTestSignatureBundle();
     installTestSignatureBundle();
+  }
+
+  public void tearDown() {    
+    log("#after each run");
+    permissionAdmin.setPermissions(testBundleLocation, null);
+    ungetAllServices();
   }
 
   /**
@@ -322,7 +308,11 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
       utility.allowed_Bundle_getResources(message, testSignatureBundle, resourcesName);
       utility.allowed_Bundle_getEntry(message, testSignatureBundle, entryName);
       utility.allowed_Bundle_getEntryPaths(message, testSignatureBundle, entryPath);
-      
+
+      // note that in R4.2 a change was made to make resource imply resolve
+      utility.allowed_PackageAdmin_refreshPackages(message, null);
+      utility.allowed_PackageAdmin_resolveBundles(message, null);
+
       utility.not_allowed_Bundle_getHeaders(message, testSignatureBundle);
       utility.not_allowed_Bundle_getHeaders_byLocation(message, testSignatureBundle);
       utility.not_allowed_Bundle_getLocation(message, testSignatureBundle);
@@ -340,8 +330,6 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
       utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
       utility.not_allowed_BundleContext_addBundleListener(message);
       utility.not_allowed_BundleContext_removeBundleListener(message);
-      utility.not_allowed_PackageAdmin_refreshPackages(message, null);
-      utility.not_allowed_PackageAdmin_resolveBundles(message, null);
       utility.not_allowed_PermissionAdmin_setPermissions(message, signatureBundleLocation, 
           new PermissionInfo[]{new PermissionInfo(AdminPermission.class.getName(), "*", "*")});
       utility.not_allowed_PermissionAdmin_setDefaultPermissions(message, permissionAdmin.getDefaultPermissions());
@@ -373,7 +361,11 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
       printPermissions(testBundleLocation);
 
       utility.allowed_Bundle_loadClass(message, testSignatureBundle, className);
-      
+
+      // note that in R4.2 a change was made to make resource imply resolve
+      utility.allowed_PackageAdmin_refreshPackages(message, null);
+      utility.allowed_PackageAdmin_resolveBundles(message, null);
+
       utility.not_allowed_Bundle_getHeaders(message, testSignatureBundle);
       utility.not_allowed_Bundle_getHeaders_byLocation(message, testSignatureBundle);
       utility.not_allowed_Bundle_getLocation(message, testSignatureBundle);
@@ -393,8 +385,6 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
       utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
       utility.not_allowed_BundleContext_addBundleListener(message);
       utility.not_allowed_BundleContext_removeBundleListener(message);
-      utility.not_allowed_PackageAdmin_refreshPackages(message, null);
-      utility.not_allowed_PackageAdmin_resolveBundles(message, null);
       utility.not_allowed_PermissionAdmin_setPermissions(message, signatureBundleLocation, 
           new PermissionInfo[]{new PermissionInfo(AdminPermission.class.getName(), "*", "*")});
       utility.not_allowed_PermissionAdmin_setDefaultPermissions(message, permissionAdmin.getDefaultPermissions());
@@ -546,6 +536,10 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
       utility.allowed_Bundle_stop(message, testSignatureBundle);
       utility.allowed_Bundle_start(message, testSignatureBundle);
       
+      // note that in R4.2 a change was made to make resource imply resolve
+      utility.allowed_PackageAdmin_refreshPackages(message, null);
+      utility.allowed_PackageAdmin_resolveBundles(message, null);
+
       utility.not_allowed_Bundle_getHeaders(message, testSignatureBundle);
       utility.not_allowed_Bundle_getHeaders_byLocation(message, testSignatureBundle);
       utility.not_allowed_Bundle_getLocation(message, testSignatureBundle);
@@ -563,8 +557,6 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
       utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
       utility.not_allowed_BundleContext_addBundleListener(message);
       utility.not_allowed_BundleContext_removeBundleListener(message);
-      utility.not_allowed_PackageAdmin_refreshPackages(message, null);
-      utility.not_allowed_PackageAdmin_resolveBundles(message, null);
       utility.not_allowed_PermissionAdmin_setPermissions(message, signatureBundleLocation, 
           new PermissionInfo[]{new PermissionInfo(AdminPermission.class.getName(), "*", "*")});
       utility.not_allowed_PermissionAdmin_setDefaultPermissions(message, permissionAdmin.getDefaultPermissions());
@@ -828,23 +820,6 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 //    
   }
   
-  /**
-   * Clean up after each method. Notice that during debugging
-   * many times the unsetState is never reached.
-   */
-  public void unsetState() {
-    log("#after each method");
-  }
-
-  /**
-   * Clean up after a run. Notice that during debugging
-   * many times the unprepare is never reached.
-   */
-  public void unprepare() {    
-    log("#after each run");
-    permissionAdmin.setPermissions(testBundleLocation, null);    
-  }
-  
   // returns true if 'method' failed
   boolean not_allowed_call(String message, String methodName,  Class[] paramClasses, Object[] paramObjects, Class wanted) throws Exception {
     try {
@@ -895,11 +870,8 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
   }
   
   private void installTestSignatureBundle() throws Exception {
-    if (!isBundleInstalled(signatureBundleName)) {
-      testSignatureBundle = installBundle(signatureBundleName);
-      signatureBundleLocation = testSignatureBundle.getLocation();
-    }
-    signatureBundleLocation = testSignatureBundle.getLocation();
+     testSignatureBundle = installBundle(signatureBundleName);
+     signatureBundleLocation = testSignatureBundle.getLocation();
   }
   
   private InputStream getInputStream(String bundleName) throws Exception {
