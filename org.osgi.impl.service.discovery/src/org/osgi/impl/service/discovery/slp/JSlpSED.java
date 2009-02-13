@@ -31,7 +31,7 @@ import ch.ethz.iks.slp.ServiceURL;
  * 
  * 
  * TODO Add Javadoc comment for this type.
- * 
+ * @author Thomas Kiesslich
  * @version $Revision$
  */
 public class JSlpSED {

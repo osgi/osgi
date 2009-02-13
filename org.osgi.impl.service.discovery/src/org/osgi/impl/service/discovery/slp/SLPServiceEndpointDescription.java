@@ -52,7 +52,7 @@ import ch.ethz.iks.slp.ServiceURL;
  * In the <code>path</code> part service properties are listed.
  * 
  * SLP Spec: http://www.ietf.org/rfc/rfc2608.txt
- * 
+ * @author Thomas Kiesslich
  * @version $Revision$
  */
 public class SLPServiceEndpointDescription implements
