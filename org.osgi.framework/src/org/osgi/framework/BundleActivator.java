@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2009). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@ public interface BundleActivator {
 	 * This method must complete and return to its caller in a timely manner.
 	 * 
 	 * @param context The execution context of the bundle being started.
-	 * @throws java.lang.Exception If this method throws an exception, this
+	 * @throws Exception If this method throws an exception, this
 	 *         bundle is marked as stopped and the Framework will remove this
 	 *         bundle's listeners, unregister all services registered by this
 	 *         bundle, and release all services used by this bundle.
@@ -78,7 +78,7 @@ public interface BundleActivator {
 	 * This method must complete and return to its caller in a timely manner.
 	 * 
 	 * @param context The execution context of the bundle being stopped.
-	 * @throws java.lang.Exception If this method throws an exception, the
+	 * @throws Exception If this method throws an exception, the
 	 *         bundle is still marked as stopped, and the Framework will remove
 	 *         the bundle's listeners, unregister all services registered by the
 	 *         bundle, and release all services used by the bundle.

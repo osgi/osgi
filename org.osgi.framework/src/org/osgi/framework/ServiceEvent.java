@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2009). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package org.osgi.framework;
 
+import java.util.Dictionary;
 import java.util.EventObject;
 
 /**
@@ -56,7 +57,7 @@ public class ServiceEvent extends EventObject {
 	 * <p>
 	 * The value of <code>REGISTERED</code> is 0x00000001.
 	 * 
-	 * @see BundleContext#registerService(String[],Object,java.util.Dictionary)
+	 * @see BundleContext#registerService(String[],Object,Dictionary)
 	 */
 	public final static int			REGISTERED			= 0x00000001;
 

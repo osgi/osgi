@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2009). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 
 package org.osgi.framework;
+
+import java.util.Dictionary;
 
 /**
  * A reference to a service.
@@ -83,8 +85,8 @@ public interface ServiceReference extends Comparable {
 	 * This method is <i>case-preserving </i>; this means that every key in the
 	 * returned array must have the same case as the corresponding key in the
 	 * properties <code>Dictionary</code> that was passed to the
-	 * {@link BundleContext#registerService(String[],Object,java.util.Dictionary)}
-	 * or {@link ServiceRegistration#setProperties} methods.
+	 * {@link BundleContext#registerService(String[],Object,Dictionary)} or
+	 * {@link ServiceRegistration#setProperties} methods.
 	 * 
 	 * @return An array of property keys.
 	 */
@@ -100,9 +102,9 @@ public interface ServiceReference extends Comparable {
 	 * unregistered.
 	 * 
 	 * @return The bundle that registered the service referenced by this
-	 *         <code>ServiceReference</code> object; <code>null</code> if
-	 *         that service has already been unregistered.
-	 * @see BundleContext#registerService(String[],Object,java.util.Dictionary)
+	 *         <code>ServiceReference</code> object; <code>null</code> if that
+	 *         service has already been unregistered.
+	 * @see BundleContext#registerService(String[],Object,Dictionary)
 	 */
 	public Bundle getBundle();
 

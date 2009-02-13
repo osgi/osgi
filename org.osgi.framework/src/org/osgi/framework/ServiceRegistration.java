@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2009). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ public interface ServiceRegistration {
 	 * The <code>ServiceReference</code> object may be shared with other
 	 * bundles.
 	 * 
-	 * @throws java.lang.IllegalStateException If this
+	 * @throws IllegalStateException If this
 	 *         <code>ServiceRegistration</code> object has already been
 	 *         unregistered.
 	 * @return <code>ServiceReference</code> object.
@@ -102,7 +102,7 @@ public interface ServiceRegistration {
 	 * the service object for the bundle.
 	 * </ol>
 	 * 
-	 * @throws java.lang.IllegalStateException If this
+	 * @throws IllegalStateException If this
 	 *         <code>ServiceRegistration</code> object has already been
 	 *         unregistered.
 	 * @see BundleContext#ungetService

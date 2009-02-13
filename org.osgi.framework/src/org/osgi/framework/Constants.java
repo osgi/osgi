@@ -22,7 +22,7 @@ package org.osgi.framework;
  * 
  * <p>
  * The values associated with these keys are of type
- * <code>java.lang.String</code>, unless otherwise indicated.
+ * <code>String</code>, unless otherwise indicated.
  * 
  * @since 1.1
  * @version $Revision$
