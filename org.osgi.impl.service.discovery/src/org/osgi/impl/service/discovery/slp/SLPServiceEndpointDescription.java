@@ -2,6 +2,9 @@
  * Copyright (c) 2008, 2009 Siemens Enterprise Communications GmbH & Co. KG, 
  * Germany. All rights reserved.
  *
+ * Siemens Enterprise Communications GmbH & Co. KG is a Trademark Licensee 
+ * of Siemens AG.
+ *
  * This material, including documentation and any related computer programs,
  * is protected by copyright controlled by Siemens Enterprise Communications 
  * GmbH & Co. KG and its licensors. All rights are reserved.
