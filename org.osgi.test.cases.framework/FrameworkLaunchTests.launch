@@ -22,5 +22,5 @@
 <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.4"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.osgi.test.cases.framework.junit.launch.FrameworkLaunchTests"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="org.osgi.test.cases.framework"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dorg.osgi.framework.launch.test.class=org.eclipse.osgi.launch.Equinox -Dorg.osgi.framework.launch.test.storageroot=${workspace_loc}/org.osgi.test.cases.framework/generated/testStorageRoot"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dorg.osgi.framework.launch.test.storageroot=${workspace_loc}/org.osgi.test.cases.framework/generated/testStorageRoot"/>
 </launchConfiguration>
