@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -95,9 +95,9 @@ public class PermissionInfo {
 		if (encodedPermission.length() == 0) {
 			throw new IllegalArgumentException("empty encoded permission");
 		}
-		String type = null;
-		String name = null;
-		String actions = null;
+		String parsedType = null;
+		String parsedName = null;
+		String parsedActions = null;
 		try {
 			char[] encoded = encodedPermission.toCharArray();
 			int length = encoded.length;
@@ -128,7 +128,7 @@ public class PermissionInfo {
 			if (pos == begin || encoded[begin] == '"') {
 				throw new IllegalArgumentException("expecting type");
 			}
-			type = new String(encoded, begin, pos - begin);
+			parsedType = new String(encoded, begin, pos - begin);
 
 			/* skip whitespace */
 			while (Character.isWhitespace(encoded[pos])) {
@@ -145,7 +145,7 @@ public class PermissionInfo {
 					}
 					pos++;
 				}
-				name = unescapeString(encoded, begin, pos);
+				parsedName = unescapeString(encoded, begin, pos);
 				pos++;
 
 				if (Character.isWhitespace(encoded[pos])) {
@@ -167,7 +167,7 @@ public class PermissionInfo {
 							}
 							pos++;
 						}
-						actions = unescapeString(encoded, begin, pos);
+						parsedActions = unescapeString(encoded, begin, pos);
 						pos++;
 
 						/* skip whitespace */
@@ -193,9 +193,9 @@ public class PermissionInfo {
 			throw new IllegalArgumentException("parsing terminated abruptly");
 		}
 
-		this.type = type;
-		this.name = name;
-		this.actions = actions;
+		type = parsedType;
+		name = parsedName;
+		actions = parsedActions;
 	}
 
 	/**
