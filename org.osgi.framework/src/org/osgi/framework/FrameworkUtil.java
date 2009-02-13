@@ -46,6 +46,7 @@ public class FrameworkUtil {
 	 * FrameworkUtil objects may not be constructed.
 	 */
 	private FrameworkUtil() {
+		// private empty constructor to prevent construction
 	}
 
 	/**
