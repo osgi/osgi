@@ -90,68 +90,67 @@ public final class AdminPermission extends BasicPermission {
 	static final long			serialVersionUID			= 407051004521261705L;
 
 	/**
-	 * The action string <code>class</code> (Value is "class"). The
-	 * <code>class</code> action implies the <code>resolve</code> action.
+	 * The action string <code>class</code>. The <code>class</code> action
+	 * implies the <code>resolve</code> action.
 	 * 
 	 * @since 1.3
 	 */
 	public final static String	CLASS						= "class";
 	/**
-	 * The action string <code>execute</code> (Value is "execute"). The
-	 * <code>execute</code> action implies the <code>resolve</code> action.
+	 * The action string <code>execute</code>. The <code>execute</code> action
+	 * implies the <code>resolve</code> action.
 	 * 
 	 * @since 1.3
 	 */
 	public final static String	EXECUTE						= "execute";
 	/**
-	 * The action string <code>extensionLifecycle</code> (Value is
-	 * "extensionLifecycle").
+	 * The action string <code>extensionLifecycle</code>.
 	 * 
 	 * @since 1.3
 	 */
 	public final static String	EXTENSIONLIFECYCLE			= "extensionLifecycle";
 	/**
-	 * The action string <code>lifecycle</code> (Value is "lifecycle").
+	 * The action string <code>lifecycle</code>.
 	 * 
 	 * @since 1.3
 	 */
 	public final static String	LIFECYCLE					= "lifecycle";
 	/**
-	 * The action string <code>listener</code> (Value is "listener").
+	 * The action string <code>listener</code>.
 	 * 
 	 * @since 1.3
 	 */
 	public final static String	LISTENER					= "listener";
 	/**
-	 * The action string <code>metadata</code> (Value is "metadata").
+	 * The action string <code>metadata</code>.
 	 * 
 	 * @since 1.3
 	 */
 	public final static String	METADATA					= "metadata";
 	/**
-	 * The action string <code>resolve</code> (Value is "resolve"). The
-	 * <code>resolve</code> action is implied by the <code>class</code>,
-	 * <code>execute</code> and <code>resource</code> actions.
+	 * The action string <code>resolve</code>. The <code>resolve</code> action
+	 * is implied by the <code>class</code>, <code>execute</code> and
+	 * <code>resource</code> actions.
 	 * 
 	 * @since 1.3
 	 */
 	public final static String	RESOLVE						= "resolve";
 	/**
-	 * The action string <code>resource</code> (Value is "resource"). The
-	 * <code>resource</code> action implies the <code>resolve</code> action.
+	 * The action string <code>resource</code>. The <code>resource</code> action
+	 * implies the <code>resolve</code> action.
 	 * 
 	 * @since 1.3
 	 */
 	public final static String	RESOURCE					= "resource";
 	/**
-	 * The action string <code>startlevel</code> (Value is "startlevel").
+	 * The action string <code>startlevel</code>.
 	 * 
 	 * @since 1.3
 	 */
 	public final static String	STARTLEVEL					= "startlevel";
 
 	/**
-	 * The action string <code>context</code> (Value is "context").
+	 * The action string <code>context</code>.
 	 * 
 	 * @since 1.4
 	 */
@@ -630,8 +629,8 @@ public final class AdminPermission extends BasicPermission {
 					"argument must be constructed with a Bundle or filter of *");
 		}
 		// check actions first - much faster
-		int targetMask = requested.getActionsMask();
-		if ((getActionsMask() & targetMask) != targetMask) {
+		int requestedMask = requested.getActionsMask();
+		if ((getActionsMask() & requestedMask) != requestedMask) {
 			return false;
 		}
 	

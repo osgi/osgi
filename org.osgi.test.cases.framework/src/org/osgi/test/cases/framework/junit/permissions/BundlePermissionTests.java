@@ -20,64 +20,83 @@ import java.security.Permission;
 import java.security.PermissionCollection;
 import java.util.PropertyPermission;
 
-import org.osgi.framework.PackagePermission;
+import org.osgi.framework.BundlePermission;
 import org.osgi.test.support.PermissionTestCase;
 
-public class PackagePermissionTests extends PermissionTestCase {
+public class BundlePermissionTests extends PermissionTestCase {
 
-	public void testInvalidPackagePermissions() {
-		invalidPackagePermission("a.b.c", "x");
-		invalidPackagePermission("a.b.c", "   get  ,  x   ");
-		invalidPackagePermission("a.b.c", "");
-		invalidPackagePermission("a.b.c", "      ");
-		invalidPackagePermission("a.b.c", null);
-		invalidPackagePermission("a.b.c", ",");
-		invalidPackagePermission("a.b.c", ",xxx");
-		invalidPackagePermission("a.b.c", "xxx,");
-		invalidPackagePermission("a.b.c", "import,");
-		invalidPackagePermission("a.b.c", "export,   ");
-		invalidPackagePermission("a.b.c", "importme,");
-		invalidPackagePermission("a.b.c", "exportme,");
-		invalidPackagePermission("a.b.c", ",import");
-		invalidPackagePermission("a.b.c", ",export");
-		invalidPackagePermission("a.b.c", "   importme   ");
-		invalidPackagePermission("a.b.c", "   exportme     ");
-		invalidPackagePermission("a.b.c", "   impor");
-		invalidPackagePermission("a.b.c", "   expor"); 
+	public void testInvalidBundlePermissions() {
+		invalidBundlePermission("a.b.c", "x");
+		invalidBundlePermission("a.b.c", "   host  ,  x   ");
+		invalidBundlePermission("a.b.c", "");
+		invalidBundlePermission("a.b.c", "      ");
+		invalidBundlePermission("a.b.c", null);
+		invalidBundlePermission("a.b.c", ",");
+		invalidBundlePermission("a.b.c", ",xxx");
+		invalidBundlePermission("a.b.c", "xxx,");
+		invalidBundlePermission("a.b.c", "provide,");
+		invalidBundlePermission("a.b.c", "require,   ");
+		invalidBundlePermission("a.b.c", "hostme,");
+		invalidBundlePermission("a.b.c", "fragmentme,");
+		invalidBundlePermission("a.b.c", ",host");
+		invalidBundlePermission("a.b.c", ",fragment");
+		invalidBundlePermission("a.b.c", "   provideme   ");
+		invalidBundlePermission("a.b.c", "   requireme     ");
+		invalidBundlePermission("a.b.c", "   hos");
+		invalidBundlePermission("a.b.c", "   fragmen"); 
 	}
 
-	public void testPackagePermission() {
+	public void testBundlePermissionActions() {
 		Permission op = new PropertyPermission("java.home", "read"); 
 
-		PackagePermission p11 = new PackagePermission("com.foo.service1",
-				"    IMPORT,export   ");
-		PackagePermission p12 = new PackagePermission("com.foo.service1",
-				"EXPORT  ,   import");
-		PackagePermission p13 = new PackagePermission("com.foo.service1",
-				"expORT   ");
-		PackagePermission p14 = new PackagePermission("com.foo.service1",
-				"    Import    "); 
+		BundlePermission p11 = new BundlePermission("com.foo.service1",
+				"    REQUIRE,provide   ");
+		BundlePermission p12 = new BundlePermission("com.foo.service1",
+				"PROVIDE  ,   require");
+		BundlePermission p13 = new BundlePermission("com.foo.service1",
+				"proVIDE   ");
+		BundlePermission p14 = new BundlePermission("com.foo.service1",
+				"    Require    "); 
+		BundlePermission p15 = new BundlePermission("com.foo.service1",
+				"    fraGMent    ");
+		BundlePermission p16 = new BundlePermission("com.foo.service1",
+				"    HosT    "); 
 
 		assertImplies(p11, p11);
 		assertImplies(p11, p12);
 		assertImplies(p11, p13);
 		assertImplies(p11, p14);
+		assertNotImplies(p11, p15);
+		assertNotImplies(p11, p16);
 
 		assertImplies(p12, p11);
 		assertImplies(p12, p12);
 		assertImplies(p12, p13);
 		assertImplies(p12, p14);
+		assertNotImplies(p12, p15);
+		assertNotImplies(p12, p16);
 
 		assertImplies(p13, p11);
 		assertImplies(p13, p12);
 		assertImplies(p13, p13);
 		assertImplies(p13, p14);
+		assertNotImplies(p13, p15);
+		assertNotImplies(p13, p16);
 
 		assertImplies(p14, p14);
-
 		assertNotImplies(p14, p11);
 		assertNotImplies(p14, p12);
 		assertNotImplies(p14, p13);
+		
+		assertImplies(p15, p15);
+		assertNotImplies(p15, p11);
+		assertNotImplies(p15, p12);
+		assertNotImplies(p15, p13);
+
+		assertImplies(p16, p16);
+		assertNotImplies(p16, p11);
+		assertNotImplies(p16, p12);
+		assertNotImplies(p16, p13);
 
 		assertNotImplies(p11, op);
 
@@ -90,13 +109,20 @@ public class PackagePermissionTests extends PermissionTestCase {
 		assertEquals(p13, p11);
 		assertEquals(p13, p12);
 		assertEquals(p13, p13);
+		assertEquals(p14, p14);
+		assertEquals(p15, p15);
+		assertEquals(p16, p16);
 
 		assertNotEquals(p11, p14);
 		assertNotEquals(p12, p14);
 		assertNotEquals(p13, p14);
+		assertNotEquals(p13, p15);
+		assertNotEquals(p13, p16);
 		assertNotEquals(p14, p11);
 		assertNotEquals(p14, p12);
 		assertNotEquals(p14, p13);
+		assertNotEquals(p14, p15);
+		assertNotEquals(p14, p16);
 
 		PermissionCollection pc = p13.newPermissionCollection();
 
@@ -140,11 +166,20 @@ public class PackagePermissionTests extends PermissionTestCase {
 
 		checkEnumeration(pc.elements(), false);
 
-		PackagePermission p21 = new PackagePermission("com.foo.service2",
-				"import");
-		PackagePermission p22 = new PackagePermission("com.foo.*", "import");
-		PackagePermission p23 = new PackagePermission("com.*", "import");
-		PackagePermission p24 = new PackagePermission("*", "import"); 
+		assertSerializable(p11);
+		assertSerializable(p12);
+		assertSerializable(p13);
+		assertSerializable(p14);
+		assertSerializable(p15);
+		assertSerializable(p16);
+	}
+
+	public void testBundlePermissionNames() {
+		BundlePermission p21 = new BundlePermission("com.foo.service2",
+				"host");
+		BundlePermission p22 = new BundlePermission("com.foo.*", "host");
+		BundlePermission p23 = new BundlePermission("com.*", "host");
+		BundlePermission p24 = new BundlePermission("*", "host"); 
 
 		assertImplies(p21, p21);
 		assertImplies(p22, p21);
@@ -169,7 +204,7 @@ public class PackagePermissionTests extends PermissionTestCase {
 
 		assertNotImplies(p23, p24);
 
-		pc = p21.newPermissionCollection();
+		PermissionCollection pc = p21.newPermissionCollection();
 
 		assertAddPermission(pc, p21);
 		assertImplies(pc, p21);
@@ -219,19 +254,15 @@ public class PackagePermissionTests extends PermissionTestCase {
 		assertImplies(pc, p23);
 		assertImplies(pc, p24);
 
-		assertSerializable(p11);
-		assertSerializable(p12);
-		assertSerializable(p13);
-		assertSerializable(p14);
 		assertSerializable(p21);
 		assertSerializable(p22);
 		assertSerializable(p23);
 		assertSerializable(p24);
 	}
 	
-	private void invalidPackagePermission(String name, String actions) {
+	private void invalidBundlePermission(String name, String actions) {
 		try {
-			PackagePermission p = new PackagePermission(name, actions);
+			BundlePermission p = new BundlePermission(name, actions);
 			fail(p + " created with invalid actions"); 
 		}
 		catch (IllegalArgumentException e) {

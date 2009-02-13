@@ -58,93 +58,93 @@ public class ServicePermissionTests extends PermissionTestCase {
 		ServicePermission p14 = new ServicePermission("com.foo.service1",
 				"    Get    "); 
 
-		shouldImply(p11, p11);
-		shouldImply(p11, p12);
-		shouldImply(p11, p13);
-		shouldImply(p11, p14);
+		assertImplies(p11, p11);
+		assertImplies(p11, p12);
+		assertImplies(p11, p13);
+		assertImplies(p11, p14);
 
-		shouldImply(p12, p11);
-		shouldImply(p12, p12);
-		shouldImply(p12, p13);
-		shouldImply(p12, p14);
+		assertImplies(p12, p11);
+		assertImplies(p12, p12);
+		assertImplies(p12, p13);
+		assertImplies(p12, p14);
 
-		shouldImply(p13, p13);
-		shouldImply(p14, p14);
+		assertImplies(p13, p13);
+		assertImplies(p14, p14);
 
-		shouldNotImply(p13, p11);
-		shouldNotImply(p13, p12);
+		assertNotImplies(p13, p11);
+		assertNotImplies(p13, p12);
 
-		shouldNotImply(p14, p11);
-		shouldNotImply(p14, p12);
+		assertNotImplies(p14, p11);
+		assertNotImplies(p14, p12);
 
-		shouldNotImply(p13, p14);
-		shouldNotImply(p14, p13);
+		assertNotImplies(p13, p14);
+		assertNotImplies(p14, p13);
 
-		shouldNotImply(p11, op);
+		assertNotImplies(p11, op);
 
-		shouldEqual(p11, p11);
-		shouldEqual(p11, p12);
-		shouldEqual(p12, p11);
-		shouldEqual(p12, p12);
-		shouldEqual(p13, p13);
-		shouldEqual(p14, p14);
+		assertEquals(p11, p11);
+		assertEquals(p11, p12);
+		assertEquals(p12, p11);
+		assertEquals(p12, p12);
+		assertEquals(p13, p13);
+		assertEquals(p14, p14);
 
-		shouldNotEqual(p11, p13);
-		shouldNotEqual(p11, p14);
-		shouldNotEqual(p12, p13);
-		shouldNotEqual(p12, p14);
-		shouldNotEqual(p13, p11);
-		shouldNotEqual(p13, p12);
-		shouldNotEqual(p13, p14);
-		shouldNotEqual(p14, p11);
-		shouldNotEqual(p14, p12);
-		shouldNotEqual(p14, p13);
+		assertNotEquals(p11, p13);
+		assertNotEquals(p11, p14);
+		assertNotEquals(p12, p13);
+		assertNotEquals(p12, p14);
+		assertNotEquals(p13, p11);
+		assertNotEquals(p13, p12);
+		assertNotEquals(p13, p14);
+		assertNotEquals(p14, p11);
+		assertNotEquals(p14, p12);
+		assertNotEquals(p14, p13);
 
 		PermissionCollection pc = p13.newPermissionCollection();
 
 		checkEnumeration(pc.elements(), true);
 
-		shouldNotImply(pc, p11);
+		assertNotImplies(pc, p11);
 
-		shouldAdd(pc, p14);
-		shouldImply(pc, p14);
-		shouldNotImply(pc, p11);
-		shouldNotImply(pc, p12);
-		shouldNotImply(pc, p13);
+		assertAddPermission(pc, p14);
+		assertImplies(pc, p14);
+		assertNotImplies(pc, p11);
+		assertNotImplies(pc, p12);
+		assertNotImplies(pc, p13);
 
-		shouldAdd(pc, p13);
-		shouldImply(pc, p11);
-		shouldImply(pc, p12);
-		shouldImply(pc, p13);
-		shouldImply(pc, p14);
+		assertAddPermission(pc, p13);
+		assertImplies(pc, p11);
+		assertImplies(pc, p12);
+		assertImplies(pc, p13);
+		assertImplies(pc, p14);
 
-		shouldNotAdd(pc, op);
+		assertNotAddPermission(pc, op);
 
 		pc = p13.newPermissionCollection();
 
-		shouldAdd(pc, p13);
-		shouldImply(pc, p13);
-		shouldNotImply(pc, p11);
-		shouldNotImply(pc, p12);
-		shouldNotImply(pc, p14);
+		assertAddPermission(pc, p13);
+		assertImplies(pc, p13);
+		assertNotImplies(pc, p11);
+		assertNotImplies(pc, p12);
+		assertNotImplies(pc, p14);
 
-		shouldAdd(pc, p14);
-		shouldImply(pc, p11);
-		shouldImply(pc, p12);
-		shouldImply(pc, p13);
-		shouldImply(pc, p14);
+		assertAddPermission(pc, p14);
+		assertImplies(pc, p11);
+		assertImplies(pc, p12);
+		assertImplies(pc, p13);
+		assertImplies(pc, p14);
 
 		pc = p11.newPermissionCollection();
 
-		shouldAdd(pc, p11);
-		shouldImply(pc, p11);
-		shouldImply(pc, p12);
-		shouldImply(pc, p13);
-		shouldImply(pc, p14);
+		assertAddPermission(pc, p11);
+		assertImplies(pc, p11);
+		assertImplies(pc, p12);
+		assertImplies(pc, p13);
+		assertImplies(pc, p14);
 
 		pc.setReadOnly();
 
-		shouldNotAdd(pc, p12);
+		assertNotAddPermission(pc, p12);
 
 		checkEnumeration(pc.elements(), false);
 
@@ -153,87 +153,87 @@ public class ServicePermissionTests extends PermissionTestCase {
 		ServicePermission p23 = new ServicePermission("com.*", "get");
 		ServicePermission p24 = new ServicePermission("*", "get"); 
 
-		shouldImply(p21, p21);
-		shouldImply(p22, p21);
-		shouldImply(p23, p21);
-		shouldImply(p24, p21);
+		assertImplies(p21, p21);
+		assertImplies(p22, p21);
+		assertImplies(p23, p21);
+		assertImplies(p24, p21);
 
-		shouldImply(p22, p22);
-		shouldImply(p23, p22);
-		shouldImply(p24, p22);
+		assertImplies(p22, p22);
+		assertImplies(p23, p22);
+		assertImplies(p24, p22);
 
-		shouldImply(p23, p23);
-		shouldImply(p24, p23);
+		assertImplies(p23, p23);
+		assertImplies(p24, p23);
 
-		shouldImply(p24, p24);
+		assertImplies(p24, p24);
 
-		shouldNotImply(p21, p22);
-		shouldNotImply(p21, p23);
-		shouldNotImply(p21, p24);
+		assertNotImplies(p21, p22);
+		assertNotImplies(p21, p23);
+		assertNotImplies(p21, p24);
 
-		shouldNotImply(p22, p23);
-		shouldNotImply(p22, p24);
+		assertNotImplies(p22, p23);
+		assertNotImplies(p22, p24);
 
-		shouldNotImply(p23, p24);
+		assertNotImplies(p23, p24);
 
 		pc = p21.newPermissionCollection();
 
-		shouldAdd(pc, p21);
-		shouldImply(pc, p21);
-		shouldNotImply(pc, p22);
-		shouldNotImply(pc, p23);
-		shouldNotImply(pc, p24);
+		assertAddPermission(pc, p21);
+		assertImplies(pc, p21);
+		assertNotImplies(pc, p22);
+		assertNotImplies(pc, p23);
+		assertNotImplies(pc, p24);
 
-		shouldAdd(pc, p22);
-		shouldImply(pc, p21);
-		shouldImply(pc, p22);
-		shouldNotImply(pc, p23);
-		shouldNotImply(pc, p24);
+		assertAddPermission(pc, p22);
+		assertImplies(pc, p21);
+		assertImplies(pc, p22);
+		assertNotImplies(pc, p23);
+		assertNotImplies(pc, p24);
 
-		shouldAdd(pc, p23);
-		shouldImply(pc, p21);
-		shouldImply(pc, p22);
-		shouldImply(pc, p23);
-		shouldNotImply(pc, p24);
+		assertAddPermission(pc, p23);
+		assertImplies(pc, p21);
+		assertImplies(pc, p22);
+		assertImplies(pc, p23);
+		assertNotImplies(pc, p24);
 
-		shouldAdd(pc, p24);
-		shouldImply(pc, p21);
-		shouldImply(pc, p22);
-		shouldImply(pc, p23);
-		shouldImply(pc, p24);
+		assertAddPermission(pc, p24);
+		assertImplies(pc, p21);
+		assertImplies(pc, p22);
+		assertImplies(pc, p23);
+		assertImplies(pc, p24);
 
 		pc = p22.newPermissionCollection();
 
-		shouldAdd(pc, p22);
-		shouldImply(pc, p21);
-		shouldImply(pc, p22);
-		shouldNotImply(pc, p23);
-		shouldNotImply(pc, p24);
+		assertAddPermission(pc, p22);
+		assertImplies(pc, p21);
+		assertImplies(pc, p22);
+		assertNotImplies(pc, p23);
+		assertNotImplies(pc, p24);
 
 		pc = p23.newPermissionCollection();
 
-		shouldAdd(pc, p23);
-		shouldImply(pc, p21);
-		shouldImply(pc, p22);
-		shouldImply(pc, p23);
-		shouldNotImply(pc, p24);
+		assertAddPermission(pc, p23);
+		assertImplies(pc, p21);
+		assertImplies(pc, p22);
+		assertImplies(pc, p23);
+		assertNotImplies(pc, p24);
 
 		pc = p24.newPermissionCollection();
 
-		shouldAdd(pc, p24);
-		shouldImply(pc, p21);
-		shouldImply(pc, p22);
-		shouldImply(pc, p23);
-		shouldImply(pc, p24);
+		assertAddPermission(pc, p24);
+		assertImplies(pc, p21);
+		assertImplies(pc, p22);
+		assertImplies(pc, p23);
+		assertImplies(pc, p24);
 
-		testSerialization(p11);
-		testSerialization(p12);
-		testSerialization(p13);
-		testSerialization(p14);
-		testSerialization(p21);
-		testSerialization(p22);
-		testSerialization(p23);
-		testSerialization(p24);
+		assertSerializable(p11);
+		assertSerializable(p12);
+		assertSerializable(p13);
+		assertSerializable(p14);
+		assertSerializable(p21);
+		assertSerializable(p22);
+		assertSerializable(p23);
+		assertSerializable(p24);
 	}
 	
 	private void invalidServicePermission(String name, String actions) {

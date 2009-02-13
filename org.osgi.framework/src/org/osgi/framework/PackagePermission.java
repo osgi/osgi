@@ -266,8 +266,8 @@ public final class PackagePermission extends BasicPermission {
 		if (p instanceof PackagePermission) {
 			PackagePermission requested = (PackagePermission) p;
 
-			int targetMask = requested.getActionsMask();
-			return ((getActionsMask() & targetMask) == targetMask)
+			int requestedMask = requested.getActionsMask();
+			return ((getActionsMask() & requestedMask) == requestedMask)
 					&& super.implies(p);
 		}
 
@@ -306,7 +306,6 @@ public final class PackagePermission extends BasicPermission {
 
 			actions = result = sb.toString();
 		}
-
 		return result;
 	}
 
@@ -520,8 +519,8 @@ final class PackagePermissionCollection extends PermissionCollection {
 			}
 		}
 		// work our way up the tree...
-		int last, offset;
-		offset = name.length() - 1;
+		int last;
+		int offset = name.length() - 1;
 		while ((last = name.lastIndexOf(".", offset)) != -1) {
 			name = name.substring(0, last + 1) + "*";
 			synchronized (this) {

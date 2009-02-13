@@ -79,68 +79,68 @@ public class AdminPermissionTests extends PermissionTestCase {
 		AdminPermission p4 = new AdminPermission((String) null, p2.getActions());
 		Permission op = new PropertyPermission("java.home", "read");
 
-		shouldImply(p1, p2);
-		shouldImply(p2, p1);
-		shouldImply(p1, p3);
-		shouldImply(p3, p1);
-		shouldImply(p3, p2);
-		shouldImply(p2, p3);
-		shouldImply(p1, p4);
-		shouldImply(p4, p1);
-		shouldImply(p4, p3);
-		shouldImply(p3, p4);
-		shouldImply(p3, p4);
-		shouldImply(p4, p3);
-		shouldImply(p4, p2);
-		shouldImply(p2, p4);
-		shouldImply(p1, p1);
-		shouldImply(p2, p2);
-		shouldImply(p3, p3);
-		shouldImply(p4, p4);
-		shouldNotImply(p1, op);
+		assertImplies(p1, p2);
+		assertImplies(p2, p1);
+		assertImplies(p1, p3);
+		assertImplies(p3, p1);
+		assertImplies(p3, p2);
+		assertImplies(p2, p3);
+		assertImplies(p1, p4);
+		assertImplies(p4, p1);
+		assertImplies(p4, p3);
+		assertImplies(p3, p4);
+		assertImplies(p3, p4);
+		assertImplies(p4, p3);
+		assertImplies(p4, p2);
+		assertImplies(p2, p4);
+		assertImplies(p1, p1);
+		assertImplies(p2, p2);
+		assertImplies(p3, p3);
+		assertImplies(p4, p4);
+		assertNotImplies(p1, op);
 
-		shouldEqual(p1, p2);
-		shouldEqual(p2, p1);
-		shouldEqual(p1, p3);
-		shouldEqual(p3, p1);
-		shouldEqual(p2, p3);
-		shouldEqual(p3, p2);
-		shouldEqual(p3, p4);
-		shouldEqual(p4, p3);
-		shouldEqual(p2, p4);
-		shouldEqual(p4, p2);
-		shouldEqual(p1, p4);
-		shouldEqual(p4, p1);
-		shouldNotEqual(p1, op);
+		assertEquals(p1, p2);
+		assertEquals(p2, p1);
+		assertEquals(p1, p3);
+		assertEquals(p3, p1);
+		assertEquals(p2, p3);
+		assertEquals(p3, p2);
+		assertEquals(p3, p4);
+		assertEquals(p4, p3);
+		assertEquals(p2, p4);
+		assertEquals(p4, p2);
+		assertEquals(p1, p4);
+		assertEquals(p4, p1);
+		assertNotEquals(p1, op);
 
 		PermissionCollection pc = p1.newPermissionCollection();
 
 		checkEnumeration(pc.elements(), true);
 
-		shouldNotImply(pc, p1);
+		assertNotImplies(pc, p1);
 
-		shouldAdd(pc, p1);
-		shouldAdd(pc, p2);
-		shouldAdd(pc, p3);
-		shouldAdd(pc, p4);
-		shouldNotAdd(pc, op);
+		assertAddPermission(pc, p1);
+		assertAddPermission(pc, p2);
+		assertAddPermission(pc, p3);
+		assertAddPermission(pc, p4);
+		assertNotAddPermission(pc, op);
 
 		pc.setReadOnly();
 
-		shouldNotAdd(pc, new AdminPermission());
+		assertNotAddPermission(pc, new AdminPermission());
 
-		shouldImply(pc, p1);
-		shouldImply(pc, p2);
-		shouldImply(pc, p3);
-		shouldImply(pc, p4);
-		shouldNotImply(pc, op);
+		assertImplies(pc, p1);
+		assertImplies(pc, p2);
+		assertImplies(pc, p3);
+		assertImplies(pc, p4);
+		assertNotImplies(pc, op);
 
 		checkEnumeration(pc.elements(), false);
 
-		testSerialization(p1);
-		testSerialization(p2);
-		testSerialization(p3);
-		testSerialization(p4);
+		assertSerializable(p1);
+		assertSerializable(p2);
+		assertSerializable(p3);
+		assertSerializable(p4);
 	}
 
 	public void testFilterAdminPermission() {
@@ -150,89 +150,89 @@ public class AdminPermissionTests extends PermissionTestCase {
 				"test.location", null), "resolve");
 		AdminPermission p4 = new AdminPermission("(name=test.*)", "resource");
 		AdminPermission p5 = new AdminPermission("(location=test.*)", "*");
-		shouldImply(p1, p3);
-		shouldImply(p1, p3);
-		shouldImply(p4, p3);
-		shouldImply(p5, p3);
-		invalidImply(p1, p2);
-		invalidImply(p2, p1);
-		unsupportedImply(p3, p2);
-		unsupportedImply(p3, p1);
+		assertImplies(p1, p3);
+		assertImplies(p1, p3);
+		assertImplies(p4, p3);
+		assertImplies(p5, p3);
+		invalidImplies(p1, p2);
+		invalidImplies(p2, p1);
+		unsupportedImplies(p3, p2);
+		unsupportedImplies(p3, p1);
 
-		shouldEqual(p1, p2);
-		shouldEqual(p2, p1);
-		shouldNotEqual(p1, p3);
-		shouldNotEqual(p2, p3);
+		assertEquals(p1, p2);
+		assertEquals(p2, p1);
+		assertNotEquals(p1, p3);
+		assertNotEquals(p2, p3);
 
 		PermissionCollection pc = p1.newPermissionCollection();
 
 		checkEnumeration(pc.elements(), true);
 
-		shouldNotImply(pc, p3);
-		invalidImply(pc, p1);
+		assertNotImplies(pc, p3);
+		invalidImplies(pc, p1);
 
-		shouldAdd(pc, new AdminPermission("(id=2)", "class"));
-		shouldAdd(pc, new AdminPermission("(id=2)", "resource"));
+		assertAddPermission(pc, new AdminPermission("(id=2)", "class"));
+		assertAddPermission(pc, new AdminPermission("(id=2)", "resource"));
 
 		Bundle testBundle1 = newMockBundle(2, "test.bsn", "test.location", null);
 		Bundle testBundle2 = newMockBundle(1, "test.bsn", "test.location", null);
-		shouldImply(pc, new AdminPermission(testBundle1, "resolve"));
-		shouldImply(pc, new AdminPermission(testBundle1, "class"));
-		shouldImply(pc, new AdminPermission(testBundle1, "resource"));
-		shouldNotImply(pc, new AdminPermission(testBundle2, "resolve"));
-		shouldNotImply(pc, new AdminPermission(testBundle2, "class"));
-		shouldNotImply(pc, new AdminPermission(testBundle2, "resource"));
-		shouldNotImply(pc, new AdminPermission("*", "resource"));
+		assertImplies(pc, new AdminPermission(testBundle1, "resolve"));
+		assertImplies(pc, new AdminPermission(testBundle1, "class"));
+		assertImplies(pc, new AdminPermission(testBundle1, "resource"));
+		assertNotImplies(pc, new AdminPermission(testBundle2, "resolve"));
+		assertNotImplies(pc, new AdminPermission(testBundle2, "class"));
+		assertNotImplies(pc, new AdminPermission(testBundle2, "resource"));
+		assertNotImplies(pc, new AdminPermission("*", "resource"));
 
-		shouldAdd(pc, new AdminPermission());
-		shouldImply(pc, new AdminPermission(testBundle1, "resolve"));
-		shouldImply(pc, new AdminPermission(testBundle1, "class"));
-		shouldImply(pc, new AdminPermission(testBundle1, "resource"));
-		shouldImply(pc, new AdminPermission(testBundle2, "resolve"));
-		shouldImply(pc, new AdminPermission(testBundle2, "class"));
-		shouldImply(pc, new AdminPermission(testBundle2, "resource"));
-		shouldImply(pc, new AdminPermission("*", "resource"));
+		assertAddPermission(pc, new AdminPermission());
+		assertImplies(pc, new AdminPermission(testBundle1, "resolve"));
+		assertImplies(pc, new AdminPermission(testBundle1, "class"));
+		assertImplies(pc, new AdminPermission(testBundle1, "resource"));
+		assertImplies(pc, new AdminPermission(testBundle2, "resolve"));
+		assertImplies(pc, new AdminPermission(testBundle2, "class"));
+		assertImplies(pc, new AdminPermission(testBundle2, "resource"));
+		assertImplies(pc, new AdminPermission("*", "resource"));
 
-		invalidImply(pc, p1);
+		invalidImplies(pc, p1);
 
 		checkEnumeration(pc.elements(), false);
 
-		testSerialization(p1);
-		testSerialization(p2);
-		testSerialization(p4);
-		testSerialization(p5);
+		assertSerializable(p1);
+		assertSerializable(p2);
+		assertSerializable(p4);
+		assertSerializable(p5);
 	}
 
 	public void testSigners() {
 		AdminPermission ap = new AdminPermission("(signer=\\*, o=ACME, c=US)",
 				"*");
 
-		shouldImply(ap, new AdminPermission(newMockBundle(1, "test.bsn",
+		assertImplies(ap, new AdminPermission(newMockBundle(1, "test.bsn",
 				"test.location", "cn=Bugs Bunny, o=ACME, c=US"), "*"));
-		shouldImply(ap, new AdminPermission(newMockBundle(2, "test.bsn",
+		assertImplies(ap, new AdminPermission(newMockBundle(2, "test.bsn",
 				"test.location", "ou = Carrots, cn=Daffy Duck, o=ACME, c=US"),
 		"*"));
-		shouldImply(ap, new AdminPermission(newMockBundle(3, "test.bsn",
+		assertImplies(ap, new AdminPermission(newMockBundle(3, "test.bsn",
 				"test.location", "dc=www,dc=acme,dc=com,o=ACME,c=US"), "*"));
-		shouldNotImply(ap, new AdminPermission(newMockBundle(4, "test.bsn",
+		assertNotImplies(ap, new AdminPermission(newMockBundle(4, "test.bsn",
 				"test.location",
 		"street = 9C\\, Avenue St. Drézéry, o=ACME, c=FR"), "*"));
-		shouldNotImply(ap, new AdminPermission(newMockBundle(5, "test.bsn",
+		assertNotImplies(ap, new AdminPermission(newMockBundle(5, "test.bsn",
 				"test.location", "dc=www, dc=acme, dc=com, c=US"), "*"));
 
 		ap = new AdminPermission("(signer=cn=\\*,o=ACME,c=\\*)", "*");
 		
-		shouldImply(ap, new AdminPermission(newMockBundle(6, "test.bsn",
+		assertImplies(ap, new AdminPermission(newMockBundle(6, "test.bsn",
 				"test.location", "cn = Daffy Duck , o = ACME , c = US"), "*"));
-		shouldImply(ap, new AdminPermission(newMockBundle(7, "test.bsn",
+		assertImplies(ap, new AdminPermission(newMockBundle(7, "test.bsn",
 				"test.location", "cn=Road Runner, o=ACME, c=NL"), "*"));
-		shouldNotImply(ap, new AdminPermission(newMockBundle(8, "test.bsn",
+		assertNotImplies(ap, new AdminPermission(newMockBundle(8, "test.bsn",
 				"test.location", "o=ACME, c=NL"), "*"));
-		shouldNotImply(ap, new AdminPermission(newMockBundle(9, "test.bsn",
+		assertNotImplies(ap, new AdminPermission(newMockBundle(9, "test.bsn",
 				"test.location", "dc=acme.com, cn=Bugs Bunny, o=ACME, c=US"),
 				"*"));
 	}
-
+	
 	private void invalidAdminPermission(String name, String actions) {
 		try {
 			AdminPermission p = new AdminPermission(name, actions);
@@ -243,7 +243,7 @@ public class AdminPermissionTests extends PermissionTestCase {
 		}
 	}
 
-	private void invalidImply(Permission p1, Permission p2) {
+	private void invalidImplies(Permission p1, Permission p2) {
 		try {
 			p1.implies(p2);
 			fail("implies did not throw exception");
@@ -253,7 +253,7 @@ public class AdminPermissionTests extends PermissionTestCase {
 		}
 	}
 
-	private void unsupportedImply(Permission p1, Permission p2) {
+	private void unsupportedImplies(Permission p1, Permission p2) {
 		try {
 			p1.implies(p2);
 			fail("implies did not throw exception");
@@ -263,7 +263,7 @@ public class AdminPermissionTests extends PermissionTestCase {
 		}
 	}
 
-	private void invalidImply(PermissionCollection pc, Permission p2) {
+	private void invalidImplies(PermissionCollection pc, Permission p2) {
 		try {
 			pc.implies(p2);
 			fail("implies did not throw exception");

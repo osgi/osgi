@@ -43,11 +43,11 @@ import java.util.Hashtable;
 public final class ServicePermission extends BasicPermission {
 	static final long			serialVersionUID	= -7662148639076511574L;
 	/**
-	 * The action string <code>get</code> (Value is "get").
+	 * The action string <code>get</code>.
 	 */
 	public final static String	GET					= "get";
 	/**
-	 * The action string <code>register</code> (Value is "register").
+	 * The action string <code>register</code>.
 	 */
 	public final static String	REGISTER			= "register";
 
@@ -242,8 +242,8 @@ public final class ServicePermission extends BasicPermission {
 		if (p instanceof ServicePermission) {
 			ServicePermission requested = (ServicePermission) p;
 
-			int targetMask = requested.getActionsMask();
-			return ((getActionsMask() & targetMask) == targetMask)
+			int requestedMask = requested.getActionsMask();
+			return ((getActionsMask() & requestedMask) == requestedMask)
 					&& super.implies(p);
 		}
 
@@ -485,8 +485,8 @@ final class ServicePermissionCollection extends PermissionCollection {
 			}
 		}
 		// work our way up the tree...
-		int last, offset;
-		offset = name.length() - 1;
+		int last;
+		int offset = name.length() - 1;
 		while ((last = name.lastIndexOf(".", offset)) != -1) {
 			name = name.substring(0, last + 1) + "*";
 			synchronized (this) {
