@@ -24,20 +24,25 @@ import org.osgi.framework.Bundle;
  * A factory for creating {@link Framework} instances.
  * 
  * <p>
- * A FrameworkFactory implementation class must have a public, no-argument
- * constructor. A framework implementation jar must define the name of the
- * FrameworkFactory implementation class by placing the name of the
- * implementation class in the following resource:
+ * A framework implementation jar must contain the following resource:
  * 
  * <pre>
  * /META-INF/services/org.osgi.framework.launch.FrameworkFactory
  * </pre>
  * 
- * Launchers can then find the name of the FrameworkFactory implementation class
- * in the resource and can then load and construct a FrameworkFactory object for
- * the framework implementation. Java 6 also provides the
- * <code>ServiceLoader</code> mechanism which can create a FrameworkFactory
- * instance from the resource.
+ * This UTF-8 encoded resource must contain the name of the framework
+ * implementation's FrameworkFactory implementation class. Space and tab
+ * characters, including blank lines, in the resource must be ignored. The
+ * number sign ('#' \u0023) and all characters following it on each line are a
+ * comment and must be ignored.
+ * 
+ * <p>
+ * Launchers can find the name of the FrameworkFactory implementation class in
+ * the resource and then load and construct a FrameworkFactory object for the
+ * framework implementation. The FrameworkFactory implementation class must have
+ * a public, no-argument constructor. Java&trade; SE 6 introduced the
+ * <code>ServiceLoader</code> class which can create a FrameworkFactory instance
+ * from the resource.
  * 
  * @ThreadSafe
  * @version $Revision$
@@ -59,7 +64,7 @@ public interface FrameworkFactory {
 	 *        can be changed after the framework instance has been created.
 	 * @return A new, configured {@link Framework} instance. The framework
 	 *         instance must be in the {@link Bundle#INSTALLED} state.
-	 * @throws java.lang.SecurityException If the caller does not have
+	 * @throws SecurityException If the caller does not have
 	 *         <code>AllPermission</code>, and the Java Runtime Environment
 	 *         supports permissions.
 	 */
