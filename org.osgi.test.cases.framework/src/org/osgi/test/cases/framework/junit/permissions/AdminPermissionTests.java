@@ -51,7 +51,7 @@ public class AdminPermissionTests extends PermissionTestCase {
 	 * <code>resource</code>, <code>startlevel</code> or <code>context</code>. A
 	 * value of "*" or <code>null</code> indicates all actions.
 	 */
-	public void testInvalidAdminPermissions() {
+	public void testInvalid() {
 		invalidAdminPermission("*", "x");
 		invalidAdminPermission("*", "   class  ,  x   ");
 		invalidAdminPermission("*", "");
@@ -72,7 +72,7 @@ public class AdminPermissionTests extends PermissionTestCase {
 		invalidAdminPermission("()", "*");
 	}
 
-	public void testDefaultAdminPermission() {
+	public void testDefault() {
 		AdminPermission p1 = new AdminPermission();
 		AdminPermission p2 = new AdminPermission("*", "*");
 		AdminPermission p3 = new AdminPermission((String) null, null);
@@ -143,7 +143,7 @@ public class AdminPermissionTests extends PermissionTestCase {
 		assertSerializable(p4);
 	}
 
-	public void testFilterAdminPermission() {
+	public void testFilter() {
 		AdminPermission p1 = new AdminPermission("(id=2)", "class");
 		AdminPermission p2 = new AdminPermission(" (id =2)", "class");
 		AdminPermission p3 = new AdminPermission(newMockBundle(2, "test.bsn",
@@ -233,6 +233,130 @@ public class AdminPermissionTests extends PermissionTestCase {
 				"*"));
 	}
 	
+	public void testActionImplications() {
+		AdminPermission classx = new AdminPermission("*", "class");
+		AdminPermission execute = new AdminPermission("*", "execute");
+		AdminPermission extensionLifecycle = new AdminPermission("*",
+				"extensionLifecycle");
+		AdminPermission lifecycle = new AdminPermission("*", "lifecycle");
+		AdminPermission listener = new AdminPermission("*", "listener");
+		AdminPermission metadata = new AdminPermission("*", "metadata");
+		AdminPermission resolve = new AdminPermission("*", "resolve");
+		AdminPermission resource = new AdminPermission("*", "resource");
+		AdminPermission startlevel = new AdminPermission("*", "startlevel");
+		AdminPermission context = new AdminPermission("*", "context");
+
+		assertImplies(classx, classx);
+		assertNotImplies(classx, execute);
+		assertNotImplies(classx, extensionLifecycle);
+		assertNotImplies(classx, lifecycle);
+		assertNotImplies(classx, listener);
+		assertNotImplies(classx, metadata);
+		assertImplies(classx, resolve);
+		assertNotImplies(classx, resource);
+		assertNotImplies(classx, startlevel);
+		assertNotImplies(classx, context);
+
+		assertNotImplies(execute, classx);
+		assertImplies(execute, execute);
+		assertNotImplies(execute, extensionLifecycle);
+		assertNotImplies(execute, lifecycle);
+		assertNotImplies(execute, listener);
+		assertNotImplies(execute, metadata);
+		assertImplies(execute, resolve);
+		assertNotImplies(execute, resource);
+		assertNotImplies(execute, startlevel);
+		assertNotImplies(execute, context);
+		
+		assertNotImplies(extensionLifecycle, classx);
+		assertNotImplies(extensionLifecycle, execute);
+		assertImplies(extensionLifecycle, extensionLifecycle);
+		assertNotImplies(extensionLifecycle, lifecycle);
+		assertNotImplies(extensionLifecycle, listener);
+		assertNotImplies(extensionLifecycle, metadata);
+		assertNotImplies(extensionLifecycle, resolve);
+		assertNotImplies(extensionLifecycle, resource);
+		assertNotImplies(extensionLifecycle, startlevel);
+		assertNotImplies(extensionLifecycle, context);
+		
+		assertNotImplies(lifecycle, classx);
+		assertNotImplies(lifecycle, execute);
+		assertNotImplies(lifecycle, extensionLifecycle);
+		assertImplies(lifecycle, lifecycle);
+		assertNotImplies(lifecycle, listener);
+		assertNotImplies(lifecycle, metadata);
+		assertNotImplies(lifecycle, resolve);
+		assertNotImplies(lifecycle, resource);
+		assertNotImplies(lifecycle, startlevel);
+		assertNotImplies(lifecycle, context);
+		
+		assertNotImplies(listener, classx);
+		assertNotImplies(listener, execute);
+		assertNotImplies(listener, extensionLifecycle);
+		assertNotImplies(listener, lifecycle);
+		assertImplies(listener, listener);
+		assertNotImplies(listener, metadata);
+		assertNotImplies(listener, resolve);
+		assertNotImplies(listener, resource);
+		assertNotImplies(listener, startlevel);
+		assertNotImplies(listener, context);
+		
+		assertNotImplies(metadata, classx);
+		assertNotImplies(metadata, execute);
+		assertNotImplies(metadata, extensionLifecycle);
+		assertNotImplies(metadata, lifecycle);
+		assertNotImplies(metadata, listener);
+		assertImplies(metadata, metadata);
+		assertNotImplies(metadata, resolve);
+		assertNotImplies(metadata, resource);
+		assertNotImplies(metadata, startlevel);
+		assertNotImplies(metadata, context);
+		
+		assertNotImplies(resolve, classx);
+		assertNotImplies(resolve, execute);
+		assertNotImplies(resolve, extensionLifecycle);
+		assertNotImplies(resolve, lifecycle);
+		assertNotImplies(resolve, listener);
+		assertNotImplies(resolve, metadata);
+		assertImplies(resolve, resolve);
+		assertNotImplies(resolve, resource);
+		assertNotImplies(resolve, startlevel);
+		assertNotImplies(resolve, context);
+		
+		assertNotImplies(resource, classx);
+		assertNotImplies(resource, execute);
+		assertNotImplies(resource, extensionLifecycle);
+		assertNotImplies(resource, lifecycle);
+		assertNotImplies(resource, listener);
+		assertNotImplies(resource, metadata);
+		assertImplies(resource, resolve);
+		assertImplies(resource, resource);
+		assertNotImplies(resource, startlevel);
+		assertNotImplies(resource, context);
+		
+		assertNotImplies(startlevel, classx);
+		assertNotImplies(startlevel, execute);
+		assertNotImplies(startlevel, extensionLifecycle);
+		assertNotImplies(startlevel, lifecycle);
+		assertNotImplies(startlevel, listener);
+		assertNotImplies(startlevel, metadata);
+		assertNotImplies(startlevel, resolve);
+		assertNotImplies(startlevel, resource);
+		assertImplies(startlevel, startlevel);
+		assertNotImplies(startlevel, context);
+		
+		assertNotImplies(context, classx);
+		assertNotImplies(context, execute);
+		assertNotImplies(context, extensionLifecycle);
+		assertNotImplies(context, lifecycle);
+		assertNotImplies(context, listener);
+		assertNotImplies(context, metadata);
+		assertNotImplies(context, resolve);
+		assertNotImplies(context, resource);
+		assertNotImplies(context, startlevel);
+		assertImplies(context, context);
+	}
+
 	private void invalidAdminPermission(String name, String actions) {
 		try {
 			AdminPermission p = new AdminPermission(name, actions);

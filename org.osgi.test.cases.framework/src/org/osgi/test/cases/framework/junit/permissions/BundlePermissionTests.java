@@ -25,7 +25,7 @@ import org.osgi.test.support.PermissionTestCase;
 
 public class BundlePermissionTests extends PermissionTestCase {
 
-	public void testInvalidBundlePermissions() {
+	public void testInvalid() {
 		invalidBundlePermission("a.b.c", "x");
 		invalidBundlePermission("a.b.c", "   host  ,  x   ");
 		invalidBundlePermission("a.b.c", "");
@@ -46,7 +46,7 @@ public class BundlePermissionTests extends PermissionTestCase {
 		invalidBundlePermission("a.b.c", "   fragmen"); 
 	}
 
-	public void testBundlePermissionActions() {
+	public void testActions() {
 		Permission op = new PropertyPermission("java.home", "read"); 
 
 		BundlePermission p11 = new BundlePermission("com.foo.service1",
@@ -174,35 +174,45 @@ public class BundlePermissionTests extends PermissionTestCase {
 		assertSerializable(p16);
 	}
 
-	public void testBundlePermissionNames() {
+	public void testNames() {
 		BundlePermission p21 = new BundlePermission("com.foo.service2",
 				"host");
 		BundlePermission p22 = new BundlePermission("com.foo.*", "host");
 		BundlePermission p23 = new BundlePermission("com.*", "host");
-		BundlePermission p24 = new BundlePermission("*", "host"); 
+		BundlePermission p24 = new BundlePermission("org.foo.service2", "host");
+		BundlePermission p25 = new BundlePermission("*", "host"); 
 
 		assertImplies(p21, p21);
 		assertImplies(p22, p21);
 		assertImplies(p23, p21);
-		assertImplies(p24, p21);
+		assertNotImplies(p24, p21);
+		assertImplies(p25, p21);
 
 		assertImplies(p22, p22);
 		assertImplies(p23, p22);
-		assertImplies(p24, p22);
+		assertNotImplies(p24, p22);
+		assertImplies(p25, p22);
 
 		assertImplies(p23, p23);
-		assertImplies(p24, p23);
+		assertNotImplies(p24, p23);
+		assertImplies(p25, p23);
 
-		assertImplies(p24, p24);
+		assertNotImplies(p24, p25);
+		assertImplies(p25, p25);
+
+		assertImplies(p25, p24);
 
 		assertNotImplies(p21, p22);
 		assertNotImplies(p21, p23);
 		assertNotImplies(p21, p24);
+		assertNotImplies(p21, p25);
 
 		assertNotImplies(p22, p23);
 		assertNotImplies(p22, p24);
+		assertNotImplies(p22, p25);
 
 		assertNotImplies(p23, p24);
+		assertNotImplies(p23, p25);
 
 		PermissionCollection pc = p21.newPermissionCollection();
 
@@ -211,23 +221,34 @@ public class BundlePermissionTests extends PermissionTestCase {
 		assertNotImplies(pc, p22);
 		assertNotImplies(pc, p23);
 		assertNotImplies(pc, p24);
+		assertNotImplies(pc, p25);
 
 		assertAddPermission(pc, p22);
 		assertImplies(pc, p21);
 		assertImplies(pc, p22);
 		assertNotImplies(pc, p23);
 		assertNotImplies(pc, p24);
+		assertNotImplies(pc, p25);
 
 		assertAddPermission(pc, p23);
 		assertImplies(pc, p21);
 		assertImplies(pc, p22);
 		assertImplies(pc, p23);
 		assertNotImplies(pc, p24);
+		assertNotImplies(pc, p25);
 
 		assertAddPermission(pc, p24);
 		assertImplies(pc, p21);
 		assertImplies(pc, p22);
 		assertImplies(pc, p23);
+		assertImplies(pc, p24);
+		assertNotImplies(pc, p25);
+
+		assertAddPermission(pc, p25);
+		assertImplies(pc, p21);
+		assertImplies(pc, p22);
+		assertImplies(pc, p23);
+		assertImplies(pc, p25);
 		assertImplies(pc, p24);
 
 		pc = p22.newPermissionCollection();
@@ -237,6 +258,7 @@ public class BundlePermissionTests extends PermissionTestCase {
 		assertImplies(pc, p22);
 		assertNotImplies(pc, p23);
 		assertNotImplies(pc, p24);
+		assertNotImplies(pc, p25);
 
 		pc = p23.newPermissionCollection();
 
@@ -245,19 +267,58 @@ public class BundlePermissionTests extends PermissionTestCase {
 		assertImplies(pc, p22);
 		assertImplies(pc, p23);
 		assertNotImplies(pc, p24);
+		assertNotImplies(pc, p25);
 
 		pc = p24.newPermissionCollection();
 
 		assertAddPermission(pc, p24);
+		assertNotImplies(pc, p21);
+		assertNotImplies(pc, p22);
+		assertNotImplies(pc, p23);
+		assertImplies(pc, p24);
+		assertNotImplies(pc, p25);
+
+		pc = p25.newPermissionCollection();
+		
+		assertAddPermission(pc, p25);
 		assertImplies(pc, p21);
 		assertImplies(pc, p22);
 		assertImplies(pc, p23);
 		assertImplies(pc, p24);
+		assertImplies(pc, p25);
 
 		assertSerializable(p21);
 		assertSerializable(p22);
 		assertSerializable(p23);
 		assertSerializable(p24);
+		assertSerializable(p25);
+	}
+	
+	public void testActionImplications() {
+		BundlePermission provide = new BundlePermission("*", "provide");
+		BundlePermission require = new BundlePermission("*", "require");
+		BundlePermission host = new BundlePermission("*", "host");
+		BundlePermission fragment = new BundlePermission("*", "fragment");
+
+		assertImplies(provide, provide);
+		assertImplies(provide, require);
+		assertNotImplies(provide, host);
+		assertNotImplies(provide, fragment);
+		
+		assertNotImplies(require, provide);
+		assertImplies(require, require);
+		assertNotImplies(require, host);
+		assertNotImplies(require, fragment);
+
+		assertNotImplies(host, provide);
+		assertNotImplies(host, require);
+		assertImplies(host, host);
+		assertNotImplies(host, fragment);
+
+		assertNotImplies(fragment, provide);
+		assertNotImplies(fragment, require);
+		assertNotImplies(fragment, host);
+		assertImplies(fragment, fragment);
 	}
 	
 	private void invalidBundlePermission(String name, String actions) {

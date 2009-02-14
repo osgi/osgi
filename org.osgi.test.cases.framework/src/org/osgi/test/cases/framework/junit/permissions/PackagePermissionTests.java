@@ -25,7 +25,7 @@ import org.osgi.test.support.PermissionTestCase;
 
 public class PackagePermissionTests extends PermissionTestCase {
 
-	public void testInvalidPackagePermissions() {
+	public void testInvalid() {
 		invalidPackagePermission("a.b.c", "x");
 		invalidPackagePermission("a.b.c", "   get  ,  x   ");
 		invalidPackagePermission("a.b.c", "");
@@ -46,7 +46,7 @@ public class PackagePermissionTests extends PermissionTestCase {
 		invalidPackagePermission("a.b.c", "   expor"); 
 	}
 
-	public void testPackagePermission() {
+	public void testPermissions() {
 		Permission op = new PropertyPermission("java.home", "read"); 
 
 		PackagePermission p11 = new PackagePermission("com.foo.service1",
@@ -229,6 +229,16 @@ public class PackagePermissionTests extends PermissionTestCase {
 		assertSerializable(p24);
 	}
 	
+	public void testActionImplications() {
+		PackagePermission export = new PackagePermission("*", "export");
+		PackagePermission importx = new PackagePermission("*", "import");
+
+		assertImplies(export, export);
+		assertImplies(export, importx);
+		assertNotImplies(importx, export);
+		assertImplies(importx, importx);
+	}
+
 	private void invalidPackagePermission(String name, String actions) {
 		try {
 			PackagePermission p = new PackagePermission(name, actions);

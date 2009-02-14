@@ -25,7 +25,7 @@ import org.osgi.test.support.PermissionTestCase;
 
 public class ServicePermissionTests extends PermissionTestCase {
 
-	public void testInvalidServicePermissions() {
+	public void testInvalid() {
 		invalidServicePermission("a.b.c", "x");
 		invalidServicePermission("a.b.c", "   get  ,  x   ");
 		invalidServicePermission("a.b.c", "");
@@ -46,7 +46,7 @@ public class ServicePermissionTests extends PermissionTestCase {
 		invalidServicePermission("a.b.c", "   registe"); 
 	}
 
-	public void testServicePermission() {
+	public void testPermissions() {
 		Permission op = new PropertyPermission("java.home", "read"); 
 
 		ServicePermission p11 = new ServicePermission("com.foo.service1",
@@ -235,6 +235,17 @@ public class ServicePermissionTests extends PermissionTestCase {
 		assertSerializable(p23);
 		assertSerializable(p24);
 	}
+	
+	public void testActionImplications() {
+		ServicePermission register = new ServicePermission("*", "register");
+		ServicePermission get = new ServicePermission("*", "get");
+
+		assertImplies(register, register);
+		assertNotImplies(register, get);
+		assertNotImplies(get, register);
+		assertImplies(get, get);
+	}
+
 	
 	private void invalidServicePermission(String name, String actions) {
 		try {
