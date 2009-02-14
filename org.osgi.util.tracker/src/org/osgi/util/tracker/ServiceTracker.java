@@ -826,13 +826,6 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 				return;
 			}
 			final ServiceReference reference = event.getServiceReference();
-			if (reference.getBundle() == null) {
-				/*
-				 * handle extremely rare corner case where service events are
-				 * delivered out of order
-				 */
-				return;
-			}
 			if (DEBUG) {
 				System.out
 						.println("ServiceTracker.Tracked.serviceChanged["
