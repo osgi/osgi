@@ -21,29 +21,28 @@ package org.osgi.test.cases.gsm;
 import junit.framework.TestCase;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.service.condpermadmin.Condition;
 import org.osgi.service.condpermadmin.ConditionInfo;
+import org.osgi.test.support.MockFactory;
 import org.osgi.util.gsm.IMEICondition;
 
 public class TestIMEI extends TestCase {
-	private BundleContext	context;
-	private Bundle			bundle;
-
-	public void setBundleContext(BundleContext context) {
-		this.context = context;
-		bundle = this.context.getBundle();
+	private Bundle				bundle		= (Bundle) MockFactory.newMock(
+													Bundle.class, null);
+	public static final String	SYSTEM_IMEI	= "012345678901234";
+	public static final String	OTHER_IMEI	= "123456789012345";
+	static {
+		System.getProperties().put("org.osgi.util.gsm.imei", SYSTEM_IMEI);
 	}
 	
-	public static final String SYSTEM_IMEI = System.getProperty("org.osgi.util.gsm.imei");
-	public static final String OTHER_IMEI = "123456789012345";
-	
 	public void testBasic() throws Exception {
-		Condition imei = (Condition) IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{SYSTEM_IMEI}));
+		Condition imei = IMEICondition.getCondition(bundle, new ConditionInfo(
+				"", new String[] {SYSTEM_IMEI}));
 		assertFalse(imei.isPostponed());
 		assertTrue(imei.isSatisfied());
 		
-		imei = (Condition) IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{OTHER_IMEI}));
+		imei = IMEICondition.getCondition(bundle, new ConditionInfo("",
+				new String[] {OTHER_IMEI}));
 		assertFalse(imei.isPostponed());
 		assertFalse(imei.isSatisfied());
 	}
@@ -52,33 +51,45 @@ public class TestIMEI extends TestCase {
 		try {
 			IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{""}));
 			fail();
-		} catch (IllegalArgumentException e) {}
+		}
+		catch (IllegalArgumentException e) {/* expected */
+		}
 		try {
 			IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{"12345678901234"}));
 			fail();
-		} catch (IllegalArgumentException e) {}
+		}
+		catch (IllegalArgumentException e) {/* expected */
+		}
 		try {
 			IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{"1234567890123456"}));
 			fail();
-		} catch (IllegalArgumentException e) {}
+		}
+		catch (IllegalArgumentException e) {/* expected */
+		}
 		try {
 			IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{"12345678901234a"}));
 			fail();
-		} catch (IllegalArgumentException e) {}
+		}
+		catch (IllegalArgumentException e) {/* expected */
+		}
 
 		IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{"01234567891234*"}));
 
 		try {
 			IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{"012345678901234*"}));
 			fail();
-		} catch (IllegalArgumentException e) {}
+		}
+		catch (IllegalArgumentException e) {/* expected */
+		}
 	}
 	
 	public void testWildcards() throws Exception {
-		Condition imei = (Condition) IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{SYSTEM_IMEI.substring(0,5)+"*"}));
+		Condition imei = IMEICondition.getCondition(bundle, new ConditionInfo(
+				"", new String[] {SYSTEM_IMEI.substring(0, 5) + "*"}));
 		assertTrue(imei.isSatisfied());	
 
-		imei = (Condition) IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{"777*"}));
+		imei = IMEICondition.getCondition(bundle, new ConditionInfo("",
+				new String[] {"777*"}));
 		assertFalse(imei.isSatisfied());
 	}
 }

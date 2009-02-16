@@ -1,9 +1,11 @@
 Bundle-Version: 4.2.0.${project.build}
 
-Private-Package						= ${p}.*
+Private-Package						= org.osgi.test.support.*, \
+	${p}.*
 
 -buildpath							= \
 	org.osgi.util.cdma;					version=project	, \
+	org.osgi.test.support;					version=project	, \
 	osgi;									version=4.0.1		, \
 	ee.minimum												, \
 	${junit}
@@ -12,8 +14,6 @@ Private-Package						= ${p}.*
 	osgi.cmpn; version=latest
 
 -runproperties					= \
-	org.osgi.util.cdma.esn=89abcdef, \
-	org.osgi.util.cdma.meid=23456789abcdef
 
 Test-Cases: ${classes;extending;*TestCase}
 	

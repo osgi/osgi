@@ -21,64 +21,81 @@ package org.osgi.test.cases.cdma;
 import junit.framework.TestCase;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.service.condpermadmin.Condition;
 import org.osgi.service.condpermadmin.ConditionInfo;
+import org.osgi.test.support.MockFactory;
 import org.osgi.util.cdma.ESNCondition;
 
 public class TestESN extends TestCase {
-	private BundleContext	context;
-	private Bundle			bundle;
-
-	public void setBundleContext(BundleContext context) {
-		this.context = context;
-		bundle = this.context.getBundle();
+	private Bundle				bundle		= (Bundle) MockFactory.newMock(
+													Bundle.class, null);
+	private static final String	SYSTEM_ESN	= "89abcdef";
+	private static final String	OTHER_ESN	= "CAFEBABE";
+	static {
+		System.getProperties().put("org.osgi.util.cdma.esn", SYSTEM_ESN);
 	}
 
-	public static final String SYSTEM_ESN = System.getProperty("org.osgi.util.cdma.esn");
-	public static final String OTHER_ESN = "CAFEBABE";
-	
 	public void testBasic() throws Exception {
-		Condition esn = (Condition) ESNCondition.getCondition(bundle,new ConditionInfo("",new String[]{SYSTEM_ESN}));
+		Condition esn = ESNCondition.getCondition(bundle, new ConditionInfo("",
+				new String[] {SYSTEM_ESN}));
 		assertFalse(esn.isPostponed());
 		assertTrue(esn.isSatisfied());
-		
-		esn = (Condition) ESNCondition.getCondition(bundle,new ConditionInfo("",new String[]{OTHER_ESN}));
+
+		esn = ESNCondition.getCondition(bundle, new ConditionInfo("",
+				new String[] {OTHER_ESN}));
 		assertFalse(esn.isPostponed());
 		assertFalse(esn.isSatisfied());
 	}
-	
+
 	public void testESNValidator() throws Exception {
 		try {
-			ESNCondition.getCondition(bundle,new ConditionInfo("",new String[]{""}));
+			ESNCondition.getCondition(bundle, new ConditionInfo("",
+					new String[] {""}));
 			fail();
-		} catch (IllegalArgumentException e) {}
+		}
+		catch (IllegalArgumentException e) {/* expected */
+		}
 		try {
-			ESNCondition.getCondition(bundle,new ConditionInfo("",new String[]{"1234567"}));
+			ESNCondition.getCondition(bundle, new ConditionInfo("",
+					new String[] {"1234567"}));
 			fail();
-		} catch (IllegalArgumentException e) {}
+		}
+		catch (IllegalArgumentException e) {/* expected */
+		}
 		try {
-			ESNCondition.getCondition(bundle,new ConditionInfo("",new String[]{"123456789"}));
+			ESNCondition.getCondition(bundle, new ConditionInfo("",
+					new String[] {"123456789"}));
 			fail();
-		} catch (IllegalArgumentException e) {}
+		}
+		catch (IllegalArgumentException e) {/* expected */
+		}
 		try {
-			ESNCondition.getCondition(bundle,new ConditionInfo("",new String[]{"1234567g"}));
+			ESNCondition.getCondition(bundle, new ConditionInfo("",
+					new String[] {"1234567g"}));
 			fail();
-		} catch (IllegalArgumentException e) {}
+		}
+		catch (IllegalArgumentException e) {/* expected */
+		}
 
-		ESNCondition.getCondition(bundle,new ConditionInfo("",new String[]{"123456*"}));
+		ESNCondition.getCondition(bundle, new ConditionInfo("",
+				new String[] {"123456*"}));
 
 		try {
-			ESNCondition.getCondition(bundle,new ConditionInfo("",new String[]{"12345678*"}));
+			ESNCondition.getCondition(bundle, new ConditionInfo("",
+					new String[] {"12345678*"}));
 			fail();
-		} catch (IllegalArgumentException e) {}
+		}
+		catch (IllegalArgumentException e) {/* expected */
+		}
 	}
-	
-	public void testWildcards() throws Exception {
-		Condition esn = (Condition) ESNCondition.getCondition(bundle,new ConditionInfo("",new String[]{SYSTEM_ESN.substring(0,5)+"*"}));
-		assertTrue(esn.isSatisfied());	
 
-		esn = (Condition) ESNCondition.getCondition(bundle,new ConditionInfo("",new String[]{"777*"}));
+	public void testWildcards() throws Exception {
+		Condition esn = ESNCondition.getCondition(bundle, new ConditionInfo("",
+				new String[] {SYSTEM_ESN.substring(0, 5) + "*"}));
+		assertTrue(esn.isSatisfied());
+
+		esn = ESNCondition.getCondition(bundle, new ConditionInfo("",
+				new String[] {"777*"}));
 		assertFalse(esn.isSatisfied());
 	}
 }

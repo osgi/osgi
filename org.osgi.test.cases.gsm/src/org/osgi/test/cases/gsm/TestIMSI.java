@@ -21,29 +21,28 @@ package org.osgi.test.cases.gsm;
 import junit.framework.TestCase;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.service.condpermadmin.Condition;
 import org.osgi.service.condpermadmin.ConditionInfo;
+import org.osgi.test.support.MockFactory;
 import org.osgi.util.gsm.IMSICondition;
 
 public class TestIMSI extends TestCase {
-	private BundleContext	context;
-	private Bundle			bundle;
-
-	public void setBundleContext(BundleContext context) {
-		this.context = context;
-		bundle = this.context.getBundle();
+	private Bundle				bundle		= (Bundle) MockFactory.newMock(
+													Bundle.class, null);
+	public static final String	SYSTEM_IMSI	= "012345678901234";
+	public static final String	OTHER_IMSI	= "123456789012345";
+	static {
+		System.getProperties().put("org.osgi.util.gsm.imsi", SYSTEM_IMSI);
 	}
 	
-	public static final String SYSTEM_IMSI = System.getProperty("org.osgi.util.gsm.imsi");
-	public static final String OTHER_IMSI = "123456789012345";
-	
 	public void testBasic() throws Exception {
-		Condition imsi = (Condition) IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{SYSTEM_IMSI}));
+		Condition imsi = IMSICondition.getCondition(bundle, new ConditionInfo(
+				"", new String[] {SYSTEM_IMSI}));
 		assertFalse(imsi.isPostponed());
 		assertTrue(imsi.isSatisfied());
 		
-		imsi = (Condition) IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{OTHER_IMSI}));
+		imsi = IMSICondition.getCondition(bundle, new ConditionInfo("",
+				new String[] {OTHER_IMSI}));
 		assertFalse(imsi.isPostponed());
 		assertFalse(imsi.isSatisfied());
 	}
@@ -52,31 +51,43 @@ public class TestIMSI extends TestCase {
 		try {
 			IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{""}));
 			fail();
-		} catch (IllegalArgumentException e) {}
+		}
+		catch (IllegalArgumentException e) {/* expected */
+		}
 		try {
 			IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{"12345678901234"}));
 			fail();
-		} catch (IllegalArgumentException e) {}
+		}
+		catch (IllegalArgumentException e) {/* expected */
+		}
 		try {
 			IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{"1234567890123456"}));
 			fail();
-		} catch (IllegalArgumentException e) {}
+		}
+		catch (IllegalArgumentException e) {/* expected */
+		}
 		try {
 			IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{"12345678901234a"}));
 			fail();
-		} catch (IllegalArgumentException e) {}
+		}
+		catch (IllegalArgumentException e) {/* expected */
+		}
 		IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{"12345678901234*"}));
 		try {
 			IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{"123456789012345*"}));
 			fail();
-		} catch (IllegalArgumentException e) {}
+		}
+		catch (IllegalArgumentException e) {/* expected */
+		}
 	}
 
 	public void testWildcards() throws Exception {
-		Condition IMSI = (Condition) IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{SYSTEM_IMSI.substring(0,5)+"*"}));
+		Condition IMSI = IMSICondition.getCondition(bundle, new ConditionInfo(
+				"", new String[] {SYSTEM_IMSI.substring(0, 5) + "*"}));
 		assertTrue(IMSI.isSatisfied());	
 
-		IMSI = (Condition) IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{"777*"}));
+		IMSI = IMSICondition.getCondition(bundle, new ConditionInfo("",
+				new String[] {"777*"}));
 		assertFalse(IMSI.isSatisfied());
 	}
 }

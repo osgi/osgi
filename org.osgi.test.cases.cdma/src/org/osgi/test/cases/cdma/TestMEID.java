@@ -21,64 +21,82 @@ package org.osgi.test.cases.cdma;
 import junit.framework.TestCase;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.service.condpermadmin.Condition;
 import org.osgi.service.condpermadmin.ConditionInfo;
+import org.osgi.test.support.MockFactory;
 import org.osgi.util.cdma.MEIDCondition;
 
 public class TestMEID extends TestCase {
-	private BundleContext	context;
-	private Bundle			bundle;
-
-	public void setBundleContext(BundleContext context) {
-		this.context = context;
-		bundle = this.context.getBundle();
+	private Bundle				bundle		= (Bundle) MockFactory.newMock(
+													Bundle.class, null);
+	private static final String	SYSTEM_MEID	= "23456789abcdef";
+	private static final String	OTHER_MEID	= "CAFEBABE42CAFE";
+	static {
+		System.getProperties().put("org.osgi.util.cdma.meid", SYSTEM_MEID);
 	}
 
-	public static final String SYSTEM_MEID = System.getProperty("org.osgi.util.cdma.meid");
-	public static final String OTHER_MEID = "CAFEBABE42CAFE";
 	public void testBasic() throws Exception {
-		Condition esn = (Condition) MEIDCondition.getCondition(bundle,new ConditionInfo("",new String[]{SYSTEM_MEID}));
+		Condition esn = MEIDCondition.getCondition(bundle, new ConditionInfo(
+				"", new String[] {SYSTEM_MEID}));
 		assertFalse(esn.isPostponed());
 		assertTrue(esn.isSatisfied());
-		
-		esn = (Condition) MEIDCondition.getCondition(bundle,new ConditionInfo("",new String[]{OTHER_MEID}));
+
+		esn = MEIDCondition.getCondition(bundle, new ConditionInfo("",
+				new String[] {OTHER_MEID}));
 		assertFalse(esn.isPostponed());
 		assertFalse(esn.isSatisfied());
 	}
-	
+
 	public void testMEIDValidator() throws Exception {
 		try {
-			MEIDCondition.getCondition(bundle,new ConditionInfo("",new String[]{""}));
+			MEIDCondition.getCondition(bundle, new ConditionInfo("",
+					new String[] {""}));
 			fail();
-		} catch (IllegalArgumentException e) {}
+		}
+		catch (IllegalArgumentException e) {/* expected */
+		}
 		try {
-			MEIDCondition.getCondition(bundle,new ConditionInfo("",new String[]{"1234567890123"}));
+			MEIDCondition.getCondition(bundle, new ConditionInfo("",
+					new String[] {"1234567890123"}));
 			fail();
-		} catch (IllegalArgumentException e) {}
+		}
+		catch (IllegalArgumentException e) {/* expected */
+		}
 		try {
-			MEIDCondition.getCondition(bundle,new ConditionInfo("",new String[]{"123456789012345"}));
+			MEIDCondition.getCondition(bundle, new ConditionInfo("",
+					new String[] {"123456789012345"}));
 			fail();
-		} catch (IllegalArgumentException e) {}
+		}
+		catch (IllegalArgumentException e) {/* expected */
+		}
 		try {
-			MEIDCondition.getCondition(bundle,new ConditionInfo("",new String[]{"1234567890ghij"}));
+			MEIDCondition.getCondition(bundle, new ConditionInfo("",
+					new String[] {"1234567890ghij"}));
 			fail();
-		} catch (IllegalArgumentException e) {}
+		}
+		catch (IllegalArgumentException e) {/* expected */
+		}
 
-		MEIDCondition.getCondition(bundle,new ConditionInfo("",new String[]{"1234567891*"}));
+		MEIDCondition.getCondition(bundle, new ConditionInfo("",
+				new String[] {"1234567891*"}));
 
 		try {
-			MEIDCondition.getCondition(bundle,new ConditionInfo("",new String[]{"12345678901234*"}));
+			MEIDCondition.getCondition(bundle, new ConditionInfo("",
+					new String[] {"12345678901234*"}));
 			fail();
-		} catch (IllegalArgumentException e) {}
+		}
+		catch (IllegalArgumentException e) {/* expected */
+		}
 	}
-	
-	public void testWildcards() throws Exception {
-		Condition esn = (Condition) MEIDCondition.getCondition(bundle,new ConditionInfo("",new String[]{SYSTEM_MEID.substring(0,5)+"*"}));
-		assertTrue(esn.isSatisfied());	
 
-		esn = (Condition) MEIDCondition.getCondition(bundle,new ConditionInfo("",new String[]{"777*"}));
+	public void testWildcards() throws Exception {
+		Condition esn = MEIDCondition.getCondition(bundle, new ConditionInfo(
+				"", new String[] {SYSTEM_MEID.substring(0, 5) + "*"}));
+		assertTrue(esn.isSatisfied());
+
+		esn = MEIDCondition.getCondition(bundle, new ConditionInfo("",
+				new String[] {"777*"}));
 		assertFalse(esn.isSatisfied());
-		
+
 	}
 }
