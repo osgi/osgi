@@ -11,4 +11,4 @@ Bundle-Copyright: ${copyright}
 Private-Package						= \
 	${p}.tb1.*
 
-#-sign					: test; password:=testtest
+-sign: test
