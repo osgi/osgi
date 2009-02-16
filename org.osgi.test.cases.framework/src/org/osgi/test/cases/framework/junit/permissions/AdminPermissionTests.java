@@ -39,7 +39,7 @@ import java.util.Set;
 
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
-import org.osgi.test.support.AbstractMockBundle;
+import org.osgi.test.support.MockFactory;
 import org.osgi.test.support.PermissionTestCase;
 
 public class AdminPermissionTests extends PermissionTestCase {
@@ -407,10 +407,12 @@ public class AdminPermissionTests extends PermissionTestCase {
 			testList.add(cert);
 			testMap.put(cert, testList);
 		}
-		return new MockBundle(id, name, location, testMap);
+		return (Bundle) MockFactory.newMock(Bundle.class, new MockBundle(id,
+				name,
+				location, testMap));
 	}
 
-	private static class MockBundle extends AbstractMockBundle {
+	private static class MockBundle {
 		private final long		id;
 		private final String	name;
 		private final String	location;
@@ -431,7 +433,7 @@ public class AdminPermissionTests extends PermissionTestCase {
 			return location;
 		}
 
-		public Map getSignerCertificates(int arg0) {
+		public Map getSignerCertificates(int type) {
 			return new HashMap(signers);
 		}
 
