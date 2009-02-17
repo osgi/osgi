@@ -116,6 +116,7 @@
                 <xsd:element ref="list"/>
                 <xsd:element ref="set"/>
                 <xsd:element ref="map"/>
+                <xsd:element ref="array"/>
                 <xsd:element ref="props"/>
                 <xsd:element ref="ref-list"/>
                 <xsd:element ref="ref-set"/>
@@ -137,6 +138,7 @@
                 <xsd:element ref="list"/>
                 <xsd:element ref="set"/>
                 <xsd:element ref="map"/>
+                <xsd:element ref="array"/>
                 <xsd:element ref="props"/>
                 <xsd:element ref="ref-list"/>
                 <xsd:element ref="ref-set"/>
@@ -198,9 +200,10 @@
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:element name="list" type="TlistOrSetType"/>
-    <xsd:element name="set" type="TlistOrSetType"/>
+    <xsd:element name="list" type="TlistSetArrayType"/>
+    <xsd:element name="set" type="TlistSetArrayType"/>
     <xsd:element name="map" type="TmapType"/>
+    <xsd:element name="array" type="TlistSetArrayType"/>
     <xsd:element name="entry" type="TentryType"/>
     <xsd:element name="props" type="TpropsType"/>
     <xsd:element name="key">
@@ -267,7 +270,7 @@
     </xsd:complexType>
 
     <!-- 'list' and 'set' collection type -->
-    <xsd:complexType name="TlistOrSetType">
+    <xsd:complexType name="TlistSetArrayType">
         <xsd:complexContent>
             <xsd:extension base="TtypedCollectionType">
                 <xsd:group ref="valueElement" minOccurs="0" maxOccurs="unbounded"/>
@@ -310,7 +313,7 @@
       <xsd:complexContent>
         <xsd:extension base="TidentifiedType">
           <xsd:sequence minOccurs="0" maxOccurs="unbounded">
-            <xsd:element name="interfaces" type="TlistOrSetType" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="interfaces" type="TlistSetArrayType" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="listener" type="Tlistener" minOccurs="0" maxOccurs="unbounded"/>
           </xsd:sequence>
           <xsd:attribute name="interface" use="optional" type="xsd:token"/>
@@ -424,7 +427,7 @@
    
    <xsd:group name="serviceElements">
           <xsd:sequence>
-            <xsd:element name="interfaces" type="TlistOrSetType" minOccurs="0"/>
+            <xsd:element name="interfaces" type="TlistSetArrayType" minOccurs="0"/>
             <xsd:element name="service-properties" minOccurs="0" type="TmapType"/>
             <xsd:element name="registration-listener" type="TserviceRegistrationListener" 
                    minOccurs="0" maxOccurs="unbounded"/>
