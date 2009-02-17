@@ -23,6 +23,11 @@ import java.util.List;
 public interface ArrayValue extends Value {
 
     /**
+     * The value-type specified for the array
+     */
+	String getValueType();
+
+    /**
      * The array of Value objects
      */
 	Value[] getArray();

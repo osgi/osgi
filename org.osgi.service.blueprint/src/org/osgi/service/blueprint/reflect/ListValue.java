@@ -23,6 +23,11 @@ import java.util.List;
 public interface ListValue extends Value {
 
     /**
+     * The value-type specified for the list elements, or null if none given
+     */
+	String getValueType();
+
+    /**
      * The List (of Value objects) for this List-based value
      */
 	List getList();

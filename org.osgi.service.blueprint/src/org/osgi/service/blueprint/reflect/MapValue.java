@@ -24,6 +24,17 @@ import java.util.Map;
  */
 public interface MapValue extends Value {
 	
+	
+	/**
+	 * The value-type specified for map values, or null if none given
+	 */
+	String getValueType();
+	
+	/**
+	 * The key-type specified for map keys, or null if none given
+	 */
+	String getKeyType();
+	
 	/**
 	 * The Map of Value->Value mappings for this map-based value
 	 */

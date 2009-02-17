@@ -23,6 +23,11 @@ import java.util.Set;
 public interface SetValue extends Value {
 
     /**
+     * The value-type specified for the set elements, or null if none given
+     */
+	String getValueType();
+
+    /**
      * The Set (of Value objects) for this set-based value
      */
 	Set getSet();
