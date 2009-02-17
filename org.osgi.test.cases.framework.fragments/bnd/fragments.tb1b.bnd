@@ -1,0 +1,11 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.tb1b
+Bundle-SymbolicName: ${p}.tb1b
+Bundle-Version: 1.0
+Private-Package: ${p}.tb1b, resources
+Fragment-Host: ${p}.tb1a
+Bundle-ClassPath: ., fragments.tb1c.jar
+
+Include-Resource: \
+	resources/notinhost.txt = tb1b/notinhost.txt, \
+	fragments.tb1c.jar

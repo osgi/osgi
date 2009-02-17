@@ -1,0 +1,7 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.tb8a
+Bundle-SymbolicName: ${p}.tb8a
+Bundle-Version: 1.0
+Bundle-Activator: ${p}.tb8a.Activator
+Require-Bundle: $(p).tb8b;bundle-version="[1.0,1.9]"
+Private-Package: ${p}.tb8a

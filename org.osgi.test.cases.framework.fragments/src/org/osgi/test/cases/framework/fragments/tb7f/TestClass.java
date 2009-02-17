@@ -61,8 +61,7 @@ public class TestClass {
 		// Try creating a URL for a restricted resource using the
 		// constructor URL#URL(URL context, String spec)
 		try {
-			URL context = new URL(resource.toExternalForm());
-			url = new URL(context, ".");
+			url = new URL(resource, ".");
 			url.openStream();
 			throw new Exception("Expecting MalformedURLException");
 		}

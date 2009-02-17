@@ -35,6 +35,8 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 
 /**
  * 
@@ -56,12 +58,22 @@ public class Activator implements BundleActivator{
 	 */
 
 	public void start(BundleContext context) {
+		ServiceReference[] bundleRefs;
+		try {
+			bundleRefs = context.getServiceReferences(Bundle.class.getName(), "(bundle=fragments.tests)");
+		}
+		catch (InvalidSyntaxException e) {
+			throw new RuntimeException(e);
+		}
+		if (bundleRefs == null)
+			throw new RuntimeException("No fragment.tests bundle available");
+		Bundle fragmentTests = (Bundle) context.getService(bundleRefs[0]);
 		InputStream in = null;
 		Bundle tb17b = null;
 		try {
 			// Install extension bundle
-			in = context.getBundle().getResource("/resources/tb17b.jar").openStream();
-			tb17b = context.installBundle("tb17b.jar", in);
+			in = fragmentTests.getEntry("fragments.tb17b.jar").openStream();
+			tb17b = context.installBundle("fragments.tb17b.jar", in);
 			// should fail, since invoker does not have
 			// AdminPermission[<bundle>, EXTENSIONLIFECYCLE]
 			throw new RuntimeException("bundle doesn't have permission to" +

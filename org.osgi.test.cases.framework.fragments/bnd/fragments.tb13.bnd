@@ -1,0 +1,13 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.tb13
+Bundle-SymbolicName: ${p}.tb13
+Bundle-Version: 1.0
+Private-Package: ${p}.tb13
+Fragment-Host: system.bundle; extension:=bootclasspath
+Bundle-Description: Bundle-Description: This is a boot classpath extension bundle used \
+ in the test that checks if a bundle that contains a native code \
+ header is not installed.
+Export-Package: q, p
+Bundle-NativeCode: org/osgi/test/cases/framework/fragments/tb8/linux_x86/libNative.so; osname=Linux; processor=x86; osversion="(1000,10000]", *
+
+-failok: true

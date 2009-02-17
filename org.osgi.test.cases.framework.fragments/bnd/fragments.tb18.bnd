@@ -1,0 +1,10 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.tb18
+Bundle-SymbolicName: ${p}.tb18
+Bundle-Version: 1.0
+Bundle-Activator: ${p}.tb18.Activator
+Private-Package: ${p}.tb18,
+	resources
+
+Include-Resource: \
+	{OSGI-INF/permissions.perm=perms/tb18.perm}

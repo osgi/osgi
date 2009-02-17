@@ -1,0 +1,9 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.tb17b
+Bundle-SymbolicName: ${p}.tb17b
+Bundle-Version: 1.0
+Private-Package: ${p}.tb17b
+Fragment-Host: system.bundle; extension:=bootclasspath
+Bundle-Description: Bundle-Description: This is a boot extension bundle used \
+ in the test that checks if a bundle has permissions to install a \
+ framework extension bundle.

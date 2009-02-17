@@ -1,0 +1,9 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.tb7g
+Bundle-SymbolicName: ${p}.tb7g
+Bundle-Version: 1.0
+Bundle-Activator: ${p}.tb7g.Activator
+Export-Package: ${p}.tb7g
+
+Include-Resource: \
+	resources/resource.txt = tb7g/resource.txt

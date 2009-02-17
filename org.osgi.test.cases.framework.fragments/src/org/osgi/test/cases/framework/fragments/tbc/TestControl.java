@@ -39,8 +39,9 @@ import org.osgi.framework.BundleListener;
 import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.packageadmin.PackageAdmin;
-import org.osgi.test.cases.util.DefaultTestBundleControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * Test cases for testing fragment bundles and extension bundles.
@@ -52,17 +53,18 @@ public class TestControl extends DefaultTestBundleControl implements
 
 	private Hashtable			events		= new Hashtable();
 	private static final String	SEPARATOR	= "#";
+	private ServiceRegistration bundleReg;
 
-	/**
-	 * Nothing to do before test run.
-	 */
-	public void prepare() {
+	protected void setUp() throws Exception {
+		super.setUp();
+		Hashtable props = new Hashtable();
+		props.put("bundle", "fragments.tests");
+		bundleReg = getContext().registerService(Bundle.class.getName(), getContext().getBundle(), props);
 	}
 
-	/**
-	 * Nothing to do before each method.
-	 */
-	public void setState() {
+	protected void tearDown() throws Exception {
+		bundleReg.unregister();
+		super.tearDown();
 	}
 
 	/**
@@ -78,7 +80,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 */
 	public void testFragmentLifecycle() throws Exception {
 		// Install fragment bundle
-		Bundle tb1b = getContext().installBundle(getWebServer() + "tb1b.jar");
+		Bundle tb1b = getContext().installBundle(getWebServer() + "fragments.tb1b.jar");
 		try {
 			// Try starting fragment
 			tb1b.start();
@@ -112,9 +114,9 @@ public class TestControl extends DefaultTestBundleControl implements
 		Class classObj2;
 
 		// Install fragment bundle
-		Bundle tb1b = getContext().installBundle(getWebServer() + "tb1b.jar");
+		Bundle tb1b = getContext().installBundle(getWebServer() + "fragments.tb1b.jar");
 		// Install host
-		Bundle tb1a = getContext().installBundle(getWebServer() + "tb1a.jar");
+		Bundle tb1a = getContext().installBundle(getWebServer() + "fragments.tb1a.jar");
 		tb1a.start();
 		try {
 			// Load a resource that exists in a jar in the classpath of the
@@ -155,10 +157,10 @@ public class TestControl extends DefaultTestBundleControl implements
 	public void testAppendClasspath02() throws Exception {
 
 		// Install fragment bundles
-		Bundle tb1g = getContext().installBundle(getWebServer() + "tb1g.jar");
-		Bundle tb1b = getContext().installBundle(getWebServer() + "tb1b.jar");
+		Bundle tb1g = getContext().installBundle(getWebServer() + "fragments.tb1g.jar");
+		Bundle tb1b = getContext().installBundle(getWebServer() + "fragments.tb1b.jar");
 		// Install and start host bundle
-		Bundle tb1a = getContext().installBundle(getWebServer() + "tb1a.jar");
+		Bundle tb1a = getContext().installBundle(getWebServer() + "fragments.tb1a.jar");
 		tb1a.start();
 
 		try {
@@ -219,9 +221,9 @@ public class TestControl extends DefaultTestBundleControl implements
 		String line;
 
 		// Install fragment bundle
-		Bundle tb1b = getContext().installBundle(getWebServer() + "tb1b.jar");
+		Bundle tb1b = getContext().installBundle(getWebServer() + "fragments.tb1b.jar");
 		// Install and start host bundle
-		tb1a = getContext().installBundle(getWebServer() + "tb1a.jar");
+		tb1a = getContext().installBundle(getWebServer() + "fragments.tb1a.jar");
 		tb1a.start();
 
 		try {
@@ -264,10 +266,10 @@ public class TestControl extends DefaultTestBundleControl implements
 	 */
 	public void testFragmentCannotBeHost() throws Exception {
 		// Install fragment bundles
-		Bundle tb1d = getContext().installBundle(getWebServer() + "tb1d.jar");
-		Bundle tb1b = getContext().installBundle(getWebServer() + "tb1b.jar");
+		Bundle tb1d = getContext().installBundle(getWebServer() + "fragments.tb1d.jar");
+		Bundle tb1b = getContext().installBundle(getWebServer() + "fragments.tb1b.jar");
 		// Install host
-		Bundle tb1a = getContext().installBundle(getWebServer() + "tb1a.jar");
+		Bundle tb1a = getContext().installBundle(getWebServer() + "fragments.tb1a.jar");
 		tb1a.start();
 
 		try {
@@ -299,10 +301,10 @@ public class TestControl extends DefaultTestBundleControl implements
 	 */
 	public void testBundlePermission() throws Exception {
 		// Install fragment bundle with normal permissions
-		Bundle tb2b = getContext().installBundle(getWebServer() + "tb2b.jar");
+		Bundle tb2b = getContext().installBundle(getWebServer() + "fragments.tb2b.jar");
 
 		// Install host without BundlePermission (host)
-		Bundle tb2a = getContext().installBundle(getWebServer() + "tb2a.jar");
+		Bundle tb2a = getContext().installBundle(getWebServer() + "fragments.tb2a.jar");
 		tb2a.start();
 
 		try {
@@ -321,10 +323,10 @@ public class TestControl extends DefaultTestBundleControl implements
 		}
 
 		// Install fragment bundle without BundlePermission (fragment)
-		Bundle tb2d = getContext().installBundle(getWebServer() + "tb2d.jar");
+		Bundle tb2d = getContext().installBundle(getWebServer() + "fragments.tb2d.jar");
 
 		// Install host with normal permissions
-		Bundle tb2c = getContext().installBundle(getWebServer() + "tb2c.jar");
+		Bundle tb2c = getContext().installBundle(getWebServer() + "fragments.tb2c.jar");
 		tb2c.start();
 
 		try {
@@ -358,13 +360,13 @@ public class TestControl extends DefaultTestBundleControl implements
 	 */
 	public void testFragmentHostHeader02() throws Exception {
 		// Install and start host bundle version 1.0
-		Bundle tb3a = getContext().installBundle(getWebServer() + "tb3a.jar");
+		Bundle tb3a = getContext().installBundle(getWebServer() + "fragments.tb3a.jar");
 
 		// Install and start host bundle version 2.0
-		Bundle tb3c = getContext().installBundle(getWebServer() + "tb3c.jar");
+		Bundle tb3c = getContext().installBundle(getWebServer() + "fragments.tb3c.jar");
 
 		// Install fragment bundle with multiple-hosts=false
-		Bundle tb3d = getContext().installBundle(getWebServer() + "tb3d.jar");
+		Bundle tb3d = getContext().installBundle(getWebServer() + "fragments.tb3d.jar");
 		PackageAdmin pa = (PackageAdmin) getService(PackageAdmin.class);
 		pa.resolveBundles(new Bundle[] {tb3d});
     tb3a.start();
@@ -410,11 +412,11 @@ public class TestControl extends DefaultTestBundleControl implements
 	 */
 	public void testFragmentAttachmentDirective01() throws Exception {
 		// Install and start host bundle
-		Bundle tb3e = getContext().installBundle(getWebServer() + "tb3e.jar");
+		Bundle tb3e = getContext().installBundle(getWebServer() + "fragments.tb3e.jar");
 		tb3e.start();
 
 		// Install fragment bundle
-		Bundle tb3d = getContext().installBundle(getWebServer() + "tb3d.jar");
+		Bundle tb3d = getContext().installBundle(getWebServer() + "fragments.tb3d.jar");
 		PackageAdmin pa = (PackageAdmin) getService(PackageAdmin.class);
 		pa.resolveBundles(new Bundle[] {tb3d});
 
@@ -445,11 +447,11 @@ public class TestControl extends DefaultTestBundleControl implements
 	 */
 	public void testFragmentAttachmentDirective02() throws Exception {
 		// Install and start host bundle
-		Bundle tb3f = getContext().installBundle(getWebServer() + "tb3f.jar");
+		Bundle tb3f = getContext().installBundle(getWebServer() + "fragments.tb3f.jar");
 		tb3f.start();
 
 		// Install fragment bundle, host already resolved
-		Bundle tb3d = getContext().installBundle(getWebServer() + "tb3d.jar");
+		Bundle tb3d = getContext().installBundle(getWebServer() + "fragments.tb3d.jar");
 		PackageAdmin pa = (PackageAdmin) getService(PackageAdmin.class);
 		pa.resolveBundles(new Bundle[] {tb3d});
 
@@ -480,10 +482,10 @@ public class TestControl extends DefaultTestBundleControl implements
 	 */
 	public void testFragmentAttachmentDirective03() throws Exception {
 		// Install fragment bundle, host not yet resolved
-		Bundle tb3d = getContext().installBundle(getWebServer() + "tb3d.jar");
+		Bundle tb3d = getContext().installBundle(getWebServer() + "fragments.tb3d.jar");
 
 		// Install and start host bundle
-		Bundle tb3f = getContext().installBundle(getWebServer() + "tb3f.jar");
+		Bundle tb3f = getContext().installBundle(getWebServer() + "fragments.tb3f.jar");
 		tb3f.start();
 
 		PackageAdmin pa = (PackageAdmin) getService(PackageAdmin.class);
@@ -520,11 +522,11 @@ public class TestControl extends DefaultTestBundleControl implements
 	 */
 	public void testAttachToResolvedHost01() throws Exception {
 		// Install and start host bundle
-		Bundle tb1a = getContext().installBundle(getWebServer() + "tb1a.jar");
+		Bundle tb1a = getContext().installBundle(getWebServer() + "fragments.tb1a.jar");
 		tb1a.start();
 
 		// Install fragment bundle, host is already ACTIVE
-		Bundle tb1e = getContext().installBundle(getWebServer() + "tb1e.jar");
+		Bundle tb1e = getContext().installBundle(getWebServer() + "fragments.tb1e.jar");
 		PackageAdmin pa = (PackageAdmin) getService(PackageAdmin.class);
 		pa.resolveBundles(new Bundle[] {tb1e});
 
@@ -551,14 +553,14 @@ public class TestControl extends DefaultTestBundleControl implements
 	 */
 	public void testAttachToResolvedHost02() throws Exception {
 		// Install and start host bundle
-		Bundle tb1a = getContext().installBundle(getWebServer() + "tb1a.jar");
+		Bundle tb1a = getContext().installBundle(getWebServer() + "fragments.tb1a.jar");
 		tb1a.start();
 
 		// Install required bundle
-		Bundle tb1b = getContext().installBundle(getWebServer() + "tb1b.jar");
+		Bundle tb1b = getContext().installBundle(getWebServer() + "fragments.tb1b.jar");
 
 		// Install fragment bundle, host is already ACTIVE
-		Bundle tb1f = getContext().installBundle(getWebServer() + "tb1f.jar");
+		Bundle tb1f = getContext().installBundle(getWebServer() + "fragments.tb1f.jar");
 		PackageAdmin pa = (PackageAdmin) getService(PackageAdmin.class);
 		pa.resolveBundles(new Bundle[] {tb1f});
 
@@ -594,11 +596,11 @@ public class TestControl extends DefaultTestBundleControl implements
 		getContext().addBundleListener(this);
 
 		// Install the host bundle
-		Bundle tb1a = getContext().installBundle(getWebServer() + "tb1a.jar");
+		Bundle tb1a = getContext().installBundle(getWebServer() + "fragments.tb1a.jar");
 
 
 		// Install fragment bundle
-		Bundle tb1g = getContext().installBundle(getWebServer() + "tb1g.jar");
+		Bundle tb1g = getContext().installBundle(getWebServer() + "fragments.tb1g.jar");
 
 		PackageAdmin pa = (PackageAdmin) getService(PackageAdmin.class);
 		pa.resolveBundles(new Bundle[] {tb1g});
@@ -611,7 +613,7 @@ public class TestControl extends DefaultTestBundleControl implements
 					Bundle.RESOLVED, tb1g.getState());
 
 			// Update fragment bundle
-			InputStream in = tb1a.getResource("resources/tb1h.jar").openStream();
+			InputStream in = getContext().getBundle().getResource("fragments.tb1h.jar").openStream();
 			tb1g.update(in);
 			in.close();
 
@@ -668,16 +670,16 @@ public class TestControl extends DefaultTestBundleControl implements
 	 */
 	public void testConflictingImportPackage() throws Exception {
 		// Install and start bundles that export packages
-		Bundle tb7c = getContext().installBundle(getWebServer() + "tb7c.jar");
+		Bundle tb7c = getContext().installBundle(getWebServer() + "fragments.tb7c.jar");
 		tb7c.start();
-		Bundle tb7d = getContext().installBundle(getWebServer() + "tb7d.jar");
+		Bundle tb7d = getContext().installBundle(getWebServer() + "fragments.tb7d.jar");
 		tb7d.start();
 
 		// Install fragment bundle
-		Bundle tb7b = getContext().installBundle(getWebServer() + "tb7b.jar");
+		Bundle tb7b = getContext().installBundle(getWebServer() + "fragments.tb7b.jar");
 
 		// Install the host bundle
-		Bundle tb7a = getContext().installBundle(getWebServer() + "tb7a.jar");
+		Bundle tb7a = getContext().installBundle(getWebServer() + "fragments.tb7a.jar");
 
 		// Start the host bundle
 		tb7a.start();
@@ -710,16 +712,16 @@ public class TestControl extends DefaultTestBundleControl implements
 	 */
 	public void testConflictingExportPackage() throws Exception {
 		// Install fragment bundle
-		Bundle tb7e = getContext().installBundle(getWebServer() + "tb7e.jar");
+		Bundle tb7e = getContext().installBundle(getWebServer() + "fragments.tb7e.jar");
 
 		// Install the host bundle
-		Bundle tb7c = getContext().installBundle(getWebServer() + "tb7c.jar");
+		Bundle tb7c = getContext().installBundle(getWebServer() + "fragments.tb7c.jar");
 
 		// Start the host bundle
 		tb7c.start();
 
 		// Install the bundle that uses the package exported by the fragment
-		Bundle tb7h = getContext().installBundle(getWebServer() + "tb7h.jar");
+		Bundle tb7h = getContext().installBundle(getWebServer() + "fragments.tb7h.jar");
 
 		try {
 			// Verify that fragment bundle is in RESOLVED state
@@ -754,14 +756,14 @@ public class TestControl extends DefaultTestBundleControl implements
 	 */
 	public void testConflictingRequireBundle() throws Exception {
 		// Install required bundles
-		Bundle tb8bv1 = getContext().installBundle(getWebServer() + "tb8b.jar");
-		Bundle tb8bv2 = getContext().installBundle(getWebServer() + "tb8c.jar");
+		Bundle tb8bv1 = getContext().installBundle(getWebServer() + "fragments.tb8b.jar");
+		Bundle tb8bv2 = getContext().installBundle(getWebServer() + "fragments.tb8c.jar");
 
 		// Install the fragment bundle
-		Bundle tb8d = getContext().installBundle(getWebServer() + "tb8d.jar");
+		Bundle tb8d = getContext().installBundle(getWebServer() + "fragments.tb8d.jar");
 
 		// Install the host bundle
-		Bundle tb8a = getContext().installBundle(getWebServer() + "tb8a.jar");
+		Bundle tb8a = getContext().installBundle(getWebServer() + "fragments.tb8a.jar");
 
 		// Start the host bundle
 		tb8a.start();
@@ -806,11 +808,11 @@ public class TestControl extends DefaultTestBundleControl implements
 		getContext().addBundleListener(this);
 
 		// Install fragment bundles
-		Bundle tb1b = getContext().installBundle(getWebServer() + "tb1b.jar");
-		Bundle tb1g = getContext().installBundle(getWebServer() + "tb1g.jar");
+		Bundle tb1b = getContext().installBundle(getWebServer() + "fragments.tb1b.jar");
+		Bundle tb1g = getContext().installBundle(getWebServer() + "fragments.tb1g.jar");
 
 		// Install the host bundle
-		Bundle tb1a = getContext().installBundle(getWebServer() + "tb1a.jar");
+		Bundle tb1a = getContext().installBundle(getWebServer() + "fragments.tb1a.jar");
 
 		// Start the host bundle
 		tb1a.start();
@@ -925,10 +927,10 @@ public class TestControl extends DefaultTestBundleControl implements
 	 */
 	public void testResourceAccessPermission() throws Exception {
 		// Install bundle that has the resource
-		Bundle tb7g = getContext().installBundle(getWebServer() + "tb7g.jar");
+		Bundle tb7g = getContext().installBundle(getWebServer() + "fragments.tb7g.jar");
 		tb7g.start();
 		// Install bundle that will try to access the resource
-		Bundle tb7f = getContext().installBundle(getWebServer() + "tb7f.jar");
+		Bundle tb7f = getContext().installBundle(getWebServer() + "fragments.tb7f.jar");
 		tb7f.start();
 		// Execute the method that will access the resource using reflection
 		try {
@@ -945,20 +947,6 @@ public class TestControl extends DefaultTestBundleControl implements
 			tb7g.stop();
 			tb7g.uninstall();
 		}
-	}
-
-	/**
-	 * Clean up after each method. Notice that during debugging many times the
-	 * unsetState is never reached.
-	 */
-	public void unsetState() {
-	}
-
-	/**
-	 * Clean up after a run. Notice that during debugging many times the
-	 * unprepare is never reached.
-	 */
-	public void unprepare() {
 	}
 
 	/**
@@ -1027,7 +1015,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	public void testBadExtensionBundle() throws Exception {
 		// installing bad extension bundle
 		try {
-			Bundle tb4 = getContext().installBundle(getWebServer() + "tb4.jar");
+			Bundle tb4 = getContext().installBundle(getWebServer() + "fragments.tb4.jar");
 			// instalation should fail
 			failException("Expected installation failure " + tb4.getLocation(), BundleException.class);
 		} catch (BundleException e) {
@@ -1050,7 +1038,7 @@ public class TestControl extends DefaultTestBundleControl implements
 				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
 			try {
 				// install extension bundle
-				tb5 = getContext().installBundle(getWebServer() + "tb5.jar");
+				tb5 = getContext().installBundle(getWebServer() + "fragments.tb5.jar");
 				Bundle systemBundle = getContext().getBundle(0);
 				// check if classloader is boot classloader
 				try {
@@ -1076,7 +1064,7 @@ public class TestControl extends DefaultTestBundleControl implements
 			String message = "bootclasspath extension bundle instalation not supported";
 			try {
 				// tries to install extension bundle
-				tb5 = getContext().installBundle(getWebServer() + "tb5.jar");
+				tb5 = getContext().installBundle(getWebServer() + "fragments.tb5.jar");
 				// instalation should fail
 				failException(message, BundleException.class);
 			}
@@ -1107,7 +1095,7 @@ public class TestControl extends DefaultTestBundleControl implements
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
 			try {
 				// install extension bundle
-				tb6 = getContext().installBundle(getWebServer() + "tb6.jar");
+				tb6 = getContext().installBundle(getWebServer() + "fragments.tb6.jar");
 				// check if classloader is framework classloader
 				try {
 					assertEquals("loaded by the framework classloader",
@@ -1135,7 +1123,7 @@ public class TestControl extends DefaultTestBundleControl implements
 			String message = "framework extension bundle instalation should fail";
 			try {
 				// tries to install extension bundle
-				tb6 = getContext().installBundle(getWebServer() + "tb6.jar");
+				tb6 = getContext().installBundle(getWebServer() + "fragments.tb6.jar");
 				// installation should fail
 				failException(message, BundleException.class);
 			}
@@ -1166,7 +1154,7 @@ public class TestControl extends DefaultTestBundleControl implements
 		if ("true".equals(getContext().getProperty(
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
 			// install extension bundle
-			tb6 = getContext().installBundle(getWebServer() + "tb6.jar");
+			tb6 = getContext().installBundle(getWebServer() + "fragments.tb6.jar");
 			try {
 				tb6.loadClass(class6);
 				// should fail, since extension bundles are not able to load
@@ -1201,7 +1189,7 @@ public class TestControl extends DefaultTestBundleControl implements
 		if ("true".equals(getContext().getProperty(
 				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
 			// install extension bundle
-			tb5 = getContext().installBundle(getWebServer() + "tb5.jar");
+			tb5 = getContext().installBundle(getWebServer() + "fragments.tb5.jar");
 			try {
 				tb5.loadClass(class5);
 				// should fail, since extension bundles are not able to load
@@ -1236,7 +1224,7 @@ public class TestControl extends DefaultTestBundleControl implements
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
 			try {
 				// install extension bundle
-				tb21 = getContext().installBundle(getWebServer() + "tb21.jar");
+				tb21 = getContext().installBundle(getWebServer() + "fragments.tb21.jar");
 				// check if classloader is framework classloader
 				try {
 					assertEquals("loaded by the framework classloader",
@@ -1278,7 +1266,7 @@ public class TestControl extends DefaultTestBundleControl implements
 		if ("true".equals(getContext().getProperty(
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
 			try {
-				tb22 = getContext().installBundle(getWebServer() + "tb22.jar");
+				tb22 = getContext().installBundle(getWebServer() + "fragments.tb22.jar");
 				// should fail, since extension bundles are not able to
 				// declare native code headers
 				failException(message, BundleException.class);
@@ -1311,7 +1299,7 @@ public class TestControl extends DefaultTestBundleControl implements
 		if ("true".equals(getContext().getProperty(
 				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
 			try {
-				tb13 = getContext().installBundle(getWebServer() + "tb13.jar");
+				tb13 = getContext().installBundle(getWebServer() + "fragments.tb13.jar");
 				// should fail, since extension bundles are not able to
 				// declare native code headers
 				failException(message, BundleException.class);
@@ -1344,7 +1332,7 @@ public class TestControl extends DefaultTestBundleControl implements
 		if ("true".equals(getContext().getProperty(
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
 			try {
-				tb9 = getContext().installBundle(getWebServer() + "tb9.jar");
+				tb9 = getContext().installBundle(getWebServer() + "fragments.tb9.jar");
 				// should fail, since extension bundles are not able to
 				// import packages
 				failException(message, BundleException.class);
@@ -1377,7 +1365,7 @@ public class TestControl extends DefaultTestBundleControl implements
 		if ("true".equals(getContext().getProperty(
 				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
 			try {
-				tb12 = getContext().installBundle(getWebServer() + "tb12.jar");
+				tb12 = getContext().installBundle(getWebServer() + "fragments.tb12.jar");
 				// should fail, since extension bundles are not able to
 				// import packages
 				failException(message, BundleException.class);
@@ -1410,7 +1398,7 @@ public class TestControl extends DefaultTestBundleControl implements
 		if ("true".equals(getContext().getProperty(
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
 			try {
-				tb10 = getContext().installBundle(getWebServer() + "tb10.jar");
+				tb10 = getContext().installBundle(getWebServer() + "fragments.tb10.jar");
 				// should fail, since extension bundles are not able to
 				// require bundles
 				failException(message, BundleException.class);
@@ -1443,7 +1431,7 @@ public class TestControl extends DefaultTestBundleControl implements
 		if ("true".equals(getContext().getProperty(
 				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
 			try {
-				tb15 = getContext().installBundle(getWebServer() + "tb15.jar");
+				tb15 = getContext().installBundle(getWebServer() + "fragments.tb15.jar");
 				// should fail, since extension bundles are not able to
 				// require bundles
 				failException(message, BundleException.class);
@@ -1478,7 +1466,7 @@ public class TestControl extends DefaultTestBundleControl implements
 		if ("true".equals(getContext().getProperty(
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
 			try {
-				tb11 = getContext().installBundle(getWebServer() + "tb11.jar");
+				tb11 = getContext().installBundle(getWebServer() + "fragments.tb11.jar");
 				// should fail, since extension bundles have to have
 				// AllPermission to be installed
 				failException(message, BundleException.class);
@@ -1513,7 +1501,7 @@ public class TestControl extends DefaultTestBundleControl implements
 		if ("true".equals(getContext().getProperty(
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
 			// install regular bundle
-			tb16a = getContext().installBundle(getWebServer() + "tb16a.jar");
+			tb16a = getContext().installBundle(getWebServer() + "fragments.tb16a.jar");
 			try {
 				// start regular bundle that tries to install a framework
 				// extension bundle
@@ -1554,7 +1542,7 @@ public class TestControl extends DefaultTestBundleControl implements
 		if ("true".equals(getContext().getProperty(
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
 			// install regular bundle
-			tb18 = getContext().installBundle(getWebServer() + "tb18.jar");
+			tb18 = getContext().installBundle(getWebServer() + "fragments.tb18.jar");
 			try {
 				// start regular bundle that tries to install a framework
 				// extension bundle
@@ -1593,7 +1581,7 @@ public class TestControl extends DefaultTestBundleControl implements
 		if ("true".equals(getContext().getProperty(
 				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
 			try {
-				tb14 = getContext().installBundle(getWebServer() + "tb14.jar");
+				tb14 = getContext().installBundle(getWebServer() + "fragments.tb14.jar");
 				// should fail, since extension bundles have to have
 				// AllPermission to be installed
 				failException(message, BundleException.class);
@@ -1629,7 +1617,7 @@ public class TestControl extends DefaultTestBundleControl implements
 		if ("true".equals(getContext().getProperty(
 				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
 			// install regular bundle
-			tb17a = getContext().installBundle(getWebServer() + "tb17a.jar");
+			tb17a = getContext().installBundle(getWebServer() + "fragments.tb17a.jar");
 			try {
 				// start regular bundle that tries to install a framework
 				// extension bundle
@@ -1672,7 +1660,7 @@ public class TestControl extends DefaultTestBundleControl implements
 		if ("true".equals(getContext().getProperty(
 				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
 			// install regular bundle
-			tb19 = getContext().installBundle(getWebServer() + "tb19.jar");
+			tb19 = getContext().installBundle(getWebServer() + "fragments.tb19.jar");
 			try {
 				// start regular bundle that tries to install a boot classpath
 				// extension bundle

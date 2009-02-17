@@ -1,0 +1,9 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.tb4
+Bundle-SymbolicName: ${p}.tb4
+Bundle-Version: 1.0
+Private-Package: ${p}.tb4
+Fragment-Host: ${p}.tb20; extension:=bootclasspath
+Bundle-Description: This is not an extension bundle. It's used in the \
+ test that checks if the extension directive is ignored when the \
+ host is not system.bundle

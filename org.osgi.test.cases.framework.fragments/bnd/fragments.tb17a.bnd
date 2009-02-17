@@ -1,0 +1,10 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.tb17a
+Bundle-SymbolicName: ${p}.tb17a
+Bundle-Version: 1.0
+Bundle-Activator: ${p}.tb17a.Activator
+Private-Package: ${p}.tb17a,
+	resources
+
+Include-Resource: \
+	{OSGI-INF/permissions.perm=perms/tb17a.perm}

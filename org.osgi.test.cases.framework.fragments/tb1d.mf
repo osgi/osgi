@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Bundle-Name: ${p}.tb1d
-Bundle-SymbolicName: ${p}.tb1d
-Bundle-Version: 1.0
-Bundle-ManifestVersion: 2
-Fragment-Host: ${p}.tb1b
-$(IMPORT-PACKAGE)
-$(EXPORT-PACKAGE)
-$(PRIVATE-PACKAGE)
