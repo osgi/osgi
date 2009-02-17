@@ -51,16 +51,9 @@ public interface CollectionBasedServiceReferenceComponentMetadata extends
 		Value getComparator();
 		
 		/**
-		 * Should the collection be ordered based on natural ordering? 
-		 * 
-		 * @return true, iff natural-ordering based sorting was specified.
-		 */
-		boolean isNaturalOrderingBasedComparison();
-		
-		/**
-		 * The basis on which to perform natural ordering, if specified.
+		 * The basis on which to perform ordering, if specified.
 		 * 
 		 * @return one of ORDER_BASIS_SERVICES and ORDER_BASIS_SERVICE_REFERENCES
 		 */
-		int getNaturalOrderingComparisonBasis();
+		int getOrderingComparisonBasis();
 }
