@@ -99,7 +99,8 @@ public interface ListenerHook {
 		 * cycle. Initially this method will return <code>false</code>
 		 * indicating the listener has been added but has not been removed.
 		 * After the listener has been removed, this method must always return
-		 * <code>true</code>.
+		 * <code>true</code>. This method can be used to detect an added listener
+		 * that was removed before or during the corresponding added event.
 		 * 
 		 * @return <code>false</code> if the listener has not been been removed,
 		 *         <code>true</code> otherwise.
