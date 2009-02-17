@@ -59,7 +59,7 @@ public interface ServiceExportComponentMetadata extends ComponentMetadata {
 	
 	/**
 	 * The type names of the set of interface types that the service should be advertised
-	 * as supporting.
+	 * as supporting, as specified in the component declaration.
 	 * 
 	 * @return an immutable set of (String) type names, or an empty set if using auto-export
 	 */
