@@ -1,21 +1,42 @@
+/*
+ * Copyright (c) OSGi Alliance (2000-2009).
+ * All Rights Reserved.
+ *
+ * Implementation of certain elements of the OSGi
+ * Specification may be subject to third party intellectual property
+ * rights, including without limitation, patent rights (such a third party may
+ * or may not be a member of the OSGi Alliance). The OSGi Alliance is not responsible and shall not be
+ * held responsible in any manner for identifying or failing to identify any or
+ * all such third party intellectual property rights.
+ *
+ * This document and the information contained herein are provided on an "AS
+ * IS" basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL
+ * NOT INFRINGE ANY RIGHTS AND ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR
+ * FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL THE OSGI ALLIANCE BE LIABLE FOR ANY
+ * LOSS OF PROFITS, LOSS OF BUSINESS, LOSS OF USE OF DATA, INTERRUPTION OF
+ * BUSINESS, OR FOR DIRECT, INDIRECT, SPECIAL OR EXEMPLARY, INCIDENTIAL,
+ * PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN CONNECTION WITH THIS
+ * DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH LOSS OR DAMAGE.
+ *
+ * All Company, brand and product names may be trademarks that are the sole
+ * property of their respective owners. All rights reserved.
+ */
 package org.osgi.test.cases.permissions.filtered.register;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.Hashtable;
 import java.util.Properties;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 
-import org.osgi.framework.*;
-import org.osgi.test.cases.permissions.filtered.util.IServiceRegister;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.test.cases.permissions.filtered.util.Util;
 
-public class RegisterActivator implements BundleActivator, IServiceRegister {
-
-	private BundleContext context;
-	private String clazz;
+/**
+ * 
+ * @author Shigekuni KONDO, Ikuo YAMASAKI, NTT Corporation
+ */
+public class RegisterActivator implements BundleActivator {
 
 	/*
 	 * (non-Javadoc)
@@ -24,77 +45,37 @@ public class RegisterActivator implements BundleActivator, IServiceRegister {
 	 * org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext
 	 * )
 	 */
-	public void start(BundleContext context) throws Exception,
-			SecurityException {
+	public void start(BundleContext context) throws Exception {
 
 		System.out.println("REGISTER BUNDLE is going to start.");
-		try {
-			this.context = context;
-			context
-					.registerService(
-							"org.osgi.test.cases.permissions.filtered.util.IServiceRegister",
-							this, null);
-			System.out.println("REGISTER BUNDLE STARTED !!!");
-		} catch (Exception e) {
-			System.out.println("FAIL TO START REGISTER BUNDLE !!!\n" + e);
-			e.printStackTrace();
-		}
-	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.osgi.test.cases.permissions.filtered.util.IServiceRegister#registerBundle
-	 * (java.lang.String)
-	 */
-	public void registerIService(final String testId) throws SecurityException {
-		Hashtable props = new Hashtable();
-		final Properties prop = new Properties();
-		AccessController.doPrivileged(new PrivilegedAction() {
-			public Object run() {
-				try {
-					InputStream is = new FileInputStream("bnd/properties/"
-							+ testId + ".properties");
-					try {
-						prop.load(is);
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					} finally {
-						if (is != null)
-							try {
-								is.close();
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-					}
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+		final Properties configuredProps = Util
+				.getConfiguredProperties("bnd/properties/REGISTER.properties");
 
-				return null; // nothing to return
-			}
-		});
-
-		String scount = prop.getProperty("prop.count");
-		int count = Integer.parseInt(scount);
+		final Hashtable props = new Hashtable();
+		final int count = Integer.parseInt(configuredProps
+				.getProperty("prop.count"));
 		for (int i = 0; i < count; i++) {
-			String key = prop.getProperty("key." + i);
-			String value = prop.getProperty("value." + i);
+			String key = configuredProps.getProperty("key." + i);
+			String value = configuredProps.getProperty("value." + i);
 			props.put(key, value);
 		}
-		clazz = prop.getProperty("object.class");
+		String clazz = configuredProps.getProperty("objectClass");
 
 		try {
-			context.registerService(clazz, new IServiceImpl(context), props);
-			System.out.println("Succeed in registering service: " + clazz);
+			context.registerService(clazz, new IServiceImpl(context),
+					props);
+			System.out
+					.println("# Register Test> Succeed in registering service: "
+							+ clazz);
 
-		} catch (SecurityException e) {
-			System.out.println("Fail to register service: " + clazz);
+		} catch (Exception e) {
+			System.out.println("# Register Test> Fail to register service: "
+					+ clazz);
+			// e.printStackTrace();
 			throw e;
 		}
+
 	}
 
 	/*

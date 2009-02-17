@@ -4,7 +4,14 @@ Private-Package						= \
 	${p}.tbc
 
 Include-Resource	= \
-	www/register.jar=register.jar
+	bundles/register.jar=register.jar					,\
+	bundles/get.jar=get.jar								,\
+	bundles/registerPlural.jar=registerPlural.jar		,\
+	bundles/registerModify.jar=registerModify.jar		,\
+	bundles/resetPermission.jar=resetPermission.jar		,\
+	bundles/exportBundle.jar=exportBundle.jar			,\
+	bundles/importBundle.jar=importBundle.jar			,\
+	bundles/registerForServiceRegistration.jar=registerForServiceRegistration.jar
 	
 Export-Package = \
 	${p}.util;version=1.0.0
@@ -12,7 +19,7 @@ Export-Package = \
 Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
 
 -buildpath							= \
-	osgi;									version=latest	, \
+	org.eclipse.osgi;									version=latest	, \
 	ee.foundation											, \
 	${junit}
 
