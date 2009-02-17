@@ -50,6 +50,13 @@ public interface ServiceReferenceComponentMetadata extends ComponentMetadata {
 	Set getInterfaceNames();
 	
 	/**
+	 * The value of the component name attribute, if specified.
+	 *
+	 * @return the component name attribute value, or null if the attribute was not specified
+	 */
+	String getComponentName();
+	
+	/**
 	 * The filter expression that a matching service must pass
 	 * 
 	 * @return filter expression
