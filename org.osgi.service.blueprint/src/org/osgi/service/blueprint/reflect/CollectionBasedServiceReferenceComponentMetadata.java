@@ -24,14 +24,24 @@ public interface CollectionBasedServiceReferenceComponentMetadata extends
 		ServiceReferenceComponentMetadata {
 	
 		/**
-		 * Create natural ordering based on comparison on service objects.
+		 * Create ordering based on comparison of service objects.
 		 */
 		public static final int ORDER_BASIS_SERVICES = 1;
 		
 		/**
-		 * Create natural ordering based on comparison of service reference objects.
+		 * Create ordering based on comparison of service reference objects.
 		 */
 		public static final int ORDER_BASIS_SERVICE_REFERENCES = 2;
+		
+		/**
+		 * Collection contains service instances
+		 */
+		public static final int MEMBER_TYPE_SERVICES = 1;
+		
+		/**
+		 * Collection contains service references
+		 */
+		public static final int MEMBER_TYPE_SERVICE_REFERENCES = 2;
 
 		/**
 		 * The type of collection to be created.
@@ -56,4 +66,9 @@ public interface CollectionBasedServiceReferenceComponentMetadata extends
 		 * @return one of ORDER_BASIS_SERVICES and ORDER_BASIS_SERVICE_REFERENCES
 		 */
 		int getOrderingComparisonBasis();
+		
+		/**
+		 * Whether the collection will contain service instances, or service references
+		 */
+		int getMemberType();
 }
