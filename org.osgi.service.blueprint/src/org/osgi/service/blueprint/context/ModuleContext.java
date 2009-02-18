@@ -94,7 +94,7 @@ public interface ModuleContext {
 	 * @throws NoSuchComponentException if the name specified is not the
 	 * name of a component within the module.
 	 */
-	Object getComponent(String name) throws NoSuchComponentException;
+	Object getComponent(String name);
 
 	/**
 	 * Get the component metadata for a given named component.
@@ -107,7 +107,7 @@ public interface ModuleContext {
 	 * @throws NoSuchComponentException if the name specified is not the
 	 * name of a component within the module.
 	 */
-	ComponentMetadata getComponentMetadata(String name) throws NoSuchComponentException;
+	ComponentMetadata getComponentMetadata(String name);
 
 	/**
 	 * Get the service reference metadata for every OSGi service referenced by

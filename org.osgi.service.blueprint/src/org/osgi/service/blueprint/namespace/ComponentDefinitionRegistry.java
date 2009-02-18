@@ -60,7 +60,7 @@ public interface ComponentDefinitionRegistry {
 	 * component definition to be registered is already in use by an existing component
 	 * definition.
 	 */
-	void registerComponentDefinition(ComponentMetadata component) throws ComponentNameAlreadyInUseException;
+	void registerComponentDefinition(ComponentMetadata component);
 	
 	/**
 	 * Remove a component definition from the registry. If no matching component

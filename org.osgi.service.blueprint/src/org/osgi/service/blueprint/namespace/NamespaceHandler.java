@@ -47,7 +47,7 @@ public interface NamespaceHandler {
 	 * @throws IllegalArgumentException if the namespace parameter is not a recognized namespace supported
 	 * by this handler
 	 */
-	URL getSchemaLocation(String namespace) throws IllegalArgumentException;
+	URL getSchemaLocation(String namespace);
 	
 	/**
 	 * Called when a top-level (i.e. non-nested) element from the namespace is encountered.
