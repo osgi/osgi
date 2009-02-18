@@ -6,4 +6,4 @@ Bundle-Activator: ${p}.tb7f.Activator
 Private-Package: ${p}.tb7f
 
 Include-Resource: \
-	{OSGI-INF/permissions.perm=perms/tb2d.perm}
+	{OSGI-INF/permissions.perm=perms/fragments.tb2d.perm}

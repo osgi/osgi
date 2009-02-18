@@ -6,4 +6,4 @@ Bundle-Activator: ${p}.tb2a.Activator
 Private-Package: ${p}.tb2a
 
 Include-Resource: \
-	{OSGI-INF/permissions.perm=perms/tb2a.perm}
+	{OSGI-INF/permissions.perm=perms/fragments.tb2a.perm}

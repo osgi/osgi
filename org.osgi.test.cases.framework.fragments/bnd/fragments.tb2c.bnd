@@ -6,4 +6,4 @@ Bundle-Activator: ${p}.tb2c.Activator
 Private-Package: ${p}.tb2c
 
 Include-Resource: \
-	{OSGI-INF/permissions.perm=perms/tb2c.perm}
+	{OSGI-INF/permissions.perm=perms/fragments.tb2c.perm}

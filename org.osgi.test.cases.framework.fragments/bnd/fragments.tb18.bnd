@@ -7,4 +7,4 @@ Private-Package: ${p}.tb18,
 	resources
 
 Include-Resource: \
-	{OSGI-INF/permissions.perm=perms/tb18.perm}
+	{OSGI-INF/permissions.perm=perms/fragments.tb18.perm}

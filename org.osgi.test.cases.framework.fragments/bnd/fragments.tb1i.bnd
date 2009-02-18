@@ -8,4 +8,4 @@ Private-Package: ${p}.tb1i, \
 	resources
 
 Include-Resource: \
-	resources/notinhost.txt = tb1i/notinhost.txt
+	resources/notinhost.txt = resources/fragments.tb1i/notinhost.txt

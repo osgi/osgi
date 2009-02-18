@@ -5,4 +5,4 @@ Bundle-Version: 1.0
 Private-Package: ${p}.tb1c, resources
 
 Include-Resource: \
-	resources/resource.txt = tb1c/resource.txt
+	resources/resource.txt = resources/fragments.tb1c/resource.txt

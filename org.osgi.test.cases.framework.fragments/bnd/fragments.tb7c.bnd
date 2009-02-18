@@ -6,4 +6,4 @@ Bundle-Activator: ${p}.tb7c.Activator
 Export-Package: ${p}.tb7c;version="1.0",testresources;version="1.0"
 
 Include-Resource: \
-	testresources/resource.txt = tb7c/resource.txt
+	testresources/resource.txt = resources/fragments.tb7c/resource.txt

@@ -7,5 +7,5 @@ Fragment-Host: ${p}.tb1a
 Bundle-ClassPath: ., fragments.tb1c.jar
 
 Include-Resource: \
-	resources/notinhost.txt = tb1b/notinhost.txt, \
+	resources/notinhost.txt = resources/fragments.tb1b/notinhost.txt, \
 	fragments.tb1c.jar

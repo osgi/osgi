@@ -6,4 +6,4 @@ Bundle-Activator: ${p}.tb7g.Activator
 Export-Package: ${p}.tb7g
 
 Include-Resource: \
-	resources/resource.txt = tb7g/resource.txt
+	resources/resource.txt = resources/fragments.tb7g/resource.txt

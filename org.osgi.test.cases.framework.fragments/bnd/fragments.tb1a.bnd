@@ -7,4 +7,4 @@ Private-Package: ${p}.tb1a,
 	resources
 
 Include-Resource: \
-	resources/resource.txt = tb1a/resource.txt
+	resources/resource.txt = resources/fragments.tb1a/resource.txt

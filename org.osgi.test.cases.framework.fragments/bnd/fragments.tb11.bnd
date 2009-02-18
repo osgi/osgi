@@ -10,4 +10,4 @@ Bundle-Description: This is a framework extension bundle used \
 Export-Package: q, p
 
 Include-Resource: \
-	{OSGI-INF/permissions.perm=perms/tb11.perm}
+	{OSGI-INF/permissions.perm=perms/fragments.tb11.perm}
