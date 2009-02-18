@@ -1,0 +1,9 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.fragments.tb2c
+Bundle-SymbolicName: ${p}.fragments.tb2c
+Bundle-Version: 1.0
+Bundle-Activator: ${p}.fragments.tb2c.Activator
+Private-Package: ${p}.fragments.tb2c
+
+Include-Resource: \
+	{OSGI-INF/permissions.perm=perms/fragments.tb2c.perm}

@@ -490,10 +490,10 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 	}
 
 	public void testSecurity() {
-		if (System.getSecurityManager() != null) {
-			System.err
-					.println("Can only testSecurity in launch tests when no initial SecurityManager is set");
-			return;
+		SecurityManager previousSM = System.getSecurityManager();
+		if (previousSM != null) {
+			// need to remove security manager to test this
+			System.setSecurityManager(null);
 		}
 		Policy previous = Policy.getPolicy();
 		Policy.setPolicy(new AllPolicy());
@@ -520,6 +520,8 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 			}
 		}
 		finally {
+			if (previousSM != null)
+				System.setSecurityManager(previousSM);
 			Policy.setPolicy(previous);
 		}
 	}
@@ -536,7 +538,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		}
 		assertNotNull("Wait for stop event is null", event);
 		assertEquals("Wrong event type", FrameworkEvent.INFO, event.getType());
-		
+		stopFramework(framework);
 	}
 
     static class AllPolicy extends Policy {

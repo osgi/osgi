@@ -1,0 +1,10 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.fragments.tb21
+Bundle-SymbolicName: ${p}.fragments.tb21
+Bundle-Version: 1.0
+Private-Package: ${p}.fragments.tb21
+Fragment-Host: system.bundle
+Bundle-Description: Bundle-Description: This is a framework extension bundle used in the \
+ test that checks if an extension bundle is a framework extension \
+ bundle by default.
+Export-Package: q, p
