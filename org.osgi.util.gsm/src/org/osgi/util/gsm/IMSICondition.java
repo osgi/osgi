@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2009). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,21 +30,20 @@ import org.osgi.service.condpermadmin.ConditionInfo;
  * @version $Revision$
  */
 public class IMSICondition {
-	private static final String ORG_OSGI_UTIL_GSM_IMSI = "org.osgi.util.gsm.imsi";
-	private static final String imsi;
-	
+	private static final String	ORG_OSGI_UTIL_GSM_IMSI	= "org.osgi.util.gsm.imsi";
+	private static final String	IMSI;
+	private static final int	IMSI_LENGTH				= 15;
+
 	static {
-		imsi = (String)
-		AccessController.doPrivileged(
-				new PrivilegedAction() {
-					public Object run() {
-					return System.getProperty(ORG_OSGI_UTIL_GSM_IMSI);
-					}
-				}
-				);
+		IMSI = (String) AccessController.doPrivileged(new PrivilegedAction() {
+			public Object run() {
+				return System.getProperty(ORG_OSGI_UTIL_GSM_IMSI);
+			}
+		});
 	}
 
 	private IMSICondition() {
+		// prevent instances being constructed
 	}
 
 	/**
@@ -59,34 +58,38 @@ public class IMSICondition {
 	 *        allowed: the string is 0 to 14 digits, followed by an asterisk (
 	 *        <code>*</code>).
 	 * @return A Condition object that indicates whether the specified IMSI
-	 *         number matches that of the subscriber. If the number contains an
+	 *         number matches that of the subscriber. If the number ends with an
 	 *         asterisk (<code>*</code>), then the beginning of the IMSI is
 	 *         compared to the pattern.
 	 * @throws IllegalArgumentException If the IMSI is not a string of 15
 	 *         digits, or 0 to 14 digits with an <code>*</code> at the end.
 	 */
-	public static Condition getCondition(Bundle bundle, ConditionInfo conditionInfo) {
+	public static Condition getCondition(Bundle bundle,
+			ConditionInfo conditionInfo) {
 		String imsi = conditionInfo.getArgs()[0];
-		if (imsi.length()>15) throw new IllegalArgumentException("imsi too long: "+imsi);
+		if (imsi.length() > IMSI_LENGTH) {
+			throw new IllegalArgumentException("IMSI too long: " + imsi);
+		}
 		if (imsi.endsWith("*")) {
-			imsi = imsi.substring(0,imsi.length()-1);
-		} else {
-			if (imsi.length() != 15) {
-				throw new IllegalArgumentException("not a valid imsi: " + imsi);
+			imsi = imsi.substring(0, imsi.length() - 1);
+		}
+		else {
+			if (imsi.length() < IMSI_LENGTH) {
+				throw new IllegalArgumentException("not a valid IMSI: " + imsi);
 			}
 		}
 		for (int i = 0; i < imsi.length(); i++) {
 			int c = imsi.charAt(i);
 			if (c < '0' || c > '9') {
-				throw new IllegalArgumentException("not a valid imsi: " + imsi);
+				throw new IllegalArgumentException("not a valid IMSI: " + imsi);
 			}
 		}
-		if (IMSICondition.imsi==null) {
-			System.err.println("The OSGi Reference Implementation of org.osgi.util.gsm.IMSICondition ");
-			System.err.println("needs the system property "+ORG_OSGI_UTIL_GSM_IMSI+" set.");
+		if (IMSI == null) {
+			System.err
+					.println("The OSGi implementation of org.osgi.util.gsm.IMSICondition needs the system property "
+							+ ORG_OSGI_UTIL_GSM_IMSI + " set.");
 			return Condition.FALSE;
 		}
-		return IMSICondition.imsi.startsWith(imsi) ? Condition.TRUE
-				: Condition.FALSE;
+		return IMSI.startsWith(imsi) ? Condition.TRUE : Condition.FALSE;
 	}
 }
