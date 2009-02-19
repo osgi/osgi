@@ -1,8 +1,0 @@
-Bundle-ManifestVersion: 2
-Bundle-Name: ${p}.fragments.tb1e
-Bundle-SymbolicName: ${p}.fragments.tb1e
-Bundle-Version: 1.0
-Bundle-ManifestVersion: 2
-Fragment-Host: ${p}.fragments.tb1a
-Import-Package: org.osgi.framework, org.osgi.service.packageadmin
-Private-Package: ${p}.fragments.tb1e

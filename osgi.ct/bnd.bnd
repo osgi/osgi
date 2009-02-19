@@ -31,6 +31,7 @@ build.tests                 = ${uniq; ${build.core.tests}, ${build.cmpn.tests}, 
 
 build.core.tests = \
     org.osgi.test.cases.framework, \
+    org.osgi.test.cases.framework.secure, \
     org.osgi.test.cases.framework.classloading, \
     org.osgi.test.cases.framework.classpath, \
     org.osgi.test.cases.framework.div, \

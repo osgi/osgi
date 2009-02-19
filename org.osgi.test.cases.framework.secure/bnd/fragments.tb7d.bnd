@@ -1,6 +1,0 @@
-Bundle-ManifestVersion: 2
-Bundle-Name: ${p}.fragments.tb7c
-Bundle-SymbolicName: ${p}.fragments.tb7c
-Bundle-Version: 2.0
-Bundle-Activator: ${p}.fragments.tb7c.Activator
-Export-Package: ${p}.fragments.tb7c;version="2.0"

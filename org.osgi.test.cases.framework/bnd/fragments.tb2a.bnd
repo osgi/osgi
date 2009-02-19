@@ -1,9 +1,0 @@
-Bundle-ManifestVersion: 2
-Bundle-Name: ${p}.fragments.tb2a
-Bundle-SymbolicName: ${p}.fragments.tb2a
-Bundle-Version: 1.0
-Bundle-Activator: ${p}.fragments.tb2a.Activator
-Private-Package: ${p}.fragments.tb2a
-
-Include-Resource: \
-	{OSGI-INF/permissions.perm=perms/fragments.tb2a.perm}

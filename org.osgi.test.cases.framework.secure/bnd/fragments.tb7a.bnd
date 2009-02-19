@@ -1,6 +1,0 @@
-Bundle-ManifestVersion: 2
-Bundle-Name: ${p}.fragments.tb7a
-Bundle-SymbolicName: ${p}.fragments.tb7a
-Bundle-Version: 1.0
-Bundle-Activator: ${p}.fragments.tb7a.Activator
-Private-Package: ${p}.fragments.tb7a

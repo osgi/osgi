@@ -1,9 +1,0 @@
-Bundle-ManifestVersion: 2
-Bundle-Name: ${p}.fragments.tb7g
-Bundle-SymbolicName: ${p}.fragments.tb7g
-Bundle-Version: 1.0
-Bundle-Activator: ${p}.fragments.tb7g.Activator
-Export-Package: ${p}.fragments.tb7g
-
-Include-Resource: \
-	resources/resource.txt = resources/fragments.tb7g/resource.txt

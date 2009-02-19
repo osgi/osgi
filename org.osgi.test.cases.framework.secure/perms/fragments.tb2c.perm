@@ -6,5 +6,5 @@
 # line in PermissionInfo encoded format.
 # See org.osgi.service.permissionadmin.PermissionInfo
 ${permissions;packages}
-(org.osgi.framework.BundlePermission "org.osgi.test.cases.framework.fragments.tb2c" "host")
+(org.osgi.framework.BundlePermission "org.osgi.test.cases.framework.secure.fragments.tb2c" "host")
 

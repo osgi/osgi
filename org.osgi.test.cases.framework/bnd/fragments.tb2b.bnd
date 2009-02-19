@@ -1,6 +1,0 @@
-Bundle-ManifestVersion: 2
-Bundle-Name: ${p}.fragments.tb2b
-Bundle-SymbolicName: ${p}.fragments.tb2b
-Bundle-Version: 1.0
-Private-Package: ${p}.fragments.tb2b
-Fragment-Host: ${p}.fragments.tb2a

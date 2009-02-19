@@ -1,7 +1,0 @@
-Bundle-ManifestVersion: 2
-Bundle-Name: ${p}.fragments.tb8d
-Bundle-SymbolicName: ${p}.fragments.tb8d
-Bundle-Version: 1.0
-Private-Package: ${p}.fragments.tb8d
-Fragment-Host: ${p}.fragments.tb8a
-Require-Bundle: ${p}.fragments.tb8b;bundle-version="[2.0,3.0]"

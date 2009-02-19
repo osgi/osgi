@@ -1,5 +1,0 @@
-Bundle-Name:                             ${p}.activationpolicy.tbchain5
-Bundle-Version:                          4.2
-Export-Package:                          ${p}.activationpolicy.tbchain5
-Bundle-ActivationPolicy:                 lazy
-

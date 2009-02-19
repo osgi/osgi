@@ -31,10 +31,6 @@ Include-Resource = \
 	fragments.tb1g.jar, \
 	fragments.tb1h.jar, \
 	fragments.tb1i.jar, \
-	fragments.tb2a.jar, \
-	fragments.tb2b.jar, \
-	fragments.tb2c.jar, \
-	fragments.tb2d.jar, \
 	fragments.tb3a.jar, \
 	fragments.tb3b.jar, \
 	fragments.tb3c.jar, \
@@ -46,8 +42,6 @@ Include-Resource = \
 	fragments.tb7c.jar, \
 	fragments.tb7d.jar, \
 	fragments.tb7e.jar, \
-	fragments.tb7f.jar, \
-	fragments.tb7g.jar, \
 	fragments.tb7h.jar, \
 	fragments.tb8a.jar, \
 	fragments.tb8b.jar, \
@@ -61,17 +55,9 @@ Include-Resource = \
 	fragments.tb22.jar, \
 	fragments.tb9.jar, \
 	fragments.tb10.jar, \
-	fragments.tb11.jar, \
 	fragments.tb12.jar, \
 	fragments.tb13.jar, \
-	fragments.tb14.jar, \
-	fragments.tb15.jar, \
-	fragments.tb16a.jar, \
-	fragments.tb16b.jar, \
-	fragments.tb17a.jar, \
-	fragments.tb17b.jar, \
-	fragments.tb18.jar, \
-	fragments.tb19.jar
+	fragments.tb15.jar
 	
 Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
 
@@ -85,5 +71,4 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 -runbundles							= \
 	
 
--runproperties = report=true, \
-	org.osgi.framework.security=osgi
+-runproperties = report=true
