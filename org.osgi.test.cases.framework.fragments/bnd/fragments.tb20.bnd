@@ -1,6 +1,0 @@
-Bundle-ManifestVersion: 2
-Bundle-Name: ${p}.tb20
-Bundle-SymbolicName: ${p}.tb20
-Bundle-Version: 1.0
-Bundle-Activator: ${p}.tb20.Activator
-Private-Package: ${p}.tb20

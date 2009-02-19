@@ -1,6 +1,0 @@
-Bundle-ManifestVersion: 2
-Bundle-Name: ${p}.tb7h
-Bundle-SymbolicName: ${p}.tb7h
-Bundle-Version: 1.0
-Bundle-Activator: ${p}.tb7h.Activator
-Private-Package: ${p}.tb7h

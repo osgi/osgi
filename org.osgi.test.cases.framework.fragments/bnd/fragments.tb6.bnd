@@ -1,9 +1,0 @@
-Bundle-ManifestVersion: 2
-Bundle-Name: ${p}.tb6
-Bundle-SymbolicName: ${p}.tb6
-Bundle-Version: 1.0
-Private-Package: ${p}.tb6
-Fragment-Host: system.bundle; extension:=framework
-Bundle-Description: This is a boot classpath extension bundle used in the \
- framework classpath append test.
-Export-Package: q, p

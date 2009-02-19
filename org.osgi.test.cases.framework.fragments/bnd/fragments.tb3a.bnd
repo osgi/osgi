@@ -1,6 +1,0 @@
-Bundle-ManifestVersion: 2
-Bundle-Name: ${p}.tb3a
-Bundle-SymbolicName: ${p}.tb3a;fragment-attachment:="always"
-Bundle-Version: 1.0
-Bundle-Activator: ${p}.tb3a.Activator
-Private-Package: ${p}.tb3a

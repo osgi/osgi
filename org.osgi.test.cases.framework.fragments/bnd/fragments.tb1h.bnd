@@ -1,7 +1,0 @@
-Bundle-ManifestVersion: 2
-Bundle-Name: ${p}.tb1g
-Bundle-SymbolicName: ${p}.tb1g
-Bundle-Version: 1.0
-Bundle-ManifestVersion: 2
-Fragment-Host: ${p}.tb1a
-Private-Package: ${p}.tb1h

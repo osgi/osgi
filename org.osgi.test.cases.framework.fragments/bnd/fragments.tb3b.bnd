@@ -1,6 +1,0 @@
-Bundle-ManifestVersion: 2
-Bundle-Name: ${p}.tb3b
-Bundle-SymbolicName: ${p}.tb3b
-Bundle-Version: 1.0
-Private-Package: ${p}.tb3b
-Fragment-Host: ${p}.tb3a; multiple-hosts:="true"; bundle-version="[1.0,2.0]"

@@ -1,6 +1,0 @@
-Bundle-ManifestVersion: 2
-Bundle-Name: ${p}.tb7a
-Bundle-SymbolicName: ${p}.tb7a
-Bundle-Version: 1.0
-Bundle-Activator: ${p}.tb7a.Activator
-Private-Package: ${p}.tb7a
