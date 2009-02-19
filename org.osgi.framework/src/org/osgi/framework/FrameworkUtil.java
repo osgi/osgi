@@ -914,11 +914,11 @@ public class FrameworkUtil {
 		}
 
 		private boolean compare_Integer(int operation, int intval, Object value2) {
+			if (operation == SUBSTRING) {
+				return false;
+			}
 			int intval2 = Integer.parseInt(((String) value2).trim());
 			switch (operation) {
-				case SUBSTRING : {
-					return false;
-				}
 				case APPROX :
 				case EQUAL : {
 					return intval == intval2;
@@ -934,11 +934,11 @@ public class FrameworkUtil {
 		}
 
 		private boolean compare_Long(int operation, long longval, Object value2) {
+			if (operation == SUBSTRING) {
+				return false;
+			}
 			long longval2 = Long.parseLong(((String) value2).trim());
 			switch (operation) {
-				case SUBSTRING : {
-					return false;
-				}
 				case APPROX :
 				case EQUAL : {
 					return longval == longval2;
@@ -954,11 +954,11 @@ public class FrameworkUtil {
 		}
 
 		private boolean compare_Byte(int operation, byte byteval, Object value2) {
+			if (operation == SUBSTRING) {
+				return false;
+			}
 			byte byteval2 = Byte.parseByte(((String) value2).trim());
 			switch (operation) {
-				case SUBSTRING : {
-					return false;
-				}
 				case APPROX :
 				case EQUAL : {
 					return byteval == byteval2;
@@ -975,11 +975,11 @@ public class FrameworkUtil {
 
 		private boolean compare_Short(int operation, short shortval,
 				Object value2) {
+			if (operation == SUBSTRING) {
+				return false;
+			}
 			short shortval2 = Short.parseShort(((String) value2).trim());
 			switch (operation) {
-				case SUBSTRING : {
-					return false;
-				}
 				case APPROX :
 				case EQUAL : {
 					return shortval == shortval2;
@@ -996,11 +996,11 @@ public class FrameworkUtil {
 
 		private boolean compare_Character(int operation, char charval,
 				Object value2) {
+			if (operation == SUBSTRING) {
+				return false;
+			}
 			char charval2 = (((String) value2).trim()).charAt(0);
 			switch (operation) {
-				case SUBSTRING : {
-					return false;
-				}
 				case EQUAL : {
 					return charval == charval2;
 				}
@@ -1023,12 +1023,12 @@ public class FrameworkUtil {
 
 		private boolean compare_Boolean(int operation, boolean boolval,
 				Object value2) {
+			if (operation == SUBSTRING) {
+				return false;
+			}
 			boolean boolval2 = new Boolean(((String) value2).trim())
 					.booleanValue();
 			switch (operation) {
-				case SUBSTRING : {
-					return false;
-				}
 				case APPROX :
 				case EQUAL :
 				case GREATER :
@@ -1041,11 +1041,11 @@ public class FrameworkUtil {
 
 		private boolean compare_Float(int operation, float floatval,
 				Object value2) {
+			if (operation == SUBSTRING) {
+				return false;
+			}
 			float floatval2 = Float.parseFloat(((String) value2).trim());
 			switch (operation) {
-				case SUBSTRING : {
-					return false;
-				}
 				case APPROX :
 				case EQUAL : {
 					return Float.compare(floatval, floatval2) == 0;
@@ -1062,11 +1062,11 @@ public class FrameworkUtil {
 
 		private boolean compare_Double(int operation, double doubleval,
 				Object value2) {
+			if (operation == SUBSTRING) {
+				return false;
+			}
 			double doubleval2 = Double.parseDouble(((String) value2).trim());
 			switch (operation) {
-				case SUBSTRING : {
-					return false;
-				}
 				case APPROX :
 				case EQUAL : {
 					return Double.compare(doubleval, doubleval2) == 0;
@@ -1085,6 +1085,9 @@ public class FrameworkUtil {
 
 		private boolean compare_Comparable(int operation, Comparable value1,
 				Object value2) {
+			if (operation == SUBSTRING) {
+				return false;
+			}
 			Constructor constructor;
 			try {
 				constructor = value1.getClass().getConstructor(constructorType);
@@ -1110,9 +1113,6 @@ public class FrameworkUtil {
 			}
 
 			switch (operation) {
-				case SUBSTRING : {
-					return false;
-				}
 				case APPROX :
 				case EQUAL : {
 					return value1.compareTo(value2) == 0;
@@ -1129,6 +1129,9 @@ public class FrameworkUtil {
 
 		private boolean compare_Unknown(int operation, Object value1,
 				Object value2) {
+			if (operation == SUBSTRING) {
+				return false;
+			}
 			Constructor constructor;
 			try {
 				constructor = value1.getClass().getConstructor(constructorType);
@@ -1154,9 +1157,6 @@ public class FrameworkUtil {
 			}
 
 			switch (operation) {
-				case SUBSTRING : {
-					return false;
-				}
 				case APPROX :
 				case EQUAL :
 				case GREATER :

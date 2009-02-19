@@ -231,6 +231,21 @@ public class AdminPermissionTests extends PermissionTestCase {
 		assertNotImplies(ap, new AdminPermission(newMockBundle(9, "test.bsn",
 				"test.location", "dc=acme.com, cn=Bugs Bunny, o=ACME, c=US"),
 				"*"));
+
+		// test bad signer filter that does not escape '*'
+		ap = new AdminPermission("(signer=*, o=ACME, c=US)", "*");
+		assertNotImplies(ap, new AdminPermission(newMockBundle(1, "test.bsn",
+				"test.location", "cn=Bugs Bunny, o=ACME, c=US"), "*"));
+		assertNotImplies(ap, new AdminPermission(newMockBundle(2, "test.bsn",
+				"test.location", "ou = Carrots, cn=Daffy Duck, o=ACME, c=US"),
+		"*"));
+		assertNotImplies(ap, new AdminPermission(newMockBundle(3, "test.bsn",
+				"test.location", "dc=www,dc=acme,dc=com,o=ACME,c=US"), "*"));
+		assertNotImplies(ap, new AdminPermission(newMockBundle(4, "test.bsn",
+				"test.location",
+		"street = 9C\\, Avenue St. Drézéry, o=ACME, c=FR"), "*"));
+		assertNotImplies(ap, new AdminPermission(newMockBundle(5, "test.bsn",
+				"test.location", "dc=www, dc=acme, dc=com, c=US"), "*"));
 	}
 	
 	public void testActionImplications() {
