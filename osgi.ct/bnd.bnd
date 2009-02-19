@@ -35,7 +35,6 @@ build.core.tests = \
     org.osgi.test.cases.framework.classpath, \
     org.osgi.test.cases.framework.div, \
     org.osgi.test.cases.framework.dynpkgimport, \
-    org.osgi.test.cases.framework.fragments, \
     org.osgi.test.cases.framework.lifecycle, \
     org.osgi.test.cases.framework.syncbundlelistener, \
     org.osgi.test.cases.packageadmin.tc1, \
