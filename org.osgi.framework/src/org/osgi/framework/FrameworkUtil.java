@@ -1026,7 +1026,7 @@ public class FrameworkUtil {
 			if (operation == SUBSTRING) {
 				return false;
 			}
-			boolean boolval2 = new Boolean(((String) value2).trim())
+			boolean boolval2 = Boolean.valueOf(((String) value2).trim())
 					.booleanValue();
 			switch (operation) {
 				case APPROX :
