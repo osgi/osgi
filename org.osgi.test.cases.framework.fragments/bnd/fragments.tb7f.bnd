@@ -1,0 +1,9 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.tb7f
+Bundle-SymbolicName: ${p}.tb7f
+Bundle-Version: 1.0
+Bundle-Activator: ${p}.tb7f.Activator
+Private-Package: ${p}.tb7f
+
+Include-Resource: \
+	{OSGI-INF/permissions.perm=perms/fragments.tb2d.perm}

@@ -1,0 +1,9 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.tb16b
+Bundle-SymbolicName: ${p}.tb16b
+Bundle-Version: 1.0
+Private-Package: ${p}.tb16b
+Fragment-Host: system.bundle; extension:=framework
+Bundle-Description: Bundle-Description: This is a framework extension bundle used \
+ in the test that checks if a bundle has permissions to install a \
+ framework extension bundle.

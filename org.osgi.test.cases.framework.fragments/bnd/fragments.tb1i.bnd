@@ -1,0 +1,11 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.tb1i
+Bundle-SymbolicName: ${p}.tb1i
+Bundle-Version: 1.0
+Bundle-ManifestVersion: 2
+Fragment-Host: ${p}.tb1a
+Private-Package: ${p}.tb1i, \
+	resources
+
+Include-Resource: \
+	resources/notinhost.txt = resources/fragments.tb1i/notinhost.txt

@@ -1,0 +1,9 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.tb2d
+Bundle-SymbolicName: ${p}.tb2d
+Bundle-Version: 1.0
+Private-Package: ${p}.tb2d
+Fragment-Host: ${p}.tb2c
+
+Include-Resource: \
+	{OSGI-INF/permissions.perm=perms/fragments.tb2d.perm}

@@ -1,0 +1,6 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.tb3f
+Bundle-SymbolicName: ${p}.tb3a;fragment-attachment:="resolve-time"
+Bundle-Version: 1.0
+Bundle-Activator: ${p}.tb3f.Activator
+Private-Package: ${p}.tb3f

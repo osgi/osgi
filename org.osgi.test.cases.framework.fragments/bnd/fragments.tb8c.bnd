@@ -1,0 +1,6 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.tb8b
+Bundle-SymbolicName: ${p}.tb8b
+Bundle-Version: 2.0
+Bundle-Activator: ${p}.tb8b.Activator
+Private-Package: ${p}.tb8c
