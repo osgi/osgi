@@ -1,0 +1,6 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.fragments.tb3e
+Bundle-SymbolicName: ${p}.fragments.tb3a;fragment-attachment:="never"
+Bundle-Version: 1.0
+Bundle-Activator: ${p}.fragments.tb3e.Activator
+Private-Package: ${p}.fragments.tb3e

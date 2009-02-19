@@ -1,0 +1,6 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.fragments.tb8b
+Bundle-SymbolicName: ${p}.fragments.tb8b
+Bundle-Version: 2.0
+Bundle-Activator: ${p}.fragments.tb8b.Activator
+Private-Package: ${p}.fragments.tb8c

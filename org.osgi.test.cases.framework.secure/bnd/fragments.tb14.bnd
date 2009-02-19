@@ -1,0 +1,10 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.fragments.tb14
+Bundle-SymbolicName: ${p}.fragments.tb14
+Bundle-Version: 1.0
+Private-Package: ${p}.fragments.tb14
+Fragment-Host: system.bundle; extension:=bootclasspath
+Bundle-Description: Bundle-Description: This is a boot classpath extension bundle used \
+ in the test that checks if a boot classpath extension bundle has \
+ to have permission to be installed.
+Export-Package: q, p
