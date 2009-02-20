@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: TBCService.java 4732 2007-04-06 02:38:19Z bjhargrave $
  * 
  * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
  * 
@@ -25,7 +25,7 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.event.tbc;
+package org.osgi.test.cases.event.service;
 
 import java.util.Vector;
 
@@ -34,7 +34,7 @@ import org.osgi.service.event.Event;
 /**
  * Dummy service to check exporter
  * 
- * @version $Revision$
+ * @version $Revision: 4732 $
  */
 public interface TBCService {
   
@@ -60,7 +60,7 @@ public interface TBCService {
   
   /**
    * Returns the last received events and then elements in the vector with last events are removed.
-   * @see org.osgi.test.cases.event.tbc.TBCService#getLastReceivedEvents()
+   * @see org.osgi.test.cases.event.service.TBCService#getLastReceivedEvents()
    */
   public Vector getLastReceivedEvents();
 }

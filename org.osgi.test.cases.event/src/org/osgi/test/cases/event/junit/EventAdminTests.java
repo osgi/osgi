@@ -24,7 +24,7 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-package org.osgi.test.cases.event.tbc;
+package org.osgi.test.cases.event.junit;
 
 import java.util.Hashtable;
 import java.util.Vector;
@@ -38,6 +38,7 @@ import org.osgi.service.event.EventAdmin;
 import org.osgi.service.event.TopicPermission;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.event.service.TBCService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -48,9 +49,8 @@ import org.osgi.util.tracker.ServiceTracker;
  * 
  * @version $Revision$
  */
-public class EventTestControl extends DefaultTestBundleControl {
+public class EventAdminTests extends DefaultTestBundleControl {
 
-	private ServiceReference eventAdminSR;
 	EventAdmin eventAdmin;
 	private Bundle tb1;
 	private Bundle tb2;
@@ -61,38 +61,31 @@ public class EventTestControl extends DefaultTestBundleControl {
 	 * 
 	 * @throws Exception
 	 */
-	public void setUp() throws Exception {
+	protected void setUp() throws Exception {
 		log("#before each run");
 		tb1 = installBundle("tb1.jar");
 		tb1.start();
 		tb2 = installBundle("tb2.jar");
 		tb2.start();
-		if ( checkPrerequisites() )
-			return;
-		
-		fail("Pre requisites not fullfilled");
+		eventAdmin = (EventAdmin) getService(EventAdmin.class);
 	}
 
 	/**
-	 * The checkPrerequisites method is called before the prepare method and
-	 * before all the testmethods. It checks if EventAdmin service is available
-	 * and report if everything is ok or not.
+	 * Clean up after a run. Notice that during debugging many times the
+	 * tearDown is never reached.
 	 * 
-	 * @see org.osgi.test.cases.util.DefaultTestBundleControl#checkPrerequisites()
-	 * 
-	 * @return <tt>true</tt> if aEventAdmin service is available,
-	 *         <tt>false</tt> otherwise.
+	 * @throws Exception
 	 */
-	public boolean checkPrerequisites() {
-		log("#checkPrerequisites");
-		eventAdminSR = getContext().getServiceReference(
-				EventAdmin.class.getName());
-		if (eventAdminSR == null)
-			return false;
-		eventAdmin = (EventAdmin) getContext().getService(eventAdminSR);
-		if (eventAdmin == null)
-			return false;
-		return true;
+	protected void tearDown() throws Exception {
+		log("#after each run");
+		tb1.stop();
+		uninstallBundle(tb1);
+		tb2.stop();
+		uninstallBundle(tb2);
+		PermissionAdmin permissionAdmin = (PermissionAdmin) getService(PermissionAdmin.class);
+		permissionAdmin.setPermissions(tb1.getLocation(), null);
+		permissionAdmin.setPermissions(tb2.getLocation(), null);
+		ungetAllServices();
 	}
 
 	/**
@@ -105,9 +98,8 @@ public class EventTestControl extends DefaultTestBundleControl {
 	 * 
 	 * @specification org.osgi.framework
 	 * @specificationSection system.bundle
-	 * @specificationVersion 3
 	 */
-	public void testIstallation() throws Exception {
+	public void testInstallation() throws Exception {
 		ServiceTracker trackerProvider1 = new ServiceTracker(getContext(),
 				"org.osgi.test.cases.event.tb1.Activator", null);
 		trackerProvider1.open();
@@ -252,46 +244,6 @@ public class EventTestControl extends DefaultTestBundleControl {
 			}
 		}
 		return true;
-	}
-
-	/**
-	 * Tests the event construction and the exceptions that are thrown if event
-	 * topic doesn't conform to the following grammar: topic := token ( "/"
-	 * token )*
-	 */
-	public void testEventConstruction() {
-		String[] illegalTopics = new String[] { "", "*", "/error_topic",
-				"//error_topic1", "é/error_topic2", "topic/error_topic3/",
-				"error_topic&", "topic//error-topic4", "topic\\error_topic5" };
-		String[] legalTopics = new String[] { "ACTION0",
-				"org/osgi/test/cases/event/ACTION1",
-				"org/osgi/test/cases/event/ACTION2", "0", "_/-", "_topic",
-				"-topic", "9topic0/-topic_/_topic-" };
-		Hashtable properties = new Hashtable();
-		String message = "Exception in event construction with topic:[";
-		String topic;
-		// illegal topics tested
-		for (int i = 0; i < illegalTopics.length; i++) {
-			topic = illegalTopics[i];
-			try {
-				new Event(topic, properties);
-			} catch (Throwable e) {
-				assertException(message + topic + "]",
-						IllegalArgumentException.class, e);
-				continue;
-			}
-			failException(message + topic + "]", IllegalArgumentException.class);
-		}
-		// legal topics tested
-		for (int i = 0; i < legalTopics.length; i++) {
-			topic = legalTopics[i];
-			try {
-				new Event(topic, properties);
-				pass("Event constructed with topic: " + topic);
-			} catch (Throwable e) {
-				fail(message + topic + "]");
-			}
-		}
 	}
 
 	/**
@@ -670,31 +622,6 @@ public class EventTestControl extends DefaultTestBundleControl {
 				eventReceived.getProperty(property);
 			}
 		}
-	}
-
-	/**
-	 * Clean up after each method. Notice that during debugging many times the
-	 * unsetState is never reached.
-	 */
-	public void unsetState() {
-		log("#after each method");
-	}
-
-	/**
-	 * Clean up after a run. Notice that during debugging many times the
-	 * unprepare is never reached.
-	 * 
-	 * @throws Exception
-	 */
-	public void unprepare() throws Exception {
-		log("#after each run");
-		tb1.stop();
-		uninstallBundle(tb1);
-		tb2.stop();
-		uninstallBundle(tb2);
-		PermissionAdmin permissionAdmin = (PermissionAdmin) getService(PermissionAdmin.class);
-		permissionAdmin.setPermissions(tb1.getLocation(), null);
-		permissionAdmin.setPermissions(tb2.getLocation(), null);
 	}
 
 	private void addPermissions(PermissionAdmin permissionAdmin, Bundle bundle,

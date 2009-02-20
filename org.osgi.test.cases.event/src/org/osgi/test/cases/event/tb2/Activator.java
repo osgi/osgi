@@ -34,7 +34,7 @@ import org.osgi.framework.*;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
-import org.osgi.test.cases.event.tbc.TBCService;
+import org.osgi.test.cases.event.service.TBCService;
 
 /**
  * A bundle that registers a service with the marker interface
@@ -74,7 +74,7 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
   
   /**
    * Sets the array with event topics in which the event handler is interested.
-   * @see org.osgi.test.cases.event.tbc.TBCService#setTopics(java.lang.String[])
+   * @see org.osgi.test.cases.event.service.TBCService#setTopics(java.lang.String[])
    */
   public void setTopics(String[] topics) {
     this.topics = topics;
@@ -94,7 +94,7 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
   
   /**
    * Returns the array with all set event topics in which the event handler is interested.
-   * @see org.osgi.test.cases.event.tbc.TBCService#getTopics()
+   * @see org.osgi.test.cases.event.service.TBCService#getTopics()
    */
   public String[] getTopics() {
     return topics;
@@ -114,7 +114,7 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
   
   /**
    * Returns the last received event and then elements in the vector with last events are removed.
-   * @see org.osgi.test.cases.event.tbc.TBCService#getLastReceivedEvent()
+   * @see org.osgi.test.cases.event.service.TBCService#getLastReceivedEvent()
    */
   public Event getLastReceivedEvent() {
     if (lastEvents == null || lastEvents.size() < 1) return null;
@@ -125,7 +125,7 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
   
   /**
    * Returns the last received events and then elements in the vector with last events are removed.
-   * @see org.osgi.test.cases.event.tbc.TBCService#getLastReceivedEvents()
+   * @see org.osgi.test.cases.event.service.TBCService#getLastReceivedEvents()
    */
   public Vector getLastReceivedEvents() {
     Vector events = (Vector) lastEvents.clone();
