@@ -24,7 +24,9 @@ public class Semaphore {
 		if(startValue < 0) {
 			throw new IllegalArgumentException("startValue can't be lower than 0");
 		}
-		count = startValue;
+		synchronized (this) {
+			count = startValue;
+		}
 	}
 	
 	/**
