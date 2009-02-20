@@ -67,22 +67,25 @@ public class IMEICondition {
 	public static Condition getCondition(Bundle bundle,
 			ConditionInfo conditionInfo) {
 		String imei = conditionInfo.getArgs()[0];
-		if (imei.length() > IMEI_LENGTH) {
+		int length = imei.length();
+		if (length > IMEI_LENGTH) {
 			throw new IllegalArgumentException("IMEI too long: " + imei);
 		}
 		if (imei.endsWith("*")) {
-			imei = imei.substring(0, imei.length() - 1);
+			length--;
+			imei = imei.substring(0, length);
 		}
 		else {
-			if (imei.length() < IMEI_LENGTH) {
-				throw new IllegalArgumentException("not a valid IMEI: " + imei);
+			if (length < IMEI_LENGTH) {
+				throw new IllegalArgumentException("IMEI too short: " + imei);
 			}
 		}
-		for (int i = 0; i < imei.length(); i++) {
-			int c = imei.charAt(i);
-			if (c < '0' || c > '9') {
-				throw new IllegalArgumentException("not a valid IMEI: " + imei);
+		for (int i = 0; i < length; i++) {
+			char c = imei.charAt(i);
+			if (('0' <= c) && (c <= '9')) {
+				continue;
 			}
+			throw new IllegalArgumentException("not a valid IMEI: " + imei);
 		}
 		if (IMEI == null) {
 			System.err

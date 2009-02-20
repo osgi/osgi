@@ -67,22 +67,25 @@ public class IMSICondition {
 	public static Condition getCondition(Bundle bundle,
 			ConditionInfo conditionInfo) {
 		String imsi = conditionInfo.getArgs()[0];
-		if (imsi.length() > IMSI_LENGTH) {
+		int length = imsi.length();
+		if (length > IMSI_LENGTH) {
 			throw new IllegalArgumentException("IMSI too long: " + imsi);
 		}
 		if (imsi.endsWith("*")) {
-			imsi = imsi.substring(0, imsi.length() - 1);
+			length--;
+			imsi = imsi.substring(0, length);
 		}
 		else {
-			if (imsi.length() < IMSI_LENGTH) {
-				throw new IllegalArgumentException("not a valid IMSI: " + imsi);
+			if (length < IMSI_LENGTH) {
+				throw new IllegalArgumentException("IMSI too short: " + imsi);
 			}
 		}
-		for (int i = 0; i < imsi.length(); i++) {
-			int c = imsi.charAt(i);
-			if (c < '0' || c > '9') {
-				throw new IllegalArgumentException("not a valid IMSI: " + imsi);
+		for (int i = 0; i < length; i++) {
+			char c = imsi.charAt(i);
+			if (('0' <= c) && (c <= '9')) {
+				continue;
 			}
+			throw new IllegalArgumentException("not a valid IMSI: " + imsi);
 		}
 		if (IMSI == null) {
 			System.err

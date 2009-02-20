@@ -72,22 +72,28 @@ public class ESNCondition {
 	public static Condition getCondition(Bundle bundle,
 			ConditionInfo conditionInfo) {
 		String esn = conditionInfo.getArgs()[0].toUpperCase();
-		if (esn.length() > ESN_LENGTH) {
+		int length = esn.length();
+		if (length > ESN_LENGTH) {
 			throw new IllegalArgumentException("ESN too long: " + esn);
 		}
 		if (esn.endsWith("*")) {
-			esn = esn.substring(0, esn.length() - 1);
+			length--;
+			esn = esn.substring(0, length);
 		}
 		else {
-			if (esn.length() < ESN_LENGTH) {
-				throw new IllegalArgumentException("not a valid ESN: " + esn);
+			if (length < ESN_LENGTH) {
+				throw new IllegalArgumentException("ESN too short: " + esn);
 			}
 		}
-		for (int i = 0; i < esn.length(); i++) {
-			int c = esn.charAt(i);
-			if ((c < '0' || c > '9') && (c < 'A' || c > 'F')) {
-				throw new IllegalArgumentException("not a valid ESN: " + esn);
+		for (int i = 0; i < length; i++) {
+			char c = esn.charAt(i);
+			if (('0' <= c) && (c <= '9')) {
+				continue;
 			}
+	        if (('A' <= c) && (c <= 'F')) {
+				continue;
+			}
+			throw new IllegalArgumentException("not a valid ESN: " + esn);
 		}
 		if (ESN == null) {
 			System.err

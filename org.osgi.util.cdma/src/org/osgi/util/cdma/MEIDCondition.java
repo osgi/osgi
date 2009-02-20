@@ -72,22 +72,28 @@ public class MEIDCondition {
 	public static Condition getCondition(Bundle bundle,
 			ConditionInfo conditionInfo) {
 		String meid = conditionInfo.getArgs()[0].toUpperCase();
-		if (meid.length() > MEID_LENGTH) {
+		int length = meid.length();
+		if (length > MEID_LENGTH) {
 			throw new IllegalArgumentException("MEID too long: " + meid);
 		}
 		if (meid.endsWith("*")) {
-			meid = meid.substring(0, meid.length() - 1);
+			length--;
+			meid = meid.substring(0, length);
 		}
 		else {
-			if (meid.length() < MEID_LENGTH) {
-				throw new IllegalArgumentException("not a valid MEID: " + meid);
+			if (length < MEID_LENGTH) {
+				throw new IllegalArgumentException("MEID too short: " + meid);
 			}
 		}
-		for (int i = 0; i < meid.length(); i++) {
-			int c = meid.charAt(i);
-			if ((c < '0' || c > '9') && (c < 'A' || c > 'F')) {
-				throw new IllegalArgumentException("not a valid MEID: " + meid);
+		for (int i = 0; i < length; i++) {
+			char c = meid.charAt(i);
+			if (('0' <= c) && (c <= '9')) {
+				continue;
 			}
+			if (('A' <= c) && (c <= 'F')) {
+				continue;
+			}
+			throw new IllegalArgumentException("not a valid MEID: " + meid);
 		}
 		if (MEID == null) {
 			System.err
