@@ -270,17 +270,17 @@ public class EventTestControl extends DefaultTestBundleControl {
 		Hashtable properties = new Hashtable();
 		String message = "Exception in event construction with topic:[";
 		String topic;
-		// illigal topics tested
+		// illegal topics tested
 		for (int i = 0; i < illegalTopics.length; i++) {
 			topic = illegalTopics[i];
 			try {
 				new Event(topic, properties);
-				failException(message + topic + "]",
-						IllegalArgumentException.class);
 			} catch (Throwable e) {
 				assertException(message + topic + "]",
 						IllegalArgumentException.class, e);
+				continue;
 			}
+			failException(message + topic + "]", IllegalArgumentException.class);
 		}
 		// legal topics tested
 		for (int i = 0; i < legalTopics.length; i++) {

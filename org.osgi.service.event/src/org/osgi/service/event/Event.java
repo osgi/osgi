@@ -19,6 +19,7 @@ package org.osgi.service.event;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -58,17 +59,32 @@ public class Event {
 		validateTopicName(topic);
 		this.topic = topic;
 		int size = (properties == null) ? 1 : (properties.size() + 1);
-		this.properties = new HashMap(size);
+		Map p = new HashMap(size);
 		if (properties != null) {
 			for (Iterator iter = properties.keySet().iterator(); iter.hasNext();) {
 				Object key = iter.next();
 				if (key instanceof String) {
 					Object value = properties.get(key);
-					this.properties.put(key, value);
+					p.put(key, value);
 				}
 			}
 		}
-		this.properties.put(EventConstants.EVENT_TOPIC, topic);
+		p.put(EventConstants.EVENT_TOPIC, topic);
+		this.properties = p; // safely publish the map
+	}
+
+	/**
+	 * Constructs an event.
+	 * 
+	 * @param topic The topic of the event.
+	 * @param properties The event's properties (may be <code>null</code>). A
+	 *        property whose key is not of type <code>String</code> will be
+	 *        ignored.
+	 * @throws IllegalArgumentException If topic is not a valid topic name.
+	 * @since 1.2
+	 */
+	public Event(String topic, Hashtable/* <String,Object> */properties) {
+		this(topic, (Map) properties);
 	}
 
 	/**
@@ -84,17 +100,18 @@ public class Event {
 		validateTopicName(topic);
 		this.topic = topic;
 		int size = (properties == null) ? 1 : (properties.size() + 1);
-		this.properties = new HashMap(size);
+		Map p = new HashMap(size);
 		if (properties != null) {
 			for (Enumeration e = properties.keys(); e.hasMoreElements();) {
 				Object key = e.nextElement();
 				if (key instanceof String) {
 					Object value = properties.get(key);
-					this.properties.put(key, value);
+					p.put(key, value);
 				}
 			}
 		}
-		this.properties.put(EventConstants.EVENT_TOPIC, topic);
+		p.put(EventConstants.EVENT_TOPIC, topic);
+		this.properties = p; // safely publish the map
 	}
 
 	/**
@@ -179,7 +196,7 @@ public class Event {
 	 * @return The string representation of this event.
 	 */
 	public String toString() {
-		return getClass().getName() + " [topic=" + topic + "]"; //$NON-NLS-1$ //$NON-NLS-2$
+		return getClass().getName() + " [topic=" + topic + "]";  
 	}
 
 	/**
@@ -190,18 +207,24 @@ public class Event {
 	 */
 	private static void validateTopicName(String topic) {
 	    char[] chars = topic.toCharArray();
-	    for (int i = 0, length = chars.length; i < length; i++) {
+	    int length = chars.length;
+	    if (length == 0) {
+			throw new IllegalArgumentException("empty topic");
+		}
+		for (int i = 0; i < length; i++) {
 	        char ch = chars[i];
 	        if (ch == '/') {
 	        	// Can't start or end with a '/' but anywhere else is okay
 				if (i == 0 || (i == length - 1)) {
 	                throw new IllegalArgumentException(
-							"invalid topic: " + topic); //$NON-NLS-1$
+							"invalid topic: "
+							+ topic); 
 	            }
 	            // Can't have "//" as that implies empty token
 	            if (chars[i-1] == '/') {
 	                throw new IllegalArgumentException(
-							"invalid topic: " + topic); //$NON-NLS-1$
+							"invalid topic: "
+							+ topic); 
 	            }
 	            continue;
 	        }
@@ -217,7 +240,7 @@ public class Event {
 	        if ((ch == '_') || (ch == '-')) {
 	            continue;
 	        }
-	        throw new IllegalArgumentException("invalid topic: " + topic); //$NON-NLS-1$
+	        throw new IllegalArgumentException("invalid topic: " + topic); 
 	    }
 	}
 	

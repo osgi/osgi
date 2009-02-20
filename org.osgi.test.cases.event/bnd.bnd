@@ -13,14 +13,15 @@ Include-Resource					= \
 Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
 
 -buildpath							= \
-    org.osgi.test.support;                  version=latest , \
+    org.osgi.test.support;                  version=project , \
+    org.osgi.service.event;                 version=project , \
 	osgi;									version=4.0.1	, \
 	ee.foundation											, \
 	${junit}
 
 -runbundles							= \
 	org.eclipse.equinox.event; version=latest, \
-	osgi; version=latest
+	osgi; version=4.0.1
 	
 
 
