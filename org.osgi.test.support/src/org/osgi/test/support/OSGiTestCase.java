@@ -16,6 +16,7 @@
 
 package org.osgi.test.support;
 
+import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 
 import org.osgi.framework.BundleContext;
@@ -42,8 +43,16 @@ public abstract class OSGiTestCase extends TestCase {
 		return c;
 	}
 
+	/**
+	 * Fail with cause t.
+	 * 
+	 * @param message Failure message.
+	 * @param t Cause of the failure.
+	 */
 	public static void fail(String message, Throwable t) {
-		t.printStackTrace();
-		fail(message + ": " + t.getMessage());
+		AssertionFailedError e = new AssertionFailedError(message + ": "
+				+ t.getMessage());
+		e.initCause(t);
+		throw e;
 	}
 }
