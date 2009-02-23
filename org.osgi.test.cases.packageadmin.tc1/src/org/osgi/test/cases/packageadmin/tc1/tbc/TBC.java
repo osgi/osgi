@@ -6,10 +6,13 @@
  */
 package org.osgi.test.cases.packageadmin.tc1.tbc;
 
-import java.io.*;
-import org.osgi.framework.*;
-import org.osgi.service.packageadmin.*;
-import org.osgi.test.service.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkEvent;
+import org.osgi.framework.FrameworkListener;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.packageadmin.ExportedPackage;
+import org.osgi.service.packageadmin.PackageAdmin;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * This is the bundle initially installed and started by the TestCase when
@@ -17,75 +20,14 @@ import org.osgi.test.service.*;
  * 
  * @author Ericsson Telecom AB
  */
-public class TBC extends Thread {
-	BundleContext			context;
-	//BundleContext otherContext;
-	ServiceRegistration		sr;
-	ServiceReference		linkRef;
-	TestCaseLink			link;
-	String					tcHome;
-	boolean					_continue		= true;
-	boolean					called;
-	int						eventQueue[]	= new int[8];
-	int						in, out;
+public class TBC extends DefaultTestBundleControl {
 	private final String	TP1				= "org.osgi.test.cases.packageadmin.tc1.tb1";
 	private final String	TP2				= "org.osgi.test.cases.packageadmin.tc1.tb2";
-	ServiceReference		serviceRef;
-	static String[]			methods			= new String[] {"tc1"};
-
-	/**
-	 * Constructor. Gets a reference to the TestCaseLink to communicate with the
-	 * TestCase.
-	 */
-	TBC(BundleContext context) {
-		this.context = context;
-		this.linkRef = context
-				.getServiceReference(TestCaseLink.class.getName());
-		this.link = (TestCaseLink) context.getService(linkRef);
-	}
-
-	/**
-	 * This function performs the tests.
-	 */
-	public void run() {
-		sr = context.registerService(TBC.class.getName(), this, null);
-		try {
-			link.log("Test bundle control started Ok.");
-			tcHome = (String) link.receive(10000);
-			for (int i = 0; _continue && i < methods.length; i++) {
-				tc1();
-				link.send("" + 100 * (i + 1) / methods.length);
-			}
-			link.send("ready");
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Releases the reference to the TestCaseLink.
-	 */
-	void quit() {
-		if (_continue) {
-			context.ungetService(linkRef);
-			linkRef = null;
-			_continue = false;
-		}
-	}
-
-	void log(String test, String result) throws IOException {
-		link.log(test + " " + result);
-	}
-
-	void log(String test) throws IOException {
-		link.log(test);
-	}
 
 	/**
 	 *  
 	 */
-	void tc1() throws Exception {
+	public void testTC1() throws Exception {
 		Bundle tb1;
 		Bundle tb2;
 		Bundle tb3;
@@ -94,28 +36,25 @@ public class TBC extends Thread {
 		//Tb1 will export package ...testpackage1
 		// Tb2 actively has chosen ...testpackage1, tb2 exports ...testpackage2
 		// Tb3 actively has chosen ...testpackage2,
-		ServiceReference sr = context.getServiceReference(PackageAdmin.class
+		ServiceReference sr = getContext().getServiceReference(PackageAdmin.class
 				.getName());
 		if (sr != null)
-			pa = (PackageAdmin) context.getService(sr);
+			pa = (PackageAdmin) getContext().getService(sr);
 		else
-			log("Can't find ServiceReference to PackageAdmin.");
+			fail("Can't find ServiceReference to PackageAdmin.");
 		//Check that the packages doesn?t exist before and do not run if they
 		// do
 		if ((pa.getExportedPackage(TP1) != null)
 				|| (pa.getExportedPackage(TP2) != null)) {
-			log("The packages used for the test are already exported, i.e. the test is impossible to make.");
+			fail("The packages used for the test are already exported, i.e. the test is impossible to make.");
 		}
 		else {
-			log("The PackageAdmin is in the System Bundle, Bundle with id 0: 0 : '"
-					+ sr.getBundle().getBundleId() + "'");
+			assertEquals("The PackageAdmin is not in the System Bundle", 0, sr.getBundle().getBundleId());
 			// install tb1, tb2 and tb3
-			tb1 = context.installBundle(tcHome + "tb1.jar");
-			tb2 = context.installBundle(tcHome + "tb2.jar");
-			tb3 = context.installBundle(tcHome + "tb3.jar");
-			tb1.start();
-			tb2.start();
-			tb3.start();
+
+			tb1 = installBundle("tc1.tb1.jar");
+			tb2 = installBundle("tc1.tb2.jar");
+			tb3 = installBundle("tc1.tb3.jar");
 			log("Install Testbundle 1, 2 and 3.");
 			// Call PackageAdmin.getExportedPackages(Bundle bundle) for tb1
 			ExportedPackage[] tps = pa.getExportedPackages(tb1);
@@ -123,19 +62,17 @@ public class TBC extends Thread {
 			int only = 0;
 			for (int i = 0; i < tps.length; i++) {
 				if (tps[i].getName().equals(TP1)) {
-					only = ++only;
+					only++;
 				}
 			}
-			log("Test Bundle 1 does only export TestPackage1: true : '"
-					+ (only == 1) + "'");
+			assertEquals("Test Bundle 1 is not the only exporter TestPackage1", 1, only);
 			// (null as argument could be tried for framework where only the
 			// framework is being run)
 			try {
 				ExportedPackage[] tpnull = pa.getExportedPackages((Bundle)null);
 			}
 			catch (Exception e) {
-				log("The method getExportedPackages(null) could not handle a null argument."
-						+ e);
+				fail("The method getExportedPackages(null) could not handle a null argument.", e);
 			}
 			//uninstall tb1
 			log("Uninstall Testbundle 1.");
@@ -144,14 +81,9 @@ public class TBC extends Thread {
 			// Call PackageAdmin.getExportedPackages(Bundle bundle) for tb1
 			// ...testpackage1 still exported? (yes)
 			ExportedPackage tp1 = pa.getExportedPackage(TP1);
-			if (tp1 != null)
-				log("When testbundle 1 was uninstalled the package should still be exported: "
-						+ TP1 + " : '" + tp1.getName() + "'");
-			else
-				log(TP1 + " was not a package that was exported.");
+			assertNotNull(TP1 + " was not a package that was exported.", tp1);
 			//is tb2 active (yes)
-			log("Is testbundle 2 still active: true: '"
-					+ (tb2.getState() == Bundle.ACTIVE) + "'");
+			assertEquals("Is testbundle 2 still active", Bundle.ACTIVE, tb2.getState());
 			// Call PackageAdmin.getExportedPackages(Bundle bundle) for tb2
 			// ...testpackage2 still exported? (yes)
 			boolean tp2present = false;
@@ -163,17 +95,12 @@ public class TBC extends Thread {
 					}
 				}
 			}
-			log("Is testpackage 2 still exported: true : '" + tp2present + "'");
+			assertTrue("Is testpackage 2 still exported:", tp2present);
 			// is tb3 active (yes)
-			log("Is testbundle 3 still active: true: '"
-					+ (tb3.getState() == Bundle.ACTIVE) + "'");
+			assertEquals("Is testbundle 3 still active:", Bundle.ACTIVE, tb3.getState());
 			// Call ExportedPackage.isRemovalPending()
 			//Answer should be true
-			if (tp1 != null)
-				log("Is TestPackage 1 scheduled for removal: true : '"
-						+ tp1.isRemovalPending() + "'");
-			else
-				log(TP1 + " was not a package that was exported.");
+			assertTrue("Is TestPackage 1 scheduled for removal:", tp1.isRemovalPending());
 			// Call PackageAdmin.refreshPackages()
 			Bundle[] b = new Bundle[3];
 			b[0] = tb1;
@@ -181,14 +108,14 @@ public class TBC extends Thread {
 			b[2] = tb3;
 			log("The Framework is being refreshed.");
       
-      PackagesRefreshedListener prl = new PackagesRefreshedListener();
-      try {
-        context.addFrameworkListener(prl);
-  			pa.refreshPackages(b);
-        prl.waitForPackagesRefreshedEvent();
-      } finally {
-        context.removeFrameworkListener(prl);
-      }
+			PackagesRefreshedListener prl = new PackagesRefreshedListener();
+			try {
+				getContext().addFrameworkListener(prl);
+				pa.refreshPackages(b);
+				prl.waitForPackagesRefreshedEvent();
+			} finally {
+				getContext().removeFrameworkListener(prl);
+			}
       
 			//Call PackageAdmin.getExportedPackages(Bundle bundle) for tb1
 			//...testpackage1 still exported? (no)
@@ -200,18 +127,14 @@ public class TBC extends Thread {
 						tp1present = true;
 					}
 				}
-			log("After refresh. Is Testpackage 1 exported: false : '"
-					+ tp1present + "'");
+			assertFalse("After refresh. Is Testpackage 1 exported:", tp1present);
 			//is tb2 active (no)
-			log("Is testbundle 2 still active: false: '"
-					+ (tb2.getState() == Bundle.ACTIVE) + "'");
+			assertFalse("Is testbundle 2 still active:", tb2.getState() == Bundle.ACTIVE);
 			//Call PackageAdmin.getExportedPackages(Bundle bundle) for tb2
 			//...testpackage2 still exported? (no)
-			log("Is TestPackage 2 still exported: false : '"
-					+ (pa.getExportedPackage(TP2) != null) + "'");
+			assertNull("Is TestPackage 2 still exported:", pa.getExportedPackage(TP2));
 			//is tb3 active (no)
-			log("Is testbundle 3 still active: false : '"
-					+ (tb3.getState() == Bundle.ACTIVE) + "'");
+			assertFalse("Is testbundle 3 still active:", tb3.getState() == Bundle.ACTIVE);
 			tb2.stop();
 			tb2.uninstall();
 			tb3.stop();
