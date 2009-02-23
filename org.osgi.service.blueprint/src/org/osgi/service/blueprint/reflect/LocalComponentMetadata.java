@@ -97,9 +97,10 @@ public interface LocalComponentMetadata extends ComponentMetadata {
 	 * the factory method is to be invoked. When no factory component has been specified
 	 * this operation will return null. A return value of null with a non-null factory method
 	 * indicates that the factory method should be invoked as a static method on the 
-	 * component class itself.
+	 * component class itself. For a non-null return value, the Value object returned 
+	 * will be either a ComponentValue or ReferenceValue.
 	 */
-	ComponentMetadata getFactoryComponent();
+	Value getFactoryComponent();
 	
 	/**
 	 * The specified scope for the component lifecycle.
