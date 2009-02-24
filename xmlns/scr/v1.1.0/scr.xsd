@@ -3,7 +3,7 @@
 	/*
 	* $Revision$
 	* 
-	* Copyright (c) OSGi Alliance (2005, 2008). All Rights Reserved.
+	* Copyright (c) OSGi Alliance (2005, 2009). All Rights Reserved.
 	* 
 	* Licensed under the Apache License, Version 2.0 (the "License");
 	* you may not use this file except in compliance with the License.
@@ -40,18 +40,18 @@
 	</annotation>
 	<element name="component" type="scr:Tcomponent" />
 	<complexType name="Tcomponent">
-		<annotation>
-			<documentation xml:lang="en">
-				Implementations of SCR must not require component
-				descriptions to specify the subelements of the component
-				element in the order as required by the schema. SCR
-				implementations must allow other orderings since
-				arbitrary orderings do not affect the meaning of the
-				component description. Only the relative ordering of
-				property and properties element have meaning.
-			</documentation>
-		</annotation>
 		<sequence>
+			<annotation>
+				<documentation xml:lang="en">
+					Implementations of SCR must not require component
+					descriptions to specify the subelements of the component
+					element in the order as required by the schema. SCR
+					implementations must allow other orderings since
+					arbitrary orderings do not affect the meaning of the
+					component description. Only the relative ordering of
+					property and properties element have meaning.
+				</documentation>
+			</annotation>
 			<choice minOccurs="0" maxOccurs="unbounded">
 				<element name="property" type="scr:Tproperty" />
 				<element name="properties" type="scr:Tproperties" />

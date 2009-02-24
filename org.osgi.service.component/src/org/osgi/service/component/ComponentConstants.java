@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2009). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,8 @@ package org.osgi.service.component;
  */
 public interface ComponentConstants {
 	/**
-	 * Manifest header (named &quot;Service-Component&quot;) specifying the XML
-	 * documents within a bundle that contain the bundle's Service Component
-	 * descriptions.
+	 * Manifest header specifying the XML documents within a bundle that contain
+	 * the bundle's Service Component descriptions.
 	 * <p>
 	 * The attribute value may be retrieved from the <code>Dictionary</code>
 	 * object returned by the <code>Bundle.getHeaders</code> method.
@@ -35,14 +34,15 @@ public interface ComponentConstants {
 	/**
 	 * A component property for a component configuration that contains the name
 	 * of the component as specified in the <code>name</code> attribute of the
-	 * <code>component</code> element. The type of this property must be
-	 * <code>String</code>.
+	 * <code>component</code> element. The value of this property must be of
+	 * type <code>String</code>.
 	 */
 	public final static String	COMPONENT_NAME			= "component.name";
 
 	/**
 	 * A component property that contains the generated id for a component
-	 * configuration. The type of this property must be <code>Long</code>.
+	 * configuration. The value of this property must be of type
+	 * <code>Long</code>.
 	 * 
 	 * <p>
 	 * The value of this property is assigned by the Service Component Runtime
@@ -55,15 +55,15 @@ public interface ComponentConstants {
 
 	/**
 	 * A service registration property for a Component Factory that contains the
-	 * value of the <code>factory</code> attribute. The type of this property
-	 * must be <code>String</code>.
+	 * value of the <code>factory</code> attribute. The value of this property
+	 * must be of type <code>String</code>.
 	 */
 	public final static String	COMPONENT_FACTORY		= "component.factory";
 
 	/**
 	 * The suffix for reference target properties. These properties contain the
-	 * filter to select the target services for a reference. The type of this
-	 * property must be <code>String</code>.
+	 * filter to select the target services for a reference. The value of this
+	 * property must be of type <code>String</code>.
 	 */
 	public final static String	REFERENCE_TARGET_SUFFIX	= ".target";
 	
