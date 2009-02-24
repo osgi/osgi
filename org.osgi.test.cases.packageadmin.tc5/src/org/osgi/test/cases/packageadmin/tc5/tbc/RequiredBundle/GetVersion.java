@@ -33,6 +33,7 @@ import org.osgi.framework.Version;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.packageadmin.RequiredBundle;
 import org.osgi.test.cases.packageadmin.tc5.tbc.TestControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * 
@@ -80,7 +81,7 @@ public class GetVersion {
 		requiredBundles = packageAdmin
 				.getRequiredBundles("org.osgi.test.cases.packageadmin.tc5.tb1");
     Bundle tb2 = control.getTestBundle2();
-		control.assertEquals("Checking the required bundle version",
+    DefaultTestBundleControl.assertEquals("Checking the required bundle version",
 				new Version("1.1.0"), 
 				(requiredBundles[0].getBundle() == tb2 ? requiredBundles[0] :  requiredBundles[1]).getVersion());
 
@@ -113,7 +114,7 @@ public class GetVersion {
 
 		control.refreshPackageAdmin();
 
-		control.assertEquals("Checking the required bundle version",
+		DefaultTestBundleControl.assertEquals("Checking the required bundle version",
 				new Version("1.1.0"),  
         tb2rb.getVersion());
 

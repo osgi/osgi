@@ -31,6 +31,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.packageadmin.RequiredBundle;
 import org.osgi.test.cases.packageadmin.tc5.tbc.TestControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * 
@@ -78,7 +79,7 @@ public class GetSymbolicName {
 
 		requiredBundles = packageAdmin
 				.getRequiredBundles(TestControl.TEST_BUNDLE_1);
-		control
+		DefaultTestBundleControl
 				.assertEquals("Checking the required bundle symbolic name",
 						TestControl.TEST_BUNDLE_1, requiredBundles[0]
 								.getSymbolicName());
@@ -112,7 +113,7 @@ public class GetSymbolicName {
 
 		control.refreshPackageAdmin();
 
-		control
+		DefaultTestBundleControl
 				.assertEquals("Checking the required bundle symbolic name",
 						TestControl.TEST_BUNDLE_1, requiredBundles[0]
 								.getSymbolicName());

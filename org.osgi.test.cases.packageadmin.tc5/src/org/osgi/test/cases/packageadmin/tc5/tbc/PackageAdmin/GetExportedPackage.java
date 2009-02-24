@@ -31,6 +31,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.packageadmin.ExportedPackage;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.cases.packageadmin.tc5.tbc.TestControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * 
@@ -75,7 +76,7 @@ public class GetExportedPackage {
 		packageAdmin = (PackageAdmin) control.getContext().getService(
 				serviceReference);
 
-		control
+		DefaultTestBundleControl
 				.assertNull(
 						"Checking if the packages already exists",
 						packageAdmin
@@ -86,7 +87,7 @@ public class GetExportedPackage {
 		exportedPackage = packageAdmin
 				.getExportedPackage("org.osgi.test.cases.packageadmin.tc5.tb1");
 
-		control.assertNotNull("Check if no exported package is returned",
+		DefaultTestBundleControl.assertNotNull("Check if no exported package is returned",
 				exportedPackage);
 
 		control.uninstallTestBundles();
@@ -109,7 +110,7 @@ public class GetExportedPackage {
 		packageAdmin = (PackageAdmin) control.getContext().getService(
 				serviceReference);
 
-		control
+		DefaultTestBundleControl
 				.assertNull(
 						"Checking if the packages already exists",
 						packageAdmin
@@ -120,7 +121,7 @@ public class GetExportedPackage {
 		exportedPackage = packageAdmin
 				.getExportedPackage("org.osgi.test.cases.packageadmin.tc5.nonexistent");
 
-		control.assertNull("Checking if no exported package is returned",
+		DefaultTestBundleControl.assertNull("Checking if no exported package is returned",
 				exportedPackage);
 
 		control.uninstallTestBundles();
@@ -143,7 +144,7 @@ public class GetExportedPackage {
 		packageAdmin = (PackageAdmin) control.getContext().getService(
 				serviceReference);
 
-		control
+		DefaultTestBundleControl
 				.assertNull(
 						"Checking if the packages already exists",
 						packageAdmin
@@ -154,7 +155,7 @@ public class GetExportedPackage {
 		exportedPackage = packageAdmin
 				.getExportedPackage("org.osgi.test.cases.packageadmin.tc5.tb1");
 
-		control.assertEquals("Checking the returned exported package version",
+		DefaultTestBundleControl.assertEquals("Checking the returned exported package version",
 				"1.1.0", exportedPackage.getSpecificationVersion());
 
 		control.uninstallTestBundles();

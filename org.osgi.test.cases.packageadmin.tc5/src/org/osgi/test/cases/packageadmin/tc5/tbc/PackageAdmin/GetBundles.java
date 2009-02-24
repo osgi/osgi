@@ -32,6 +32,7 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.cases.packageadmin.tc5.tbc.TestControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * 
@@ -83,12 +84,12 @@ public class GetBundles {
 
 		bundles = packageAdmin.getBundles(TestControl.TEST_BUNDLE_1,
 				"[1.0.0, 1.1.0]");
-		control.assertNotNull("Checking if the result is not null", bundles);
-		control.assertEquals("Checking the number of returned bundles", 2,
+		DefaultTestBundleControl.assertNotNull("Checking if the result is not null", bundles);
+		DefaultTestBundleControl.assertEquals("Checking the number of returned bundles", 2,
 				bundles.length);
-		control.assertEquals("Checking the bunder order", "1.1", bundles[0]
+		DefaultTestBundleControl.assertEquals("Checking the bunder order", "1.1", bundles[0]
 				.getHeaders().get(Constants.BUNDLE_VERSION));
-		control.assertEquals("Checking the bunder order", "1.0", bundles[1]
+		DefaultTestBundleControl.assertEquals("Checking the bunder order", "1.0", bundles[1]
 				.getHeaders().get(Constants.BUNDLE_VERSION));
 
 		control.uninstallTestBundles();
@@ -116,10 +117,10 @@ public class GetBundles {
 
 		bundles = packageAdmin.getBundles(TestControl.TEST_BUNDLE_1,
 				"[1.0.1, 1.1.0]");
-		control.assertNotNull("Checking if the result is not null", bundles);
-		control.assertEquals("Checking the number of returned bundles", 1,
+		DefaultTestBundleControl.assertNotNull("Checking if the result is not null", bundles);
+		DefaultTestBundleControl.assertEquals("Checking the number of returned bundles", 1,
 				bundles.length);
-		control.assertEquals("Checking the bunder order", "1.1", bundles[0]
+		DefaultTestBundleControl.assertEquals("Checking the bunder order", "1.1", bundles[0]
 				.getHeaders().get(Constants.BUNDLE_VERSION));
 
 		control.uninstallTestBundles();
@@ -147,10 +148,10 @@ public class GetBundles {
 
 		bundles = packageAdmin.getBundles(TestControl.TEST_BUNDLE_1,
 				"[1.0.0, 1.0.9]");
-		control.assertNotNull("Checking if the result is not null", bundles);
-		control.assertEquals("Checking the number of returned bundles", 1,
+		DefaultTestBundleControl.assertNotNull("Checking if the result is not null", bundles);
+		DefaultTestBundleControl.assertEquals("Checking the number of returned bundles", 1,
 				bundles.length);
-		control.assertEquals("Checking the bunder order", "1.0", bundles[0]
+		DefaultTestBundleControl.assertEquals("Checking the bunder order", "1.0", bundles[0]
 				.getHeaders().get(Constants.BUNDLE_VERSION));
 
 		control.uninstallTestBundles();
@@ -177,7 +178,7 @@ public class GetBundles {
 
 		bundles = packageAdmin.getBundles(TestControl.TEST_BUNDLE_1,
 				"[2.0.0, 2.1.0]");
-		control.assertNull("Checking if the result is null", bundles);
+		DefaultTestBundleControl.assertNull("Checking if the result is null", bundles);
 
 		control.uninstallTestBundles();
 
@@ -205,7 +206,7 @@ public class GetBundles {
 		bundles = packageAdmin.getBundles(
 				"org.osgi.test.cases.packageadmin.tc5.tb1.nonexistent",
 				"[1.0.0, 1.1.0]");
-		control.assertNull("Checking if the result is null", bundles);
+		DefaultTestBundleControl.assertNull("Checking if the result is null", bundles);
 
 		control.uninstallTestBundles();
 
@@ -230,12 +231,12 @@ public class GetBundles {
 		control.installTestBundles();
 
 		bundles = packageAdmin.getBundles(TestControl.TEST_BUNDLE_1, null);
-		control.assertNotNull("Checking if the result it not null", bundles);
-		control.assertEquals("Checking the number of resulted bundles", 2,
+		DefaultTestBundleControl.assertNotNull("Checking if the result it not null", bundles);
+		DefaultTestBundleControl.assertEquals("Checking the number of resulted bundles", 2,
 				bundles.length);
-		control.assertEquals("Checking the bundle order", "1.1", bundles[0]
+		DefaultTestBundleControl.assertEquals("Checking the bundle order", "1.1", bundles[0]
 				.getHeaders().get(Constants.BUNDLE_VERSION));
-		control.assertEquals("Checking the bundle order", "1.0", bundles[1]
+		DefaultTestBundleControl.assertEquals("Checking the bundle order", "1.0", bundles[1]
 				.getHeaders().get(Constants.BUNDLE_VERSION));
 
 		control.uninstallTestBundles();

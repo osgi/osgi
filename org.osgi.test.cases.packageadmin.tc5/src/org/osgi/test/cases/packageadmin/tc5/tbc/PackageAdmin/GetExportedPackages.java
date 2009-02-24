@@ -31,6 +31,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.packageadmin.ExportedPackage;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.cases.packageadmin.tc5.tbc.TestControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * 
@@ -75,7 +76,7 @@ public class GetExportedPackages {
 		packageAdmin = (PackageAdmin) control.getContext().getService(
 				serviceReference);
 
-		control
+		DefaultTestBundleControl
 				.assertNull(
 						"Testing if the packages already exists",
 						packageAdmin
@@ -86,7 +87,7 @@ public class GetExportedPackages {
 		exportedPackages = packageAdmin
 				.getExportedPackages("org.osgi.test.cases.packageadmin.tc5.tb1");
 
-		control
+		DefaultTestBundleControl
 				.assertNotNull(
 						"Testing the return value when finding an nonexisting exported packages",
 						exportedPackages);
@@ -111,7 +112,7 @@ public class GetExportedPackages {
 		packageAdmin = (PackageAdmin) control.getContext().getService(
 				serviceReference);
 
-		control
+		DefaultTestBundleControl
 				.assertNull(
 						"Testing if the packages already exists",
 						packageAdmin
@@ -122,7 +123,7 @@ public class GetExportedPackages {
 		exportedPackages = packageAdmin
 				.getExportedPackages("org.osgi.test.cases.packageadmin.tc5.nonexistent");
 
-		control
+		DefaultTestBundleControl
 				.assertNull(
 						"Testing the return value when finding an nonexisting exported package",
 						exportedPackages);
@@ -148,7 +149,7 @@ public class GetExportedPackages {
 		packageAdmin = (PackageAdmin) control.getContext().getService(
 				serviceReference);
 
-		control
+		DefaultTestBundleControl
 				.assertNull(
 						"Testing if the packages already exists",
 						packageAdmin
@@ -159,23 +160,23 @@ public class GetExportedPackages {
 		exportedPackages = packageAdmin
 				.getExportedPackages("org.osgi.test.cases.packageadmin.tc5.tb1");
 
-		control.assertEquals(
+		DefaultTestBundleControl.assertEquals(
 				"Checking the number of exported packages returned", 2,
 				exportedPackages.length);
 
 		if (exportedPackages[0].getSpecificationVersion().equals("1.0.0")) {
-			control.assertEquals(
+			DefaultTestBundleControl.assertEquals(
 					"Checking the exported packages version order", "1.1.0",
 					exportedPackages[1].getSpecificationVersion());
 		}
 		else
 			if (exportedPackages[0].getSpecificationVersion().equals("1.1.0")) {
-				control.assertEquals(
+				DefaultTestBundleControl.assertEquals(
 						"Checking the exported packages version order",
 						"1.0.0", exportedPackages[1].getSpecificationVersion());
 			}
 			else {
-				control.fail("Expected packages are not returned");
+				DefaultTestBundleControl.fail("Expected packages are not returned");
 			}
 
 		control.uninstallTestBundles();

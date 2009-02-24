@@ -76,7 +76,7 @@ public class GetAllExportedPackages {
 				serviceReference);
 
 		// TODO: Activate this test
-		//control.assertNull("Testing if the packages already exists",
+		//DefaultTestBundleControl.assertNull("Testing if the packages already exists",
 		//		packageAdmin.getAllExportedPackages("org.osgi.test.cases.packageadmin.tc5.tb1"));
 
 		control.installTestBundles();
@@ -154,7 +154,7 @@ public class GetAllExportedPackages {
 				serviceReference);
 
 		// TODO: Activate this test
-		// control.assertNull("Testing if the packages already exists",
+		// DefaultTestBundleControl.assertNull("Testing if the packages already exists",
 		//		packageAdmin.getAllExportedPackages("org.osgi.test.cases.packageadmin.tc5.tb1"));
 
 		control.installTestBundles();
@@ -164,7 +164,7 @@ public class GetAllExportedPackages {
 		//		.getAllExportedPackages("org.osgi.test.cases.packageadmin.tc5.tb1");
 
 		// TODO: Activate this test
-		//control.assertEquals(
+		//DefaultTestBundleControl.assertEquals(
 		//		"Checking the number of exported packages returned", 2,
 		//		exportedPackages.length);
 		//control

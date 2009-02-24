@@ -31,6 +31,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.cases.packageadmin.tc5.tbc.TestControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * 
@@ -82,10 +83,10 @@ public class GetHosts {
 		packageAdmin.resolveBundles(new Bundle[] {tb5});
 
 		bundles = packageAdmin.getHosts(tb5);
-		control.assertNotNull("Checking if some bundles is returned", bundles);
-		control.assertEquals("Checking the number of returned bundles", 1,
+		DefaultTestBundleControl.assertNotNull("Checking if some bundles is returned", bundles);
+		DefaultTestBundleControl.assertEquals("Checking the number of returned bundles", 1,
 				bundles.length);
-		control.assertEquals("Checking the symbolic name of returned bundle",
+		DefaultTestBundleControl.assertEquals("Checking the symbolic name of returned bundle",
 				"org.osgi.test.cases.packageadmin.tc5.tb3", bundles[0]
 						.getSymbolicName());
 
@@ -111,13 +112,12 @@ public class GetHosts {
 		packageAdmin = (PackageAdmin) control.getContext().getService(
 				serviceReference);
 
-		tb5 = control.getContext().installBundle(
-				control.getWebServer() + "tb5.jar");
+		tb5 = control.installBundle("tc5.tb5.jar", false);
 
 		packageAdmin.resolveBundles(new Bundle[] {tb5});
 
 		bundles = packageAdmin.getHosts(tb5);
-		control.assertNull("Checking if no bundle is returned", bundles);
+		DefaultTestBundleControl.assertNull("Checking if no bundle is returned", bundles);
 
 		tb5.uninstall();
 
@@ -142,7 +142,7 @@ public class GetHosts {
 		control.installTestBundles();
 
 		bundles = packageAdmin.getHosts(control.getTestBundle3());
-		control.assertNull("Checking if no bundle is returned", bundles);
+		DefaultTestBundleControl.assertNull("Checking if no bundle is returned", bundles);
 
 		control.uninstallTestBundles();
 

@@ -31,6 +31,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.cases.packageadmin.tc5.tbc.TestControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * 
@@ -82,10 +83,10 @@ public class GetFragments {
 		packageAdmin.resolveBundles(new Bundle[] {tb5});
 
 		bundles = packageAdmin.getFragments(control.getTestBundle3());
-		control.assertNotNull("Checking if the result is not null", bundles);
-		control.assertEquals("Checking the number of returned bundles", 1,
+		DefaultTestBundleControl.assertNotNull("Checking if the result is not null", bundles);
+		DefaultTestBundleControl.assertEquals("Checking the number of returned bundles", 1,
 				bundles.length);
-		control.assertEquals("Checking the returned bundle",
+		DefaultTestBundleControl.assertEquals("Checking the returned bundle",
 				"org.osgi.test.cases.packageadmin.tc5.tb5", bundles[0]
 						.getSymbolicName());
 
@@ -116,7 +117,7 @@ public class GetFragments {
 		packageAdmin.resolveBundles(new Bundle[] {tb5});
 
 		bundles = packageAdmin.getFragments(tb5);
-		control.assertNull("Checking if no bundle is returned", bundles);
+		DefaultTestBundleControl.assertNull("Checking if no bundle is returned", bundles);
 
 		control.uninstallTestBundles();
 
@@ -141,10 +142,10 @@ public class GetFragments {
 
 		control.installTestBundles();
 
-		tb6 = control.getContext().installBundle(control.getWebServer()+"tb6.jar");
+		tb6 = control.installBundle("tc5.tb6.jar", false);
 		
 		bundles = packageAdmin.getFragments(control.getTestBundle5());
-		control.assertNull("Checking if no bundle is returned", bundles);
+		DefaultTestBundleControl.assertNull("Checking if no bundle is returned", bundles);
 
 		tb6.uninstall();
 		control.uninstallTestBundles();
@@ -170,7 +171,7 @@ public class GetFragments {
 		control.installTestBundles();
 
 		bundles = packageAdmin.getFragments(control.getTestBundle1());
-		control.assertNull("Checking if no bundle is returned", bundles);
+		DefaultTestBundleControl.assertNull("Checking if no bundle is returned", bundles);
 
 		control.uninstallTestBundles();
 

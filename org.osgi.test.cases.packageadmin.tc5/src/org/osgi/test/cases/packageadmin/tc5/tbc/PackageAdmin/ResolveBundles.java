@@ -31,6 +31,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.cases.packageadmin.tc5.tbc.TestControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * 
@@ -75,13 +76,13 @@ public class ResolveBundles {
 		control.installTestBundles();
 
 		tb5 = control.getTestBundle5();
-		/*control.assertEquals("Checking the bundle state", Bundle.INSTALLED, tb5
+		/*DefaultTestBundleControl.assertEquals("Checking the bundle state", Bundle.INSTALLED, tb5
 				.getState());*/
 
-		control.assertTrue("Checking the resolved bundle", packageAdmin
+		DefaultTestBundleControl.assertTrue("Checking the resolved bundle", packageAdmin
 				.resolveBundles(new Bundle[] {tb5}));
 
-		control.assertEquals("Checking the bundle state", Bundle.RESOLVED, tb5
+		DefaultTestBundleControl.assertEquals("Checking the bundle state", Bundle.RESOLVED, tb5
 				.getState());
 
 		control.uninstallTestBundles();
@@ -107,12 +108,12 @@ public class ResolveBundles {
 		control.installTestBundles();
 
 		tb5 = control.getTestBundle5();
-		/*control.assertEquals("Checking the bundle state", Bundle.INSTALLED, tb5
+		/*DefaultTestBundleControl.assertEquals("Checking the bundle state", Bundle.INSTALLED, tb5
 				.getState());*/
 
 		packageAdmin.resolveBundles(null);
 
-		control.assertEquals("Checking the bundle state", Bundle.RESOLVED, tb5
+		DefaultTestBundleControl.assertEquals("Checking the bundle state", Bundle.RESOLVED, tb5
 				.getState());
 
 		control.uninstallTestBundles();

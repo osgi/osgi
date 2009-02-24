@@ -32,6 +32,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.packageadmin.ExportedPackage;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.cases.packageadmin.tc5.tbc.TestControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * 
@@ -76,7 +77,7 @@ public class GetImportingBundles {
 		packageAdmin = (PackageAdmin) control.getContext().getService(
 				serviceReference);
 
-		control.assertNull("Checking if the packages already exists",
+		DefaultTestBundleControl.assertNull("Checking if the packages already exists",
 				packageAdmin.getExportedPackage(TestControl.TEST_BUNDLE_1));
 
 		control.installTestBundles();
@@ -85,11 +86,11 @@ public class GetImportingBundles {
 				.getExportedPackage(TestControl.TEST_BUNDLE_1);
 
 		bundles = exportedPackage.getImportingBundles();
-		control.assertNotNull("Checking the returned importing bundles",
+		DefaultTestBundleControl.assertNotNull("Checking the returned importing bundles",
 				bundles);
-		control.assertEquals("Checking the number of importing bundles", 1,
+		DefaultTestBundleControl.assertEquals("Checking the number of importing bundles", 1,
 				bundles.length);
-		control.assertEquals("Checking the importing bundle", control
+		DefaultTestBundleControl.assertEquals("Checking the importing bundle", control
 				.getTestBundle4(), bundles[0]);
 
 		control.uninstallTestBundles();
@@ -113,7 +114,7 @@ public class GetImportingBundles {
 		packageAdmin = (PackageAdmin) control.getContext().getService(
 				serviceReference);
 
-		control.assertNull("Checking if the packages already exists",
+		DefaultTestBundleControl.assertNull("Checking if the packages already exists",
 				packageAdmin.getExportedPackage(TestControl.TEST_BUNDLE_1));
 
 		control.installTestBundles();
@@ -126,7 +127,7 @@ public class GetImportingBundles {
 		control.refreshPackageAdmin();
 
 		bundles = exportedPackage.getImportingBundles();
-		control.assertNull("Checking the returned importing bundles", bundles);
+		DefaultTestBundleControl.assertNull("Checking the returned importing bundles", bundles);
 
 		control.getContext().ungetService(serviceReference);
 	}

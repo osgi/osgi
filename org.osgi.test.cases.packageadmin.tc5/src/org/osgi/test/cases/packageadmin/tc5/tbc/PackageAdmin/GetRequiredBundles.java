@@ -31,6 +31,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.packageadmin.RequiredBundle;
 import org.osgi.test.cases.packageadmin.tc5.tbc.TestControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * 
@@ -79,15 +80,15 @@ public class GetRequiredBundles {
 
 		requiredBundles = packageAdmin
 				.getRequiredBundles(TestControl.TEST_BUNDLE_1);
-		control.assertNotNull("Checking if a required bundle is returned",
+		DefaultTestBundleControl.assertNotNull("Checking if a required bundle is returned",
 				requiredBundles);
-		control.assertEquals("Checking the number of required bundles", 2,
+		DefaultTestBundleControl.assertEquals("Checking the number of required bundles", 2,
 				requiredBundles.length);
-		control
+		DefaultTestBundleControl
 				.assertEquals("Checking the required bundle symbolic name",
 						TestControl.TEST_BUNDLE_1, requiredBundles[0]
 								.getSymbolicName());
-		control
+		DefaultTestBundleControl
 				.assertEquals("Checking the required bundle symbolic name",
 						TestControl.TEST_BUNDLE_1, requiredBundles[1]
 								.getSymbolicName());
@@ -114,7 +115,7 @@ public class GetRequiredBundles {
 
 		requiredBundles = packageAdmin
 				.getRequiredBundles("org.osgi.test.cases.packageadmin.tc5.nonexistent");
-		control
+		DefaultTestBundleControl
 				.assertNull("Checking if no bundle is returned",
 						requiredBundles);
 
@@ -139,9 +140,9 @@ public class GetRequiredBundles {
 		control.installTestBundles();
 
 		requiredBundles = packageAdmin.getRequiredBundles(null);
-		control.assertNotNull("Checking if some bundle is returned",
+		DefaultTestBundleControl.assertNotNull("Checking if some bundle is returned",
 				requiredBundles);
-		control.assertTrue("Checking the number of returned bundles",
+		DefaultTestBundleControl.assertTrue("Checking the number of returned bundles",
 				(requiredBundles.length > 1));
 
 		control.uninstallTestBundles();

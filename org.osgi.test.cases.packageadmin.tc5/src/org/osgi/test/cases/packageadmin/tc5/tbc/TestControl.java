@@ -44,7 +44,7 @@ import org.osgi.test.cases.packageadmin.tc5.tbc.RequiredBundle.GetRequiringBundl
 import org.osgi.test.cases.packageadmin.tc5.tbc.RequiredBundle.GetSymbolicName;
 import org.osgi.test.cases.packageadmin.tc5.tbc.RequiredBundle.GetVersion;
 import org.osgi.test.cases.packageadmin.tc5.tbc.RequiredBundle.IsRemovalPending;
-import org.osgi.test.cases.util.DefaultTestBundleControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * 
@@ -72,41 +72,13 @@ public class TestControl extends DefaultTestBundleControl {
 	private Bundle				tb5;
 
 	/**
-	 * Creates a new instance of TestControl
-	 */
-	public TestControl() {
-
-	}
-
-	/**
-	 * <remove>Prepare for each run. It is important that
-	 * org.osgi.test.cases.packageadmin.tc5 test run is properly initialized and
-	 * that each case can run standalone. To save
-	 * org.osgi.test.cases.packageadmin.tc5 lot of time in debugging, clean up
-	 * all possible persistent remains before the test is run. Clean up is
-	 * better don in the prepare because debugging sessions can easily cause the
-	 * unprepare never to be called. </remove>
-	 */
-	public void prepare() {
-	}
-
-	/**
-	 * <remove>Prepare for each method. It is important that each method can be
-	 * executed independently of each other method. Do not keep state between
-	 * methods, if possible. This method can be used to clean up any possible
-	 * remaining state. </remove>
-	 */
-	public void setState() {
-	}
-
-	/**
 	 * Tests the constants of the class PackageAdmin
 	 * 
 	 * @specification org.osgi.framework.packageadmin
 	 * @specificationVersion 4
 	 */
 	public void testConstants() throws Exception {
-		new Constants(this).run();
+		new Constants().run();
 	}
 
 	/**
@@ -271,11 +243,11 @@ public class TestControl extends DefaultTestBundleControl {
 	 */
 	public void installTestBundles() throws Exception {
 		// Install test bundles
-		tb5 = getContext().installBundle(getWebServer() + "tb5.jar");
-		tb1 = installBundle("tb1.jar");
-		tb2 = installBundle("tb2.jar");
-		tb3 = installBundle("tb3.jar");
-		tb4 = installBundle("tb4.jar");
+		tb5 = installBundle("tc5.tb5.jar", false);
+		tb1 = installBundle("tc5.tb1.jar");
+		tb2 = installBundle("tc5.tb2.jar");
+		tb3 = installBundle("tc5.tb3.jar");
+		tb4 = installBundle("tc5.tb4.jar");
 	}
 
 	/**

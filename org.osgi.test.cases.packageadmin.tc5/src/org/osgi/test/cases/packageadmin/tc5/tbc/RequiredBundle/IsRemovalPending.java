@@ -31,6 +31,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.packageadmin.RequiredBundle;
 import org.osgi.test.cases.packageadmin.tc5.tbc.TestControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * 
@@ -79,7 +80,7 @@ public class IsRemovalPending {
 
 		requiredBundles = packageAdmin
 				.getRequiredBundles("org.osgi.test.cases.packageadmin.tc5.tb1");
-		control.assertTrue("Checking if the bundle removal is not pending",
+		DefaultTestBundleControl.assertTrue("Checking if the bundle removal is not pending",
 				!requiredBundles[0].isRemovalPending());
 
 		control.uninstallTestBundles();
@@ -107,7 +108,7 @@ public class IsRemovalPending {
 
 		control.uninstallTestBundles();
 
-		control.assertTrue("Checking if the bundle removal is pending",
+		DefaultTestBundleControl.assertTrue("Checking if the bundle removal is pending",
 				requiredBundles[0].isRemovalPending());
 
 		control.refreshPackageAdmin();
@@ -135,7 +136,7 @@ public class IsRemovalPending {
 
 		control.refreshPackageAdmin();
 
-		control.assertTrue("Checking if the bundle removal is pending",
+		DefaultTestBundleControl.assertTrue("Checking if the bundle removal is pending",
 				requiredBundles[0].isRemovalPending());
 	}
 

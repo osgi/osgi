@@ -31,6 +31,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.packageadmin.RequiredBundle;
 import org.osgi.test.cases.packageadmin.tc5.tbc.TestControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * 
@@ -77,7 +78,7 @@ public class GetBundle {
 
 		requiredBundles = packageAdmin
 				.getRequiredBundles(TestControl.TEST_BUNDLE_1);
-		control.assertEquals(
+		DefaultTestBundleControl.assertEquals(
 				"Checking the bundle which defines the required bundle",
 				control.getTestBundle1(), requiredBundles[0].getBundle());
 
@@ -110,7 +111,7 @@ public class GetBundle {
 
 		control.refreshPackageAdmin();
 
-		control.assertNull("Checking the result with a staled required bundle",
+		DefaultTestBundleControl.assertNull("Checking the result with a staled required bundle",
 				requiredBundles[0].getBundle());
 
 		control.getContext().ungetService(serviceReference);

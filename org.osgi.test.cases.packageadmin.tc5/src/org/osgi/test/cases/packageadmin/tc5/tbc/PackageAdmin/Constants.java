@@ -27,7 +27,7 @@
 package org.osgi.test.cases.packageadmin.tc5.tbc.PackageAdmin;
 
 import org.osgi.service.packageadmin.PackageAdmin;
-import org.osgi.test.cases.packageadmin.tc5.tbc.TestControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * Test the constants of org.osgi.service.packageadmin.PackageAdmin class.
@@ -36,17 +36,6 @@ import org.osgi.test.cases.packageadmin.tc5.tbc.TestControl;
  * @version $Revision$
  */
 public class Constants {
-
-	private TestControl	control;
-
-	/**
-	 * Creates a new Constants
-	 * 
-	 * @param _control the bundle control for this test
-	 */
-	public Constants(TestControl _control) {
-		control = _control;
-	}
 
 	/**
 	 * Run the tests
@@ -59,7 +48,7 @@ public class Constants {
 	 * Test the constant values
 	 */
 	public void testConstantValues0001() throws Exception {
-		control.assertEquals(
+		DefaultTestBundleControl.assertEquals(
 				"Testing the constant value PackageAdmin.BUNDLE_TYPE_FRAGMENT",
 				0x00000001, PackageAdmin.BUNDLE_TYPE_FRAGMENT);
 	}

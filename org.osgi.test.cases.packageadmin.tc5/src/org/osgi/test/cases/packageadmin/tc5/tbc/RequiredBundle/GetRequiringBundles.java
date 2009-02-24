@@ -32,6 +32,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.packageadmin.RequiredBundle;
 import org.osgi.test.cases.packageadmin.tc5.tbc.TestControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * 
@@ -82,11 +83,11 @@ public class GetRequiringBundles {
 				.getRequiredBundles(TestControl.TEST_BUNDLE_1);
 		Bundle tb2 = control.getTestBundle2();
 		bundles = (requiredBundles[0].getBundle() == tb2 ? requiredBundles[0] : requiredBundles[1]).getRequiringBundles();
-		control.assertNotNull("Checking the returned requiring bundles",
+		DefaultTestBundleControl.assertNotNull("Checking the returned requiring bundles",
 				bundles);
-		control.assertEquals("Checking the number of requiring bundles", 1,
+		DefaultTestBundleControl.assertEquals("Checking the number of requiring bundles", 1,
 				bundles.length);
-		control.assertEquals("Checking the requiring bundle", control
+		DefaultTestBundleControl.assertEquals("Checking the requiring bundle", control
 				.getTestBundle4(), bundles[0]);
 
 		control.uninstallTestBundles();
@@ -120,7 +121,7 @@ public class GetRequiringBundles {
 		control.refreshPackageAdmin();
 		
 		Bundle[] bundles = (requiredBundles[0].getBundle() == tb2 ? requiredBundles[0] : requiredBundles[1]).getRequiringBundles();
-		control.assertNull("Checking the result with a staled required bundle",
+		DefaultTestBundleControl.assertNull("Checking the result with a staled required bundle",
 				bundles);
 
 		control.getContext().ungetService(serviceReference);

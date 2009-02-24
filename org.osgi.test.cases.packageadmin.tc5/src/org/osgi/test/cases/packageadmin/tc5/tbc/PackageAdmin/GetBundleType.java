@@ -31,6 +31,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.cases.packageadmin.tc5.tbc.TestControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * 
@@ -78,7 +79,7 @@ public class GetBundleType {
 		tb5 = control.getTestBundle5();
 		packageAdmin.resolveBundles(new Bundle[] {tb5});
 
-		control.assertEquals("Checking the returned bundle type",
+		DefaultTestBundleControl.assertEquals("Checking the returned bundle type",
 				PackageAdmin.BUNDLE_TYPE_FRAGMENT, packageAdmin
 						.getBundleType(tb5));
 
@@ -103,7 +104,7 @@ public class GetBundleType {
 
 		control.installTestBundles();
 
-		control.assertEquals("Checking the return bundle type", 0x00000000,
+		DefaultTestBundleControl.assertEquals("Checking the return bundle type", 0x00000000,
 				packageAdmin.getBundleType(control.getTestBundle1()));
 
 		control.uninstallTestBundles();

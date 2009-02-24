@@ -33,6 +33,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.cases.packageadmin.tc5.tbc.TestControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * 
@@ -83,8 +84,8 @@ public class GetBundle {
 		clazz = tb1.loadClass("org.osgi.test.cases.packageadmin.tc5.tb1.Dummy");
 
 		tb = packageAdmin.getBundle(clazz);
-		control.assertNotNull("Checking if the result is not null", tb);
-		control.assertEquals("Checking if the bundle class loader is the same",
+		DefaultTestBundleControl.assertNotNull("Checking if the result is not null", tb);
+		DefaultTestBundleControl.assertEquals("Checking if the bundle class loader is the same",
 				tb1, tb);
 
 		control.uninstallTestBundles();
@@ -110,7 +111,7 @@ public class GetBundle {
 		control.installTestBundles();
 
 		tb = packageAdmin.getBundle(Collection.class);
-		control.assertNull("Checking if the result is null", tb);
+		DefaultTestBundleControl.assertNull("Checking if the result is null", tb);
 
 		control.uninstallTestBundles();
 
