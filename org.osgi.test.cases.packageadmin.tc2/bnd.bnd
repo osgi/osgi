@@ -26,5 +26,4 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 -runbundles							= \
 	
 
--runproperties = report=true, \
-    osgi.console=23
+-runproperties = report=true
