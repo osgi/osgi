@@ -6,10 +6,14 @@
  */
 package org.osgi.test.cases.packageadmin.tc2.tbc;
 
-import java.io.*;
-import java.net.*;
-import org.osgi.framework.*;
-import org.osgi.service.packageadmin.*;
+import java.net.URL;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkEvent;
+import org.osgi.framework.FrameworkListener;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.packageadmin.ExportedPackage;
+import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
@@ -19,16 +23,9 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * @author Ericsson
  */
 public class TBC extends DefaultTestBundleControl {
-	ServiceRegistration		sr;
-
-	boolean					_continue		= true;
-	boolean					called;
-	int						eventQueue[]	= new int[8];
-	int						in, out;
 	private final String	TP1				= "org.osgi.test.cases.packageadmin.tc2.tb1";
 	private final String	TP2				= "org.osgi.test.cases.packageadmin.tc2.tb2";
 	private final String	TP3				= "org.osgi.test.cases.packageadmin.tc2.tb3";
-	ServiceReference		serviceRef;
 
 	/**
 	 *  
