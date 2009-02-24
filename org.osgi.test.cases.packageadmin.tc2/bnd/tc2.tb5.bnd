@@ -1,0 +1,9 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.tb5
+Bundle-SymbolicName: ${p}.tb5
+Bundle-Version: 4.2
+Bundle-Activator: ${p}.tb5.TB5Activator
+Export-Package: ${p}.tb5
+
+Include-Resource: \
+	tc2.tb1.jar=tc2.tb3.jar

@@ -1,0 +1,6 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.tb4
+Bundle-SymbolicName: ${p}.tb4
+Bundle-Version: 4.2
+Bundle-Activator: ${p}.tb4.TB4Activator
+Export-Package: ${p}.tb4
