@@ -21,6 +21,8 @@
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
 	xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0"
 	targetNamespace="http://www.osgi.org/xmlns/scr/v1.1.0"
+	elementFormDefault="unqualified"
+	attributeFormDefault="unqualified"
 	version="1.1.0">
 
 	<annotation>
@@ -32,10 +34,9 @@
 			manifest header of a bundle. XML documents containing
 			component descriptions may contain a single, root component
 			element or one or more component elements embedded in a
-			larger document. Use of the namespace is optional if the
-			document only contains a root component element. In this
-			case, the scr namespace is assumed. Otherwise the namespace
-			must be specified.
+			larger document. Use of the name space for component 
+			descriptions is mandatory. The attributes and subelements 
+			of a component element are always unqualified.
 		</documentation>
 	</annotation>
 	<element name="component" type="scr:Tcomponent" />
@@ -72,7 +73,12 @@
 				<documentation xml:lang="en">
 					The default value of this attribute is the value of
 					the class attribute of the nested implementation
-					element.
+					element. If multiple component elements use the same 
+					value for the class attribute of their nested 
+					implementation element, then using the default value 
+					for this attribute will result in duplicate names. 
+					In this case, this attribute must be specified with 
+					a unique value.
 				</documentation>
 			</annotation>
 		</attribute>
@@ -117,8 +123,9 @@
 		<sequence>
 			<element name="provide" type="scr:Tprovide" minOccurs="1"
 				maxOccurs="unbounded" />
-			<!-- It is non-deterministic, per W3C XML Schema 1.0: http://www.w3.org/TR/xmlschema-1/#cos-nonambig
-				to use namespace="##any" below. -->
+			<!-- It is non-deterministic, per W3C XML Schema 1.0: 
+			http://www.w3.org/TR/xmlschema-1/#cos-nonambig
+			to use name space="##any" below. -->
 			<any namespace="##other" processContents="lax" minOccurs="0"
 				maxOccurs="unbounded" />
 		</sequence>
@@ -148,7 +155,7 @@
 					use the same value for the interface attribute, then 
 					using the default value for this attribute will result 
 					in duplicate names. In this case, this attribute 
-					should be specified with a unique value.
+					must be specified with a unique value.
 				</documentation>
 			</annotation>
 		</attribute>
@@ -201,7 +208,7 @@
 			<documentation xml:lang="en">
 				This attribute should be used by extensions to documents
 				to require that the document consumer understand the
-				extension.
+				extension. This attribute must be qualified when used.
 			</documentation>
 		</annotation>
 	</attribute>
