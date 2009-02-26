@@ -22,14 +22,14 @@ package org.osgi.service.permissionadmin;
  * <p>
  * This class encapsulates three pieces of information: a Permission <i>type
  * </i> (class name), which must be a subclass of
- * <code>java.security.Permission</code>, and the <i>name </i> and <i>actions
- * </i> arguments passed to its constructor.
+ * <code>java.security.Permission</code>, and the <i>name</i> and <i>actions</i>
+ * arguments passed to its constructor.
  * 
  * <p>
- * In order for a permission represented by a <code>PermissionInfo</code> to
- * be instantiated and considered during a permission check, its Permission
- * class must be available from the system classpath or an exported package.
- * This means that the instantiation of a permission represented by a
+ * In order for a permission represented by a <code>PermissionInfo</code> to be
+ * instantiated and considered during a permission check, its Permission class
+ * must be available from the system classpath or an exported package. This
+ * means that the instantiation of a permission represented by a
  * <code>PermissionInfo</code> may be delayed until the package containing its
  * Permission class has been exported by a bundle.
  * 
@@ -46,24 +46,22 @@ public class PermissionInfo {
 	 * and actions.
 	 * 
 	 * @param type The fully qualified class name of the permission represented
-	 *        by this <code>PermissionInfo</code>. The class must be a
-	 *        subclass of <code>java.security.Permission</code> and must
-	 *        define a 2-argument constructor that takes a <i>name </i> string
-	 *        and an <i>actions </i> string.
+	 *        by this <code>PermissionInfo</code>. The class must be a subclass
+	 *        of <code>java.security.Permission</code> and must define a
+	 *        2-argument constructor that takes a <i>name</i> string and an
+	 *        <i>actions</i> string.
 	 * 
 	 * @param name The permission name that will be passed as the first argument
-	 *        to the constructor of the <code>Permission</code> class
-	 *        identified by <code>type</code>.
+	 *        to the constructor of the <code>Permission</code> class identified
+	 *        by <code>type</code>.
 	 * 
 	 * @param actions The permission actions that will be passed as the second
 	 *        argument to the constructor of the <code>Permission</code> class
 	 *        identified by <code>type</code>.
 	 * 
-	 * @throws java.lang.NullPointerException if <code>type</code> is
-	 *         <code>null</code>.
-	 * @throws java.lang.IllegalArgumentException if <code>action</code> is
-	 *         not <code>null</code> and <code>name</code> is
-	 *         <code>null</code>.
+	 * @throws NullPointerException If <code>type</code> is <code>null</code>.
+	 * @throws IllegalArgumentException If <code>action</code> is not
+	 *         <code>null</code> and <code>name</code> is <code>null</code>.
 	 */
 	public PermissionInfo(String type, String name, String actions) {
 		this.type = type;
@@ -85,7 +83,7 @@ public class PermissionInfo {
 	 * 
 	 * @param encodedPermission The encoded <code>PermissionInfo</code>.
 	 * @see #getEncoded
-	 * @throws java.lang.IllegalArgumentException If the
+	 * @throws IllegalArgumentException If the specified
 	 *         <code>encodedPermission</code> is not properly formatted.
 	 */
 	public PermissionInfo(String encodedPermission) {
@@ -199,8 +197,8 @@ public class PermissionInfo {
 	}
 
 	/**
-	 * Returns the string encoding of this <code>PermissionInfo</code> in a
-	 * form suitable for restoring this <code>PermissionInfo</code>.
+	 * Returns the string encoding of this <code>PermissionInfo</code> in a form
+	 * suitable for restoring this <code>PermissionInfo</code>.
 	 * 
 	 * <p>
 	 * The encoded format is:
@@ -222,15 +220,16 @@ public class PermissionInfo {
 	 * </pre>
 	 * 
 	 * where <i>name</i> and <i>actions</i> are strings that are encoded for
-	 * proper parsing. Specifically, the <code>"</code>,<code>\</code>,
+	 * proper parsing. Specifically, the <code>&quot;</code>,<code>\</code>,
 	 * carriage return, and line feed characters are escaped using
-	 * <code>\"</code>, <code>\\</code>,<code>\r</code>, and
+	 * <code>\&quot;</code>, <code>\\</code>,<code>\r</code>, and
 	 * <code>\n</code>, respectively.
 	 * 
 	 * <p>
 	 * The encoded string contains no leading or trailing whitespace characters.
-	 * A single space character is used between <i>type</i> and &quot;<i>name</i>&quot;
-	 * and between &quot;<i>name</i>&quot; and &quot;<i>actions</i>&quot;.
+	 * A single space character is used between <i>type</i> and
+	 * &quot;<i>name</i>&quot; and between &quot;<i>name</i>&quot; and
+	 * &quot;<i>actions</i>&quot;.
 	 * 
 	 * @return The string encoding of this <code>PermissionInfo</code>.
 	 */
@@ -345,14 +344,14 @@ public class PermissionInfo {
 	 * @return A hash code value for this object.
 	 */
 	public int hashCode() {
-		int hash = type.hashCode();
+		int h = 31 * 17 + type.hashCode();
 		if (name != null) {
-			hash ^= name.hashCode();
+			h = 31 * h + name.hashCode();
 			if (actions != null) {
-				hash ^= actions.hashCode();
+				h = 31 * h + actions.hashCode();
 			}
 		}
-		return hash;
+		return h;
 	}
 
 	/**

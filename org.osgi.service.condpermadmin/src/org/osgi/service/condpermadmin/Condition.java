@@ -57,7 +57,7 @@ public interface Condition {
 
 	/**
 	 * Returns whether the Condition is satisfied. This method is only called
-	 * for immediate Conditon objects or immutable postponed conditions, and
+	 * for immediate Condition objects or immutable postponed conditions, and
 	 * must always be called inside a permission check. Mutable postponed
 	 * Condition objects will be called with the grouped version
 	 * {@link #isSatisfied(Condition[],Dictionary)} at the end of the permission
@@ -100,12 +100,13 @@ public interface Condition {
 	 *         not satisfied.
 	 */
 	boolean isSatisfied(Condition conditions[], Dictionary context);
-
 }
 
 /**
  * Package private class used to define the {@link Condition#FALSE} and
  * {@link Condition#TRUE} constants.
+ * 
+ * @Immutable
  */
 final class BooleanCondition implements Condition {
 	private final boolean	satisfied;

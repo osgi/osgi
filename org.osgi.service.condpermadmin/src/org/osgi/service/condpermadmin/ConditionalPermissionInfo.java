@@ -105,4 +105,80 @@ public interface ConditionalPermissionInfo {
 	 * @since 1.1
 	 */
 	String getGrantDecision();
+
+	/**
+	 * Returns the string encoding of this
+	 * <code>ConditionalPermissionInfo</code> in a form suitable for restoring
+	 * this <code>ConditionalPermissionInfo</code>.
+	 * 
+	 * <p>
+	 * The encoded format is:
+	 * 
+	 * <pre>
+	 *   grant {conditions permissions} &quot;name&quot;
+	 * </pre>
+	 * 
+	 * where <i>grant</i> is the grant decision, <i>conditions</i> is zero or
+	 * more {@link ConditionInfo#getEncoded() encoded conditions},
+	 * <i>permissions</i> is one or more {@link PermissionInfo#getEncoded()
+	 * encoded permissions} and <i>name</i> is the name of the
+	 * <code>ConditionalPermissionInfo</code>. <i>name</i> is optional.
+	 * 
+	 * <p>
+	 * If <i>name</i> is present in the encoded string, it must be encoded for
+	 * proper parsing. Specifically, the <code>&quot;</code>, <code>\</code>,
+	 * carriage return, and line feed characters are escaped using
+	 * <code>\&quot;</code>, <code>\\</code>, <code>\r</code>, and
+	 * <code>\n</code>, respectively.
+	 * 
+	 * <p>
+	 * The encoded string contains no leading or trailing whitespace characters.
+	 * A single space character is used between <i>grant</i> and <code>{</code>
+	 * and between <code>}</code> and <i>name</i>, if <i>name</i> is present.
+	 * All conditions and permissions are separated by a single space character.
+	 * 
+	 * @return The string encoding of this
+	 *         <code>ConditionalPermissionInfo</code>.
+	 * @since 1.1
+	 */
+	String getEncoded();
+
+	/**
+	 * Returns the string representation of this
+	 * <code>ConditionalPermissionInfo</code>. The string is created by calling
+	 * the <code>getEncoded</code> method on this
+	 * <code>ConditionalPermissionInfo</code>.
+	 * 
+	 * @return The string representation of this
+	 *         <code>ConditionalPermissionInfo</code>.
+	 * @since 1.1
+	 */
+	String toString();
+
+	/**
+	 * Determines the equality of two <code>ConditionalPermissionInfo</code>
+	 * objects.
+	 * 
+	 * This method checks that specified object has the same grant decision,
+	 * conditions, permissions and name as this
+	 * <code>ConditionalPermissionInfo</code> object.
+	 * 
+	 * @param obj The object to test for equality with this
+	 *        <code>ConditionalPermissionInfo</code> object.
+	 * @return <code>true</code> if <code>obj</code> is a
+	 *         <code>ConditionalPermissionInfo</code>, and has the same grant
+	 *         decision, conditions, permissions and name as this
+	 *         <code>ConditionalPermissionInfo</code> object; <code>false</code>
+	 *         otherwise.
+	 * @since 1.1
+	 */
+	 boolean equals(Object obj);
+ 
+	/**
+	 * Returns the hash code value for this object.
+	 * 
+	 * @return A hash code value for this object.
+	 * @since 1.1
+	 */
+	int hashCode();
 }
