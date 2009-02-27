@@ -37,9 +37,9 @@ import java.util.Hashtable;
  * </pre>
  * 
  * <p>
- * <code>PackagePermission</code> has two actions: <code>export</code> and
- * <code>import</code>. The <code>export</code> action implies the
- * <code>import</code> action.
+ * <code>PackagePermission</code> has three actions: <code>exportonly</code>,
+ * <code>import</code> and <code>export</code>. The <code>export</code> action,
+ * which is deprecated, implies the <code>import</code> action.
  * 
  * @ThreadSafe
  * @version $Revision$
@@ -47,16 +47,24 @@ import java.util.Hashtable;
 
 public final class PackagePermission extends BasicPermission {
 	static final long			serialVersionUID	= -5107705877071099135L;
-	
+
 	/**
 	 * The action string <code>export</code>. The <code>export</code> action
 	 * implies the <code>import</code> action.
+	 * 
+	 * @deprecated Since 1.5. Use {@link #EXPORTONLY} instead.
 	 */
 	public final static String	EXPORT				= "export";
 
 	/**
-	 * The action string <code>import</code>. The <code>import</code> action is
-	 * implied by the <code>export</code> action.
+	 * The action string <code>exportonly</code>.
+	 * 
+	 * @since 1.5
+	 */
+	public final static String	EXPORTONLY			= "exportonly";
+
+	/**
+	 * The action string <code>import</code>.
 	 */
 	public final static String	IMPORT				= "import";
 
@@ -106,7 +114,6 @@ public final class PackagePermission extends BasicPermission {
 	 * @param name Package name.
 	 * @param actions <code>export</code>,<code>import</code> (canonical order).
 	 */
-
 	public PackagePermission(String name, String actions) {
 		this(name, parseActions(actions));
 	}
@@ -200,9 +207,25 @@ public final class PackagePermission extends BasicPermission {
 
 				}
 				else {
-					// parse error
-					throw new IllegalArgumentException("invalid permission: "
-							+ actions);
+					if (i >= 9 && (a[i - 9] == 'e' || a[i - 9] == 'E')
+							&& (a[i - 8] == 'x' || a[i - 8] == 'X')
+							&& (a[i - 7] == 'p' || a[i - 7] == 'P')
+							&& (a[i - 6] == 'o' || a[i - 6] == 'O')
+							&& (a[i - 5] == 'r' || a[i - 5] == 'R')
+							&& (a[i - 4] == 't' || a[i - 4] == 'T')
+							&& (a[i - 3] == 'o' || a[i - 3] == 'O')
+							&& (a[i - 2] == 'n' || a[i - 2] == 'N')
+							&& (a[i - 1] == 'l' || a[i - 1] == 'L')
+							&& (a[i] == 'y' || a[i] == 'Y')) {
+						matchlen = 10;
+						mask |= ACTION_EXPORT;
+
+					}
+					else {
+						// parse error
+						throw new IllegalArgumentException(
+								"invalid permission: " + actions);
+					}
 				}
 
 			// make sure we didn't just match the tail of a word
@@ -261,7 +284,6 @@ public final class PackagePermission extends BasicPermission {
 	 *         <code>PackagePermission</code> action is implied by this
 	 *         object; <code>false</code> otherwise.
 	 */
-
 	public boolean implies(Permission p) {
 		if (p instanceof PackagePermission) {
 			PackagePermission requested = (PackagePermission) p;
@@ -280,12 +302,11 @@ public final class PackagePermission extends BasicPermission {
 	 * 
 	 * <p>
 	 * Always returns present <code>PackagePermission</code> actions in the
-	 * following order: <code>EXPORT</code>,<code>IMPORT</code>.
+	 * following order: <code>EXPORTONLY</code>,<code>IMPORT</code>.
 	 * 
 	 * @return Canonical string representation of the
 	 *         <code>PackagePermission</code> actions.
 	 */
-
 	public String getActions() {
 		String result = actions;
 		if (result == null) {
@@ -294,7 +315,7 @@ public final class PackagePermission extends BasicPermission {
 
 			int mask = getActionsMask();
 			if ((mask & ACTION_EXPORT) == ACTION_EXPORT) {
-				sb.append(EXPORT);
+				sb.append(EXPORTONLY);
 				comma = true;
 			}
 

@@ -27,7 +27,7 @@ public class PackagePermissionTests extends PermissionTestCase {
 
 	public void testInvalid() {
 		invalidPackagePermission("a.b.c", "x");
-		invalidPackagePermission("a.b.c", "   get  ,  x   ");
+		invalidPackagePermission("a.b.c", "   import  ,  x   ");
 		invalidPackagePermission("a.b.c", "");
 		invalidPackagePermission("a.b.c", "      ");
 		invalidPackagePermission("a.b.c", null);
@@ -36,27 +36,37 @@ public class PackagePermissionTests extends PermissionTestCase {
 		invalidPackagePermission("a.b.c", "xxx,");
 		invalidPackagePermission("a.b.c", "import,");
 		invalidPackagePermission("a.b.c", "export,   ");
+		invalidPackagePermission("a.b.c", "exportonly,   ");
 		invalidPackagePermission("a.b.c", "importme,");
 		invalidPackagePermission("a.b.c", "exportme,");
+		invalidPackagePermission("a.b.c", "exportonlyme,");
 		invalidPackagePermission("a.b.c", ",import");
 		invalidPackagePermission("a.b.c", ",export");
+		invalidPackagePermission("a.b.c", ",exportonly");
 		invalidPackagePermission("a.b.c", "   importme   ");
 		invalidPackagePermission("a.b.c", "   exportme     ");
+		invalidPackagePermission("a.b.c", "   exportonlyme     ");
 		invalidPackagePermission("a.b.c", "   impor");
 		invalidPackagePermission("a.b.c", "   expor"); 
+		invalidPackagePermission("a.b.c", "   exportonl"); 
 	}
 
-	public void testPermissions() {
+	public void testActions() {
 		Permission op = new PropertyPermission("java.home", "read"); 
 
 		PackagePermission p11 = new PackagePermission("com.foo.service1",
-				"    IMPORT,export   ");
+				"    IMPORT,exportonly   ");
 		PackagePermission p12 = new PackagePermission("com.foo.service1",
-				"EXPORT  ,   import");
+				"EXPORTONLY  ,   import");
 		PackagePermission p13 = new PackagePermission("com.foo.service1",
 				"expORT   ");
 		PackagePermission p14 = new PackagePermission("com.foo.service1",
 				"    Import    "); 
+		
+		assertEquals("exportonly,import", p11.getActions());
+		assertEquals("exportonly,import", p12.getActions());
+		assertEquals("exportonly,import", p13.getActions());
+		assertEquals("import", p14.getActions());
 
 		assertImplies(p11, p11);
 		assertImplies(p11, p12);
@@ -139,7 +149,14 @@ public class PackagePermissionTests extends PermissionTestCase {
 		assertNotAddPermission(pc, p12);
 
 		checkEnumeration(pc.elements(), false);
+		
+		assertSerializable(p11);
+		assertSerializable(p12);
+		assertSerializable(p13);
+		assertSerializable(p14);
+	}
 
+	public void testNames() {
 		PackagePermission p21 = new PackagePermission("com.foo.service2",
 				"import");
 		PackagePermission p22 = new PackagePermission("com.foo.*", "import");
@@ -169,7 +186,7 @@ public class PackagePermissionTests extends PermissionTestCase {
 
 		assertNotImplies(p23, p24);
 
-		pc = p21.newPermissionCollection();
+		PermissionCollection pc = p21.newPermissionCollection();
 
 		assertAddPermission(pc, p21);
 		assertImplies(pc, p21);
@@ -219,10 +236,6 @@ public class PackagePermissionTests extends PermissionTestCase {
 		assertImplies(pc, p23);
 		assertImplies(pc, p24);
 
-		assertSerializable(p11);
-		assertSerializable(p12);
-		assertSerializable(p13);
-		assertSerializable(p14);
 		assertSerializable(p21);
 		assertSerializable(p22);
 		assertSerializable(p23);
@@ -230,13 +243,26 @@ public class PackagePermissionTests extends PermissionTestCase {
 	}
 	
 	public void testActionImplications() {
+		PackagePermission exportonly = new PackagePermission("*", "exportonly");
 		PackagePermission export = new PackagePermission("*", "export");
 		PackagePermission importx = new PackagePermission("*", "import");
 
+		assertEquals("exportonly", exportonly.getActions());
+		assertEquals("exportonly,import", export.getActions());
+		assertEquals("import", importx.getActions());
+
 		assertImplies(export, export);
-		assertImplies(export, importx);
-		assertNotImplies(importx, export);
 		assertImplies(importx, importx);
+		assertImplies(exportonly, exportonly);
+		
+		assertImplies(export, importx);
+		assertImplies(export, exportonly);
+
+		assertNotImplies(importx, export);
+		assertNotImplies(importx, exportonly);
+		
+		assertNotImplies(exportonly, importx);
+		assertNotImplies(exportonly, export);
 	}
 
 	private void invalidPackagePermission(String name, String actions) {
