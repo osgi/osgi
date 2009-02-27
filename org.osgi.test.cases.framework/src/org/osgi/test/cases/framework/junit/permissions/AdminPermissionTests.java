@@ -16,30 +16,12 @@
 
 package org.osgi.test.cases.framework.junit.permissions;
 
-import java.math.BigInteger;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.security.Permission;
 import java.security.PermissionCollection;
-import java.security.Principal;
-import java.security.PublicKey;
-import java.security.SignatureException;
-import java.security.cert.CertificateEncodingException;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateExpiredException;
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.PropertyPermission;
-import java.util.Set;
 
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
-import org.osgi.test.support.MockFactory;
 import org.osgi.test.support.PermissionTestCase;
 
 public class AdminPermissionTests extends PermissionTestCase {
@@ -261,6 +243,17 @@ public class AdminPermissionTests extends PermissionTestCase {
 		AdminPermission startlevel = new AdminPermission("*", "startlevel");
 		AdminPermission context = new AdminPermission("*", "context");
 
+		assertEquals("class,resolve", classx.getActions());
+		assertEquals("execute,resolve", execute.getActions());
+		assertEquals("extensionLifecycle", extensionLifecycle.getActions());
+		assertEquals("lifecycle", lifecycle.getActions());
+		assertEquals("listener", listener.getActions());
+		assertEquals("metadata", metadata.getActions());
+		assertEquals("resolve", resolve.getActions());
+		assertEquals("resolve,resource", resource.getActions());
+		assertEquals("startlevel", startlevel.getActions());
+		assertEquals("context", context.getActions());
+
 		assertImplies(classx, classx);
 		assertNotImplies(classx, execute);
 		assertNotImplies(classx, extensionLifecycle);
@@ -409,218 +402,6 @@ public class AdminPermissionTests extends PermissionTestCase {
 		}
 		catch (IllegalArgumentException e) {
 			// expected
-		}
-	}
-
-	private Bundle newMockBundle(long id, String name, String location,
-			String dn) {
-		Map /* <X509Certificate, List<X509Certificate>> */testMap = new HashMap();
-		if (dn != null) {
-			Principal principal = new MockPrincipal(dn);
-			X509Certificate cert = new MockX509Certificate(principal);
-			List /* <X509Certificate> */testList = new ArrayList();
-			testList.add(cert);
-			testMap.put(cert, testList);
-		}
-		return (Bundle) MockFactory.newMock(Bundle.class, new MockBundle(id,
-				name,
-				location, testMap));
-	}
-
-	private static class MockBundle {
-		private final long		id;
-		private final String	name;
-		private final String	location;
-		private final Map		signers;
-
-		MockBundle(long id, String name, String location, Map signers) {
-			this.id = id;
-			this.name = name;
-			this.location = location;
-			this.signers = signers;
-		}
-
-		public long getBundleId() {
-			return id;
-		}
-
-		public String getLocation() {
-			return location;
-		}
-
-		public Map getSignerCertificates(int type) {
-			return new HashMap(signers);
-		}
-
-		public String getSymbolicName() {
-			return name;
-		}
-	}
-
-	private static class MockX509Certificate extends X509Certificate {
-		private final Principal	principal;
-
-		MockX509Certificate(Principal principal) {
-			this.principal = principal;
-		}
-
-		public Principal getSubjectDN() {
-			return principal;
-		}
-
-		public boolean equals(Object obj) {
-			if (this == obj) {
-				return true;
-			}
-			if (obj instanceof MockX509Certificate) {
-				return principal.equals(((MockX509Certificate) obj).principal);
-			}
-			return false;
-		}
-
-		public int hashCode() {
-			return principal.hashCode();
-		}
-
-		public String toString() {
-			return principal.toString();
-		}
-
-		public void checkValidity() throws CertificateExpiredException,
-				java.security.cert.CertificateNotYetValidException {
-			throw new UnsupportedOperationException();
-		}
-
-		public void checkValidity(Date var0)
-				throws java.security.cert.CertificateExpiredException,
-				java.security.cert.CertificateNotYetValidException {
-			throw new UnsupportedOperationException();
-		}
-
-		public int getBasicConstraints() {
-			throw new UnsupportedOperationException();
-		}
-
-		public Principal getIssuerDN() {
-			throw new UnsupportedOperationException();
-		}
-
-		public boolean[] getIssuerUniqueID() {
-			throw new UnsupportedOperationException();
-		}
-
-		public boolean[] getKeyUsage() {
-			throw new UnsupportedOperationException();
-		}
-
-		public Date getNotAfter() {
-			throw new UnsupportedOperationException();
-		}
-
-		public Date getNotBefore() {
-			throw new UnsupportedOperationException();
-		}
-
-		public BigInteger getSerialNumber() {
-			throw new UnsupportedOperationException();
-		}
-
-		public String getSigAlgName() {
-			throw new UnsupportedOperationException();
-		}
-
-		public String getSigAlgOID() {
-			throw new UnsupportedOperationException();
-		}
-
-		public byte[] getSigAlgParams() {
-			throw new UnsupportedOperationException();
-		}
-
-		public byte[] getSignature() {
-			throw new UnsupportedOperationException();
-		}
-
-		public boolean[] getSubjectUniqueID() {
-			throw new UnsupportedOperationException();
-		}
-
-		public byte[] getTBSCertificate() throws CertificateEncodingException {
-			throw new UnsupportedOperationException();
-		}
-
-		public int getVersion() {
-			throw new UnsupportedOperationException();
-		}
-
-		public byte[] getEncoded() throws CertificateEncodingException {
-			throw new UnsupportedOperationException();
-		}
-
-		public PublicKey getPublicKey() {
-			throw new UnsupportedOperationException();
-		}
-
-		public void verify(PublicKey var0)
-				throws java.security.InvalidKeyException,
-				java.security.NoSuchAlgorithmException,
-				java.security.NoSuchProviderException,
-				java.security.SignatureException,
-				java.security.cert.CertificateException {
-			throw new UnsupportedOperationException();
-		}
-
-		public void verify(PublicKey var0, String var1)
-				throws InvalidKeyException, NoSuchAlgorithmException,
-				NoSuchProviderException, SignatureException,
-				CertificateException {
-			throw new UnsupportedOperationException();
-		}
-
-		public Set getCriticalExtensionOIDs() {
-			throw new UnsupportedOperationException();
-		}
-
-		public byte[] getExtensionValue(String var0) {
-			throw new UnsupportedOperationException();
-		}
-
-		public Set getNonCriticalExtensionOIDs() {
-			throw new UnsupportedOperationException();
-		}
-
-		public boolean hasUnsupportedCriticalExtension() {
-			throw new UnsupportedOperationException();
-		}
-	}
-
-	private static class MockPrincipal implements Principal {
-		private final String	name;
-
-		MockPrincipal(String name) {
-			this.name = name;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public boolean equals(Object obj) {
-			if (this == obj) {
-				return true;
-			}
-			if (obj instanceof MockPrincipal) {
-				return name.equals(((MockPrincipal) obj).name);
-			}
-			return false;
-		}
-
-		public int hashCode() {
-			return name.hashCode();
-		}
-
-		public String toString() {
-			return getName();
 		}
 	}
 }
