@@ -85,13 +85,13 @@ public interface Filter {
 	 * Compares this <code>Filter</code> to another <code>Filter</code>.
 	 * 
 	 * <p>
-	 * This implementation returns the result of calling
-	 * <code>this.toString().equals(obj.toString()</code>.
+	 * This method returns the result of calling
+	 * <code>this.toString().equals(obj.toString())</code>.
 	 * 
 	 * @param obj The object to compare against this <code>Filter</code>.
 	 * @return If the other object is a <code>Filter</code> object, then returns
 	 *         the result of calling
-	 *         <code>this.toString().equals(obj.toString()</code>;
+	 *         <code>this.toString().equals(obj.toString())</code>;
 	 *         <code>false</code> otherwise.
 	 */
 	public boolean equals(Object obj);
@@ -100,7 +100,7 @@ public interface Filter {
 	 * Returns the hashCode for this <code>Filter</code>.
 	 * 
 	 * <p>
-	 * This implementation returns the result of calling
+	 * This method returns the result of calling
 	 * <code>this.toString().hashCode()</code>.
 	 * 
 	 * @return The hashCode of this <code>Filter</code>.
