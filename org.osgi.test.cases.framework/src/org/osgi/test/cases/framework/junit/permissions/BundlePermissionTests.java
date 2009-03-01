@@ -321,7 +321,7 @@ public class BundlePermissionTests extends PermissionTestCase {
 		assertImplies(fragment, fragment);
 	}
 	
-	private void invalidBundlePermission(String name, String actions) {
+	private static void invalidBundlePermission(String name, String actions) {
 		try {
 			BundlePermission p = new BundlePermission(name, actions);
 			fail(p + " created with invalid actions"); 

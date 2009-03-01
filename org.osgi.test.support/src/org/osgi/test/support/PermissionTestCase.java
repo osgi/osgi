@@ -134,6 +134,52 @@ public abstract class PermissionTestCase extends OSGiTestCase {
 		}
 	}
 
+	public static void assertNotSerializable(Permission p1) {
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ObjectOutputStream out = new ObjectOutputStream(baos);
+
+			out.writeObject(p1);
+			out.flush();
+			out.close();
+			fail("serialization error");
+		}
+		catch (Exception e) {
+			// expected
+		}
+	}
+
+	public static void assertInvalidImplies(Permission p1, Permission p2) {
+		try {
+			p1.implies(p2);
+			fail("implies did not throw exception");
+		}
+		catch (IllegalArgumentException e) {
+			// expected
+		}
+	}
+
+	public static void assertInvalidImplies(PermissionCollection pc,
+			Permission p2) {
+		try {
+			pc.implies(p2);
+			fail("implies did not throw exception");
+		}
+		catch (IllegalArgumentException e) {
+			// expected
+		}
+	}
+
+	public static void assertUnsupportedImplies(Permission p1, Permission p2) {
+		try {
+			p1.implies(p2);
+			fail("implies did not throw exception");
+		}
+		catch (UnsupportedOperationException e) {
+			// expected
+		}
+	}
+
 	public static Bundle newMockBundle(long id, String name, String location,
 			String dn) {
 		Map /* <X509Certificate, List<X509Certificate>> */testMap = new HashMap();

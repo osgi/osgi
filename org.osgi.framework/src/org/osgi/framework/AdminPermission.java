@@ -68,7 +68,7 @@ import java.util.Iterator;
  * <code>execute</code> and <code>resource</code> actions.
  * <p>
  * The name of this permission is a filter expression. The filter gives access
- * to the following parameters:
+ * to the following attributes:
  * <ul>
  * <li>signer - A Distinguished Name chain used to sign a bundle. Wildcards in a
  * DN are not matched according to the filter string rules, but according to the
@@ -77,6 +77,7 @@ import java.util.Iterator;
  * <li>id - The bundle ID of the designated bundle.</li>
  * <li>name - The symbolic name of a bundle.</li>
  * </ul>
+ * Filter attribute names are processed in a case sensitive manner.
  * 
  * @ThreadSafe
  * @version $Revision$
@@ -202,11 +203,11 @@ public final class AdminPermission extends BasicPermission {
 	transient final Bundle		bundle;
 
 	/**
-	 * If this AdminPermission was constructed with a bundle, this dictionary
-	 * holds the properties of that bundle, used to match a filter in implies.
-	 * This is not initialized until necessary, and then cached in this object.
+	 * This dictionary holds the properties of the permission, used to match a
+	 * filter in implies. This is not initialized until necessary, and then
+	 * cached in this object.
 	 */
-	private transient volatile Dictionary	bundleProperties;
+	private transient volatile Dictionary	properties;
 
 	/**
 	 * Creates a new <code>AdminPermission</code> object that matches all
@@ -238,13 +239,15 @@ public final class AdminPermission extends BasicPermission {
 	 * 
 	 * @param filter A filter expression that can use signer, location, id, and
 	 *        name keys. A value of &quot;*&quot; or <code>null</code> matches
-	 *        all bundle.
+	 *        all bundle. Filter attribute names are processed in a case
+	 *        sensitive manner.
 	 * @param actions <code>class</code>, <code>execute</code>,
 	 *        <code>extensionLifecycle</code>, <code>lifecycle</code>,
 	 *        <code>listener</code>, <code>metadata</code>, <code>resolve</code>
 	 *        , <code>resource</code>, <code>startlevel</code> or
 	 *        <code>context</code>. A value of "*" or <code>null</code>
 	 *        indicates all actions.
+	 * @throws IllegalArgumentException If the filter has an invalid syntax.
 	 */
 	public AdminPermission(String filter, String actions) {
 		// arguments will be null if called from a PermissionInfo defined with
@@ -253,12 +256,12 @@ public final class AdminPermission extends BasicPermission {
 	}
 
 	/**
-	 * Creates a new <code>AdminPermission</code> object to be used by the code
-	 * that must check a <code>Permission</code> object.
+	 * Creates a new requested <code>AdminPermission</code> object to be used by
+	 * the code that must perform <code>checkPermission</code>.
 	 * <code>AdminPermission</code> objects created with this constructor cannot
 	 * be added to an <code>AdminPermission</code> permission collection.
 	 * 
-	 * @param bundle A bundle
+	 * @param bundle A bundle.
 	 * @param actions <code>class</code>, <code>execute</code>,
 	 *        <code>extensionLifecycle</code>, <code>lifecycle</code>,
 	 *        <code>listener</code>, <code>metadata</code>, <code>resolve</code>
@@ -280,6 +283,9 @@ public final class AdminPermission extends BasicPermission {
 	 * @return permission name.
 	 */
 	private static String createName(Bundle bundle) {
+		if (bundle == null) {
+			throw new IllegalArgumentException("bundle must not be null");
+		}
 		StringBuffer sb = new StringBuffer();
 		sb.append("(id=");
 		sb.append(bundle.getBundleId());
@@ -551,6 +557,11 @@ public final class AdminPermission extends BasicPermission {
 		return mask;
 	}
 
+	/**
+	 * Returns the filter.
+	 * 
+	 * @return Current filter.
+	 */
 	synchronized Filter getFilter() {
 		return filter;
 	}
@@ -562,9 +573,14 @@ public final class AdminPermission extends BasicPermission {
 	 * @return a Filter for this bundle. If the specified filterString is
 	 *         <code>null</code> or equals "*", then <code>null</code> is
 	 *         returned to indicate a wildcard.
+	 * @throws IllegalArgumentException If the filter syntax is invalid.
 	 */
 	private static Filter parseFilter(String filterString) {
-		if ((filterString == null) || filterString.equals("*")) {
+		if (filterString == null) {
+			return null;
+		}
+		filterString = filterString.trim();
+		if (filterString.equals("*")) {
 			return null;
 		}
 		
@@ -601,8 +617,7 @@ public final class AdminPermission extends BasicPermission {
 	 * filter is "*" and this object's actions include all of the specified
 	 * permission's actions
 	 * 
-	 * @param p The permission to interrogate.
-	 * 
+	 * @param p The requested permission.
 	 * @return <code>true</code> if the specified permission is implied by this
 	 *         object; <code>false</code> otherwise.
 	 * @throws UnsupportedOperationException If this permission was constructed
@@ -640,7 +655,7 @@ public final class AdminPermission extends BasicPermission {
 		if (requested.bundle == null) {
 			return false;
 		}
-		return f.match(requested.getProperties());
+		return f.matchCase(requested.getProperties());
 	}
 
 	/**
@@ -812,7 +827,7 @@ public final class AdminPermission extends BasicPermission {
 	 * @return a dictionary of properties for this bundle
 	 */
 	private Dictionary getProperties() {
-		Dictionary result = bundleProperties;
+		Dictionary result = properties;
 		if (result == null) {
 			final Dictionary dict = new Hashtable(4);
 			AccessController.doPrivileged(new PrivilegedAction() {
@@ -830,7 +845,7 @@ public final class AdminPermission extends BasicPermission {
 					return null;
 				}
 			});
-			bundleProperties = result = dict;
+			properties = result = dict;
 		}
 		return result;
 	}
@@ -861,7 +876,6 @@ final class AdminPermissionCollection extends PermissionCollection {
 	 * Create an empty AdminPermissions object.
 	 * 
 	 */
-
 	public AdminPermissionCollection() {
 		permissions = new Hashtable();
 	}
@@ -953,9 +967,9 @@ final class AdminPermissionCollection extends PermissionCollection {
 		}
 
 		// just iterate one by one
-		Iterator permItr = permissions.values().iterator();
-		while (permItr.hasNext()) {
-			if (((AdminPermission) permItr.next()).implies(requested)) {
+		for (Iterator iter = permissions.values().iterator(); iter
+				.hasNext();) {
+			if (((AdminPermission) iter.next()).implies(requested)) {
 				return true;
 			}
 		}
@@ -968,7 +982,6 @@ final class AdminPermissionCollection extends PermissionCollection {
 	 * 
 	 * @return Enumeration of all <code>AdminPermission</code> objects.
 	 */
-
 	public Enumeration elements() {
 		return permissions.elements();
 	}

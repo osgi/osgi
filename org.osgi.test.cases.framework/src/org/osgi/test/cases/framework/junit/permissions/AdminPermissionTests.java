@@ -52,6 +52,7 @@ public class AdminPermissionTests extends PermissionTestCase {
 		invalidAdminPermission("*", "   contex");
 
 		invalidAdminPermission("()", "*");
+		invalidAdminPermission((Bundle) null, "*");
 	}
 
 	public void testDefault() {
@@ -136,10 +137,10 @@ public class AdminPermissionTests extends PermissionTestCase {
 		assertImplies(p1, p3);
 		assertImplies(p4, p3);
 		assertImplies(p5, p3);
-		invalidImplies(p1, p2);
-		invalidImplies(p2, p1);
-		unsupportedImplies(p3, p2);
-		unsupportedImplies(p3, p1);
+		assertInvalidImplies(p1, p2);
+		assertInvalidImplies(p2, p1);
+		assertUnsupportedImplies(p3, p2);
+		assertUnsupportedImplies(p3, p1);
 
 		assertEquals(p1, p2);
 		assertEquals(p2, p1);
@@ -151,7 +152,7 @@ public class AdminPermissionTests extends PermissionTestCase {
 		checkEnumeration(pc.elements(), true);
 
 		assertNotImplies(pc, p3);
-		invalidImplies(pc, p1);
+		assertInvalidImplies(pc, p1);
 
 		assertAddPermission(pc, new AdminPermission("(id=2)", "class"));
 		assertAddPermission(pc, new AdminPermission("(id=2)", "resource"));
@@ -175,12 +176,13 @@ public class AdminPermissionTests extends PermissionTestCase {
 		assertImplies(pc, new AdminPermission(testBundle2, "resource"));
 		assertImplies(pc, new AdminPermission("*", "resource"));
 
-		invalidImplies(pc, p1);
+		assertInvalidImplies(pc, p1);
 
 		checkEnumeration(pc.elements(), false);
 
 		assertSerializable(p1);
 		assertSerializable(p2);
+		assertNotSerializable(p3);
 		assertSerializable(p4);
 		assertSerializable(p5);
 	}
@@ -365,7 +367,7 @@ public class AdminPermissionTests extends PermissionTestCase {
 		assertImplies(context, context);
 	}
 
-	private void invalidAdminPermission(String name, String actions) {
+	private static void invalidAdminPermission(String name, String actions) {
 		try {
 			AdminPermission p = new AdminPermission(name, actions);
 			fail(p + " created with invalid arguments");
@@ -374,31 +376,11 @@ public class AdminPermissionTests extends PermissionTestCase {
 			// expected
 		}
 	}
-
-	private void invalidImplies(Permission p1, Permission p2) {
+	
+	private static void invalidAdminPermission(Bundle bundle, String actions) {
 		try {
-			p1.implies(p2);
-			fail("implies did not throw exception");
-		}
-		catch (IllegalArgumentException e) {
-			// expected
-		}
-	}
-
-	private void unsupportedImplies(Permission p1, Permission p2) {
-		try {
-			p1.implies(p2);
-			fail("implies did not throw exception");
-		}
-		catch (UnsupportedOperationException e) {
-			// expected
-		}
-	}
-
-	private void invalidImplies(PermissionCollection pc, Permission p2) {
-		try {
-			pc.implies(p2);
-			fail("implies did not throw exception");
+			AdminPermission p = new AdminPermission(bundle, actions);
+			fail(p + " created with invalid arguments");
 		}
 		catch (IllegalArgumentException e) {
 			// expected

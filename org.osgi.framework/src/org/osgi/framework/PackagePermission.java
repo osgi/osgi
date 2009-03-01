@@ -17,11 +17,19 @@
 package org.osgi.framework;
 
 import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.security.AccessController;
 import java.security.BasicPermission;
 import java.security.Permission;
 import java.security.PermissionCollection;
+import java.security.PrivilegedAction;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * A bundle's authority to import or export a package.
@@ -46,51 +54,72 @@ import java.util.Hashtable;
  */
 
 public final class PackagePermission extends BasicPermission {
-	static final long			serialVersionUID	= -5107705877071099135L;
+	static final long						serialVersionUID	= -5107705877071099135L;
 
 	/**
 	 * The action string <code>export</code>. The <code>export</code> action
 	 * implies the <code>import</code> action.
 	 * 
-	 * @deprecated Since 1.5. Use {@link #EXPORTONLY} instead.
+	 * @deprecated Since 1.5. Use <code>exportonly</code> instead.
 	 */
-	public final static String	EXPORT				= "export";
+	public final static String				EXPORT				= "export";
 
 	/**
-	 * The action string <code>exportonly</code>.
+	 * The action string <code>exportonly</code>. The <code>exportonly</code>
+	 * action does not imply the <code>import</code> action.
 	 * 
 	 * @since 1.5
 	 */
-	public final static String	EXPORTONLY			= "exportonly";
+	public final static String				EXPORTONLY			= "exportonly";
 
 	/**
 	 * The action string <code>import</code>.
 	 */
-	public final static String	IMPORT				= "import";
+	public final static String				IMPORT				= "import";
 
-	private final static int	ACTION_EXPORT		= 0x00000001;
-	private final static int	ACTION_IMPORT		= 0x00000002;
-	private final static int	ACTION_ALL			= ACTION_EXPORT
-															| ACTION_IMPORT;
-	private final static int	ACTION_NONE			= 0;
+	private final static int				ACTION_EXPORT		= 0x00000001;
+	private final static int				ACTION_IMPORT		= 0x00000002;
+	private final static int				ACTION_ALL			= ACTION_EXPORT
+																		| ACTION_IMPORT;
+	private final static int				ACTION_NONE			= 0;
 
 	/**
 	 * The actions mask.
 	 * 
 	 * @GuardedBy this
 	 */
-	private transient int		action_mask;
+	private transient int					action_mask;
 
 	/**
 	 * The actions in canonical form.
 	 * 
 	 * @serial
 	 */
-	private volatile String		actions				= null;
+	private volatile String					actions				= null;
 
 	/**
-	 * Defines the authority to import and/or export a package within the OSGi
-	 * environment.
+	 * The bundle used by this PackagePermission.
+	 */
+	transient final Bundle					bundle;
+
+	/**
+	 * If this PackagePermission was constructed with a filter, this holds a
+	 * Filter matching object used to evaluate the filter in implies.
+	 * 
+	 * @GuardedBy this
+	 */
+	private transient Filter				filter;
+
+	/**
+	 * This dictionary holds the properties of the permission, used to match a
+	 * filter in implies. This is not initialized until necessary, and then
+	 * cached in this object.
+	 */
+	private transient volatile Dictionary	properties;
+
+	/**
+	 * Creates a new <code>PackagePermission</code> object.
+	 * 
 	 * <p>
 	 * The name is specified as a normal Java package name: a dot-separated
 	 * string. Wildcards may be used. For example:
@@ -100,6 +129,19 @@ public final class PackagePermission extends BasicPermission {
 	 * javax.servlet.*
 	 * *
 	 * </pre>
+	 * 
+	 * For the <code>import</code> action, the name can also be a filter
+	 * expression. The filter gives access to the following attributes:
+	 * <ul>
+	 * <li>exporter.signer - A Distinguished Name chain used to sign the
+	 * exporting bundle. Wildcards in a DN are not matched according to the
+	 * filter string rules, but according to the rules defined for a DN chain.</li>
+	 * <li>exporter.location - The location of the exporting bundle.</li>
+	 * <li>exporter.id - The bundle ID of the exporting bundle.</li>
+	 * <li>exporter.name - The symbolic name of the exporting bundle.</li>
+	 * <li>package.name - The name of the requested package.</li>
+	 * </ul>
+	 * Filter attribute names are processed in a case sensitive manner.
 	 * 
 	 * <p>
 	 * Package Permissions are granted over all possible versions of a package.
@@ -111,21 +153,61 @@ public final class PackagePermission extends BasicPermission {
 	 * <p>
 	 * Permission is granted for both classes and resources.
 	 * 
-	 * @param name Package name.
-	 * @param actions <code>export</code>,<code>import</code> (canonical order).
+	 * @param name Package name or filter expression. A filter expression can
+	 *        only be specified if the specified action is <code>import</code>.
+	 * @param actions <code>exportonly</code>,<code>import</code> (canonical
+	 *        order).
+	 * @throw IllegalArgumentException If the specified name is a filter
+	 *        expression and either the specified action is not
+	 *        <code>import</code> or the filter has an invalid syntax.
 	 */
 	public PackagePermission(String name, String actions) {
 		this(name, parseActions(actions));
+		if ((getFilter() != null)
+				&& ((getActionsMask() & ACTION_ALL) != ACTION_IMPORT)) {
+			throw new IllegalArgumentException(
+					"invalid action string for filter expression");
+		}
+	}
+
+	/**
+	 * Creates a new requested <code>PackagePermission</code> object to be used
+	 * by code that must perform <code>checkPermission</code> for the
+	 * <code>import</code> action. <code>PackagePermission</code> objects
+	 * created with this constructor cannot be added to a
+	 * <code>PackagePermission</code> permission collection.
+	 * 
+	 * @param name The name of the requested package to import.
+	 * @param exportingBundle The bundle exporting the requested package.
+	 * @param actions The action <code>import</code>.
+	 * @throw IllegalArgumentException If the specified action is not
+	 *        <code>import</code> or the name is a filter expression.
+	 * @since 1.5
+	 */
+	public PackagePermission(String name, Bundle exportingBundle, String actions) {
+		super(name);
+		this.bundle = exportingBundle;
+		if (exportingBundle == null) {
+			throw new IllegalArgumentException("bundle must not be null");
+		}
+		setTransients(parseActions(actions));
+		if (getFilter() != null) {
+			throw new IllegalArgumentException("invalid name");
+		}
+		if ((getActionsMask() & ACTION_ALL) != ACTION_IMPORT) {
+			throw new IllegalArgumentException("invalid action string");
+		}
 	}
 
 	/**
 	 * Package private constructor used by PackagePermissionCollection.
 	 * 
-	 * @param name class name
+	 * @param name package name
 	 * @param mask action mask
 	 */
 	PackagePermission(String name, int mask) {
 		super(name);
+		this.bundle = null;
 		setTransients(mask);
 	}
 
@@ -139,6 +221,7 @@ public final class PackagePermission extends BasicPermission {
 			throw new IllegalArgumentException("invalid action string");
 		}
 		action_mask = mask;
+		filter = parseFilter(getName());
 	}
 
 	/**
@@ -261,6 +344,40 @@ public final class PackagePermission extends BasicPermission {
 	}
 
 	/**
+	 * Returns the filter.
+	 * 
+	 * @return Current filter.
+	 */
+	synchronized Filter getFilter() {
+		return filter;
+	}
+
+	/**
+	 * Parse filter string into a Filter object.
+	 * 
+	 * @param filterString The filter string to parse.
+	 * @return a Filter for this bundle. If the specified filterString is not a
+	 *         filter expression, then <code>null</code> is returned.
+	 * @throws IllegalArgumentException If the filter syntax is invalid.
+	 */
+	private static Filter parseFilter(String filterString) {
+		filterString = filterString.trim();
+		if (filterString.charAt(0) != '(') {
+			return null;
+		}
+
+		try {
+			return FrameworkUtil.createFilter(filterString);
+		}
+		catch (InvalidSyntaxException e) {
+			IllegalArgumentException iae = new IllegalArgumentException(
+					"invalid filter");
+			iae.initCause(e);
+			throw iae;
+		}
+	}
+
+	/**
 	 * Determines if the specified permission is implied by this object.
 	 * 
 	 * <p>
@@ -279,21 +396,38 @@ public final class PackagePermission extends BasicPermission {
 	 * x.y,&quot;export&quot; -&gt; x.y.z, &quot;export&quot;  is false
 	 * </pre>
 	 * 
-	 * @param p The target permission to interrogate.
-	 * @return <code>true</code> if the specified
-	 *         <code>PackagePermission</code> action is implied by this
+	 * @param p The requested permission.
+	 * @return <code>true</code> if the specified permission is implied by this
 	 *         object; <code>false</code> otherwise.
+	 * @throws IllegalArgumentException If specified permission was constructed
+	 *         with a filter expression.
 	 */
 	public boolean implies(Permission p) {
-		if (p instanceof PackagePermission) {
-			PackagePermission requested = (PackagePermission) p;
-
-			int requestedMask = requested.getActionsMask();
-			return ((getActionsMask() & requestedMask) == requestedMask)
-					&& super.implies(p);
+		if (!(p instanceof PackagePermission)) {
+			return false;
+		}
+		PackagePermission requested = (PackagePermission) p;
+		if (bundle != null) {
+			throw new UnsupportedOperationException(
+					"implies cannot be called because this permission constructed with a Bundle");
+		}
+		// if requested permission has a filter, then it is an invalid argument
+		if (requested.getFilter() != null) {
+			throw new IllegalArgumentException(
+					"argument must not be constructed with a filter expression");
 		}
 
-		return false;
+		// check actions first - much faster
+		int requestedMask = requested.getActionsMask();
+		if ((getActionsMask() & requestedMask) != requestedMask) {
+			return false;
+		}
+		// Get filter if any
+		Filter f = getFilter();
+		if (f == null) {
+			return super.implies(requested);
+		}
+		return f.matchCase(requested.getProperties());
 	}
 
 	/**
@@ -350,8 +484,8 @@ public final class PackagePermission extends BasicPermission {
 	 * @param obj The object to test for equality with this
 	 *        <code>PackagePermission</code> object.
 	 * @return <code>true</code> if <code>obj</code> is a
-	 *         <code>PackagePermission</code>, and has the same package name
-	 *         and actions as this <code>PackagePermission</code> object;
+	 *         <code>PackagePermission</code>, and has the same package name and
+	 *         actions as this <code>PackagePermission</code> object;
 	 *         <code>false</code> otherwise.
 	 */
 	public boolean equals(Object obj) {
@@ -366,7 +500,9 @@ public final class PackagePermission extends BasicPermission {
 		PackagePermission pp = (PackagePermission) obj;
 
 		return (getActionsMask() == pp.getActionsMask())
-				&& getName().equals(pp.getName());
+				&& getName().equals(pp.getName())
+				&& ((bundle == pp.bundle) || ((bundle != null) && bundle
+						.equals(pp.bundle)));
 	}
 
 	/**
@@ -374,10 +510,12 @@ public final class PackagePermission extends BasicPermission {
 	 * 
 	 * @return A hash code value for this object.
 	 */
-
 	public int hashCode() {
 		int h = 31 * 17 + getName().hashCode();
 		h = 31 * h + getActions().hashCode();
+		if (bundle != null) {
+			h = 31 * h + bundle.hashCode();
+		}
 		return h;
 	}
 
@@ -388,6 +526,9 @@ public final class PackagePermission extends BasicPermission {
 	 */
 	private synchronized void writeObject(java.io.ObjectOutputStream s)
 			throws IOException {
+		if (bundle != null) {
+			throw new InvalidObjectException("cannot serialize");
+		}
 		// Write out the actions. The superclass takes care of the name
 		// call getActions to make sure actions field is initialized
 		if (actions == null)
@@ -405,6 +546,40 @@ public final class PackagePermission extends BasicPermission {
 		s.defaultReadObject();
 		setTransients(parseActions(actions));
 	}
+
+	/**
+	 * Called by <code><@link PackagePermission#implies(Permission)></code>.
+	 * 
+	 * @return a dictionary of properties for this permission.
+	 */
+	private Dictionary getProperties() {
+		Dictionary result = properties;
+		if (result == null) {
+			final Dictionary dict = new Hashtable(4);
+			if (bundle != null) {
+				AccessController.doPrivileged(new PrivilegedAction() {
+					public Object run() {
+						dict.put("exporter.id", new Long(bundle.getBundleId()));
+						dict.put("exporter.location", bundle.getLocation());
+						String name = bundle.getSymbolicName();
+						if (name != null) {
+							dict.put("exporter.name", name);
+						}
+						SignerProperty signer = new SignerProperty(bundle);
+						if (signer.isBundleSigned()) {
+							dict.put("exporter.signer", signer);
+						}
+						return null;
+					}
+				});
+			}
+			if (getFilter() == null) {
+				dict.put("package.name", getName());
+			}
+			properties = result = dict;
+		}
+		return result;
+	}
 }
 
 /**
@@ -418,7 +593,7 @@ public final class PackagePermission extends BasicPermission {
 final class PackagePermissionCollection extends PermissionCollection {
 	static final long		serialVersionUID	= -3350758995234427603L;
 	/**
-	 * Table of permissions.
+	 * Table of permissions with names.
 	 * 
 	 * @serial
 	 * @GuardedBy this
@@ -434,17 +609,25 @@ final class PackagePermissionCollection extends PermissionCollection {
 	private boolean			all_allowed;
 
 	/**
+	 * Table of permissions with filter expressions.
+	 * 
+	 * @serial
+	 * @GuardedBy this
+	 */
+	private final Hashtable	filterPermissions;
+
+	/**
 	 * Create an empty PackagePermissions object.
 	 */
-
 	public PackagePermissionCollection() {
 		permissions = new Hashtable();
+		filterPermissions = new Hashtable();
 		all_allowed = false;
 	}
 
 	/**
-	 * Adds a permission to the <code>PackagePermission</code> objects. The
-	 * key for the hash is the name.
+	 * Adds a permission to the <code>PackagePermission</code> objects. The key
+	 * for the hash is the name.
 	 * 
 	 * @param permission The <code>PackagePermission</code> object to add.
 	 * 
@@ -455,7 +638,6 @@ final class PackagePermissionCollection extends PermissionCollection {
 	 *         <code>PackagePermissionCollection</code> object has been marked
 	 *         read-only.
 	 */
-
 	public void add(final Permission permission) {
 		if (!(permission instanceof PackagePermission)) {
 			throw new IllegalArgumentException("invalid permission: "
@@ -467,23 +649,30 @@ final class PackagePermissionCollection extends PermissionCollection {
 		}
 
 		final PackagePermission pp = (PackagePermission) permission;
+		if (pp.bundle != null) {
+			throw new IllegalArgumentException("cannot add to collection: "
+					+ pp);
+		}
+
 		final String name = pp.getName();
+		/* select the bucket for the permission */
+		Dictionary pc = (pp.getFilter() == null) ? permissions
+				: filterPermissions;
 
 		synchronized (this) {
-			final PackagePermission existing = (PackagePermission) permissions
-					.get(name);
-
+			final PackagePermission existing = (PackagePermission) pc.get(name);
 			if (existing != null) {
 				final int oldMask = existing.getActionsMask();
 				final int newMask = pp.getActionsMask();
 				if (oldMask != newMask) {
-					permissions.put(name, new PackagePermission(name, oldMask
-							| newMask));
+					pc
+							.put(name, new PackagePermission(name, oldMask
+									| newMask));
 
 				}
 			}
 			else {
-				permissions.put(name, pp);
+				pc.put(name, pp);
 			}
 
 			if (!all_allowed) {
@@ -501,16 +690,19 @@ final class PackagePermissionCollection extends PermissionCollection {
 	 * @param permission The Permission object to compare with this
 	 *        <code>PackagePermission</code> object.
 	 * 
-	 * @return <code>true</code> if <code>permission</code> is a proper
-	 *         subset of a permission in the set; <code>false</code>
-	 *         otherwise.
+	 * @return <code>true</code> if <code>permission</code> is a proper subset
+	 *         of a permission in the set; <code>false</code> otherwise.
 	 */
-
 	public boolean implies(final Permission permission) {
 		if (!(permission instanceof PackagePermission)) {
 			return false;
 		}
 		final PackagePermission requested = (PackagePermission) permission;
+		// if requested permission has a filter, then it is an invalid argument
+		if (requested.getFilter() != null) {
+			throw new IllegalArgumentException(
+					"argument must not be constructed with a filter expression");
+		}
 		String name = requested.getName();
 		final int desired = requested.getActionsMask();
 		PackagePermission x;
@@ -556,7 +748,15 @@ final class PackagePermissionCollection extends PermissionCollection {
 			offset = last - 1;
 		}
 		// we don't have to check for "*" as it was already checked
-		// at the top (all_allowed), so we just return false
+		// at the top (all_allowed)
+		// iterate one by one over filteredPermissions
+		for (Iterator iter = filterPermissions.values().iterator(); iter
+				.hasNext();) {
+			if (((PackagePermission) iter.next()).implies(requested)) {
+				return true;
+			}
+		}
+
 		return false;
 	}
 
@@ -566,8 +766,9 @@ final class PackagePermissionCollection extends PermissionCollection {
 	 * 
 	 * @return Enumeration of all <code>PackagePermission</code> objects.
 	 */
-
 	public Enumeration elements() {
-		return permissions.elements();
+		List all = new ArrayList(permissions.values());
+		all.addAll(filterPermissions.values());
+		return Collections.enumeration(all);
 	}
 }

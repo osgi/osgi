@@ -20,6 +20,7 @@ import java.security.Permission;
 import java.security.PermissionCollection;
 import java.util.PropertyPermission;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.PackagePermission;
 import org.osgi.test.support.PermissionTestCase;
 
@@ -49,6 +50,15 @@ public class PackagePermissionTests extends PermissionTestCase {
 		invalidPackagePermission("a.b.c", "   impor");
 		invalidPackagePermission("a.b.c", "   expor"); 
 		invalidPackagePermission("a.b.c", "   exportonl"); 
+		invalidPackagePermission("()", "import");
+		invalidPackagePermission("(package.name=a.b.c)", "exportonly");
+		invalidPackagePermission("(package.name=a.b.c)", "export"); 
+		invalidPackagePermission("(package.name=a.b.c)", null, "import"); 
+		invalidPackagePermission("a.b.c", null, "import"); 
+		invalidPackagePermission("a.b.c", newMockBundle(2, "test.bsn",
+				"test.location", null), "export"); 
+		invalidPackagePermission("a.b.c", newMockBundle(2, "test.bsn",
+				"test.location", null), "exportonly"); 
 	}
 
 	public void testActions() {
@@ -265,10 +275,161 @@ public class PackagePermissionTests extends PermissionTestCase {
 		assertNotImplies(exportonly, export);
 	}
 
-	private void invalidPackagePermission(String name, String actions) {
+	public void testFiltersPackage() {
+		PackagePermission p31 = new PackagePermission(
+				"  (package.name  =com.foo.service2)",
+				"import");
+		PackagePermission p32 = new PackagePermission(
+				"(package.name=com.foo.*)", "import");
+		PackagePermission p33 = new PackagePermission("(package.name=com.*)",
+				"import");
+		PackagePermission p34 = new PackagePermission("(package.name=*)",
+				"import");
+		PackagePermission p35 = new PackagePermission("com.foo.service2",
+				"import");
+		PackagePermission p36 = new PackagePermission("com.foo.*", "import");
+
+		assertImplies(p31, p35);
+		assertImplies(p32, p35);
+		assertImplies(p33, p35);
+		assertImplies(p34, p35);
+
+		assertInvalidImplies(p31, p32);
+		assertInvalidImplies(p31, p33);
+		assertInvalidImplies(p31, p34);
+
+		assertInvalidImplies(p32, p33);
+		assertInvalidImplies(p32, p34);
+
+		assertInvalidImplies(p33, p34);
+
+		PermissionCollection pc = p31.newPermissionCollection();
+		checkEnumeration(pc.elements(), true);
+
+		assertAddPermission(pc, p34);
+		assertImplies(pc, p35);
+
+		assertInvalidImplies(pc, p32);
+		assertInvalidImplies(pc, p33);
+		assertInvalidImplies(pc, p34);
+
+		assertAddPermission(pc, p33);
+		assertImplies(pc, p35);
+		
+		assertAddPermission(pc, p32);
+		assertImplies(pc, p35);
+
+		assertAddPermission(pc, p31);
+		assertImplies(pc, p35);
+		checkEnumeration(pc.elements(), false);
+
+		pc = p32.newPermissionCollection();
+
+		assertAddPermission(pc, p33);
+		assertImplies(pc, p35);
+
+		assertAddPermission(pc, p36);
+		assertImplies(pc, p35);
+		
+		assertSerializable(p31);
+		assertSerializable(p32);
+		assertSerializable(p33);
+		assertSerializable(p34);
+		assertSerializable(p35);
+		assertSerializable(p36);
+	}
+	
+	public void testFiltersBundles() {
+		PackagePermission p41 = new PackagePermission(
+				"(exporter.id=2)",
+				"import");
+		PackagePermission p42 = new PackagePermission(
+				"(exporter.location=test.*)", "import");
+		PackagePermission p43 = new PackagePermission("(exporter.name=test.*)",
+				"import");
+		PackagePermission p44 = new PackagePermission(
+				"(exporter.signer=\\*, o=ACME, c=US)",
+				"import");
+		PackagePermission p45 = new PackagePermission(
+				"(package.name=com.foo.*)", "import");
+		
+		PackagePermission p46 = new PackagePermission("com.foo.service2",
+				newMockBundle(2, "test.bsn", "test.location",
+						"cn=Bugs Bunny, o=ACME, c=US"),
+				"import");
+		PackagePermission p47 = new PackagePermission("com.bar.service2",
+				newMockBundle(3, "not.bsn", "not.location",
+						"cn=Bugs Bunny, o=NOT, c=US"), "import");
+
+		assertImplies(p41, p46);
+		assertImplies(p42, p46);
+		assertImplies(p43, p46);
+		assertImplies(p44, p46);
+		assertImplies(p45, p46);
+
+		assertNotImplies(p41, p47);
+		assertNotImplies(p42, p47);
+		assertNotImplies(p43, p47);
+		assertNotImplies(p44, p47);
+		assertNotImplies(p45, p47);
+		
+		assertInvalidImplies(p41, p42);
+		assertInvalidImplies(p41, p43);
+		assertInvalidImplies(p41, p44);
+		assertInvalidImplies(p41, p45);
+
+		PermissionCollection pc = p41.newPermissionCollection();
+		checkEnumeration(pc.elements(), true);
+
+		assertAddPermission(pc, p44);
+		assertImplies(pc, p46);
+		assertNotImplies(pc, p47);
+
+		assertInvalidImplies(pc, p42);
+		assertInvalidImplies(pc, p43);
+		assertInvalidImplies(pc, p44);
+		assertInvalidImplies(pc, p45);
+
+		assertAddPermission(pc, p43);
+		assertImplies(pc, p46);
+		assertNotImplies(pc, p47);
+
+		assertAddPermission(pc, p42);
+		assertImplies(pc, p46);
+		assertNotImplies(pc, p47);
+
+		assertAddPermission(pc, p41);
+		assertImplies(pc, p46);
+		assertNotImplies(pc, p47);
+		checkEnumeration(pc.elements(), false);
+
+		assertNotAddPermission(pc, p46);
+		assertNotAddPermission(pc, p47);
+
+		assertSerializable(p41);
+		assertSerializable(p42);
+		assertSerializable(p43);
+		assertSerializable(p44);
+		assertSerializable(p45);
+		assertNotSerializable(p46);
+		assertNotSerializable(p47);
+	}
+	
+	private static void invalidPackagePermission(String name, String actions) {
 		try {
 			PackagePermission p = new PackagePermission(name, actions);
 			fail(p + " created with invalid actions"); 
+		}
+		catch (IllegalArgumentException e) {
+			// expected
+		}
+	}
+
+	private static void invalidPackagePermission(String name, Bundle bundle,
+			String actions) {
+		try {
+			PackagePermission p = new PackagePermission(name, bundle, actions);
+			fail(p + " created with invalid actions");
 		}
 		catch (IllegalArgumentException e) {
 			// expected

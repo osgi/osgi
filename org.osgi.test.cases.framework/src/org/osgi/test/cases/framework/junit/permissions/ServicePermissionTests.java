@@ -247,7 +247,7 @@ public class ServicePermissionTests extends PermissionTestCase {
 	}
 
 	
-	private void invalidServicePermission(String name, String actions) {
+	private static void invalidServicePermission(String name, String actions) {
 		try {
 			ServicePermission p = new ServicePermission(name, actions);
 			fail(p + " created with invalid actions"); 
