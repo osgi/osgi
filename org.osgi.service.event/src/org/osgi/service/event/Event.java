@@ -16,6 +16,7 @@
 
 package org.osgi.service.event;
 
+import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -253,7 +254,7 @@ public class Event {
 			this.wrapped = wrapped;
 		}
 		public Enumeration elements() {
-			return new IteratorEnumeration(wrapped.values().iterator());
+			return Collections.enumeration(wrapped.values());
 		}
 		public Object get(Object key) {
 			return wrapped.get(key);
@@ -262,7 +263,7 @@ public class Event {
 			return wrapped.isEmpty();
 		}
 		public Enumeration keys() {
-			return new IteratorEnumeration(wrapped.keySet().iterator());
+			return Collections.enumeration(wrapped.keySet());
 		}
 		public Object put(Object key, Object value) {
 			throw new UnsupportedOperationException();
@@ -272,22 +273,6 @@ public class Event {
 		}
 		public int size() {
 			return wrapped.size();
-		}
-	}
-	
-	/**
-	 * Maps an Iterator to the Enumeration interface.
-	 */
-	private static class IteratorEnumeration implements Enumeration {
-		private final Iterator	iter;
-		IteratorEnumeration(Iterator iter) {
-			this.iter = iter;
-		}
-		public boolean hasMoreElements() {
-			return iter.hasNext();
-		}
-		public Object nextElement() {
-			return iter.next();
 		}
 	}
 }
