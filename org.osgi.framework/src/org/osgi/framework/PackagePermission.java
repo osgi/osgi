@@ -555,7 +555,7 @@ public final class PackagePermission extends BasicPermission {
 	private Dictionary getProperties() {
 		Dictionary result = properties;
 		if (result == null) {
-			final Dictionary dict = new Hashtable(4);
+			final Dictionary dict = new Hashtable(5);
 			if (bundle != null) {
 				AccessController.doPrivileged(new PrivilegedAction() {
 					public Object run() {
@@ -614,14 +614,13 @@ final class PackagePermissionCollection extends PermissionCollection {
 	 * @serial
 	 * @GuardedBy this
 	 */
-	private final Hashtable	filterPermissions;
+	private Hashtable		filterPermissions;
 
 	/**
 	 * Create an empty PackagePermissions object.
 	 */
 	public PackagePermissionCollection() {
 		permissions = new Hashtable();
-		filterPermissions = new Hashtable();
 		all_allowed = false;
 	}
 
@@ -655,11 +654,20 @@ final class PackagePermissionCollection extends PermissionCollection {
 		}
 
 		final String name = pp.getName();
-		/* select the bucket for the permission */
-		Dictionary pc = (pp.getFilter() == null) ? permissions
-				: filterPermissions;
-
+		final Filter f = pp.getFilter();
 		synchronized (this) {
+			/* select the bucket for the permission */
+			Hashtable pc;
+			if (f != null) {
+				pc = filterPermissions;
+				if (pc == null) {
+					filterPermissions = pc = new Hashtable();
+				}
+			}
+			else {
+				pc = permissions;
+			}
+			
 			final PackagePermission existing = (PackagePermission) pc.get(name);
 			if (existing != null) {
 				final int oldMask = existing.getActionsMask();
@@ -708,10 +716,12 @@ final class PackagePermissionCollection extends PermissionCollection {
 		PackagePermission x;
 		int effective = 0;
 
+		Hashtable pc;
 		synchronized (this) {
+			pc = permissions;
 			// short circuit if the "*" Permission was added
 			if (all_allowed) {
-				x = (PackagePermission) permissions.get("*");
+				x = (PackagePermission) pc.get("*");
 				if (x != null) {
 					effective |= x.getActionsMask();
 					if ((effective & desired) == desired) {
@@ -719,7 +729,7 @@ final class PackagePermissionCollection extends PermissionCollection {
 					}
 				}
 			}
-			x = (PackagePermission) permissions.get(name);
+			x = (PackagePermission) pc.get(name);
 		}
 		// strategy:
 		// Check for full match first. Then work our way up the
@@ -737,7 +747,7 @@ final class PackagePermissionCollection extends PermissionCollection {
 		while ((last = name.lastIndexOf(".", offset)) != -1) {
 			name = name.substring(0, last + 1) + "*";
 			synchronized (this) {
-				x = (PackagePermission) permissions.get(name);
+				x = (PackagePermission) pc.get(name);
 			}
 			if (x != null) {
 				effective |= x.getActionsMask();
@@ -750,13 +760,17 @@ final class PackagePermissionCollection extends PermissionCollection {
 		// we don't have to check for "*" as it was already checked
 		// at the top (all_allowed)
 		// iterate one by one over filteredPermissions
-		for (Iterator iter = filterPermissions.values().iterator(); iter
-				.hasNext();) {
+		synchronized (this) {
+			pc = filterPermissions;
+		}
+		if (pc == null) {
+			return false;
+		}
+		for (Iterator iter = pc.values().iterator(); iter.hasNext();) {
 			if (((PackagePermission) iter.next()).implies(requested)) {
 				return true;
 			}
 		}
-
 		return false;
 	}
 
@@ -766,9 +780,12 @@ final class PackagePermissionCollection extends PermissionCollection {
 	 * 
 	 * @return Enumeration of all <code>PackagePermission</code> objects.
 	 */
-	public Enumeration elements() {
+	public synchronized Enumeration elements() {
 		List all = new ArrayList(permissions.values());
-		all.addAll(filterPermissions.values());
+		Hashtable pc = filterPermissions;
+		if (pc != null) {
+			all.addAll(pc.values());
+		}
 		return Collections.enumeration(all);
 	}
 }
