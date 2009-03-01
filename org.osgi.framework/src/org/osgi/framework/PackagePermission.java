@@ -27,9 +27,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A bundle's authority to import or export a package.
@@ -614,7 +616,7 @@ final class PackagePermissionCollection extends PermissionCollection {
 	 * @serial
 	 * @GuardedBy this
 	 */
-	private Hashtable		filterPermissions;
+	private HashMap			filterPermissions;
 
 	/**
 	 * Create an empty PackagePermissions object.
@@ -657,11 +659,11 @@ final class PackagePermissionCollection extends PermissionCollection {
 		final Filter f = pp.getFilter();
 		synchronized (this) {
 			/* select the bucket for the permission */
-			Hashtable pc;
+			Map pc;
 			if (f != null) {
 				pc = filterPermissions;
 				if (pc == null) {
-					filterPermissions = pc = new Hashtable();
+					pc = filterPermissions = new HashMap();
 				}
 			}
 			else {
@@ -716,7 +718,7 @@ final class PackagePermissionCollection extends PermissionCollection {
 		PackagePermission x;
 		int effective = 0;
 
-		Hashtable pc;
+		Map pc;
 		synchronized (this) {
 			pc = permissions;
 			// short circuit if the "*" Permission was added
@@ -782,7 +784,7 @@ final class PackagePermissionCollection extends PermissionCollection {
 	 */
 	public synchronized Enumeration elements() {
 		List all = new ArrayList(permissions.values());
-		Hashtable pc = filterPermissions;
+		Map pc = filterPermissions;
 		if (pc != null) {
 			all.addAll(pc.values());
 		}
