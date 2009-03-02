@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.osgi.framework;
 
 import java.security.cert.X509Certificate;
@@ -24,7 +23,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Package private class used by permissions for filter matching on signer key.
+ * Package private class used by permissions for filter matching on signer key
+ * during filter expression evaluation in the permission implies method.
  * 
  * @Immutable
  * @version $Revision$
@@ -34,10 +34,10 @@ class SignerProperty {
 	private final String	pattern;
 
 	/**
-	 * String constructor used by the filter matching algorithm to construct
-	 * SignerPropertys from the attribute value in the filter string.
+	 * String constructor used by the filter matching algorithm to construct a
+	 * SignerProperty from the attribute value in a filter expression.
 	 * 
-	 * @param pattern Attribute value in the filter string.
+	 * @param pattern Attribute value in the filter expression.
 	 */
 	public SignerProperty(String pattern) {
 		this.pattern = pattern;
@@ -45,7 +45,8 @@ class SignerProperty {
 	}
 
 	/**
-	 * Used by implies to build the properties for a filter match.
+	 * Used by the permission implies method to build the properties for a
+	 * filter match.
 	 * 
 	 * @param bundle The bundle whose signers are to be matched.
 	 */
@@ -55,7 +56,11 @@ class SignerProperty {
 	}
 
 	/**
-	 * Used by the filter matching algorithm.
+	 * Used by the filter matching algorithm. This methods does NOT satisfy the
+	 * normal equals contract. Since the class is only used in filter expression
+	 * evaluations, it only needs to support comparing an instance created with
+	 * a Bundle to an instance created with a pattern string from the filter
+	 * expression.
 	 * 
 	 * @param o SignerProperty to compare against.
 	 * @return true if the DN name chain matches the pattern.
@@ -85,10 +90,8 @@ class SignerProperty {
 	}
 
 	/**
-	 * It is not possible to make unique hash codes for this object because of
-	 * the way equals is implemented to behave differently when the fields are
-	 * null. This is a package private class that is only used for filter
-	 * evaluations. No need to make its hashcode unique for map usage.
+	 * Since the equals method does not obey the general equals contract, this
+	 * method cannot generate hash codes which obey the equals contract.
 	 */
 	public int hashCode() {
 		return 31;

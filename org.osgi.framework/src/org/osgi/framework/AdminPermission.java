@@ -881,17 +881,14 @@ final class AdminPermissionCollection extends PermissionCollection {
 	}
 
 	/**
-	 * Adds a permission to the <code>AdminPermission</code> objects. The key
-	 * for the hashtable is the name
+	 * Adds a permission to this permission collection.
 	 * 
 	 * @param permission The <code>AdminPermission</code> object to add.
-	 * 
-	 * @exception IllegalArgumentException If the permission is not an
-	 *            <code>AdminPermission</code> instance.
-	 * 
-	 * @exception SecurityException If this
-	 *            <code>AdminPermissionCollection</code> object has been marked
-	 *            read-only.
+	 * @throws IllegalArgumentException If the specified permission is not an
+	 *         <code>AdminPermission</code> instance or was constructed with a
+	 *         Bundle object.
+	 * @throws SecurityException If this <code>AdminPermissionCollection</code>
+	 *         object has been marked read-only.
 	 */
 	public void add(Permission permission) {
 		if (!(permission instanceof AdminPermission)) {
@@ -936,10 +933,11 @@ final class AdminPermissionCollection extends PermissionCollection {
 	 * 
 	 * @param permission The Permission object to compare with the
 	 *        <code>AdminPermission</code> objects in this collection.
-	 * 
 	 * @return <code>true</code> if <code>permission</code> is implied by an
 	 *         <code>AdminPermission</code> in this collection,
 	 *         <code>false</code> otherwise.
+	 * @throws IllegalArgumentException If the specified permission was not
+	 *         constructed with a Bundle object or the name *.
 	 */
 	public boolean implies(Permission permission) {
 		if (!(permission instanceof AdminPermission)) {

@@ -401,6 +401,8 @@ public final class PackagePermission extends BasicPermission {
 	 * @param p The requested permission.
 	 * @return <code>true</code> if the specified permission is implied by this
 	 *         object; <code>false</code> otherwise.
+	 * @throws UnsupportedOperationException If this permission was constructed
+	 *         with a Bundle.
 	 * @throws IllegalArgumentException If specified permission was constructed
 	 *         with a filter expression.
 	 */
@@ -627,14 +629,12 @@ final class PackagePermissionCollection extends PermissionCollection {
 	}
 
 	/**
-	 * Adds a permission to the <code>PackagePermission</code> objects. The key
-	 * for the hash is the name.
+	 * Adds a permission to this permission collection.
 	 * 
 	 * @param permission The <code>PackagePermission</code> object to add.
-	 * 
-	 * @throws IllegalArgumentException If the permission is not a
-	 *         <code>PackagePermission</code> instance.
-	 * 
+	 * @throws IllegalArgumentException If the specified permission is not a
+	 *         <code>PackagePermission</code> instance or was constructed with a
+	 *         Bundle object.
 	 * @throws SecurityException If this
 	 *         <code>PackagePermissionCollection</code> object has been marked
 	 *         read-only.
@@ -699,9 +699,10 @@ final class PackagePermissionCollection extends PermissionCollection {
 	 * 
 	 * @param permission The Permission object to compare with this
 	 *        <code>PackagePermission</code> object.
-	 * 
 	 * @return <code>true</code> if <code>permission</code> is a proper subset
 	 *         of a permission in the set; <code>false</code> otherwise.
+	 * @throws IllegalArgumentException If the specified permission was not
+	 *         constructed with a Bundle object or the name *.
 	 */
 	public boolean implies(final Permission permission) {
 		if (!(permission instanceof PackagePermission)) {

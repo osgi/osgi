@@ -109,7 +109,6 @@ public final class BundlePermission extends BasicPermission {
 	 * @param actions <code>PROVIDE</code>,<code>REQUIRE</code>,
 	 *        <code>HOST</code>,<code>FRAGMENT</code> (canonical order).
 	 */
-
 	public BundlePermission(String symbolicName, String actions) {
 		this(symbolicName, parseActions(actions));
 	}
@@ -284,7 +283,6 @@ public final class BundlePermission extends BasicPermission {
 	 * @return <code>true</code> if the specified <code>BundlePermission</code>
 	 *         action is implied by this object; <code>false</code> otherwise.
 	 */
-
 	public boolean implies(Permission p) {
 		if (p instanceof BundlePermission) {
 			BundlePermission requested = (BundlePermission) p;
@@ -309,7 +307,6 @@ public final class BundlePermission extends BasicPermission {
 	 * @return Canonical string representation of the <code>BundlePermission
 	 *         </code> actions.
 	 */
-
 	public String getActions() {
 		String result = actions;
 		if (result == null) {
@@ -390,7 +387,6 @@ public final class BundlePermission extends BasicPermission {
 	 * 
 	 * @return A hash code value for this object.
 	 */
-
 	public int hashCode() {
 		int h = 31 * 17 + getName().hashCode();
 		h = 31 * h + getActions().hashCode();
@@ -402,7 +398,6 @@ public final class BundlePermission extends BasicPermission {
 	 * <code>BundlePermission</code> object to a stream. The actions are
 	 * serialized, and the superclass takes care of the name.
 	 */
-
 	private synchronized void writeObject(java.io.ObjectOutputStream s)
 			throws IOException {
 		// Write out the actions. The superclass takes care of the name
@@ -459,24 +454,20 @@ final class BundlePermissionCollection extends PermissionCollection {
 	 * Create an empty BundlePermissions object.
 	 * 
 	 */
-
 	public BundlePermissionCollection() {
 		permissions = new Hashtable();
 		all_allowed = false;
 	}
 
 	/**
-	 * Adds a permission to the <code>BundlePermission</code> objects. The key
-	 * for the hash is the symbolic name.
+	 * Add a permission to this permission collection.
 	 * 
 	 * @param permission The <code>BundlePermission</code> object to add.
-	 * 
 	 * @throws IllegalArgumentException If the permission is not a
 	 *         <code>BundlePermission</code> instance.
 	 * @throws SecurityException If this <code>BundlePermissionCollection</code>
 	 *         object has been marked read-only.
 	 */
-
 	public void add(final Permission permission) {
 		if (!(permission instanceof BundlePermission))
 			throw new IllegalArgumentException("invalid permission: "
@@ -518,11 +509,9 @@ final class BundlePermissionCollection extends PermissionCollection {
 	 * 
 	 * @param permission The Permission object to compare with this
 	 *        <code>BundlePermission</code> object.
-	 * 
 	 * @return <code>true</code> if <code>permission</code> is a proper subset
 	 *         of a permission in the set; <code>false</code> otherwise.
 	 */
-
 	public boolean implies(final Permission permission) {
 		if (!(permission instanceof BundlePermission))
 			return false;
@@ -582,7 +571,6 @@ final class BundlePermissionCollection extends PermissionCollection {
 	 * 
 	 * @return Enumeration of all <code>BundlePermission</code> objects.
 	 */
-
 	public Enumeration elements() {
 		return permissions.elements();
 	}

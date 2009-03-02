@@ -100,7 +100,6 @@ public final class ServicePermission extends BasicPermission {
 	 * @param actions <code>get</code>,<code>register</code> (canonical
 	 *        order)
 	 */
-
 	public ServicePermission(String name, String actions) {
 		this(name, parseActions(actions));
 	}
@@ -237,7 +236,6 @@ public final class ServicePermission extends BasicPermission {
 	 * @return <code>true</code> if the specified permission is implied by
 	 *         this object; <code>false</code> otherwise.
 	 */
-
 	public boolean implies(Permission p) {
 		if (p instanceof ServicePermission) {
 			ServicePermission requested = (ServicePermission) p;
@@ -324,7 +322,6 @@ public final class ServicePermission extends BasicPermission {
 	 * 
 	 * @return Hash code value for this object.
 	 */
-
 	public int hashCode() {
 		int h = 31 * 17 + getName().hashCode();
 		h = 31 * h + getActions().hashCode();
@@ -363,7 +360,6 @@ public final class ServicePermission extends BasicPermission {
  * @see java.security.Permissions
  * @see java.security.PermissionCollection
  */
-
 final class ServicePermissionCollection extends PermissionCollection {
 	static final long	serialVersionUID	= 662615640374640621L;
 	/**
@@ -385,25 +381,21 @@ final class ServicePermissionCollection extends PermissionCollection {
 	/**
 	 * Creates an empty ServicePermissions object.
 	 */
-
 	public ServicePermissionCollection() {
 		permissions = new Hashtable();
 		all_allowed = false;
 	}
 
 	/**
-	 * Adds a permission to the <code>ServicePermission</code> objects using
-	 * the key for the hash as the name.
+	 * Adds a permission to this permission collection.
 	 * 
 	 * @param permission The Permission object to add.
-	 * 
-	 * @throws IllegalArgumentException If the permission is not a
+	 * @throws IllegalArgumentException If the specified permission is not a
 	 *         ServicePermission object.
 	 * @throws SecurityException If this
 	 *         <code>ServicePermissionCollection</code> object has been marked
 	 *         read-only.
 	 */
-
 	public void add(final Permission permission) {
 		if (!(permission instanceof ServicePermission)) {
 			throw new IllegalArgumentException("invalid permission: "
@@ -445,12 +437,10 @@ final class ServicePermissionCollection extends PermissionCollection {
 	 * <code>permission</code>.
 	 * 
 	 * @param permission The Permission object to compare.
-	 * 
 	 * @return <code>true</code> if <code>permission</code> is a proper
 	 *         subset of a permission in the set; <code>false</code>
 	 *         otherwise.
 	 */
-
 	public boolean implies(final Permission permission) {
 		if (!(permission instanceof ServicePermission)) {
 			return false;
@@ -511,7 +501,6 @@ final class ServicePermissionCollection extends PermissionCollection {
 	 * 
 	 * @return Enumeration of all the ServicePermission objects.
 	 */
-
 	public Enumeration elements() {
 		return permissions.elements();
 	}
