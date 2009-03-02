@@ -124,6 +124,7 @@ public class AdminPermissionTests extends PermissionTestCase {
 		assertSerializable(p2);
 		assertSerializable(p3);
 		assertSerializable(p4);
+		assertSerializable(pc);
 	}
 
 	public void testFilter() {
@@ -185,6 +186,7 @@ public class AdminPermissionTests extends PermissionTestCase {
 		assertNotSerializable(p3);
 		assertSerializable(p4);
 		assertSerializable(p5);
+		assertSerializable(pc);
 	}
 
 	public void testSigners() {

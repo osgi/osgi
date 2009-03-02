@@ -119,6 +119,7 @@ public class ServicePermissionTests extends PermissionTestCase {
 		assertImplies(pc, p14);
 
 		assertNotAddPermission(pc, op);
+		assertSerializable(pc);
 
 		pc = p13.newPermissionCollection();
 
@@ -133,6 +134,7 @@ public class ServicePermissionTests extends PermissionTestCase {
 		assertImplies(pc, p12);
 		assertImplies(pc, p13);
 		assertImplies(pc, p14);
+		assertSerializable(pc);
 
 		pc = p11.newPermissionCollection();
 
@@ -175,6 +177,7 @@ public class ServicePermissionTests extends PermissionTestCase {
 		assertNotImplies(p22, p24);
 
 		assertNotImplies(p23, p24);
+		assertSerializable(pc);
 
 		pc = p21.newPermissionCollection();
 
@@ -201,6 +204,7 @@ public class ServicePermissionTests extends PermissionTestCase {
 		assertImplies(pc, p22);
 		assertImplies(pc, p23);
 		assertImplies(pc, p24);
+		assertSerializable(pc);
 
 		pc = p22.newPermissionCollection();
 
@@ -209,6 +213,7 @@ public class ServicePermissionTests extends PermissionTestCase {
 		assertImplies(pc, p22);
 		assertNotImplies(pc, p23);
 		assertNotImplies(pc, p24);
+		assertSerializable(pc);
 
 		pc = p23.newPermissionCollection();
 
@@ -217,6 +222,7 @@ public class ServicePermissionTests extends PermissionTestCase {
 		assertImplies(pc, p22);
 		assertImplies(pc, p23);
 		assertNotImplies(pc, p24);
+		assertSerializable(pc);
 
 		pc = p24.newPermissionCollection();
 
@@ -234,6 +240,7 @@ public class ServicePermissionTests extends PermissionTestCase {
 		assertSerializable(p22);
 		assertSerializable(p23);
 		assertSerializable(p24);
+		assertSerializable(pc);
 	}
 	
 	public void testActionImplications() {

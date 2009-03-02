@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -112,6 +113,36 @@ public abstract class PermissionTestCase extends OSGiTestCase {
 		}
 	}
 
+	public static void assertSerializable(PermissionCollection c1) {
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ObjectOutputStream out = new ObjectOutputStream(baos);
+
+			out.writeObject(c1);
+			out.flush();
+			out.close();
+
+			ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+			ObjectInputStream in = new ObjectInputStream(bais);
+
+			PermissionCollection c2 = (PermissionCollection) in.readObject();
+
+			assertNotSame(c1, c2);
+			assertEquals(enumerationAsSet(c1.elements()), enumerationAsSet(c2
+					.elements()));
+		}
+		catch (Exception e) {
+			fail("serialization error", e);
+		}
+	}
+
+	private static Set enumerationAsSet(Enumeration e) {
+		Set result = new HashSet();
+		while (e.hasMoreElements()) {
+			result.add(e.nextElement());
+		}
+		return result;
+	}
 	public static void assertSerializable(Permission p1) {
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -121,7 +152,8 @@ public abstract class PermissionTestCase extends OSGiTestCase {
 			out.flush();
 			out.close();
 
-			ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+			ByteArrayInputStream bais = new ByteArrayInputStream(baos
+					.toByteArray());
 			ObjectInputStream in = new ObjectInputStream(bais);
 
 			Permission p2 = (Permission) in.readObject();
@@ -133,8 +165,8 @@ public abstract class PermissionTestCase extends OSGiTestCase {
 			fail("serialization error", e);
 		}
 	}
-
-	public static void assertNotSerializable(Permission p1) {
+	
+	public static void assertNotSerializable(Object p1) {
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ObjectOutputStream out = new ObjectOutputStream(baos);
@@ -142,7 +174,7 @@ public abstract class PermissionTestCase extends OSGiTestCase {
 			out.writeObject(p1);
 			out.flush();
 			out.close();
-			fail("serialization error");
+			fail("serialization did not throw exception");
 		}
 		catch (Exception e) {
 			// expected

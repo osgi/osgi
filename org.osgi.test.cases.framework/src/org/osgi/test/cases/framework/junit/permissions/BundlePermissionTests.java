@@ -143,6 +143,7 @@ public class BundlePermissionTests extends PermissionTestCase {
 		assertImplies(pc, p14);
 
 		assertNotAddPermission(pc, op);
+		assertSerializable(pc);
 
 		pc = p13.newPermissionCollection();
 
@@ -151,6 +152,7 @@ public class BundlePermissionTests extends PermissionTestCase {
 		assertImplies(pc, p12);
 		assertImplies(pc, p13);
 		assertImplies(pc, p14);
+		assertSerializable(pc);
 
 		pc = p11.newPermissionCollection();
 
@@ -172,6 +174,7 @@ public class BundlePermissionTests extends PermissionTestCase {
 		assertSerializable(p14);
 		assertSerializable(p15);
 		assertSerializable(p16);
+		assertSerializable(pc);
 	}
 
 	public void testNames() {
@@ -250,6 +253,7 @@ public class BundlePermissionTests extends PermissionTestCase {
 		assertImplies(pc, p23);
 		assertImplies(pc, p25);
 		assertImplies(pc, p24);
+		assertSerializable(pc);
 
 		pc = p22.newPermissionCollection();
 
@@ -259,6 +263,7 @@ public class BundlePermissionTests extends PermissionTestCase {
 		assertNotImplies(pc, p23);
 		assertNotImplies(pc, p24);
 		assertNotImplies(pc, p25);
+		assertSerializable(pc);
 
 		pc = p23.newPermissionCollection();
 
@@ -268,6 +273,7 @@ public class BundlePermissionTests extends PermissionTestCase {
 		assertImplies(pc, p23);
 		assertNotImplies(pc, p24);
 		assertNotImplies(pc, p25);
+		assertSerializable(pc);
 
 		pc = p24.newPermissionCollection();
 
@@ -277,6 +283,7 @@ public class BundlePermissionTests extends PermissionTestCase {
 		assertNotImplies(pc, p23);
 		assertImplies(pc, p24);
 		assertNotImplies(pc, p25);
+		assertSerializable(pc);
 
 		pc = p25.newPermissionCollection();
 		
@@ -292,6 +299,7 @@ public class BundlePermissionTests extends PermissionTestCase {
 		assertSerializable(p23);
 		assertSerializable(p24);
 		assertSerializable(p25);
+		assertSerializable(pc);
 	}
 	
 	public void testActionImplications() {
