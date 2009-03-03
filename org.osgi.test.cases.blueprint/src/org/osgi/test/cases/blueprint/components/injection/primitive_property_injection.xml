@@ -15,7 +15,7 @@
    </component>
 
    <component id="compPrimBooleanYes" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
-       <property name="primBoolean" value="yes" type="boolean"/>
+       <property name="primBoolean" value="yes"/>
    </component>
    <component id="compPrimBooleanNo" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primBoolean">

@@ -277,7 +277,7 @@
        <constructor-arg value="\uffff" type="char"/>
    </component>
    <component id="compPrimCharacterA" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="A type="char"/>
+       <constructor-arg value="A" type="char"/>
    </component>
    <component id="compWrapperedCharacterZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
        <constructor-arg value="\u0000" type="java.lang.Character"/>

@@ -1,53 +1,53 @@
-<?xml version="1.0" encoding="UTF-8"?> 
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd"> 
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
-<!-- String -->	
-	<component id="compInnerString" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory"> 
+<!-- String -->
+	<component id="compInnerString" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
 			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
 				<constructor-arg value="ABC"/>
 			</component>
 		</constructor-arg>
-	</component>  
-	
+	</component>
+
 <!-- Boolean -->
-	<component id="compInnerPrimitiveBoolean" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory"> 
+	<component id="compInnerPrimitiveBoolean" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
 			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
        			<constructor-arg value="true" type="boolean"/>
 			</component>
 		</constructor-arg>
-	</component> 
-	
-	<component id="compInnerWrapperedBoolean" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory"> 
+	</component>
+
+	<component id="compInnerWrapperedBoolean" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
 			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
        			<constructor-arg value="false" type="java.lang.Boolean"/>
 			</component>
 		</constructor-arg>
-	</component> 	
+	</component>
 
-<!-- Byte --> 	
-	<component id="compInnerPrimitiveByte" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory"> 
+<!-- Byte -->
+	<component id="compInnerPrimitiveByte" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
 			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
        			<constructor-arg value="-128" type="byte"/>
 			</component>
 		</constructor-arg>
-	</component> 	
-	
-	<component id="compInnerWrapperedByte" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory"> 
+	</component>
+
+	<component id="compInnerWrapperedByte" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
 			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
        			<constructor-arg value="127" type="java.lang.Byte"/>
 			</component>
 		</constructor-arg>
-	</component>	
+	</component>
 
-<!-- Double --> 	
-	<component id="compInnerPrimitiveDouble" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory"> 
+<!-- Double -->
+	<component id="compInnerPrimitiveDouble" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
 			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
        			<constructor-arg value="4.9e-324" type="double"/>
@@ -55,7 +55,7 @@
 		</constructor-arg>
 	</component>
 
-	<component id="compInnerWrapperedDouble" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory"> 
+	<component id="compInnerWrapperedDouble" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
 			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
        			<constructor-arg value="1.7976931348623157E308" type="java.lang.Double"/>
@@ -63,8 +63,8 @@
 		</constructor-arg>
 	</component>
 
-<!-- Float --> 
-	<component id="compInnerPrimitiveFloat" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory"> 
+<!-- Float -->
+	<component id="compInnerPrimitiveFloat" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
 			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
        			<constructor-arg value="1.4E-45" type="float"/>
@@ -72,7 +72,7 @@
 		</constructor-arg>
 	</component>
 
-	<component id="compInnerWrapperedFloat" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory"> 
+	<component id="compInnerWrapperedFloat" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
 			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
        			<constructor-arg value="3.4028235E38" type="java.lang.Float"/>
@@ -80,8 +80,8 @@
 		</constructor-arg>
 	</component>
 
-<!-- Integer --> 
-	<component id="compInnerPrimitiveInteger" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory"> 
+<!-- Integer -->
+	<component id="compInnerPrimitiveInteger" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
 			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
        			<constructor-arg value="-2147483648" type="int"/>
@@ -89,7 +89,7 @@
 		</constructor-arg>
 	</component>
 
-	<component id="compInnerWrapperedInteger" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory"> 
+	<component id="compInnerWrapperedInteger" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
 			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
        			<constructor-arg value="2147483647" type="java.lang.Integer"/>
@@ -98,25 +98,25 @@
 	</component>
 
 
-<!-- Character --> 
-	<component id="compInnerPrimitiveCharacter" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory"> 
+<!-- Character -->
+	<component id="compInnerPrimitiveCharacter" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
 			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-       			<constructor-arg value="0" type="char"/>
+       			<constructor-arg value="\u0000" type="char"/>
 			</component>
 		</constructor-arg>
 	</component>
 
-	<component id="compInnerWrapperedCharacter" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory"> 
+	<component id="compInnerWrapperedCharacter" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
 			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-       			<constructor-arg value="65535" type="java.lang.Character"/>
+       			<constructor-arg value="\uffff" type="java.lang.Character"/>
 			</component>
 		</constructor-arg>
 	</component>
-	
-<!-- Short --> 
-	<component id="compInnerPrimitiveShort" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory"> 
+
+<!-- Short -->
+	<component id="compInnerPrimitiveShort" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
 			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
        			<constructor-arg value="-32768" type="short"/>
@@ -124,7 +124,7 @@
 		</constructor-arg>
 	</component>
 
-	<component id="compInnerWrapperedShort" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory"> 
+	<component id="compInnerWrapperedShort" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
 			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
        			<constructor-arg value="32767" type="java.lang.Short"/>
@@ -133,8 +133,8 @@
 	</component>
 
 
-<!-- Long --> 
-	<component id="compInnerPrimitiveLong" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory"> 
+<!-- Long -->
+	<component id="compInnerPrimitiveLong" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
 			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
        			<constructor-arg value="-9223372036854775808" type="long"/>
@@ -142,7 +142,7 @@
 		</constructor-arg>
 	</component>
 
-	<component id="compInnerWrapperedLong" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory"> 
+	<component id="compInnerWrapperedLong" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
 			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
        			<constructor-arg value="9223372036854775807" type="java.lang.Long"/>
@@ -151,5 +151,4 @@
 	</component>
 
 
-</components>	
-	
+</components>

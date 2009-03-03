@@ -15,7 +15,7 @@
    </component>
 
    <component id="compPrimBooleanYes" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
-       <property name="primBoolean" value="yes" type="boolean"/>
+       <property name="primBoolean" value="yes"/>
    </component>
    <component id="compPrimBooleanNo" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
        <property name="primBoolean">

@@ -24,6 +24,7 @@
                         <list>
                             <!-- for the 1st factory configration object -->
                             <component class="org.osgi.test.cases.blueprint.components.cmsupport.ConfigurationDictionaryBuilder">
+                            <constructor-arg>
                                 <map>
                                     <entry key="string">
                                         <value type="java.lang.String">abc</value>
@@ -32,17 +33,20 @@
                                         <value type="java.lang.Boolean">true</value>
                                     </entry>
                                 </map>
+                            </constructor-arg>
                             </component>
                             <!-- for the 2nd factory configration object -->
                             <component class="org.osgi.test.cases.blueprint.components.cmsupport.ConfigurationDictionaryBuilder">
-                                <map>
-                                    <entry key="string">
-                                        <value type="java.lang.String">bcd</value>
-                                    </entry>
-                                    <entry key="boolean">
-                                        <value type="java.lang.Boolean">false</value>
-                                    </entry>
-                                </map>
+                                <constructor-arg>
+                                    <map>
+                                        <entry key="string">
+                                            <value type="java.lang.String">bcd</value>
+                                        </entry>
+                                        <entry key="boolean">
+                                            <value type="java.lang.Boolean">false</value>
+                                        </entry>
+                                    </map>
+                                </constructor-arg>
                             </component>
                         </list>
                     </constructor-arg>
