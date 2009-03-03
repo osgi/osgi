@@ -109,15 +109,15 @@ public interface CompositeBundleFactory {
 	 * The composite manifest map must not contain the following headers. If a
 	 * composite manifest map does contain one of the following headers then a
 	 * <code>BundleException</code> is thrown:
-	 * <ul>
-	 * <li> {@link Constants#BUNDLE_ACTIVATIONPOLICY Bundle-ActivationPolicy}</li>
-	 * <li> {@link Constants#BUNDLE_ACTIVATOR Bundle-Activator}</li>
-	 * <li> {@link Constants#BUNDLE_CLASSPATH Bundle-ClassPath}</li>
-	 * <li> {@link Constants#BUNDLE_LOCALIZATION Bundle-Localization}</li>
-	 * <li> {@link Constants#BUNDLE_NATIVECODE Bundle-NativeCode}</li>
-	 * <li> {@link Constants#FRAGMENT_HOST Fragment-Host}</li>
-	 * <li> {@link Constants#DYNAMICIMPORT_PACKAGE DynamicImport-Package}</li>
-	 * </ul>
+	 * <br/>
+	 * {@link Constants#BUNDLE_ACTIVATIONPOLICY Bundle-ActivationPolicy}<br/>
+	 * {@link Constants#BUNDLE_ACTIVATOR Bundle-Activator}<br/>
+	 * {@link Constants#BUNDLE_CLASSPATH Bundle-ClassPath}<br/>
+	 * {@link Constants#BUNDLE_LOCALIZATION Bundle-Localization}<br/>
+	 * {@link Constants#BUNDLE_NATIVECODE Bundle-NativeCode}<br/>
+	 * {@link Constants#FRAGMENT_HOST Fragment-Host}<br/>
+	 * {@link Constants#DYNAMICIMPORT_PACKAGE DynamicImport-Package}<br/>
+	 * <br/>
 	 * </li>
 	 * <li>A child framework is created which uses a storage area associated with
 	 * the composite bundle's persistent storage. The framework configuration 
