@@ -15,6 +15,7 @@
  */
 package org.osgi.service.distribution;
 
+import java.util.Collection;
 import java.util.Map;
 
 import org.osgi.framework.ServiceReference;
@@ -52,7 +53,8 @@ public interface DistributionProvider {
 
     /**
      * Service Registration property that lists the intents supported by this
-     * DistributionProvider.
+     * DistributionProvider. Value of this property is of type 
+     * Collection (<? extends String>).
      */
     static final String PROP_KEY_SUPPORTED_INTENTS =
                             "osgi.remote.distribition.supported_intents";
@@ -60,47 +62,40 @@ public interface DistributionProvider {
     /**
      * @return ServiceReferences of services registered in the local Service
      *         Registry that are proxies to remote services. If no proxies are
-     *         registered, then an empty array is returned.
+     *         registered, then an empty collection is returned.
      */
-    ServiceReference[] getRemoteServices();
+    Collection /*<? extends ServiceReference>*/ getRemoteServices();
 
     /**
      * @return ServiceReferences of local services that are exposed remotely 
      *         using this DisitributionProvider. Note that certain services may be
      *         exposed and without being published to a discovery service. This 
      *         API returns all the exposed services. If no services are exposed an 
-     *         empty array is returned.
+     *         empty collection is returned.
      */
-    ServiceReference[] getExposedServices();
+    Collection /*<? extends ServiceReference>*/ getExposedServices();
 
     /**
-     * @return Local ServiceReferences of exposed services that are published 
-     *         remotely to a discovery mechanism using this DisitributionProvider. 
-     *         Note that certain services might be exposed without being
-     *         published. 
-     *         This API returns all the published service. If no services are 
-     *         published an empty array is returned.
+     * Provides access to extra properties set by the DistributionProvider on
+     * endpoints, as they will appear on client side proxies given an exposed
+     * ServiceReference. 
+     * These properties are not always available on the server-side
+     * ServiceReference of the exposed
+     * service but will be on the remote client side proxy to this service.
+     * This API provides access to these extra properties from the exposing
+     * side.
+     * E.g. a service is exposed remotely, the distribution software is configured
+     * to add transactionality to the remote service. Because of this, on the 
+     * client-side proxy the property serviceosgi.intents=”transactionality” is set. 
+     * However, these intents are *not* always set on the original
+     * ServiceRegistration on the server-side since on the server side the service
+     * object is a local pojo which doesn’t provide transactionality by itself.
+     * This QoS is added by the distribution.
+     * This API provides access to these extra properties from the server-side.
+     * 
+     * @param sr A ServiceReference of an exposed service.
+     * @return The map of extra properties.
      */
-    ServiceReference[] getPublishedServices();
-
-	/**
-	 * Provides access to extra properties set by the DistributionProvider on
-	 * endpoints, as they will appear on client side proxies given an exposed
-	 * ServiceReference. These properties are not always available on the
-	 * server-side ServiceReference of the published service but will be on the
-	 * remote client side proxy to this service. This API provides access to
-	 * these extra properties from the publishing side. E.g. a service is
-	 * exposed remotely, the distribution software is configured to add
-	 * transactionality to the remote service. Because of this, on the
-	 * client-side proxy the property osgi.intents="transactionality" is set.
-	 * However, these intents are *not* always set on the original
-	 * ServiceRegistration on the server-side since on the server side the
-	 * service object is a local pojo which doesn't provide transactionality by
-	 * itself. This QoS is added by the distribution. This API provides access
-	 * to these extra properties from the server-side.
-	 * 
-	 * @param sr A ServiceReference of a published service.
-	 * @return The map of extra properties.
-	 */
-    Map getPublicationProperties(ServiceReference sr);
+    Map /*<String, String>*/ getExposedProperties(ServiceReference sr);
 }
+
