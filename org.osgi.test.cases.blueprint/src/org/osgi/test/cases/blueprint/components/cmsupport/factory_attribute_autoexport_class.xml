@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
-    xmlns:osgix="http://www.osgi.org/xmlns/blueprint/compendium/v1.0.0">
-    
-    <osgix:managed-service-factory id="srvFactory1" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:osgix="http://www.osgi.org/xmlns/blueprint/compendium/v1.0.0"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+    http://www.osgi.org/xmlns/blueprint-compendium/v1.0.0 http://www.osgi.org/xmlns/blueprint-compendium/v1.0.0/blueprint-compendium.xsd">
+
+    <osgix:managed-service-factory id="srvFactory1"
         factory-pid="org.osgi.test.cases.blueprint.components.cmsupport.configfactory1"
         auto-export="class-hierarchy">
         <osgix:managed-component class="org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection"/>
     </osgix:managed-service-factory>
-    
+
 </components>

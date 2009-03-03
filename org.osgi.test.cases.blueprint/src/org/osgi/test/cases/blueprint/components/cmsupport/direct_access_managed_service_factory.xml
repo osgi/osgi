@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
-    xmlns:osgix="http://www.osgi.org/xmlns/blueprint/compendium/v1.0.0">
-    
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:osgix="http://www.osgi.org/xmlns/blueprint/compendium/v1.0.0"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+    http://www.osgi.org/xmlns/blueprint-compendium/v1.0.0 http://www.osgi.org/xmlns/blueprint-compendium/v1.0.0/blueprint-compendium.xsd">
+
     <description> Direct access to configuration data </description>
-    
+
     <component id="compTestManagedServiceFactory" class="org.osgi.test.cases.blueprint.components.cmsupport.TestManagedServiceFactory">
         <constructor-arg value="compTestManagedServiceFactory"/>
     </component>
-    
+
     <service id="srvTestManagedServiceFactory" ref="compTestManagedServiceFactory" interface="org.osgi.service.cm.ManagedServiceFactory">
         <service-properties>
             <entry key="service.pid" value="org.osgi.test.cases.blueprint.components.cmsupport.configfactory1"/>
         </service-properties>
     </service>
-    
+
 </components>

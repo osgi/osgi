@@ -1,74 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
-    xmlns:osgix="http://www.osgi.org/xmlns/blueprint/compendium/v1.0.0">
-    
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:osgix="http://www.osgi.org/xmlns/blueprint/compendium/v1.0.0"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+    http://www.osgi.org/xmlns/blueprint-compendium/v1.0.0 http://www.osgi.org/xmlns/blueprint-compendium/v1.0.0/blueprint-compendium.xsd">
+
     <osgix:property-placeholder persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config2"/>
-        
+
 <!-- string -->
     <component id="compString" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="string" value="${string}"/>
     </component>
-    
+
     <component id="compStringPart" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="string" value="${string}xyz"/>
     </component>
-    
+
 <!-- string empty -->
     <component id="compStringEmpty" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="string" value="${string_empty}"/>
     </component>
-    
+
     <component id="compStringEmptyPart" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="string" value="xyz${string_empty}"/>
     </component>
-    
+
 <!-- string null -->
     <component id="compStringNull" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="string" value="${string_null}"/>
     </component>
-    
+
     <component id="compStringNullPart" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="string" value="xyz${string_null}xyz"/>
     </component>
-    
-<!-- boolean -->    
+
+<!-- boolean -->
     <component id="compWrapperBoolean" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="boolean" value="${boolean}"/>
     </component>
-    
+
 <!-- byte -->
     <component id="compWrapperByte" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="byte" value="${byte}"/>
     </component>
-    
+
 <!-- char -->
     <component id="compWrapperCharacter" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="char" value="${char}"/>
     </component>
-    
+
 <!-- int-->
     <component id="compWrapperInteger" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="int" value="${int}"/>
     </component>
-    
+
 <!-- short -->
     <component id="compWrapperShort" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="short" value="${short}"/>
     </component>
-    
+
 <!-- long -->
     <component id="compWrapperLong" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="long" value="${long}"/>
     </component>
-    
+
 <!-- double -->
     <component id="compWrapperDouble" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="double" value="${double}"/>
     </component>
-    
+
 <!-- float -->
     <component id="compWrapperFloat" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="float" value="${float}"/>
     </component>
-    
+
 </components>

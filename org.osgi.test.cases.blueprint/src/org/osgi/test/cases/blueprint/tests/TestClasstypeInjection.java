@@ -178,7 +178,8 @@ public class TestClasstypeInjection extends DefaultTestBundleControl {
     }
 
     public void testPropertyInjection() throws Exception {
-        StandardTestController controller = new StandardTestController(getContext(), getWebServer() + "www/classtype_property_injection.jar");
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer() + "www/classtype_property_injection.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
 
         this.addPropertyTestItem(startEvents);
@@ -187,7 +188,8 @@ public class TestClasstypeInjection extends DefaultTestBundleControl {
     }
 
     public void testInstanceFactoryPropertyInjection () throws Exception{
-        StandardTestController controller = new StandardTestController(getContext(), getWebServer() + "www/classtype_factory_property_injection.jar");
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer() + "www/classtype_factory_property_injection.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
 
         this.addPropertyTestItem(startEvents);
@@ -196,7 +198,8 @@ public class TestClasstypeInjection extends DefaultTestBundleControl {
     }
 
     public void testStaticFactoryPropertyInjection () throws Exception{
-        StandardTestController controller = new StandardTestController(getContext(), getWebServer() + "www/classtype_static_factory_property_injection.jar");
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer() + "www/classtype_static_factory_property_injection.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
 
         this.addPropertyTestItem(startEvents);

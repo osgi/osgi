@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
-    xmlns:osgix="http://www.osgi.org/xmlns/blueprint/compendium/v1.0.0">
-    
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:osgix="http://www.osgi.org/xmlns/blueprint/compendium/v1.0.0"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+    http://www.osgi.org/xmlns/blueprint-compendium/v1.0.0 http://www.osgi.org/xmlns/blueprint-compendium/v1.0.0/blueprint-compendium.xsd">
+
     <!-- default config one -->
     <osgix:property-placeholder persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config1" defaults-ref="compDefaultConfig1"/>
 
     <component id="compDefaultConfig1" class="org.osgi.test.cases.blueprint.components.cmsupport.DefaultConfigOne"/>
-    
+
     <component id="compString1" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="string" value="${str_1}"/>
     </component>
-    
+
     <!-- default config two -->
     <osgix:property-placeholder persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config2" defaults-ref="compDefaultConfig2" placeholder-prefix="#{" placeholder-suffix="}"/>
-    
+
     <component id="compDefaultConfig2" class="org.osgi.test.cases.blueprint.components.cmsupport.DefaultConfigTwo"/>
-    
+
     <component id="compString2" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="string" value="#{str_2}"/>
     </component>
-    
+
     <!-- default config three -->
     <osgix:property-placeholder persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config3" placeholder-prefix="#[" placeholder-suffix="]">
         <default-properties>
@@ -30,7 +33,7 @@
     <component id="compString3" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="string" value="#[str_3]"/>
     </component>
-    
-    
+
+
 
 </components>
