@@ -30,14 +30,19 @@ package org.osgi.service.discovery;
  * 
  * Please note that providing the {@link #PROP_KEY_SERVICE_INTERFACE_NAME}
  * property is mandatory when a <code>ServicePublication</code> service is
- * registered.<br>
+ * registered. Note also that a Discovery implementation may require provision
+ * of additional properties, e.g. some of the standard properties defined below,
+ * or may make special use of them in case they are provided. For example an
+ * SLP-based Discovery might use the value provided with the
+ * {@link #PROP_KEY_ENDPOINT_LOCATION} property for construction of a SLP-URL
+ * used to publish the service.<br>
  * 
  * Also important is that it's not guaranteed that after registering a
  * <code>ServicePublication</code> object its service metadata is actually
  * published. Beside the fact that at least one Discovery service has to be
  * present, the provided properties have to be valid, e.g. shouldn't contain
- * case variants of the same key name, a supported publication strategy used and
- * the actual publication via Discovery mechanisms has to succeed.
+ * case variants of the same key name, and the actual publication via Discovery
+ * mechanisms has to succeed.
  * 
  * @version $Revision$
  */
@@ -49,24 +54,24 @@ public interface ServicePublication {
 	 * endpoint. Value of this property is of type Collection (<? extends
 	 * String>).
 	 */
-	public static final String PROP_KEY_SERVICE_INTERFACE_NAME = "service.interface";
+	public static final String	PROP_KEY_SERVICE_INTERFACE_NAME		= "service.interface";
 
 	/**
 	 * Optional ServiceRegistration property which contains a collection of
 	 * interface names with their associated version attributes separated by
-	 * {@link #SEPARATOR} e.g. 'my.company.foo:1.3.5 my.company.zoo:2.3.5'. In
+	 * {@link #SEPARATOR} e.g. 'my.company.foo|1.3.5 my.company.zoo|2.3.5'. In
 	 * case no version has been provided for an interface, Discovery may use the
 	 * String-value of <code>org.osgi.framework.Version.emptyVersion</code>
 	 * constant. <br>
 	 * Value of this property is of type Collection (<? extends String>).
 	 */
-	public static final String PROP_KEY_SERVICE_INTERFACE_VERSION = "service.interface.version";
+	public static final String	PROP_KEY_SERVICE_INTERFACE_VERSION	= "service.interface.version";
 
 	/**
 	 * Optional ServiceRegistration property which contains a collection of
 	 * interface names with their associated (non-Java) endpoint interface names
 	 * separated by {@link #SEPARATOR} e.g.:<br>
-	 * 'my.company.foo:MyWebService my.company.zoo:MyWebService'.<br>
+	 * 'my.company.foo|MyWebService my.company.zoo|MyWebService'.<br>
 	 * This (non-Java) endpoint interface name is usually a communication
 	 * protocol specific interface, for instance a web service interface name.
 	 * Though this information is usually contained in accompanying properties
@@ -77,33 +82,35 @@ public interface ServicePublication {
 	 * 
 	 * Value of this property is of type Collection (<? extends String>).
 	 */
-	public static final String PROP_KEY_ENDPOINT_INTERFACE_NAME = "osgi.remote.endpoint.interface";
+	public static final String	PROP_KEY_ENDPOINT_INTERFACE_NAME	= "osgi.remote.endpoint.interface";
 
 	/**
 	 * Optional ServiceRegistration property which contains a map of properties
 	 * of the published service. <br>
 	 * Property keys are handled in a case insensitive manner (as OSGi Framework
-	 * does). Note that Discovery might make use of certain standard properties
-	 * e.g. defined by {@link ServiceEndpointDescription} for the publication
-	 * process if they are provided.<br>
+	 * does). <br>
 	 * Value of this property is of type <code>java.util.Map<code>.
 	 */
-	public static final String PROP_KEY_SERVICE_PROPERTIES = "service.properties";
+	public static final String	PROP_KEY_SERVICE_PROPERTIES			= "service.properties";
 
 	/**
 	 * Optional property of the published service identifying its location.
 	 * Value of this property is of type <code>java.net.URL<code>.
 	 */
-	public static final String PROP_KEY_ENDPOINT_LOCATION = "osgi.remote.endpoint.location";
+	public static final String	PROP_KEY_ENDPOINT_LOCATION			= "osgi.remote.endpoint.location";
 
 	/**
 	 * Optional property of the published service uniquely identifying its
 	 * endpoint. Value of this property is of type <code>String<code>.
 	 */
-	public static final String PROP_KEY_ENDPOINT_ID = "osgi.remote.endpoint.id";
+	public static final String	PROP_KEY_ENDPOINT_ID				= "osgi.remote.endpoint.id";
 
 	/**
-	 * Separator for key value pairs.
+	 * Separator constant for association of interface-specific values with the
+	 * particular interface name. See also
+	 * {@link #PROP_KEY_SERVICE_INTERFACE_VERSION} and
+	 * {@link #PROP_KEY_ENDPOINT_INTERFACE_NAME} properties which describe such
+	 * interface-specific values.
 	 */
-	public static final String SEPARATOR = ":";
+	public static final String	SEPARATOR							= "|";
 }
