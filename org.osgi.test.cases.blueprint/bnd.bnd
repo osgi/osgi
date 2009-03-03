@@ -183,7 +183,7 @@ Include-Resource					= \
  	www/component_properties_evaluation.jar=component_properties_evaluation.jar, \
  	www/component_properties_auto_update.jar=component_properties_auto_update.jar, \
  	www/direct_access_managed_service_factory.jar=direct_access_managed_service_factory.jar, \
- 	www/direct_access_managed_service.jar=direct_access_managed_service.jar,
+ 	www/direct_access_managed_service.jar=direct_access_managed_service.jar, \
  	www/factory_attribute_autoexport_all.jar=factory_attribute_autoexport_all.jar, \
  	www/factory_attribute_autoexport_class.jar=factory_attribute_autoexport_class.jar, \
  	www/factory_attribute_autoexport_interfaces.jar=factory_attribute_autoexport_interfaces.jar, \
@@ -195,7 +195,7 @@ Include-Resource					= \
  	www/factory_nested_interfaces.jar=factory_nested_interfaces.jar, \
  	www/factory_service_lifecycle.jar=factory_service_lifecycle.jar, \
  	www/factory_service_properties_evaluation.jar=factory_service_properties_evaluation.jar, \
- 	www/factory_service_properties_auto_update.jar=factory_service_properties_auto_update.jar,
+ 	www/factory_service_properties_auto_update.jar=factory_service_properties_auto_update.jar
 
 Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
 
@@ -211,5 +211,5 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 	org.apache.felix.configadmin;  version=latest, \
 	org.eclipse.equinox.event; version=latest, \
  	osgi; version=latest, \
- 	org.osgi.test.support;  version=latest,
+ 	org.osgi.test.support;  version=latest, \
         org.springsource.service.blueprint; version=latest

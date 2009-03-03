@@ -351,7 +351,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
             getWebServer()+"www/ServiceOne_complex_property_export.jar");
         // we add different validation stuff to each jar.  We'll start with the
         // export jar
-        MetadataEventSet exportStartEvents = controller.getStartEvents(1);
+        MetadataEventSet exportStartEvents = controller.getStartEvents();
         // This will validate all of the service properties
         exportStartEvents.addValidator(new ComplexServicePropertyValidator());
 
