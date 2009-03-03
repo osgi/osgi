@@ -53,34 +53,35 @@ public interface ConditionalPermissionUpdate {
 	List /* <ConditionalPermissionInfo> */getConditionalPermissionInfos();
 
 	/**
-	 * Commit the update. If no changes have been made to the Conditional
+	 * Commit this update. If no changes have been made to the Conditional
 	 * Permission Table since this update was created, then this method will
 	 * replace the Conditional Permission Table with this update's Conditional
 	 * Permissions. This method may only be successfully called once on this
 	 * object.
 	 * <p>
 	 * If any of the {@link ConditionalPermissionInfo}s in the update list has
-	 * <code>null</code> as a name it will be replaced with a
+	 * <code>null</code> as a name it will be replaced with a new
 	 * {@link ConditionalPermissionInfo} object that has a generated name which
 	 * is unique within the list.
 	 * <p>
 	 * No two entries in this update's Conditional Permissions may have the same
-	 * name. Other consistency checks may also be performed. If the update's
+	 * name. Other consistency checks may also be performed. If this update's
 	 * Conditional Permissions are determined to be inconsistent in some way
 	 * then an <code>IllegalStateException</code> will be thrown.
 	 * <p>
-	 * This method returns <code>false</code> if the Conditional Permission
-	 * Table has been modified since the creation of this update.
+	 * This method returns <code>false</code> if the commit did not occur
+	 * because the Conditional Permission Table has been modified since the
+	 * creation of this update.
 	 * 
 	 * @return <code>true</code> if the commit was successful.
-	 *         <code>false</code> if the Conditional Permission Table has been
-	 *         modified since the creation of this update.
+	 *         <code>false</code> if the commit did not occur because the
+	 *         Conditional Permission Table has been modified since the creation
+	 *         of this update.
 	 * @throws SecurityException If the caller does not have
 	 *         <code>AllPermission</code>.
-	 * @throws IllegalStateException If the update's Conditional Permissions are
-	 *         not valid or inconsistent. For example, if this update has two
-	 *         Conditional Permissions in it with the same name, then this
-	 *         exception will be thrown.
+	 * @throws IllegalStateException If this update's Conditional Permissions
+	 *         are not valid or inconsistent. For example, this update has two
+	 *         Conditional Permissions in it with the same name.
 	 */
 	boolean commit();
 }

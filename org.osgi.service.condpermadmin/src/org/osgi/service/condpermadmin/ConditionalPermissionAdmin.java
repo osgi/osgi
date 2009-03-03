@@ -37,7 +37,7 @@ public interface ConditionalPermissionAdmin {
 	 * <p>
 	 * The Conditional Permission Info will be given a unique, never reused
 	 * name. This entry will be added at the beginning of the Conditional
-	 * Permission Table with a grant decision of
+	 * Permission Table with an access decision of
 	 * {@link ConditionalPermissionInfo#ALLOW ALLOW}.
 	 * <p>
 	 * Since this method changes the Conditional Permission Table any
@@ -73,7 +73,7 @@ public interface ConditionalPermissionAdmin {
 	 * specified name. Otherwise, the Conditional Permission Info with the
 	 * specified name must be updated with the specified Conditions and
 	 * Permissions. If a new entry was created in the Conditional Permission
-	 * Table it will be added at the beginning of the table with a grant
+	 * Table it will be added at the beginning of the table with an access
 	 * decision of {@link ConditionalPermissionInfo#ALLOW ALLOW}.
 	 * <p>
 	 * Since this method changes the underlying permission table any
@@ -102,6 +102,7 @@ public interface ConditionalPermissionAdmin {
 
 	/**
 	 * Returns the Conditional Permission Infos from the Conditional Permission
+	 * Table.
 	 * <p>
 	 * The returned Enumeration will return elements in the order they are kept
 	 * in the Conditional Permission Table.
@@ -122,7 +123,9 @@ public interface ConditionalPermissionAdmin {
 	 * Return the Conditional Permission Info with the specified name.
 	 * 
 	 * @param name The name of the Conditional Permission Info to be returned.
-	 * @return The Conditional Permission Info with the specified name.
+	 * @return The Conditional Permission Info with the specified name or
+	 *         <code>null</code> if no Conditional Permission Info with the
+	 *         specified name exists in the Conditional Permission Table.
 	 * @deprecated Since 1.1. Use {@link #newConditionalPermissionUpdate()}
 	 *             instead.
 	 */
@@ -171,21 +174,22 @@ public interface ConditionalPermissionAdmin {
 	 * @param permissions The permissions that are enabled when the specified
 	 *        conditions, if any, are satisfied. This argument must not be
 	 *        <code>null</code> and must specify at least one permission.
-	 * @param grant Grant decision. Must be one of the following values:
+	 * @param access Access decision. Must be one of the following values:
 	 *        <ul>
 	 *        <li>{@link ConditionalPermissionInfo#ALLOW allow}</li>
 	 *        <li>{@link ConditionalPermissionInfo#DENY deny}</li>
 	 *        </ul>
-	 *        The specified grant value must be evaluated case insensitively.
+	 *        The specified access decision value must be evaluated case
+	 *        insensitively.
 	 * @return A <code>ConditionalPermissionInfo</code> object suitable for
 	 *         insertion into a {@link ConditionalPermissionUpdate}.
 	 * @throws IllegalArgumentException If no permissions are specified or if
-	 *         the specified grant is not a valid value.
+	 *         the specified access decision is not a valid value.
 	 * @since 1.1
 	 */
 	ConditionalPermissionInfo newConditionalPermissionInfo(String name,
 			ConditionInfo conditions[], PermissionInfo permissions[],
-			String grant);
+			String access);
 
 	/**
 	 * Creates a new <code>ConditionalPermissionInfo</code> from the specified
@@ -197,12 +201,13 @@ public interface ConditionalPermissionAdmin {
 	 * 
 	 * @param encodedConditionalPermissionInfo The encoded
 	 *        <code>ConditionalPermissionInfo</code>. White space in the encoded
-	 *        <code>ConditionalPermissionInfo</code> is ignored. The grant value
-	 *        in the encoded <code>ConditionalPermissionInfo</code> must be
-	 *        evaluated case insensitively. If the encoded
+	 *        <code>ConditionalPermissionInfo</code> is ignored. The access
+	 *        decision value in the encoded
+	 *        <code>ConditionalPermissionInfo</code> must be evaluated case
+	 *        insensitively. If the encoded
 	 *        <code>ConditionalPermissionInfo</code> does not contain the
 	 *        optional name, <code>null</code> must be used for the name and a
-	 *        unique name is generated when the returned
+	 *        unique name will be generated when the returned
 	 *        <code>ConditionalPermissionInfo</code> is committed in an update
 	 *        to the Conditional Permission Table.
 	 * @return A <code>ConditionalPermissionInfo</code> object suitable for

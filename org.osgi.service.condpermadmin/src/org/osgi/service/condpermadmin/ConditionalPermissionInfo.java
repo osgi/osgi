@@ -19,8 +19,9 @@ package org.osgi.service.condpermadmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
 /**
- * A binding of a set of Conditions to a set of Permissions. Instances of this
- * interface are obtained from the Conditional Permission Admin service.
+ * A list of Permissions guarded by a list of conditions with an access
+ * decision. Instances of this interface are obtained from the Conditional
+ * Permission Admin service.
  * 
  * @Immutable
  * @version $Revision$
@@ -28,7 +29,7 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 public interface ConditionalPermissionInfo {
 	/**
 	 * This string is used to indicate that a row in the Conditional Permission
-	 * Table should return a grant decision of &quot;allow&quot; if the
+	 * Table should return an access decision of &quot;allow&quot; if the
 	 * conditions are all satisfied and at least one of the permissions is
 	 * implied.
 	 * 
@@ -38,7 +39,7 @@ public interface ConditionalPermissionInfo {
 
 	/**
 	 * This string is used to indicate that a row in the Conditional Permission
-	 * Table should return a grant decision of &quot;deny&quot; if the
+	 * Table should return an access decision of &quot;deny&quot; if the
 	 * conditions are all satisfied and at least one of the permissions is
 	 * implied.
 	 * 
@@ -56,10 +57,10 @@ public interface ConditionalPermissionInfo {
 	ConditionInfo[] getConditionInfos();
 
 	/**
-	 * Returns the Permission Infos for the Permission in this Conditional
+	 * Returns the Permission Infos for the Permissions in this Conditional
 	 * Permission Info.
 	 * 
-	 * @return The Permission Infos for the Permission in this Conditional
+	 * @return The Permission Infos for the Permissions in this Conditional
 	 *         Permission Info.
 	 */
 	PermissionInfo[] getPermissionInfos();
@@ -68,7 +69,7 @@ public interface ConditionalPermissionInfo {
 	 * Removes this Conditional Permission Info from the Conditional Permission
 	 * Table.
 	 * <p>
-	 * Since this method changes the underlying permission table any
+	 * Since this method changes the underlying permission table, any
 	 * {@link ConditionalPermissionUpdate}s that were created prior to calling
 	 * this method can no longer be committed.
 	 * 
@@ -89,22 +90,25 @@ public interface ConditionalPermissionInfo {
 	/**
 	 * Returns the name of this Conditional Permission Info.
 	 * 
-	 * @return The name of this Conditional Permission Info.
+	 * @return The name of this Conditional Permission Info. This can be
+	 *         <code>null</code> if this Conditional Permission Info was created
+	 *         without a name.
 	 */
 	String getName();
 
 	/**
-	 * Returns the grant decision for this Conditional Permission Info.
+	 * Returns the access decision for this Conditional Permission Info.
 	 * 
 	 * @return One of the following values:
 	 *         <ul>
-	 *         <li>{@link #ALLOW allow} - The grant decision is
+	 *         <li>{@link #ALLOW allow} - The access decision is
 	 *         &quot;allow&quot;.</li>
-	 *         <li>{@link #DENY deny} - The grant decision is &quot;deny&quot;.</li>
+	 *         <li>{@link #DENY deny} - The access decision is &quot;deny&quot;.
+	 *         </li>
 	 *         </ul>
 	 * @since 1.1
 	 */
-	String getGrantDecision();
+	String getAccessDecision();
 
 	/**
 	 * Returns the string encoding of this
@@ -115,27 +119,29 @@ public interface ConditionalPermissionInfo {
 	 * The encoded format is:
 	 * 
 	 * <pre>
-	 *   grant {conditions permissions} &quot;name&quot;
+	 *   access {conditions permissions} name
 	 * </pre>
 	 * 
-	 * where <i>grant</i> is the grant decision, <i>conditions</i> is zero or
+	 * where <i>access</i> is the access decision, <i>conditions</i> is zero or
 	 * more {@link ConditionInfo#getEncoded() encoded conditions},
 	 * <i>permissions</i> is one or more {@link PermissionInfo#getEncoded()
 	 * encoded permissions} and <i>name</i> is the name of the
-	 * <code>ConditionalPermissionInfo</code>. <i>name</i> is optional.
+	 * <code>ConditionalPermissionInfo</code>.
 	 * 
 	 * <p>
-	 * If <i>name</i> is present in the encoded string, it must be encoded for
-	 * proper parsing. Specifically, the <code>&quot;</code>, <code>\</code>,
-	 * carriage return, and line feed characters are escaped using
-	 * <code>\&quot;</code>, <code>\\</code>, <code>\r</code>, and
-	 * <code>\n</code>, respectively.
+	 * <i>name</i> is optional. If <i>name</i> is present in the encoded string,
+	 * it must quoted, beginning and ending with <code>&quot;</code>. The
+	 * <i>name</i> value must be encoded for proper parsing. Specifically, the
+	 * <code>&quot;</code>, <code>\</code>, carriage return, and line feed
+	 * characters must be escaped using <code>\&quot;</code>, <code>\\</code>,
+	 * <code>\r</code>, and <code>\n</code>, respectively.
 	 * 
 	 * <p>
 	 * The encoded string contains no leading or trailing whitespace characters.
-	 * A single space character is used between <i>grant</i> and <code>{</code>
+	 * A single space character is used between <i>access</i> and <code>{</code>
 	 * and between <code>}</code> and <i>name</i>, if <i>name</i> is present.
-	 * All conditions and permissions are separated by a single space character.
+	 * All encoded conditions and permissions are separated by a single space
+	 * character.
 	 * 
 	 * @return The string encoding of this
 	 *         <code>ConditionalPermissionInfo</code>.
@@ -159,14 +165,14 @@ public interface ConditionalPermissionInfo {
 	 * Determines the equality of two <code>ConditionalPermissionInfo</code>
 	 * objects.
 	 * 
-	 * This method checks that specified object has the same grant decision,
+	 * This method checks that specified object has the same access decision,
 	 * conditions, permissions and name as this
 	 * <code>ConditionalPermissionInfo</code> object.
 	 * 
 	 * @param obj The object to test for equality with this
 	 *        <code>ConditionalPermissionInfo</code> object.
 	 * @return <code>true</code> if <code>obj</code> is a
-	 *         <code>ConditionalPermissionInfo</code>, and has the same grant
+	 *         <code>ConditionalPermissionInfo</code>, and has the same access
 	 *         decision, conditions, permissions and name as this
 	 *         <code>ConditionalPermissionInfo</code> object; <code>false</code>
 	 *         otherwise.

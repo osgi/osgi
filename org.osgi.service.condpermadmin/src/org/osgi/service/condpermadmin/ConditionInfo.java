@@ -172,9 +172,9 @@ public class ConditionInfo {
 	 *   [type &quot;arg0&quot; &quot;arg1&quot; ...]
 	 * </pre>
 	 * 
-	 * where <i>argN</i> are strings that are encoded for proper parsing.
+	 * where <i>argN</i> are strings that must be encoded for proper parsing.
 	 * Specifically, the <code>&quot;</code>, <code>\</code>, carriage return,
-	 * and line feed characters are escaped using <code>\&quot;</code>,
+	 * and line feed characters must be escaped using <code>\&quot;</code>,
 	 * <code>\\</code>, <code>\r</code>, and <code>\n</code>, respectively.
 	 * 
 	 * <p>

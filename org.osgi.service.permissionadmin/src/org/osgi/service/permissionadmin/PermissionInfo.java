@@ -219,9 +219,9 @@ public class PermissionInfo {
 	 * (type &quot;name&quot; &quot;actions&quot;)
 	 * </pre>
 	 * 
-	 * where <i>name</i> and <i>actions</i> are strings that are encoded for
+	 * where <i>name</i> and <i>actions</i> are strings that must be encoded for
 	 * proper parsing. Specifically, the <code>&quot;</code>,<code>\</code>,
-	 * carriage return, and line feed characters are escaped using
+	 * carriage return, and line feed characters must be escaped using
 	 * <code>\&quot;</code>, <code>\\</code>,<code>\r</code>, and
 	 * <code>\n</code>, respectively.
 	 * 
