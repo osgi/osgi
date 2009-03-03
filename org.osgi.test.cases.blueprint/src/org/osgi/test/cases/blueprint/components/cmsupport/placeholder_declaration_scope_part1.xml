@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:osgix="http://www.osgi.org/xmlns/blueprint/compendium/v1.0.0">
+    
+    
+    
+    <!-- string -->
+    <component id="compString" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="string" value="${string}"/>
+    </component>
+    
+    
+</components>

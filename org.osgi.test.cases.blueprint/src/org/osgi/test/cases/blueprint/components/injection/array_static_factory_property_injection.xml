@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+	<!-- Injection of an empty array -->
+	<component id="compEmptyArray" factory-method="makeInstance"
+		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+		<property name="objectArray">
+			<array value-type="java.lang.Object"></array>
+		</property>
+	</component>
+
+	<!-- Injection of a null array -->
+	<component id="compNullArray" factory-method="makeInstance"
+		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+		<property name="nullArray">
+			<array value-type="java.lang.Object">
+				<null />
+			</array>
+		</property>
+	</component>
+
+	<!-- Injection of a String array -->
+	<component id="compStringArray" factory-method="makeInstance"
+		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+		<property name="stringArray">
+			<array value-type="java.lang.String">
+				<value>abc</value>
+				<value>efg</value>
+			</array>
+		</property>
+	</component>
+
+	<!-- Injection of a primitive int array -->
+	<component id="compPrimIntArray" factory-method="makeInstance"
+		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+		<property name="primIntArray">
+			<array value-type="int">
+				<value>1</value>
+				<value>2</value>
+			</array>
+		</property>
+	</component>
+
+	<!-- Injection of a wrapped int array -->
+	<component id="compWrappedIntArray" factory-method="makeInstance"
+		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+		<property name="wrappedIntArray">
+			<array value-type="java.lang.Integer">
+				<value>1</value>
+				<value>2</value>
+			</array>
+		</property>
+	</component>
+
+	<!-- Injection of a primitive boolean array -->
+	<component id="compPrimBoolArray" factory-method="makeInstance"
+		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+		<property name="primBoolArray">
+			<array value-type="boolean">
+				<value>true</value>
+				<value>false</value>
+			</array>
+		</property>
+	</component>
+
+	<!-- Injection of a wrapped boolean array -->
+	<component id="compWrappedBooleanArray" factory-method="makeInstance"
+		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+		<property name="wrappedBooleanArray">
+			<array value-type="java.lang.Boolean">
+				<value type="java.lang.Boolean">true</value>
+				<value type="java.lang.Boolean">false</value>
+			</array>
+		</property>
+	</component>
+
+	<!-- Injection of a primitive byte items -->
+	<component id="compPrimByteArray" factory-method="makeInstance"
+		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+		<property name="primByteArray">
+			<array value-type="byte">
+				<value>1</value>
+				<value>2</value>
+			</array>
+		</property>
+	</component>
+
+	<!-- Injection of a wrapped byte array -->
+	<component id="compWrappedByteArray" factory-method="makeInstance"
+		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+		<property name="wrappedByteArray">
+			<array value-type="java.lang.Byte">
+				<value>1</value>
+				<value>2</value>
+			</array>
+		</property>
+	</component>
+
+	<!-- Injection of a primitive char array -->
+	<component id="compPrimCharArray" factory-method="makeInstance"
+		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+		<property name="primCharArray">
+			<array value-type="char">
+				<value>a</value>
+				<value>b</value>
+			</array>
+		</property>
+	</component>
+
+	<!-- Injection of a wrapped char array -->
+	<component id="compWrappedCharArray" factory-method="makeInstance"
+		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+		<property name="wrappedCharArray">
+			<array value-type="java.lang.Character">
+				<value>a</value>
+				<value>b</value>
+			</array>
+		</property>
+	</component>
+
+	<!-- Injection of a primitive short array -->
+	<component id="compPrimShortArray" factory-method="makeInstance"
+		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+		<property name="primShortArray">
+			<array value-type="short">
+				<value>3</value>
+				<value>4</value>
+			</array>
+		</property>
+	</component>
+
+	<!-- Injection of a wrapped short array -->
+	<component id="compWrappedShortArray" factory-method="makeInstance"
+		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+		<property name="wrappedShortArray">
+			<array value-type="java.lang.Short">
+				<value>3</value>
+				<value>4</value>
+			</array>
+		</property>
+	</component>
+
+	<!-- Injection of a primitive long array -->
+	<component id="compPrimLongArray" factory-method="makeInstance"
+		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+		<property name="primLongArray">
+			<array value-type="long">
+				<value>3</value>
+				<value>4</value>
+			</array>
+		</property>
+	</component>
+
+	<!-- Injection of a wrapped long array -->
+	<component id="compWrappedLongArray" factory-method="makeInstance"
+		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+		<property name="wrappedLongArray">
+			<array value-type="java.lang.Long">
+				<value>3</value>
+				<value>4</value>
+			</array>
+		</property>
+	</component>
+
+	<!-- Injection of a primitive double array -->
+	<component id="compPrimDoubleArray" factory-method="makeInstance"
+		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+		<property name="primDoubleArray">
+			<array value-type="double">
+				<value>3</value>
+				<value>4</value>
+			</array>
+		</property>
+	</component>
+
+	<!-- Injection of a wrapped double array -->
+	<component id="compWrappedDoubleArray" factory-method="makeInstance"
+		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+		<property name="wrappedDoubleArray">
+			<array value-type="java.lang.Double">
+				<value>3</value>
+				<value>4</value>
+			</array>
+		</property>
+	</component>
+
+	<!-- Injection of a primitive float array -->
+	<component id="compPrimFloatArray" factory-method="makeInstance"
+		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+		<property name="primFloatArray">
+			<array value-type="float">
+				<value>3</value>
+				<value>4</value>
+			</array>
+		</property>
+	</component>
+
+	<!-- Injection of a wrapped float array -->
+	<component id="compWrappedFloatArray" factory-method="makeInstance"
+		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+		<property name="wrappedFloatArray">
+			<array value-type="java.lang.Float">
+				<value>3</value>
+				<value>4</value>
+			</array>
+		</property>
+	</component>
+
+	<!-- Injection of a Date array -->
+	<component id="compDateArray" factory-method="makeInstance"
+		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+		<property name="dateArray">
+			<array value-type="java.lang.Date">
+				<value>2009-2-19</value>
+				<value>2009-2-20</value>
+			</array>
+		</property>
+	</component>
+
+	<!-- Injection of an URL array -->
+	<component id="compUrlArray" factory-method="makeInstance"
+		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+		<property name="urlArray">
+			<array value-type="java.net.URL">
+				<value>http://www.osgi.org</value>
+				<value>http://www.gmail.com</value>
+			</array>
+		</property>
+	</component>
+
+	<!-- Injection of a Class array -->
+	<component id="compClassArray" factory-method="makeInstance"
+		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+		<property name="classArray">
+			<array value-type="java.lang.Class">
+				<value>java.lang.String</value>
+				<value>java.lang.Boolean</value>
+			</array>
+		</property>
+	</component>
+
+	<!-- Injection of a Locale array -->
+	<component id="compLocaleArray" factory-method="makeInstance"
+		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+		<property name="localeArray">
+			<array value-type="java.lang.Locale">
+				<value>en_US</value>
+				<value>zh_CN</value>
+			</array>
+		</property>
+	</component>
+
+	<!-- Injection of String values from props -->
+	<component id="compNestedProps" factory-method="makeInstance"
+		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+		<property name="propsArray">
+			<array value-type="java.util.Properties">
+				<props>
+					<prop key="administrator">administrator@example.org
+					</prop>
+					<prop key="support">support@example.org</prop>
+				</props>
+			</array>
+		</property>
+	</component>
+
+	<!-- Injection of String values from map -->
+	<component id="compNestedMap" factory-method="makeInstance"
+		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+		<property name="mapArray">
+			<array value-type="java.util.Map">
+				<map>
+					<entry key="abc" value="1" />
+					<entry key="def" value="2" />
+				</map>
+			</array>
+		</property>
+	</component>
+
+	<!-- Injection of String values from set -->
+	<component id="compNestedSet" factory-method="makeInstance"
+		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+		<property name="setArray">
+			<array value-type="java.util.Set">
+				<set>
+					<value>administrator@example.org</value>
+					<value>support@example.org</value>
+				</set>
+			</array>
+		</property>
+	</component>
+
+	<!-- Injection of String values from list -->
+	<component id="compNestedList" factory-method="makeInstance"
+		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+		<property name="listArray">
+			<array value-type="java.util.List">
+				<list>
+					<value>administrator@example.org</value>
+					<value>support@example.org</value>
+				</list>
+			</array>
+		</property>
+	</component>
+
+	<!-- Injection of nested array -->
+	<component id="compNestedArray" factory-method="makeInstance"
+		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+		<property name="nestedArray">
+			<array value-type="java.lang.Object">
+				<array value-type="java.lang.String">
+					<value>abc</value>
+					<value>def</value>
+				</array>
+			</array>
+		</property>
+	</component>
+
+	<!-- Array Injection from idref -->
+
+	<!-- Array Injection from ref -->
+
+	<!-- Array Injection from component -->
+
+</components>

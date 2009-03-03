@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <component id="compFactory" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionInstanceFactory">
+      <!-- collaborators and configuration for this component go here -->
+    </component>
+
+    <component id="compEmptySet" factory-method="makeInstance" factory-component="compFactory">
+        <property name="set">
+            <set></set>
+        </property>
+    </component>
+
+    <component id="compNullSet" factory-method="makeInstance" factory-component="compFactory">
+        <property name="set">
+            <null/>
+        </property>
+    </component>
+
+    <component id="compStringItems" factory-method="makeInstance" factory-component="compFactory">
+        <property name="set">
+            <set>
+                <value>abc</value>
+                <value>def</value>
+            </set>
+        </property>
+    </component>
+
+    <component id="compDupItems" factory-method="makeInstance" factory-component="compFactory">
+        <property name="set">
+            <set>
+                <value>abc</value>
+                <value>abc</value>
+            </set>
+        </property>
+    </component>
+
+    <component id="compBooleanItems" factory-method="makeInstance" factory-component="compFactory">
+        <property name="set">
+            <set>
+                <value type="java.lang.Boolean">true</value>
+                <value type="java.lang.Boolean">false</value>
+            </set>
+        </property>
+    </component>
+
+    <component id="compMixedItems" factory-method="makeInstance" factory-component="compFactory">
+        <property name="set">
+            <set>
+                <value type="java.lang.String">abc</value>
+                <value type="java.lang.Boolean">false</value>
+                <value type="java.lang.Byte">3</value>
+                <value type="java.lang.Character">4</value>
+                <value type="java.lang.Integer">5</value>
+                <value type="java.lang.Short">6</value>
+                <value type="java.lang.Long">7</value>
+                <value type="java.lang.Double">8.0</value>
+                <value type="java.lang.Float">9.0</value>
+                <value type="java.lang.Date">2008-11-04</value>
+                <value type="java.net.URL">http://www.osgi.org</value>
+                <value type="java.lang.Class">java.lang.String</value>
+                <value type="java.util.Locale">en_US</value>
+                <null/>
+            </set>
+        </property>
+    </component>
+
+    <component id="compTypedItems" factory-method="makeInstance" factory-component="compFactory">
+        <property name="set">
+            <set type="java.lang.Double">
+                <value>0.0</value>
+                <value>1.0</value>
+            </set>
+        </property>
+    </component>
+
+    <component id="compTypedOverride" factory-method="makeInstance" factory-component="compFactory">
+        <property name="set">
+            <set type="java.lang.Double">
+                <value>0.0</value>
+                <value>1.0</value>
+                <value type="java.lang.Boolean">true</value>
+            </set>
+        </property>
+    </component>
+
+    <component id="compNestedSet" factory-method="makeInstance" factory-component="compFactory">
+        <property name="set">
+            <set>
+                <set>
+                    <value>abc</value>
+                    <value>def</value>
+                </set>
+            </set>
+        </property>
+    </component>
+
+    <component id="compNestedList" factory-method="makeInstance" factory-component="compFactory">
+        <property name="set">
+            <set>
+                <list>
+                    <value>abc</value>
+                    <value>def</value>
+                </list>
+            </set>
+        </property>
+    </component>
+
+    <component id="compNestedMap" factory-method="makeInstance" factory-component="compFactory">
+        <property name="set">
+            <set>
+                <map>
+                    <entry key="abc" value="def"/>
+                    <entry key="ghi" value="jkl"/>
+                </map>
+            </set>
+        </property>
+    </component>
+
+    <component id="compNestedProps" factory-method="makeInstance" factory-component="compFactory">
+        <property name="set">
+            <set>
+                <props>
+                    <prop key="abc">"def"</prop>
+                    <prop key="ghi">"jkl"</prop>
+                </props>
+            </set>
+        </property>
+    </component>
+</components>
+

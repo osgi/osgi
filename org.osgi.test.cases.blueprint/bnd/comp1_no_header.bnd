@@ -1,0 +1,7 @@
+Bundle-SymbolicName:                     ${p}.comp1_no_header
+Bundle-Version:                          4.2
+Import-Package:                          ${p}.components.comp1, ${p}.services
+Private-Package:                         $(p).build
+Include-Resource					= \
+	OSGI-INF/blueprint/comp1.xml=src/org/osgi/test/cases/blueprint/components/comp1/comp1.xml
+

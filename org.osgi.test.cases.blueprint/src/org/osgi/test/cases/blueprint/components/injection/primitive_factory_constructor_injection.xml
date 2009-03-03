@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <component id="compFactory" class="org.osgi.test.cases.blueprint.components.injection.yadayada.ConstructorInjectionInstanceFactory">
+      <!-- collaborators and configuration for this component go here -->
+    </component>>
+
+   <component id="compNoArg" factory-component="compFactory" factory-method="makeInstance">
+     <!-- no constructor arguments -->
+   </component>
+   <component id="compOneArg" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="compOneArg"/>
+     <!-- just a component name -->
+   </component>
+   <component id="compImplicitString" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="compImplicitString"/>
+       <constructor-arg value="ABC"/>
+     <!-- just a component name -->
+   </component>
+   <component id="compIndexedString" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="ABC" index="1"/>
+       <constructor-arg value="compIndexedString" index="0"/>
+   </component>
+   <component id="compZeroLengthString" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="" index="1"/>
+       <constructor-arg value="compZeroLengthString" index="0"/>
+   </component>
+   <component id="compNullString" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg index="1"><null/></constructor-arg>
+       <constructor-arg value="compNullString" index="0"/>
+   </component>
+
+   <component id="compThreeArgImplicit" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="compThreeArgImplicit"/>
+       <constructor-arg><null/></constructor-arg>
+       <constructor-arg value="ABC"/>
+   </component>
+
+   <component id="compThreeArgOverride" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg type="java.lang.String" value="compThreeArgOverride"/>
+       <constructor-arg type="java.lang.Object">
+           <value type="java.lang.Boolean">true</value>
+       </constructor-arg>
+       <constructor-arg type="java.lang.String"><null/></constructor-arg>
+   </component>
+
+   <component id="compPrimBooleanYes" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg type="boolean"><value>yes</value></constructor-arg>
+   </component>
+   <component id="compPrimBooleanNo" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg><value type="boolean">no</value></constructor-arg>
+   </component>
+   <component id="compPrimBooleanTrue" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="true" type="boolean"/>
+   </component>
+   <component id="compPrimBooleanFalse" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="false" type="boolean"/>
+   </component>
+   <component id="compPrimBooleanOn" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg type="boolean"><value type="boolean">on</value></constructor-arg>
+   </component>
+   <component id="compPrimBooleanOff" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="off" type="boolean"/>
+   </component>
+   <component id="compWrapperedBooleanYes" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="yes" type="java.lang.Boolean"/>
+   </component>
+   <component id="compWrapperedBooleanNo" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg type="java.lang.Boolean" value="no"/>
+   </component>
+   <component id="compWrapperedBooleanTrue" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="true" type="java.lang.Boolean"/>
+   </component>
+   <component id="compWrapperedBooleanFalse" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="false" type="java.lang.Boolean"/>
+   </component>
+   <component id="compWrapperedBooleanOn" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="on" type="java.lang.Boolean"/>
+   </component>
+   <component id="compWrapperedBooleanOff" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="off" type="java.lang.Boolean"/>
+   </component>
+   <component id="compWrapperedBooleanNull" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg type="java.lang.Boolean"><null/></constructor-arg>
+   </component>
+   <component id="compPrimByteZero" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="0" type="byte"/>
+   </component>
+   <component id="compPrimByteMax" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="127" type="byte"/>
+   </component>
+   <component id="compPrimByteMin" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="-128" type="byte"/>
+   </component>
+   <component id="compWrapperedByteZero" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="0" type="java.lang.Byte"/>
+   </component>
+   <component id="compWrapperedByteMax" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="127" type="java.lang.Byte"/>
+   </component>
+   <component id="compWrapperedByteMin" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="-128" type="java.lang.Byte"/>
+   </component>
+   <component id="compWrapperedByteNull" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg type="java.lang.Byte"><null/></constructor-arg>
+   </component>
+   <component id="compPrimDoubleZero" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="0" type="double"/>
+   </component>
+   <component id="compPrimDoubleMinusZero" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="-0.0" type="double"/>
+   </component>
+   <component id="compPrimDoubleDSuffix" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="1.1D " type="double"/>
+   </component>
+   <component id="compPrimDoubledSuffix" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value=" 1.1d" type="double"/>
+   </component>
+   <component id="compPrimDoubleFSuffix" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value=" 1.1F " type="double"/>
+   </component>
+   <component id="compPrimDoublefSuffix" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="1.1e1f" type="double"/>
+   </component>
+   <component id="compPrimDoubleMax" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="1.7976931348623157E308" type="double"/>
+   </component>
+   <component id="compPrimDoubleMin" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value=" 4.9e-324 " type="double"/>
+   </component>
+   <component id="compPrimDoubleNaN" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="NaN" type="double"/>
+   </component>
+   <component id="compPrimDoubleInfinity" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="Infinity" type="double"/>
+   </component>
+   <component id="compPrimDoubleNegInfinity" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="-Infinity" type="double"/>
+   </component>
+   <component id="compWrapperedDoubleZero" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="0" type="java.lang.Double"/>
+   </component>
+   <component id="compWrapperedDoubleMinusZero" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="-0" type="java.lang.Double"/>
+   </component>
+   <component id="compWrapperedDoubleDSuffix" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="1.1D " type="java.lang.Double"/>
+   </component>
+   <component id="compWrapperedDoubledSuffix" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value=" 1.1d" type="java.lang.Double"/>
+   </component>
+   <component id="compWrapperedDoubleFSuffix" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value=" 1.1F " type="java.lang.Double"/>
+   </component>
+   <component id="compWrapperedDoublefSuffix" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="1.1e1f" type="java.lang.Double"/>
+   </component>
+   <component id="compWrapperedDoubleMax" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="1.7976931348623157E308" type="java.lang.Double"/>
+   </component>
+   <component id="compWrapperedDoubleMin" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value=" 4.9e-324 " type="java.lang.Double"/>
+   </component>
+   <component id="compWrapperedDoubleNaN" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="NaN" type="java.lang.Double"/>
+   </component>
+   <component id="compWrapperedDoubleInfinity" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="Infinity" type="java.lang.Double"/>
+   </component>
+   <component id="compWrapperedDoubleNegInfinity" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="-Infinity" type="java.lang.Double"/>
+   </component>
+   <component id="compWrapperedDoubleNull" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg type="java.lang.Double"><null/></constructor-arg>
+   </component>
+   <component id="compPrimFloatZero" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="0" type="float"/>
+   </component>
+   <component id="compPrimFloatMinusZero" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="-0" type="float"/>
+   </component>
+   <component id="compPrimFloatDSuffix" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="1.1D " type="float"/>
+   </component>
+   <component id="compPrimFloatdSuffix" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value=" 1.1d" type="float"/>
+   </component>
+   <component id="compPrimFloatFSuffix" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value=" 1.1F " type="float"/>
+   </component>
+   <component id="compPrimFloatfSuffix" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="1.1e1f" type="float"/>
+   </component>
+   <component id="compPrimFloatMax" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="3.4028235E38" type="float"/>
+   </component>
+   <component id="compPrimFloatMin" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value=" 1.4E-45 " type="float"/>
+   </component>
+   <component id="compPrimFloatNaN" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="NaN" type="float"/>
+   </component>
+   <component id="compPrimFloatInfinity" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="Infinity" type="float"/>
+   </component>
+   <component id="compPrimFloatNegInfinity" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="-Infinity" type="float"/>
+   </component>
+   <component id="compWrapperedFloatZero" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="0" type="java.lang.Float"/>
+   </component>
+   <component id="compWrapperedFloatMinusZero" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="-0" type="java.lang.Float"/>
+   </component>
+   <component id="compWrapperedFloatDSuffix" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="1.1D " type="java.lang.Float"/>
+   </component>
+   <component id="compWrapperedFloatdSuffix" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value=" 1.1d" type="java.lang.Float"/>
+   </component>
+   <component id="compWrapperedFloatFSuffix" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value=" 1.1F " type="java.lang.Float"/>
+   </component>
+   <component id="compWrapperedFloatfSuffix" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="1.1e1f" type="java.lang.Float"/>
+   </component>
+   <component id="compWrapperedFloatMax" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="3.4028235E38" type="java.lang.Float"/>
+   </component>
+   <component id="compWrapperedFloatMin" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value=" 1.4E-45 " type="java.lang.Float"/>
+   </component>
+   <component id="compWrapperedFloatNaN" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="NaN" type="java.lang.Float"/>
+   </component>
+   <component id="compWrapperedFloatInfinity" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="Infinity" type="java.lang.Float"/>
+   </component>
+   <component id="compWrapperedFloatNegInfinity" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="-Infinity" type="java.lang.Float"/>
+   </component>
+   <component id="compWrapperedFloatNull" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg type="java.lang.Float"><null/></constructor-arg>
+   </component>
+   <component id="compPrimIntegerZero" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="0" type="int"/>
+   </component>
+   <component id="compPrimIntegerMax" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="2147483647" type="int"/>
+   </component>
+   <component id="compPrimIntegerMin" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="-2147483648" type="int"/>
+   </component>
+   <component id="compWrapperedIntegerZero" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="0" type="java.lang.Integer"/>
+   </component>
+   <component id="compWrapperedIntegerMax" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="2147483647" type="java.lang.Integer"/>
+   </component>
+   <component id="compWrapperedIntegerMin" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="-2147483648" type="java.lang.Integer"/>
+   </component>
+   <component id="compWrapperedIntegerNull" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg type="java.lang.Integer"><null/></constructor-arg>
+   </component>
+   <component id="compPrimCharacterZero" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="\u0000" type="char"/>
+   </component>
+   <component id="compPrimCharacterMax" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="\uffff" type="char"/>
+   </component>
+   <component id="compPrimCharacterA" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="A" type="char"/>
+   </component>
+   <component id="compWrapperedCharacterZero" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="\u0000" type="java.lang.Character"/>
+   </component>
+   <component id="compWrapperedCharacterMax" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="\ffff" type="java.lang.Character"/>
+   </component>
+   <component id="compWrapperedCharacterA" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="A" type="java.lang.Character"/>
+   </component>
+   <component id="compWrapperedCharacterNull" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg type="java.lang.Character"><null/></constructor-arg>
+   </component>
+   <component id="compPrimShortZero" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="0" type="short"/>
+   </component>
+   <component id="compPrimShortMax" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="32767" type="short"/>
+   </component>
+   <component id="compPrimShortMin" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="-32768" type="short"/>
+   </component>
+   <component id="compWrapperedShortZero" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="0" type="java.lang.Short"/>
+   </component>
+   <component id="compWrapperedShortMax" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="32767" type="java.lang.Short"/>
+   </component>
+   <component id="compWrapperedShortMin" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="-32768" type="java.lang.Short"/>
+   </component>
+   <component id="compWrapperedShortNull" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg type="java.lang.Short"><null/></constructor-arg>
+   </component>
+   <component id="compPrimLongZero" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="0" type="long"/>
+   </component>
+   <component id="compPrimLongMax" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="9223372036854775807" type="long"/>
+   </component>
+   <component id="compPrimLongMin" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="-9223372036854775808" type="long"/>
+   </component>
+   <component id="compWrapperedLongZero" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="0" type="java.lang.Long"/>
+   </component>
+   <component id="compWrapperedLongMax" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="9223372036854775807" type="java.lang.Long"/>
+   </component>
+   <component id="compWrapperedLongMin" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg value="-9223372036854775808" type="java.lang.Long"/>
+   </component>
+   <component id="compWrapperedLongNull" factory-component="compFactory" factory-method="makeInstance">
+       <constructor-arg type="java.lang.Long"><null/></constructor-arg>
+   </component>
+
+   <!-- The following tests only test implicit type derivation from constructor signatures.
+   We hit all of the primitive and wrappered types, but only one test per type, since we've already tested
+   string conversions in the other components. -->
+
+   <component id="constructorPrimitiveBoolean"  factory-component="compFactory" factory-method="makePrimitiveBoolean">
+       <constructor-arg><value>yes</value></constructor-arg>
+   </component>
+   <component id="constructorWrapperedBoolean"  factory-component="compFactory" factory-method="makeWrapperedBoolean">
+       <constructor-arg value="yes"/>
+   </component>
+   <component id="constructorPrimitiveByte" factory-component="compFactory" factory-method="makeByte">
+       <constructor-arg value="123"/>
+   </component>
+   <component id="constructorWrapperedByte" factory-component="compFactory" factory-method="makeWrapperedByte">
+       <constructor-arg value="100"/>
+   </component>
+   <component id="constructorPrimitiveDouble" factory-component="compFactory" factory-method="makePrimitiveDouble">
+       <constructor-arg value="1.1"/>
+   </component>
+   <component id="constructorWrapperedDouble" factory-component="compFactory" factory-method="makeWrapperedDouble">
+       <constructor-arg value="1.2"/>
+   </component>
+   <component id="constructorPrimitiveFloat" factory-component="compFactory" factory-method="makePrimitiveFloat">
+       <constructor-arg value="1.3"/>
+   </component>
+   <component id="constructorWrapperedFloat" factory-component="compFactory" factory-method="makeWrapperedFloat">
+       <constructor-arg value="0"/>
+   </component>
+   <component id="constructorPrimitiveInteger" factory-component="compFactory" factory-method="makePrimitiveInteger">
+       <constructor-arg value="12"/>
+   </component>
+   <component id="constructorWrapperedInteger" factory-component="compFactory" factory-method="makeWrapperedInteger">
+       <constructor-arg value="13"/>
+   </component>
+   <component id="constructorPrimitiveCharacter" factory-component="compFactory" factory-method="makePrimitiveCharacter">
+       <constructor-arg value="a"/>
+   </component>
+   <component id="constructorWrapperedCharacter" factory-component="compFactory" factory-method="makeWrapperedCharacter">
+       <constructor-arg value="b"/>
+   </component>
+   <component id="constructorPrimitiveShort" factory-component="compFactory" factory-method="makePrimitiveShort">
+       <constructor-arg value="15"/>
+   </component>
+   <component id="constructorWrapperedShort" factory-component="compFactory" factory-method="makeWrapperedShort">
+       <constructor-arg value="16"/>
+   </component>
+   <component id="constructorPrimitiveLong" factory-component="compFactory" factory-method="makePrimitiveLong">
+       <constructor-arg value="17"/>
+   </component>
+   <component id="constructorWrapperedLong" factory-component="compFactory" factory-method="makeWrapperedLong">
+       <constructor-arg value="0"/>
+   </component>
+</components>
+

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd"> 
+	
+	<component id="compInnerEmpty" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection"> 
+		<constructor-arg value="compInnerEmpty"/>
+		<constructor-arg></constructor-arg>
+	</component>	
+	
+	<component id="compInnerNull" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection"> 
+		<constructor-arg value="compInnerNull"/>
+		<constructor-arg><null/></constructor-arg>
+	</component>
+    
+    <component id="compInnerOne" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection"> 
+		<constructor-arg value="compInnerOne"/>
+		<constructor-arg>
+			<component class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+				<constructor-arg value="compInnerOne_1"/>
+			</component>
+		</constructor-arg>
+	</component>
+    
+    <component id="compInnerLazyOuter" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection" lazy-init="true"> 
+		<constructor-arg value="compInnerLazyOuter"/>
+		<constructor-arg>
+			<component class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+				<constructor-arg value="compInnerLazyOuter_1"/>
+			</component>
+		</constructor-arg>
+	</component>
+    
+    <component id="compInnerTwo" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection"> 
+		<constructor-arg value="compInnerTwo"/>
+		<constructor-arg>
+			<component class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+				<constructor-arg value="compInnerTwo_1"/>
+			</component>
+		</constructor-arg>
+		<constructor-arg>
+			<component class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+				<constructor-arg value="compInnerTwo_2"/>
+			</component>
+		</constructor-arg>
+	</component>
+    
+<!-- ignores -->
+    <component id="compInnerIgnoreID" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection"> 
+		<constructor-arg value="compInnerIgnoreID"/>
+		<constructor-arg>
+			<component id="compInnerIgnoreID_1" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+			</component>
+		</constructor-arg>
+	</component>
+    
+    <component id="compInnerIgnoreScope" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection"> 
+		<constructor-arg value="compInnerIgnoreScope"/>
+		<constructor-arg>
+			<component scope="singleton" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+			</component>
+		</constructor-arg>
+	</component>    
+      
+    
+</components>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+<!-- instance factory -->
+    <component id="compFactory" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionInstanceFactory">
+		<!-- collaborators and configuration for this component go here -->
+    </component>
+
+<!-- URL: 3 cases -->
+	<component id="compURL" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg value="http://www.osgi.org" type="java.net.URL"/>
+	</component>
+
+    <component id="compURLNull" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg type="java.net.URL"><null/></constructor-arg>
+	</component>
+
+	<component id="compURL_EleValue" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg><value type="java.net.URL">http://www.osgi.org</value></constructor-arg>
+	</component>
+
+<!-- Date: 5 cases -->
+	<component id="compDate" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg value="6/1/1999" type="java.util.Date"/>
+	</component>
+
+    <component id="compDate2" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg value="2000-12-31 23:59:59" type="java.util.Date"/>
+	</component>
+
+    <component id="compDate3" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg value="January 1, 1970, 00:00:00 GMT" type="java.util.Date"/>
+	</component>
+
+    <component id="compDateNull" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg type="java.util.Date"><null/></constructor-arg>
+	</component>
+
+	<component id="compDate_EleValue" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg><value type="java.util.Date">1970-1-1</value></constructor-arg>
+	</component>
+
+<!-- Locale:5 cases -->
+	<component id="compLocale" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg value="en" type="java.util.Locale"/>
+	</component>
+
+	<component id="compLocale2" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg value="zh_CN" type="java.util.Locale"/>
+	</component>
+
+	<component id="compLocale3" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg value="en_US_WIN" type="java.util.Locale"/>
+	</component>
+
+    <component id="compLocaleNull" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg type="java.util.Locale"><null/></constructor-arg>
+	</component>
+
+	<component id="compLocale_EleValue" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg><value type="java.util.Locale">en_US</value></constructor-arg>
+	</component>
+
+<!-- Class:3 cases -->
+	<component id="compClass" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg value="java.lang.String" type="java.lang.Class"/>
+	</component>
+
+    <component id="compClassNull" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg type="java.lang.Class"><null/></constructor-arg>
+	</component>
+
+	<component id="compClass_EleValue" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg><value type="java.lang.Class">org.osgi.test.cases.blueprint.components.injection.ConstructorInjection</value></constructor-arg>
+	</component>
+
+<!-- Properties: 4 cases -->
+	<component id="compProperties" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg value="Name=Rex" type="java.util.Properties"/>
+	</component>
+
+	<component id="compProperties_EleValue" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg type="java.util.Properties">
+			<value>
+				Name= Rex
+				Organization =OSGi Alliance
+				Nationality    :    China
+				Language:中文, English
+				Graduated=Shanghai Jiao Tong /
+					University
+				#key is the word before the first whitespace - "Major"
+				Major Computer Science
+
+				!Gender should be a String ""
+				Gender
+
+			</value>
+		</constructor-arg>
+	</component>
+
+	<component id="compPropertiesEmpty" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg type="java.util.Properties"><value>  </value></constructor-arg>
+	</component>
+
+    <component id="compPropertiesNull" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg type="java.util.Properties"><null/></constructor-arg>
+	</component>
+
+</components>

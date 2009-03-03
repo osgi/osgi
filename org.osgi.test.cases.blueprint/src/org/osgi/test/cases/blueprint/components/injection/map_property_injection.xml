@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <component id="compEmptyMap" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="map">
+            <map></map>
+        </property>
+    </component>
+
+    <component id="compNullMap" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="map">
+            <null/>
+        </property>
+    </component>
+
+    <component id="compStringItems" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="map">
+            <map>
+                <entry key="abc" value="1"/>
+                <entry key="def" value="2"/>
+            </map>
+        </property>
+    </component>
+
+    <component id="compDupItems" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="map">
+            <map>
+                <entry key="abc" value="1"/>
+                <entry key="abc" value="2"/>
+            </map>
+        </property>
+    </component>
+
+    <component id="compBooleanItems" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="map">
+            <map>
+                <entry key="true">
+                    <value type="java.lang.Boolean">true</value>
+                </entry>
+                <entry key="false">
+                    <value type="java.lang.Boolean">false</value>
+                </entry>
+            </map>
+        </property>
+    </component>
+
+    <component id="compBooleanKeys" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="map">
+            <map>
+                <entry>
+                    <key><value type="java.lang.Boolean">true</value></key>
+                    <value>true</value>
+                </entry>
+                <entry>
+                    <key><value type="java.lang.Boolean">false</value></key>
+                    <value>false</value>
+                </entry>
+            </map>
+        </property>
+    </component>
+
+    <component id="compTypedItems" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="map">
+            <map value-type="java.lang.Boolean">
+                <entry key="true" value="true">
+                </entry>
+                <entry key="false">
+                    <value>false</value>
+                </entry>
+                <entry key="double">
+                    <value type="java.lang.Double">1.0</value>
+                </entry>
+            </map>
+        </property>
+    </component>
+
+    <component id="compTypedKeys" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="map">
+            <map keyType="comp.lang.Boolean">
+                <entry key="true" value="true"/>
+                <entry value="false">
+                    <key value="false"/>
+                </entry>
+                <entry>
+                    <key><value type="java.lang.Double">1.0</value></key>
+                    <value>double</value>
+                </entry>
+            </map>
+        </property>
+    </component>
+
+    <component id="compMixedItems" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="map">
+            <map>
+                <entry key="String">
+                    <value type="java.lang.String">abc</value>
+                </entry>
+                <entry key="Boolean">
+                    <value type="java.lang.Boolean">false</value>
+                </entry>
+                <entry key="Byte">
+                    <value type="java.lang.Byte">3</value>
+                </entry>
+                <entry key="Char">
+                    <value type="java.lang.Character">4</value>
+                </entry>
+                <entry key="Integer">
+                    <value type="java.lang.Integer">5</value>
+                </entry>
+                <entry key="Short">
+                    <value type="java.lang.Short">6</value>
+                </entry>
+                <entry key="Long">
+                    <value type="java.lang.Long">7</value>
+                </entry>
+                <entry key="Double">
+                    <value type="java.lang.Double">8.0</value>
+                </entry>
+                <entry key="Float">
+                    <value type="java.lang.Float">9.0</value>
+                </entry>
+                <entry key="Date">
+                    <value type="java.lang.Date">2008-11-04</value>
+                </entry>
+                <entry key="URL">
+                    <value type="java.net.URL">http://www.osgi.org</value>
+                </entry>
+                <entry key="Class">
+                    <value type="java.lang.Class">java.lang.String</value>
+                </entry>
+                <entry key="Local">
+                    <value type="java.util.Locale">en_US</value>
+                </entry>
+                <entry key="null">
+                    <null/>
+                </entry>
+        	</map>
+        </property>
+    </component>
+
+    <component id="compNestedMap" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="map">
+            <map>
+                <map>
+                    <entry>
+                        <key><value>inner</value></key>
+                        <map>
+                            <entry key="abc" value="1"/>
+                            <entry key="def" value="2"/>
+                        </map>
+                    </entry>
+                </map>
+            </map>
+        </property>
+    </component>
+
+    <component id="compNestedSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="map">
+            <map>
+                <entry>
+                    <key><value>inner</value></key>
+                    <set>
+                        <value>abc</value>
+                        <value>def</value>
+                    </set>
+                </entry>
+            </map>
+        </property>
+    </component>
+
+    <component id="compNestedList" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="map">
+            <map>
+                <entry>
+                    <key><value>inner</value></key>
+                    <list>
+                        <value>abc</value>
+                        <value>def</value>
+                    </list>
+                </entry>
+            </map>
+        </property>
+    </component>
+
+    <component id="compNestedProps" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="map">
+            <map>
+                <entry>
+                    <key><value>inner</value></key>
+                    <props>
+                        <prop key="abc">"def"</prop>
+                        <prop key="ghi">"jkl"</prop>
+                    </props>
+                </entry>
+            </map>
+        </property>
+    </component>
+</components>
+

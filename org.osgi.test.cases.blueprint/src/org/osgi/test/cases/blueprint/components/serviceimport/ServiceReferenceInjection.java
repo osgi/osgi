@@ -1,0 +1,67 @@
+/*
+ * $Id$
+ *
+ * Copyright (c) The OSGi Alliance (2009). All Rights Reserved.
+ *
+ * Implementation of certain elements of the OSGi Specification may be subject
+ * to third party intellectual property rights, including without limitation,
+ * patent rights (such a third party may or may not be a member of the OSGi
+ * Alliance). The OSGi Alliance is not responsible and shall not be held
+ * responsible in any manner for identifying or failing to identify any or all
+ * such third party intellectual property rights.
+ *
+ * This document and the information contained herein are provided on an "AS IS"
+ * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
+ * HEREIN WILL NOT INFRINGE ANY RIGHTS AND ANY IMPLIED WARRANTIES OF
+ * MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL THE
+ * OSGI ALLIANCE BE LIABLE FOR ANY LOSS OF PROFITS, LOSS OF BUSINESS, LOSS OF
+ * USE OF DATA, INTERRUPTION OF BUSINESS, OR FOR DIRECT, INDIRECT, SPECIAL OR
+ * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
+ * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
+ *
+ * All Company, brand and product names may be trademarks that are the sole
+ * property of their respective owners. All rights reserved.
+ */
+
+package org.osgi.test.cases.blueprint.components.serviceimport;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.test.cases.blueprint.services.AssertionService;
+import org.osgi.test.cases.blueprint.services.BaseTestComponent;
+import org.osgi.test.cases.blueprint.services.TestServiceOne;
+
+/**
+ * Concrete target for testing import of ServiceReferences.
+ * Since we require our BundleContext to check the ServiceReference
+ * validity, this test will also serve as a test for Bundle and BundleReference
+ * injection.
+ */
+public class ServiceReferenceInjection extends BaseTestComponent {
+    // The injected BundleContext
+    protected BundleContext context;
+    // the injected Bundle
+    protected Bundle bundle;
+
+    public ServiceReferenceInjection(String componentId, BundleContext context, Bundle bundle) {
+        super(componentId);
+        this.context = context;
+        this.bundle = bundle;
+        AssertionService.assertNotNull(this, "Null BundleContext received", context);
+        AssertionService.assertNotNull(this, "Null Bundle received", bundle);
+        AssertionService.assertEquals(this, "Bundle/BundleContext mismatch", bundle, context.getBundle());
+    }
+
+    public void setReference(ServiceReference ref) {
+        AssertionService.assertNotNull(this, "Null ServiceReference received", ref);
+        TestServiceOne service = (TestServiceOne)context.getService(ref);
+        AssertionService.assertTrue(this, "Test service result failure", service.testOne());
+        // release the service
+        context.ungetService(ref);
+        AssertionService.sendEvent(this, AssertionService.SERVICE_SUCCESS);
+    }
+}
+

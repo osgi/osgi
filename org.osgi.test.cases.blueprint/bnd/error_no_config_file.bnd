@@ -1,0 +1,6 @@
+Bundle-SymbolicName:                     ${p}.error_no_config_file
+Bundle-Version:                          4.2
+Import-Package:                          ${p}.components.comp1, ${p}.services
+Private-Package:                         $(p).build
+Bundle-Blueprint: OSGI-INF/blueprint/comp1_file_does_not_exist.xml
+

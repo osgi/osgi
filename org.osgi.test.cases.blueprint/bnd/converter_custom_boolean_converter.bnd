@@ -1,0 +1,7 @@
+Bundle-SymbolicName:                     ${p}.converter_custom_boolean_converter
+Bundle-Version:                          4.2
+Import-Package:                          ${p}.components.injection, ${p}.services
+Private-Package:                         $(p).build
+Include-Resource					= \
+	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/injection/converter_custom_boolean_converter.xml
+

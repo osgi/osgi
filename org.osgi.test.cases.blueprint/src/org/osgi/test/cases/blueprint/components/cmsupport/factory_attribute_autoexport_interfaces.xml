@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:osgix="http://www.osgi.org/xmlns/blueprint/compendium/v1.0.0">
+    
+    <osgix:managed-service-factory id="srvFactory1" 
+        factory-pid="org.osgi.test.cases.blueprint.components.cmsupport.configfactory1"
+        auto-export="interfaces">
+        <osgix:managed-component class="org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection"/>
+    </osgix:managed-service-factory>
+    
+</components>

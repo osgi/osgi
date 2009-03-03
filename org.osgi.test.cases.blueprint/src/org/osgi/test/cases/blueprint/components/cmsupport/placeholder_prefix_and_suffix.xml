@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:osgix="http://www.osgi.org/xmlns/blueprint/compendium/v1.0.0">
+    
+    <osgix:property-placeholder persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config1" />
+
+    <osgix:property-placeholder persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config2" placeholder-prefix="#{" placeholder-suffix="}"/>
+    
+    <component id="compString1" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="string" value="${str}"/>
+    </component>
+    
+    <component id="compString2" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="string" value="#{string}"/>
+    </component>
+    
+</components>

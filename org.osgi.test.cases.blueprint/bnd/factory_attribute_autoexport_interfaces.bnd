@@ -1,0 +1,7 @@
+Bundle-SymbolicName:                     ${p}.factory_attribute_autoexport_interfaces
+Bundle-Version:                          4.2
+Import-Package:                          ${p}.components.cmsupport, ${p}.services
+Private-Package:                         $(p).build
+Include-Resource					= \
+	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/cmsupport/factory_attribute_autoexport_interfaces.xml
+

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd"> 
+
+
+
+    <component id="compEmptyProps" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+        <property name="properties">
+            <props></props>
+        </property>
+    </component> 
+
+    <component id="compNullProps" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+        <property name="properties">
+            <null/>
+        </property>
+    </component> 
+
+    <component id="compStringItems" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+        <property name="properties">
+            <props>
+                <prop key="administrator">administrator@example.org</prop>
+				<prop key="support">support@example.org</prop>
+				<prop key="development">development@example.org</prop>
+            </props>
+        </property>
+    </component> 
+
+</components>

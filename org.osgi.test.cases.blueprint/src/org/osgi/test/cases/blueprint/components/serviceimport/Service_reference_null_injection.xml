@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <description>
+        This is a test for ServiceReference injection with optional availability.  This should inject a null
+        value for the reference.
+    </description>
+
+    <!-- single shared instance of the imported service -->
+    <reference id="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" availability="optional"/>
+
+   <!-- We pull in the bundle, the bundle context, as well as the service reference -->
+   <component id="ServiceReferenceChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceInjection">
+       <constructor-arg value="ServiceReferenceChecker"/>
+       <constructor-arg ref="bundleContext"/>
+       <constructor-arg ref="bundle"/>
+       <property name="reference" ref="ServiceOne"/>
+   </component>
+</components>
+

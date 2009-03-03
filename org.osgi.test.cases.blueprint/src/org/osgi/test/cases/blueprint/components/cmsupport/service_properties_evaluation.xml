@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:osgix="http://www.osgi.org/xmlns/blueprint/compendium/v1.0.0">
+
+    <description> Publishing configuration admin properties with exported services </description>
+
+    <!-- publish one -->
+    <osgix:property-placeholder persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config1" />
+
+    <component id="compGoodService" class="org.osgi.test.cases.blueprint.services.TestGoodService">
+        <constructor-arg value="compGoodService"/>
+    </component>
+
+    <service id="srvGoodService" ref="compGoodService" interface="org.osgi.test.cases.blueprint.services.TestGoodService">
+        <service-properties>
+            <entry key="str" value="${str}"/>
+        </service-properties>
+    </service>
+    
+    <!-- publish all the properties -->
+    <component id="compGoodServiceSubclass" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
+        <constructor-arg value="compGoodServiceSubclass"/>
+    </component>
+    
+    <service id="srvGoodServiceSubclass" ref="compGoodServiceSubclass" interface="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
+        <service-properties>
+            <osgix:cm-properties persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config1"/>
+        </service-properties>
+    </service>
+    
+    
+</components>

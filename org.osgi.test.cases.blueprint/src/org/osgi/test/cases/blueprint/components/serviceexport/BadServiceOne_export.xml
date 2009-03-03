@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd"
+    default-init-method="init" default-destroy-method="destroy">
+
+    <description>
+        This is just a simple exported service using a single interface.
+    </description>
+
+    <!-- the node this service export maps into. -->
+   <component id="BadServiceOne" class="org.osgi.test.cases.blueprint.services.TestBad" lazy-init="true">
+       <constructor-arg value="ServiceOne"/>
+   </component>
+
+   <!-- simple export using a reference and just one interface.  -->
+   <service id="BadServiceService" ref="BadServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" ranking="2"/>
+</components>
+

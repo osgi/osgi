@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+<!-- instance factory -->
+    <component id="compFactory" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionInstanceFactory">
+		<!-- collaborators and configuration for this component go here -->
+    </component>
+
+	<component id="innerCompFactory" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionInstanceFactory">
+		<!-- collaborators and configuration for this component go here -->
+    </component>
+
+<!-- String -->
+	<component id="compInnerString" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg>
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
+				<constructor-arg value="ABC"/>
+			</component>
+		</constructor-arg>
+	</component>
+
+<!-- Boolean -->
+	<component id="compInnerPrimitiveBoolean" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg>
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
+       			<constructor-arg value="true" type="boolean"/>
+			</component>
+		</constructor-arg>
+	</component>
+
+	<component id="compInnerWrapperedBoolean" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg>
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
+       			<constructor-arg value="false" type="java.lang.Boolean"/>
+			</component>
+		</constructor-arg>
+	</component>
+
+<!-- Byte -->
+	<component id="compInnerPrimitiveByte" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg>
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
+       			<constructor-arg value="-128" type="byte"/>
+			</component>
+		</constructor-arg>
+	</component>
+
+	<component id="compInnerWrapperedByte" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg>
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
+       			<constructor-arg value="127" type="java.lang.Byte"/>
+			</component>
+		</constructor-arg>
+	</component>
+
+<!-- Double -->
+	<component id="compInnerPrimitiveDouble" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg>
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
+       			<constructor-arg value="4.9e-324" type="double"/>
+			</component>
+		</constructor-arg>
+	</component>
+
+	<component id="compInnerWrapperedDouble" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg>
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
+       			<constructor-arg value="1.7976931348623157E308" type="java.lang.Double"/>
+			</component>
+		</constructor-arg>
+	</component>
+
+<!-- Float -->
+	<component id="compInnerPrimitiveFloat" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg>
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
+       			<constructor-arg value="1.4E-45" type="float"/>
+			</component>
+		</constructor-arg>
+	</component>
+
+	<component id="compInnerWrapperedFloat" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg>
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
+       			<constructor-arg value="3.4028235E38" type="java.lang.Float"/>
+			</component>
+		</constructor-arg>
+	</component>
+
+<!-- Integer -->
+	<component id="compInnerPrimitiveInteger" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg>
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
+       			<constructor-arg value="-2147483648" type="int"/>
+			</component>
+		</constructor-arg>
+	</component>
+
+	<component id="compInnerWrapperedInteger" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg>
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
+       			<constructor-arg value="2147483647" type="java.lang.Integer"/>
+			</component>
+		</constructor-arg>
+	</component>
+
+
+<!-- Character -->
+	<component id="compInnerPrimitiveCharacter" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg>
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
+       			<constructor-arg value="\u0000" type="char"/>
+			</component>
+		</constructor-arg>
+	</component>
+
+	<component id="compInnerWrapperedCharacter" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg>
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
+       			<constructor-arg value="\uffff" type="java.lang.Character"/>
+			</component>
+		</constructor-arg>
+	</component>
+
+<!-- Short -->
+	<component id="compInnerPrimitiveShort" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg>
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
+       			<constructor-arg value="-32768" type="short"/>
+			</component>
+		</constructor-arg>
+	</component>
+
+	<component id="compInnerWrapperedShort" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg>
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
+       			<constructor-arg value="32767" type="java.lang.Short"/>
+			</component>
+		</constructor-arg>
+	</component>
+
+
+<!-- Long -->
+	<component id="compInnerPrimitiveLong" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg>
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
+       			<constructor-arg value="-9223372036854775808" type="long"/>
+			</component>
+		</constructor-arg>
+	</component>
+
+	<component id="compInnerWrapperedLong" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg>
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
+       			<constructor-arg value="9223372036854775807" type="java.lang.Long"/>
+			</component>
+		</constructor-arg>
+	</component>
+
+
+</components>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <description>
+        This is a checker for different set vs. list semantics
+    </description>
+
+    <!-- This gets both a ServiceManager and a reference collection injected -->
+   <component id="SetChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.SetSemanticsChecker" init-method="init">
+       <constructor-arg value="SetChecker"/>
+       <!-- Not actually used in this test, but having it here enforces initialization order -->
+       <property name="serviceManager">
+           <service interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
+       </property>
+       <property name="set">
+           <ref-set interface="org.osgi.test.cases.blueprint.services.TestServiceOne"/>
+       </property>
+       <property name="list">
+           <ref-list interface="org.osgi.test.cases.blueprint.services.TestServiceOne"/>
+       </property>
+   </component>
+</components>
+

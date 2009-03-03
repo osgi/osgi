@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+<!-- instance factory -->
+    <component id="compFactory" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionInstanceFactory">
+		<!-- collaborators and configuration for this component go here -->
+    </component>
+
+	<component id="innerCompFactory" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionInstanceFactory">
+		<!-- collaborators and configuration for this component go here -->
+    </component>
+
+<!-- String -->
+	<component id="compInnerString" factory-method="makeInstance" factory-component="compFactory">
+		<property name="innerComponent">
+			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+				<property name="string" value="ABC"/>
+			</component>
+		</property>
+	</component>
+
+<!-- Boolean -->
+	<component id="compInnerPrimitiveBoolean" factory-method="makeInstance" factory-component="compFactory">
+		<property name="innerComponent">
+			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+       			<property name="primBoolean" value="true" type="boolean"/>
+			</component>
+		</property>
+	</component>
+
+	<component id="compInnerWrapperedBoolean" factory-method="makeInstance" factory-component="compFactory">
+		<property name="innerComponent">
+			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+       			<property name="boolean" value="false" type="java.lang.Boolean"/>
+			</component>
+		</property>
+	</component>
+
+<!-- Byte -->
+	<component id="compInnerPrimitiveByte" factory-method="makeInstance" factory-component="compFactory">
+		<property name="innerComponent">
+			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+       			<property name="primByte" value="-128" type="byte"/>
+			</component>
+		</property>
+	</component>
+
+	<component id="compInnerWrapperedByte" factory-method="makeInstance" factory-component="compFactory">
+		<property name="innerComponent">
+			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+       			<property name="byte" value="127" type="java.lang.Byte"/>
+			</component>
+		</property>
+	</component>
+
+<!-- Double -->
+	<component id="compInnerPrimitiveDouble" factory-method="makeInstance" factory-component="compFactory">
+		<property name="innerComponent">
+			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+       			<property name="primDouble" value="4.9e-324" type="double"/>
+			</component>
+		</property>
+	</component>
+
+	<component id="compInnerWrapperedDouble" factory-method="makeInstance" factory-component="compFactory">
+		<property name="innerComponent">
+			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+       			<property name="double" value="1.7976931348623157E308" type="java.lang.Double"/>
+			</component>
+		</property>
+	</component>
+
+<!-- Float -->
+	<component id="compInnerPrimitiveFloat" factory-method="makeInstance" factory-component="compFactory">
+		<property name="innerComponent">
+			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+       			<property name="primFloat" value="1.4E-45" type="float"/>
+			</component>
+		</property>
+	</component>
+
+	<component id="compInnerWrapperedFloat" factory-method="makeInstance" factory-component="compFactory">
+		<property name="innerComponent">
+			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+       			<property name="float" value="3.4028235E38" type="java.lang.Float"/>
+			</component>
+		</property>
+	</component>
+
+<!-- Integer -->
+	<component id="compInnerPrimitiveInteger" factory-method="makeInstance" factory-component="compFactory">
+		<property name="innerComponent">
+			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+       			<property name="primInteger" value="-2147483648" type="int"/>
+			</component>
+		</property>
+	</component>
+
+	<component id="compInnerWrapperedInteger" factory-method="makeInstance" factory-component="compFactory">
+		<property name="innerComponent">
+			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+       			<property name="integer" value="2147483647" type="java.lang.Integer"/>
+			</component>
+		</property>
+	</component>
+
+
+<!-- Character -->
+	<component id="compInnerPrimitiveCharacter" factory-method="makeInstance" factory-component="compFactory">
+		<property name="innerComponent">
+			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+       			<property name="primCharacter" value="\u0000" type="char"/>
+			</component>
+		</property>
+	</component>
+
+	<component id="compInnerWrapperedCharacter" factory-method="makeInstance" factory-component="compFactory">
+		<property name="innerComponent">
+			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+       			<property name="character" value="\uffff" type="java.lang.Character"/>
+			</component>
+		</property>
+	</component>
+
+<!-- Short -->
+	<component id="compInnerPrimitiveShort" factory-method="makeInstance" factory-component="compFactory">
+		<property name="innerComponent">
+			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+       			<property name="primShort" value="-32768" type="short"/>
+			</component>
+		</property>
+	</component>
+
+	<component id="compInnerWrapperedShort" factory-method="makeInstance" factory-component="compFactory">
+		<property name="innerComponent">
+			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+       			<property name="short" value="32767" type="java.lang.Short"/>
+			</component>
+		</property>
+	</component>
+
+
+<!-- Long -->
+	<component id="compInnerPrimitiveLong" factory-method="makeInstance" factory-component="compFactory">
+		<property name="innerComponent">
+			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+       			<property name="primLong" value="-9223372036854775808" type="long"/>
+			</component>
+		</property>
+	</component>
+
+	<component id="compInnerWrapperedLong" factory-method="makeInstance" factory-component="compFactory">
+		<property name="innerComponent">
+			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+       			<property name="long" value="9223372036854775807" type="java.lang.Long"/>
+			</component>
+		</property>
+	</component>
+
+
+
+
+</components>

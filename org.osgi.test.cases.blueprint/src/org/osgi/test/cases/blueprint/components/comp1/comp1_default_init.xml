@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd"
+      default-init-method="init">
+
+   <component id="comp1" class="org.osgi.test.cases.blueprint.components.comp1.SimpleTestComponent">
+     <!-- collaborators and configuration for this component go here -->
+       <constructor-arg value="comp1"/>
+   </component>
+   <component id="comp1a" class="org.osgi.test.cases.blueprint.components.comp1.AltSimpleTestComponent" init-method="altinit">
+     <!-- collaborators and configuration for this component go here -->
+       <constructor-arg value="comp1a"/>
+   </component>
+   <component id="comp1b" class="org.osgi.test.cases.blueprint.components.comp1.AltSimpleTestComponent" init-method="">
+     <!-- collaborators and configuration for this component go here -->
+       <constructor-arg value="comp1b"/>
+   </component>
+   <component id="comp1c" class="org.osgi.test.cases.blueprint.components.comp1.SimpleTestComponent" destroy-method="destroy">
+     <!-- collaborators and configuration for this component go here -->
+       <constructor-arg value="comp1c"/>
+   </component>
+   <component id="comp1d" class="org.osgi.test.cases.blueprint.services.BaseTestComponent">
+     <!-- collaborators and configuration for this component go here -->
+       <constructor-arg value="comp1d"/>
+   </component>
+</components>
+

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <description>
+        This is a reusable config for validating different service registrations.
+    </description>
+
+
+    <!-- service request using multiple interfaces -->
+    <reference id="ServiceOneMultiple">
+        <interfaces>
+             <value>org.osgi.test.cases.blueprint.services.TestServiceOne</value>
+             <value>org.osgi.test.cases.blueprint.services.TestServiceTwo</value>
+        </interfaces>
+    </reference>
+
+
+    <!-- now one of each using just one of the exported set.  This should map to the same signature -->
+    <reference id="ServiceOne">
+        <interfaces>
+             <value>org.osgi.test.cases.blueprint.services.TestServiceOne</value>
+        </interfaces>
+    </reference>
+
+    <reference id="ServiceTwo">
+        <interfaces>
+             <value>org.osgi.test.cases.blueprint.services.TestServiceTwo</value>
+        </interfaces>
+    </reference>
+
+   <component id="ServiceOneMultiple" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceChecker">
+       <constructor-arg value="ServiceOneMultiple"/>
+       <property name="one" ref="ServiceOneMultiple"/>
+       <property name="two" ref="ServiceOneMultiple"/>
+   </component>
+
+   <component id="ServiceOne" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceChecker">
+       <constructor-arg value="ServiceOne"/>
+       <property name="one" ref="ServiceOne"/>
+   </component>
+
+   <component id="ServiceTwo" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceChecker">
+       <constructor-arg value="ServiceTwo"/>
+       <property name="two" ref="ServiceTwo"/>
+   </component>
+</components>
+

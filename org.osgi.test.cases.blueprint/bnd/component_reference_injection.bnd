@@ -1,0 +1,8 @@
+Bundle-SymbolicName:                     ${p}.component_reference_injection
+Bundle-Version:                          4.2
+Import-Package:                          ${p}.components.injection, ${p}.services
+Private-Package:                         $(p).build
+Include-Resource					= \
+	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/injection/component_reference_injection.xml, \
+	OSGI-INF/blueprint/config2.xml=src/org/osgi/test/cases/blueprint/components/injection/component_reference_lazy_init.xml
+

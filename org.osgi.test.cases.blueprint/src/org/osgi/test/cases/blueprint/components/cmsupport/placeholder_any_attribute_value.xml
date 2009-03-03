@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:osgix="http://www.osgi.org/xmlns/blueprint/compendium/v1.0.0">
+    
+    <osgix:property-placeholder persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config2"/>
+
+
+    <component id="compConstructorArgValue" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+        <constructor-arg value="${string}" type="java.lang.String"/>
+    </component>
+    
+    <component id="compPropertyValue" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="string" value="${string}"/>
+    </component>
+    
+    <component id="compMapEntryValue" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="map">
+            <entry key="string" value="${string}"/>
+        </property>
+    </component>
+    
+</components>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:osgix="http://www.osgi.org/xmlns/blueprint/compendium/v1.0.0">
+    
+    <description>
+        This use to build configuration object 
+    </description>
+    
+    <!-- reference configuration admin service  -->
+    <reference id="adminService" interface="org.osgi.service.cm.ConfigurationAdmin"/>
+    
+    <component id="compConfigurationManager" class="org.osgi.test.cases.blueprint.services.ConfigurationManager">
+        <constructor-arg ref="adminService"/>
+        <constructor-arg>
+            <list>
+                <!-- config1 -->
+                <component class="org.osgi.test.cases.blueprint.services.ManagedConfiguration">
+                    <constructor-arg value="org.osgi.test.cases.blueprint.components.cmsupport.config1"/>
+                    <constructor-arg>
+                        <props>
+                            <prop key="str">abc</prop>
+                            <prop key="str_empty"></prop>
+                            <!--<prop key="str_null"><null/></prop>-->
+                            <prop key="str_boolean">true</prop>
+                            <prop key="str_byte">3</prop>
+                            <prop key="str_char">4</prop>
+                            <prop key="str_int">5</prop>
+                            <prop key="str_short">6</prop>
+                            <prop key="str_long">7</prop>
+                            <prop key="str_double">8.0</prop>
+                            <prop key="str_float">9.0</prop>
+                        </props>
+                    </constructor-arg>
+                </component>
+                
+                <!-- config2 -->
+                <component class="org.osgi.test.cases.blueprint.services.ManagedConfiguration">
+                    <constructor-arg value="org.osgi.test.cases.blueprint.components.cmsupport.config2"/>
+                    <constructor-arg>
+                        <component class="org.osgi.test.cases.blueprint.components.cmsupport.ConfigurationDictionaryBuilder">
+                            <map>
+                                <entry key="string"> 
+                                    <value type="java.lang.String">abc</value>
+                                </entry>
+                                <entry key="string_empty"> 
+                                    <value type="java.lang.String"></value>
+                                </entry>
+                                <entry key="string_null"> 
+                                    <null/>
+                                </entry>
+                                <entry key="boolean"> 
+                                    <value type="java.lang.Boolean">true</value>
+                                </entry>
+                                <entry key="byte"> 
+                                    <value type="java.lang.Byte">3</value>
+                                </entry>
+                                <entry key="char"> 
+                                    <value type="java.lang.Character">4</value>
+                                </entry>
+                                <entry key="int"> 
+                                    <value type="java.lang.Integer">5</value>
+                                </entry>
+                                <entry key="short"> 
+                                    <value type="java.lang.Short">6</value>
+                                </entry>
+                                <entry key="long"> 
+                                    <value type="java.lang.Long">7</value>
+                                </entry>
+                                <entry key="double"> 
+                                    <value type="java.lang.Double">8.0</value>
+                                </entry>
+                                <entry key="float"> 
+                                    <value type="java.lang.Float">9.0</value>
+                                </entry>
+                            </map>
+                        </component>
+                    </constructor-arg>
+                </component>
+                
+                <!-- config3 -->
+                <component class="org.osgi.test.cases.blueprint.services.ManagedConfiguration">
+                    <constructor-arg value="org.osgi.test.cases.blueprint.components.cmsupport.config3"/>
+                    <constructor-arg><null/></constructor-arg>
+                </component>
+                
+                
+            </list>
+        </constructor-arg>
+    </component>
+
+
+    <service id="srvConfigurationManager" ref="compConfigurationManager" interface="org.osgi.test.cases.blueprint.services.ConfigurationManager"/>
+        
+        
+</components>

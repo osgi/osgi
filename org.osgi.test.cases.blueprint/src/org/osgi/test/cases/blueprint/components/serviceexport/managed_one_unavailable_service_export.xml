@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <description>
+        This creates a ServiceManager instance with just a single managed service that is enabled
+        at startup.
+    </description>
+
+    <!-- define a series of components for service export -->
+    <component id="ServiceOneA" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
+        <constructor-arg value="ServiceOneA"/>
+        <constructor-arg value="4"/>
+    </component>
+
+    <component id="ServiceManager" class="org.osgi.test.cases.blueprint.services.ServiceManager">
+        <constructor-arg ref="bundleContext"/>
+        <constructor-arg>
+            <list>
+                <component class="org.osgi.test.cases.blueprint.services.ManagedService">
+                    <property name="bundleContext" ref="bundleContext"/>
+                    <property name="name">
+                        <idref component="ServiceOneA"/>
+                    </property>
+                    <property name="service" ref="ServiceOneA"/>
+                    <property name="interfaces">
+                        <set>
+                            <value>org.osgi.test.cases.blueprint.services.TestServiceOne</value>
+                        </set>
+                    </property>
+                    // this is unavailable initially
+                    <property name="start" value="false"/>
+                </component>
+            </list>
+        </constructor-arg>
+    </component>
+
+   <!-- simple the service manager service when finished.  Note that the ServiceManager component
+        might register services for this bundle before it is registered itself.  For cross-bundle dependency
+        purposes, we're depending on this                                                                     -->
+   <service id="ServiceManagerService" ref="ServiceManager" interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
+</components>
+

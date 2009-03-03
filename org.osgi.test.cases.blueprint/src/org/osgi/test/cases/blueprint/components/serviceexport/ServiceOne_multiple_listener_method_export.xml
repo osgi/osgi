@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <description>
+        This is just a simple exported service using a single interface.
+    </description>
+
+    <!-- the node this service export maps into. -->
+   <component id="ServiceOne" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
+       <constructor-arg value="ServiceOne"/>
+   </component>
+
+   <!-- simple export using a reference and just one interface. -->
+   <service id="ServiceOneService" ref="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
+       <interfaces>
+            <value>org.osgi.test.cases.blueprint.services.TestServiceOne</value>
+            <value>org.osgi.test.cases.blueprint.services.TestServiceTwo</value>
+       </interfaces>
+       <registration-listener
+           registration-method="register"
+           unregistration-method="unregister">
+           <component class="org.osgi.test.cases.blueprint.serviceexport.ServiceOneTwoRegistrationListener">
+               <constructor-arg value="ServiceOneTwoListener"/>
+           </component>
+       </registration-listener>
+       <service-properties>
+           <entry key="service.component.name" value="ServiceOneService"/>
+       </service-properties>
+   </service>
+</components>
+

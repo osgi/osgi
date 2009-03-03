@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:osgix="http://www.osgi.org/xmlns/blueprint/compendium/v1.0.0">
+    
+    <description>
+        This use to build configuration object 
+    </description>
+    
+    <!-- reference configuration admin service  -->
+    <reference id="adminService" interface="org.osgi.service.cm.ConfigurationAdmin"/>
+
+
+    <component id="compConfigurationManager" class="org.osgi.test.cases.blueprint.services.ConfigurationManager">
+        <constructor-arg ref="adminService"/>
+        <constructor-arg>
+            <list>
+                <!-- config factory 1 -->
+                <component class="org.osgi.test.cases.blueprint.services.ManagedConfigurationFactory">
+                    <constructor-arg value="org.osgi.test.cases.blueprint.components.cmsupport.configfactory1"/>
+                    <constructor-arg>
+                        <list>
+                            <!-- for the 1st factory configration object -->
+                            <component class="org.osgi.test.cases.blueprint.components.cmsupport.ConfigurationDictionaryBuilder">
+                                <map>
+                                    <entry key="string"> 
+                                        <value type="java.lang.String">abc</value>
+                                    </entry>
+                                    <entry key="boolean"> 
+                                        <value type="java.lang.Boolean">true</value>
+                                    </entry>
+                                </map>
+                            </component>
+                            <!-- for the 2nd factory configration object -->
+                            <component class="org.osgi.test.cases.blueprint.components.cmsupport.ConfigurationDictionaryBuilder">
+                                <map>
+                                    <entry key="string"> 
+                                        <value type="java.lang.String">bcd</value>
+                                    </entry>
+                                    <entry key="boolean"> 
+                                        <value type="java.lang.Boolean">false</value>
+                                    </entry>
+                                </map>
+                            </component>
+                        </list>
+                    </constructor-arg>
+                </component>
+                
+             </list>
+        </constructor-arg>
+    </component>
+    
+    <service id="srvConfigurationManager" ref="compConfigurationManager" interface="org.osgi.test.cases.blueprint.services.ConfigurationManager"/>
+    
+</components>

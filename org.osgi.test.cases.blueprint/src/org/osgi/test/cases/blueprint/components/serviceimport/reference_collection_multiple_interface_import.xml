@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <description>
+        This is similar to the sorting tests, but uses the same code to test reference collections
+        using multiple interfaces.
+    </description>
+
+    <component id="NameComparator" class="org.osgi.test.cases.blueprint.components.serviceimport.NameComparator"/>
+
+    <!-- This gets both a ServiceManager and a reference collection injected -->
+    <component id="ComparatorChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.ReferenceCollectionSortChecker" init-method="init">
+        <constructor-arg value="ComparatorChecker"/>
+        <property name="serviceManager">
+            <service interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
+        </property>
+        <property name="bundleContext" ref="bundleContext"/>
+        <property name="set">
+            <ref-set comparator-ref="NameComparator">
+                <interfaces>
+                    <value>org.osgi.test.cases.blueprint.services.TestServiceOne</value>
+                    <value>org.osgi.test.cases.blueprint.services.TestServiceTwo</value>
+                </interfaces>
+            </ref-set>
+        </property>
+        <property name="list">
+            <ref-list>
+                <comparator>
+                    <ref component="NamedComponent"/>
+                </comparator>
+                <interfaces>
+                    <value>org.osgi.test.cases.blueprint.services.TestServiceOne</value>
+                    <value>org.osgi.test.cases.blueprint.services.TestServiceTwo</value>
+                </interfaces>
+            </ref-list>
+        </property>
+        <property name="sortOrder">
+            <list>
+                <value>TestServiceA</value>
+                <value>TestServiceB</value>
+                <value>TestServiceC</value>
+                <value>TestServiceD</value>
+                <value>TestServiceE</value>
+            </list>
+        </property>
+    </component>
+</components>
+

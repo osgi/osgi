@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+<!-- URL: 3 cases -->
+	<component id="compURL" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		<constructor-arg value="http://www.osgi.org" type="java.net.URL"/>
+	</component>
+
+    <component id="compURLNull" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		<constructor-arg type="java.net.URL"><null/></constructor-arg>
+	</component>
+
+	<component id="compURL_EleValue" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		<constructor-arg><value type="java.net.URL">http://www.osgi.org</value></constructor-arg>
+	</component>
+
+<!-- Date: 5 cases -->
+	<component id="compDate" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		<constructor-arg value="6/1/1999" type="java.util.Date"/>
+	</component>
+
+    <component id="compDate2" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		<constructor-arg value="2000-12-31 23:59:59" type="java.util.Date"/>
+	</component>
+
+    <component id="compDate3" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		<constructor-arg value="January 1, 1970, 00:00:00 GMT" type="java.util.Date"/>
+	</component>
+
+    <component id="compDateNull" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		<constructor-arg type="java.util.Date"><null/></constructor-arg>
+	</component>
+
+	<component id="compDate_EleValue" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		<constructor-arg><value type="java.util.Date">1970-1-1</value></constructor-arg>
+	</component>
+
+<!-- Locale:5 cases -->
+	<component id="compLocale" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		<constructor-arg value="en" type="java.util.Locale"/>
+	</component>
+
+	<component id="compLocale2" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		<constructor-arg value="zh_CN" type="java.util.Locale"/>
+	</component>
+
+	<component id="compLocale3" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		<constructor-arg value="en_US_WIN" type="java.util.Locale"/>
+	</component>
+
+    <component id="compLocaleNull" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		<constructor-arg type="java.util.Locale"><null/></constructor-arg>
+	</component>
+
+	<component id="compLocale_EleValue" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		<constructor-arg><value type="java.util.Locale">en_US</value></constructor-arg>
+	</component>
+
+<!-- Class:3 cases -->
+	<component id="compClass" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		<constructor-arg value="java.lang.String" type="java.lang.Class"/>
+	</component>
+
+    <component id="compClassNull" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		<constructor-arg type="java.lang.Class"><null/></constructor-arg>
+	</component>
+
+	<component id="compClass_EleValue" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		<constructor-arg><value type="java.lang.Class">org.osgi.test.cases.blueprint.components.injection.ConstructorInjection</value></constructor-arg>
+	</component>
+
+<!-- Properties: 4 cases -->
+	<component id="compProperties" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		<constructor-arg value="Name=Rex" type="java.util.Properties"/>
+	</component>
+
+	<component id="compProperties_EleValue" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		<constructor-arg type="java.util.Properties">
+			<value>
+				Name= Rex
+				Organization =OSGi Alliance
+				Nationality    :    China
+				Language:中文, English
+				Graduated=Shanghai Jiao Tong /
+					University
+				#key is the word before the first whitespace - "Major"
+				Major Computer Science
+
+				!Gender should be a String ""
+				Gender
+
+			</value>
+		</constructor-arg>
+	</component>
+
+	<component id="compPropertiesEmpty" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		<constructor-arg type="java.util.Properties"><value>  </value></constructor-arg>
+	</component>
+
+    <component id="compPropertiesNull" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		<constructor-arg type="java.util.Properties"><null/></constructor-arg>
+	</component>
+
+</components>
+

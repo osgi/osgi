@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <description>
+        This for unregistration of dependencies and listers actions.
+    </description>
+
+    <component id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceOneListener">
+        <constructor-arg value="ServiceOneListener"/>
+    </component>
+
+
+    <!-- single shared instance of the imported service.  The original backing service will go away, but a
+         replacement should be immediately available.  The 0 timeout verifies it doesn't go way.  -->
+    <reference id="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" timeout="0">
+        <listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
+    </reference>
+
+    <!-- This gets both a ServiceManager and a reference collection injected -->
+   <component id="ReboundDependencyChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.ReboundDependencyChecker" init-method="init">
+       <constructor-arg value="ReboundDependencyChecker"/>
+       <property name="one" ref="ServiceOne"/>
+       <property name="serviceManager">
+           <service interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
+       </property>
+   </component>
+</components>
+

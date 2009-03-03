@@ -1,0 +1,730 @@
+/*
+ * $Id$
+ *
+ * Copyright (c) The OSGi Alliance (2009). All Rights Reserved.
+ *
+ * Implementation of certain elements of the OSGi Specification may be subject
+ * to third party intellectual property rights, including without limitation,
+ * patent rights (such a third party may or may not be a member of the OSGi
+ * Alliance). The OSGi Alliance is not responsible and shall not be held
+ * responsible in any manner for identifying or failing to identify any or all
+ * such third party intellectual property rights.
+ *
+ * This document and the information contained herein are provided on an "AS IS"
+ * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
+ * HEREIN WILL NOT INFRINGE ANY RIGHTS AND ANY IMPLIED WARRANTIES OF
+ * MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL THE
+ * OSGI ALLIANCE BE LIABLE FOR ANY LOSS OF PROFITS, LOSS OF BUSINESS, LOSS OF
+ * USE OF DATA, INTERRUPTION OF BUSINESS, OR FOR DIRECT, INDIRECT, SPECIAL OR
+ * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
+ * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
+ *
+ * All Company, brand and product names may be trademarks that are the sole
+ * property of their respective owners. All rights reserved.
+ */
+
+package org.osgi.test.cases.blueprint.framework;
+import java.util.Collection;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.blueprint.context.ModuleContext;
+import org.osgi.service.blueprint.context.NoSuchComponentException;
+import org.osgi.service.blueprint.reflect.*;
+import org.osgi.test.cases.blueprint.services.ComponentTestInfo;
+import org.osgi.test.cases.blueprint.services.StringValueDescriptor;
+import org.osgi.test.cases.blueprint.services.ValueDescriptor;
+
+import junit.framework.Assert;
+import junit.framework.AssertionFailedError;
+
+/**
+ * A wrapper around the published ModuleContext service for a managed
+ * bundle.  This is used by the different validators, initializers,
+ * and terminators to perform metadata-related operations.
+ */
+public class ModuleMetadata extends Assert implements TestValidator, TestCleanup {
+    // the bundle context we're running in
+    protected BundleContext testBundle;
+    // the bundle we're validating for
+    protected Bundle bundle;
+    // the resolved service reference to the target module context.
+    protected ServiceReference contextRef;
+    // the actual module context service
+    protected ModuleContext context;
+
+
+    /**
+     * Create a metadata item for the given bundle.
+     *
+     * @param testBundle The text BundleContext (needed for services operations).
+     * @param bundle     The target test bundle.
+     */
+    public ModuleMetadata(BundleContext testBundle, Bundle bundle) {
+        this.testBundle = testBundle;
+        this.bundle = bundle;
+    }
+
+
+    /**
+     * Provide access to the bundle that owns the metadata.
+     *
+     * @return The associated bundle.
+     */
+    public Bundle getBundle() {
+        return bundle;
+    }
+
+
+    /**
+     * Perform any additional validation checks at the end of a test phase.
+     * This can perform any validation action needed beyond just
+     * event verification.  One good use is to ensure that specific
+     * services are actually in the services registry or validating
+     * the service properties.
+     *
+     * @param testContext
+     *               The BundleContext for the test (used for inspecting the test
+     *               environment).
+     *
+     * @exception Exception
+     */
+    public void validate(BundleContext testContext) throws Exception {
+        // just get the module context at this point
+        getModuleContext();
+    }
+
+    /**
+     * Retrieve the module context for the target bundle.
+     */
+    protected void getModuleContext() throws Exception {
+        ServiceReference[] refs = testBundle.getServiceReferences("org.osgi.service.blueprint.context.ModuleContext",
+            "(osgi.blueprint.context.symbolicname=" + bundle.getSymbolicName() + ")");
+        assertNotNull("No ModuleContext located for bundle " + bundle.getSymbolicName(), refs);
+        assertEquals("Bundle mismatch for ModuleContext instance.", bundle, refs[0].getBundle());
+
+        // save the module context reference
+        contextRef = refs[0];
+        context = (ModuleContext)testBundle.getService(contextRef);
+    }
+
+
+    /**
+     * Retrieve a named component from module context.
+     *
+     * @param componentName
+     * @param className
+     */
+    public Object getComponent(String componentName) throws Exception {
+        // ensure we have a good context first
+        getModuleContext();
+        try {
+            // get the object instance
+            Object component = context.getComponent(componentName);
+            assertNotNull("Component " + componentName + " not found in ModuleContext for " + bundle.getSymbolicName(), component);
+            return component;
+        } catch (NoSuchComponentException e) {
+            fail("Component " + componentName + " not created for bundle " + bundle.getSymbolicName());
+        }
+        return null;
+    }
+
+
+    /**
+     * Retrieve a matching component from module context.
+     *
+     * @param component The metadata information we're looking for.  We'll
+     *                  accept the first one it agrees is a match.
+     *
+     * @return The matching component metadata
+     * @exception Exception
+     */
+    public ComponentMetadata getComponentMetadata(TestComponentMetadata target) throws Exception {
+        // ensure we have a good context first
+        getModuleContext();
+        try {
+            Iterator componentNames = context.getComponentNames().iterator();
+            while (componentNames.hasNext()) {
+                String name = (String)componentNames.next();
+
+                // get the metadata instance for the next name and check for a match
+                ComponentMetadata component = context.getComponentMetadata(name);
+                if (target.matches(component)) {
+                    return component;
+                }
+            }
+        } catch (NoSuchComponentException e) {
+            fail("Component " + target.getName() + " not created for bundle " + bundle.getSymbolicName());
+        }
+        return null;
+    }
+
+
+    /**
+     * Retrieve the metadata for a named component from module context.
+     *
+     * @param componentName
+     */
+    public ComponentMetadata getComponentMetadata(String componentName) throws Exception {
+        // ensure we have a good context first
+        getModuleContext();
+        try {
+            // get the object instance
+            ComponentMetadata component = context.getComponentMetadata(componentName);
+            assertNotNull("Component " + componentName + " not found in ModuleContext for " + bundle.getSymbolicName(), component);
+            return component;
+        } catch (NoSuchComponentException e) {
+            fail("Component " + componentName + " not created for bundle " + bundle.getSymbolicName());
+        }
+        return null;
+    }
+
+
+    /**
+     * Validate that the named component is of the correct class.
+     *
+     * @param component The component instance.
+     * @param className The target class name.
+     */
+    public void validateComponentClass(Object component, Class clz) throws Exception {
+        if (!clz.isInstance(component)) {
+            fail("" + component + " not an instance of class " + clz.getName());
+        }
+    }
+
+
+    /**
+     * Validate the internal property bundle of a test component.
+     *
+     * @param component The component object.
+     * @param props     The set of properties to compare against.
+     */
+    public void validateComponentProperties(Object component, Dictionary props) throws Exception {
+        try {
+            // this means we expect this to be a base component class.
+            ComponentTestInfo base = (ComponentTestInfo)component;
+            Dictionary componentProps = base.getComponentProperties();
+            Enumeration keys = props.keys();
+            // all of the expected properties need to be the same
+            while (keys.hasMoreElements()) {
+                String key = (String)keys.nextElement();
+                assertEquals("property " + key + " in component " + component, props.get(key), componentProps.get(key));
+            }
+        } catch (ClassCastException e) {
+            fail("Component " + component + " is not an instance of ComponentTestInfo");
+        }
+    }
+
+
+    /**
+     * Retrieve an internal component property
+     *
+     * @param component The registered component name.
+     * @param name      The name of the target property.
+     */
+    public Object getComponentProperty(String componentId, String name) throws Exception {
+        return getComponentProperty(getComponent(componentId), name);
+    }
+
+
+    /**
+     * Retrieve an internal component property
+     *
+     * @param component The component object.
+     * @param name      The name of the target property.
+     */
+    public Object getComponentProperty(Object component, String name) throws Exception {
+        try {
+            // this means we expect this to be a base component class.
+            ComponentTestInfo base = (ComponentTestInfo)component;
+            Dictionary componentProps = base.getComponentProperties();
+            return componentProps.get(name);
+        } catch (ClassCastException e) {
+            fail("Component " + component + " is not an instance of ComponentTestInfo");
+        }
+        return null;
+    }
+
+
+    /**
+     * Return the descriptor for an injected component property value.
+     *
+     * @param componentId
+     *               The target componentId.
+     * @param name   The name of the injected property.
+     *
+     * @return A TestComponentInfo object describing the property, or null if
+     *         not found.
+     * @exception Exception
+     */
+    public ValueDescriptor getComponentPropertyValue(String componentId, String propertyName) throws Exception {
+        Dictionary properties = (Dictionary)getComponentProperty(componentId, ComponentTestInfo.COMPONENT_PROPERTIES);
+        // if unable to resolve this, return null
+        if (properties == null) {
+            return null;
+        }
+        return (ValueDescriptor)properties.get(propertyName);
+    }
+
+
+    /**
+     * Return the descriptor for an injected component argument value.
+     *
+     * @param componentId
+     *               The target componentId.
+     * @param name   The name of the injected argument.
+     *
+     * @return A TestComponentInfo object describing the argument, or null if
+     *         not found.
+     * @exception Exception
+     */
+    public ValueDescriptor getComponentArgumentValue(String componentId, String argumentName) throws Exception {
+        Dictionary properties = (Dictionary)getComponentProperty(componentId, ComponentTestInfo.COMPONENT_ARGUMENTS);
+        // if unable to resolve this, return null
+        if (properties == null) {
+            return null;
+        }
+        return (ValueDescriptor)properties.get(argumentName);
+    }
+
+
+    /**
+     * Perform a full component validation operation.
+     *
+     * @param componentId
+     *                  The target component id.
+     * @param className The component class name.
+     * @param props     The set of validation properties.
+     */
+    public void validateComponent(String componentId, Class componentClass, Dictionary props) throws Exception {
+        Object component = getComponent(componentId);
+        this.validateComponent(component, componentClass, props);
+    }
+
+    /**
+     * Perform a full component validation operation.
+     *
+     * @param component
+     *                  The target component
+     * @param className The component class name.
+     * @param props     The set of validation properties.
+     */
+    public void validateComponent(Object component, Class componentClass, Dictionary props) throws Exception {
+
+        validateComponentClass(component, componentClass);
+        if (props != null) {
+            validateComponentProperties(component, props);
+        }
+    }
+
+
+    /**
+     * Validate that a component's metadata contains the expected lifecycle
+     * components.
+     *
+     * @param componentId
+     *                   The target component id.
+     * @param className  The expected classname for the component.
+     * @param initMethod The expected init method name.
+     * @param destroyMethod
+     *                   The expected destroy method name.
+     *
+     * @exception Exception
+     */
+    public void validateLifeCycle(String componentId, String className, String initMethod, String destroyMethod) throws Exception {
+        // now validate the meta data is correct for the aliases.
+        LocalComponentMetadata meta = (LocalComponentMetadata)context.getComponentMetadata(componentId);
+        assertEquals("Classname for component " + componentId, className, meta.getClassName());
+        assertEquals("init-method for component " + componentId, initMethod, meta.getInitMethodName());
+        assertEquals("destroy-method for component " + componentId, destroyMethod, meta.getDestroyMethodName());
+    }
+
+    /**
+     * Validate the constructor metadata for a component against an expected set.
+     *
+     * @param componentId
+     *                 The target component id.
+     * @param expected The set of expected items.
+     *
+     * @exception Exception
+     */
+    public void validateConstructorMetadata(String componentId, TestParameter[] expected) throws Exception {
+        // now validate the meta data is correct for the parameters
+        LocalComponentMetadata meta = (LocalComponentMetadata)context.getComponentMetadata(componentId);
+        validateConstructorMetadata(meta, expected);
+    }
+
+    /**
+     * Validate the constructor metadata for a component against an expected set.
+     *
+     * @param meta     The metadata describing this component.  This might be for an
+     *                 inner component.
+     * @param expected The set of expected items.
+     *
+     * @exception Exception
+     */
+    public void validateConstructorMetadata(LocalComponentMetadata meta, TestParameter[] expected) throws Exception {
+        // determine which type of parameter injection needs to be validated.
+        MethodInjectionMetadata factoryMeta = meta.getFactoryMethodMetadata();
+        if (factoryMeta != null) {
+            validateConstructorParameters(meta, factoryMeta.getParameterSpecifications(), expected);
+        }
+        else {
+            validateConstructorParameters(meta, meta.getConstructorInjectionMetadata().getParameterSpecifications(), expected);
+        }
+    }
+
+    /**
+     * Validate the constructor metadata for a component against an expected set.
+     *
+     * @param meta     The metadata describing this component.  This might be for an
+     *                 inner component.
+     * @param expected The set of expected items.
+     *
+     * @exception Exception
+     */
+    public void validateConstructorParameters(LocalComponentMetadata meta, List parms, TestParameter[] expected) throws Exception {
+        assertEquals("Mismatch in constructor parameter size", expected.length, parms.size());
+        // validate each expected argment against the actual metadata for this constructor.
+        for (int i = 0; i < expected.length; i++) {
+            try {
+                // explicitly set the index so it will compare.  The spec says this will
+                // be set whether it was implicit or explicit, so enforce the ordering.
+                expected[i].setIndex(i);
+                expected[i].validate(this, (ParameterSpecification)parms.get(i));
+            } catch (Throwable e) {
+                // just allowing this to go past will result
+                // about which component and property we're doing this on.  So
+                // we'll throw a new assertion failure with the old one embedded.
+                AssertionFailedError ee = new AssertionFailedError("Validation failure for component argument=" + i + ", error=" + e.getMessage());
+                ee.initCause(e);
+                throw ee;
+            }
+        }
+    }
+
+    /**
+     * Validate the a partial list of constructor metadata for a component against an expected set.
+     *
+     * @param componentId
+     *                 The target component id.
+     * @param expected The set of expected items.  This need not be a full list,
+     *                 but all parameters must have the index position set.
+     *
+     * @exception Exception
+     */
+    public void validatePartialConstructorMetadata(String componentId, TestParameter[] expected) throws Exception {
+        // now validate the meta data is correct for the parameters
+        LocalComponentMetadata meta = (LocalComponentMetadata)context.getComponentMetadata(componentId);
+        validatePartialConstructorMetadata(meta, expected);
+    }
+
+    /**
+     * Validate the constructor metadata for a component against an expected set.
+     *
+     * @param meta     The metadata describing this component.  This might be for an
+     *                 inner component.
+     * @param expected The set of expected items.
+     *
+     * @exception Exception
+     */
+    public void validatePartialConstructorMetadata(LocalComponentMetadata meta, TestParameter[] expected) throws Exception {
+        // determine which type of parameter injection needs to be validated.
+        MethodInjectionMetadata factoryMeta = meta.getFactoryMethodMetadata();
+        if (factoryMeta != null) {
+            validatePartialConstructorParameters(meta, factoryMeta.getParameterSpecifications(), expected);
+        }
+        else {
+            validatePartialConstructorParameters(meta, meta.getConstructorInjectionMetadata().getParameterSpecifications(), expected);
+        }
+    }
+
+    /**
+     * Validate the constructor metadata for a component against an expected set.
+     *
+     * @param meta     The metadata describing this component.  This might be for an
+     *                 inner component.
+     * @param expected The set of expected items.
+     *
+     * @exception Exception
+     */
+    public void validatePartialConstructorParameters(LocalComponentMetadata meta, List parms, TestParameter[] expected) throws Exception {
+        assertEquals("Mismatch in constructor parameter size", expected.length, parms.size());
+        // validate each expected argment against the actual metadata for this constructor.
+        for (int i = 0; i < expected.length; i++) {
+            try {
+                // validate against the expected index position.
+                expected[i].validate(this, (ParameterSpecification)parms.get(expected[i].getIndex()));
+            } catch (Throwable e) {
+                // just allowing this to go past will result
+                // about which component and property we're doing this on.  So
+                // we'll throw a new assertion failure with the old one embedded.
+                AssertionFailedError ee = new AssertionFailedError("Validation failure for component argument=" + i + ", error=" + e.getMessage());
+                ee.initCause(e);
+                throw ee;
+            }
+        }
+    }
+
+    /**
+     * Validate the method injection metadata for a factory definition against an expected set.
+     *
+     * @param componentId
+     *                 The target component id.
+     * @param expected The set of expected items.
+     *
+     * @exception Exception
+     */
+    public void validateFactoryConstructorMetadata(String componentId, String factoryMethod, String factoryComponent, TestParameter[] expected) throws Exception {
+        // now validate the meta data is correct for the parameters
+        LocalComponentMetadata meta = (LocalComponentMetadata)context.getComponentMetadata(componentId);
+        validateFactoryConstructorMetadata(meta, componentId, factoryMethod, factoryComponent, expected);
+    }
+
+    /**
+     * Validate the method injection metadata for a factory definition against an expected set.
+     *
+     * @param componentId
+     *                 The target component id.
+     * @param expected The set of expected items.
+     *
+     * @exception Exception
+     */
+    public void validateFactoryConstructorMetadata(LocalComponentMetadata meta, String componentId, String factoryMethod, String factoryComponent, TestParameter[] expected) throws Exception {
+        MethodInjectionMetadata ci = meta.getFactoryMethodMetadata();
+
+        assertEquals("Factory method for component " + componentId, factoryMethod, ci.getName());
+        Value factory = meta.getFactoryComponent();
+        // for the named factories, we expect this to be a RefernceValue.
+        assertTrue("Factory ReferenceValue expected", factory instanceof ReferenceValue);
+        assertEquals("Factory component for component " + componentId, factoryComponent, ((ReferenceValue)factory).getComponentName());
+        validateConstructorParameters(meta, ci.getParameterSpecifications(), expected);
+    }
+
+    /**
+     * Validate the property metadata for a component against an expected set.
+     *
+     * @param componentId
+     *                 The target component id.
+     * @param expected The set of expected items.
+     *
+     * @exception Exception
+     */
+    public void validatePropertyMetadata(String componentId, TestProperty[] expected) throws Exception {
+        // now validate the meta data is correct for the properties
+        validatePropertyMetadata((LocalComponentMetadata)context.getComponentMetadata(componentId), expected);
+    }
+
+    /**
+     * Validate the property metadata for a component against an expected set.
+     *
+     * @param componentId
+     *                 The target component id.
+     * @param expected The set of expected items.
+     *
+     * @exception Exception
+     */
+    public void validatePropertyMetadata(LocalComponentMetadata meta, TestProperty[] expected) throws Exception {
+        Collection pi = meta.getPropertyInjectionMetadata();
+
+        assertEquals("Mismatch in property set size", expected.length, pi.size());
+        Iterator it = pi.iterator();
+        // validate each expected argment against the actual metadata for this constructor.
+        int i = 0;
+        while (it.hasNext()) {
+            try {
+                expected[i++].validate(this, (PropertyInjectionMetadata)it.next());
+            } catch (Throwable e) {
+                // just allowing this to go past will result
+                // about which component and property we're doing this on.  So
+                // we'll throw a new assertion failure with the old one embedded.
+                AssertionFailedError ee = new AssertionFailedError("Validation failure for component property=" + expected[i - 1].getName() + ", error=" + e.getMessage());
+                ee.initCause(e);
+                throw ee;
+            }
+        }
+    }
+
+
+    /**
+     * Get all of the component names for the wrappered module context.
+     *
+     * @return The Set of defined component names.
+     */
+    public Set getComponentNames() {
+        return context.getComponentNames();
+    }
+
+    /**
+     * Retrieve any dependencies defined for a component using a
+     * depends-on specification.
+     *
+     * @param componentId
+     *               The target component id.
+     *
+     * @return The Set of explicit dependencies.  Returns an empty set if none
+     *         are specified.
+     * @exception Exception
+     */
+    public Set getComponentDependencies(String componentId) throws Exception {
+        // now validate the meta data is correct for the properties
+        LocalComponentMetadata meta = (LocalComponentMetadata)context.getComponentMetadata(componentId);
+        return meta.getExplicitDependencies();
+    }
+
+
+    /**
+     * Search for an instance of a string within an array.
+     *
+     * @param target The target string.
+     * @param list   The array to search.
+     *
+     * @return true if the string was found, false otherwise.
+     */
+    protected boolean contains(String target, String[] list) {
+        for (int i = 0; i < list.length; i++) {
+            if (target.equals(list[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * Perform any additional test phase cleanup actions.
+     *
+     * @param testContext
+     *               The BundleContext for the test (used for inspecting the test
+     *               environment).
+     *
+     * @exception Exception
+     */
+    public void cleanup(BundleContext testContext) throws Exception {
+        if (context != null) {
+            // this needs to release the acquired service.
+            testBundle.ungetService(contextRef);
+            context = null;
+        }
+        if (bundle != null) {
+            System.out.println(">>>>>>>>>>> uninstalling bundle " + bundle);
+            // uninstall the bundle unconditionally
+            bundle.uninstall();
+            bundle = null;
+        }
+    }
+
+    /**
+     * Validate a list of exported services that we expect to find
+     *
+     * @param expected The list of expected service definitions.
+     *
+     * @exception Exception
+     */
+    public void validateExportedServices(ExportedService[] expected) throws Exception {
+        Collection exportedServices = context.getExportedServicesMetadata();
+
+        assertEquals("Mismatch on the number of exported services", exportedServices.size(), expected.length);
+        for (int i = 0; i < expected.length; i++) {
+            ExportedService e = (ExportedService)expected[i];
+            ServiceExportComponentMetadata service = locateServiceExport(exportedServices, e);
+            assertNotNull("Exported service not found in metadata", service);
+            // validate the metadata specifics
+            e.validate(this, service);
+        }
+    }
+
+
+    /**
+     * Locate a matching metadata value for a service.
+     *
+     * @param services
+     * @param service  The set of services for this bundle.
+     *
+     * @return The matching services metadata, or null if no match was found.
+     */
+    protected ServiceExportComponentMetadata locateServiceExport(Collection services, ExportedService service) {
+        Iterator i = services.iterator();
+        while (i.hasNext()) {
+            ServiceExportComponentMetadata meta = (ServiceExportComponentMetadata)i.next();
+            if (service.matches(meta)) {
+                return meta;
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * Validate a list of referenced services that we expect to find
+     *
+     * @param expected The list of expected service definitions.
+     *
+     * @exception Exception
+     */
+    public void validateReferencedServices(ReferencedService[] expected) throws Exception {
+        Collection referencedServices = context.getReferencedServicesMetadata();
+
+        assertEquals("Mismatch on the number of referenced services", referencedServices.size(), expected.length);
+        for (int i = 0; i < expected.length; i++) {
+            ReferencedService e = (ReferencedService)expected[i];
+            ServiceReferenceComponentMetadata service = locateServiceReference(referencedServices, e);
+            assertNotNull("Referenced service not found in metadata", service);
+            // validate the metadata specifics
+            e.validate(this, service);
+        }
+    }
+
+
+    /**
+     * Validate a list of defined components.  These must all be named metadata items
+     *
+     * @param expected The list of component definitions to validate
+     *
+     * @exception Exception
+     */
+    public void validateComponentMetadata(TestComponentMetadata[] expected) throws Exception {
+        for (int i = 0; i < expected.length; i++) {
+            String name = expected[i].getName();
+            // wildcard request?
+            if (name.equals("*")) {
+                // we need to find a "likely" candidate.  For local components, this
+                // generally matches on the class name, so this needs to be used with care
+                expected[i].validate(this, getComponentMetadata(expected[i]));
+            }
+            else {
+                // go validate the component
+                expected[i].validate(this, getComponentMetadata(name));
+            }
+        }
+    }
+
+
+    /**
+     * Locate a matching metadata value for a service.
+     *
+     * @param services
+     * @param service  The set of services for this bundle.
+     *
+     * @return The matching services metadata, or null if no match was found.
+     */
+    protected ServiceReferenceComponentMetadata locateServiceReference(Collection services, ReferencedService service) {
+        Iterator i = services.iterator();
+        while (i.hasNext()) {
+            ServiceReferenceComponentMetadata meta = (ServiceReferenceComponentMetadata)i.next();
+            if (service.matches(meta)) {
+                return meta;
+            }
+        }
+        return null;
+    }
+}
+

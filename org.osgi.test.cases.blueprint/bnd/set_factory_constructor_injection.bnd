@@ -1,0 +1,7 @@
+Bundle-SymbolicName:                     ${p}.set_factory_constructor_injection
+Bundle-Version:                          4.2
+Import-Package:                          ${p}.components.injection, ${p}.services
+Private-Package:                         $(p).build
+Include-Resource					= \
+	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/injection/set_factory_constructor_injection.xml
+

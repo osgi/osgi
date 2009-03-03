@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <description>
+        This defines a component that uses a ServiceRegistration for a service exported by the same context.
+    </description>
+
+    <!-- the node this service export maps into. -->
+   <component id="ServiceRegistrationChecker" class="org.osgi.test.cases.blueprint.components.serviceexport.ServiceRegistrationChecker">
+       <constructor-arg value="ServiceRegistrationChecker"/>
+       <constructor-arg>
+           <map>
+               <entry key="component.name" value="ServiceRegistrationChecker"/>
+               <entry key="component.version" value="1"/>
+           </map>
+       </constructor-arg>
+       <property name="registration" ref="ServiceOneService" />
+   </component>
+</components>
+

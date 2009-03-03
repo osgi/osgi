@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <component id="compEmptySet" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+        <constructor-arg>
+            <set></set>
+        </constructor-arg>
+    </component>
+
+    <component id="compNullSet" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+        <constructor-arg type="java.util.Set">
+            <null/>
+        </constructor-arg>
+    </component>
+
+    <component id="compStringItems" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+        <constructor-arg>
+            <set>
+                <value>abc</value>
+                <value>def</value>
+            </set>
+        </constructor-arg>
+    </component>
+
+    <component id="compDupItems" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+        <constructor-arg>
+            <set>
+                <value>abc</value>
+                <value>abc</value>
+            </set>
+        </constructor-arg>
+    </component>
+
+    <component id="compBooleanItems" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+        <constructor-arg>
+            <set>
+                <value type="java.lang.Boolean">true</value>
+                <value type="java.lang.Boolean">false</value>
+            </set>
+        </constructor-arg>
+    </component>
+
+    <component id="compMixedItems" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+        <constructor-arg>
+            <set>
+                <value type="java.lang.String">abc</value>
+                <value type="java.lang.Boolean">false</value>
+                <value type="java.lang.Byte">3</value>
+                <value type="java.lang.Character">4</value>
+                <value type="java.lang.Integer">5</value>
+                <value type="java.lang.Short">6</value>
+                <value type="java.lang.Long">7</value>
+                <value type="java.lang.Double">8.0</value>
+                <value type="java.lang.Float">9.0</value>
+                <value type="java.lang.Date">2008-11-04</value>
+                <value type="java.net.URL">http://www.osgi.org</value>
+                <value type="java.lang.Class">java.lang.String</value>
+                <value type="java.util.Locale">en_US</value>
+                <null/>
+            </set>
+        </constructor-arg>
+    </component>
+
+    <component id="compTypedItems" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+        <constructor-arg>
+            <set value-type="java.lang.Double">
+                <value>0.0</value>
+                <value>1.0</value>
+            </set>
+        </constructor-arg>
+    </component>
+
+    <component id="compTypedOverride" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+        <constructor-arg>
+            <set value-type="java.lang.Double">
+                <value>0.0</value>
+                <value>1.0</value>
+                <value type="java.lang.Boolean">true</value>
+            </set>
+        </constructor-arg>
+    </component>
+
+    <component id="compNestedSet" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+        <constructor-arg>
+            <set>
+                <set>
+                    <value>abc</value>
+                    <value>def</value>
+                </set>
+            </set>
+        </constructor-arg>
+    </component>
+
+    <component id="compNestedList" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+        <constructor-arg>
+            <set>
+                <list>
+                    <value>abc</value>
+                    <value>def</value>
+                </list>
+            </set>
+        </constructor-arg>
+    </component>
+
+    <component id="compNestedMap" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+        <constructor-arg>
+            <set>
+                <map>
+                    <entry key="abc" value="def"/>
+                    <entry key="ghi" value="jkl"/>
+                </map>
+            </set>
+        </constructor-arg>
+    </component>
+
+    <component id="compNestedProps" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+        <constructor-arg>
+            <set>
+                <props>
+                    <prop key="abc">"def"</prop>
+                    <prop key="ghi">"jkl"</prop>
+                </props>
+            </set>
+        </constructor-arg>
+    </component>
+</components>
+
+

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <component id="compEmptyList" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+        <property name="list">
+            <list></list>
+        </property>
+    </component>
+
+    <component id="compNullList" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+        <property name="list">
+            <null/>
+        </property>
+    </component>
+
+    <component id="compStringItems" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+        <property name="list">
+            <list>
+                <value>abc</value>
+                <value>def</value>
+            </list>
+        </property>
+    </component>
+
+    <component id="compDupItems" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+        <property name="list">
+            <list>
+                <value>abc</value>
+                <value>abc</value>
+            </list>
+        </property>
+    </component>
+
+    <component id="compBooleanItems" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+        <property name="list">
+            <list>
+                <value type="java.lang.Boolean">true</value>
+                <value type="java.lang.Boolean">false</value>
+            </list>
+        </property>
+    </component>
+
+    <component id="compMixedItems" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+        <property name="list">
+            <list>
+                <value type="java.lang.String">abc</value>
+                <value type="java.lang.Boolean">false</value>
+                <value type="java.lang.Byte">3</value>
+                <value type="java.lang.Character">4</value>
+                <value type="java.lang.Integer">5</value>
+                <value type="java.lang.Short">6</value>
+                <value type="java.lang.Long">7</value>
+                <value type="java.lang.Double">8.0</value>
+                <value type="java.lang.Float">9.0</value>
+                <value type="java.lang.Date">2008-11-04</value>
+                <value type="java.net.URL">http://www.osgi.org</value>
+                <value type="java.lang.Class">java.lang.String</value>
+                <value type="java.util.Locale">en_US</value>
+                <null/>
+            </list>
+        </property>
+    </component>
+
+    <component id="compTypedItems" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+        <property name="list">
+            <list type="java.lang.Double">
+                <value>0.0</value>
+                <value>1.0</value>
+            </list>
+        </property>
+    </component>
+
+    <component id="compTypeOverride" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+        <property name="list">
+            <list type="java.lang.Double">
+                <value>0.0</value>
+                <value>1.0</value>
+                <value type="java.lang.Boolean">true</value>
+            </list>
+        </property>
+    </component>
+
+    <component id="compNestedList" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+        <property name="list">
+            <list>
+                <list>
+                    <value>abc</value>
+                    <value>def</value>
+                </list>
+            </list>
+        </property>
+    </component>
+
+    <component id="compNestedSet" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+        <property name="list">
+            <list>
+                <set>
+                    <value>abc</value>
+                    <value>def</value>
+                </set>
+            </list>
+        </property>
+    </component>
+
+    <component id="compNestedMap" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+        <property name="list">
+            <list>
+                <map>
+                    <entry key="abc" value="def"/>
+                    <entry key="ghi" value="jkl"/>
+                </map>
+            </list>
+        </property>
+    </component>
+
+    <component id="compNestedProps" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+        <property name="list">
+            <list>
+                <props>
+                    <prop key="abc">"def"</prop>
+                    <prop key="ghi">"jkl"</prop>
+                </props>
+            </list>
+        </property>
+    </component>
+</components>
+
