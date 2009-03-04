@@ -190,12 +190,14 @@ public class FrameworkUtil {
 	}
 
 	/**
-	 * Return a <code>Bundle</code> for the specified bundle class.
+	 * Return a <code>Bundle</code> for the specified bundle class. The returned
+	 * <code>Bundle</code> is the bundle associated with the bundle class loader
+	 * which defined the specified class.
 	 * 
-	 * @param classFromBundle A class loaded from a bundle.
+	 * @param classFromBundle A class defined by a bundle class loader.
 	 * @return A <code>Bundle</code> for the specified bundle class or
-	 *         <code>null</code> if the class was not loaded by a bundle class
-	 *         loader.
+	 *         <code>null</code> if the specified class was not defined by a
+	 *         bundle class loader.
 	 * @since 1.5
 	 */
 	public static Bundle getBundle(final Class classFromBundle) {
