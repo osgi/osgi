@@ -146,18 +146,6 @@ public class BlueprintEvent extends AdminTestEvent {
         return topic.equals("org/osgi/service/blueprint/context/FAILURE");
     }
 
-    /**
-     * Get an exception that might be attached with an event.
-     *
-     * @return A Throwable object that was attached with an admin event.
-     */
-    public Throwable getException() {
-        if (props != null) {
-            return (Throwable)props.get("exception");
-        }
-        return null;
-    }
-
 
     /**
      * Do any event-specific validation of a received event.  If the

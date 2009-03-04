@@ -34,6 +34,16 @@ import java.util.Set;
 import java.util.Properties;
 import java.util.List;
 
+import org.osgi.test.cases.blueprint.services.ObjectArrayValueDescriptor;
+import org.osgi.test.cases.blueprint.services.IntArrayValueDescriptor;
+import org.osgi.test.cases.blueprint.services.ByteArrayValueDescriptor;
+import org.osgi.test.cases.blueprint.services.BooleanArrayValueDescriptor;
+import org.osgi.test.cases.blueprint.services.CharArrayValueDescriptor;
+import org.osgi.test.cases.blueprint.services.ShortArrayValueDescriptor;
+import org.osgi.test.cases.blueprint.services.LongArrayValueDescriptor;
+import org.osgi.test.cases.blueprint.services.DoubleArrayValueDescriptor;
+import org.osgi.test.cases.blueprint.services.FloatArrayValueDescriptor;
+
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 
 public class ArrayInjection extends BaseTestComponent {
@@ -56,103 +66,103 @@ public class ArrayInjection extends BaseTestComponent {
      */
     public ArrayInjection(int[] arg1) {
         super();
-        setArgumentValue("arg1", arg1, new int[0].getClass());
+        setArgumentValue("arg1", new IntArrayValueDescriptor("arg1", arg1));
     }
 
     public void setString(String[] arg1) {
-        setPropertyValue("string", arg1, new String[0].getClass());
+        setPropertyValue("string", new ObjectArrayValueDescriptor("string", arg1));
     }
 
     public void setPrimBoolean(boolean[] arg1) {
-        setPropertyValue("primBoolean", arg1, new boolean[0].getClass());
+        setPropertyValue("primBoolean", new BooleanArrayValueDescriptor("primBoolean", arg1));
     }
 
     public void setPrimByte(byte[] arg1) {
-        setPropertyValue("primByte", arg1, new byte[0].getClass());
+        setPropertyValue("primByte", new ByteArrayValueDescriptor("primByte", arg1));
     }
 
     public void setPrimChar(char[] arg1) {
-        setPropertyValue("primChar", arg1, new char[0].getClass());
+        setPropertyValue("primChar", new CharArrayValueDescriptor("primChar", arg1));
     }
 
     public void setPrimDouble(double[] arg1) {
-        setPropertyValue("primDouble", arg1, new double[0].getClass());
+        setPropertyValue("primDouble", new DoubleArrayValueDescriptor("primDouble", arg1));
     }
 
     public void setPrimFloat(float[] arg1) {
-        setPropertyValue("primFloat", arg1, new float[0].getClass());
+        setPropertyValue("primFloat", new FloatArrayValueDescriptor("primFloat", arg1));
     }
 
     public void setPrimInt(int[] arg1) {
-        setPropertyValue("primInt", arg1, new int[0].getClass());
+        setPropertyValue("primInt", new IntArrayValueDescriptor("primInt", arg1));
     }
 
     public void setPrimLong(long[] arg1) {
-        setPropertyValue("primLong", arg1, new long[0].getClass());
+        setPropertyValue("primLong", new LongArrayValueDescriptor("primLong", arg1));
     }
 
     public void setPrimShort(short[] arg1) {
-        setPropertyValue("primShort", arg1, new short[0].getClass());
+        setPropertyValue("primShort", new ShortArrayValueDescriptor("primShort", arg1));
     }
 
     public void setBoolean(Boolean[] arg1) {
-        setPropertyValue("boolean", arg1, new Boolean[0].getClass());
+        setPropertyValue("boolean", new ObjectArrayValueDescriptor("boolean", arg1));
     }
 
     public void setByte(Byte[] arg1) {
-        setPropertyValue("byte", arg1, new Byte[0].getClass());
+        setPropertyValue("byte", new ObjectArrayValueDescriptor("byte", arg1));
     }
 
     public void setChar(Character[] arg1) {
-        setPropertyValue("char", arg1, new Character[0].getClass());
+        setPropertyValue("char", new ObjectArrayValueDescriptor("char", arg1));
     }
 
     public void setDouble(Double[] arg1) {
-        setPropertyValue("double", arg1, new Double[0].getClass());
+        setPropertyValue("double", new ObjectArrayValueDescriptor("double", arg1));
     }
 
     public void setFloat(Float[] arg1) {
-        setPropertyValue("float", arg1, new Float[0].getClass());
+        setPropertyValue("float", new ObjectArrayValueDescriptor("float", arg1));
     }
 
     public void setInt(Integer[] arg1) {
-        setPropertyValue("int", arg1, new Integer[0].getClass());
+        setPropertyValue("int", new ObjectArrayValueDescriptor("int", arg1));
     }
 
     public void setLong(Long[] arg1) {
-        setPropertyValue("long", arg1, new Long[0].getClass());
+        setPropertyValue("long", new ObjectArrayValueDescriptor("long", arg1));
     }
 
     public void setShort(Short[] arg1) {
-        setPropertyValue("short", arg1, new Short[0].getClass());
+        setPropertyValue("short", new ObjectArrayValueDescriptor("short", arg1));
     }
 
     public void setClass(Class[] arg1) {
-        setPropertyValue("class", arg1, new Class[0].getClass());
+        setPropertyValue("class", new ObjectArrayValueDescriptor("class", arg1));
     }
 
     public void setLocale(Locale[] arg1) {
-        setPropertyValue("locale", arg1, new Locale[0].getClass());
+        setPropertyValue("locale", new ObjectArrayValueDescriptor("locale", arg1));
     }
 
     public void setUrl(URL[] arg1) {
-        setPropertyValue("url", arg1, new URL[0].getClass());
+        setPropertyValue("url", new ObjectArrayValueDescriptor("url", arg1));
     }
 
     public void setProperties(Properties[] arg1) {
-        setPropertyValue("properties", arg1, new Properties[0].getClass());
+        setPropertyValue("properties", new ObjectArrayValueDescriptor("properties", arg1));
     }
 
     public void setMap(Map[] arg1) {
-        setPropertyValue("map", arg1, new Map[0].getClass());
+        setPropertyValue("map", new ObjectArrayValueDescriptor("map", arg1));
     }
 
     public void setSet(Set[] arg1) {
-        setPropertyValue("set", arg1, new Set[0].getClass());
+        setPropertyValue("set", new ObjectArrayValueDescriptor("set", arg1));
     }
 
     public void setSet(List[] arg1) {
-        setPropertyValue("list", arg1, new List[0].getClass());
+        setPropertyValue("list", new ObjectArrayValueDescriptor("list", arg1));
     }
 }
 

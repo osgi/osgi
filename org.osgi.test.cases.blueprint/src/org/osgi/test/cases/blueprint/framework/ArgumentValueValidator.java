@@ -80,6 +80,24 @@ public class ArgumentValueValidator extends MetadataValidator {
         this.value = new StringValueDescriptor(argumentName, value, clz);
     }
 
+
+    /**
+     * Constructor for an argument validator.
+     *
+     * @param componentId
+     *               The target component owning the argument.
+     * @param argumentName
+     *               The name of the argument.  These are generally named "arg1",
+     *               "arg2", etc.
+     * @param value  The expected value.  These are compared using the equals() method.
+     * @param clz    The class of object we expect this to be.
+     */
+    public ArgumentValueValidator(String componentId, ValueDescriptor value) {
+        this.componentId = componentId;
+        // add the validator appropriate for this
+        this.value = value;
+    }
+
     /**
      * Perform any additional validation checks at the end of a test phase.
      * This can perform any validation action needed beyond just
