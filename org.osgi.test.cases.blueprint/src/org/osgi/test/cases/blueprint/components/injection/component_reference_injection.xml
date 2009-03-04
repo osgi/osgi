@@ -159,6 +159,11 @@
        <constructor-arg value="prototype3"/>
    </component>
 
+   <!-- referenced by a list, so will create unique ones for each element. -->
+   <component id="prototype4" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" scope="prototype">
+       <constructor-arg value="prototype4"/>
+   </component>
+
    <!-- Three singletons in a set should reduce to one element -->
    <component id="threeSingleton1" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent">
        <constructor-arg value="threeSingleton1"/>
@@ -195,6 +200,19 @@
                <ref component="singleton3"/>
                <ref component="singleton3"/>
            </set>
+       </property>
+   </component>
+
+   <!-- Expecting 3 component instances -->
+   <component id="threeListPrototype1" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent">
+       <constructor-arg value="threePrototype1"/>
+       <constructor-arg value="3"/>
+       <property name="listReferences">
+           <list>
+               <ref component="prototype4"/>
+               <ref component="prototype4"/>
+               <ref component="prototype4"/>
+           </list>
        </property>
    </component>
 

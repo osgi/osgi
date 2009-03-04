@@ -27,7 +27,9 @@
 
 package org.osgi.test.cases.blueprint.components.injection;
 
+import java.util.HashSet;
 import java.util.Set;
+import java.util.List;
 
 import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
@@ -67,6 +69,19 @@ public class ScopeComponent extends BaseTestComponent {
      */
     public void setReferences(Set refs) {
         AssertionService.assertEquals(this, "Unexpected component Set size", expectedCount, refs.size());
+    }
+
+
+    /**
+     * References property used to validate singleton/prototype
+     * reference sets.
+     *
+     * @param refs   The injected Set of references.
+     */
+    public void setListReferences(List refs) {
+        AssertionService.assertEquals(this, "Unexpected component List size", expectedCount, refs.size());
+        Set set = new HashSet(refs);
+        AssertionService.assertEquals(this, "Unexpected component converted Set size", expectedCount, refs.size());
     }
 }
 

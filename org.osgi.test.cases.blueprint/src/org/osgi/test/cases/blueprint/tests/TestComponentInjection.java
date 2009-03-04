@@ -193,7 +193,7 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         startEvents.addFailureEvent(new ComponentAssertion("singleton2", AssertionService.COMPONENT_CREATED));
         startEvents.addFailureEvent(new ComponentAssertion("singleton3", AssertionService.COMPONENT_CREATED));
 
-        // we expect to see 3 (and only 3) instantiations of the prototype components
+        // we expect to see 6 (and only 6) instantiations of the prototype components
         startEvents.addAssertion("prototype1", AssertionService.COMPONENT_CREATED);
 
         // this is the first with a prototype scope
@@ -204,6 +204,10 @@ public class TestComponentInjection extends DefaultTestBundleControl {
 
         startEvents.addAssertion("prototype1", AssertionService.COMPONENT_CREATED);
         startEvents.addAssertion("prototype1", AssertionService.COMPONENT_CREATED);
+        // only 4 of these also
+        startEvents.addAssertion("prototype4", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("prototype4", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("prototype4", AssertionService.COMPONENT_CREATED);
 
         startEvents.addAssertion("prototype2", AssertionService.COMPONENT_CREATED);
         startEvents.addAssertion("prototype2", AssertionService.COMPONENT_CREATED);
@@ -214,6 +218,7 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         startEvents.addFailureEvent(new ComponentAssertion("prototype2", AssertionService.COMPONENT_CREATED));
         // this one will be explicitly requested in the middle phase.  We should see nothing here
         startEvents.addFailureEvent(new ComponentAssertion("prototype3", AssertionService.COMPONENT_CREATED));
+        startEvents.addFailureEvent(new ComponentAssertion("prototype4", AssertionService.COMPONENT_CREATED));
 
 
         // ok, now we'll request some components via the metadata and see what we get.
