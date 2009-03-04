@@ -35,10 +35,7 @@ import java.util.Set;
 public class ConfigurationDictionaryBuilder extends Hashtable {
     public ConfigurationDictionaryBuilder(Map map){
         super();
-        Set keys = map.keySet();
-        Iterator i = keys.iterator();
-        while (i.hasNext()){
-            this.put(i.next(), map.get(i.next()));
-        }
+        // copy everything over
+        this.putAll(map);
     }
 }

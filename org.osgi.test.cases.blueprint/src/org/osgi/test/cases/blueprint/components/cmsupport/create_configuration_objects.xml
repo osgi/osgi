@@ -49,9 +49,11 @@
                                     <entry key="string_empty">
                                         <value type="java.lang.String"></value>
                                     </entry>
+                                    <!--
                                     <entry key="string_null">
                                         <null/>
                                     </entry>
+                                    -->
                                     <entry key="boolean">
                                         <value type="java.lang.Boolean">true</value>
                                     </entry>
