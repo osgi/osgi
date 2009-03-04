@@ -145,7 +145,7 @@ public class PropertyInjection extends BaseTestComponent {
         setPropertyValue("set", value, Set.class);
     }
 
-    public void setSet(List value) {
+    public void setList(List value) {
         setPropertyValue("list", value, List.class);
     }
 

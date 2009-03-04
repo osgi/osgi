@@ -54,7 +54,6 @@
                 <value type="java.lang.Long">7</value>
                 <value type="java.lang.Double">8.0</value>
                 <value type="java.lang.Float">9.0</value>
-                <value type="java.lang.Date">2008-11-04</value>
                 <value type="java.net.URL">http://www.osgi.org</value>
                 <value type="java.lang.Class">java.lang.String</value>
                 <value type="java.util.Locale">en_US</value>
@@ -65,7 +64,7 @@
 
     <component id="compTypedItems" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="set">
-            <set type="java.lang.Double">
+            <set value-type="java.lang.Double">
                 <value>0.0</value>
                 <value>1.0</value>
             </set>
@@ -74,7 +73,7 @@
 
     <component id="compTypedOverride" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="set">
-            <set type="java.lang.Double">
+            <set value-type="java.lang.Double">
                 <value>0.0</value>
                 <value>1.0</value>
                 <value type="java.lang.Boolean">true</value>

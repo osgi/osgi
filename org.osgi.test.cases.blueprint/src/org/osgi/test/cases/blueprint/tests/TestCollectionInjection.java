@@ -28,8 +28,6 @@ package org.osgi.test.cases.blueprint.tests;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -103,7 +101,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(new Long(7));
         expected.add(new Double(8.0));
         expected.add(new Float(9.0));
-        expected.add(new GregorianCalendar(2008, 11, 4).getTime());
         expected.add(new URL("http://www.osgi.org"));
         expected.add(String.class);
         expected.add(new Locale("en", "US"));
@@ -121,7 +118,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
                 new TestStringValue(Long.class, "7"),
                 new TestStringValue(Double.class, "8"),
                 new TestStringValue(Float.class, "9"),
-                new TestStringValue(Date.class, "2008-11-04"),
                 new TestStringValue(URL.class, "http://www.osgi.org"),
                 new TestStringValue(Class.class, "java.lang.String"),
                 new TestStringValue(Locale.class, "en_US")
@@ -239,7 +235,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(new Long(7));
         expected.add(new Double(8.0));
         expected.add(new Float(9.0));
-        expected.add(new GregorianCalendar(2008, 11, 4).getTime());
         expected.add(new URL("http://www.osgi.org"));
         expected.add(String.class);
         expected.add(new Locale("en", "US"));
@@ -257,7 +252,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
                 new TestStringValue(Long.class, "7"),
                 new TestStringValue(Double.class, "8"),
                 new TestStringValue(Float.class, "9"),
-                new TestStringValue(Date.class, "2008-11-04"),
                 new TestStringValue(URL.class, "http://www.osgi.org"),
                 new TestStringValue(Class.class, "java.lang.String"),
                 new TestStringValue(Locale.class, "en_US")
@@ -375,7 +369,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(new Long(7));
         expected.add(new Double(8.0));
         expected.add(new Float(9.0));
-        expected.add(new GregorianCalendar(2008, 11, 4).getTime());
         expected.add(new URL("http://www.osgi.org"));
         expected.add(String.class);
         expected.add(new Locale("en", "US"));
@@ -393,7 +386,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
                 new TestStringValue(Long.class, "7"),
                 new TestStringValue(Double.class, "8"),
                 new TestStringValue(Float.class, "9"),
-                new TestStringValue(Date.class, "2008-11-04"),
                 new TestStringValue(URL.class, "http://www.osgi.org"),
                 new TestStringValue(Class.class, "java.lang.String"),
                 new TestStringValue(Locale.class, "en_US")
@@ -521,7 +513,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(new Long(7));
         expected.add(new Double(8.0));
         expected.add(new Float(9.0));
-        expected.add(new GregorianCalendar(2008, 11, 4).getTime());
         expected.add(new URL("http://www.osgi.org"));
         expected.add(String.class);
         expected.add(new Locale("en", "US"));
@@ -537,7 +528,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
                 new TestStringValue(Long.class, "7"),
                 new TestStringValue(Double.class, "8"),
                 new TestStringValue(Float.class, "9"),
-                new TestStringValue(Date.class, "2008-11-04"),
                 new TestStringValue(URL.class, "http://www.osgi.org"),
                 new TestStringValue(Class.class, "java.lang.String"),
                 new TestStringValue(Locale.class, "en_US")
@@ -662,7 +652,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(new Long(7));
         expected.add(new Double(8.0));
         expected.add(new Float(9.0));
-        expected.add(new GregorianCalendar(2008, 11, 4).getTime());
         expected.add(new URL("http://www.osgi.org"));
         expected.add(String.class);
         expected.add(new Locale("en", "US"));
@@ -678,7 +667,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
                 new TestStringValue(Long.class, "7"),
                 new TestStringValue(Double.class, "8"),
                 new TestStringValue(Float.class, "9"),
-                new TestStringValue(Date.class, "2008-11-04"),
                 new TestStringValue(URL.class, "http://www.osgi.org"),
                 new TestStringValue(Class.class, "java.lang.String"),
                 new TestStringValue(Locale.class, "en_US")
@@ -798,7 +786,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(new Long(7));
         expected.add(new Double(8.0));
         expected.add(new Float(9.0));
-        expected.add(new GregorianCalendar(2008, 11, 4).getTime());
         expected.add(new URL("http://www.osgi.org"));
         expected.add(String.class);
         expected.add(new Locale("en", "US"));
@@ -814,7 +801,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
                 new TestStringValue(Long.class, "7"),
                 new TestStringValue(Double.class, "8"),
                 new TestStringValue(Float.class, "9"),
-                new TestStringValue(Date.class, "2008-11-04"),
                 new TestStringValue(URL.class, "http://www.osgi.org"),
                 new TestStringValue(Class.class, "java.lang.String"),
                 new TestStringValue(Locale.class, "en_US")
@@ -936,7 +922,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(new Long(7));
         expected.add(new Double(8.0));
         expected.add(new Float(9.0));
-        expected.add(new GregorianCalendar(2008, 11, 4).getTime());
         expected.add(new URL("http://www.osgi.org"));
         expected.add(String.class);
         expected.add(new Locale("en", "US"));
@@ -954,7 +939,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
                 new TestStringValue(Long.class, "7"),
                 new TestStringValue(Double.class, "8"),
                 new TestStringValue(Float.class, "9"),
-                new TestStringValue(Date.class, "2008-11-04"),
                 new TestStringValue(URL.class, "http://www.osgi.org"),
                 new TestStringValue(Class.class, "java.lang.String"),
                 new TestStringValue(Locale.class, "en_US")
@@ -1073,7 +1057,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(new Long(7));
         expected.add(new Double(8.0));
         expected.add(new Float(9.0));
-        expected.add(new GregorianCalendar(2008, 11, 4).getTime());
         expected.add(new URL("http://www.osgi.org"));
         expected.add(String.class);
         expected.add(new Locale("en", "US"));
@@ -1091,7 +1074,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
                 new TestStringValue(Long.class, "7"),
                 new TestStringValue(Double.class, "8"),
                 new TestStringValue(Float.class, "9"),
-                new TestStringValue(Date.class, "2008-11-04"),
                 new TestStringValue(URL.class, "http://www.osgi.org"),
                 new TestStringValue(Class.class, "java.lang.String"),
                 new TestStringValue(Locale.class, "en_US")
@@ -1211,7 +1193,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(new Long(7));
         expected.add(new Double(8.0));
         expected.add(new Float(9.0));
-        expected.add(new GregorianCalendar(2008, 11, 4).getTime());
         expected.add(new URL("http://www.osgi.org"));
         expected.add(String.class);
         expected.add(new Locale("en", "US"));
@@ -1229,7 +1210,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
                 new TestStringValue(Long.class, "7"),
                 new TestStringValue(Double.class, "8"),
                 new TestStringValue(Float.class, "9"),
-                new TestStringValue(Date.class, "2008-11-04"),
                 new TestStringValue(URL.class, "http://www.osgi.org"),
                 new TestStringValue(Class.class, "java.lang.String"),
                 new TestStringValue(Locale.class, "en_US")
@@ -1352,7 +1332,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(new Long(7));
         expected.add(new Double(8.0));
         expected.add(new Float(9.0));
-        expected.add(new GregorianCalendar(2008, 11, 4).getTime());
         expected.add(new URL("http://www.osgi.org"));
         expected.add(String.class);
         expected.add(new Locale("en", "US"));
@@ -1369,7 +1348,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
                 new TestStringValue(Long.class, "7"),
                 new TestStringValue(Double.class, "8"),
                 new TestStringValue(Float.class, "9"),
-                new TestStringValue(Date.class, "2008-11-04"),
                 new TestStringValue(URL.class, "http://www.osgi.org"),
                 new TestStringValue(Class.class, "java.lang.String"),
                 new TestStringValue(Locale.class, "en_US")
@@ -1495,7 +1473,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(new Long(7));
         expected.add(new Double(8.0));
         expected.add(new Float(9.0));
-        expected.add(new GregorianCalendar(2008, 11, 4).getTime());
         expected.add(new URL("http://www.osgi.org"));
         expected.add(String.class);
         expected.add(new Locale("en", "US"));
@@ -1512,7 +1489,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
                 new TestStringValue(Long.class, "7"),
                 new TestStringValue(Double.class, "8"),
                 new TestStringValue(Float.class, "9"),
-                new TestStringValue(Date.class, "2008-11-04"),
                 new TestStringValue(URL.class, "http://www.osgi.org"),
                 new TestStringValue(Class.class, "java.lang.String"),
                 new TestStringValue(Locale.class, "en_US")
@@ -1620,7 +1596,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         startEvents.addValidator(new PropertyMetadataValidator("compBooleanItems", new TestProperty(
             new TestSetValue(new TestValue[] { new TestStringValue(Boolean.class, "true"),
             new TestStringValue(Boolean.class, "false") })
-            /*  */
             , "set")));
         // set containing a mixed bag of types
         expected = new HashSet();
@@ -1633,7 +1608,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(new Long(7));
         expected.add(new Double(8.0));
         expected.add(new Float(9.0));
-        expected.add(new GregorianCalendar(2008, 11, 4).getTime());
         expected.add(new URL("http://www.osgi.org"));
         expected.add(String.class);
         expected.add(new Locale("en", "US"));
@@ -1650,7 +1624,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
                 new TestStringValue(Long.class, "7"),
                 new TestStringValue(Double.class, "8"),
                 new TestStringValue(Float.class, "9"),
-                new TestStringValue(Date.class, "2008-11-04"),
                 new TestStringValue(URL.class, "http://www.osgi.org"),
                 new TestStringValue(Class.class, "java.lang.String"),
                 new TestStringValue(Locale.class, "en_US")
@@ -1824,7 +1797,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.put("Long", new Long(7));
         expected.put("Double", new Double(8.0));
         expected.put("Float", new Float(9.0));
-        expected.put("Date", new GregorianCalendar(2008, 11, 4).getTime());
         expected.put("URL", new URL("http://www.osgi.org"));
         expected.put("Class", String.class);
         expected.put("Locale", new Locale("en", "US"));
@@ -1843,7 +1815,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
                 new MapValueEntry("Long", new TestStringValue(Long.class, "7")),
                 new MapValueEntry("Double", new TestStringValue(Double.class, "8.0")),
                 new MapValueEntry("Float", new TestStringValue(Float.class, "9.0")),
-                new MapValueEntry("Date", new TestStringValue(Date.class, "2008-11-04")),
                 new MapValueEntry("URL", new TestStringValue(URL.class, "http://www.osgi.org")),
                 new MapValueEntry("Class", new TestStringValue(Class.class, "java.lang.String")),
                 new MapValueEntry("Locale", new TestStringValue(Locale.class, "en_US")),
@@ -1989,7 +1960,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.put("Long", new Long(7));
         expected.put("Double", new Double(8.0));
         expected.put("Float", new Float(9.0));
-        expected.put("Date", new GregorianCalendar(2008, 11, 4).getTime());
         expected.put("URL", new URL("http://www.osgi.org"));
         expected.put("Class", String.class);
         expected.put("Locale", new Locale("en", "US"));
@@ -2008,7 +1978,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
                 new MapValueEntry("Long", new TestStringValue(Long.class, "7")),
                 new MapValueEntry("Double", new TestStringValue(Double.class, "8.0")),
                 new MapValueEntry("Float", new TestStringValue(Float.class, "9.0")),
-                new MapValueEntry("Date", new TestStringValue(Date.class, "2008-11-04")),
                 new MapValueEntry("URL", new TestStringValue(URL.class, "http://www.osgi.org")),
                 new MapValueEntry("Class", new TestStringValue(Class.class, "java.lang.String")),
                 new MapValueEntry("Locale", new TestStringValue(Locale.class, "en_US")),
@@ -2154,7 +2123,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.put("Long", new Long(7));
         expected.put("Double", new Double(8.0));
         expected.put("Float", new Float(9.0));
-        expected.put("Date", new GregorianCalendar(2008, 11, 4).getTime());
         expected.put("URL", new URL("http://www.osgi.org"));
         expected.put("Class", String.class);
         expected.put("Locale", new Locale("en", "US"));
@@ -2173,7 +2141,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
                 new MapValueEntry("Long", new TestStringValue(Long.class, "7")),
                 new MapValueEntry("Double", new TestStringValue(Double.class, "8.0")),
                 new MapValueEntry("Float", new TestStringValue(Float.class, "9.0")),
-                new MapValueEntry("Date", new TestStringValue(Date.class, "2008-11-04")),
                 new MapValueEntry("URL", new TestStringValue(URL.class, "http://www.osgi.org")),
                 new MapValueEntry("Class", new TestStringValue(Class.class, "java.lang.String")),
                 new MapValueEntry("Locale", new TestStringValue(Locale.class, "en_US")),
@@ -2321,7 +2288,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.put("Long", new Long(7));
         expected.put("Double", new Double(8.0));
         expected.put("Float", new Float(9.0));
-        expected.put("Date", new GregorianCalendar(2008, 11, 4).getTime());
         expected.put("URL", new URL("http://www.osgi.org"));
         expected.put("Class", String.class);
         expected.put("Locale", new Locale("en", "US"));
@@ -2340,7 +2306,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
                 new MapValueEntry("Long", new TestStringValue(Long.class, "7")),
                 new MapValueEntry("Double", new TestStringValue(Double.class, "8.0")),
                 new MapValueEntry("Float", new TestStringValue(Float.class, "9.0")),
-                new MapValueEntry("Date", new TestStringValue(Date.class, "2008-11-04")),
                 new MapValueEntry("URL", new TestStringValue(URL.class, "http://www.osgi.org")),
                 new MapValueEntry("Class", new TestStringValue(Class.class, "java.lang.String")),
                 new MapValueEntry("Locale", new TestStringValue(Locale.class, "en_US")),
@@ -2489,7 +2454,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.put("Long", new Long(7));
         expected.put("Double", new Double(8.0));
         expected.put("Float", new Float(9.0));
-        expected.put("Date", new GregorianCalendar(2008, 11, 4).getTime());
         expected.put("URL", new URL("http://www.osgi.org"));
         expected.put("Class", String.class);
         expected.put("Locale", new Locale("en", "US"));
@@ -2508,7 +2472,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
                 new MapValueEntry("Long", new TestStringValue(Long.class, "7")),
                 new MapValueEntry("Double", new TestStringValue(Double.class, "8.0")),
                 new MapValueEntry("Float", new TestStringValue(Float.class, "9.0")),
-                new MapValueEntry("Date", new TestStringValue(Date.class, "2008-11-04")),
                 new MapValueEntry("URL", new TestStringValue(URL.class, "http://www.osgi.org")),
                 new MapValueEntry("Class", new TestStringValue(Class.class, "java.lang.String")),
                 new MapValueEntry("Locale", new TestStringValue(Locale.class, "en_US")),
@@ -2646,7 +2609,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.put("Long", new Long(7));
         expected.put("Double", new Double(8.0));
         expected.put("Float", new Float(9.0));
-        expected.put("Date", new GregorianCalendar(2008, 11, 4).getTime());
         expected.put("URL", new URL("http://www.osgi.org"));
         expected.put("Class", String.class);
         expected.put("Locale", new Locale("en", "US"));
@@ -2665,7 +2627,6 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
                 new MapValueEntry("Long", new TestStringValue(Long.class, "7")),
                 new MapValueEntry("Double", new TestStringValue(Double.class, "8.0")),
                 new MapValueEntry("Float", new TestStringValue(Float.class, "9.0")),
-                new MapValueEntry("Date", new TestStringValue(Date.class, "2008-11-04")),
                 new MapValueEntry("URL", new TestStringValue(URL.class, "http://www.osgi.org")),
                 new MapValueEntry("Class", new TestStringValue(Class.class, "java.lang.String")),
                 new MapValueEntry("Locale", new TestStringValue(Locale.class, "en_US")),
@@ -2721,11 +2682,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         this.addConstructorValidator(startEvents, "compNullProps", null, Properties.class);
         // validate the metadata for this one too
         startEvents.addValidator(new ConstructorMetadataValidator("compNullProps", new TestParameter(
-            new TestNullValue())));
+            new TestNullValue(), Properties.class)));
 
-        // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compNullProps", new TestParameter(
-            new TestNullValue())));
         // strings
         expected = new Properties();
         expected.put("administrator", "administrator@example.org");
@@ -2792,7 +2750,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 	    expected.put("development", "development@example.org");
 	    this.addPropertyValidator(startEvents, "compStringItems", "properties", expected, Properties.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new PropertyMetadataValidator("compEmptyProps", new TestProperty(
+        startEvents.addValidator(new PropertyMetadataValidator("compStringItems", new TestProperty(
             new TestPropertiesValue(expected)
             , "properties")));
 	}

@@ -222,7 +222,7 @@
 	<component id="compDateArray"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
 		<constructor-arg>
-			<array value-type="java.lang.Date">
+			<array value-type="java.util.Date">
 				<value>2009-2-19</value>
 				<value>2009-2-20</value>
 			</array>

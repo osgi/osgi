@@ -78,10 +78,10 @@
 
     <component id="compTypedKeys" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
         <property name="map">
-            <map keyType="comp.lang.Boolean">
+            <map key-type="java.lang.Boolean">
                 <entry key="true" value="true"/>
                 <entry value="false">
-                    <key value="false"/>
+                    <key><value>false</value></key>
                 </entry>
                 <entry>
                     <key><value type="java.lang.Double">1.0</value></key>
@@ -121,9 +121,6 @@
                 <entry key="Float">
                     <value type="java.lang.Float">9.0</value>
                 </entry>
-                <entry key="Date">
-                    <value type="java.lang.Date">2008-11-04</value>
-                </entry>
                 <entry key="URL">
                     <value type="java.net.URL">http://www.osgi.org</value>
                 </entry>
@@ -143,15 +140,13 @@
     <component id="compNestedMap" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
         <property name="map">
             <map>
-                <map>
-                    <entry>
-                        <key><value>inner</value></key>
-                        <map>
-                            <entry key="abc" value="1"/>
-                            <entry key="def" value="2"/>
-                        </map>
-                    </entry>
-                </map>
+                <entry>
+                    <key><value>inner</value></key>
+                    <map>
+                        <entry key="abc" value="1"/>
+                        <entry key="def" value="2"/>
+                    </map>
+                </entry>
             </map>
         </property>
     </component>

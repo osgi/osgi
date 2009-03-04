@@ -54,25 +54,25 @@
            <entry key="test.case.property.java.lang.Float.array"><array type="java.lang.Float"><value>16.0</value></array></entry>
            <entry key="test.case.property.java.lang.Double.array"><array type="java.lang.Double"><value>17.0</value></array></entry>
 
-           <entry key="test.case.property.java.lang.String.Set"><set type="java.lang.String"><value>"abc"</value></set></entry>
-           <entry key="test.case.property.java.lang.Integer.Set"><set type="java.lang.Integer"><value>11</value></set></entry>
-           <entry key="test.case.property.java.lang.Short.Set"><set type="java.lang.Short"><value>12</value></set></entry>
-           <entry key="test.case.property.java.lang.Byte.Set"><set type="java.lang.Byte"><value>13</value></set></entry>
-           <entry key="test.case.property.java.lang.Character.Set"><set type="java.lang.Character"><value>a</value></set></entry>
-           <entry key="test.case.property.java.lang.Long.Set"><set type="java.lang.Long"><value>15</value></set></entry>
-           <entry key="test.case.property.java.lang.Boolean.Set"><set type="java.lang.Boolean"><value>false</value></set></entry>
-           <entry key="test.case.property.java.lang.Float.Set"><set type="java.lang.Float"><value>16.0</value></set></entry>
-           <entry key="test.case.property.java.lang.Double.Set"><set type="java.lang.Double"><value>17.0</value></set></entry>
+           <entry key="test.case.property.java.lang.String.Set"><set value-type="java.lang.String"><value>"abc"</value></set></entry>
+           <entry key="test.case.property.java.lang.Integer.Set"><set value-type="java.lang.Integer"><value>11</value></set></entry>
+           <entry key="test.case.property.java.lang.Short.Set"><set value-type="java.lang.Short"><value>12</value></set></entry>
+           <entry key="test.case.property.java.lang.Byte.Set"><set value-type="java.lang.Byte"><value>13</value></set></entry>
+           <entry key="test.case.property.java.lang.Character.Set"><set value-type="java.lang.Character"><value>a</value></set></entry>
+           <entry key="test.case.property.java.lang.Long.Set"><set value-type="java.lang.Long"><value>15</value></set></entry>
+           <entry key="test.case.property.java.lang.Boolean.Set"><set value-type="java.lang.Boolean"><value>false</value></set></entry>
+           <entry key="test.case.property.java.lang.Float.Set"><set value-type="java.lang.Float"><value>16.0</value></set></entry>
+           <entry key="test.case.property.java.lang.Double.Set"><set value-type="java.lang.Double"><value>17.0</value></set></entry>
 
-           <entry key="test.case.property.java.lang.String.List"><list type="java.lang.String"><value>"abc"</value></list></entry>
-           <entry key="test.case.property.java.lang.Integer.List"><list type="java.lang.Integer"><value>11</value></list></entry>
-           <entry key="test.case.property.java.lang.Short.List"><list type="java.lang.Short"><value>12</value></list></entry>
-           <entry key="test.case.property.java.lang.Byte.List"><list type="java.lang.Byte"><value>13</value></list></entry>
-           <entry key="test.case.property.java.lang.Character.List"><list type="java.lang.Character"><value>a</value></list></entry>
-           <entry key="test.case.property.java.lang.Long.List"><list type="java.lang.Long"><value>15</value></list></entry>
-           <entry key="test.case.property.java.lang.Boolean.List"><list type="java.lang.Boolean"><value>false</value></list></entry>
-           <entry key="test.case.property.java.lang.Float.List"><list type="java.lang.Float"><value>16.0</value></list></entry>
-           <entry key="test.case.property.java.lang.Double.List"><list type="java.lang.Double"><value>17.0</value></list></entry>
+           <entry key="test.case.property.java.lang.String.List"><list value-type="java.lang.String"><value>"abc"</value></list></entry>
+           <entry key="test.case.property.java.lang.Integer.List"><list value-type="java.lang.Integer"><value>11</value></list></entry>
+           <entry key="test.case.property.java.lang.Short.List"><list value-type="java.lang.Short"><value>12</value></list></entry>
+           <entry key="test.case.property.java.lang.Byte.List"><list value-type="java.lang.Byte"><value>13</value></list></entry>
+           <entry key="test.case.property.java.lang.Character.List"><list value-type="java.lang.Character"><value>a</value></list></entry>
+           <entry key="test.case.property.java.lang.Long.List"><list value-type="java.lang.Long"><value>15</value></list></entry>
+           <entry key="test.case.property.java.lang.Boolean.List"><list value-type="java.lang.Boolean"><value>false</value></list></entry>
+           <entry key="test.case.property.java.lang.Float.List"><list value-type="java.lang.Float"><value>16.0</value></list></entry>
+           <entry key="test.case.property.java.lang.Double.List"><list value-type="java.lang.Double"><value>17.0</value></list></entry>
        </service-properties>
    </service>
 </components>
