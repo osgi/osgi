@@ -138,10 +138,10 @@ public class AdminPermissionTests extends PermissionTestCase {
 		assertImplies(p1, p3);
 		assertImplies(p4, p3);
 		assertImplies(p5, p3);
-		assertInvalidImplies(p1, p2);
-		assertInvalidImplies(p2, p1);
-		assertUnsupportedImplies(p3, p2);
-		assertUnsupportedImplies(p3, p1);
+		assertNotImplies(p1, p2);
+		assertNotImplies(p2, p1);
+		assertNotImplies(p3, p2);
+		assertNotImplies(p3, p1);
 
 		assertEquals(p1, p2);
 		assertEquals(p2, p1);
@@ -153,7 +153,7 @@ public class AdminPermissionTests extends PermissionTestCase {
 		checkEnumeration(pc.elements(), true);
 
 		assertNotImplies(pc, p3);
-		assertInvalidImplies(pc, p1);
+		assertNotImplies(pc, p1);
 
 		assertAddPermission(pc, new AdminPermission("(id=2)", "class"));
 		assertAddPermission(pc, new AdminPermission("(id=2)", "resource"));
@@ -177,7 +177,7 @@ public class AdminPermissionTests extends PermissionTestCase {
 		assertImplies(pc, new AdminPermission(testBundle2, "resource"));
 		assertImplies(pc, new AdminPermission("*", "resource"));
 
-		assertInvalidImplies(pc, p1);
+		assertNotImplies(pc, p1);
 
 		checkEnumeration(pc.elements(), false);
 

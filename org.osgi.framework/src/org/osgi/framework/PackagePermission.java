@@ -401,10 +401,6 @@ public final class PackagePermission extends BasicPermission {
 	 * @param p The requested permission.
 	 * @return <code>true</code> if the specified permission is implied by this
 	 *         object; <code>false</code> otherwise.
-	 * @throws UnsupportedOperationException If this permission was constructed
-	 *         with a Bundle.
-	 * @throws IllegalArgumentException If specified permission was constructed
-	 *         with a filter expression.
 	 */
 	public boolean implies(Permission p) {
 		if (!(p instanceof PackagePermission)) {
@@ -412,13 +408,11 @@ public final class PackagePermission extends BasicPermission {
 		}
 		PackagePermission requested = (PackagePermission) p;
 		if (bundle != null) {
-			throw new UnsupportedOperationException(
-					"implies cannot be called because this permission constructed with a Bundle");
+			return false;
 		}
 		// if requested permission has a filter, then it is an invalid argument
 		if (requested.getFilter() != null) {
-			throw new IllegalArgumentException(
-					"argument must not be constructed with a filter expression");
+			return false;
 		}
 		return implies0(requested);
 	}
@@ -714,8 +708,6 @@ final class PackagePermissionCollection extends PermissionCollection {
 	 *        <code>PackagePermission</code> object.
 	 * @return <code>true</code> if <code>permission</code> is a proper subset
 	 *         of a permission in the set; <code>false</code> otherwise.
-	 * @throws IllegalArgumentException If the specified permission was not
-	 *         constructed with a Bundle object or the name *.
 	 */
 	public boolean implies(final Permission permission) {
 		if (!(permission instanceof PackagePermission)) {
@@ -724,8 +716,7 @@ final class PackagePermissionCollection extends PermissionCollection {
 		final PackagePermission requested = (PackagePermission) permission;
 		// if requested permission has a filter, then it is an invalid argument
 		if (requested.getFilter() != null) {
-			throw new IllegalArgumentException(
-					"argument must not be constructed with a filter expression");
+			return false;
 		}
 		String name = requested.getName();
 		final int desired = requested.getActionsMask();

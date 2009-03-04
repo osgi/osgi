@@ -379,12 +379,10 @@ public class PackagePermissionTests extends PermissionTestCase {
 		assertImplies(p37, p35);
 		assertImplies(p38, p35);
 
-		// throw exception, if specified permission was constructed with a
-		// filter expression.
-		assertInvalidImplies(p31, p31);
-		assertInvalidImplies(p31, p32);
-		assertInvalidImplies(p31, p33);
-		assertInvalidImplies(p31, p34);
+		assertNotImplies(p31, p31);
+		assertNotImplies(p31, p32);
+		assertNotImplies(p31, p33);
+		assertNotImplies(p31, p34);
 
 		assertNotImplies(p31, p36);
 		assertImplies(p32, p36);
@@ -418,12 +416,10 @@ public class PackagePermissionTests extends PermissionTestCase {
 
 		assertAddPermission(pc, p31);
 
-		// throw exception, if specified permission was constructed with a
-		// filter expression.
-		assertInvalidImplies(pc, p31);
-		assertInvalidImplies(pc, p32);
-		assertInvalidImplies(pc, p33);
-		assertInvalidImplies(pc, p34);
+		assertNotImplies(pc, p31);
+		assertNotImplies(pc, p32);
+		assertNotImplies(pc, p33);
+		assertNotImplies(pc, p34);
 
 		assertImplies(pc, p35);
 		assertNotImplies(pc, p36);
@@ -515,13 +511,11 @@ public class PackagePermissionTests extends PermissionTestCase {
 		assertNotImplies(p44, p47);
 		assertNotImplies(p45, p47);
 
-		// throw InvalidArgumentException, if the specified permissions is
-		// constructed with filter.
-		assertInvalidImplies(p41, p41);
-		assertInvalidImplies(p41, p42);
-		assertInvalidImplies(p41, p43);
-		assertInvalidImplies(p41, p44);
-		assertInvalidImplies(p41, p45);
+		assertNotImplies(p41, p41);
+		assertNotImplies(p41, p42);
+		assertNotImplies(p41, p43);
+		assertNotImplies(p41, p44);
+		assertNotImplies(p41, p45);
 
 		PermissionCollection pc = p41.newPermissionCollection();
 		checkEnumeration(pc.elements(), true);
@@ -530,13 +524,11 @@ public class PackagePermissionTests extends PermissionTestCase {
 		assertImplies(pc, p46);
 		assertNotImplies(pc, p47);
 
-		// throw InvalidArgumentException, if the specified permissions is
-		// constructed with filter.
-		assertInvalidImplies(pc, p41);
-		assertInvalidImplies(pc, p42);
-		assertInvalidImplies(pc, p43);
-		assertInvalidImplies(pc, p44);
-		assertInvalidImplies(pc, p45);
+		assertNotImplies(pc, p41);
+		assertNotImplies(pc, p42);
+		assertNotImplies(pc, p43);
+		assertNotImplies(pc, p44);
+		assertNotImplies(pc, p45);
 		assertSerializable(pc);
 
 		pc = p41.newPermissionCollection();

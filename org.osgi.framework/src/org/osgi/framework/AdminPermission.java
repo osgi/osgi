@@ -620,10 +620,6 @@ public final class AdminPermission extends BasicPermission {
 	 * @param p The requested permission.
 	 * @return <code>true</code> if the specified permission is implied by this
 	 *         object; <code>false</code> otherwise.
-	 * @throws UnsupportedOperationException If this permission was constructed
-	 *         with a Bundle.
-	 * @throws IllegalArgumentException If specified permission was not
-	 *         constructed with a Bundle or "*".
 	 */
 	public boolean implies(Permission p) {
 		if (!(p instanceof AdminPermission)) {
@@ -631,13 +627,11 @@ public final class AdminPermission extends BasicPermission {
 		}
 		AdminPermission requested = (AdminPermission) p;
 		if (bundle != null) {
-			throw new UnsupportedOperationException(
-					"implies cannot be called because this permission constructed with a Bundle");
+			return false;
 		}
 		// if requested permission has a filter, then it is an invalid argument
 		if (requested.getFilter() != null) {
-			throw new IllegalArgumentException(
-					"argument must be constructed with a Bundle or filter of *");
+			return false;
 		}
 		return implies0(requested);
 	}
@@ -950,8 +944,6 @@ final class AdminPermissionCollection extends PermissionCollection {
 	 * @return <code>true</code> if <code>permission</code> is implied by an
 	 *         <code>AdminPermission</code> in this collection,
 	 *         <code>false</code> otherwise.
-	 * @throws IllegalArgumentException If the specified permission was not
-	 *         constructed with a Bundle object or the name *.
 	 */
 	public boolean implies(Permission permission) {
 		if (!(permission instanceof AdminPermission)) {
@@ -961,8 +953,7 @@ final class AdminPermissionCollection extends PermissionCollection {
 		AdminPermission requested = (AdminPermission) permission;
 		// if requested permission has a filter, then it is an invalid argument
 		if (requested.getFilter() != null) {
-			throw new IllegalArgumentException(
-					"argument must be constructed with a Bundle or filter of *");
+			return false;
 		}
 		synchronized (this) {
 			// short circuit if the "*" Permission was added
