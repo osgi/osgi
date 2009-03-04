@@ -135,12 +135,12 @@ public final class PackagePermission extends BasicPermission {
 	 * For the <code>import</code> action, the name can also be a filter
 	 * expression. The filter gives access to the following attributes:
 	 * <ul>
-	 * <li>exporter.signer - A Distinguished Name chain used to sign the
-	 * exporting bundle. Wildcards in a DN are not matched according to the
-	 * filter string rules, but according to the rules defined for a DN chain.</li>
-	 * <li>exporter.location - The location of the exporting bundle.</li>
-	 * <li>exporter.id - The bundle ID of the exporting bundle.</li>
-	 * <li>exporter.name - The symbolic name of the exporting bundle.</li>
+	 * <li>signer - A Distinguished Name chain used to sign the exporting
+	 * bundle. Wildcards in a DN are not matched according to the filter string
+	 * rules, but according to the rules defined for a DN chain.</li>
+	 * <li>location - The location of the exporting bundle.</li>
+	 * <li>id - The bundle ID of the exporting bundle.</li>
+	 * <li>name - The symbolic name of the exporting bundle.</li>
 	 * <li>package.name - The name of the requested package.</li>
 	 * </ul>
 	 * Filter attribute names are processed in a case sensitive manner.
@@ -420,7 +420,20 @@ public final class PackagePermission extends BasicPermission {
 			throw new IllegalArgumentException(
 					"argument must not be constructed with a filter expression");
 		}
+		return implies0(requested);
+	}
 
+	/**
+	 * Internal implies method. Used by the implies and the permission
+	 * collection implies methods.
+	 * 
+	 * @param requested The requested PackagePermission which has already be
+	 *        validated as a proper argument. The requested PackagePermission
+	 *        must not have a filter expression.
+	 * @return <code>true</code> if the specified permission is implied by this
+	 *         object; <code>false</code> otherwise.
+	 */
+	boolean implies0(PackagePermission requested) {
 		// check actions first - much faster
 		int requestedMask = requested.getActionsMask();
 		if ((getActionsMask() & requestedMask) != requestedMask) {
@@ -563,15 +576,15 @@ public final class PackagePermission extends BasicPermission {
 			if (bundle != null) {
 				AccessController.doPrivileged(new PrivilegedAction() {
 					public Object run() {
-						dict.put("exporter.id", new Long(bundle.getBundleId()));
-						dict.put("exporter.location", bundle.getLocation());
+						dict.put("id", new Long(bundle.getBundleId()));
+						dict.put("location", bundle.getLocation());
 						String name = bundle.getSymbolicName();
 						if (name != null) {
-							dict.put("exporter.name", name);
+							dict.put("name", name);
 						}
 						SignerProperty signer = new SignerProperty(bundle);
 						if (signer.isBundleSigned()) {
-							dict.put("exporter.signer", signer);
+							dict.put("signer", signer);
 						}
 						return null;
 					}
@@ -770,7 +783,7 @@ final class PackagePermissionCollection extends PermissionCollection {
 			return false;
 		}
 		for (Iterator iter = pc.values().iterator(); iter.hasNext();) {
-			if (((PackagePermission) iter.next()).implies(requested)) {
+			if (((PackagePermission) iter.next()).implies0(requested)) {
 				return true;
 			}
 		}

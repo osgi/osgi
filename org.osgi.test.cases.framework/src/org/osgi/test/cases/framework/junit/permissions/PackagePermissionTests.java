@@ -484,14 +484,15 @@ public class PackagePermissionTests extends PermissionTestCase {
 	}
 
 	public void testFiltersBundles() {
-		PackagePermission p41 = new PackagePermission("(exporter.id=2)",
+		PackagePermission p41 = new PackagePermission("(id=2)",
 				"import");
 		PackagePermission p42 = new PackagePermission(
-				"(exporter.location=test.*)", "import");
-		PackagePermission p43 = new PackagePermission("(exporter.name=test.*)",
+				"(location=test.*)",
+				"import");
+		PackagePermission p43 = new PackagePermission("(name=test.*)",
 				"import");
 		PackagePermission p44 = new PackagePermission(
-				"(exporter.signer=\\*, o=ACME, c=US)", "import");
+				"(signer=\\*, o=ACME, c=US)", "import");
 		PackagePermission p45 = new PackagePermission(
 				"(package.name=com.foo.*)", "import");
 

@@ -639,6 +639,20 @@ public final class AdminPermission extends BasicPermission {
 			throw new IllegalArgumentException(
 					"argument must be constructed with a Bundle or filter of *");
 		}
+		return implies0(requested);
+	}
+
+	/**
+	 * Internal implies method. Used by the implies and the permission
+	 * collection implies methods.
+	 * 
+	 * @param requested The requested AdminPermision which has already be
+	 *        validated as a proper argument. The requested AdminPermission must
+	 *        not have a filter expression.
+	 * @return <code>true</code> if the specified permission is implied by this
+	 *         object; <code>false</code> otherwise.
+	 */
+	boolean implies0(AdminPermission requested) {
 		// check actions first - much faster
 		int requestedMask = requested.getActionsMask();
 		if ((getActionsMask() & requestedMask) != requestedMask) {
@@ -967,7 +981,7 @@ final class AdminPermissionCollection extends PermissionCollection {
 		// just iterate one by one
 		for (Iterator iter = permissions.values().iterator(); iter
 				.hasNext();) {
-			if (((AdminPermission) iter.next()).implies(requested)) {
+			if (((AdminPermission) iter.next()).implies0(requested)) {
 				return true;
 			}
 		}
