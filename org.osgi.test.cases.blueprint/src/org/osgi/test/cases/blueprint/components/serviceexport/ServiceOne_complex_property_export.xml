@@ -35,24 +35,24 @@
            <entry key="test.case.property.java.lang.Float"><value type="java.lang.Float">16.0</value></entry>
            <entry key="test.case.property.java.lang.Double"><value type="java.lang.Double">17.0</value></entry>
 
-           <entry key="test.case.property.int.array"><array type="int"><value>1</value></array></entry>
-           <entry key="test.case.property.short.array"><array type="short"><value>2</value></array></entry>
-           <entry key="test.case.property.byte.array"><array type="byte"><value>3</value></array></entry>
-           <entry key="test.case.property.char.array"><array type="char"><value>4</value></array></entry>
-           <entry key="test.case.property.long.array"><array type="long"><value>5</value></array></entry>
-           <entry key="test.case.property.boolean.array"><array type="boolean"><value>true</value></array></entry>
-           <entry key="test.case.property.float.array"><array type="float"><value>6.0</value></array></entry>
-           <entry key="test.case.property.double.array"><array type="float"><value>7.0</value></array></entry>
+           <entry key="test.case.property.int.array"><array value-type="int"><value>1</value></array></entry>
+           <entry key="test.case.property.short.array"><array value-type="short"><value>2</value></array></entry>
+           <entry key="test.case.property.byte.array"><array value-type="byte"><value>3</value></array></entry>
+           <entry key="test.case.property.char.array"><array value-type="char"><value>4</value></array></entry>
+           <entry key="test.case.property.long.array"><array value-type="long"><value>5</value></array></entry>
+           <entry key="test.case.property.boolean.array"><array value-type="boolean"><value>true</value></array></entry>
+           <entry key="test.case.property.float.array"><array value-type="float"><value>6.0</value></array></entry>
+           <entry key="test.case.property.double.array"><array value-type="float"><value>7.0</value></array></entry>
 
-           <entry key="test.case.property.java.lang.String.array"><array type="java.lang.String"><value>"abc"</value></array></entry>
-           <entry key="test.case.property.java.lang.Integer.array"><array type="java.lang.Integer"><value>11</value></array></entry>
-           <entry key="test.case.property.java.lang.Short.array"><array type="java.lang.Short"><value>12</value></array></entry>
-           <entry key="test.case.property.java.lang.Byte.array"><array type="java.lang.Byte"><value>13</value></array></entry>
-           <entry key="test.case.property.java.lang.Character.array"><array type="java.lang.Character"><value>a</value></array></entry>
-           <entry key="test.case.property.java.lang.Long.array"><array type="java.lang.Long"><value>15</value></array></entry>
-           <entry key="test.case.property.java.lang.Boolean.array"><array type="java.lang.Boolean"><value>false</value></array></entry>
-           <entry key="test.case.property.java.lang.Float.array"><array type="java.lang.Float"><value>16.0</value></array></entry>
-           <entry key="test.case.property.java.lang.Double.array"><array type="java.lang.Double"><value>17.0</value></array></entry>
+           <entry key="test.case.property.java.lang.String.array"><array value-type="java.lang.String"><value>"abc"</value></array></entry>
+           <entry key="test.case.property.java.lang.Integer.array"><array value-type="java.lang.Integer"><value>11</value></array></entry>
+           <entry key="test.case.property.java.lang.Short.array"><array value-type="java.lang.Short"><value>12</value></array></entry>
+           <entry key="test.case.property.java.lang.Byte.array"><array value-type="java.lang.Byte"><value>13</value></array></entry>
+           <entry key="test.case.property.java.lang.Character.array"><array value-type="java.lang.Character"><value>a</value></array></entry>
+           <entry key="test.case.property.java.lang.Long.array"><array value-type="java.lang.Long"><value>15</value></array></entry>
+           <entry key="test.case.property.java.lang.Boolean.array"><array value-type="java.lang.Boolean"><value>false</value></array></entry>
+           <entry key="test.case.property.java.lang.Float.array"><array value-type="java.lang.Float"><value>16.0</value></array></entry>
+           <entry key="test.case.property.java.lang.Double.array"><array value-type="java.lang.Double"><value>17.0</value></array></entry>
 
            <entry key="test.case.property.java.lang.String.Set"><set value-type="java.lang.String"><value>"abc"</value></set></entry>
            <entry key="test.case.property.java.lang.Integer.Set"><set value-type="java.lang.Integer"><value>11</value></set></entry>
