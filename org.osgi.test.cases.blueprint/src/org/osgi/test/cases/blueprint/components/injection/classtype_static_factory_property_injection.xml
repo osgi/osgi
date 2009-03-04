@@ -17,6 +17,7 @@
 	</component>
 
 <!-- Date: 5 cases -->
+<!-- TODO Temporarily disabled...bugzilla 1145
 	<component id="compDate" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
 		<property name="date" value="6/1/1999"/>
 	</component>
@@ -36,6 +37,7 @@
 	<component id="compDate_EleValue" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
 		<property name="date"><value type="java.util.Date">1970-1-1</value></property>
 	</component>
+    -->
 
 <!-- Locale:5 cases -->
 	<component id="compLocale" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
@@ -82,9 +84,8 @@
 				Name= Rex
 				Organization =OSGi Alliance
 				Nationality    :    China
-				Language:中文, English
-				Graduated=Shanghai Jiao Tong /
-					University
+				Language: \u4e2d\u6587, English
+				Graduated=Shanghai Jiao Tong University
 				#key is the word before the first whitespace - "Major"
 				Major Computer Science
 

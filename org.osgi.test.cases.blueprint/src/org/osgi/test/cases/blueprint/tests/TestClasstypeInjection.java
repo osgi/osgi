@@ -53,23 +53,25 @@ public class TestClasstypeInjection extends DefaultTestBundleControl {
         this.addConstructorValidator(startEvents, "compURL_EleValue", new URL("http://www.osgi.org"), null, "http://www.osgi.org", URL.class);
 
         // Date tests
+/** TODO:  temporarily disabled.  See bugzilla 1152
         this.addConstructorValidator(startEvents, "compDate", (new SimpleDateFormat("MM/dd/yyyy")).parse("6/1/1999"), Date.class, "6/1/1999", null);
         this.addConstructorValidator(startEvents, "compDate2", (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse("2000-12-31 23:59:59"), Date.class, "2000-12-31 23:59:59", null);
         this.addConstructorValidator(startEvents, "compDate3", new Date(0), Date.class, "January 1, 1970, 00:00:00 GMT", null);
         this.addConstructorValidator(startEvents, "compDateNull", Date.class);
         this.addConstructorValidator(startEvents, "compDate_EleValue", (new SimpleDateFormat("MM/dd/yyyy")).parse("1/1/1970"), null, "1970-1-1", Date.class);
+ */
 
         // Locale tests
         this.addConstructorValidator(startEvents, "compLocale", new Locale("en"), Locale.class, "en", null);
         this.addConstructorValidator(startEvents, "compLocale2", new Locale("zh", "cn"), Locale.class, "zh_CN", null);
         this.addConstructorValidator(startEvents, "compLocale3", new Locale("en", "US", "WIN"), Locale.class, "en_US_WIN", null);
         this.addConstructorValidator(startEvents, "compLocaleNull", Locale.class);
-        this.addConstructorValidator(startEvents, "compLocale_EleValue", new Locale("en_US"), null, "en_US", Locale.class);
+        this.addConstructorValidator(startEvents, "compLocale_EleValue", new Locale("en", "US"), null, "en_US", Locale.class);
 
         // "Class" tests
         this.addConstructorValidator(startEvents, "compClass", String.class, Class.class, "java.lang.String", null);
         this.addConstructorValidator(startEvents, "compClassNull", Class.class);     // this String.class is at will
-        this.addConstructorValidator(startEvents, "compClass_EleValue", ConstructorInjection.class, null, "org.osgi.test.cases.blueprint.components.injection.ConstructorInjection", ConstructorInjection.class);
+        this.addConstructorValidator(startEvents, "compClass_EleValue", ConstructorInjection.class, null, "org.osgi.test.cases.blueprint.components.injection.ConstructorInjection", Class.class);
 
         // "Properties" tests
         Properties properties = new Properties();
@@ -129,7 +131,7 @@ public class TestClasstypeInjection extends DefaultTestBundleControl {
 
     private void addPropertyValidator(MetadataEventSet startEvents, String compName, String propertyName,
             Class propertyType) {
-        startEvents.validateComponentProperty(compName, propertyName, null, propertyType);
+        startEvents.validateComponentProperty(compName, propertyName, null, null);
         startEvents.addValidator(new PropertyMetadataValidator(compName, new TestProperty[] {
             new TestProperty(new TestNullValue(), propertyName)}));
     }
@@ -137,28 +139,30 @@ public class TestClasstypeInjection extends DefaultTestBundleControl {
     private void addPropertyTestItem(MetadataEventSet startEvents)throws Exception{
         // URL tests
         this.addPropertyValidator(startEvents, "compURL", "url", new URL("http://www.osgi.org"), URL.class, "http://www.osgi.org", null);
-        this.addPropertyValidator(startEvents, "compURLNull", null, URL.class);
-        this.addPropertyValidator(startEvents, "compURL_EleValue", "url", new URL("http://www.osgi.org"), null, "http://www.osgi.org", URL.class);
+        this.addPropertyValidator(startEvents, "compURLNull", "url", URL.class);
+        this.addPropertyValidator(startEvents, "compURL_EleValue", "url", new URL("http://www.osgi.org"), null, "http://www.osgi.org", null);
 
         // Date tests
+/** TODO:  temporarily disabled.  See bugzilla 1152
         this.addPropertyValidator(startEvents, "compDate", "date", (new SimpleDateFormat("MM/dd/yyyy")).parse("6/1/1999"), Date.class);
         this.addPropertyValidator(startEvents, "compDate2", "date", (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse("2000-12-31 23:59:59"), Date.class);
         this.addPropertyValidator(startEvents, "compDate3", "date", new Date(0), Date.class);
         this.addPropertyValidator(startEvents, "compDateNull", "date", Date.class);
         this.addPropertyValidator(startEvents, "compDate_EleValue", "date", (new SimpleDateFormat("MM/dd/yyyy")).parse("1/1/1970"), Date.class);
+ */
 
         // Locale tests
         this.addPropertyValidator(startEvents, "compLocale", "locale", new Locale("en"), Locale.class);
         this.addPropertyValidator(startEvents, "compLocale2", "locale", new Locale("zh", "cn"), Locale.class);
         this.addPropertyValidator(startEvents, "compLocale3", "locale", new Locale("en", "US", "WIN"), Locale.class);
         this.addPropertyValidator(startEvents, "compLocaleNull", "locale", Locale.class);
-        this.addPropertyValidator(startEvents, "compLocale_EleValue", "locale", new Locale("en_US"), Date.class);
+        this.addPropertyValidator(startEvents, "compLocale_EleValue", "locale", new Locale("en", "US"), Locale.class);
 
         // "Class" tests
         this.addPropertyValidator(startEvents, "compClass", "class", String.class, Class.class);
         this.addPropertyValidator(startEvents, "compClassNull", "class", Class.class);
         // this case is different from the ConstructorInjection
-        this.addPropertyValidator(startEvents, "compClass_EleValue", "class", PropertyInjection.class, Class.class, "org.osgi.test.cases.blueprint.components.injection.ConstructorInjection", Class.class);
+        this.addPropertyValidator(startEvents, "compClass_EleValue", "class", PropertyInjection.class, Class.class);
 
         // "Properties" tests
         Properties properties = new Properties();

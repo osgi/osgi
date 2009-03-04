@@ -266,6 +266,9 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
      * @exception Exception
      */
     public ValueDescriptor getComponentPropertyValue(String componentId, String propertyName) throws Exception {
+        if (propertyName == null) {
+            fail("Null property name for component " + componentId);
+        }
         Dictionary properties = (Dictionary)getComponentProperty(componentId, ComponentTestInfo.COMPONENT_PROPERTIES);
         // if unable to resolve this, return null
         if (properties == null) {
@@ -357,9 +360,18 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
      * @exception Exception
      */
     public void validateConstructorMetadata(String componentId, TestParameter[] expected) throws Exception {
-        // now validate the meta data is correct for the parameters
-        LocalComponentMetadata meta = (LocalComponentMetadata)context.getComponentMetadata(componentId);
-        validateConstructorMetadata(meta, expected);
+        try {
+            // now validate the meta data is correct for the parameters
+            LocalComponentMetadata meta = (LocalComponentMetadata)context.getComponentMetadata(componentId);
+            validateConstructorMetadata(meta, expected);
+        } catch (Throwable e) {
+            // just allowing this to go past will result
+            // about which component and property we're doing this on.  So
+            // we'll throw a new assertion failure with the old one embedded.
+            AssertionFailedError ee = new AssertionFailedError("Validation failure for component " + componentId);
+            ee.initCause(e);
+            throw ee;
+        }
     }
 
     /**
@@ -520,7 +532,16 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
      */
     public void validatePropertyMetadata(String componentId, TestProperty[] expected) throws Exception {
         // now validate the meta data is correct for the properties
-        validatePropertyMetadata((LocalComponentMetadata)context.getComponentMetadata(componentId), expected);
+        try {
+            validatePropertyMetadata((LocalComponentMetadata)context.getComponentMetadata(componentId), expected);
+        } catch (Throwable e) {
+            // just allowing this to go past will result
+            // about which component and property we're doing this on.  So
+            // we'll throw a new assertion failure with the old one embedded.
+            AssertionFailedError ee = new AssertionFailedError("Validation failure for component " + componentId);
+            ee.initCause(e);
+            throw ee;
+        }
     }
 
     /**
