@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2007, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2007, 2009). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,6 +64,10 @@ public class ServiceException extends RuntimeException {
 	 * examined for the type of the exception.
 	 */
 	public static final int	SUBCLASSED			= 4;
+	/**
+	 * An error occurred invoking a remote service.
+	 */
+	public static final int REMOTE 				= 5;
 
 	/**
 	 * Creates a <code>ServiceException</code> with the specified message and
