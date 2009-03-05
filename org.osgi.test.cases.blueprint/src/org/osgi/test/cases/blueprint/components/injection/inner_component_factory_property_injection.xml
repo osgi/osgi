@@ -15,7 +15,7 @@
 <!-- String -->
 	<component id="compInnerString" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
 				<property name="string" value="ABC"/>
 			</component>
 		</property>
@@ -24,7 +24,7 @@
 <!-- Boolean -->
 	<component id="compInnerPrimitiveBoolean" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="primBoolean" value="true"/>
 			</component>
 		</property>
@@ -32,7 +32,7 @@
 
 	<component id="compInnerWrapperedBoolean" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="boolean" value="false"/>
 			</component>
 		</property>
@@ -41,7 +41,7 @@
 <!-- Byte -->
 	<component id="compInnerPrimitiveByte" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="primByte" value="-128"/>
 			</component>
 		</property>
@@ -49,7 +49,7 @@
 
 	<component id="compInnerWrapperedByte" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="byte" value="127"/>
 			</component>
 		</property>
@@ -58,7 +58,7 @@
 <!-- Double -->
 	<component id="compInnerPrimitiveDouble" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="primDouble" value="4.9e-324"/>
 			</component>
 		</property>
@@ -66,7 +66,7 @@
 
 	<component id="compInnerWrapperedDouble" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="double" value="1.7976931348623157E308"/>
 			</component>
 		</property>
@@ -75,7 +75,7 @@
 <!-- Float -->
 	<component id="compInnerPrimitiveFloat" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="primFloat" value="1.4E-45"/>
 			</component>
 		</property>
@@ -83,7 +83,7 @@
 
 	<component id="compInnerWrapperedFloat" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="float" value="3.4028235E38"/>
 			</component>
 		</property>
@@ -92,7 +92,7 @@
 <!-- Integer -->
 	<component id="compInnerPrimitiveInteger" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="primInteger" value="-2147483648"/>
 			</component>
 		</property>
@@ -100,7 +100,7 @@
 
 	<component id="compInnerWrapperedInteger" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="integer" value="2147483647"/>
 			</component>
 		</property>
@@ -110,7 +110,7 @@
 <!-- Character -->
 	<component id="compInnerPrimitiveCharacter" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="primCharacter" value="\u0000"/>
 			</component>
 		</property>
@@ -118,7 +118,7 @@
 
 	<component id="compInnerWrapperedCharacter" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="character" value="\uffff"/>
 			</component>
 		</property>
@@ -127,7 +127,7 @@
 <!-- Short -->
 	<component id="compInnerPrimitiveShort" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="primShort" value="-32768"/>
 			</component>
 		</property>
@@ -135,7 +135,7 @@
 
 	<component id="compInnerWrapperedShort" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="short" value="32767"/>
 			</component>
 		</property>
@@ -145,7 +145,7 @@
 <!-- Long -->
 	<component id="compInnerPrimitiveLong" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="primLong" value="-9223372036854775808"/>
 			</component>
 		</property>
@@ -153,7 +153,7 @@
 
 	<component id="compInnerWrapperedLong" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="InnerCompFactory">
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="long" value="9223372036854775807"/>
 			</component>
 		</property>
