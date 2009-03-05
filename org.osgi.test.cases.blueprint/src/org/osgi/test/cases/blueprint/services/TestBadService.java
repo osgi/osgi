@@ -39,6 +39,10 @@ public class TestBadService extends TestGoodServiceSubclass {
         super("BadService");
     }
 
+    public TestBadService(String componentId, int serviceId) {
+        super(componentId, serviceId);
+    }
+
 
     /**
      * A method that can be called for test verification purposes.  This

@@ -21,7 +21,7 @@
    </component>
 
    <!-- simple export using a reference and just one interface. -->
-   <service id="ServiceOneService" ref="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
+   <service id="ServiceOneService" ref="ServiceOne">
        <interfaces>
             <value>org.osgi.test.cases.blueprint.services.TestServiceOne</value>
             <value>org.osgi.test.cases.blueprint.services.TestServiceTwo</value>
