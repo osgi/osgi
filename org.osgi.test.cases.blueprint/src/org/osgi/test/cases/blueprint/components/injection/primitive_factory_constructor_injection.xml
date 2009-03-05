@@ -3,10 +3,9 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
-    <component id="compFactory" class="org.osgi.test.cases.blueprint.components.injection.yadayada.ConstructorInjectionInstanceFactory">
+    <component id="compFactory" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionInstanceFactory">
         <!-- collaborators and configuration for this component go here -->
     </component>
->
 
     <component id="compNoArg" factory-component="compFactory" factory-method="makeInstance">
         <!-- no constructor arguments -->
@@ -301,7 +300,7 @@
         <constructor-arg value="\u0000" type="java.lang.Character"/>
     </component>
     <component id="compWrapperedCharacterMax" factory-component="compFactory" factory-method="makeInstance">
-        <constructor-arg value="\ffff" type="java.lang.Character"/>
+        <constructor-arg value="\uffff" type="java.lang.Character"/>
     </component>
     <component id="compWrapperedCharacterA" factory-component="compFactory" factory-method="makeInstance">
         <constructor-arg value="A" type="java.lang.Character"/>
@@ -370,7 +369,7 @@
     <component id="constructorWrapperedBoolean"  factory-component="compFactory" factory-method="makeWrapperedBoolean">
         <constructor-arg value="yes"/>
     </component>
-    <component id="constructorPrimitiveByte" factory-component="compFactory" factory-method="makeByte">
+    <component id="constructorPrimitiveByte" factory-component="compFactory" factory-method="makePrimitiveByte">
         <constructor-arg value="123"/>
     </component>
     <component id="constructorWrapperedByte" factory-component="compFactory" factory-method="makeWrapperedByte">

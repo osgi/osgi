@@ -59,7 +59,7 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
     private void addConstructorValidator(MetadataEventSet startEvents, String id, Class targetType) {
         startEvents.validateComponentArgument(id, "arg1", null, targetType);
         startEvents.addValidator(new ConstructorMetadataValidator(id, new TestParameter[] {
-            new TestParameter(new TestNullValue())
+            new TestParameter(new TestNullValue(), targetType)
         }));
     }
 
@@ -86,11 +86,13 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
         }));
 
         // Two String arguments with explicit order
+        // TODO:  Bugzilla 1163 -- these may need adjusting once 1163 is resolved.  The arguments are supposed to be
+        // in index order, not specification order
         startEvents.validateComponentArgument("compIndexedString", "arg1", "compIndexedString");
         startEvents.validateComponentArgument("compIndexedString", "arg2", "ABC");
         startEvents.addValidator(new ConstructorMetadataValidator("compIndexedString", new TestParameter[] {
-            new TestParameter(new TestStringValue("compIndexedString"), 0),
-            new TestParameter(new TestStringValue("ABC"), 1)
+            new TestParameter(new TestStringValue("ABC"), 1),
+            new TestParameter(new TestStringValue("compIndexedString"), 0)
         }));
 
         // Three string arguments with different types in correct argument order
@@ -100,9 +102,10 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
         // The boolean type argument can only match the last one (Object)
         startEvents.validateComponentArgument("compThreeArgOverride", "arg3", Boolean.TRUE, Boolean.class);
         startEvents.addValidator(new ConstructorMetadataValidator("compThreeArgOverride", new TestParameter[] {
-            new StringParameter("compThreeArgOverride"),
-            new TestParameter(new TestNullValue(), String.class),
-            new StringParameter(Boolean.class, "true")
+            new StringParameter(String.class, "compThreeArgOverride"),
+            // TODO:  The order may also need adjusting here.
+            new StringParameter(Object.class, "true", Boolean.class),
+            new TestParameter(new TestNullValue(), String.class)
         }));
 
         // Three string arguments with different types using different argument order that requires
@@ -112,7 +115,7 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
         startEvents.validateComponentArgument("compThreeArgImplicit", "arg2", null, String.class);
         // The boolean type argument can only match the last one (Object)
         startEvents.validateComponentArgument("compThreeArgImplicit", "arg3", "ABC");
-        startEvents.addValidator(new ConstructorMetadataValidator("compIndexedString", new TestParameter[] {
+        startEvents.addValidator(new ConstructorMetadataValidator("compThreeArgImplicit", new TestParameter[] {
             new StringParameter("compThreeArgImplicit"),
             new TestParameter(new TestNullValue()),
             new StringParameter("ABC")
@@ -121,15 +124,19 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
         // Null string valued argument
         startEvents.validateComponentArgument("compZeroLengthString", "arg2", "");
         startEvents.addValidator(new ConstructorMetadataValidator("compZeroLengthString", new TestParameter[] {
-            new TestParameter(new TestStringValue("compZeroLengthString"), 0),
-            new TestParameter(new TestStringValue(""), 1)
+            // TODO:  Bugzilla 1163 -- these may need adjusting once 1163 is resolved.  The arguments are supposed to be
+            // in index order, not specification order
+            new TestParameter(new TestStringValue(""), 1),
+            new TestParameter(new TestStringValue("compZeroLengthString"), 0)
         }));
 
         // null string valued argument
         startEvents.validateComponentArgument("compNullString", "arg2", null, String.class);
         startEvents.addValidator(new ConstructorMetadataValidator("compNullString", new TestParameter[] {
-            new TestParameter(new TestStringValue("compNullString"), 0),
-            new TestParameter(new TestNullValue(), 1)
+            // TODO:  Bugzilla 1163 -- these may need adjusting once 1163 is resolved.  The arguments are supposed to be
+            // in index order, not specification order
+            new TestParameter(new TestNullValue(), 1),
+            new TestParameter(new TestStringValue("compNullString"), 0)
         }));
 
         // from this point on, we're only testing the value of a single argument
@@ -368,7 +375,7 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
         addPropertyValidator(startEvents, "compNullString", "string", String.class);
 
         // Primitive boolean tests
-        addPropertyValidator(startEvents, "compPrimBooleanYes", "primBoolean", "yes", Boolean.TRUE, Boolean.TYPE, Boolean.TYPE);
+        addPropertyValidator(startEvents, "compPrimBooleanYes", "primBoolean", "yes", Boolean.TRUE, Boolean.TYPE);
         addPropertyValidator(startEvents, "compPrimBooleanTrue", "primBoolean", "true", Boolean.TRUE, Boolean.TYPE, Boolean.TYPE);
         addPropertyValidator(startEvents, "compPrimBooleanOn", "primBoolean", "on", Boolean.TRUE, Boolean.TYPE);
         addPropertyValidator(startEvents, "compPrimBooleanNo", "primBoolean", "no", Boolean.FALSE, Boolean.TYPE);

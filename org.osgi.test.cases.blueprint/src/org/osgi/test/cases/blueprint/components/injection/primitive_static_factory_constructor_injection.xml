@@ -263,7 +263,7 @@
        <constructor-arg type="java.lang.Integer"><null/></constructor-arg>
    </component>
    <component id="compPrimCharacterZero" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-       <constructor-arg value="\0" type="char"/>
+       <constructor-arg value="\u0000" type="char"/>
    </component>
    <component id="compPrimCharacterMax" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
        <constructor-arg value="\uffff" type="char"/>
@@ -272,7 +272,7 @@
        <constructor-arg value="A" type="char"/>
    </component>
    <component id="compWrapperedCharacterZero" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-       <constructor-arg value="\0" type="java.lang.Character"/>
+       <constructor-arg value="\u0000" type="java.lang.Character"/>
    </component>
    <component id="compWrapperedCharacterMax" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
        <constructor-arg value="\uffff" type="java.lang.Character"/>

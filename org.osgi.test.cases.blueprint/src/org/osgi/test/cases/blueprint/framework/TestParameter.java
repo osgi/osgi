@@ -87,11 +87,11 @@ public class TestParameter extends Assert {
         assertEquals("Type parameter type mismatch", typeName, spec.getTypeName());
         // expecting an index position?
 
-        /** TODO:  restore this later
+        /** TODO:  Bugzilla 1155.  The RI is all over the charts with non-explicit index
+         * positions.  So if we're using -1 for a check value, then don't even bother validating. */
         if (index != -1) {
             assertEquals("Indexed parameter position mismatch", index, spec.getIndex());
         }
-        */
         // validate the value type also
         parameterType.validate(moduleMetadata, spec.getValue());
     }

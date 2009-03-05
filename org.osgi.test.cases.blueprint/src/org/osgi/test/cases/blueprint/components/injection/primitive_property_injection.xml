@@ -13,6 +13,14 @@
    <component id="compNullString" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="string"><null/></property>
    </component>
+   <component id="compPrimBooleanTrue" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+       <property name="primBoolean">
+           <value type="boolean">true</value>
+       </property>
+   </component>
+   <component id="compPrimBooleanFalse" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+       <property name="primBoolean" value="false"/>
+   </component>
 
    <component id="compPrimBooleanYes" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primBoolean" value="yes"/>
@@ -21,14 +29,6 @@
        <property name="primBoolean">
            <value>no</value>
        </property>
-   </component>
-   <component id="compPrimBooleanTrue" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
-       <property name="primBoolean">
-           <value type="boolean">true</value>
-       </property>
-   </component>
-   <component id="compPrimBooleanFalse" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
-       <property name="primBoolean" value="false"/>
    </component>
    <component id="compPrimBooleanOn" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primBoolean" value="on"/>
