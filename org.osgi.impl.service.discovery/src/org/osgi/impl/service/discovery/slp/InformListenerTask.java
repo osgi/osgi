@@ -20,6 +20,8 @@
  */
 package org.osgi.impl.service.discovery.slp;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TimerTask;
@@ -103,6 +105,9 @@ public class InformListenerTask extends TimerTask {
 	 */
 	private void notifyUnavailableServices(Map vanishedServices,
 			Map trackers) {
+		Collection matchingInterfaces = new ArrayList();
+		Collection matchingFilters = new ArrayList();
+		
 		Iterator svcDescrIt = vanishedServices.values().iterator();
 		while (svcDescrIt.hasNext()) {
 			ServiceEndpointDescription sed = (ServiceEndpointDescription) svcDescrIt
@@ -112,8 +117,10 @@ public class InformListenerTask extends TimerTask {
 			while (trackerIt.hasNext()) {
 				DiscoveredServiceTracker tracker = (DiscoveredServiceTracker) trackerIt
 						.next();
+				matchingInterfaces.clear();
+				matchingFilters.clear();
 				if (SLPHandlerImpl.isTrackerInterestedInSED(sed, (Map) trackers
-						.get(tracker))) {
+						.get(tracker), matchingInterfaces, matchingFilters)) {
 					SLPHandlerImpl.log(LogService.LOG_INFO, this.getClass()
 							.getName()
 							+ ": Notify "
@@ -122,7 +129,7 @@ public class InformListenerTask extends TimerTask {
 					tracker
 							.serviceChanged(new DiscoveredServiceNotificationImpl(
 									sed,
-									DiscoveredServiceNotification.UNAVAILABLE));
+									DiscoveredServiceNotification.UNAVAILABLE, matchingInterfaces, matchingFilters));
 				}
 			}
 		}
@@ -139,10 +146,13 @@ public class InformListenerTask extends TimerTask {
 			ServiceEndpointDescription svcDescr,
 			DiscoveredServiceTracker tracker, Map trackerProps,
 			Map lastLookupResult) {
+		Collection matchingInterfaces = new ArrayList();
+		Collection matchingFilters = new ArrayList();
+		
 		// check if the listener filter matches the given
 		// description properties. That prerequisites that all information of a
 		// service description are in its properties bag
-		if (SLPHandlerImpl.isTrackerInterestedInSED(svcDescr, trackerProps)) {
+		if (SLPHandlerImpl.isTrackerInterestedInSED(svcDescr, trackerProps, matchingInterfaces, matchingFilters)) {
 			if (lastLookupResult != null) {
 				// if we already know that service
 				if (lastLookupResult.containsKey(svcDescr.getEndpointID())) {
@@ -159,7 +169,7 @@ public class InformListenerTask extends TimerTask {
 						tracker
 								.serviceChanged(new DiscoveredServiceNotificationImpl(
 										svcDescr,
-										DiscoveredServiceNotification.MODIFIED));
+										DiscoveredServiceNotification.MODIFIED, matchingInterfaces, matchingFilters));
 					}
 				}
 				else {
@@ -175,7 +185,7 @@ public class InformListenerTask extends TimerTask {
 					tracker
 							.serviceChanged(new DiscoveredServiceNotificationImpl(
 									svcDescr,
-									DiscoveredServiceNotification.AVAILABLE));
+									DiscoveredServiceNotification.AVAILABLE, matchingInterfaces, matchingFilters));
 				}
 
 			}

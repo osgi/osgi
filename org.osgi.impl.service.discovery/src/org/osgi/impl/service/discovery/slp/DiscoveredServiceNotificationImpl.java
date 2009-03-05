@@ -20,6 +20,8 @@
  */
 package org.osgi.impl.service.discovery.slp;
 
+import java.util.Collection;
+
 import org.osgi.service.discovery.DiscoveredServiceNotification;
 import org.osgi.service.discovery.ServiceEndpointDescription;
 
@@ -32,11 +34,15 @@ public class DiscoveredServiceNotificationImpl implements
 
 	private ServiceEndpointDescription descr;
 	private int type;
+	private Collection/*String*/ filters;
+	private Collection/*String*/ interfaces;
 
 	public DiscoveredServiceNotificationImpl(ServiceEndpointDescription sed,
-			int t) {
+			int notificationType, Collection matchingFilters, Collection matchingInterfaces) {
 		descr = sed;
-		type = t;
+		type = notificationType;
+		filters = matchingFilters;
+		interfaces = matchingInterfaces;
 	}
 
 	/**
@@ -53,4 +59,17 @@ public class DiscoveredServiceNotificationImpl implements
 		return type;
 	}
 
+	/** 
+	 * @see org.osgi.service.discovery.DiscoveredServiceNotification#getFilters()
+	 */
+	public Collection getFilters() {
+		return filters;
+	}
+
+	/**
+	 * @see org.osgi.service.discovery.DiscoveredServiceNotification#getInterfaces()
+	 */
+	public Collection getInterfaces() {
+		return interfaces;
+	}
 }

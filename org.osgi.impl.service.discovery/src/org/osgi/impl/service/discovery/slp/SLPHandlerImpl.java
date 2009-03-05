@@ -297,9 +297,9 @@ public class SLPHandlerImpl implements Discovery {
 					// if (!localServices.contains(descriptionAdapter
 					// .getEndpointID())) {
 					// only if this is a remote service we have to add it.
-						result.put(descriptionAdapter.getEndpointID(),
-								descriptionAdapter);
-					}
+					result.put(descriptionAdapter.getEndpointID(),
+							descriptionAdapter);
+				}
 				else {
 					log(LogService.LOG_ERROR, "no interfaces provided by "
 							+ descriptionAdapter);
@@ -578,15 +578,19 @@ public class SLPHandlerImpl implements Discovery {
 		System.out.println(cachedServices.size()
 				+ " services are registered in Discovery.");
 		if (cachedServices != null) {
+			Collection matchingInterfaces = new ArrayList();
+			Collection matchingFilters = new ArrayList();
 			Iterator it = cachedServices.iterator();
 			while (it.hasNext()) {
 				ServiceEndpointDescription svcDescr = (ServiceEndpointDescription) it
 						.next();
-				if (isTrackerInterestedInSED(svcDescr, matchingCriteria)) {
+				matchingInterfaces.clear();
+				matchingFilters.clear();
+				if (isTrackerInterestedInSED(svcDescr, matchingCriteria, matchingInterfaces, matchingFilters)) {
 					tracker
 							.serviceChanged(new DiscoveredServiceNotificationImpl(
 									svcDescr,
-									DiscoveredServiceNotification.AVAILABLE));
+									DiscoveredServiceNotification.AVAILABLE, matchingInterfaces, matchingFilters));
 				}
 			}
 		}
@@ -598,15 +602,19 @@ public class SLPHandlerImpl implements Discovery {
 	 */
 	protected void notifyListenersOnNewServiceDescription(
 			ServiceEndpointDescription svcDescr) {
+		Collection matchingInterfaces = new ArrayList();
+		Collection matchingFilters = new ArrayList();
 		Map discoveredSTs = getRegisteredServiceTracker();
 		Iterator it = discoveredSTs.keySet().iterator();
 		while (it.hasNext()) {
 			DiscoveredServiceTracker st = (DiscoveredServiceTracker) it.next();
 			Map trackerProps = (Map) discoveredSTs.get(st);
-			if (isTrackerInterestedInSED(svcDescr, trackerProps)) {
+			matchingInterfaces.clear();
+			matchingFilters.clear();
+			if (isTrackerInterestedInSED(svcDescr, trackerProps, matchingInterfaces, matchingFilters)) {
 				try {
 					st.serviceChanged(new DiscoveredServiceNotificationImpl(
-							svcDescr, DiscoveredServiceNotification.AVAILABLE));
+							svcDescr, DiscoveredServiceNotification.AVAILABLE, matchingInterfaces, matchingFilters));
 				}
 				catch (Exception e) {
 					log(
@@ -626,19 +634,23 @@ public class SLPHandlerImpl implements Discovery {
 	 */
 	protected void notifyListenersOnRemovedServiceDescription(
 			ServiceEndpointDescription svcDescr) {
+		Collection matchingInterfaces = new ArrayList();
+		Collection matchingFilters = new ArrayList();
 		Map discoveredSTs = getRegisteredServiceTracker();
 		Iterator it = discoveredSTs.keySet().iterator();
 		while (it.hasNext()) {
 			DiscoveredServiceTracker st = (DiscoveredServiceTracker) it.next();
 			Map trackerProps = (Map) discoveredSTs.get(st);
+			matchingInterfaces.clear();
+			matchingFilters.clear();
 			// inform it if the listener has no Filter set
 			// or the filter matches the criteria
-			if (isTrackerInterestedInSED(svcDescr, trackerProps)) {
+			if (isTrackerInterestedInSED(svcDescr, trackerProps, matchingInterfaces, matchingFilters)) {
 				try {
 					st
 							.serviceChanged(new DiscoveredServiceNotificationImpl(
 									svcDescr,
-									DiscoveredServiceNotification.UNAVAILABLE));
+									DiscoveredServiceNotification.UNAVAILABLE, matchingInterfaces, matchingFilters));
 				}
 				catch (Exception e) {
 					log(
@@ -656,6 +668,8 @@ public class SLPHandlerImpl implements Discovery {
 	 */
 	protected void notifyListenersOnModifiedServiceDescription(
 			ServiceEndpointDescription svcDescr) {
+		Collection matchingInterfaces = new ArrayList();
+		Collection matchingFilters = new ArrayList();
 		Map discoveredSTs = getRegisteredServiceTracker();
 		Iterator it = discoveredSTs.keySet().iterator();
 		while (it.hasNext()) {
@@ -663,10 +677,12 @@ public class SLPHandlerImpl implements Discovery {
 			Map trackerProps = (Map) discoveredSTs.get(st);
 			// inform it if the listener has no Filter set
 			// or the filter matches the criteria
-			if (isTrackerInterestedInSED(svcDescr, trackerProps)) {
+			matchingInterfaces.clear();
+			matchingFilters.clear();
+			if (isTrackerInterestedInSED(svcDescr, trackerProps, matchingInterfaces, matchingFilters)) {
 				try {
 					st.serviceChanged(new DiscoveredServiceNotificationImpl(
-							svcDescr, DiscoveredServiceNotification.MODIFIED));
+							svcDescr, DiscoveredServiceNotification.MODIFIED, matchingInterfaces, matchingFilters));
 				}
 				catch (Exception e) {
 					log(
@@ -684,12 +700,19 @@ public class SLPHandlerImpl implements Discovery {
 	 * 
 	 * @param svcDescr
 	 * @param trackerProperties
+	 * @param matchingInterfaces (an out-argument) a collection which will
+	 *        contain all tracker's interface criteria matching with given
+	 *        ServiceEndpointDescription object
+	 * @param matchingFilters (an out-argument) a collection which will contain
+	 *        all tracker's filter criteria matching with given
+	 *        ServiceEndpointDescription object
 	 * @return true if the service tracker properties match the SEDs properties,
 	 *         else false
 	 */
 	public static boolean isTrackerInterestedInSED(
 			ServiceEndpointDescription svcDescr,
-			Map/* String, Object */trackerProperties) {
+			Map/* String, Object */trackerProperties,
+			Collection matchingInterfaces, Collection matchingFilters) {
 		Collection interfaceCriteria = (Collection) trackerProperties
 				.get(DiscoveredServiceTracker.PROP_KEY_MATCH_CRITERIA_INTERFACES);
 		Collection filter = (Collection) trackerProperties
@@ -711,6 +734,10 @@ public class SLPHandlerImpl implements Discovery {
 				intersectionResult.retainAll(svcInterfaces);
 				if (intersectionResult.size() > 0) {
 					notify = true;
+					if(matchingInterfaces != null)
+					{
+						matchingInterfaces.addAll(intersectionResult);
+					}
 				}
 			}
 
@@ -725,6 +752,10 @@ public class SLPHandlerImpl implements Discovery {
 						Filter f = context.createFilter(currentFilter);
 						if (f.match(new Hashtable(svcDescr.getProperties()))) {
 							notify = true;
+							if(matchingFilters != null)
+							{
+								matchingFilters.add(currentFilter);
+							}
 						}
 					}
 					catch (InvalidSyntaxException e) {
@@ -769,7 +800,8 @@ public class SLPHandlerImpl implements Discovery {
 
 		public Object addingService(ServiceReference reference) {
 			// TODO: use it only we haven't got a service yet
-			// TODO: handle DiscoveredServiceTrackers added/modified/removed in the time when locator was away.
+			// TODO: handle DiscoveredServiceTrackers added/modified/removed in
+			// the time when locator was away.
 			if (getLocator() == null) {
 				Locator loc = setLocatorService(reference);
 				return loc;
