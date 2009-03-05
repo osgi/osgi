@@ -6,5 +6,10 @@
    <component id="compFactory" class="org.osgi.test.cases.blueprint.components.factory.SimpleInstanceFactory">
      <!-- collaborators and configuration for this component go here -->
    </component>
+
+
+   <component id="compFactory" factory-component="compFactory">
+     <!-- collaborators and configuration for this component go here -->
+   </component>
 </components>
 
