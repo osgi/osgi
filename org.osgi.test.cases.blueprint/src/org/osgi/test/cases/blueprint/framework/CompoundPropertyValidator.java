@@ -34,6 +34,7 @@ import java.util.StringTokenizer;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.test.cases.blueprint.services.ComponentTestInfo;
+import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 import org.osgi.test.cases.blueprint.services.StringValueDescriptor;
 import org.osgi.test.cases.blueprint.services.ValueDescriptor;
 
@@ -55,14 +56,18 @@ public class CompoundPropertyValidator extends MetadataValidator {
         // the value must be equal
 
         Object componentObject = moduleMetadata.getComponent(componentId);
-        if (componentObject instanceof ComponentTestInfo){
-            ComponentTestInfo component = (ComponentTestInfo)componentObject;
+        if (componentObject instanceof BaseTestComponent){
+            BaseTestComponent component = (BaseTestComponent)componentObject;
             List names = split(compoundName);
             int i=0;
-            for(i=0; i<names.size()-1; i++){
-                component = (ComponentTestInfo)(((StringValueDescriptor)component.getProperty((String)names.get(i))).getValue());
+            for(i=0; i < names.size() - 1; i++) {
+                String name = (String)names.get(i);
+                StringValueDescriptor value = (StringValueDescriptor)component.getPropertyValue(name);
+                assertNotNull("Null subcomponent value in component " + componentId + " found for sub-name " + name, value);
+                component = (BaseTestComponent)value.getValue();
+                assertNotNull("Null subcomponent in component " + componentId + " found for sub-name " + name, component);
             }
-            StringValueDescriptor testValue = (StringValueDescriptor)(component.getProperty((String)names.get(i)));
+            StringValueDescriptor testValue = (StringValueDescriptor)(component.getPropertyValue((String)names.get(i)));
             assertEquals("Compound Property " + compoundName + " value in component " + componentId, expectedValue, testValue);
         }else{
             fail("Component is not ComponentTestInfo.");

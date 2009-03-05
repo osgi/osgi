@@ -33,7 +33,7 @@ public class CompBar extends BaseTestComponent {
     private CompFred fred;
 
     public CompBar(){
-        super();
+        super("CompBar");
         this.setFred(new CompFred());
     }
 

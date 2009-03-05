@@ -33,7 +33,7 @@ public class CompBob extends BaseTestComponent {
     private String sammy;
 
     public CompBob (){
-        super();
+        super("CompBob");
     }
 
     public String getSammy() {
