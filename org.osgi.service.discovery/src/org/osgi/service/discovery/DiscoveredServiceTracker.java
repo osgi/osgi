@@ -32,31 +32,41 @@ package org.osgi.service.discovery;
 public interface DiscoveredServiceTracker {
 
 	/**
-	 * Property describing service interfaces this tracker is interested in.
-	 * Value of this property is of type Collection (<? extends String>).<br>
+	 * Optional ServiceRegistration property which contains service interfaces
+	 * this tracker is interested in. Value of this property is of type
+	 * Collection (<? extends String>). <br>
 	 * Property is optional, may be null.
 	 */
-	public static final String PROP_KEY_MATCH_CRITERIA_INTERFACES = "osgi.discovery.interest.interfaces";
+	public static final String	PROP_KEY_MATCH_CRITERIA_INTERFACES	= "osgi.discovery.interest.interfaces";
 
 	/**
-	 * Property describing filters for services this tracker is interested in.
-	 * Value of this property is of type Collection (<? extends String>). See
-	 * {@link ServicePublication} for some standard property keys used to
-	 * publish service metadata. <br>
+	 * Optional ServiceRegistration property which contains filters for services
+	 * this tracker is interested in. <br>
+	 * Note that these filters need to take into account service publication
+	 * properties which are not necessarily the same as properties under which a
+	 * service is registered. See {@link ServicePublication} for some standard
+	 * properties used to publish service metadata. <br>
+	 * The following sample filter will make Discovery notify the
+	 * DiscoveredServiceTracker about services providing interface
+	 * 'my.company.foo' of version '1.0.1.3':<br>
+	 * "(&(service.interface=my.company.foo)(service.interface.version=my.company.foo|1.0.1.3))". <br>
+	 * Value of this property is of type Collection (<? extends String>).
 	 * Property is optional, may be null.
 	 */
-	public static final String PROP_KEY_MATCH_CRITERIA_FILTERS = "osgi.discovery.interest.filters";
+	public static final String	PROP_KEY_MATCH_CRITERIA_FILTERS		= "osgi.discovery.interest.filters";
 
 	/**
 	 * Receives notification that information known to Discovery regarding a
 	 * remote service has changed. <br>
 	 * The tracker is only notified about remote services which fulfill the
 	 * matching criteria, either one of the interfaces or one of the filters,
-	 * provided as properties of this service.
+	 * provided as properties of this service. <br>
+	 * If multiple criteria match, then the tracker is notified about each of
+	 * them. This can be done either by a single notification callback or by
+	 * multiple subsequent ones.
 	 * 
-	 * @param notification
-	 *            the <code>DiscoveredServiceNotification</code> object
-	 *            describing the change.
+	 * @param notification the <code>DiscoveredServiceNotification</code> object
+	 *        describing the change.
 	 */
 	void serviceChanged(DiscoveredServiceNotification notification);
 }
