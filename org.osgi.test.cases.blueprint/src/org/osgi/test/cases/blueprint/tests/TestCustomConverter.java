@@ -29,7 +29,8 @@ public class TestCustomConverter extends DefaultTestBundleControl {
     }
 
     public void testCustomTypeInjection() throws Exception {
-        StandardTestController controller = new StandardTestController(getContext(), getWebServer() + "www/converter_custom_type_injection.jar");
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer() + "www/converter_custom_type_injection.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
 
         // constructor
@@ -43,7 +44,8 @@ public class TestCustomConverter extends DefaultTestBundleControl {
     }
 
     public void testMultiRegisteredConverter() throws Exception {
-        StandardTestController controller = new StandardTestController(getContext(), getWebServer() + "www/converter_multi_registered_converter.jar");
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer() + "www/converter_multi_registered_converter.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
 
         // constructor
@@ -54,19 +56,23 @@ public class TestCustomConverter extends DefaultTestBundleControl {
     }
 
     public void testCustomBooleanConverter() throws Exception {
-        StandardTestController controller = new StandardTestController(getContext(), getWebServer() + "www/converter_custom_boolean_converter.jar");
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer() + "www/converter_custom_boolean_converter.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
 
         // constructor
-        this.addConstructorValidator(startEvents, "compCustomBoolean_cnst", new java.lang.Boolean(true), Boolean.class);
+        startEvents.validateComponentArgument("compCustomBoolean_cnst", "arg1", Boolean.TRUE, Boolean.class);
+        startEvents.addValidator(new ConstructorMetadataValidator("compCustomBoolean_cnst", new TestParameter[] {
+                new StringParameter(Boolean.class) }));
         // property
-        this.addPropertyValidator(startEvents, "compCustomBoolean_prpt", "boolean", new java.lang.Boolean(false), Boolean.class);
+        this.addPropertyValidator(startEvents, "compCustomBoolean_prpt", "boolean", Boolean.FALSE, Boolean.class);
 
         controller.run();
     }
 
     public void testSubclassConverterInstead() throws Exception {
-        StandardTestController controller = new StandardTestController(getContext(), getWebServer() + "www/converter_subclass_converter_instead.jar");
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer() + "www/converter_subclass_converter_instead.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
 
         // constructor
@@ -78,7 +84,8 @@ public class TestCustomConverter extends DefaultTestBundleControl {
     }
 
     public void testConverterCalled() throws Exception {
-        StandardTestController controller = new StandardTestController(getContext(), getWebServer() + "www/converter_called.jar");
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer() + "www/converter_called.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
 
         startEvents.addAssertion("compEuropean_cnst", AssertionService.METHOD_CALLED);
@@ -92,7 +99,7 @@ public class TestCustomConverter extends DefaultTestBundleControl {
         MetadataEventSet startEvents = controller.getStartEvents();
 
         // this will validate that the property got converted to a Boolean properly
-        this.addPropertyValidator(startEvents, "ConversionInjection", "conversion", new java.lang.Boolean(true), Boolean.class);
+        this.addPropertyValidator(startEvents, "ConversionInjection", "conversion", Boolean.TRUE, null);
 
         controller.run();
     }
@@ -104,7 +111,7 @@ public class TestCustomConverter extends DefaultTestBundleControl {
 
         // this will validate that the property got converted to a Boolean properly
         // using the custom Boolean converter
-        this.addPropertyValidator(startEvents, "ConversionInjection", "conversion", new java.lang.Boolean(true), Boolean.class);
+        this.addPropertyValidator(startEvents, "ConversionInjection", "conversion", Boolean.TRUE, null);
 
         controller.run();
     }
