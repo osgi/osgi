@@ -1,0 +1,820 @@
+/*
+ * $Id$
+ *
+ * Copyright (c) The OSGi Alliance (2009). All Rights Reserved.
+ *
+ * Implementation of certain elements of the OSGi Specification may be subject
+ * to third party intellectual property rights, including without limitation,
+ * patent rights (such a third party may or may not be a member of the OSGi
+ * Alliance). The OSGi Alliance is not responsible and shall not be held
+ * responsible in any manner for identifying or failing to identify any or all
+ * such third party intellectual property rights.
+ *
+ * This document and the information contained herein are provided on an "AS IS"
+ * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
+ * HEREIN WILL NOT INFRINGE ANY RIGHTS AND ANY IMPLIED WARRANTIES OF
+ * MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL THE
+ * OSGI ALLIANCE BE LIABLE FOR ANY LOSS OF PROFITS, LOSS OF BUSINESS, LOSS OF
+ * USE OF DATA, INTERRUPTION OF BUSINESS, OR FOR DIRECT, INDIRECT, SPECIAL OR
+ * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
+ *
+ * All Company, brand and product names may be trademarks that are the sole
+ * property of their respective owners. All rights reserved.
+ */
+
+package org.osgi.test.cases.transaction;
+
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.InvalidTransactionException;
+import javax.transaction.RollbackException;
+import javax.transaction.Status;
+import javax.transaction.SystemException;
+import javax.transaction.Transaction;
+import javax.transaction.TransactionManager;
+import javax.transaction.xa.XAException;
+
+import org.osgi.framework.BundleContext;
+import org.osgi.test.cases.transaction.util.TransactionManagerFactory;
+import org.osgi.test.cases.transaction.util.TransactionUtil;
+import org.osgi.test.cases.transaction.util.XAResourceImpl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+/**
+ * transaction manager test, test basic commit, rollback, suspend/resume, with exceptions arisen from xa resources
+ *
+ *
+ */
+
+public class TransactionManagerTest extends DefaultTestBundleControl {
+
+    BundleContext context;
+    TransactionManager tm;
+
+    public void setBundleContext(BundleContext context) {
+        this.context = context;
+        TransactionManagerFactory.setBundleContext(context);
+    }
+
+    public void setUp() throws Exception {
+        tm = TransactionManagerFactory.getTransactionManager();
+        TransactionUtil.startWithCleanTM(tm); 
+    }
+    
+    public void testTransactionManagerFactory() {
+        assertNotNull(TransactionManagerFactory.getTransactionManager());
+    }
+
+    public void testTM001() throws Exception {
+        try
+        {
+            tm.begin();
+            tm.commit();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM003() throws Exception { 
+        try
+        {
+            tm.begin();         
+            tm.getTransaction().enlistResource(new XAResourceImpl());           
+            tm.commit();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM004() throws Exception {
+        try
+        {
+            tm.begin();
+            tm.getTransaction().enlistResource(new XAResourceImpl());           
+            tm.getTransaction().enlistResource(new XAResourceImpl());           
+            tm.commit();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM005() throws Exception {
+        try
+        {
+            tm.commit();
+            fail();
+        }
+        catch (IllegalStateException e)
+        {
+            // As expected
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM006() throws Exception {
+        try
+        {
+            tm.begin(); 
+            tm.setRollbackOnly();
+            tm.commit();
+            fail();
+        }               
+        catch (RollbackException re)
+        {
+            // As expected
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM007() throws Exception {
+        try
+        {
+            tm.begin();
+            final Transaction tx = tm.getTransaction();
+
+            tx.enlistResource(new XAResourceImpl().setCommitAction(XAException.XA_RBROLLBACK));
+
+            try
+            {
+                tm.commit();
+                fail();
+            }
+            catch (RollbackException e)
+            {
+                // As expected
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM008() throws Exception {
+        try
+        {
+            tm.begin();
+            tm.getTransaction().enlistResource(new XAResourceImpl().setPrepareAction(XAException.XA_RBROLLBACK));           
+            tm.getTransaction().enlistResource(new XAResourceImpl());           
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+
+        try
+        {
+            tm.commit();
+            fail();
+        }
+        catch(RollbackException e)
+        {
+            // As expected
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM009() throws Exception {
+        try
+        {
+            tm.begin();
+            tm.getTransaction().enlistResource(new XAResourceImpl().setCommitAction(XAException.XA_HEURRB));           
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+
+        try
+        {
+            tm.commit();
+            fail();
+        }
+        catch(HeuristicRollbackException e)
+        {
+            // As expected
+        }
+        catch (RollbackException e)
+        {
+            // As expected
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+
+        try
+        {
+            assertEquals(tm.getStatus(), Status.STATUS_NO_TRANSACTION);
+        }
+        catch(SystemException e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM010() throws Exception {
+        try
+        {
+            tm.begin();
+            tm.getTransaction().enlistResource(new XAResourceImpl().setCommitAction(XAException.XA_HEURMIX));           
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+
+        try
+        {
+            tm.commit();
+            fail();
+        }
+        catch(HeuristicMixedException e)
+        {
+            // As expected
+        }
+        catch (RollbackException e)
+        {
+            // As expected
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM011() throws Exception {
+        try
+        {
+            tm.begin();
+            tm.commit();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+
+        try
+        {
+            tm.commit();
+            fail();
+        }
+        catch (IllegalStateException e)
+        {
+            // As expected
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM012() throws Exception {
+        try
+        {
+            tm.begin();
+            tm.commit();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+
+        try
+        {
+            tm.rollback();
+            fail();
+        }
+        catch (IllegalStateException e)
+        {
+            // As expected
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM013() throws Exception {
+        try
+        {
+            assertEquals(tm.getStatus(), Status.STATUS_NO_TRANSACTION);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM014() throws Exception {
+        try
+        {
+            tm.begin();
+
+            assertEquals(tm.getStatus(), Status.STATUS_ACTIVE);
+
+            tm.commit();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM015() throws Exception {
+        try
+        {
+            tm.begin();
+            tm.setRollbackOnly();
+
+            assertEquals(tm.getStatus(), Status.STATUS_MARKED_ROLLBACK);
+
+            tm.rollback();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM016() throws Exception {
+        try
+        {
+            tm.begin();
+            tm.commit();
+
+            assertEquals(tm.getStatus(), Status.STATUS_NO_TRANSACTION);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM017() throws Exception {
+        try
+        {
+            tm.begin();
+
+            assertNotNull(tm.getTransaction());
+
+            tm.commit();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM018() throws Exception {
+        try
+        {
+            assertNull(tm.getTransaction());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM019() throws Exception {
+        try
+        {
+            tm.resume(null);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM020() throws Exception {
+        try
+        {
+            tm.begin();
+            final Transaction tx = tm.getTransaction();
+            tm.suspend();
+            tm.resume(tx);
+            tm.commit();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM021() throws Exception {
+        Transaction tx = null;
+        try
+        {
+            tm.begin();
+            tx = tm.getTransaction();
+            tm.commit();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+
+        try
+        {
+            tm.resume(tx);
+            fail();
+        }
+        catch(InvalidTransactionException e)
+        {
+            // As expected
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM022() throws Exception {
+        try
+        {
+            tm.begin();
+            tm.resume(null);
+            fail();
+        }
+        catch (IllegalStateException e)
+        {
+            // As expected
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+
+        try
+        {
+            tm.rollback();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM023() throws Exception {
+        Transaction tx = null;
+        try
+        {
+            tm.begin();
+            tx = tm.suspend();
+
+            tm.begin();
+            tm.resume(tx);
+            fail();
+        }
+        catch (IllegalStateException e)
+        {
+            // As expected
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+
+        try
+        {
+            tm.rollback();
+            tm.resume(tx);
+            tm.rollback();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM024() throws Exception {
+        Transaction tx = null;
+        try
+        {
+            tm.begin();
+            tx = tm.getTransaction();
+            tm.rollback();
+
+            tm.begin();
+            tm.resume(tx);
+            fail();
+        }
+        catch (IllegalStateException e)
+        {
+            // As expected
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+
+        try
+        {
+            tm.rollback();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM025() throws Exception {
+        Transaction tx = null;
+        try
+        {
+            tm.begin();
+            tx = tm.suspend();
+            assertNull(tm.getTransaction());
+            tm.resume(tx);
+            tm.rollback();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM026() throws Exception {  
+        try
+        {
+            tm.begin();
+            tm.rollback();
+
+            assertEquals(tm.getStatus(), Status.STATUS_NO_TRANSACTION);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM027() throws Exception {
+        try
+        {
+            tm.begin();
+            tm.getTransaction().enlistResource(new XAResourceImpl());           
+            tm.rollback();
+
+            assertEquals(tm.getStatus(), Status.STATUS_NO_TRANSACTION);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM028() throws Exception {
+        try
+        {
+            tm.begin();
+            tm.getTransaction().enlistResource(new XAResourceImpl());           
+            tm.getTransaction().enlistResource(new XAResourceImpl());           
+            tm.rollback();
+
+            assertEquals(tm.getStatus(), Status.STATUS_NO_TRANSACTION);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM029() throws Exception {
+        try
+        {
+            tm.begin();
+            tm.setRollbackOnly();           
+            tm.rollback();
+
+            assertEquals(tm.getStatus(), Status.STATUS_NO_TRANSACTION);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM030() throws Exception {
+        try
+        {
+            tm.rollback();
+            fail();
+        }
+        catch (IllegalStateException e)
+        {
+            // As expected
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM031() throws Exception {
+        try
+        {
+            tm.begin();
+            tm.rollback();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+
+        try
+        {
+            tm.rollback();
+            fail();
+        }
+        catch (IllegalStateException e)
+        {
+            // As expected
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM032() throws Exception {
+        try
+        {
+            tm.begin();
+            tm.rollback();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+
+        try
+        {
+            tm.commit();
+            fail();
+        }
+        catch (IllegalStateException e)
+        {
+            // As expected
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM033() throws Exception {
+        try
+        {
+            tm.setRollbackOnly();
+            fail();
+        }
+        catch (IllegalStateException e)
+        {
+            // As expected
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM034() throws Exception {
+        try
+        {
+            tm.begin();
+            tm.setRollbackOnly();
+            tm.setRollbackOnly();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+
+        try
+        {
+            tm.commit();
+            fail();
+        }
+        catch (RollbackException e)
+        {
+            // As expected
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM040() throws Exception {
+        try
+        {
+            tm.setTransactionTimeout(-1);
+            fail();
+        }
+        catch (SystemException e)
+        {
+            // As expected
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM041() throws Exception {
+        try
+        {
+            assertNull(tm.suspend());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testTM042() throws Exception {
+        try
+        {
+            tm.begin();
+            final Transaction tx = tm.suspend();
+            assertNotNull(tx);
+            
+            assertEquals(tm.getStatus(), Status.STATUS_NO_TRANSACTION);
+
+            tm.resume(tx);
+            tm.commit();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+}
