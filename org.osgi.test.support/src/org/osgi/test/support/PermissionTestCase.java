@@ -38,12 +38,14 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.ServiceReference;
 
 public abstract class PermissionTestCase extends OSGiTestCase {
 
@@ -143,6 +145,7 @@ public abstract class PermissionTestCase extends OSGiTestCase {
 		}
 		return result;
 	}
+	
 	public static void assertSerializable(Permission p1) {
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -389,6 +392,46 @@ public abstract class PermissionTestCase extends OSGiTestCase {
 
 		public String toString() {
 			return getName();
+		}
+	}
+	
+	public static ServiceReference newMockServiceReference(Bundle bundle,
+			Map properties) {
+		return (ServiceReference) MockFactory.newMock(ServiceReference.class,
+				new MockServiceReference(bundle, properties));
+	}
+
+	private static class MockServiceReference {
+		private final Bundle	bundle;
+		private final Map		properties;
+
+		MockServiceReference(Bundle bundle, Map properties) {
+			this.bundle = bundle;
+			this.properties = properties;
+		}
+
+		public Bundle getBundle() {
+			return bundle;
+		}
+
+		public Object getProperty(String key) {
+			Object result = properties.get(key);
+			if (result != null) {
+				return result;
+			}
+			for (Iterator iter = properties.keySet().iterator(); iter.hasNext();) {
+				String k = (String) iter.next();
+				if (k.equalsIgnoreCase(key)) {
+					return properties.get(k);
+				}
+			}
+			return null;
+		}
+
+		public String[] getPropertyKeys() {
+			String[] result = new String[properties.size()];
+			properties.keySet().toArray(result);
+			return result;
 		}
 	}
 }
