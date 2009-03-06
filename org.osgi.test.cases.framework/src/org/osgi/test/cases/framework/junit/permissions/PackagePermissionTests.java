@@ -356,7 +356,7 @@ public class PackagePermissionTests extends PermissionTestCase {
 		assertNotImplies(exportonly, export);
 	}
 
-	public void testFiltersPackage() {
+	public void testFiltersName() {
 		PackagePermission p31 = new PackagePermission(
 				"  (package.name  =com.foo.service2)", "import");
 		PackagePermission p32 = new PackagePermission(
@@ -479,7 +479,7 @@ public class PackagePermissionTests extends PermissionTestCase {
 		assertSerializable(pc);
 	}
 
-	public void testFiltersBundles() {
+	public void testFiltersBundle() {
 		PackagePermission p41 = new PackagePermission("(id=2)",
 				"import");
 		PackagePermission p42 = new PackagePermission(
