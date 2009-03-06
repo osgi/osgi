@@ -11,7 +11,7 @@
    <component id="NullReferenceChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.NullReferenceList" init-method="init">
        <constructor-arg value="NullReferenceChecker"/>
        <property name="serviceManager">
-           <service interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
+           <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
        </property>
        <property name="list">
            <ref-list interface="org.osgi.test.cases.blueprint.services.TestServiceOne" availability="optional">

@@ -12,7 +12,7 @@
        <constructor-arg value="SetChecker"/>
        <!-- Not actually used in this test, but having it here enforces initialization order -->
        <property name="serviceManager">
-           <service interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
+           <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
        </property>
        <property name="set">
            <ref-set interface="org.osgi.test.cases.blueprint.services.TestServiceOne"/>

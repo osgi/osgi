@@ -21,7 +21,7 @@
    <component id="ReferenceChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.StaticReferenceSet" init-method="init">
        <constructor-arg value="ReferenceChecker"/>
        <property name="serviceManager">
-           <service interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
+           <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
        </property>
        <property name="set" ref="TestCollection" />
        <property name="useReferences" value="true" />

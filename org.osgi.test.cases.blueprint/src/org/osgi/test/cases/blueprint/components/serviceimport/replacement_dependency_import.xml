@@ -17,7 +17,7 @@
        <constructor-arg value="DependencyChecker"/>
        <property name="one" ref="ServiceOne"/>
        <property name="serviceManager">
-           <service interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
+           <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
        </property>
    </component>
 </components>

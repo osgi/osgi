@@ -79,6 +79,11 @@ public class ReferenceCollectionSortChecker extends ReferenceCollectionChecker {
      * @param order  The expected order of the elements.
      */
     protected void testCollection(Collection source, String[] order) {
+        // we process only one collection to avoid interference from
+        // the service registrations/deregistrations
+        if (source == null) {
+            return;
+        }
         // first, validate the the original sort order
         validateSortOrder(source.iterator(), order);
         // we're going to unregister one of the services, then retest

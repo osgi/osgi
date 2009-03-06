@@ -11,7 +11,7 @@
    <component id="BindUnbindSetChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.BindUnbindSetChecker" init-method="init">
        <constructor-arg value="BindUnbindSetChecker"/>
        <property name="serviceManager">
-           <service interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
+           <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
        </property>
        <property name="list">
            <ref-list interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
@@ -24,7 +24,7 @@
   <component id="BindUnbindListChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.BindUnbindListChecker" init-method="init">
       <constructor-arg value="BindUnbindListChecker"/>
       <property name="serviceManager">
-          <service interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
+          <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
       </property>
       <property name="list">
           <ref-list interface="org.osgi.test.cases.blueprint.services.TestServiceOne">

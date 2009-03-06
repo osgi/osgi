@@ -4,8 +4,7 @@
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
     <description>
-        This is similar to the sorting tests, but uses the same code to test reference collections
-        using multiple interfaces.
+        This is a checker for different sorting combinations.
     </description>
 
     <component id="NameComparator" class="org.osgi.test.cases.blueprint.components.serviceimport.NameComparator"/>
@@ -17,23 +16,11 @@
             <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
         </property>
         <property name="bundleContext" ref="bundleContext"/>
-        <property name="set">
-            <ref-set comparator-ref="NameComparator">
-                <interfaces>
-                    <value>org.osgi.test.cases.blueprint.services.TestServiceOne</value>
-                    <value>org.osgi.test.cases.blueprint.services.TestServiceTwo</value>
-                </interfaces>
-            </ref-set>
-        </property>
         <property name="list">
-            <ref-list>
+            <ref-list interface="org.osgi.test.cases.blueprint.services.TestServiceOne" ordering-basis="service">
                 <comparator>
-                    <ref component="NamedComponent"/>
+                    <ref component="NameComparator"/>
                 </comparator>
-                <interfaces>
-                    <value>org.osgi.test.cases.blueprint.services.TestServiceOne</value>
-                    <value>org.osgi.test.cases.blueprint.services.TestServiceTwo</value>
-                </interfaces>
             </ref-list>
         </property>
         <property name="sortOrder">
@@ -47,4 +34,3 @@
         </property>
     </component>
 </components>
-

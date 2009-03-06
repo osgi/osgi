@@ -1,0 +1,7 @@
+Bundle-SymbolicName:                     ${p}.ref_list_name_sort_reference
+Bundle-Version:                          4.2
+Import-Package:                          ${p}.components.serviceimport, ${p}.services
+Private-Package:                         $(p).build
+Include-Resource					= \
+	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/serviceimport/ref_list_name_sort_reference.xml
+

@@ -878,12 +878,12 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 	/**
 	 * A number of sort/Iterator tests, including some service dynamics elements.
 	 */
-	public void testReferenceCollectionSort() throws Exception {
+	public void testRefSetNameSort() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/reference_collection_sort_import.jar",
+            getWebServer()+"www/ref_set_name_sort.jar",
             getWebServer()+"www/sorting_service_export.jar");
 
         // all of our validation here is on the importing side
@@ -893,9 +893,6 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // we're just looking for the completion methods.  Any assertion failures
         // will terminate the test.
         importStartEvents.addAssertion("ComparatorChecker", AssertionService.COMPONENT_INIT_METHOD);
-        importStartEvents.addAssertion("InvertedComparatorChecker", AssertionService.COMPONENT_INIT_METHOD);
-        importStartEvents.addAssertion("ServiceOrderChecker", AssertionService.COMPONENT_INIT_METHOD);
-        importStartEvents.addAssertion("ServiceReferenceOrderChecker", AssertionService.COMPONENT_INIT_METHOD);
 
         // validate the metadata for the different collection types/comparator combinations
         importStartEvents.addValidator(new PropertyMetadataValidator("ComparatorChecker",
@@ -907,14 +904,28 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
             CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICES)), "set")));
 
-        importStartEvents.addValidator(new PropertyMetadataValidator("ComparatorChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
-            null, List.class,
-            new TestReferenceValue("NameComparator"),
-            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
-            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICES)), "list")));
+        controller.run();
+    }
+
+
+	/**
+	 * A number of sort/Iterator tests, including some service dynamics elements.
+	 */
+	public void testRefSetInvertedNameSort() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/ref_set_inverted_name_sort.jar",
+            getWebServer()+"www/sorting_service_export.jar");
+
+        // all of our validation here is on the importing side
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+
+        // all of the real tests are performed in the instantiated components, so
+        // we're just looking for the completion methods.  Any assertion failures
+        // will terminate the test.
+        importStartEvents.addAssertion("InvertedComparatorChecker", AssertionService.COMPONENT_INIT_METHOD);
 
         importStartEvents.addValidator(new PropertyMetadataValidator("InvertedComparatorChecker",
             new TestProperty(new TestComponentValue(
@@ -925,66 +936,355 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
             CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICES)), "set")));
 
+        controller.run();
+    }
+
+
+	/**
+	 * A number of sort/Iterator tests, including some service dynamics elements.
+	 */
+	public void testRefSetReferenceComparatorSort() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/ref_set_reference_comparator.jar",
+            getWebServer()+"www/sorting_service_export.jar");
+
+        // all of our validation here is on the importing side
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+
+        // all of the real tests are performed in the instantiated components, so
+        // we're just looking for the completion methods.  Any assertion failures
+        // will terminate the test.
+        importStartEvents.addAssertion("ServiceReferenceComparatorChecker", AssertionService.COMPONENT_INIT_METHOD);
+
+        importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceComparatorChecker",
+            new TestProperty(new TestComponentValue(
+            new ReferenceCollection(null,
+            TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
+            null, Set.class,
+            new TestReferenceValue("ServiceReferenceComparator"),
+            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICE_REFERENCES,
+            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICES)), "set")));
+
+        controller.run();
+    }
+
+
+	/**
+	 * A number of sort/Iterator tests, including some service dynamics elements.
+	 */
+	public void testRefSetServiceOrderSort() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/ref_set_service_order.jar",
+            getWebServer()+"www/sorting_service_export.jar");
+
+        // all of our validation here is on the importing side
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+
+        // all of the real tests are performed in the instantiated components, so
+        // we're just looking for the completion methods.  Any assertion failures
+        // will terminate the test.
+        importStartEvents.addAssertion("ServiceOrderChecker", AssertionService.COMPONENT_INIT_METHOD);
+
+
+        importStartEvents.addValidator(new PropertyMetadataValidator("ServiceOrderChecker",
+            new TestProperty(new TestComponentValue(
+            new ReferenceCollection(null,
+            TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
+            null, Set.class,
+            null,
+            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
+            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICES)), "set")));
+
+        controller.run();
+    }
+
+
+	/**
+	 * A number of sort/Iterator tests, including some service dynamics elements.
+	 */
+	public void testRefSetServiceReferenceOrderSort() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/ref_set_servicereference_order.jar",
+            getWebServer()+"www/sorting_service_export.jar");
+
+        // all of our validation here is on the importing side
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+
+        // all of the real tests are performed in the instantiated components, so
+        // we're just looking for the completion methods.  Any assertion failures
+        // will terminate the test.
+        importStartEvents.addAssertion("ServiceReferenceOrderChecker", AssertionService.COMPONENT_INIT_METHOD);
+
+        importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceOrderChecker",
+            new TestProperty(new TestComponentValue(
+            new ReferenceCollection(null,
+            TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
+            null, Set.class,
+            null,
+            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICE_REFERENCES,
+            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICES)), "set")));
+    }
+
+
+	/**
+	 * A number of sort/Iterator tests, including some service dynamics elements.
+	 */
+	public void testRefSetNameReferenceSort() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/ref_set_name_sort_reference.jar",
+            getWebServer()+"www/sorting_service_export.jar");
+
+        // all of our validation here is on the importing side
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+
+        // all of the real tests are performed in the instantiated components, so
+        // we're just looking for the completion methods.  Any assertion failures
+        // will terminate the test.
+        importStartEvents.addAssertion("ComparatorChecker", AssertionService.COMPONENT_INIT_METHOD);
+
+        // validate the metadata for the different collection types/comparator combinations
+        importStartEvents.addValidator(new PropertyMetadataValidator("ComparatorChecker",
+            new TestProperty(new TestComponentValue(
+            new ReferenceCollection(null,
+            TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
+            null, Set.class,
+            new TestReferenceValue("NameComparator"),
+            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
+            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICE_REFERENCES)), "set")));
+
+        controller.run();
+    }
+
+
+	/**
+	 * A number of sort/Iterator tests, including some service dynamics elements.
+	 */
+	public void testRefSetInvertedNameReferenceSort() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/ref_set_inverted_name_sort_reference.jar",
+            getWebServer()+"www/sorting_service_export.jar");
+
+        // all of our validation here is on the importing side
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+
+        // all of the real tests are performed in the instantiated components, so
+        // we're just looking for the completion methods.  Any assertion failures
+        // will terminate the test.
+        importStartEvents.addAssertion("InvertedComparatorChecker", AssertionService.COMPONENT_INIT_METHOD);
+
+        importStartEvents.addValidator(new PropertyMetadataValidator("InvertedComparatorChecker",
+            new TestProperty(new TestComponentValue(
+            new ReferenceCollection(null,
+            TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
+            null, Set.class,
+            new TestReferenceValue("InvertedNameComparator"),
+            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
+            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICE_REFERENCES)), "set")));
+
+        controller.run();
+    }
+
+
+	/**
+	 * A number of sort/Iterator tests, including some service dynamics elements.
+	 */
+	public void testRefSetReferenceComparatorReferenceSort() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/ref_set_reference_comparator_reference.jar",
+            getWebServer()+"www/sorting_service_export.jar");
+
+        // all of our validation here is on the importing side
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+
+        // all of the real tests are performed in the instantiated components, so
+        // we're just looking for the completion methods.  Any assertion failures
+        // will terminate the test.
+        importStartEvents.addAssertion("ServiceReferenceComparatorChecker", AssertionService.COMPONENT_INIT_METHOD);
+
+        importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceComparatorChecker",
+            new TestProperty(new TestComponentValue(
+            new ReferenceCollection(null,
+            TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
+            null, Set.class,
+            new TestReferenceValue("ServiceReferenceComparator"),
+            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICE_REFERENCES,
+            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICE_REFERENCES)), "set")));
+
+        controller.run();
+    }
+
+
+	/**
+	 * A number of sort/Iterator tests, including some service dynamics elements.
+	 */
+	public void testRefSetServiceOrderReferenceSort() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/ref_set_service_order_reference.jar",
+            getWebServer()+"www/sorting_service_export.jar");
+
+        // all of our validation here is on the importing side
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+
+        // all of the real tests are performed in the instantiated components, so
+        // we're just looking for the completion methods.  Any assertion failures
+        // will terminate the test.
+        importStartEvents.addAssertion("ServiceOrderChecker", AssertionService.COMPONENT_INIT_METHOD);
+
+
+        importStartEvents.addValidator(new PropertyMetadataValidator("ServiceOrderChecker",
+            new TestProperty(new TestComponentValue(
+            new ReferenceCollection(null,
+            TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
+            null, Set.class,
+            null,
+            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
+            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICE_REFERENCES)), "set")));
+
+        controller.run();
+    }
+
+
+	/**
+	 * A number of sort/Iterator tests, including some service dynamics elements.
+	 */
+	public void testRefSetServiceReferenceOrderReferenceSort() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/ref_set_servicereference_order_reference.jar",
+            getWebServer()+"www/sorting_service_export.jar");
+
+        // all of our validation here is on the importing side
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+
+        // all of the real tests are performed in the instantiated components, so
+        // we're just looking for the completion methods.  Any assertion failures
+        // will terminate the test.
+        importStartEvents.addAssertion("ServiceReferenceOrderChecker", AssertionService.COMPONENT_INIT_METHOD);
+
+        importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceOrderChecker",
+            new TestProperty(new TestComponentValue(
+            new ReferenceCollection(null,
+            TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
+            null, Set.class,
+            null,
+            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICE_REFERENCES,
+            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICE_REFERENCES)), "set")));
+    }
+
+
+	/**
+	 * A number of sort/Iterator tests, including some service dynamics elements.
+	 */
+	public void testRefListNameSort() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/ref_list_name_sort.jar",
+            getWebServer()+"www/sorting_service_export.jar");
+
+        // all of our validation here is on the importing side
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+
+        // all of the real tests are performed in the instantiated components, so
+        // we're just looking for the completion methods.  Any assertion failures
+        // will terminate the test.
+        importStartEvents.addAssertion("ComparatorChecker", AssertionService.COMPONENT_INIT_METHOD);
+
+        // validate the metadata for the different collection types/comparator combinations
+        importStartEvents.addValidator(new PropertyMetadataValidator("ComparatorChecker",
+            new TestProperty(new TestComponentValue(
+            new ReferenceCollection(null,
+            TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
+            null, List.class,
+            new TestReferenceValue("NameComparator"),
+            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
+            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICES)), "list")));
+
+        controller.run();
+    }
+
+
+	/**
+	 * A number of sort/Iterator tests, including some service dynamics elements.
+	 */
+	public void testRefListInvertedNameSort() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/ref_list_inverted_name_sort.jar",
+            getWebServer()+"www/sorting_service_export.jar");
+
+        // all of our validation here is on the importing side
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+
+        // all of the real tests are performed in the instantiated components, so
+        // we're just looking for the completion methods.  Any assertion failures
+        // will terminate the test.
+        importStartEvents.addAssertion("InvertedComparatorChecker", AssertionService.COMPONENT_INIT_METHOD);
+
         importStartEvents.addValidator(new PropertyMetadataValidator("InvertedComparatorChecker",
             new TestProperty(new TestComponentValue(
             new ReferenceCollection(null,
             TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
             null, List.class,
-            new TestReferenceValue("InvertedNamedComparator"),
+            new TestReferenceValue("InvertedNameComparator"),
             CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
             CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICES)), "list")));
+
+        controller.run();
+    }
+
+
+	/**
+	 * A number of sort/Iterator tests, including some service dynamics elements.
+	 */
+	public void testRefListReferenceComparatorSort() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/ref_list_reference_comparator.jar",
+            getWebServer()+"www/sorting_service_export.jar");
+
+        // all of our validation here is on the importing side
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+
+        // all of the real tests are performed in the instantiated components, so
+        // we're just looking for the completion methods.  Any assertion failures
+        // will terminate the test.
+        importStartEvents.addAssertion("ServiceReferenceComparatorChecker", AssertionService.COMPONENT_INIT_METHOD);
 
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceComparatorChecker",
             new TestProperty(new TestComponentValue(
             new ReferenceCollection(null,
             TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
-            null, Set.class,
-            new TestReferenceValue("ServiceReferenceComparator"),
-            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICE_REFERENCES,
-            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICES)), "set")));
-
-        importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceComparatorChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
             null, List.class,
             new TestReferenceValue("ServiceReferenceComparator"),
-            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICE_REFERENCES,
-            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICES)), "list")));
-
-        importStartEvents.addValidator(new PropertyMetadataValidator("ServiceOrderChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
-            null, Set.class,
-            null,
-            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
-            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICES)), "set")));
-
-        importStartEvents.addValidator(new PropertyMetadataValidator("ServiceOrderChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
-            null, List.class,
-            null,
-            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
-            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICES)), "list")));
-
-        importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceOrderChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
-            null, Set.class,
-            null,
-            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICE_REFERENCES,
-            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICES)), "set")));
-
-        importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceOrderChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
-            null, List.class,
-            null,
             CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICE_REFERENCES,
             CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICES)), "list")));
 
@@ -993,15 +1293,77 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
 
 	/**
-	 * A number of sort/Iterator tests, including some service dynamics, uses ServiceReference
-     * member-type.
+	 * A number of sort/Iterator tests, including some service dynamics elements.
 	 */
-	public void testServiceReferenceCollectionSort() throws Exception {
+	public void testRefListServiceOrderSort() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/reference_collection_sort_ref_import.jar",
+            getWebServer()+"www/ref_list_service_order.jar",
+            getWebServer()+"www/sorting_service_export.jar");
+
+        // all of our validation here is on the importing side
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+
+        // all of the real tests are performed in the instantiated components, so
+        // we're just looking for the completion methods.  Any assertion failures
+        // will terminate the test.
+        importStartEvents.addAssertion("ServiceOrderChecker", AssertionService.COMPONENT_INIT_METHOD);
+
+
+        importStartEvents.addValidator(new PropertyMetadataValidator("ServiceOrderChecker",
+            new TestProperty(new TestComponentValue(
+            new ReferenceCollection(null,
+            TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
+            null, List.class,
+            null,
+            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
+            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICES)), "list")));
+
+        controller.run();
+    }
+
+
+	/**
+	 * A number of sort/Iterator tests, including some service dynamics elements.
+	 */
+	public void testRefListServiceReferenceOrderSort() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/ref_list_servicereference_order.jar",
+            getWebServer()+"www/sorting_service_export.jar");
+
+        // all of our validation here is on the importing side
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+
+        // all of the real tests are performed in the instantiated components, so
+        // we're just looking for the completion methods.  Any assertion failures
+        // will terminate the test.
+        importStartEvents.addAssertion("ServiceReferenceOrderChecker", AssertionService.COMPONENT_INIT_METHOD);
+
+        importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceOrderChecker",
+            new TestProperty(new TestComponentValue(
+            new ReferenceCollection(null,
+            TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
+            null, List.class,
+            null,
+            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICE_REFERENCES,
+            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICES)), "list")));
+    }
+
+
+	/**
+	 * A number of sort/Iterator tests, including some service dynamics elements.
+	 */
+	public void testRefListNameReferenceSort() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/ref_list_name_sort_reference.jar",
             getWebServer()+"www/sorting_service_export.jar");
 
         // all of our validation here is on the importing side
@@ -1011,102 +1373,145 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // we're just looking for the completion methods.  Any assertion failures
         // will terminate the test.
         importStartEvents.addAssertion("ComparatorChecker", AssertionService.COMPONENT_INIT_METHOD);
-        importStartEvents.addAssertion("InvertedComparatorChecker", AssertionService.COMPONENT_INIT_METHOD);
-        importStartEvents.addAssertion("ServiceOrderChecker", AssertionService.COMPONENT_INIT_METHOD);
-        importStartEvents.addAssertion("ServiceReferenceOrderChecker", AssertionService.COMPONENT_INIT_METHOD);
 
         // validate the metadata for the different collection types/comparator combinations
         importStartEvents.addValidator(new PropertyMetadataValidator("ComparatorChecker",
             new TestProperty(new TestComponentValue(
             new ReferenceCollection(null,
             TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
-            null, Set.class,
-            new TestReferenceValue("NameComparator"),
-            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
-            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICE_REFERENCES)), "set")));
-
-        importStartEvents.addValidator(new PropertyMetadataValidator("ComparatorChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
             null, List.class,
             new TestReferenceValue("NameComparator"),
             CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
             CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICE_REFERENCES)), "list")));
 
+        controller.run();
+    }
+
+
+	/**
+	 * A number of sort/Iterator tests, including some service dynamics elements.
+	 */
+	public void testRefListInvertedNameReferenceSort() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/ref_list_inverted_name_sort_reference.jar",
+            getWebServer()+"www/sorting_service_export.jar");
+
+        // all of our validation here is on the importing side
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+
+        // all of the real tests are performed in the instantiated components, so
+        // we're just looking for the completion methods.  Any assertion failures
+        // will terminate the test.
+        importStartEvents.addAssertion("InvertedComparatorChecker", AssertionService.COMPONENT_INIT_METHOD);
+
         importStartEvents.addValidator(new PropertyMetadataValidator("InvertedComparatorChecker",
             new TestProperty(new TestComponentValue(
             new ReferenceCollection(null,
             TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
-            null, Set.class,
+            null, List.class,
             new TestReferenceValue("InvertedNameComparator"),
             CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
-            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICE_REFERENCES)), "set")));
-
-        importStartEvents.addValidator(new PropertyMetadataValidator("InvertedComparatorChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
-            null, List.class,
-            new TestReferenceValue("InvertedNamedComparator"),
-            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
             CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICE_REFERENCES)), "list")));
+
+        controller.run();
+    }
+
+
+	/**
+	 * A number of sort/Iterator tests, including some service dynamics elements.
+	 */
+	public void testRefListReferenceComparatorReferenceSort() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/ref_list_reference_comparator_reference.jar",
+            getWebServer()+"www/sorting_service_export.jar");
+
+        // all of our validation here is on the importing side
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+
+        // all of the real tests are performed in the instantiated components, so
+        // we're just looking for the completion methods.  Any assertion failures
+        // will terminate the test.
+        importStartEvents.addAssertion("ServiceReferenceComparatorChecker", AssertionService.COMPONENT_INIT_METHOD);
 
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceComparatorChecker",
             new TestProperty(new TestComponentValue(
             new ReferenceCollection(null,
             TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
-            null, Set.class,
-            new TestReferenceValue("ServiceReferenceComparator"),
-            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICE_REFERENCES,
-            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICE_REFERENCES)), "set")));
-
-        importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceComparatorChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
             null, List.class,
             new TestReferenceValue("ServiceReferenceComparator"),
-            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICE_REFERENCES,
-            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICE_REFERENCES)), "list")));
-
-        importStartEvents.addValidator(new PropertyMetadataValidator("ServiceOrderChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
-            null, Set.class,
-            null,
-            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
-            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICE_REFERENCES)), "set")));
-
-        importStartEvents.addValidator(new PropertyMetadataValidator("ServiceOrderChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
-            null, List.class,
-            null,
-            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
-            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICE_REFERENCES)), "list")));
-
-        importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceOrderChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
-            null, Set.class,
-            null,
-            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICE_REFERENCES,
-            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICE_REFERENCES)), "set")));
-
-        importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceOrderChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
-            null, List.class,
-            null,
             CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICE_REFERENCES,
             CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICE_REFERENCES)), "list")));
 
         controller.run();
+    }
+
+
+	/**
+	 * A number of sort/Iterator tests, including some service dynamics elements.
+	 */
+	public void testRefListServiceOrderReferenceSort() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/ref_list_service_order_reference.jar",
+            getWebServer()+"www/sorting_service_export.jar");
+
+        // all of our validation here is on the importing side
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+
+        // all of the real tests are performed in the instantiated components, so
+        // we're just looking for the completion methods.  Any assertion failures
+        // will terminate the test.
+        importStartEvents.addAssertion("ServiceOrderChecker", AssertionService.COMPONENT_INIT_METHOD);
+
+
+        importStartEvents.addValidator(new PropertyMetadataValidator("ServiceOrderChecker",
+            new TestProperty(new TestComponentValue(
+            new ReferenceCollection(null,
+            TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
+            null, List.class,
+            null,
+            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
+            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICE_REFERENCES)), "list")));
+
+        controller.run();
+    }
+
+
+	/**
+	 * A number of sort/Iterator tests, including some service dynamics elements.
+	 */
+	public void testRefListServiceReferenceOrderReferenceSort() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/ref_list_servicereference_order_reference.jar",
+            getWebServer()+"www/sorting_service_export.jar");
+
+        // all of our validation here is on the importing side
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+
+        // all of the real tests are performed in the instantiated components, so
+        // we're just looking for the completion methods.  Any assertion failures
+        // will terminate the test.
+        importStartEvents.addAssertion("ServiceReferenceOrderChecker", AssertionService.COMPONENT_INIT_METHOD);
+
+        importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceOrderChecker",
+            new TestProperty(new TestComponentValue(
+            new ReferenceCollection(null,
+            TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
+            null, List.class,
+            null,
+            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICE_REFERENCES,
+            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICE_REFERENCES)), "list")));
     }
 
 
