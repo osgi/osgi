@@ -39,6 +39,16 @@ public class TestParameter extends Assert {
     // a potential explicit parameter index postion
     protected int index;
 
+    public TestParameter(String value) {
+        // the parameter type is inferred from specified position
+        this(new TestStringValue(value), null, -1);
+    }
+
+    public TestParameter(String value, int index) {
+        // the parameter type is inferred from specified position
+        this(new TestStringValue(value), null, index);
+    }
+
     public TestParameter(TestValue parameterType) {
         // the parameter type is inferred from specified position
         this(parameterType, null, -1);

@@ -44,6 +44,12 @@ public class TestProperty extends Assert {
     }
 
 
+    public TestProperty(String value, String propertyName) {
+        this.propertyType = new TestStringValue(value);
+        this.propertyName = propertyName;
+    }
+
+
     /**
      * Validate a ParameterSpecification against an expected value.
      *
