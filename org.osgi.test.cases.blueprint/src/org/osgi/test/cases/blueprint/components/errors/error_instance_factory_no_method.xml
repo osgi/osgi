@@ -8,7 +8,7 @@
    </component>
 
 
-   <component id="compFactory" factory-component="compFactory">
+   <component id="compFactory" factory-component="compFactory"">
      <!-- collaborators and configuration for this component go here -->
    </component>
 </components>

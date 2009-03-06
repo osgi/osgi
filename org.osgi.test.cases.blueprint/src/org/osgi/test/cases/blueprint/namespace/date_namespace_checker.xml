@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:date="http://www.osgi.org/schema/blueprint/test/date/v1.0.0"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <date:dateformat id="format1" pattern="yyyy.MM.dd G 'at' HH:mm:ss z"/>
+    <date:dateformat id="format2" pattern="yyyy-MM-dd HH:mm" lenient="true"/>
+
+   <component id="checker1" class="org.osgi.test.cases.blueprint.components.namespace.DateChecker">
+       <constructor-arg value="checker1"/>
+       <constructor-arg>
+           <component class="java.text.SimpleDateFormat">
+                <constructor-arg value="yyyy.MM.dd G 'at' HH:mm:ss z"/>
+           </component>
+       </constructor-arg>
+       <property name="format" ref="format1"/>
+   </component>
+
+   <component id="checker2" class="org.osgi.test.cases.blueprint.components.namespace.DateChecker">
+       <constructor-arg value="checker2"/>
+       <constructor-arg>
+           <component class="java.text.SimpleDateFormat">
+                <constructor-arg value="yyyy-MM-dd HH:mm"/>
+                <property name="lenient" value="true"/>
+           </component>
+       </constructor-arg>
+       <property name="format" ref="format2"/>
+   </component>
+
+   <component id="checker3" class="org.osgi.test.cases.blueprint.components.namespace.DateChecker">
+       <constructor-arg value="checker3"/>
+       <constructor-arg>
+           <component class="java.text.SimpleDateFormat">
+                <constructor-arg value="yyyy-MM-dd HH:mm"/>
+                <property name="lenient" value="false"/>
+           </component>
+       </constructor-arg>
+       <property name="format">
+           <!-- tests use as an inner component and also tests the boolean type conversion
+                when used indirectly -->
+           <date:dateformat id="format2" pattern="yyyy-MM-dd HH:mm" lenient="no"/>
+       </property>
+   </component>
+</components>
+

@@ -25,55 +25,38 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.blueprint.namespace;
+package org.osgi.test.cases.blueprint.components.serviceimport;
 
-import java.util.Properties;
-import java.util.Iterator;
+import java.text.SimpleDateFormat;
 
-import org.osgi.service.blueprint.reflect.*;
+import org.osgi.test.cases.blueprint.services.AssertionService;
+import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 
 
 /**
- * A ComponentMetadata implementation class used for
- * testing NamespaceHandler functions.  The blueprint
- * service implementation must be capable of receiving
- * different implementations of these classes back
- * without error, so we'll generally perform deep
- * copy operations and replace all of the interfaces
- * in the metadata with our replacement versions.
- * As long as we have a true implementation, this
- * should work ok.
+ * A base class for implementing components that test service dynamics by causing
+ * changes in the registration state of services.  This class is injected with a
+ * ServiceManager reference that can be used to register/deregister services.
+ * The subclasses use the init() method to trigger state changes that the test driver
+ * code will validate via the events the state changes cause (or possibly even
+ * directly in the init() code).
  */
-public class TypedStringValueImpl implements TypedStringValue {
-    private String stringValue;
-    private String typeName;
+public class DateChecker extends BaseTestComponent {
+    // the target for this format check
+    protected SimpleDateFormat target;
 
-    public TypedStringValueImpl(String value) {
-        this.stringValue = value;
-        this.typeName = null;
-    }
-
-    public TypedStringValueImpl(String value, String name) {
-        this.stringValue = value;
-        this.typeName = name;
-    }
-
-    public TypedStringValueImpl(TypedStringValue source) {
-        this.stringValue = source.getStringValue();
-        this.typeName = source.getTypeName();
+    public DateChecker(String componentId, SimpleDateFormat target) {
+        super(componentId);
     }
 
     /**
-     * The string value (unconverted) of this value).
+     * Inject a formatter property, which is checked against
+     * a reference instance created via normal blueprint means.
+     *
+     * @param format The injected format object.
      */
-    public String getStringValue() {
-        return stringValue;
-    }
-    /**
-     * The name of the type to which this value should be coerced. May be null.
-     */
-    public String getTypeName() {
-        return typeName;
+    public void setFormat(SimpleDateFormat format) {
+        AssertionService.assertEquals(this, "Mismatch in date format objects", target, format);
     }
 }
 

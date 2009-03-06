@@ -52,6 +52,11 @@ public class PropertyInjectionMetadataImpl implements PropertyInjectionMetadata 
     public PropertyInjectionMetadataImpl() {
     }
 
+    public PropertyInjectionMetadataImpl(String name, Value value) {
+        this.name = name;
+        this.value = value;
+    }
+
     public PropertyInjectionMetadataImpl(PropertyInjectionMetadata source) {
         name = source.getName();
         value = NamespaceUtil.cloneValue(source.getValue());

@@ -1,6 +1,6 @@
 Bundle-SymbolicName:                     ${p}.placeholder_prefix_and_suffix
 Bundle-Version:                          4.2
-Import-Package:                          ${p}.components.cmsupport, ${p}.services
+Import-Package:                          ${p}.components.cmsupport, ${p}.services, ${p}.components.injection
 Private-Package:                         $(p).build
 Include-Resource					= \
 	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/cmsupport/placeholder_prefix_and_suffix.xml

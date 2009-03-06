@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://www.osgi.org/schema/test/date"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:osgi="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    targetNamespace="http://www.osgi.org/schema/blueprint/test/date/v1.0.0"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified">
+
+   <xsd:import namespace="http://www.osgi.org/xmlns/blueprint/v1.0.0"/>
+
+   <xsd:element name="dateformat">
+      <xsd:complexType>
+         <xsd:complexContent>
+            <xsd:extension base="osgi:identifiedType">
+               <xsd:attribute name="lenient" type="xsd:boolean"/>
+               <xsd:attribute name="pattern" type="xsd:string" use="required"/>
+            </xsd:extension>
+         </xsd:complexContent>
+      </xsd:complexType>
+   </xsd:element>
+
+</xsd:schema>
+

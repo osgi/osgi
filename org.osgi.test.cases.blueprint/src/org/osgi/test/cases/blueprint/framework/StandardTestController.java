@@ -41,6 +41,7 @@ import org.osgi.framework.BundleContext;
 public class StandardTestController extends BaseTestController {
     // our list of managed bundles.  This stores the module metadata object associated with the bundle.
     protected Map bundleList = new HashMap();
+
     // this is our startup phase.  General test progression
     // is start the bundle, wait for all of our expected
     // events.

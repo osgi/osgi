@@ -1,0 +1,8 @@
+Bundle-SymbolicName:                     ${p}.date_namespace_handler
+Bundle-Version:                          4.2
+Import-Package:                          ${p}.namespace, ${p}.services, org.w3c.dom
+Private-Package:                         $(p).build
+Include-Resource					= \
+	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/namespace/date_namespace_handler.xml, \
+        schemas/date.xsd=src/org/osgi/test/cases/blueprint/namespace/date.xsd
+

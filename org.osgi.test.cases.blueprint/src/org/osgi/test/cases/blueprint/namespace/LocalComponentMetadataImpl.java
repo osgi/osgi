@@ -37,6 +37,7 @@ import org.osgi.service.blueprint.reflect.ConstructorInjectionMetadata;
 import org.osgi.service.blueprint.reflect.LocalComponentMetadata;
 import org.osgi.service.blueprint.reflect.MethodInjectionMetadata;
 import org.osgi.service.blueprint.reflect.PropertyInjectionMetadata;
+import org.osgi.service.blueprint.reflect.ParameterSpecification;
 import org.osgi.service.blueprint.reflect.Value;
 
 
@@ -105,6 +106,30 @@ public class LocalComponentMetadataImpl extends ComponentMetadataImpl implements
     public ConstructorInjectionMetadata getConstructorInjectionMetadata() {
         return constructorInjection;
     }
+
+
+    /**
+     * A couple of convenience methods to make components
+     * easier to construct.
+     *
+     * @param spec   The Parameter spect to add.
+     */
+    public void addConstructorArg(ParameterSpecification spec) {
+		constructorInjection.addParameterSpecification(spec);
+	}
+
+    /**
+     * convenience method for String-based values
+     *
+     * @param value  The string source value.
+     * @param index  The index position
+     */
+	public void addConstructorArg(String value, int index) {
+        ParameterSpecificationImpl spec = new ParameterSpecificationImpl();
+        spec.setIndex(index);
+        spec.setValue(new TypedStringValueImpl(value));
+	}
+
 
     /**
      * The name of the class type specified for this component.
@@ -198,11 +223,17 @@ public class LocalComponentMetadataImpl extends ComponentMetadataImpl implements
         return propertyInjection;
     }
 
-    public void addPropertyInjectionMetadata(PropertyInjectionMetadata m) {
+    public void addProperty(PropertyInjectionMetadata m) {
         propertyInjection.add(m);
     }
 
+    public void addProperty(String name, Value value) {
+        addProperty(new PropertyInjectionMetadataImpl(name, value));
+    }
 
+    public void addProperty(String name, String value) {
+        addProperty(new PropertyInjectionMetadataImpl(name, new TypedStringValueImpl(value)));
+    }
 
     /**
      * The metadata describing how to create the component instance by invoking a

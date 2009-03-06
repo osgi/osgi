@@ -75,6 +75,11 @@ public class BaseTestController implements EventHandler, ModuleContextListener, 
     protected BundleContext testContext;
     // our list of test phases to be executed.
     protected List testPhases = new LinkedList();
+    // optional test phases created for getting service bundles initialized before
+    // actual testing occurs.  This is necessary for things like namespace handlers where
+    // the service must be available before parsing of the config files begins.
+    protected TestPhase setupPhase = null;
+    protected TestPhase cleanupPhase = null;
     // the current testphase being executed.
     protected TestPhase activeTestPhase = null;
 
@@ -108,6 +113,59 @@ public class BaseTestController implements EventHandler, ModuleContextListener, 
             extenderBundle = (Bundle)props.get(ModuleContextEventConstants.EXTENDER_BUNDLE);
         }
         return extenderBundle;
+    }
+
+
+    /**
+     * Add a setup bundle that must be installed and
+     * initialialized before testing can begin.  This
+     * bundle will be installed, started, and terminated
+     * at test completion.
+     *
+     * @param name   The name of the bundle to add.
+     */
+    public void addSetupBundle(String bundleName) throws Exception {
+        // make sure we have these additional phases to work with
+        createSetupPhases();
+        // first install this
+        Bundle testBundle = installBundle(bundleName);
+        // This uses a plain set of events and actions.  Of primary importance is catching
+        // start failures and waiting for module context creating to complete.  This
+        // performs no metadata-type operations
+        // in each phase.  Add the events to each list
+        EventSet setupEvents = new EventSet(testContext, testBundle);
+        // we add an initializer to start our bundle when the test starts
+        setupEvents.addInitializer(new TestBundleStarter(testBundle));
+        // this should be the last event that will indicate successful completion
+        setupEvents.addServiceEvent("REGISTERED", "org.osgi.service.blueprint.context.ModuleContext");
+        setupPhase.addEventSet(setupEvents);
+
+        EventSet cleanupEvents = new EventSet(testContext, testBundle);
+        // we start this test phase out by stopping the bundle.  Everything else flows
+        // from that.
+        cleanupEvents.addInitializer(new TestBundleStopper(testBundle));
+        // we always expect to see a stopped bundle event at the end.  We need at least one
+        // event to wake us up to kill the timeout
+        cleanupEvents.addBundleEvent("STOPPED");
+        cleanupPhase.addEventSet(cleanupEvents);
+    }
+
+
+    /**
+     * Some tests require some additional setup/teardown
+     * work.  This is frequently in the form of installed
+     * blueprint bundles that must be fully initialized
+     * before processing can proceed.  This also generally
+     * means there's some cleanup required post-test as well.
+     * This creates these additional hidden test phases
+     * that handle the out-of-band event handling required.
+     */
+    protected void createSetupPhases() {
+        // only do this once
+        if (setupPhase == null) {
+            setupPhase = new TestPhase(testContext, timeout);
+            cleanupPhase = new TestPhase(testContext, timeout);
+        }
     }
 
 
@@ -163,6 +221,18 @@ public class BaseTestController implements EventHandler, ModuleContextListener, 
      * @exception Exception
      */
     protected void runTest() throws Exception {
+        // do we have a setup phase to process?  Add it to the front of
+        // the run list
+        if (setupPhase != null) {
+            testPhases.add(0, setupPhase);
+        }
+        // and the same for the cleanup phase
+        if (cleanupPhase != null) {
+            // this is always done at the very end
+            testPhases.add(cleanupPhase);
+        }
+
+
         Iterator i = testPhases.iterator();
         // run each of the phases in the prescribed order.
         while (i.hasNext()) {
