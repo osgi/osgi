@@ -128,7 +128,13 @@ public final class PackagePermission extends BasicPermission {
 	 * 
 	 * <p>
 	 * The name is specified as a normal Java package name: a dot-separated
-	 * string. Wildcards may be used. For example:
+	 * string. Wildcards may be used.
+	 * 
+	 * <pre>
+	 * name ::= &lt;package name&gt; | &lt;package name ending in &quot;.*&quot;&gt; | *
+	 * </pre>
+	 * 
+	 * Examples:
 	 * 
 	 * <pre>
 	 * org.osgi.service.http

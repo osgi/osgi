@@ -34,12 +34,19 @@ import java.util.Map;
  * fragments.
  * 
  * <p>
- * A bundle symbolic name defines a unique fully qualified name.
- * <p>
- * For example:
+ * A bundle symbolic name defines a unique fully qualified name. Wildcards may
+ * be used.
+ * 
+ * <pre>
+ * name ::= &lt;symbolic name&gt; | &lt;symbolic name ending in &quot;.*&quot;&gt; | *
+ * </pre>
+ * 
+ * Examples:
  * 
  * <pre>
  * org.osgi.example.bundle
+ * org.osgi.example.*
+ * *
  * </pre>
  * 
  * <p>
@@ -111,9 +118,9 @@ public final class BundlePermission extends BasicPermission {
 	 * for that symbolic name; a bundle that specifies a fragment host must have
 	 * the appropriate <code>BundlePermission</code> for that symbolic name.
 	 * 
-	 * @param symbolicName the bundle symbolic name.
-	 * @param actions <code>PROVIDE</code>,<code>REQUIRE</code>,
-	 *        <code>HOST</code>,<code>FRAGMENT</code> (canonical order).
+	 * @param symbolicName The bundle symbolic name.
+	 * @param actions <code>provide</code>,<code>require</code>,
+	 *        <code>host</code>,<code>fragment</code> (canonical order).
 	 */
 	public BundlePermission(String symbolicName, String actions) {
 		this(symbolicName, parseActions(actions));
@@ -285,20 +292,19 @@ public final class BundlePermission extends BasicPermission {
 	 *       x.y,&quot;provide&quot; -&gt; x.y.z, &quot;provide&quot;  is false
 	 * </pre>
 	 * 
-	 * @param p The target permission to interrogate.
+	 * @param p The requested permission.
 	 * @return <code>true</code> if the specified <code>BundlePermission</code>
 	 *         action is implied by this object; <code>false</code> otherwise.
 	 */
 	public boolean implies(Permission p) {
-		if (p instanceof BundlePermission) {
-			BundlePermission requested = (BundlePermission) p;
-
-			int requestedMask = requested.getActionsMask();
-			return ((getActionsMask() & requestedMask) == requestedMask)
-					&& super.implies(p);
+		if (!(p instanceof BundlePermission)) {
+			return false;
 		}
+		BundlePermission requested = (BundlePermission) p;
 
-		return false;
+		int requestedMask = requested.getActionsMask();
+		return ((getActionsMask() & requestedMask) == requestedMask)
+				&& super.implies(p);
 	}
 
 	/**
@@ -307,8 +313,8 @@ public final class BundlePermission extends BasicPermission {
 	 * 
 	 * <p>
 	 * Always returns present <code>BundlePermission</code> actions in the
-	 * following order: <code>PROVIDE</code>,<code>REQUIRE</code>,
-	 * <code>HOST</code>,<code>FRAGMENT.
+	 * following order: <code>provide</code>, <code>require</code>,
+	 * <code>host</code>, <code>fragment</code>.
 	 * 
 	 * @return Canonical string representation of the <code>BundlePermission
 	 *         </code> actions.
