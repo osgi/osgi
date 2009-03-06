@@ -18,12 +18,16 @@ package org.osgi.framework;
 
 import java.io.IOException;
 import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.ObjectStreamField;
 import java.security.AccessController;
 import java.security.BasicPermission;
 import java.security.Permission;
 import java.security.PermissionCollection;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -565,31 +569,31 @@ public final class PackagePermission extends BasicPermission {
 	 */
 	private Dictionary getProperties() {
 		Dictionary result = properties;
-		if (result == null) {
-			final Dictionary dict = new Hashtable(5);
-			if (bundle != null) {
-				AccessController.doPrivileged(new PrivilegedAction() {
-					public Object run() {
-						dict.put("id", new Long(bundle.getBundleId()));
-						dict.put("location", bundle.getLocation());
-						String name = bundle.getSymbolicName();
-						if (name != null) {
-							dict.put("name", name);
-						}
-						SignerProperty signer = new SignerProperty(bundle);
-						if (signer.isBundleSigned()) {
-							dict.put("signer", signer);
-						}
-						return null;
-					}
-				});
-			}
-			if (getFilter() == null) {
-				dict.put("package.name", getName());
-			}
-			properties = result = dict;
+		if (result != null) {
+			return result;
 		}
-		return result;
+		final Dictionary dict = new Hashtable(5);
+		if (getFilter() == null) {
+			dict.put("package.name", getName());
+		}
+		if (bundle != null) {
+			AccessController.doPrivileged(new PrivilegedAction() {
+				public Object run() {
+					dict.put("id", new Long(bundle.getBundleId()));
+					dict.put("location", bundle.getLocation());
+					String name = bundle.getSymbolicName();
+					if (name != null) {
+						dict.put("name", name);
+					}
+					SignerProperty signer = new SignerProperty(bundle);
+					if (signer.isBundleSigned()) {
+						dict.put("signer", signer);
+					}
+					return null;
+				}
+			});
+		}
+		return properties = dict;
 	}
 }
 
@@ -606,10 +610,9 @@ final class PackagePermissionCollection extends PermissionCollection {
 	/**
 	 * Table of permissions with names.
 	 * 
-	 * @serial
 	 * @GuardedBy this
 	 */
-	private final Hashtable	permissions;
+	private transient Map	permissions;
 
 	/**
 	 * Boolean saying if "*" is in the collection.
@@ -625,13 +628,13 @@ final class PackagePermissionCollection extends PermissionCollection {
 	 * @serial
 	 * @GuardedBy this
 	 */
-	private HashMap			filterPermissions;
+	private Map				filterPermissions;
 
 	/**
 	 * Create an empty PackagePermissions object.
 	 */
 	public PackagePermissionCollection() {
-		permissions = new Hashtable();
+		permissions = new HashMap();
 		all_allowed = false;
 	}
 
@@ -670,7 +673,7 @@ final class PackagePermissionCollection extends PermissionCollection {
 			if (f != null) {
 				pc = filterPermissions;
 				if (pc == null) {
-					pc = filterPermissions = new HashMap();
+					filterPermissions = pc = new HashMap();
 				}
 			}
 			else {
@@ -765,15 +768,17 @@ final class PackagePermissionCollection extends PermissionCollection {
 			offset = last - 1;
 		}
 		// we don't have to check for "*" as it was already checked
-		// at the top (all_allowed)
+		// at the top (all_allowed), so we
 		// iterate one by one over filteredPermissions
+		Collection perms;
 		synchronized (this) {
 			pc = filterPermissions;
+			if (pc == null) {
+				return false;
+			}
+			perms = pc.values();
 		}
-		if (pc == null) {
-			return false;
-		}
-		for (Iterator iter = pc.values().iterator(); iter.hasNext();) {
+		for (Iterator iter = perms.iterator(); iter.hasNext();) {
 			if (((PackagePermission) iter.next()).implies0(requested)) {
 				return true;
 			}
@@ -794,5 +799,30 @@ final class PackagePermissionCollection extends PermissionCollection {
 			all.addAll(pc.values());
 		}
 		return Collections.enumeration(all);
+	}
+
+	/* serialization logic */
+	private static final ObjectStreamField[]	serialPersistentFields	= {
+			new ObjectStreamField("permissions", Hashtable.class),
+			new ObjectStreamField("all_allowed", Boolean.TYPE),
+			new ObjectStreamField("filterPermissions", HashMap.class)	};
+
+	private synchronized void writeObject(ObjectOutputStream out)
+			throws IOException {
+		Hashtable hashtable = new Hashtable(permissions);
+		ObjectOutputStream.PutField pfields = out.putFields();
+		pfields.put("permissions", hashtable);
+		pfields.put("all_allowed", all_allowed);
+		pfields.put("filterPermissions", filterPermissions);
+		out.writeFields();
+	}
+
+	private synchronized void readObject(java.io.ObjectInputStream in)
+			throws IOException, ClassNotFoundException {
+		ObjectInputStream.GetField gfields = in.readFields();
+		Hashtable hashtable = (Hashtable) gfields.get("permissions", null);
+		permissions = new HashMap(hashtable);
+		all_allowed = gfields.get("all_allowed", false);
+		filterPermissions = (HashMap) gfields.get("filterPermissions", null);
 	}
 }

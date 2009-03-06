@@ -18,15 +18,22 @@ package org.osgi.framework;
 
 import java.io.IOException;
 import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.ObjectStreamField;
 import java.security.AccessController;
 import java.security.BasicPermission;
 import java.security.Permission;
 import java.security.PermissionCollection;
 import java.security.PrivilegedAction;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * A bundle's authority to perform specific privileged administrative operations
@@ -836,26 +843,26 @@ public final class AdminPermission extends BasicPermission {
 	 */
 	private Dictionary getProperties() {
 		Dictionary result = properties;
-		if (result == null) {
-			final Dictionary dict = new Hashtable(4);
-			AccessController.doPrivileged(new PrivilegedAction() {
-				public Object run() {
-					dict.put("id", new Long(bundle.getBundleId())); 
-					dict.put("location", bundle.getLocation()); 
-					String name = bundle.getSymbolicName();
-					if (name != null) {
-						dict.put("name", name); 
-					}
-					SignerProperty signer = new SignerProperty(bundle);
-					if (signer.isBundleSigned()) {
-						dict.put("signer", signer); 
-					}
-					return null;
-				}
-			});
-			properties = result = dict;
+		if (result != null) {
+			return result;
 		}
-		return result;
+		final Dictionary dict = new Hashtable(4);
+		AccessController.doPrivileged(new PrivilegedAction() {
+			public Object run() {
+				dict.put("id", new Long(bundle.getBundleId()));
+				dict.put("location", bundle.getLocation());
+				String name = bundle.getSymbolicName();
+				if (name != null) {
+					dict.put("name", name);
+				}
+				SignerProperty signer = new SignerProperty(bundle);
+				if (signer.isBundleSigned()) {
+					dict.put("signer", signer); 
+				}
+				return null;
+			}
+		});
+		return properties = dict;
 	}
 }
 
@@ -867,10 +874,9 @@ final class AdminPermissionCollection extends PermissionCollection {
 	/**
 	 * Collection of permissions.
 	 * 
-	 * @serial
 	 * @GuardedBy this
 	 */
-	private final Hashtable		permissions;
+	private transient Map		permissions;
 
 	/**
 	 * Boolean saying if "*" is in the collection.
@@ -885,7 +891,7 @@ final class AdminPermissionCollection extends PermissionCollection {
 	 * 
 	 */
 	public AdminPermissionCollection() {
-		permissions = new Hashtable();
+		permissions = new HashMap();
 	}
 
 	/**
@@ -914,18 +920,19 @@ final class AdminPermissionCollection extends PermissionCollection {
 		}
 		final String name = ap.getName();
 		synchronized (this) {
-			AdminPermission existing = (AdminPermission) permissions.get(name);
+			Map pc = permissions;
+			AdminPermission existing = (AdminPermission) pc.get(name);
 			if (existing != null) {
 				int oldMask = existing.getActionsMask();
 				int newMask = ap.getActionsMask();
 
 				if (oldMask != newMask) {
-					permissions.put(name, new AdminPermission(existing
+					pc.put(name, new AdminPermission(existing
 							.getFilter(), oldMask | newMask));
 				}
 			}
 			else {
-				permissions.put(name, ap);
+				pc.put(name, ap);
 			}
 			if (!all_allowed) {
 				if (name.equals("*")) {
@@ -955,10 +962,12 @@ final class AdminPermissionCollection extends PermissionCollection {
 		if (requested.getFilter() != null) {
 			return false;
 		}
+		Collection perms;
 		synchronized (this) {
+			Map pc = permissions;
 			// short circuit if the "*" Permission was added
 			if (all_allowed) {
-				AdminPermission x = (AdminPermission) permissions.get("*");
+				AdminPermission x = (AdminPermission) pc.get("*");
 				if (x != null) {
 					final int effective = x.getActionsMask();
 					final int desired = requested.getActionsMask();
@@ -967,11 +976,11 @@ final class AdminPermissionCollection extends PermissionCollection {
 					}
 				}
 			}
+			perms = pc.values();
 		}
 
 		// just iterate one by one
-		for (Iterator iter = permissions.values().iterator(); iter
-				.hasNext();) {
+		for (Iterator iter = perms.iterator(); iter.hasNext();) {
 			if (((AdminPermission) iter.next()).implies0(requested)) {
 				return true;
 			}
@@ -985,7 +994,30 @@ final class AdminPermissionCollection extends PermissionCollection {
 	 * 
 	 * @return Enumeration of all <code>AdminPermission</code> objects.
 	 */
-	public Enumeration elements() {
-		return permissions.elements();
+	public synchronized Enumeration elements() {
+		return Collections.enumeration(permissions.values());
+	}
+	
+	/* serialization logic */
+    private static final ObjectStreamField[]	serialPersistentFields	= {
+			new ObjectStreamField("permissions", Hashtable.class),
+			new ObjectStreamField("all_allowed", Boolean.TYPE)			};
+    
+    private synchronized void writeObject(ObjectOutputStream out)
+			throws IOException {
+		Hashtable hashtable = new Hashtable(permissions);
+		ObjectOutputStream.PutField pfields = out.putFields();
+		pfields.put("permissions", hashtable);
+		pfields.put("all_allowed", all_allowed);
+		out.writeFields();
+	}
+    
+    private synchronized void readObject(java.io.ObjectInputStream in)
+			throws IOException,
+			ClassNotFoundException {
+		ObjectInputStream.GetField gfields = in.readFields();
+		Hashtable hashtable = (Hashtable) gfields.get("permissions", null);
+		permissions = new HashMap(hashtable);
+		all_allowed = gfields.get("all_allowed", false);
 	}
 }

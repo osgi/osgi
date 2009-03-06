@@ -17,11 +17,17 @@
 package org.osgi.framework;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.ObjectStreamField;
 import java.security.BasicPermission;
 import java.security.Permission;
 import java.security.PermissionCollection;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * A bundle's authority to require or provide a bundle or to receive or attach
@@ -428,19 +434,14 @@ public final class BundlePermission extends BasicPermission {
  */
 
 final class BundlePermissionCollection extends PermissionCollection {
-
-	/**
-	 * Comment for <code>serialVersionUID</code>
-	 */
 	private static final long	serialVersionUID	= 3258407326846433079L;
 
 	/**
 	 * Table of permissions.
 	 * 
-	 * @serial
 	 * @GuardedBy this
 	 */
-	private final Hashtable		permissions;
+	private transient Map		permissions;
 
 	/**
 	 * Boolean saying if "*" is in the collection.
@@ -455,7 +456,7 @@ final class BundlePermissionCollection extends PermissionCollection {
 	 * 
 	 */
 	public BundlePermissionCollection() {
-		permissions = new Hashtable();
+		permissions = new HashMap();
 		all_allowed = false;
 	}
 
@@ -469,31 +470,30 @@ final class BundlePermissionCollection extends PermissionCollection {
 	 *         object has been marked read-only.
 	 */
 	public void add(final Permission permission) {
-		if (!(permission instanceof BundlePermission))
+		if (!(permission instanceof BundlePermission)) {
 			throw new IllegalArgumentException("invalid permission: "
 					+ permission);
-		if (isReadOnly())
+		}
+		if (isReadOnly()) {
 			throw new SecurityException("attempt to add a Permission to a "
 					+ "readonly PermissionCollection");
-
+		}
 		final BundlePermission bp = (BundlePermission) permission;
 		final String name = bp.getName();
-		final int newMask = bp.getActionsMask();
-
 		synchronized (this) {
-			final BundlePermission existing = (BundlePermission) permissions
-					.get(name);
-
+			Map pc = permissions;
+			BundlePermission existing = (BundlePermission) pc.get(name);
 			if (existing != null) {
 				final int oldMask = existing.getActionsMask();
+				final int newMask = bp.getActionsMask();
 				if (oldMask != newMask) {
-					permissions.put(name, new BundlePermission(name, oldMask
+					pc.put(name, new BundlePermission(name, oldMask
 							| newMask));
 
 				}
 			}
 			else {
-				permissions.put(name, bp);
+				pc.put(name, bp);
 			}
 
 			if (!all_allowed) {
@@ -513,18 +513,21 @@ final class BundlePermissionCollection extends PermissionCollection {
 	 *         of a permission in the set; <code>false</code> otherwise.
 	 */
 	public boolean implies(final Permission permission) {
-		if (!(permission instanceof BundlePermission))
+		if (!(permission instanceof BundlePermission)) {
 			return false;
-		final BundlePermission requested = (BundlePermission) permission;
+		}
+		BundlePermission requested = (BundlePermission) permission;
 		String name = requested.getName();
 		final int desired = requested.getActionsMask();
 		BundlePermission x;
 		int effective = 0;
 
 		// short circuit if the "*" Permission was added
+		Map pc;
 		synchronized (this) {
+			pc = permissions;
 			if (all_allowed) {
-				x = (BundlePermission) permissions.get("*");
+				x = (BundlePermission) pc.get("*");
 				if (x != null) {
 					effective |= x.getActionsMask();
 					if ((effective & desired) == desired) {
@@ -532,7 +535,7 @@ final class BundlePermissionCollection extends PermissionCollection {
 					}
 				}
 			}
-			x = (BundlePermission) permissions.get(name);
+			x = (BundlePermission) pc.get(name);
 		}
 		// strategy:
 		// Check for full match first. Then work our way up the
@@ -550,7 +553,7 @@ final class BundlePermissionCollection extends PermissionCollection {
 		while ((last = name.lastIndexOf(".", offset)) != -1) {
 			name = name.substring(0, last + 1) + "*";
 			synchronized (this) {
-				x = (BundlePermission) permissions.get(name);
+				x = (BundlePermission) pc.get(name);
 			}
 			if (x != null) {
 				effective |= x.getActionsMask();
@@ -571,7 +574,29 @@ final class BundlePermissionCollection extends PermissionCollection {
 	 * 
 	 * @return Enumeration of all <code>BundlePermission</code> objects.
 	 */
-	public Enumeration elements() {
-		return permissions.elements();
+	public synchronized Enumeration elements() {
+		return Collections.enumeration(permissions.values());
+	}
+	
+	/* serialization logic */
+	private static final ObjectStreamField[]	serialPersistentFields	= {
+			new ObjectStreamField("permissions", Hashtable.class),
+			new ObjectStreamField("all_allowed", Boolean.TYPE)			};
+
+	private synchronized void writeObject(ObjectOutputStream out)
+			throws IOException {
+		Hashtable hashtable = new Hashtable(permissions);
+		ObjectOutputStream.PutField pfields = out.putFields();
+		pfields.put("permissions", hashtable);
+		pfields.put("all_allowed", all_allowed);
+		out.writeFields();
+	}
+
+	private synchronized void readObject(java.io.ObjectInputStream in)
+			throws IOException, ClassNotFoundException {
+		ObjectInputStream.GetField gfields = in.readFields();
+		Hashtable hashtable = (Hashtable) gfields.get("permissions", null);
+		permissions = new HashMap(hashtable);
+		all_allowed = gfields.get("all_allowed", false);
 	}
 }
