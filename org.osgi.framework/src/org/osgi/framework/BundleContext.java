@@ -409,19 +409,20 @@ public interface BundleContext {
 	 * <p>
 	 * The following steps are required to register a service:
 	 * <ol>
-	 * <li>If <code>service</code> is not a <code>ServiceFactory</code>,
-	 * an <code>IllegalArgumentException</code> is thrown if
-	 * <code>service</code> is not an <code>instanceof</code> all the
-	 * classes named.
-	 * <li>The Framework adds these service properties to the specified
-	 * <code>Dictionary</code> (which may be <code>null</code>): a property
-	 * named {@link Constants#SERVICE_ID} identifying the registration number of
-	 * the service and a property named {@link Constants#OBJECTCLASS} containing
-	 * all the specified classes. If any of these properties have already been
-	 * specified by the registering bundle, their values will be overwritten by
-	 * the Framework.
-	 * <li>The service is added to the Framework service registry and may now
-	 * be used by other bundles.
+	 * <li>If <code>service</code> is not a <code>ServiceFactory</code>, an
+	 * <code>IllegalArgumentException</code> is thrown if <code>service</code>
+	 * is not an <code>instanceof</code> all the specified class names.
+	 * <li>The Framework adds the following service properties to the service
+	 * properties from the specified <code>Dictionary</code> (which may be
+	 * <code>null</code>): <br/>
+	 * A property named {@link Constants#SERVICE_ID} identifying the
+	 * registration number of the service <br/>
+	 * A property named {@link Constants#OBJECTCLASS} containing all the
+	 * specified classes. <br/>
+	 * Properties with these names in the specified <code>Dictionary</code> will
+	 * be ignored.
+	 * <li>The service is added to the Framework service registry and may now be
+	 * used by other bundles.
 	 * <li>A service event of type {@link ServiceEvent#REGISTERED} is fired.
 	 * <li>A <code>ServiceRegistration</code> object for this registration is
 	 * returned.
@@ -438,22 +439,20 @@ public interface BundleContext {
 	 *        Changes should not be made to this object after calling this
 	 *        method. To update the service's properties the
 	 *        {@link ServiceRegistration#setProperties} method must be called.
-	 *        The set of properties may be <code>null</code> if the service
-	 *        has no properties.
+	 *        The set of properties may be <code>null</code> if the service has
+	 *        no properties.
 	 * 
 	 * @return A <code>ServiceRegistration</code> object for use by the bundle
 	 *         registering the service to update the service's properties or to
 	 *         unregister the service.
 	 * 
-	 * @throws IllegalArgumentException If one of the following is
-	 *         true:
+	 * @throws IllegalArgumentException If one of the following is true:
 	 *         <ul>
-	 *         <li><code>service</code> is <code>null</code>.
-	 *         <li><code>service</code> is not a <code>ServiceFactory</code>
-	 *         object and is not an instance of all the named classes in
-	 *         <code>clazzes</code>.
-	 *         <li><code>properties</code> contains case variants of the same
-	 *         key name.
+	 *         <li><code>service</code> is <code>null</code>. <li><code>service
+	 *         </code> is not a <code>ServiceFactory</code> object and is not an
+	 *         instance of all the named classes in <code>clazzes</code>. <li>
+	 *         <code>properties</code> contains case variants of the same key
+	 *         name.
 	 *         </ul>
 	 * 
 	 * @throws SecurityException If the caller does not have the
@@ -461,8 +460,7 @@ public interface BundleContext {
 	 *         the named classes and the Java Runtime Environment supports
 	 *         permissions.
 	 * 
-	 * @throws IllegalStateException If this BundleContext is no
-	 *         longer valid.
+	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * 
 	 * @see ServiceRegistration
 	 * @see ServiceFactory
@@ -479,8 +477,8 @@ public interface BundleContext {
 	 * {@link #registerService(String[], Object, Dictionary)} and is provided as
 	 * a convenience when <code>service</code> will only be registered under a
 	 * single class name. Note that even in this case the value of the service's
-	 * {@link Constants#OBJECTCLASS} property will be an array of strings,
-	 * rather than just a single string.
+	 * {@link Constants#OBJECTCLASS} property will be an array of string, rather
+	 * than just a single string.
 	 * 
 	 * @param clazz The class name under which the service can be located.
 	 * @param service The service object or a <code>ServiceFactory</code>
@@ -516,56 +514,40 @@ public interface BundleContext {
 	 * {@link Filter} for a description of the filter string syntax.
 	 * 
 	 * <p>
-	 * If <code>filter</code> is <code>null</code>, all registered services
-	 * are considered to match the filter. If <code>filter</code> cannot be
-	 * parsed, an {@link InvalidSyntaxException} will be thrown with a human
-	 * readable message where the filter became unparsable.
+	 * If <code>filter</code> is <code>null</code>, all registered services are
+	 * considered to match the filter. If <code>filter</code> cannot be parsed,
+	 * an {@link InvalidSyntaxException} will be thrown with a human readable
+	 * message where the filter became unparsable.
 	 * 
 	 * <p>
-	 * The following steps are required to select a set of
-	 * <code>ServiceReference</code> objects:
-	 * <ol>
-	 * <li>If the filter string is not <code>null</code>, the filter string
-	 * is parsed and the set <code>ServiceReference</code> objects of
-	 * registered services that satisfy the filter is produced. If the filter
-	 * string is <code>null</code>, then all registered services are
-	 * considered to satisfy the filter.
-	 * <li>If the Java Runtime Environment supports permissions, the set of
-	 * <code>ServiceReference</code> objects produced by the previous step is
-	 * reduced by checking that the caller has the
-	 * <code>ServicePermission</code> to get at least one of the class names
-	 * under which the service was registered. If the caller does not have the
-	 * correct permission for a particular <code>ServiceReference</code>
-	 * object, then it is removed from the set.
-	 * <li>If <code>clazz</code> is not <code>null</code>, the set is
-	 * further reduced to those services that are an <code>instanceof</code>
-	 * and were registered under the specified class. The complete list of
-	 * classes of which a service is an instance and which were specified when
-	 * the service was registered is available from the service's
-	 * {@link Constants#OBJECTCLASS} property.
-	 * <li>The set is reduced one final time by cycling through each
-	 * <code>ServiceReference</code> object and calling
+	 * The result is an array of <code>ServiceReference</code> objects for all
+	 * services that meet all of the following conditions:
+	 * <ul>
+	 * <li>If the specified class name, <code>clazz</code>, is not
+	 * <code>null</code>, the service must have been registered with the
+	 * specified class name. The complete list of class names with which a
+	 * service was registered is available from the service's
+	 * {@link Constants#OBJECTCLASS objectClass} property.
+	 * <li>If the filter string is not <code>null</code>, the filter expression
+	 * must match the service.
+	 * <li>If the Java Runtime Environment supports permissions, the caller must
+	 * have <code>ServicePermission</code> with the <code>GET</code> action for
+	 * at least one of the class names under which the service was registered.
+	 * <li>For each class name with which the service was registered, calling
 	 * {@link ServiceReference#isAssignableTo(Bundle, String)} with the context
-	 * bundle and each class name under which the <code>ServiceReference</code>
-	 * object was registered. For any given <code>ServiceReference</code>
-	 * object, if any call to
-	 * {@link ServiceReference#isAssignableTo(Bundle, String)} returns
-	 * <code>false</code>, then it is removed from the set of
-	 * <code>ServiceReference</code> objects.
-	 * <li>An array of the remaining <code>ServiceReference</code> objects is
-	 * returned.
-	 * </ol>
+	 * bundle and the class name on the service's <code>ServiceReference</code>
+	 * object must return <code>true</code>
+	 * </ul>
 	 * 
 	 * @param clazz The class name with which the service was registered or
 	 *        <code>null</code> for all services.
 	 * @param filter The filter criteria.
 	 * @return An array of <code>ServiceReference</code> objects or
-	 *         <code>null</code> if no services are registered which satisfy
-	 *         the search.
-	 * @throws InvalidSyntaxException If <code>filter</code> contains an
-	 *         invalid filter string that cannot be parsed.
-	 * @throws IllegalStateException If this BundleContext is no
-	 *         longer valid.
+	 *         <code>null</code> if no services are registered which satisfy the
+	 *         search.
+	 * @throws InvalidSyntaxException If <code>filter</code> contains an invalid
+	 *         filter string that cannot be parsed.
+	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 */
 	public ServiceReference[] getServiceReferences(String clazz, String filter)
 			throws InvalidSyntaxException;
@@ -587,47 +569,36 @@ public interface BundleContext {
 	 * {@link Filter} for a description of the filter string syntax.
 	 * 
 	 * <p>
-	 * If <code>filter</code> is <code>null</code>, all registered services
-	 * are considered to match the filter. If <code>filter</code> cannot be
-	 * parsed, an {@link InvalidSyntaxException} will be thrown with a human
-	 * readable message where the filter became unparsable.
+	 * If <code>filter</code> is <code>null</code>, all registered services are
+	 * considered to match the filter. If <code>filter</code> cannot be parsed,
+	 * an {@link InvalidSyntaxException} will be thrown with a human readable
+	 * message where the filter became unparsable.
 	 * 
 	 * <p>
-	 * The following steps are required to select a set of
-	 * <code>ServiceReference</code> objects:
-	 * <ol>
-	 * <li>If the filter string is not <code>null</code>, the filter string
-	 * is parsed and the set <code>ServiceReference</code> objects of
-	 * registered services that satisfy the filter is produced. If the filter
-	 * string is <code>null</code>, then all registered services are
-	 * considered to satisfy the filter.
-	 * <li>If the Java Runtime Environment supports permissions, the set of
-	 * <code>ServiceReference</code> objects produced by the previous step is
-	 * reduced by checking that the caller has the
-	 * <code>ServicePermission</code> to get at least one of the class names
-	 * under which the service was registered. If the caller does not have the
-	 * correct permission for a particular <code>ServiceReference</code>
-	 * object, then it is removed from the set.
-	 * <li>If <code>clazz</code> is not <code>null</code>, the set is
-	 * further reduced to those services that are an <code>instanceof</code>
-	 * and were registered under the specified class. The complete list of
-	 * classes of which a service is an instance and which were specified when
-	 * the service was registered is available from the service's
-	 * {@link Constants#OBJECTCLASS} property.
-	 * <li>An array of the remaining <code>ServiceReference</code> objects is
-	 * returned.
-	 * </ol>
+	 * The result is an array of <code>ServiceReference</code> objects for all
+	 * services that meet all of the following conditions:
+	 * <ul>
+	 * <li>If the specified class name, <code>clazz</code>, is not
+	 * <code>null</code>, the service must have been registered with the
+	 * specified class name. The complete list of class names with which a
+	 * service was registered is available from the service's
+	 * {@link Constants#OBJECTCLASS objectClass} property.
+	 * <li>If the filter string is not <code>null</code>, the filter expression
+	 * must match the service.
+	 * <li>If the Java Runtime Environment supports permissions, the caller must
+	 * have <code>ServicePermission</code> with the <code>GET</code> action for
+	 * at least one of the class names under which the service was registered.
+	 * </ul>
 	 * 
 	 * @param clazz The class name with which the service was registered or
 	 *        <code>null</code> for all services.
 	 * @param filter The filter criteria.
 	 * @return An array of <code>ServiceReference</code> objects or
-	 *         <code>null</code> if no services are registered which satisfy
-	 *         the search.
-	 * @throws InvalidSyntaxException If <code>filter</code> contains an
-	 *         invalid filter string that cannot be parsed.
-	 * @throws IllegalStateException If this BundleContext is no
-	 *         longer valid.
+	 *         <code>null</code> if no services are registered which satisfy the
+	 *         search.
+	 * @throws InvalidSyntaxException If <code>filter</code> contains an invalid
+	 *         filter string that cannot be parsed.
+	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @since 1.3
 	 */
 	public ServiceReference[] getAllServiceReferences(String clazz,
