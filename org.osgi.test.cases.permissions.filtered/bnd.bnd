@@ -8,10 +8,13 @@ Include-Resource	= \
 	bundles/get.jar=get.jar								,\
 	bundles/registerPlural.jar=registerPlural.jar		,\
 	bundles/registerModify.jar=registerModify.jar		,\
-	bundles/resetPermission.jar=resetPermission.jar		,\
+	bundles/setPermission.jar=setPermission.jar			,\
 	bundles/exportBundle.jar=exportBundle.jar			,\
 	bundles/importBundle.jar=importBundle.jar			,\
-	bundles/registerForServiceRegistration.jar=registerForServiceRegistration.jar
+	bundles/registerForServiceRegistration.jar=registerForServiceRegistration.jar	,\
+	bundles/exportBundle2.jar=exportBundle2.jar			,\
+	bundles/exportBundle3.jar=exportBundle3.jar			,\
+	bundles/exportBundle4.jar=exportBundle4.jar
 	
 Export-Package = \
 	${p}.util;version=1.0.0
@@ -25,5 +28,6 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 
 -runproperties = \
 	report=true, \
-	org.osgi.framework.security=osgi
+	org.osgi.framework.security=osgi, \
+#	org.osgi.framework.trust.repositories=${build}/keystore
 	

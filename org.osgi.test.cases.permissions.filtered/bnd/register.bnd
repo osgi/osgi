@@ -10,3 +10,4 @@ Bundle-Category: osgi,test
 Private-Package	= \
 	${p}.register
 	
+#-sign: test

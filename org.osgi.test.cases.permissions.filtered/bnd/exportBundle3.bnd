@@ -1,0 +1,18 @@
+Bundle-SymbolicName: ${p}.exportBundle3
+Bundle-Name: ${p}.exportBundle3
+Bundle-Description: Filtered ServicePermissiont Test R4 - pacage export Test
+Bundle-Activator: ${p}.exportBundle3.ExportBundle3Activator
+Bundle-Vendor: NTT
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Version: 5.5.0
+Bundle-Category: osgi,test
+
+Private-Package	= \
+	${p}.exportBundle3	,\
+	${p}.exportPackageUtil
+	
+Export-Package = \
+	${p}.exportPackageUtil;version=1.0.0
+	
+Import-Package: org.osgi.test.cases.permissions.filtered.exportPackageUtil, org.osgi.framework
