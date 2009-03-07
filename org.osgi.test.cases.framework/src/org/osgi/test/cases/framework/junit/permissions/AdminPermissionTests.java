@@ -367,6 +367,15 @@ public class AdminPermissionTests extends PermissionTestCase {
 		assertNotImplies(context, resource);
 		assertNotImplies(context, startlevel);
 		assertImplies(context, context);
+		
+		PermissionCollection pc = context.newPermissionCollection();
+		AdminPermission ap = new AdminPermission("(id=2)", "metadata");
+		AdminPermission all = new AdminPermission(newMockBundle(2, "test.bsn",
+				"test.location", null), "metadata,context");
+
+		assertAddPermission(pc, context);
+		assertAddPermission(pc, ap);
+		assertImplies(pc, all);
 	}
 
 	private static void invalidAdminPermission(String name, String actions) {

@@ -354,6 +354,15 @@ public class PackagePermissionTests extends PermissionTestCase {
 
 		assertNotImplies(exportonly, importx);
 		assertNotImplies(exportonly, export);
+
+		PackagePermission comfooexport = new PackagePermission("com.foo.*",
+				"exportonly");
+		PackagePermission both = new PackagePermission("com.foo.bar",
+				"import,exportonly");
+		PermissionCollection pc = importx.newPermissionCollection();
+		assertAddPermission(pc, importx);
+		assertAddPermission(pc, comfooexport);
+		assertImplies(pc, both);
 	}
 
 	public void testFiltersName() {
@@ -592,17 +601,25 @@ public class PackagePermissionTests extends PermissionTestCase {
 		PermissionCollection pc;
 		pc = p51.newPermissionCollection();
 		assertAddPermission(pc, p51);
+		assertImplies(p51, p5a);
 		assertImplies(pc, p5a);
+		assertImplies(p51, p55);
 		assertImplies(pc, p55);
+		assertNotImplies(p51, p5b);
 		assertNotImplies(pc, p5b);
+		assertNotImplies(p51, p56);
 		assertNotImplies(pc, p56);
 		assertSerializable(pc);
 		
 		pc = p56.newPermissionCollection();
 		assertAddPermission(pc, p56);
+		assertNotImplies(p56, p5a);
 		assertNotImplies(pc, p5a);
+		assertNotImplies(p56, p55);
 		assertNotImplies(pc, p55);
+		assertImplies(p56, p5b);
 		assertImplies(pc, p5b);
+		assertImplies(p56, p56);
 		assertImplies(pc, p56);
 		assertSerializable(pc);
 		
@@ -626,17 +643,25 @@ public class PackagePermissionTests extends PermissionTestCase {
 	
 		pc = p52.newPermissionCollection();
 		assertAddPermission(pc, p52);
+		assertImplies(p52, p5a);
 		assertImplies(pc, p5a);
+		assertImplies(p52, p55);
 		assertImplies(pc, p55);
+		assertNotImplies(p52, p5b);
 		assertNotImplies(pc, p5b);
+		assertNotImplies(p52, p56);
 		assertNotImplies(pc, p56);
 		assertSerializable(pc);
 		
 		pc = p57.newPermissionCollection();
 		assertAddPermission(pc, p57);
+		assertNotImplies(p57, p5a);
 		assertNotImplies(pc, p5a);
+		assertNotImplies(p57, p55);
 		assertNotImplies(pc, p55);
+		assertImplies(p57, p5b);
 		assertImplies(pc, p5b);
+		assertImplies(p57, p56);
 		assertImplies(pc, p56);
 		assertSerializable(pc);
 		
@@ -651,17 +676,25 @@ public class PackagePermissionTests extends PermissionTestCase {
 
 		pc = p53.newPermissionCollection();
 		assertAddPermission(pc, p53);
+		assertImplies(p53, p5a);
 		assertImplies(pc, p5a);
+		assertImplies(p53, p55);
 		assertImplies(pc, p55);
+		assertImplies(p53, p5b);
 		assertImplies(pc, p5b);
+		assertImplies(p53, p56);
 		assertImplies(pc, p56);
 		assertSerializable(pc);
 
 		pc = p58.newPermissionCollection();
 		assertAddPermission(pc, p58);
+		assertImplies(p58, p5a);
 		assertImplies(pc, p5a);
+		assertImplies(p58, p55);
 		assertImplies(pc, p55);
+		assertImplies(p58, p5b);
 		assertImplies(pc, p5b);
+		assertImplies(p58, p56);
 		assertImplies(pc, p56);
 		assertSerializable(pc);
 
@@ -676,17 +709,25 @@ public class PackagePermissionTests extends PermissionTestCase {
 
 		pc = p54.newPermissionCollection();
 		assertAddPermission(pc, p54);
+		assertImplies(p54, p5a);
 		assertImplies(pc, p5a);
+		assertImplies(p54, p55);
 		assertImplies(pc, p55);
+		assertImplies(p54, p5b);
 		assertImplies(pc, p5b);
+		assertImplies(p54, p56);
 		assertImplies(pc, p56);
 		assertSerializable(pc);
 
 		pc = p59.newPermissionCollection();
 		assertAddPermission(pc, p59);
+		assertImplies(p59, p5a);
 		assertImplies(pc, p5a);
+		assertImplies(p59, p55);
 		assertImplies(pc, p55);
+		assertImplies(p59, p5b);
 		assertImplies(pc, p5b);
+		assertImplies(p59, p56);
 		assertImplies(pc, p56);
 		assertSerializable(pc);
 	}
@@ -694,7 +735,7 @@ public class PackagePermissionTests extends PermissionTestCase {
 	private static void invalidPackagePermission(String name, String actions) {
 		try {
 			PackagePermission p = new PackagePermission(name, actions);
-			fail(p + " created with invalid actions");
+			fail(p + " created with invalid arguments");
 		}
 		catch (IllegalArgumentException e) {
 			// expected
@@ -705,7 +746,7 @@ public class PackagePermissionTests extends PermissionTestCase {
 			String actions) {
 		try {
 			PackagePermission p = new PackagePermission(name, bundle, actions);
-			fail(p + " created with invalid actions");
+			fail(p + " created with invalid arguments");
 		}
 		catch (IllegalArgumentException e) {
 			// expected

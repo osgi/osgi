@@ -17,7 +17,7 @@
 package org.osgi.framework;
 
 import java.io.IOException;
-import java.io.InvalidObjectException;
+import java.io.NotSerializableException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.ObjectStreamField;
@@ -180,7 +180,7 @@ public final class AdminPermission extends BasicPermission {
 																	| ACTION_STARTLEVEL
 																	| ACTION_EXTENSIONLIFECYCLE
 																	| ACTION_CONTEXT;
-	private final static int	ACTION_NONE					= 0;
+	final static int						ACTION_NONE					= 0;
 
 	/**
 	 * The actions in canonical form.
@@ -191,23 +191,19 @@ public final class AdminPermission extends BasicPermission {
 
 	/**
 	 * The actions mask.
-	 * 
-	 * @GuardedBy this
 	 */
-	private transient int		action_mask;
+	transient int							action_mask;
 
 	/**
 	 * If this AdminPermission was constructed with a filter, this holds a
 	 * Filter matching object used to evaluate the filter in implies.
-	 * 
-	 * @GuardedBy this
 	 */
-	private transient Filter	filter;
+	transient Filter						filter;
 
 	/**
 	 * The bundle governed by this AdminPermission - only used if filter == null
 	 */
-	transient final Bundle		bundle;
+	transient final Bundle					bundle; 
 
 	/**
 	 * This dictionary holds the properties of the permission, used to match a
@@ -279,8 +275,8 @@ public final class AdminPermission extends BasicPermission {
 	 */
 	public AdminPermission(Bundle bundle, String actions) {
 		super(createName(bundle));
-		this.bundle = bundle;
 		setTransients(null, parseActions(actions));
+		this.bundle = bundle;
 	}
 
 	/**
@@ -293,8 +289,7 @@ public final class AdminPermission extends BasicPermission {
 		if (bundle == null) {
 			throw new IllegalArgumentException("bundle must not be null");
 		}
-		StringBuffer sb = new StringBuffer();
-		sb.append("(id=");
+		StringBuffer sb = new StringBuffer("(id=");
 		sb.append(bundle.getBundleId());
 		sb.append(")");
 		return sb.toString();
@@ -308,8 +303,8 @@ public final class AdminPermission extends BasicPermission {
 	 */
 	AdminPermission(Filter filter, int mask) {
 		super((filter == null) ? "*" : filter.toString());
-		this.bundle = null;
 		setTransients(filter, mask);
+		this.bundle = null;
 	}
 
 	/**
@@ -318,23 +313,12 @@ public final class AdminPermission extends BasicPermission {
 	 * @param filter Permission's filter or <code>null</code> for wildcard.
 	 * @param mask action mask
 	 */
-	private synchronized void setTransients(Filter filter, int mask) {
+	private void setTransients(Filter filter, int mask) {
 		this.filter = filter;
 		if ((mask == ACTION_NONE) || ((mask & ACTION_ALL) != mask)) {
 			throw new IllegalArgumentException("invalid action string");
 		}
 		this.action_mask = mask;
-	}
-
-	/**
-	 * Returns the current action mask.
-	 * <p>
-	 * Used by the AdminPermissionCollection class.
-	 * 
-	 * @return Current action mask.
-	 */
-	synchronized int getActionsMask() {
-		return action_mask;
 	}
 
 	/**
@@ -565,15 +549,6 @@ public final class AdminPermission extends BasicPermission {
 	}
 
 	/**
-	 * Returns the filter.
-	 * 
-	 * @return Current filter.
-	 */
-	synchronized Filter getFilter() {
-		return filter;
-	}
-
-	/**
 	 * Parse filter string into a Filter object.
 	 * 
 	 * @param filterString The filter string to parse.
@@ -637,10 +612,10 @@ public final class AdminPermission extends BasicPermission {
 			return false;
 		}
 		// if requested permission has a filter, then it is an invalid argument
-		if (requested.getFilter() != null) {
+		if (requested.filter != null) {
 			return false;
 		}
-		return implies0(requested);
+		return implies0(requested, ACTION_NONE);
 	}
 
 	/**
@@ -650,23 +625,25 @@ public final class AdminPermission extends BasicPermission {
 	 * @param requested The requested AdminPermision which has already be
 	 *        validated as a proper argument. The requested AdminPermission must
 	 *        not have a filter expression.
+	 * @param effective The effective actions with which to start.
 	 * @return <code>true</code> if the specified permission is implied by this
 	 *         object; <code>false</code> otherwise.
 	 */
-	boolean implies0(AdminPermission requested) {
-		// check actions first - much faster
-		int requestedMask = requested.getActionsMask();
-		if ((getActionsMask() & requestedMask) != requestedMask) {
+	boolean implies0(AdminPermission requested, int effective) {
+		/* check actions first - much faster */
+		effective |= action_mask;
+		final int desired = requested.action_mask;
+		if ((effective & desired) != desired) {
 			return false;
 		}
 	
-		// Get our filter
-		Filter f = getFilter();
+		/* Get our filter */
+		Filter f = filter;
 		if (f == null) {
 			// it's "*"
 			return true;
 		}
-		// is requested a wildcard filter?
+		/* is requested a wildcard filter? */
 		if (requested.bundle == null) {
 			return false;
 		}
@@ -692,7 +669,7 @@ public final class AdminPermission extends BasicPermission {
 		if (result == null) {
 			StringBuffer sb = new StringBuffer();
 	
-			int mask = getActionsMask();
+			int mask = action_mask;
 			if ((mask & ACTION_CLASS) == ACTION_CLASS) {
 				sb.append(CLASS);
 				sb.append(',');
@@ -781,11 +758,11 @@ public final class AdminPermission extends BasicPermission {
 
 		AdminPermission ap = (AdminPermission) obj;
 
-		return (getActionsMask() == ap.getActionsMask())
+		return (action_mask == ap.action_mask)
 				&& ((bundle == ap.bundle) || ((bundle != null) && bundle
 						.equals(ap.bundle)))
-				&& (getFilter() == null ? ap.getFilter() == null : getFilter()
-						.equals(ap.getFilter()));
+				&& (filter == null ? ap.filter == null : filter
+						.equals(ap.filter));
 	}
 
 	/**
@@ -810,7 +787,7 @@ public final class AdminPermission extends BasicPermission {
 	private synchronized void writeObject(java.io.ObjectOutputStream s)
 			throws IOException {
 		if (bundle != null) {
-			throw new InvalidObjectException("cannot serialize");
+			throw new NotSerializableException("cannot serialize");
 		}
 		// Write out the actions. The superclass takes care of the name
 		// call getActions to make sure actions field is initialized
@@ -923,12 +900,12 @@ final class AdminPermissionCollection extends PermissionCollection {
 			Map pc = permissions;
 			AdminPermission existing = (AdminPermission) pc.get(name);
 			if (existing != null) {
-				int oldMask = existing.getActionsMask();
-				int newMask = ap.getActionsMask();
+				int oldMask = existing.action_mask;
+				int newMask = ap.action_mask;
 
 				if (oldMask != newMask) {
-					pc.put(name, new AdminPermission(existing
-							.getFilter(), oldMask | newMask));
+					pc.put(name, new AdminPermission(existing.filter, oldMask
+							| newMask));
 				}
 			}
 			else {
@@ -959,18 +936,19 @@ final class AdminPermissionCollection extends PermissionCollection {
 
 		AdminPermission requested = (AdminPermission) permission;
 		// if requested permission has a filter, then it is an invalid argument
-		if (requested.getFilter() != null) {
+		if (requested.filter != null) {
 			return false;
 		}
+		int effective = AdminPermission.ACTION_NONE;
 		Collection perms;
 		synchronized (this) {
 			Map pc = permissions;
 			// short circuit if the "*" Permission was added
 			if (all_allowed) {
-				AdminPermission x = (AdminPermission) pc.get("*");
-				if (x != null) {
-					final int effective = x.getActionsMask();
-					final int desired = requested.getActionsMask();
+				AdminPermission ap = (AdminPermission) pc.get("*");
+				if (ap != null) {
+					effective |= ap.action_mask;
+					final int desired = requested.action_mask;
 					if ((effective & desired) == desired) {
 						return true;
 					}
@@ -981,7 +959,7 @@ final class AdminPermissionCollection extends PermissionCollection {
 
 		// just iterate one by one
 		for (Iterator iter = perms.iterator(); iter.hasNext();) {
-			if (((AdminPermission) iter.next()).implies0(requested)) {
+			if (((AdminPermission) iter.next()).implies0(requested, effective)) {
 				return true;
 			}
 		}

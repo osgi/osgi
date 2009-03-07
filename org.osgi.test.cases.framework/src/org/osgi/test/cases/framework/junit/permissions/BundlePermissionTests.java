@@ -327,12 +327,23 @@ public class BundlePermissionTests extends PermissionTestCase {
 		assertNotImplies(fragment, require);
 		assertNotImplies(fragment, host);
 		assertImplies(fragment, fragment);
+		
+		BundlePermission comfoohost = new BundlePermission("com.foo.*", "host");
+		BundlePermission comfoobarfragment = new BundlePermission(
+				"com.foo.bar.*", "fragment");
+		BundlePermission all = new BundlePermission("com.foo.bar.baz",
+				"provide,require,host,fragment");
+		PermissionCollection pc = provide.newPermissionCollection();
+		assertAddPermission(pc, provide);
+		assertAddPermission(pc, comfoohost);
+		assertAddPermission(pc, comfoobarfragment);
+		assertImplies(pc, all);
 	}
 	
 	private static void invalidBundlePermission(String name, String actions) {
 		try {
 			BundlePermission p = new BundlePermission(name, actions);
-			fail(p + " created with invalid actions"); 
+			fail(p + " created with invalid arguments"); 
 		}
 		catch (IllegalArgumentException e) {
 			// expected

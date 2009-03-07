@@ -93,7 +93,7 @@ public final class BundlePermission extends BasicPermission {
 															| ACTION_REQUIRE
 															| ACTION_HOST
 															| ACTION_FRAGMENT;
-	private final static int	ACTION_NONE			= 0;
+	final static int			ACTION_NONE			= 0;
 	/**
 	 * The actions mask.
 	 */
@@ -302,9 +302,10 @@ public final class BundlePermission extends BasicPermission {
 		}
 		BundlePermission requested = (BundlePermission) p;
 
-		int requestedMask = requested.getActionsMask();
-		return ((getActionsMask() & requestedMask) == requestedMask)
-				&& super.implies(p);
+		final int effective = getActionsMask();
+		final int desired = requested.getActionsMask();
+		return ((effective & desired) == desired)
+				&& super.implies(requested);
 	}
 
 	/**
@@ -523,55 +524,52 @@ final class BundlePermissionCollection extends PermissionCollection {
 			return false;
 		}
 		BundlePermission requested = (BundlePermission) permission;
-		String name = requested.getName();
+		String requestedName = requested.getName();
 		final int desired = requested.getActionsMask();
-		BundlePermission x;
-		int effective = 0;
+		int effective = BundlePermission.ACTION_NONE;
+		BundlePermission bp;
 
-		// short circuit if the "*" Permission was added
-		Map pc;
 		synchronized (this) {
-			pc = permissions;
+			Map pc = permissions;
+			/* short circuit if the "*" Permission was added */
 			if (all_allowed) {
-				x = (BundlePermission) pc.get("*");
-				if (x != null) {
-					effective |= x.getActionsMask();
+				bp = (BundlePermission) pc.get("*");
+				if (bp != null) {
+					effective |= bp.getActionsMask();
 					if ((effective & desired) == desired) {
 						return true;
 					}
 				}
 			}
-			x = (BundlePermission) pc.get(name);
-		}
-		// strategy:
-		// Check for full match first. Then work our way up the
-		// name looking for matches on a.b.*
-		if (x != null) {
-			// we have a direct hit!
-			effective |= x.getActionsMask();
-			if ((effective & desired) == desired) {
-				return true;
-			}
-		}
-		// work our way up the tree...
-		int last;
-		int offset = name.length() - 1;
-		while ((last = name.lastIndexOf(".", offset)) != -1) {
-			name = name.substring(0, last + 1) + "*";
-			synchronized (this) {
-				x = (BundlePermission) pc.get(name);
-			}
-			if (x != null) {
-				effective |= x.getActionsMask();
+			bp = (BundlePermission) pc.get(requestedName);
+			// strategy:
+			// Check for full match first. Then work our way up the
+			// name looking for matches on a.b.*
+			if (bp != null) {
+				// we have a direct hit!
+				effective |= bp.getActionsMask();
 				if ((effective & desired) == desired) {
 					return true;
 				}
 			}
-			offset = last - 1;
+			// work our way up the tree...
+			int last;
+			int offset = requestedName.length() - 1;
+			while ((last = requestedName.lastIndexOf(".", offset)) != -1) {
+				requestedName = requestedName.substring(0, last + 1) + "*";
+				bp = (BundlePermission) pc.get(requestedName);
+				if (bp != null) {
+					effective |= bp.getActionsMask();
+					if ((effective & desired) == desired) {
+						return true;
+					}
+				}
+				offset = last - 1;
+			}
+			// we don't have to check for "*" as it was already checked
+			// at the top (all_allowed), so we just return false
+			return false;
 		}
-		// we don't have to check for "*" as it was already checked
-		// at the top (all_allowed), so we just return false
-		return false;
 	}
 
 	/**

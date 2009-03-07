@@ -17,7 +17,7 @@
 package org.osgi.framework;
 
 import java.io.IOException;
-import java.io.InvalidObjectException;
+import java.io.NotSerializableException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.ObjectStreamField;
@@ -87,14 +87,12 @@ public final class PackagePermission extends BasicPermission {
 	private final static int				ACTION_IMPORT		= 0x00000002;
 	private final static int				ACTION_ALL			= ACTION_EXPORT
 																		| ACTION_IMPORT;
-	private final static int				ACTION_NONE			= 0;
+	final static int						ACTION_NONE			= 0;
 
 	/**
 	 * The actions mask.
-	 * 
-	 * @GuardedBy this
 	 */
-	private transient int					action_mask;
+	transient int							action_mask;
 
 	/**
 	 * The actions in canonical form.
@@ -111,10 +109,8 @@ public final class PackagePermission extends BasicPermission {
 	/**
 	 * If this PackagePermission was constructed with a filter, this holds a
 	 * Filter matching object used to evaluate the filter in implies.
-	 * 
-	 * @GuardedBy this
 	 */
-	private transient Filter				filter;
+	transient Filter						filter;
 
 	/**
 	 * This dictionary holds the properties of the permission, used to match a
@@ -175,8 +171,8 @@ public final class PackagePermission extends BasicPermission {
 	 */
 	public PackagePermission(String name, String actions) {
 		this(name, parseActions(actions));
-		if ((getFilter() != null)
-				&& ((getActionsMask() & ACTION_ALL) != ACTION_IMPORT)) {
+		if ((filter != null)
+				&& ((action_mask & ACTION_ALL) != ACTION_IMPORT)) {
 			throw new IllegalArgumentException(
 					"invalid action string for filter expression");
 		}
@@ -198,15 +194,15 @@ public final class PackagePermission extends BasicPermission {
 	 */
 	public PackagePermission(String name, Bundle exportingBundle, String actions) {
 		super(name);
+		setTransients(name, parseActions(actions));
 		this.bundle = exportingBundle;
 		if (exportingBundle == null) {
 			throw new IllegalArgumentException("bundle must not be null");
 		}
-		setTransients(parseActions(actions));
-		if (getFilter() != null) {
+		if (filter != null) {
 			throw new IllegalArgumentException("invalid name");
 		}
-		if ((getActionsMask() & ACTION_ALL) != ACTION_IMPORT) {
+		if ((action_mask & ACTION_ALL) != ACTION_IMPORT) {
 			throw new IllegalArgumentException("invalid action string");
 		}
 	}
@@ -219,8 +215,8 @@ public final class PackagePermission extends BasicPermission {
 	 */
 	PackagePermission(String name, int mask) {
 		super(name);
+		setTransients(name, mask);
 		this.bundle = null;
-		setTransients(mask);
 	}
 
 	/**
@@ -228,23 +224,12 @@ public final class PackagePermission extends BasicPermission {
 	 * 
 	 * @param mask action mask
 	 */
-	private synchronized void setTransients(int mask) {
+	private void setTransients(String name, int mask) {
 		if ((mask == ACTION_NONE) || ((mask & ACTION_ALL) != mask)) {
 			throw new IllegalArgumentException("invalid action string");
 		}
 		action_mask = mask;
-		filter = parseFilter(getName());
-	}
-
-	/**
-	 * Returns the current action mask.
-	 * <p>
-	 * Used by the PackagePermissionCollection class.
-	 * 
-	 * @return Current action mask.
-	 */
-	synchronized int getActionsMask() {
-		return action_mask;
+		filter = parseFilter(name);
 	}
 
 	/**
@@ -356,15 +341,6 @@ public final class PackagePermission extends BasicPermission {
 	}
 
 	/**
-	 * Returns the filter.
-	 * 
-	 * @return Current filter.
-	 */
-	synchronized Filter getFilter() {
-		return filter;
-	}
-
-	/**
 	 * Parse filter string into a Filter object.
 	 * 
 	 * @param filterString The filter string to parse.
@@ -421,10 +397,10 @@ public final class PackagePermission extends BasicPermission {
 			return false;
 		}
 		// if requested permission has a filter, then it is an invalid argument
-		if (requested.getFilter() != null) {
+		if (requested.filter != null) {
 			return false;
 		}
-		return implies0(requested);
+		return implies0(requested, ACTION_NONE);
 	}
 
 	/**
@@ -434,17 +410,19 @@ public final class PackagePermission extends BasicPermission {
 	 * @param requested The requested PackagePermission which has already be
 	 *        validated as a proper argument. The requested PackagePermission
 	 *        must not have a filter expression.
+	 * @param effective The effective actions with which to start.
 	 * @return <code>true</code> if the specified permission is implied by this
 	 *         object; <code>false</code> otherwise.
 	 */
-	boolean implies0(PackagePermission requested) {
-		// check actions first - much faster
-		int requestedMask = requested.getActionsMask();
-		if ((getActionsMask() & requestedMask) != requestedMask) {
+	boolean implies0(PackagePermission requested, int effective) {
+		/* check actions first - much faster */
+		effective |= action_mask;
+		final int desired = requested.action_mask;
+		if ((effective & desired) != desired) {
 			return false;
 		}
-		// Get filter if any
-		Filter f = getFilter();
+		/* Get filter if any */
+		Filter f = filter;
 		if (f == null) {
 			return super.implies(requested);
 		}
@@ -468,7 +446,7 @@ public final class PackagePermission extends BasicPermission {
 			StringBuffer sb = new StringBuffer();
 			boolean comma = false;
 
-			int mask = getActionsMask();
+			int mask = action_mask;
 			if ((mask & ACTION_EXPORT) == ACTION_EXPORT) {
 				sb.append(EXPORTONLY);
 				comma = true;
@@ -520,7 +498,7 @@ public final class PackagePermission extends BasicPermission {
 
 		PackagePermission pp = (PackagePermission) obj;
 
-		return (getActionsMask() == pp.getActionsMask())
+		return (action_mask == pp.action_mask)
 				&& getName().equals(pp.getName())
 				&& ((bundle == pp.bundle) || ((bundle != null) && bundle
 						.equals(pp.bundle)));
@@ -548,7 +526,7 @@ public final class PackagePermission extends BasicPermission {
 	private synchronized void writeObject(java.io.ObjectOutputStream s)
 			throws IOException {
 		if (bundle != null) {
-			throw new InvalidObjectException("cannot serialize");
+			throw new NotSerializableException("cannot serialize");
 		}
 		// Write out the actions. The superclass takes care of the name
 		// call getActions to make sure actions field is initialized
@@ -565,7 +543,7 @@ public final class PackagePermission extends BasicPermission {
 			throws IOException, ClassNotFoundException {
 		// Read in the action, then initialize the rest
 		s.defaultReadObject();
-		setTransients(parseActions(actions));
+		setTransients(getName(), parseActions(actions));
 	}
 
 	/**
@@ -579,7 +557,7 @@ public final class PackagePermission extends BasicPermission {
 			return result;
 		}
 		final Dictionary dict = new Hashtable(5);
-		if (getFilter() == null) {
+		if (filter == null) {
 			dict.put("package.name", getName());
 		}
 		if (bundle != null) {
@@ -672,7 +650,7 @@ final class PackagePermissionCollection extends PermissionCollection {
 		}
 
 		final String name = pp.getName();
-		final Filter f = pp.getFilter();
+		final Filter f = pp.filter;
 		synchronized (this) {
 			/* select the bucket for the permission */
 			Map pc;
@@ -688,8 +666,8 @@ final class PackagePermissionCollection extends PermissionCollection {
 			
 			final PackagePermission existing = (PackagePermission) pc.get(name);
 			if (existing != null) {
-				final int oldMask = existing.getActionsMask();
-				final int newMask = pp.getActionsMask();
+				final int oldMask = existing.action_mask;
+				final int newMask = pp.action_mask;
 				if (oldMask != newMask) {
 					pc
 							.put(name, new PackagePermission(name, oldMask
@@ -723,69 +701,68 @@ final class PackagePermissionCollection extends PermissionCollection {
 			return false;
 		}
 		final PackagePermission requested = (PackagePermission) permission;
-		// if requested permission has a filter, then it is an invalid argument
-		if (requested.getFilter() != null) {
+		/* if requested permission has a filter, then it is an invalid argument */
+		if (requested.filter != null) {
 			return false;
 		}
-		String name = requested.getName();
-		final int desired = requested.getActionsMask();
-		PackagePermission x;
-		int effective = 0;
+		String requestedName = requested.getName();
+		final int desired = requested.action_mask;
+		int effective = PackagePermission.ACTION_NONE;
 
-		Map pc;
+		Collection perms;
 		synchronized (this) {
-			pc = permissions;
-			// short circuit if the "*" Permission was added
+			Map pc = permissions;
+			PackagePermission pp;
+			/* short circuit if the "*" Permission was added */
 			if (all_allowed) {
-				x = (PackagePermission) pc.get("*");
-				if (x != null) {
-					effective |= x.getActionsMask();
+				pp = (PackagePermission) pc.get("*");
+				if (pp != null) {
+					effective |= pp.action_mask;
 					if ((effective & desired) == desired) {
 						return true;
 					}
 				}
 			}
-			x = (PackagePermission) pc.get(name);
-		}
-		// strategy:
-		// Check for full match first. Then work our way up the
-		// name looking for matches on a.b.*
-		if (x != null) {
-			// we have a direct hit!
-			effective |= x.getActionsMask();
-			if ((effective & desired) == desired) {
-				return true;
-			}
-		}
-		// work our way up the tree...
-		int last;
-		int offset = name.length() - 1;
-		while ((last = name.lastIndexOf(".", offset)) != -1) {
-			name = name.substring(0, last + 1) + "*";
-			synchronized (this) {
-				x = (PackagePermission) pc.get(name);
-			}
-			if (x != null) {
-				effective |= x.getActionsMask();
+			/*
+			 * strategy: Check for full match first. Then work our way up the
+			 * name looking for matches on a.b.*
+			 */
+			pp = (PackagePermission) pc.get(requestedName);
+			if (pp != null) {
+				/* we have a direct hit! */
+				effective |= pp.action_mask;
 				if ((effective & desired) == desired) {
 					return true;
 				}
 			}
-			offset = last - 1;
-		}
-		// we don't have to check for "*" as it was already checked
-		// at the top (all_allowed), so we
-		// iterate one by one over filteredPermissions
-		Collection perms;
-		synchronized (this) {
+			/* work our way up the tree... */
+			int last;
+			int offset = requestedName.length() - 1;
+			while ((last = requestedName.lastIndexOf(".", offset)) != -1) {
+				requestedName = requestedName.substring(0, last + 1) + "*";
+				pp = (PackagePermission) pc.get(requestedName);
+				if (pp != null) {
+					effective |= pp.action_mask;
+					if ((effective & desired) == desired) {
+						return true;
+					}
+				}
+				offset = last - 1;
+			}
+			/*
+			 * we don't have to check for "*" as it was already checked before
+			 * we were called.
+			 */
 			pc = filterPermissions;
 			if (pc == null) {
 				return false;
 			}
 			perms = pc.values();
 		}
+		/* iterate one by one over filteredPermissions */
 		for (Iterator iter = perms.iterator(); iter.hasNext();) {
-			if (((PackagePermission) iter.next()).implies0(requested)) {
+			if (((PackagePermission) iter.next())
+					.implies0(requested, effective)) {
 				return true;
 			}
 		}
