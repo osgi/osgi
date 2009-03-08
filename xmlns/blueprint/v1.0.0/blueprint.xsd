@@ -3,7 +3,7 @@
 	/*
 	* $Revision$
 	* 
-	* Copyright (c) OSGi Alliance (2008). All Rights Reserved.
+	* Copyright (c) OSGi Alliance (2008, 2009). All Rights Reserved.
 	* 
 	* Licensed under the Apache License, Version 2.0 (the "License");
 	* you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
             targetNamespace="http://www.osgi.org/xmlns/blueprint/v1.0.0"
             elementFormDefault="qualified"
             attributeFormDefault="unqualified"
-            version="1.0-rc2">
+            version="1.0.0">
 
     <!-- Schema elements for core component declarations -->
 
