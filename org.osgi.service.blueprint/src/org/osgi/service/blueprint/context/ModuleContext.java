@@ -39,7 +39,6 @@ import org.osgi.service.blueprint.reflect.ComponentMetadata;
  * between invocations on the same thread if another thread is concurrently
  * modifying the same mutable ModuleContext implementation object.
  * 
- * @see ModuleContextAware
  * @see org.osgi.framework.Constants
  * 
  */
