@@ -259,7 +259,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         // dependency will be handled by a service that's registered when
         // the WAITING blueprint event is received.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/injected_component.jar");
+            getWebServer()+"www/nowait_injected_component.jar");
 
         // create a ServiceManager instance with one instance of an injected service.
         // We will register this when we receive then CREATED event from the blueprint service.
