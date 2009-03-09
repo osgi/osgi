@@ -78,36 +78,15 @@ public interface BundleContext {
 	 * method returns <code>null</code> if the property is not found.
 	 * 
 	 * <p>
-	 * The Framework defines the following standard property keys:
-	 * </p>
-	 * <ul>
-	 * <li>{@link Constants#FRAMEWORK_VERSION} - The OSGi Framework version.
-	 * </li>
-	 * <li>{@link Constants#FRAMEWORK_VENDOR} - The Framework implementation
-	 * vendor.</li>
-	 * <li>{@link Constants#FRAMEWORK_LANGUAGE} - The language being used. See
-	 * ISO 639 for possible values.</li>
-	 * <li>{@link Constants#FRAMEWORK_OS_NAME} - The host computer operating
-	 * system.</li>
-	 * <li>{@link Constants#FRAMEWORK_OS_VERSION} - The host computer operating
-	 * system version number.</li>
-	 * <li>{@link Constants#FRAMEWORK_PROCESSOR} - The host computer processor
-	 * name.</li>
-	 * </ul>
-	 * <p>
-	 * All bundles must have permission to read these properties.
-	 * 
-	 * <p>
-	 * Note: The last four standard properties are used by the
-	 * {@link Constants#BUNDLE_NATIVECODE} <code>Manifest</code> header's
-	 * matching algorithm for selecting native language code.
+	 * All bundles must have permission to read properties whose names start
+	 * with &quot;org.osgi.&quot;.
 	 * 
 	 * @param key The name of the requested property.
-	 * @return The value of the requested property, or <code>null</code> if
-	 *         the property is undefined.
-	 * @throws SecurityException If the caller does not have the
-	 *         appropriate <code>PropertyPermission</code> to read the
-	 *         property, and the Java Runtime Environment supports permissions.
+	 * @return The value of the requested property, or <code>null</code> if the
+	 *         property is undefined.
+	 * @throws SecurityException If the caller does not have the appropriate
+	 *         <code>PropertyPermission</code> to read the property, and the
+	 *         Java Runtime Environment supports permissions.
 	 */
 	public String getProperty(String key);
 
