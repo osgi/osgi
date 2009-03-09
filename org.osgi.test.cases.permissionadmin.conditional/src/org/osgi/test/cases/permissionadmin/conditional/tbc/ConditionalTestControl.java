@@ -744,8 +744,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
    * Check a condition that starts as a mutable and later becomes immutable.
    */
   public void testMutable2Immutable() {//TC12
-	// TODO this test assumes an implementation ordering of the calls to isMutable and isSatisfied
-	// The RI calls isSatisfied first and the calls isMutable to determine if the condition answer can be optimized out.
+	// This test assumes an implementation ordering of the calls to isMutable and then isSatisfied
 	// TODO this testcase mandates that implementations optimize out immutable conditions, this is optional in the spec.
     utility.setTestBunde(testBundle, false);
     TestCondition.satisfOrder.removeAllElements();
@@ -773,41 +772,34 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     ConditionalPermissionInfo cpi_df = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { cInfo },
         new Permission[] { new AdminPermission("*", AdminPermission.EXTENSIONLIFECYCLE) });
 
-    TestCondition.changeToImmutable(false);
+    TestCondition.changeToImmutable(true);
     ConditionalPermissionInfo cpi = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { cInfo, tc1 },
         new Permission[] { perm1 });
     utility.notAllowed(perm1, SecurityException.class);
-    TestCondition.changeToImmutable(true);
     utility.notAllowed(perm1, SecurityException.class);
     utility.notAllowed(perm1, SecurityException.class);
     utility.testEqualArrays(new String[] { "TestCondition_200", "TestCondition_200" }, TestCondition.getSatisfOrder());
     cpi.delete();
 
-    TestCondition.changeToImmutable(false);
     cpi = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { cInfo, tc2 },
         new Permission[] { perm2 });
     utility.allowed(perm2);
-    TestCondition.changeToImmutable(true);
     utility.allowed(perm2);
     utility.allowed(perm2);
     utility.testEqualArrays(new String[] { "TestCondition_201", "TestCondition_201" }, TestCondition.getSatisfOrder());
     cpi.delete();
 
-    TestCondition.changeToImmutable(false);
     cpi = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { cInfo, tc3 },
         new Permission[] { perm3 });
     utility.notAllowed(perm3, SecurityException.class);
-    TestCondition.changeToImmutable(true);
     utility.notAllowed(perm3, SecurityException.class);
     utility.notAllowed(perm3, SecurityException.class);
     utility.testEqualArrays(new String[] { "TestCondition_202", "TestCondition_202" }, TestCondition.getSatisfOrder());
     cpi.delete();
 
-    TestCondition.changeToImmutable(false);
     cpi = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { cInfo, tc4 },
         new Permission[] { perm4 });
     utility.allowed(perm4);
-    TestCondition.changeToImmutable(true);
     utility.allowed(perm4);
     utility.allowed(perm4);
     utility.testEqualArrays(new String[] { "TestCondition_203", "TestCondition_203" }, TestCondition.getSatisfOrder());
