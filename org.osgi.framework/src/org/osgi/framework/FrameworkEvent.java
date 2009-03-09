@@ -61,10 +61,7 @@ public class FrameworkEvent extends EventObject {
 	 * has reached the initial start level. The source of this event is the
 	 * System Bundle.
 	 * 
-	 * <p>
-	 * The value of <code>STARTED</code> is 0x00000001.
-	 * 
-	 * @see "<code>StartLevel</code>"
+	 * @see "The Start Level Service"
 	 */
 	public final static int	STARTED							= 0x00000001;
 
@@ -73,9 +70,6 @@ public class FrameworkEvent extends EventObject {
 	 * 
 	 * <p>
 	 * There was an error associated with a bundle.
-	 * 
-	 * <p>
-	 * The value of <code>ERROR</code> is 0x00000002.
 	 */
 	public final static int	ERROR							= 0x00000002;
 
@@ -86,9 +80,6 @@ public class FrameworkEvent extends EventObject {
 	 * This event is fired when the Framework has completed the refresh packages
 	 * operation initiated by a call to the PackageAdmin.refreshPackages method.
 	 * The source of this event is the System Bundle.
-	 * 
-	 * <p>
-	 * The value of <code>PACKAGES_REFRESHED</code> is 0x00000004.
 	 * 
 	 * @since 1.2
 	 * @see "<code>PackageAdmin.refreshPackages</code>"
@@ -103,11 +94,8 @@ public class FrameworkEvent extends EventObject {
 	 * start level initiated by a call to the StartLevel.setStartLevel method.
 	 * The source of this event is the System Bundle.
 	 * 
-	 * <p>
-	 * The value of <code>STARTLEVEL_CHANGED</code> is 0x00000008.
-	 * 
 	 * @since 1.2
-	 * @see "<code>StartLevel</code>"
+	 * @see "The Start Level Service"
 	 */
 	public final static int	STARTLEVEL_CHANGED				= 0x00000008;
 
@@ -116,9 +104,6 @@ public class FrameworkEvent extends EventObject {
 	 * 
 	 * <p>
 	 * There was a warning associated with a bundle.
-	 * 
-	 * <p>
-	 * The value of <code>WARNING</code> is 0x00000010.
 	 * 
 	 * @since 1.3
 	 */
@@ -129,9 +114,6 @@ public class FrameworkEvent extends EventObject {
 	 * 
 	 * <p>
 	 * There was an informational event associated with a bundle.
-	 * 
-	 * <p>
-	 * The value of <code>INFO</code> is 0x00000020.
 	 * 
 	 * @since 1.3
 	 */
@@ -145,9 +127,6 @@ public class FrameworkEvent extends EventObject {
 	 * operation on the system bundle. The source of this event is the System
 	 * Bundle.
 	 * 
-	 * <p>
-	 * The value of <code>STOPPED</code> is 0x00000040.
-	 * 
 	 * @since 1.5
 	 */
 	public final static int	STOPPED							= 0x00000040;
@@ -159,9 +138,6 @@ public class FrameworkEvent extends EventObject {
 	 * This event is fired when the Framework has been stopped because of an
 	 * update operation on the system bundle. The Framework will be restarted
 	 * after this event is fired. The source of this event is the System Bundle.
-	 * 
-	 * <p>
-	 * The value of <code>STOPPED_UPDATE</code> is 0x00000080.
 	 * 
 	 * @since 1.5
 	 */
@@ -175,12 +151,20 @@ public class FrameworkEvent extends EventObject {
 	 * operation on the system bundle and a bootclasspath extension bundle has
 	 * been installed or updated. The source of this event is the System Bundle.
 	 * 
-	 * <p>
-	 * The value of <code>STOPPED_BOOTCLASSPATH_MODIFIED</code> is 0x00000100.
-	 * 
 	 * @since 1.5
 	 */
 	public final static int	STOPPED_BOOTCLASSPATH_MODIFIED	= 0x00000100;
+
+	/**
+	 * The Framework did not stop before the wait timeout expired.
+	 * 
+	 * <p>
+	 * This event is fired when the Framework did not stop before the wait
+	 * timeout expired. The source of this event is the System Bundle.
+	 * 
+	 * @since 1.5
+	 */
+	public final static int	WAIT_TIMEDOUT					= 0x00000200;
 
 	/**
 	 * Creates a Framework event.
@@ -246,6 +230,7 @@ public class FrameworkEvent extends EventObject {
 	 * <li>{@link #STOPPED}
 	 * <li>{@link #STOPPED_BOOTCLASSPATH_MODIFIED}
 	 * <li>{@link #STOPPED_UPDATE}
+	 * <li>{@link #WAIT_TIMEDOUT}
 	 * </ul>
 	 * 
 	 * @return The type of state change.

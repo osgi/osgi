@@ -54,9 +54,6 @@ public class ServiceEvent extends EventObject {
 	 * This event is synchronously delivered <strong>after</strong> the service
 	 * has been registered with the Framework.
 	 * 
-	 * <p>
-	 * The value of <code>REGISTERED</code> is 0x00000001.
-	 * 
 	 * @see BundleContext#registerService(String[],Object,Dictionary)
 	 */
 	public final static int			REGISTERED			= 0x00000001;
@@ -66,9 +63,6 @@ public class ServiceEvent extends EventObject {
 	 * <p>
 	 * This event is synchronously delivered <strong>after</strong> the service
 	 * properties have been modified.
-	 * 
-	 * <p>
-	 * The value of <code>MODIFIED</code> is 0x00000002.
 	 * 
 	 * @see ServiceRegistration#setProperties
 	 */
@@ -87,9 +81,6 @@ public class ServiceEvent extends EventObject {
 	 * this event, the Framework will automatically release the bundle's use of
 	 * the service while completing the service unregistration operation.
 	 * 
-	 * <p>
-	 * The value of UNREGISTERING is 0x00000004.
-	 * 
 	 * @see ServiceRegistration#unregister
 	 * @see BundleContext#ungetService
 	 */
@@ -104,9 +95,6 @@ public class ServiceEvent extends EventObject {
 	 * which were added with a non-<code>null</code> filter where the filter
 	 * matched the service properties prior to the modification but the filter
 	 * does not match the modified service properties.
-	 * 
-	 * <p>
-	 * The value of <code>MODIFIED_ENDMATCH</code> is 0x00000008.
 	 * 
 	 * @see ServiceRegistration#setProperties
 	 * @since 1.5
