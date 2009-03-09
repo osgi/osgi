@@ -1304,24 +1304,5 @@ public interface Constants {
 	 * This property may be supplied in the properties <code>Dictionary</code>
 	 * object passed to the <code>BundleContext.registerService</code> method.
 	 */
-	public static final String	SERVICE_DESCRIPTION						= "service.description";
-
-	/**
-	 * Service property to provide information about the type of the service.
-	 * For example, if this service is proxied, the property value might contain
-	 * a string such as &quot;proxied&quot;.
-	 * 
-	 * <p>
-	 * The OSGi Alliance reserves all property value strings that start with
-	 * &quot;osgi.&quot;.
-	 * 
-	 * <p>
-	 * This property may be supplied in the properties <code>Dictionary</code>
-	 * object passed to the <code>BundleContext.registerService</code> method.
-	 * The value of this property must be of type <code>String</code>,
-	 * <code>String[]</code>, or <code>Collection</code> of <code>String</code>.
-	 * 
-	 * @since 1.5
-	 */
-	public static final String	SERVICE_TYPE							= "service.type"; 
+	public static final String	SERVICE_DESCRIPTION						= "service.description"; 
 }
