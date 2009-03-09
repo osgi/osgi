@@ -30,8 +30,8 @@
         </interfaces>
     </reference>
 
-   <component id="ServiceOneMultiple" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceChecker">
-       <constructor-arg value="ServiceOneMultiple"/>
+   <component id="ServiceOneMultipleChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceChecker">
+       <constructor-arg value="ServiceOneMultipleChecker"/>
        <property name="one" ref="ServiceOneMultiple"/>
        <property name="two" ref="ServiceOneMultiple"/>
    </component>

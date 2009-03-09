@@ -438,8 +438,8 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
         // we inject two properties, each of which does a service test using different interfaces.
         // We expect two of these events.
-        importStartEvents.addAssertion("ServiceOneMultiple", AssertionService.SERVICE_SUCCESS);
-        importStartEvents.addAssertion("ServiceOneMultiple", AssertionService.SERVICE_SUCCESS);
+        importStartEvents.addAssertion("ServiceOneMultipleChecker", AssertionService.SERVICE_SUCCESS);
+        importStartEvents.addAssertion("ServiceOneMultipleChecker", AssertionService.SERVICE_SUCCESS);
         // and tso additional components that just request this using a single interface.
         importStartEvents.addAssertion("ServiceOne", AssertionService.SERVICE_SUCCESS);
         importStartEvents.addAssertion("ServiceTwo", AssertionService.SERVICE_SUCCESS);
@@ -739,7 +739,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
         // this should be modified, and have the new service properties available.
-        exportStartEvents.addServiceEvent("MODIFIED", TestServiceOne.class, props);
+        exportStartEvents.addServiceEvent("MODIFIED", TestServiceOne.class);
 
         // now some expected termination stuff
         EventSet exportStopEvents = controller.getStopEvents();
