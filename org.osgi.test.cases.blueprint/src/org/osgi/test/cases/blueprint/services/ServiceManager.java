@@ -55,6 +55,13 @@ public class ServiceManager {
     // our ServiceRegistration instance
     protected ServiceRegistration registration;
 
+    /**
+     * A null constructor is required to be able to export this
+     * as a service interface.
+     */
+    public ServiceManager() {
+    }
+
     public ServiceManager(BundleContext context) {
         this.context = context;
     }

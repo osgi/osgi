@@ -27,7 +27,7 @@
            </ref-set>
        </property>
        <property name="list">
-           <ref-list member-type="service-reference" member-type="service-reference">
+           <ref-list member-type="service-reference">
                <comparator>
                    <ref component="NamedComponent"/>
                </comparator>
@@ -39,11 +39,11 @@
        </property>
        <property name="sortOrder">
            <list>
-               <value>TestServiceA</value>
-               <value>TestServiceB</value>
-               <value>TestServiceC</value>
-               <value>TestServiceD</value>
-               <value>TestServiceE</value>
+               <value>ServiceOneA</value>
+               <value>ServiceOneB</value>
+               <value>ServiceOneC</value>
+               <value>ServiceOneD</value>
+               <value>ServiceOneE</value>
            </list>
        </property>
    </component>

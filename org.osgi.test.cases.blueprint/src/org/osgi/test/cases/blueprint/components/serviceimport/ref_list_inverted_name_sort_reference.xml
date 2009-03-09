@@ -18,17 +18,17 @@
         <property name="list">
             <ref-list interface="org.osgi.test.cases.blueprint.services.TestServiceOne" member-type="service-reference">
                 <comparator>
-                    <component class="org.osgi.test.cases.blueprint.components.serviceimport.InvertedNameComparator"/>
+                    <component class="org.osgi.test.cases.blueprint.components.serviceimport.InverseNameComparator"/>
                 </comparator>
             </ref-list>
         </property>
         <property name="sortOrder">
             <list>
-                <value>TestServiceE</value>
-                <value>TestServiceD</value>
-                <value>TestServiceC</value>
-                <value>TestServiceB</value>
-                <value>TestServiceA</value>
+                <value>ServiceOneE</value>
+                <value>ServiceOneD</value>
+                <value>ServiceOneC</value>
+                <value>ServiceOneB</value>
+                <value>ServiceOneA</value>
             </list>
         </property>
     </component>

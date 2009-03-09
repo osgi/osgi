@@ -34,6 +34,7 @@ package org.osgi.test.cases.blueprint.services;
  * for testing service disambiguation via filters and rankings.
  */
 public class TestBadService extends TestGoodServiceSubclass {
+
     public TestBadService() {
         // always use the same internal component id
         super("BadService");

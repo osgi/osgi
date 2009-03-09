@@ -23,10 +23,10 @@
         </property>
         <property name="sortOrder">
             <list>
-                <value>TestServiceA</value>
-                <value>TestServiceB</value>
-                <value>TestServiceC</value>
-                <value>TestServiceD</value>
+                <value>ServiceOneA</value>
+                <value>ServiceOneB</value>
+                <value>ServiceOneC</value>
+                <value>ServiceOneD</value>
                 <value>TestServiceF</value>
             </list>
         </property>

@@ -41,6 +41,14 @@ public class TestGoodService extends BaseTestComponent implements TestServiceAll
     // instances.  This is also used for testing service sorting.
     public int serviceId = 0;
 
+    /**
+     * A null argument constructor is required for exporting
+     * as a service interface.
+     */
+    public TestGoodService() {
+        super("ProxyTestGoodService");
+    }
+
     public TestGoodService(String componentId) {
         super(componentId);
     }

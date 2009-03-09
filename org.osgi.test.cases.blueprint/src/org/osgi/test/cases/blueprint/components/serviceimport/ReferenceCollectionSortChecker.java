@@ -48,9 +48,6 @@ import org.osgi.test.cases.blueprint.services.TestServiceTwoSubclass;
  * registration is picked up.
  */
 public class ReferenceCollectionSortChecker extends ReferenceCollectionChecker {
-    // our expected sort order (provided as a property)
-    protected String[] sortOrder;
-
     public ReferenceCollectionSortChecker(String componentId) {
         super(componentId);
     }
@@ -114,7 +111,7 @@ public class ReferenceCollectionSortChecker extends ReferenceCollectionChecker {
         // now reregister and complete the iteration.
         serviceManager.registerService(order[0]);
 
-        validateSortOrder(i, order);
+        validateSortOrder(i, slice(order, 2, 3));
     }
 }
 

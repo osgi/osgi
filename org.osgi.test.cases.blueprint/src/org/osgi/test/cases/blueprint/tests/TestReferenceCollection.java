@@ -74,8 +74,11 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/static_reference_list_import.jar",
-            getWebServer()+"www/managed_service_export.jar");
+            getWebServer()+"www/static_reference_list_import.jar");
+
+        // this installs and starts the bundle containing the reference services first to
+        // ensure the timing of the initial service listener calls.
+        controller.addSetupBundle(getWebServer()+"www/managed_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -883,8 +886,11 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ref_set_name_sort.jar",
-            getWebServer()+"www/sorting_service_export.jar");
+            getWebServer()+"www/ref_set_name_sort.jar");
+
+        // this installs and starts the bundle containing the reference services first to
+        // ensure the timing of the initial service listener calls.
+        controller.addSetupBundle(getWebServer()+"www/sorting_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -916,8 +922,11 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ref_set_inverted_name_sort.jar",
-            getWebServer()+"www/sorting_service_export.jar");
+            getWebServer()+"www/ref_set_inverted_name_sort.jar");
+
+        // this installs and starts the bundle containing the reference services first to
+        // ensure the timing of the initial service listener calls.
+        controller.addSetupBundle(getWebServer()+"www/sorting_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);

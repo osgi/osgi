@@ -221,11 +221,11 @@ public class ReferenceCollectionChecker extends DependencyDriver {
     protected void checkServiceName(Object service, String name) {
         if (usesReferences) {
             Object checkedService = bundleContext.getService((ServiceReference)service);
-            AssertionService.assertEquals(this, "Mismatch on sorted name order", ((TestServiceOne)checkedService).getServiceName(), name);
+            AssertionService.assertEquals(this, "Mismatch on sorted name order", name, ((TestServiceOne)checkedService).getServiceName());
             bundleContext.ungetService((ServiceReference)service);
         }
         else {
-            AssertionService.assertEquals(this, "Mismatch on sorted name order", ((TestServiceOne)service).getServiceName(), name);
+            AssertionService.assertEquals(this, "Mismatch on sorted name order", name, ((TestServiceOne)service).getServiceName());
         }
     }
 

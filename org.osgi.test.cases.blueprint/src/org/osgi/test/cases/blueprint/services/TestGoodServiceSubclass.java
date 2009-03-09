@@ -34,6 +34,16 @@ package org.osgi.test.cases.blueprint.services;
  * will give a good return.
  */
 public class TestGoodServiceSubclass extends TestGoodService {
+
+    /**
+     * A null argument constructor is required for exporting
+     * as a service interface.
+     */
+    public TestGoodServiceSubclass() {
+        super();
+    }
+
+
     public TestGoodServiceSubclass(String componentId) {
         super(componentId);
     }

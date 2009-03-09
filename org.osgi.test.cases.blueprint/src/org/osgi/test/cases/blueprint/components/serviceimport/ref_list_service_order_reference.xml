@@ -21,11 +21,11 @@
         <property name="usesReferences" value="true"/>
         <property name="sortOrder">
             <list>
-                <value>TestServiceB</value>
-                <value>TestServiceC</value>
-                <value>TestServiceA</value>
-                <value>TestServiceE</value>
-                <value>TestServiceD</value>
+                <value>ServiceOneB</value>
+                <value>ServiceOneC</value>
+                <value>ServiceOneA</value>
+                <value>ServiceOneE</value>
+                <value>ServiceOneD</value>
             </list>
         </property>
     </component>

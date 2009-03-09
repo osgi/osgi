@@ -38,11 +38,11 @@
         </property>
         <property name="sortOrder">
             <list>
-                <value>TestServiceA</value>
-                <value>TestServiceB</value>
-                <value>TestServiceC</value>
-                <value>TestServiceD</value>
-                <value>TestServiceE</value>
+                <value>ServiceOneA</value>
+                <value>ServiceOneB</value>
+                <value>ServiceOneC</value>
+                <value>ServiceOneD</value>
+                <value>ServiceOneE</value>
             </list>
         </property>
     </component>
