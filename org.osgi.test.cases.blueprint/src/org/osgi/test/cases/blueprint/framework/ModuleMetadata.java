@@ -638,7 +638,6 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
             context = null;
         }
         if (bundle != null) {
-            System.out.println(">>>>>>>>>>> uninstalling bundle " + bundle);
             // uninstall the bundle unconditionally
             bundle.uninstall();
             bundle = null;

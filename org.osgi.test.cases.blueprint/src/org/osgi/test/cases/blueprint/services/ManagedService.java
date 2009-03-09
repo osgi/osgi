@@ -77,14 +77,14 @@ public class ManagedService {
         this.props = props;
         // we will register at least the service name as a property, so create a table if
         // not given one.
-        if (props == null) {
-            props = new Properties();
+        if (this.props == null) {
+            this.props = new Properties();
         }
         // add the service name
-        props.put("test.service.name", name);
+        this.props.put("test.service.name", name);
         // nothing registered yet
         registration = null;
-        start = start;
+        this.start = start;
     }
 
     // we need some setter methods so that we can create instances of this

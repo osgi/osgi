@@ -111,8 +111,12 @@ public class EventSet {
      * @exception Exception
      */
     public void stop(BundleContext testContext) throws Exception {
-        for (int i = 0; i < terminators.size(); i++) {
-            TestCleanup v = (TestCleanup)terminators.get(i);
+        Iterator i = terminators.iterator();
+        while (i.hasNext()) {
+            TestCleanup v = (TestCleanup)i.next();
+            // remove this from the termination list so we never
+            // process this twise
+            i.remove();
             v.cleanup(testContext);
         }
     }

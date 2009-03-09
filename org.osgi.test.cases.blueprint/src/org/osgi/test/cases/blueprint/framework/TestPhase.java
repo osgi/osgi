@@ -119,6 +119,9 @@ public class TestPhase {
      * at the end of processing.
      */
     public void cleanup(BundleContext testContext) throws Exception {
+        // make sure all of the event sets have a chance to
+        // drive their terminators
+        stopEventSets();
     }
 
     /**
@@ -137,7 +140,7 @@ public class TestPhase {
      * Typically, this involves starting some sort of bundle.
      */
     protected void stopEventSets() throws Exception {
-        for (int i = 0; i < events.size(); i ++) {
+        for (int i = 0; i < events.size();i ++) {
             EventSet set = (EventSet)events.get(i);
             set.stop(testContext);
         }

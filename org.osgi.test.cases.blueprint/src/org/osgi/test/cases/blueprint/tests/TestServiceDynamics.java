@@ -230,7 +230,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         ServiceManager serviceManager = new ServiceManager(getContext(),
             new ManagedService[] {
                 // this one is registered from the start
-                new ManagedService("ServiceOneA", new TestGoodService("ServiceOneA"), TestServiceOne.class, getContext(), null, true),
+                new ManagedService("ServiceOneA", new TestGoodService("ServiceOneA"), TestServiceOne.class, getContext(), null, false),
             });
 
         // now we chain a few events to actions to allow us to track the dynamics.
@@ -266,7 +266,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         ServiceManager serviceManager = new ServiceManager(getContext(),
             new ManagedService[] {
                 // this one is registered from the start
-                new ManagedService("ServiceOneA", new TestGoodService("ServiceOneA"), TestServiceOne.class, getContext(), null, true),
+                new ManagedService("ServiceOneA", new TestGoodService("ServiceOneA"), TestServiceOne.class, getContext(), null, false),
             });
 
         // now we chain a few events to actions to allow us to track the dynamics.
