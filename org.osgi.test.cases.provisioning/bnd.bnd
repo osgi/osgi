@@ -1,0 +1,28 @@
+Bundle-Version: 3.0.0.${project.build}
+
+Private-Package						= ${p}.*
+
+Include-Resource: ipa/simple.ipa=simple.ipa, \
+	ipa/ref.ipa=ref.ipa, \
+	ipa/osgi.cert=osgi.cert, \
+	ipa/case-ref.ipa=case-ref.ipa, \
+	ipa/delay-ref.ipa=delay-ref.ipa, \
+	ipa/spid.ipa=spid.ipa, \
+	ipa/ipa-ref-start.ipa=ipa-ref-start.ipa, \
+	ipa/ipa-ref.ipa=ipa-ref.ipa, \
+	ipa/keys-only.ipa=keys-only.ipa, \
+	ipa/unicode.ipa=unicode.ipa
+	
+-buildpath							= \
+	org.osgi.service.provisioning;			version=project	, \
+	osgi;									version=4.1		, \
+	ee.minimum												, \
+	${junit}
+
+-runbundles						= \
+	org.osgi.impl.service.provisioning; version=project
+
+
+Test-Cases: ${classes;extending;*TestCase}
+
+
