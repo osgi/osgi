@@ -1169,8 +1169,8 @@ public interface Constants {
 	 * Default value is {@link #FRAMEWORK_BUNDLE_PARENT_BOOT boot}.
 	 * 
 	 * @see #FRAMEWORK_BUNDLE_PARENT_BOOT
-	 * @see #FRAMEWORK_BUNDLE_PARENT_APP
 	 * @see #FRAMEWORK_BUNDLE_PARENT_EXT
+	 * @see #FRAMEWORK_BUNDLE_PARENT_APP
 	 * @see #FRAMEWORK_BUNDLE_PARENT_FRAMEWORK
 	 * @since 1.5
 	 */
@@ -1186,15 +1186,6 @@ public interface Constants {
 	public final static String	FRAMEWORK_BUNDLE_PARENT_BOOT			= "boot";
 
 	/**
-	 * Specifies to use the application class loader as the parent class loader
-	 * for all bundle class loaders.
-	 * 
-	 * @since 1.5
-	 * @see #FRAMEWORK_BUNDLE_PARENT
-	 */
-	public final static String	FRAMEWORK_BUNDLE_PARENT_APP				= "app";
-
-	/**
 	 * Specifies to use the extension class loader as the parent class loader
 	 * for all bundle class loaders.
 	 * 
@@ -1204,9 +1195,22 @@ public interface Constants {
 	public final static String	FRAMEWORK_BUNDLE_PARENT_EXT				= "ext";
 
 	/**
+	 * Specifies to use the application class loader as the parent class loader
+	 * for all bundle class loaders.  Depending on how the framework is 
+	 * launched, this may refer to the same class loader as 
+	 * {@link #FRAMEWORK_BUNDLE_PARENT_FRAMEWORK}.
+	 * 
+	 * @since 1.5
+	 * @see #FRAMEWORK_BUNDLE_PARENT
+	 */
+	public final static String	FRAMEWORK_BUNDLE_PARENT_APP				= "app";
+
+	/**
 	 * Specifies to use the framework class loader as the parent class loader
 	 * for all bundle class loaders. The framework class loader is the class
-	 * loader used to load the framework implementation.
+	 * loader used to load the framework implementation.  Depending on how the 
+	 * framework is launched, this may refer to the same class loader as 
+	 * {@link #FRAMEWORK_BUNDLE_PARENT_APP}.
 	 * 
 	 * @since 1.5
 	 * @see #FRAMEWORK_BUNDLE_PARENT
