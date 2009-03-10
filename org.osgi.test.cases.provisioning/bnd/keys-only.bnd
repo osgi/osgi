@@ -1,0 +1,6 @@
+-resourceonly:                           true
+Include-Resource:                        keys-only.ipa;literal='true';extra='text/plain;charset=utf-8', \
+   load-status;literal='keys-only.ipa';extra='text/plain;charset=utf-8', \
+   some.key.1;literal='some.value.111';extra='text/plain;charset=utf-8', \
+   some.key.2;literal='some.value.22';extra='text/plain;charset=utf-8', \
+   some.key.4;literal='some.value.4';extra='text/plain;charset=utf-8'

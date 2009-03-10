@@ -1,0 +1,4 @@
+-resourceonly:                           true
+Include-Resource:                        unicode.ipa;literal='true';extra='text/plain;charset=utf-8', \
+   load-status;literal='unicode.ipa';extra='text/plain;charset=utf-8', \
+   unicode.string;literal='v?ôv';extra='text/plain;charset=utf-8'

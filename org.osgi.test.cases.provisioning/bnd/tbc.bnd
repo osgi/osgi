@@ -1,0 +1,22 @@
+Bundle-Name:                             test.cases.provisioning.tbc
+Bundle-Version:                          3.0
+Bundle-Description:                      Tests the Initial Provisioning control bundle
+Bundle-Category:                         osgi,test
+
+
+Bundle-Activator:                        ${p}.tbc.ProvisioningControl
+Private-Package:                         ${p}.tbc
+Include-Resource:                        ${p}/tbc/simple.ipa=simple.ipa, \
+  ${p}/tbc/ref.ipa=ref.ipa, \
+  ${p}/tbc/osgi.cert=osgi.cert, \
+  ${p}/tbc/case-ref.ipa=case-ref.ipa, \
+  ${p}/tbc/delay-ref.ipa=delay-ref.ipa, \
+  ${p}/tbc/spid.ipa=spid.ipa, \
+  ${p}/tbc/ipa-ref-start.ipa=ipa-ref-start.ipa, \
+  ${p}/tbc/ipa-ref.ipa=ipa-ref.ipa, \
+  ${p}/tbc/keys-only.ipa=keys-only.ipa, \
+  ${p}/tbc/unicode.ipa=unicode.ipa
+
+
+CVS-Header:                              $Id: tbc.mf 4769 2007-04-06 02:45:41Z bjhargrave $
+

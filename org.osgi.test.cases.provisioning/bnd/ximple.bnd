@@ -1,0 +1,12 @@
+Bundle-Name:                             test.provisioning
+Bundle-Version:                          3.0.0.${project.build}
+Bundle-Description:                      Tests the Initial Provisioning
+Bundle-Category:                         osgi,test
+
+
+Bundle-Activator:                        ${p}.ProvisioningTestCase
+Private-Package:                         ${p}.simple
+
+
+CVS-Header:                              $Id: Manifest.mf 4769 2007-04-06 02:45:41Z bjhargrave $
+
