@@ -113,6 +113,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
             new TestListValue(new TestValue[] {
                 new TestStringValue(String.class, "abc"),
                 new TestStringValue(Boolean.class, "false"),
+                new TestStringValue(Byte.class, "3"),
                 new TestStringValue(Character.class, "4"),
                 new TestStringValue(Integer.class, "5"),
                 new TestStringValue(Short.class, "6"),
@@ -121,7 +122,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
                 new TestStringValue(Float.class, "9.0"),
                 new TestStringValue(URL.class, "http://www.osgi.org"),
                 new TestStringValue(Class.class, "java.lang.String"),
-                new TestStringValue(Locale.class, "en_US")
+                new TestStringValue(Locale.class, "en_US"),
+                new TestNullValue(),
             }))));
 
         // a typed list of Doubles
@@ -1016,7 +1018,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerList.add("def");
         expected = new HashSet();
         expected.add(innerList);
-        addConstructorValidator(startEvents, "compNestedSet", expected, Set.class);
+        addConstructorValidator(startEvents, "compNestedList", expected, Set.class);
 
         // Map nested inside of a set
         Map innerMap = new HashMap();
@@ -1769,7 +1771,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compStringItems", expected, Map.class);
 
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compEmptyMap", new TestParameter(
+        startEvents.addValidator(new ConstructorMetadataValidator("compStringItems", new TestParameter(
             new TestMapValue(new MapValueEntry[]{
                 new MapValueEntry("abc", "1"),
                 new MapValueEntry("def", "2"),
@@ -1932,7 +1934,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compStringItems", expected, Map.class);
 
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compEmptyMap", new TestParameter(
+        startEvents.addValidator(new ConstructorMetadataValidator("compStringItems", new TestParameter(
             new TestMapValue(new MapValueEntry[]{
                 new MapValueEntry("abc", "1"),
                 new MapValueEntry("def", "2"),
@@ -2095,7 +2097,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compStringItems", expected, Map.class);
 
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compEmptyMap", new TestParameter(
+        startEvents.addValidator(new ConstructorMetadataValidator("compStringItems", new TestParameter(
             new TestMapValue(new MapValueEntry[]{
                 new MapValueEntry("abc", "1"),
                 new MapValueEntry("def", "2"),
@@ -2260,7 +2262,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addPropertyValidator(startEvents, "compStringItems", "map", expected, Map.class);
 
         // validate the metadata for this one too
-        startEvents.addValidator(new PropertyMetadataValidator("compEmptyMap", new TestProperty(
+        startEvents.addValidator(new PropertyMetadataValidator("compStringItems", new TestProperty(
             new TestMapValue(new MapValueEntry[]{
                 new MapValueEntry("abc", "1"),
                 new MapValueEntry("def", "2")
@@ -2426,7 +2428,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addPropertyValidator(startEvents, "compStringItems", "map", expected, Map.class);
 
         // validate the metadata for this one too
-        startEvents.addValidator(new PropertyMetadataValidator("compEmptyMap", new TestProperty(
+        startEvents.addValidator(new PropertyMetadataValidator("compStringItems", new TestProperty(
             new TestMapValue(new MapValueEntry[]{
                 new MapValueEntry("abc", "1"),
                 new MapValueEntry("def", "2")
@@ -2591,7 +2593,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addPropertyValidator(startEvents, "compStringItems", "map", expected, Map.class);
 
         // validate the metadata for this one too
-        startEvents.addValidator(new PropertyMetadataValidator("compEmptyMap", new TestProperty(
+        startEvents.addValidator(new PropertyMetadataValidator("compStringItems", new TestProperty(
             new TestMapValue(new MapValueEntry[]{
                 new MapValueEntry("abc", "1"),
                 new MapValueEntry("def", "2")

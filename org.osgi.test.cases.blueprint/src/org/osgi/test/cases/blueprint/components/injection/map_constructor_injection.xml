@@ -190,8 +190,8 @@
                 <entry>
                     <key><value>inner</value></key>
                     <props>
-                        <prop key="abc">"def"</prop>
-                        <prop key="ghi">"jkl"</prop>
+                        <prop key="abc">def</prop>
+                        <prop key="ghi">jkl</prop>
                     </props>
                 </entry>
             </map>

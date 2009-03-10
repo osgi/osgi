@@ -122,8 +122,8 @@
         <property name="list">
             <list>
                 <props>
-                    <prop key="abc">"def"</prop>
-                    <prop key="ghi">"jkl"</prop>
+                    <prop key="abc">def</prop>
+                    <prop key="ghi">jkl</prop>
                 </props>
             </list>
         </property>

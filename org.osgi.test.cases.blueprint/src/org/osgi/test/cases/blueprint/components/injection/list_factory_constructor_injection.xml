@@ -122,8 +122,8 @@
         <constructor-arg>
             <list>
                 <props>
-                    <prop key="abc">"def"</prop>
-                    <prop key="ghi">"jkl"</prop>
+                    <prop key="abc">def</prop>
+                    <prop key="ghi">jkl</prop>
                 </props>
             </list>
         </constructor-arg>
