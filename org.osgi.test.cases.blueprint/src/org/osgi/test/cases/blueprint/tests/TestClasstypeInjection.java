@@ -91,7 +91,8 @@ public class TestClasstypeInjection extends DefaultTestBundleControl {
     }
 
     public void testConstructorInjection() throws Exception {
-        StandardTestController controller = new StandardTestController(getContext(), getWebServer() + "www/classtype_constructor_injection.jar");
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer() + "www/classtype_constructor_injection.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
 
         this.addConstructorTestItem(startEvents);
@@ -100,7 +101,8 @@ public class TestClasstypeInjection extends DefaultTestBundleControl {
     }
 
     public void testInstanceFactoryConstructorInjection() throws Exception {
-        StandardTestController controller = new StandardTestController(getContext(), getWebServer() + "www/classtype_factory_constructor_injection.jar");
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer() + "www/classtype_factory_constructor_injection.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
 
         this.addConstructorTestItem(startEvents);
@@ -109,7 +111,8 @@ public class TestClasstypeInjection extends DefaultTestBundleControl {
     }
 
     public void testStaticFactoryConstructorInjection() throws Exception {
-        StandardTestController controller = new StandardTestController(getContext(), getWebServer() + "www/classtype_static_factory_constructor_injection.jar");
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer() + "www/classtype_static_factory_constructor_injection.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
 
         this.addConstructorTestItem(startEvents);

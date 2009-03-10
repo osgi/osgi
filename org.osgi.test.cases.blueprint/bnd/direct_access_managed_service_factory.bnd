@@ -1,6 +1,6 @@
 Bundle-SymbolicName:                     ${p}.direct_access_managed_service_factory
 Bundle-Version:                          4.2
-Import-Package:                          ${p}.components.cmsupport, ${p}.services
+Import-Package:                          ${p}.components.cmsupport, ${p}.services, org.osgi.service.cm
 Private-Package:                         $(p).build
 Include-Resource					= \
 	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/cmsupport/direct_access_managed_service_factory.xml
