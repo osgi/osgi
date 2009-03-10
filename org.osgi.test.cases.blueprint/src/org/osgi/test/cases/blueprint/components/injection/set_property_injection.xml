@@ -71,7 +71,7 @@
         </property>
     </component>
 
-    <component id="compTypedOverride" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <component id="compTypeOverride" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="set">
             <set value-type="java.lang.Double">
                 <value>0.0</value>

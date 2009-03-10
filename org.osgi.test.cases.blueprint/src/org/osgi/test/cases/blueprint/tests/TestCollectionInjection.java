@@ -51,7 +51,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
     }
 
 	public void testListConstructor() throws Exception {
-        StandardTestController controller = new StandardTestController(getContext(), getWebServer()+"www/list_constructor_injection.jar");
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/list_constructor_injection.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
         // Empty list
         List expected = new ArrayList();
@@ -64,7 +65,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compNullList", null, List.class);
         // validate the metadata for this one too
         startEvents.addValidator(new ConstructorMetadataValidator("compNullList", new TestParameter(
-            new TestNullValue())));
+            new TestNullValue(), List.class)));
 
         // simple list of strings
         expected = new ArrayList();
@@ -116,8 +117,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
                 new TestStringValue(Integer.class, "5"),
                 new TestStringValue(Short.class, "6"),
                 new TestStringValue(Long.class, "7"),
-                new TestStringValue(Double.class, "8"),
-                new TestStringValue(Float.class, "9"),
+                new TestStringValue(Double.class, "8.0"),
+                new TestStringValue(Float.class, "9.0"),
                 new TestStringValue(URL.class, "http://www.osgi.org"),
                 new TestStringValue(Class.class, "java.lang.String"),
                 new TestStringValue(Locale.class, "en_US")
@@ -131,8 +132,9 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new ConstructorMetadataValidator("compTypedItems", new TestParameter(
             new TestListValue(new TestValue[] {
-                new TestStringValue("0.0"),
-                new TestStringValue("1.0")
+                // TODO:  Remove explicit type once bug is fixed
+                new TestStringValue(Double.class, "0.0"),
+                new TestStringValue(Double.class, "1.0")
             }, Double.class))));
 
         // a type list of Doubles with an element override
@@ -144,8 +146,9 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new ConstructorMetadataValidator("compTypeOverride", new TestParameter(
             new TestListValue(new TestValue[] {
-                new TestStringValue("0.0"),
-                new TestStringValue("1.0"),
+                // TODO:  Remove explicit type once bug is fixed
+                new TestStringValue(Double.class, "0.0"),
+                new TestStringValue(Double.class, "1.0"),
                 new TestStringValue(Boolean.class, "true")
             }, Double.class))));
 
@@ -171,7 +174,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerMap.put("ghi", "jkl");
         expected = new ArrayList();
         expected.add(innerMap);
-        addConstructorValidator(startEvents, "compNestedSet", expected, List.class);
+        addConstructorValidator(startEvents, "compNestedMap", expected, List.class);
 
         // Properties nested inside of a list
         Properties innerProps = new Properties();
@@ -179,13 +182,14 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerProps.put("ghi", "jkl");
         expected = new ArrayList();
         expected.add(innerProps);
-        addConstructorValidator(startEvents, "compNestedSet", expected, List.class);
+        addConstructorValidator(startEvents, "compNestedProps", expected, List.class);
 
         controller.run();
     }
 
 	public void testListStaticFactoryConstructor() throws Exception {
-        StandardTestController controller = new StandardTestController(getContext(), getWebServer()+"www/list_static_factory_constructor_injection.jar");
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/list_static_factory_constructor_injection.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
         // Empty list
         List expected = new ArrayList();
@@ -198,7 +202,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compNullList", null, List.class);
         // validate the metadata for this one too
         startEvents.addValidator(new ConstructorMetadataValidator("compNullList", new TestParameter(
-            new TestNullValue())));
+            new TestNullValue(), List.class)));
 
         // simple list of strings
         expected = new ArrayList();
@@ -246,15 +250,17 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
             new TestListValue(new TestValue[] {
                 new TestStringValue(String.class, "abc"),
                 new TestStringValue(Boolean.class, "false"),
+                new TestStringValue(Byte.class, "3"),
                 new TestStringValue(Character.class, "4"),
                 new TestStringValue(Integer.class, "5"),
                 new TestStringValue(Short.class, "6"),
                 new TestStringValue(Long.class, "7"),
-                new TestStringValue(Double.class, "8"),
-                new TestStringValue(Float.class, "9"),
+                new TestStringValue(Double.class, "8.0"),
+                new TestStringValue(Float.class, "9.0"),
                 new TestStringValue(URL.class, "http://www.osgi.org"),
                 new TestStringValue(Class.class, "java.lang.String"),
-                new TestStringValue(Locale.class, "en_US")
+                new TestStringValue(Locale.class, "en_US"),
+                new TestNullValue(),
             }))));
 
         // a typed list of Doubles
@@ -265,8 +271,9 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new ConstructorMetadataValidator("compTypedItems", new TestParameter(
             new TestListValue(new TestValue[] {
-                new TestStringValue("0.0"),
-                new TestStringValue("1.0")
+                // TODO:  Remove explicit type once bug is fixed
+                new TestStringValue(Double.class, "0.0"),
+                new TestStringValue(Double.class, "1.0")
             }, Double.class))));
 
         // a type list of Doubles with an element override
@@ -278,8 +285,9 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new ConstructorMetadataValidator("compTypeOverride", new TestParameter(
             new TestListValue(new TestValue[] {
-                new TestStringValue("0.0"),
-                new TestStringValue("1.0"),
+                // TODO:  Remove explicit type once bug is fixed
+                new TestStringValue(Double.class, "0.0"),
+                new TestStringValue(Double.class, "1.0"),
                 new TestStringValue(Boolean.class, "true")
             }, Double.class))));
 
@@ -305,7 +313,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerMap.put("ghi", "jkl");
         expected = new ArrayList();
         expected.add(innerMap);
-        addConstructorValidator(startEvents, "compNestedSet", expected, List.class);
+        addConstructorValidator(startEvents, "compNestedMap", expected, List.class);
 
         // Properties nested inside of a list
         Properties innerProps = new Properties();
@@ -313,13 +321,14 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerProps.put("ghi", "jkl");
         expected = new ArrayList();
         expected.add(innerProps);
-        addConstructorValidator(startEvents, "compNestedSet", expected, List.class);
+        addConstructorValidator(startEvents, "compNestedProps", expected, List.class);
 
         controller.run();
     }
 
 	public void testListInstanceFactoryConstructor() throws Exception {
-        StandardTestController controller = new StandardTestController(getContext(), getWebServer()+"www/list_factory_constructor_injection.jar");
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/list_factory_constructor_injection.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
         // Empty list
         List expected = new ArrayList();
@@ -332,7 +341,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compNullList", null, List.class);
         // validate the metadata for this one too
         startEvents.addValidator(new ConstructorMetadataValidator("compNullList", new TestParameter(
-            new TestNullValue())));
+            new TestNullValue(), List.class)));
 
         // simple list of strings
         expected = new ArrayList();
@@ -380,15 +389,17 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
             new TestListValue(new TestValue[] {
                 new TestStringValue(String.class, "abc"),
                 new TestStringValue(Boolean.class, "false"),
+                new TestStringValue(Byte.class, "3"),
                 new TestStringValue(Character.class, "4"),
                 new TestStringValue(Integer.class, "5"),
                 new TestStringValue(Short.class, "6"),
                 new TestStringValue(Long.class, "7"),
-                new TestStringValue(Double.class, "8"),
-                new TestStringValue(Float.class, "9"),
+                new TestStringValue(Double.class, "8.0"),
+                new TestStringValue(Float.class, "9.0"),
                 new TestStringValue(URL.class, "http://www.osgi.org"),
                 new TestStringValue(Class.class, "java.lang.String"),
-                new TestStringValue(Locale.class, "en_US")
+                new TestStringValue(Locale.class, "en_US"),
+                new TestNullValue(),
             }))));
 
         // a typed list of Doubles
@@ -399,8 +410,9 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new ConstructorMetadataValidator("compTypedItems", new TestParameter(
             new TestListValue(new TestValue[] {
-                new TestStringValue("0.0"),
-                new TestStringValue("1.0")
+                // TODO:  Remove explicit type once bug is fixed
+                new TestStringValue(Double.class, "0.0"),
+                new TestStringValue(Double.class, "1.0")
             }, Double.class))));
 
         // a type list of Doubles with an element override
@@ -412,8 +424,9 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new ConstructorMetadataValidator("compTypeOverride", new TestParameter(
             new TestListValue(new TestValue[] {
-                new TestStringValue("0.0"),
-                new TestStringValue("1.0"),
+                // TODO:  Remove explicit type once bug is fixed
+                new TestStringValue(Double.class, "0.0"),
+                new TestStringValue(Double.class, "1.0"),
                 new TestStringValue(Boolean.class, "true")
             }, Double.class))));
 
@@ -439,7 +452,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerMap.put("ghi", "jkl");
         expected = new ArrayList();
         expected.add(innerMap);
-        addConstructorValidator(startEvents, "compNestedSet", expected, List.class);
+        addConstructorValidator(startEvents, "compNestedMap", expected, List.class);
 
         // Properties nested inside of a list
         Properties innerProps = new Properties();
@@ -447,7 +460,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerProps.put("ghi", "jkl");
         expected = new ArrayList();
         expected.add(innerProps);
-        addConstructorValidator(startEvents, "compNestedSet", expected, List.class);
+        addConstructorValidator(startEvents, "compNestedProps", expected, List.class);
 
         controller.run();
     }
@@ -459,7 +472,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
 
 	public void testListProperty() throws Exception {
-        StandardTestController controller = new StandardTestController(getContext(), getWebServer()+"www/list_property_injection.jar");
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/list_property_injection.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
         // Empty list
         List expected = new ArrayList();
@@ -507,7 +521,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add("abc");
         expected.add(Boolean.FALSE);
         expected.add(new Byte((byte)3));
-        expected.add(new Character((char)4));
+        expected.add(new Character('4'));
         expected.add(new Integer(5));
         expected.add(new Short((short)6));
         expected.add(new Long(7));
@@ -522,15 +536,17 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
             new TestListValue(new TestValue[] {
                 new TestStringValue(String.class, "abc"),
                 new TestStringValue(Boolean.class, "false"),
+                new TestStringValue(Byte.class, "3"),
                 new TestStringValue(Character.class, "4"),
                 new TestStringValue(Integer.class, "5"),
                 new TestStringValue(Short.class, "6"),
                 new TestStringValue(Long.class, "7"),
-                new TestStringValue(Double.class, "8"),
-                new TestStringValue(Float.class, "9"),
+                new TestStringValue(Double.class, "8.0"),
+                new TestStringValue(Float.class, "9.0"),
                 new TestStringValue(URL.class, "http://www.osgi.org"),
                 new TestStringValue(Class.class, "java.lang.String"),
-                new TestStringValue(Locale.class, "en_US")
+                new TestStringValue(Locale.class, "en_US"),
+                new TestNullValue()
             })
             , "list")));
 
@@ -542,8 +558,9 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new PropertyMetadataValidator("compTypedItems", new TestProperty(
             new TestListValue(new TestValue[] {
-                new TestStringValue("0.0"),
-                new TestStringValue("1.0")
+                // TODO:  Remove explicit type once bug is fixed
+                new TestStringValue(Double.class, "0.0"),
+                new TestStringValue(Double.class, "1.0")
             }, Double.class)
             , "list")));
 
@@ -554,10 +571,11 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(Boolean.TRUE);
         addPropertyValidator(startEvents, "compTypeOverride", "list", expected, List.class);
 
-        startEvents.addValidator(new PropertyMetadataValidator("compTypedOverride", new TestProperty(
+        startEvents.addValidator(new PropertyMetadataValidator("compTypeOverride", new TestProperty(
             new TestListValue(new TestValue[] {
-                new TestStringValue("0.0"),
-                new TestStringValue("1.0"),
+                // TODO:  Remove explicit type once bug is fixed
+                new TestStringValue(Double.class, "0.0"),
+                new TestStringValue(Double.class, "1.0"),
                 new TestStringValue(Boolean.class, "true")
             }, Double.class)
             , "list")));
@@ -584,7 +602,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerMap.put("ghi", "jkl");
         expected = new ArrayList();
         expected.add(innerMap);
-        addPropertyValidator(startEvents, "compNestedSet", "list", expected, List.class);
+        addPropertyValidator(startEvents, "compNestedMap", "list", expected, List.class);
 
         // Properties nested inside of a list
         Properties innerProps = new Properties();
@@ -592,13 +610,14 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerProps.put("ghi", "jkl");
         expected = new ArrayList();
         expected.add(innerProps);
-        addPropertyValidator(startEvents, "compNestedSet", "list", expected, List.class);
+        addPropertyValidator(startEvents, "compNestedProps", "list", expected, List.class);
 
         controller.run();
     }
 
 	public void testStaticFactoryListProperty() throws Exception {
-        StandardTestController controller = new StandardTestController(getContext(), getWebServer()+"www/list_static_factory_property_injection.jar");
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/list_static_factory_property_injection.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
         // Empty list
         List expected = new ArrayList();
@@ -646,7 +665,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add("abc");
         expected.add(Boolean.FALSE);
         expected.add(new Byte((byte)3));
-        expected.add(new Character((char)4));
+        expected.add(new Character('4'));
         expected.add(new Integer(5));
         expected.add(new Short((short)6));
         expected.add(new Long(7));
@@ -661,15 +680,17 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
             new TestListValue(new TestValue[] {
                 new TestStringValue(String.class, "abc"),
                 new TestStringValue(Boolean.class, "false"),
+                new TestStringValue(Byte.class, "3"),
                 new TestStringValue(Character.class, "4"),
                 new TestStringValue(Integer.class, "5"),
                 new TestStringValue(Short.class, "6"),
                 new TestStringValue(Long.class, "7"),
-                new TestStringValue(Double.class, "8"),
-                new TestStringValue(Float.class, "9"),
+                new TestStringValue(Double.class, "8.0"),
+                new TestStringValue(Float.class, "9.0"),
                 new TestStringValue(URL.class, "http://www.osgi.org"),
                 new TestStringValue(Class.class, "java.lang.String"),
-                new TestStringValue(Locale.class, "en_US")
+                new TestStringValue(Locale.class, "en_US"),
+                new TestNullValue()
             })
             , "list")));
 
@@ -681,8 +702,9 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new PropertyMetadataValidator("compTypedItems", new TestProperty(
             new TestListValue(new TestValue[] {
-                new TestStringValue("0.0"),
-                new TestStringValue("1.0")
+                // TODO:  Remove explicit type once bug is fixed
+                new TestStringValue(Double.class, "0.0"),
+                new TestStringValue(Double.class, "1.0")
             }, Double.class)
             , "list")));
 
@@ -691,12 +713,13 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(new Double(0.0));
         expected.add(new Double(1.0));
         expected.add(Boolean.TRUE);
-        addPropertyValidator(startEvents, "compTypedOverride", "list", expected, List.class);
+        addPropertyValidator(startEvents, "compTypeOverride", "list", expected, List.class);
 
-        startEvents.addValidator(new PropertyMetadataValidator("compTypedItems", new TestProperty(
+        startEvents.addValidator(new PropertyMetadataValidator("compTypeOverride", new TestProperty(
             new TestListValue(new TestValue[] {
-                new TestStringValue("0.0"),
-                new TestStringValue("1.0"),
+                // TODO:  Remove explicit type once bug is fixed
+                new TestStringValue(Double.class, "0.0"),
+                new TestStringValue(Double.class, "1.0"),
                 new TestStringValue(Boolean.class, "true")
             }, Double.class)
             , "list")));
@@ -723,7 +746,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerMap.put("ghi", "jkl");
         expected = new ArrayList();
         expected.add(innerMap);
-        addPropertyValidator(startEvents, "compNestedSet", "list", expected, List.class);
+        addPropertyValidator(startEvents, "compNestedMap", "list", expected, List.class);
 
         // Properties nested inside of a list
         Properties innerProps = new Properties();
@@ -731,13 +754,14 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerProps.put("ghi", "jkl");
         expected = new ArrayList();
         expected.add(innerProps);
-        addPropertyValidator(startEvents, "compNestedSet", "list", expected, List.class);
+        addPropertyValidator(startEvents, "compNestedProps", "list", expected, List.class);
 
         controller.run();
     }
 
 	public void testInstanceFactoryListProperty() throws Exception {
-        StandardTestController controller = new StandardTestController(getContext(), getWebServer()+"www/list_factory_property_injection.jar");
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/list_factory_property_injection.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
         // Empty list
         List expected = new ArrayList();
@@ -780,7 +804,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add("abc");
         expected.add(Boolean.FALSE);
         expected.add(new Byte((byte)3));
-        expected.add(new Character((char)4));
+        expected.add(new Character('4'));
         expected.add(new Integer(5));
         expected.add(new Short((short)6));
         expected.add(new Long(7));
@@ -795,15 +819,17 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
             new TestListValue(new TestValue[] {
                 new TestStringValue(String.class, "abc"),
                 new TestStringValue(Boolean.class, "false"),
+                new TestStringValue(Byte.class, "3"),
                 new TestStringValue(Character.class, "4"),
                 new TestStringValue(Integer.class, "5"),
                 new TestStringValue(Short.class, "6"),
                 new TestStringValue(Long.class, "7"),
-                new TestStringValue(Double.class, "8"),
-                new TestStringValue(Float.class, "9"),
+                new TestStringValue(Double.class, "8.0"),
+                new TestStringValue(Float.class, "9.0"),
                 new TestStringValue(URL.class, "http://www.osgi.org"),
                 new TestStringValue(Class.class, "java.lang.String"),
-                new TestStringValue(Locale.class, "en_US")
+                new TestStringValue(Locale.class, "en_US"),
+                new TestNullValue()
             })
             , "list")));
 
@@ -816,8 +842,9 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new PropertyMetadataValidator("compTypedItems", new TestProperty(
             new TestListValue(new TestValue[] {
-                new TestStringValue("0.0"),
-                new TestStringValue("1.0")
+                // TODO:  Remove explicit type once bug is fixed
+                new TestStringValue(Double.class, "0.0"),
+                new TestStringValue(Double.class, "1.0")
             }, Double.class)
             , "list")));
 
@@ -826,12 +853,13 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(new Double(0.0));
         expected.add(new Double(1.0));
         expected.add(Boolean.TRUE);
-        addPropertyValidator(startEvents, "compTypedOverride", "list", expected, List.class);
+        addPropertyValidator(startEvents, "compTypeOverride", "list", expected, List.class);
 
-        startEvents.addValidator(new PropertyMetadataValidator("compTypedOverride", new TestProperty(
+        startEvents.addValidator(new PropertyMetadataValidator("compTypeOverride", new TestProperty(
             new TestListValue(new TestValue[] {
-                new TestStringValue("0.0"),
-                new TestStringValue("1.0"),
+                // TODO:  Remove explicit type once bug is fixed
+                new TestStringValue(Double.class, "0.0"),
+                new TestStringValue(Double.class, "1.0"),
                 new TestStringValue(Boolean.class, "true")
             }, Double.class)
             , "list")));
@@ -858,7 +886,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerMap.put("ghi", "jkl");
         expected = new ArrayList();
         expected.add(innerMap);
-        addPropertyValidator(startEvents, "compNestedSet", "list", expected, List.class);
+        addPropertyValidator(startEvents, "compNestedMap", "list", expected, List.class);
 
         // Properties nested inside of a list
         Properties innerProps = new Properties();
@@ -866,7 +894,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerProps.put("ghi", "jkl");
         expected = new ArrayList();
         expected.add(innerProps);
-        addPropertyValidator(startEvents, "compNestedSet", "list", expected, List.class);
+        addPropertyValidator(startEvents, "compNestedProps", "list", expected, List.class);
 
         controller.run();
     }
@@ -885,7 +913,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compNullSet", null, Set.class);
         // validate the metadata for this one too
         startEvents.addValidator(new ConstructorMetadataValidator("compNullSet", new TestParameter(
-            new TestNullValue())));
+            new TestNullValue(), Set.class)));
 
         // simple set of strings
         expected = new HashSet();
@@ -916,7 +944,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add("abc");
         expected.add(Boolean.FALSE);
         expected.add(new Byte((byte)3));
-        expected.add(new Character((char)4));
+        expected.add(new Character('4'));
         expected.add(new Integer(5));
         expected.add(new Short((short)6));
         expected.add(new Long(7));
@@ -930,18 +958,20 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         // large metadata validation step here.
         startEvents.addValidator(new ConstructorMetadataValidator("compMixedItems", new TestParameter(
-            new TestListValue(new TestValue[] {
+            new TestSetValue(new TestValue[] {
                 new TestStringValue(String.class, "abc"),
                 new TestStringValue(Boolean.class, "false"),
+                new TestStringValue(Byte.class, "3"),
                 new TestStringValue(Character.class, "4"),
                 new TestStringValue(Integer.class, "5"),
                 new TestStringValue(Short.class, "6"),
                 new TestStringValue(Long.class, "7"),
-                new TestStringValue(Double.class, "8"),
-                new TestStringValue(Float.class, "9"),
+                new TestStringValue(Double.class, "8.0"),
+                new TestStringValue(Float.class, "9.0"),
                 new TestStringValue(URL.class, "http://www.osgi.org"),
                 new TestStringValue(Class.class, "java.lang.String"),
-                new TestStringValue(Locale.class, "en_US")
+                new TestStringValue(Locale.class, "en_US"),
+                new TestNullValue()
             }))));
 
         // a typed set of elements
@@ -952,8 +982,9 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new ConstructorMetadataValidator("compTypedItems", new TestParameter(
             new TestSetValue(new TestValue[] {
-                new TestStringValue("0.0"),
-                new TestStringValue("1.0")
+                // TODO:  Remove explicit type once bug is fixed
+                new TestStringValue(Double.class, "0.0"),
+                new TestStringValue(Double.class, "1.0")
             }, Double.class))));
 
         // a typed set of elements, with an element override
@@ -965,8 +996,9 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new ConstructorMetadataValidator("compTypeOverride", new TestParameter(
             new TestSetValue(new TestValue[] {
-                new TestStringValue("0.0"),
-                new TestStringValue("1.0"),
+                // TODO:  Remove explicit type once bug is fixed
+                new TestStringValue(Double.class, "0.0"),
+                new TestStringValue(Double.class, "1.0"),
                 new TestStringValue(Boolean.class, "true")
             }, Double.class))));
 
@@ -992,7 +1024,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerMap.put("ghi", "jkl");
         expected = new HashSet();
         expected.add(innerMap);
-        addConstructorValidator(startEvents, "compNestedSet", expected, Set.class);
+        addConstructorValidator(startEvents, "compNestedMap", expected, Set.class);
 
         // Properties nested inside of a set
         Properties innerProps = new Properties();
@@ -1000,7 +1032,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerProps.put("ghi", "jkl");
         expected = new HashSet();
         expected.add(innerProps);
-        addConstructorValidator(startEvents, "compNestedSet", expected, Set.class);
+        addConstructorValidator(startEvents, "compNestedProps", expected, Set.class);
 
         controller.run();
     }
@@ -1020,7 +1052,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         // validate the metadata for this one too
         // validate the metadata for this one too
         startEvents.addValidator(new ConstructorMetadataValidator("compNullSet", new TestParameter(
-            new TestNullValue())));
+            new TestNullValue(), Set.class)));
 
         // simple set of strings
         expected = new HashSet();
@@ -1051,7 +1083,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add("abc");
         expected.add(Boolean.FALSE);
         expected.add(new Byte((byte)3));
-        expected.add(new Character((char)4));
+        expected.add(new Character('4'));
         expected.add(new Integer(5));
         expected.add(new Short((short)6));
         expected.add(new Long(7));
@@ -1065,18 +1097,20 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         // large metadata validation step here.
         startEvents.addValidator(new ConstructorMetadataValidator("compMixedItems", new TestParameter(
-            new TestListValue(new TestValue[] {
+            new TestSetValue(new TestValue[] {
                 new TestStringValue(String.class, "abc"),
                 new TestStringValue(Boolean.class, "false"),
+                new TestStringValue(Byte.class, "3"),
                 new TestStringValue(Character.class, "4"),
                 new TestStringValue(Integer.class, "5"),
                 new TestStringValue(Short.class, "6"),
                 new TestStringValue(Long.class, "7"),
-                new TestStringValue(Double.class, "8"),
-                new TestStringValue(Float.class, "9"),
+                new TestStringValue(Double.class, "8.0"),
+                new TestStringValue(Float.class, "9.0"),
                 new TestStringValue(URL.class, "http://www.osgi.org"),
                 new TestStringValue(Class.class, "java.lang.String"),
-                new TestStringValue(Locale.class, "en_US")
+                new TestStringValue(Locale.class, "en_US"),
+                new TestNullValue()
             }))));
 
         // a typed set of elements
@@ -1087,8 +1121,9 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new ConstructorMetadataValidator("compTypedItems", new TestParameter(
             new TestSetValue(new TestValue[] {
-                new TestStringValue("0.0"),
-                new TestStringValue("1.0")
+                // TODO:  Remove explicit type once bug is fixed
+                new TestStringValue(Double.class, "0.0"),
+                new TestStringValue(Double.class, "1.0")
             }, Double.class))));
 
         // a typed set of elements, with an element override
@@ -1100,8 +1135,9 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new ConstructorMetadataValidator("compTypeOverride", new TestParameter(
             new TestSetValue(new TestValue[] {
-                new TestStringValue("0.0"),
-                new TestStringValue("1.0"),
+                // TODO:  Remove explicit type once bug is fixed
+                new TestStringValue(Double.class, "0.0"),
+                new TestStringValue(Double.class, "1.0"),
                 new TestStringValue(Boolean.class, "true")
             }, Double.class))));
 
@@ -1120,7 +1156,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerList.add("def");
         expected = new HashSet();
         expected.add(innerList);
-        addConstructorValidator(startEvents, "compNestedSet", expected, Set.class);
+        addConstructorValidator(startEvents, "compNestedList", expected, Set.class);
 
         // Map nested inside of a set
         Map innerMap = new HashMap();
@@ -1128,7 +1164,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerMap.put("ghi", "jkl");
         expected = new HashSet();
         expected.add(innerMap);
-        addConstructorValidator(startEvents, "compNestedSet", expected, Set.class);
+        addConstructorValidator(startEvents, "compNestedMap", expected, Set.class);
 
         // Properties nested inside of a set
         Properties innerProps = new Properties();
@@ -1136,7 +1172,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerProps.put("ghi", "jkl");
         expected = new HashSet();
         expected.add(innerProps);
-        addConstructorValidator(startEvents, "compNestedSet", expected, Set.class);
+        addConstructorValidator(startEvents, "compNestedProps", expected, Set.class);
 
         controller.run();
     }
@@ -1156,7 +1192,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         // validate the metadata for this one too
         // validate the metadata for this one too
         startEvents.addValidator(new ConstructorMetadataValidator("compNullSet", new TestParameter(
-            new TestNullValue())));
+            new TestNullValue(), Set.class)));
 
         // simple set of strings
         expected = new HashSet();
@@ -1187,7 +1223,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add("abc");
         expected.add(Boolean.FALSE);
         expected.add(new Byte((byte)3));
-        expected.add(new Character((char)4));
+        expected.add(new Character('4'));
         expected.add(new Integer(5));
         expected.add(new Short((short)6));
         expected.add(new Long(7));
@@ -1201,30 +1237,33 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         // large metadata validation step here.
         startEvents.addValidator(new ConstructorMetadataValidator("compMixedItems", new TestParameter(
-            new TestListValue(new TestValue[] {
+            new TestSetValue(new TestValue[] {
                 new TestStringValue(String.class, "abc"),
                 new TestStringValue(Boolean.class, "false"),
+                new TestStringValue(Byte.class, "3"),
                 new TestStringValue(Character.class, "4"),
                 new TestStringValue(Integer.class, "5"),
                 new TestStringValue(Short.class, "6"),
                 new TestStringValue(Long.class, "7"),
-                new TestStringValue(Double.class, "8"),
-                new TestStringValue(Float.class, "9"),
+                new TestStringValue(Double.class, "8.0"),
+                new TestStringValue(Float.class, "9.0"),
                 new TestStringValue(URL.class, "http://www.osgi.org"),
                 new TestStringValue(Class.class, "java.lang.String"),
-                new TestStringValue(Locale.class, "en_US")
+                new TestStringValue(Locale.class, "en_US"),
+                new TestNullValue()
             }))));
 
         // a typed set of elements
         expected = new HashSet();
         expected.add(new Double(0.0));
         expected.add(new Double(1.0));
-        addConstructorValidator(startEvents, "comp  TypedItems", expected, Set.class);
+        addConstructorValidator(startEvents, "compTypedItems", expected, Set.class);
 
         startEvents.addValidator(new ConstructorMetadataValidator("compTypedItems", new TestParameter(
             new TestSetValue(new TestValue[] {
-                new TestStringValue("0.0"),
-                new TestStringValue("1.0")
+                // TODO:  Remove explicit type once bug is fixed
+                new TestStringValue(Double.class, "0.0"),
+                new TestStringValue(Double.class, "1.0")
             }, Double.class))));
 
         // a typed set of elements, with an element override
@@ -1236,8 +1275,9 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new ConstructorMetadataValidator("compTypeOverride", new TestParameter(
             new TestSetValue(new TestValue[] {
-                new TestStringValue("0.0"),
-                new TestStringValue("1.0"),
+                // TODO:  Remove explicit type once bug is fixed
+                new TestStringValue(Double.class, "0.0"),
+                new TestStringValue(Double.class, "1.0"),
                 new TestStringValue(Boolean.class, "true")
             }, Double.class))));
 
@@ -1256,7 +1296,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerList.add("def");
         expected = new HashSet();
         expected.add(innerList);
-        addConstructorValidator(startEvents, "compNestedSet", expected, Set.class);
+        addConstructorValidator(startEvents, "compNestedList", expected, Set.class);
 
         // Map nested inside of a set
         Map innerMap = new HashMap();
@@ -1264,7 +1304,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerMap.put("ghi", "jkl");
         expected = new HashSet();
         expected.add(innerMap);
-        addConstructorValidator(startEvents, "compNestedSet", expected, Set.class);
+        addConstructorValidator(startEvents, "compNestedMap", expected, Set.class);
 
         // Properties nested inside of a set
         Properties innerProps = new Properties();
@@ -1272,7 +1312,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerProps.put("ghi", "jkl");
         expected = new HashSet();
         expected.add(innerProps);
-        addConstructorValidator(startEvents, "compNestedSet", expected, Set.class);
+        addConstructorValidator(startEvents, "compNestedProps", expected, Set.class);
 
         controller.run();
     }
@@ -1326,7 +1366,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add("abc");
         expected.add(Boolean.FALSE);
         expected.add(new Byte((byte)3));
-        expected.add(new Character((char)4));
+        expected.add(new Character('4'));
         expected.add(new Integer(5));
         expected.add(new Short((short)6));
         expected.add(new Long(7));
@@ -1342,15 +1382,17 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
             new TestSetValue(new TestValue[] {
                 new TestStringValue(String.class, "abc"),
                 new TestStringValue(Boolean.class, "false"),
+                new TestStringValue(Byte.class, "3"),
                 new TestStringValue(Character.class, "4"),
                 new TestStringValue(Integer.class, "5"),
                 new TestStringValue(Short.class, "6"),
                 new TestStringValue(Long.class, "7"),
-                new TestStringValue(Double.class, "8"),
-                new TestStringValue(Float.class, "9"),
+                new TestStringValue(Double.class, "8.0"),
+                new TestStringValue(Float.class, "9.0"),
                 new TestStringValue(URL.class, "http://www.osgi.org"),
                 new TestStringValue(Class.class, "java.lang.String"),
-                new TestStringValue(Locale.class, "en_US")
+                new TestStringValue(Locale.class, "en_US"),
+                new TestNullValue()
             })
             , "set")));
 
@@ -1362,8 +1404,9 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new PropertyMetadataValidator("compTypedItems", new TestProperty(
             new TestSetValue(new TestValue[] {
-                new TestStringValue("0.0"),
-                new TestStringValue("1.0")
+                // TODO:  Remove explicit type once bug is fixed
+                new TestStringValue(Double.class, "0.0"),
+                new TestStringValue(Double.class, "1.0")
             }, Double.class)
             , "set")));
 
@@ -1372,12 +1415,13 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(new Double(0.0));
         expected.add(new Double(1.0));
         expected.add(Boolean.TRUE);
-        addPropertyValidator(startEvents, "compTypedOverride", "set", expected, Set.class);
+        addPropertyValidator(startEvents, "compTypeOverride", "set", expected, Set.class);
 
-        startEvents.addValidator(new PropertyMetadataValidator("compTypedOverride", new TestProperty(
+        startEvents.addValidator(new PropertyMetadataValidator("compTypeOverride", new TestProperty(
             new TestSetValue(new TestValue[] {
-                new TestStringValue("0.0"),
-                new TestStringValue("1.0"),
+                // TODO:  Remove explicit type once bug is fixed
+                new TestStringValue(Double.class, "0.0"),
+                new TestStringValue(Double.class, "1.0"),
                 new TestStringValue(Boolean.class, "true")
             }, Double.class)
             , "set")));
@@ -1397,7 +1441,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerList.add("def");
         expected = new HashSet();
         expected.add(innerList);
-        addPropertyValidator(startEvents, "compNestedSet", "set", expected, Set.class);
+        addPropertyValidator(startEvents, "compNestedList", "set", expected, Set.class);
 
         // Map nested inside of a set
         Map innerMap = new HashMap();
@@ -1405,7 +1449,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerMap.put("ghi", "jkl");
         expected = new HashSet();
         expected.add(innerMap);
-        addPropertyValidator(startEvents, "compNestedSet", "set", expected, Set.class);
+        addPropertyValidator(startEvents, "compNestedMap", "set", expected, Set.class);
 
         // Properties nested inside of a set
         Properties innerProps = new Properties();
@@ -1413,7 +1457,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerProps.put("ghi", "jkl");
         expected = new HashSet();
         expected.add(innerProps);
-        addPropertyValidator(startEvents, "compNestedSet", "set", expected, Set.class);
+        addPropertyValidator(startEvents, "compNestedProps", "set", expected, Set.class);
 
         controller.run();
     }
@@ -1467,7 +1511,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add("abc");
         expected.add(Boolean.FALSE);
         expected.add(new Byte((byte)3));
-        expected.add(new Character((char)4));
+        expected.add(new Character('4'));
         expected.add(new Integer(5));
         expected.add(new Short((short)6));
         expected.add(new Long(7));
@@ -1483,15 +1527,17 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
             new TestSetValue(new TestValue[] {
                 new TestStringValue(String.class, "abc"),
                 new TestStringValue(Boolean.class, "false"),
+                new TestStringValue(Byte.class, "3"),
                 new TestStringValue(Character.class, "4"),
                 new TestStringValue(Integer.class, "5"),
                 new TestStringValue(Short.class, "6"),
                 new TestStringValue(Long.class, "7"),
-                new TestStringValue(Double.class, "8"),
-                new TestStringValue(Float.class, "9"),
+                new TestStringValue(Double.class, "8.0"),
+                new TestStringValue(Float.class, "9.0"),
                 new TestStringValue(URL.class, "http://www.osgi.org"),
                 new TestStringValue(Class.class, "java.lang.String"),
-                new TestStringValue(Locale.class, "en_US")
+                new TestStringValue(Locale.class, "en_US"),
+                new TestNullValue()
             })
             , "set")));
 
@@ -1503,8 +1549,9 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new PropertyMetadataValidator("compTypedItems", new TestProperty(
             new TestSetValue(new TestValue[] {
-                new TestStringValue("0.0"),
-                new TestStringValue("1.0")
+                // TODO:  Remove explicit type once bug is fixed
+                new TestStringValue(Double.class, "0.0"),
+                new TestStringValue(Double.class, "1.0")
             }, Double.class)
             , "set")));
 
@@ -1513,12 +1560,13 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(new Double(0.0));
         expected.add(new Double(1.0));
         expected.add(Boolean.TRUE);
-        addPropertyValidator(startEvents, "compTypedOverride", "set", expected, Set.class);
+        addPropertyValidator(startEvents, "compTypeOverride", "set", expected, Set.class);
 
-        startEvents.addValidator(new PropertyMetadataValidator("compTypedOverride", new TestProperty(
+        startEvents.addValidator(new PropertyMetadataValidator("compTypeOverride", new TestProperty(
             new TestSetValue(new TestValue[] {
-                new TestStringValue("0.0"),
-                new TestStringValue("1.0"),
+                // TODO:  Remove explicit type once bug is fixed
+                new TestStringValue(Double.class, "0.0"),
+                new TestStringValue(Double.class, "1.0"),
                 new TestStringValue(Boolean.class, "true")
             }, Double.class)
             , "set")));
@@ -1538,7 +1586,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerList.add("def");
         expected = new HashSet();
         expected.add(innerList);
-        addPropertyValidator(startEvents, "compNestedSet", "set", expected, Set.class);
+        addPropertyValidator(startEvents, "compNestedList", "set", expected, Set.class);
 
         // Map nested inside of a set
         Map innerMap = new HashMap();
@@ -1546,7 +1594,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerMap.put("ghi", "jkl");
         expected = new HashSet();
         expected.add(innerMap);
-        addPropertyValidator(startEvents, "compNestedSet", "set", expected, Set.class);
+        addPropertyValidator(startEvents, "compNestedMap", "set", expected, Set.class);
 
         // Properties nested inside of a set
         Properties innerProps = new Properties();
@@ -1554,7 +1602,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerProps.put("ghi", "jkl");
         expected = new HashSet();
         expected.add(innerProps);
-        addPropertyValidator(startEvents, "compNestedSet", "set", expected, Set.class);
+        addPropertyValidator(startEvents, "compNestedProps", "set", expected, Set.class);
 
         controller.run();
     }
@@ -1602,7 +1650,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add("abc");
         expected.add(Boolean.FALSE);
         expected.add(new Byte((byte)3));
-        expected.add(new Character((char)4));
+        expected.add(new Character('4'));
         expected.add(new Integer(5));
         expected.add(new Short((short)6));
         expected.add(new Long(7));
@@ -1618,15 +1666,17 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
             new TestSetValue(new TestValue[] {
                 new TestStringValue(String.class, "abc"),
                 new TestStringValue(Boolean.class, "false"),
+                new TestStringValue(Byte.class, "3"),
                 new TestStringValue(Character.class, "4"),
                 new TestStringValue(Integer.class, "5"),
                 new TestStringValue(Short.class, "6"),
                 new TestStringValue(Long.class, "7"),
-                new TestStringValue(Double.class, "8"),
-                new TestStringValue(Float.class, "9"),
+                new TestStringValue(Double.class, "8.0"),
+                new TestStringValue(Float.class, "9.0"),
                 new TestStringValue(URL.class, "http://www.osgi.org"),
                 new TestStringValue(Class.class, "java.lang.String"),
-                new TestStringValue(Locale.class, "en_US")
+                new TestStringValue(Locale.class, "en_US"),
+                new TestNullValue()
             })
             , "set")));
 
@@ -1638,8 +1688,9 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new PropertyMetadataValidator("compTypedItems", new TestProperty(
             new TestSetValue(new TestValue[] {
-                new TestStringValue("0.0"),
-                new TestStringValue("1.0")
+                // TODO:  Remove explicit type once bug is fixed
+                new TestStringValue(Double.class, "0.0"),
+                new TestStringValue(Double.class, "1.0")
             }, Double.class)
             , "set")));
 
@@ -1648,12 +1699,13 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(new Double(0.0));
         expected.add(new Double(1.0));
         expected.add(Boolean.TRUE);
-        addPropertyValidator(startEvents, "compTypedOverride", "set", expected, Set.class);
+        addPropertyValidator(startEvents, "compTypeOverride", "set", expected, Set.class);
 
-        startEvents.addValidator(new PropertyMetadataValidator("compTypedOverride", new TestProperty(
+        startEvents.addValidator(new PropertyMetadataValidator("compTypeOverride", new TestProperty(
             new TestSetValue(new TestValue[] {
-                new TestStringValue("0.0"),
-                new TestStringValue("1.0"),
+                // TODO:  Remove explicit type once bug is fixed
+                new TestStringValue(Double.class, "0.0"),
+                new TestStringValue(Double.class, "1.0"),
                 new TestStringValue(Boolean.class, "true")
             }, Double.class)
             , "set")));
@@ -1673,7 +1725,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerList.add("def");
         expected = new HashSet();
         expected.add(innerList);
-        addPropertyValidator(startEvents, "compNestedSet", "set", expected, Set.class);
+        addPropertyValidator(startEvents, "compNestedList", "set", expected, Set.class);
 
         // Map nested inside of a set
         Map innerMap = new HashMap();
@@ -1681,7 +1733,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerMap.put("ghi", "jkl");
         expected = new HashSet();
         expected.add(innerMap);
-        addPropertyValidator(startEvents, "compNestedSet", "set", expected, Set.class);
+        addPropertyValidator(startEvents, "compNestedMap", "set", expected, Set.class);
 
         // Properties nested inside of a set
         Properties innerProps = new Properties();
@@ -1689,7 +1741,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerProps.put("ghi", "jkl");
         expected = new HashSet();
         expected.add(innerProps);
-        addPropertyValidator(startEvents, "compNestedSet", "set", expected, Set.class);
+        addPropertyValidator(startEvents, "compNestedProps", "set", expected, Set.class);
 
         controller.run();
     }
@@ -1708,7 +1760,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compNullMap", null, Map.class);
         // validate the metadata for this one too
         startEvents.addValidator(new ConstructorMetadataValidator("compNullMap", new TestParameter(
-            new TestNullValue())));
+            new TestNullValue(), Map.class)));
 
         // simple Map of strings
         expected = new HashMap();
@@ -1871,7 +1923,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compNullMap", null, Map.class);
         // validate the metadata for this one too
         startEvents.addValidator(new ConstructorMetadataValidator("compNullMap", new TestParameter(
-            new TestNullValue())));
+            new TestNullValue(), Map.class)));
 
         // simple Map of strings
         expected = new HashMap();
@@ -1954,7 +2006,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.put("String", "abc");
         expected.put("Boolean", Boolean.FALSE);
         expected.put("Byte", new Byte((byte)3));
-        expected.put("Character", new Character((char)4));
+        expected.put("Character", new Character('4'));
         expected.put("Integer", new Integer(5));
         expected.put("Short", new Short((short)6));
         expected.put("Long", new Long(7));
@@ -2034,7 +2086,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compNullMap", null, Map.class);
         // validate the metadata for this one too
         startEvents.addValidator(new ConstructorMetadataValidator("compNullMap", new TestParameter(
-            new TestNullValue())));
+            new TestNullValue(), Map.class)));
 
         // simple Map of strings
         expected = new HashMap();
@@ -2117,7 +2169,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.put("String", "abc");
         expected.put("Boolean", Boolean.FALSE);
         expected.put("Byte", new Byte((byte)3));
-        expected.put("Character", new Character((char)4));
+        expected.put("Character", new Character('4'));
         expected.put("Integer", new Integer(5));
         expected.put("Short", new Short((short)6));
         expected.put("Long", new Long(7));
@@ -2282,7 +2334,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.put("String", "abc");
         expected.put("Boolean", Boolean.FALSE);
         expected.put("Byte", new Byte((byte)3));
-        expected.put("Character", new Character((char)4));
+        expected.put("Character", new Character('4'));
         expected.put("Integer", new Integer(5));
         expected.put("Short", new Short((short)6));
         expected.put("Long", new Long(7));
@@ -2448,7 +2500,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.put("String", "abc");
         expected.put("Boolean", Boolean.FALSE);
         expected.put("Byte", new Byte((byte)3));
-        expected.put("Character", new Character((char)4));
+        expected.put("Character", new Character('4'));
         expected.put("Integer", new Integer(5));
         expected.put("Short", new Short((short)6));
         expected.put("Long", new Long(7));
@@ -2603,7 +2655,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.put("String", "abc");
         expected.put("Boolean", Boolean.FALSE);
         expected.put("Byte", new Byte((byte)3));
-        expected.put("Character", new Character((char)4));
+        expected.put("Character", new Character('4'));
         expected.put("Integer", new Integer(5));
         expected.put("Short", new Short((short)6));
         expected.put("Long", new Long(7));

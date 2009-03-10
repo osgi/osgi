@@ -94,12 +94,16 @@ public class TestStringValue extends TestValue {
         if (!super.equals(v)) {
             return false;
         }
+
         // if no type was explicitly specified,
-        if (targetTypeName == null && ((TypedStringValue)v).getTypeName() != null) {
-            return false;
+        if (targetTypeName == null) {
+            // then this must also be null
+            if (((TypedStringValue)v).getTypeName() != null) {
+                return false;
+            }
         }
         // must match on the type name
-        if (!targetTypeName.equals(((TypedStringValue)v).getTypeName())) {
+        else if (!targetTypeName.equals(((TypedStringValue)v).getTypeName())) {
             return false;
         }
 

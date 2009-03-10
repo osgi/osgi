@@ -75,7 +75,7 @@
         </constructor-arg>
     </component>
 
-    <component id="compTypedOverride" factory-method="makeInstance" factory-component="compFactory">
+    <component id="compTypeOverride" factory-method="makeInstance" factory-component="compFactory">
         <constructor-arg>
             <set value-type="java.lang.Double">
                 <value>0.0</value>

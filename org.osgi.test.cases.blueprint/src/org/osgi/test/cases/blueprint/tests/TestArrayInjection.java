@@ -77,9 +77,7 @@ public class TestArrayInjection extends DefaultTestBundleControl {
             new TestListValue(new TestValue[] { new TestStringValue("1234") }))));
 
         // boolean conversions
-        addPropertyValidator(startEvents, "compListPrimBoolean", new BooleanArrayValueDescriptor("primBoolean", new boolean[] {true, true, true, false, false, false}));
-        startEvents.addValidator(new ArgumentValueValidator("compListPrimBoolean",
-            new IntArrayValueDescriptor("arg1", new int[] {1234})));
+        addPropertyValidator(startEvents, "compListPrimBoolean", new BooleanArrayValueDescriptor("primBoolean", new boolean[] {true, false, true, false, true, false}));
         addPropertyValidator(startEvents, "compSetPrimBoolean", new BooleanArrayValueDescriptor("primBoolean", new boolean[] {true, true, true}));
         addPropertyValidator(startEvents, "compListWrapperedBoolean", new ObjectArrayValueDescriptor("boolean", new Boolean[] {Boolean.TRUE, Boolean.TRUE, Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE}));
         addPropertyValidator(startEvents, "compSetWrapperedBoolean", new ObjectArrayValueDescriptor("boolean", new Boolean[] {Boolean.TRUE, Boolean.TRUE, Boolean.TRUE}));

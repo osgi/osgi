@@ -71,7 +71,7 @@
         </constructor-arg>
     </component>
 
-    <component id="compTypedOverride" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+    <component id="compTypeOverride" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
         <constructor-arg>
             <set value-type="java.lang.Double">
                 <value>0.0</value>
