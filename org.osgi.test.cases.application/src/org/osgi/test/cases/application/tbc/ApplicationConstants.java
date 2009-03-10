@@ -120,8 +120,8 @@ public class ApplicationConstants {
     
     public static final String SIGNER_FILTER = "CN=John Smith, O=ACME Inc, OU=ACME Cert Authority, L=Austin, S=Texas, C=US";
     public static final String SIGNER_FILTER2 = "CN=Different Cert, O=Test Inc, OU=Test Cert Authority, L=Recife, S=Pernambuco, C=BR";
-    public static final String SIGNER_FILTER_WILDCARD = "CN=John*, O=ACME Inc, OU=ACME Cert Authority, L=Austin, S=Texas, C=US";
-    public static final String SIGNER_FILTER_INVALID1 = "2=*.ORG.BR, TX=CESAR, R=MOTOROLA, L=RECIFE, C=BR";
+    public static final String	SIGNER_FILTER_WILDCARD													= "CN=John\\*, O=ACME Inc, OU=ACME Cert Authority, L=Austin, S=Texas, C=US";
+	public static final String	SIGNER_FILTER_INVALID1													= "2=\\*.ORG.BR, TX=CESAR, R=MOTOROLA, L=RECIFE, C=BR";
 	
 	public static String APPLICATION_PERMISSION_FILTER1 = "(&(signer="+SIGNER_FILTER+")"+"(pid="+TEST_PID+"))";
 	public static String APPLICATION_PERMISSION_FILTER2 = "(&(signer="+SIGNER_FILTER_WILDCARD+")"+"(pid="+TEST_PID+"))";

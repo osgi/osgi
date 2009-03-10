@@ -340,71 +340,9 @@ public class ApplicationAdminPermission extends Permission {
   }
   
   private Filter getFilter() {
-  	String transformedFilter = filter;
-  	
   	if (appliedFilter == null) {
   		try {
-  			int pos = filter.indexOf("signer"); //$NON-NLS-1$
-  			if (pos != -1){ 
-  			
-  				//there may be a signer attribute 
-    			StringBuffer filterBuf = new StringBuffer(filter);
-    			int numAsteriskFound = 0; //use as offset to replace in buffer
-    			
-    			int walkbackPos; //temp pos
-
-    			//find occurences of (signer= and escape out *'s
-    			while (pos != -1) {
-
-    				//walk back and look for '(' to see if this is an attr
-    				walkbackPos = pos-1; 
-    				
-    				//consume whitespace
-    				while(walkbackPos >= 0 && Character.isWhitespace(filter.charAt(walkbackPos))) {
-    					walkbackPos--;
-    				}
-    				if (walkbackPos <0) {
-    					//filter is invalid - FilterImpl will throw error
-    					break;
-    				}
-    				
-    				//check to see if we have unescaped '('
-    				if (filter.charAt(walkbackPos) != '(' || (walkbackPos > 0 && filter.charAt(walkbackPos-1) == '\\')) {
-    					//'(' was escaped or not there
-    					pos = filter.indexOf("signer",pos+6); //$NON-NLS-1$
-    					continue;
-    				}     				
-    				pos+=6; //skip over 'signer'
-
-    				//found signer - consume whitespace before '='
-    				while (Character.isWhitespace(filter.charAt(pos))) {
-    					pos++;
-    				}
-
-    				//look for '='
-    				if (filter.charAt(pos) != '=') {
-    					//attr was signerx - keep looking
-    					pos = filter.indexOf("signer",pos); //$NON-NLS-1$
-    					continue;
-    				}
-    				pos++; //skip over '='
-    				
-    				//found signer value - escape '*'s
-    				while (!(filter.charAt(pos) == ')' && filter.charAt(pos-1) != '\\')) {
-    					if (filter.charAt(pos) == '*') {
-    						filterBuf.insert(pos+numAsteriskFound,'\\');
-    						numAsteriskFound++;
-    					}
-    					pos++;
-    				}
-
-    				//end of signer value - look for more?
-    				pos = filter.indexOf("signer",pos); //$NON-NLS-1$
-    			} //end while (pos != -1)
-    			transformedFilter = filterBuf.toString();
-  			} //end if (pos != -1)
-
-  			appliedFilter = FrameworkUtil.createFilter( transformedFilter );
+  			appliedFilter = FrameworkUtil.createFilter(filter);
 		} catch (InvalidSyntaxException e) {
 			//we will return null
 		}
