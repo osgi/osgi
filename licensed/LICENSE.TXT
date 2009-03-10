@@ -179,6 +179,13 @@ URL                     http://depfind.sourceforge.net/
 License					licenses/JEANTESSIER.txt
 Modifications           none
 
+com.springsource.org.easymock ------------------------------------------------------------
+Copyright                Copyright (c) Easymock
+Used                    Used in JMX tests
+URL                     http://www.easymock.org/
+License					http://www.opensource.org/licenses/mit-license.php
+Modifications           none
+
 
 
 
