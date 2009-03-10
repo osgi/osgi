@@ -25,53 +25,12 @@
  */
 package org.osgi.test.cases.permissions.filtered.util;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-import java.util.Properties;
-
 /**
  * This class provides Utility method for TestCases.
  * 
  * @author Shigekuni KONDO, Ikuo YAMASAKI, NTT Corporation
  */
 public class Util {
-	public static Properties getConfiguredProperties(final String path)
-			throws Exception {
-		final Properties props = new Properties();
-
-		final ExceptionHolder exceptionHolder = new ExceptionHolder();
-		AccessController.doPrivileged(new PrivilegedAction() {
-			public Object run() {
-				try {
-					InputStream is = new FileInputStream(path);
-					try {
-						props.load(is);
-					} catch (IOException e1) {
-						e1.printStackTrace();
-						exceptionHolder.setException(e1);
-					} finally {
-						if (is != null)
-							try {
-								is.close();
-							} catch (IOException e) {
-
-								e.printStackTrace();
-							}
-					}
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-					exceptionHolder.setException(e);
-				}
-				return null;
-			}
-		});
-		if (exceptionHolder.getException() != null)
-			throw exceptionHolder.getException();
-		return props;
-	}
+	public final static boolean	debug	= false;
 
 }

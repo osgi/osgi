@@ -28,7 +28,6 @@ package org.osgi.test.cases.permissions.filtered.importer1;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.test.cases.permissions.filtered.sharedPkg.IShared;
-import org.osgi.test.cases.permissions.filtered.util.IService1;
 
 /**
  * 

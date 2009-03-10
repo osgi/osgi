@@ -59,12 +59,12 @@ import org.osgi.test.cases.permissions.filtered.util.PermissionsFilterException;
  */
 public class FilteredTestControl extends TestCase {
 
-	private static final String	S_NAME_UTIL_ISERVICE1						= "org.osgi.test.cases.permissions.filtered.util.IService1";
-	private static final String	S_NAME_UTIL_ISERVICE2						= "org.osgi.test.cases.permissions.filtered.util.IService2";
-	private static final String	P_NAME_UTIL									= "org.osgi.test.cases.permissions.filtered.util";
-	private static final String	P_NAME_SHARED								= "org.osgi.test.cases.permissions.filtered.sharedPkg";
-	private static final String	SP											= "org.osgi.framework.ServicePermission";
-	private static final String	PP											= "org.osgi.framework.PackagePermission";
+	private static final String	S_NAME_UTIL_ISERVICE1				= "org.osgi.test.cases.permissions.filtered.util.IService1";
+	private static final String	S_NAME_UTIL_ISERVICE2				= "org.osgi.test.cases.permissions.filtered.util.IService2";
+	private static final String	P_NAME_UTIL							= "org.osgi.test.cases.permissions.filtered.util";
+	private static final String	P_NAME_SHARED						= "org.osgi.test.cases.permissions.filtered.sharedPkg";
+	private static final String	SP									= "org.osgi.framework.ServicePermission";
+	private static final String	PP									= "org.osgi.framework.PackagePermission";
 	private BundleContext		context;
 	private PermissionAdmin		permAdmin;
 	private PackageAdmin		pkgAdmin;
@@ -78,29 +78,29 @@ public class FilteredTestControl extends TestCase {
 	private boolean				flagModifyEvent;
 	private boolean				flagUnregisterEvent;
 
-	private static final String	REGISTER_BUNDLE_LOCATION					= "bundles/register.jar";
-	private static final String	REGISTER_MODIFY_BUNDLE_LOCATION				= "bundles/registerModify.jar";
-	private static final String	REGISTER_PLURAL_BUNDLE_LOCATION				= "bundles/registerPlural.jar";
-	private static final String	GET_BUNDLE_LOCATION							= "bundles/get.jar";
-	private static final String	RESET_PERMISSION_BUNDLE_LOCATION			= "bundles/setPermission.jar";
-	private static final String	EXPORT_BUNDLE_1_LOCATION					= "bundles/exporter1.jar";
-	private static final String	EXPORT_BUNDLE_2_LOCATION					= "bundles/exporter2.jar";
-	private static final String	IMPORT_BUNDLE_1_LOCATION					= "bundles/importer1.jar";
-	private static final String	IMPORT_BUNDLE_2_LOCATION					= "bundles/importer2.jar";
+	private static final String	REGISTER_BUNDLE_LOCATION			= "bundles/register.jar";
+	private static final String	REGISTER_MODIFY_BUNDLE_LOCATION		= "bundles/registerModify.jar";
+	private static final String	REGISTER_PLURAL_BUNDLE_LOCATION		= "bundles/registerPlural.jar";
+	private static final String	GET_BUNDLE_LOCATION					= "bundles/get.jar";
+	private static final String	RESET_PERMISSION_BUNDLE_LOCATION	= "bundles/setPermission.jar";
+	private static final String	EXPORT_BUNDLE_1_LOCATION			= "bundles/exporter1.jar";
+	private static final String	EXPORT_BUNDLE_2_LOCATION			= "bundles/exporter2.jar";
+	private static final String	IMPORT_BUNDLE_1_LOCATION			= "bundles/importer1.jar";
+	private static final String	IMPORT_BUNDLE_2_LOCATION			= "bundles/importer2.jar";
 
-	private Bundle				registerBundle								= null;
-	private Bundle				registerPluralBundle						= null;
-	private Bundle				getBundle									= null;
-	private Bundle				registerModifyBundle						= null;
-	private Bundle				exportBundle1								= null;
-	private Bundle				importBundle1								= null;
-	private Bundle				importBundle2								= null;
-	private Bundle				registerForServiceRegistrationTestBundle	= null;
-	private Bundle				setPermBundle								= null;
-	private Bundle				exportBundle2								= null;
+	private Bundle				registerBundle						= null;
+	private Bundle				registerPluralBundle				= null;
+	private Bundle				getBundle							= null;
+	private Bundle				registerModifyBundle				= null;
+	private Bundle				exportBundle1						= null;
+	private Bundle				importBundle1						= null;
+	private Bundle				importBundle2						= null;
+	// private Bundle registerForServiceRegistrationTestBundle = null;
+	private Bundle				setPermBundle						= null;
+	private Bundle				exportBundle2						= null;
 	private LinkedList			list;
 
-	private static final int	SLEEP_PERIOD_IN_MSEC						= 200;
+	private static final int	SLEEP_PERIOD_IN_MSEC				= 200;
 
 	public void setBundleContext(BundleContext context) {
 		this.context = context;
@@ -118,7 +118,7 @@ public class FilteredTestControl extends TestCase {
 		this.flagUnregisterEvent = false;
 		permAdmin = this.getPermissionAdmin();
 		pkgAdmin = this.getPackageAdmin();
-		this.resetBundles();
+		this.resetBundles(false);
 		this.setAllpermission(RESET_PERMISSION_BUNDLE_LOCATION);
 		setPermBundle = this.installBundle(RESET_PERMISSION_BUNDLE_LOCATION);
 		setPermBundle.start();
@@ -137,6 +137,10 @@ public class FilteredTestControl extends TestCase {
 	}
 
 	private void resetBundles() throws BundleException {
+		resetBundles(true);
+	}
+
+	private void resetBundles(boolean refreshAndResolve) throws BundleException {
 		if (this.registerBundle != null) {
 			this.registerBundle.uninstall();
 			this.registerBundle = null;
@@ -166,16 +170,17 @@ public class FilteredTestControl extends TestCase {
 			this.importBundle2.uninstall();
 			this.importBundle2 = null;
 		}
-		if (this.registerForServiceRegistrationTestBundle != null) {
-			this.registerForServiceRegistrationTestBundle.uninstall();
-			this.registerForServiceRegistrationTestBundle = null;
-		}
+		// if (this.registerForServiceRegistrationTestBundle != null) {
+		// this.registerForServiceRegistrationTestBundle.uninstall();
+		// this.registerForServiceRegistrationTestBundle = null;
+		// }
 		if (this.exportBundle2 != null) {
 			this.exportBundle2.uninstall();
 			this.exportBundle2 = null;
 		}
 
-		this.refreshPackagesAndResolveBundles(null);
+		if (refreshAndResolve)
+			this.refreshPackagesAndResolveBundles(null);
 	}
 
 	/*
@@ -577,6 +582,20 @@ public class FilteredTestControl extends TestCase {
 		assertFalse("Fail to register service. It MUST succeed.", exceptionFlag);
 		add(list, PP, P_NAME_UTIL, "IMPORT");
 		add(list, PP, "org.osgi.framework", "IMPORT");
+		String location = this.registerBundle.getLocation();
+		String sub = location.substring(0, location.indexOf(".") + 1) + "*";
+		add(list, SP, "(&(objectClass=" + S_NAME_UTIL_ISERVICE1 + ")(location="
+				+ sub + "))", "GET");
+		this.setBundlePermission(this.getBundle, list);
+		this.startBundleAndCheckPermissionsFilterException(getBundle);
+		assertFalse("Fail to get service. It MUST succeed.", exceptionFlag);
+	}
+
+	public void testServiceGet2_08_3() throws Exception {
+		this.startBundleAndCheckSecurityException(this.registerBundle);
+		assertFalse("Fail to register service. It MUST succeed.", exceptionFlag);
+		add(list, PP, P_NAME_UTIL, "IMPORT");
+		add(list, PP, "org.osgi.framework", "IMPORT");
 		add(list, SP, "(&(objectClass=" + S_NAME_UTIL_ISERVICE1
 				+ ")(location=something.else))", "GET");
 		this.setBundlePermission(this.getBundle, list);
@@ -584,7 +603,7 @@ public class FilteredTestControl extends TestCase {
 		assertTrue("Succeed in getting service. It MUST fail.", exceptionFlag);
 	}
 
-	public void testServiceGet2_08_3() throws Exception {
+	public void testServiceGet2_08_4() throws Exception {
 		this.startBundleAndCheckSecurityException(this.registerBundle);
 		assertFalse("Fail to register service. It MUST succeed.", exceptionFlag);
 		add(list, PP, P_NAME_UTIL, "IMPORT");
@@ -596,7 +615,7 @@ public class FilteredTestControl extends TestCase {
 		assertFalse("Fail to get service. It MUST succeed.", exceptionFlag);
 	}
 
-	public void testServiceGet2_08_4() throws Exception {
+	public void testServiceGet2_08_5() throws Exception {
 		this.startBundleAndCheckSecurityException(this.registerBundle);
 		assertFalse("Fail to register service. It MUST succeed.", exceptionFlag);
 		add(list, PP, P_NAME_UTIL, "IMPORT");
@@ -608,7 +627,7 @@ public class FilteredTestControl extends TestCase {
 		assertTrue("Succeed in getting service. It MUST fail.", exceptionFlag);
 	}
 
-	public void testServiceGet2_08_5() throws Exception {
+	public void testServiceGet2_08_6() throws Exception {
 		this.startBundleAndCheckSecurityException(this.registerBundle);
 		assertFalse("Fail to register service. It MUST succeed.", exceptionFlag);
 		add(list, PP, P_NAME_UTIL, "IMPORT");
@@ -620,20 +639,18 @@ public class FilteredTestControl extends TestCase {
 		assertFalse("Fail to get service. It MUST succeed.", exceptionFlag);
 	}
 
-	public void testServiceGet2_08_6() throws Exception {
+	public void testServiceGet2_08_7() throws Exception {
 		this.startBundleAndCheckSecurityException(this.registerBundle);
 		assertFalse("Fail to register service. It MUST succeed.", exceptionFlag);
 		add(list, PP, P_NAME_UTIL, "IMPORT");
 		add(list, PP, "org.osgi.framework", "IMPORT");
-		add(list, SP, "(&(objectClass=" + S_NAME_UTIL_ISERVICE1
-				+ ")(name=something.else))", "GET");
+		String name = this.registerBundle.getSymbolicName();
+		String sub = name.substring(0, name.indexOf(".") + 1) + "*";
+		add(list, SP, "(&(objectClass=" + S_NAME_UTIL_ISERVICE1 + ")(name="
+				+ sub + "))", "GET");
 		this.setBundlePermission(this.getBundle, list);
 		this.startBundleAndCheckPermissionsFilterException(getBundle);
-		assertTrue("Succeed in getting service. It MUST fail.", exceptionFlag);
-	}
-
-	public void testServiceGet2_08_7() throws Exception {
-		// TODO implements signer test.
+		assertFalse("Fail to get service. It MUST succeed.", exceptionFlag);
 	}
 
 	public void testServiceGet2_08_8() throws Exception {
@@ -641,8 +658,61 @@ public class FilteredTestControl extends TestCase {
 		assertFalse("Fail to register service. It MUST succeed.", exceptionFlag);
 		add(list, PP, P_NAME_UTIL, "IMPORT");
 		add(list, PP, "org.osgi.framework", "IMPORT");
-		add(list, SP, "(&(objectClass=" + S_NAME_UTIL_ISERVICE1
-				+ ")(signer=cn=something.else))", "GET");
+		String sub = "something.else";
+		add(list, SP, "(&(objectClass=" + S_NAME_UTIL_ISERVICE1 + ")(name="
+				+ sub + "))", "GET");
+		this.setBundlePermission(this.getBundle, list);
+		this.startBundleAndCheckPermissionsFilterException(getBundle);
+		assertTrue("Succeed in getting service. It MUST fail.", exceptionFlag);
+	}
+
+	public void testServiceGet2_08_9() throws Exception {
+		this.startBundleAndCheckSecurityException(this.registerBundle);
+		assertFalse("Fail to register service. It MUST succeed.", exceptionFlag);
+		add(list, PP, P_NAME_UTIL, "IMPORT");
+		add(list, PP, "org.osgi.framework", "IMPORT");
+		String signerValue = "CN=John Smith,O=ACME Inc,OU=ACME Cert Authority,L=Austin,ST=Texas,C=US";
+		add(list, SP, "(&(objectClass=" + S_NAME_UTIL_ISERVICE1 + ")(signer="
+				+ signerValue + "))", "GET");
+		this.setBundlePermission(this.getBundle, list);
+		this.startBundleAndCheckPermissionsFilterException(getBundle);
+		assertFalse("Fail to get service. It MUST succeed.", exceptionFlag);
+	}
+
+	public void testServiceGet2_08_10() throws Exception {
+		this.startBundleAndCheckSecurityException(this.registerBundle);
+		assertFalse("Fail to register service. It MUST succeed.", exceptionFlag);
+		add(list, PP, P_NAME_UTIL, "IMPORT");
+		add(list, PP, "org.osgi.framework", "IMPORT");
+		String signerValue = "\\*,O=ACME Inc,OU=ACME Cert Authority,L=Austin,ST=Texas,C=US";
+		add(list, SP, "(&(objectClass=" + S_NAME_UTIL_ISERVICE1 + ")(signer="
+				+ signerValue + "))", "GET");
+		this.setBundlePermission(this.getBundle, list);
+		this.startBundleAndCheckPermissionsFilterException(getBundle);
+		assertFalse("Fail to get service. It MUST succeed.", exceptionFlag);
+	}
+
+	public void testServiceGet2_08_11() throws Exception {
+		this.startBundleAndCheckSecurityException(this.registerBundle);
+		assertFalse("Fail to register service. It MUST succeed.", exceptionFlag);
+		add(list, PP, P_NAME_UTIL, "IMPORT");
+		add(list, PP, "org.osgi.framework", "IMPORT");
+		String signerValue = "\\*,OU=ACME Cert Authority,L=Austin,ST=Texas,C=US";
+		add(list, SP, "(&(objectClass=" + S_NAME_UTIL_ISERVICE1 + ")(signer="
+				+ signerValue + "))", "GET");
+		this.setBundlePermission(this.getBundle, list);
+		this.startBundleAndCheckPermissionsFilterException(getBundle);
+		assertFalse("Fail to get service. It MUST succeed.", exceptionFlag);
+	}
+
+	public void testServiceGet2_08_12() throws Exception {
+		this.startBundleAndCheckSecurityException(this.registerBundle);
+		assertFalse("Fail to register service. It MUST succeed.", exceptionFlag);
+		add(list, PP, P_NAME_UTIL, "IMPORT");
+		add(list, PP, "org.osgi.framework", "IMPORT");
+		String signerValue = "\\*,O=NTT,OU=NTT Cert Authority,C=JP";
+		add(list, SP, "(&(objectClass=" + S_NAME_UTIL_ISERVICE1 + ")(signer="
+				+ signerValue + "))", "GET");
 		this.setBundlePermission(this.getBundle, list);
 		this.startBundleAndCheckPermissionsFilterException(getBundle);
 		assertTrue("Succeed in getting service. It MUST fail.", exceptionFlag);
@@ -681,8 +751,8 @@ public class FilteredTestControl extends TestCase {
 		assertFalse("Fail to register service. It MUST succeed.", exceptionFlag);
 		add(list, PP, P_NAME_UTIL, "IMPORT");
 		add(list, PP, "org.osgi.framework", "IMPORT");
-		add(list, SP, "(location=" + this.registerBundle.getLocation() + ")",
-				"GET");
+		String sub = this.registerBundle.getLocation();
+		add(list, SP, "(location=" + sub + ")", "GET");
 		this.setBundlePermission(this.getBundle, list);
 		this.startBundleAndCheckPermissionsFilterException(getBundle);
 		assertFalse("Fail to get service. It MUST succeed.", exceptionFlag);
@@ -693,10 +763,12 @@ public class FilteredTestControl extends TestCase {
 		assertFalse("Fail to register service. It MUST succeed.", exceptionFlag);
 		add(list, PP, P_NAME_UTIL, "IMPORT");
 		add(list, PP, "org.osgi.framework", "IMPORT");
-		add(list, SP, "(location=something.else)", "GET");
+		String tmp = this.registerBundle.getLocation();
+		String sub = tmp.substring(0, tmp.indexOf(".") + 1) + "*";
+		add(list, SP, "(location=" + sub + ")", "GET");
 		this.setBundlePermission(this.getBundle, list);
 		this.startBundleAndCheckPermissionsFilterException(getBundle);
-		assertTrue("Succeed in getting service. It MUST fail.", exceptionFlag);
+		assertFalse("Fail to get service. It MUST succeed.", exceptionFlag);
 	}
 
 	public void testServiceGet2_10_3() throws Exception {
@@ -715,11 +787,11 @@ public class FilteredTestControl extends TestCase {
 		assertFalse("Fail to register service. It MUST succeed.", exceptionFlag);
 		add(list, PP, P_NAME_UTIL, "IMPORT");
 		add(list, PP, "org.osgi.framework", "IMPORT");
-		add(list, SP, "(id=" + this.context.getBundle().getBundleId() + ")",
-				"GET");
+		String sub = this.registerBundle.getSymbolicName();
+		add(list, SP, "(name=" + sub + ")", "GET");
 		this.setBundlePermission(this.getBundle, list);
 		this.startBundleAndCheckPermissionsFilterException(getBundle);
-		assertTrue("Succeed in getting service. It MUST fail.", exceptionFlag);
+		assertFalse("Fail to get service. It MUST succeed.", exceptionFlag);
 	}
 
 	public void testServiceGet2_10_5() throws Exception {
@@ -727,8 +799,9 @@ public class FilteredTestControl extends TestCase {
 		assertFalse("Fail to register service. It MUST succeed.", exceptionFlag);
 		add(list, PP, P_NAME_UTIL, "IMPORT");
 		add(list, PP, "org.osgi.framework", "IMPORT");
-		add(list, SP, "(name=" + this.registerBundle.getSymbolicName() + ")",
-				"GET");
+		String tmp = this.registerBundle.getSymbolicName();
+		String sub = tmp.substring(0, tmp.indexOf(".") + 1) + "*";
+		add(list, SP, "(name=" + sub + ")", "GET");
 		this.setBundlePermission(this.getBundle, list);
 		this.startBundleAndCheckPermissionsFilterException(getBundle);
 		assertFalse("Fail to get service. It MUST succeed.", exceptionFlag);
@@ -739,28 +812,72 @@ public class FilteredTestControl extends TestCase {
 		assertFalse("Fail to register service. It MUST succeed.", exceptionFlag);
 		add(list, PP, P_NAME_UTIL, "IMPORT");
 		add(list, PP, "org.osgi.framework", "IMPORT");
+		String signerValue = "CN=John Smith,O=ACME Inc,OU=ACME Cert Authority,L=Austin,ST=Texas,C=US";
+		add(list, SP, "(signer=" + signerValue + ")", "GET");
+		this.setBundlePermission(this.getBundle, list);
+		this.startBundleAndCheckPermissionsFilterException(getBundle);
+		assertFalse("Fail to get service. It MUST succeed.", exceptionFlag);
+	}
+
+	public void testServiceGet2_10_7() throws Exception {
+		this.startBundleAndCheckSecurityException(this.registerBundle);
+		assertFalse("Fail to register service. It MUST succeed.", exceptionFlag);
+		add(list, PP, P_NAME_UTIL, "IMPORT");
+		add(list, PP, "org.osgi.framework", "IMPORT");
+		String signerValue = "\\*,O=ACME Inc,OU=ACME Cert Authority,L=Austin,ST=Texas,C=US";
+		add(list, SP, "(signer=" + signerValue + ")", "GET");
+		this.setBundlePermission(this.getBundle, list);
+		this.startBundleAndCheckPermissionsFilterException(getBundle);
+		assertFalse("Fail to get service. It MUST succeed.", exceptionFlag);
+	}
+
+	public void testServiceGet2_11_1() throws Exception {
+		this.startBundleAndCheckSecurityException(this.registerBundle);
+		assertFalse("Fail to register service. It MUST succeed.", exceptionFlag);
+		add(list, PP, P_NAME_UTIL, "IMPORT");
+		add(list, PP, "org.osgi.framework", "IMPORT");
+		add(list, SP, "(location=something.else)", "GET");
+		this.setBundlePermission(this.getBundle, list);
+		this.startBundleAndCheckPermissionsFilterException(getBundle);
+		assertTrue("Succeed in getting service. It MUST fail.", exceptionFlag);
+	}
+
+	public void testServiceGet2_11_2() throws Exception {
+		this.startBundleAndCheckSecurityException(this.registerBundle);
+		assertFalse("Fail to register service. It MUST succeed.", exceptionFlag);
+		add(list, PP, P_NAME_UTIL, "IMPORT");
+		add(list, PP, "org.osgi.framework", "IMPORT");
+		add(list, SP, "(id=" + this.context.getBundle().getBundleId() + ")",
+				"GET");
+		this.setBundlePermission(this.getBundle, list);
+		this.startBundleAndCheckPermissionsFilterException(getBundle);
+		assertTrue("Succeed in getting service. It MUST fail.", exceptionFlag);
+	}
+
+	public void testServiceGet2_11_3() throws Exception {
+		this.startBundleAndCheckSecurityException(this.registerBundle);
+		assertFalse("Fail to register service. It MUST succeed.", exceptionFlag);
+		add(list, PP, P_NAME_UTIL, "IMPORT");
+		add(list, PP, "org.osgi.framework", "IMPORT");
 		add(list, SP, "(name=something.else)", "GET");
 		this.setBundlePermission(this.getBundle, list);
 		this.startBundleAndCheckPermissionsFilterException(getBundle);
 		assertTrue("Succeed in getting service. It MUST fail.", exceptionFlag);
 	}
 
-	public void testServiceGet2_10_7() throws Exception {
-		// TODO implements signer test.
-	}
-
-	public void testServiceGet2_10_8() throws Exception {
+	public void testServiceGet2_11_4() throws Exception {
 		this.startBundleAndCheckSecurityException(this.registerBundle);
 		assertFalse("Fail to register service. It MUST succeed.", exceptionFlag);
 		add(list, PP, P_NAME_UTIL, "IMPORT");
 		add(list, PP, "org.osgi.framework", "IMPORT");
-		add(list, SP, "(signer=cn=something.else)", "GET");
+		String signerValue = "\\*,O=NTT,OU=NTT Cert Authority,L=Austin,ST=Texas,C=US";
+		add(list, SP, "(signer=" + signerValue + ")", "GET");
 		this.setBundlePermission(this.getBundle, list);
 		this.startBundleAndCheckPermissionsFilterException(getBundle);
 		assertTrue("Succeed in getting service. It MUST fail.", exceptionFlag);
 	}
 
-	public void testServiceGet2_11_1() throws Exception {
+	public void testServiceGet2_12_1() throws Exception {
 		this.startBundleAndCheckSecurityException(this.registerBundle);
 		assertFalse("Fail to register service. It MUST succeed.", exceptionFlag);
 		add(list, PP, P_NAME_UTIL, "IMPORT");
@@ -772,7 +889,7 @@ public class FilteredTestControl extends TestCase {
 		assertFalse("Fail to get service. It MUST succeed.", exceptionFlag);
 	}
 
-	public void testServiceGet2_11_2() throws Exception {
+	public void testServiceGet2_12_2() throws Exception {
 		this.startBundleAndCheckSecurityException(this.registerBundle);
 		assertFalse("Fail to register service. It MUST succeed.", exceptionFlag);
 		add(list, PP, P_NAME_UTIL, "IMPORT");
@@ -784,7 +901,7 @@ public class FilteredTestControl extends TestCase {
 		assertFalse("Fail to get service. It MUST succeed.", exceptionFlag);
 	}
 
-	public void testServiceGet2_11_3() throws Exception {
+	public void testServiceGet2_12_3() throws Exception {
 		this.startBundleAndCheckSecurityException(this.registerBundle);
 		assertFalse("Fail to register service. It MUST succeed.", exceptionFlag);
 		add(list, PP, P_NAME_UTIL, "IMPORT");
@@ -805,6 +922,8 @@ public class FilteredTestControl extends TestCase {
 		add(list, AdminPermission.class.getName(), "*", "*");
 		add(list, SP, "(&(objectClass=" + S_NAME_UTIL_ISERVICE1 + ")(name="
 				+ this.registerModifyBundle.getSymbolicName() + "))", "GET");
+		// add(list, SP, PermissionAdmin.class.getName(), "get");
+		// add(list, SP, PackageAdmin.class.getName(), "get");
 		this.setBundlePermission(this.context.getBundle(), list);
 		this.startBundleAndCheckSecurityException(this.registerModifyBundle);
 		assertFalse("Fail to register service. It MUST succeed.", exceptionFlag);
@@ -913,7 +1032,7 @@ public class FilteredTestControl extends TestCase {
 		return sl;
 	}
 
-	// /////////////////////////////
+	// ///////////////////////////
 
 	public void testGetRegisteredService4_1_1() throws Exception {
 		this.startBundleAndCheckSecurityException(registerPluralBundle);
@@ -1323,18 +1442,7 @@ public class FilteredTestControl extends TestCase {
 
 	public void testExportPackage7_5_1() throws Exception {
 		this.resetBundles();
-		// bundle=org.osgi.test.cases.permissions.filtered.exporter1_1.1.1 [10]
-		// [Export-Package:
-		// org.osgi.test.cases.permissions.filtered.sharedPkg;version="1.0.0"]
-		// [Import-Package:
-		// org.osgi.test.cases.permissions.filtered.sharedPkg;version="1.0"]
 		exportBundle1 = this.installBundle(EXPORT_BUNDLE_1_LOCATION);
-
-		// bundle=org.osgi.test.cases.permissions.filtered.exporter2_2.2.2 [11]
-		// [Export-Package:
-		// org.osgi.test.cases.permissions.filtered.sharedPkg;version="2.0.0"]
-		// [Import-Package:
-		// org.osgi.test.cases.permissions.filtered.sharedPkg;version="2.0"]
 		exportBundle2 = this.installBundle(EXPORT_BUNDLE_2_LOCATION);
 
 		this.printoutHeader(exportBundle1);
@@ -1457,16 +1565,8 @@ public class FilteredTestControl extends TestCase {
 		if (this.exportBundle2.getState() != Bundle.RESOLVED)
 			fail("Fail to resolve exportBundle2");
 
-		ExportedPackage[] pkgs1 = pkgAdmin
-				.getExportedPackages(this.exportBundle1);
 		ExportedPackage[] pkgs2 = pkgAdmin
 				.getExportedPackages(this.exportBundle2);
-		if (pkgs1 == null || pkgs1.length != 1
-				|| !pkgs1[0].getName().equals(P_NAME_SHARED)) {
-			fail("Fail to export package. It MUST succeed.");
-		}
-		if (pkgs1[0].getImportingBundles().length != 0)
-			fail("It MUST not be imported.");
 
 		if (pkgs2 == null || pkgs2.length != 1
 				|| !pkgs2[0].getName().equals(P_NAME_SHARED)) {
@@ -1499,7 +1599,7 @@ public class FilteredTestControl extends TestCase {
 
 	}
 
-	// ///////////////////////////////////////////////////////
+	// /////////////////////////////////////////////////////
 
 	public void testImportPackage8_1_1() throws Exception {
 		this.resetBundles();
@@ -1683,8 +1783,8 @@ public class FilteredTestControl extends TestCase {
 		this.resetBundles();
 		exportBundle1 = this.installBundle(EXPORT_BUNDLE_1_LOCATION);
 		importBundle1 = this.installBundle(IMPORT_BUNDLE_1_LOCATION);
-		add(list, PP, "(name=" + this.exportBundle1.getSymbolicName() + ")",
-				"import");
+		String sub = this.exportBundle1.getSymbolicName();
+		add(list, PP, "(name=" + sub + ")", "import");
 		add(list, PP, "org.osgi.framework", "IMPORT");
 		this.setBundlePermission(this.importBundle1, list);
 		checkExport1SucceedImport1Succeed();
@@ -1694,7 +1794,9 @@ public class FilteredTestControl extends TestCase {
 		this.resetBundles();
 		exportBundle1 = this.installBundle(EXPORT_BUNDLE_1_LOCATION);
 		importBundle1 = this.installBundle(IMPORT_BUNDLE_1_LOCATION);
-		add(list, PP, "(id=" + this.exportBundle1.getBundleId() + ")", "import");
+		String tmp = this.exportBundle1.getSymbolicName();
+		String sub = tmp.substring(0, tmp.indexOf(".") + 1) + "*";
+		add(list, PP, "(name=" + sub + ")", "import");
 		add(list, PP, "org.osgi.framework", "IMPORT");
 		this.setBundlePermission(this.importBundle1, list);
 		checkExport1SucceedImport1Succeed();
@@ -1704,15 +1806,57 @@ public class FilteredTestControl extends TestCase {
 		this.resetBundles();
 		exportBundle1 = this.installBundle(EXPORT_BUNDLE_1_LOCATION);
 		importBundle1 = this.installBundle(IMPORT_BUNDLE_1_LOCATION);
-		add(list, PP, "(location=" + this.exportBundle1.getLocation() + ")",
-				"import");
+		long id = this.exportBundle1.getBundleId();
+		add(list, PP, "(id=" + id + ")", "import");
 		add(list, PP, "org.osgi.framework", "IMPORT");
 		this.setBundlePermission(this.importBundle1, list);
 		checkExport1SucceedImport1Succeed();
 	}
 
 	public void testImportPackage8_4_4() throws Exception {
-		// TODO implement signer filtering.
+		this.resetBundles();
+		exportBundle1 = this.installBundle(EXPORT_BUNDLE_1_LOCATION);
+		importBundle1 = this.installBundle(IMPORT_BUNDLE_1_LOCATION);
+		String sub = this.exportBundle1.getLocation();
+		add(list, PP, "(location=" + sub + ")", "import");
+		add(list, PP, "org.osgi.framework", "IMPORT");
+		this.setBundlePermission(this.importBundle1, list);
+		checkExport1SucceedImport1Succeed();
+	}
+
+	public void testImportPackage8_4_5() throws Exception {
+		this.resetBundles();
+		exportBundle1 = this.installBundle(EXPORT_BUNDLE_1_LOCATION);
+		importBundle1 = this.installBundle(IMPORT_BUNDLE_1_LOCATION);
+		String tmp = this.exportBundle1.getLocation();
+		String sub = tmp.substring(0, tmp.indexOf(".") + 1) + "*";
+
+		add(list, PP, "(location=" + sub + ")", "import");
+		add(list, PP, "org.osgi.framework", "IMPORT");
+		this.setBundlePermission(this.importBundle1, list);
+		checkExport1SucceedImport1Succeed();
+	}
+
+	public void testImportPackage8_4_6() throws Exception {
+		this.resetBundles();
+		exportBundle1 = this.installBundle(EXPORT_BUNDLE_1_LOCATION);
+		importBundle1 = this.installBundle(IMPORT_BUNDLE_1_LOCATION);
+		String signerValue = "CN=John Smith,O=ACME Inc,OU=ACME Cert Authority,L=Austin,ST=Texas,C=US";
+		add(list, PP, "(signer=" + signerValue + ")", "import");
+		add(list, PP, "org.osgi.framework", "IMPORT");
+		this.setBundlePermission(this.importBundle1, list);
+		checkExport1SucceedImport1Succeed();
+	}
+
+	public void testImportPackage8_4_7() throws Exception {
+		this.resetBundles();
+		exportBundle1 = this.installBundle(EXPORT_BUNDLE_1_LOCATION);
+		importBundle1 = this.installBundle(IMPORT_BUNDLE_1_LOCATION);
+		String signerValue = "CN=\\*,O=ACME Inc,OU=ACME Cert Authority,L=Austin,ST=Texas,C=US";
+		add(list, PP, "(signer=" + signerValue + ")", "import");
+		add(list, PP, "org.osgi.framework", "IMPORT");
+		this.setBundlePermission(this.importBundle1, list);
+		checkExport1SucceedImport1Succeed();
 	}
 
 	public void testImportPackage8_5_1() throws Exception {
@@ -1733,7 +1877,6 @@ public class FilteredTestControl extends TestCase {
 				"import");
 		add(list, PP, "org.osgi.framework", "IMPORT");
 		this.setBundlePermission(this.importBundle1, list);
-
 		checkExport1SucceedImport1Fail();
 	}
 
@@ -1744,12 +1887,18 @@ public class FilteredTestControl extends TestCase {
 		add(list, PP, "(location=" + "something.else" + ")", "import");
 		add(list, PP, "org.osgi.framework", "IMPORT");
 		this.setBundlePermission(this.importBundle1, list);
-
 		checkExport1SucceedImport1Fail();
 	}
 
 	public void testImportPackage8_5_4() throws Exception {
-		// TODO implement signer filtering.
+		this.resetBundles();
+		exportBundle1 = this.installBundle(EXPORT_BUNDLE_1_LOCATION);
+		importBundle1 = this.installBundle(IMPORT_BUNDLE_1_LOCATION);
+		String signerValue = "CN=\\*,O=NTT,OU=NTT Cert Authority,L=Austin,ST=Texas,C=US";
+		add(list, PP, "(signer=" + signerValue + ")", "import");
+		add(list, PP, "org.osgi.framework", "IMPORT");
+		this.setBundlePermission(this.importBundle1, list);
+		checkExport1SucceedImport1Fail();
 	}
 
 	public void testImportPackage8_6_1() throws Exception {
@@ -1854,8 +2003,17 @@ public class FilteredTestControl extends TestCase {
 			BundleException {
 		URL url = context.getBundle().getResource(location);
 		InputStream is = url.openStream();
-		Bundle bundle = context.installBundle(location, is);
-		is.close();
+		Bundle bundle = null;
+		try {
+			bundle = context.installBundle(location, is);
+		}
+		catch (Exception e) {
+			throw new IllegalArgumentException("Fail to install bundle from "
+					+ location);
+		}
+		finally {
+			is.close();
+		}
 		return bundle;
 	}
 

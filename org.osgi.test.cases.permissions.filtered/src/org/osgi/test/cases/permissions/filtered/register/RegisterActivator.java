@@ -26,7 +26,6 @@
 package org.osgi.test.cases.permissions.filtered.register;
 
 import java.util.Hashtable;
-import java.util.Properties;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -48,7 +47,8 @@ public class RegisterActivator implements BundleActivator {
 	 */
 	public void start(BundleContext context) throws Exception {
 
-		System.out.println("REGISTER BUNDLE is going to start.");
+		if (Util.debug)
+			System.out.println("REGISTER BUNDLE is going to start.");
 
 		final Hashtable props = new Hashtable();
 		props.put("segment", "providerA");
@@ -57,17 +57,19 @@ public class RegisterActivator implements BundleActivator {
 		props.put("@location", "location.NTT");
 		props.put("@@name", "name.NTT");
 		String clazz = IService1.class.getName();
-
 		try {
 			context.registerService(clazz, new IServiceImpl(context), props);
-			System.out
-					.println("# Register Test> Succeed in registering service: "
-							+ clazz);
+			if (Util.debug)
+				System.out
+						.println("# Register Test> Succeed in registering service: "
+								+ clazz);
 
 		}
 		catch (Exception e) {
-			System.out.println("# Register Test> Fail to register service: "
-					+ clazz);
+			if (Util.debug)
+				System.out
+						.println("# Register Test> Fail to register service: "
+								+ clazz);
 			// e.printStackTrace();
 			throw e;
 		}

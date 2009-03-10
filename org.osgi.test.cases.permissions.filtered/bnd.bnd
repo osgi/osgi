@@ -12,7 +12,6 @@ Include-Resource	= \
 	bundles/exporter1.jar=exporter1.jar			,\
 	bundles/importer1.jar=importer1.jar			,\
 	bundles/importer2.jar=importer2.jar			,\
-	bundles/registerForServiceRegistration.jar=registerForServiceRegistration.jar	,\
 	bundles/exporter2.jar=exporter2.jar			
 	
 Export-Package = \
@@ -28,5 +27,5 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 -runproperties = \
 	report=true, \
 	org.osgi.framework.security=osgi, \
-#	org.osgi.framework.trust.repositories=${build}/keystore
-	
+	org.osgi.framework.trust.repositories=${build}/keystore
+		

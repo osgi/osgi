@@ -25,14 +25,11 @@
  */
 package org.osgi.test.cases.permissions.filtered.setPermission;
 
-import java.security.AllPermission;
-
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.permissionadmin.PermissionAdmin;
-import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.test.cases.permissions.filtered.util.*;
+import org.osgi.test.cases.permissions.filtered.util.Util;
 
 /**
  * 
@@ -40,23 +37,8 @@ import org.osgi.test.cases.permissions.filtered.util.*;
  */
 public class SetPermissionActivator implements BundleActivator {
 
-	private PermissionAdmin permAdmin;
-	private BundleContext context;
-	private static final String RESET_PERMISSION_BUNDLE_LOCATION = "bundles/resetPermission.jar";
-
 	public void start(BundleContext context) throws Exception {
-		this.context = context;
-		this.setAllpermission(RESET_PERMISSION_BUNDLE_LOCATION);
-		System.out.println("SetPermission Bundle is going to start.");
-		try {
-			context.registerService(ISetPermissionService.class.getName(), new SetPermissionService(context), null);
-			System.out
-					.println("# SetPermission Bundle > Succeed in registering service: " + ISetPermissionService.class.getName());
 
-		} catch (Exception e) {
-			System.out.println("# SetPermission Bundle > Fail to register service: " + ISetPermissionService.class.getName());
-			throw e;
-		}
 	}
 
 	public void stop(BundleContext context) throws Exception {
@@ -64,32 +46,21 @@ public class SetPermissionActivator implements BundleActivator {
 		ServiceReference ref = context
 				.getServiceReference(PermissionAdmin.class.getName());
 		if (ref == null) {
-			System.out.println("Fail to get ServiceReference of " + PermissionAdmin.class.getName());
+			if (Util.debug)
+				System.out.println("Fail to get ServiceReference of "
+						+ PermissionAdmin.class.getName());
 		}
-		permAdmin = (PermissionAdmin) context.getService(ref);
+		PermissionAdmin permAdmin = (PermissionAdmin) context.getService(ref);
 		permAdmin.setDefaultPermissions(null);
-		String[] location = permAdmin.getLocations();
-		if (location == null) {
-			System.out.println("getLocations ERROR");
-			return;
+		String[] locations = permAdmin.getLocations();
+		if (locations == null) {
+			if (Util.debug)
+				System.out.println("getLocations ERROR");
 		}
-		for (int i = 0; i < location.length; i++) {
-			permAdmin.setPermissions(location[i], null);
-		}
+		else
+			for (int i = 0; i < locations.length; i++) {
+				permAdmin.setPermissions(locations[i], null);
+			}
 	}
-	
-	private void setAllpermission(String bundleLocation){
-		ServiceReference ref = context
-			.getServiceReference(PermissionAdmin.class.getName());
-		if (ref == null) {
-			System.out.println("Fail to get ServiceReference of "
-					+ PermissionAdmin.class.getName());
-			return;
-		}
-		permAdmin = (PermissionAdmin) context.getService(ref);
-		PermissionInfo[] pisAllPerm = new PermissionInfo[1];
-		pisAllPerm[0] = new PermissionInfo("("+AllPermission.class.getName()+")");
-		permAdmin.setPermissions(bundleLocation, pisAllPerm);
-	}
-	
+
 }

@@ -25,8 +25,6 @@
  */
 package org.osgi.test.cases.permissions.filtered.get;
 
-import java.util.Properties;
-
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -49,7 +47,8 @@ public class GetActivator implements BundleActivator {
 	 */
 	public void start(BundleContext context) throws Exception {
 
-		System.out.println("GETTER BUNDLE is going to start.");
+		if (Util.debug)
+			System.out.println("GETTER BUNDLE is going to start.");
 
 		ServiceReference ref = null;
 
@@ -60,9 +59,10 @@ public class GetActivator implements BundleActivator {
 					"Fail to get ServiceReference of " + clazz);
 		}
 		else {
-			System.out
-					.println("# Get Test> Succeed in getting Service Reference of "
-							+ clazz);
+			if (Util.debug)
+				System.out
+						.println("# Get Test> Succeed in getting Service Reference of "
+								+ clazz);
 		}
 
 		Object service = context.getService(ref);
@@ -71,8 +71,9 @@ public class GetActivator implements BundleActivator {
 					+ clazz);
 		}
 		else {
-			System.out.println("# Get Test> Succeed in getting Service of "
-					+ clazz);
+			if (Util.debug)
+				System.out.println("# Get Test> Succeed in getting Service of "
+						+ clazz);
 		}
 
 	}

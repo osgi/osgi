@@ -26,7 +26,6 @@
 package org.osgi.test.cases.permissions.filtered.registerPlural;
 
 import java.util.Hashtable;
-import java.util.Properties;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -49,26 +48,29 @@ public class registerPluralActivator implements BundleActivator {
 	 */
 	public void start(BundleContext context) throws Exception {
 
-		System.out.println("REGISTER BUNDLE is going to start.");
+		if (Util.debug)
+			System.out.println("REGISTER BUNDLE is going to start.");
 		Hashtable props = new Hashtable();
 		props.put("segment", "providerA");
 		props.put("vendor", "NTT");
 
-		String[] clazz = new String[] {IService1.class.getName(),
+		String[] clazzes = new String[] {IService1.class.getName(),
 				IService2.class.getName()};
 
 		try {
-			context.registerService(clazz, new IServicePluralImpl(context),
+			context.registerService(clazzes, new IServicePluralImpl(context),
 					props);
-			System.out
-					.println("# Register Plural Test> Succeed in registering service: "
-							+ clazz);
+			if (Util.debug)
+				System.out
+						.println("# Register Plural Test> Succeed in registering service: "
+								+ clazzes);
 
 		}
 		catch (Exception e) {
-			System.out
-					.println("# Register Plural Test> Fail to register service: "
-							+ clazz);
+			if (Util.debug)
+				System.out
+						.println("# Register Plural Test> Fail to register service: "
+								+ clazzes);
 			throw e;
 
 		}

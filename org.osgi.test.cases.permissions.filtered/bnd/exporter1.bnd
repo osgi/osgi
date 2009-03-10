@@ -15,3 +15,5 @@ Private-Package	= \
 Export-Package = \
 	${p}.sharedPkg;version=1.0.0
 	
+-sign: test
+	

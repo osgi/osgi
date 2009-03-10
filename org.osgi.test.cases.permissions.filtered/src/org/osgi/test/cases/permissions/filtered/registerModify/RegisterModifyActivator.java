@@ -26,7 +26,6 @@
 package org.osgi.test.cases.permissions.filtered.registerModify;
 
 import java.util.Hashtable;
-import java.util.Properties;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -51,7 +50,8 @@ public class RegisterModifyActivator implements BundleActivator {
 	 */
 	public void start(BundleContext context) throws Exception {
 
-		System.out.println("REGISTER BUNDLE is going to start.");
+		if (Util.debug)
+			System.out.println("REGISTER BUNDLE is going to start.");
 		final Hashtable props = new Hashtable();
 		props.put("segment", "providerA");
 		props.put("vendor", "NTT");
@@ -59,28 +59,32 @@ public class RegisterModifyActivator implements BundleActivator {
 		try {
 			sr = context.registerService(clazz, new IServiceImpl(context),
 					props);
-			System.out
-					.println("# Properties Modify Test> Succeed in registering service: "
-							+ clazz);
+			if (Util.debug)
+				System.out
+						.println("# Properties Modify Test> Succeed in registering service: "
+								+ clazz);
 		}
 		catch (Exception e) {
-			System.out
-					.println("# Properties Modify Test> Fail to register service: "
-							+ clazz);
+			if (Util.debug)
+				System.out
+						.println("# Properties Modify Test> Fail to register service: "
+								+ clazz);
 			throw e;
 		}
 		props.put("segment", "providerB");
 		props.put("vendor", "ACME");
 		try {
 			sr.setProperties(props);
-			System.out
-					.println("# Properties Modify Test> Succeed in modifying properties: "
-							+ clazz);
+			if (Util.debug)
+				System.out
+						.println("# Properties Modify Test> Succeed in modifying properties: "
+								+ clazz);
 		}
 		catch (Exception e) {
-			System.out
-					.println("# Properties Modify Test> Fail to modify properties: "
-							+ clazz);
+			if (Util.debug)
+				System.out
+						.println("# Properties Modify Test> Fail to modify properties: "
+								+ clazz);
 			// e.printStackTrace();
 			throw e;
 		}
