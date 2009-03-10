@@ -84,7 +84,7 @@
    </component>
 
    <component id="compListWrapperedBoolean" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
-       <property name="primBoolean">
+       <property name="boolean">
            <list>
                <value>yes</value>
                <value>no</value>

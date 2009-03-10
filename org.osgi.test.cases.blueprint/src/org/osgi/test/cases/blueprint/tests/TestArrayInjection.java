@@ -71,15 +71,15 @@ public class TestArrayInjection extends DefaultTestBundleControl {
         startEvents.addValidator(new ConstructorMetadataValidator("compListArgument", new TestParameter(
             new TestListValue(new TestValue[] { new TestStringValue("1234"), new TestStringValue("5678") }))));
         // NB, Sets tend to be one item because you can't depend on order of final array
-        startEvents.addValidator(new ArgumentValueValidator("compListArgument", new IntArrayValueDescriptor("arg1", new int[] {1234})));
+        startEvents.addValidator(new ArgumentValueValidator("compSetArgument", new IntArrayValueDescriptor("arg1", new int[] {1234})));
         // validate the metadata for this one too
         startEvents.addValidator(new ConstructorMetadataValidator("compSetArgument", new TestParameter(
-            new TestListValue(new TestValue[] { new TestStringValue("1234") }))));
+            new TestSetValue(new TestValue[] { new TestStringValue("1234") }))));
 
         // boolean conversions
         addPropertyValidator(startEvents, "compListPrimBoolean", new BooleanArrayValueDescriptor("primBoolean", new boolean[] {true, false, true, false, true, false}));
         addPropertyValidator(startEvents, "compSetPrimBoolean", new BooleanArrayValueDescriptor("primBoolean", new boolean[] {true, true, true}));
-        addPropertyValidator(startEvents, "compListWrapperedBoolean", new ObjectArrayValueDescriptor("boolean", new Boolean[] {Boolean.TRUE, Boolean.TRUE, Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE}));
+        addPropertyValidator(startEvents, "compListWrapperedBoolean", new ObjectArrayValueDescriptor("boolean", new Boolean[] {Boolean.TRUE, Boolean.FALSE, Boolean.TRUE, Boolean.FALSE, Boolean.TRUE, Boolean.FALSE}));
         addPropertyValidator(startEvents, "compSetWrapperedBoolean", new ObjectArrayValueDescriptor("boolean", new Boolean[] {Boolean.TRUE, Boolean.TRUE, Boolean.TRUE}));
         addPropertyValidator(startEvents, "compPrimBooleanEmptyList", new BooleanArrayValueDescriptor("primBoolean", new boolean[] {}));
         addPropertyValidator(startEvents, "compPrimBooleanEmptySet", new BooleanArrayValueDescriptor("primBoolean", new boolean[] {}));
@@ -103,8 +103,8 @@ public class TestArrayInjection extends DefaultTestBundleControl {
         addPropertyValidator(startEvents, "compSetWrapperedFloat", new ObjectArrayValueDescriptor("float", new Float[] {new Float(123)}));
 
         // int conversion
-        addPropertyValidator(startEvents, "compListPrimInt", new IntArrayValueDescriptor("primInteger", new int[] {0, Integer.MAX_VALUE, Integer.MIN_VALUE}));
-        addPropertyValidator(startEvents, "compSetPrimInt", new IntArrayValueDescriptor("primInteger", new int[] {123}));
+        addPropertyValidator(startEvents, "compListPrimInteger", new IntArrayValueDescriptor("primInt", new int[] {0, Integer.MAX_VALUE, Integer.MIN_VALUE}));
+        addPropertyValidator(startEvents, "compSetPrimInteger", new IntArrayValueDescriptor("primInt", new int[] {123}));
         addPropertyValidator(startEvents, "compListWrapperedInteger", new ObjectArrayValueDescriptor("int", new Integer[] {new Integer((int)0), new Integer(Integer.MAX_VALUE), new Integer(Integer.MIN_VALUE)}));
         addPropertyValidator(startEvents, "compSetWrapperedInteger", new ObjectArrayValueDescriptor("int", new Integer[] {new Integer((int)123)}));
 
