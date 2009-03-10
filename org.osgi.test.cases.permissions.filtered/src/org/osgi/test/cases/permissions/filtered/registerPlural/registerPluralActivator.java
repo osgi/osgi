@@ -30,6 +30,8 @@ import java.util.Properties;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.test.cases.permissions.filtered.util.IService1;
+import org.osgi.test.cases.permissions.filtered.util.IService2;
 import org.osgi.test.cases.permissions.filtered.util.Util;
 
 /**
@@ -48,22 +50,12 @@ public class registerPluralActivator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 
 		System.out.println("REGISTER BUNDLE is going to start.");
-		final Properties configuredProps = Util
-				.getConfiguredProperties("bnd/properties/REGISTER_PLURAL.properties");
-
-		int count = Integer.parseInt(configuredProps.getProperty("prop.count"));
-
 		Hashtable props = new Hashtable();
-		int ocount = Integer.parseInt(configuredProps
-				.getProperty("prop.obj.count"));
-		for (int i = 0; i < count; i++) {
-			String key = configuredProps.getProperty("key." + i);
-			String value = configuredProps.getProperty("value." + i);
-			props.put(key, value);
-		}
-		String[] clazz = new String[ocount];
-		for (int j = 0; j < ocount; j++)
-			clazz[j] = configuredProps.getProperty("objectClass." + j);
+		props.put("segment", "providerA");
+		props.put("vendor", "NTT");
+
+		String[] clazz = new String[] {IService1.class.getName(),
+				IService2.class.getName()};
 
 		try {
 			context.registerService(clazz, new IServicePluralImpl(context),
@@ -72,7 +64,8 @@ public class registerPluralActivator implements BundleActivator {
 					.println("# Register Plural Test> Succeed in registering service: "
 							+ clazz);
 
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			System.out
 					.println("# Register Plural Test> Fail to register service: "
 							+ clazz);

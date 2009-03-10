@@ -30,6 +30,7 @@ import java.util.Properties;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.test.cases.permissions.filtered.util.IService1;
 import org.osgi.test.cases.permissions.filtered.util.PermissionsFilterException;
 import org.osgi.test.cases.permissions.filtered.util.Util;
 
@@ -49,34 +50,31 @@ public class GetActivator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 
 		System.out.println("GETTER BUNDLE is going to start.");
-		final Properties configuredProps = Util
-				.getConfiguredProperties("bnd/properties/GET.properties");
 
 		ServiceReference ref = null;
 
-		String classNum = configuredProps.getProperty("type");
-		if (classNum.equals("single")) {
-			String clazz = configuredProps.getProperty("objectClass");
-
-			ref = context.getServiceReference(clazz);
-			if (ref == null) {
-				throw new PermissionsFilterException(
-						"Fail to get ServiceReference of " + clazz);
-			} else {
-				System.out
-						.println("# Get Test> Succeed in getting Service Reference of "
-								+ clazz);
-			}
-
-			Object service = context.getService(ref);
-			if (service == null) {
-				throw new PermissionsFilterException("Fail to get service of "
-						+ clazz);
-			} else {
-				System.out.println("# Get Test> Succeed in getting Service of "
-						+ clazz);
-			}
+		String clazz = IService1.class.getName();
+		ref = context.getServiceReference(clazz);
+		if (ref == null) {
+			throw new PermissionsFilterException(
+					"Fail to get ServiceReference of " + clazz);
 		}
+		else {
+			System.out
+					.println("# Get Test> Succeed in getting Service Reference of "
+							+ clazz);
+		}
+
+		Object service = context.getService(ref);
+		if (service == null) {
+			throw new PermissionsFilterException("Fail to get service of "
+					+ clazz);
+		}
+		else {
+			System.out.println("# Get Test> Succeed in getting Service of "
+					+ clazz);
+		}
+
 	}
 
 	/*

@@ -31,6 +31,7 @@ import java.util.Properties;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.test.cases.permissions.filtered.util.IService1;
 import org.osgi.test.cases.permissions.filtered.util.Util;
 
 /**
@@ -39,7 +40,7 @@ import org.osgi.test.cases.permissions.filtered.util.Util;
  */
 public class RegisterModifyActivator implements BundleActivator {
 
-	ServiceRegistration sr;
+	ServiceRegistration	sr;
 
 	/*
 	 * (non-Javadoc)
@@ -51,48 +52,32 @@ public class RegisterModifyActivator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 
 		System.out.println("REGISTER BUNDLE is going to start.");
-		final Properties configuredProps = Util
-				.getConfiguredProperties("bnd/properties/REGISTER_MODIFY.properties");
-
 		final Hashtable props = new Hashtable();
-		final int count = Integer.parseInt(configuredProps
-				.getProperty("prop.count"));
-		for (int i = 0; i < count; i++) {
-			String key = configuredProps.getProperty("key." + i);
-			String value = configuredProps.getProperty("value." + i);
-			props.put(key, value);
-		}
-		String clazz = configuredProps.getProperty("objectClass");
-
+		props.put("segment", "providerA");
+		props.put("vendor", "NTT");
+		String clazz = IService1.class.getName();
 		try {
 			sr = context.registerService(clazz, new IServiceImpl(context),
 					props);
 			System.out
 					.println("# Properties Modify Test> Succeed in registering service: "
 							+ clazz);
-
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			System.out
 					.println("# Properties Modify Test> Fail to register service: "
 							+ clazz);
 			throw e;
 		}
-
-		int countMod = Integer.parseInt(configuredProps
-				.getProperty("prop.count.mod"));
-		for (int i = 0; i < countMod; i++) {
-			String keyMod = configuredProps.getProperty("keyMod." + i);
-			String valueMod = configuredProps.getProperty("valueMod." + i);
-			props.put(keyMod, valueMod);
-		}
-
+		props.put("segment", "providerB");
+		props.put("vendor", "ACME");
 		try {
 			sr.setProperties(props);
 			System.out
 					.println("# Properties Modify Test> Succeed in modifying properties: "
 							+ clazz);
-
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			System.out
 					.println("# Properties Modify Test> Fail to modify properties: "
 							+ clazz);

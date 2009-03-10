@@ -33,7 +33,7 @@ import org.osgi.test.cases.permissions.filtered.util.*;
  * 
  * @author Shigekuni KONDO, Ikuo YAMASAKI, NTT Corporation
  */
-public class IServicePluralImpl implements IService ,IService2{
+public class IServicePluralImpl implements IService1 ,IService2{
 
 	private final BundleContext bc;
 

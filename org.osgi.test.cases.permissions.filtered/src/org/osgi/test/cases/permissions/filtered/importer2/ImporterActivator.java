@@ -23,21 +23,17 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-package org.osgi.test.cases.permissions.filtered.register;
-
-import java.util.Hashtable;
-import java.util.Properties;
+package org.osgi.test.cases.permissions.filtered.importer2;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.test.cases.permissions.filtered.util.IService1;
-import org.osgi.test.cases.permissions.filtered.util.Util;
+import org.osgi.test.cases.permissions.filtered.sharedPkg.IShared;
 
 /**
  * 
  * @author Shigekuni KONDO, Ikuo YAMASAKI, NTT Corporation
  */
-public class RegisterActivator implements BundleActivator {
+public class ImporterActivator implements BundleActivator {
 
 	/*
 	 * (non-Javadoc)
@@ -47,31 +43,7 @@ public class RegisterActivator implements BundleActivator {
 	 * )
 	 */
 	public void start(BundleContext context) throws Exception {
-
-		System.out.println("REGISTER BUNDLE is going to start.");
-
-		final Hashtable props = new Hashtable();
-		props.put("segment", "providerA");
-		props.put("vendor", "NTT");
-		props.put("id", "id.NTT");
-		props.put("@location", "location.NTT");
-		props.put("@@name", "name.NTT");
-		String clazz = IService1.class.getName();
-
-		try {
-			context.registerService(clazz, new IServiceImpl(context), props);
-			System.out
-					.println("# Register Test> Succeed in registering service: "
-							+ clazz);
-
-		}
-		catch (Exception e) {
-			System.out.println("# Register Test> Fail to register service: "
-					+ clazz);
-			// e.printStackTrace();
-			throw e;
-		}
-
+		IShared.class.getClass();
 	}
 
 	/*

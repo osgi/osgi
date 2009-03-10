@@ -28,13 +28,13 @@ package org.osgi.test.cases.permissions.filtered.propertiesModify;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 
-import org.osgi.test.cases.permissions.filtered.util.IService;
+import org.osgi.test.cases.permissions.filtered.util.IService1;
 
 /**
  * 
  * @author Shigekuni KONDO, Ikuo YAMASAKI, NTT Corporation
  */
-public class IServiceImpl implements IService {
+public class IServiceImpl implements IService1 {
 
 	private final BundleContext bc;
 

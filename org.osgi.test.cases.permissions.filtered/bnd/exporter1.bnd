@@ -1,0 +1,17 @@
+Bundle-SymbolicName: ${p}.exporter1
+Bundle-Name: ${p}.exporter1
+Bundle-Description: Filtered ServicePermissiont Test R4 - package export Test
+Bundle-Activator: ${p}.exporter1.ExporterActivator
+Bundle-Vendor: NTT
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Version: 1.1.1
+Bundle-Category: osgi,test
+
+Private-Package	= \
+	${p}.exporter1	,\
+	${p}.sharedPkg
+	
+Export-Package = \
+	${p}.sharedPkg;version=1.0.0
+	

@@ -9,12 +9,11 @@ Include-Resource	= \
 	bundles/registerPlural.jar=registerPlural.jar		,\
 	bundles/registerModify.jar=registerModify.jar		,\
 	bundles/setPermission.jar=setPermission.jar			,\
-	bundles/exportBundle.jar=exportBundle.jar			,\
-	bundles/importBundle.jar=importBundle.jar			,\
+	bundles/exporter1.jar=exporter1.jar			,\
+	bundles/importer1.jar=importer1.jar			,\
+	bundles/importer2.jar=importer2.jar			,\
 	bundles/registerForServiceRegistration.jar=registerForServiceRegistration.jar	,\
-	bundles/exportBundle2.jar=exportBundle2.jar			,\
-	bundles/exportBundle3.jar=exportBundle3.jar			,\
-	bundles/exportBundle4.jar=exportBundle4.jar
+	bundles/exporter2.jar=exporter2.jar			
 	
 Export-Package = \
 	${p}.util;version=1.0.0
