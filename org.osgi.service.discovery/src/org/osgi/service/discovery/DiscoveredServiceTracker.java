@@ -49,8 +49,8 @@ public interface DiscoveredServiceTracker {
 	 * The following sample filter will make Discovery notify the
 	 * DiscoveredServiceTracker about services providing interface
 	 * 'my.company.foo' of version '1.0.1.3':<br>
-	 * "(&(service.interface=my.company.foo)(service.interface.version=my.company.foo|1.0.1.3))". <br>
-	 * Value of this property is of type Collection (<? extends String>).
+	 * "(&amp;(service.interface=my.company.foo)(service.interface.version=my.company.foo|1.0.1.3))". <br>
+	 * Value of this property is of type Collection (&lt;? extends String%gt;).
 	 * Property is optional, may be null.
 	 */
 	public static final String	PROP_KEY_MATCH_CRITERIA_FILTERS		= "osgi.discovery.interest.filters";
