@@ -334,7 +334,7 @@
        <constructor-arg><value>yes</value></constructor-arg>
    </component>
    <component id="constructorWrapperedBoolean"  class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory" factory-method="makeWrapperedBoolean">
-       <constructor-arg value="yes"/>
+       <constructor-arg value="no"/>
    </component>
    <component id="constructorPrimitiveByte" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory" factory-method="makePrimitiveByte">
        <constructor-arg value="123"/>
@@ -352,7 +352,7 @@
        <constructor-arg value="1.3"/>
    </component>
    <component id="constructorWrapperedFloat" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory" factory-method="makeWrapperedFloat">
-       <constructor-arg value="0"/>
+       <constructor-arg value="1.4"/>
    </component>
    <component id="constructorPrimitiveInteger" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory" factory-method="makePrimitiveInteger">
        <constructor-arg value="12"/>
@@ -376,7 +376,7 @@
        <constructor-arg value="17"/>
    </component>
    <component id="constructorWrapperedLong" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory" factory-method="makeWrapperedLong">
-       <constructor-arg value="0"/>
+       <constructor-arg value="18"/>
    </component>
 </components>
 

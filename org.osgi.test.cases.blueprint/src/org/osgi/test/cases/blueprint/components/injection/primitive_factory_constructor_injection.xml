@@ -367,7 +367,7 @@
         </constructor-arg>
     </component>
     <component id="constructorWrapperedBoolean"  factory-component="compFactory" factory-method="makeWrapperedBoolean">
-        <constructor-arg value="yes"/>
+        <constructor-arg value="no"/>
     </component>
     <component id="constructorPrimitiveByte" factory-component="compFactory" factory-method="makePrimitiveByte">
         <constructor-arg value="123"/>
@@ -385,7 +385,7 @@
         <constructor-arg value="1.3"/>
     </component>
     <component id="constructorWrapperedFloat" factory-component="compFactory" factory-method="makeWrapperedFloat">
-        <constructor-arg value="0"/>
+        <constructor-arg value="1.4"/>
     </component>
     <component id="constructorPrimitiveInteger" factory-component="compFactory" factory-method="makePrimitiveInteger">
         <constructor-arg value="12"/>
@@ -409,7 +409,7 @@
         <constructor-arg value="17"/>
     </component>
     <component id="constructorWrapperedLong" factory-component="compFactory" factory-method="makeWrapperedLong">
-        <constructor-arg value="0"/>
+        <constructor-arg value="18"/>
     </component>
 </components>
 

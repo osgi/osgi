@@ -148,7 +148,7 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         }));
 
         // now some dependson tests.  The dependency ordering tests are done in the module
-        startEvents.addAssertion("dependleaf1", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("dependsleaf1", AssertionService.COMPONENT_CREATED);
         startEvents.addAssertion("dependsOnOne", AssertionService.COMPONENT_CREATED);
 
         startEvents.addValidator(new ComponentMetadataValidator(
@@ -156,8 +156,8 @@ public class TestComponentInjection extends DefaultTestBundleControl {
             new TestParameter[] { new StringParameter("dependsOnOne") } , null,
             new String[] { "dependsleaf1" }, false, null)));
 
-        startEvents.addAssertion("dependleaf2", AssertionService.COMPONENT_CREATED);
-        startEvents.addAssertion("dependleaf3", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("dependsleaf2", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("dependsleaf3", AssertionService.COMPONENT_CREATED);
         startEvents.addAssertion("dependsOnTwo", AssertionService.COMPONENT_CREATED);
 
         startEvents.addValidator(new ComponentMetadataValidator(
