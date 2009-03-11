@@ -73,8 +73,7 @@ public class TestSetValue extends TestValue {
         Set set = ((SetValue)v).getSet();
         // validate the size first
         assertEquals("Set value size mismatch", entries.length, set.size());
-// TODO:  Temporarily disabled
-//      assertEquals("Set default type mismatch", typeName, ((SetValue)v).getValueType());
+        assertEquals("Set default type mismatch", typeName, ((SetValue)v).getValueType());
         // we work off of a copy of this
         Set working = new HashSet(set);
         // now validate each of the entries

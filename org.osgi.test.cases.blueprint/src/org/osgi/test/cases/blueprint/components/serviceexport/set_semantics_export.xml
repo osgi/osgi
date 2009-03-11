@@ -9,19 +9,20 @@
         interface, but which will compare equal when tested via the equals method.
     </description>
 
-    <!-- define a series of components for service export -->
+    <!-- define a series of components for service export
+         NOTE:  These all have the same name so that they'll compare equal -->
     <component id="ServiceOneA" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
         <constructor-arg value="ServiceOneA"/>
         <constructor-arg value="4"/>
     </component>
 
     <component id="ServiceOneB" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
-        <constructor-arg value="ServiceOneB"/>
+        <constructor-arg value="ServiceOneA"/>
         <constructor-arg value="4"/>
     </component>
 
     <component id="ServiceOneC" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
-        <constructor-arg value="ServiceOneC"/>
+        <constructor-arg value="ServiceOneA"/>
         <constructor-arg value="4"/>
     </component>
 

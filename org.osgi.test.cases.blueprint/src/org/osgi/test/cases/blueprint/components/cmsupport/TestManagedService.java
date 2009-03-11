@@ -38,7 +38,6 @@ public class TestManagedService extends TestGoodService implements ManagedServic
 
     public TestManagedService(String componentId) {
         super(componentId);
-        // TODO Auto-generated constructor stub
     }
 
     public void updated(Dictionary properties) throws ConfigurationException {

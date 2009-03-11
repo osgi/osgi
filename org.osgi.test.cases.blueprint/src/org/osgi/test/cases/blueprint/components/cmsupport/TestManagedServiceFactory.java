@@ -43,12 +43,10 @@ public class TestManagedServiceFactory extends TestGoodService implements Manage
     }
 
     public void deleted(String pid) {
-        // TODO Auto-generated method stub
 
     }
 
     public String getName() {
-        // TODO Auto-generated method stub
         return null;
     }
 

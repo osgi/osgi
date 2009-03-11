@@ -31,7 +31,6 @@ public class EuropeanRegionCode extends RegionCode{
 
     public EuropeanRegionCode(String code) {
         super(code);
-        // TODO Auto-generated constructor stub
     }
 
 }

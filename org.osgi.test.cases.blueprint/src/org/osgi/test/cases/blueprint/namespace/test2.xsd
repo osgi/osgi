@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<xsd:schema xmlns="http://www.osgi.org/schema/test/test2"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:osgi="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    targetNamespace="http://www.osgi.org/schema/blueprint/test/test2/v1.0.0"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified">
+
+    <xsd:import namespace="http://www.osgi.org/xmlns/blueprint/v1.0.0"/>
+
+    <xsd:attribute name="sleepy" type="TSleepyType" use="optional"/>
+
+    <xsd:simpleType name="TSleepyType">
+         <xsd:restriction base="xsd:token">
+             <xsd:enumeration value="yes"/>
+             <xsd:enumeration value="no"/>
+         </xsd:restriction>
+    </xsd:simpleType>
+
+</xsd:schema>

@@ -28,6 +28,7 @@ package org.osgi.test.cases.blueprint.tests;
 
 import org.osgi.test.cases.blueprint.components.comp1.SimpleTestComponent;
 import org.osgi.test.cases.blueprint.components.factory.SimpleInstanceFactory;
+import org.osgi.test.cases.blueprint.components.staticfactory.SimpleStaticFactory;
 import org.osgi.test.cases.blueprint.framework.*;
 import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
@@ -308,7 +309,7 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         startEvents.addAssertion("comp2_id", AssertionService.COMPONENT_CREATED);
 
         LocalComponent comp1 =
-            new LocalComponent("comp1", SimpleTestComponent.class,
+            new LocalComponent("comp1", SimpleStaticFactory.class,
             new TestParameter[0], null);
         comp1.setFactoryMethod("createSimple");
 
@@ -316,7 +317,7 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         startEvents.addValidator(new ComponentMetadataValidator(comp1));
 
         LocalComponent comp2_id =
-            new LocalComponent("comp2_id", SimpleTestComponent.class,
+            new LocalComponent("comp2_id", SimpleStaticFactory.class,
             new TestParameter[] { new StringParameter("comp2_id") } , null);
         comp2_id.setFactoryMethod("createSimple");
 

@@ -30,6 +30,7 @@ package org.osgi.test.cases.blueprint.tests;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
+import org.osgi.test.cases.blueprint.components.injection.ComponentInjection;
 import org.osgi.test.cases.blueprint.framework.ComponentAssertion;
 import org.osgi.test.cases.blueprint.framework.ConstructorMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.InnerComponentValidator;
@@ -117,47 +118,47 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
     private void addConstructorTestItem(MetadataEventSet startEvents) throws Exception {
 
 
-        this.addConstructorMetadataValidator(startEvents, "compInnerString", ComponentTestInfo.class, String.class);
+        this.addConstructorMetadataValidator(startEvents, "compInnerString", ComponentInjection.class, String.class);
         this.addConstructorArgValueValidator(startEvents, "compInnerString", ComponentTestInfo.class, new String("ABC"), String.class);
 
-        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveBoolean", ComponentTestInfo.class, Boolean.TYPE);
+        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveBoolean", ComponentInjection.class, Boolean.TYPE);
         this.addConstructorArgValueValidator(startEvents, "compInnerPrimitiveBoolean", ComponentTestInfo.class, Boolean.TRUE, Boolean.TYPE);
-        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedBoolean", ComponentTestInfo.class, Boolean.class);
+        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedBoolean", ComponentInjection.class, Boolean.class);
         this.addConstructorArgValueValidator(startEvents, "compInnerWrapperedBoolean", ComponentTestInfo.class, Boolean.FALSE, Boolean.class);
 
-        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveByte", ComponentTestInfo.class, Byte.TYPE);
+        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveByte", ComponentInjection.class, Byte.TYPE);
         this.addConstructorArgValueValidator(startEvents, "compInnerPrimitiveByte", ComponentTestInfo.class, new Byte(Byte.MIN_VALUE), Byte.TYPE);
-        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedByte", ComponentTestInfo.class, Byte.class);
+        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedByte", ComponentInjection.class, Byte.class);
         this.addConstructorArgValueValidator(startEvents, "compInnerWrapperedByte", ComponentTestInfo.class, new Byte(Byte.MAX_VALUE), Byte.class);
 
-        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveDouble", ComponentTestInfo.class, Double.TYPE);
+        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveDouble", ComponentInjection.class, Double.TYPE);
         this.addConstructorArgValueValidator(startEvents, "compInnerPrimitiveDouble", ComponentTestInfo.class, new Double(Double.MIN_VALUE), Double.TYPE);
-        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedDouble", ComponentTestInfo.class, Double.class);
+        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedDouble", ComponentInjection.class, Double.class);
         this.addConstructorArgValueValidator(startEvents, "compInnerWrapperedDouble", ComponentTestInfo.class, new Double(Double.MAX_VALUE), Double.class);
 
-        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveFloat", ComponentTestInfo.class, Float.TYPE);
+        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveFloat", ComponentInjection.class, Float.TYPE);
         this.addConstructorArgValueValidator(startEvents, "compInnerPrimitiveFloat", ComponentTestInfo.class, new Float(Float.MIN_VALUE), Float.TYPE);
-        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedFloat", ComponentTestInfo.class, Float.class);
+        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedFloat", ComponentInjection.class, Float.class);
         this.addConstructorArgValueValidator(startEvents, "compInnerWrapperedFloat", ComponentTestInfo.class, new Float(Float.MAX_VALUE), Float.class);
 
-        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveInteger", ComponentTestInfo.class, Integer.TYPE);
+        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveInteger", ComponentInjection.class, Integer.TYPE);
         this.addConstructorArgValueValidator(startEvents, "compInnerPrimitiveInteger", ComponentTestInfo.class, new Integer(Integer.MIN_VALUE), Integer.TYPE);
-        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedInteger", ComponentTestInfo.class, Integer.class);
+        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedInteger", ComponentInjection.class, Integer.class);
         this.addConstructorArgValueValidator(startEvents, "compInnerWrapperedInteger", ComponentTestInfo.class, new Integer(Integer.MAX_VALUE), Integer.class);
 
-        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveCharacter", ComponentTestInfo.class, Character.TYPE);
+        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveCharacter", ComponentInjection.class, Character.TYPE);
         this.addConstructorArgValueValidator(startEvents, "compInnerPrimitiveCharacter", ComponentTestInfo.class, new Character(Character.MIN_VALUE), Character.TYPE);
-        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedCharacter", ComponentTestInfo.class, Character.class);
+        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedCharacter", ComponentInjection.class, Character.class);
         this.addConstructorArgValueValidator(startEvents, "compInnerWrapperedCharacter", ComponentTestInfo.class, new Character(Character.MAX_VALUE), Character.class);
 
-        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveShort", ComponentTestInfo.class, Short.TYPE);
+        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveShort", ComponentInjection.class, Short.TYPE);
         this.addConstructorArgValueValidator(startEvents, "compInnerPrimitiveShort", ComponentTestInfo.class, new Short(Short.MIN_VALUE), Short.TYPE);
-        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedShort", ComponentTestInfo.class, Short.class);
+        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedShort", ComponentInjection.class, Short.class);
         this.addConstructorArgValueValidator(startEvents, "compInnerWrapperedShort", ComponentTestInfo.class, new Short(Short.MAX_VALUE), Short.class);
 
-        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveLong", ComponentTestInfo.class, Long.TYPE);
+        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveLong", ComponentInjection.class, Long.TYPE);
         this.addConstructorArgValueValidator(startEvents, "compInnerPrimitiveLong", ComponentTestInfo.class, new Long(Long.MIN_VALUE), Long.TYPE);
-        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedLong", ComponentTestInfo.class, Long.class);
+        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedLong", ComponentInjection.class, Long.class);
         this.addConstructorArgValueValidator(startEvents, "compInnerWrapperedLong", ComponentTestInfo.class, new Long(Long.MAX_VALUE), Long.class);
     }
 
@@ -204,23 +205,23 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
     }
 
     private void addPropertyTestItem(MetadataEventSet startEvents) throws Exception {
-        this.addPropertyValidator(startEvents, "compInnerString", ComponentTestInfo.class, null, "string");
-        this.addPropertyValidator(startEvents, "compInnerPrimitiveBoolean", ComponentTestInfo.class, Boolean.TYPE, "primBoolean");
-        this.addPropertyValidator(startEvents, "compInnerWrapperedBoolean", ComponentTestInfo.class, Boolean.class, "boolean");
-        this.addPropertyValidator(startEvents, "compInnerPrimitiveByte", ComponentTestInfo.class, Byte.TYPE, "primByte");
-        this.addPropertyValidator(startEvents, "compInnerWrapperedByte", ComponentTestInfo.class, Byte.class, "byte");
-        this.addPropertyValidator(startEvents, "compInnerPrimitiveDouble", ComponentTestInfo.class, Double.TYPE, "primDouble");
-        this.addPropertyValidator(startEvents, "compInnerWrapperedDouble", ComponentTestInfo.class, Double.class, "double");
-        this.addPropertyValidator(startEvents, "compInnerPrimitiveFloat", ComponentTestInfo.class, Float.TYPE, "primFloat");
-        this.addPropertyValidator(startEvents, "compInnerWrapperedFloat", ComponentTestInfo.class, Float.class, "float");
-        this.addPropertyValidator(startEvents, "compInnerPrimitiveInteger", ComponentTestInfo.class, Integer.TYPE, "primInteger");
-        this.addPropertyValidator(startEvents, "compInnerWrapperedInteger", ComponentTestInfo.class, Integer.class, "integer");
-        this.addPropertyValidator(startEvents, "compInnerPrimitiveCharacter", ComponentTestInfo.class, Character.TYPE, "primCharacter");
-        this.addPropertyValidator(startEvents, "compInnerWrapperedCharacter", ComponentTestInfo.class, Character.class, "character");
-        this.addPropertyValidator(startEvents, "compInnerPrimitiveShort", ComponentTestInfo.class, Short.TYPE, "primShort");
-        this.addPropertyValidator(startEvents, "compInnerWrapperedShort", ComponentTestInfo.class, Short.class, "short");
-        this.addPropertyValidator(startEvents, "compInnerPrimitiveLong", ComponentTestInfo.class, Long.TYPE, "primLong");
-        this.addPropertyValidator(startEvents, "compInnerWrapperedLong", ComponentTestInfo.class, Long.class, "long");
+        this.addPropertyValidator(startEvents, "compInnerString", ComponentInjection.class, null, "string");
+        this.addPropertyValidator(startEvents, "compInnerPrimitiveBoolean", ComponentInjection.class, Boolean.TYPE, "primBoolean");
+        this.addPropertyValidator(startEvents, "compInnerWrapperedBoolean", ComponentInjection.class, Boolean.class, "boolean");
+        this.addPropertyValidator(startEvents, "compInnerPrimitiveByte", ComponentInjection.class, Byte.TYPE, "primByte");
+        this.addPropertyValidator(startEvents, "compInnerWrapperedByte", ComponentInjection.class, Byte.class, "byte");
+        this.addPropertyValidator(startEvents, "compInnerPrimitiveDouble", ComponentInjection.class, Double.TYPE, "primDouble");
+        this.addPropertyValidator(startEvents, "compInnerWrapperedDouble", ComponentInjection.class, Double.class, "double");
+        this.addPropertyValidator(startEvents, "compInnerPrimitiveFloat", ComponentInjection.class, Float.TYPE, "primFloat");
+        this.addPropertyValidator(startEvents, "compInnerWrapperedFloat", ComponentInjection.class, Float.class, "float");
+        this.addPropertyValidator(startEvents, "compInnerPrimitiveInteger", ComponentInjection.class, Integer.TYPE, "primInteger");
+        this.addPropertyValidator(startEvents, "compInnerWrapperedInteger", ComponentInjection.class, Integer.class, "integer");
+        this.addPropertyValidator(startEvents, "compInnerPrimitiveCharacter", ComponentInjection.class, Character.TYPE, "primCharacter");
+        this.addPropertyValidator(startEvents, "compInnerWrapperedCharacter", ComponentInjection.class, Character.class, "character");
+        this.addPropertyValidator(startEvents, "compInnerPrimitiveShort", ComponentInjection.class, Short.TYPE, "primShort");
+        this.addPropertyValidator(startEvents, "compInnerWrapperedShort", ComponentInjection.class, Short.class, "short");
+        this.addPropertyValidator(startEvents, "compInnerPrimitiveLong", ComponentInjection.class, Long.TYPE, "primLong");
+        this.addPropertyValidator(startEvents, "compInnerWrapperedLong", ComponentInjection.class, Long.class, "long");
     }
 
     public void testPropertyInjection() throws Exception {
@@ -277,7 +278,4 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
 
         controller.run();
     }
-
-
-
 }

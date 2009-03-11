@@ -80,8 +80,7 @@ public class TestListValue extends TestValue {
         List list = ((ListValue)v).getList();
         // validate the size first
         assertEquals("List value size mismatch", entries.length, list.size());
-// TODO:  Temporarily disabled
-//        assertEquals("List default type mismatch", typeName, ((ListValue)v).getValueType());
+        assertEquals("List default type mismatch", typeName, ((ListValue)v).getValueType());
         // now validate each of the entries
         for (int i = 0; i < entries.length; i++) {
             // nulls appear as NullValue items, so everything should match

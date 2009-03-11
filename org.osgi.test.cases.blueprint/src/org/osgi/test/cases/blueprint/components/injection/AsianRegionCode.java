@@ -31,7 +31,6 @@ public class AsianRegionCode extends RegionCode{
 
     public AsianRegionCode(String code) {
         super(code);
-        // TODO Auto-generated constructor stub
     }
 
 }

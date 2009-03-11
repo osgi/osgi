@@ -45,8 +45,6 @@ import org.osgi.test.cases.blueprint.services.TestUtil;
  * EventAdmin service.
  */
 public class BlueprintEvent extends AdminTestEvent {
-    // TODO:  This is a temporary patch to get us past some RI errors
-    private boolean bypassValidation = false;
 
     /**
      * Create an event for a given topic type.
@@ -161,10 +159,6 @@ public class BlueprintEvent extends AdminTestEvent {
     public TestEvent validate(TestEvent received) {
         // this should be true, since we matched, but don't assume
         if (!(received instanceof BlueprintEvent)) {
-            return null;
-        }
-        // TODO:  This needs to be removed eventually
-        if (bypassValidation) {
             return null;
         }
 

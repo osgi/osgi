@@ -60,7 +60,7 @@ public class BaseTestController implements EventHandler, ModuleContextListener, 
     // default timeout for the test.  For most tests, we're not dealing with
     // expected timeout situations, so a short timeout is acceptable.  This will
     // need to be set higher if we're testing actual timeout situations.
-    public static final long DEFAULT_TIMEOUT = 10000;
+    public static final long DEFAULT_TIMEOUT = 20000;
 
     protected long timeout = DEFAULT_TIMEOUT;
 
