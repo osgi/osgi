@@ -27,10 +27,11 @@
 
 package org.osgi.test.cases.component.tb3;
 
-import org.osgi.test.cases.component.tbc.TBCService;
+import org.osgi.test.cases.component.service.TBCService;
 
 /**
  * @version $Revision$
  */
 public interface ServiceConsumerEvent extends TBCService {
+	// empty
 }

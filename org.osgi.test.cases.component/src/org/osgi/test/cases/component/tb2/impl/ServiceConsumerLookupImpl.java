@@ -30,9 +30,9 @@ package org.osgi.test.cases.component.tb2.impl;
 import java.util.Dictionary;
 
 import org.osgi.service.component.ComponentContext;
+import org.osgi.test.cases.component.service.ServiceProvider;
+import org.osgi.test.cases.component.service.TestObject;
 import org.osgi.test.cases.component.tb2.ServiceConsumerLookup;
-import org.osgi.test.cases.component.tbc.ServiceProvider;
-import org.osgi.test.cases.component.tbc.TestObject;
 
 /**
  * @version $Revision$
@@ -42,13 +42,14 @@ public class ServiceConsumerLookupImpl implements ServiceConsumerLookup {
 	private ComponentContext	context;
 
 	public ServiceConsumerLookupImpl() {
+		// empty
 	}
 
-	protected void activate(ComponentContext context) {
-		this.context = context;
+	protected void activate(ComponentContext c) {
+		this.context = c;
 	}
 
-	protected void deactivate(ComponentContext context) {
+	protected void deactivate(ComponentContext c) {
 		this.context = null;
 	}
 

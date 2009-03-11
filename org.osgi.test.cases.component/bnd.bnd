@@ -1,0 +1,33 @@
+Bundle-Version: 4.2.0.${project.build}
+Bundle-Description: Declarative Services Test Case
+
+Private-Package						= org.osgi.test.support.*, \
+	${p}.junit
+Export-Package						= \
+	${p}.service
+
+Include-Resource					= \
+	tb1.jar, \
+	tb2.jar, \
+	tb3.jar, \
+	tb4.jar
+	
+Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+
+-buildpath							= \
+    org.osgi.test.support;                  version=project , \
+    org.osgi.service.component;                 version=project , \
+	osgi;									version=latest	, \
+	ee.minimum; version=1.2											, \
+	${junit}
+
+-runbundles							= \
+	org.eclipse.equinox.ds; version=latest, \
+	org.apache.felix.configadmin; version=latest, \
+	org.osgi.impl.service.log; version=latest, \
+	osgi; version=latest
+	
+
+
+-runproperties = report=true, \
+	scr.bundle.name=org.eclipse.equinox.ds

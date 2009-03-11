@@ -1,0 +1,6 @@
+Bundle-Version: 4
+Private-Package: ${p}.tb2.*
+Export-Package: ${p}.tb2;version="1.0"
+Service-Component: org/osgi/test/cases/component/tb2/impl/serviceconsumerlookup.xml
+
+

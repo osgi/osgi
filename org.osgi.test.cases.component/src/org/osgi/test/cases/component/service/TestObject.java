@@ -25,11 +25,14 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.component.tbc;
-
+package org.osgi.test.cases.component.service;
 
 /**
  * @version $Revision$
  */
-public interface ServiceProvider extends TBCService {
+public class TestObject {
+  
+  public TestObject() {
+		// empty
+  }
 }

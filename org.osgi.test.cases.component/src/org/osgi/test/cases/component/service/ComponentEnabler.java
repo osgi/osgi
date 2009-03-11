@@ -25,18 +25,14 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.component.tbc;
-
-import java.util.Dictionary;
+package org.osgi.test.cases.component.service;
 
 /**
- * Dummy service to check exporter
+ * Extended by ServiceConsumerLookup to break dependency of tbc on tb2.
  * 
  * @version $Revision$
  */
-public interface TBCService {
+public interface ComponentEnabler extends TBCService {
 
-  public TestObject getTestObject();
-  
-  public Dictionary getProperties();
+  public void enableComponent(String name, boolean flag);
 }

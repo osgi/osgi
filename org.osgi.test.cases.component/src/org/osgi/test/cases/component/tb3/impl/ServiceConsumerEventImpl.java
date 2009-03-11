@@ -30,8 +30,8 @@ package org.osgi.test.cases.component.tb3.impl;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
+import org.osgi.test.cases.component.service.TestObject;
 import org.osgi.test.cases.component.tb3.ServiceConsumerEvent;
-import org.osgi.test.cases.component.tbc.TestObject;
 
 /**
  * @version $Revision$

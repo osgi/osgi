@@ -27,7 +27,7 @@
 
 package org.osgi.test.cases.component.tb3.impl;
 
-import org.osgi.test.cases.component.tbc.ServiceProvider;
+import org.osgi.test.cases.component.service.ServiceProvider;
 
 /**
  * This class is extended by the service implementation. Its purpose is to
@@ -40,11 +40,11 @@ import org.osgi.test.cases.component.tbc.ServiceProvider;
 public class DefaultBindImpl {
 	protected ServiceProvider	serviceProvider;
 
-	protected void bindServiceProvider(ServiceProvider serviceProvider) {
-		this.serviceProvider = serviceProvider;
+	protected void bindServiceProvider(ServiceProvider sp) {
+		this.serviceProvider = sp;
 	}
 
-	protected void unbindServiceProvider(ServiceProvider serviceProvider) {
+	protected void unbindServiceProvider(ServiceProvider sp) {
 		this.serviceProvider = null;
 	}
 

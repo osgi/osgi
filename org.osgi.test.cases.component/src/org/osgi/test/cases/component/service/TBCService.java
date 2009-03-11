@@ -25,18 +25,18 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.component;
+package org.osgi.test.cases.component.service;
 
-import org.osgi.test.cases.util.director.DefaultTestCase;
-
-
-
+import java.util.Dictionary;
 
 /**
- *
- * This class may remain empty
- * @testcase org.osgi.service.component
+ * Dummy service to check exporter
+ * 
  * @version $Revision$
  */
-public class TestCase extends DefaultTestCase {
+public interface TBCService {
+
+  public TestObject getTestObject();
+  
+  public Dictionary getProperties();
 }

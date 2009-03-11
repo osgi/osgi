@@ -8,8 +8,8 @@
 
 	<!-- cardinality by default should be 1..1 and policy - static -->
   <reference name="serviceProvider"
-		interface="org.osgi.test.cases.component.tbc.ServiceProvider"
-		target="(component.name=org.osgi.test.cases.component.tbc.ServiceProvider)"
+		interface="org.osgi.test.cases.component.service.ServiceProvider"
+		target="(component.name=org.osgi.test.cases.component.tb1.impl.ServiceProviderImpl)"
 		bind="bindServiceProvider"
 		unbind="unbindServiceProvider"
 	/>

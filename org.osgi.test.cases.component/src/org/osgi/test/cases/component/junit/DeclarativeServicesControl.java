@@ -24,8 +24,9 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-package org.osgi.test.cases.component.tbc;
+package org.osgi.test.cases.component.junit;
 
+import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
@@ -43,7 +44,10 @@ import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogListener;
 import org.osgi.service.log.LogReaderService;
 import org.osgi.service.log.LogService;
-import org.osgi.test.cases.util.DefaultTestBundleControl;
+import org.osgi.test.cases.component.service.ComponentEnabler;
+import org.osgi.test.cases.component.service.TBCService;
+import org.osgi.test.cases.component.service.TestObject;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -55,30 +59,15 @@ import org.osgi.util.tracker.ServiceTracker;
 public class DeclarativeServicesControl extends DefaultTestBundleControl
 		implements LogListener {
 
-	private static final String	PROVIDER_CLASS	= "org.osgi.test.cases.component.tbc.ServiceProvider";
+	private static final String	PROVIDER_CLASS	= "org.osgi.test.cases.component.service.ServiceProvider";
 	private static final String	LOOKUP_CLASS	= "org.osgi.test.cases.component.tb2.ServiceConsumerLookup";
 	private static final String	DYN_CLASS		= "org.osgi.test.cases.component.tb2.DynService";
 	private static final String	EVENT_CLASS		= "org.osgi.test.cases.component.tb3.ServiceConsumerEvent";
 	private static final String	NAMED_CLASS		= "org.osgi.test.cases.component.tb4.NamedService";
 
-	private static int	SLEEP			= 1000;
+	private static int			SLEEP			= 1000;
 
 	private Bundle				tb1, tb2, tb3;
-
-	private static String[]		methods			= new String[] {
-			"testRegistration", // "TC1"
-			"testGetServiceDirect", // "TC2"
-			"testGetServiceLookup", // "TC3"
-			"testGetServiceEvent", // "TC4"
-			"testGetProperties", // "TC5"
-			"testStartStopSCR", // "TC6"
-			"testComponentFactory", // "TC7"
-			"testBadComponents", // TC8
-			"testDynamicBind", // TC9
-			"testCMUpdate", // TC10
-			"testManagedServiceFactory",// TC11
-			"testComponentEnableAndDisable", // TC12
-												};
 
 	private ServiceTracker		trackerProvider;
 	private ServiceTracker		trackerConsumerLookup;
@@ -88,33 +77,29 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	private ServiceTracker		trackerNamedServiceFactory;
 	private ServiceTracker		trackerCM;
 
-	/**
-	 * Returns a list containing the names of the test methods in the order they
-	 * should be called.
-	 * 
-	 * @see org.osgi.test.cases.util.DefaultTestBundleControl#getMethods()
-	 */
-	protected String[] getMethods() {
-		return methods;
-	}
+	protected void setUp() throws Exception {
+		String sleepTimeString = System
+				.getProperty("osgi.tc.component.sleeptime");
+		int sleepTime = SLEEP;
+		if (sleepTimeString != null) {
+			try {
+				sleepTime = Integer.parseInt(sleepTimeString);
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+				System.out
+						.println("Error while parsing sleep value! The default one will be used : "
+								+ SLEEP);
+			}
+			if (sleepTime < 100) {
+				System.out.println("The sleep value is too low : " + sleepTime
+						+ " ! The default one will be used : " + SLEEP);
+			}
+			else {
+				SLEEP = sleepTime;
+			}
+		}
 
-	public void prepare() throws Exception {
-    String sleepTimeString = System.getProperty("osgi.tc.component.sleeptime");
-    int sleepTime = SLEEP;
-    if (sleepTimeString != null) {
-      try {
-        sleepTime = Integer.parseInt(sleepTimeString);
-      } catch (Exception e) {
-        e.printStackTrace();
-        System.out.println("Error while parsing sleep value! The default one will be used : "+SLEEP);
-      }
-      if (sleepTime < 100) {
-        System.out.println("The sleep value is too low : "+sleepTime+" ! The default one will be used : "+SLEEP);
-      } else {
-        SLEEP = sleepTime;
-      }
-    }
-    
 		// install test cases
 		tb1 = installBundle("tb1.jar", false);
 		tb2 = installBundle("tb2.jar", false);
@@ -170,7 +155,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	 * @throws Exception is the bundles are not installed
 	 * @see org.osgi.test.cases.util.DefaultTestBundleControl#unprepare()
 	 */
-	public void unprepare() throws Exception {
+	protected void tearDown() throws Exception {
 		uninstallBundle(tb1);
 		uninstallBundle(tb2);
 		uninstallBundle(tb3);
@@ -184,13 +169,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		trackerCM.close();
 	}
 
-	protected void setState() throws Exception {
-	}
-	protected void clearState() throws Exception {
-	}
-	
-
-/**
+	/**
 	 * Tests registering / unregistering of the component bundles and their
 	 * provided services.
 	 * 
@@ -226,8 +205,8 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		tb1 = installBundle("tb1.jar", false);
 		Thread.sleep(SLEEP);
 		serviceProvider = (TBCService) trackerProvider.getService();
-		assertTrue("ServiceProvider bundle should be in resolved state",
-				(tb1.getState()&(Bundle.RESOLVED|Bundle.INSTALLED))!=0);
+		assertTrue("ServiceProvider bundle should be in resolved state", (tb1
+				.getState() & (Bundle.RESOLVED | Bundle.INSTALLED)) != 0);
 		assertNull("ServiceProvider service should not be registered",
 				serviceProvider);
 
@@ -291,7 +270,8 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		String[] array = (String[]) properties.get("test.property.string");
 		assertEquals("The size of test.property.string array should be 3", 3,
 				array.length);
-		assertEquals("test.property.string array should be", new String[] {"Value 1", "Value 2", "Value 3"}, array );
+		assertTrue("test.property.string array should be", Arrays.equals(
+				new String[] {"Value 1", "Value 2", "Value 3"}, array));
 	}
 
 	/**
@@ -305,20 +285,20 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		if (scr == null) {
 			fail("testStartStopSCR test cannot execute: Please set the system property 'scr.bundle.name' to the Bundle-SymbolicName of the SCR implementation bundle being tested.");
 		}
-		
+
 		ServiceReference refs[];
 		BundleContext bc = getContext();
 		String filter = "(" + ComponentConstants.COMPONENT_NAME + "=*)";
-		
+
 		// preserve the count of the registered components
 		// after SRC is started again, the same number of components
 		// must be registered
 		refs = bc.getServiceReferences(null, filter);
-		int count = (refs==null)?0:refs.length;
-		
+		int count = (refs == null) ? 0 : refs.length;
+
 		scr.stop();
-		Thread.sleep(SLEEP*2);
-		
+		Thread.sleep(SLEEP * 2);
+
 		try {
 			refs = bc.getServiceReferences(null, filter);
 			assertNull(
@@ -329,13 +309,13 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 			// make sure that after SCR is being started it will activate
 			// the components which bundles are active
 			scr.start();
-			Thread.sleep(SLEEP*2);
+			Thread.sleep(SLEEP * 2);
 		}
-		
+
 		refs = bc.getServiceReferences(null, filter);
 		assertEquals(
 				"The Service Component Runtime must start all components that are installed prior it",
-				count, (refs==null)?0:refs.length);
+				count, (refs == null) ? 0 : refs.length);
 	}
 
 	/**
@@ -419,13 +399,13 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				trackerNamedService.getService());
 	}
 
-	boolean errorLog = false;
+	boolean	errorLog	= false;
 
-  public void logged(LogEntry e) {
-    if (e.getLevel() == LogService.LOG_ERROR) {
-      errorLog = true;
-    }
-  }
+	public void logged(LogEntry e) {
+		if (e.getLevel() == LogService.LOG_ERROR) {
+			errorLog = true;
+		}
+	}
 
 	/**
 	 * This method tests the behaviour of the service component runtime against
@@ -450,16 +430,16 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		tb1.uninstall();
 
 		// clear any previously reported 'error' bundles
-    errorLog = false;
-    LogReaderService logService = (LogReaderService) getService(LogReaderService.class);
-    logService.addLogListener(this);
+		errorLog = false;
+		LogReaderService logService = (LogReaderService) getService(LogReaderService.class);
+		logService.addLogListener(this);
 
 		// the bundle contains some illegal definitions
 		tb1 = installBundle("tb1.jar", false);
 		tb1.start();
-		Thread.sleep(SLEEP*2); // log and scr have asynchronous processing 
+		Thread.sleep(SLEEP * 2); // log and scr have asynchronous processing
 
-    logService.removeLogListener(this);
+		logService.removeLogListener(this);
 
 		// make sure that SCR reports some errors for tb1
 		assertTrue(
@@ -481,20 +461,20 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				ref);
 	}
 
-  private Bundle getSCRBundle() {
-    String bundleName = System.getProperty("scr.bundle.name");
-    if (bundleName != null) {
-      Bundle[] bundles = getContext().getBundles();
-      for (int i = 0; i < bundles.length; i++) {
-        Bundle current = bundles[i];
-        String name = current.getSymbolicName();
-        if (bundleName.equals(name)) {
-          return current;
-        }
-      }
-    }
-    return null;
-  }
+	private Bundle getSCRBundle() {
+		String bundleName = System.getProperty("scr.bundle.name");
+		if (bundleName != null) {
+			Bundle[] bundles = getContext().getBundles();
+			for (int i = 0; i < bundles.length; i++) {
+				Bundle current = bundles[i];
+				String name = current.getSymbolicName();
+				if (bundleName.equals(name)) {
+					return current;
+				}
+			}
+		}
+		return null;
+	}
 
 	// helper for testDynamicBind
 	private int getCount() {
@@ -510,7 +490,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		assertEquals("The number of dynamically bound service should be zero",
 				0, getCount());
 
-		Bundle bundle = installBundle("tb4.jar",false);
+		Bundle bundle = installBundle("tb4.jar", false);
 		bundle.start();
 		Thread.sleep(SLEEP);
 
@@ -526,24 +506,27 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		ComponentInstance instance1 = factory.newInstance(props);
 		Thread.sleep(SLEEP);
 
-		assertEquals("The component should be bound to the first instance", 1, getCount());
+		assertEquals("The component should be bound to the first instance", 1,
+				getCount());
 
 		props = new Hashtable();
 		props.put("name", "world");
 		// ComponentInstance instance2 =
 		factory.newInstance(props);
 		Thread.sleep(SLEEP);
-		assertEquals("The component should be bound to the second instance too", 2,
+		assertEquals(
+				"The component should be bound to the second instance too", 2,
 				getCount());
 
 		instance1.dispose();
 		Thread.sleep(SLEEP);
-		assertEquals("The component should be unbound from the first instance", 1,
-				getCount());
+		assertEquals("The component should be unbound from the first instance",
+				1, getCount());
 
 		bundle.uninstall(); // must also dispose the second instance!
 		Thread.sleep(SLEEP);
-		assertEquals("The component should be unbound from the all component instances",
+		assertEquals(
+				"The component should be unbound from the all component instances",
 				0, getCount());
 	}
 
@@ -571,7 +554,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		config.update(props);
 
 		// let SCR & CM to complete it's job
-		Thread.sleep(SLEEP*2);
+		Thread.sleep(SLEEP * 2);
 
 		// verify that the service is updated
 		assertNotSame("The service shoud be restarted with a new instance",
@@ -591,7 +574,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// make sure that the SCR handles delete events!
 		config.delete();
 		// wait to complete - slow becase CM may use threads for notify
-		Thread.sleep(SLEEP*2);
+		Thread.sleep(SLEEP * 2);
 
 		assertNotSame(
 				"After delete the service shoud be restarted with a new instance",
@@ -623,7 +606,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		props = new Hashtable(2);
 		props.put("instance", "1");
 		config.update(props);
-		Thread.sleep(SLEEP*2); // let it finish update, CM + SCR
+		Thread.sleep(SLEEP * 2); // let it finish update, CM + SCR
 
 		// verify the result
 		length = trackerConsumerEvent.getServices().length;
@@ -636,7 +619,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		props = new Hashtable(2);
 		props.put("instance", "2");
 		config.update(props);
-		Thread.sleep(SLEEP*2); // let it finish update, CM + SCR
+		Thread.sleep(SLEEP * 2); // let it finish update, CM + SCR
 
 		// verify the result
 		length = trackerConsumerEvent.getServices().length;

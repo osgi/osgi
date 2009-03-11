@@ -35,4 +35,5 @@ package org.osgi.test.cases.component.tb1;
  * @version $Revision$
  */
 public class BadService2 {
+	// empty
 }

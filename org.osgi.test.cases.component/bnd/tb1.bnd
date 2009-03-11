@@ -1,0 +1,6 @@
+Bundle-Version: 4
+Private-Package: ${p}.tb1.*
+Export-Package: ${p}.tb1;version="1.0"
+Service-Component: org/osgi/test/cases/component/tb1/impl/serviceprovider.xml
+
+

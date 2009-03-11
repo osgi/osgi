@@ -18,8 +18,8 @@
 
 	<!-- cardinality="1..1"; policy="static" - these are defaults -->
 	<reference name="serviceProvider"
-		interface="org.osgi.test.cases.component.tbc.ServiceProvider"
-		target="(component.name=org.osgi.test.cases.component.tbc.ServiceProvider)"
+		interface="org.osgi.test.cases.component.service.ServiceProvider"
+		target="(component.name=org.osgi.test.cases.component.tb1.impl.ServiceProviderImpl)"
 	/>
 </scr:component>
 

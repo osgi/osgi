@@ -29,8 +29,8 @@ package org.osgi.test.cases.component.tb1.impl;
 
 import java.util.Dictionary;
 
-import org.osgi.test.cases.component.tbc.ServiceProvider;
-import org.osgi.test.cases.component.tbc.TestObject;
+import org.osgi.test.cases.component.service.ServiceProvider;
+import org.osgi.test.cases.component.service.TestObject;
 
 /**
  * @version $Revision$
@@ -38,6 +38,7 @@ import org.osgi.test.cases.component.tbc.TestObject;
 public class ServiceProviderImpl implements ServiceProvider {
   
   public ServiceProviderImpl() {
+		// empty
   }
 
   public TestObject getTestObject() {

@@ -35,5 +35,5 @@ package org.osgi.test.cases.component.tb2;
  * @version $Revision$
  */
 public class DynService {
-
+	// empty
 }

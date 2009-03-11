@@ -30,12 +30,12 @@
 	</component>
 </ignored>
 
-<scr:component name="org.osgi.test.cases.component.tbc.ServiceProvider"
+<scr:component name="org.osgi.test.cases.component.tb1.impl.ServiceProviderImpl"
 	enabled="true"
 	xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
 	<implementation class="org.osgi.test.cases.component.tb1.impl.ServiceProviderImpl"/>
 	<service servicefactory="true">
-		<provide interface="org.osgi.test.cases.component.tbc.ServiceProvider"/>
+		<provide interface="org.osgi.test.cases.component.service.ServiceProvider"/>
 	</service>
 </scr:component>
 
