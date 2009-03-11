@@ -23,6 +23,7 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 
 -runbundles							= \
 	org.eclipse.equinox.ds; version=latest, \
+	org.eclipse.equinox.util; version=latest, \
 	org.apache.felix.configadmin; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
 	osgi; version=latest
