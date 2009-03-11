@@ -50,6 +50,7 @@ public class TestBundleUninstaller implements TestCleanup {
      * @exception Exception
      */
     public void cleanup(BundleContext testContext) throws Exception {
+        System.out.println(">>>>>>>> uninstalling bundle " + bundle);
         // this will stop the bundle also.
         bundle.uninstall();
     }

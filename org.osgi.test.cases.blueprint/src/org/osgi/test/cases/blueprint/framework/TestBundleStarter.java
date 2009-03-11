@@ -52,6 +52,7 @@ public class TestBundleStarter implements TestInitializer {
      * @exception Exception
      */
     public void start(BundleContext testContext) throws Exception {
+        System.out.println(">>>>>>>> starting bundle " + bundle);
         bundle.start();
     }
 }

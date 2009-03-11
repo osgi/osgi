@@ -144,6 +144,7 @@ public class BaseTestController implements EventHandler, ModuleContextListener, 
         // we start this test phase out by stopping the bundle.  Everything else flows
         // from that.
         cleanupEvents.addInitializer(new TestBundleStopper(testBundle));
+        cleanupEvents.addTerminator(new TestBundleUninstaller(testBundle));
         // we always expect to see a stopped bundle event at the end.  We need at least one
         // event to wake us up to kill the timeout
         cleanupEvents.addBundleEvent("STOPPED");
@@ -232,12 +233,14 @@ public class BaseTestController implements EventHandler, ModuleContextListener, 
             testPhases.add(cleanupPhase);
         }
 
+        System.out.println(">>>>> Beginning test with " + testPhases.size() + " phases");
 
         Iterator i = testPhases.iterator();
         // run each of the phases in the prescribed order.
         while (i.hasNext()) {
             // this also sets the active phase used for event dispatch.
             activeTestPhase = (TestPhase)i.next();
+            System.out.println(">>>>> Running test phase");
             activeTestPhase.runTest();
         }
         // no more event processing
@@ -447,6 +450,7 @@ public class BaseTestController implements EventHandler, ModuleContextListener, 
         URL url = new URL(bundleName);
         InputStream in = url.openStream();
 
+        System.out.println(">>>>>>> installing bundle " + bundleName);
         return testContext.installBundle(bundleName, in);
     }
 

@@ -65,7 +65,7 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
                 getWebServer()+"www/placeholder_property_injection.jar");
 
         controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
-        
+
         MetadataEventSet startEventSet = controller.getStartEvents(0);
 
         this.addPropertyValidator(startEventSet, "compString", "string", "abc", String.class);
@@ -91,9 +91,9 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
         StandardTestController controller = new StandardTestController(getContext(),
                 getWebServer()+"www/placeholder_prefix_and_suffix.jar");
         controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
-        
+
         MetadataEventSet startEventSet = controller.getStartEvents(0);
-        
+
         this.addPropertyValidator(startEventSet, "compString1", "string", "abc", String.class);
         this.addPropertyValidator(startEventSet, "compString2", "string", "abc", String.class);
 
@@ -104,9 +104,9 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
         StandardTestController controller = new StandardTestController(getContext(),
                 getWebServer()+"www/placeholder_default_properties.jar");
         controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
-        
+
         MetadataEventSet startEventSet = controller.getStartEvents(0);
-        
+
         this.addPropertyValidator(startEventSet, "compString1", "string", "def", String.class);
         this.addPropertyValidator(startEventSet, "compString2", "string", "def", String.class);
         this.addPropertyValidator(startEventSet, "compString3", "string", "def", String.class);
@@ -118,9 +118,9 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
         StandardTestController controller = new StandardTestController(getContext(),
                 getWebServer()+"www/placeholder_declaration_scope.jar");
         controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
-        
+
         MetadataEventSet startEventSet = controller.getStartEvents(0);
-        
+
         this.addPropertyValidator(startEventSet, "compString", "string", "abc", String.class);
 
         controller.run();
@@ -131,7 +131,7 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
         StandardTestController controller = new StandardTestController(getContext(),
                 getWebServer()+"www/service_properties_evaluation.jar");
         controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
-        
+
         MetadataEventSet startEventSet = controller.getStartEvents(0);
 
         // publish one
@@ -162,7 +162,7 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
         StandardTestController controller = new StandardTestController(getContext(),
                 getWebServer()+"www/service_properties_auto_update.jar");
         controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
-        
+
         MetadataEventSet startEventSet = controller.getStartEvents(0);
 
         Properties initialProps = new Properties();
@@ -372,7 +372,7 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
         controller.run();
 
     }
-    
+
     public void testFactoryServicePropertiesAutoUpdate() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
                 getWebServer()+"www/factory_service_properties_auto_update.jar");
@@ -388,7 +388,7 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
         startEventSet.removeEvent(new BlueprintEvent("CREATED"));
         // Ok, when the CREATED event is triggered, update the configuration object
         startEventSet.addEvent(new BlueprintEvent("CREATED", null, new AdminPropertiesUpdater(getContext(), "org.osgi.test.cases.blueprint.services.ConfigurationManager", "org.osgi.test.cases.blueprint.components.cmsupport.configfactory1", updatedProps)));
-        
+
         // 2. validate Service Exist
         startEventSet.addValidator(new ServiceExistValidator("org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection", updatedProps));
 
@@ -418,7 +418,7 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
         controller.run();
 
     }
-    
+
     public void testFactoryComponentPropertiesAutoUpdate_ContainerManaged() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
                 getWebServer()+"www/factory_component_properties_auto_update_cont.jar");
@@ -434,7 +434,7 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
         startEventSet.removeEvent(new BlueprintEvent("CREATED"));
         // Ok, when the CREATED event is triggered, update the configuration object
         startEventSet.addEvent(new BlueprintEvent("CREATED", null, new AdminPropertiesUpdater(getContext(), "org.osgi.test.cases.blueprint.services.ConfigurationManager", "org.osgi.test.cases.blueprint.components.cmsupport.configfactory1", updatedProps)));
-        
+
         // 2. Validate component exist
         ServiceComponentExistValidator v = null;
         v = new ServiceComponentExistValidator("org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection");
@@ -444,7 +444,7 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
         controller.run();
 
     }
-    
+
     public void testFactoryComponentPropertiesAutoUpdate_ComponentManaged() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
                 getWebServer()+"www/factory_component_properties_auto_update_comp.jar");
@@ -460,14 +460,14 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
         startEventSet.removeEvent(new BlueprintEvent("CREATED"));
         // Ok, when the CREATED event is triggered, update the configuration object
         startEventSet.addEvent(new BlueprintEvent("CREATED", null, new AdminPropertiesUpdater(getContext(), "org.osgi.test.cases.blueprint.services.ConfigurationManager", "org.osgi.test.cases.blueprint.components.cmsupport.configfactory1", updatedProps)));
-        
+
         // 2. Assert component method called
         startEventSet.addAssertion("managedComp", AssertionService.METHOD_CALLED);
 
         controller.run();
 
     }
-    
+
     public void testFactoryComponentPropertiesAutoUpdate_None() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
                 getWebServer()+"www/factory_component_properties_auto_update_none.jar");
@@ -483,8 +483,8 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
         startEventSet.removeEvent(new BlueprintEvent("CREATED"));
         // Ok, when the CREATED event is triggered, update the configuration object
         startEventSet.addEvent(new BlueprintEvent("CREATED", null, new AdminPropertiesUpdater(getContext(), "org.osgi.test.cases.blueprint.services.ConfigurationManager", "org.osgi.test.cases.blueprint.components.cmsupport.configfactory1", updatedProps)));
-        
-        
+
+
         // 2. no component changed
         ServiceComponentExistValidator v = null;
 
@@ -520,12 +520,12 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
         Dictionary newProps = new Hashtable();
         newProps.put("string", "cde");
         newProps.put("boolean", new Boolean(true));
-        
+
         // add 1 configuration to the configfactory1
         middleEventSet.addInitializer(new AdminPropertiesAdder(getContext(), "org.osgi.test.cases.blueprint.services.ConfigurationManager",  "org.osgi.test.cases.blueprint.components.cmsupport.configfactory1", newProps));
         middleEventSet.addEvent(new ServiceTestEvent("REGISTERED", new String[] {"org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection"}, null,
                 new AdminPropertiesRemover(getContext(), "org.osgi.test.cases.blueprint.services.ConfigurationManager",  "org.osgi.test.cases.blueprint.components.cmsupport.configfactory1")));
-        
+
         // after remove the properties, we should receive 3 unregistering event
         middleEventSet.addEvent(new ServiceTestEvent("UNREGISTERING", "org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection"));
         middleEventSet.addEvent(new ServiceTestEvent("UNREGISTERING", "org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection"));
