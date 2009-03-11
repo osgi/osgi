@@ -53,24 +53,24 @@ import junit.framework.AssertionFailedError;
  */
 public class ModuleMetadata extends Assert implements TestValidator, TestCleanup {
     // the bundle context we're running in
-    protected BundleContext testBundle;
+    protected BundleContext testContext;
     // the bundle we're validating for
-    protected Bundle bundle;
+    protected Bundle targetBundle;
     // the resolved service reference to the target module context.
     protected ServiceReference contextRef;
     // the actual module context service
-    protected ModuleContext context;
+    protected ModuleContext targetModuleContext;
 
 
     /**
      * Create a metadata item for the given bundle.
      *
-     * @param testBundle The text BundleContext (needed for services operations).
-     * @param bundle     The target test bundle.
+     * @param testContext    The text BundleContext (needed for services operations).
+     * @param targetBundle   The target test bundle.
      */
-    public ModuleMetadata(BundleContext testBundle, Bundle bundle) {
-        this.testBundle = testBundle;
-        this.bundle = bundle;
+    public ModuleMetadata(BundleContext testContext, Bundle targetBundle) {
+        this.testContext = testContext;
+        this.targetBundle = targetBundle;
     }
 
 
@@ -79,8 +79,8 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
      *
      * @return The associated bundle.
      */
-    public Bundle getBundle() {
-        return bundle;
+    public Bundle getTargetBundle() {
+        return targetBundle;
     }
 
 
@@ -106,14 +106,14 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
      * Retrieve the module context for the target bundle.
      */
     protected void getModuleContext() throws Exception {
-        ServiceReference[] refs = testBundle.getServiceReferences("org.osgi.service.blueprint.context.ModuleContext",
-            "(osgi.blueprint.context.symbolicname=" + bundle.getSymbolicName() + ")");
-        assertNotNull("No ModuleContext located for bundle " + bundle.getSymbolicName(), refs);
-        assertEquals("Bundle mismatch for ModuleContext instance.", bundle, refs[0].getBundle());
+        ServiceReference[] refs = testContext.getServiceReferences("org.osgi.service.blueprint.context.ModuleContext",
+            "(osgi.blueprint.context.symbolicname=" + targetBundle.getSymbolicName() + ")");
+        assertNotNull("No ModuleContext located for bundle " + targetBundle.getSymbolicName(), refs);
+        assertEquals("Bundle mismatch for ModuleContext instance.", targetBundle, refs[0].getBundle());
 
         // save the module context reference
         contextRef = refs[0];
-        context = (ModuleContext)testBundle.getService(contextRef);
+        targetModuleContext = (ModuleContext)testContext.getService(contextRef);
     }
 
 
@@ -128,11 +128,11 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
         getModuleContext();
         try {
             // get the object instance
-            Object component = context.getComponent(componentName);
-            assertNotNull("Component " + componentName + " not found in ModuleContext for " + bundle.getSymbolicName(), component);
+            Object component = targetModuleContext.getComponent(componentName);
+            assertNotNull("Component " + componentName + " not found in ModuleContext for " + targetBundle.getSymbolicName(), component);
             return component;
         } catch (NoSuchComponentException e) {
-            fail("Component " + componentName + " not created for bundle " + bundle.getSymbolicName());
+            fail("Component " + componentName + " not created for bundle " + targetBundle.getSymbolicName());
         }
         return null;
     }
@@ -151,18 +151,18 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
         // ensure we have a good context first
         getModuleContext();
         try {
-            Iterator componentNames = context.getComponentNames().iterator();
+            Iterator componentNames = targetModuleContext.getComponentNames().iterator();
             while (componentNames.hasNext()) {
                 String name = (String)componentNames.next();
 
                 // get the metadata instance for the next name and check for a match
-                ComponentMetadata component = context.getComponentMetadata(name);
+                ComponentMetadata component = targetModuleContext.getComponentMetadata(name);
                 if (target.matches(component)) {
                     return component;
                 }
             }
         } catch (NoSuchComponentException e) {
-            fail("Component " + target.getName() + " not created for bundle " + bundle.getSymbolicName());
+            fail("Component " + target.getName() + " not created for bundle " + targetBundle.getSymbolicName());
         }
         return null;
     }
@@ -178,11 +178,11 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
         getModuleContext();
         try {
             // get the object instance
-            ComponentMetadata component = context.getComponentMetadata(componentName);
-            assertNotNull("Component " + componentName + " not found in ModuleContext for " + bundle.getSymbolicName(), component);
+            ComponentMetadata component = targetModuleContext.getComponentMetadata(componentName);
+            assertNotNull("Component " + componentName + " not found in ModuleContext for " + targetBundle.getSymbolicName(), component);
             return component;
         } catch (NoSuchComponentException e) {
-            fail("Component " + componentName + " not created for bundle " + bundle.getSymbolicName());
+            fail("Component " + componentName + " not created for bundle " + targetBundle.getSymbolicName());
         }
         return null;
     }
@@ -344,7 +344,7 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
      */
     public void validateLifeCycle(String componentId, String className, String initMethod, String destroyMethod) throws Exception {
         // now validate the meta data is correct for the aliases.
-        LocalComponentMetadata meta = (LocalComponentMetadata)context.getComponentMetadata(componentId);
+        LocalComponentMetadata meta = (LocalComponentMetadata)targetModuleContext.getComponentMetadata(componentId);
         assertEquals("Classname for component " + componentId, className, meta.getClassName());
         assertEquals("init-method for component " + componentId, initMethod, meta.getInitMethodName());
         assertEquals("destroy-method for component " + componentId, destroyMethod, meta.getDestroyMethodName());
@@ -362,7 +362,7 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
     public void validateConstructorMetadata(String componentId, TestParameter[] expected) throws Exception {
         try {
             // now validate the meta data is correct for the parameters
-            LocalComponentMetadata meta = (LocalComponentMetadata)context.getComponentMetadata(componentId);
+            LocalComponentMetadata meta = (LocalComponentMetadata)targetModuleContext.getComponentMetadata(componentId);
             validateConstructorMetadata(meta, expected);
         } catch (Throwable e) {
             // just allowing this to go past will result
@@ -437,7 +437,7 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
      */
     public void validatePartialConstructorMetadata(String componentId, TestParameter[] expected) throws Exception {
         // now validate the meta data is correct for the parameters
-        LocalComponentMetadata meta = (LocalComponentMetadata)context.getComponentMetadata(componentId);
+        LocalComponentMetadata meta = (LocalComponentMetadata)targetModuleContext.getComponentMetadata(componentId);
         validatePartialConstructorMetadata(meta, expected);
     }
 
@@ -499,7 +499,7 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
      */
     public void validateFactoryConstructorMetadata(String componentId, String factoryMethod, String factoryComponent, TestParameter[] expected) throws Exception {
         // now validate the meta data is correct for the parameters
-        LocalComponentMetadata meta = (LocalComponentMetadata)context.getComponentMetadata(componentId);
+        LocalComponentMetadata meta = (LocalComponentMetadata)targetModuleContext.getComponentMetadata(componentId);
         validateFactoryConstructorMetadata(meta, componentId, factoryMethod, factoryComponent, expected);
     }
 
@@ -535,7 +535,7 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
     public void validatePropertyMetadata(String componentId, TestProperty[] expected) throws Exception {
         // now validate the meta data is correct for the properties
         try {
-            validatePropertyMetadata((LocalComponentMetadata)context.getComponentMetadata(componentId), expected);
+            validatePropertyMetadata((LocalComponentMetadata)targetModuleContext.getComponentMetadata(componentId), expected);
         } catch (Throwable e) {
             // just allowing this to go past will result
             // about which component and property we're doing this on.  So
@@ -583,7 +583,7 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
      * @return The Set of defined component names.
      */
     public Set getComponentNames() {
-        return context.getComponentNames();
+        return targetModuleContext.getComponentNames();
     }
 
     /**
@@ -599,7 +599,7 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
      */
     public Set getComponentDependencies(String componentId) throws Exception {
         // now validate the meta data is correct for the properties
-        LocalComponentMetadata meta = (LocalComponentMetadata)context.getComponentMetadata(componentId);
+        LocalComponentMetadata meta = (LocalComponentMetadata)targetModuleContext.getComponentMetadata(componentId);
         return meta.getExplicitDependencies();
     }
 
@@ -631,16 +631,16 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
      *
      * @exception Exception
      */
-    public void cleanup(BundleContext testContext) throws Exception {
-        if (context != null) {
+    public void cleanup(BundleContext context) throws Exception {
+        if (targetModuleContext != null) {
             // this needs to release the acquired service.
-            testBundle.ungetService(contextRef);
-            context = null;
+            testContext.ungetService(contextRef);
+            targetModuleContext = null;
         }
-        if (bundle != null) {
+        if (targetBundle != null) {
             // uninstall the bundle unconditionally
-            bundle.uninstall();
-            bundle = null;
+            targetBundle.uninstall();
+            targetBundle = null;
         }
     }
 
@@ -652,7 +652,7 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
      * @exception Exception
      */
     public void validateExportedServices(ExportedService[] expected) throws Exception {
-        Collection exportedServices = context.getExportedServicesMetadata();
+        Collection exportedServices = targetModuleContext.getExportedServicesMetadata();
 
         assertEquals("Mismatch on the number of exported services", exportedServices.size(), expected.length);
         for (int i = 0; i < expected.length; i++) {
@@ -693,7 +693,7 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
      * @exception Exception
      */
     public void validateReferencedServices(ReferencedService[] expected) throws Exception {
-        Collection referencedServices = context.getReferencedServicesMetadata();
+        Collection referencedServices = targetModuleContext.getReferencedServicesMetadata();
 
         assertEquals("Mismatch on the number of referenced services", referencedServices.size(), expected.length);
         for (int i = 0; i < expected.length; i++) {

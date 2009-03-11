@@ -27,25 +27,35 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.test.cases.blueprint.services.ConfigurationManager;
 import org.osgi.test.cases.blueprint.services.ManagedConfigurationInterface;
 
 public class AdminPropertiesRemover implements TestEventListener{
 
-    ConfigurationManager configurationManager;
+    BundleContext testContext;
+    String configurationManagerServiceInterface;
     // id could be either pid or factory-pid
     String id;
 
-    public AdminPropertiesRemover(ConfigurationManager configurationManager, String targetId){
-
-        this.configurationManager = configurationManager;
+    public AdminPropertiesRemover(BundleContext testContext, String configurationManagerServiceInterface, String targetId){
+        this.testContext = testContext;
+        this.configurationManagerServiceInterface = configurationManagerServiceInterface;
         this.id = targetId;
 
     }
 
     public void eventReceived(TestEvent expected, TestEvent received) {
-        ManagedConfigurationInterface mci= this.configurationManager.getConfig(id);
-        mci.remove(configurationManager.getConfigurationAdmin());
+        try {
+            ConfigurationManager configurationManager = (ConfigurationManager) this.retrieveService(testContext, configurationManagerServiceInterface);
+            ManagedConfigurationInterface mci= configurationManager.getConfig(id);
+            mci.remove(configurationManager.getConfigurationAdmin());
+        } catch (Exception e) {
+            System.out.println("Unexpected exception" + e);
+            e.printStackTrace();
+        }
+       
     }
 
     public void eventNotReceived(TestEvent expected) throws Exception {
@@ -56,5 +66,9 @@ public class AdminPropertiesRemover implements TestEventListener{
         // this is a NOP event
         return null;
     }
-
+    
+    private Object retrieveService(BundleContext testContext, String serviceInterface) throws Exception {
+        ServiceReference[] refs = testContext.getServiceReferences(serviceInterface, null);
+        return testContext.getService(refs[0]);
+    }
 }

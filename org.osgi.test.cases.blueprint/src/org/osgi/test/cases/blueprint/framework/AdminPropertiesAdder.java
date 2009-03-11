@@ -29,24 +29,33 @@ package org.osgi.test.cases.blueprint.framework;
 import java.util.Dictionary;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.test.cases.blueprint.services.ConfigurationManager;
 import org.osgi.test.cases.blueprint.services.ManagedConfigurationInterface;
 
 public class AdminPropertiesAdder implements TestInitializer, TestEventListener {
 
-    ConfigurationManager configurationManager;
+    BundleContext testContext;
+    String configurationManagerServiceInterface;
     Dictionary newProps;
     String factoryPid;
 
-    public AdminPropertiesAdder(ConfigurationManager configurationManager, String factoryPid, Dictionary newProps) {
-        this.configurationManager = configurationManager;
+    public AdminPropertiesAdder(BundleContext testContext, String configurationManagerServiceInterface, String factoryPid, Dictionary newProps) {
+        this.testContext = testContext;
+        this.configurationManagerServiceInterface = configurationManagerServiceInterface;
         this.factoryPid = factoryPid;
         this.newProps = newProps;
     }
 
     private void add() throws Exception {
-        ManagedConfigurationInterface mci = this.configurationManager.getConfig(this.factoryPid);
-        mci.add(this.configurationManager.getConfigurationAdmin(), newProps);
+        try{
+            ConfigurationManager configurationManager = (ConfigurationManager) this.retrieveService(testContext, configurationManagerServiceInterface);
+            ManagedConfigurationInterface mci = configurationManager.getConfig(factoryPid);
+            mci.add(configurationManager.getConfigurationAdmin(), newProps);
+        } catch (Exception e) {
+            System.out.println("Unexpected exception" + e);
+            e.printStackTrace();
+        }
     }
 
     public void start(BundleContext testContext) throws Exception {
@@ -55,17 +64,20 @@ public class AdminPropertiesAdder implements TestInitializer, TestEventListener 
 
     public void eventNotReceived(TestEvent expected) throws Exception {
         this.add();
-
     }
 
     public void eventReceived(TestEvent expected, TestEvent received) {
         // NOP
-
     }
 
     public TestEvent validateEvent(TestEvent expected, TestEvent received) {
         // NOP
         return null;
+    }
+
+    private Object retrieveService(BundleContext testContext, String serviceInterface) throws Exception {
+        ServiceReference[] refs = testContext.getServiceReferences(serviceInterface, null);
+        return testContext.getService(refs[0]);
     }
 
 }

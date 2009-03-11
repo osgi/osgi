@@ -28,9 +28,11 @@
 package org.osgi.test.cases.blueprint.services;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.osgi.framework.BundleContext;
+import java.util.Set;
+
 import org.osgi.service.cm.ConfigurationAdmin;
 
 public class ConfigurationManager {
@@ -89,5 +91,20 @@ public class ConfigurationManager {
             this.addConfig((ManagedConfigurationInterface) configlist.get(i));
         }
     }
+    
+    /**
+     * Remove all the configurations.
+     */
+    public void removeAllConfigs(){
+        
+        Set keys = this.managedConfigs.keySet();
+        Iterator i = keys.iterator();
+        while (i.hasNext()){
+            ManagedConfigurationInterface config = (ManagedConfigurationInterface)this.managedConfigs.remove(i.next());
+            config.remove(this.admin);
+        }
+        
+    }
+    
 
 }

@@ -66,7 +66,7 @@ public class AssertionService
     public static final String EVENT_TYPE = "EVENT_TYPE";
 
     // our current hosting context
-    static BundleContext context;
+    static BundleContext testContext;
     // the event admin service instance
     static EventAdmin adminService;
     // the service control instance
@@ -81,10 +81,10 @@ public class AssertionService
     /**
      * Initialize this service class for a test bundle.
      *
-     * @param context The bundle context we're servicing.
+     * @param testContext The bundle context we're servicing.
      */
-    public static void initService(BundleContext ourContext) {
-        context = ourContext;
+    public static void initService(BundleContext context) {
+        testContext = context;
         serviceReference = context.getServiceReference("org.osgi.service.event.EventAdmin");
         adminService = (EventAdmin)context.getService(serviceReference);
     }
@@ -94,9 +94,9 @@ public class AssertionService
      */
     public static void cleanupService() {
         adminService = null;
-        context.ungetService(serviceReference);
+        testContext.ungetService(serviceReference);
         serviceReference = null;
-        context = null;
+        testContext = null;
     }
 
     /**

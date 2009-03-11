@@ -12,7 +12,7 @@
     <!-- reference configuration admin service  -->
     <reference id="adminService" interface="org.osgi.service.cm.ConfigurationAdmin"/>
 
-    <component id="compConfigurationManager" class="org.osgi.test.cases.blueprint.services.ConfigurationManager">
+    <component id="compConfigurationManager" class="org.osgi.test.cases.blueprint.services.ConfigurationManager" destroy-method="removeAllConfigs">
         <constructor-arg ref="adminService"/>
         <constructor-arg>
             <list>

@@ -55,7 +55,7 @@ public class MetadataValidator extends Assert implements TestValidator, Metadata
     public void setModuleMetadata(ModuleMetadata moduleMetadata) {
         this.moduleMetadata = moduleMetadata;
         // save the bundle also
-        this.bundle = moduleMetadata.getBundle();
+        this.bundle = moduleMetadata.getTargetBundle();
     }
 
 

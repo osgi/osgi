@@ -13,7 +13,7 @@
     <reference id="adminService" interface="org.osgi.service.cm.ConfigurationAdmin"/>
 
 
-    <component id="compConfigurationManager" class="org.osgi.test.cases.blueprint.services.ConfigurationManager">
+    <component id="compConfigurationManager" class="org.osgi.test.cases.blueprint.services.ConfigurationManager" destroy-method="removeAllConfigs">
         <constructor-arg ref="adminService"/>
         <constructor-arg>
             <list>
@@ -24,16 +24,16 @@
                         <list>
                             <!-- for the 1st factory configration object -->
                             <component class="org.osgi.test.cases.blueprint.components.cmsupport.ConfigurationDictionaryBuilder">
-                            <constructor-arg>
-                                <map>
-                                    <entry key="string">
-                                        <value type="java.lang.String">abc</value>
-                                    </entry>
-                                    <entry key="boolean">
-                                        <value type="java.lang.Boolean">true</value>
-                                    </entry>
-                                </map>
-                            </constructor-arg>
+                                <constructor-arg>
+                                    <map>
+                                        <entry key="string">
+                                            <value type="java.lang.String">abc</value>
+                                        </entry>
+                                        <entry key="boolean">
+                                            <value type="java.lang.Boolean">true</value>
+                                        </entry>
+                                    </map>
+                                </constructor-arg>
                             </component>
                             <!-- for the 2nd factory configration object -->
                             <component class="org.osgi.test.cases.blueprint.components.cmsupport.ConfigurationDictionaryBuilder">

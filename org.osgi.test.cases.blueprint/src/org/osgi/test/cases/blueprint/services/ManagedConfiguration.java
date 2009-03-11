@@ -27,10 +27,8 @@
 package org.osgi.test.cases.blueprint.services;
 
 import java.util.Dictionary;
-import java.util.Properties;
 
 import org.osgi.framework.Constants;
-
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 

@@ -30,25 +30,34 @@ package org.osgi.test.cases.blueprint.framework;
 
 import java.util.Dictionary;
 
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.test.cases.blueprint.services.ConfigurationManager;
 import org.osgi.test.cases.blueprint.services.ManagedConfigurationInterface;
 
 public class AdminPropertiesUpdater implements TestEventListener{
 
-    ConfigurationManager configurationManager;
+    BundleContext testContext;
+    String configurationManagerServiceInterface;
     String id;
     Dictionary newDic;
 
-    public AdminPropertiesUpdater(ConfigurationManager configurationManager, String targetId, Dictionary newDic){
-
-        this.configurationManager = configurationManager;
+    public AdminPropertiesUpdater(BundleContext testContext, String configurationManagerServiceInterface, String targetId, Dictionary newDic){
+        this.testContext = testContext;
+        this.configurationManagerServiceInterface = configurationManagerServiceInterface;
         this.id = targetId;
         this.newDic = newDic;
     }
 
     public void eventReceived(TestEvent expected, TestEvent received) {
-        ManagedConfigurationInterface mci= this.configurationManager.getConfig(id);
-        mci.update(configurationManager.getConfigurationAdmin(), this.newDic);
+        try {
+            ConfigurationManager configurationManager = (ConfigurationManager) this.retrieveService(testContext, configurationManagerServiceInterface);
+            ManagedConfigurationInterface mci= configurationManager.getConfig(id);
+            mci.update(configurationManager.getConfigurationAdmin(), this.newDic);
+        } catch (Exception e) {
+            System.out.println("Unexpected exception" + e);
+            e.printStackTrace();
+        }
     }
 
     public void eventNotReceived(TestEvent expected) throws Exception {
@@ -58,6 +67,11 @@ public class AdminPropertiesUpdater implements TestEventListener{
     public TestEvent validateEvent(TestEvent expected, TestEvent received) {
         // this is a NOP event
         return null;
+    }
+    
+    private Object retrieveService(BundleContext testContext, String serviceInterface) throws Exception {
+        ServiceReference[] refs = testContext.getServiceReferences(serviceInterface, null);
+        return testContext.getService(refs[0]);
     }
 
 }
