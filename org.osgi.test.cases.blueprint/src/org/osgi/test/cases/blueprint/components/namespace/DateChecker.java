@@ -25,7 +25,7 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.blueprint.components.serviceimport;
+package org.osgi.test.cases.blueprint.components.namespace;
 
 import java.text.SimpleDateFormat;
 

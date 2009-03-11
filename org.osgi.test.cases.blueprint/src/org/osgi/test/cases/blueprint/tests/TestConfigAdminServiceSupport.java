@@ -27,7 +27,6 @@
 
 package org.osgi.test.cases.blueprint.tests;
 
-import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -35,9 +34,6 @@ import java.util.Properties;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.blueprint.context.ModuleContext;
-import org.osgi.service.cm.ConfigurationAdmin;
-import org.osgi.service.cm.ManagedService;
 import org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection;
 import org.osgi.test.cases.blueprint.framework.AdminPropertiesAdder;
 import org.osgi.test.cases.blueprint.framework.AdminPropertiesRemover;
@@ -45,26 +41,18 @@ import org.osgi.test.cases.blueprint.framework.AdminPropertiesUpdater;
 import org.osgi.test.cases.blueprint.framework.BlueprintEvent;
 import org.osgi.test.cases.blueprint.framework.EventSet;
 import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
-import org.osgi.test.cases.blueprint.framework.PropertyMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.ServiceComponentExistValidator;
 import org.osgi.test.cases.blueprint.framework.ServiceExistValidator;
-import org.osgi.test.cases.blueprint.framework.ServiceManagerRegister;
-import org.osgi.test.cases.blueprint.framework.ServiceManagerUnregister;
 import org.osgi.test.cases.blueprint.framework.ServiceRegistrationValidator;
 import org.osgi.test.cases.blueprint.framework.ServiceTestEvent;
 import org.osgi.test.cases.blueprint.framework.StandardTestController;
-import org.osgi.test.cases.blueprint.framework.StringProperty;
-import org.osgi.test.cases.blueprint.framework.TestProperty;
 import org.osgi.test.cases.blueprint.framework.ThreePhaseTestController;
 import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 import org.osgi.test.cases.blueprint.services.ComponentTestInfo;
 import org.osgi.test.cases.blueprint.services.ConfigurationManager;
-import org.osgi.test.cases.blueprint.services.ManagedConfigurationFactory;
 import org.osgi.test.cases.blueprint.services.TestGoodService;
 import org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass;
-import org.osgi.test.cases.blueprint.services.TestServiceDynamicsInterface;
-import org.osgi.test.cases.blueprint.services.TestServiceOne;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
@@ -77,10 +65,11 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
 
     public void testPlaceholderPropertyInjection() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/create_configuration_objects.jar",
                 getWebServer()+"www/placeholder_property_injection.jar");
 
-        MetadataEventSet startEventSet = controller.getStartEvents(1);
+        controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
+        
+        MetadataEventSet startEventSet = controller.getStartEvents(0);
 
         this.addPropertyValidator(startEventSet, "compString", "string", "abc", String.class);
         this.addPropertyValidator(startEventSet, "compStringPart", "string", "abcxyz", String.class);
@@ -103,11 +92,11 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
 
     public void testPlaceholderPrefixAndSuffix() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/create_configuration_objects.jar",
                 getWebServer()+"www/placeholder_prefix_and_suffix.jar");
-
-        MetadataEventSet startEventSet = controller.getStartEvents(1);
-
+        controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
+        
+        MetadataEventSet startEventSet = controller.getStartEvents(0);
+        
         this.addPropertyValidator(startEventSet, "compString1", "string", "abc", String.class);
         this.addPropertyValidator(startEventSet, "compString2", "string", "abc", String.class);
 
@@ -116,11 +105,11 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
 
     public void testPlaceholderDefaultProperties() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/create_configuration_objects.jar",
                 getWebServer()+"www/placeholder_default_properties.jar");
-
-        MetadataEventSet startEventSet = controller.getStartEvents(1);
-
+        controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
+        
+        MetadataEventSet startEventSet = controller.getStartEvents(0);
+        
         this.addPropertyValidator(startEventSet, "compString1", "string", "def", String.class);
         this.addPropertyValidator(startEventSet, "compString2", "string", "def", String.class);
         this.addPropertyValidator(startEventSet, "compString3", "string", "def", String.class);
@@ -130,11 +119,11 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
 
     public void testPlaceholderDeclarationScope() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/create_configuration_objects.jar",
                 getWebServer()+"www/placeholder_declaration_scope.jar");
-
-        MetadataEventSet startEventSet = controller.getStartEvents(1);
-
+        controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
+        
+        MetadataEventSet startEventSet = controller.getStartEvents(0);
+        
         this.addPropertyValidator(startEventSet, "compString", "string", "abc", String.class);
 
         controller.run();
@@ -143,10 +132,10 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
     // Section 5.7.2
     public void testServicePropertiesEvaluation() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/create_configuration_objects.jar",
                 getWebServer()+"www/service_properties_evaluation.jar");
-
-        MetadataEventSet startEventSet = controller.getStartEvents(1);
+        controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
+        
+        MetadataEventSet startEventSet = controller.getStartEvents(0);
 
         // publish one
         Hashtable expectedProps = new Hashtable();
@@ -181,10 +170,10 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
 
     public void testServicePropertiesAutoUpdate() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/create_configuration_objects.jar",
                 getWebServer()+"www/service_properties_auto_update.jar");
-
-        MetadataEventSet startEventSet = controller.getStartEvents(1);
+        controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
+        
+        MetadataEventSet startEventSet = controller.getStartEvents(0);
 
         ConfigurationManager cm = this.retrieveConfigurationManager(getContext());
 
@@ -212,10 +201,10 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
     // Section 5.7.3
     public void testComponentPropertiesEvaluation() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/create_configuration_objects.jar",
                 getWebServer()+"www/component_properties_evaluation.jar");
+        controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
 
-        MetadataEventSet startEventSet = controller.getStartEvents(1);
+        MetadataEventSet startEventSet = controller.getStartEvents(0);
 
         this.addPropertyValidator(startEventSet, "comp1", "string", "abc", String.class);
         this.addPropertyValidator(startEventSet, "comp1", "boolean", Boolean.TRUE, Boolean.class);
@@ -244,10 +233,10 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
 
     public void testComponentPropertiesAutoUpdate() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/create_configuration_objects.jar",
                 getWebServer()+"www/component_properties_auto_update.jar");
+        controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
 
-        MetadataEventSet startEventSet = controller.getStartEvents(1);
+        MetadataEventSet startEventSet = controller.getStartEvents(0);
 
         ConfigurationManager cm = this.retrieveConfigurationManager(getContext());
 
@@ -289,10 +278,10 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
     //section 5.7.5
     public void testDirectAccessManagedService() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/create_configuration_objects.jar",
                 getWebServer()+"www/direct_access_managed_service.jar");
+        controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
 
-        MetadataEventSet startEventSet = controller.getStartEvents(1);
+        MetadataEventSet startEventSet = controller.getStartEvents(0);
 
         Hashtable serviceProps = null;
 
@@ -308,10 +297,10 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
 
     public void testDirectAccessManagedServiceFactory() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/create_factory_configuration_objects.jar",
                 getWebServer()+"www/direct_access_managed_service_factory.jar");
+        controller.addSetupBundle(getWebServer()+"www/create_factory_configuration_objects.jar");
 
-        MetadataEventSet startEventSet = controller.getStartEvents(1);
+        MetadataEventSet startEventSet = controller.getStartEvents(0);
 
         Hashtable serviceProps = null;
 
@@ -332,10 +321,10 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
 
     public void testFactoryAttributeAutoExportAll() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/create_factory_configuration_objects.jar",
                 getWebServer()+"www/factory_attribute_autoexport_all.jar");
+        controller.addSetupBundle(getWebServer()+"www/create_factory_configuration_objects.jar");
 
-        MetadataEventSet startEventSet = controller.getStartEvents(1);
+        MetadataEventSet startEventSet = controller.getStartEvents(0);
         startEventSet.addEvent(new ServiceTestEvent("REGISTERED", new Class[]{ManagedComponentInjection.class, BaseTestComponent.class, ComponentTestInfo.class}));
         controller.run();
 
@@ -344,30 +333,30 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
 
     public void testFactoryAttributeAutoExportClass() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/create_factory_configuration_objects.jar",
                 getWebServer()+"www/factory_attribute_autoexport_class.jar");
+        controller.addSetupBundle(getWebServer()+"www/create_factory_configuration_objects.jar");
 
-        MetadataEventSet startEventSet = controller.getStartEvents(1);
+        MetadataEventSet startEventSet = controller.getStartEvents(0);
         startEventSet.addEvent(new ServiceTestEvent("REGISTERED", new Class[]{ManagedComponentInjection.class, BaseTestComponent.class}));  //?
         controller.run();
     }
 
     public void testFactoryAttributeAutoExportInterfaces() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/create_factory_configuration_objects.jar",
                 getWebServer()+"www/factory_attribute_autoexport_interfaces.jar");
+        controller.addSetupBundle(getWebServer()+"www/create_factory_configuration_objects.jar");
 
-        MetadataEventSet startEventSet = controller.getStartEvents(1);
+        MetadataEventSet startEventSet = controller.getStartEvents(0);
         startEventSet.addEvent(new ServiceTestEvent("REGISTERED", new Class[]{ComponentTestInfo.class}));
         controller.run();
     }
 
     public void testFactoryNestedInterfaces() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/create_factory_configuration_objects.jar",
                 getWebServer()+"www/factory_attribute_autoexport_class.jar");
+        controller.addSetupBundle(getWebServer()+"www/create_factory_configuration_objects.jar");
 
-        MetadataEventSet startEventSet = controller.getStartEvents(1);
+        MetadataEventSet startEventSet = controller.getStartEvents(0);
         startEventSet.addEvent(new ServiceTestEvent("REGISTERED", new Class[]{ManagedComponentInjection.class, BaseTestComponent.class}));  //?
         controller.run();
     }
@@ -378,10 +367,10 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
 
     public void testFactoryServicePropertiesEvaluation() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/create_factory_configuration_objects.jar",
                 getWebServer()+"www/factory_service_properties_evaluation.jar");
+        controller.addSetupBundle(getWebServer()+"www/create_factory_configuration_objects.jar");
 
-        MetadataEventSet startEventSet = controller.getStartEvents(1);
+        MetadataEventSet startEventSet = controller.getStartEvents(0);
 
         HashMap expectedProps;
 
@@ -403,10 +392,10 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
     
     public void testFactoryServicePropertiesAutoUpdate() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/create_factory_configuration_objects.jar",
                 getWebServer()+"www/factory_service_properties_auto_update.jar");
+        controller.addSetupBundle(getWebServer()+"www/create_factory_configuration_objects.jar");
 
-        MetadataEventSet startEventSet = controller.getStartEvents(1);
+        MetadataEventSet startEventSet = controller.getStartEvents(0);
 
         // 1. change the configuration objects
         ConfigurationManager cm = this.retrieveConfigurationManager(getContext());
@@ -427,10 +416,10 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
 
     public void testFactoryComponentPropertiesEvaluation() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/create_factory_configuration_objects.jar",
                 getWebServer()+"www/factory_component_properties_evaluation.jar");
+        controller.addSetupBundle(getWebServer()+"www/create_factory_configuration_objects.jar");
 
-        MetadataEventSet startEventSet = controller.getStartEvents(1);
+        MetadataEventSet startEventSet = controller.getStartEvents(0);
 
         ServiceComponentExistValidator v = null;
 
@@ -450,10 +439,10 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
     
     public void testFactoryComponentPropertiesAutoUpdate_ContainerManaged() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/create_factory_configuration_objects.jar",
                 getWebServer()+"www/factory_component_properties_auto_update_cont.jar");
+        controller.addSetupBundle(getWebServer()+"www/create_factory_configuration_objects.jar");
 
-        MetadataEventSet startEventSet = controller.getStartEvents(1);
+        MetadataEventSet startEventSet = controller.getStartEvents(0);
 
         // 1. Change the configuration objects
         ConfigurationManager cm = this.retrieveConfigurationManager(getContext());
@@ -477,10 +466,10 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
     
     public void testFactoryComponentPropertiesAutoUpdate_ComponentManaged() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/create_factory_configuration_objects.jar",
                 getWebServer()+"www/factory_component_properties_auto_update_comp.jar");
+        controller.addSetupBundle(getWebServer()+"www/create_factory_configuration_objects.jar");
 
-        MetadataEventSet startEventSet = controller.getStartEvents(1);
+        MetadataEventSet startEventSet = controller.getStartEvents(0);
 
         // 1. Change the configuration objects
         ConfigurationManager cm = this.retrieveConfigurationManager(getContext());
@@ -501,10 +490,10 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
     
     public void testFactoryComponentPropertiesAutoUpdate_None() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/create_factory_configuration_objects.jar",
                 getWebServer()+"www/factory_component_properties_auto_update_none.jar");
+        controller.addSetupBundle(getWebServer()+"www/create_factory_configuration_objects.jar");
 
-        MetadataEventSet startEventSet = controller.getStartEvents(1);
+        MetadataEventSet startEventSet = controller.getStartEvents(0);
 
         // 1. Change the configuration objects
         ConfigurationManager cm = this.retrieveConfigurationManager(getContext());
@@ -538,27 +527,28 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
 
     public void testFactoryServiceLifecycle() throws Exception {
         ThreePhaseTestController controller = new ThreePhaseTestController(getContext(),
-                getWebServer()+"www/create_factory_configuration_objects.jar",
                 getWebServer()+"www/factory_service_lifecycle.jar");
+        controller.addSetupBundle(getWebServer()+"www/create_factory_configuration_objects.jar");
 
         //start
-        MetadataEventSet startEventSet = controller.getStartEvents(1);
+        MetadataEventSet startEventSet = controller.getStartEvents(0);
         //configfactory1 has 2 configuration objects, so receive 2 registered event
         startEventSet.addEvent(new ServiceTestEvent("REGISTERED", "org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection"));
         startEventSet.addEvent(new ServiceTestEvent("REGISTERED", "org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection"));
 
         //middle
-        MetadataEventSet middleEventSet = controller.getMiddleEvents(1);
+        MetadataEventSet middleEventSet = controller.getMiddleEvents(0);
         ConfigurationManager cm = this.retrieveConfigurationManager(getContext());
         Dictionary newProps = new Hashtable();
         newProps.put("string", "cde");
         newProps.put("boolean", new Boolean(true));
+        
         // add 1 configuration to the configfactory1
         middleEventSet.addInitializer(new AdminPropertiesAdder(cm, "org.osgi.test.cases.blueprint.components.cmsupport.configfactory1", newProps));
         middleEventSet.addEvent(new ServiceTestEvent("REGISTERED", new String[] {"org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection"}, null,
                 new AdminPropertiesRemover(cm, "org.osgi.test.cases.blueprint.components.cmsupport.configfactory1")));
         
-        // receive 3 unregistering event
+        // after remove the properties, we should receive 3 unregistering event
         middleEventSet.addEvent(new ServiceTestEvent("UNREGISTERING", "org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection"));
         middleEventSet.addEvent(new ServiceTestEvent("UNREGISTERING", "org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection"));
         middleEventSet.addEvent(new ServiceTestEvent("UNREGISTERING", "org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection"));
@@ -569,10 +559,10 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
 
     public void testFactoryManagedComponentInitAndDestroy_ConfigDeleted() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/create_configuration_objects.jar",
                 getWebServer()+"www/factory_managed_component_init_and_destroy.jar");
+        controller.addSetupBundle(getWebServer()+"www/create_factory_configuration_objects.jar");
 
-        MetadataEventSet startEventSet = controller.getStartEvents(1);
+        MetadataEventSet startEventSet = controller.getStartEvents(0);
 
         // init method called
         startEventSet.addPropertyAssertion("managedComp", AssertionService.METHOD_CALLED, "ManagedComponentInjection_onInit");
@@ -596,10 +586,10 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
 
     public void testFactoryManagedComponentInitAndDestroy_BundleStopping() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/create_configuration_objects.jar",
                 getWebServer()+"www/factory_managed_component_init_and_destroy.jar");
+        controller.addSetupBundle(getWebServer()+"www/create_factory_configuration_objects.jar");
 
-        MetadataEventSet startEventSet = controller.getStartEvents(1);
+        MetadataEventSet startEventSet = controller.getStartEvents(0);
         // init method called
         startEventSet.addPropertyAssertion("managedComp", AssertionService.METHOD_CALLED, "ManagedComponentInjection_onInit");
 
