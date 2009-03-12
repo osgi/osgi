@@ -40,13 +40,13 @@ import org.osgi.test.cases.blueprint.services.TestServiceOne;
  * validity, this test will also serve as a test for Bundle and BundleReference
  * injection.
  */
-public class ServiceReferenceInjection extends BaseTestComponent {
+public class NullServiceReferenceInjection extends BaseTestComponent {
     // The injected BundleContext
     protected BundleContext context;
     // the injected Bundle
     protected Bundle bundle;
 
-    public ServiceReferenceInjection(String componentId, BundleContext context, Bundle bundle) {
+    public NullServiceReferenceInjection(String componentId, BundleContext context, Bundle bundle) {
         super(componentId);
         this.context = context;
         this.bundle = bundle;
@@ -56,18 +56,7 @@ public class ServiceReferenceInjection extends BaseTestComponent {
     }
 
     public void setReference(ServiceReference ref) throws Throwable {
-        try {
-            AssertionService.assertNotNull(this, "Null ServiceReference received", ref);
-            TestServiceOne service = (TestServiceOne)context.getService(ref);
-            AssertionService.assertTrue(this, "Test service result failure", service.testOne());
-            // release the service
-            context.ungetService(ref);
-            AssertionService.sendEvent(this, AssertionService.SERVICE_SUCCESS);
-        } catch (Throwable e) {
-            System.out.println(">>>>>>> Exception received " + e);
-            e.printStackTrace();
-            throw e;
-        }
+        AssertionService.assertNull(this, "non-null ServiceReference received", ref);
     }
 }
 

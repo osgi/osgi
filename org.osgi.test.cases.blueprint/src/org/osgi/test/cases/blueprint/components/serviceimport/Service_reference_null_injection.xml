@@ -12,7 +12,7 @@
     <reference id="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" availability="optional"/>
 
    <!-- We pull in the bundle, the bundle context, as well as the service reference -->
-   <component id="ServiceReferenceChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceInjection">
+   <component id="ServiceReferenceChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.NullServiceReferenceInjection">
        <constructor-arg value="ServiceReferenceChecker"/>
        <constructor-arg ref="bundleContext"/>
        <constructor-arg ref="bundle"/>
