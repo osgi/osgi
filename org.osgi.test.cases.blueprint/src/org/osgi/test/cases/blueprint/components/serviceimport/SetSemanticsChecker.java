@@ -67,7 +67,7 @@ public class SetSemanticsChecker extends ReferenceCollectionChecker {
         // we're just going to test the injected values here.  Other tests so much more thorough
         // validation.
         AssertionService.assertEquals(this, "Mismatch on ref-set size", 1, injectedSet.size());
-        AssertionService.assertEquals(this, "Mismatch on ref-list size", 1, injectedList.size());
+        AssertionService.assertEquals(this, "Mismatch on ref-list size", 3, injectedList.size());
         super.init();
     }
 }

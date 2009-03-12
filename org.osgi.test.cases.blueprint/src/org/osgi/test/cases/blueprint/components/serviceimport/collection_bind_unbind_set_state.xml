@@ -13,24 +13,11 @@
        <property name="serviceManager">
            <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
        </property>
-       <property name="list">
-           <ref-list interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
+       <property name="set">
+           <ref-set interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
                <listener bind-method="bind" unbind-method="unbind" ref="BindUnbindSetChecker"/>
-           </ref-list>
+           </ref-set>
        </property>
    </component>
-
-   <!-- This gets both a ServiceManager and a reference collection injected -->
-  <component id="BindUnbindListChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.BindUnbindListChecker" init-method="init">
-      <constructor-arg value="BindUnbindListChecker"/>
-      <property name="serviceManager">
-          <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
-      </property>
-      <property name="list">
-          <ref-list interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
-              <listener bind-method="bind" unbind-method="unbind" ref="BindUnbindListChecker"/>
-          </ref-list>
-      </property>
-  </component>
 </components>
 

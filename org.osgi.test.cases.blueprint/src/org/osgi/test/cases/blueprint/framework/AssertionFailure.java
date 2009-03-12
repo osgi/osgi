@@ -74,7 +74,7 @@ public class AssertionFailure extends TestEvent {
     public void failUnexpected() {
         AssertionFailedError exception = new AssertionFailedError(this.toString());
         if (cause != null) {
-            exception.initCause(exception);
+            exception.initCause(cause);
         }
         throw exception;
     }

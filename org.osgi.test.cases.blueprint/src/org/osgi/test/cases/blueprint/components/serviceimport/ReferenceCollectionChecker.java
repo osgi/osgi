@@ -116,6 +116,7 @@ public class ReferenceCollectionChecker extends DependencyDriver {
      * @param expected The expected set of services.
      */
     protected void validateList(ManagedService[] expected) {
+
         validateCollection(expected, injectedList);
         // for lists, we also validate the iteration using the get method.
         for (int i = 0; i < injectedList.size(); i++) {
@@ -144,14 +145,15 @@ public class ReferenceCollectionChecker extends DependencyDriver {
      * @param source   The collection source.
      */
     protected void validateCollection(ManagedService[] expected, Collection source) {
-        AssertionService.assertEquals(this, "Incorrect reference collection size", expected.length, injectedList.size());
+        AssertionService.assertNotNull(this, "Null collection reference injected", source);
+        AssertionService.assertEquals(this, "Incorrect reference collection size", expected.length, source.size());
         int i = 0;
         Iterator iterator = source.iterator();
         while (iterator.hasNext()) {
             // this can be either a service instance or a ServiceReference
             Object service = iterator.next();
             if (locateMatchingService(service, expected) == null) {
-                AssertionService.fail(this, "Unexpected service instance located in list");
+                AssertionService.fail(this, "Unexpected service instance located in list: " + service);
             }
             i++;      // count the number of services we process
         }

@@ -160,6 +160,11 @@ public class ComponentAssertion extends AdminTestEvent {
         if (propertyName != null) {
             return propertyName.equals(other.propertyName);
         }
+
+        // if we have properties we need to match on those too
+        if (props != null) {
+            return TestUtil.containsAll(props, other.getProperties());
+        }
         // this matches on the necessary specifics
         return true;
     }
@@ -257,8 +262,10 @@ public class ComponentAssertion extends AdminTestEvent {
         ComponentAssertion other = (ComponentAssertion)received;
         // if we have properties we should validate on
         if (props != null) {
-            if (!TestUtil.containsAll(props, other.getProperties())) {
-                return new AssertionFailure("Mismatched assertion properties for component " + componentId + " event " + topic);
+            try {
+                TestUtil.validateProperties(props, other.getProperties());
+            } catch (Throwable e) {
+                return new AssertionFailure("Mismatched assertion properties for component " + componentId + " event " + topic, e);
             }
         }
         // allow the superclass to validate this (which includes calling potential
@@ -276,7 +283,7 @@ public class ComponentAssertion extends AdminTestEvent {
             return "ComponentAssertion " + topic + " for component " + componentId + " with properties: " + TestUtil.formatProperties(props);
         }
         else {
-            return "BundleTestEvent " + topic + " for component " + componentId;
+            return "ComponentAssertion " + topic + " for component " + componentId;
         }
     }
 }

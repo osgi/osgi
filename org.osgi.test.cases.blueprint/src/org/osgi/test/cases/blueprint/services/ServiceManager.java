@@ -264,7 +264,7 @@ public class ServiceManager {
     public void sleep() {
         try {
             // half a second should be sufficiently long, likely longer than is needed.
-            Thread.sleep(500);
+            Thread.sleep(100);
         } catch (InterruptedException e) {
         }
     }

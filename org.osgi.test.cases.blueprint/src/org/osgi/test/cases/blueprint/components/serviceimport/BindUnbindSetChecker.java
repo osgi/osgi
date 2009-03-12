@@ -77,23 +77,46 @@ public class BindUnbindSetChecker extends ReferenceCollectionChecker {
      * some methods for doubling as service listeners.
      */
     public void bind(TestServiceOne service, Map serviceProperties) {
-        // we're working with a collection that should always have a single
-        // item on the bind/unbind calls.
-        TestServiceOne refService = (TestServiceOne)(injectedSet.toArray())[0];
-        AssertionService.assertTrue(this, "Bad service call", refService.testOne());
+        try {
+            // TODO:  The listener is getting called before the
+            // reference is injected
+            if (injectedSet == null) {
+                // do normal "I was called broadcast"
+                super.bind(service, serviceProperties);
+                return;
+            }
+            Object[] setArray = injectedSet.toArray();
+            // we're working with a collection that should always have a single
+            // item on the bind/unbind calls.
+            TestServiceOne refService = (TestServiceOne)setArray[0];
+            AssertionService.assertTrue(this, "Bad service call", refService.testOne());
 
-        // do normal "I was called broadcast"
-        super.bind(service, serviceProperties);
+            // do normal "I was called broadcast"
+            super.bind(service, serviceProperties);
+        } catch (Throwable e) {
+            AssertionService.fail(this, "Unexpected exception in bind method", e);
+        }
     }
 
     public void unbind(TestServiceOne service, Map serviceProperties) {
-        // we're working with a collection that should always have a single
-        // item on the bind/unbind calls.
-        TestServiceOne refService = (TestServiceOne)(injectedSet.toArray())[0];
-        AssertionService.assertTrue(this, "Bad service call", refService.testOne());
+        try {
+            // TODO:  The listener is getting called before the
+            // reference is injected
+            if (injectedSet == null) {
+                // do normal "I was called broadcast"
+                super.bind(service, serviceProperties);
+                return;
+            }
+            // we're working with a collection that should always have a single
+            // item on the bind/unbind calls.
+            TestServiceOne refService = (TestServiceOne)(injectedSet.toArray())[0];
+            AssertionService.assertTrue(this, "Bad service call", refService.testOne());
 
-        // do normal "I was called broadcast"
-        super.unbind(service, serviceProperties);
+            // do normal "I was called broadcast"
+            super.unbind(service, serviceProperties);
+        } catch (Throwable e) {
+            AssertionService.fail(this, "Unexpected exception in unbind method", e);
+        }
     }
 }
 

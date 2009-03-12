@@ -64,9 +64,7 @@ public class ServiceReferenceInjection extends BaseTestComponent {
             context.ungetService(ref);
             AssertionService.sendEvent(this, AssertionService.SERVICE_SUCCESS);
         } catch (Throwable e) {
-            System.out.println(">>>>>>> Exception received " + e);
-            e.printStackTrace();
-            throw e;
+            AssertionService.fail(this, "Unexpected exception", e);
         }
     }
 }

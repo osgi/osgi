@@ -149,6 +149,22 @@ public class AssertionService
     }
 
     /**
+     * Fails a test with the given message message and cause.
+     *
+     * @param component
+     *                  The component object making the assertion
+     * @param message
+     *            the identifying message for the assertion event (<code>null</code>
+     *            okay)
+     */
+    static public void fail(Object component, String message, Throwable cause) {
+        Hashtable props = new Hashtable();
+        props.put(ASSERTION_MESSAGE, message);
+        props.put(TRACEBACK, cause);
+        sendEvent(component, ASSERTION_FAILURE, props);
+    }
+
+    /**
      * Send an event for a component.
      *
      * @param component

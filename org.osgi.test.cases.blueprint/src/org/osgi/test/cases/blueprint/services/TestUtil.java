@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.Enumeration;
 import java.util.Iterator;
 
+import junit.framework.AssertionFailedError;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
@@ -70,6 +71,31 @@ public class TestUtil {
         }
         // good match
         return true;
+    }
+
+
+    /**
+     * Validate a set of properties, throwing an exception detailing the first
+     * mismatch.
+     *
+     * @param expected The expected set of properties.
+     * @param received The received property set.
+     */
+    public static void validateProperties(Map expected, Map received) {
+        Iterator keys = expected.keySet().iterator();
+        while (keys.hasNext()) {
+            String key = (String)keys.next();
+            Object expectedValue = expected.get(key);
+            Object receivedValue = received.get(key);
+            // if not in the received dictionary, this is a false test
+            if (receivedValue == null) {
+                throw new AssertionFailedError("Missing property " + key + " in [" + formatProperties(received) + "]");
+            }
+            // if the values don't compare, this is a failure too
+            if (!expectedValue.equals(receivedValue)) {
+                throw new AssertionFailedError("Mismatched property value for key=" + key + ", expected=" + expectedValue + ", received=" + receivedValue);
+            }
+        }
     }
 
 

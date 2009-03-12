@@ -97,18 +97,6 @@ public class DependencyDriver extends BaseTestComponent {
         serviceTwo = service;
     }
 
-
-    /**
-     * This is the actual test method.  After the component is
-     * instantiated, the init method is called to drive the
-     * component test logic.  Each concrete test will override this
-     * and verify that the injected results are correct.  Tests
-     * dealing with service dynamics will use the ServiceManager to
-     * modify the state of the registered services.
-     */
-    public void init() {
-    }
-
     /**
      * Some dependency drivers also double as listners, so have this base methods
      * available.
@@ -118,7 +106,7 @@ public class DependencyDriver extends BaseTestComponent {
         props.putAll(serviceProperties);
         props.put("service.interface.name", serviceInterface.getName());
         props.put("service.listener.type", "interface");
-        AssertionService.sendEvent(this, AssertionService.SERVICE_BIND);
+        AssertionService.sendEvent(this, AssertionService.SERVICE_BIND, props);
     }
 
     protected void unbind(Class serviceInterface, Map serviceProperties) {
@@ -126,7 +114,7 @@ public class DependencyDriver extends BaseTestComponent {
         props.putAll(serviceProperties);
         props.put("service.interface.name", serviceInterface.getName());
         props.put("service.listener.type", "interface");
-        AssertionService.sendEvent(this, AssertionService.SERVICE_UNBIND);
+        AssertionService.sendEvent(this, AssertionService.SERVICE_UNBIND, props);
     }
 
     protected void bindReference(ServiceReference ref) {

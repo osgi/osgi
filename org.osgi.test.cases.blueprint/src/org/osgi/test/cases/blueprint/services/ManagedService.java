@@ -243,7 +243,9 @@ public class ManagedService {
             // This is dependent upon our service instances overriding the equals() method.
             // this also ensures that any service proxies that the blueprint service creates
             // is overriding the equals method appropriate.
-            return checkedService.equals(service);
+
+            // TODO:  we have to call equals() on service rather than checkedService because of bug 1219
+            return service.equals(checkedService);
         }
         else {
             return ((TestServiceOne)checkedService).getServiceName().equals(name);

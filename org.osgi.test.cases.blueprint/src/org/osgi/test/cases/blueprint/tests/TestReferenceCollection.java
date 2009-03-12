@@ -325,17 +325,17 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         Hashtable propsA = new Hashtable();
         propsA.put("service.interface.name", TestServiceOne.class.getName());
         propsA.put("service.listener.type", "interface");
-        propsA.put("osgi.service.blueprint.compname", "ServiceOneA");
+        propsA.put("test.service.name", "ServiceOneA");
 
         Hashtable propsB = new Hashtable();
         propsB.put("service.interface.name", TestServiceOne.class.getName());
         propsB.put("service.listener.type", "interface");
-        propsB.put("osgi.service.blueprint.compname", "ServiceOneB");
+        propsB.put("test.service.name", "ServiceOneB");
 
         Hashtable propsC = new Hashtable();
         propsC.put("service.interface.name", TestServiceOne.class.getName());
         propsC.put("service.listener.type", "interface");
-        propsC.put("osgi.service.blueprint.compname", "ServiceOneC");
+        propsC.put("test.service.name", "ServiceOneC");
 
         // the first step taken in the test is complete the registration of the
         // rest of the managed services.  This will result in an extra bind event
@@ -388,17 +388,17 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         Hashtable propsA = new Hashtable();
         propsA.put("service.interface.name", TestServiceOne.class.getName());
         propsA.put("service.listener.type", "interface");
-        propsA.put("osgi.service.blueprint.compname", "ServiceOneA");
+        propsA.put("test.service.name", "ServiceOneA");
 
         Hashtable propsB = new Hashtable();
         propsB.put("service.interface.name", TestServiceOne.class.getName());
         propsB.put("service.listener.type", "interface");
-        propsB.put("osgi.service.blueprint.compname", "ServiceOneB");
+        propsB.put("test.service.name", "ServiceOneB");
 
         Hashtable propsC = new Hashtable();
         propsC.put("service.interface.name", TestServiceOne.class.getName());
         propsC.put("service.listener.type", "interface");
-        propsC.put("osgi.service.blueprint.compname", "ServiceOneC");
+        propsC.put("test.service.name", "ServiceOneC");
 
         // we start out with an empty list, register everything, then unregister everything.
         // we should see a pair of events for each service.
@@ -443,17 +443,17 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         Hashtable propsA = new Hashtable();
         propsA.put("service.interface.name", TestServiceOne.class.getName());
         propsA.put("service.listener.type", "interface");
-        propsA.put("osgi.service.blueprint.compname", "ServiceOneA");
+        propsA.put("test.service.name", "ServiceOneA");
 
         Hashtable propsB = new Hashtable();
         propsB.put("service.interface.name", TestServiceOne.class.getName());
         propsB.put("service.listener.type", "interface");
-        propsB.put("osgi.service.blueprint.compname", "ServiceOneB");
+        propsB.put("test.service.name", "ServiceOneB");
 
         Hashtable propsC = new Hashtable();
         propsC.put("service.interface.name", TestServiceOne.class.getName());
         propsC.put("service.listener.type", "interface");
-        propsC.put("osgi.service.blueprint.compname", "ServiceOneC");
+        propsC.put("test.service.name", "ServiceOneC");
 
         // we start out with an empty list, register everything, then unregister everything.
         // we should see a pair of events for each service.
@@ -495,12 +495,12 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         Hashtable propsA = new Hashtable();
         propsA.put("service.interface.name", TestServiceOne.class.getName());
         propsA.put("service.listener.type", "interface");
-        propsA.put("osgi.service.blueprint.compname", "ServiceOneA");
+        propsA.put("test.service.name", "ServiceOneA");
 
         Hashtable propsC = new Hashtable();
         propsC.put("service.interface.name", TestServiceOne.class.getName());
         propsC.put("service.listener.type", "interface");
-        propsC.put("osgi.service.blueprint.compname", "ServiceOneC");
+        propsC.put("test.service.name", "ServiceOneC");
 
         // We should not get these, so consider them failures.
         importStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsA));
@@ -552,12 +552,12 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         Hashtable propsA = new Hashtable();
         propsA.put("service.interface.name", TestServiceOne.class.getName());
         propsA.put("service.listener.type", "interface");
-        propsA.put("osgi.service.blueprint.compname", "ServiceOneA");
+        propsA.put("test.service.name", "ServiceOneA");
 
         Hashtable propsC = new Hashtable();
         propsC.put("service.interface.name", TestServiceOne.class.getName());
         propsC.put("service.listener.type", "interface");
-        propsC.put("osgi.service.blueprint.compname", "ServiceOneC");
+        propsC.put("test.service.name", "ServiceOneC");
 
         // We should not get these, so consider them failures.
         importStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsA));
@@ -607,17 +607,17 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         Hashtable propsA = new Hashtable();
         propsA.put("service.interface.name", TestServiceOne.class.getName());
         propsA.put("service.listener.type", "interface");
-        propsA.put("osgi.service.blueprint.compname", "ServiceOneA");
+        propsA.put("test.service.name", "ServiceOneA");
 
         Hashtable propsB = new Hashtable();
         propsB.put("service.interface.name", TestServiceOne.class.getName());
         propsB.put("service.listener.type", "interface");
-        propsB.put("osgi.service.blueprint.compname", "ServiceOneB");
+        propsB.put("test.service.name", "ServiceOneB");
 
         Hashtable propsC = new Hashtable();
         propsC.put("service.interface.name", TestServiceOne.class.getName());
         propsC.put("service.listener.type", "interface");
-        propsC.put("osgi.service.blueprint.compname", "ServiceOneC");
+        propsC.put("test.service.name", "ServiceOneC");
 
         // the first step taken in the test is complete the registration of the
         // rest of the managed services.  This will result in an extra bind event
@@ -668,17 +668,17 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         Hashtable propsA = new Hashtable();
         propsA.put("service.interface.name", TestServiceOne.class.getName());
         propsA.put("service.listener.type", "interface");
-        propsA.put("osgi.service.blueprint.compname", "ServiceOneA");
+        propsA.put("test.service.name", "ServiceOneA");
 
         Hashtable propsB = new Hashtable();
         propsB.put("service.interface.name", TestServiceOne.class.getName());
         propsB.put("service.listener.type", "interface");
-        propsB.put("osgi.service.blueprint.compname", "ServiceOneB");
+        propsB.put("test.service.name", "ServiceOneB");
 
         Hashtable propsC = new Hashtable();
         propsC.put("service.interface.name", TestServiceOne.class.getName());
         propsC.put("service.listener.type", "interface");
-        propsC.put("osgi.service.blueprint.compname", "ServiceOneC");
+        propsC.put("test.service.name", "ServiceOneC");
 
         // the first step taken in the test is complete the registration of the
         // rest of the managed services.  This will result in an extra bind event
@@ -727,21 +727,21 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         Hashtable propsA = new Hashtable();
         propsA.put("service.interface.name", TestServiceOne.class.getName());
         propsA.put("service.listener.type", "interface");
-        propsA.put("osgi.service.blueprint.compname", "ServiceOneA");
+        propsA.put("test.service.name", "ServiceOneA");
 
         Hashtable propsB = new Hashtable();
         propsB.put("service.interface.name", TestServiceOne.class.getName());
         propsB.put("service.listener.type", "interface");
-        propsB.put("osgi.service.blueprint.compname", "ServiceOneB");
+        propsB.put("test.service.name", "ServiceOneB");
 
         Hashtable propsC = new Hashtable();
         propsC.put("service.interface.name", TestServiceOne.class.getName());
         propsC.put("service.listener.type", "interface");
-        propsC.put("osgi.service.blueprint.compname", "ServiceOneC");
+        propsC.put("test.service.name", "ServiceOneC");
 
-        // the first step taken in the test is complete the registration of the
+        // the first step taken in the test is to complete the registration of the
         // rest of the managed services.  This will result in an extra bind event
-        importStartEvents.addEvent(new ComponentAssertion("", AssertionService.SERVICE_BIND, propsB));
+        importStartEvents.addEvent(new ComponentAssertion("NullReferenceChecker", AssertionService.SERVICE_BIND, propsB));
 
         // next it unregisters everything.  We should see an unbind for each service that
         // goes away
@@ -790,17 +790,17 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         Hashtable propsA = new Hashtable();
         propsA.put("service.interface.name", TestServiceOne.class.getName());
         propsA.put("service.listener.type", "interface");
-        propsA.put("osgi.service.blueprint.compname", "ServiceOneA");
+        propsA.put("test.service.name", "ServiceOneA");
 
         Hashtable propsB = new Hashtable();
         propsB.put("service.interface.name", TestServiceOne.class.getName());
         propsB.put("service.listener.type", "interface");
-        propsB.put("osgi.service.blueprint.compname", "ServiceOneB");
+        propsB.put("test.service.name", "ServiceOneB");
 
         Hashtable propsC = new Hashtable();
         propsC.put("service.interface.name", TestServiceOne.class.getName());
         propsC.put("service.listener.type", "interface");
-        propsC.put("osgi.service.blueprint.compname", "ServiceOneC");
+        propsC.put("test.service.name", "ServiceOneC");
 
         // we start out with an empty list, register everything, then unregister everything.
         // we should see a pair of events for each service.
@@ -845,17 +845,17 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         Hashtable propsA = new Hashtable();
         propsA.put("service.interface.name", TestServiceOne.class.getName());
         propsA.put("service.listener.type", "interface");
-        propsA.put("osgi.service.blueprint.compname", "ServiceOneA");
+        propsA.put("test.service.name", "ServiceOneA");
 
         Hashtable propsB = new Hashtable();
         propsB.put("service.interface.name", TestServiceOne.class.getName());
         propsB.put("service.listener.type", "interface");
-        propsB.put("osgi.service.blueprint.compname", "ServiceOneB");
+        propsB.put("test.service.name", "ServiceOneB");
 
         Hashtable propsC = new Hashtable();
         propsC.put("service.interface.name", TestServiceOne.class.getName());
         propsC.put("service.listener.type", "interface");
-        propsC.put("osgi.service.blueprint.compname", "ServiceOneC");
+        propsC.put("test.service.name", "ServiceOneC");
 
         // we start out with an empty list, register everything, then unregister everything.
         // we should see a pair of events for each service.
@@ -1592,16 +1592,51 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         controller.run();
     }
 
+
 	/**
 	 * This tests the state of references in the reference collections during
      * bind/unbind listener calls for both Set and List.
 	 */
-	public void testBindUnbindCollectionImport() throws Exception {
+	public void testBindUnbindSetImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/collection_bind_unbind_state.jar",
+            getWebServer()+"www/collection_bind_unbind_set_state.jar",
+            getWebServer()+"www/managed_one_service_export.jar");
+
+        // all of our validation here is on the importing side
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+
+        // We're only seeing one service, so we don't need the property bundle.
+
+        // ok, we'll unbind, then bind, then unbind again.  We should see two events, one from
+        // each checker component
+        // rest of the managed services.  This will result in an extra bind event
+        importStartEvents.addAssertion("BindUnbindSetChecker", AssertionService.SERVICE_UNBIND);
+
+        importStartEvents.addAssertion("BindUnbindSetChecker", AssertionService.SERVICE_BIND);
+
+        importStartEvents.addAssertion("BindUnbindSetChecker", AssertionService.SERVICE_UNBIND);
+
+        // this event signals completion of all of the checking work.  If there
+        // have been any errors, these get signalled as assertion failures and will
+        // fail the test.
+        importStartEvents.addAssertion("BindUnbindSetChecker", AssertionService.COMPONENT_INIT_METHOD);
+        controller.run();
+    }
+
+
+	/**
+	 * This tests the state of references in the reference collections during
+     * bind/unbind listener calls for both Set and List.
+	 */
+	public void testBindUnbindListImport() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/collection_bind_unbind_list_state.jar",
             getWebServer()+"www/managed_one_service_export.jar");
 
         // all of our validation here is on the importing side
@@ -1613,19 +1648,15 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // each checker component
         // rest of the managed services.  This will result in an extra bind event
         importStartEvents.addAssertion("BindUnbindListChecker", AssertionService.SERVICE_UNBIND);
-        importStartEvents.addAssertion("BindUnbindSetChecker", AssertionService.SERVICE_UNBIND);
 
         importStartEvents.addAssertion("BindUnbindListChecker", AssertionService.SERVICE_BIND);
-        importStartEvents.addAssertion("BindUnbindSetChecker", AssertionService.SERVICE_BIND);
 
         importStartEvents.addAssertion("BindUnbindListChecker", AssertionService.SERVICE_UNBIND);
-        importStartEvents.addAssertion("BindUnbindSetChecker", AssertionService.SERVICE_UNBIND);
 
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
         // fail the test.
         importStartEvents.addAssertion("BindUnbindListChecker", AssertionService.COMPONENT_INIT_METHOD);
-        importStartEvents.addAssertion("BindUnbindSetChecker", AssertionService.COMPONENT_INIT_METHOD);
 
         controller.run();
     }

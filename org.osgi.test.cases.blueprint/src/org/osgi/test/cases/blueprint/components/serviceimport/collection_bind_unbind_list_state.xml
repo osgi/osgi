@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <description>
+        This is a checker for the state of the service reference in the collection during bind/unbind calls.
+    </description>
+
+   <!-- This gets both a ServiceManager and a reference collection injected -->
+  <component id="BindUnbindListChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.BindUnbindListChecker" init-method="init">
+      <constructor-arg value="BindUnbindListChecker"/>
+      <property name="serviceManager">
+          <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
+      </property>
+      <property name="list">
+          <ref-list interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
+              <listener bind-method="bind" unbind-method="unbind" ref="BindUnbindListChecker"/>
+          </ref-list>
+      </property>
+  </component>
+</components>
+
