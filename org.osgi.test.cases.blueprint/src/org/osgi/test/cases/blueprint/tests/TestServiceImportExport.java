@@ -119,7 +119,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // do some validation of the import metadata
         importStartEvents.addValidator(new ConstructorMetadataValidator("ServiceOneConstructor", new TestParameter[] {
             new StringParameter("ServiceOneConstructor"),
-            new ReferenceParameter("ServiceOne")
+            new ReferenceParameter("ServiceOne", TestServiceOne.class)
         }));
 
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceOneProperty", new TestProperty[] {

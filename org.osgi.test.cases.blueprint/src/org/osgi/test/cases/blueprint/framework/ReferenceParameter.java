@@ -36,6 +36,12 @@ public class ReferenceParameter extends TestParameter {
         this(componentId, -1);
     }
 
+
+    public ReferenceParameter(String componentId, Class  type) {
+        // the parameter type is inferred from specified position
+        super(new TestReferenceValue(componentId), type);
+    }
+
     public ReferenceParameter(String componentId, int index) {
         // the index has been specified
         super(new TestReferenceValue(componentId), index);

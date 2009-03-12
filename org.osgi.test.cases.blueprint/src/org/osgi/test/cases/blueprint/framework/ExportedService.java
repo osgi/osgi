@@ -234,5 +234,10 @@ public class ExportedService extends Assert implements TestComponentMetadata {
     public String getName() {
         return serviceId;
     }
+
+
+    public String toString() {
+        return "Exported service name=" + serviceId + ", interfaces=" + serviceInterfaces;
+    }
 }
 

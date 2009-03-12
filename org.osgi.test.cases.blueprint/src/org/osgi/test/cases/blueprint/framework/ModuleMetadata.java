@@ -658,7 +658,7 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
         for (int i = 0; i < expected.length; i++) {
             ExportedService e = (ExportedService)expected[i];
             ServiceExportComponentMetadata service = locateServiceExport(exportedServices, e);
-            assertNotNull("Exported service not found in metadata", service);
+            assertNotNull("Exported service not found in metadata: " + e, service);
             // validate the metadata specifics
             e.validate(this, service);
         }
