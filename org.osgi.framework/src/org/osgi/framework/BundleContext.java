@@ -478,23 +478,22 @@ public interface BundleContext {
 	 * Returns an array of <code>ServiceReference</code> objects. The returned
 	 * array of <code>ServiceReference</code> objects contains services that
 	 * were registered under the specified class, match the specified filter
-	 * criteria, and the packages for the class names under which the services
+	 * expression, and the packages for the class names under which the services
 	 * were registered match the context bundle's packages as defined in
 	 * {@link ServiceReference#isAssignableTo(Bundle, String)}.
 	 * 
 	 * <p>
-	 * The list is valid at the time of the call to this method, however since
+	 * The list is valid at the time of the call to this method. However since
 	 * the Framework is a very dynamic environment, services can be modified or
-	 * unregistered at anytime.
+	 * unregistered at any time.
 	 * 
 	 * <p>
-	 * <code>filter</code> is used to select the registered service whose
-	 * properties objects contain keys and values which satisfy the filter. See
-	 * {@link Filter} for a description of the filter string syntax.
-	 * 
-	 * <p>
-	 * If <code>filter</code> is <code>null</code>, all registered services are
-	 * considered to match the filter. If <code>filter</code> cannot be parsed,
+	 * The specified <code>filter</code> expression is used to select the
+	 * registered services whose service properties contain keys and values
+	 * which satisfy the filter expression. See {@link Filter} for a description
+	 * of the filter syntax. If the specified <code>filter</code> is
+	 * <code>null</code>, all registered services are considered to match the
+	 * filter. If the specified <code>filter</code> expression cannot be parsed,
 	 * an {@link InvalidSyntaxException} will be thrown with a human readable
 	 * message where the filter became unparsable.
 	 * 
@@ -507,8 +506,8 @@ public interface BundleContext {
 	 * specified class name. The complete list of class names with which a
 	 * service was registered is available from the service's
 	 * {@link Constants#OBJECTCLASS objectClass} property.
-	 * <li>If the filter string is not <code>null</code>, the filter expression
-	 * must match the service.
+	 * <li>If the specified <code>filter</code> is not <code>null</code>, the
+	 * filter expression must match the service.
 	 * <li>If the Java Runtime Environment supports permissions, the caller must
 	 * have <code>ServicePermission</code> with the <code>GET</code> action for
 	 * at least one of the class names under which the service was registered.
@@ -520,12 +519,13 @@ public interface BundleContext {
 	 * 
 	 * @param clazz The class name with which the service was registered or
 	 *        <code>null</code> for all services.
-	 * @param filter The filter criteria.
+	 * @param filter The filter expression or <code>null</code> for all
+	 *        services.
 	 * @return An array of <code>ServiceReference</code> objects or
 	 *         <code>null</code> if no services are registered which satisfy the
 	 *         search.
-	 * @throws InvalidSyntaxException If <code>filter</code> contains an invalid
-	 *         filter string that cannot be parsed.
+	 * @throws InvalidSyntaxException If the specified <code>filter</code>
+	 *         contains an invalid filter expression that cannot be parsed.
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 */
 	public ServiceReference[] getServiceReferences(String clazz, String filter)
@@ -535,21 +535,20 @@ public interface BundleContext {
 	 * Returns an array of <code>ServiceReference</code> objects. The returned
 	 * array of <code>ServiceReference</code> objects contains services that
 	 * were registered under the specified class and match the specified filter
-	 * criteria.
+	 * expression.
 	 * 
 	 * <p>
-	 * The list is valid at the time of the call to this method, however since
+	 * The list is valid at the time of the call to this method. However since
 	 * the Framework is a very dynamic environment, services can be modified or
-	 * unregistered at anytime.
+	 * unregistered at any time.
 	 * 
 	 * <p>
-	 * <code>filter</code> is used to select the registered service whose
-	 * properties objects contain keys and values which satisfy the filter. See
-	 * {@link Filter} for a description of the filter string syntax.
-	 * 
-	 * <p>
-	 * If <code>filter</code> is <code>null</code>, all registered services are
-	 * considered to match the filter. If <code>filter</code> cannot be parsed,
+	 * The specified <code>filter</code> expression is used to select the
+	 * registered services whose service properties contain keys and values
+	 * which satisfy the filter expression. See {@link Filter} for a description
+	 * of the filter syntax. If the specified <code>filter</code> is
+	 * <code>null</code>, all registered services are considered to match the
+	 * filter. If the specified <code>filter</code> expression cannot be parsed,
 	 * an {@link InvalidSyntaxException} will be thrown with a human readable
 	 * message where the filter became unparsable.
 	 * 
@@ -562,8 +561,8 @@ public interface BundleContext {
 	 * specified class name. The complete list of class names with which a
 	 * service was registered is available from the service's
 	 * {@link Constants#OBJECTCLASS objectClass} property.
-	 * <li>If the filter string is not <code>null</code>, the filter expression
-	 * must match the service.
+	 * <li>If the specified <code>filter</code> is not <code>null</code>, the
+	 * filter expression must match the service.
 	 * <li>If the Java Runtime Environment supports permissions, the caller must
 	 * have <code>ServicePermission</code> with the <code>GET</code> action for
 	 * at least one of the class names under which the service was registered.
@@ -571,12 +570,13 @@ public interface BundleContext {
 	 * 
 	 * @param clazz The class name with which the service was registered or
 	 *        <code>null</code> for all services.
-	 * @param filter The filter criteria.
+	 * @param filter The filter expression or <code>null</code> for all
+	 *        services.
 	 * @return An array of <code>ServiceReference</code> objects or
 	 *         <code>null</code> if no services are registered which satisfy the
 	 *         search.
-	 * @throws InvalidSyntaxException If <code>filter</code> contains an invalid
-	 *         filter string that cannot be parsed.
+	 * @throws InvalidSyntaxException If the specified <code>filter</code>
+	 *         contains an invalid filter expression that cannot be parsed.
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @since 1.3
 	 */
@@ -588,14 +588,14 @@ public interface BundleContext {
 	 * implements and was registered under the specified class.
 	 * 
 	 * <p>
-	 * This <code>ServiceReference</code> object is valid at the time of the
-	 * call to this method, however as the Framework is a very dynamic
-	 * environment, services can be modified or unregistered at anytime.
+	 * The returned <code>ServiceReference</code> object is valid at the time of
+	 * the call to this method. However as the Framework is a very dynamic
+	 * environment, services can be modified or unregistered at any time.
 	 * 
 	 * <p>
 	 * This method is the same as calling
 	 * {@link BundleContext#getServiceReferences(String, String)} with a
-	 * <code>null</code> filter string. It is provided as a convenience for
+	 * <code>null</code> filter expression. It is provided as a convenience for
 	 * when the caller is interested in any service that implements the
 	 * specified class.
 	 * <p>
@@ -607,10 +607,9 @@ public interface BundleContext {
 	 * service that was registered first is returned.
 	 * 
 	 * @param clazz The class name with which the service was registered.
-	 * @return A <code>ServiceReference</code> object, or <code>null</code>
-	 *         if no services are registered which implement the named class.
-	 * @throws IllegalStateException If this BundleContext is no
-	 *         longer valid.
+	 * @return A <code>ServiceReference</code> object, or <code>null</code> if
+	 *         no services are registered which implement the named class.
+	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @see #getServiceReferences(String, String)
 	 */
 	public ServiceReference getServiceReference(String clazz);
