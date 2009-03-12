@@ -380,7 +380,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // We should see both of these registered
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, "ServiceOne"));
         // also validate the metadata for the exported service
-        exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
+        exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("GoodServiceService", "ServiceOne", TestServiceOne.class,
             ServiceExportComponentMetadata.EXPORT_MODE_DISABLED, 0, null, new String[] { "Depends1", "Depends2"}, null)));
 
         // these are lazy-inited components, but we should see them get created
@@ -440,9 +440,9 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // We expect two of these events.
         importStartEvents.addAssertion("ServiceOneMultipleChecker", AssertionService.SERVICE_SUCCESS);
         importStartEvents.addAssertion("ServiceOneMultipleChecker", AssertionService.SERVICE_SUCCESS);
-        // and tso additional components that just request this using a single interface.
-        importStartEvents.addAssertion("ServiceOne", AssertionService.SERVICE_SUCCESS);
-        importStartEvents.addAssertion("ServiceTwo", AssertionService.SERVICE_SUCCESS);
+        // and two additional components that just request this using a single interface.
+        importStartEvents.addAssertion("ServiceOneChecker", AssertionService.SERVICE_SUCCESS);
+        importStartEvents.addAssertion("ServiceTwoChecker", AssertionService.SERVICE_SUCCESS);
 
         // now some expected termination stuff
         EventSet exportStopEvents = controller.getStopEvents(1);
@@ -821,7 +821,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // validate that the service has been registered
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, "ServiceOne"));
         // also validate the metadata for the exported service
-        exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
+        exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("GoodServiceService", "ServiceOne", TestServiceOne.class,
             ServiceExportComponentMetadata.EXPORT_MODE_DISABLED, 0, null, null, null)));
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
@@ -1282,7 +1282,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
         // metadata issues have been well tested elsewhere.  We're going to focus on the service dynamics.
 
-        // the test component will handle all of hte validation checking for this
+        // the test component will handle all of the validation checking for this
         // this indicates successful completion of the test phase
         importStartEvents.addAssertion("DependencyChecker", AssertionService.COMPONENT_INIT_METHOD);
 

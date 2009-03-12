@@ -152,13 +152,30 @@ public class TestPhase {
      * Typically, this involves starting some sort of bundle.
      */
     protected void checkEventResults() throws Exception {
+        // we do this in multiple passes...first checking for failures,
+        // then missing events, and finally validation failures
+
+        // outright failures
+        for (int i = 0; i < events.size(); i ++) {
+            EventSet set = (EventSet)events.get(i);
+            set.checkUnexpected();
+        }
+
+        // missing stuff
+        for (int i = 0; i < events.size(); i ++) {
+            EventSet set = (EventSet)events.get(i);
+            set.checkMissing();
+        }
+
+        // nothing unexpected or missing, so validate
+        // the state of things
         for (int i = 0; i < events.size(); i ++) {
             EventSet set = (EventSet)events.get(i);
             // the event set might need to use the context to
             // poke around at the state of things (e.g., see if
             // particular services are registered, check service
             // properties, etc.)
-            set.checkResults(testContext);
+            set.checkEnvironment(testContext);
         }
     }
 
