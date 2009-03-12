@@ -4,10 +4,18 @@
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
 <!-- String -->
+	<component id="compInnerStringTyped" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+		<property name="innerComponent">
+			<component class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+				<property name="string"><value type="java.lang.String">ABC</value></property>
+			</component>
+		</property>
+	</component>
+	
 	<component id="compInnerString" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
 		<property name="innerComponent">
 			<component class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
-				<property name="string" value="ABC"/>
+				<property name="string" value="XYZ"/>
 			</component>
 		</property>
 	</component>
@@ -102,7 +110,7 @@
 	<component id="compInnerPrimitiveCharacter" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
 		<property name="innerComponent">
 			<component class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
-       			<property name="primCharacter" value="\u0000"/>
+       			<property name="primCharacter" value="a"/>
 			</component>
 		</property>
 	</component>
@@ -110,7 +118,7 @@
 	<component id="compInnerWrapperedCharacter" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
 		<property name="innerComponent">
 			<component class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
-       			<property name="character" value="\uffff"/>
+       			<property name="character" value="A"/>
 			</component>
 		</property>
 	</component>

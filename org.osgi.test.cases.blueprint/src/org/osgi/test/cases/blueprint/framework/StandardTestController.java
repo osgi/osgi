@@ -107,8 +107,8 @@ public class StandardTestController extends BaseTestController {
         // in each phase.  Add the events to each list
         EventSet startEvents = new MetadataEventSet(moduleMetadata, testContext, bundle);
         addStartEvents(bundle, moduleMetadata, startEvents);
-
         startPhase.addEventSet(startEvents);
+
         EventSet endEvents = new MetadataEventSet(moduleMetadata, testContext, bundle);
         addStopEvents(bundle, moduleMetadata, endEvents);
         endPhase.addEventSet(endEvents);

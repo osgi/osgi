@@ -31,6 +31,8 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.osgi.test.cases.blueprint.components.injection.ComponentInjection;
+import org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection;
+import org.osgi.test.cases.blueprint.components.injection.PropertyInjection;
 import org.osgi.test.cases.blueprint.framework.ComponentAssertion;
 import org.osgi.test.cases.blueprint.framework.ConstructorMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.InnerComponentValidator;
@@ -74,7 +76,7 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         startEvents.addAssertion("compInnerTwo_1", AssertionService.COMPONENT_CREATED);
         startEvents.addAssertion("compInnerTwo_2", AssertionService.COMPONENT_CREATED);
 
-        TestComponentValue testComponentValue = new TestComponentValue(new LocalComponent(ComponentTestInfo.class));
+        TestComponentValue testComponentValue = new TestComponentValue(new LocalComponent(InnerComponentInjection.class));
         //Ignore ID
         startEvents.addValidator(new ConstructorMetadataValidator(
                 "compInnerIgnoreID",
@@ -95,133 +97,155 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
 
 
 
-    // Constructor Test
-    private void addConstructorMetadataValidator(MetadataEventSet startEvents, String componentId, Class innerComponentClass, Class innerArgType) {
-        // metadata test
-        TestComponentValue testComponentValue = new TestComponentValue(new LocalComponent(innerComponentClass,
-                new TestParameter[] { new StringParameter(innerArgType) }, null));
-
-        startEvents.addValidator(new ConstructorMetadataValidator(componentId, new TestParameter[] { new TestParameter(
-                testComponentValue) }));
-    }
-
-    private void addConstructorArgValueValidator(MetadataEventSet startEvents, String outterComponentId, Class innerComponentClassName, Object innerArgValue, Class innerArgType ){
-        // value test
-        Dictionary innerComponentProps = new Hashtable();
-        StringValueDescriptor svd = new StringValueDescriptor("arg1", innerArgValue, innerArgType); // the "arg1" is "inner" arg1
-        innerComponentProps.put("arg1", svd); // the "arg1" is "inner" arg1
-
-        startEvents.addValidator(new InnerComponentValidator(outterComponentId, "arg1", innerComponentClassName, innerComponentProps));  //the "arg1" is "outer" arg1
-
-    }
-
-    private void addConstructorTestItem(MetadataEventSet startEvents) throws Exception {
-
-
-        this.addConstructorMetadataValidator(startEvents, "compInnerString", ComponentInjection.class, String.class);
-        this.addConstructorArgValueValidator(startEvents, "compInnerString", ComponentTestInfo.class, new String("ABC"), String.class);
-
-        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveBoolean", ComponentInjection.class, Boolean.TYPE);
-        this.addConstructorArgValueValidator(startEvents, "compInnerPrimitiveBoolean", ComponentTestInfo.class, Boolean.TRUE, Boolean.TYPE);
-        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedBoolean", ComponentInjection.class, Boolean.class);
-        this.addConstructorArgValueValidator(startEvents, "compInnerWrapperedBoolean", ComponentTestInfo.class, Boolean.FALSE, Boolean.class);
-
-        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveByte", ComponentInjection.class, Byte.TYPE);
-        this.addConstructorArgValueValidator(startEvents, "compInnerPrimitiveByte", ComponentTestInfo.class, new Byte(Byte.MIN_VALUE), Byte.TYPE);
-        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedByte", ComponentInjection.class, Byte.class);
-        this.addConstructorArgValueValidator(startEvents, "compInnerWrapperedByte", ComponentTestInfo.class, new Byte(Byte.MAX_VALUE), Byte.class);
-
-        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveDouble", ComponentInjection.class, Double.TYPE);
-        this.addConstructorArgValueValidator(startEvents, "compInnerPrimitiveDouble", ComponentTestInfo.class, new Double(Double.MIN_VALUE), Double.TYPE);
-        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedDouble", ComponentInjection.class, Double.class);
-        this.addConstructorArgValueValidator(startEvents, "compInnerWrapperedDouble", ComponentTestInfo.class, new Double(Double.MAX_VALUE), Double.class);
-
-        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveFloat", ComponentInjection.class, Float.TYPE);
-        this.addConstructorArgValueValidator(startEvents, "compInnerPrimitiveFloat", ComponentTestInfo.class, new Float(Float.MIN_VALUE), Float.TYPE);
-        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedFloat", ComponentInjection.class, Float.class);
-        this.addConstructorArgValueValidator(startEvents, "compInnerWrapperedFloat", ComponentTestInfo.class, new Float(Float.MAX_VALUE), Float.class);
-
-        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveInteger", ComponentInjection.class, Integer.TYPE);
-        this.addConstructorArgValueValidator(startEvents, "compInnerPrimitiveInteger", ComponentTestInfo.class, new Integer(Integer.MIN_VALUE), Integer.TYPE);
-        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedInteger", ComponentInjection.class, Integer.class);
-        this.addConstructorArgValueValidator(startEvents, "compInnerWrapperedInteger", ComponentTestInfo.class, new Integer(Integer.MAX_VALUE), Integer.class);
-
-        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveCharacter", ComponentInjection.class, Character.TYPE);
-        this.addConstructorArgValueValidator(startEvents, "compInnerPrimitiveCharacter", ComponentTestInfo.class, new Character(Character.MIN_VALUE), Character.TYPE);
-        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedCharacter", ComponentInjection.class, Character.class);
-        this.addConstructorArgValueValidator(startEvents, "compInnerWrapperedCharacter", ComponentTestInfo.class, new Character(Character.MAX_VALUE), Character.class);
-
-        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveShort", ComponentInjection.class, Short.TYPE);
-        this.addConstructorArgValueValidator(startEvents, "compInnerPrimitiveShort", ComponentTestInfo.class, new Short(Short.MIN_VALUE), Short.TYPE);
-        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedShort", ComponentInjection.class, Short.class);
-        this.addConstructorArgValueValidator(startEvents, "compInnerWrapperedShort", ComponentTestInfo.class, new Short(Short.MAX_VALUE), Short.class);
-
-        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveLong", ComponentInjection.class, Long.TYPE);
-        this.addConstructorArgValueValidator(startEvents, "compInnerPrimitiveLong", ComponentTestInfo.class, new Long(Long.MIN_VALUE), Long.TYPE);
-        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedLong", ComponentInjection.class, Long.class);
-        this.addConstructorArgValueValidator(startEvents, "compInnerWrapperedLong", ComponentTestInfo.class, new Long(Long.MAX_VALUE), Long.class);
-    }
-
-    public void testConstructorInjection() throws Exception {
-        StandardTestController controller = new StandardTestController(getContext(), getWebServer()
-                + "www/inner_component_constructor_injection.jar");
-        MetadataEventSet startEvents = controller.getStartEvents();
-
-        this.addConstructorTestItem(startEvents);
-
-        controller.run();
-    }
-
-    public void testInstanceFactoryConstructorInjection() throws Exception {
-        StandardTestController controller = new StandardTestController(getContext(), getWebServer()
-                + "www/inner_component_factory_constructor_injection.jar");
-        MetadataEventSet startEvents = controller.getStartEvents();
-
-        this.addConstructorTestItem(startEvents);
-
-        controller.run();
-    }
-
-    public void testStaticFactoryConstructorInjection() throws Exception {
-        StandardTestController controller = new StandardTestController(getContext(), getWebServer()
-                + "www/inner_component_static_factory_constructor_injection.jar");
-        MetadataEventSet startEvents = controller.getStartEvents();
-
-        this.addConstructorTestItem(startEvents);
-
-        controller.run();
-    }
+//    // Constructor Test
+//    private void addConstructorMetadataValidator(MetadataEventSet startEvents, String componentId, Class innerComponentClass, Class innerArgType) {
+//        // metadata test
+//        TestComponentValue testComponentValue = new TestComponentValue(new LocalComponent(innerComponentClass,
+//                new TestParameter[] { new StringParameter(innerArgType) }, null));
+//
+//        startEvents.addValidator(new ConstructorMetadataValidator(componentId, new TestParameter[] { new TestParameter(
+//                testComponentValue) }));
+//    }
+//
+//    private void addConstructorArgValueValidator(MetadataEventSet startEvents, String outterComponentId, Class innerComponentClassName, Object innerArgValue, Class innerArgType ){
+//        // value test
+//        Dictionary innerComponentProps = new Hashtable();
+//        StringValueDescriptor svd = new StringValueDescriptor("arg1", innerArgValue, innerArgType); // the "arg1" is "inner" arg1
+//        innerComponentProps.put("arg1", svd); // the "arg1" is "inner" arg1
+//
+//        startEvents.addValidator(new InnerComponentValidator(outterComponentId, "arg1", innerComponentClassName, innerComponentProps));  //the "arg1" is "outer" arg1
+//
+//    }
+//
+//    private void addConstructorTestItem(MetadataEventSet startEvents) throws Exception {
+//
+//
+//        this.addConstructorMetadataValidator(startEvents, "compInnerString", ComponentInjection.class, String.class);
+//        this.addConstructorArgValueValidator(startEvents, "compInnerString", ComponentTestInfo.class, new String("ABC"), String.class);
+//
+//        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveBoolean", ComponentInjection.class, Boolean.TYPE);
+//        this.addConstructorArgValueValidator(startEvents, "compInnerPrimitiveBoolean", ComponentTestInfo.class, Boolean.TRUE, Boolean.TYPE);
+//        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedBoolean", ComponentInjection.class, Boolean.class);
+//        this.addConstructorArgValueValidator(startEvents, "compInnerWrapperedBoolean", ComponentTestInfo.class, Boolean.FALSE, Boolean.class);
+//
+//        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveByte", ComponentInjection.class, Byte.TYPE);
+//        this.addConstructorArgValueValidator(startEvents, "compInnerPrimitiveByte", ComponentTestInfo.class, new Byte(Byte.MIN_VALUE), Byte.TYPE);
+//        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedByte", ComponentInjection.class, Byte.class);
+//        this.addConstructorArgValueValidator(startEvents, "compInnerWrapperedByte", ComponentTestInfo.class, new Byte(Byte.MAX_VALUE), Byte.class);
+//
+//        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveDouble", ComponentInjection.class, Double.TYPE);
+//        this.addConstructorArgValueValidator(startEvents, "compInnerPrimitiveDouble", ComponentTestInfo.class, new Double(Double.MIN_VALUE), Double.TYPE);
+//        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedDouble", ComponentInjection.class, Double.class);
+//        this.addConstructorArgValueValidator(startEvents, "compInnerWrapperedDouble", ComponentTestInfo.class, new Double(Double.MAX_VALUE), Double.class);
+//
+//        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveFloat", ComponentInjection.class, Float.TYPE);
+//        this.addConstructorArgValueValidator(startEvents, "compInnerPrimitiveFloat", ComponentTestInfo.class, new Float(Float.MIN_VALUE), Float.TYPE);
+//        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedFloat", ComponentInjection.class, Float.class);
+//        this.addConstructorArgValueValidator(startEvents, "compInnerWrapperedFloat", ComponentTestInfo.class, new Float(Float.MAX_VALUE), Float.class);
+//
+//        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveInteger", ComponentInjection.class, Integer.TYPE);
+//        this.addConstructorArgValueValidator(startEvents, "compInnerPrimitiveInteger", ComponentTestInfo.class, new Integer(Integer.MIN_VALUE), Integer.TYPE);
+//        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedInteger", ComponentInjection.class, Integer.class);
+//        this.addConstructorArgValueValidator(startEvents, "compInnerWrapperedInteger", ComponentTestInfo.class, new Integer(Integer.MAX_VALUE), Integer.class);
+//
+//        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveCharacter", ComponentInjection.class, Character.TYPE);
+//        this.addConstructorArgValueValidator(startEvents, "compInnerPrimitiveCharacter", ComponentTestInfo.class, new Character(Character.MIN_VALUE), Character.TYPE);
+//        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedCharacter", ComponentInjection.class, Character.class);
+//        this.addConstructorArgValueValidator(startEvents, "compInnerWrapperedCharacter", ComponentTestInfo.class, new Character(Character.MAX_VALUE), Character.class);
+//
+//        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveShort", ComponentInjection.class, Short.TYPE);
+//        this.addConstructorArgValueValidator(startEvents, "compInnerPrimitiveShort", ComponentTestInfo.class, new Short(Short.MIN_VALUE), Short.TYPE);
+//        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedShort", ComponentInjection.class, Short.class);
+//        this.addConstructorArgValueValidator(startEvents, "compInnerWrapperedShort", ComponentTestInfo.class, new Short(Short.MAX_VALUE), Short.class);
+//
+//        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveLong", ComponentInjection.class, Long.TYPE);
+//        this.addConstructorArgValueValidator(startEvents, "compInnerPrimitiveLong", ComponentTestInfo.class, new Long(Long.MIN_VALUE), Long.TYPE);
+//        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedLong", ComponentInjection.class, Long.class);
+//        this.addConstructorArgValueValidator(startEvents, "compInnerWrapperedLong", ComponentTestInfo.class, new Long(Long.MAX_VALUE), Long.class);
+//    }
+//
+//    public void testConstructorInjection() throws Exception {
+//        StandardTestController controller = new StandardTestController(getContext(), getWebServer()
+//                + "www/inner_component_constructor_injection.jar");
+//        MetadataEventSet startEvents = controller.getStartEvents();
+//
+//        this.addConstructorTestItem(startEvents);
+//
+//        controller.run();
+//    }
+//
+//    public void testInstanceFactoryConstructorInjection() throws Exception {
+//        StandardTestController controller = new StandardTestController(getContext(), getWebServer()
+//                + "www/inner_component_factory_constructor_injection.jar");
+//        MetadataEventSet startEvents = controller.getStartEvents();
+//
+//        this.addConstructorTestItem(startEvents);
+//
+//        controller.run();
+//    }
+//
+//    public void testStaticFactoryConstructorInjection() throws Exception {
+//        StandardTestController controller = new StandardTestController(getContext(), getWebServer()
+//                + "www/inner_component_static_factory_constructor_injection.jar");
+//        MetadataEventSet startEvents = controller.getStartEvents();
+//
+//        this.addConstructorTestItem(startEvents);
+//
+//        controller.run();
+//    }
 
     // Property Test
 
-    private void addPropertyValidator(MetadataEventSet startEvents, String componentId, Class innerComponentClass,
-            Class innerProType, String innerProName) {
-
+    private void addPropertyValidator(MetadataEventSet startEvents, String componentId, Class innerComponentClass, Class innerProValueType, 
+            String innerProName, Class innerProType, String innerProSource ) {
+        // value test
+        // TODO
+        
         // metadata test
-        TestComponentValue testComponentValue = new TestComponentValue(new LocalComponent(innerComponentClass, null,
-                new TestProperty[] { new StringProperty(innerProName, innerProType) }));
-        startEvents.addValidator(new PropertyMetadataValidator(componentId, new TestProperty[] { new TestProperty(
-                testComponentValue, "innerComponent") }));
+        TestComponentValue testComponentValue = new TestComponentValue(
+                new LocalComponent(
+                        innerComponentClass, 
+                        null,
+                        new TestProperty[] { new StringProperty(innerProName, innerProType, innerProSource) }
+                        )
+                );
+        
+        startEvents.addValidator(
+                new PropertyMetadataValidator(
+                        componentId, 
+                        new TestProperty[] { new TestProperty(testComponentValue, "innerComponent") }
+                        )
+                );
     }
 
     private void addPropertyTestItem(MetadataEventSet startEvents) throws Exception {
-        this.addPropertyValidator(startEvents, "compInnerString", ComponentInjection.class, null, "string");
-        this.addPropertyValidator(startEvents, "compInnerPrimitiveBoolean", ComponentInjection.class, Boolean.TYPE, "primBoolean");
-        this.addPropertyValidator(startEvents, "compInnerWrapperedBoolean", ComponentInjection.class, Boolean.class, "boolean");
-        this.addPropertyValidator(startEvents, "compInnerPrimitiveByte", ComponentInjection.class, Byte.TYPE, "primByte");
-        this.addPropertyValidator(startEvents, "compInnerWrapperedByte", ComponentInjection.class, Byte.class, "byte");
-        this.addPropertyValidator(startEvents, "compInnerPrimitiveDouble", ComponentInjection.class, Double.TYPE, "primDouble");
-        this.addPropertyValidator(startEvents, "compInnerWrapperedDouble", ComponentInjection.class, Double.class, "double");
-        this.addPropertyValidator(startEvents, "compInnerPrimitiveFloat", ComponentInjection.class, Float.TYPE, "primFloat");
-        this.addPropertyValidator(startEvents, "compInnerWrapperedFloat", ComponentInjection.class, Float.class, "float");
-        this.addPropertyValidator(startEvents, "compInnerPrimitiveInteger", ComponentInjection.class, Integer.TYPE, "primInteger");
-        this.addPropertyValidator(startEvents, "compInnerWrapperedInteger", ComponentInjection.class, Integer.class, "integer");
-        this.addPropertyValidator(startEvents, "compInnerPrimitiveCharacter", ComponentInjection.class, Character.TYPE, "primCharacter");
-        this.addPropertyValidator(startEvents, "compInnerWrapperedCharacter", ComponentInjection.class, Character.class, "character");
-        this.addPropertyValidator(startEvents, "compInnerPrimitiveShort", ComponentInjection.class, Short.TYPE, "primShort");
-        this.addPropertyValidator(startEvents, "compInnerWrapperedShort", ComponentInjection.class, Short.class, "short");
-        this.addPropertyValidator(startEvents, "compInnerPrimitiveLong", ComponentInjection.class, Long.TYPE, "primLong");
-        this.addPropertyValidator(startEvents, "compInnerWrapperedLong", ComponentInjection.class, Long.class, "long");
+        //string
+        this.addPropertyValidator(startEvents, "compInnerStringTyped", PropertyInjection.class, String.class, "string", String.class, "ABC"); //typed
+        this.addPropertyValidator(startEvents, "compInnerString", PropertyInjection.class, String.class, "string", null, "XYZ");
+        //boolean
+        this.addPropertyValidator(startEvents, "compInnerPrimitiveBoolean", PropertyInjection.class, Boolean.TYPE, "primBoolean", null, "true");
+        this.addPropertyValidator(startEvents, "compInnerWrapperedBoolean", PropertyInjection.class, Boolean.class, "boolean", null, "false");
+        //byte
+        this.addPropertyValidator(startEvents, "compInnerPrimitiveByte", PropertyInjection.class, Byte.TYPE, "primByte", null, "-128");
+        this.addPropertyValidator(startEvents, "compInnerWrapperedByte", PropertyInjection.class, Byte.class, "byte", null, "127");
+        //double
+        this.addPropertyValidator(startEvents, "compInnerPrimitiveDouble", PropertyInjection.class, Double.TYPE, "primDouble", null, "4.9e-324");
+        this.addPropertyValidator(startEvents, "compInnerWrapperedDouble", PropertyInjection.class, Double.class, "double", null, "1.7976931348623157E308");
+        //float
+        this.addPropertyValidator(startEvents, "compInnerPrimitiveFloat", PropertyInjection.class, Float.TYPE, "primFloat", null,"1.4E-45");
+        this.addPropertyValidator(startEvents, "compInnerWrapperedFloat", PropertyInjection.class, Float.class, "float", null,"3.4028235E38");
+        //int
+        this.addPropertyValidator(startEvents, "compInnerPrimitiveInteger", PropertyInjection.class, Integer.TYPE, "primInteger", null, "-2147483648");
+        this.addPropertyValidator(startEvents, "compInnerWrapperedInteger", PropertyInjection.class, Integer.class, "integer", null,"2147483647");
+        //char
+        this.addPropertyValidator(startEvents, "compInnerPrimitiveCharacter", PropertyInjection.class, Character.TYPE, "primCharacter",null, "a");
+        this.addPropertyValidator(startEvents, "compInnerWrapperedCharacter", PropertyInjection.class, Character.class, "character",null, "A");
+        //short
+        this.addPropertyValidator(startEvents, "compInnerPrimitiveShort", PropertyInjection.class, Short.TYPE, "primShort", null,"-32768");
+        this.addPropertyValidator(startEvents, "compInnerWrapperedShort", PropertyInjection.class, Short.class, "short", null, "32767");
+        //long
+        this.addPropertyValidator(startEvents, "compInnerPrimitiveLong", PropertyInjection.class, Long.TYPE, "primLong", null, "-9223372036854775808");
+        this.addPropertyValidator(startEvents, "compInnerWrapperedLong", PropertyInjection.class, Long.class, "long", null,"9223372036854775807");
     }
 
     public void testPropertyInjection() throws Exception {
@@ -234,48 +258,48 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         controller.run();
     }
 
-    public void testInstanceFactoryPropertyInjection() throws Exception {
-        StandardTestController controller = new StandardTestController(getContext(), getWebServer()
-                + "www/inner_component_factory_property_injection.jar");
-        MetadataEventSet startEvents = controller.getStartEvents();
-
-        this.addPropertyTestItem(startEvents);
-
-        controller.run();
-    }
-
-    public void testStaticFactoryPropertyInjection() throws Exception {
-        StandardTestController controller = new StandardTestController(getContext(), getWebServer()
-                + "www/inner_component_static_factory_property_injection.jar");
-        MetadataEventSet startEvents = controller.getStartEvents();
-
-        this.addPropertyTestItem(startEvents);
-
-        controller.run();
-    }
-
-    // Collection Test
-    public void testCollectionInjection() throws Exception {
-        StandardTestController controller = new StandardTestController(getContext(), getWebServer()
-                + "www/inner_component_collection_injection.jar");
-        MetadataEventSet startEvents = controller.getStartEvents();
-
-        TestComponentValue testComponentValue = new TestComponentValue(new LocalComponent(ComponentTestInfo.class,
-                new TestParameter[] { new StringParameter() }, null));
-
-        // List
-        startEvents.addValidator(new ConstructorMetadataValidator("compInnerList", new TestParameter[] { new TestParameter(
-                new TestListValue(new TestValue[] { testComponentValue, testComponentValue })) }));
-
-        // Set
-        startEvents.addValidator(new ConstructorMetadataValidator("compInnerSet", new TestParameter[] { new TestParameter(
-                new TestSetValue(new TestValue[] { testComponentValue, testComponentValue })) }));
-
-        // Map
-        startEvents.addValidator(new ConstructorMetadataValidator("compInnerMap", new TestParameter[] { new TestParameter(
-                new TestMapValue(new MapValueEntry[] { new MapValueEntry(testComponentValue, testComponentValue),
-                        new MapValueEntry(testComponentValue, testComponentValue) })) }));
-
-        controller.run();
-    }
+//    public void testInstanceFactoryPropertyInjection() throws Exception {
+//        StandardTestController controller = new StandardTestController(getContext(), getWebServer()
+//                + "www/inner_component_factory_property_injection.jar");
+//        MetadataEventSet startEvents = controller.getStartEvents();
+//
+//        this.addPropertyTestItem(startEvents);
+//
+//        controller.run();
+//    }
+//
+//    public void testStaticFactoryPropertyInjection() throws Exception {
+//        StandardTestController controller = new StandardTestController(getContext(), getWebServer()
+//                + "www/inner_component_static_factory_property_injection.jar");
+//        MetadataEventSet startEvents = controller.getStartEvents();
+//
+//        this.addPropertyTestItem(startEvents);
+//
+//        controller.run();
+//    }
+//
+//    // Collection Test
+//    public void testCollectionInjection() throws Exception {
+//        StandardTestController controller = new StandardTestController(getContext(), getWebServer()
+//                + "www/inner_component_collection_injection.jar");
+//        MetadataEventSet startEvents = controller.getStartEvents();
+//
+//        TestComponentValue testComponentValue = new TestComponentValue(new LocalComponent(ComponentTestInfo.class,
+//                new TestParameter[] { new StringParameter() }, null));
+//
+//        // List
+//        startEvents.addValidator(new ConstructorMetadataValidator("compInnerList", new TestParameter[] { new TestParameter(
+//                new TestListValue(new TestValue[] { testComponentValue, testComponentValue })) }));
+//
+//        // Set
+//        startEvents.addValidator(new ConstructorMetadataValidator("compInnerSet", new TestParameter[] { new TestParameter(
+//                new TestSetValue(new TestValue[] { testComponentValue, testComponentValue })) }));
+//
+//        // Map
+//        startEvents.addValidator(new ConstructorMetadataValidator("compInnerMap", new TestParameter[] { new TestParameter(
+//                new TestMapValue(new MapValueEntry[] { new MapValueEntry(testComponentValue, testComponentValue),
+//                        new MapValueEntry(testComponentValue, testComponentValue) })) }));
+//
+//        controller.run();
+//    }
 }
