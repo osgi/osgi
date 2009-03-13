@@ -27,13 +27,14 @@
 
 package org.osgi.test.cases.blueprint.components.serviceexport;
 
-import java.util.Map;
 import java.util.Hashtable;
+import java.util.Map;
 
 import org.osgi.framework.ServiceRegistration;
-
+import org.osgi.framework.ServiceReference;
 import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
+import org.osgi.test.cases.blueprint.services.TestUtil;
 
 /**
  * Concrete target for testing import of ServiceRegistrations.  This will update
@@ -54,7 +55,10 @@ public class ServiceRegistrationChecker extends BaseTestComponent {
     }
 
     public void setRegistration(ServiceRegistration reg) {
+        ServiceReference ref = reg.getReference();
         AssertionService.sendEvent(this, AssertionService.SERVICE_SUCCESS);
+        // copy all of the existing properties
+        setProperties.putAll(TestUtil.getProperties(ref));
         reg.setProperties(setProperties);
     }
 }
