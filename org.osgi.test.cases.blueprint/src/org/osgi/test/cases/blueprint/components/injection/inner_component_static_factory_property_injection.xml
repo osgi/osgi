@@ -5,10 +5,18 @@
 
 
 <!-- String -->
+	<component id="compInnerStringTyped" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+		<property name="innerComponent">
+			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+				<property name="string"><value type="java.lang.String">ABC</value></property>
+			</component>
+		</property>
+	</component>
+	
 	<component id="compInnerString" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<property name="innerComponent">
 			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
-				<property name="string" value="ABC"/>
+				<property name="string" value="XYZ"/>
 			</component>
 		</property>
 	</component>
@@ -103,7 +111,7 @@
 	<component id="compInnerPrimitiveCharacter" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<property name="innerComponent">
 			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
-       			<property name="primCharacter" value="\u0000"/>
+       			<property name="primCharacter" value="a"/>
 			</component>
 		</property>
 	</component>
@@ -111,7 +119,7 @@
 	<component id="compInnerWrapperedCharacter" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<property name="innerComponent">
 			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
-       			<property name="character" value="\uffff"/>
+       			<property name="character" value="A"/>
 			</component>
 		</property>
 	</component>

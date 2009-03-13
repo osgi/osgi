@@ -28,6 +28,8 @@
 package org.osgi.test.cases.blueprint.services;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.osgi.test.cases.blueprint.services.AssertionService;
 
@@ -310,6 +312,68 @@ public class BaseTestComponent implements ComponentTestInfo {
      */
     public boolean isDestroyed() {
         return getProperty(DESTROY_CALLED) == Boolean.TRUE;
+    }
+    
+    
+    /**
+     * Used when this component is an inner component..
+     */
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        
+        if (!(o instanceof BaseTestComponent)) return false;
+        
+        BaseTestComponent obj = (BaseTestComponent)o;
+        
+        if (!this.componentId.equals(obj.componentId)) return false;
+        
+        if (compareHashtables(this.properties, obj.properties) 
+                && compareHashtables(this.arguments, obj.arguments)) return true;
+        else return false;
+        
+    }
+    
+    private boolean compareHashtables(Hashtable h1, Hashtable h2){
+        if (h1==null && h2==null) return true;
+        if (h1==null && h2!=null) return false;
+        if (h1!=null && h2==null) return false;
+        Set keys1 = h1.keySet();
+        Set keys2 = h2.keySet();
+        Iterator it1 = keys1.iterator();
+        while(it1.hasNext()){
+            Object key = it1.next();
+            if (!h1.get(key).equals(h2.get(key))) return false;
+            keys2.remove(key);
+        }
+        if (!keys2.isEmpty()) return false;
+        else return true;
+    }
+    
+    /**
+     * Override hashCode() because we overrided the equals()
+     */
+    public int hashCode() {
+        int r = 17;
+        r = 19*r + this.componentId.hashCode();
+        
+        Set keys;
+        Iterator it;
+        if (this.properties!=null){
+            keys = this.properties.keySet();
+            it = keys.iterator();
+            while(it.hasNext()){
+                r = 19*r + this.properties.get(it.next()).hashCode();
+            }
+        }
+        if (this.arguments!=null){
+            keys = this.arguments.keySet();
+            it = keys.iterator();
+            while(it.hasNext()){
+                r = 19*r + this.arguments.get(it.next()).hashCode();
+            }
+        }
+        return r;
+        
     }
 }
 

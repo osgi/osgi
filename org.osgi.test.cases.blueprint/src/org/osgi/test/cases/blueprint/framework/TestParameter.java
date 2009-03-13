@@ -33,7 +33,7 @@ import junit.framework.Assert;
 
 public class TestParameter extends Assert {
     // expected parameter metadata type
-    protected TestValue parameterType;
+    protected TestValue parameterTestValue;
     // explicitly named parameter type (optional, if not specified)
     protected String typeName;
     // a potential explicit parameter index postion
@@ -75,7 +75,7 @@ public class TestParameter extends Assert {
      *                 is expected to be a NamedParameterSpecification.
      */
     public TestParameter(TestValue parameterType, Class type, int index) {
-        this.parameterType = parameterType;
+        this.parameterTestValue = parameterType;
         // we don't always have a type name here
         if (type != null) {
             this.typeName = type.getName();
@@ -103,7 +103,7 @@ public class TestParameter extends Assert {
             assertEquals("Indexed parameter position mismatch", index, spec.getIndex());
         }
         // validate the value type also
-        parameterType.validate(moduleMetadata, spec.getValue());
+        parameterTestValue.validate(moduleMetadata, spec.getValue());
     }
 
 

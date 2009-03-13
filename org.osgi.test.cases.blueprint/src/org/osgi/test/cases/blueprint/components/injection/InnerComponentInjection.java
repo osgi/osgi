@@ -89,7 +89,7 @@ public class InnerComponentInjection extends BaseTestComponent {
 
     //Property Setter
     public void setInnerComponent(ComponentTestInfo arg1) {
-        this.setPropertyValue("innerComponent", arg1, ComponentTestInfo.class);
+        this.setPropertyValue("innerComponent", arg1, PropertyInjection.class);
     }
 
 }

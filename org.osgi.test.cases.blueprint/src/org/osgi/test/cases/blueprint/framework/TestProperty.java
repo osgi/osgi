@@ -35,17 +35,17 @@ public class TestProperty extends Assert {
     // the target property name
     protected String propertyName;
     // expected property metadata type
-    protected TestValue propertyType;
+    protected TestValue propertyTestValue;
 
 
-    public TestProperty(TestValue propertyType, String propertyName) {
-        this.propertyType = propertyType;
+    public TestProperty(TestValue propertyTestValue, String propertyName) {
+        this.propertyTestValue = propertyTestValue;
         this.propertyName = propertyName;
     }
 
 
     public TestProperty(String value, String propertyName) {
-        this.propertyType = new TestStringValue(value);
+        this.propertyTestValue = new TestStringValue(value);
         this.propertyName = propertyName;
     }
 
@@ -61,8 +61,8 @@ public class TestProperty extends Assert {
         // validate the name
         assertEquals("Property name mismatch", propertyName, spec.getName());
         // and validate the property type information
-        if (propertyType != null) {
-            propertyType.validate(moduleMetadata, spec.getValue());
+        if (propertyTestValue != null) {
+            propertyTestValue.validate(moduleMetadata, spec.getValue());
         }
     }
 

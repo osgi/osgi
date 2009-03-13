@@ -79,7 +79,7 @@ public class CollectionBasedServiceReferenceComponentMetadataImpl extends Servic
         return comparator;
     }
 
-    public void setComparator(Value compartor) {
+    public void setComparator(Value comparator) {
         this.comparator = comparator;
     }
 
