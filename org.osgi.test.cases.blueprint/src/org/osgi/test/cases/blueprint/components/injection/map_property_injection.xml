@@ -103,7 +103,7 @@
                 <entry key="Byte">
                     <value type="java.lang.Byte">3</value>
                 </entry>
-                <entry key="Char">
+                <entry key="Character">
                     <value type="java.lang.Character">4</value>
                 </entry>
                 <entry key="Integer">
@@ -127,7 +127,7 @@
                 <entry key="Class">
                     <value type="java.lang.Class">java.lang.String</value>
                 </entry>
-                <entry key="Local">
+                <entry key="Locale">
                     <value type="java.util.Locale">en_US</value>
                 </entry>
                 <entry key="null">

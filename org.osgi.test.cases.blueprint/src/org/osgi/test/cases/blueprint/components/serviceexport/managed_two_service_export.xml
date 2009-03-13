@@ -14,8 +14,8 @@
         <constructor-arg value="4"/>
     </component>
 
-    <component id="ServiceOneB" class="org.osgi.test.cases.blueprint.services.TestBadService">
-        <constructor-arg value="ServiceOneB"/>
+    <component id="BadService" class="org.osgi.test.cases.blueprint.services.TestBadService">
+        <constructor-arg value="BadService"/>
         <constructor-arg value="5"/>
     </component>
 
@@ -39,9 +39,9 @@
                 <component class="org.osgi.test.cases.blueprint.services.ManagedService">
                     <property name="bundleContext" ref="bundleContext"/>
                     <property name="name">
-                        <idref component="ServiceOneB"/>
+                        <idref component="BadService"/>
                     </property>
-                    <property name="service" ref="ServiceOneB"/>
+                    <property name="service" ref="BadService"/>
                     <property name="interfaces">
                         <set>
                             <value>org.osgi.test.cases.blueprint.services.TestServiceOne</value>

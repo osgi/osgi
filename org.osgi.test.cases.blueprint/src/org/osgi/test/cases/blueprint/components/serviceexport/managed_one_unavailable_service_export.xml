@@ -29,7 +29,7 @@
                             <value>org.osgi.test.cases.blueprint.services.TestServiceOne</value>
                         </set>
                     </property>
-                    // this is unavailable initially
+                    <!-- this is unavailable initially -->
                     <property name="start" value="false"/>
                 </component>
             </list>

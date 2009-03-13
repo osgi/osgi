@@ -1323,7 +1323,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // Ok, when the WAITING event is triggered, we register the second service.
         importStartEvents.addEvent(new BlueprintEvent("WAITING", null, new ServiceManagerRegister(serviceManager, "ServiceOneB")));
 
-        // the test component will handle all of hte validation checking for this
+        // the test component will handle all of the validation checking for this
         // this indicates successful completion of the test phase
         importStartEvents.addAssertion("DependencyChecker", AssertionService.COMPONENT_INIT_METHOD);
 
