@@ -308,6 +308,13 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         startEvents.addAssertion("static-comp1", AssertionService.COMPONENT_CREATED);
         startEvents.addAssertion("comp2_id", AssertionService.COMPONENT_CREATED);
 
+        LocalComponent comp2_id =
+            new LocalComponent("comp2_id", SimpleStaticFactory.class,
+            new TestParameter[] { new StringParameter("comp2_id") } , null);
+        comp2_id.setFactoryMethod("createSimple");
+
+        startEvents.addValidator(new ComponentMetadataValidator(comp2_id));
+
         LocalComponent comp1 =
             new LocalComponent("comp1", SimpleStaticFactory.class,
             new TestParameter[0], null);
@@ -315,13 +322,6 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
 
         // validate the metadata for all components
         startEvents.addValidator(new ComponentMetadataValidator(comp1));
-
-        LocalComponent comp2_id =
-            new LocalComponent("comp2_id", SimpleStaticFactory.class,
-            new TestParameter[] { new StringParameter("comp2_id") } , null);
-        comp2_id.setFactoryMethod("createSimple");
-
-        startEvents.addValidator(new ComponentMetadataValidator(comp2_id));
 
         // make sure this was created with the correct class
         // NOTE:  the "comp1" is the XML file component id.  "static-comp1" is an internal id created by the factory

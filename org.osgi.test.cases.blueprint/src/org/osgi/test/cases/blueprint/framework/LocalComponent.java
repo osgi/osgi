@@ -152,14 +152,14 @@ public class LocalComponent extends Assert implements TestComponentMetadata {
         else {
             assertNull("non-null component name for inner component", meta.getName());
         }
-        assertEquals("Component class name mismatch", className, meta.getClassName());
-        assertEquals("Component init-method mismatch", initMethodName, meta.getInitMethodName());
-        assertEquals("Component destroy-method mismatch", initMethodName, meta.getDestroyMethodName());
+        assertEquals("Component " + meta.getName() + " class name mismatch", className, meta.getClassName());
+        assertEquals("Component " + meta.getName() + " init-method mismatch", initMethodName, meta.getInitMethodName());
+        assertEquals("Component " + meta.getName() + " destroy-method mismatch", initMethodName, meta.getDestroyMethodName());
         // this is either instantiatied via a factory or directly
         if (factoryMethod != null) {
             MethodInjectionMetadata factoryMeta = meta.getFactoryMethodMetadata();
-            assertNotNull("Factory metadata expected", factoryMeta);
-            assertEquals("Component factory method mismatch", factoryMethod, factoryMeta.getName());
+            assertNotNull("Component " + meta.getName() + " factory metadata expected", factoryMeta);
+            assertEquals("Component " + meta.getName() + " factory method mismatch ", factoryMethod, factoryMeta.getName());
             // if we have parms to validate, check those now
             if (parms != null) {
                 moduleMetadata.validateConstructorParameters(meta, factoryMeta.getParameterSpecifications(), parms);
@@ -167,7 +167,7 @@ public class LocalComponent extends Assert implements TestComponentMetadata {
             // and a potential factory component
             if (factoryComponent != null) {
                 Value factory = meta.getFactoryComponent();
-                assertNotNull("Factory component definition expected", factory);
+                assertNotNull("Component " + meta.getName() + "factory component definition expected", factory);
                 // validate that component information
                 factoryComponent.validate(moduleMetadata, factory);
             }

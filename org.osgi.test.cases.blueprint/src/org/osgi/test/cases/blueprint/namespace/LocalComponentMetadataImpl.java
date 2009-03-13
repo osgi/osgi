@@ -227,6 +227,20 @@ public class LocalComponentMetadataImpl extends ComponentMetadataImpl implements
         propertyInjection.add(m);
     }
 
+    public void replaceProperty(PropertyInjectionMetadata m) {
+        String name = m.getName();
+        // remove any matching item and replace with the new one
+        Iterator i = propertyInjection.iterator();
+        while (i.hasNext()) {
+            PropertyInjectionMetadata current = (PropertyInjectionMetadata)i.next();
+            if (current.getName().equals(name)) {
+                i.remove();
+                break;
+            }
+        }
+        propertyInjection.add(m);
+    }
+
     public void addProperty(String name, Value value) {
         addProperty(new PropertyInjectionMetadataImpl(name, value));
     }

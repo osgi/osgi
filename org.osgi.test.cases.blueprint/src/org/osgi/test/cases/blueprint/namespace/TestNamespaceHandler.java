@@ -90,9 +90,54 @@ public class TestNamespaceHandler implements NamespaceHandler {
         if (node instanceof Attr) {
             Attr attribute = (Attr)node;
             if (attribute.getName().equals("sleepy")) {
+                // make a copy of the metadata
+                LocalComponentMetadataImpl metadata = (LocalComponentMetadataImpl)NamespaceUtil.cloneComponentMetadata(component);
+                metadata.setLazy(attribute.getValue().equals("on"));
+                return metadata;
             }
+            else if (attribute.getName().equals("raise-error")) {
+                // make a copy of the metadata
+                if (attribute.getValue().equals("yes")) {
+                    throw new IllegalArgumentException("raise-error=\"yes\" triggered exception");
+                }
+                // we can also use this to trigger replacement of a component
+                return NamespaceUtil.cloneComponentMetadata(component);
+            }
+            throw new IllegalArgumentException("Unknown attribute " + attribute.getName());
         }
-        return null;
+        else {
+            Element element = (Element)node;
+            // requesting a bundle property be set
+            if (element.getTagName().equalsIgnoreCase("bundle")) {
+                // make a copy of the metadata
+                LocalComponentMetadataImpl metadata = (LocalComponentMetadataImpl)NamespaceUtil.cloneComponentMetadata(component);
+                // the assigned value is a component reference
+                ReferenceValueImpl bundleRef = new ReferenceValueImpl("bundle");
+                PropertyInjectionMetadataImpl property = new PropertyInjectionMetadataImpl("bundle", bundleRef);
+                metadata.addProperty(property);
+                return metadata;
+            }
+            // we have a different value tag
+            else if (element.getTagName().equalsIgnoreCase("bundle-value")) {
+                // make a copy of the metadata for our enclosing component
+                LocalComponentMetadataImpl metadata = (LocalComponentMetadataImpl)NamespaceUtil.cloneComponentMetadata(context.getEnclosingComponent());
+                // we need to replace the definition of the
+                Element parent = (Element)element.getParentNode();
+                if (!parent.getTagName().equals("property")) {
+                    throw new IllegalArgumentException("<bundleValue> only valid as a child of <property> element");
+                }
+                // the assigned value is a component reference
+                ReferenceValueImpl bundleRef = new ReferenceValueImpl("bundle");
+                PropertyInjectionMetadataImpl property = new PropertyInjectionMetadataImpl(parent.getAttribute("name"), bundleRef);
+                // replace the property definition with the fully realized value
+                metadata.replaceProperty(property);
+            }
+            // we have a different value tag
+            else if (element.getTagName().equalsIgnoreCase("raise-error")) {
+                throw new IllegalArgumentException("<raise-error> triggered exception");
+            }
+            throw new IllegalArgumentException("Unknown element " + element.getTagName());
+        }
     }
 
 
@@ -100,8 +145,26 @@ public class TestNamespaceHandler implements NamespaceHandler {
      * Handle the "dateformat" tag (and others in time...)
      */
     public ComponentMetadata parse(Element element, ParserContext context) {
-        // we don't recognize anything that would be called for parse...different test case
-        return null;
+        // we have a different value tag
+        if (element.getTagName().equalsIgnoreCase("bundle-value")) {
+            // make a copy of the metadata for our enclosing component
+            LocalComponentMetadataImpl metadata = (LocalComponentMetadataImpl)NamespaceUtil.cloneComponentMetadata(context.getEnclosingComponent());
+            // we need to replace the definition of the
+            Element parent = (Element)element.getParentNode();
+            if (!parent.getTagName().equals("property")) {
+                throw new IllegalArgumentException("<bundleValue> only valid as a child of <property> element");
+            }
+            // the assigned value is a component reference
+            ReferenceValueImpl bundleRef = new ReferenceValueImpl("bundle");
+            PropertyInjectionMetadataImpl property = new PropertyInjectionMetadataImpl(parent.getAttribute("name"), bundleRef);
+            // replace the property definition with the fully realized value
+            metadata.replaceProperty(property);
+        }
+        // we have a different value tag
+        else if (element.getTagName().equalsIgnoreCase("raise-error")) {
+            throw new IllegalArgumentException("<raise-error> triggered exception");
+        }
+        throw new IllegalArgumentException("Unknown element " + element.getTagName());
     }
 }
 

@@ -9,6 +9,7 @@
     <xsd:import namespace="http://www.osgi.org/xmlns/blueprint/v1.0.0"/>
 
     <xsd:attribute name="sleepy" type="TSleepyType" use="optional"/>
+    <xsd:attribute name="raise-error" type="TSleepyType" use="optional"/>
 
     <xsd:simpleType name="TSleepyType">
          <xsd:restriction base="xsd:token">

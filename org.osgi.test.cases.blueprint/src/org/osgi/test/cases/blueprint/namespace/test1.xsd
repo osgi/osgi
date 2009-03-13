@@ -8,9 +8,7 @@
 
     <xsd:import namespace="http://www.osgi.org/xmlns/blueprint/v1.0.0"/>
 
-    <xsd:element name="bundle">
-        <xsd:complexType mixed="true">
-            <xsd:choice minOccurs="0" maxOccurs="unbounded"/>
-        </xsd:complexType>
-    </xsd:element>
+    <xsd:element name="bundle"/>
+    <xsd:element name="bundle-value"/>
+    <xsd:element name="raise-error"/>
 </xsd:schema>
