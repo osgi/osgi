@@ -42,15 +42,15 @@ import junit.framework.Assert;
  * Validate the constructor metadata for a component built using a
  * factory class.
  */
-public class FactoryConstructorMetadataValidator extends MetadataValidator {
+public class FactoryMetadataValidator extends MetadataValidator {
     // the external component id
     protected String componentId;
     // the factory method name
-    protected String factoryMethod;
-    // optional name of a factory component
+    protected String factoryMethodName;
+    // The static factory class name.
     protected String staticFactoryClassName;
-    // the list of expected parameters
-    protected TestParameter[] parms;
+    // the factory TestComponentValue
+    protected TestValue factoryTestComponentValue;
 
     /**
      * Validate the factory constructor metadata.
@@ -59,11 +59,11 @@ public class FactoryConstructorMetadataValidator extends MetadataValidator {
      *               The id of the target component.
      * @param factoryMethod
      *               The name of the factory method used to construct the component.
-     * @param factoryComponent
-     *               The factoryComponent reference id.
+     * @param staticFactoryClassName
+     *               The static factory class name.
      */
-    public FactoryConstructorMetadataValidator(String componentId, String factoryMethod, String factoryComponent) {
-        this(componentId, factoryMethod, factoryComponent, new TestParameter[0]);
+    public FactoryMetadataValidator(String componentId, String factoryMethodName, String factoryComponent) {
+        this(componentId, factoryMethodName, factoryComponent, null);
     }
 
 
@@ -74,17 +74,17 @@ public class FactoryConstructorMetadataValidator extends MetadataValidator {
      *               The id of the target component.
      * @param factoryMethod
      *               The name of the factory method used to construct the component.
-     * @param factoryComponent
-     *               The factoryComponent reference id.
-     * @param parms  An array of constructor type validators for the expected constructor
-     *               argument set.
+     * @param staticFactoryClassName
+     *               The static factory class name.
+     * @param factoryTestComponentValue  
+     *               The instance factory TestComponentValue.
      */
-    public FactoryConstructorMetadataValidator(String componentId, String factoryMethod, String staticFactoryClassName, TestParameter[] parms) {
+    public FactoryMetadataValidator(String componentId, String factoryMethodName, String staticFactoryClassName, TestValue factoryTestComponentValue) {
         super();
-        this.factoryMethod = factoryMethod;
+        this.factoryMethodName = factoryMethodName;
         this.staticFactoryClassName = staticFactoryClassName;
         this.componentId = componentId;
-        this.parms = parms;
+        this.factoryTestComponentValue = factoryTestComponentValue;
     }
 
     /**
@@ -104,8 +104,7 @@ public class FactoryConstructorMetadataValidator extends MetadataValidator {
         // ensure we have everything initialized
         super.validate(testContext);
         // validation is done by the metadata wrapper.
-        moduleMetadata.validateFactoryMetadata(componentId, factoryMethod, staticFactoryClassName, null);
-        moduleMetadata.validateConstructorMetadata(componentId, parms);
+        moduleMetadata.validateFactoryMetadata(componentId, factoryMethodName, staticFactoryClassName, factoryTestComponentValue);
     }
 }
 

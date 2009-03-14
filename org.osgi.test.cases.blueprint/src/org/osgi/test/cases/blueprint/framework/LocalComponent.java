@@ -52,8 +52,6 @@ public class LocalComponent extends Assert implements TestComponentMetadata {
     protected String destroyMethodName;
     // a potential list of constructor/factory parameters to validate
     // NOTE:  This parameter list applies to the factory method as well.
-    // how it gets applied depends on whether a factory method name has been
-    // set
     protected TestParameter[] parms;
     // a potential list of property injection values to check
     protected TestProperty[] props;
@@ -69,27 +67,24 @@ public class LocalComponent extends Assert implements TestComponentMetadata {
     protected String factoryMethod;
     // the factory injection metadata
 
-    public LocalComponent(Class classType) {
-        this(null, classType, null, null, null, null, null, null, false, LocalComponentMetadata.SCOPE_SINGLETON);
-    }
-
-    public LocalComponent(Class classType, TestParameter[] parms, TestProperty[] props) {
-        this(null, classType, null, null, null, parms, props, null, false, LocalComponentMetadata.SCOPE_SINGLETON);
-    }
-
-    // directly from class
+    // indicated the component is created directly from class
     public LocalComponent(String name, Class classType, TestParameter[] parms, TestProperty[] props) {
         this(name, classType, null, null, null, parms, props, null, false, LocalComponentMetadata.SCOPE_SINGLETON);
     }
     
-    // by instance factory
+    // indicated the component is created by instance factory
     public LocalComponent(String name, String factoryMethodName, TestParameter[] parms, TestProperty[] props) {
         this(name, null, factoryMethodName, null, null, parms, props, null, false, LocalComponentMetadata.SCOPE_SINGLETON);
     }
     
-    // by static factory
+    // indicated the component is created by static factory
     public LocalComponent(String name, Class classType, String factoryMethodName, TestParameter[] parms, TestProperty[] props) {
         this(name, classType, factoryMethodName, null, null, parms, props, null, false, LocalComponentMetadata.SCOPE_SINGLETON);
+    }
+    
+    // indicated the component is inner component
+    public LocalComponent(Class classType, String factoryMethodName, TestParameter[] parms, TestProperty[] props) {
+        this(null, classType, factoryMethodName, null, null, parms, props, null, false, LocalComponentMetadata.SCOPE_SINGLETON);
     }
     
     public LocalComponent(String name, Class classType, String initMethodName, String destroyMethodName, TestParameter[] parms, TestProperty[] props) {
@@ -128,9 +123,6 @@ public class LocalComponent extends Assert implements TestComponentMetadata {
         factoryTestComponentValue = factory;
     }
 
-
-
-
     /**
      * Validate a the contained component meta data against an actual instance
      *
@@ -145,6 +137,7 @@ public class LocalComponent extends Assert implements TestComponentMetadata {
     public void validate(ModuleMetadata moduleMetadata, ComponentMetadata componentMeta) throws Exception {
         assertTrue("Component type mismatch", componentMeta instanceof LocalComponentMetadata);
         LocalComponentMetadata meta = (LocalComponentMetadata)componentMeta;
+
         if (name != null) {
             if (name.equals("*")) {
                 assertNotNull("Missing generated component name", meta.getName());
@@ -157,21 +150,21 @@ public class LocalComponent extends Assert implements TestComponentMetadata {
             assertNull("non-null component name for inner component", meta.getName());
         }
         
-        // three ways to create a component
-        if (className != null && factoryMethod == null){
-            // directly created from class
-            assertEquals("Component " + meta.getName() + " class name mismatch", className, meta.getClassName());
-            assertNull("Component " + meta.getName() + " factory method is not null", meta.getFactoryMethodMetadata());
-        }else if (className != null && factoryMethod != null){
-            // by static factory
-            moduleMetadata.validateFactoryMetadata(meta, factoryMethod, className, null);
-        }else if (className == null && factoryMethod != null){
-            // by instance factory
-            moduleMetadata.validateFactoryMetadata(meta, factoryMethod, null, factoryTestComponentValue);
-        }else{
-            // error status
-            fail("The test data for Component " + meta.getName() +" instantiated incorrectly, both class type and factory method name are null.");
-        }
+//        // three ways to create a component
+//        if (className != null && factoryMethod == null){
+//            // directly created from class
+//            assertEquals("Component " + meta.getName() + " class name mismatch", className, meta.getClassName());
+//            assertNull("Component " + meta.getName() + " factory method is not null", meta.getFactoryMethodMetadata());
+//        }else if (className != null && factoryMethod != null){
+//            // by static factory
+//            moduleMetadata.validateFactoryMetadata(meta, factoryMethod, className, null);
+//        }else if (className == null && factoryMethod != null){
+//            // by instance factory
+//            moduleMetadata.validateFactoryMetadata(meta, factoryMethod, null, factoryTestComponentValue);
+//        }else{
+//            // error status
+//            fail("The test data for Component " + meta.getName() +" instantiated incorrectly, both class type and factory method name are null.");
+//        }
 
         // validate the parameters
         if (parms != null) {

@@ -39,15 +39,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import org.osgi.test.cases.blueprint.framework.ConstructorMetadataValidator;
-import org.osgi.test.cases.blueprint.framework.FactoryConstructorMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
-import org.osgi.test.cases.blueprint.framework.PropertyMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.StandardTestController;
-import org.osgi.test.cases.blueprint.framework.StringParameter;
-import org.osgi.test.cases.blueprint.framework.TestParameter;
-import org.osgi.test.cases.blueprint.framework.TestProperty;
-import org.osgi.test.cases.blueprint.framework.TestValidator;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**

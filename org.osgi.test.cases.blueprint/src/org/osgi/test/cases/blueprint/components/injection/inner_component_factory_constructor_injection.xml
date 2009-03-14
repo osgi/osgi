@@ -13,14 +13,46 @@
     </component>
 
 <!-- String -->
-	<component id="compInnerString" factory-method="makeInstance" factory-component="compFactory">
+	<component id="compInnerStringNoTyped" factory-method="makeInstance" factory-component="compFactory">
 		<constructor-arg>
 			<component factory-method="makeInstance" factory-component="innerCompFactory">
-				<constructor-arg value="ABC"/>
+				<constructor-arg value="STR1"/>
 			</component>
 		</constructor-arg>
 	</component>
-
+	
+	<component id="compInnerStringBothTyped" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg>
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
+				<constructor-arg type="java.lang.String"><value type="java.lang.String">STR2</value></constructor-arg>
+			</component>
+		</constructor-arg>
+	</component>
+	
+	<component id="compInnerStringValueTyped" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg>
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
+				<constructor-arg><value type="java.lang.String">STR3</value></constructor-arg>
+			</component>
+		</constructor-arg>
+	</component>
+	
+	<component id="compInnerStringArgTyped" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg>
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
+				<constructor-arg type="java.lang.String"><value>STR4</value></constructor-arg>
+			</component>
+		</constructor-arg>
+	</component>
+	
+	<component id="compInnerString" factory-method="makeInstance" factory-component="compFactory">
+		<constructor-arg>
+			<component factory-method="makeInstance" factory-component="innerCompFactory">
+				<constructor-arg value="STR5" type="java.lang.String"/>
+			</component>
+		</constructor-arg>
+	</component>
+	
 <!-- Boolean -->
 	<component id="compInnerPrimitiveBoolean" factory-method="makeInstance" factory-component="compFactory">
 		<constructor-arg>
@@ -111,7 +143,7 @@
 	<component id="compInnerPrimitiveCharacter" factory-method="makeInstance" factory-component="compFactory">
 		<constructor-arg>
 			<component factory-method="makeInstance" factory-component="innerCompFactory">
-       			<constructor-arg value="\u0000" type="char"/>
+       			<constructor-arg value="a" type="char"/>
 			</component>
 		</constructor-arg>
 	</component>
@@ -119,7 +151,7 @@
 	<component id="compInnerWrapperedCharacter" factory-method="makeInstance" factory-component="compFactory">
 		<constructor-arg>
 			<component factory-method="makeInstance" factory-component="innerCompFactory">
-       			<constructor-arg value="\uffff" type="java.lang.Character"/>
+       			<constructor-arg value="A" type="java.lang.Character"/>
 			</component>
 		</constructor-arg>
 	</component>

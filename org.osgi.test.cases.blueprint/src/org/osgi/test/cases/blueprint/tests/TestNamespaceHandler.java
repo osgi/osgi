@@ -70,7 +70,7 @@ public class TestNamespaceHandler extends DefaultTestBundleControl {
         // and this tests the inner component metadata
         startEvents.addValidator(new PropertyMetadataValidator("checker3",
             new TestProperty(new TestComponentValue(
-            new LocalComponent(SimpleDateFormat.class,
+            new LocalComponent(SimpleDateFormat.class, null,
                 new TestParameter[] { new TestParameter("yyyy-MM-dd HH:mm", 0) },
                 new TestProperty[] { new TestProperty("false", "lenient")})),
             "format")));

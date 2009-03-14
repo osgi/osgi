@@ -102,6 +102,9 @@ public class ConstructorMetadataValidator extends MetadataValidator {
         super.validate(testContext);
         // validation is done by the metadata wrapper.
         moduleMetadata.validateConstructorMetadata(componentId, parms);
+        
+        
+        
     }
 }
 
