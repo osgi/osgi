@@ -46,7 +46,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * @version $Revision$
  */
 public class TestPrimitiveInjection extends DefaultTestBundleControl {
-    private void addConstructorValidator(MetadataEventSet startEvents, String id, Object value, Class type) {
+    private void addConstructorValueValidator(MetadataEventSet startEvents, String id, Object value, Class type) {
         startEvents.validateComponentArgument(id, "arg1", value, type);
     }
 
@@ -56,7 +56,7 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
         }));
     }
 
-    private void addConstructorValidator(MetadataEventSet startEvents, String id, Class targetType) {
+    private void addConstructorNullValidator(MetadataEventSet startEvents, String id, Class targetType) {
         startEvents.validateComponentArgument(id, "arg1", null, targetType);
         startEvents.addValidator(new ConstructorMetadataValidator(id, new TestParameter[] {
             new TestParameter(new TestNullValue(), targetType)
@@ -143,164 +143,164 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
 
 
         // Primitive boolean tests
-        addConstructorValidator(startEvents, "compPrimBooleanYes", Boolean.TRUE, Boolean.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimBooleanYes", Boolean.TRUE, Boolean.TYPE);
         // type is specified on the constructor arg, nothing on the value element
         addConstructorMetadataValidator(startEvents, "compPrimBooleanYes", "yes", Boolean.TYPE, null);
 
-        addConstructorValidator(startEvents, "compPrimBooleanTrue", Boolean.TRUE, Boolean.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimBooleanTrue", Boolean.TRUE, Boolean.TYPE);
         // type and value specified on the constructor arg.  The type should stick with the constructor
         addConstructorMetadataValidator(startEvents, "compPrimBooleanTrue", "true", Boolean.TYPE, null);
 
-        addConstructorValidator(startEvents, "compPrimBooleanOn", Boolean.TRUE, Boolean.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimBooleanOn", Boolean.TRUE, Boolean.TYPE);
         // type specified on both the constructor argument and the value.
         addConstructorMetadataValidator(startEvents, "compPrimBooleanOn", "on", Boolean.TYPE, Boolean.TYPE);
         // this one is slightly different.  The type is on the <value> tag.
-        addConstructorValidator(startEvents, "compPrimBooleanNo", Boolean.FALSE, Boolean.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimBooleanNo", Boolean.FALSE, Boolean.TYPE);
         // type specified on the <value> element, not on the constructor arg
         addConstructorMetadataValidator(startEvents, "compPrimBooleanNo", "no", null, Boolean.TYPE);
 
-        addConstructorValidator(startEvents, "compPrimBooleanFalse", Boolean.FALSE, Boolean.TYPE);
-        addConstructorValidator(startEvents, "compPrimBooleanOff", Boolean.FALSE, Boolean.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimBooleanFalse", Boolean.FALSE, Boolean.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimBooleanOff", Boolean.FALSE, Boolean.TYPE);
 
         // Wrappered boolean tests
-        addConstructorValidator(startEvents, "compWrapperedBooleanYes", Boolean.TRUE, Boolean.class);
-        addConstructorValidator(startEvents, "compWrapperedBooleanTrue", Boolean.TRUE, Boolean.class);
-        addConstructorValidator(startEvents, "compWrapperedBooleanOn", Boolean.TRUE, Boolean.class);
-        addConstructorValidator(startEvents, "compWrapperedBooleanNo", Boolean.FALSE, Boolean.class);
-        addConstructorValidator(startEvents, "compWrapperedBooleanFalse", Boolean.FALSE, Boolean.class);
-        addConstructorValidator(startEvents, "compWrapperedBooleanOff", Boolean.FALSE, Boolean.class);
-        addConstructorValidator(startEvents, "compWrapperedBooleanNull", Boolean.class);
+        addConstructorValueValidator(startEvents, "compWrapperedBooleanYes", Boolean.TRUE, Boolean.class);
+        addConstructorValueValidator(startEvents, "compWrapperedBooleanTrue", Boolean.TRUE, Boolean.class);
+        addConstructorValueValidator(startEvents, "compWrapperedBooleanOn", Boolean.TRUE, Boolean.class);
+        addConstructorValueValidator(startEvents, "compWrapperedBooleanNo", Boolean.FALSE, Boolean.class);
+        addConstructorValueValidator(startEvents, "compWrapperedBooleanFalse", Boolean.FALSE, Boolean.class);
+        addConstructorValueValidator(startEvents, "compWrapperedBooleanOff", Boolean.FALSE, Boolean.class);
+        addConstructorNullValidator(startEvents, "compWrapperedBooleanNull", Boolean.class);
 
         // Primitive byte tests
-        addConstructorValidator(startEvents, "compPrimByteZero", new Byte((byte)0), Byte.TYPE);
-        addConstructorValidator(startEvents, "compPrimByteMax", new Byte(Byte.MAX_VALUE), Byte.TYPE);
-        addConstructorValidator(startEvents, "compPrimByteMin", new Byte(Byte.MIN_VALUE), Byte.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimByteZero", new Byte((byte)0), Byte.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimByteMax", new Byte(Byte.MAX_VALUE), Byte.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimByteMin", new Byte(Byte.MIN_VALUE), Byte.TYPE);
 
         // Wrappered byte tests
-        addConstructorValidator(startEvents, "compWrapperedByteZero", new Byte((byte)0), Byte.class);
-        addConstructorValidator(startEvents, "compWrapperedByteMax", new Byte(Byte.MAX_VALUE), Byte.class);
-        addConstructorValidator(startEvents, "compWrapperedByteMin", new Byte(Byte.MIN_VALUE), Byte.class);
-        addConstructorValidator(startEvents, "compWrapperedByteNull", Byte.class);
+        addConstructorValueValidator(startEvents, "compWrapperedByteZero", new Byte((byte)0), Byte.class);
+        addConstructorValueValidator(startEvents, "compWrapperedByteMax", new Byte(Byte.MAX_VALUE), Byte.class);
+        addConstructorValueValidator(startEvents, "compWrapperedByteMin", new Byte(Byte.MIN_VALUE), Byte.class);
+        addConstructorNullValidator(startEvents, "compWrapperedByteNull", Byte.class);
 
         // Primitive short tests
-        addConstructorValidator(startEvents, "compPrimShortZero", new Short((short)0), Short.TYPE);
-        addConstructorValidator(startEvents, "compPrimShortMax", new Short(Short.MAX_VALUE), Short.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimShortZero", new Short((short)0), Short.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimShortMax", new Short(Short.MAX_VALUE), Short.TYPE);
 
         // Wrappered short tests
-        addConstructorValidator(startEvents, "compWrapperedShortZero", new Short((short)0), Short.class);
-        addConstructorValidator(startEvents, "compWrapperedShortMax", new Short(Short.MAX_VALUE), Short.class);
-        addConstructorValidator(startEvents, "compWrapperedShortNull", Short.class);
+        addConstructorValueValidator(startEvents, "compWrapperedShortZero", new Short((short)0), Short.class);
+        addConstructorValueValidator(startEvents, "compWrapperedShortMax", new Short(Short.MAX_VALUE), Short.class);
+        addConstructorNullValidator(startEvents, "compWrapperedShortNull", Short.class);
 
         // Primitive integer tests
-        addConstructorValidator(startEvents, "compPrimIntegerZero", new Integer(0), Integer.TYPE);
-        addConstructorValidator(startEvents, "compPrimIntegerMax", new Integer(Integer.MAX_VALUE), Integer.TYPE);
-        addConstructorValidator(startEvents, "compPrimIntegerMin", new Integer(Integer.MIN_VALUE), Integer.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimIntegerZero", new Integer(0), Integer.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimIntegerMax", new Integer(Integer.MAX_VALUE), Integer.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimIntegerMin", new Integer(Integer.MIN_VALUE), Integer.TYPE);
 
         // Wrappered integer tests
-        addConstructorValidator(startEvents, "compWrapperedIntegerZero", new Integer(0), Integer.class);
-        addConstructorValidator(startEvents, "compWrapperedIntegerMax", new Integer(Integer.MAX_VALUE), Integer.class);
-        addConstructorValidator(startEvents, "compWrapperedIntegerMin", new Integer(Integer.MIN_VALUE), Integer.class);
-        addConstructorValidator(startEvents, "compWrapperedIntegerNull", Integer.class);
+        addConstructorValueValidator(startEvents, "compWrapperedIntegerZero", new Integer(0), Integer.class);
+        addConstructorValueValidator(startEvents, "compWrapperedIntegerMax", new Integer(Integer.MAX_VALUE), Integer.class);
+        addConstructorValueValidator(startEvents, "compWrapperedIntegerMin", new Integer(Integer.MIN_VALUE), Integer.class);
+        addConstructorNullValidator(startEvents, "compWrapperedIntegerNull", Integer.class);
 
         // Primitive long tests
-        addConstructorValidator(startEvents, "compPrimLongZero", new Long(0), Long.TYPE);
-        addConstructorValidator(startEvents, "compPrimLongMax", new Long(Long.MAX_VALUE), Long.TYPE);
-        addConstructorValidator(startEvents, "compPrimLongMin", new Long(Long.MIN_VALUE), Long.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimLongZero", new Long(0), Long.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimLongMax", new Long(Long.MAX_VALUE), Long.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimLongMin", new Long(Long.MIN_VALUE), Long.TYPE);
 
         // Wrappered long tests
-        addConstructorValidator(startEvents, "compWrapperedLongZero", new Long(0), Long.class);
-        addConstructorValidator(startEvents, "compWrapperedLongMax", new Long(Long.MAX_VALUE), Long.class);
-        addConstructorValidator(startEvents, "compWrapperedLongMin", new Long(Long.MIN_VALUE), Long.class);
-        addConstructorValidator(startEvents, "compWrapperedLongNull", Long.class);
+        addConstructorValueValidator(startEvents, "compWrapperedLongZero", new Long(0), Long.class);
+        addConstructorValueValidator(startEvents, "compWrapperedLongMax", new Long(Long.MAX_VALUE), Long.class);
+        addConstructorValueValidator(startEvents, "compWrapperedLongMin", new Long(Long.MIN_VALUE), Long.class);
+        addConstructorNullValidator(startEvents, "compWrapperedLongNull", Long.class);
 
         // Primitive character tests.  We validate the metadata because of the special processing that
         // character values receive
-        addConstructorValidator(startEvents, "compPrimCharacterZero", new Character('\0'), Character.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimCharacterZero", new Character('\0'), Character.TYPE);
         // type is specified on the constructor arg, nothing on the value element
         addConstructorMetadataValidator(startEvents, "compPrimCharacterZero", "\\u0000", Character.TYPE, null);
-        addConstructorValidator(startEvents, "compPrimCharacterMax", new Character(Character.MAX_VALUE), Character.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimCharacterMax", new Character(Character.MAX_VALUE), Character.TYPE);
         // type is specified on the constructor arg, nothing on the value element
         addConstructorMetadataValidator(startEvents, "compPrimCharacterMax", "\\uffff", Character.TYPE, null);
 
-        addConstructorValidator(startEvents, "compPrimCharacterA", new Character('A'), Character.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimCharacterA", new Character('A'), Character.TYPE);
 
         // Wrappered character tests
-        addConstructorValidator(startEvents, "compWrapperedCharacterZero", new Character('\0'), Character.class);
-        addConstructorValidator(startEvents, "compWrapperedCharacterMax", new Character(Character.MAX_VALUE), Character.class);
-        addConstructorValidator(startEvents, "compWrapperedCharacterA", new Character('A'), Character.class);
-        addConstructorValidator(startEvents, "compWrapperedCharacterNull", Character.class);
+        addConstructorValueValidator(startEvents, "compWrapperedCharacterZero", new Character('\0'), Character.class);
+        addConstructorValueValidator(startEvents, "compWrapperedCharacterMax", new Character(Character.MAX_VALUE), Character.class);
+        addConstructorValueValidator(startEvents, "compWrapperedCharacterA", new Character('A'), Character.class);
+        addConstructorNullValidator(startEvents, "compWrapperedCharacterNull", Character.class);
 
         // Primitive double tests
-        addConstructorValidator(startEvents, "compPrimDoubleZero", new Double(0), Double.TYPE);
-        addConstructorValidator(startEvents, "compPrimDoubleMinusZero", new Double("-0.0"), Double.TYPE);
-        addConstructorValidator(startEvents, "compPrimDoubleMax", new Double(Double.MAX_VALUE), Double.TYPE);
-        addConstructorValidator(startEvents, "compPrimDoubleMin", new Double(Double.MIN_VALUE), Double.TYPE);
-        addConstructorValidator(startEvents, "compPrimDoubleDSuffix", new Double(1.1), Double.TYPE);
-        addConstructorValidator(startEvents, "compPrimDoubledSuffix", new Double(1.1), Double.TYPE);
-        addConstructorValidator(startEvents, "compPrimDoubleFSuffix", new Double(1.1), Double.TYPE);
-        addConstructorValidator(startEvents, "compPrimDoublefSuffix", new Double(1.1e1), Double.TYPE);
-        addConstructorValidator(startEvents, "compPrimDoubleNaN", new Double(Double.NaN), Double.TYPE);
-        addConstructorValidator(startEvents, "compPrimDoubleInfinity", new Double(Double.POSITIVE_INFINITY), Double.TYPE);
-        addConstructorValidator(startEvents, "compPrimDoubleNegInfinity", new Double(Double.NEGATIVE_INFINITY), Double.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimDoubleZero", new Double(0), Double.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimDoubleMinusZero", new Double("-0.0"), Double.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimDoubleMax", new Double(Double.MAX_VALUE), Double.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimDoubleMin", new Double(Double.MIN_VALUE), Double.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimDoubleDSuffix", new Double(1.1), Double.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimDoubledSuffix", new Double(1.1), Double.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimDoubleFSuffix", new Double(1.1), Double.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimDoublefSuffix", new Double(1.1e1), Double.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimDoubleNaN", new Double(Double.NaN), Double.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimDoubleInfinity", new Double(Double.POSITIVE_INFINITY), Double.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimDoubleNegInfinity", new Double(Double.NEGATIVE_INFINITY), Double.TYPE);
 
         // Wrappered double tests
-        addConstructorValidator(startEvents, "compWrapperedDoubleZero", new Double(0), Double.class);
-        addConstructorValidator(startEvents, "compWrapperedDoubleMinusZero", new Double("-0.0"), Double.class);
-        addConstructorValidator(startEvents, "compWrapperedDoubleMax", new Double(Double.MAX_VALUE), Double.class);
-        addConstructorValidator(startEvents, "compWrapperedDoubleMin", new Double(Double.MIN_VALUE), Double.class);
-        addConstructorValidator(startEvents, "compWrapperedDoubleDSuffix", new Double(1.1), Double.class);
-        addConstructorValidator(startEvents, "compWrapperedDoubledSuffix", new Double(1.1), Double.class);
-        addConstructorValidator(startEvents, "compWrapperedDoubleFSuffix", new Double(1.1), Double.class);
-        addConstructorValidator(startEvents, "compWrapperedDoublefSuffix", new Double(1.1e1), Double.class);
-        addConstructorValidator(startEvents, "compWrapperedDoubleNaN", new Double(Double.NaN), Double.class);
-        addConstructorValidator(startEvents, "compWrapperedDoubleInfinity", new Double(Double.POSITIVE_INFINITY), Double.class);
-        addConstructorValidator(startEvents, "compWrapperedDoubleNegInfinity", new Double(Double.NEGATIVE_INFINITY), Double.class);
-        addConstructorValidator(startEvents, "compWrapperedDoubleNull", Double.class);
+        addConstructorValueValidator(startEvents, "compWrapperedDoubleZero", new Double(0), Double.class);
+        addConstructorValueValidator(startEvents, "compWrapperedDoubleMinusZero", new Double("-0.0"), Double.class);
+        addConstructorValueValidator(startEvents, "compWrapperedDoubleMax", new Double(Double.MAX_VALUE), Double.class);
+        addConstructorValueValidator(startEvents, "compWrapperedDoubleMin", new Double(Double.MIN_VALUE), Double.class);
+        addConstructorValueValidator(startEvents, "compWrapperedDoubleDSuffix", new Double(1.1), Double.class);
+        addConstructorValueValidator(startEvents, "compWrapperedDoubledSuffix", new Double(1.1), Double.class);
+        addConstructorValueValidator(startEvents, "compWrapperedDoubleFSuffix", new Double(1.1), Double.class);
+        addConstructorValueValidator(startEvents, "compWrapperedDoublefSuffix", new Double(1.1e1), Double.class);
+        addConstructorValueValidator(startEvents, "compWrapperedDoubleNaN", new Double(Double.NaN), Double.class);
+        addConstructorValueValidator(startEvents, "compWrapperedDoubleInfinity", new Double(Double.POSITIVE_INFINITY), Double.class);
+        addConstructorValueValidator(startEvents, "compWrapperedDoubleNegInfinity", new Double(Double.NEGATIVE_INFINITY), Double.class);
+        addConstructorNullValidator(startEvents, "compWrapperedDoubleNull", Double.class);
 
         // Primitive float tests
-        addConstructorValidator(startEvents, "compPrimFloatZero", new Float(0), Float.TYPE);
-        addConstructorValidator(startEvents, "compPrimFloatMinusZero", new Float("-0.0"), Float.TYPE);
-        addConstructorValidator(startEvents, "compPrimFloatMax", new Float(Float.MAX_VALUE), Float.TYPE);
-        addConstructorValidator(startEvents, "compPrimFloatMin", new Float(Float.MIN_VALUE), Float.TYPE);
-        addConstructorValidator(startEvents, "compPrimFloatDSuffix", new Float(1.1), Float.TYPE);
-        addConstructorValidator(startEvents, "compPrimFloatdSuffix", new Float(1.1), Float.TYPE);
-        addConstructorValidator(startEvents, "compPrimFloatFSuffix", new Float(1.1), Float.TYPE);
-        addConstructorValidator(startEvents, "compPrimFloatfSuffix", new Float(1.1e1), Float.TYPE);
-        addConstructorValidator(startEvents, "compPrimFloatNaN", new Float(Float.NaN), Float.TYPE);
-        addConstructorValidator(startEvents, "compPrimFloatInfinity", new Float(Float.POSITIVE_INFINITY), Float.TYPE);
-        addConstructorValidator(startEvents, "compPrimFloatNegInfinity", new Float(Float.NEGATIVE_INFINITY), Float.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimFloatZero", new Float(0), Float.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimFloatMinusZero", new Float("-0.0"), Float.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimFloatMax", new Float(Float.MAX_VALUE), Float.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimFloatMin", new Float(Float.MIN_VALUE), Float.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimFloatDSuffix", new Float(1.1), Float.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimFloatdSuffix", new Float(1.1), Float.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimFloatFSuffix", new Float(1.1), Float.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimFloatfSuffix", new Float(1.1e1), Float.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimFloatNaN", new Float(Float.NaN), Float.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimFloatInfinity", new Float(Float.POSITIVE_INFINITY), Float.TYPE);
+        addConstructorValueValidator(startEvents, "compPrimFloatNegInfinity", new Float(Float.NEGATIVE_INFINITY), Float.TYPE);
 
         // Wrappered float tests
-        addConstructorValidator(startEvents, "compWrapperedFloatZero", new Float(0), Float.class);
-        addConstructorValidator(startEvents, "compWrapperedFloatMinusZero", new Float("-0.0"), Float.class);
-        addConstructorValidator(startEvents, "compWrapperedFloatMax", new Float(Float.MAX_VALUE), Float.class);
-        addConstructorValidator(startEvents, "compWrapperedFloatMin", new Float(Float.MIN_VALUE), Float.class);
-        addConstructorValidator(startEvents, "compWrapperedFloatDSuffix", new Float(1.1), Float.class);
-        addConstructorValidator(startEvents, "compWrapperedFloatdSuffix", new Float(1.1), Float.class);
-        addConstructorValidator(startEvents, "compWrapperedFloatFSuffix", new Float(1.1), Float.class);
-        addConstructorValidator(startEvents, "compWrapperedFloatfSuffix", new Float(1.1e1), Float.class);
-        addConstructorValidator(startEvents, "compWrapperedFloatNaN", new Float(Float.NaN), Float.class);
-        addConstructorValidator(startEvents, "compWrapperedFloatInfinity", new Float(Float.POSITIVE_INFINITY), Float.class);
-        addConstructorValidator(startEvents, "compWrapperedFloatNegInfinity", new Float(Float.NEGATIVE_INFINITY), Float.class);
-        addConstructorValidator(startEvents, "compWrapperedFloatNull", Float.class);
+        addConstructorValueValidator(startEvents, "compWrapperedFloatZero", new Float(0), Float.class);
+        addConstructorValueValidator(startEvents, "compWrapperedFloatMinusZero", new Float("-0.0"), Float.class);
+        addConstructorValueValidator(startEvents, "compWrapperedFloatMax", new Float(Float.MAX_VALUE), Float.class);
+        addConstructorValueValidator(startEvents, "compWrapperedFloatMin", new Float(Float.MIN_VALUE), Float.class);
+        addConstructorValueValidator(startEvents, "compWrapperedFloatDSuffix", new Float(1.1), Float.class);
+        addConstructorValueValidator(startEvents, "compWrapperedFloatdSuffix", new Float(1.1), Float.class);
+        addConstructorValueValidator(startEvents, "compWrapperedFloatFSuffix", new Float(1.1), Float.class);
+        addConstructorValueValidator(startEvents, "compWrapperedFloatfSuffix", new Float(1.1e1), Float.class);
+        addConstructorValueValidator(startEvents, "compWrapperedFloatNaN", new Float(Float.NaN), Float.class);
+        addConstructorValueValidator(startEvents, "compWrapperedFloatInfinity", new Float(Float.POSITIVE_INFINITY), Float.class);
+        addConstructorValueValidator(startEvents, "compWrapperedFloatNegInfinity", new Float(Float.NEGATIVE_INFINITY), Float.class);
+        addConstructorNullValidator(startEvents, "compWrapperedFloatNull", Float.class);
 
         // now the inferred type tests
-        addConstructorValidator(startEvents, "constructorPrimitiveBoolean", Boolean.TRUE, Boolean.TYPE);
-        addConstructorValidator(startEvents, "constructorWrapperedBoolean", Boolean.FALSE, Boolean.class);
-        addConstructorValidator(startEvents, "constructorPrimitiveByte", new Byte((byte)123), Byte.TYPE);
-        addConstructorValidator(startEvents, "constructorWrapperedByte", new Byte((byte)100), Byte.class);
-        addConstructorValidator(startEvents, "constructorPrimitiveDouble", new Double(1.1), Double.TYPE);
-        addConstructorValidator(startEvents, "constructorWrapperedDouble", new Double(1.2), Double.class);
-        addConstructorValidator(startEvents, "constructorPrimitiveFloat", new Float(1.3), Float.TYPE);
-        addConstructorValidator(startEvents, "constructorWrapperedFloat", new Float(1.4), Float.class);
-        addConstructorValidator(startEvents, "constructorPrimitiveInteger", new Integer(12), Integer.TYPE);
-        addConstructorValidator(startEvents, "constructorWrapperedInteger", new Integer(13), Integer.class);
-        addConstructorValidator(startEvents, "constructorPrimitiveCharacter", new Character('a'), Character.TYPE);
-        addConstructorValidator(startEvents, "constructorWrapperedCharacter", new Character('b'), Character.class);
-        addConstructorValidator(startEvents, "constructorPrimitiveShort", new Short((short)15), Short.TYPE);
-        addConstructorValidator(startEvents, "constructorWrapperedShort", new Short((short)16), Short.class);
-        addConstructorValidator(startEvents, "constructorPrimitiveLong", new Long((long)17), Long.TYPE);
-        addConstructorValidator(startEvents, "constructorWrapperedLong", new Long((long)18), Long.class);
+        addConstructorValueValidator(startEvents, "constructorPrimitiveBoolean", Boolean.TRUE, Boolean.TYPE);
+        addConstructorValueValidator(startEvents, "constructorWrapperedBoolean", Boolean.FALSE, Boolean.class);
+        addConstructorValueValidator(startEvents, "constructorPrimitiveByte", new Byte((byte)123), Byte.TYPE);
+        addConstructorValueValidator(startEvents, "constructorWrapperedByte", new Byte((byte)100), Byte.class);
+        addConstructorValueValidator(startEvents, "constructorPrimitiveDouble", new Double(1.1), Double.TYPE);
+        addConstructorValueValidator(startEvents, "constructorWrapperedDouble", new Double(1.2), Double.class);
+        addConstructorValueValidator(startEvents, "constructorPrimitiveFloat", new Float(1.3), Float.TYPE);
+        addConstructorValueValidator(startEvents, "constructorWrapperedFloat", new Float(1.4), Float.class);
+        addConstructorValueValidator(startEvents, "constructorPrimitiveInteger", new Integer(12), Integer.TYPE);
+        addConstructorValueValidator(startEvents, "constructorWrapperedInteger", new Integer(13), Integer.class);
+        addConstructorValueValidator(startEvents, "constructorPrimitiveCharacter", new Character('a'), Character.TYPE);
+        addConstructorValueValidator(startEvents, "constructorWrapperedCharacter", new Character('b'), Character.class);
+        addConstructorValueValidator(startEvents, "constructorPrimitiveShort", new Short((short)15), Short.TYPE);
+        addConstructorValueValidator(startEvents, "constructorWrapperedShort", new Short((short)16), Short.class);
+        addConstructorValueValidator(startEvents, "constructorPrimitiveLong", new Long((long)17), Long.TYPE);
+        addConstructorValueValidator(startEvents, "constructorWrapperedLong", new Long((long)18), Long.class);
     }
 
 
@@ -341,21 +341,28 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
         addConstructorTests(controller);
         controller.run();
     }
-
+	
+	/**
+	 * Property Validator
+	 * @param startEvents
+	 * @param compName
+	 * @param propertyName
+	 * @param source
+	 * @param propertyValue
+	 * @param type             property object's real type: primitive or wrapper
+	 * @param valueType        <value type="">
+	 */
     private void addPropertyValidator(MetadataEventSet startEvents, String compName, String propertyName, String source, Object propertyValue, Class type, Class valueType) {
-        // a "" string value
         startEvents.validateComponentProperty(compName, propertyName, propertyValue, type);
         startEvents.addValidator(new PropertyMetadataValidator(compName, new StringProperty(propertyName, valueType, source)));
     }
 
     private void addPropertyValidator(MetadataEventSet startEvents, String compName, String propertyName, String source, Object propertyValue, Class type) {
-        // a "" string value
         startEvents.validateComponentProperty(compName, propertyName, propertyValue, type);
         startEvents.addValidator(new PropertyMetadataValidator(compName, new StringProperty(propertyName, null, source)));
     }
 
-    private void addPropertyValidator(MetadataEventSet startEvents, String compName, String propertyName, Class type) {
-        // a "" string value
+    private void addPropertyNullValidator(MetadataEventSet startEvents, String compName, String propertyName, Class type) {
         startEvents.validateComponentProperty(compName, propertyName, null, type);
         startEvents.addValidator(new PropertyMetadataValidator(compName, new TestProperty(new TestNullValue(), propertyName)));
     }
@@ -372,14 +379,14 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
 
         // a null value
         // this requires a little special handling
-        addPropertyValidator(startEvents, "compNullString", "string", String.class);
+        addPropertyNullValidator(startEvents, "compNullString", "string", String.class);
 
         // Primitive boolean tests
+        addPropertyValidator(startEvents, "compPrimBooleanTrue", "primBoolean", "true", Boolean.TRUE, Boolean.TYPE, Boolean.TYPE);  // type specified
         addPropertyValidator(startEvents, "compPrimBooleanYes", "primBoolean", "yes", Boolean.TRUE, Boolean.TYPE);
-        addPropertyValidator(startEvents, "compPrimBooleanTrue", "primBoolean", "true", Boolean.TRUE, Boolean.TYPE, Boolean.TYPE);
         addPropertyValidator(startEvents, "compPrimBooleanOn", "primBoolean", "on", Boolean.TRUE, Boolean.TYPE);
-        addPropertyValidator(startEvents, "compPrimBooleanNo", "primBoolean", "no", Boolean.FALSE, Boolean.TYPE);
         addPropertyValidator(startEvents, "compPrimBooleanFalse", "primBoolean", "false", Boolean.FALSE, Boolean.TYPE);
+        addPropertyValidator(startEvents, "compPrimBooleanNo", "primBoolean", "no", Boolean.FALSE, Boolean.TYPE);
         addPropertyValidator(startEvents, "compPrimBooleanOff", "primBoolean", "off", Boolean.FALSE, Boolean.TYPE);
 
         // Wrappered boolean tests
@@ -389,7 +396,7 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
         addPropertyValidator(startEvents, "compWrapperedBooleanNo", "boolean", "no", Boolean.FALSE, Boolean.class);
         addPropertyValidator(startEvents, "compWrapperedBooleanFalse", "boolean", "false", Boolean.FALSE, Boolean.class);
         addPropertyValidator(startEvents, "compWrapperedBooleanOff", "boolean", "off", Boolean.FALSE, Boolean.class);
-        addPropertyValidator(startEvents, "compWrapperedBooleanNull", "boolean", Boolean.class);
+        addPropertyNullValidator(startEvents, "compWrapperedBooleanNull", "boolean", Boolean.class);
 
         // Primitive byte tests
         addPropertyValidator(startEvents, "compPrimByteZero", "primByte", "0", new Byte((byte)0), Byte.TYPE);
@@ -400,7 +407,7 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
         addPropertyValidator(startEvents, "compWrapperedByteZero", "byte", "0", new Byte((byte)0), Byte.class);
         addPropertyValidator(startEvents, "compWrapperedByteMax", "byte", "127", new Byte(Byte.MAX_VALUE), Byte.class);
         addPropertyValidator(startEvents, "compWrapperedByteMin", "byte", "-128", new Byte(Byte.MIN_VALUE), Byte.class);
-        addPropertyValidator(startEvents, "compWrapperedByteNull", "byte", Byte.class);
+        addPropertyNullValidator(startEvents, "compWrapperedByteNull", "byte", Byte.class);
 
         // Primitive short tests
         addPropertyValidator(startEvents, "compPrimShortZero", "primShort", "0", new Short((short)0), Short.TYPE);
@@ -411,7 +418,7 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
         addPropertyValidator(startEvents, "compWrapperedShortZero", "short", "0", new Short((short)0), Short.class);
         addPropertyValidator(startEvents, "compWrapperedShortMax", "short", "32767", new Short(Short.MAX_VALUE), Short.class);
         addPropertyValidator(startEvents, "compWrapperedShortMin", "short", "-32768", new Short(Short.MIN_VALUE), Short.class);
-        addPropertyValidator(startEvents, "compWrapperedShortNull", "short", Short.class);
+        addPropertyNullValidator(startEvents, "compWrapperedShortNull", "short", Short.class);
 
         // Primitive integer tests
         addPropertyValidator(startEvents, "compPrimIntegerZero", "primInteger", "0", new Integer(0), Integer.TYPE);
@@ -422,7 +429,7 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
         addPropertyValidator(startEvents, "compWrapperedIntegerZero", "integer", "0", new Integer(0), Integer.class);
         addPropertyValidator(startEvents, "compWrapperedIntegerMax", "integer", "2147483647", new Integer(Integer.MAX_VALUE), Integer.class);
         addPropertyValidator(startEvents, "compWrapperedIntegerMin", "integer", "-2147483648", new Integer(Integer.MIN_VALUE), Integer.class);
-        addPropertyValidator(startEvents, "compWrapperedIntegerNull", "integer", Integer.class);
+        addPropertyNullValidator(startEvents, "compWrapperedIntegerNull", "integer", Integer.class);
 
         // Primitive long tests
         addPropertyValidator(startEvents, "compPrimLongZero", "primLong", "0", new Long(0), Long.TYPE);
@@ -433,7 +440,7 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
         addPropertyValidator(startEvents, "compWrapperedLongZero", "long", "0", new Long(0), Long.class);
         addPropertyValidator(startEvents, "compWrapperedLongMax", "long", "9223372036854775807", new Long(Long.MAX_VALUE), Long.class);
         addPropertyValidator(startEvents, "compWrapperedLongMin", "long", "-9223372036854775808", new Long(Long.MIN_VALUE), Long.class);
-        addPropertyValidator(startEvents, "compWrapperedLongNull", "long", Long.class);
+        addPropertyNullValidator(startEvents, "compWrapperedLongNull", "long", Long.class);
 
         // Primitive character tests
         addPropertyValidator(startEvents, "compPrimCharacterZero", "primCharacter", "\\u0000", new Character('\0'), Character.TYPE);
@@ -444,7 +451,7 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
         addPropertyValidator(startEvents, "compWrapperedCharacterZero", "character", "\\u0000", new Character('\0'), Character.class);
         addPropertyValidator(startEvents, "compWrapperedCharacterMax", "character", "\\uffff", new Character(Character.MAX_VALUE), Character.class);
         addPropertyValidator(startEvents, "compWrapperedCharacterA", "character", "A", new Character('A'), Character.class);
-        addPropertyValidator(startEvents, "compWrapperedCharacterNull", "character", Character.class);
+        addPropertyNullValidator(startEvents, "compWrapperedCharacterNull", "character", Character.class);
 
         // Primitive double tests
         addPropertyValidator(startEvents, "compPrimDoubleZero", "primDouble", "0", new Double(0), Double.TYPE);
@@ -471,7 +478,7 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
         addPropertyValidator(startEvents, "compWrapperedDoubleNaN", "double", "NaN", new Double(Double.NaN), Double.class);
         addPropertyValidator(startEvents, "compWrapperedDoubleInfinity", "double", "Infinity", new Double(Double.POSITIVE_INFINITY), Double.class);
         addPropertyValidator(startEvents, "compWrapperedDoubleNegInfinity", "double", "-Infinity", new Double(Double.NEGATIVE_INFINITY), Double.class);
-        addPropertyValidator(startEvents, "compWrapperedDoubleNull", "double", Double.class);
+        addPropertyNullValidator(startEvents, "compWrapperedDoubleNull", "double", Double.class);
 
         // Primitive float tests
         addPropertyValidator(startEvents, "compPrimFloatZero", "primFloat", "0", new Float(0), Float.TYPE);
@@ -498,7 +505,7 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
         addPropertyValidator(startEvents, "compWrapperedFloatNaN", "float", "NaN", new Float(Float.NaN), Float.class);
         addPropertyValidator(startEvents, "compWrapperedFloatInfinity", "float", "Infinity", new Float(Float.POSITIVE_INFINITY), Float.class);
         addPropertyValidator(startEvents, "compWrapperedFloatNegInfinity", "float", "-Infinity", new Float(Float.NEGATIVE_INFINITY), Float.class);
-        addPropertyValidator(startEvents, "compWrapperedFloatNull", "float", Float.class);
+        addPropertyNullValidator(startEvents, "compWrapperedFloatNull", "float", Float.class);
     }
 
     /*

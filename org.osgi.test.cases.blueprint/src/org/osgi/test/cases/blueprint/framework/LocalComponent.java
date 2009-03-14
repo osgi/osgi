@@ -64,32 +64,44 @@ public class LocalComponent extends Assert implements TestComponentMetadata {
     // the scope attribute
     protected String scope;
     // a factory component (optional)
-    protected TestValue factoryComponent;
+    protected TestValue factoryTestComponentValue;
     // the name of the factory method to invoke.
     protected String factoryMethod;
     // the factory injection metadata
 
     public LocalComponent(Class classType) {
-        this(null, classType, null, null, null, null, null, false, LocalComponentMetadata.SCOPE_SINGLETON);
+        this(null, classType, null, null, null, null, null, null, false, LocalComponentMetadata.SCOPE_SINGLETON);
     }
 
     public LocalComponent(Class classType, TestParameter[] parms, TestProperty[] props) {
-        this(null, classType, null, null, parms, props, null, false, LocalComponentMetadata.SCOPE_SINGLETON);
+        this(null, classType, null, null, null, parms, props, null, false, LocalComponentMetadata.SCOPE_SINGLETON);
     }
 
+    // directly from class
     public LocalComponent(String name, Class classType, TestParameter[] parms, TestProperty[] props) {
-        this(name, classType, null, null, parms, props, null, false, LocalComponentMetadata.SCOPE_SINGLETON);
+        this(name, classType, null, null, null, parms, props, null, false, LocalComponentMetadata.SCOPE_SINGLETON);
     }
-
+    
+    // by instance factory
+    public LocalComponent(String name, String factoryMethodName, TestParameter[] parms, TestProperty[] props) {
+        this(name, null, factoryMethodName, null, null, parms, props, null, false, LocalComponentMetadata.SCOPE_SINGLETON);
+    }
+    
+    // by static factory
+    public LocalComponent(String name, Class classType, String factoryMethodName, TestParameter[] parms, TestProperty[] props) {
+        this(name, classType, factoryMethodName, null, null, parms, props, null, false, LocalComponentMetadata.SCOPE_SINGLETON);
+    }
+    
     public LocalComponent(String name, Class classType, String initMethodName, String destroyMethodName, TestParameter[] parms, TestProperty[] props) {
-        this(name, classType, initMethodName, destroyMethodName, parms, props, null, false, LocalComponentMetadata.SCOPE_SINGLETON);
+        this(name, classType, null, initMethodName, destroyMethodName, parms, props, null, false, LocalComponentMetadata.SCOPE_SINGLETON);
     }
 
-    public LocalComponent(String name, Class classType, String initMethodName, String destroyMethodName, TestParameter[] parms, TestProperty[] props, String[] dependsOn, boolean isLazy, String scope) {
+    public LocalComponent(String name, Class classType, String factoryMethodName, String initMethodName, String destroyMethodName, TestParameter[] parms, TestProperty[] props, String[] dependsOn, boolean isLazy, String scope) {
         this.name = name;
         if (classType != null) {
             this.className = classType.getName();
         }
+        this.factoryMethod = factoryMethodName;
         this.initMethodName = initMethodName;
         this.destroyMethodName = destroyMethodName;
         this.parms = parms;
@@ -102,8 +114,8 @@ public class LocalComponent extends Assert implements TestComponentMetadata {
             this.scope = LocalComponentMetadata.SCOPE_SINGLETON;
         }
         // these generally get set post-construction
-        this.factoryComponent = null;
-        this.factoryMethod = null;
+        this.factoryTestComponentValue = null;
+        
     }
 
     /**
@@ -113,18 +125,10 @@ public class LocalComponent extends Assert implements TestComponentMetadata {
      * @param name   The name of the target factory.
      */
     public void setFactoryComponent(TestValue factory) {
-        factoryComponent = factory;
+        factoryTestComponentValue = factory;
     }
 
 
-    /**
-     * Set the name of the factory method.
-     *
-     * @param name   The factory method name.
-     */
-    public void setFactoryMethod(String name) {
-        this.factoryMethod = name;
-    }
 
 
     /**
@@ -152,38 +156,36 @@ public class LocalComponent extends Assert implements TestComponentMetadata {
         else {
             assertNull("non-null component name for inner component", meta.getName());
         }
-        assertEquals("Component " + meta.getName() + " class name mismatch", className, meta.getClassName());
-        assertEquals("Component " + meta.getName() + " init-method mismatch", initMethodName, meta.getInitMethodName());
-        assertEquals("Component " + meta.getName() + " destroy-method mismatch", initMethodName, meta.getDestroyMethodName());
-        // this is either instantiatied via a factory or directly
-        if (factoryMethod != null) {
-            MethodInjectionMetadata factoryMeta = meta.getFactoryMethodMetadata();
-            assertNotNull("Component " + meta.getName() + " factory metadata expected", factoryMeta);
-            assertEquals("Component " + meta.getName() + " factory method mismatch ", factoryMethod, factoryMeta.getName());
-            // if we have parms to validate, check those now
-            if (parms != null) {
-                moduleMetadata.validateConstructorParameters(meta, factoryMeta.getParameterSpecifications(), parms);
-            }
-            // and a potential factory component
-            if (factoryComponent != null) {
-                Value factory = meta.getFactoryComponent();
-                assertNotNull("Component " + meta.getName() + "factory component definition expected", factory);
-                // validate that component information
-                factoryComponent.validate(moduleMetadata, factory);
-            }
-        }
-        else {
-            // directly created, so we might have parms to validate
-            if (parms != null) {
-                moduleMetadata.validateConstructorParameters(meta, meta.getConstructorInjectionMetadata().getParameterSpecifications(), parms);
-            }
+        
+        // three ways to create a component
+        if (className != null && factoryMethod == null){
+            // directly created from class
+            assertEquals("Component " + meta.getName() + " class name mismatch", className, meta.getClassName());
+            assertNull("Component " + meta.getName() + " factory method is not null", meta.getFactoryMethodMetadata());
+        }else if (className != null && factoryMethod != null){
+            // by static factory
+            moduleMetadata.validateFactoryMetadata(meta, factoryMethod, className, null);
+        }else if (className == null && factoryMethod != null){
+            // by instance factory
+            moduleMetadata.validateFactoryMetadata(meta, factoryMethod, null, factoryTestComponentValue);
+        }else{
+            // error status
+            fail("The test data for Component " + meta.getName() +" instantiated incorrectly, both class type and factory method name are null.");
         }
 
+        // validate the parameters
+        if (parms != null) {
+            moduleMetadata.validateConstructorMetadata(meta, parms);
+        }
+        
         // validate the property definitions
         if (props != null) {
             moduleMetadata.validatePropertyMetadata(meta, props);
         }
-
+        
+        assertEquals("Component " + meta.getName() + " init-method mismatch", initMethodName, meta.getInitMethodName());
+        assertEquals("Component " + meta.getName() + " destroy-method mismatch", initMethodName, meta.getDestroyMethodName());
+      
         if (dependsOn != null) {
             Set test = new HashSet();
             for (int i = 0; i < dependsOn.length; i++) {

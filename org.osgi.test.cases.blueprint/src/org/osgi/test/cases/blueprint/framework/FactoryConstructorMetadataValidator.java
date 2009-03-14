@@ -42,13 +42,13 @@ import junit.framework.Assert;
  * Validate the constructor metadata for a component built using a
  * factory class.
  */
-public class FactoryConstructorValidator extends MetadataValidator {
+public class FactoryConstructorMetadataValidator extends MetadataValidator {
     // the external component id
     protected String componentId;
     // the factory method name
     protected String factoryMethod;
     // optional name of a factory component
-    protected String factoryComponent;
+    protected String staticFactoryClassName;
     // the list of expected parameters
     protected TestParameter[] parms;
 
@@ -62,7 +62,7 @@ public class FactoryConstructorValidator extends MetadataValidator {
      * @param factoryComponent
      *               The factoryComponent reference id.
      */
-    public FactoryConstructorValidator(String componentId, String factoryMethod, String factoryComponent) {
+    public FactoryConstructorMetadataValidator(String componentId, String factoryMethod, String factoryComponent) {
         this(componentId, factoryMethod, factoryComponent, new TestParameter[0]);
     }
 
@@ -79,10 +79,10 @@ public class FactoryConstructorValidator extends MetadataValidator {
      * @param parms  An array of constructor type validators for the expected constructor
      *               argument set.
      */
-    public FactoryConstructorValidator(String componentId, String factoryMethod, String factoryComponent, TestParameter[] parms) {
+    public FactoryConstructorMetadataValidator(String componentId, String factoryMethod, String staticFactoryClassName, TestParameter[] parms) {
         super();
         this.factoryMethod = factoryMethod;
-        this.factoryComponent = factoryComponent;
+        this.staticFactoryClassName = staticFactoryClassName;
         this.componentId = componentId;
         this.parms = parms;
     }
@@ -104,7 +104,8 @@ public class FactoryConstructorValidator extends MetadataValidator {
         // ensure we have everything initialized
         super.validate(testContext);
         // validation is done by the metadata wrapper.
-        moduleMetadata.validateFactoryConstructorMetadata(componentId, factoryMethod, factoryComponent, parms);
+        moduleMetadata.validateFactoryMetadata(componentId, factoryMethod, staticFactoryClassName, null);
+        moduleMetadata.validateConstructorMetadata(componentId, parms);
     }
 }
 

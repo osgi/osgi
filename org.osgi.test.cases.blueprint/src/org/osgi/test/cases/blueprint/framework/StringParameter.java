@@ -81,11 +81,12 @@ public class StringParameter extends TestParameter {
      * on the <constructor-arg> AND a type is specified
      * on the value.
      *
-     * @param targetType The target parameter type.
-     * @param value      The source string value for the conversion.
+     * @param targetType The target parameter type. specified in <constructor-arg type="">
+     * @param source     The source string value for the conversion.
+     * @param valueType  The value type, specified in <value type="">
      */
-    public StringParameter(Class targetType, String value, Class valueType) {
-        super(new TestStringValue(valueType, value), targetType);
+    public StringParameter(Class targetType, String source, Class valueType) {
+        super(new TestStringValue(valueType, source), targetType);
     }
 
 

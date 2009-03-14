@@ -309,16 +309,14 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         startEvents.addAssertion("comp2_id", AssertionService.COMPONENT_CREATED);
 
         LocalComponent comp2_id =
-            new LocalComponent("comp2_id", SimpleStaticFactory.class,
+            new LocalComponent("comp2_id", SimpleStaticFactory.class, "createSimple",
             new TestParameter[] { new StringParameter("comp2_id") } , null);
-        comp2_id.setFactoryMethod("createSimple");
 
         startEvents.addValidator(new ComponentMetadataValidator(comp2_id));
 
         LocalComponent comp1 =
-            new LocalComponent("comp1", SimpleStaticFactory.class,
+            new LocalComponent("comp1", SimpleStaticFactory.class, "createSimple",
             new TestParameter[0], null);
-        comp1.setFactoryMethod("createSimple");
 
         // validate the metadata for all components
         startEvents.addValidator(new ComponentMetadataValidator(comp1));
@@ -342,18 +340,16 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         startEvents.addAssertion("comp2_id", AssertionService.COMPONENT_CREATED);
 
         LocalComponent comp1 =
-            new LocalComponent("comp1", null,
+            new LocalComponent("comp1", "createSimple",
             new TestParameter[0], null);
-        comp1.setFactoryMethod("createSimple");
         comp1.setFactoryComponent(new TestReferenceValue("compFactory"));
 
         // validate the metadata for all components
         startEvents.addValidator(new ComponentMetadataValidator(comp1));
 
         LocalComponent comp2_id =
-            new LocalComponent("comp2_id", null,
+            new LocalComponent("comp2_id", "createSimple",
             new TestParameter[] { new StringParameter("comp2_id") } , null);
-        comp2_id.setFactoryMethod("createSimple");
         comp2_id.setFactoryComponent(new TestReferenceValue("compFactory"));
 
         startEvents.addValidator(new ComponentMetadataValidator(comp2_id));
@@ -381,18 +377,16 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         startEvents.addAssertion("comp2_id", AssertionService.COMPONENT_CREATED);
 
         LocalComponent comp1 =
-            new LocalComponent("comp1", null,
+            new LocalComponent("comp1", "createSimple",
             new TestParameter[0], null);
-        comp1.setFactoryMethod("createSimple");
         comp1.setFactoryComponent(new TestReferenceValue("compFactory"));
 
         // validate the metadata for all components
         startEvents.addValidator(new ComponentMetadataValidator(comp1));
 
         LocalComponent comp2_id =
-            new LocalComponent("comp2_id", null,
+            new LocalComponent("comp2_id", "createSimple",
             new TestParameter[] { new StringParameter("comp2_id") } , null);
-        comp2_id.setFactoryMethod("createSimple");
         comp2_id.setFactoryComponent(new TestReferenceValue("compFactory"));
 
         // make sure this was created with the correct class

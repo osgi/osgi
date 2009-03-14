@@ -351,11 +351,10 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
     }
 
     /**
-     * Validate the constructor metadata for a component against an expected set.
+     * Validate the constructor parameters for a component against an expected set.
      *
-     * @param componentId
-     *                 The target component id.
-     * @param expected The set of expected items.
+     * @param componentId   The target component id.
+     * @param expected      The set of expected items.
      *
      * @exception Exception
      */
@@ -363,7 +362,7 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
         try {
             // now validate the meta data is correct for the parameters
             LocalComponentMetadata meta = (LocalComponentMetadata)targetModuleContext.getComponentMetadata(componentId);
-            validateConstructorMetadata(meta, expected);
+            this.validateConstructorMetadata(meta, expected);
         } catch (Throwable e) {
             // just allowing this to go past will result
             // about which component and property we're doing this on.  So
@@ -375,36 +374,32 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
     }
 
     /**
-     * Validate the constructor metadata for a component against an expected set.
-     *
-     * @param meta     The metadata describing this component.  This might be for an
-     *                 inner component.
-     * @param expected The set of expected items.
-     *
-     * @exception Exception
+     * Validate the constructor parameters for a component against an expected set.
+     * @param meta  The metadata describing this component. This might be for an inner component.
+     * @param expected
+     * @throws Exception
      */
     public void validateConstructorMetadata(LocalComponentMetadata meta, TestParameter[] expected) throws Exception {
         // determine which type of parameter injection needs to be validated.
-        MethodInjectionMetadata factoryMeta = meta.getFactoryMethodMetadata();
-        if (factoryMeta != null) {
-            validateConstructorParameters(meta, factoryMeta.getParameterSpecifications(), expected);
+        MethodInjectionMetadata factoryMethodMeta = meta.getFactoryMethodMetadata();
+        if (factoryMethodMeta != null) {
+            validateParameters(factoryMethodMeta.getParameterSpecifications(), expected);
         }
         else {
-            validateConstructorParameters(meta, meta.getConstructorInjectionMetadata().getParameterSpecifications(), expected);
+            validateParameters(meta.getConstructorInjectionMetadata().getParameterSpecifications(), expected);
         }
     }
-
+    
     /**
-     * Validate the constructor metadata for a component against an expected set.
+     * Validate the parameters for a component against an expected set.
      *
-     * @param meta     The metadata describing this component.  This might be for an
-     *                 inner component.
-     * @param expected The set of expected items.
+     * @param parmSpecs The parameter specs
+     * @param expected  The set of expected items.
      *
      * @exception Exception
      */
-    public void validateConstructorParameters(LocalComponentMetadata meta, List parms, TestParameter[] expected) throws Exception {
-        assertEquals("Mismatch in constructor parameter size", expected.length, parms.size());
+    public void validateParameters(List parmSpecs, TestParameter[] expected) throws Exception {
+        assertEquals("Mismatch in constructor parameter size", expected.length, parmSpecs.size());
         // validate each expected argment against the actual metadata for this constructor.
         for (int i = 0; i < expected.length; i++) {
             try {
@@ -413,7 +408,7 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
                 // TODO:  Bugzilla 1155.  The index values are not getting set and -1
                 // is returned, counter to what the spec says
 //              expected[i].setIndex(i);
-                expected[i].validate(this, (ParameterSpecification)parms.get(i));
+                expected[i].validate(this, (ParameterSpecification)parmSpecs.get(i));
             } catch (Throwable e) {
                 // just allowing this to go past will result
                 // about which component and property we're doing this on.  So
@@ -492,43 +487,55 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
      * Validate the method injection metadata for a factory definition against an expected set.
      *
      * @param componentId
-     *                 The target component id.
+     * @param factoryMethodName
+     * @param staticFactoryClassName
+     * @param factoryTestComponentValue
      * @param expected The set of expected items.
      *
      * @exception Exception
      */
-    public void validateFactoryConstructorMetadata(String componentId, String factoryMethod, String factoryComponent, TestParameter[] expected) throws Exception {
+    public void validateFactoryMetadata(String componentId, String factoryMethodName, String staticFactoryClassName, TestValue factoryTestComponentValue) throws Exception {
         // now validate the meta data is correct for the parameters
         LocalComponentMetadata meta = (LocalComponentMetadata)targetModuleContext.getComponentMetadata(componentId);
-        validateFactoryConstructorMetadata(meta, componentId, factoryMethod, factoryComponent, expected);
+        this.validateFactoryMetadata(meta, factoryMethodName, staticFactoryClassName, factoryTestComponentValue);
     }
 
     /**
-     * Validate the method injection metadata for a factory definition against an expected set.
-     *
-     * @param componentId
-     *                 The target component id.
-     * @param expected The set of expected items.
-     *
-     * @exception Exception
+     * Validate the method injection metadata
+     * 
+     * @param meta  The metadata describing this component. This might be for an inner component.
+     * @param factoryMethodName
+     * @param staticFactoryClassName
+     * @param factoryTestComponentValue
+     * @throws Exception
      */
-    public void validateFactoryConstructorMetadata(LocalComponentMetadata meta, String componentId, String factoryMethod, String factoryComponent, TestParameter[] expected) throws Exception {
-        MethodInjectionMetadata ci = meta.getFactoryMethodMetadata();
+    public void validateFactoryMetadata(LocalComponentMetadata meta, String factoryMethodName, String staticFactoryClassName, TestValue factoryTestComponentValue) throws Exception {
+        MethodInjectionMetadata methodMetadata = meta.getFactoryMethodMetadata();
+        assertNotNull("Component " + meta.getName() + " factory metadata expected", methodMetadata);
+        
+        // validate factory method name
+        assertEquals("Factory method for component " + meta.getName(), factoryMethodName, methodMetadata.getName());
+        
+        // validate class name
+        assertEquals("Component " + meta.getName() + " class name mismatch", staticFactoryClassName, meta.getClassName());
+        
+        // validate for instance factory
+        if (factoryTestComponentValue != null) { //optional validate..
+            Value factoryComponentValue = meta.getFactoryComponent();
+            assertNotNull("Component " + meta.getName() + "factory component definition expected", factoryComponentValue);
+            // for the named factories, we expect this to be a RefernceValue.
+            assertTrue("Factory ReferenceValue expected", factoryComponentValue instanceof ReferenceValue);
+            // validate that component information
+            factoryTestComponentValue.validate(this, factoryComponentValue);
+        }
 
-        assertEquals("Factory method for component " + componentId, factoryMethod, ci.getName());
-        Value factory = meta.getFactoryComponent();
-        // for the named factories, we expect this to be a RefernceValue.
-        assertTrue("Factory ReferenceValue expected", factory instanceof ReferenceValue);
-        assertEquals("Factory component for component " + componentId, factoryComponent, ((ReferenceValue)factory).getComponentName());
-        validateConstructorParameters(meta, ci.getParameterSpecifications(), expected);
     }
 
     /**
      * Validate the property metadata for a component against an expected set.
      *
-     * @param componentId
-     *                 The target component id.
-     * @param expected The set of expected items.
+     * @param componentId   The target component id.
+     * @param expected      The set of expected items.
      *
      * @exception Exception
      */
@@ -549,17 +556,16 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
     /**
      * Validate the property metadata for a component against an expected set.
      *
-     * @param componentId
-     *                 The target component id.
-     * @param expected The set of expected items.
+     * @param meta      The metadata describing this component. This might be for an inner component.
+     * @param expected  The set of expected items.
      *
      * @exception Exception
      */
     public void validatePropertyMetadata(LocalComponentMetadata meta, TestProperty[] expected) throws Exception {
-        Collection pi = meta.getPropertyInjectionMetadata();
+        Collection propMetas = meta.getPropertyInjectionMetadata();
 
-        assertEquals("Mismatch in property set size", expected.length, pi.size());
-        Iterator it = pi.iterator();
+        assertEquals("Mismatch in property set size", expected.length, propMetas.size());
+        Iterator it = propMetas.iterator();
         // validate each expected argment against the actual metadata for this constructor.
         int i = 0;
         while (it.hasNext()) {
