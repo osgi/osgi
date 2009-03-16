@@ -11,4 +11,5 @@
     <xsd:element name="bundle"/>
     <xsd:element name="bundle-value"/>
     <xsd:element name="raise-error"/>
+    <xsd:element name="replace-all"/>
 </xsd:schema>

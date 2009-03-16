@@ -1,0 +1,9 @@
+Bundle-SymbolicName:                     ${p}.date_namespace_handler
+Bundle-Version:                          4.2
+Import-Package:                          ${p}.namespace, ${p}.services, org.w3c.dom
+Private-Package:                         $(p).build
+Include-Resource					= \
+	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/namespace/test_namespace_handler.xml, \
+        schemas/test1.xsd=src/org/osgi/test/cases/blueprint/namespace/test1.xsd, \
+        schemas/test2.xsd=src/org/osgi/test/cases/blueprint/namespace/test2.xsd
+

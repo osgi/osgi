@@ -28,15 +28,21 @@ package org.osgi.test.cases.blueprint.namespace;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.service.blueprint.namespace.ComponentDefinitionRegistry;
+import org.osgi.service.blueprint.namespace.ComponentNameAlreadyInUseException;
 import org.osgi.service.blueprint.namespace.NamespaceHandler;
 import org.osgi.service.blueprint.namespace.ParserContext;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
-import org.w3c.dom.Element;
+import org.osgi.test.cases.blueprint.services.AssertionService;
+import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 import org.w3c.dom.Attr;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 /**
@@ -46,7 +52,7 @@ import org.w3c.dom.Node;
  * and attributes it defines are extensions to existing
  * elements.
  */
-public class TestNamespaceHandler implements NamespaceHandler {
+public class TestNamespaceHandler extends BaseTestComponent implements NamespaceHandler {
 
     /**
      * The schema file is packaged in the same bundle as this handler class
@@ -59,6 +65,7 @@ public class TestNamespaceHandler implements NamespaceHandler {
     private final BundleContext bundleContext;
 
     public TestNamespaceHandler(BundleContext context) {
+        super("TestNamespaceHandler");
         this.bundleContext = context;
         // create a map of the schemas we handle
         schemas.put("http://www.osgi.org/schema/blueprint/test/test1/v1.0.0",
@@ -93,6 +100,16 @@ public class TestNamespaceHandler implements NamespaceHandler {
                 // make a copy of the metadata
                 LocalComponentMetadataImpl metadata = (LocalComponentMetadataImpl)NamespaceUtil.cloneComponentMetadata(component);
                 metadata.setLazy(attribute.getValue().equals("on"));
+                return metadata;
+            }
+            if (attribute.getName().equals("copy-component")) {
+                // make a copy of the metadata, but don't decorate it
+                LocalComponentMetadataImpl metadata = (LocalComponentMetadataImpl)NamespaceUtil.cloneComponentMetadata(component);
+                return metadata;
+            }
+            if (attribute.getName().equals("copy-register")) {
+                // make a copy of the metadata, but don't decorate it
+                LocalComponentMetadataImpl metadata = (LocalComponentMetadataImpl)NamespaceUtil.cloneComponentMetadata(component);
                 return metadata;
             }
             else if (attribute.getName().equals("raise-error")) {
@@ -131,6 +148,7 @@ public class TestNamespaceHandler implements NamespaceHandler {
                 PropertyInjectionMetadataImpl property = new PropertyInjectionMetadataImpl(parent.getAttribute("name"), bundleRef);
                 // replace the property definition with the fully realized value
                 metadata.replaceProperty(property);
+                return metadata;
             }
             // we have a different value tag
             else if (element.getTagName().equalsIgnoreCase("raise-error")) {
@@ -145,8 +163,47 @@ public class TestNamespaceHandler implements NamespaceHandler {
      * Handle the "dateformat" tag (and others in time...)
      */
     public ComponentMetadata parse(Element element, ParserContext context) {
+        // this is a blanket replacement of all named components
+        if (element.getTagName().equalsIgnoreCase("replace-all")) {
+            ComponentDefinitionRegistry registry = context.getComponentDefinitionRegistry();
+            Set names = registry.getComponentDefinitionNames();
+            Iterator i = names.iterator();
+            while (i.hasNext()) {
+                try {
+                    String name = (String)i.next();
+                    // this should be there
+                    AssertionService.assertTrue(this, "incorrect result from ComponentDefinitionRegistry.containsComponentDefinition(" + name + ")",
+                        registry.containsComponentDefinition(name));
+                    // retrieve the definition associated with this name
+                    ComponentMetadata metadata = registry.getComponentDefinition(name);
+                    AssertionService.assertNotNull(this, "null component returned from registry for (" + name + ")", metadata);
+                    // clone this so we can perform a replacement with out version
+                    metadata = NamespaceUtil.cloneComponentMetadata(metadata);
+                    try {
+                        // and register the replacement version
+                        registry.registerComponentDefinition(metadata);
+                        AssertionService.fail(this, "Exception expected on registerComponentDefinition()");
+                    } catch (ComponentNameAlreadyInUseException e) {
+                        // this is expected
+                    }
+                    // remove the definition
+                    registry.removeComponentDefinition(name);
+                    AssertionService.assertFalse(this, "incorrect result from ComponentDefinitionRegistry.containsComponentDefinition(" + name + ")",
+                        registry.containsComponentDefinition(name));
+                    AssertionService.assertNull(this, "non-null component returned from registry for (" + name + ")", registry.getComponentDefinition(name));
+                    // and register the replacement version
+                    registry.registerComponentDefinition(metadata);
+                    // and verify that the registered component returns something good
+                    AssertionService.assertTrue(this, "incorrect result from ComponentDefinitionRegistry.containsComponentDefinition(" + name + ")",
+                        registry.containsComponentDefinition(name));
+                    AssertionService.assertNotNull(this, "non-null component returned from registry for (" + name + ")", registry.getComponentDefinition(name));
+                } catch (Throwable e) {
+                    AssertionService.fail(this, "Unexpected exception", e);
+                }
+            }
+        }
         // we have a different value tag
-        if (element.getTagName().equalsIgnoreCase("bundle-value")) {
+        else if (element.getTagName().equalsIgnoreCase("bundle-value")) {
             // make a copy of the metadata for our enclosing component
             LocalComponentMetadataImpl metadata = (LocalComponentMetadataImpl)NamespaceUtil.cloneComponentMetadata(context.getEnclosingComponent());
             // we need to replace the definition of the
