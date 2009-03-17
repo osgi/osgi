@@ -1867,7 +1867,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerList.add("def");
         expected = new HashMap();
         expected.put("inner", innerList);
-        addConstructorValidator(startEvents, "compNestedMap", expected, Map.class);
+        addConstructorValidator(startEvents, "compNestedList", expected, Map.class);
 
         // Set nested inside of a Map
         Set innerSet = new HashSet();
@@ -1875,7 +1875,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerSet.add("def");
         expected = new HashMap();
         expected.put("inner", innerSet);
-        addConstructorValidator(startEvents, "compNestedMap", expected, Map.class);
+        addConstructorValidator(startEvents, "compNestedSet", expected, Map.class);
 
         // Properties nested inside of a Map
         Properties innerProps = new Properties();
@@ -1883,7 +1883,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerProps.put("ghi", "jkl");
         expected = new HashMap();
         expected.put("inner", innerProps);
-        addConstructorValidator(startEvents, "compNestedMap", expected, Map.class);
+        addConstructorValidator(startEvents, "compNestedProps", expected, Map.class);
 
         controller.run();
     }
@@ -2030,7 +2030,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerList.add("def");
         expected = new HashMap();
         expected.put("inner", innerList);
-        addConstructorValidator(startEvents, "compNestedMap", expected, Map.class);
+        addConstructorValidator(startEvents, "compNestedList", expected, Map.class);
 
         // List nested inside of a Map
         Set innerSet = new HashSet();
@@ -2038,7 +2038,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerSet.add("def");
         expected = new HashMap();
         expected.put("inner", innerSet);
-        addConstructorValidator(startEvents, "compNestedMap", expected, Map.class);
+        addConstructorValidator(startEvents, "compNestedSet", expected, Map.class);
 
         // Properties nested inside of a Map
         Properties innerProps = new Properties();
@@ -2046,7 +2046,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerProps.put("ghi", "jkl");
         expected = new HashMap();
         expected.put("inner", innerProps);
-        addConstructorValidator(startEvents, "compNestedMap", expected, Map.class);
+        addConstructorValidator(startEvents, "compNestedProps", expected, Map.class);
 
         controller.run();
     }
@@ -2194,7 +2194,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerList.add("def");
         expected = new HashMap();
         expected.put("inner", innerList);
-        addConstructorValidator(startEvents, "compNestedMap", expected, Map.class);
+        addConstructorValidator(startEvents, "compNestedList", expected, Map.class);
 
         // List nested inside of a Map
         Set innerSet = new HashSet();
@@ -2202,7 +2202,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerSet.add("def");
         expected = new HashMap();
         expected.put("inner", innerSet);
-        addConstructorValidator(startEvents, "compNestedMap", expected, Map.class);
+        addConstructorValidator(startEvents, "compNestedSet", expected, Map.class);
 
         // Properties nested inside of a Map
         Properties innerProps = new Properties();
@@ -2210,7 +2210,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerProps.put("ghi", "jkl");
         expected = new HashMap();
         expected.put("inner", innerProps);
-        addConstructorValidator(startEvents, "compNestedMap", expected, Map.class);
+        addConstructorValidator(startEvents, "compNestedProps", expected, Map.class);
 
         controller.run();
     }
@@ -2360,7 +2360,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerList.add("def");
         expected = new HashMap();
         expected.put("inner", innerList);
-        addPropertyValidator(startEvents, "compNestedMap", "map", expected, Map.class);
+        addPropertyValidator(startEvents, "compNestedList", "map", expected, Map.class);
 
         // Set nested inside of a Map
         Set innerSet = new HashSet();
@@ -2368,7 +2368,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerSet.add("def");
         expected = new HashMap();
         expected.put("inner", innerSet);
-        addPropertyValidator(startEvents, "compNestedMap", "map", expected, Map.class);
+        addPropertyValidator(startEvents, "compNestedSet", "map", expected, Map.class);
 
         // Properties nested inside of a Map
         Properties innerProps = new Properties();
@@ -2376,7 +2376,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerProps.put("ghi", "jkl");
         expected = new HashMap();
         expected.put("inner", innerProps);
-        addPropertyValidator(startEvents, "compNestedMap", "map", expected, Map.class);
+        addPropertyValidator(startEvents, "compNestedProps", "map", expected, Map.class);
 
         controller.run();
     }
@@ -2525,7 +2525,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerList.add("def");
         expected = new HashMap();
         expected.put("inner", innerList);
-        addPropertyValidator(startEvents, "compNestedMap", "map", expected, Map.class);
+        addPropertyValidator(startEvents, "compNestedList", "map", expected, Map.class);
 
         // Set nested inside of a Map
         Set innerSet = new HashSet();
@@ -2533,7 +2533,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerSet.add("def");
         expected = new HashMap();
         expected.put("inner", innerSet);
-        addPropertyValidator(startEvents, "compNestedMap", "map", expected, Map.class);
+        addPropertyValidator(startEvents, "compNestedSet", "map", expected, Map.class);
 
         // Properties nested inside of a Map
         Properties innerProps = new Properties();
@@ -2541,7 +2541,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerProps.put("ghi", "jkl");
         expected = new HashMap();
         expected.put("inner", innerProps);
-        addPropertyValidator(startEvents, "compNestedMap", "map", expected, Map.class);
+        addPropertyValidator(startEvents, "compNestedProps", "map", expected, Map.class);
 
         controller.run();
     }
@@ -2680,7 +2680,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerList.add("def");
         expected = new HashMap();
         expected.put("inner", innerList);
-        addPropertyValidator(startEvents, "compNestedMap", "map", expected, Map.class);
+        addPropertyValidator(startEvents, "compNestedList", "map", expected, Map.class);
 
         // Set nested inside of a Map
         Set innerSet = new HashSet();
@@ -2688,7 +2688,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerSet.add("def");
         expected = new HashMap();
         expected.put("inner", innerSet);
-        addPropertyValidator(startEvents, "compNestedMap", "map", expected, Map.class);
+        addPropertyValidator(startEvents, "compNestedSet", "map", expected, Map.class);
 
         // Properties nested inside of a Map
         Properties innerProps = new Properties();
@@ -2696,7 +2696,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         innerProps.put("ghi", "jkl");
         expected = new HashMap();
         expected.put("inner", innerProps);
-        addPropertyValidator(startEvents, "compNestedMap", "map", expected, Map.class);
+        addPropertyValidator(startEvents, "compNestedProps", "map", expected, Map.class);
 
         controller.run();
     }
