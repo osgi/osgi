@@ -26,12 +26,20 @@
  */
 package org.osgi.test.cases.blueprint.tests;
 
-import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Set;
 
-import org.osgi.test.cases.blueprint.components.comp1.SimpleTestComponent;
-import org.osgi.test.cases.blueprint.components.factory.SimpleInstanceFactory;
+import java.text.SimpleDateFormat;
+import org.osgi.service.blueprint.namespace.NamespaceHandler;
+import org.osgi.service.blueprint.reflect.CollectionBasedServiceReferenceComponentMetadata;
+import org.osgi.service.blueprint.reflect.ServiceReferenceComponentMetadata;
+import org.osgi.service.blueprint.reflect.ServiceExportComponentMetadata;
+
+import org.osgi.test.cases.blueprint.components.namespace.NamespaceChecker;
 import org.osgi.test.cases.blueprint.framework.*;
 import org.osgi.test.cases.blueprint.services.AssertionService;
+import org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass;
+import org.osgi.test.cases.blueprint.services.TestServiceOne;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
@@ -75,6 +83,120 @@ public class TestNamespaceHandler extends DefaultTestBundleControl {
                 new TestProperty[] { new TestProperty("false", "lenient")})),
             "format")));
 
+        controller.run();
+    }
+
+
+	/*
+	 * Test decoration of components by a namespace handler.
+	 */
+	public void testDecorate() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/decorate_namespace.jar");
+
+        // this installs and starts the bundle containing the namespace handler before
+        // starting the test
+        controller.addSetupBundle(getWebServer()+"www/test_namespace_handler.jar");
+
+        // we're mostly interested that the metadata we've updated has been maintained, but
+        // there are a couple of events that we'll expect to see also.
+        MetadataEventSet startEvents = controller.getStartEvents();
+        // and the validate the component metadata
+        startEvents.addValidator(new ComponentMetadataValidator(
+            new LocalComponent("decorate1", NamespaceChecker.class, "init", null,
+            new TestParameter[] { new StringParameter("decorate1") }, null)));
+
+        // and the validate the component metadata
+        startEvents.addValidator(new ComponentMetadataValidator(
+            new LocalComponent("decorate2", NamespaceChecker.class,
+            new TestParameter[] { new StringParameter("decorate2") },
+            new TestProperty[] { new TestProperty(new TestReferenceValue("bundle"), "bundle") })));
+
+        // and the validate the component metadata
+        startEvents.addValidator(new ComponentMetadataValidator(
+            new LocalComponent("decorate3", NamespaceChecker.class,
+            new TestParameter[] { new StringParameter("decorate3") },
+            new TestProperty[] { new TestProperty(new TestReferenceValue("bundle"), "bundle") })));
+
+        // we should see an init method call here
+        startEvents.addAssertion("decorate1", AssertionService.COMPONENT_INIT_METHOD);
+        // 2 & 3 should see the setter calls
+        startEvents.addAssertion("decorate2", AssertionService.METHOD_CALLED);
+        startEvents.addAssertion("decorate3", AssertionService.METHOD_CALLED);
+
+        controller.run();
+    }
+
+
+	/**
+	 * Tests the component registry and the ability to use non-implementation created
+     * metadata instances for different component replacements
+	 */
+	public void testComponentCopy() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/component_copy.jar");
+
+        // this installs and starts the bundle containing the namespace handler before
+        // starting the test
+        controller.addSetupBundle(getWebServer()+"www/test_namespace_handler.jar");
+
+        // We're mostly interested that the component metadata has remained what we expect to see
+        // and that there were no errors
+        MetadataEventSet startEvents = controller.getStartEvents();
+
+        // and the collection metadata
+        startEvents.addValidator(new ComponentMetadataValidator(new ReferenceCollection("list",
+            NamespaceHandler.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
+            null, List.class, null,
+            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
+            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICES)));
+
+        startEvents.addValidator(new ComponentMetadataValidator(new ReferenceCollection("set",
+            NamespaceHandler.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
+            null, Set.class, null,
+            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
+            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICES)));
+
+        // also validate the metadata for the imported service (this one only has a single import, so easy to locate)
+        startEvents.addValidator(new ComponentMetadataValidator(new ReferencedService("handler", NamespaceHandler.class,
+            ServiceReferenceComponentMetadata.MANDATORY_AVAILABILITY, null, null, ReferencedService.DEFAULT_TIMEOUT)));
+
+        // and the validate the component metadata
+        startEvents.addValidator(new ComponentMetadataValidator(
+            new LocalComponent("ServiceOne", TestGoodServiceSubclass.class, null, null,
+            new TestParameter[] { new StringParameter("ServiceOne") }, null)));
+
+        startEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
+            ServiceExportComponentMetadata.EXPORT_MODE_DISABLED, 0, null, null, null)));
+
+        controller.run();
+    }
+
+
+	/*
+	 * Test error from a decorate() namespace method call
+	 */
+	public void testDecorateError() throws Exception {
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_decorate.jar");
+
+        // this installs and starts the bundle containing the namespace handler before
+        // starting the test
+        controller.addSetupBundle(getWebServer()+"www/test_namespace_handler.jar");
+        controller.run();
+    }
+
+
+	/*
+	 * Test error from a parse() namespace method call
+	 */
+	public void testParseError() throws Exception {
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_parse.jar");
+
+        // this installs and starts the bundle containing the namespace handler before
+        // starting the test
+        controller.addSetupBundle(getWebServer()+"www/test_namespace_handler.jar");
         controller.run();
     }
 }

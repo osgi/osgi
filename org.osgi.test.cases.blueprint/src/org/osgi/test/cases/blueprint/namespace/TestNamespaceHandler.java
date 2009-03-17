@@ -94,6 +94,8 @@ public class TestNamespaceHandler extends BaseTestComponent implements Namespace
      * nothing for us to do.
      */
     public ComponentMetadata decorate(Node node, ComponentMetadata component, ParserContext context) {
+        AssertionService.sendEvent(this, AssertionService.METHOD_CALLED);
+
         if (node instanceof Attr) {
             Attr attribute = (Attr)node;
             if (attribute.getName().equals("sleepy")) {
@@ -102,12 +104,13 @@ public class TestNamespaceHandler extends BaseTestComponent implements Namespace
                 metadata.setLazy(attribute.getValue().equals("on"));
                 return metadata;
             }
-            if (attribute.getName().equals("copy-component")) {
-                // make a copy of the metadata, but don't decorate it
+            else if (attribute.getName().equals("init")) {
+                // make a copy of the metadata
                 LocalComponentMetadataImpl metadata = (LocalComponentMetadataImpl)NamespaceUtil.cloneComponentMetadata(component);
+                metadata.setInitMethodName(attribute.getValue());
                 return metadata;
             }
-            if (attribute.getName().equals("copy-register")) {
+            else if (attribute.getName().equals("copy-component")) {
                 // make a copy of the metadata, but don't decorate it
                 LocalComponentMetadataImpl metadata = (LocalComponentMetadataImpl)NamespaceUtil.cloneComponentMetadata(component);
                 return metadata;
@@ -163,6 +166,7 @@ public class TestNamespaceHandler extends BaseTestComponent implements Namespace
      * Handle the "dateformat" tag (and others in time...)
      */
     public ComponentMetadata parse(Element element, ParserContext context) {
+        AssertionService.sendEvent(this, AssertionService.METHOD_CALLED);
         // this is a blanket replacement of all named components
         if (element.getTagName().equalsIgnoreCase("replace-all")) {
             ComponentDefinitionRegistry registry = context.getComponentDefinitionRegistry();
