@@ -42,7 +42,7 @@ import org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStati
 import org.osgi.test.cases.blueprint.framework.ComponentAssertion;
 import org.osgi.test.cases.blueprint.framework.ConstructorMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.FactoryMetadataValidator;
-import org.osgi.test.cases.blueprint.framework.InnerComponentValidator;
+import org.osgi.test.cases.blueprint.framework.RexValidator;
 import org.osgi.test.cases.blueprint.framework.LocalComponent;
 import org.osgi.test.cases.blueprint.framework.MapValueEntry;
 import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
@@ -294,7 +294,7 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         this.addFactoryMetadataTestItems(startEvents, null, null);
         
         // parameter metadata test
-        // TODO: 
+        // TODO: bugzilla 1230, Mismatch in constructor parameter size expected:<1> but was:<0>
         // this.addConstructorMetadataTestItems(startEvents, null, "makeInstance");
                 
         controller.run();
@@ -309,12 +309,12 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         this.addConstructorValueTestItems(startEvents, ConstructorInjection.class);
 
         // factory metadata test
-        // TODO:
+        // TODO: bugzilla 1231, comp created by StaticFactory, has constructorInjMetadata, but no methodInjMetaData?
         // this.addFactoryMetadataTestItems(startEvents,InnerComponentInjectionStaticFactory.class.getName(), null);
 
         // parameter metadata test
-        // TODO: 
-        // this.addConstructorMetadataTestItems(startEvents, ConstructorInjectionStaticFactory.class.getName(), "makeInstance");
+        // TODO: LocalComponent, wait bugzilla 1230 1231 
+        this.addConstructorMetadataTestItems(startEvents, ConstructorInjectionStaticFactory.class, "makeInstance");
 
         controller.run();
     }
@@ -479,7 +479,7 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         // value test
         this.addPropertyValueTestItems(startEvents, PropertyInjection.class);
         // property metadata test
-        // TODO:
+        // TODO: LocalComponent, wait bugzilla 1230 1231,
         this.addPropertyMetadataTestItem(startEvents, null, "makeInstance");
 
         controller.run();
@@ -493,7 +493,7 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         // value test
         this.addPropertyValueTestItems(startEvents, PropertyInjection.class);
         // property metadata test
-        // TODO:
+        // TODO: LocalComponent, wait bugzilla 1230 1231,
         this.addPropertyMetadataTestItem(startEvents, PropertyInjectionStaticFactory.class, "makeInstance");
 
         controller.run();

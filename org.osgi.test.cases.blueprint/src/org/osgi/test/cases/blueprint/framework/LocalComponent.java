@@ -166,10 +166,36 @@ public class LocalComponent extends Assert implements TestComponentMetadata {
 //            fail("The test data for Component " + meta.getName() +" instantiated incorrectly, both class type and factory method name are null.");
 //        }
 
+        
+        
         // validate the parameters
         if (parms != null) {
             moduleMetadata.validateConstructorMetadata(meta, parms);
         }
+        
+//        // this is either instantiatied via a factory or directly
+//        if (factoryMethod != null) {
+//            MethodInjectionMetadata factoryMeta = meta.getFactoryMethodMetadata();
+//            assertNotNull("Component " + meta.getName() + " factory metadata expected", factoryMeta);
+//            assertEquals("Component " + meta.getName() + " factory method mismatch ", factoryMethod, factoryMeta.getName());
+//            // if we have parms to validate, check those now
+//            if (parms != null) {
+//                moduleMetadata.validateConstructorParameters(meta, factoryMeta.getParameterSpecifications(), parms);
+//            }
+//            // and a potential factory component
+//            if (factoryComponent != null) {
+//                Value factory = meta.getFactoryComponent();
+//                assertNotNull("Component " + meta.getName() + "factory component definition expected", factory);
+//                // validate that component information
+//                factoryComponent.validate(moduleMetadata, factory);
+//            }
+//        }
+//        else {
+//            // directly created, so we might have parms to validate
+//            if (parms != null) {
+//                moduleMetadata.validateConstructorParameters(meta, meta.getConstructorInjectionMetadata().getParameterSpecifications(), parms);
+//            }
+//        }
         
         // validate the property definitions
         if (props != null) {
