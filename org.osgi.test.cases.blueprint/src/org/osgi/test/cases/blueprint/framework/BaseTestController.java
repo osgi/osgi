@@ -37,7 +37,6 @@ import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
@@ -50,8 +49,6 @@ import org.osgi.service.event.Event;
 import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
 import org.osgi.test.cases.blueprint.services.AssertionService;
-
-import junit.framework.AssertionFailedError;
 
 /**
  * A base class for the different types of test controller.

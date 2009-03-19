@@ -26,19 +26,8 @@
  */
 
 package org.osgi.test.cases.blueprint.framework;
-import java.util.Dictionary;
-import java.util.Enumeration;
-
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.blueprint.context.ModuleContext;
-import org.osgi.service.blueprint.context.NoSuchComponentException;
-import org.osgi.test.cases.blueprint.services.ComponentTestInfo;
 import org.osgi.test.cases.blueprint.services.ValueDescriptor;
-import org.osgi.test.cases.blueprint.services.StringValueDescriptor;
-
-import junit.framework.Assert;
 
 /**
  * Validate the value of a property stored in an initilized component.

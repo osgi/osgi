@@ -26,17 +26,14 @@
  */
 
 package org.osgi.test.cases.blueprint.framework;
-import java.util.Dictionary;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import junit.framework.AssertionFailedError;
+
 import org.osgi.framework.Bundle;
-import org.osgi.framework.Constants;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventConstants;
-
-import junit.framework.AssertionFailedError;
 
 /**
  * The base class for all events that are received using the

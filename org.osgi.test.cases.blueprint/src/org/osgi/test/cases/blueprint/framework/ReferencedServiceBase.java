@@ -31,15 +31,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import junit.framework.Assert;
+
 import org.osgi.service.blueprint.reflect.BindingListenerMetadata;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
-import org.osgi.service.blueprint.reflect.ComponentValue;
-import org.osgi.service.blueprint.reflect.ReferenceValue;
 import org.osgi.service.blueprint.reflect.ServiceReferenceComponentMetadata;
-import org.osgi.service.blueprint.reflect.Value;
-import org.osgi.test.cases.blueprint.services.TestUtil;
-
-import junit.framework.Assert;
 
 /**
  * A single referenced service in the ModuleContext metadata.

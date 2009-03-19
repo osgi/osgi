@@ -27,10 +27,22 @@
 
 package org.osgi.test.cases.blueprint.namespace;
 
-import java.util.Properties;
-import java.util.Iterator;
-
-import org.osgi.service.blueprint.reflect.*;
+import org.osgi.service.blueprint.reflect.ArrayValue;
+import org.osgi.service.blueprint.reflect.CollectionBasedServiceReferenceComponentMetadata;
+import org.osgi.service.blueprint.reflect.ComponentMetadata;
+import org.osgi.service.blueprint.reflect.ComponentValue;
+import org.osgi.service.blueprint.reflect.ListValue;
+import org.osgi.service.blueprint.reflect.LocalComponentMetadata;
+import org.osgi.service.blueprint.reflect.MapValue;
+import org.osgi.service.blueprint.reflect.NullValue;
+import org.osgi.service.blueprint.reflect.PropertiesValue;
+import org.osgi.service.blueprint.reflect.ReferenceNameValue;
+import org.osgi.service.blueprint.reflect.ReferenceValue;
+import org.osgi.service.blueprint.reflect.ServiceExportComponentMetadata;
+import org.osgi.service.blueprint.reflect.SetValue;
+import org.osgi.service.blueprint.reflect.TypedStringValue;
+import org.osgi.service.blueprint.reflect.UnaryServiceReferenceComponentMetadata;
+import org.osgi.service.blueprint.reflect.Value;
 
 
 /**

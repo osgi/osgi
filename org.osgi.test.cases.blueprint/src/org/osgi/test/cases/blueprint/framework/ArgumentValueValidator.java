@@ -26,18 +26,9 @@
  */
 
 package org.osgi.test.cases.blueprint.framework;
-import java.util.Dictionary;
-
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.blueprint.context.ModuleContext;
-import org.osgi.service.blueprint.context.NoSuchComponentException;
-import org.osgi.test.cases.blueprint.services.ComponentTestInfo;
-import org.osgi.test.cases.blueprint.services.ValueDescriptor;
 import org.osgi.test.cases.blueprint.services.StringValueDescriptor;
-
-import junit.framework.Assert;
+import org.osgi.test.cases.blueprint.services.ValueDescriptor;
 
 /**
  * Validate the injected value of an argument in a component.

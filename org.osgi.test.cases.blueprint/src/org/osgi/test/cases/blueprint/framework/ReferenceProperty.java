@@ -27,8 +27,6 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
-import org.osgi.service.blueprint.reflect.PropertyInjectionMetadata;
-import org.osgi.service.blueprint.reflect.ReferenceValue;
 
 public class ReferenceProperty extends TestProperty {
     public ReferenceProperty(String propertyName, String componentId) {

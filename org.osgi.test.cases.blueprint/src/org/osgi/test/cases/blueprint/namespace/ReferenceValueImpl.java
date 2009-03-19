@@ -27,10 +27,7 @@
 
 package org.osgi.test.cases.blueprint.namespace;
 
-import java.util.Properties;
-import java.util.Iterator;
-
-import org.osgi.service.blueprint.reflect.*;
+import org.osgi.service.blueprint.reflect.ReferenceValue;
 
 
 /**

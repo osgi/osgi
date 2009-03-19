@@ -27,7 +27,6 @@
 package org.osgi.test.cases.blueprint.namespace;
 
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;

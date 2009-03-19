@@ -27,14 +27,10 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-
-import junit.framework.Assert;
 
 /**
  * Validate that the module context contains all of the indicated

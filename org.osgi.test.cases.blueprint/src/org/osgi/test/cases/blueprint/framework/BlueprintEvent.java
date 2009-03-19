@@ -26,18 +26,14 @@
  */
 
 package org.osgi.test.cases.blueprint.framework;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
-
 import org.osgi.service.blueprint.context.ModuleContextEventConstants;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventConstants;
-
 import org.osgi.test.cases.blueprint.services.TestUtil;
 
 /**

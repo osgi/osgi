@@ -31,18 +31,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import org.osgi.service.blueprint.reflect.BindingListenerMetadata;
-import org.osgi.service.blueprint.reflect.ComponentMetadata;
-import org.osgi.service.blueprint.reflect.ConstructorInjectionMetadata;
-import org.osgi.service.blueprint.reflect.MethodInjectionMetadata;
-import org.osgi.service.blueprint.reflect.PropertyInjectionMetadata;
-import org.osgi.service.blueprint.reflect.RegistrationListenerMetadata;
-import org.osgi.service.blueprint.reflect.ServiceExportComponentMetadata;
 import org.osgi.service.blueprint.reflect.ServiceReferenceComponentMetadata;
-import org.osgi.service.blueprint.reflect.Value;
 
 
 /**

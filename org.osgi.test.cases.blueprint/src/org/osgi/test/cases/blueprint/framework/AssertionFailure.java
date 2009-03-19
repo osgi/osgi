@@ -26,13 +26,9 @@
  */
 
 package org.osgi.test.cases.blueprint.framework;
-import java.util.Dictionary;
-
-import org.osgi.service.event.Event;
-import org.osgi.test.cases.blueprint.services.AssertionService;
-import org.osgi.test.cases.blueprint.services.ComponentTestInfo;
-
 import junit.framework.AssertionFailedError;
+
+import org.osgi.test.cases.blueprint.services.AssertionService;
 
 public class AssertionFailure extends TestEvent {
     // the message associated with the event

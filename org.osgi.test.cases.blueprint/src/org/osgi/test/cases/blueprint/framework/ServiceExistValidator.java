@@ -1,14 +1,10 @@
 package org.osgi.test.cases.blueprint.framework;
 
-import java.util.ArrayList;
 import java.util.Dictionary;
-import java.util.Iterator;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.test.cases.blueprint.services.ComponentTestInfo;
 import org.osgi.test.cases.blueprint.services.TestUtil;
-import org.osgi.test.cases.blueprint.services.ValueDescriptor;
 
 public class ServiceExistValidator extends MetadataValidator {
 

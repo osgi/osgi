@@ -26,11 +26,10 @@
  */
 
 package org.osgi.test.cases.blueprint.framework;
+import junit.framework.Assert;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-
-import junit.framework.Assert;
 
 /**
  * Validate that a bundle is in an expected state during the validation phase.

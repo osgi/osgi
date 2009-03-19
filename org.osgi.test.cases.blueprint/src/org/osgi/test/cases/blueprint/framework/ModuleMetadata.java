@@ -33,18 +33,25 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import junit.framework.Assert;
+import junit.framework.AssertionFailedError;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.blueprint.context.ModuleContext;
 import org.osgi.service.blueprint.context.NoSuchComponentException;
-import org.osgi.service.blueprint.reflect.*;
+import org.osgi.service.blueprint.reflect.ComponentMetadata;
+import org.osgi.service.blueprint.reflect.LocalComponentMetadata;
+import org.osgi.service.blueprint.reflect.MethodInjectionMetadata;
+import org.osgi.service.blueprint.reflect.ParameterSpecification;
+import org.osgi.service.blueprint.reflect.PropertyInjectionMetadata;
+import org.osgi.service.blueprint.reflect.ReferenceValue;
+import org.osgi.service.blueprint.reflect.ServiceExportComponentMetadata;
+import org.osgi.service.blueprint.reflect.ServiceReferenceComponentMetadata;
+import org.osgi.service.blueprint.reflect.Value;
 import org.osgi.test.cases.blueprint.services.ComponentTestInfo;
-import org.osgi.test.cases.blueprint.services.StringValueDescriptor;
 import org.osgi.test.cases.blueprint.services.ValueDescriptor;
-
-import junit.framework.Assert;
-import junit.framework.AssertionFailedError;
 
 /**
  * A wrapper around the published ModuleContext service for a managed

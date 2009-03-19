@@ -27,15 +27,7 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
-import java.util.List;
-import java.util.ArrayList;
-
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.blueprint.context.ModuleContext;
-import org.osgi.service.blueprint.context.NoSuchComponentException;
-import org.osgi.test.cases.blueprint.services.ComponentTestInfo;
 
 /**
  * Validate the metadata for all of the exported services

@@ -26,15 +26,11 @@
  */
 
 package org.osgi.test.cases.blueprint.framework;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import junit.framework.AssertionFailedError;
 
-import org.osgi.framework.Bundle;
 import org.osgi.service.event.Event;
-
 import org.osgi.test.cases.blueprint.services.TestUtil;
 
 /**

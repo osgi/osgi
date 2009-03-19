@@ -29,13 +29,7 @@ package org.osgi.test.cases.blueprint.framework;
 
 import org.osgi.service.blueprint.reflect.CollectionBasedServiceReferenceComponentMetadata;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
-import org.osgi.service.blueprint.reflect.ComponentValue;
-import org.osgi.service.blueprint.reflect.ReferenceValue;
 import org.osgi.service.blueprint.reflect.ServiceReferenceComponentMetadata;
-import org.osgi.service.blueprint.reflect.Value;
-import org.osgi.test.cases.blueprint.services.TestUtil;
-
-import junit.framework.Assert;
 
 /**
  * A single referenced service in the ModuleContext metadata.

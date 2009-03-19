@@ -28,7 +28,6 @@ package org.osgi.test.cases.blueprint.framework;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.test.cases.blueprint.services.ServiceManager;
 
 /**
  * A class to trigger LAZY_ACTIVATION of a bundle by requesting

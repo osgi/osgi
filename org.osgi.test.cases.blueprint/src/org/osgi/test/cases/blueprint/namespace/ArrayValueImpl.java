@@ -27,10 +27,6 @@
 
 package org.osgi.test.cases.blueprint.namespace;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.osgi.service.blueprint.reflect.ArrayValue;
 import org.osgi.service.blueprint.reflect.Value;
 

@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.test.cases.blueprint.services.ComponentTestInfo;
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 import org.osgi.test.cases.blueprint.services.StringValueDescriptor;
 import org.osgi.test.cases.blueprint.services.ValueDescriptor;

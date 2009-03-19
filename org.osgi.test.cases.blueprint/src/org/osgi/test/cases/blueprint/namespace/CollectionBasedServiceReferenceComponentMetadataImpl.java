@@ -27,10 +27,10 @@
 
 package org.osgi.test.cases.blueprint.namespace;
 
-import java.util.Collection;
 import java.util.List;
 
-import org.osgi.service.blueprint.reflect.*;
+import org.osgi.service.blueprint.reflect.CollectionBasedServiceReferenceComponentMetadata;
+import org.osgi.service.blueprint.reflect.Value;
 
 
 /**

@@ -27,9 +27,6 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
-import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,15 +34,6 @@ import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleException;
-import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.event.Event;
-import org.osgi.service.event.EventConstants;
-import org.osgi.service.event.EventHandler;
-import org.osgi.test.cases.blueprint.services.AssertionService;
-
-import junit.framework.TestCase;
 
 /**
  * An expected event set attached to a TestPhase.  This holds all of the

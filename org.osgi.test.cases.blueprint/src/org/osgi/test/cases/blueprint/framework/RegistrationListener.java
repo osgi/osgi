@@ -26,17 +26,12 @@
  */
 
 package org.osgi.test.cases.blueprint.framework;
-import java.util.Map;
-import java.util.HashSet;
-import java.util.Set;
+import junit.framework.Assert;
 
+import org.osgi.service.blueprint.reflect.ComponentValue;
+import org.osgi.service.blueprint.reflect.ReferenceValue;
 import org.osgi.service.blueprint.reflect.RegistrationListenerMetadata;
 import org.osgi.service.blueprint.reflect.Value;
-import org.osgi.service.blueprint.reflect.ReferenceValue;
-import org.osgi.service.blueprint.reflect.ComponentValue;
-import org.osgi.test.cases.blueprint.services.TestUtil;
-
-import junit.framework.Assert;
 
 /**
  * Validate the metadata for a registration listener.
@@ -60,7 +55,7 @@ public class RegistrationListener extends Assert {
      * @param unregistrationName
      *               The name of the unregistration method.
      */
-    public RegistrationListener(String componentId, String registratonName, String unregistrationName) {
+    public RegistrationListener(String componentId, String registrationName, String unregistrationName) {
         this.componentId = componentId;
         this.registrationName = registrationName;
         this.unregistrationName = unregistrationName;

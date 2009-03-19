@@ -27,14 +27,7 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
-import java.util.List;
-
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.blueprint.context.ModuleContext;
-import org.osgi.service.blueprint.context.NoSuchComponentException;
-import org.osgi.test.cases.blueprint.services.ComponentTestInfo;
 
 /**
  * Validate the referenced service metadata for a ModuleContext.

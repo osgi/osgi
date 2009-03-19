@@ -27,14 +27,11 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
-import java.util.Dictionary;
+import junit.framework.Assert;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.test.cases.blueprint.services.TestUtil;
-
-import junit.framework.Assert;
 
 /**
  * Validate that a particular set of services is no longer registered.

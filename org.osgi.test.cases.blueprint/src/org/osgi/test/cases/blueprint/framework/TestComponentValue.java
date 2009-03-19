@@ -28,12 +28,7 @@
 package org.osgi.test.cases.blueprint.framework;
 
 import org.osgi.service.blueprint.reflect.ComponentValue;
-import org.osgi.service.blueprint.reflect.ComponentMetadata;
-import org.osgi.service.blueprint.reflect.LocalComponentMetadata;
 import org.osgi.service.blueprint.reflect.Value;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * A wrapper for component definition metadata.

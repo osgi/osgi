@@ -27,12 +27,10 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
-import org.osgi.service.blueprint.reflect.BindingListenerMetadata;
-import org.osgi.service.blueprint.reflect.ComponentValue;
-import org.osgi.service.blueprint.reflect.ReferenceValue;
-import org.osgi.service.blueprint.reflect.Value;
-
 import junit.framework.Assert;
+
+import org.osgi.service.blueprint.reflect.BindingListenerMetadata;
+import org.osgi.service.blueprint.reflect.Value;
 
 /**
  * A base type for validating BindingListener metadata.

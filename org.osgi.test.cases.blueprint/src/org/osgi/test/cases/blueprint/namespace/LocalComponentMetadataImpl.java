@@ -30,14 +30,12 @@ package org.osgi.test.cases.blueprint.namespace;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
-import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.osgi.service.blueprint.reflect.ConstructorInjectionMetadata;
 import org.osgi.service.blueprint.reflect.LocalComponentMetadata;
 import org.osgi.service.blueprint.reflect.MethodInjectionMetadata;
-import org.osgi.service.blueprint.reflect.PropertyInjectionMetadata;
 import org.osgi.service.blueprint.reflect.ParameterSpecification;
+import org.osgi.service.blueprint.reflect.PropertyInjectionMetadata;
 import org.osgi.service.blueprint.reflect.Value;
 
 

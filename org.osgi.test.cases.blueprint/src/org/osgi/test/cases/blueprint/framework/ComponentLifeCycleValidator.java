@@ -26,16 +26,7 @@
  */
 
 package org.osgi.test.cases.blueprint.framework;
-import java.util.Dictionary;
-
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.blueprint.context.ModuleContext;
-import org.osgi.service.blueprint.context.NoSuchComponentException;
-import org.osgi.test.cases.blueprint.services.ComponentTestInfo;
-
-import junit.framework.Assert;
 
 /**
  * Validate the lifecycle information for a component.
