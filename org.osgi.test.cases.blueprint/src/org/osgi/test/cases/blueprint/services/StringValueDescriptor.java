@@ -26,8 +26,6 @@
  */
 package org.osgi.test.cases.blueprint.services;
 
-import java.util.Dictionary;
-import junit.framework.Assert;
 
 /**
  * Representation of a String-derived value stored inside of a component.

@@ -31,7 +31,6 @@ package org.osgi.test.cases.blueprint.tests;
 import org.osgi.test.cases.blueprint.framework.CompoundPropertyValidator;
 import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
 import org.osgi.test.cases.blueprint.framework.StandardTestController;
-import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 public class TestCompoundPropertyInjection  extends DefaultTestBundleControl {

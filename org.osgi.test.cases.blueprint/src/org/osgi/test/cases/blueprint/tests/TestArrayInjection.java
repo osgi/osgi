@@ -26,19 +26,26 @@
  */
 package org.osgi.test.cases.blueprint.tests;
 
-import org.osgi.service.blueprint.reflect.Value;
-import org.osgi.test.cases.blueprint.framework.*;
-import org.osgi.test.cases.blueprint.services.AssertionService;
-import org.osgi.test.cases.blueprint.services.ValueDescriptor;
-import org.osgi.test.cases.blueprint.services.ObjectArrayValueDescriptor;
-import org.osgi.test.cases.blueprint.services.IntArrayValueDescriptor;
-import org.osgi.test.cases.blueprint.services.ByteArrayValueDescriptor;
+import org.osgi.test.cases.blueprint.framework.ArgumentValueValidator;
+import org.osgi.test.cases.blueprint.framework.ConstructorMetadataValidator;
+import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
+import org.osgi.test.cases.blueprint.framework.PropertyValueValidator;
+import org.osgi.test.cases.blueprint.framework.StandardTestController;
+import org.osgi.test.cases.blueprint.framework.TestListValue;
+import org.osgi.test.cases.blueprint.framework.TestParameter;
+import org.osgi.test.cases.blueprint.framework.TestSetValue;
+import org.osgi.test.cases.blueprint.framework.TestStringValue;
+import org.osgi.test.cases.blueprint.framework.TestValue;
 import org.osgi.test.cases.blueprint.services.BooleanArrayValueDescriptor;
+import org.osgi.test.cases.blueprint.services.ByteArrayValueDescriptor;
 import org.osgi.test.cases.blueprint.services.CharArrayValueDescriptor;
-import org.osgi.test.cases.blueprint.services.ShortArrayValueDescriptor;
-import org.osgi.test.cases.blueprint.services.LongArrayValueDescriptor;
 import org.osgi.test.cases.blueprint.services.DoubleArrayValueDescriptor;
 import org.osgi.test.cases.blueprint.services.FloatArrayValueDescriptor;
+import org.osgi.test.cases.blueprint.services.IntArrayValueDescriptor;
+import org.osgi.test.cases.blueprint.services.LongArrayValueDescriptor;
+import org.osgi.test.cases.blueprint.services.ObjectArrayValueDescriptor;
+import org.osgi.test.cases.blueprint.services.ShortArrayValueDescriptor;
+import org.osgi.test.cases.blueprint.services.ValueDescriptor;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**

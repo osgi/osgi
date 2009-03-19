@@ -26,13 +26,9 @@
  */
 package org.osgi.test.cases.blueprint.tests;
 
-import org.osgi.test.cases.blueprint.components.factory.SimpleInstanceFactory;
-import org.osgi.test.cases.blueprint.framework.ComponentAssertion;
 import org.osgi.test.cases.blueprint.framework.EventSet;
-import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
 import org.osgi.test.cases.blueprint.framework.StandardErrorTestController;
 import org.osgi.test.cases.blueprint.framework.StandardTestController;
-import org.osgi.test.cases.blueprint.framework.TestService;
 import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 

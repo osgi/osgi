@@ -28,7 +28,6 @@
 package org.osgi.test.cases.blueprint.services;
 
 import java.util.Dictionary;
-import java.util.HashMap;
 import java.util.Hashtable;
 
 import org.osgi.framework.BundleContext;

@@ -26,7 +26,6 @@
  */
 package org.osgi.test.cases.blueprint.tests;
 
-import org.osgi.service.blueprint.reflect.NullValue;
 import org.osgi.test.cases.blueprint.framework.ConstructorMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
 import org.osgi.test.cases.blueprint.framework.PropertyMetadataValidator;

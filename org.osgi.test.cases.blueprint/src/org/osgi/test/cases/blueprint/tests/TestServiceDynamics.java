@@ -26,8 +26,6 @@
  */
 package org.osgi.test.cases.blueprint.tests;
 
-import java.util.Hashtable;
-
 import org.osgi.test.cases.blueprint.framework.BlueprintEvent;
 import org.osgi.test.cases.blueprint.framework.ClassLoadInitiator;
 import org.osgi.test.cases.blueprint.framework.ComponentAssertion;
@@ -38,18 +36,17 @@ import org.osgi.test.cases.blueprint.framework.ServiceManagerRegister;
 import org.osgi.test.cases.blueprint.framework.ServiceManagerUnregister;
 import org.osgi.test.cases.blueprint.framework.ServiceRequestInitiator;
 import org.osgi.test.cases.blueprint.framework.ServiceTestEvent;
-import org.osgi.test.cases.blueprint.framework.StandardTestController;
 import org.osgi.test.cases.blueprint.framework.StandardErrorTestController;
-
+import org.osgi.test.cases.blueprint.framework.StandardTestController;
 import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.services.ComponentTestInfo;
 import org.osgi.test.cases.blueprint.services.ManagedService;
 import org.osgi.test.cases.blueprint.services.ServiceManager;
+import org.osgi.test.cases.blueprint.services.TestGoodService;
 import org.osgi.test.cases.blueprint.services.TestServiceAllSubclass;
+import org.osgi.test.cases.blueprint.services.TestServiceDynamicsInterface;
 import org.osgi.test.cases.blueprint.services.TestServiceOne;
 import org.osgi.test.cases.blueprint.services.TestServiceTwo;
-import org.osgi.test.cases.blueprint.services.TestGoodService;
-import org.osgi.test.cases.blueprint.services.TestServiceDynamicsInterface;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**

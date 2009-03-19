@@ -31,9 +31,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.osgi.service.blueprint.reflect.CollectionBasedServiceReferenceComponentMetadata;
-import org.osgi.service.blueprint.reflect.ServiceExportComponentMetadata;
 import org.osgi.service.blueprint.reflect.ServiceReferenceComponentMetadata;
-
 import org.osgi.test.cases.blueprint.framework.BindingListener;
 import org.osgi.test.cases.blueprint.framework.ComponentAssertion;
 import org.osgi.test.cases.blueprint.framework.ComponentMetadataValidator;
@@ -43,21 +41,12 @@ import org.osgi.test.cases.blueprint.framework.PropertyMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.ReferenceCollection;
 import org.osgi.test.cases.blueprint.framework.ReferencedService;
 import org.osgi.test.cases.blueprint.framework.StandardTestController;
-import org.osgi.test.cases.blueprint.framework.TestProperty;
 import org.osgi.test.cases.blueprint.framework.TestComponentValue;
+import org.osgi.test.cases.blueprint.framework.TestProperty;
 import org.osgi.test.cases.blueprint.framework.TestReferenceValue;
-
 import org.osgi.test.cases.blueprint.services.AssertionService;
-import org.osgi.test.cases.blueprint.services.BaseTestComponent;
-import org.osgi.test.cases.blueprint.services.ComponentTestInfo;
 import org.osgi.test.cases.blueprint.services.ServiceManager;
-import org.osgi.test.cases.blueprint.services.TestBadService;
-import org.osgi.test.cases.blueprint.services.TestGoodService;
-import org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass;
-import org.osgi.test.cases.blueprint.services.TestServiceAllSubclass;
 import org.osgi.test.cases.blueprint.services.TestServiceOne;
-import org.osgi.test.cases.blueprint.services.TestServiceTwo;
-import org.osgi.test.cases.blueprint.services.TestServiceTwoSubclass;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**

@@ -1,8 +1,6 @@
 package org.osgi.test.cases.blueprint.tests;
 
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -17,7 +15,6 @@ import org.osgi.test.cases.blueprint.framework.TestNullValue;
 import org.osgi.test.cases.blueprint.framework.TestParameter;
 import org.osgi.test.cases.blueprint.framework.TestProperty;
 import org.osgi.test.cases.blueprint.framework.TestStringValue;
-import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 public class TestClasstypeInjection extends DefaultTestBundleControl {

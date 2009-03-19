@@ -26,16 +26,14 @@
  */
 package org.osgi.test.cases.blueprint.services;
 
-import java.util.Dictionary;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
 
-import org.osgi.framework.Constants;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 
 public class ManagedService {
     // The registered name of this service

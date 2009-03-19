@@ -36,8 +36,20 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import org.osgi.test.cases.blueprint.framework.*;
-import org.osgi.test.cases.blueprint.services.AssertionService;
+import org.osgi.test.cases.blueprint.framework.ConstructorMetadataValidator;
+import org.osgi.test.cases.blueprint.framework.MapValueEntry;
+import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
+import org.osgi.test.cases.blueprint.framework.PropertyMetadataValidator;
+import org.osgi.test.cases.blueprint.framework.StandardTestController;
+import org.osgi.test.cases.blueprint.framework.TestListValue;
+import org.osgi.test.cases.blueprint.framework.TestMapValue;
+import org.osgi.test.cases.blueprint.framework.TestNullValue;
+import org.osgi.test.cases.blueprint.framework.TestParameter;
+import org.osgi.test.cases.blueprint.framework.TestPropertiesValue;
+import org.osgi.test.cases.blueprint.framework.TestProperty;
+import org.osgi.test.cases.blueprint.framework.TestSetValue;
+import org.osgi.test.cases.blueprint.framework.TestStringValue;
+import org.osgi.test.cases.blueprint.framework.TestValue;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**

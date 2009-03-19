@@ -27,7 +27,6 @@
 package org.osgi.test.cases.blueprint.services;
 
 import java.util.Dictionary;
-import junit.framework.Assert;
 
 /**
  * Representation of a component-reference value stored inside of a

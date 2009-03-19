@@ -26,7 +26,6 @@
  */
 package org.osgi.test.cases.blueprint.services;
 
-import java.util.Dictionary;
 import junit.framework.Assert;
 
 /**

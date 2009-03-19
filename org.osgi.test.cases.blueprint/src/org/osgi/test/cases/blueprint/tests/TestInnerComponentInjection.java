@@ -27,38 +27,25 @@
 
 package org.osgi.test.cases.blueprint.tests;
 
-import java.util.Dictionary;
-import java.util.Hashtable;
-
-import org.osgi.test.cases.blueprint.components.injection.ComponentInjection;
 import org.osgi.test.cases.blueprint.components.injection.ConstructorInjection;
 import org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory;
 import org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection;
-import org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionInstanceFactory;
-import org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory;
 import org.osgi.test.cases.blueprint.components.injection.PropertyInjection;
-import org.osgi.test.cases.blueprint.components.injection.PropertyInjectionInstanceFactory;
 import org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory;
 import org.osgi.test.cases.blueprint.framework.ComponentAssertion;
 import org.osgi.test.cases.blueprint.framework.ConstructorMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.FactoryMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.LocalComponent;
-import org.osgi.test.cases.blueprint.framework.MapValueEntry;
 import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
 import org.osgi.test.cases.blueprint.framework.PropertyMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.StandardTestController;
 import org.osgi.test.cases.blueprint.framework.StringParameter;
 import org.osgi.test.cases.blueprint.framework.StringProperty;
 import org.osgi.test.cases.blueprint.framework.TestComponentValue;
-import org.osgi.test.cases.blueprint.framework.TestListValue;
-import org.osgi.test.cases.blueprint.framework.TestMapValue;
 import org.osgi.test.cases.blueprint.framework.TestParameter;
 import org.osgi.test.cases.blueprint.framework.TestProperty;
-import org.osgi.test.cases.blueprint.framework.TestSetValue;
 import org.osgi.test.cases.blueprint.framework.TestValue;
 import org.osgi.test.cases.blueprint.services.AssertionService;
-import org.osgi.test.cases.blueprint.services.ComponentTestInfo;
-import org.osgi.test.cases.blueprint.services.StringValueDescriptor;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 public class TestInnerComponentInjection extends DefaultTestBundleControl {
