@@ -27,11 +27,8 @@
 
 package org.osgi.test.cases.blueprint.components.serviceexport;
 
-import java.util.Hashtable;
 import java.util.Map;
 
-import org.osgi.test.cases.blueprint.services.AssertionService;
-import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 import org.osgi.test.cases.blueprint.services.TestServiceTwo;
 
 

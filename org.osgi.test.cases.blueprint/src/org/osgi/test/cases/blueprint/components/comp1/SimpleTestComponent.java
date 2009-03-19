@@ -27,7 +27,6 @@
 
 package org.osgi.test.cases.blueprint.components.comp1;
 
-import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 
 public class SimpleTestComponent extends BaseTestComponent {

@@ -30,9 +30,6 @@ package org.osgi.test.cases.blueprint.components.staticfactory;
 import org.osgi.test.cases.blueprint.components.comp1.AltSimpleTestComponent;
 import org.osgi.test.cases.blueprint.components.comp1.SimpleTestComponent;
 
-import org.osgi.test.cases.blueprint.services.AssertionService;
-import org.osgi.test.cases.blueprint.services.BaseTestComponent;
-
 public class SimpleStaticFactory {
     // make this non-instantiable
     private SimpleStaticFactory() {}

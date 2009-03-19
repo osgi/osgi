@@ -28,9 +28,7 @@
 package org.osgi.test.cases.blueprint.components.cmsupport;
 
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 public class ConfigurationDictionaryBuilder extends Hashtable {
     public ConfigurationDictionaryBuilder(Map map){

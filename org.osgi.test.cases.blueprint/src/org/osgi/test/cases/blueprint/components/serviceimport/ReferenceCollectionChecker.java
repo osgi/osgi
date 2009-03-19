@@ -30,22 +30,14 @@ package org.osgi.test.cases.blueprint.components.serviceimport;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.Map;
+import java.util.Set;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-
 import org.osgi.test.cases.blueprint.services.AssertionService;
-import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 import org.osgi.test.cases.blueprint.services.ManagedService;
-import org.osgi.test.cases.blueprint.services.ServiceManager;
-import org.osgi.test.cases.blueprint.services.TestGoodService;
-import org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass;
-import org.osgi.test.cases.blueprint.services.TestServiceAllSubclass;
 import org.osgi.test.cases.blueprint.services.TestServiceOne;
-import org.osgi.test.cases.blueprint.services.TestServiceTwo;
-import org.osgi.test.cases.blueprint.services.TestServiceTwoSubclass;
 
 
 /**

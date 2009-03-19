@@ -32,7 +32,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
-import org.osgi.test.cases.blueprint.services.TestServiceOne;
 
 /**
  * Concrete target for testing import of ServiceReferences.

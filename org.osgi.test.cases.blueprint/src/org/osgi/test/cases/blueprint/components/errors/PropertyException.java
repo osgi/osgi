@@ -27,7 +27,6 @@
 
 package org.osgi.test.cases.blueprint.components.errors;
 
-import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 
 /**

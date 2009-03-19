@@ -27,11 +27,7 @@
 
 package org.osgi.test.cases.blueprint.components.errors;
 
-import org.osgi.test.cases.blueprint.components.comp1.AltSimpleTestComponent;
-import org.osgi.test.cases.blueprint.components.comp1.SimpleTestComponent;
-
 import org.osgi.test.cases.blueprint.services.AssertionService;
-import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 
 public class StaticFactoryException {
     // make this non-instantiable

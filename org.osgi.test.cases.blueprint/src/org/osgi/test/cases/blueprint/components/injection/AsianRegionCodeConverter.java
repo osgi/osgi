@@ -28,7 +28,6 @@
 package org.osgi.test.cases.blueprint.components.injection;
 
 import org.osgi.service.blueprint.convert.Converter;
-import org.osgi.service.blueprint.reflect.TypedStringValue;
 
 public class AsianRegionCodeConverter implements Converter {
     private Class targetClass = AsianRegionCode.class;

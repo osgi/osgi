@@ -32,12 +32,10 @@ import java.util.Map;
 import org.osgi.service.blueprint.context.ModuleContext;
 import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
-import org.osgi.test.cases.blueprint.services.ComponentTestInfo;
 
 public class ManagedComponentInjection extends BaseTestComponent {
 
     public static int count = 0;
-    private int myId;
 
     public ManagedComponentInjection() {
         super();

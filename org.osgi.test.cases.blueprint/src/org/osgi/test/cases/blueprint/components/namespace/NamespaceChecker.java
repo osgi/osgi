@@ -27,10 +27,7 @@
 
 package org.osgi.test.cases.blueprint.components.namespace;
 
-import java.text.SimpleDateFormat;
-
 import org.osgi.framework.Bundle;
-
 import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 

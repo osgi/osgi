@@ -28,8 +28,6 @@
 package org.osgi.test.cases.blueprint.components.serviceimport;
 
 import org.osgi.test.cases.blueprint.services.AssertionService;
-import org.osgi.test.cases.blueprint.services.TestServiceOne;
-import org.osgi.test.cases.blueprint.services.TestServiceTwo;
 
 
 /**
