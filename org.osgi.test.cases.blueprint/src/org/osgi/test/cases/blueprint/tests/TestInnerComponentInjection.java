@@ -42,7 +42,6 @@ import org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStati
 import org.osgi.test.cases.blueprint.framework.ComponentAssertion;
 import org.osgi.test.cases.blueprint.framework.ConstructorMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.FactoryMetadataValidator;
-import org.osgi.test.cases.blueprint.framework.RexValidator;
 import org.osgi.test.cases.blueprint.framework.LocalComponent;
 import org.osgi.test.cases.blueprint.framework.MapValueEntry;
 import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
