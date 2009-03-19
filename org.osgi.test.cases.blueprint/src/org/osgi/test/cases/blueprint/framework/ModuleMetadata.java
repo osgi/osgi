@@ -389,13 +389,10 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
     public void validateConstructorMetadata(LocalComponentMetadata meta, TestParameter[] expected) throws Exception {
         // determine which type of parameter injection needs to be validated.
         MethodInjectionMetadata factoryMethodMeta = meta.getFactoryMethodMetadata();
-        System.out.println("~~~~~~~~~~~~~~=>"+factoryMethodMeta);
         if (factoryMethodMeta != null) {
-            System.out.println("~~~~~~~~~~~~~~!>"+factoryMethodMeta.getParameterSpecifications().size());
             validateParameters(factoryMethodMeta.getParameterSpecifications(), expected);
         }
         else {
-            System.out.println("~~~~~~~~~~~~~~?>"+meta.getConstructorInjectionMetadata().getParameterSpecifications().size());
             validateParameters(meta.getConstructorInjectionMetadata().getParameterSpecifications(), expected);
         }
     }

@@ -30,43 +30,9 @@ import java.util.Hashtable;
 
 import org.osgi.service.blueprint.reflect.ServiceExportComponentMetadata;
 import org.osgi.service.blueprint.reflect.ServiceReferenceComponentMetadata;
-import org.osgi.test.cases.blueprint.framework.BindingListener;
-import org.osgi.test.cases.blueprint.framework.BlueprintEvent;
-import org.osgi.test.cases.blueprint.framework.ComplexServicePropertyValidator;
-import org.osgi.test.cases.blueprint.framework.ComponentAssertion;
-import org.osgi.test.cases.blueprint.framework.ComponentMetadataValidator;
-import org.osgi.test.cases.blueprint.framework.ConstructorMetadataValidator;
-import org.osgi.test.cases.blueprint.framework.EventSet;
-import org.osgi.test.cases.blueprint.framework.ExportedService;
-import org.osgi.test.cases.blueprint.framework.ExportedServiceValidator;
-import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
-import org.osgi.test.cases.blueprint.framework.PropertyMetadataValidator;
-import org.osgi.test.cases.blueprint.framework.ReferenceParameter;
-import org.osgi.test.cases.blueprint.framework.ReferenceProperty;
-import org.osgi.test.cases.blueprint.framework.ReferencedService;
-import org.osgi.test.cases.blueprint.framework.ReferencedServiceValidator;
-import org.osgi.test.cases.blueprint.framework.RegistrationListener;
-import org.osgi.test.cases.blueprint.framework.ServiceManagerRegister;
-import org.osgi.test.cases.blueprint.framework.ServiceManagerUnregister;
-import org.osgi.test.cases.blueprint.framework.ServiceRegistrationValidator;
-import org.osgi.test.cases.blueprint.framework.ServiceUnregistrationValidator;
-import org.osgi.test.cases.blueprint.framework.StandardTestController;
-import org.osgi.test.cases.blueprint.framework.StringParameter;
-import org.osgi.test.cases.blueprint.framework.TestComponentValue;
-import org.osgi.test.cases.blueprint.framework.TestParameter;
-import org.osgi.test.cases.blueprint.framework.TestProperty;
-import org.osgi.test.cases.blueprint.services.AssertionService;
-import org.osgi.test.cases.blueprint.services.BaseTestComponent;
-import org.osgi.test.cases.blueprint.services.ComponentTestInfo;
-import org.osgi.test.cases.blueprint.services.ManagedService;
-import org.osgi.test.cases.blueprint.services.ServiceManager;
-import org.osgi.test.cases.blueprint.services.TestBadService;
-import org.osgi.test.cases.blueprint.services.TestGoodService;
-import org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass;
-import org.osgi.test.cases.blueprint.services.TestServiceAllSubclass;
-import org.osgi.test.cases.blueprint.services.TestServiceOne;
-import org.osgi.test.cases.blueprint.services.TestServiceTwo;
-import org.osgi.test.cases.blueprint.services.TestServiceTwoSubclass;
+import org.osgi.test.cases.blueprint.components.serviceimport.ServiceTwoListener;
+import org.osgi.test.cases.blueprint.framework.*;
+import org.osgi.test.cases.blueprint.services.*;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
@@ -1110,7 +1076,8 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // we're expecting some listener metadata on the import.
         BindingListener[] listeners = new BindingListener[] {
             new BindingListener("ServiceOneListener", "bind", "unbind"),
-            new BindingListener("ServiceTwoListener", "bind", "unbind"),
+            // this is done with an inner component
+            new BindingListener(new TestComponentValue(new LocalComponent(null, ServiceTwoListener.class, null, null)), "bind", "unbind"),
         };
         // validate the metadata for the imported service (this one only has a single import, so easy to locate)
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferencedService("ServiceOne", TestServiceOne.class,
