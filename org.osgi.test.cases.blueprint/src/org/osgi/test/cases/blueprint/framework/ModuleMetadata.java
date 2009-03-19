@@ -399,7 +399,7 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
             validateParameters(meta.getConstructorInjectionMetadata().getParameterSpecifications(), expected);
         }
     }
-    
+
     /**
      * Validate the parameters for a component against an expected set.
      *
@@ -512,7 +512,7 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
 
     /**
      * Validate the method injection metadata
-     * 
+     *
      * @param meta  The metadata describing this component. This might be for an inner component.
      * @param factoryMethodName
      * @param staticFactoryClassName
@@ -522,13 +522,13 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
     public void validateFactoryMetadata(LocalComponentMetadata meta, String factoryMethodName, String staticFactoryClassName, TestValue factoryTestComponentValue) throws Exception {
         MethodInjectionMetadata methodMetadata = meta.getFactoryMethodMetadata();
         assertNotNull("Component " + meta.getName() + " factory metadata expected", methodMetadata);
-        
+
         // validate factory method name
         assertEquals("Factory method for component " + meta.getName(), factoryMethodName, methodMetadata.getName());
-        
+
         // validate class name
         assertEquals("Component " + meta.getName() + " class name mismatch", staticFactoryClassName, meta.getClassName());
-        
+
         // validate for instance factory
         if (factoryTestComponentValue != null) { //optional validate..
             Value factoryComponentValue = meta.getFactoryComponent();
@@ -574,7 +574,8 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
     public void validatePropertyMetadata(LocalComponentMetadata meta, TestProperty[] expected) throws Exception {
         Collection propMetas = meta.getPropertyInjectionMetadata();
 
-        assertEquals("Mismatch in property set size", expected.length, propMetas.size());
+        // the list here might be a partial list of the properties to validate, so only worry about
+        // the ones in this list.
         Iterator it = propMetas.iterator();
         // validate each expected argment against the actual metadata for this constructor.
         int i = 0;

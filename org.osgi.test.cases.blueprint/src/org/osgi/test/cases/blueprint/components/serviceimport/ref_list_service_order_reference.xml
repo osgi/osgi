@@ -18,7 +18,7 @@
             <ref-list interface="org.osgi.test.cases.blueprint.services.TestServiceOne" ordering-basis="service" member-type="service-reference"/>
         </property>
         <property name="bundleContext" ref="bundleContext"/>
-        <property name="usesReferences" value="true"/>
+        <property name="useReferences" value="true"/>
         <property name="sortOrder">
             <list>
                 <value>ServiceOneB</value>

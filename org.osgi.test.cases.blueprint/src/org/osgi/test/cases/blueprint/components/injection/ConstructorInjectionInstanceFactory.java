@@ -74,7 +74,7 @@ public class ConstructorInjectionInstanceFactory extends BaseTestComponent {
      *            The component identifier used for test verification purposes.
      */
     public Object makeInstance(String componentId, String arg2, Object arg3) {
-        return new ConstructorInjection(componentId, arg2);
+        return new ConstructorInjection(componentId, arg2, arg3);
     }
 
     public Object makeInstance(boolean arg2) {

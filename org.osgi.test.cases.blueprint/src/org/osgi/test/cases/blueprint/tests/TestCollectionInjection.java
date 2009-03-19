@@ -2030,8 +2030,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         // Map nested inside of a Map
         Map innerMap = new HashMap();
-        expected.put("abc", "1");
-        expected.put("def", "2");
+        innerMap.put("abc", "1");
+        innerMap.put("def", "2");
         expected = new HashMap();
         expected.put("inner", innerMap);
         addConstructorValidator(startEvents, "compNestedMap", expected, Map.class);

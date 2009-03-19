@@ -145,7 +145,7 @@ public class ReferencedServiceBase extends Assert implements TestComponentMetada
             for (int i = 0; i < listeners.length; i++) {
                 BindingListener s = listeners[i];
                 BindingListenerMetadata l = locateBindingListener(bindingListeners, s);
-                assertNotNull("Missing binding listener", l);
+                assertNotNull("Missing binding listener (" + s + ") for component " + name, l);
                 // do additional validation on the listener definition.
                 s.validate(moduleMetadata, l);
             }

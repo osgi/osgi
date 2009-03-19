@@ -7,7 +7,7 @@
         This imports a service reference with a multiple attached listeners
     </description>
 
-    <component id="ServiceTwoOneListener" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceOneTwoListener">
+    <component id="ServiceOneTwoListener" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceOneTwoListener">
         <constructor-arg value="ServiceOneTwoListener"/>
     </component>
 

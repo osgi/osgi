@@ -17,7 +17,7 @@
            <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
        </property>
        <property name="bundleContext" ref="bundleContext"/>
-       <property name="usesReferences" value="true"/>
+       <property name="useReferences" value="true"/>
        <property name="set">
            <ref-set comparator-ref="NameComparator" member-type="service-reference">
                <interfaces>

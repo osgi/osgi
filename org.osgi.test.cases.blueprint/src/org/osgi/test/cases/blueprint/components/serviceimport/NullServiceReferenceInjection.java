@@ -56,6 +56,7 @@ public class NullServiceReferenceInjection extends BaseTestComponent {
 
     public void setReference(ServiceReference ref) throws Throwable {
         AssertionService.assertNull(this, "non-null ServiceReference received", ref);
+        AssertionService.sendEvent(this, AssertionService.SERVICE_SUCCESS);
     }
 }
 

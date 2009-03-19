@@ -81,5 +81,9 @@ public class BindingListener extends Assert {
         assertEquals(unbindName, meta.getUnbindMethodName());
         listener.validate(moduleMetadata, meta.getListenerComponent());
     }
+
+    public String toString() {
+        return "Binding listener component: " + listener;
+    }
 }
 
