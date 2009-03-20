@@ -1,0 +1,30 @@
+javac.source 			= 1.5
+javac.target 			= 1.5
+
+Bundle-Version: 4.2.0.${project.build}
+Export-Package						= ${p}.*
+
+Include-Resource					= \
+	www/generic_collection_injection.jar=generic_collection_injection.jar , \
+	www/managed_service_export.jar=managed_service_export.jar , \
+	www/reference_collection_import.jar=reference_collection_import.jar , \
+	www/reference_list_import.jar=reference_list_import.jar , \
+	www/reference_set_import.jar=reference_set_import.jar
+
+Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+
+-buildpath							= \
+    org.osgi.test.support;                  version=project , \
+    org.osgi.service.blueprint;             version=project , \
+    org.osgi.test.cases.blueprint;          version=project , \
+	osgi;									version=4.1		, \
+	${junit}
+
+-runbundles							= \
+	org.osgi.impl.service.log; version=latest, \
+	org.apache.felix.configadmin;  version=latest, \
+	org.eclipse.equinox.event; version=latest, \
+ 	osgi; version=latest, \
+ 	org.osgi.test.support;  version=latest, \
+ 	org.osgi.test.cases.blueprint;  version=latest, \
+        org.springsource.service.blueprint; version=latest

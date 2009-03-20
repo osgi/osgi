@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <component id="GenericListConstructor" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericListInjection">
+        <constructor-arg>
+            <list>
+                <value>123</value>
+                <value>456</value>
+            </list>
+        </constructor-arg>
+    </component>
+
+    <component id="GenericListProperty" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericListInjection">
+        <property name="string">
+            <list>
+                <value>abc</value>
+                <value>def</value>
+            </list>
+        </property>
+        <property name="class">
+            <list>
+                <value>java.lang.String</value>
+                <value>org.osgi.test.cases.blueprint.java5.components.injection.GenericListInjection</value>
+            </list>
+        </property>
+    </component>
+
+    <component id="GenericSetConstructor" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericSetInjection">
+        <constructor-arg>
+            <list>
+                <value>3.1415926</value>
+                <value>1.0</value>
+            </list>
+        </constructor-arg>
+    </component>
+
+    <component id="GenericSetProperty" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericSetInjection">
+        <property name="integer">
+            <list>
+                <value>123</value>
+                <value>456</value>
+            </list>
+        </property>
+        <property name="url">
+            <list>
+                <value>http://www.osgi.org</value>
+                <value>http://www.w3c.org</value>
+            </list>
+        </property>
+    </component>
+
+    <component id="GenericMapConstructor" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericMapInjection">
+        <constructor-arg>
+            <map>
+                <entry key="1" value="true"/>
+                <entry key="2" value="no"/>
+                <entry key="3" value="on"/>
+                <entry key="4" value="false"/>
+            </map>
+        </constructor-arg>
+    </component>
+
+    <component id="GenericMapProperty" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericMapInjection">
+        <property name="map1">
+            <map>
+                <entry key="1.0" value="true"/>
+                <entry key="2.0" value="false"/>
+            </map>
+        </property>
+        <property name="map2">
+            <map>
+                <entry key="osgi" value="http://www.osgi.org"/>
+                <entry key="w3c" value="http://www.w3c.org"/>
+            </map>
+        </property>
+    </component>
+</components>
+
