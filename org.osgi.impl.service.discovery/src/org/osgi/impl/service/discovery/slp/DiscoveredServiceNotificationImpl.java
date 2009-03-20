@@ -38,7 +38,7 @@ public class DiscoveredServiceNotificationImpl implements
 	private Collection/*String*/ interfaces;
 
 	public DiscoveredServiceNotificationImpl(ServiceEndpointDescription sed,
-			int notificationType, Collection matchingFilters, Collection matchingInterfaces) {
+			int notificationType, Collection matchingInterfaces, Collection matchingFilters) {
 		descr = sed;
 		type = notificationType;
 		filters = matchingFilters;
