@@ -298,4 +298,34 @@ public class TestConfigErrors extends DefaultTestBundleControl {
             getWebServer()+"www/error_type_converter.jar");
         controller.run();
     }
+
+    /**
+     * Tests a reference to an undefined component
+     */
+    public void testMissingReferenceError() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_missing_reference.jar");
+        controller.run();
+    }
+
+    /**
+     * Tests a reference to an undefined component
+     */
+    public void testCircularReferenceError() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_circular_reference.jar");
+        controller.run();
+    }
+
+    /**
+     * Tests injecting a null value into a primitive type
+     */
+    public void testPrimitiveNull() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_primitive_null.jar");
+        controller.run();
+    }
 }
