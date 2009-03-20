@@ -7,7 +7,7 @@
       <!-- collaborators and configuration for this component go here -->
     </component>
 
-   <component id="compFactory" factory-component="compFactory" factory-method="createSimpleNotHere">
+   <component factory-component="compFactory" factory-method="createSimpleNotHere">
      <!-- collaborators and configuration for this component go here -->
    </component>
 </components>

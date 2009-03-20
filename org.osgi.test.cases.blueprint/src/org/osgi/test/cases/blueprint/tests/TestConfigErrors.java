@@ -328,4 +328,34 @@ public class TestConfigErrors extends DefaultTestBundleControl {
             getWebServer()+"www/error_primitive_null.jar");
         controller.run();
     }
+
+    /**
+     * Tests the target property does not exist
+     */
+    public void testMissingProperty() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_missing_property.jar");
+        controller.run();
+    }
+
+    /**
+     * Tests the checking for multple setters for a name
+     */
+    public void testAmbiguousProperty() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_ambiguous_property.jar");
+        controller.run();
+    }
+
+    /**
+     * Tests a bad bean pattern, with the getter and setter not in agreement.
+     */
+    public void testBadProperty() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_bad_property.jar");
+        controller.run();
+    }
 }

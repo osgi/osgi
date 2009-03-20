@@ -263,4 +263,24 @@ public class PropertyInjection extends BaseTestComponent {
     }
 
     // End of insertion of array property
+
+    // the following ones are to test property error situations
+
+    // more than one setter
+    public void setAmbiguous(Object v) {
+        setPropertyValue("ambiguous", v, Object.class);
+    }
+
+    public void setAmbiguous(int v) {
+        setPropertyValue("ambiguous", v);
+    }
+
+    // mismatched setters/getters
+    public void setBadBean(int v) {
+        setPropertyValue("badBean", v);
+    }
+
+    public Object getBadBean() {
+        return null;     // not really used
+    }
 }
