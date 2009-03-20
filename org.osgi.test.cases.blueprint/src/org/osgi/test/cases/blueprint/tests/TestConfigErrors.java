@@ -358,4 +358,34 @@ public class TestConfigErrors extends DefaultTestBundleControl {
             getWebServer()+"www/error_bad_property.jar");
         controller.run();
     }
+
+    /**
+     * Tests a non-complete set of constructor indexes
+     */
+    public void testSkippedIndex() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_constructor_skipped_index.jar");
+        controller.run();
+    }
+
+    /**
+     * Tests a duplicate index in the constructor argument set
+     */
+    public void testDuplicateIndex() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_constructor_duplicate_index.jar");
+        controller.run();
+    }
+
+    /**
+     * Tests index positions specified on only some of the constructor arguments
+     */
+    public void testPartialIndex() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_constructor_partial_index.jar");
+        controller.run();
+    }
 }
