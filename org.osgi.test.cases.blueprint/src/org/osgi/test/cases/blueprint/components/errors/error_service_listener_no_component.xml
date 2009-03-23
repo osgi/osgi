@@ -3,23 +3,9 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
-    <description>
-        This is just a simple exported service using a single interface.
-    </description>
-
     <!-- the node is the one that is used for the registered service -->
    <component id="ServiceOne" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass" init-method="init">
        <constructor-arg value="ServiceOne"/>
-   </component>
-
-   <!-- the node is the one that is with a service that uses listeners.  Should only be registered after activation. -->
-   <component id="ServiceTwo" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass" init-method="init">
-       <constructor-arg value="ServiceTwo"/>
-   </component>
-
-   <!-- the node is the one that is with a service that uses auto-export.  Should only be registered after activation. -->
-   <component id="ServiceThree" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass" init-method="init">
-       <constructor-arg value="ServiceThree"/>
    </component>
 
    <component id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceexport.ServiceOneRegistrationListener">
@@ -31,12 +17,9 @@
 
    <!-- This service will not be registered before activation because it uses a listener -->
    <service id="ServiceTwoService" ref="ServiceTwo" interface="org.osgi.test.cases.blueprint.services.TestServiceTwo">
-       <registration-listener ref="ServiceTwoListener"
+       <registration-listener
            registration-method="register"
-           registration-method="unregister"/>
+           unregistration-method="unregister"/>
    </service>
-
-   <!-- This service will not be registered before activation because uses auto-export -->
-   <service id="ServiceOneService" ref="ServiceThree" auto-export="interface"/>
 </components>
 

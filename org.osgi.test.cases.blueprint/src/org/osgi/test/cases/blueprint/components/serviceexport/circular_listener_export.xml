@@ -8,7 +8,7 @@
     </description>
 
    <!-- This is both the service we export AND the listner for the service registrations -->
-   <component id="ServiceOneListener" class="org.osgi.test.cases.blueprint.serviceexport.CircularRegistrationListener">
+   <component id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceexport.CircularRegistrationListener">
        <constructor-arg value="ServiceOneListener"/>
    </component>
 

@@ -488,4 +488,74 @@ public class TestConfigErrors extends DefaultTestBundleControl {
             getWebServer()+"www/error_service_dup_interface.jar");
         controller.run();
     }
+
+    /**
+     * Bad component name on listener
+     */
+    public void testServiceListenerBadComponent() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_service_listener_bad_component.jar");
+        controller.run();
+    }
+
+    /**
+     * Bad register method signature
+     */
+    public void testServiceListenerBadRegister() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_service_listener_bad_register.jar");
+        controller.run();
+    }
+
+    /**
+     * Bad unregister method signature
+     */
+    public void testServiceListenerBadUnregister() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_service_listener_bad_unregister.jar");
+        controller.run();
+    }
+
+    /**
+     * No listener component specified
+     */
+    public void testServiceListenerNoComponent() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_service_listener_no_component.jar");
+        controller.run();
+    }
+
+    /**
+     * No listener methods specified
+     */
+    public void testServiceListenerNoMethods() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_service_listener_no_methods.jar");
+        controller.run();
+    }
+
+    /**
+     * No register method found
+     */
+    public void testServiceListenerNoRegister() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_service_listener_no_register.jar");
+        controller.run();
+    }
+
+    /**
+     * No unregister method found
+     */
+    public void testServiceListenerNoUnregister() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_service_listener_no_unregister.jar");
+        controller.run();
+    }
 }

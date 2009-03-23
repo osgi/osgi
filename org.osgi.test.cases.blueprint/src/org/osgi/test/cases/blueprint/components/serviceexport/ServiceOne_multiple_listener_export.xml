@@ -12,11 +12,11 @@
        <constructor-arg value="ServiceOne"/>
    </component>
 
-   <component id="ServiceOneListener" class="org.osgi.test.cases.blueprint.serviceexport.ServiceOneRegistrationListener">
+   <component id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceexport.ServiceOneRegistrationListener">
        <constructor-arg value="ServiceOneListener"/>
    </component>
 
-   <component id="ServiceTwoListener" class="org.osgi.test.cases.blueprint.serviceexport.ServiceTwoRegistrationListener">
+   <component id="ServiceTwoListener" class="org.osgi.test.cases.blueprint.components.serviceexport.ServiceTwoRegistrationListener">
        <constructor-arg value="ServiceTwoListener"/>
    </component>
 

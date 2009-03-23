@@ -21,7 +21,7 @@
        <registration-listener
            registration-method="register"
            unregistration-method="unregister">
-           <component class="org.osgi.test.cases.blueprint.serviceexport.ServiceOneTwoRegistrationListener">
+           <component class="org.osgi.test.cases.blueprint.components.serviceexport.ServiceOneTwoRegistrationListener">
                <constructor-arg value="ServiceOneTwoListener"/>
            </component>
        </registration-listener>

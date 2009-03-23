@@ -29,6 +29,7 @@ package org.osgi.test.cases.blueprint.components.serviceexport;
 
 import java.util.Map;
 
+import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.services.TestServiceOne;
 
 
@@ -47,6 +48,14 @@ public class ServiceOneRegistrationListener extends RegistrationListener  {
 
     public void unregistered(TestServiceOne service, Map serviceProperties) {
         unregistered(TestServiceOne.class, serviceProperties);
+    }
+
+    public void badRegistered(TestServiceOne service) {
+        AssertionService.fail(this, "Invalid registered method call");
+    }
+
+    public void badUnregistered(TestServiceOne service) {
+        AssertionService.fail(this, "Invalid unregistered method call");
     }
 }
 

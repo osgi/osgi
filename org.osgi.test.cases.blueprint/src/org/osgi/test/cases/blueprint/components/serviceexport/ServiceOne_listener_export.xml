@@ -12,7 +12,7 @@
        <constructor-arg value="ServiceOne"/>
    </component>
 
-   <component id="ServiceOneListener" class="org.osgi.test.cases.blueprint.serviceexport.RegistrationStateListener">
+   <component id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceexport.RegistrationStateListener">
        <constructor-arg value="ServiceOneListener"/>
        <!-- Another circular depdendency.  This allows us to check the service registration state
             during the listener calls -->
