@@ -27,6 +27,7 @@
 
 package org.osgi.test.cases.blueprint.components.errors;
 
+import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 
 /**
@@ -48,6 +49,15 @@ public class InitMethodException extends BaseTestComponent {
         // this broadcasts an event we can track
         super.init();
         throw new NullPointerException("Intentional exception from component " + componentId);
+    }
+
+
+    /**
+     * An init method with a bad signature
+     */
+    public int badInit(int a) {
+        AssertionService.fail(this, "Invalid init method call");
+        return 0;
     }
 }
 

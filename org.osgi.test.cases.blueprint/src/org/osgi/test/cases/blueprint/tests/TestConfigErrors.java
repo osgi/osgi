@@ -388,4 +388,44 @@ public class TestConfigErrors extends DefaultTestBundleControl {
             getWebServer()+"www/error_constructor_partial_index.jar");
         controller.run();
     }
+
+    /**
+     * Badly named init method
+     */
+    public void testInitNoMethod() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_init_no_method.jar");
+        controller.run();
+    }
+
+    /**
+     * Badly named destroy method
+     */
+    public void testDestroyNoMethod() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_destroy_no_method.jar");
+        controller.run();
+    }
+
+    /**
+     * Badly named init method
+     */
+    public void testInitBadMethod() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_init_bad_method.jar");
+        controller.run();
+    }
+
+    /**
+     * Badly named destroy method
+     */
+    public void testDestroyBadMethod() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_destroy_bad_method.jar");
+        controller.run();
+    }
 }

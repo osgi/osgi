@@ -27,6 +27,7 @@
 
 package org.osgi.test.cases.blueprint.components.errors;
 
+import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 
 /**
@@ -45,9 +46,17 @@ public class DestroyMethodException extends BaseTestComponent {
      * A destroy method that will throw an exception.
      */
     public void destroy() {
-        // this broadcasts an event we can track
         super.destroy();
         throw new NullPointerException("Intentional exception from component " + componentId);
+    }
+
+
+    /**
+     * A destroy method with a bad signature
+     */
+    public int badDestroy(int a) {
+        AssertionService.fail(this, "Invalid destroy method call");
+        return 0;
     }
 }
 
