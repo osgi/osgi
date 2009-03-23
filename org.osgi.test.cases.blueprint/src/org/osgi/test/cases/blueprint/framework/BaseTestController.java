@@ -112,6 +112,16 @@ public class BaseTestController implements EventHandler, ModuleContextListener, 
         return extenderBundle;
     }
 
+    /**
+     * Return the extender bundle that we believe we're running
+     * against.
+     *
+     * @return
+     */
+    static public Bundle getExtenderBundle() {
+        return extenderBundle;
+    }
+
 
     /**
      * Add a setup bundle that must be installed and

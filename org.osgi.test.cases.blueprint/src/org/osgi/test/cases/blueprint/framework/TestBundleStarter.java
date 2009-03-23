@@ -36,9 +36,16 @@ import org.osgi.framework.BundleContext;
 public class TestBundleStarter implements TestInitializer {
     // the bundle we manage
     protected Bundle bundle;
+    // a delay to apply to the start (in milliseconds)
+    protected long delay = 0;
 
     public TestBundleStarter(Bundle bundle) {
         this.bundle = bundle;
+    }
+
+    public TestBundleStarter(Bundle bundle, long delay) {
+        this.bundle = bundle;
+        this.delay = delay;
     }
 
 
@@ -52,6 +59,15 @@ public class TestBundleStarter implements TestInitializer {
      * @exception Exception
      */
     public void start(BundleContext testContext) throws Exception {
+        // we might want to delay starting this
+        if (delay > 0) {
+            try {
+                // half a second should be sufficiently long, likely longer than is needed.
+                Thread.sleep(delay);
+            } catch (InterruptedException e) {
+            }
+        }
+
         System.out.println(">>>>>>>> starting bundle " + bundle);
         bundle.start();
     }
