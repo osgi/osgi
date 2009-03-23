@@ -22,10 +22,10 @@
        	<constructor-arg>
             <set>  
 				<component class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-					<constructor-arg value="compInner1"/>
+					<constructor-arg value="compInner3"/>
 				</component>
-                <component class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-					<constructor-arg value="compInner2"/>
+                <component class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+					<property name="string" value="compInner4"/>
 				</component>
           	 </set>
       	 </constructor-arg>
@@ -47,12 +47,12 @@
                 </entry>
                 <entry>
                     <key>
-                        <component class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-							<constructor-arg value="compInnerEntryKey2"/>
+                        <component class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+							<property name="string" value="compInnerEntryKey2"/>
 						</component>
                     </key>
-                    <component class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-						<constructor-arg value="compInnerEntryValue2"/>
+                    <component class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+						<property name="string" value="compInnerEntryValue2"/>
 					</component>
                 </entry>
             </map>

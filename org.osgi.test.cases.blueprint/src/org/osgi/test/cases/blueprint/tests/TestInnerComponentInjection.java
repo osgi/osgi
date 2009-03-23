@@ -27,23 +27,36 @@
 
 package org.osgi.test.cases.blueprint.tests;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.osgi.test.cases.blueprint.components.injection.ConstructorInjection;
 import org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory;
 import org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection;
+import org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory;
 import org.osgi.test.cases.blueprint.components.injection.PropertyInjection;
 import org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory;
 import org.osgi.test.cases.blueprint.framework.ComponentAssertion;
 import org.osgi.test.cases.blueprint.framework.ConstructorMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.FactoryMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.LocalComponent;
+import org.osgi.test.cases.blueprint.framework.MapValueEntry;
 import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
 import org.osgi.test.cases.blueprint.framework.PropertyMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.StandardTestController;
 import org.osgi.test.cases.blueprint.framework.StringParameter;
 import org.osgi.test.cases.blueprint.framework.StringProperty;
 import org.osgi.test.cases.blueprint.framework.TestComponentValue;
+import org.osgi.test.cases.blueprint.framework.TestListValue;
+import org.osgi.test.cases.blueprint.framework.TestMapValue;
 import org.osgi.test.cases.blueprint.framework.TestParameter;
 import org.osgi.test.cases.blueprint.framework.TestProperty;
+import org.osgi.test.cases.blueprint.framework.TestSetValue;
 import org.osgi.test.cases.blueprint.framework.TestValue;
 import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
@@ -281,7 +294,7 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
 
         // parameter metadata test
         // TODO: bugzilla 1230, Mismatch in constructor parameter size expected:<1> but was:<0>
-        // this.addConstructorMetadataTestItems(startEvents, null, "makeInstance");
+        this.addConstructorMetadataTestItems(startEvents, null, "makeInstance");
 
         controller.run();
     }
@@ -296,7 +309,7 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
 
         // factory metadata test
         // TODO: bugzilla 1231, comp created by StaticFactory, has constructorInjMetadata, but no methodInjMetaData?
-        // this.addFactoryMetadataTestItems(startEvents,InnerComponentInjectionStaticFactory.class.getName(), null);
+        this.addFactoryMetadataTestItems(startEvents,InnerComponentInjectionStaticFactory.class.getName(), null);
 
         // parameter metadata test
         // TODO: LocalComponent, wait bugzilla 1230 1231
@@ -401,7 +414,7 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         TestComponentValue testComponentValue = new TestComponentValue(
                 new LocalComponent(
                         innerComponentSpecifiedClass,
-                        null,
+                        factoryMethodName,
                         null,
                         new TestProperty[] { new StringProperty(innerProName, innerProType, innerProSource) }
                 )
@@ -485,28 +498,140 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         controller.run();
     }
 
-//    // Collection Test
-//    public void testCollectionInjection() throws Exception {
-//        StandardTestController controller = new StandardTestController(getContext(), getWebServer()
-//                + "www/inner_component_collection_injection.jar");
-//        MetadataEventSet startEvents = controller.getStartEvents();
-//
-//        TestComponentValue testComponentValue = new TestComponentValue(new LocalComponent(ComponentTestInfo.class,
-//                new TestParameter[] { new StringParameter() }, null));
-//
-//        // List
-//        startEvents.addValidator(new ConstructorMetadataValidator("compInnerList", new TestParameter[] { new TestParameter(
-//                new TestListValue(new TestValue[] { testComponentValue, testComponentValue })) }));
-//
-//        // Set
-//        startEvents.addValidator(new ConstructorMetadataValidator("compInnerSet", new TestParameter[] { new TestParameter(
-//                new TestSetValue(new TestValue[] { testComponentValue, testComponentValue })) }));
-//
-//        // Map
-//        startEvents.addValidator(new ConstructorMetadataValidator("compInnerMap", new TestParameter[] { new TestParameter(
-//                new TestMapValue(new MapValueEntry[] { new MapValueEntry(testComponentValue, testComponentValue),
-//                        new MapValueEntry(testComponentValue, testComponentValue) })) }));
-//
-//        controller.run();
-//    }
+    
+    private TestComponentValue makeTestComponentValue(Class innerComponentClass, String factoryMethodName,
+            Class innerArgTargetType, Class innerArgValueType, String innerArgSource){
+        return new TestComponentValue(
+                new LocalComponent(
+                        innerComponentClass,
+                        factoryMethodName,
+                        new TestParameter[] { new StringParameter(innerArgTargetType, innerArgSource, innerArgValueType) },
+                        null
+                )
+        );
+    }
+    
+    // Collection Test
+    public void testCollectionInjection() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(), getWebServer()
+                + "www/inner_component_collection_injection.jar");
+        MetadataEventSet startEvents = controller.getStartEvents();
+        
+        // List - meta
+        TestComponentValue testComponentValue1 = this.makeTestComponentValue(ConstructorInjection.class, null, null, null, "compInner1");
+        TestComponentValue testComponentValue2 = this.makeTestComponentValue(ConstructorInjection.class, null, null, null, "compInner2");
+        startEvents.addValidator(
+                new ConstructorMetadataValidator(
+                        "compInnerList", 
+                        new TestParameter[] { 
+                                new TestParameter(
+                                        new TestListValue(
+                                                new TestValue[] { testComponentValue1, testComponentValue2 }
+                                        )
+                                )
+                        }
+                )
+        );
+        // List - value
+        ConstructorInjection inner1 = new ConstructorInjection("compInner1");
+        ConstructorInjection inner2 = new ConstructorInjection("compInner2");
+        List expectedList = new ArrayList();
+        expectedList.add(inner1);
+        expectedList.add(inner2);
+        this.addConstructorValueValidator(startEvents, "compInnerList", expectedList, List.class);
+        
+
+        
+        
+        // Set - meta
+        TestComponentValue testComponentValue3 = this.makeTestComponentValue(ConstructorInjection.class, null, null, null, "compInner3");
+        TestComponentValue testComponentValue4 = new TestComponentValue(
+                new LocalComponent(
+                        PropertyInjection.class,
+                        null,
+                        null,
+                        new TestProperty[] { new StringProperty("string", null, "compInner4") }
+                )
+        );
+        startEvents.addValidator(
+                new ConstructorMetadataValidator(
+                        "compInnerSet", 
+                        new TestParameter[] { 
+                                new TestParameter(
+                                        new TestSetValue(
+                                                new TestValue[] { testComponentValue3, testComponentValue4 }
+                                        )
+                                )
+                        }
+                )
+        );
+        
+        
+//        // Set - value
+//        ConstructorInjection inner3 = new ConstructorInjection("compInner3");
+//        PropertyInjection inner4 = new PropertyInjection();
+//        inner4.setString("compInner4");
+//        Set expectedSet = new LinkedHashSet();
+//        expectedSet.add(inner3);
+//        expectedSet.add(inner4);
+//        this.addConstructorValueValidator(startEvents, "compInnerSet", expectedSet, Set.class);
+
+        
+        
+        // Map - meta 
+        TestComponentValue compInnerEntryKey1 = this.makeTestComponentValue(ConstructorInjection.class, null, null, null, "compInnerEntryKey1");
+        TestComponentValue compInnerEntryValue1 = this.makeTestComponentValue(ConstructorInjection.class, null, null, null, "compInnerEntryValue1");
+        TestComponentValue compInnerEntryKey2 = new TestComponentValue(
+        new LocalComponent(
+                PropertyInjection.class,
+                null,
+                null,
+                new TestProperty[] { new StringProperty("string", null, "compInnerEntryKey2") }
+                )
+        );
+        TestComponentValue compInnerEntryValue2 =  new TestComponentValue(
+                new LocalComponent(
+                        PropertyInjection.class,
+                        null,
+                        null,
+                        new TestProperty[] { new StringProperty("string", null, "compInnerEntryValue2") }
+                        )
+                );
+        
+        startEvents.addValidator(
+                new ConstructorMetadataValidator(
+                        "compInnerMap", 
+                        new TestParameter[] { 
+                                new TestParameter(
+                                        new TestMapValue(
+                                                new MapValueEntry[] {
+                                                        new MapValueEntry(compInnerEntryKey1, compInnerEntryValue1),
+                                                        new MapValueEntry(compInnerEntryKey2, compInnerEntryValue2)
+                                                }
+                                        )
+                                )
+                        }
+                )
+        );
+        
+        
+        
+        
+//        // Map - value
+//        ConstructorInjection innerKey1 = new ConstructorInjection("compInnerEntryKey1");
+//        ConstructorInjection innerValue1 = new ConstructorInjection("compInnerEntryValue1");
+//        PropertyInjection innerKey2 = new PropertyInjection();
+//        innerKey2.setString("compInnerEntryKey2");
+//        PropertyInjection innerValue2 = new PropertyInjection();     
+//        innerValue2.setString("compInnerEntryValue2");
+//        
+//        Map expectedMap = new HashMap();
+//        expectedMap.put(innerKey1, innerValue1);
+//        expectedMap.put(innerKey2, innerValue2);
+//        
+//        this.addConstructorValueValidator(startEvents, "compInnerMap", expectedMap, Map.class);
+        
+        
+        controller.run();
+    }
 }

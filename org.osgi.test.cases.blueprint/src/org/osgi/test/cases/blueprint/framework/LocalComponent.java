@@ -147,21 +147,21 @@ public class LocalComponent extends Assert implements TestComponentMetadata {
             assertNull("non-null component name for inner component", meta.getName());
         }
         
-//        // three ways to create a component
-//        if (className != null && factoryMethod == null){
-//            // directly created from class
-//            assertEquals("Component " + meta.getName() + " class name mismatch", className, meta.getClassName());
-//            assertNull("Component " + meta.getName() + " factory method is not null", meta.getFactoryMethodMetadata());
-//        }else if (className != null && factoryMethod != null){
-//            // by static factory
-//            moduleMetadata.validateFactoryMetadata(meta, factoryMethod, className, null);
-//        }else if (className == null && factoryMethod != null){
-//            // by instance factory
-//            moduleMetadata.validateFactoryMetadata(meta, factoryMethod, null, factoryTestComponentValue);
-//        }else{
-//            // error status
-//            fail("The test data for Component " + meta.getName() +" instantiated incorrectly, both class type and factory method name are null.");
-//        }
+        // three ways to create a component
+        if (className != null && factoryMethod == null){
+            // directly created from class
+            assertEquals("Component " + meta.getName() + " class name mismatch", className, meta.getClassName());
+            assertNull("Component " + meta.getName() + " factory method is not null", meta.getFactoryMethodMetadata());
+        }else if (className != null && factoryMethod != null){
+            // by static factory
+            moduleMetadata.validateFactoryMetadata(meta, factoryMethod, className, null);
+        }else if (className == null && factoryMethod != null){
+            // by instance factory
+            moduleMetadata.validateFactoryMetadata(meta, factoryMethod, null, factoryTestComponentValue);
+        }else{
+            // error status
+            fail("The test data for Component " + meta.getName() +" instantiated incorrectly, both class type and factory method name are null.");
+        }
 
         
         

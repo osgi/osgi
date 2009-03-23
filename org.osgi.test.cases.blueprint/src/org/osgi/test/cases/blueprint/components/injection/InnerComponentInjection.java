@@ -73,17 +73,17 @@ public class InnerComponentInjection extends BaseTestComponent {
 
     public InnerComponentInjection(List arg1) {
         super();
-        setArgumentValue("argList", arg1, List.class);
+        setArgumentValue("arg1", arg1, List.class);
     }
 
     public InnerComponentInjection(Set arg1) {
         super();
-        setArgumentValue("argSet", arg1, Set.class);
+        setArgumentValue("arg1", arg1, Set.class);
     }
 
     public InnerComponentInjection(Map arg1) {
         super();
-        setArgumentValue("argMap", arg1, Map.class);
+        setArgumentValue("arg1", arg1, Map.class);
     }
 
 
