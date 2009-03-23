@@ -428,4 +428,64 @@ public class TestConfigErrors extends DefaultTestBundleControl {
             getWebServer()+"www/error_destroy_bad_method.jar");
         controller.run();
     }
+
+    /**
+     * Bad component reference on service export
+     */
+    public void testServiceBadComponent() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_service_bad_component.jar");
+        controller.run();
+    }
+
+    /**
+     * Bad interface name on service export
+     */
+    public void testServiceBadInterface() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_service_bad_interface.jar");
+        controller.run();
+    }
+
+    /**
+     * No component for a service export
+     */
+    public void testServiceNoComponent() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_service_no_component.jar");
+        controller.run();
+    }
+
+    /**
+     * No interface for a service export
+     */
+    public void testServiceNoInterface() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_service_no_interface.jar");
+        controller.run();
+    }
+
+    /**
+     * Wrong interface for component on a service export
+     */
+    public void testServiceWrongInterface() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_service_wrong_interface.jar");
+        controller.run();
+    }
+
+    /**
+     * Wrong both interface attribute and interfaces element specified
+     */
+    public void testServiceDupInterface() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_service_dup_interface.jar");
+        controller.run();
+    }
 }
