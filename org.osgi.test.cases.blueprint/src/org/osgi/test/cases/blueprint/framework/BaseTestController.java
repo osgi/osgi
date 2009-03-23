@@ -113,6 +113,16 @@ public class BaseTestController implements EventHandler, ModuleContextListener, 
     }
 
     /**
+     * Retrieve the test bundle context from the controller.
+     *
+     * @return The current BundleContext.
+     */
+    public BundleContext getTestContext() {
+        return testContext;
+    }
+
+
+    /**
      * Return the extender bundle that we believe we're running
      * against.
      *

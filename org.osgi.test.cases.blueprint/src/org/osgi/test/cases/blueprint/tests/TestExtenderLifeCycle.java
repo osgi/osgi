@@ -29,6 +29,7 @@ package org.osgi.test.cases.blueprint.tests;
 import java.util.Hashtable;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 
 import org.osgi.service.blueprint.reflect.ServiceExportComponentMetadata;
 import org.osgi.service.blueprint.reflect.ServiceReferenceComponentMetadata;
@@ -77,6 +78,32 @@ public class TestExtenderLifeCycle extends DefaultTestBundleControl {
         // have this start with a little delay behind the others
         startEvents.addInitializer(new TestBundleStarter(extenderBundle, 1000));
         // this should run through all of the normal startup/shutdown events from here.
+        controller.run();
+    }
+
+
+    /**
+     * Test the orderly shutdown of managed bundles when the
+     * extender bundle is stopped.
+     *
+     * @exception Exception
+     */
+    public void testExtenderStop() throws Exception {
+        // this test uses something other than the standard set of
+        // events/validators/controllers, so we'll hand construct the
+        // test phases rather than using the standard controller.
+        ExtenderStopController controller = new ExtenderStopController(getContext(), getExtenderBundle());
+        // no imports or exports on this one
+        controller.addBundle(getWebServer()+"www/comp1_no_header.jar");
+        // the import jar has a dependency on the export one, so the import should be
+        // shutdown first
+        controller.addBundle(getWebServer()+"www/ServiceTwoSubclass_export.jar");
+        controller.addBundle(getWebServer()+"www/ServiceTwoSubclass_import.jar");
+        // there's a circular reference relationship between these two bundles...this
+        // will shutdown the first installed one first.
+        controller.addBundle(getWebServer()+"www/circular_ref_one.jar");
+        controller.addBundle(getWebServer()+"www/circular_ref_two.jar");
+
         controller.run();
     }
 

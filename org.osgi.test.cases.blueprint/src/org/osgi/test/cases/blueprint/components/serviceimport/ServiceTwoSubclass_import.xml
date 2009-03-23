@@ -11,7 +11,7 @@
    <component id="ServiceTwoSubclassConstructor" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceChecker">
        <constructor-arg value="ServiceTwoSubclassConstructor"/>
        <constructor-arg type="org.osgi.test.cases.blueprint.services.TestServiceTwoSubclass">
-           <reference interface="org.osgi.test.cases.blueprint.services.TestServiceTwoClass"/>
+           <reference interface="org.osgi.test.cases.blueprint.services.TestServiceTwoSubclass"/>
        </constructor-arg>
    </component>
 
