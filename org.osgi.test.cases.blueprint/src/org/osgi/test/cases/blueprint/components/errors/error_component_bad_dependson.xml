@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <description>
+        This tests an indirect service dependency via depends-on relationship
+    </description>
+
+   <!-- This component does nothing other than get created and have a service injected as a property -->
+   <component id="ServiceOneImporter" class="org.osgi.test.cases.blueprint.components.servicedynamics.DependencyService" depends-on="ComponentDependencyXXXXX">
+       <constructor-arg value="ServiceOneImporter"/>
+   </component>
+
+   <reference id="ComponentDependency" interface="org.osgi.test.cases.blueprint.services.TestServiceOne"/>
+
+   <!-- This service registration should come and go as the dependent service does -->
+   <service id="ServiceOneExporter" ref="ServiceOneImporter" interface="org.osgi.test.cases.blueprint.services.TestServiceDynamicsInterface"/>
+</components>
+

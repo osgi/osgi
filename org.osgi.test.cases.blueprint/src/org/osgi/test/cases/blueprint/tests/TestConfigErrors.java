@@ -558,4 +558,24 @@ public class TestConfigErrors extends DefaultTestBundleControl {
             getWebServer()+"www/error_service_listener_no_unregister.jar");
         controller.run();
     }
+
+    /**
+     * Bad component reference in a <component> depends-on
+     */
+    public void testComponentBadDependson() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_component_bad_dependson.jar");
+        controller.run();
+    }
+
+    /**
+     * Bad component reference in a <service> depends-on
+     */
+    public void testServiceBadDependson() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_service_bad_dependson.jar");
+        controller.run();
+    }
 }
