@@ -618,4 +618,84 @@ public class TestConfigErrors extends DefaultTestBundleControl {
             getWebServer()+"www/error_reference_bad_interface.jar");
         controller.run();
     }
+
+    /**
+     * Missing interface spec on <ref-list>
+     */
+    public void testRefListNoInterface() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_ref_list_no_interface.jar");
+        controller.run();
+    }
+
+    /**
+     * Missing interface spec on <ref-list> <interfaces>
+     */
+    public void testRefListEmptyInterfaces() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_ref_list_empty_interfaces.jar");
+        controller.run();
+    }
+
+    /**
+     * Both interface attribute and <interfaces> elements specified
+     */
+    public void testRefListDupInterfaces() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_ref_list_dup_interfaces.jar");
+        controller.run();
+    }
+
+    /**
+     * Bad interface class name specified on <ref-list>
+     */
+    public void testRefListBadInterface() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_ref_list_bad_interface.jar");
+        controller.run();
+    }
+
+    /**
+     * Missing interface spec on <ref-set>
+     */
+    public void testRefSetNoInterface() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_ref_set_no_interface.jar");
+        controller.run();
+    }
+
+    /**
+     * Missing interface spec on <ref-set> <interfaces>
+     */
+    public void testRefSetEmptyInterfaces() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_ref_set_empty_interfaces.jar");
+        controller.run();
+    }
+
+    /**
+     * Both interface attribute and <interfaces> elements specified
+     */
+    public void testRefSetDupInterfaces() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_ref_set_dup_interfaces.jar");
+        controller.run();
+    }
+
+    /**
+     * Bad interface class name specified on <ref-set>
+     */
+    public void testRefSetBadInterface() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_ref_set_bad_interface.jar");
+        controller.run();
+    }
 }
