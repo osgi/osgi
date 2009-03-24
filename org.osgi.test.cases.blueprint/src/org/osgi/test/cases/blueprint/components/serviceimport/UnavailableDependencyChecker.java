@@ -28,6 +28,7 @@
 package org.osgi.test.cases.blueprint.components.serviceimport;
 
 import org.osgi.test.cases.blueprint.services.AssertionService;
+import org.osgi.service.blueprint.context.ServiceUnavailableException;
 
 
 /**
@@ -57,7 +58,9 @@ public class UnavailableDependencyChecker extends DependencyDriver {
         try {
             // this should give an exception
             AssertionService.assertFalse(this, "Service proxy not detached", serviceOne.testOne());
-        } catch (Throwable e) {
+            // should never get here
+            AssertionService.fail(this, "Service proxy not detached");
+        } catch (ServiceUnavailableException e) {
             // we expect to get here
         }
         // this should register our dependent service
@@ -69,7 +72,7 @@ public class UnavailableDependencyChecker extends DependencyDriver {
         try {
             // this should give an exception
             AssertionService.assertFalse(this, "Service proxy not detached", serviceOne.testOne());
-        } catch (Throwable e) {
+        } catch (ServiceUnavailableException e) {
             // we expect to get here
         }
         super.init();
