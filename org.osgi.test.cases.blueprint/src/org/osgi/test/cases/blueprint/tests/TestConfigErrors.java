@@ -578,4 +578,44 @@ public class TestConfigErrors extends DefaultTestBundleControl {
             getWebServer()+"www/error_service_bad_dependson.jar");
         controller.run();
     }
+
+    /**
+     * Missing interface spec on <reference>
+     */
+    public void testReferenceNoInterface() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_reference_no_interface.jar");
+        controller.run();
+    }
+
+    /**
+     * Missing interface spec on <reference> <interfaces>
+     */
+    public void testReferenceEmptyInterfaces() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_reference_empty_interfaces.jar");
+        controller.run();
+    }
+
+    /**
+     * Both interface attribute and <interfaces> elements specified
+     */
+    public void testReferenceDupInterfaces() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_reference_dup_interfaces.jar");
+        controller.run();
+    }
+
+    /**
+     * Bad interface class name specified on <reference>
+     */
+    public void testReferenceBadInterface() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_reference_bad_interface.jar");
+        controller.run();
+    }
 }
