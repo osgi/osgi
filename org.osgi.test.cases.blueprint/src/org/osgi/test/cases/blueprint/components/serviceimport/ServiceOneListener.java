@@ -74,5 +74,13 @@ public class ServiceOneListener extends ServiceListener {
         }
         unbind(TestServiceOne.class, serviceProperties);
     }
+
+    public void badBind(TestServiceOne service) {
+        AssertionService.fail(this, "Bad bind call");
+    }
+
+    public void badUnbind(TestServiceOne service) {
+        AssertionService.fail(this, "Bad unbind call");
+    }
 }
 

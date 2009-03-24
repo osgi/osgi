@@ -698,4 +698,74 @@ public class TestConfigErrors extends DefaultTestBundleControl {
             getWebServer()+"www/error_ref_set_bad_interface.jar");
         controller.run();
     }
+
+    /**
+     * Bad component name on listener
+     */
+    public void testReferenceListenerBadComponent() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_reference_listener_bad_component.jar");
+        controller.run();
+    }
+
+    /**
+     * Bad bind method signature
+     */
+    public void testReferenceListenerBadbind() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_reference_listener_bad_bind.jar");
+        controller.run();
+    }
+
+    /**
+     * Bad unbind method signature
+     */
+    public void testReferenceListenerBadUnbind() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_reference_listener_bad_unbind.jar");
+        controller.run();
+    }
+
+    /**
+     * No listener component specified
+     */
+    public void testReferenceListenerNoComponent() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_reference_listener_no_component.jar");
+        controller.run();
+    }
+
+    /**
+     * No listener methods specified
+     */
+    public void testReferenceListenerNoMethods() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_reference_listener_no_methods.jar");
+        controller.run();
+    }
+
+    /**
+     * No bind method found
+     */
+    public void testReferenceListenerNobind() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_reference_listener_no_bind.jar");
+        controller.run();
+    }
+
+    /**
+     * No unbind method found
+     */
+    public void testReferenceListenerNoUnbind() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_reference_listener_no_unbind.jar");
+        controller.run();
+    }
 }
