@@ -1229,15 +1229,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         StandardTestController controller = new StandardTestController(getContext(),
             getWebServer()+"www/replacement_dependency_import.jar");
 
-        // create a ServiceManager instance with two instances of an injected service.
-        // we will register both, and the test will unregister the first.
-        ServiceManager serviceManager = new ServiceManager(getContext(),
-            new ManagedService[] {
-                // this one is registered from the start
-                new ManagedService("ServiceOneA", new TestGoodService("ServiceOneA"), TestServiceOne.class, getContext(), null, true),
-                // this one gets registered as a replacement
-                new ManagedService("ServiceOneB", new TestGoodService("ServiceOneB"), TestServiceOne.class, getContext(), null, true)
-            });
+        controller.addSetupBundle(getWebServer()+"www/managed_replacement_dependency_export.jar");
 
         // The export jar has been well covered already in other tests.  We'll just focus
         // on the import listener details.
@@ -1250,8 +1242,6 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
         // now some expected termination stuff
         EventSet importStopEvents = controller.getStopEvents(0);
-        // add a cleanup processor for the exported services.
-        importStopEvents.addTerminator(new ServiceManagerUnregister(serviceManager));
         controller.run();
     }
 
@@ -1277,6 +1267,9 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
                 new ManagedService("ServiceOneB", new TestGoodService("ServiceOneB"), TestServiceOne.class, getContext(), null, false)
             });
 
+        // make this registered
+        serviceManager.register();
+
         // The export jar has been well covered already in other tests.  We'll just focus
         // on the import listener details.
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1292,7 +1285,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // now some expected termination stuff
         EventSet importStopEvents = controller.getStopEvents(0);
         // add a cleanup processor for the exported services.
-        importStopEvents.addTerminator(new ServiceManagerUnregister(serviceManager));
+        importStopEvents.addTerminator(new ServiceManagerDestroy(serviceManager));
         controller.run();
     }
 

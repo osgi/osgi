@@ -209,6 +209,7 @@ Include-Resource					= \
  	www/reference_collection_multiple_interface_ref_import.jar=reference_collection_multiple_interface_ref_import.jar, \
  	www/set_semantics_import.jar=set_semantics_import.jar, \
  	www/managed_service_export.jar=managed_service_export.jar, \
+ 	www/managed_replacement_dependency_export.jar=managed_replacement_dependency_export.jar, \
  	www/managed_one_service_export.jar=managed_one_service_export.jar, \
  	www/managed_two_service_export.jar=managed_two_service_export.jar, \
  	www/managed_one_unavailable_service_export.jar=managed_one_unavailable_service_export.jar, \
