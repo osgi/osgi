@@ -529,7 +529,7 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
         // validate for instance factory
         if (factoryTestComponentValue != null) { //optional validate..
             Value factoryComponentValue = meta.getFactoryComponent();
-            assertNotNull("Component " + meta.getName() + "factory component definition expected", factoryComponentValue);
+            assertNotNull("Component " + meta.getName() + " factory component definition expected", factoryComponentValue);
             // for the named factories, we expect this to be a RefernceValue.
             assertTrue("Factory ReferenceValue expected", factoryComponentValue instanceof ReferenceValue);
             // validate that component information
@@ -573,21 +573,47 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
 
         // the list here might be a partial list of the properties to validate, so only worry about
         // the ones in this list.
-        Iterator it = propMetas.iterator();
-        // validate each expected argment against the actual metadata for this constructor.
-        int i = 0;
-        while (it.hasNext()) {
+
+        // validate each expected argment against the actual metadata for this object.
+        for (int i = 0; i < expected.length; i++) {
+            // locate the target property
+            PropertyInjectionMetadata propMeta = locateProperty(propMetas, expected[i]);
+            assertNotNull("Component " + meta.getName() + " property " + expected[i].getName() + " not found", propMeta);
             try {
-                expected[i++].validate(this, (PropertyInjectionMetadata)it.next());
+                // do the full validation now
+                expected[i].validate(this, propMeta);
             } catch (Throwable e) {
-                // just allowing this to go past will result
+                // just allowing this to go past will result in losing
                 // about which component and property we're doing this on.  So
                 // we'll throw a new assertion failure with the old one embedded.
-                AssertionFailedError ee = new AssertionFailedError("Validation failure for component property=" + expected[i - 1].getName() + ", error=" + e.getMessage());
+                AssertionFailedError ee = new AssertionFailedError("Validation failure for component " + meta.getName() + " property=" + expected[i].getName() + ", error=" + e.getMessage());
                 ee.initCause(e);
                 throw ee;
             }
         }
+    }
+
+
+    /**
+     * Locate the metadata for a specific named property.
+     *
+     * @param propMetas The collection of properties.
+     * @param target    The property of interest.
+     *
+     * @return The located property metadata or null if not found.
+     */
+    public PropertyInjectionMetadata locateProperty(Collection propMetas, TestProperty target) {
+        // the list here might be a partial list of the properties to validate, so only worry about
+        // the ones in this list.
+        Iterator it = propMetas.iterator();
+        while (it.hasNext()) {
+            PropertyInjectionMetadata meta = (PropertyInjectionMetadata)it.next();
+            if (target.getName().equals(meta.getName())) {
+                return meta;
+            }
+        }
+        // not found
+        return null;
     }
 
 

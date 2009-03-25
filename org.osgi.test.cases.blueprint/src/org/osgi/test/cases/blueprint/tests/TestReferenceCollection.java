@@ -77,12 +77,12 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         Hashtable propsA = new Hashtable();
         propsA.put("service.interface.name", TestServiceOne.class.getName());
         propsA.put("service.listener.type", "interface");
-        propsA.put("osgi.service.blueprint.compname", "ServiceOneA");
+        propsA.put("test.service.name", "ServiceOneA");
 
         Hashtable propsC = new Hashtable();
         propsC.put("service.interface.name", TestServiceOne.class.getName());
         propsC.put("service.listener.type", "interface");
-        propsC.put("osgi.service.blueprint.compname", "ServiceOneC");
+        propsC.put("test.service.name", "ServiceOneC");
 
         // We should not get these, so consider them failures.
         importStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsA));
@@ -140,12 +140,12 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         Hashtable propsA = new Hashtable();
         propsA.put("service.interface.name", TestServiceOne.class.getName());
         propsA.put("service.listener.type", "interface");
-        propsA.put("osgi.service.blueprint.compname", "ServiceOneA");
+        propsA.put("test.service.name", "ServiceOneA");
 
         Hashtable propsC = new Hashtable();
         propsC.put("service.interface.name", TestServiceOne.class.getName());
         propsC.put("service.listener.type", "interface");
-        propsC.put("osgi.service.blueprint.compname", "ServiceOneC");
+        propsC.put("test.service.name", "ServiceOneC");
 
         // We should not get these, so consider them failures.
         importStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsA));
@@ -194,17 +194,17 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         Hashtable propsA = new Hashtable();
         propsA.put("service.interface.name", TestServiceOne.class.getName());
         propsA.put("service.listener.type", "interface");
-        propsA.put("osgi.service.blueprint.compname", "ServiceOneA");
+        propsA.put("test.service.name", "ServiceOneA");
 
         Hashtable propsB = new Hashtable();
         propsB.put("service.interface.name", TestServiceOne.class.getName());
         propsB.put("service.listener.type", "interface");
-        propsB.put("osgi.service.blueprint.compname", "ServiceOneB");
+        propsB.put("test.service.name", "ServiceOneB");
 
         Hashtable propsC = new Hashtable();
         propsC.put("service.interface.name", TestServiceOne.class.getName());
         propsC.put("service.listener.type", "interface");
-        propsC.put("osgi.service.blueprint.compname", "ServiceOneC");
+        propsC.put("test.service.name", "ServiceOneC");
 
         // the first step taken in the test is complete the registration of the
         // rest of the managed services.  This will result in an extra bind event
@@ -254,17 +254,17 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         Hashtable propsA = new Hashtable();
         propsA.put("service.interface.name", TestServiceOne.class.getName());
         propsA.put("service.listener.type", "interface");
-        propsA.put("osgi.service.blueprint.compname", "ServiceOneA");
+        propsA.put("test.service.name", "ServiceOneA");
 
         Hashtable propsB = new Hashtable();
         propsB.put("service.interface.name", TestServiceOne.class.getName());
         propsB.put("service.listener.type", "interface");
-        propsB.put("osgi.service.blueprint.compname", "ServiceOneB");
+        propsB.put("test.service.name", "ServiceOneB");
 
         Hashtable propsC = new Hashtable();
         propsC.put("service.interface.name", TestServiceOne.class.getName());
         propsC.put("service.listener.type", "interface");
-        propsC.put("osgi.service.blueprint.compname", "ServiceOneC");
+        propsC.put("test.service.name", "ServiceOneC");
 
         // the first step taken in the test is complete the registration of the
         // rest of the managed services.  This will result in an extra bind event
