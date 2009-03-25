@@ -295,6 +295,8 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         // we also look for a WAITING event.
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
             getWebServer()+"www/timeout_injected_component.jar");
+        // use a little longer timeout here to give the extender time to time this out.
+        controller.setTimeout(30000);
 
         // now we chain a few events to actions to allow us to track the dynamics.
         EventSet startEvents = controller.getTestEvents();
