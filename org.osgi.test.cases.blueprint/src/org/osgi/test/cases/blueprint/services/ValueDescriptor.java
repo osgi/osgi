@@ -101,6 +101,17 @@ public class ValueDescriptor extends Assert {
          return true;
      }
 
+     /**
+      * Override hashCode() when overrided the equals()
+      */
+     public int hashCode() {
+         int r = 11;
+         r = 17*r + this.name.hashCode();
+         r = 17*r + this.value.hashCode();
+         r = 17*r + this.clz.hashCode();
+         return r;
+     }
+     
      // return the argument or property name of this value.
      public String getName() {
          return name;

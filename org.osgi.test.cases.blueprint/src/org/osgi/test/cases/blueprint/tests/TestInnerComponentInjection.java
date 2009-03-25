@@ -567,14 +567,14 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         );
         
         
-//        // Set - value
-//        ConstructorInjection inner3 = new ConstructorInjection("compInner3");
-//        PropertyInjection inner4 = new PropertyInjection();
-//        inner4.setString("compInner4");
-//        Set expectedSet = new LinkedHashSet();
-//        expectedSet.add(inner3);
-//        expectedSet.add(inner4);
-//        this.addConstructorValueValidator(startEvents, "compInnerSet", expectedSet, Set.class);
+        // Set - value
+        ConstructorInjection inner3 = new ConstructorInjection("compInner3");
+        PropertyInjection inner4 = new PropertyInjection();
+        inner4.setString("compInner4");
+        Set expectedSet = new LinkedHashSet();
+        expectedSet.add(inner3);
+        expectedSet.add(inner4);
+        this.addConstructorValueValidator(startEvents, "compInnerSet", expectedSet, Set.class);
 
         
         
@@ -617,19 +617,19 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         
         
         
-//        // Map - value
-//        ConstructorInjection innerKey1 = new ConstructorInjection("compInnerEntryKey1");
-//        ConstructorInjection innerValue1 = new ConstructorInjection("compInnerEntryValue1");
-//        PropertyInjection innerKey2 = new PropertyInjection();
-//        innerKey2.setString("compInnerEntryKey2");
-//        PropertyInjection innerValue2 = new PropertyInjection();     
-//        innerValue2.setString("compInnerEntryValue2");
-//        
-//        Map expectedMap = new HashMap();
-//        expectedMap.put(innerKey1, innerValue1);
-//        expectedMap.put(innerKey2, innerValue2);
-//        
-//        this.addConstructorValueValidator(startEvents, "compInnerMap", expectedMap, Map.class);
+        // Map - value
+        ConstructorInjection innerKey1 = new ConstructorInjection("compInnerEntryKey1");
+        ConstructorInjection innerValue1 = new ConstructorInjection("compInnerEntryValue1");
+        PropertyInjection innerKey2 = new PropertyInjection();
+        innerKey2.setString("compInnerEntryKey2");
+        PropertyInjection innerValue2 = new PropertyInjection();     
+        innerValue2.setString("compInnerEntryValue2");
+        
+        Map expectedMap = new HashMap();
+        expectedMap.put(innerKey1, innerValue1);
+        expectedMap.put(innerKey2, innerValue2);
+        
+        this.addConstructorValueValidator(startEvents, "compInnerMap", expectedMap, Map.class);
         
         
         controller.run();

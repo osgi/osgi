@@ -33,7 +33,7 @@ import java.util.Set;
 
 import org.osgi.test.cases.blueprint.services.AssertionService;
 
-public class BaseTestComponent implements ComponentTestInfo {
+public class BaseTestComponent implements ComponentTestInfo{
     // an incremental creation id used to distinguish between component instances.
     static int creationId = 0;
     // the component id
@@ -267,7 +267,7 @@ public class BaseTestComponent implements ComponentTestInfo {
      * @return The component id name.
      */
     public String toString() {
-        return "Component " + componentId;
+        return "Component:" + componentId + "|Args:" + arguments + "|Props:" + properties;
     }
 
     /**
@@ -320,13 +320,9 @@ public class BaseTestComponent implements ComponentTestInfo {
      */
     public boolean equals(Object o) {
         if (this == o) return true;
-        
         if (!(o instanceof BaseTestComponent)) return false;
-        
         BaseTestComponent obj = (BaseTestComponent)o;
-        
         if (!this.componentId.equals(obj.componentId)) return false;
-        
         if (compareHashtables(this.properties, obj.properties) 
                 && compareHashtables(this.arguments, obj.arguments)) return true;
         else return false;
@@ -335,18 +331,12 @@ public class BaseTestComponent implements ComponentTestInfo {
     
     private boolean compareHashtables(Hashtable h1, Hashtable h2){
         if (h1==null && h2==null) return true;
-        if (h1==null && h2!=null) return false;
-        if (h1!=null && h2==null) return false;
-        Set keys1 = h1.keySet();
-        Set keys2 = h2.keySet();
-        Iterator it1 = keys1.iterator();
-        while(it1.hasNext()){
-            Object key = it1.next();
-            if (!h1.get(key).equals(h2.get(key))) return false;
-            keys2.remove(key);
+        else if (h1==null && h2!=null) return false;
+        else if (h1!=null && h2==null) return false;
+        else {
+            return h1.equals(h2);
         }
-        if (!keys2.isEmpty()) return false;
-        else return true;
+        
     }
     
     /**
@@ -375,5 +365,7 @@ public class BaseTestComponent implements ComponentTestInfo {
         return r;
         
     }
+
+
 }
 
