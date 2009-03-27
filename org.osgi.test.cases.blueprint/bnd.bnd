@@ -24,6 +24,7 @@ Include-Resource					= \
 	www/static_factory.jar=static_factory.jar, \
 	www/error_static_factory_missing_class.jar=error_static_factory_missing_class.jar, \
 	www/error_static_factory_missing_method.jar=error_static_factory_missing_method.jar, \
+	www/error_static_factory_nonstatic_method.jar=error_static_factory_nonstatic_method.jar, \
 	www/error_static_factory_no_class.jar=error_static_factory_no_class.jar, \
 	www/error_instance_factory_missing_method.jar=error_instance_factory_missing_method.jar, \
 	www/error_instance_factory_no_method.jar=error_instance_factory_no_method.jar, \

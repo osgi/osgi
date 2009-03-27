@@ -110,6 +110,16 @@ public class TestConfigErrors extends DefaultTestBundleControl {
     }
 
     /*
+     * Tests a config file with a non-static factory method name.
+     */
+    public void testStaticFactoryNonStaticMethod() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_static_factory_nonstatic_method.jar");
+        controller.run();
+    }
+
+    /*
      * Tests a config file where no class name has been specified for a component.
      */
     public void testStaticFactoryNoClass() throws Exception {

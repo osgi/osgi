@@ -35,18 +35,27 @@ public class SimpleStaticFactory {
     private SimpleStaticFactory() {}
 
     public static Object createSimple() {
-//        AssertionService.sendEvent(SimpleStaticFactory.class, AssertionService.STATIC_FACTORY_CALLED);
         return new SimpleTestComponent("static-comp1");
     }
 
     public static Object createSimple(String id) {
-//        AssertionService.sendEvent(SimpleStaticFactory.class, AssertionService.STATIC_FACTORY_CALLED);
         return new SimpleTestComponent(id);
     }
 
     public static AltSimpleTestComponent createAlt(String id) {
-//        AssertionService.sendEvent(SimpleStaticFactory.class, AssertionService.STATIC_FACTORY_CALLED);
         return new AltSimpleTestComponent(id);
     }
+
+    /**
+     * Method to test attempting to invoke non-static factory method.
+     *
+     * @param id     The component id.
+     *
+     * @return A new instance (but never should be invoked).
+     */
+    public Object nonStaticMethod(String id) {
+        return new SimpleTestComponent(id);
+    }
+
 }
 
