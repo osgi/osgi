@@ -320,6 +320,16 @@ public class TestConfigErrors extends DefaultTestBundleControl {
     }
 
     /**
+     * Tests an <idref> to an undefined component
+     */
+    public void testMissingIdrefError() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_missing_idref_reference.jar");
+        controller.run();
+    }
+
+    /**
      * Tests a reference to an undefined component
      */
     public void testCircularReferenceError() throws Exception {

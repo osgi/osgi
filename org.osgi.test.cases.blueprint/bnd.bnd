@@ -58,6 +58,7 @@ Include-Resource					= \
 	www/error_conversion_service_override.jar=error_conversion_service_override.jar, \
 	www/error_type_converter.jar=error_type_converter.jar, \
 	www/error_missing_reference.jar=error_missing_reference.jar, \
+	www/error_missing_idref_reference.jar=error_missing_idref_reference.jar, \
 	www/error_circular_reference.jar=error_circular_reference.jar, \
 	www/error_primitive_null.jar=error_primitive_null.jar, \
 	www/error_missing_property.jar=error_missing_property.jar, \
