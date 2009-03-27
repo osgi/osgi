@@ -1,15 +1,14 @@
 Bundle-Version: 4.2.0.${project.build}
 Bundle-RequiredExecutionEnvironment = J2SE-1.5
 
-Private-Package						= org.osgi.test.support.*, \
-	${p}.*
+Private-Package						= ${p}.*
 	
 Import-Package = \
  	javax.transaction;version=1.1, \
 	javax.transaction.xa;version=1.1, \
  	*
-
- Export-Package =\
+ 	
+Export-Package =\
 	org.osgi.test.cases.transaction.util;version=1.0
 	
 -buildpath							= \
@@ -17,11 +16,12 @@ Import-Package = \
 	org.apache.geronimo.specs.geronimo-jta_1.1_spec;version=1.1.1, \
 	ee.j2se;								version=1.4, \
 	osgi;									version=4.2, \
-	org.osgi.test.support;          	version=project , \
+	org.osgi.test.support;          	    version=project , \
 	${junit}
 
- -runbundles						= \
-	org.osgi.impl.bundle.transaction; version=project
+-runbundles						= \
+	org.osgi.impl.bundle.transaction; version=project, \
+	org.osgi.test.support;  version=latest
 	
 -runproperties					= report=true
 
