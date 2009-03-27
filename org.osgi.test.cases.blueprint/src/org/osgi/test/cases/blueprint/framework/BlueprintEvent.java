@@ -168,6 +168,15 @@ public class BlueprintEvent extends AdminTestEvent {
 
         // if we have exception information, then keep this even if we replace it with another error.
         Throwable cause = (Throwable)other.props.get(EventConstants.EXCEPTION);
+        // if this is a failure event, then the exception property is required
+        if (isError() && cause == null) {
+            return new AssertionFailure("Missing exception cause on a failure event: " + other.toString());
+        }
+
+        Object timestamp = other.getProperty(EventConstants.TIMESTAMP);
+        if (timestamp == null || !(timestamp instanceof Long)) {
+            return new AssertionFailure("Invalid or missing timestamp property on blueprint event: " + other.toString(), cause);
+        }
 
         if (!TestUtil.validateBundleVersion(bundle, (Version)other.getProperty(ModuleContextEventConstants.BUNDLE_VERSION))) {
             return new AssertionFailure("Mismatched bundle version on blueprint event expected=" + (String)bundle.getHeaders().get(Constants.BUNDLE_VERSION) + " received=" + other.getProperty("bundle.version"), cause);
