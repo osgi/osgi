@@ -246,5 +246,15 @@ public class TestUtil {
         buffer.deleteCharAt(buffer.length() - 2);
         return buffer.toString();
     }
+
+
+    static public boolean contains(String target, String[] array) {
+        for (int i = 0; i < array.length; i++) {
+            if (target.equals(array[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 

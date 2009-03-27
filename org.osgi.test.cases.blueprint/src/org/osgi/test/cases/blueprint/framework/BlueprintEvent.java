@@ -41,7 +41,6 @@ import org.osgi.test.cases.blueprint.services.TestUtil;
  * EventAdmin service.
  */
 public class BlueprintEvent extends AdminTestEvent {
-
     /**
      * Create an event for a given topic type.
      *

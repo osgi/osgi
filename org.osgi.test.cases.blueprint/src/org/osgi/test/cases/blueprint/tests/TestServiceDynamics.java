@@ -32,6 +32,7 @@ import org.osgi.test.cases.blueprint.framework.ComponentAssertion;
 import org.osgi.test.cases.blueprint.framework.EventSet;
 import org.osgi.test.cases.blueprint.framework.LazyActivationTestController;
 import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
+import org.osgi.test.cases.blueprint.framework.ServiceBlueprintEvent;
 import org.osgi.test.cases.blueprint.framework.ServiceManagerRegister;
 import org.osgi.test.cases.blueprint.framework.ServiceManagerUnregister;
 import org.osgi.test.cases.blueprint.framework.ServiceRequestInitiator;
@@ -234,7 +235,8 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
 
         // Ok, when the WAITING event is triggered, we register the first service.
-        importStartEvents.addEvent(new BlueprintEvent("WAITING", null, new ServiceManagerRegister(serviceManager, "ServiceOneA")));
+        importStartEvents.addEvent(new ServiceBlueprintEvent("WAITING", new Class[] { TestServiceOne.class },
+            null, new ServiceManagerRegister(serviceManager, "ServiceOneA")));
 
         // then we should see this REGISTERED again at the end.
         importStartEvents.addServiceEvent("REGISTERED", TestServiceDynamicsInterface.class);
@@ -301,8 +303,11 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         // now we chain a few events to actions to allow us to track the dynamics.
         EventSet startEvents = controller.getTestEvents();
         // we should see one of these before the failures
-        startEvents.addBlueprintEvent("WAITING");
-
+        startEvents.addEvent(new ServiceBlueprintEvent("WAITING", new Class[] { TestServiceOne.class }));
+        // remove the current failure event....we want a more specific one to test the properties getting set.
+        startEvents.removeEvent(new BlueprintEvent("FAILURE"));
+        // this failure event will verify the information about the failing dependency is set.
+        startEvents.addEvent(new ServiceBlueprintEvent("FAILURE", new Class[] { TestServiceOne.class }));
         controller.run();
     }
 
