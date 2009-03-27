@@ -788,4 +788,24 @@ public class TestConfigErrors extends DefaultTestBundleControl {
             getWebServer()+"www/error_reference_listener_no_unbind.jar");
         controller.run();
     }
+
+    /**
+     * Missing components in a map key-ref element
+     */
+    public void testMapBadKeyRef() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_map_bad_key_ref.jar");
+        controller.run();
+    }
+
+    /**
+     * Missing components in a map value-ref element
+     */
+    public void testMapBadValueRef() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_map_bad_value_ref.jar");
+        controller.run();
+    }
 }
