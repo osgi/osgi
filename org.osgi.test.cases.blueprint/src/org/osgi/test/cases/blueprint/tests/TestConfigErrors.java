@@ -808,4 +808,14 @@ public class TestConfigErrors extends DefaultTestBundleControl {
             getWebServer()+"www/error_map_bad_value_ref.jar");
         controller.run();
     }
+
+    /**
+     * type converter doesn't implement correct interface
+     */
+    public void testConverterWrongType() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_converter_wrong_type.jar");
+        controller.run();
+    }
 }

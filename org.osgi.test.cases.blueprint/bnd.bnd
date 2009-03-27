@@ -90,6 +90,7 @@ Include-Resource					= \
 	www/error_reference_listener_no_unbind.jar=error_reference_listener_no_unbind.jar, \
 	www/error_map_bad_key_ref.jar=error_map_bad_key_ref.jar, \
 	www/error_map_bad_value_ref.jar=error_map_bad_value_ref.jar, \
+	www/error_converter_wrong_type.jar=error_converter_wrong_type.jar, \
 	www/component_instance_factory.jar=component_instance_factory.jar, \
 	www/service_instance_factory.jar=service_instance_factory.jar, \
  	www/classtype_constructor_injection.jar=classtype_constructor_injection.jar, \
