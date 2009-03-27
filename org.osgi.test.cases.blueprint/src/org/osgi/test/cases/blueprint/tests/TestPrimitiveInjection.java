@@ -121,12 +121,30 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
         }));
 
         // Null string valued argument
-        startEvents.validateComponentArgument("compZeroLengthString", "arg2", "");
-        startEvents.addValidator(new ConstructorMetadataValidator("compZeroLengthString", new TestParameter[] {
+        startEvents.validateComponentArgument("compZeroLengthString1", "arg2", "");
+        startEvents.addValidator(new ConstructorMetadataValidator("compZeroLengthString1", new TestParameter[] {
             // TODO:  Bugzilla 1163 -- these may need adjusting once 1163 is resolved.  The arguments are supposed to be
             // in index order, not specification order
             new TestParameter(new TestStringValue(""), 1),
-            new TestParameter(new TestStringValue("compZeroLengthString"), 0)
+            new TestParameter(new TestStringValue("compZeroLengthString1"), 0)
+        }));
+
+        // Null string valued argument
+        startEvents.validateComponentArgument("compZeroLengthString2", "arg2", "");
+        startEvents.addValidator(new ConstructorMetadataValidator("compZeroLengthString2", new TestParameter[] {
+            // TODO:  Bugzilla 1163 -- these may need adjusting once 1163 is resolved.  The arguments are supposed to be
+            // in index order, not specification order
+            new TestParameter(new TestStringValue(""), 1),
+            new TestParameter(new TestStringValue("compZeroLengthString2"), 0)
+        }));
+
+        // Null string valued argument
+        startEvents.validateComponentArgument("compZeroLengthString3", "arg2", "");
+        startEvents.addValidator(new ConstructorMetadataValidator("compZeroLengthString3", new TestParameter[] {
+            // TODO:  Bugzilla 1163 -- these may need adjusting once 1163 is resolved.  The arguments are supposed to be
+            // in index order, not specification order
+            new TestParameter(new TestStringValue(""), 1),
+            new TestParameter(new TestStringValue("compZeroLengthString3"), 0)
         }));
 
         // null string valued argument
@@ -340,7 +358,7 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
         addConstructorTests(controller);
         controller.run();
     }
-	
+
 	/**
 	 * Property Validator
 	 * @param startEvents
@@ -374,7 +392,9 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
         addPropertyValidator(startEvents, "compImplicitString", "string", "ABC", "ABC", String.class);
 
         // a "" string value
-        addPropertyValidator(startEvents, "compZeroLengthString", "string", "", "", String.class);
+        addPropertyValidator(startEvents, "compZeroLengthString1", "string", "", "", String.class);
+        addPropertyValidator(startEvents, "compZeroLengthString2", "string", "", "", String.class);
+        addPropertyValidator(startEvents, "compZeroLengthString3", "string", "", "", String.class);
 
         // a null value
         // this requires a little special handling

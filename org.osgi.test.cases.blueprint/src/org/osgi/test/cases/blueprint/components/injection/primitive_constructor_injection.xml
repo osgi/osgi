@@ -17,9 +17,17 @@
        <constructor-arg value="ABC" index="1"/>
        <constructor-arg value="compIndexedString" index="0"/>
    </component>
-   <component id="compZeroLengthString" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+   <component id="compZeroLengthString1" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
        <constructor-arg value="" index="1"/>
-       <constructor-arg value="compZeroLengthString" index="0"/>
+       <constructor-arg value="compZeroLengthString1" index="0"/>
+   </component>
+   <component id="compZeroLengthString2" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <constructor-arg index="1"><value/></constructor-arg>
+       <constructor-arg value="compZeroLengthString2" index="0"/>
+   </component>
+   <component id="compZeroLengthString3" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <constructor-arg index="1"><value></value></constructor-arg>
+       <constructor-arg value="compZeroLengthString3" index="0"/>
    </component>
    <component id="compNullString" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
        <constructor-arg index="1"><null/></constructor-arg>

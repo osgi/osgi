@@ -23,9 +23,17 @@
         <constructor-arg value="ABC" index="1"/>
         <constructor-arg value="compIndexedString" index="0"/>
     </component>
-    <component id="compZeroLengthString" factory-component="compFactory" factory-method="makeInstance">
+    <component id="compZeroLengthString1" factory-component="compFactory" factory-method="makeInstance">
         <constructor-arg value="" index="1"/>
-        <constructor-arg value="compZeroLengthString" index="0"/>
+        <constructor-arg value="compZeroLengthString1" index="0"/>
+    </component>
+    <component id="compZeroLengthString2" factory-component="compFactory" factory-method="makeInstance">
+        <constructor-arg index="1"><value/></constructor-arg>
+        <constructor-arg value="compZeroLengthString2" index="0"/>
+    </component>
+    <component id="compZeroLengthString3" factory-component="compFactory" factory-method="makeInstance">
+        <constructor-arg index="1"><value></value></constructor-arg>
+        <constructor-arg value="compZeroLengthString3" index="0"/>
     </component>
     <component id="compNullString" factory-component="compFactory" factory-method="makeInstance">
         <constructor-arg index="1">

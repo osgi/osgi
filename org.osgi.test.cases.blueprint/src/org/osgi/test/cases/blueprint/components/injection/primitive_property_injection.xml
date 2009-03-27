@@ -7,8 +7,14 @@
        <property name="string" value="ABC"/>
      <!-- just a component name -->
    </component>
-   <component id="compZeroLengthString" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   <component id="compZeroLengthString1" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="string" value=""/>
+   </component>
+   <component id="compZeroLengthString2" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+       <property name="string"><value/></property>
+   </component>
+   <component id="compZeroLengthString3" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+       <property name="string"><value></value></property>
    </component>
    <component id="compNullString" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="string"><null/></property>
