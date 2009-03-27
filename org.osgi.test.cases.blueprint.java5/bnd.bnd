@@ -1,6 +1,7 @@
 javac.source 			= 1.5
 javac.target 			= 1.5
 
+Private-Package						= org.osgi.test.support.*
 Bundle-Version: 4.2.0.${project.build}
 Export-Package						= ${p}.*
 
@@ -25,6 +26,5 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 	org.apache.felix.configadmin;  version=latest, \
 	org.eclipse.equinox.event; version=latest, \
  	osgi; version=latest, \
- 	org.osgi.test.support;  version=latest, \
  	org.osgi.test.cases.blueprint;  version=latest, \
         org.springsource.service.blueprint; version=latest
