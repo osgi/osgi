@@ -1,6 +1,8 @@
 Bundle-Version: 4.2.0.${project.build}
 Export-Package						= ${p}.*
 
+Private-Package						= org.osgi.test.support.*
+
 Include-Resource					= \
 	www/comp1a_no_header.jar=comp1a_no_header.jar , \
 	www/comp1_no_header.jar=comp1_no_header.jar , \
@@ -285,7 +287,7 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
     org.osgi.service.blueprint;             version=project , \
-	osgi;									version=4.1		, \
+	osgi;									version=4.2		, \
 	ee.j2se;version=latest												, \
 	${junit}
 
@@ -294,5 +296,4 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 	org.apache.felix.configadmin;  version=latest, \
 	org.eclipse.equinox.event; version=latest, \
  	osgi; version=latest, \
- 	org.osgi.test.support;  version=latest, \
         org.springsource.service.blueprint; version=latest
