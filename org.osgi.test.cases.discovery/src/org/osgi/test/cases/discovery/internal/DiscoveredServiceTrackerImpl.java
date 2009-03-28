@@ -25,6 +25,13 @@ public class DiscoveredServiceTrackerImpl implements DiscoveredServiceTracker {
 		semaphore.signal();
 	}
 
+	/**
+	 * Block on the semaphore for the given amount of time (in millisec) and return the notification.
+	 *  
+	 * @param timeout Timeout to maximal wait for in milliseconds
+	 * @return DiscoveredServiceNotification or null if timed out
+	 * @throws InterruptedException if interrupted while blocking on semaphore
+	 */
 	public DiscoveredServiceNotification waitForEvent(long timeout) throws InterruptedException {
 		semaphore.waitForSignal(timeout);
 		DiscoveredServiceNotification rv = event;
