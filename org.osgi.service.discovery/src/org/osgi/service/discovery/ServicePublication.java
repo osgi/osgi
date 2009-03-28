@@ -16,6 +16,8 @@
 
 package org.osgi.service.discovery;
 
+import org.osgi.framework.ServiceReference;
+
 /**
  * Register a service implementing the <code>ServicePublication</code> interface
  * in order to publish metadata of a particular service (endpoint) via
@@ -113,4 +115,11 @@ public interface ServicePublication {
 	 * interface-specific values.
 	 */
 	public static final String	SEPARATOR							= "|";
+	
+	/**
+	 * Returns the ServiceReference this publication metadata is associated with. 
+	 * 
+	 * @return the ServiceReference being published. Is never null.
+	 */
+	ServiceReference getReference();
 }
