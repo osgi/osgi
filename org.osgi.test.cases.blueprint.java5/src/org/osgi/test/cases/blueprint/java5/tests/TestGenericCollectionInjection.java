@@ -202,5 +202,17 @@ public class TestGenericCollectionInjection extends DefaultTestBundleControl {
 
         controller.run();
     }
+
+
+	/**
+	 * Test conversion of string values to Pattern instances.
+	 */
+	public void testPatternInjection() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/pattern_injection.jar");
+
+        // this one is self checking and will raise an assertion failure if something is wrong
+        controller.run();
+    }
 }
 

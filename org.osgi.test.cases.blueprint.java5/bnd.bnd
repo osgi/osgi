@@ -10,7 +10,8 @@ Include-Resource					= \
 	www/managed_service_export.jar=managed_service_export.jar , \
 	www/reference_collection_import.jar=reference_collection_import.jar , \
 	www/reference_list_import.jar=reference_list_import.jar , \
-	www/reference_set_import.jar=reference_set_import.jar
+	www/reference_set_import.jar=reference_set_import.jar, \
+	www/pattern_injection.jar=pattern_injection.jar
 
 Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
 

@@ -1,0 +1,7 @@
+Bundle-SymbolicName:                     ${p}.pattern_injection
+Bundle-Version:                          4.2
+Import-Package:                          ${p}.components.injection, org.osgi.test.cases.blueprint.services
+Private-Package:                         $(p).build
+Include-Resource					= \
+	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/java5/components/injection/pattern_injection.xml
+
