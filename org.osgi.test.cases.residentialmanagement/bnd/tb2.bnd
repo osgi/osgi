@@ -1,0 +1,10 @@
+Bundle-SymbolicName:	${p}.tb2.jar
+Bundle-Name:			${p}.tb2
+Bundle-Description:		FrameworkPlugin Test Bundle 2
+Bundle-Activator:		${p}.tb2.Activator
+Bundle-Vendor:			NTT
+Bundle-DocURL:			http://www.osgi.org/
+Bundle-ContactAddress:	info@mail.osgi.org
+Bundle-Category:		osgi, test
+
+Private-Package =		${p}.tb2
