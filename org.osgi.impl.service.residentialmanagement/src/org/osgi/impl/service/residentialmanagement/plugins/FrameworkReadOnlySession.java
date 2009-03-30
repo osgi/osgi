@@ -98,11 +98,18 @@ class FrameworkReadOnlySession implements ReadableDataSession {
 		}
 
 		if (path.length == 3 && path[1].equals(INSTALLBUNDLE)) {
-			String[] children = new String[2];
-			children[0] = LOCATION;
-			children[1] = URL;
-
-			return children;
+			Node[] ids = installbundle.getChildren();
+			
+			for (int i = 0; i < ids.length; i++) {
+				if(ids[i].getName().equals(path[2])){
+					Node[] gc = ids[i].getChildren();
+					String[] children = new String[gc.length];
+					for(int g = 0; g < gc.length; g++){
+						children[g] = gc[g].getName();
+					}
+					return children;
+				}
+			}
 		}
 
 		// other case
@@ -403,10 +410,10 @@ class FrameworkReadOnlySession implements ReadableDataSession {
 		if (path.length == 4) {
 			Node[] ids = installbundle.getChildren();
 			for (int i = 0; i < ids.length; i++) {
-				if (path[1].equals(ids[i].getName())) {
+				if (path[2].equals(ids[i].getName())) {
 					Node[] leaf = ids[i].getChildren();
 					for (int x = 0; x < leaf.length; x++) {
-						if (path[2].equals(leaf[x].getName()))
+						if (path[3].equals(leaf[x].getName()))
 							return leaf[x].getData();
 					}
 					break;

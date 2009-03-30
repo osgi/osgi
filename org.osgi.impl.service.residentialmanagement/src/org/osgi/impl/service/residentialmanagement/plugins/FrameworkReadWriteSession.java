@@ -15,9 +15,17 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 
 	private Vector operations;
 
-	FrameworkReadWriteSession(FrameworkPlugin plugin, BundleContext context) {
+/*	FrameworkReadWriteSession(FrameworkPlugin plugin, BundleContext context) {
 		super(plugin, context);
 
+		operations = new Vector();
+	}*/
+	
+	FrameworkReadWriteSession(FrameworkPlugin plugin, BundleContext context, FrameworkReadOnlySession session){
+		super(plugin, context);
+		
+		this.installbundle = session.installbundle;
+		
 		operations = new Vector();
 	}
 
@@ -39,7 +47,7 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 					Node[] children = installbundle.getChildren();
 					String[] nodepath = operation.getObjectname();
 					for (int x = 0; x < children.length; x++) {
-						if (nodepath[1].equals(children[x].getName())) {
+						if (nodepath[2].equals(children[x].getName())) {
 							installbundle.deleteNode(children[x]);
 							break;
 						}
@@ -113,8 +121,10 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 		// Bundle Install
 		Node[] children = installbundle.getChildren();
 		for (int x = 0; x < children.length; x++) {
-			if (children[x].findNode(new String[] { URL }).getData() != null
-					& children[x].findNode(new String[] { LOCATION }).getData() != null) {
+			if(children[x].findNode(new String[] { ERROR }) != null){
+				
+			} else if (!children[x].findNode(new String[] { URL }).getData().getString().equals("")
+					& !children[x].findNode(new String[] { LOCATION }).getData().getString().equals("")) {
 				String url = children[x].findNode(new String[] { URL })
 						.getData().getString();
 				String loc = children[x].findNode(new String[] { LOCATION })
@@ -125,16 +135,14 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 							.getInputStream());
 					installbundle.deleteNode(children[x]);
 				} catch (BundleException be) {
-					Node error = new Node(ERROR, null, new DmtData(be
-							.getMessage()));
+					Node error = new Node(ERROR, null, new DmtData(be.toString()));
 					children[x].addNode(error);
 				} catch (IOException ie) {
-					Node error = new Node(ERROR, null, new DmtData(ie
-							.getMessage()));
+					Node error = new Node(ERROR, null, new DmtData(ie.toString()));
 					children[x].addNode(error);
 				}
-			} else if (children[x].findNode(new String[] { URL }).getData() == null
-					& children[x].findNode(new String[] { LOCATION }).getData() != null) {
+			} else if (children[x].findNode(new String[] { URL }).getData().getString().equals("")
+					& !children[x].findNode(new String[] { LOCATION }).getData().getString().equals("")) {
 				String loc = children[x].findNode(new String[] { LOCATION })
 						.getData().getString();
 
@@ -142,8 +150,7 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 					context.installBundle(loc);
 					installbundle.deleteNode(children[x]);
 				} catch (BundleException be) {
-					Node error = new Node(ERROR, null, new DmtData(be
-							.getMessage()));
+					Node error = new Node(ERROR, null, new DmtData(be.toString()));
 					children[x].addNode(error);
 				}
 			} else {
@@ -247,8 +254,8 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 	public void deleteNode(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
 
-		if (path.length == 2) {
-			if (path[0].equals(INSTALLBUNDLE)) {
+		if (path.length == 3) {
+			if (path[1].equals(INSTALLBUNDLE)) {
 				operations.add(new Operation(Operation.DELETE_OBJECT, path));
 				return;
 			}
@@ -269,7 +276,7 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 
 		if (!isLeafNode(nodePath))
 			throw new DmtException(nodePath, DmtException.COMMAND_FAILED,
-					"Cannot set type property of interior configuration nodes.");
+					"Cannot set type property of interior nodes.");
 
 		// do nothing, meta-data guarantees that type is "text/plain"
 	}

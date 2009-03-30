@@ -7,15 +7,17 @@ import info.dmtree.spi.*;
 import org.osgi.framework.BundleContext;
 
 class FrameworkPlugin implements DataPlugin {
-    private BundleContext context;
+    private FrameworkReadOnlySession readonly;
+    private FrameworkReadWriteSession readwrite;
 
     FrameworkPlugin(BundleContext context) {
-    	this.context = context;
+    	readonly = new FrameworkReadOnlySession(this, context);
+    	readwrite = new FrameworkReadWriteSession(this, context, readonly);
     }
     
     public ReadableDataSession openReadOnlySession(String[] sessionRoot,
             DmtSession session) throws DmtException {
-        return new FrameworkReadOnlySession(this, context);
+        return readonly;
     }
 
     public ReadWriteDataSession openReadWriteSession(String[] sessionRoot,
@@ -32,6 +34,6 @@ class FrameworkPlugin implements DataPlugin {
                     "Fine-grained locking not supported, session subtree " +
                     "must contain at least one whole configuration table.");
 
-        return new FrameworkReadWriteSession(this, context);
+        return readwrite;
     }
 }

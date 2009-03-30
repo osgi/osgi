@@ -1,5 +1,5 @@
 Bundle-Version: 1.0.0.${project.build}
-Bundle-Activator	= $(p).plugins.FrameworkPluginActivator
+Bundle-Activator	= $(p).plugins.ResidentialPluginActivator
 
 Private-Package		= ${p}.*
 
