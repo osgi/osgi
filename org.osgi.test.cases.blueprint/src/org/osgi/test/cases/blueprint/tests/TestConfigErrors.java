@@ -810,6 +810,86 @@ public class TestConfigErrors extends DefaultTestBundleControl {
     }
 
     /**
+     * Missing class for a value-type
+     */
+    public void testMapBadValueType() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_map_bad_value_type.jar");
+        controller.run();
+    }
+
+    /**
+     * Missing class for a key-type
+     */
+    public void testMapBadKeyType() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_map_bad_key_type.jar");
+        controller.run();
+    }
+
+    /**
+     * Duplicate ref values specified
+     */
+    public void testMapDupValueRef() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_map_dup_value_ref.jar");
+        controller.run();
+    }
+
+    /**
+     * Duplicate key ref specified
+     */
+    public void testMapDupKeyRef() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_map_dup_key_ref.jar");
+        controller.run();
+    }
+
+    /**
+     * Duplicate key forms specified
+     */
+    public void testMapDupKey() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_map_dup_key.jar");
+        controller.run();
+    }
+
+    /**
+     * Duplicate value forms specified
+     */
+    public void testMapDupValue() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_map_dup_value.jar");
+        controller.run();
+    }
+
+    /**
+     * Missing components in a list value-ref element
+     */
+    public void testListBadValueRef() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_list_bad_value_ref.jar");
+        controller.run();
+    }
+
+    /**
+     * Missing components in a set value-ref element
+     */
+    public void testSetBadValueRef() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_set_bad_value_ref.jar");
+        controller.run();
+    }
+
+    /**
      * type converter doesn't implement correct interface
      */
     public void testConverterWrongType() throws Exception {
