@@ -166,26 +166,51 @@ public class DiscoveryTestCase extends TestCase {
 		assertEquals("1.0.0", sed.getVersion(DiscoveryTestServiceInterface.class.getName()));
 		
 		// modify registration and check for event update
-		spprops.put("mynewprop", "another value");
+		propertiesMap.put("mynewprop", "another value");
+		spprops.put(ServicePublication.PROP_KEY_SERVICE_PROPERTIES, propertiesMap);
 		spsr.setProperties(spprops);
 
 		dsn = tracker.waitForEvent(dtimeout);
 		assertNotNull(dsn);
 		System.out.println("service modified");
 		
-		assertEquals(DiscoveredServiceNotification.MODIFIED, dsn.getType());
-		assertNotNull(dsn.getFilters());
-		assertEquals(filter, dsn.getFilters().toArray()[0]);
-		assertNotNull(dsn.getInterfaces());
-		assertTrue(dsn.getInterfaces().size() > 0);
-		assertEquals(DiscoveryTestServiceInterface.class.getName(), dsn.getInterfaces().toArray()[0]);
-		assertFalse(dsn.getInterfaces().contains(DoNotPublishInterface.class.getName()));
+		if (DiscoveredServiceNotification.MODIFIED == dsn.getType()) {
+			System.out.println("Discovery support for MODIFIED event");
+			
+			assertNotNull(dsn.getFilters());
+			assertEquals(filter, dsn.getFilters().toArray()[0]);
+			assertNotNull(dsn.getInterfaces());
+			assertTrue(dsn.getInterfaces().size() > 0);
+			assertEquals(DiscoveryTestServiceInterface.class.getName(), dsn.getInterfaces().toArray()[0]);
+			assertFalse(dsn.getInterfaces().contains(DoNotPublishInterface.class.getName()));
 
-		sed = dsn.getServiceEndpointDescription();
-		assertNotNull(sed);
+			sed = dsn.getServiceEndpointDescription();
+			assertNotNull(sed);
+			
+			assertEquals("myid", sed.getEndpointID());
+			assertEquals("another value", sed.getProperty("mynewprop"));
+		} else if (DiscoveredServiceNotification.UNAVAILABLE == dsn.getType()) {
+			dsn = tracker.waitForEvent(dtimeout);
+			assertNotNull(dsn);
+			
+			System.out.println("Discovery does not support MODIFIED, but implements re-registration");
+			
+			assertNotNull(dsn.getFilters());
+			assertEquals(filter, dsn.getFilters().toArray()[0]);
+			assertNotNull(dsn.getInterfaces());
+			assertTrue(dsn.getInterfaces().size() > 0);
+			assertEquals(DiscoveryTestServiceInterface.class.getName(), dsn.getInterfaces().toArray()[0]);
+			assertFalse(dsn.getInterfaces().contains(DoNotPublishInterface.class.getName()));
+
+			sed = dsn.getServiceEndpointDescription();
+			assertNotNull(sed);
+			
+			assertEquals("myid", sed.getEndpointID());
+			assertEquals("another value", sed.getProperty("mynewprop"));
+		} else {
+			fail("Modification of Service properties should be handled by MODIFIED event or re-registration. received event " + dsn.getType());
+		}
 		
-		assertEquals("myid", sed.getEndpointID());
-		assertEquals("another value", sed.getProperty("mynewprop"));
 		
 		// check for event notification when service unregisters
 		spsr.unregister();
