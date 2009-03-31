@@ -65,6 +65,7 @@ build.cmpn.tests = \
     org.osgi.test.cases.event, \
     org.osgi.test.cases.gsm, \
     org.osgi.test.cases.http, \
+	org.osgi.test.cases.jdbc, \
     org.osgi.test.cases.io, \
     org.osgi.test.cases.log, \
     org.osgi.test.cases.measurement, \
@@ -104,6 +105,7 @@ build.mobile.tests = \
 
 build.enterprise.tests = \
 	org.osgi.test.cases.discovery, \
+	org.osgi.test.cases.jdbc, \
 	org.osgi.test.cases.transaction
 	
 	 

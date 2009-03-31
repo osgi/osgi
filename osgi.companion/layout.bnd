@@ -33,6 +33,7 @@ cmpn.specs = \
 	 org.osgi.service.event, \
 	 org.osgi.service.http, \
 	 org.osgi.service.io, \
+	 org.osgi.service.jdbc, \
 	 org.osgi.service.log, \
 	 org.osgi.service.metatype, \
 	 org.osgi.service.monitor, \

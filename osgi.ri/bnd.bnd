@@ -42,6 +42,7 @@ build.cmpn.impls = \
 	org.osgi.impl.service.deploymentadmin , \
 	org.osgi.impl.service.dmt , \
 	org.osgi.impl.service.io , \
+	org.osgi.impl.service.jdbc , \
 	org.osgi.impl.service.monitor , \
 	org.osgi.impl.service.policy , \
 	org.osgi.impl.service.prefs , \
@@ -67,5 +68,6 @@ build.mobile.impls = \
   	
 build.enterprise.impls = \
 	org.osgi.impl.service.discovery, \
+	org.osgi.impl.service.jdbc , \
 	org.osgi.impl.bundle.transaction 
   	
