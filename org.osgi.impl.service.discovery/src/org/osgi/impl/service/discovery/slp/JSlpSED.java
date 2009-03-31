@@ -34,7 +34,7 @@ import ch.ethz.iks.slp.ServiceURL;
  * @author Thomas Kiesslich
  * @version $Revision$
  */
-public class JSlpSED {
+public final class JSlpSED {
 
 	private static final String	LINE_SEPARATOR		= System
 															.getProperty("line.separator");

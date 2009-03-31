@@ -27,9 +27,10 @@ import org.osgi.service.discovery.ServiceEndpointDescription;
 
 /**
  * @author Thomas Kiesslich
- * 
+ * @author Philipp Konradi
+ * @Immutable
  */
-public class DiscoveredServiceNotificationImpl implements
+public final class DiscoveredServiceNotificationImpl implements
 		DiscoveredServiceNotification {
 
 	private ServiceEndpointDescription descr;

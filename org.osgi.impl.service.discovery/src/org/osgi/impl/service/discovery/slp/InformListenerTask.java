@@ -1,5 +1,4 @@
-/* 
- * Copyright (c) 2008, 2009 Siemens Enterprise Communications GmbH & Co. KG, 
+/* Copyright (c) 2008, 2009 Siemens Enterprise Communications GmbH & Co. KG, 
  * Germany. All rights reserved.
  *
  * Siemens Enterprise Communications GmbH & Co. KG is a Trademark Licensee 
@@ -35,7 +34,7 @@ import org.osgi.service.log.LogService;
  * A TimerTask that compares in its run method the registered filters with the
  * available services and informs the listeners if its filter matches.
  * 
- * @version 0.6
+ * @version 0.7
  * @author Thomas Kiesslich
  */
 public class InformListenerTask extends TimerTask {
@@ -110,7 +109,7 @@ public class InformListenerTask extends TimerTask {
 		
 		Iterator svcDescrIt = vanishedServices.values().iterator();
 		while (svcDescrIt.hasNext()) {
-			ServiceEndpointDescription sed = (ServiceEndpointDescription) svcDescrIt
+			ServiceEndpointDescription svcDescr = (ServiceEndpointDescription) svcDescrIt
 					.next();
 
 			Iterator trackerIt = trackers.keySet().iterator();
@@ -119,16 +118,16 @@ public class InformListenerTask extends TimerTask {
 						.next();
 				matchingInterfaces.clear();
 				matchingFilters.clear();
-				if (SLPHandlerImpl.isTrackerInterestedInSED(sed, (Map) trackers
+				if (SLPHandlerImpl.isTrackerInterestedInSED(svcDescr, (Map) trackers
 						.get(tracker), matchingInterfaces, matchingFilters)) {
 					SLPHandlerImpl.log(LogService.LOG_INFO, this.getClass()
 							.getName()
 							+ ": Notify "
 							+ tracker
-							+ " about the GONE service " + sed);
+							+ " about the GONE service " + svcDescr);
 					tracker
 							.serviceChanged(new DiscoveredServiceNotificationImpl(
-									sed,
+									SLPServiceEndpointDescription.newInstance(svcDescr),
 									DiscoveredServiceNotification.UNAVAILABLE, matchingInterfaces, matchingFilters));
 				}
 			}
@@ -168,7 +167,7 @@ public class InformListenerTask extends TimerTask {
 								+ " about the MODIFIED service " + svcDescr);
 						tracker
 								.serviceChanged(new DiscoveredServiceNotificationImpl(
-										svcDescr,
+										SLPServiceEndpointDescription.newInstance(svcDescr),
 										DiscoveredServiceNotification.MODIFIED, matchingInterfaces, matchingFilters));
 					}
 				}
@@ -184,7 +183,7 @@ public class InformListenerTask extends TimerTask {
 							+ svcDescr);
 					tracker
 							.serviceChanged(new DiscoveredServiceNotificationImpl(
-									svcDescr,
+									SLPServiceEndpointDescription.newInstance(svcDescr),
 									DiscoveredServiceNotification.AVAILABLE, matchingInterfaces, matchingFilters));
 				}
 

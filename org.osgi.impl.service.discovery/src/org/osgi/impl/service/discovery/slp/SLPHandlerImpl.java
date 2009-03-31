@@ -57,6 +57,7 @@ import ch.ethz.iks.slp.ServiceURL;
  * 
  * @author Philipp Konradi
  * @author Thomas Kiesslich
+ * @ThreadSafe
  */
 public class SLPHandlerImpl implements Discovery {
 	/**
@@ -586,11 +587,13 @@ public class SLPHandlerImpl implements Discovery {
 						.next();
 				matchingInterfaces.clear();
 				matchingFilters.clear();
-				if (isTrackerInterestedInSED(svcDescr, matchingCriteria, matchingInterfaces, matchingFilters)) {
+				if (isTrackerInterestedInSED(svcDescr, matchingCriteria,
+						matchingInterfaces, matchingFilters)) {
 					tracker
 							.serviceChanged(new DiscoveredServiceNotificationImpl(
 									svcDescr,
-									DiscoveredServiceNotification.AVAILABLE, matchingInterfaces, matchingFilters));
+									DiscoveredServiceNotification.AVAILABLE,
+									matchingInterfaces, matchingFilters));
 				}
 			}
 		}
@@ -611,10 +614,15 @@ public class SLPHandlerImpl implements Discovery {
 			Map trackerProps = (Map) discoveredSTs.get(st);
 			matchingInterfaces.clear();
 			matchingFilters.clear();
-			if (isTrackerInterestedInSED(svcDescr, trackerProps, matchingInterfaces, matchingFilters)) {
+			if (isTrackerInterestedInSED(svcDescr, trackerProps,
+					matchingInterfaces, matchingFilters)) {
 				try {
-					st.serviceChanged(new DiscoveredServiceNotificationImpl(
-							svcDescr, DiscoveredServiceNotification.AVAILABLE, matchingInterfaces, matchingFilters));
+					st
+							.serviceChanged(new DiscoveredServiceNotificationImpl(
+									SLPServiceEndpointDescription
+											.newInstance(svcDescr),
+									DiscoveredServiceNotification.AVAILABLE,
+									matchingInterfaces, matchingFilters));
 				}
 				catch (Exception e) {
 					log(
@@ -645,12 +653,15 @@ public class SLPHandlerImpl implements Discovery {
 			matchingFilters.clear();
 			// inform it if the listener has no Filter set
 			// or the filter matches the criteria
-			if (isTrackerInterestedInSED(svcDescr, trackerProps, matchingInterfaces, matchingFilters)) {
+			if (isTrackerInterestedInSED(svcDescr, trackerProps,
+					matchingInterfaces, matchingFilters)) {
 				try {
 					st
 							.serviceChanged(new DiscoveredServiceNotificationImpl(
-									svcDescr,
-									DiscoveredServiceNotification.UNAVAILABLE, matchingInterfaces, matchingFilters));
+									SLPServiceEndpointDescription
+											.newInstance(svcDescr),
+									DiscoveredServiceNotification.UNAVAILABLE,
+									matchingInterfaces, matchingFilters));
 				}
 				catch (Exception e) {
 					log(
@@ -679,10 +690,15 @@ public class SLPHandlerImpl implements Discovery {
 			// or the filter matches the criteria
 			matchingInterfaces.clear();
 			matchingFilters.clear();
-			if (isTrackerInterestedInSED(svcDescr, trackerProps, matchingInterfaces, matchingFilters)) {
+			if (isTrackerInterestedInSED(svcDescr, trackerProps,
+					matchingInterfaces, matchingFilters)) {
 				try {
-					st.serviceChanged(new DiscoveredServiceNotificationImpl(
-							svcDescr, DiscoveredServiceNotification.MODIFIED, matchingInterfaces, matchingFilters));
+					st
+							.serviceChanged(new DiscoveredServiceNotificationImpl(
+									SLPServiceEndpointDescription
+											.newInstance(svcDescr),
+									DiscoveredServiceNotification.MODIFIED,
+									matchingInterfaces, matchingFilters));
 				}
 				catch (Exception e) {
 					log(
@@ -734,8 +750,7 @@ public class SLPHandlerImpl implements Discovery {
 				intersectionResult.retainAll(svcInterfaces);
 				if (intersectionResult.size() > 0) {
 					notify = true;
-					if(matchingInterfaces != null)
-					{
+					if (matchingInterfaces != null) {
 						matchingInterfaces.addAll(intersectionResult);
 					}
 				}
@@ -752,8 +767,7 @@ public class SLPHandlerImpl implements Discovery {
 						Filter f = context.createFilter(currentFilter);
 						if (f.match(new Hashtable(svcDescr.getProperties()))) {
 							notify = true;
-							if(matchingFilters != null)
-							{
+							if (matchingFilters != null) {
 								matchingFilters.add(currentFilter);
 							}
 						}

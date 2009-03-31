@@ -33,8 +33,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.StringTokenizer;
+import java.rmi.dgc.VMID;
+import java.rmi.server.UID;
 
 import org.osgi.service.discovery.ServiceEndpointDescription;
 import org.osgi.service.discovery.ServicePublication;
@@ -52,10 +53,12 @@ import ch.ethz.iks.slp.ServiceURL;
  * In the <code>path</code> part service properties are listed.
  * 
  * SLP Spec: http://www.ietf.org/rfc/rfc2608.txt
+ * 
  * @author Thomas Kiesslich
  * @version $Revision$
+ * @Immutable
  */
-public class SLPServiceEndpointDescription implements
+public final class SLPServiceEndpointDescription implements
 		ServiceEndpointDescription {
 	// RFC2608: reserved are: `(' / `)' / `,' / `\' / `!' / `<' / `=' / `>' /
 	// `~' / CTL
@@ -203,6 +206,51 @@ public class SLPServiceEndpointDescription implements
 		}
 		addInterfacesAndVersionsToProperties(interfaceNames,
 				interfacesAndVersions, endPointInterfaces, endpointID);
+	}
+
+	/**
+	 * This is a factory method to create a copy of a given
+	 * SLPServiceEndpointDescription. This is needed to return an immutable
+	 * object to the DiscoveredServiceTracker, as defined in the
+	 * ServiceEndpointDescription interface.
+	 * 
+	 * @param oldDescr the given SLPServiceEndpointDescription to copy
+	 * @return a deep SLPServiceEndpointDescription copy of the given oldDescr,
+	 *         or null if an ServiceLocationException has occurred
+	 */
+	public static SLPServiceEndpointDescription newInstance(
+			ServiceEndpointDescription oldDescr) {
+		String endpntID = new String(oldDescr.getEndpointID());
+		//TODO deep copy of properties
+		Map props = new HashMap(oldDescr.getProperties());
+		Collection interfaceNames = new ArrayList();
+		Collection interfacesAndVersions = new ArrayList();
+		Collection endPointInterfaces = new ArrayList();
+		Iterator it = oldDescr.getProvidedInterfaces().iterator();
+		while (it != null && it.hasNext()) {
+			String interfaceName = (String) it.next();
+			interfaceNames.add(new String(interfaceName));
+			String ifAndversion = oldDescr.getVersion(interfaceName);
+			if (ifAndversion != null) {
+				ifAndversion = interfaceName + ServicePublication.SEPARATOR + ifAndversion;
+				interfacesAndVersions.add(ifAndversion);
+			}
+			String ifAndEndpntIF = oldDescr.getEndpointInterfaceName(interfaceName);
+			if (ifAndEndpntIF != null) {
+				ifAndEndpntIF = interfaceName + ServicePublication.SEPARATOR + ifAndEndpntIF;
+				endPointInterfaces.add(ifAndEndpntIF);
+			}
+		}
+		try {
+			return new SLPServiceEndpointDescription(interfaceNames,
+					interfacesAndVersions, endPointInterfaces, props, endpntID);
+		}
+		catch (ServiceLocationException e) {
+			SLPHandlerImpl.log(LogService.LOG_ERROR,
+					"Exception during creation of copy of SLPServiceEndPointDescription is "
+							+ e);
+		}
+		return null;
 	}
 
 	/**
@@ -486,16 +534,18 @@ public class SLPServiceEndpointDescription implements
 		StringBuffer buff = new StringBuffer();
 		buff.append(STRING_SERVICE_OSGI);
 		buff.append(interf);
-//		if (properties == null || properties.get(ServicePublication.PROP_KEY_ENDPOINT_LOCATION) == null) {
-			buff.append((protocol != null ? protocol + "://" : "://"));
-			buff.append(host);
-			buff.append((port != null ? ":" + port : ""));
-//		}
-//		else {
-//			buff.append(".");
-//			buff.append(properties
-//					.get(ServicePublication.PROP_KEY_ENDPOINT_LOCATION));
-//		}
+		// if (properties == null ||
+		// properties.get(ServicePublication.PROP_KEY_ENDPOINT_LOCATION) ==
+		// null) {
+		buff.append((protocol != null ? protocol + "://" : "://"));
+		buff.append(host);
+		buff.append((port != null ? ":" + port : ""));
+		// }
+		// else {
+		// buff.append(".");
+		// buff.append(properties
+		// .get(ServicePublication.PROP_KEY_ENDPOINT_LOCATION));
+		// }
 		buff.append("/");
 		buff.append(path);
 		return new ServiceURL(buff.toString(), lifetime);
@@ -632,7 +682,7 @@ public class SLPServiceEndpointDescription implements
 	 * @return
 	 */
 	private String getUUID() {
-		return String.valueOf((new Random()).nextInt());
+		return (new UID()).toString() + (new VMID()).toString();
 	}
 
 	/**
