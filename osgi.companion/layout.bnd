@@ -33,7 +33,6 @@ cmpn.specs = \
 	 org.osgi.service.event, \
 	 org.osgi.service.http, \
 	 org.osgi.service.io, \
-	 org.osgi.service.jdbc, \
 	 org.osgi.service.log, \
 	 org.osgi.service.metatype, \
 	 org.osgi.service.monitor, \
@@ -51,13 +50,16 @@ cmpn.specs = \
 	 org.osgi.util.tracker, \
 	 org.osgi.util.xml, \
 	 info.dmtree
+# The following project are not part of compendium for 4.2
+#	 org.osgi.service.jdbc, \
 
 cmpn.packages = ${replace;$(cmpn.specs);^.*$;$0.*}
 
 enterprise.specs = \
 	 org.osgi.service.blueprint, \
 	 org.osgi.service.discovery, \
-	 org.osgi.service.distribution
+	 org.osgi.service.distribution, \
+	 org.osgi.service.jdbc
 
 enterprise.packages = ${replace;$(enterprise.specs);^.*$;$0.*}
 

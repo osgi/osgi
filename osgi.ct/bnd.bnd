@@ -65,7 +65,6 @@ build.cmpn.tests = \
     org.osgi.test.cases.event, \
     org.osgi.test.cases.gsm, \
     org.osgi.test.cases.http, \
-	org.osgi.test.cases.jdbc, \
     org.osgi.test.cases.io, \
     org.osgi.test.cases.log, \
     org.osgi.test.cases.measurement, \
@@ -79,7 +78,10 @@ build.cmpn.tests = \
     org.osgi.test.cases.useradmin, \
     org.osgi.test.cases.wireadmin, \
     org.osgi.test.cases.xml
+# Temporarily remove as it does not build
 #    org.osgi.test.cases.provisioning, \
+# The following project is not part of compendium for 4.2
+#	org.osgi.test.cases.jdbc, \
 
 build.mobile.tests = \
 	org.osgi.test.cases.application, \
@@ -105,7 +107,8 @@ build.mobile.tests = \
 
 build.enterprise.tests = \
 	org.osgi.test.cases.discovery, \
-	org.osgi.test.cases.jdbc, \
 	org.osgi.test.cases.transaction
+# The following project does not exist!
+#	org.osgi.test.cases.jdbc, \
 	
 	 
