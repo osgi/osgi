@@ -1,0 +1,9 @@
+Bundle-SymbolicName: ${p}.permissions.get
+Bundle-Name: ${p}.permissions.get
+Bundle-Description: Filtered ServicePermissiont Test R4 - Service get permission test
+Bundle-Activator: ${p}.permissions.get.GetActivator
+Bundle-Category: osgi,test
+
+Private-Package	= \
+	${p}.permissions.get
+

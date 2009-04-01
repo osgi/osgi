@@ -1,0 +1,10 @@
+Bundle-SymbolicName: ${p}.permissions.register
+Bundle-Name: ${p}.permissions.register
+Bundle-Description: Filtered ServicePermissiont Test R4 - registration permission test
+Bundle-Activator: ${p}.permissions.register.RegisterActivator
+Bundle-Category: osgi,test
+
+Private-Package	= \
+	${p}.permissions.register
+	
+-sign: test

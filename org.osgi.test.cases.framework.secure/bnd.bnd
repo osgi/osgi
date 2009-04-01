@@ -5,6 +5,7 @@ Private-Package						= org.osgi.test.support.*, \
 	${p}.junit.*
 	
 Export-Package						= \
+	${p}.permissions.util;version=1.0.0
 
 Include-Resource = \
 	fragments.tb2a.jar, \
@@ -20,7 +21,16 @@ Include-Resource = \
 	fragments.tb17a.jar, \
 	fragments.tb17b.jar, \
 	fragments.tb18.jar, \
-	fragments.tb19.jar
+	fragments.tb19.jar, \
+	permissions.exporter1.jar, \
+	permissions.exporter2.jar, \
+	permissions.get.jar, \
+	permissions.importer1.jar, \
+	permissions.importer2.jar, \
+	permissions.register.jar, \
+	permissions.registerModify.jar, \
+	permissions.registerPlural.jar, \
+	permissions.setPermission.jar
 	
 Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
 
@@ -35,4 +45,6 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 	
 
 -runproperties = report=true, \
-	org.osgi.framework.security=osgi
+	org.osgi.framework.security=osgi, \
+	org.osgi.framework.trust.repositories=${build}/keystore
+	

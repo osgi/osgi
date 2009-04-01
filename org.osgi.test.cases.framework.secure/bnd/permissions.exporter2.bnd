@@ -1,0 +1,14 @@
+Bundle-SymbolicName: ${p}.permissions.exporter2
+Bundle-Name: ${p}.permissions.exporter2
+Bundle-Description: Filtered ServicePermissiont Test R4 - package export Test
+Bundle-Activator: ${p}.permissions.exporter2.ExporterActivator
+Bundle-Version: 2.2.2
+Bundle-Category: osgi,test
+
+Private-Package	= \
+	${p}.permissions.exporter2	,\
+	${p}.permissions.sharedPkg
+	
+Export-Package = \
+	${p}.permissions.sharedPkg;version=2.0.0
+	

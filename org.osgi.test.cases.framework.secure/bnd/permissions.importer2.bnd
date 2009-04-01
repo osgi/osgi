@@ -1,0 +1,13 @@
+Bundle-SymbolicName: ${p}.permissions.importer2
+Bundle-Name: ${p}.permissions.importer2
+Bundle-Description: Filtered ServicePermissiont Test R4 - package import Test
+Bundle-Activator: ${p}.permissions.importer2.ImporterActivator
+Bundle-Category: osgi,test
+
+Private-Package	= \
+	${p}.permissions.importer2
+	
+Import-Package	= \
+	org.osgi.framework, ${p}.permissions.sharedPkg; version=2.0.0
+	
+	
