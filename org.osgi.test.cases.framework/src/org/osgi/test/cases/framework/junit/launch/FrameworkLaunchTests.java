@@ -537,7 +537,8 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 			fail("Unexpected interuption", e);
 		}
 		assertNotNull("Wait for stop event is null", event);
-		assertEquals("Wrong event type", FrameworkEvent.INFO, event.getType());
+		assertEquals("Wrong event type", FrameworkEvent.WAIT_TIMEDOUT, event
+				.getType());
 		stopFramework(framework);
 	}
 
