@@ -2,26 +2,28 @@
 <components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd"
-    default-availability="optional">
+    default-availability="optional" default-timeout="1000">
 
     <description>
-        This is a checker for basic reference list validation.
+        This checks an unavailable dependency, with defaults specified.
     </description>
 
     <component id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceOneListener">
         <constructor-arg value="ServiceOneListener"/>
     </component>
 
+
+    <!-- single shared instance of the imported service.  The original backing service will not exist, but is optional. -->
+    <reference id="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
+        <listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
+    </reference>
+
     <!-- This gets both a ServiceManager and a reference collection injected -->
-   <component id="NullReferenceChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.NullReferenceSet" init-method="init">
-       <constructor-arg value="NullReferenceChecker"/>
+   <component id="UnavailableDependencyChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.UnavailableDependencyChecker" init-method="init">
+       <constructor-arg value="UnavailableDependencyChecker"/>
+       <property name="one" ref="ServiceOne"/>
        <property name="serviceManager">
            <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
-       </property>
-       <property name="set">
-           <ref-set interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
-               <listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
-           </ref-set>
        </property>
    </component>
 </components>

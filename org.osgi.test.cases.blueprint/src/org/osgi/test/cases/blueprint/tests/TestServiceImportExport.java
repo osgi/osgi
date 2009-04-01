@@ -1327,6 +1327,45 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
+	/**
+	 * This tests the behavior of optional availability services and listener events.
+     * This is the same ad testUnavailableServiceDependency(), but the availability and
+     * timeout options are specified using the components default-* attributes.
+	 */
+	public void testUnavailableServiceDefaultDependency() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/unavailable_dependency_default_import.jar",
+            getWebServer()+"www/managed_one_unavailable_service_export.jar");
+        // The export jar has been well covered already in other tests.  We'll just focus
+        // on the import listener details.
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+        // metadata issues have been well tested elsewhere.  We're going to focus on the service dynamics.
+
+        // the first property comes from the called method signature, the
+        // second should be passed to the registration listener.
+        Hashtable props1 = new Hashtable();
+        props1.put("service.interface.name", TestServiceOne.class.getName());
+        props1.put("service.listener.type", "interface");
+        props1.put("osgi.service.blueprint.compname", "ServiceOneA");
+        // this is the bind operation that occurs after the service manager is nudged.
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, props1));
+        // this is followed by an UNBIND operation when the service goes away again.
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, props1));
+        // this indicates successful completion of the test phase
+        importStartEvents.addAssertion("UnavailableDependencyChecker", AssertionService.COMPONENT_INIT_METHOD);
+
+        // now some expected termination stuff
+        EventSet importStopEvents = controller.getStopEvents(0);
+        // the final UNBIND operation on module context shutdown.  Since this service is
+        // not currently bound, we should not see this.
+        importStopEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, props1));
+        controller.run();
+    }
+
+
 	/*
 	 * This tests the behavior of a service rebind to an alternative service.
 	 */

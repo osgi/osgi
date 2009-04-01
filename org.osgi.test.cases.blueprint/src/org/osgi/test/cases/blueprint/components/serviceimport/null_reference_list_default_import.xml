@@ -5,7 +5,7 @@
     default-availability="optional">
 
     <description>
-        This is a checker for basic reference list validation.
+        This is a checker for basic reference list validation, but with the availability specified via the default.
     </description>
 
     <component id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceOneListener">
@@ -13,15 +13,15 @@
     </component>
 
     <!-- This gets both a ServiceManager and a reference collection injected -->
-   <component id="NullReferenceChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.NullReferenceSet" init-method="init">
+   <component id="NullReferenceChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.NullReferenceList" init-method="init">
        <constructor-arg value="NullReferenceChecker"/>
        <property name="serviceManager">
            <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
        </property>
-       <property name="set">
-           <ref-set interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
+       <property name="list">
+           <ref-list interface="org.osgi.test.cases.blueprint.services.TestServiceOne" member-type="service-instance">
                <listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
-           </ref-set>
+           </ref-list>
        </property>
    </component>
 </components>
