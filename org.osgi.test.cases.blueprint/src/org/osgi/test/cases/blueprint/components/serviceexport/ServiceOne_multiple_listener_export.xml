@@ -26,15 +26,15 @@
             <value>org.osgi.test.cases.blueprint.services.TestServiceOne</value>
             <value>org.osgi.test.cases.blueprint.services.TestServiceTwo</value>
        </interfaces>
+       <service-properties>
+           <entry key="service.component.name" value="ServiceOneService"/>
+       </service-properties>
        <registration-listener ref="ServiceOneListener"
            registration-method="register"
            unregistration-method="unregister"/>
        <registration-listener ref="ServiceTwoListener"
            registration-method="register"
            unregistration-method="unregister"/>
-       <service-properties>
-           <entry key="service.component.name" value="ServiceOneService"/>
-       </service-properties>
    </service>
 </components>
 

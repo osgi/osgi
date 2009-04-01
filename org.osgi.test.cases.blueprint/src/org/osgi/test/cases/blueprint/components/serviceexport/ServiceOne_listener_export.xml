@@ -21,12 +21,12 @@
 
    <!-- simple export using a reference and just one interface. -->
    <service id="ServiceOneService" ref="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
-       <registration-listener ref="ServiceOneListener"
-           registration-method="register"
-           unregistration-method="unregister"/>
        <service-properties>
            <entry key="service.component.name" value="ServiceOneService" />
        </service-properties>
+       <registration-listener ref="ServiceOneListener"
+           registration-method="register"
+           unregistration-method="unregister"/>
    </service>
 </components>
 
