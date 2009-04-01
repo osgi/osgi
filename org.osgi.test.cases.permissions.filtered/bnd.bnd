@@ -1,0 +1,31 @@
+Bundle-Version: 1.0.0.${project.build}
+
+Private-Package						= \
+	${p}.tbc
+
+Include-Resource	= \
+	bundles/register.jar=register.jar					,\
+	bundles/get.jar=get.jar								,\
+	bundles/registerPlural.jar=registerPlural.jar		,\
+	bundles/registerModify.jar=registerModify.jar		,\
+	bundles/setPermission.jar=setPermission.jar			,\
+	bundles/exporter1.jar=exporter1.jar			,\
+	bundles/importer1.jar=importer1.jar			,\
+	bundles/importer2.jar=importer2.jar			,\
+	bundles/exporter2.jar=exporter2.jar			
+	
+Export-Package = \
+	${p}.util;version=1.0.0
+	
+Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+
+-buildpath							= \
+	org.eclipse.osgi;									version=latest	, \
+	ee.foundation											, \
+	${junit}
+
+-runproperties = \
+	report=true, \
+	org.osgi.framework.security=osgi, \
+	org.osgi.framework.trust.repositories=${build}/keystore
+		

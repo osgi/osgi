@@ -1,0 +1,13 @@
+Bundle-SymbolicName: ${p}.setPermission
+Bundle-Name: ${p}.setPermission
+Bundle-Description: Filtered ServicePermissiont Test R4 - set all Permission.
+Bundle-Activator: ${p}.setPermission.SetPermissionActivator
+Bundle-Vendor: NTT
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+
+Private-Package	= \
+	${p}.setPermission
+	
+Import-Package:org.osgi.test.cases.permissions.filtered.util, org.osgi.framework, org.osgi.service.permissionadmin

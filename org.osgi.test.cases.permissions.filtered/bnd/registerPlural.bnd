@@ -1,0 +1,12 @@
+Bundle-SymbolicName: ${p}.registerPlural
+Bundle-Name: ${p}.registerPlural
+Bundle-Description: Filtered ServicePermissiont Test R4 - Service register plural permission test
+Bundle-Activator: ${p}.registerPlural.registerPluralActivator
+Bundle-Vendor: NTT
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+
+Private-Package	= \
+	${p}.registerPlural
+	
