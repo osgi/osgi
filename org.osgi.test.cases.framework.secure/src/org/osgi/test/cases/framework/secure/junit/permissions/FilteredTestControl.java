@@ -2102,8 +2102,8 @@ public class FilteredTestControl extends OSGiTestCase {
 		return permissionAdmin;
 	}
 
-	private void add(List addToList, String clazz, String name, String actions) {
-		addToList.add(new PermissionInfo(clazz, name, actions));
+	private void add(List permissionsInfos, String clazz, String name, String actions) {
+		permissionsInfos.add(new PermissionInfo(clazz, name, actions));
 	}
 
 	private void setBasePermissions() {
