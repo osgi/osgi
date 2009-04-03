@@ -35,9 +35,11 @@
 	</target>
 
 	<target name="ees" depends="init">
+		<echo>${minimum-latest.jar}</echo>
+		<echo>${foundation-latest.jar}</echo>
 		<java classname="org.osgi.tools.jar2xml.JAR2XML" classpath="${jar2xml}" fork="true" output="ee.xml">
-			<arg line="-tagged minimum ${minimum-latest}" />
-			<arg line="-tagged foundation ${foundation-latest}" />
+			<arg line="-tagged minimum ${minimum-latest.jar}" />
+			<arg line="-tagged foundation ${foundation-latest.jar}" />
 		</java>
 		<echo>Converted JARs to XML</echo>
 		<java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true" output="ee.html">
