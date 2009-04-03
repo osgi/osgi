@@ -102,21 +102,46 @@ public interface BundleContext {
 	public Bundle getBundle();
 
 	/**
-	 * Installs a bundle from the specified location string. A bundle is
-	 * obtained from <code>location</code> as interpreted by the Framework in
-	 * an implementation dependent manner.
+	 * Installs a bundle from the specified <code>location</code> identifier.
+	 * 
 	 * <p>
-	 * Every installed bundle is uniquely identified by its location string,
-	 * typically in the form of a URL.
+	 * This method performs the same function as calling
+	 * {@link #installBundle(String,InputStream)} with the specified
+	 * <code>location</code> identifier and a <code>null</code> InputStream.
+	 * 
+	 * @param location The location identifier of the bundle to install.
+	 * @return The <code>Bundle</code> object of the installed bundle.
+	 * @throws BundleException If the installation failed.
+	 * @throws SecurityException If the caller does not have the appropriate
+	 *         <code>AdminPermission[installed bundle,LIFECYCLE]</code>, and the
+	 *         Java Runtime Environment supports permissions.
+	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @see #installBundle(String, InputStream)
+	 */
+	public Bundle installBundle(String location) throws BundleException;
+
+	/**
+	 * Installs a bundle from the specified <code>InputStream</code> object.
+	 * 
+	 * <p>
+	 * If the specified <code>InputStream</code> is <code>null</code>, the
+	 * Framework must create the <code>InputStream</code> from which to read the
+	 * bundle by interpreting, in an implementation dependent manner, the
+	 * specified <code>location</code>.
+	 * 
+	 * <p>
+	 * The specified <code>location</code> identifier will be used as the
+	 * identity of the bundle. Every installed bundle is uniquely identified by
+	 * its location identifier which is typically in the form of a URL.
 	 * 
 	 * <p>
 	 * The following steps are required to install a bundle:
 	 * <ol>
-	 * <li>If a bundle containing the same location string is already
+	 * <li>If a bundle containing the same location identifier is already
 	 * installed, the <code>Bundle</code> object for that bundle is returned.
 	 * 
-	 * <li>The bundle's content is read from the location string. If this
-	 * fails, a {@link BundleException} is thrown.
+	 * <li>The bundle's content is read from the input stream. If this fails, a
+	 * {@link BundleException} is thrown.
 	 * 
 	 * <li>The bundle's associated resources are allocated. The associated
 	 * resources minimally consist of a unique identifier and a persistent
@@ -127,13 +152,14 @@ public interface BundleContext {
 	 * 
 	 * <li>A bundle event of type {@link BundleEvent#INSTALLED} is fired.
 	 * 
-	 * <li>The <code>Bundle</code> object for the newly or previously
-	 * installed bundle is returned.
+	 * <li>The <code>Bundle</code> object for the newly or previously installed
+	 * bundle is returned.
 	 * </ol>
 	 * 
 	 * <b>Postconditions, no exceptions thrown </b>
 	 * <ul>
-	 * <li><code>getState()</code> in {<code>INSTALLED</code>,<code>RESOLVED</code>}.
+	 * <li><code>getState()</code> in &#x007B; <code>INSTALLED</code>,
+	 * <code>RESOLVED</code> &#x007D;.
 	 * <li>Bundle has a unique ID.
 	 * </ul>
 	 * <b>Postconditions, when an exception is thrown </b>
@@ -142,44 +168,18 @@ public interface BundleContext {
 	 * </ul>
 	 * 
 	 * @param location The location identifier of the bundle to install.
-	 * @return The <code>Bundle</code> object of the installed bundle.
-	 * @throws BundleException If the installation failed.
-	 * @throws SecurityException If the caller does not have the
-	 *         appropriate
-	 *         <code>AdminPermission[installed bundle,LIFECYCLE]</code>, and
-	 *         the Java Runtime Environment supports permissions.
-	 * @throws IllegalStateException If this BundleContext is no
-	 *         longer valid.
-	 */
-	public Bundle installBundle(String location) throws BundleException;
-
-	/**
-	 * Installs a bundle from the specified <code>InputStream</code> object.
-	 * 
-	 * <p>
-	 * This method performs all of the steps listed in
-	 * <code>BundleContext.installBundle(String location)</code>, except that
-	 * the bundle's content will be read from the <code>InputStream</code>
-	 * object. The location identifier string specified will be used as the
-	 * identity of the bundle.
-	 * 
-	 * <p>
-	 * This method must always close the <code>InputStream</code> object, even
-	 * if an exception is thrown.
-	 * 
-	 * @param location The location identifier of the bundle to install.
 	 * @param input The <code>InputStream</code> object from which this bundle
-	 *        will be read.
+	 *        will be read or <code>null</code> to indicate the Framework must
+	 *        create the input stream from the specified location identifier.
+	 *        The input stream must always be closed when this method completes,
+	 *        even if an exception is thrown.
 	 * @return The <code>Bundle</code> object of the installed bundle.
-	 * @throws BundleException If the provided stream cannot be read or the
+	 * @throws BundleException If the input stream cannot be read or the
 	 *         installation failed.
-	 * @throws SecurityException If the caller does not have the
-	 *         appropriate
-	 *         <code>AdminPermission[installed bundle,LIFECYCLE]</code>, and
-	 *         the Java Runtime Environment supports permissions.
-	 * @throws IllegalStateException If this BundleContext is no
-	 *         longer valid.
-	 * @see #installBundle(String)
+	 * @throws SecurityException If the caller does not have the appropriate
+	 *         <code>AdminPermission[installed bundle,LIFECYCLE]</code>, and the
+	 *         Java Runtime Environment supports permissions.
+	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 */
 	public Bundle installBundle(String location, InputStream input)
 			throws BundleException;
