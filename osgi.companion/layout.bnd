@@ -25,7 +25,6 @@ cmpn.specs = \
 	 org.osgi.service.blueprint, \
 	 org.osgi.service.cm, \
 	 org.osgi.service.component, \
-	 org.osgi.service.command, \
 	 org.osgi.service.deploymentadmin, \
 	 org.osgi.service.discovery, \
 	 org.osgi.service.distribution, \
@@ -38,7 +37,6 @@ cmpn.specs = \
 	 org.osgi.service.monitor, \
 	 org.osgi.service.prefs, \
 	 org.osgi.service.provisioning, \
-	 org.osgi.service.threadio, \
 	 org.osgi.service.upnp, \
 	 org.osgi.service.useradmin, \
 	 org.osgi.service.wireadmin, \
@@ -52,6 +50,8 @@ cmpn.specs = \
 	 info.dmtree
 # The following project are not part of compendium for 4.2
 #	 org.osgi.service.jdbc, \
+#	 org.osgi.service.command, \
+#	 org.osgi.service.threadio, \
 
 cmpn.packages = ${replace;$(cmpn.specs);^.*$;$0.*}
 
