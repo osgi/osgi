@@ -1,0 +1,6 @@
+-include ../osgi.ri/layout.bnd, ../osgi.ct/layout.bnd
+
+-runbundles 	: 	org.osgi.impl.service.log
+-testbundles 	: 	org.osgi.test.cases.log, \
+    org.osgi.test.cases.framework
+  
