@@ -39,6 +39,8 @@ import org.osgi.test.cases.blueprint.framework.EventSet;
 import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
 import org.osgi.test.cases.blueprint.framework.PropertyMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.ReferenceCollection;
+import org.osgi.test.cases.blueprint.framework.ReferenceListValidator;
+import org.osgi.test.cases.blueprint.framework.ReferenceSetValidator;
 import org.osgi.test.cases.blueprint.framework.ReferencedService;
 import org.osgi.test.cases.blueprint.framework.StandardTestController;
 import org.osgi.test.cases.blueprint.framework.TestComponentValue;
@@ -104,6 +106,9 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind") }, List.class, null,
             CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
             CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICES)));
+
+        // this validates the ModuleContext.getComponent() result
+        importStartEvents.addValidator(new ReferenceListValidator("TestCollection"));
 
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
@@ -561,6 +566,9 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind") }, Set.class, null,
             CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
             CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICES)));
+
+        // this validates the ModuleContext.getComponent() result
+        importStartEvents.addValidator(new ReferenceSetValidator("TestCollection"));
 
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will

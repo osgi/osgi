@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <description>
+        This is a checker for basic reference list validation.
+    </description>
+
+    <component id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceOneListener">
+        <constructor-arg value="ServiceOneListener"/>
+    </component>
+
+    <!-- This gets both a ServiceManager and a reference collection injected -->
+   <component id="NullReferenceChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.NullReferenceSet" init-method="init">
+       <constructor-arg value="NullReferenceChecker"/>
+       <property name="serviceManager">
+           <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
+       </property>
+       <property name="set">
+           <ref-set interface="org.osgi.test.cases.blueprint.services.TestServiceOne" availability="optional">
+               <listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
+           </ref-set>
+       </property>
+   </component>
+</components>
+
