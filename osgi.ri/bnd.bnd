@@ -1,3 +1,4 @@
+-include: layout.bnd
 -reportnewer : true
 
 # Build the deliverables that are published in the repository
