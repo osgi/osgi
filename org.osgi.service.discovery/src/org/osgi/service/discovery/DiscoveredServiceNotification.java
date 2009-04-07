@@ -21,6 +21,9 @@ import java.util.Collection;
 /**
  * Interface for notification on discovered services.
  * 
+ * <code>DiscoveredServiceNotification</code> objects are immutable.
+ * 
+ * @Immutable
  * @version $Revision$
  */
 public interface DiscoveredServiceNotification {

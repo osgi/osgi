@@ -29,6 +29,7 @@ package org.osgi.service.discovery;
  * Discovery service implementations usually rely on some discovery protocols or
  * other information distribution means.
  * 
+ * @ThreadSafe
  * @version $Revision$
  */
 public interface Discovery {

@@ -46,6 +46,7 @@ import org.osgi.framework.ServiceReference;
  * case variants of the same key name, and the actual publication via Discovery
  * mechanisms has to succeed.
  * 
+ * @ThreadSafe
  * @version $Revision$
  */
 public interface ServicePublication {

@@ -27,6 +27,7 @@ package org.osgi.service.discovery;
  * <code>DiscoveredServiceTracker</code> out of order and may concurrently call
  * and/or reenter a <code>DiscoveredServiceTracker</code>.
  * 
+ * @ThreadSafe
  * @version $Revision$
  */
 public interface DiscoveredServiceTracker {

@@ -26,6 +26,9 @@ import java.util.Map;
  * its endpoint. It provides an API to conveniently access the most important
  * properties of the service.
  * 
+ * <code>ServiceEndpointDescription</code> objects are immutable.
+ * 
+ * @Immutable
  * @version $Revision$
  */
 public interface ServiceEndpointDescription {
