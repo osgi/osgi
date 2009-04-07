@@ -49,10 +49,9 @@ public interface ServiceEndpointDescription {
 	 * {@link ServicePublication#PROP_KEY_ENDPOINT_INTERFACE_NAME} is used by
 	 * this operation.
 	 * 
-	 * @param interfaceName
-	 *            for which its non-Java endpoint interface name should be
-	 *            returned. 
-	 *            
+	 * @param interfaceName for which its non-Java endpoint interface name
+	 *        should be returned.
+	 * 
 	 * @return non-Java endpoint interface name. Null, if it hasn't been
 	 *         provided.
 	 */
@@ -63,8 +62,7 @@ public interface ServiceEndpointDescription {
 	 * {@link ServicePublication#PROP_KEY_SERVICE_INTERFACE_VERSION} is used by
 	 * this operation.
 	 * 
-	 * @param interfaceName
-	 *            for which its version should be returned.
+	 * @param interfaceName for which its version should be returned.
 	 * @return Version of given service interface. Null, if it hasn't been
 	 *         provided.
 	 */
@@ -90,29 +88,29 @@ public interface ServiceEndpointDescription {
 	/**
 	 * Getter method for the property value of a given key.
 	 * 
-	 * @param key
-	 *            Name of the property
+	 * @param key Name of the property
 	 * @return The property value, null if none is found for the given key
 	 */
 	Object getProperty(String key);
 
 	/**
-	 * @return <code>java.util.Collection</code> of property names available in
-	 *         the ServiceEndpointDescription. The collection is never null or
-	 *         empty but contains at least basic properties like objectClass for
-	 *         the service interface. The collection represents a snapshot and
-	 *         as such is not going to be updated in case properties were added
-	 *         or removed at a later point of time.
+	 * @return a <code>java.util.Collection</code> of property names available
+	 *         in the ServiceEndpointDescription. The collection is never null
+	 *         or empty but contains at least names of mandatory
+	 *         <code>ServicePublication</code> properties. Since
+	 *         <code>ServiceEndpointDescription</code> objects are immutable,
+	 *         the returned collection is also not going to be updated at a
+	 *         later point of time.
 	 */
 	Collection/* <? extends String> */getPropertyKeys();
 
 	/**
-	 * @return Returns all properties of the service as a
-	 *         <code>java.util.Map</code>. The map is never null or empty but
-	 *         contains at least basic properties like objectClass for the
-	 *         service interface. The collection represents a snapshot and as
-	 *         such is not going to be updated in case properties were added or
-	 *         removed at a later point of time.
+	 * @return all properties of the service as a <code>java.util.Map</code>.
+	 *         The map is never null or empty but contains at least mandatory
+	 *         <code>ServicePublication</code> properties. Since
+	 *         <code>ServiceEndpointDescription</code> objects are immutable,
+	 *         the returned map is also not going to be updated at a later point
+	 *         of time.
 	 */
 	Map/* <String, Object> */getProperties();
 }
