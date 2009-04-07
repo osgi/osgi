@@ -12,8 +12,6 @@
        <constructor-arg value="ServiceOneImporter"/>
    </component>
 
-   <reference id="ComponentDependency" interface="org.osgi.test.cases.blueprint.services.TestServiceOne"/>
-
    <!-- This service registration should come and go as the dependent service does -->
    <service id="ServiceOneExporter" ref="ServiceOneImporter" interface="org.osgi.test.cases.blueprint.services.TestServiceDynamicsInterface"/>
 </components>
