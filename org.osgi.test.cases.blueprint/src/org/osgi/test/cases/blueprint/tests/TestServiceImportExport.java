@@ -63,7 +63,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // validate that the service has been registered
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, "ServiceOne"));
         // this will validate the getComponent() result
-        exportStartEvents.addValidator(new ServiceComponentValidator("ServiceOne"));
+        exportStartEvents.addValidator(new ServiceComponentValidator("ServiceOneService"));
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
             ServiceExportComponentMetadata.EXPORT_MODE_DISABLED, 0, null, null, null)));
