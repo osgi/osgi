@@ -251,7 +251,7 @@ public class ConditionalUtility {
   }
   
   void testPermissions(ConditionInfo[] conditions, Permission[] permissions,
-      AdminPermission[] allowedPermission, AdminPermission[] notAllowedPermission, String[] order) {
+      AdminPermission[] allowedPermission, AdminPermission[] notAllowedPermission, String[] order1, String[] order2) {
     ConditionalPermissionInfo cpInfo = setPermissionsByCPermissionAdmin(conditions, permissions);
     testControl.trace("Test " + cpInfoToString(cpInfo));
     boolean testForAllowed = allowedPermission.length>0;
@@ -259,7 +259,7 @@ public class ConditionalUtility {
     for (int i = 0; i < allowedPermission.length; i++) {
       allowed(allowedPermission[i]);
     }
-    if (testForAllowed) testEqualArrays(order, TestCondition.getSatisfOrder());
+    if (testForAllowed) testEqualArrays(order1, order2, TestCondition.getSatisfOrder());
     testControl.trace("Test for not allowed permissions:");
     for (int k = 0; k < notAllowedPermission.length; k++) {
       notAllowed(notAllowedPermission[k], SecurityException.class);
@@ -269,12 +269,24 @@ public class ConditionalUtility {
       TestCondition.satisfOrder.removeAllElements();
     } else {
       //order not tested yet, test it here
-      testEqualArrays(order, TestCondition.getSatisfOrder());
+      testEqualArrays(order1, order2, TestCondition.getSatisfOrder());
     }
     cpInfo.delete();
   }
   
-  void deletePermissions(ConditionInfo[] conditions, Permission permission) {
+  private void testEqualArrays(String[] order1, String[] order2,
+		String[] satisfOrder) {
+	try {
+		testEqualArrays(order1, satisfOrder);
+	} catch (RuntimeException e) {
+		if (order2 == null) 
+			throw e;
+		testEqualArrays(order2, satisfOrder);
+	}
+	
+}
+
+void deletePermissions(ConditionInfo[] conditions, Permission permission) {
     ConditionalPermissionInfo cpInfo = setPermissionsByCPermissionAdmin(conditions, new Permission[] {permission});
     testControl.pass("New permissions are set: " + cpInfoToString(cpInfo));
     Enumeration infos = cpAdmin.getConditionalPermissionInfos();
@@ -302,7 +314,7 @@ public class ConditionalUtility {
       testControl.fail("Not correct check of TestConditions.");
     }
   }
-	
+  
 	Vector createWildcardDNs(String value) {
 		Vector result = new Vector();
 		String semicolon = ";";

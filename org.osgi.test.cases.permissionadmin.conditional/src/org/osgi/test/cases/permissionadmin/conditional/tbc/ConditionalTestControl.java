@@ -371,7 +371,6 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
         fail("Please use Target_tck95.launch for successful run of 'testMoreConditions' test case");
     }
 
-    // TODO This assumes an ordering not mandated by the specification
     // implementation assumption:
     // TestCondition_0 and TestCondion_2 will be executed before TestCondition_1 because they are not postponed
     utility.testPermissions(
@@ -383,9 +382,9 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
       new AdminPermission[]{permission},
       new AdminPermission[]{permission},     //allowed
       new AdminPermission[]{allPermissions}, //not allowed
-      new String[] {"TestCondition_0", "TestCondition_2", "TestCondition_1"});
+      new String[] {"TestCondition_0", "TestCondition_2", "TestCondition_1"},
+      null);
 
-    // TODO This assumes an ordering not mandated by the specification
     // implementation assumption:
     // TestCondition_0_1 and TestCondion_1_1 will be executed before TestCondition_2_1 because they are not postponed
     // TestConditoin_1_1 will be executed again on a second permission check because it is mutable
@@ -398,9 +397,11 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
       new AdminPermission[]{permission, permission2},
       new AdminPermission[]{permission, permission2}, //allowed
       new AdminPermission[]{allPermissions},          //not allowed
-      new String[] {"TestCondition_0_1", "TestCondition_1_1", "TestCondition_2_1", "TestCondition_1_1"});
+      new String[] {"TestCondition_0_1", "TestCondition_1_1", "TestCondition_2_1", "TestCondition_1_1"}, // optimized
+      new String[] {"TestCondition_0_1", "TestCondition_1_1", "TestCondition_2_1", "TestCondition_0_1", "TestCondition_1_1", "TestCondition_2_1"} // not optimized
+      );
 
-    // TODO This assumes an ordering not mandated by the specification
+
     //Check at creation 3 and 4_2 and 4_3, and then 4 and 4_1 because they are postponed
     utility.testPermissions(
         new ConditionInfo[]{
@@ -413,9 +414,9 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
         new AdminPermission[] {permission},
         new AdminPermission[]{permission},     //allowed
         new AdminPermission[]{allPermissions}, //not allowed
-        new String[] {"TestCondition_3", "TestCondition_4_2", "TestCondition_4_3", "TestCondition_4", "TestCondition_4_1"});
+        new String[] {"TestCondition_3", "TestCondition_4_2", "TestCondition_4_3", "TestCondition_4", "TestCondition_4_1"},
+        null);
 
-    // TODO This assumes an ordering not mandated by the specification
     // implementation note:
     // first permission check:
     // we do not ever check TestCondition_5 because a non-postponed condition 7 is not satisfied
@@ -430,7 +431,8 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
       new AdminPermission[] {permission},
       new AdminPermission[]{},               //allowed
       new AdminPermission[]{permission, allPermissions}, //not allowed
-      new String[] {"TestCondition_6", "TestCondition_7"});
+      new String[] {"TestCondition_6", "TestCondition_7"},
+      null);
 
     //Don't check 2nd because 1st is not satisfied
     utility.testPermissions(
@@ -441,9 +443,9 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
         new AdminPermission[] {permission},
         new AdminPermission[]{},
         new AdminPermission[]{permission},
-        new String[] {"TestCondition_8"});
+        new String[] {"TestCondition_8"},
+        null);
 
-    // TODO This assumes an ordering not mandated by the specification
     // implementation note:
     // we don not ever check TestCondition_11 because a non-postponed condition 10 is not satisfied
     utility.testPermissions(
@@ -454,9 +456,9 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
       new AdminPermission[] {permission},
       new AdminPermission[]{},//allowed
       new AdminPermission[]{permission, allPermissions},//permission, allPermissions
-      new String[] {"TestCondition_10", "TestCondition_10"});
+      new String[] {"TestCondition_10", "TestCondition_10"},
+      null);
 
-    // TODO This assumes an ordering not mandated by the specification
     // Don't check TestCondition_14 or 15 because TestCondition_12 is not satisfied
     // implementation note:
     // first permission check:
@@ -473,7 +475,8 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
       new AdminPermission[] {permission},
       new AdminPermission[]{},//allowed
       new AdminPermission[]{permission, allPermissions},
-      new String[] {"TestCondition_13", "TestCondition_12"});//according 9.5.1 and fig 9.38
+      new String[] {"TestCondition_13", "TestCondition_12"}, //according 9.5.1 and fig 9.38
+      new String[] {"TestCondition_13", "TestCondition_12", "TestCondition_13"});
   }
 
   /**
@@ -749,15 +752,6 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     utility.setTestBunde(testBundle, false);
     TestCondition.satisfOrder.removeAllElements();
     
-    try {
-        Class.forName(TestCondition.class.getName());
-    } catch (Exception ex) {
-      pass(ex.getMessage());
-      //it doesn't work because loadClass method in RI works with the system class loader only
-      if (ex instanceof ClassNotFoundException)
-        fail("Please use Target_tck95.launch for successful run of 'testMoreConditions' test case");
-    }
-
     ConditionInfo cInfo = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[] { testBundleLocation });
     ConditionInfo tc1  = utility.createTestCInfo(false, false, true, "TestCondition_200", testBundle.getBundleId()); // not postponed, not satisfied, mutable
     ConditionInfo tc2  = utility.createTestCInfo(false,  true, true, "TestCondition_201", testBundle.getBundleId()); // not postponed, satisfied, mutable
