@@ -26,6 +26,12 @@
  */
 package org.osgi.test.cases.blueprint.tests;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+
+import org.osgi.service.blueprint.context.ModuleContext;
+import org.osgi.service.blueprint.convert.ConversionService;
+
 import org.osgi.test.cases.blueprint.components.comp1.SimpleTestComponent;
 import org.osgi.test.cases.blueprint.components.factory.SimpleInstanceFactory;
 import org.osgi.test.cases.blueprint.components.staticfactory.SimpleStaticFactory;
@@ -412,6 +418,14 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         startEvents.addAssertion("ContextAware", AssertionService.COMPONENT_CREATED);
         startEvents.addAssertion("ContextAware", AssertionService.MODULE_CONTEXT_INJECTED);
         startEvents.addAssertion("ContextAware", AssertionService.COMPONENT_INIT_METHOD);
+
+        // This is a bonus part of the test.  Check that the default component exist and are of the
+        // correct type.
+        startEvents.addValidator(new ComponentTypeValidator("bundle", Bundle.class));
+        startEvents.addValidator(new ComponentTypeValidator("bundleContext", BundleContext.class));
+        startEvents.addValidator(new ComponentTypeValidator("moduleContext", ModuleContext.class));
+        startEvents.addValidator(new ComponentTypeValidator("conversionService", ConversionService.class));
+
         // if we receive the above events and no assertion failures, then everything has worked.
         controller.run();
     }

@@ -110,6 +110,7 @@ Include-Resource					= \
  	www/classtype_factory_property_injection.jar=classtype_factory_property_injection.jar, \
  	www/classtype_static_factory_property_injection.jar=classtype_static_factory_property_injection.jar, \
  	www/component_reference_injection.jar=component_reference_injection.jar, \
+ 	www/default_component_override.jar=default_component_override.jar, \
  	www/list_constructor_injection.jar=list_constructor_injection.jar, \
  	www/list_static_factory_constructor_injection.jar=list_static_factory_constructor_injection.jar, \
  	www/list_factory_constructor_injection.jar=list_factory_constructor_injection.jar, \

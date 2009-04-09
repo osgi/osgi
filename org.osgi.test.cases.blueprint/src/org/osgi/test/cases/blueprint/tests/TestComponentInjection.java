@@ -26,6 +26,13 @@
  */
 package org.osgi.test.cases.blueprint.tests;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+
+import org.osgi.service.blueprint.context.ModuleContext;
+import org.osgi.service.blueprint.convert.ConversionService;
+
+import org.osgi.service.blueprint.reflect.LocalComponentMetadata;
 import org.osgi.service.blueprint.reflect.LocalComponentMetadata;
 import org.osgi.test.cases.blueprint.components.injection.ComponentInjection;
 import org.osgi.test.cases.blueprint.framework.*;
@@ -270,6 +277,35 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         stopEvents.addFailureEvent(new ComponentAssertion("prototype1", AssertionService.COMPONENT_DESTROY_METHOD));
         stopEvents.addFailureEvent(new ComponentAssertion("prototype2", AssertionService.COMPONENT_DESTROY_METHOD));
         stopEvents.addFailureEvent(new ComponentAssertion("prototype3", AssertionService.COMPONENT_DESTROY_METHOD));
+
+        controller.run();
+    }
+
+
+	/*
+	 * the override of the default components with user defined components.
+	 */
+	public void testDefaultComponentOverride() throws Exception {
+        ThreePhaseTestController controller = new ThreePhaseTestController(getContext(),
+            getWebServer()+"www/default_component_override.jar");
+        MetadataEventSet startEvents = controller.getStartEvents();
+        // first creation of the override components
+        startEvents.addAssertion("bundle", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("bundleContext", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("moduleContext", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("conversionService", AssertionService.COMPONENT_CREATED);
+
+        // and the injection targets
+        startEvents.addAssertion("bundleUser", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("bundleContextUser", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("moduleContextUser", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("conversionServiceUser", AssertionService.COMPONENT_CREATED);
+
+        // these should all be our local components
+        startEvents.addValidator(new ComponentTypeValidator("bundle", ComponentInjection.class));
+        startEvents.addValidator(new ComponentTypeValidator("bundleContext", ComponentInjection.class));
+        startEvents.addValidator(new ComponentTypeValidator("moduleContext", ComponentInjection.class));
+        startEvents.addValidator(new ComponentTypeValidator("conversionService", ComponentInjection.class));
 
         controller.run();
     }
