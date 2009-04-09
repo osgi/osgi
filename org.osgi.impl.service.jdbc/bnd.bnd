@@ -1,3 +1,6 @@
+javac.source = 1.5
+javac.target = 1.5
+
 Bundle-Activator: 		org.osgi.impl.service.jdbc.Activator
 Export-Package: 		org.osgi.service.jdbc;-split-package:=first, org.osgi.impl.service.jdbc
 Import-Package: 		org.apache.derby.jdbc, javax.sql, org.osgi.framework
