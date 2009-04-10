@@ -48,7 +48,7 @@ public class JDBCTestCase extends TestCase {
 	public void testDataSourceFactoryService() throws Exception {
 		String filter = "(" + DataSourceFactory.JDBC_DRIVER +
 				"=" +
-				DerbyEmbeddedDataSourceFactory.DERBY_JDBC_DRIVER +
+				DerbyEmbeddedDataSourceFactory.JDBC_DRIVER_PROPERTY_VALUE +
 				")";
 		ServiceReference[] serviceReferences = context.getServiceReferences(
 				DataSourceFactory.class.getName(), filter);
