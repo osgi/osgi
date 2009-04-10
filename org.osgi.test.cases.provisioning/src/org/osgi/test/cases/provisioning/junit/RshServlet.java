@@ -26,14 +26,28 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.provisioning;
-import java.io.*;
-import java.security.*;
-import java.util.zip.*;
+package org.osgi.test.cases.provisioning.junit;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.zip.CRC32;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
-import javax.crypto.*;
-import javax.crypto.spec.*;
-import javax.servlet.http.*;
+import javax.crypto.Cipher;
+import javax.crypto.Mac;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESedeKeySpec;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 
 /**
@@ -42,6 +56,7 @@ import javax.servlet.http.*;
  */
 
 public class RshServlet extends HttpServlet {	
+	private static final long	serialVersionUID	= -2695459852977761254L;
 	static public  byte [] E = { b(0x05), b(0x36), b(0x54), b(0x70), b(0x00) };
 	static public  byte [] A = { b(0x00), b(0x4F), b(0x53), b(0x47), b(0x49) };
 	static final public  byte b(int x) { return (byte) x; }

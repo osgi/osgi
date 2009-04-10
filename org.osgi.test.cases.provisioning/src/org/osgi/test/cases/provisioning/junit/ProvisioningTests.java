@@ -26,7 +26,7 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.provisioning.tbc;
+package org.osgi.test.cases.provisioning.junit;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -42,7 +42,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -51,56 +50,25 @@ import org.osgi.service.provisioning.ProvisioningService;
 import org.osgi.service.url.AbstractURLStreamHandlerService;
 import org.osgi.service.url.URLConstants;
 import org.osgi.service.url.URLStreamHandlerService;
-import org.osgi.test.cases.util.DefaultTestBundleControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * A test case for the R3 Initial Provisioning service, with
  * file, http, and rsh url mappings.
  */
-public class ProvisioningControl extends DefaultTestBundleControl {
+public class ProvisioningTests extends DefaultTestBundleControl {
 	File							dir;			// Working dir for copying bundles
 	ServiceTracker					provisioning;	// Tracks provisioning service
-	BundleContext					context;		
 	final boolean					debug = true;	// For debug info
 	ServiceTracker					bundles;		// Tracks started Ip bundles
 	ServiceRegistration				registration;	// director: spid-test: stream handler
 	String							query; 			// Query part from spid-test: url
+	final String		rshServer;
 
-	long TIMEOUT1 = 60000;
-	long TIMEOUT2 = 10000;
-	long TIMEOUT4 = 100;
-	long TIMEOUT5 = 50;
-
-	/**
-	 * Check the availability of the provisioning service.
-	 */	
-	public boolean checkPrerequisites() {
-		try {
-			String scalingStr = System.getProperty("org.osgi.test.testcase.scaling");
-			if (scalingStr != null) {
-				try {
-					long scale = Long.parseLong(scalingStr);
-					if (scale > 0) {
-						TIMEOUT1 *= scale;
-						TIMEOUT2 *= scale;
-						TIMEOUT4 *= scale;
-						TIMEOUT5 *= scale;
-					}
-				} catch (Exception e) {}
-			}
-
-			context = getContext();
-			provisioning = new ServiceTracker(context, ProvisioningService.class.getName(),null);
-			provisioning.open();
-			getProvisioningService();	// Check existence	
-			return true;
-		}
-		catch( Exception e ) {
-			log( "Cannot start provisioning service test case " + e );
-			e.printStackTrace();
-			return false;
-		}
+	public ProvisioningTests() {
+		rshServer = "http://" + Activator.hostName + ":" + Activator.hostPort
+				+ "/";
 	}
 
 	/**
@@ -110,43 +78,33 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 	 * This bundle is simple.jar and will register its bundle in the
 	 * service registry with test.case property.
 	 */
-	public void prepare() throws InvalidSyntaxException {
-		dir = context.getDataFile("work");
+	protected void setUp() throws InvalidSyntaxException {
+		provisioning = new ServiceTracker(getContext(),
+				ProvisioningService.class.getName(), null);
+		provisioning.open();
+		dir = getContext().getDataFile("work");
 		dir.mkdir();
-		bundles = new ServiceTracker( context, 
-			context.createFilter( "(test.case=org.osgi.test.cases.provisioning)"),
+		bundles = new ServiceTracker(getContext(), getContext().createFilter(
+				"(test.case=org.osgi.test.cases.provisioning)"),
 			null );
 		bundles.open();		
-		installStreamHandler();
-	}
-	
-	/**
-	 * Remove the stream handlers
-	 */
-	public void unprepare() {
-		registration.unregister();
+		registration = installStreamHandler();
+		reset();
 	}
 
-	/**
-	 * We want to continue after an assert failed
-	 */
-	public boolean getContinuationAfterError(Throwable throwable) {
-		return true;
-	}
-	
-	/**
-	 * For each test case, assure we have no test bundles installed.
-	 * We assure that all installed bundles end with -prov.jar so we
-	 * can find them.
-	 */
-	public void setState() {
-		Bundle bndls[] = context.getBundles();
+	private void reset() {
+		/*
+		 * For each test case, assure we have no test bundles installed. We
+		 * assure that all installed bundles end with -prov.jar so we can find
+		 * them.
+		 */
+		Bundle bndls[] = getContext().getBundles();
 		for ( int i=0; i < bndls.length; i++ ) {
 			if ( bndls[i].getLocation().endsWith("-prov.jar") ) {
 				if ( debug )
 					System.out.println( "Uninstalling? " + bndls[i].getLocation() );
 				try {
-					Bundle bundle = (Bundle)bndls[i];
+					Bundle bundle = bndls[i];
 					//
 					// Some bundles might still be in
 					// the starting mode if their thread was
@@ -155,7 +113,7 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 					//
 					int n = 30;
 					while ( bundle.getState() == Bundle.STARTING && n-->0)
-						Thread.sleep(TIMEOUT4);
+						Thread.sleep(Activator.TIMEOUT4);
 					
 					//
 					// But now we kill it !
@@ -179,10 +137,21 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 		getProvisioningService().setInformation( information );
 	}
 	
-	/******************************************************************************************/
-	/* START OF TESTS
-	/******************************************************************************************/
+	/**
+	 * Remove the stream handlers
+	 */
+	protected void tearDown() {
+		registration.unregister();
+		provisioning.close();
+	}
 
+	
+	private String getRshServer() {
+		return rshServer;
+	}
+	/*
+	 * START OF TESTS
+	 */
 	
 	/**
 	 * Test if we actually have RSH stream handler installed. If
@@ -197,7 +166,7 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 		if ( ! rshAvailable() )
 			return;
 		
-		URL ws = new URL( getWebServer() );
+		URL ws = new URL(getRshServer());
 		URL rshurl = new URL( "rsh://" + ws.getHost() + ":" + ws.getPort() + "/test/rsh");
 		
 		// Check if we can get data from this
@@ -266,23 +235,23 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 		assertEquals( "Different spid was set (provisioning.spid)", spid, get("provisioning.spid"));
 		assertEquals( "Different secret was set (provisioning.rsh.secret)", secret, get("provisioning.rsh.secret"));
 		
-		URL ws = new URL( getWebServer() );
+		URL ws = new URL(getRshServer());
 		String time = System.currentTimeMillis()+"";
 		URL rshurl = new URL( "rsh://" + ws.getHost() + ":" + ws.getPort() + "/test/rsh?time="+time );
 		loadFromURL( rshurl, "rsh.ipa");
 		
 		assertEquals( "Check if we loaded the thing", "rsh.ipa", get("rsh.ipa") );
-		setState();
+		reset();
 	}
 	
 	/**
 	 * Check if RSH is available
 	 */
 	boolean rshAvailable() throws InvalidSyntaxException {
-		ServiceReference refs[] = context.getServiceReferences( 
+		ServiceReference refs[] = getContext().getServiceReferences( 
 			URLStreamHandlerService.class.getName(), 
 			"(" + URLConstants.URL_HANDLER_PROTOCOL + "=rsh)" );
-		String webserver = getWebServer();		
+		String webserver = getRshServer();		
 		if ( refs == null || refs.length==0 
 			|| ! webserver.startsWith("http:")) {
 			log( "[No rsh protocol available]" );
@@ -453,14 +422,16 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 		ps.setInformation( dict );
 		int			count = getCount();
 		
-		ServiceReference	ref = context.getServiceReference( ProvisioningService.class.getName() );
+		ServiceReference ref = getContext().getServiceReference(
+				ProvisioningService.class.getName());
 		assertNotNull( "There must be a service ref for the provisioning service", ref );
 		Bundle bundle = ref.getBundle();
 		bundle.stop();
 		
 		assertTrue( "Bundle should be stopped now ", (bundle.getState() & (Bundle.RESOLVED|Bundle.INSTALLED))!=0);
 		assertNull( "Not be able to get provisioning service", 
-			context.getServiceReference(ProvisioningService.class.getName() ) );
+			getContext()
+				.getServiceReference(ProvisioningService.class.getName()));
 		
 		bundle.start();
 		assertEquals( "Check stored field against contents", time, get("persistence.test") );
@@ -500,7 +471,7 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 			if ( deadline <= System.currentTimeMillis() )
 				assertEquals(string, bundle.getState(), active );
 			else {
-				Thread.sleep(TIMEOUT5);
+				Thread.sleep(Activator.TIMEOUT5);
 			}
 		} catch( InterruptedException ie ) {
 			// who cares
@@ -701,9 +672,11 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 	 */
 	Bundle waitForBundle() {
 		try {
-			Bundle bundle = (Bundle) bundles.waitForService(TIMEOUT1);
+			Bundle bundle = (Bundle) bundles.waitForService(Activator.TIMEOUT1);
 			return bundle;
-		} catch( InterruptedException e ) {}
+		} catch( InterruptedException e ) {
+			// empty
+		}
 		
 		return null;
 	}
@@ -714,10 +687,10 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 	/*/
 	
 	Bundle findBundle( String suffix ) {
-	Bundle bundles[] = context.getBundles();
-	for ( int i=0; i<bundles.length; i++ ) {
-	if ( bundles[i].getLocation().endsWith(suffix) ) {
-	return bundles[i];
+	Bundle b[] = getContext().getBundles();
+	for ( int i=0; i<b.length; i++ ) {
+	if ( b[i].getLocation().endsWith(suffix) ) {
+	return b[i];
 	}
 	}
 	return null;
@@ -731,7 +704,8 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 	 */	
 	ProvisioningService getProvisioningService() {
 		Object service = null;
-		try { service = provisioning.waitForService(TIMEOUT2); } catch( InterruptedException e) {}
+		try { service = provisioning.waitForService(Activator.TIMEOUT2); } catch( InterruptedException e) {//empty
+		}
 		if ( service == null )
 			throw new IllegalStateException( "No Provisioning Service" );
 		
@@ -814,8 +788,11 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 		try {
 			while ( n-- > 0 
 				&& get( ipaFile ) == null )
-				Thread.sleep(TIMEOUT4);
-		} catch( InterruptedException e ) {}
+				Thread.sleep(Activator.TIMEOUT4);
+		}
+		catch (InterruptedException e) {
+			// empty
+		}
 		if ( n < 0 )
 			fail("File did not appear in time " + ipaFile );
 	}
@@ -833,7 +810,7 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 	 * depending on the webserver setting.
 	 */
 	
-	void installStreamHandler() {
+	ServiceRegistration installStreamHandler() {
 		URLStreamHandlerService		magic = new AbstractURLStreamHandlerService() {
 			URLConnection ucon;
 			public URLConnection openConnection(URL u) throws java.io.IOException{
@@ -850,19 +827,16 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 					String file = u.getFile().substring(0, index );
 					if ( debug )
 						System.out.println("Query = " + query + " " + u.getFile() + " " + file + " "  + u);
-					URL url = getClass().getResource(file);
+					URL url = getClass().getResource("/ipa/" + file);
 					ucon = url.openConnection();
 					return ucon;
 				}
-			}
-			public URLConnection getConnectionObject(){
-				return ucon;	
 			}
 		};
 		Dictionary properties = new Hashtable();
 		properties.put(URLConstants.URL_HANDLER_PROTOCOL,new String[]{"director","spid-test"}); 
 		properties.put(Constants.SERVICE_RANKING,new Integer(100)); 
-		registration = context.registerService(
+		return getContext().registerService(
 			URLStreamHandlerService.class.getName(),
 			magic,
 			properties );

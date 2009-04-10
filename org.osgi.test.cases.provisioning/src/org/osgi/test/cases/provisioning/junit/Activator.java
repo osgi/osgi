@@ -26,13 +26,21 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.provisioning;
+package org.osgi.test.cases.provisioning.junit;
 
+import java.io.IOException;
+import java.net.InetAddress;
 import java.net.URL;
+import java.net.UnknownHostException;
 
-import org.osgi.framework.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.http.HttpContext;
 import org.osgi.service.http.HttpService;
-import org.osgi.test.cases.util.director.DefaultTestCase;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -43,11 +51,13 @@ import org.osgi.util.tracker.ServiceTracker;
  * @testcase org.osgi.service.provisioning
  * @version $Revision$
  */
-public class ProvisioningTestCase extends DefaultTestCase {
-	HttpService		http;
+public class Activator implements BundleActivator, HttpContext {
 	ServiceTracker	tracker;
 
-	static long TIMEOUT2 = 10000;
+	public static long	TIMEOUT1	= 60000;
+	public static long	TIMEOUT2	= 10000;
+	public static long	TIMEOUT4	= 100;
+	public static long	TIMEOUT5	= 50;
 
 	static {
 		String scalingStr = System.getProperty("org.osgi.test.testcase.scaling");	  
@@ -55,40 +65,91 @@ public class ProvisioningTestCase extends DefaultTestCase {
 			try {
 				long scale = Long.parseLong(scalingStr);
 				if (scale > 0) {
+					TIMEOUT1 *= scale;
 					TIMEOUT2 *= scale;
+					TIMEOUT4 *= scale;
+					TIMEOUT5 *= scale;
 				}
-			} catch (Exception e) {}
+			}
+			catch (Exception e) {
+				// empty
+			}
 		}
 	}
 
+	public boolean handleSecurity(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		return true;
+	}
+	
 	public String getMimeType(String name) {
 		if (name.endsWith(".ipa") || name.endsWith(".jar")
-				|| name.endsWith(".zip"))
+				|| name.endsWith(".zip")) {
 			return "application/zip";
+		}
 		return null;
 	}
 
 	public URL getResource(String name) {
-		if (name.endsWith("delay.jar"))
+		if (name.endsWith("delay.jar")) {
 			try {		
 				Thread.sleep(TIMEOUT2);
 			}
-			catch (InterruptedException e) {}
-		return super.getResource(name);
+			catch (InterruptedException e) {
+				// empty
+			}
+		}
+		URL url = null;
+		try {
+			url = getClass().getResource(name);
+			if (url == null)
+				url = getClass().getResource("/" + name);
+
+			if (url == null && name.startsWith("/www")) {
+				name = name.substring(4);
+				url = getClass().getResource(name);
+			}
+			return url;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
+	
+	public static String	hostName;
+	public static String	hostPort;
 
-	public void xinit() throws Exception {
-		final ProvisioningTestCase p = this;
-
-		tracker = new ServiceTracker(getBundleContext(), HttpService.class
+	public void start(BundleContext c) throws Exception {
+		tracker = new ServiceTracker(c, HttpService.class
 				.getName(), null) {
 			public Object addingService(ServiceReference ref) {
-				HttpService http = (HttpService) super.addingService(ref);
+				hostName = context
+						.getProperty("org.osgi.service.http.hostname");
+				if (hostName == null) {
+					try {
+						hostName = InetAddress.getLocalHost().getHostName();
+					}
+					catch (UnknownHostException e) {
+						hostName = "localhost";
+					}
+				}
+
+				hostPort = (String) ref
+						.getProperty("http.port");
+				if (hostPort == null) {
+					hostPort = context
+							.getProperty("org.osgi.service.http.port");
+					if (hostPort == null) {
+						throw new AssertionError(
+								"unknown port for http service");
+					}
+				}
+				final HttpService http = (HttpService) super.addingService(ref);
 				try {
-					getBundleContext().getService(ref);
-					http
-							.registerServlet("/test/rsh", new RshServlet(),
-									null, p);
+					context.getService(ref);
+					http.registerServlet("/test/rsh", new RshServlet(), null,
+							Activator.this);
 				}
 				catch (Exception e) {
 					e.printStackTrace();
@@ -99,24 +160,7 @@ public class ProvisioningTestCase extends DefaultTestCase {
 		tracker.open();
 	}
 
-	public void xdeinit() {
+	public void stop(BundleContext c) {
 		tracker.close();
 	}
-
-	public void start(BundleContext c) {
-		super.start(c);
-		try {
-			xinit();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			new RuntimeException(e + "");
-		}
-	}
-
-	public void stop(BundleContext c) {
-		xdeinit();
-		super.stop(c);
-	}
-
 }

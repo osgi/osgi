@@ -1,3 +1,7 @@
+#
+# We are referring to a jar that takes some time to load and
+# see if start is done after load
+#
 -resourceonly:                           true
 Include-Resource:                        delay-ref.ipa;literal='true';extra='text/plain;charset=utf-8', \
    load-status;literal='delay-ref.ipa';extra='text/plain;charset=utf-8', \

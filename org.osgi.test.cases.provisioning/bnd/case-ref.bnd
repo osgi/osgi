@@ -1,3 +1,7 @@
+#
+# Should get the test-1.jar bundle from the remote system
+# but we use an unusual case for the type
+#
 -resourceonly:                           true
 Include-Resource:                        case-ref.ipa;literal='true';extra='text/plain;charset=utf-8', \
    load-status;literal='case-ref.ipa';extra='text/plain;charset=utf-8', \

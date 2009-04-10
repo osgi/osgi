@@ -27,14 +27,19 @@
  */
 
 package org.osgi.test.cases.provisioning.simple;
-import org.osgi.framework.*;
-import java.util.*;
-import java.security.*;
-import org.osgi.service.provisioning.*;
+import java.security.AllPermission;
+import java.util.Dictionary;
+import java.util.Hashtable;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.provisioning.ProvisioningService;
 
 public class Simple implements BundleActivator {
 	
-	public void start( BundleContext context ) throws InvalidSyntaxException {
+	public void start(BundleContext context) {
 		Dictionary properties = new Hashtable();
 		properties.put("test.case", "org.osgi.test.cases.provisioning" );
 		if ( context.getBundle().hasPermission( new AllPermission() ) )
@@ -51,5 +56,6 @@ public class Simple implements BundleActivator {
 		context.registerService( Bundle.class.getName(), context.getBundle(), properties );
 	}
 	public void stop( BundleContext context ) {
+		// empty
 	}
 }

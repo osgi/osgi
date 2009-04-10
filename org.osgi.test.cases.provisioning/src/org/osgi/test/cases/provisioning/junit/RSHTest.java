@@ -26,7 +26,7 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.provisioning;
+package org.osgi.test.cases.provisioning.junit;
 
 public class RSHTest {
 	static public  byte[] 				seed = { 0 };

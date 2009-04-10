@@ -1,3 +1,7 @@
+#
+# Will install + start a bundle + get a reference which also starts
+# the agent.
+#
 -resourceonly:                           true
 Include-Resource:                        ipa-ref-start.ipa;literal='true';extra='text/plain;charset=utf-8', \
    load-status;literal='ipa-ref-start.ipa';extra='text/plain;charset=utf-8', \

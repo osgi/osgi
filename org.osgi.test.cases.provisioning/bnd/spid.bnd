@@ -1,3 +1,7 @@
+#
+# This ipa is used to check if we get a Service Platform
+# identifier
+# 
 -resourceonly:                           true
 Include-Resource:                        spid.ipa;literal='true';extra='text/plain;charset=utf-8', \
    load-status;literal='spid.ipa';extra='text/plain;charset=utf-8'

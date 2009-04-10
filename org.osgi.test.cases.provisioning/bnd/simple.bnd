@@ -1,3 +1,7 @@
+#
+# All bundles and texts are contained in the
+# the file
+#
 -resourceonly:                           true
 Include-Resource:                        simple.ipa;literal='true';extra='text/plain;charset=utf-8', \
    load-status;literal='simple.ipa';extra='text/plain;charset=utf-8', \

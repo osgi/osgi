@@ -1,3 +1,0 @@
-Manifest-Version: 1.0
-Bundle-Activator: org.osgi.test.cases.provisioning.simple.Simple
-$(IMPORT-PACKAGE)
