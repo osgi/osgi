@@ -13,8 +13,15 @@ package org.osgi.impl.service.http;
 
 import java.io.IOException;
 import java.util.Hashtable;
-import org.osgi.framework.*;
-import org.osgi.service.http.*;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.ServiceFactory;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.http.HttpContext;
+import org.osgi.service.http.HttpService;
 
 //  ******************** HttpServiceController ********************
 /**
@@ -82,6 +89,8 @@ public class HttpServiceController implements BundleActivator, ServiceFactory {
 			log.info("Registering HttpService");
 			Hashtable dict = new Hashtable();
 			dict.put("Description", "The standard OSGi HTTP service");
+			dict.put("http.port", String.valueOf(httpServer
+					.getServerPort()));
 			httpReg = bc.registerService("org.osgi.service.http.HttpService",
 					this, dict);
 			// Register a default page
