@@ -1,0 +1,8 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.resources.tb1
+Bundle-SymbolicName: ${p}.resources.tb1
+Bundle-Version: 1.0
+Private-Package: resources
+
+Include-Resource: \
+	resources/ = resources/resources.tb1/

@@ -16,10 +16,15 @@
 
 package org.osgi.test.support;
 
+import java.io.IOException;
+import java.net.URL;
+
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
 
 public abstract class OSGiTestCase extends TestCase {
 	private volatile BundleContext	context;
@@ -54,5 +59,18 @@ public abstract class OSGiTestCase extends TestCase {
 				+ t.getMessage());
 		e.initCause(t);
 		throw e;
+	}
+
+	/**
+	 * Installs a resource within the test bundle as a bundle
+	 * @param bundle a path to an entry that contains a bundle to install
+	 * @return The installed bundle
+	 * @throws BundleException if an error occurred while installing the bundle
+	 * @throws IOException if an error occurred while reading the bundle content
+	 */
+	public Bundle install(String bundle) throws BundleException, IOException {
+		URL entry = getContext().getBundle().getEntry(bundle);
+		assertNotNull("Can not find bundle: " + bundle, entry);
+		return getContext().installBundle(bundle, entry.openStream());
 	}
 }

@@ -57,7 +57,8 @@ Include-Resource = \
 	fragments.tb10.jar, \
 	fragments.tb12.jar, \
 	fragments.tb13.jar, \
-	fragments.tb15.jar
+	fragments.tb15.jar, \
+	resources.tb1.jar
 	
 Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
 
