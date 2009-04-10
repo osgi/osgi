@@ -31,6 +31,7 @@ import org.osgi.framework.BundleContext;
 
 import org.osgi.service.blueprint.context.ModuleContext;
 import org.osgi.service.blueprint.convert.ConversionService;
+import org.osgi.service.blueprint.reflect.LocalComponentMetadata;
 
 import org.osgi.test.cases.blueprint.components.comp1.SimpleTestComponent;
 import org.osgi.test.cases.blueprint.components.factory.SimpleInstanceFactory;
@@ -55,6 +56,8 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         MetadataEventSet startEvents = controller.getStartEvents();
         startEvents.addAssertion("comp1", AssertionService.COMPONENT_CREATED);
         startEvents.validateComponent("comp1", SimpleTestComponent.class);
+        // make sure the name is in the component list
+        startEvents.addValidator(new ComponentNamePresenceValidator("comp1"));
 
         // and the validate the component metadata
         startEvents.addValidator(new ComponentMetadataValidator(
@@ -87,6 +90,10 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         startEvents.addAssertion("comp2", AssertionService.COMPONENT_CREATED);
         startEvents.validateComponent("comp1", SimpleTestComponent.class);
         startEvents.validateComponent("comp2", SimpleTestComponent.class);
+
+        // validate both names too
+        startEvents.addValidator(new ComponentNamePresenceValidator("comp1"));
+        startEvents.addValidator(new ComponentNamePresenceValidator("comp2"));
 
         // and the meta data for both components
         startEvents.addValidator(new ComponentMetadataValidator(
@@ -425,6 +432,18 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         startEvents.addValidator(new ComponentTypeValidator("bundleContext", BundleContext.class));
         startEvents.addValidator(new ComponentTypeValidator("moduleContext", ModuleContext.class));
         startEvents.addValidator(new ComponentTypeValidator("conversionService", ConversionService.class));
+
+        // and finally, these should be listed in the set of component names
+        startEvents.addValidator(new ComponentNamePresenceValidator("bundle"));
+        startEvents.addValidator(new ComponentNamePresenceValidator("bundleContext"));
+        startEvents.addValidator(new ComponentNamePresenceValidator("moduleContext"));
+        startEvents.addValidator(new ComponentNamePresenceValidator("conversionService"));
+
+        // now verify that these have associated metadata
+        startEvents.addValidator(new ComponentMetadataPresenceValidator("bundle", LocalComponentMetadata.class));
+        startEvents.addValidator(new ComponentMetadataPresenceValidator("bundleContext", LocalComponentMetadata.class));
+        startEvents.addValidator(new ComponentMetadataPresenceValidator("moduleContext", LocalComponentMetadata.class));
+        startEvents.addValidator(new ComponentMetadataPresenceValidator("conversionService", LocalComponentMetadata.class));
 
         // if we receive the above events and no assertion failures, then everything has worked.
         controller.run();

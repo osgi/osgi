@@ -31,7 +31,7 @@ import org.osgi.service.blueprint.reflect.TypedStringValue;
 
 
 /**
- * A ComponentMetadata implementation class used for
+ * A TypedStringValue implementation class used for
  * testing NamespaceHandler functions.  The blueprint
  * service implementation must be capable of receiving
  * different implementations of these classes back

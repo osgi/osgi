@@ -32,7 +32,7 @@ import org.osgi.service.blueprint.reflect.ComponentValue;
 
 
 /**
- * A ComponentMetadata implementation class used for
+ * A ComponentValue implementation class used for
  * testing NamespaceHandler functions.  The blueprint
  * service implementation must be capable of receiving
  * different implementations of these classes back

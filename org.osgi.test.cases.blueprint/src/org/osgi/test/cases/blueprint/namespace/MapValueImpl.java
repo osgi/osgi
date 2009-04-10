@@ -36,7 +36,7 @@ import org.osgi.service.blueprint.reflect.*;
 
 
 /**
- * A ComponentMetadata implementation class used for
+ * A MapValue implementation class used for
  * testing NamespaceHandler functions.  The blueprint
  * service implementation must be capable of receiving
  * different implementations of these classes back

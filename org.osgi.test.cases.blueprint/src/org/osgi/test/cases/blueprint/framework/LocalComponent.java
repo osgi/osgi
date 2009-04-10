@@ -68,22 +68,22 @@ public class LocalComponent extends Assert implements TestComponentMetadata {
     public LocalComponent(String name, Class classType, TestParameter[] parms, TestProperty[] props) {
         this(name, classType, null, null, null, parms, props, null, false, LocalComponentMetadata.SCOPE_SINGLETON);
     }
-    
+
     // indicated the component is created by instance factory
     public LocalComponent(String name, String factoryMethodName, TestParameter[] parms, TestProperty[] props) {
         this(name, null, factoryMethodName, null, null, parms, props, null, false, LocalComponentMetadata.SCOPE_SINGLETON);
     }
-    
+
     // indicated the component is created by static factory
     public LocalComponent(String name, Class classType, String factoryMethodName, TestParameter[] parms, TestProperty[] props) {
         this(name, classType, factoryMethodName, null, null, parms, props, null, false, LocalComponentMetadata.SCOPE_SINGLETON);
     }
-    
+
     // indicated the component is inner component
     public LocalComponent(Class classType, String factoryMethodName, TestParameter[] parms, TestProperty[] props) {
         this(null, classType, factoryMethodName, null, null, parms, props, null, false, LocalComponentMetadata.SCOPE_SINGLETON);
     }
-    
+
     public LocalComponent(String name, Class classType, String initMethodName, String destroyMethodName, TestParameter[] parms, TestProperty[] props) {
         this(name, classType, null, initMethodName, destroyMethodName, parms, props, null, false, LocalComponentMetadata.SCOPE_SINGLETON);
     }
@@ -107,7 +107,7 @@ public class LocalComponent extends Assert implements TestComponentMetadata {
         }
         // these generally get set post-construction
         this.factoryTestComponentValue = null;
-        
+
     }
 
     /**
@@ -146,12 +146,12 @@ public class LocalComponent extends Assert implements TestComponentMetadata {
         else {
             assertNull("non-null component name for inner component", meta.getName());
         }
-        
+
         // three ways to create a component
         if (className != null && factoryMethod == null){
             // directly created from class
             assertEquals("Component " + meta.getName() + " class name mismatch", className, meta.getClassName());
-            assertNull("Component " + meta.getName() + " factory method is not null", meta.getFactoryMethodMetadata());
+            assertNull("Component " + meta.getName() + " factory metadata is not null", meta.getFactoryMethodMetadata());
         }else if (className != null && factoryMethod != null){
             // by static factory
             moduleMetadata.validateFactoryMetadata(meta, factoryMethod, className, null);
@@ -163,13 +163,13 @@ public class LocalComponent extends Assert implements TestComponentMetadata {
             fail("The test data for Component " + meta.getName() +" instantiated incorrectly, both class type and factory method name are null.");
         }
 
-        
-        
+
+
         // validate the parameters
         if (parms != null) {
             moduleMetadata.validateConstructorMetadata(meta, parms);
         }
-        
+
 //        // this is either instantiatied via a factory or directly
 //        if (factoryMethod != null) {
 //            MethodInjectionMetadata factoryMeta = meta.getFactoryMethodMetadata();
@@ -193,15 +193,15 @@ public class LocalComponent extends Assert implements TestComponentMetadata {
 //                moduleMetadata.validateConstructorParameters(meta, meta.getConstructorInjectionMetadata().getParameterSpecifications(), parms);
 //            }
 //        }
-        
+
         // validate the property definitions
         if (props != null) {
             moduleMetadata.validatePropertyMetadata(meta, props);
         }
-        
+
         assertEquals("Component " + meta.getName() + " init-method mismatch", initMethodName, meta.getInitMethodName());
         assertEquals("Component " + meta.getName() + " destroy-method mismatch", initMethodName, meta.getDestroyMethodName());
-      
+
         if (dependsOn != null) {
             Set test = new HashSet();
             for (int i = 0; i < dependsOn.length; i++) {
