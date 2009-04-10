@@ -62,8 +62,10 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStartEvents.addAssertion("ServiceOne", AssertionService.COMPONENT_CREATED);
         // validate that the service has been registered
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, "ServiceOne"));
-        // this will validate the getComponent() result
+        // this will validate the getComponent() result and check this is also in getComponentNames();
         exportStartEvents.addValidator(new ServiceComponentValidator("ServiceOneService"));
+        exportStartEvents.addValidator(new ComponentNamePresenceValidator("ServiceOneService"));
+
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
             ServiceExportComponentMetadata.EXPORT_MODE_DISABLED, 0, null, null, null)));
@@ -80,6 +82,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         importStartEvents.addAssertion("ServiceOneProperty", AssertionService.SERVICE_SUCCESS);
         // validate that the component is the correct type
         importStartEvents.addValidator(new ReferenceComponentValidator("ServiceOne", TestServiceOne.class));
+        importStartEvents.addValidator(new ComponentNamePresenceValidator("ServiceOne"));
 
         // do some validation of the import metadata
         importStartEvents.addValidator(new ConstructorMetadataValidator("ServiceOneConstructor", new TestParameter[] {

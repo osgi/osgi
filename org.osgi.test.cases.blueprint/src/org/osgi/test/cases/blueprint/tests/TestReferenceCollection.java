@@ -35,6 +35,7 @@ import org.osgi.service.blueprint.reflect.ServiceReferenceComponentMetadata;
 import org.osgi.test.cases.blueprint.framework.BindingListener;
 import org.osgi.test.cases.blueprint.framework.ComponentAssertion;
 import org.osgi.test.cases.blueprint.framework.ComponentMetadataValidator;
+import org.osgi.test.cases.blueprint.framework.ComponentNamePresenceValidator;
 import org.osgi.test.cases.blueprint.framework.EventSet;
 import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
 import org.osgi.test.cases.blueprint.framework.PropertyMetadataValidator;
@@ -109,6 +110,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
         // this validates the ModuleContext.getComponent() result
         importStartEvents.addValidator(new ReferenceListValidator("TestCollection"));
+        importStartEvents.addValidator(new ComponentNamePresenceValidator("TestCollection"));
 
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
@@ -569,6 +571,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
         // this validates the ModuleContext.getComponent() result
         importStartEvents.addValidator(new ReferenceSetValidator("TestCollection"));
+        importStartEvents.addValidator(new ComponentNamePresenceValidator("TestCollection"));
 
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
