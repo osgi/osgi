@@ -79,7 +79,7 @@ build.mobile.tests = \
 build.enterprise.tests = \
 	org.osgi.test.cases.discovery, \
 	org.osgi.test.cases.transaction
-# The following project does not exist!
+# The following project does not build since the derby jars are Java 6 class files!
 #	org.osgi.test.cases.jdbc, \
 	
 	 
