@@ -7,87 +7,52 @@
  * the OSGi MEMBER AGREEMENT.
  * Updated June 2001
  */
-package org.osgi.test.cases.http.tbc;
+package org.osgi.test.cases.http.junit;
 
-import java.io.*;
-import java.net.*;
-import java.security.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import org.osgi.framework.*;
-import org.osgi.service.http.*;
-import org.osgi.test.cases.util.*;
-import org.osgi.test.service.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ServerSocket;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 
-public class HttpTestBundle1 extends DefaultTestBundleControl implements
-		BundleActivator, Runnable {
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.http.HttpContext;
+import org.osgi.service.http.HttpService;
+import org.osgi.service.http.NamespaceException;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+public class HttpTestBundle1 extends DefaultTestBundleControl {
 	// Http service
 	HttpService			_http;
 	ServiceReference	_httpSR;
 	int					_httpPort;
-	TestCaseLink		_link;
-	ServiceReference	_ref;
-	Dictionary			_properties	= new Hashtable();
-	boolean				_continue;
-	static String[]		methods		= new String[] {
-									// REGISTRATION BEHAVIOUR
-									"SimpleServletRegistration", // "TC1"
-									"SimpleServletUnregistration", // "TC2"
-									"OverlappingRegistrationPaths", // "TC3"
-									"UnregistringOverlapping", // "TC4"
-									"BundleStopping", // "TC5"
-									"LongRegistrationName", // "TC6"
-									"NullServlet", // "TC7"
-									"CaseSensitivity", // "TC8"
-									"GenericServletRegistration", // "TC9"
-									"RegisterResources", // "TC10"
-									"MultipleRegistrations", // "TC11"
-									"MultipleUnregistrations", // "TC12"
-									"EndingSlash", // "TC13"
-									"RootAlias", // "TC14" new
-									"ServletRegDefaultContext", // "TC15" new
-									"ResourceRegDefaultContext", // "TC16"
-																	// new
-									"RegisterMultipleAliases", // "TC17" new
-									// RUNTIME BEHAVIOUR
-									"Empty_doGet", // "TC50"
-									"Security", // "TC51"
-									// "doGetExceptions", // "TC52" Disabled due
-									// to undefined behavior
-									"LargeOutput", // "TC53"
-									// "WebServerVersion", // "TC54" removed
-									// "HangRequest", // "TC55" removed because
-									// not clear what it tests
-									"LargeURL", // "TC56"
-									"OddURL", // "TC57"
-									"MultipleNamesURL", // "TC58a" updated
-									"MultipleNamesURL2", // "TC58b" updated
-									"MIMEtypes", // "TC59" updated
-									"ResourceName", // "TC60"
-									"Authentication", // "TC61" new
-									"ServletContextSharing", // "TC62" new
-									// BUGBUG need to complete this testcase
-									// "Permissions" // "TC63" new
-									};
-
-	protected String[] getMethods() {
-		return methods;
-	}
-
-	public boolean checkPrerequisites() {
+	
+	protected void setUp() {
 		_httpSR = getContext().getServiceReference(HttpService.class.getName());
-		if (_httpSR == null)
-			return false;
+		assertNotNull(_httpSR);
 		_http = (HttpService) getContext().getService(_httpSR);
-		if (_http == null)
-			return false;
+		assertNotNull(_http);
 		_httpPort = guessHttpPort();
-		return true;
 	}
 
+	protected void tearDown() {
+		getContext().ungetService(_httpSR);
+	}
+	
 	// REGISTRATION BEHAVIOUR
-	public void SimpleServletRegistration() throws Exception {
+	public void testSimpleServletRegistration() throws Exception {
 		log("TC1 Registration of simple servlet");
 		HttpTestServlet1 servlet = new HttpTestServlet1();
 		final String urlstr = "http://localhost:" + _httpPort
@@ -102,18 +67,22 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		// get and use resource /tc1servlet
 		source = new URL(urlstr);
 		in = new BufferedReader(new InputStreamReader(source.openStream()));
+		assertNotNull(in);
 		// read lines in resource /tc1servlet
 		log("Receiving from servlet");
 		while ((inputLine = in.readLine()) != null) {
 			resbuf.append(inputLine);
 		}
-		log(resbuf.toString());
+		in.close();
+		assertEquals(
+				"<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>1 Registration of simple servlet</h1></body></html>",
+				resbuf.toString());
 		// unregister simple servlet
 		_http.unregister("/tc1servlet");
 		log("Simple Servlet unregistered");
 	}
 
-	public void SimpleServletUnregistration() throws Exception {
+	public void testSimpleServletUnregistration() throws Exception {
 		log("TC2 Unregistration of simple servlet");
 		HttpTestServlet1 servlet = new HttpTestServlet1();
 		final String urlstr = "http://localhost:" + _httpPort
@@ -128,12 +97,16 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		// get and use resoruce /tc2servlet
 		source = new URL(urlstr);
 		in = new BufferedReader(new InputStreamReader(source.openStream()));
+		assertNotNull(in);
 		// read lines in resource /tc2servlet
 		log("Receiving from servlet");
 		while ((inputLine = in.readLine()) != null) {
 			resbuf.append(inputLine);
 		}
-		log(resbuf.toString());
+		in.close();
+		assertEquals(
+				"<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>2 Unregistration of simple servlet</h1></body></html>",
+				resbuf.toString());
 		// unregister simple servlet
 		_http.unregister("/tc2servlet");
 		log("Simple Servlet unregistered");
@@ -144,7 +117,7 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 			if (conn.getResponseCode() == HttpURLConnection.HTTP_NOT_FOUND) {
 				throw new IOException("404");
 			}
-			log("Simple servlet improperly available");
+			fail("Simple servlet improperly available");
 		}
 		catch (IOException e) {
 			log("Simple servlet not available");
@@ -152,7 +125,7 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		}
 	}
 
-	public void OverlappingRegistrationPaths() throws Exception {
+	public void testOverlappingRegistrationPaths() throws Exception {
 		log("TC3 Registration of two overlapping servlets");
 		HttpTestServlet1 servlet_aa = new HttpTestServlet1();
 		HttpTestServlet2 servlet_aabb = new HttpTestServlet2();
@@ -174,23 +147,30 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		// get and use second resoruce /aa/bb
 		source_aabb = new URL(urlstr_aabb);
 		in = new BufferedReader(new InputStreamReader(source_aabb.openStream()));
+		assertNotNull(in);
 		// read lines in resource /aa/bb
 		log("Receiving from servlet resource /aa/bb");
 		while ((inputLine = in.readLine()) != null) {
 			resbuf.append(inputLine);
 		}
-		log(resbuf.toString());
+		in.close();
+		assertEquals(
+				"<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>3 Registration of two overlapping servlets</h1><p>Servlet aabb</p></body></html>",
+				resbuf.toString());
 		// get and use first resource /aa
 		source_aa = new URL(urlstr_aa);
 		in = new BufferedReader(new InputStreamReader(source_aa.openStream()));
+		assertNotNull(in);
 		// read lines in resource /aa
 		resbuf.setLength(0);
 		log("Receiving from servlet resource /aa");
 		while ((inputLine = in.readLine()) != null) {
 			resbuf.append(inputLine);
 		}
-		log(resbuf.toString());
 		in.close();
+		assertEquals(
+				"<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>3 Registration of two overlapping servlets</h1><p>Servlet aa</p></body></html>",
+				resbuf.toString());
 		// unregister servlets with overlapping names
 		_http.unregister("/aa");
 		log("Servlet resource /aa unregistered");
@@ -198,7 +178,7 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		log("Servlet resource /aa/bb unregistered");
 	}
 
-	public void UnregistringOverlapping() throws Exception {
+	public void testUnregistringOverlapping() throws Exception {
 		log("TC4 Unregistration of overlapping servlet");
 		HttpTestServlet1 servlet_aa = new HttpTestServlet1();
 		HttpTestServlet2 servlet_aabb = new HttpTestServlet2();
@@ -220,84 +200,102 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		// get and use second resource /aa/bb
 		source_aabb = new URL(urlstr_aabb);
 		in = new BufferedReader(new InputStreamReader(source_aabb.openStream()));
+		assertNotNull(in);
 		// read lines in resource /aa/bb
 		log("Receiving from servlet resource /aa/bb");
 		while ((inputLine = in.readLine()) != null) {
 			resbuf.append(inputLine);
 		}
-		log(resbuf.toString());
 		in.close();
+		assertEquals(
+				"<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>4 Unregistration of overlapping servlet</h1><p>Servlet aabb</p></body></html>",
+				resbuf.toString());
 		// get and use first resource /aa
 		source_aa = new URL(urlstr_aa);
 		in = new BufferedReader(new InputStreamReader(source_aa.openStream()));
+		assertNotNull(in);
 		// read lines in resource /aa
 		resbuf.setLength(0);
 		log("Receiving from servlet resource /aa");
 		while ((inputLine = in.readLine()) != null) {
 			resbuf.append(inputLine);
 		}
-		log(resbuf.toString());
 		in.close();
+		assertEquals(
+				"<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>4 Unregistration of overlapping servlet</h1><p>Servlet aa</p></body></html>",
+				resbuf.toString());
 		// unregister servlet with path /aa/bb
 		_http.unregister("/aa/bb");
 		log("Servlet resource /aa/bb unregistered");
 		// try to get and use the resoruce /aa/bb after unregistering
 		in = new BufferedReader(new InputStreamReader(source_aabb.openStream()));
+		assertNotNull(in);
 		// read lines in resource /aa/bb
 		resbuf.setLength(0);
 		log("Receiving from servlet resource /aa/bb");
 		while ((inputLine = in.readLine()) != null) {
 			resbuf.append(inputLine);
 		}
-		log(resbuf.toString());
 		in.close();
+		assertEquals(
+				"<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>4 Unregistration of overlapping servlet</h1><p>Servlet aa</p></body></html>",
+				resbuf.toString());
 		// get and use first resoruce /aa
 		in = new BufferedReader(new InputStreamReader(source_aa.openStream()));
+		assertNotNull(in);
 		// read lines in resource /aa
 		resbuf.setLength(0);
 		log("Receiving from servlet resource /aa");
 		while ((inputLine = in.readLine()) != null) {
 			resbuf.append(inputLine);
 		}
-		log(resbuf.toString());
 		in.close();
+		assertEquals(
+				"<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>4 Unregistration of overlapping servlet</h1><p>Servlet aa</p></body></html>",
+				resbuf.toString());
 		// unregister servlets with overlapping names
 		_http.unregister("/aa");
 		log("Servlet resource /aa unregistered");
 	}
 
-	public void BundleStopping() throws Exception {
+	public void testBundleStopping() throws Exception {
 		log("TC5 Stopping of source bundle");
 		final String urlstr = "http://localhost:" + _httpPort + "/tc5servlet";
 		log("Check if tc5servlet available before bundle installed (no)");
-		check(urlstr);
-		Bundle tb2 = getContext().installBundle("BundleStoppingHelperBundle",
+		check(urlstr, null);
+		Bundle tb1 = getContext().installBundle("BundleStoppingHelperBundle",
 				getClass().getResourceAsStream("/tb1.jar"));
+		assertNotNull(tb1);
 		log("Check if tc5servlet available after bundle installed (no)");
-		check(urlstr);
-		tb2.start();
+		check(urlstr, null);
+		tb1.start();
 		log("Check if tc5servlet available after bundle started (yes)");
-		check(urlstr);
-		tb2.stop();
+		check(
+				urlstr,
+				"<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>5 Uninstallation of source bundle</h1></body></html>");
+		tb1.stop();
 		log("Check if tc5servlet available after bundle stopped (no)");
-		check(urlstr);
-		tb2.start();
+		check(urlstr, null);
+		tb1.start();
 		log("Check if tc5servlet available after bundle started again (yes)");
-		check(urlstr);
-		tb2.uninstall();
+		check(
+				urlstr,
+				"<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>5 Uninstallation of source bundle</h1></body></html>");
+		tb1.uninstall();
 		log("Check if tc5servlet available after bundle uninstalled without stop (no)");
-		check(urlstr);
+		check(urlstr, null);
 	}
 
-	void check(String urlstr) {
+	private void check(String urlstr, String expected) {
 		URL source = null;
-		String inputLine = new String();
+		String inputLine;
+		StringBuffer resbuf = new StringBuffer();
 		BufferedReader in = null;
 		try {
 			source = new URL(urlstr);
 		}
 		catch (MalformedURLException e) {
-			log("Malformed URL " + urlstr);
+			fail("Malformed URL " + urlstr);
 			return;
 		}
 		try {
@@ -308,19 +306,23 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 			}
 			log("--- start file: " + source.getPath());
 			in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			assertNotNull(in);
 			// read lines in resource /tc5servlet
 			while ((inputLine = in.readLine()) != null) {
-				log(inputLine);
+				resbuf.append(inputLine);
 			}
 			in.close();
+			assertEquals(expected, resbuf.toString());
 			log("--- end file: " + source.getPath());
 		}
 		catch (IOException e) {
-			log(source.getPath() + " not available");
+			if (expected != null) {
+				fail(source.getPath() + " not available");
+			}
 		}
 	}
 
-	public void LongRegistrationName() throws Exception {
+	public void testLongRegistrationName() throws Exception {
 		log("TC6 Registering servlet with long name");
 		HttpTestServlet1 servlet = new HttpTestServlet1();
 		final String urlstr = "http://localhost:"
@@ -339,44 +341,36 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		// get and use resoruce /tc6servlet
 		source = new URL(urlstr);
 		in = new BufferedReader(new InputStreamReader(source.openStream()));
+		assertNotNull(in);
 		// read lines in resource
 		log("Receiving from servlet");
 		while ((inputLine = in.readLine()) != null) {
 			resbuf.append(inputLine);
 		}
-		log(resbuf.toString());
 		in.close();
+		assertEquals(
+				"<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>6 Registering servlet with long name</h1></body></html>",
+				resbuf.toString());
 		// unregister servlet with long name
 		_http
 				.unregister("/abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
 		log("Servlet resource with long name unregistered");
 	}
 
-	public void NullServlet() throws Exception {
+	public void testNullServlet() throws Exception {
 		log("TC7 Attempt to register null servlet");
 		HttpTestServlet1 servlet = null;
 		// register servlet with path /tc7servlet
 		try {
 			_http.registerServlet("/tc7servlet", servlet, null, httpContext);
-			log("Null servlet registered");
+			fail("Null servlet registered");
 		}
 		catch (Exception e1) {
-			log("NullPointerException for null servlet");
-		}
-		// See if it did not remain registered
-		try {
-			_http.registerServlet("/tc7servlet", servlet, null, httpContext);
-		}
-		catch (NullPointerException ne) {
-		}
-		catch (IllegalArgumentException iae) {
-		}
-		catch (Exception e1) {
-			log("Null servlet, causing null ptr exception, caused registration that was not cleaned up");
+			log("Exception for null servlet: " + e1);
 		}
 	}
 
-	public void CaseSensitivity() throws Exception {
+	public void testCaseSensitivity() throws Exception {
 		log("TC8 Registering servlets with case sensitive names");
 		HttpTestServlet1 servlet_lc = new HttpTestServlet1();
 		HttpTestServlet2 servlet_UC = new HttpTestServlet2();
@@ -398,23 +392,30 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		// get and use resoruce /aa
 		source_lc = new URL(urlstr_lc);
 		in = new BufferedReader(new InputStreamReader(source_lc.openStream()));
+		assertNotNull(in);
 		// read lines in resource /aa
 		log("Receiving from servlet resource /aa");
 		while ((inputLine = in.readLine()) != null) {
 			resbuf.append(inputLine);
 		}
-		log(resbuf.toString());
+		in.close();
+		assertEquals(
+				"<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>8 Case sensitivity</h1><p>Lowercase Servlet</p></body></html>",
+				resbuf.toString());
 		// get and use resoruce /AA
 		source_UC = new URL(urlstr_UC);
 		in = new BufferedReader(new InputStreamReader(source_UC.openStream()));
+		assertNotNull(in);
 		// read lines in resource /AA
 		resbuf.setLength(0);
 		log("Receiving from servlet resource /AA");
 		while ((inputLine = in.readLine()) != null) {
 			resbuf.append(inputLine);
 		}
-		log(resbuf.toString());
 		in.close();
+		assertEquals(
+				"<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>8 Case sensitivity</h1><p>Uppercase Servlet</p></body></html>",
+				resbuf.toString());
 		// unregister servlet aa
 		_http.unregister("/aa");
 		log("Servlet resource /aa unregistered");
@@ -423,7 +424,7 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		log("Servlet resource /AA unregistered");
 	}
 
-	public void GenericServletRegistration() throws Exception {
+	public void testGenericServletRegistration() throws Exception {
 		log("TC9 Registering javax.servlet.Servlet");
 		HttpTestServlet3 servlet = new HttpTestServlet3();
 		final String urlstr = "http://localhost:" + _httpPort + "/tc9servlet";
@@ -437,18 +438,22 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		// get and use resource /tc9servlet
 		source = new URL(urlstr);
 		in = new BufferedReader(new InputStreamReader(source.openStream()));
+		assertNotNull(in);
 		// read lines in resource /tc9servlet
 		log("Receiving resource");
 		while ((inputLine = in.readLine()) != null) {
 			resbuf.append(inputLine);
 		}
-		log(resbuf.toString());
+		in.close();
+		assertEquals(
+				"<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>9 javax.servlet.Servlet registration</h1></body></html>",
+				resbuf.toString());
 		// unregister simple servlet
 		_http.unregister("/tc9servlet");
 		log("Generic Servlet unregistered");
 	}
 
-	public void RegisterResources() throws Exception {
+	public void testRegisterResources() throws Exception {
 		log("TC10 Registering resources");
 		final String res1url = "http://localhost:" + _httpPort
 				+ "/tc10resource/tc10.html";
@@ -464,22 +469,27 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		log("Resource registered");
 		source1 = new URL(res1url);
 		in = new BufferedReader(new InputStreamReader(source1.openStream()));
+		assertNotNull(in);
 		// read lines in HTML resource
 		log("Receiving HTML resource");
 		while ((inputLine = in.readLine()) != null) {
 			resbuf.append(inputLine);
 		}
-		log(resbuf.toString());
 		in.close();
+		assertEquals(
+				"<html><head><title>TestCaseServlet TC10</title></head><body><h1>OSGi - HTTP Service test case TC10 - Register resources</h1></body></html>",
+				resbuf.toString());
 		source2 = new URL(res2url);
 		log("Receiving GIF resource");
 		InputStream org = getClass().getResourceAsStream("www/tc10.gif");
+		assertNotNull(org);
 		InputStream copy = source2.openStream();
+		assertNotNull(copy);
 		while (true) {
 			int orgByte = org.read();
 			int copyByte = copy.read();
 			if (orgByte != copyByte) {
-				log("GIF does not match!");
+				fail("GIF does not match!");
 				break;
 			}
 			if (orgByte == -1) {
@@ -487,12 +497,14 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 				break;
 			}
 		}
+		org.close();
+		copy.close();
 		// unregister resource
 		_http.unregister("/tc10resource");
 		log("Resource unregistered");
 	}
 
-	public void MultipleRegistrations() throws Exception {
+	public void testMultipleRegistrations() throws Exception {
 		log("TC11 Multiple registering of one resource");
 		final String urlstr = "http://localhost:" + _httpPort
 				+ "/tc11resource/tc11.html";
@@ -506,17 +518,20 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		// get and use resource /tc11resource
 		source = new URL(urlstr);
 		in = new BufferedReader(new InputStreamReader(source.openStream()));
+		assertNotNull(in);
 		// read lines in resource /tc11resource
 		log("Receiving HTML resource");
 		while ((inputLine = in.readLine()) != null) {
 			resbuf.append(inputLine);
 		}
-		log(resbuf.toString());
 		in.close();
+		assertEquals(
+				"<html><head><title>TestCaseServlet TC11</title></head><body><h1>OSGi - HTTP Service test case TC11 - Multiple registrations</h1></body></html>",
+				resbuf.toString());
 		// register resource with path /tc11resource once more
 		try {
 			_http.registerResources("/tc11resource", "www", httpContext);
-			log("Resource registered twice");
+			fail("Resource registered twice");
 		}
 		catch (NamespaceException e) {
 			log("Resource already registered");
@@ -526,7 +541,7 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		log("Resource unregistered");
 	}
 
-	public void MultipleUnregistrations() throws Exception {
+	public void testMultipleUnregistrations() throws Exception {
 		log("TC12 Multiple unregistering of one resource");
 		final String urlstr = "http://localhost:" + _httpPort
 				+ "/tc12resource/tc12.html";
@@ -540,49 +555,43 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		// get and use resource /tc12resource
 		source = new URL(urlstr);
 		in = new BufferedReader(new InputStreamReader(source.openStream()));
+		assertNotNull(in);
 		// read lines in resource /tc12resource
 		log("Receiving HTML resource");
 		while ((inputLine = in.readLine()) != null) {
 			resbuf.append(inputLine);
 		}
-		log(resbuf.toString());
 		in.close();
+		assertEquals(
+				"<html><head><title>TestCaseServlet TC12</title></head><body><h1>OSGi - HTTP Service test case TC12 - Multiple unregistrations</h1></body></html>",
+				resbuf.toString());
 		// unregister resource with path /tc12resource
 		_http.unregister("/tc12resource");
 		log("Resource unregistered once");
 		// unregister resource with path /tc12resource once more
 		try {
 			_http.unregister("/tc12resource");
-			log("Resource unregistered twice");
+			fail("Resource unregistered twice");
 		}
 		catch (IllegalArgumentException e) {
 			log("Resource already unregistered");
 		}
 	}
 
-	public void EndingSlash() throws Exception {
+	public void testEndingSlash() throws Exception {
 		log("TC13 Registering resource with name ending with slash");
-		final String urlstr = "http://localhost:" + _httpPort
-				+ "/tc13resource/tc13.html";
-		URL source = null;
-		String inputLine = new String();
-		StringBuffer resbuf = new StringBuffer();
 		try {
 			// register resource with path /tc13resource
 			_http.registerResources("/tc13resource/", "www", httpContext);
-			log("Resource registered");
+			fail("Resource registered");
 		}
 		catch (IllegalArgumentException e) {
 			log("Resource could not be registerd due to ending slash");
 		}
 	}
 
-	public void RootAlias() throws Exception {
+	public void testRootAlias() throws Exception {
 		log("TC14 Registering resource with root alias slash");
-		final String urlstr = "http://localhost:" + _httpPort + "/tc14.html";
-		URL source = null;
-		String inputLine = new String();
-		StringBuffer resbuf = new StringBuffer();
 		try {
 			// register resource with path /
 			_http.registerResources("/", "www", httpContext);
@@ -592,11 +601,11 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 			log("Resource unregistered");
 		}
 		catch (IllegalArgumentException e) {
-			log("Resource could not be registerd");
+			fail("Resource could not be registerd");
 		}
 	}
 
-	public void ServletRegDefaultContext() throws Exception {
+	public void testServletRegDefaultContext() throws Exception {
 		log("TC15 Registration of servlet using default HTTP context");
 		HttpTestServlet1 servlet = new HttpTestServlet1();
 		final String urlstr = "http://localhost:" + _httpPort
@@ -611,18 +620,22 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		// get and use resource /tc15servlet
 		source = new URL(urlstr);
 		in = new BufferedReader(new InputStreamReader(source.openStream()));
+		assertNotNull(in);
 		// read lines in resource /tc1servlet
 		log("Receiving from servlet");
 		while ((inputLine = in.readLine()) != null) {
 			resbuf.append(inputLine);
 		}
-		log(resbuf.toString());
+		in.close();
+		assertEquals(
+				"<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>15 Registration of servlet using default HTTP context</h1></body></html>",
+				resbuf.toString());
 		// unregister servlet
 		_http.unregister("/tc15servlet");
 		log("Servlet unregistered");
 	}
 
-	public void ResourceRegDefaultContext() throws Exception {
+	public void testResourceRegDefaultContext() throws Exception {
 		log("TC16 Registering resources using default HTTP context");
 		final String res1url = "http://localhost:" + _httpPort
 				+ "/tc16resource/tc16.html";
@@ -632,23 +645,26 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		BufferedReader in = null;
 		// register resource with path /tc16resource
 		_http.registerResources("/tc16resource",
-				"org/osgi/test/cases/http/tbc/www", null);
+				"org/osgi/test/cases/http/junit/www", null);
 		log("Resource registered");
 		source1 = new URL(res1url);
 		in = new BufferedReader(new InputStreamReader(source1.openStream()));
+		assertNotNull(in);
 		// read lines in HTML resource
 		log("Receiving HTML resource");
 		while ((inputLine = in.readLine()) != null) {
 			resbuf.append(inputLine);
 		}
-		log(resbuf.toString());
 		in.close();
+		assertEquals(
+				"<html><head><title>TestCaseServlet TC16</title></head><body><h1>OSGi - HTTP Service test case TC16 - Default HTTP context</h1></body></html>",
+				resbuf.toString());
 		// unregister resource
 		_http.unregister("/tc16resource");
 		log("Resource unregistered");
 	}
 
-	public void RegisterMultipleAliases() throws Exception {
+	public void testRegisterMultipleAliases() throws Exception {
 		log("TC17 Attempt to register servlet with multiple aliases");
 		HttpTestServlet1 servlet = new HttpTestServlet1();
 		// register same servlet with paths /tc17a and /tc17b
@@ -656,10 +672,10 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 			_http.registerServlet("/tc17a", servlet, null, httpContext);
 			log("Servlet registered with path tc17a");
 			_http.registerServlet("/tc17b", servlet, null, httpContext);
-			log("Servlet registered with path tc17a and tc17b");
+			fail("Servlet registered with path tc17a and tc17b");
 			// unregister servlet /tc17b
 			_http.unregister("/tc17b");
-			log("Servlet resource /tc17b unregistered");
+			fail("Servlet resource /tc17b unregistered");
 		}
 		catch (ServletException e1) {
 			log("Attempted to register servlet with multiple aliases");
@@ -670,7 +686,7 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 	}
 
 	// RUNTIME BEHAVIOUR
-	public void Empty_doGet() throws Exception {
+	public void testEmpty_doGet() throws Exception {
 		log("TC50 Register servlet with empty doGet() method");
 		HttpTestServlet1 servlet = new HttpTestServlet1();
 		final String urlstr = "http://localhost:" + _httpPort
@@ -689,21 +705,23 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		HttpURLConnection conn = (HttpURLConnection) source.openConnection();
 		conn.setRequestProperty("Connection", "close");
 		in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		assertNotNull(in);
 		// read lines in resource
 		log("Receiving from servlet");
 		while ((inputLine = in.readLine()) != null) {
 			resbuf.append(inputLine);
 		}
-		log(resbuf.toString());
 		in.close();
+		assertEquals("", resbuf.toString());
 		// unregister simple servlet
 		_http.unregister("/tc50servlet");
 		log("Servlet resource with empty doGet unregistered");
 	}
 
-	public void Security() throws Exception {
+	public void testSecurity() throws Exception {
 		log("TC51 Verification of statements under handleSecurity()");
 		// HttpContext permitting
+		final boolean[] handleSecurityCalled = {false};
 		HttpContext hc1 = new HttpContext() {
 			public java.net.URL getResource(String name) {
 				// Map a resource name to a URL.
@@ -719,6 +737,7 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 					HttpServletResponse response) throws java.io.IOException {
 				// Handle security for a request.
 				log("Handle Security Called");
+				handleSecurityCalled[0] = true;
 				return true;
 			}
 		};
@@ -746,6 +765,7 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 					/* This call will generate HTML into the response. */
 				}
 				catch (IOException e) {
+					// empty
 				}
 				return (false);
 			}
@@ -763,34 +783,38 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 			log("Security Servlet registered");
 		}
 		catch (ServletException se) {
-			log("Error registering servlet");
+			fail("Error registering servlet", se);
 		}
 		catch (NamespaceException ne) {
-			log("Error namespace registering servlet");
+			fail("Error namespace registering servlet", ne);
 		}
 		// get and use resource
 		try {
 			source = new URL(urlstr);
 		}
 		catch (MalformedURLException mue) {
+			fail("url error", mue);
 		}
 		// read lines in resource
 		log("Receiving from servlet");
 		try {
 			// Access with permission
 			in = new BufferedReader(new InputStreamReader(source.openStream()));
+			assertNotNull(in);
 			while ((inputLine = in.readLine()) != null) {
 				resbuf.append(inputLine);
 			}
-			log(resbuf.toString());
+			in.close();
+			assertTrue(handleSecurityCalled[0]);
+			assertEquals(
+					"<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>51 Verification of statements under handleSecurity()</h1></body></html>",
+					resbuf.toString());
 		}
 		catch (IOException ioe) {
-			log("IOException in servlet");
-			ioe.printStackTrace();
+			fail("IOException in servlet", ioe);
 		}
 		finally {
 			// unregister simple servlet
-			in.close();
 			_http.unregister("/tc51servlet");
 			log("Security Servlet unregistered");
 		}
@@ -800,16 +824,17 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 			log("Security Servlet reregistered");
 		}
 		catch (ServletException se) {
-			log("Error registering servlet");
+			fail("Error registering servlet", se);
 		}
 		catch (NamespaceException ne) {
-			log("Error namespace registering servlet");
+			fail("Error namespace registering servlet", ne);
 		}
 		// get and use resource
 		try {
 			source = new URL(urlstr);
 		}
 		catch (MalformedURLException mue) {
+			fail("url error", mue);
 		}
 		try {
 			// Access without permission
@@ -817,7 +842,7 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 			if (conn.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
 				throw new IOException("401");
 			}
-			log("Access improperly allowed");
+			fail("Access improperly allowed");
 		}
 		catch (IOException fnfe) {
 			log("Access denied");
@@ -829,49 +854,7 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		}
 	}
 
-	/**
-	 * This test seems to be nonsense because exceptions thrown in a servlet do
-	 * not have a defined result in the output. It could send the stream so far
-	 * or it could append it with the error message. This test is disabled for
-	 * now.
-	 */
-	public void doGetExceptions() throws Exception {
-		log("TC52 Servlet throws exception in doGet()");
-		HttpTestServlet1 servlet = new HttpTestServlet1();
-		final String urlstr = "http://localhost:" + _httpPort
-				+ "/tc52servlet?TestCase=52";
-		URL source = null;
-		String inputLine = new String();
-		StringBuffer resbuf = new StringBuffer();
-		BufferedReader in = null;
-		// register servlet with path /tc52servlet
-		_http.registerServlet("/tc52servlet", servlet, null, httpContext);
-		log("Servlet resource throwing exception registered");
-		// get and use resource
-		source = new URL(urlstr);
-		// read lines in resource
-		log("Receiving from servlet");
-		try {
-			in = new BufferedReader(new InputStreamReader(source.openStream()));
-			while ((inputLine = in.readLine()) != null) {
-				resbuf.append(inputLine);
-			}
-			log(resbuf.toString());
-			in.close();
-		}
-		catch (IOException ioe) {
-			log(resbuf.toString());
-			log("IOException in servlet");
-			ioe.printStackTrace();
-		}
-		finally {
-			// unregister simple servlet
-			_http.unregister("/tc52servlet");
-			log("Servlet resource throwing exception unregistered");
-		}
-	}
-
-	public void LargeOutput() throws Exception {
+	public void testLargeOutput() throws Exception {
 		log("TC53 Servlet returns 4 MB file");
 		HttpTestServlet1 servlet = new HttpTestServlet1();
 		final String urlstr = "http://localhost:" + _httpPort
@@ -886,12 +869,13 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		// get and use resoruce /tc53servlet
 		source = new URL(urlstr);
 		in = new BufferedReader(new InputStreamReader(source.openStream()));
+		assertNotNull(in);
 		char[] buf = new char[1024];
 		log("Receiving from servlet");
 		while ((len = in.read(buf, 0, buf.length)) > 0)
 			bufsize += len;
-		log("bufsize = " + bufsize);
 		in.close();
+		assertEquals(4194304, bufsize);
 		// unregister simple servlet
 		_http.unregister("/tc53servlet");
 		log("Servlet resource returning large output unregistered");
@@ -934,7 +918,7 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 	// }
 	// End of tc54
 
-	public void LargeURL() throws Exception {
+	public void testLargeURL() throws Exception {
 		log("TC56 Access of servlet with long parameter values");
 		HttpTestServlet1 servlet = new HttpTestServlet1();
 		final String urlstr = "http://localhost:" + _httpPort
@@ -951,27 +935,31 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		// get and use resource /tc56servlet
 		source = new URL(urlstr + "&" + param1 + "&" + param2);
 		in = new BufferedReader(new InputStreamReader(source.openStream()));
+		assertNotNull(in);
 		// read lines in resource /tc56servlet
 		log("Receiving from servlet");
 		while ((inputLine = in.readLine()) != null) {
 			resbuf.append(inputLine);
 		}
-		log(resbuf.toString());
+		in.close();
+		assertEquals(
+				"<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>56 Access of servlet with long parameter values</h1><p>Parameter: param1 Value: value1</p><p>Parameter: param2 Value: abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz</p></body></html>",
+				resbuf.toString());
 		// unregister simple servlet
 		_http.unregister("/tc56servlet");
 		log("Servlet accessed with long parameter unregistered");
 	}
 
-	public void OddURL() throws Exception {
+	public void testOddURL() throws Exception {
 		log("TC57 Access URL with special parameter values");
 		HttpTestServlet1 servlet = new HttpTestServlet1();
 		final String urlstr = "http://localhost:" + _httpPort
 				+ "/tc57servlet?TestCase=57";
-		String param1 = "param1=" + URLEncoder.encode("&");
-		String param2 = "param2=" + URLEncoder.encode("&&");
-		String param3 = "param3=" + URLEncoder.encode("%");
-		String param4 = "param4=" + URLEncoder.encode(" ");
-		String param5 = "param5=" + URLEncoder.encode("?");
+		String param1 = "param1=" + URLEncoder.encode("&", "UTF-8");
+		String param2 = "param2=" + URLEncoder.encode("&&", "UTF-8");
+		String param3 = "param3=" + URLEncoder.encode("%", "UTF-8");
+		String param4 = "param4=" + URLEncoder.encode(" ", "UTF-8");
+		String param5 = "param5=" + URLEncoder.encode("?", "UTF-8");
 		URL source = null;
 		String inputLine = new String();
 		StringBuffer resbuf = new StringBuffer();
@@ -983,19 +971,23 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		source = new URL(urlstr + "&" + param1 + "&" + param2 + "&" + param3
 				+ "&" + param4 + "&" + param5);
 		in = new BufferedReader(new InputStreamReader(source.openStream()));
+		assertNotNull(in);
 		// log (source.toString()); //for testing purposes!!
 		// read lines in resource /tc57servlet
 		log("Receiving from servlet");
 		while ((inputLine = in.readLine()) != null) {
 			resbuf.append(inputLine);
 		}
-		log(resbuf.toString());
+		in.close();
+		assertEquals(
+				"<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>57 Access URL with special parameter values</h1><p>Parameter: param1 Value: &</p><p>Parameter: param2 Value: &&</p><p>Parameter: param3 Value: %</p><p>Parameter: param4 Value:  </p><p>Parameter: param5 Value: ?</p></body></html>",
+				resbuf.toString());
 		// unregister simple servlet
 		_http.unregister("/tc57servlet");
 		log("Servlet accessed with special parameter values unregistered");
 	}
 
-	public void MultipleNamesURL() throws Exception {
+	public void testMultipleNamesURL() throws Exception {
 		log("TC58a Access URL using getParameter with different values for the same parameter");
 		HttpTestServlet1 servlet = new HttpTestServlet1();
 		final String urlstr = "http://localhost:" + _httpPort
@@ -1012,18 +1004,22 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		// get and use resource /tc58aservlet
 		source = new URL(urlstr + "&" + param1 + "&" + param2);
 		in = new BufferedReader(new InputStreamReader(source.openStream()));
+		assertNotNull(in);
 		// read lines in resource /tc58aservlet
 		log("Receiving from servlet");
 		while ((inputLine = in.readLine()) != null) {
 			resbuf.append(inputLine);
 		}
-		log(resbuf.toString());
+		in.close();
+		assertEquals(
+				"<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>58a Access URL using getParameter with different values for the same parameter</h1><p>Parameter: param1 Value: value1, value2</p></body></html>",
+				resbuf.toString());
 		// unregister simple servlet
 		_http.unregister("/tc58aservlet");
 		log("Servlet accessed with different values for the same parameter unregistered");
 	}
 
-	public void MultipleNamesURL2() throws Exception {
+	public void testMultipleNamesURL2() throws Exception {
 		log("TC58b Access URL using getParameterValues with different values for the same parameter");
 		HttpTestServlet1 servlet = new HttpTestServlet1();
 		final String urlstr = "http://localhost:" + _httpPort
@@ -1040,18 +1036,22 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		// get and use resoruce /tc58bservlet
 		source = new URL(urlstr + "&" + param1 + "&" + param2);
 		in = new BufferedReader(new InputStreamReader(source.openStream()));
+		assertNotNull(in);
 		// read lines in resource /tc58bservlet
 		log("Receiving from servlet");
 		while ((inputLine = in.readLine()) != null) {
 			resbuf.append(inputLine);
 		}
-		log(resbuf.toString());
+		in.close();
+		assertEquals(
+				"<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>58b Access URL using getParameterValues with different values for the same parameter</h1><p>Parameter: param1 Value: value1,value2</p></body></html>",
+				resbuf.toString());
 		// unregister simple servlet
 		_http.unregister("/tc58bservlet");
 		log("Servlet accessed with different values for the same parameter unregistered");
 	}
 
-	public void MIMEtypes() throws Exception {
+	public void testMIMEtypes() throws Exception {
 		log("TC59 Verify most common MIME types");
 		HttpTestServlet1 servlet = new HttpTestServlet1();
 		final String urlstr1 = "http://localhost:" + _httpPort
@@ -1072,36 +1072,44 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		source = new URL(urlstr1);
 		URLConnection uc1 = source.openConnection();
 		ct = filterMIMEtype(uc1.getContentType());
-		log("ContentType = " + ct);
+		assertEquals("text/plain", ct);
 		in = new BufferedReader(new InputStreamReader(source.openStream()));
+		assertNotNull(in);
 		// read lines in resource /tc59servlet
 		log("Receiving text/plain from servlet");
 		while ((inputLine = in.readLine()) != null) {
 			resbuf.append(inputLine);
 		}
-		log(resbuf.toString());
+		in.close();
+		assertEquals(
+				"OSGi - HTTP Service test case59 Verify most common MIME types",
+				resbuf.toString());
 		source = new URL(urlstr2);
 		URLConnection uc2 = source.openConnection();
 		ct = filterMIMEtype(uc2.getContentType());
-		log("ContentType = " + ct);
+		assertEquals("text/html", ct);
 		in = new BufferedReader(new InputStreamReader(source.openStream()));
+		assertNotNull(in);
 		resbuf.setLength(0);
 		// read lines in resource /tc59servlet
 		log("Receiving text/html from servlet");
 		while ((inputLine = in.readLine()) != null) {
 			resbuf.append(inputLine);
 		}
-		log(resbuf.toString());
+		in.close();
+		assertEquals(
+				"<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>59 Verify most common MIME types</h1></body></html>",
+				resbuf.toString());
 		source = new URL(urlstr3);
 		URLConnection uc3 = source.openConnection();
 		ct = filterMIMEtype(uc3.getContentType());
-		log("ContentType = " + ct);
+		assertEquals("image/jpeg", ct);
 		// unregister simple servlet
 		_http.unregister("/tc59servlet");
 		log("Servlet TC59Servlet unregistered");
 	}
 
-	public void ResourceName() throws Exception {
+	public void testResourceName() throws Exception {
 		log("TC60 Verify resource name construction");
 		HttpTestServlet1 servlet = new HttpTestServlet1();
 		final String urlstr = "http://localhost:" + _httpPort
@@ -1117,18 +1125,22 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		// get and use resource /tc60servlet
 		source = new URL(urlstr);
 		in = new BufferedReader(new InputStreamReader(source.openStream()));
+		assertNotNull(in);
 		// read lines in resource /tc60servlet
 		log("Receiving from servlet");
 		while ((inputLine = in.readLine()) != null) {
 			resbuf.append(inputLine);
 		}
-		log(resbuf.toString());
+		in.close();
+		assertEquals(
+				"<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>60 Verify resource name construction</h1><p>RequestURI = /dir1/dir2/tc60servlet</p></body></html>",
+				resbuf.toString());
 		// unregister simple servlet
 		_http.unregister("/dir1/dir2/tc60servlet");
 		log("Servlet TC60Servlet unregistered");
 	}
 
-	public void Authentication() throws Exception {
+	public void testAuthentication() throws Exception {
 		log("TC61 Verification of authentication under handleSecurity()");
 		HttpTestServlet1 servlet = new HttpTestServlet1();
 		final String urlstr = "http://localhost:" + _httpPort
@@ -1137,6 +1149,7 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		String inputLine = new String();
 		StringBuffer resbuf = new StringBuffer();
 		BufferedReader in = null;
+		final boolean[] handleSecurityCalled = {false};
 		// register servlet with path /tc61servlet using default context
 		try {
 			_http.registerServlet("/tc61servlet", servlet, null,
@@ -1146,6 +1159,7 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 								HttpServletResponse response)
 								throws IOException {
 							log("Handle Security Called");
+							handleSecurityCalled[0] = true;
 							request.setAttribute(HttpContext.REMOTE_USER,
 									"unknown user");
 							request.setAttribute(
@@ -1164,10 +1178,10 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 			log("Servlet registered");
 		}
 		catch (ServletException se) {
-			log("Error registering servlet");
+			fail("Error registering servlet", se);
 		}
 		catch (NamespaceException ne) {
-			log("Error namespace registering servlet");
+			fail("Error namespace registering servlet", ne);
 		}
 		// read lines in resource
 		log("Receiving from servlet");
@@ -1175,25 +1189,28 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 			// get and use resource /tc61servlet
 			source = new URL(urlstr);
 			in = new BufferedReader(new InputStreamReader(source.openStream()));
+			assertNotNull(in);
 			// read lines in resource /tc1servlet
 			while ((inputLine = in.readLine()) != null) {
 				resbuf.append(inputLine);
 			}
-			log(resbuf.toString());
+			in.close();
+			assertTrue(handleSecurityCalled[0]);
+			assertEquals(
+					"<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>61 Verification of authentication under handleSecurity()</h1><p>Remote User is unknown user, Authentication Type is Basic</p></body></html>",
+					resbuf.toString());
 		}
 		catch (IOException ioe) {
-			log("IOException in servlet");
-			ioe.printStackTrace();
+			fail("IOException in servlet", ioe);
 		}
 		finally {
 			// unregister simple servlet
-			in.close();
 			_http.unregister("/tc61servlet");
 			log("Servlet unregistered");
 		}
 	}
 
-	public void ServletContextSharing() throws Exception {
+	public void testServletContextSharing() throws Exception {
 		log("TC62 Verification of servlet context sharing");
 		// HttpContext for servlet1 and servlet2
 		HttpContext hc1 = _http.createDefaultHttpContext();
@@ -1224,49 +1241,59 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 			log("Servlet3 registered");
 		}
 		catch (ServletException se) {
-			log("Error registering servlet");
+			fail("Error registering servlet", se);
 		}
 		catch (NamespaceException ne) {
-			log("Error namespace registering servlet");
+			fail("Error namespace registering servlet", ne);
 		}
 		try {
 			// get and use resource /tc62servlet1
 			source1 = new URL(urlstr1);
 			in = new BufferedReader(new InputStreamReader(source1.openStream()));
+			assertNotNull(in);
 			// read lines in resource /tc62servlet1
 			log("Receiving from servlet1");
 			while ((inputLine = in.readLine()) != null) {
 				resbuf.append(inputLine);
 			}
-			log(resbuf.toString());
+			in.close();
+			assertEquals(
+					"<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>62 Verification of ServletContext sharing</h1><p>Writing parameter: param1 with value: val1</p></body></html>",
+					resbuf.toString());
 			// get and use resource /tc62servlet2
 			source2 = new URL(urlstr2);
 			in = new BufferedReader(new InputStreamReader(source2.openStream()));
+			assertNotNull(in);
 			// read lines in resource /tc62servlet2
 			log("Receiving from servlet2");
 			resbuf.setLength(0);
 			while ((inputLine = in.readLine()) != null) {
 				resbuf.append(inputLine);
 			}
-			log(resbuf.toString());
+			in.close();
+			assertEquals(
+					"<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>62 Verification of ServletContext sharing</h1><p>Parameter param1 has value: val1</p></body></html>",
+					resbuf.toString());
 			// get and use resource /tc62servlet3
 			source3 = new URL(urlstr3);
 			in = new BufferedReader(new InputStreamReader(source3.openStream()));
+			assertNotNull(in);
 			// read lines in resource /tc62servlet3
 			log("Receiving from servlet3");
 			resbuf.setLength(0);
 			while ((inputLine = in.readLine()) != null) {
 				resbuf.append(inputLine);
 			}
-			log(resbuf.toString());
+			in.close();
+			assertEquals(
+					"<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>62 Verification of ServletContext sharing</h1><p>Parameter param1 has value: null</p></body></html>",
+					resbuf.toString());
 		}
 		catch (IOException ioe) {
-			log("IOException in servlet");
-			ioe.printStackTrace();
+			fail("IOException in servlet", ioe);
 		}
 		finally {
 			// unregister simple servlet
-			in.close();
 			_http.unregister("/tc62servlet1");
 			log("Servlet1 unregistered");
 			_http.unregister("/tc62servlet2");
@@ -1276,12 +1303,12 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		}
 	}
 
-	public void Permissions() {
+	public void xxxtestPermissions() {
 		log("TC63 Registering resources without correct permissions");
 		// BUGBUG need to complete test case!!
 	}
 
-	int guessHttpPort() {
+	private int guessHttpPort() {
 		// Try to find the HTTP port.
 		String p;
 		int tBax = 0;
@@ -1294,11 +1321,9 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 			tBax = Integer.parseInt(p);
 		}
 		else {
-			ServerSocket sock;
 			try {
 				// Otherwise pick 8080 if it's busy.
-				sock = new ServerSocket(8080);
-				sock = null;
+				new ServerSocket(8080);
 				// Port 8080 was not busy, go for 80.
 				tBax = 80;
 			}

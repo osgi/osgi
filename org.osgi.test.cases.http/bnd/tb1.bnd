@@ -1,0 +1,5 @@
+Bundle-Version: 4.2
+Bundle-Activator: $(p).tb1.HttpTestBundle2
+Bundle-Description: Test Bundle for Http Service tests
+
+Private-Package	: $(p).tb1

@@ -6,7 +6,7 @@
  * MEMBER LICENSED MATERIALS under the terms of section 3.2 of
  * the OSGi MEMBER AGREEMENT.
  */
-package org.osgi.test.cases.http.tbc;
+package org.osgi.test.cases.http.junit;
 
 import java.io.*;
 import java.security.*;

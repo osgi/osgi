@@ -6,7 +6,7 @@
  * MEMBER LICENSED MATERIALS under the terms of section 3.2 of
  * the OSGi MEMBER AGREEMENT.
  */
-package org.osgi.test.cases.http.tbc.tb1;
+package org.osgi.test.cases.http.tb1;
 
 import org.osgi.framework.*;
 import org.osgi.service.http.*;
