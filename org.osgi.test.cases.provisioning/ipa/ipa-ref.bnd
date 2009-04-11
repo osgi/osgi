@@ -1,6 +1,7 @@
 #
 # Simple reference to simple.ipa on the director
 #
+-sources:								false
 -resourceonly:                           true
 Include-Resource:                        ipa-ref.ipa;literal='true';extra='text/plain;charset=utf-8', \
    load-status;literal='ipa-ref.ipa';extra='text/plain;charset=utf-8', \

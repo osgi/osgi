@@ -4,19 +4,25 @@ Bundle-Activator: ${p}.junit.Activator
 Private-Package						= org.osgi.test.support.*, \
 	${p}.junit
 
-Include-Resource: ipa/simple.ipa=simple.ipa, \
-	ipa/ref.ipa=ref.ipa, \
-	ipa/osgi.cert=osgi.cert, \
+Include-Resource: \
 	ipa/case-ref.ipa=case-ref.ipa, \
 	ipa/delay-ref.ipa=delay-ref.ipa, \
-	ipa/spid.ipa=spid.ipa, \
 	ipa/ipa-ref-start.ipa=ipa-ref-start.ipa, \
 	ipa/ipa-ref.ipa=ipa-ref.ipa, \
 	ipa/keys-only.ipa=keys-only.ipa, \
+	ipa/ref.ipa=ref.ipa, \
+	ipa/simple.ipa=simple.ipa, \
+	ipa/spid.ipa=spid.ipa, \
 	ipa/unicode.ipa=unicode.ipa, \
-	www/test-1.jar=ximple.jar, \
-	www/delay.jar=ximple.jar, \
-	www/simple.jar=ximple.jar
+	www/case-ref-prov.jar=case-ref-prov.jar, \
+	www/delay-prov.jar=delay-prov.jar, \
+	www/local-prov.jar=local-prov.jar, \
+	www/simple-prov.jar=simple-prov.jar, \
+	www/simple.jar=simple.jar, \
+	www/test-0-prov.jar=test-0-prov.jar, \
+	www/test-1-prov.jar=test-1-prov.jar, \
+	www/test-1.jar=test-1.jar, \
+	www/osgi.cert=osgi.cert
 	
 -buildpath							= \
     org.osgi.test.support;                  version=project , \

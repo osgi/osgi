@@ -2,9 +2,10 @@
 # Will install + start a bundle + get a reference which also starts
 # the agent.
 #
+-sources:								false
 -resourceonly:                           true
 Include-Resource:                        ipa-ref-start.ipa;literal='true';extra='text/plain;charset=utf-8', \
    load-status;literal='ipa-ref-start.ipa';extra='text/plain;charset=utf-8', \
-   local-prov.jar=ximple.jar;extra='application/x-osgi-bundle', \
+   local-prov.jar=local-prov.jar;extra='application/x-osgi-bundle', \
    provisioning.reference;literal='director:simple.ipa';extra='text/plain;charset=utf-8', \
    provisioning.start.bundle;literal='local-prov.jar';extra='text/plain;charset=utf-8'

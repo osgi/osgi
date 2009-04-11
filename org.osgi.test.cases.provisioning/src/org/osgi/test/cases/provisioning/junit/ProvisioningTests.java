@@ -34,8 +34,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.zip.ZipEntry;
@@ -89,10 +91,7 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 			null );
 		bundles.open();		
 		registration = installStreamHandler();
-		reset();
-	}
 
-	private void reset() {
 		/*
 		 * For each test case, assure we have no test bundles installed. We
 		 * assure that all installed bundles end with -prov.jar so we can find
@@ -212,16 +211,28 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 	 * in the zip file.
 	 * @spec rsh
 	 */
-	public void testProvisoningWithRsh() throws Exception {
+	public void testProvisoningWithRsh1() throws Exception {
 		if ( ! rshAvailable() ) 
 			return;
 		
 		rshSecret( "SPID:abcd", RSHTest.secret );
+	}
+
+	public void testProvisoningWithRsh2() throws Exception {
+		if (!rshAvailable())
+			return;
+		
 		rshSecret( "SPID:large", RSHTest.largesecret );
+	}
+
+	public void testProvisoningWithRsh3() throws Exception {
+		if (!rshAvailable())
+			return;
+		
 		rshSecret( "SPID:abcd%21", RSHTest.secret );
 	}
 	
-	void rshSecret( String spid, byte [] secret ) throws Exception {
+	private void rshSecret(String spid, byte[] secret) throws Exception {
 		if ( ! rshAvailable() ) 
 			return;
 		
@@ -233,7 +244,8 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 		getProvisioningService().addInformation( d );
 		
 		assertEquals( "Different spid was set (provisioning.spid)", spid, get("provisioning.spid"));
-		assertEquals( "Different secret was set (provisioning.rsh.secret)", secret, get("provisioning.rsh.secret"));
+		assertTrue("Different secret was set (provisioning.rsh.secret)", Arrays
+				.equals(secret, (byte[]) get("provisioning.rsh.secret")));
 		
 		URL ws = new URL(getRshServer());
 		String time = System.currentTimeMillis()+"";
@@ -241,7 +253,6 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 		loadFromURL( rshurl, "rsh.ipa");
 		
 		assertEquals( "Check if we loaded the thing", "rsh.ipa", get("rsh.ipa") );
-		reset();
 	}
 	
 	/**
@@ -276,22 +287,44 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 	 * @spec ProvisioningService.PROVISIONING_UPDATE_COUNT
 	 */
 	public void testConstants() {
-		assertEquals("MIME_BUNDLE", "application/vnd.osgi.bundle",
-				ProvisioningService.MIME_BUNDLE);
-		assertEquals("MIME_BUNDLE_ALT", "application/x-osgi-bundle",
-				ProvisioningService.MIME_BUNDLE_ALT);
-		assertEquals( "MIME_BUNDLE_URL", 			"text/x-osgi-bundle-url", 		ProvisioningService.MIME_BUNDLE_URL );
-		assertEquals( "MIME_BYTE_ARRAY", 			"application/octet-stream", 	ProvisioningService.MIME_BYTE_ARRAY );
-		assertEquals( "MIME_STRING", 				"text/plain;charset=utf-8", 	ProvisioningService.MIME_STRING );
-		assertEquals( "PROVISIONING_AGENT_CONFIG", 	"provisioning.agent.config", 	ProvisioningService.PROVISIONING_AGENT_CONFIG );
-		assertEquals( "PROVISIONING_REFERENCE", 	"provisioning.reference", 		ProvisioningService.PROVISIONING_REFERENCE );
-		assertEquals( "PROVISIONING_ROOTX509", 		"provisioning.rootx509", 		ProvisioningService.PROVISIONING_ROOTX509 );
-		assertEquals( "PROVISIONING_RSH_SECRET", 	"provisioning.rsh.secret", 		ProvisioningService.PROVISIONING_RSH_SECRET );
-		assertEquals( "PROVISIONING_SPID", 			"provisioning.spid", 			ProvisioningService.PROVISIONING_SPID );
-		assertEquals( "PROVISIONING_START_BUNDLE", 	"provisioning.start.bundle", 	ProvisioningService.PROVISIONING_START_BUNDLE );
-		assertEquals( "PROVISIONING_UPDATE_COUNT", 	"provisioning.update.count", 	ProvisioningService.PROVISIONING_UPDATE_COUNT );		
+		assertConstant("MIME_BUNDLE", "application/vnd.osgi.bundle",
+				ProvisioningService.class);
+		assertConstant("MIME_BUNDLE_ALT", "application/x-osgi-bundle",
+				ProvisioningService.class);
+		assertConstant("MIME_BUNDLE_URL", "text/x-osgi-bundle-url",
+				ProvisioningService.class);
+		assertConstant("MIME_BYTE_ARRAY", "application/octet-stream",
+				ProvisioningService.class);
+		assertConstant("MIME_STRING", "text/plain;charset=utf-8",
+				ProvisioningService.class);
+		assertConstant("PROVISIONING_AGENT_CONFIG",
+				"provisioning.agent.config", ProvisioningService.class);
+		assertConstant("PROVISIONING_REFERENCE", "provisioning.reference",
+				ProvisioningService.class);
+		assertConstant("PROVISIONING_ROOTX509", "provisioning.rootx509",
+				ProvisioningService.class);
+		assertConstant("PROVISIONING_RSH_SECRET", "provisioning.rsh.secret",
+				ProvisioningService.class);
+		assertConstant("PROVISIONING_SPID", "provisioning.spid",
+				ProvisioningService.class);
+		assertConstant("PROVISIONING_START_BUNDLE",
+				"provisioning.start.bundle", ProvisioningService.class);
+		assertConstant("PROVISIONING_UPDATE_COUNT",
+				"provisioning.update.count", ProvisioningService.class);		
 	}
 	
+	private static void assertConstant(String name, String value, Class source) {
+		try {
+			Field f = source.getField(name);
+			assertEquals(name, value, f.get(null));
+		}
+		catch (NoSuchFieldException e) {
+			fail("missing field: " + name, e);
+		}
+		catch (IllegalAccessException e) {
+			fail("bad field: " + name, e);
+		}
+	}
 	
 	/**
 	 * The content can have UNICODE. This will test if we can
@@ -332,7 +365,7 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 		
 		try {
 			d.remove( "provisioning.update.count" );
-			assertTrue( "The dictionary should not allow remove", false );
+			fail("The dictionary should not allow remove");
 		}
 		catch( Exception e ) {
 			assertException( "remove should throw UnsupportedOperationException", UnsupportedOperationException.class, e );
@@ -360,7 +393,8 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 		assertEquals( "May only be 3 keys + update count in dict", 4, d.size() );
 		
 		ZipInputStream		zip = new ZipInputStream( 
-			getClass().getResourceAsStream("keys-only.ipa") );
+			getClass().getResourceAsStream(
+				"/ipa/keys-only.ipa"));
 		ps.addInformation( zip );
 		zip.close();
 		assertEquals( "May only be 4 keys + update count + 2 status in dict", 7, d.size() );
@@ -398,7 +432,8 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 			Object	 type = invalidTypes[i];
 			d.put( "invalid.type", type );
 			ps.addInformation( d );
-			assertEquals( type.getClass().getName() + " should still be",ok, get("invalid.type") );
+			assertTrue(type.getClass().getName() + " should still be", Arrays
+					.equals(ok, (byte[]) get("invalid.type")));
 		}
 	}
 	
@@ -620,7 +655,8 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 		Object object = get( "osgi.cert" );
 		assertTrue( "Certificate must be binary ", object instanceof byte[] );
 		byte [] actual = (byte[]) object;
-		byte [] expected = collect( getClass().getResourceAsStream("osgi.cert"),0 );		
+		byte[] expected = collect(getClass().getResourceAsStream(
+				"/www/osgi.cert"), 0);		
 		assertEquals( "Verify binary cert is correctly handled", expected, actual );
 		
 		
@@ -762,7 +798,7 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 	void loadFromResource( String ipaFile ) throws IOException {
 		assertNull("The ipa file should not have been loaded here", get(ipaFile) );
 		File		jar = new File(dir,ipaFile);
-		copyAndClose( getClass().getResourceAsStream(ipaFile), 
+		copyAndClose(getClass().getResourceAsStream("/ipa/" + ipaFile), 
 			new FileOutputStream( jar )  );
 		loadFromURL( jar.toURL(), ipaFile );
 	}
@@ -815,7 +851,10 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 			URLConnection ucon;
 			public URLConnection openConnection(URL u) throws java.io.IOException{
 				if ( u.toString().startsWith("director:") ) {
-					URL newurl = new URL( getWebServer() + u.getFile() );
+					String file = u.getPath();
+					String path = (file.endsWith(".ipa") ? "/ipa/" : "/www/")
+							+ file;
+					URL newurl = getClass().getResource(path);
 					if ( debug )
 						System.out.println( "Incoming " + u  + " ->  " + newurl );
 					return ucon = newurl.openConnection();

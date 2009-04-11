@@ -1,0 +1,15 @@
+#
+# Should get the test-1.jar bundle from the remote system
+# 
+-sources:								false
+-resourceonly:                           true
+Include-Resource:                        ref.ipa;literal='true';extra='text/plain;charset=utf-8', \
+   load-status;literal='ref.ipa';extra='text/plain;charset=utf-8', \
+   test-0-prov.jar=test-0-prov.jar;extra='application/x-osgi-bundle', \
+   test-1-prov.jar;literal=director:test-1-prov.jar;extra='text/x-osgi-bundle-url', \
+   test-2-prov.jar;literal='http://NON_EXISTENT_HOST/NON_EXISTENT_FILE';extra='text/x-osgi-bundle;charset=utf-8', \
+   provisioning.start.bundle;literal='test-0-prov.jar';extra='text/plain;charset=utf-8', \
+   text-1;literal='TEST1';extra='text/plain;charset=utf-8', \
+   text-2;literal='TEST2';extra='text/plain;charset=utf-8', \
+   /text-3;literal='TEST3';extra='text/plain;charset=utf-8', \
+   osgi.cert=osgi.cert;extra='application/octet-stream'

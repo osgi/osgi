@@ -1,3 +1,4 @@
+-sources:								false
 -resourceonly:                           true
 Include-Resource:                        keys-only.ipa;literal='true';extra='text/plain;charset=utf-8', \
    load-status;literal='keys-only.ipa';extra='text/plain;charset=utf-8', \

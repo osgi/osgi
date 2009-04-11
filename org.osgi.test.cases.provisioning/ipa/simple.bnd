@@ -1,11 +1,13 @@
 #
-# Should get the test-1.jar bundle from the remote system
-# 
+# All bundles and texts are contained in the
+# the file
+#
+-sources:								false
 -resourceonly:                           true
-Include-Resource:                        ref.ipa;literal='true';extra='text/plain;charset=utf-8', \
-   load-status;literal='ref.ipa';extra='text/plain;charset=utf-8', \
-   test-0-prov.jar=ximple.jar;extra='application/x-osgi-bundle', \
-   test-1-prov.jar;literal=director:ximple.jar;extra='text/x-osgi-bundle-url', \
+Include-Resource:                        simple.ipa;literal='true';extra='text/plain;charset=utf-8', \
+   load-status;literal='simple.ipa';extra='text/plain;charset=utf-8', \
+   test-0-prov.jar=test-0-prov.jar;extra='application/x-osgi-bundle', \
+   test-1-prov.jar=test-1-prov.jar;extra='application/x-osgi-bundle', \
    test-2-prov.jar;literal='http://NON_EXISTENT_HOST/NON_EXISTENT_FILE';extra='text/x-osgi-bundle;charset=utf-8', \
    provisioning.start.bundle;literal='test-0-prov.jar';extra='text/plain;charset=utf-8', \
    text-1;literal='TEST1';extra='text/plain;charset=utf-8', \

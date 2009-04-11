@@ -2,8 +2,9 @@
 # Should get the test-1.jar bundle from the remote system
 # but we use an unusual case for the type
 #
+-sources:								false
 -resourceonly:                           true
 Include-Resource:                        case-ref.ipa;literal='true';extra='text/plain;charset=utf-8', \
    load-status;literal='case-ref.ipa';extra='text/plain;charset=utf-8', \
-   case-ref-prov.jar;literal=director:ximple.jar;extra='text/X-OSGI-BUNDLE-URL', \
+   case-ref-prov.jar;literal=director:case-ref-prov.jar;extra='text/X-OSGI-BUNDLE-URL', \
    provisioning.start.bundle;literal='case-ref-prov.jar';extra='text/plain;charset=utf-8'

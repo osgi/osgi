@@ -91,7 +91,7 @@ public class Activator implements BundleActivator, HttpContext {
 	}
 
 	public URL getResource(String name) {
-		if (name.endsWith("delay.jar")) {
+		if (name.endsWith("delay-prov.jar")) {
 			try {		
 				Thread.sleep(TIMEOUT2);
 			}
