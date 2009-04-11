@@ -119,10 +119,7 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 			formatted = message + " ";
 		}
 
-		if (want.isInstance(got)) {
-			pass(formatted + want.getName());
-		}
-		else {
+		if (!want.isInstance(got)) {
 			fail(formatted + "expected:[" + want.getName() + "] but was:["
 					+ got.getClass().getName() + "]", got);
 		}
