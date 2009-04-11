@@ -53,7 +53,8 @@ btool.compress			= true
 
 
 -make                   =  \
-  (*).(jar|ipa);                             type=bnd;  recipe="bnd/$1.bnd"
+  (*).(jar);                             type=bnd;  recipe="bnd/$1.bnd", \
+  (*).(ipa);                             type=bnd;  recipe="ipa/$1.bnd"
 
 
 junit					= com.springsource.junit;version=3.8;export="junit.framework;version=3.8,junit.extensions;version=3.8"
