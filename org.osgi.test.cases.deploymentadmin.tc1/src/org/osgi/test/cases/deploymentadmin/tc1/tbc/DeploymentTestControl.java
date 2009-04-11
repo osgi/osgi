@@ -120,7 +120,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 		
         installHandlersAndListeners();
 		try {
-			install("tb1.jar");
+			installTestBundle("tb1.jar");
 			tb1Srv = (TB1Service) getContext().getService(getContext().getServiceReference(TB1Service.class.getName()));
 			if(tb1Srv!=null) {
 				testClasses = tb1Srv.getTestClasses(this);
@@ -457,7 +457,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 		return (TestingDeploymentPackage)packages.get(String.valueOf(code));
 	}
 
-	public void install(String bundle) throws Exception {
+	public void installTestBundle(String bundle) throws Exception {
 		PermissionInfo info[] = {
 				new PermissionInfo(ServicePermission.class.getName(), "*", ServicePermission.GET + ","
 								+ ServicePermission.REGISTER),
