@@ -25,41 +25,28 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-package org.osgi.test.cases.io.tbc;
+package org.osgi.test.cases.io.junit;
 
-import org.osgi.test.cases.util.*;
-import org.osgi.util.tracker.ServiceTracker;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
-import org.osgi.framework.Constants;
-import org.osgi.service.io.ConnectionFactory;
-import org.osgi.service.io.ConnectorService;
-import javax.microedition.io.Connection;
-import javax.microedition.io.ConnectionNotFoundException;
-import java.util.Hashtable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.InputStream;
+import java.util.Hashtable;
+
+import javax.microedition.io.Connection;
+import javax.microedition.io.ConnectionNotFoundException;
+
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.io.ConnectionFactory;
+import org.osgi.service.io.ConnectorService;
+import org.osgi.test.support.OSGiTestCase;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * Tests the functionality of a ConnectorService implementation
  */
-public class IOControl extends DefaultTestBundleControl {
-	BundleContext	bc;
-	/**
-	 * List of test methods used in this test case.
-	 */
-	static String[]	methods	= new String[] {"testOpen", "testRanking1",
-			"testRanking2", "testMultipleSchemes",};
-
-	/**
-	 * Returns the list of test methods contained in this test case.
-	 * 
-	 * @return list of test methods
-	 */
-	public String[] getMethods() {
-		return methods;
-	}
+public class IOControl extends OSGiTestCase {
 
 	/**
 	 * tests the open methods in ConnectorService
@@ -67,7 +54,7 @@ public class IOControl extends DefaultTestBundleControl {
 	 * @throws Exception
 	 */
 	public void testOpen() throws Exception {
-		bc = getContext();
+		BundleContext bc = getContext();
 		Hashtable props = new Hashtable();
 		props.put(ConnectionFactory.IO_SCHEME, "test");
 		TestConnectionFactory cf = new TestConnectionFactory();
@@ -83,14 +70,13 @@ public class IOControl extends DefaultTestBundleControl {
 		assertNotNull("returned connection", c);
 		assertEquals("uri check", "test://testurl", cf.uri);
 		cf.clean();
-		boolean exc = false;
 		try {
-			connector.open("notavalidURI");
+			c = connector.open("notavalidURI");
+			fail("invalid uri " + c);
 		}
 		catch (IllegalArgumentException e) {
-			exc = true;
+			// expected
 		}
-		assertTrue("illegal argument exception not thrown", exc);
 		c = connector.open("test://readurl", ConnectorService.READ);
 		assertNotNull("returned connection", c);
 		assertEquals("mode", ConnectorService.READ, cf.mode);
@@ -107,15 +93,13 @@ public class IOControl extends DefaultTestBundleControl {
 		assertNotNull("returned connection", c);
 		assertTrue("timeouts", cf.timeouts);
 		cf.clean();
-		exc = false;
 		try {
-			Connection con = connector.open("notavalidscheme://notfoundurl");
+			c = connector.open("notavalidscheme://notfoundurl");
 			fail("Connection should not be created " + c);
 		}
 		catch (ConnectionNotFoundException cnf) {
-			exc = true;
+			// expected
 		}
-		assertTrue("connection not found exception", exc);
 		cf.clean();
 		DataInputStream dis = connector.openDataInputStream("test://testurl");
 		assertNotNull("openDataInputStream", dis);
@@ -132,12 +116,12 @@ public class IOControl extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * checks if the ConnectionFactory with the lowest service id is choosen
+	 * checks if the ConnectionFactory with the lowest service id is chosen
 	 * 
 	 * @throws Exception
 	 */
 	public void testRanking1() throws Exception {
-		bc = getContext();
+		BundleContext bc = getContext();
 		Hashtable props = new Hashtable();
 		props.put(ConnectionFactory.IO_SCHEME, new String[] {"test"});
 		TestConnectionFactory cf1 = new TestConnectionFactory();
@@ -167,7 +151,7 @@ public class IOControl extends DefaultTestBundleControl {
 	 * @throws Exception
 	 */
 	public void testRanking2() throws Exception {
-		bc = getContext();
+		BundleContext bc = getContext();
 		Hashtable props = new Hashtable();
 		props.put(ConnectionFactory.IO_SCHEME, new String[] {"test"});
 		TestConnectionFactory cf1 = new TestConnectionFactory();
@@ -197,7 +181,7 @@ public class IOControl extends DefaultTestBundleControl {
 	 * @throws Exception
 	 */
 	public void testMultipleSchemes() throws Exception {
-		bc = getContext();
+		BundleContext bc = getContext();
 		Hashtable props = new Hashtable();
 		props.put(ConnectionFactory.IO_SCHEME, new String[] {"test", "test2"});
 		TestConnectionFactory cf = new TestConnectionFactory();
