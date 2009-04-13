@@ -245,10 +245,10 @@ public class RshServlet extends HttpServlet {
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();
 		ZipOutputStream	out = new ZipOutputStream(bout);
 		
-		InputStream in = getClass().getResourceAsStream("/www/simple.jar");
+		InputStream in = getClass().getResourceAsStream("/www/simple-prov.jar");
 		byte bundle[] = collect(in,0);
 		in.close();
-		addEntry( out, "simple.jar", "application/x-osgi-bundle", bundle );
+		addEntry(out, "simple-prov.jar", "application/x-osgi-bundle", bundle);
 		
 		for ( int i=0; fields!=null && i<fields.length; i+=3 ) {
 			addEntry( out, fields[i], fields[i+1], fields[i+2].getBytes() );

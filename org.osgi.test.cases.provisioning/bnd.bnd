@@ -18,10 +18,8 @@ Include-Resource: \
 	www/delay-prov.jar=delay-prov.jar, \
 	www/local-prov.jar=local-prov.jar, \
 	www/simple-prov.jar=simple-prov.jar, \
-	www/simple.jar=simple.jar, \
 	www/test-0-prov.jar=test-0-prov.jar, \
 	www/test-1-prov.jar=test-1-prov.jar, \
-	www/test-1.jar=test-1.jar, \
 	www/osgi.cert=osgi.cert
 	
 -buildpath							= \

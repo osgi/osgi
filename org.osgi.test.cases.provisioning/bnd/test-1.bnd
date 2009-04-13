@@ -1,2 +1,0 @@
-Bundle-Activator:                        ${p}.simple.Simple
-Private-Package:                         ${p}.simple

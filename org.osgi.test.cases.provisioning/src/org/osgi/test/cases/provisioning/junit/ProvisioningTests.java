@@ -101,7 +101,7 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 		for ( int i=0; i < bndls.length; i++ ) {
 			if ( bndls[i].getLocation().endsWith("-prov.jar") ) {
 				if ( debug )
-					System.out.println( "Uninstalling? " + bndls[i].getLocation() );
+					log("Uninstalling? " + bndls[i].getLocation());
 				try {
 					Bundle bundle = bndls[i];
 					//
@@ -185,7 +185,7 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 		while ( entry != null) {
 			byte [] data = collect(zin,0);
 			if ( debug )
-				System.out.println( "Entry " + entry  + " " + data.length );
+				log("Entry " + entry + " " + data.length);
 			if ( entry.getName().equals( "clientfg") ) {
 				assertNotNull( "clientfg entry must have ZIP extra field set", entry.getExtra() );
 				assertEquals( "Type for clientfg entry must be utf-8", "text/plain;charset=utf-8", new String(entry.getExtra()) );
@@ -856,7 +856,7 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 							+ file;
 					URL newurl = getClass().getResource(path);
 					if ( debug )
-						System.out.println( "Incoming " + u  + " ->  " + newurl );
+						log("Incoming " + u + " ->  " + newurl);
 					return ucon = newurl.openConnection();
 				} else {
 					query = u.getQuery();
@@ -865,7 +865,8 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 						index = u.getFile().length();
 					String file = u.getFile().substring(0, index );
 					if ( debug )
-						System.out.println("Query = " + query + " " + u.getFile() + " " + file + " "  + u);
+						log("Query = " + query + " " + u.getFile() + " " + file
+								+ " " + u);
 					URL url = getClass().getResource("/ipa/" + file);
 					ucon = url.openConnection();
 					return ucon;
