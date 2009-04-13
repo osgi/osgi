@@ -1,3 +1,4 @@
+-nomanifest: true
 -sources:								false
 -resourceonly:                           true
 Include-Resource:                        unicode.ipa;literal='true';extra='text/plain;charset=utf-8', \

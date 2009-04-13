@@ -2,6 +2,7 @@
 # This ipa is used to check if we get a Service Platform
 # identifier
 # 
+-nomanifest: true
 -sources:								false
 -resourceonly:                           true
 Include-Resource:                        spid.ipa;literal='true';extra='text/plain;charset=utf-8', \

@@ -2,6 +2,7 @@
 # Will install + start a bundle + get a reference which also starts
 # the agent.
 #
+-nomanifest: true
 -sources:								false
 -resourceonly:                           true
 Include-Resource:                        ipa-ref-start.ipa;literal='true';extra='text/plain;charset=utf-8', \

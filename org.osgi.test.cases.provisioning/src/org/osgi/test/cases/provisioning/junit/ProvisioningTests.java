@@ -34,7 +34,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Field;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Arrays;
@@ -66,10 +65,10 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 	ServiceTracker					bundles;		// Tracks started Ip bundles
 	ServiceRegistration				registration;	// director: spid-test: stream handler
 	String							query; 			// Query part from spid-test: url
-	final String		rshServer;
+	final String		httpServer;
 
 	public ProvisioningTests() {
-		rshServer = "http://" + Activator.hostName + ":" + Activator.hostPort
+		httpServer = "http://" + Activator.hostName + ":" + Activator.hostPort
 				+ "/";
 	}
 
@@ -91,7 +90,10 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 			null );
 		bundles.open();		
 		registration = installStreamHandler();
+		reset();
+	}
 
+	private void reset() {
 		/*
 		 * For each test case, assure we have no test bundles installed. We
 		 * assure that all installed bundles end with -prov.jar so we can find
@@ -140,13 +142,14 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 	 * Remove the stream handlers
 	 */
 	protected void tearDown() {
+		reset();
 		registration.unregister();
 		provisioning.close();
 	}
 
 	
-	private String getRshServer() {
-		return rshServer;
+	private String getHttpServer() {
+		return httpServer;
 	}
 	/*
 	 * START OF TESTS
@@ -165,7 +168,7 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 		if ( ! rshAvailable() )
 			return;
 		
-		URL ws = new URL(getRshServer());
+		URL ws = new URL(getHttpServer());
 		URL rshurl = new URL( "rsh://" + ws.getHost() + ":" + ws.getPort() + "/test/rsh");
 		
 		// Check if we can get data from this
@@ -247,7 +250,7 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 		assertTrue("Different secret was set (provisioning.rsh.secret)", Arrays
 				.equals(secret, (byte[]) get("provisioning.rsh.secret")));
 		
-		URL ws = new URL(getRshServer());
+		URL ws = new URL(getHttpServer());
 		String time = System.currentTimeMillis()+"";
 		URL rshurl = new URL( "rsh://" + ws.getHost() + ":" + ws.getPort() + "/test/rsh?time="+time );
 		loadFromURL( rshurl, "rsh.ipa");
@@ -262,7 +265,7 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 		ServiceReference refs[] = getContext().getServiceReferences( 
 			URLStreamHandlerService.class.getName(), 
 			"(" + URLConstants.URL_HANDLER_PROTOCOL + "=rsh)" );
-		String webserver = getRshServer();		
+		String webserver = getHttpServer();		
 		if ( refs == null || refs.length==0 
 			|| ! webserver.startsWith("http:")) {
 			log( "[No rsh protocol available]" );
@@ -287,43 +290,32 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 	 * @spec ProvisioningService.PROVISIONING_UPDATE_COUNT
 	 */
 	public void testConstants() {
-		assertConstant("MIME_BUNDLE", "application/vnd.osgi.bundle",
+		assertConstant("application/vnd.osgi.bundle", "MIME_BUNDLE",
 				ProvisioningService.class);
-		assertConstant("MIME_BUNDLE_ALT", "application/x-osgi-bundle",
+		assertConstant("application/x-osgi-bundle", "MIME_BUNDLE_ALT",
 				ProvisioningService.class);
-		assertConstant("MIME_BUNDLE_URL", "text/x-osgi-bundle-url",
+		assertConstant("text/x-osgi-bundle-url", "MIME_BUNDLE_URL", 
 				ProvisioningService.class);
-		assertConstant("MIME_BYTE_ARRAY", "application/octet-stream",
+		assertConstant("application/octet-stream", "MIME_BYTE_ARRAY", 
 				ProvisioningService.class);
-		assertConstant("MIME_STRING", "text/plain;charset=utf-8",
+		assertConstant("text/plain;charset=utf-8", "MIME_STRING", 
 				ProvisioningService.class);
-		assertConstant("PROVISIONING_AGENT_CONFIG",
-				"provisioning.agent.config", ProvisioningService.class);
-		assertConstant("PROVISIONING_REFERENCE", "provisioning.reference",
+		assertConstant("provisioning.agent.config",
+				"PROVISIONING_AGENT_CONFIG",
 				ProvisioningService.class);
-		assertConstant("PROVISIONING_ROOTX509", "provisioning.rootx509",
+		assertConstant("provisioning.reference", "PROVISIONING_REFERENCE", 
 				ProvisioningService.class);
-		assertConstant("PROVISIONING_RSH_SECRET", "provisioning.rsh.secret",
+		assertConstant("provisioning.rootx509", "PROVISIONING_ROOTX509", 
 				ProvisioningService.class);
-		assertConstant("PROVISIONING_SPID", "provisioning.spid",
+		assertConstant("provisioning.rsh.secret", "PROVISIONING_RSH_SECRET", 
 				ProvisioningService.class);
-		assertConstant("PROVISIONING_START_BUNDLE",
-				"provisioning.start.bundle", ProvisioningService.class);
-		assertConstant("PROVISIONING_UPDATE_COUNT",
-				"provisioning.update.count", ProvisioningService.class);		
-	}
-	
-	private static void assertConstant(String name, String value, Class source) {
-		try {
-			Field f = source.getField(name);
-			assertEquals(name, value, f.get(null));
-		}
-		catch (NoSuchFieldException e) {
-			fail("missing field: " + name, e);
-		}
-		catch (IllegalAccessException e) {
-			fail("bad field: " + name, e);
-		}
+		assertConstant("provisioning.spid", "PROVISIONING_SPID", 
+				ProvisioningService.class);
+		assertConstant("provisioning.start.bundle",
+				"PROVISIONING_START_BUNDLE",
+				ProvisioningService.class);
+		assertConstant("provisioning.update.count",
+				"PROVISIONING_UPDATE_COUNT", ProvisioningService.class);		
 	}
 	
 	/**
@@ -565,7 +557,7 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 	 */
 	public void testDelayReference() throws Exception {
 		loadFromResource( "delay-ref.ipa" );
-		Bundle bundle = waitForBundle(); // this is simpl-prov.jar
+		Bundle bundle = waitForBundle(); // this is simple-prov.jar
 		assertNotNull( "Check if simple-prov.jar is started", bundle );
 		
 		Bundle delayed= findBundle("delay-prov.jar");
@@ -610,7 +602,8 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 	 * @spec ProvisioningService.addInformation(String)
 	 */
 	public void testHttpLoad()throws Exception {
-		loadFromURL( new URL( getWebServer() + "simple.ipa" ), "simple.ipa" );
+		loadFromURL(new URL(getHttpServer() + "test/ipa/simple.ipa"),
+				"simple.ipa");
 		doURL( );
 	}
 	
@@ -657,7 +650,8 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 		byte [] actual = (byte[]) object;
 		byte[] expected = collect(getClass().getResourceAsStream(
 				"/www/osgi.cert"), 0);		
-		assertEquals( "Verify binary cert is correctly handled", expected, actual );
+		assertTrue("Verify binary cert is correctly handled", Arrays.equals(
+				expected, actual));
 		
 		
 		assertEquals( "Check for allpermision", "true", refs[0].getProperty("allpermission"));
@@ -850,10 +844,17 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 		URLStreamHandlerService		magic = new AbstractURLStreamHandlerService() {
 			URLConnection ucon;
 			public URLConnection openConnection(URL u) throws java.io.IOException{
+				String file = u.getPath();
+				if (file.endsWith("delay-prov.jar")) {
+					try {
+						Thread.sleep(Activator.TIMEOUT2);
+					}
+					catch (InterruptedException e) {
+						// empty
+					}
+				}
 				if ( u.toString().startsWith("director:") ) {
-					String file = u.getPath();
-					String path = (file.endsWith(".ipa") ? "/ipa/" : "/www/")
-							+ file;
+					String path = getResourcePath(file) + file;
 					URL newurl = getClass().getResource(path);
 					if ( debug )
 						log("Incoming " + u + " ->  " + newurl);
@@ -863,11 +864,12 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 					int index = u.getFile().indexOf('?');
 					if ( index < 0 )
 						index = u.getFile().length();
-					String file = u.getFile().substring(0, index );
+					file = u.getFile().substring(0, index);
 					if ( debug )
 						log("Query = " + query + " " + u.getFile() + " " + file
 								+ " " + u);
-					URL url = getClass().getResource("/ipa/" + file);
+					URL url = getClass().getResource(
+							getResourcePath(file) + file);
 					ucon = url.openConnection();
 					return ucon;
 				}
@@ -882,5 +884,8 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 			properties );
 	}
 	
+	static String getResourcePath(String file) {
+		return file.endsWith(".ipa") ? "/ipa/" : "/www/";
+	}
 
 }

@@ -2,6 +2,7 @@
 # Should get the test-1.jar bundle from the remote system
 # but we use an unusual case for the type
 #
+-nomanifest: true
 -sources:								false
 -resourceonly:                           true
 Include-Resource:                        case-ref.ipa;literal='true';extra='text/plain;charset=utf-8', \

@@ -2,6 +2,7 @@
 # All bundles and texts are contained in the
 # the file
 #
+-nomanifest: true
 -sources:								false
 -resourceonly:                           true
 Include-Resource:                        simple.ipa;literal='true';extra='text/plain;charset=utf-8', \

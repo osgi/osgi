@@ -1,6 +1,7 @@
 #
 # Should get the test-1.jar bundle from the remote system
 # 
+-nomanifest: true
 -sources:								false
 -resourceonly:                           true
 Include-Resource:                        ref.ipa;literal='true';extra='text/plain;charset=utf-8', \

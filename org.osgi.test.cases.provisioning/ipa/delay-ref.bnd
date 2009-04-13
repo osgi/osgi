@@ -2,6 +2,7 @@
 # We are referring to a jar that takes some time to load and
 # see if start is done after load
 #
+-nomanifest: true
 -sources:								false
 -resourceonly:                           true
 Include-Resource:                        delay-ref.ipa;literal='true';extra='text/plain;charset=utf-8', \

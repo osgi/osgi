@@ -105,10 +105,6 @@ public class Activator implements BundleActivator, HttpContext {
 			if (url == null)
 				url = getClass().getResource("/" + name);
 
-			if (url == null && name.startsWith("/www")) {
-				name = name.substring(4);
-				url = getClass().getResource(name);
-			}
 			return url;
 		}
 		catch (Exception e) {
@@ -147,9 +143,10 @@ public class Activator implements BundleActivator, HttpContext {
 				}
 				final HttpService http = (HttpService) super.addingService(ref);
 				try {
-					context.getService(ref);
 					http.registerServlet("/test/rsh", new RshServlet(), null,
 							Activator.this);
+					http.registerResources("/test/ipa", "/ipa", Activator.this);
+					http.registerResources("/test/www", "/www", Activator.this);
 				}
 				catch (Exception e) {
 					e.printStackTrace();
