@@ -17,6 +17,8 @@
 package org.osgi.test.support;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.net.URL;
 
 import junit.framework.AssertionFailedError;
@@ -60,6 +62,31 @@ public abstract class OSGiTestCase extends TestCase {
 		e.initCause(t);
 		throw e;
 	}
+
+	/**
+	 * Assert a constant from class has a specific value.
+	 * 
+	 * @param expected Expected value.
+	 * @param fieldName Constant field name.
+	 * @param fieldClass Class containing constant.
+	 */
+	public static void assertConstant(Object expected, String fieldName,
+			Class fieldClass) {
+		try {
+			Field f = fieldClass.getField(fieldName);
+			assertTrue(Modifier.isPublic(f.getModifiers()));
+			assertTrue(Modifier.isStatic(f.getModifiers()));
+			assertTrue(Modifier.isFinal(f.getModifiers()));
+			assertEquals(fieldName, expected, f.get(null));
+		}
+		catch (NoSuchFieldException e) {
+			fail("missing field: " + fieldName, e);
+		}
+		catch (IllegalAccessException e) {
+			fail("bad field: " + fieldName, e);
+		}
+	}
+	
 
 	/**
 	 * Installs a resource within the test bundle as a bundle
