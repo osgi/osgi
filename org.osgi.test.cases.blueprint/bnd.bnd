@@ -32,6 +32,7 @@ Include-Resource					= \
 	www/error_instance_factory_no_method.jar=error_instance_factory_no_method.jar, \
 	www/error_instance_factory_no_component.jar=error_instance_factory_no_component.jar, \
 	www/error_constructor_exception.jar=error_constructor_exception.jar, \
+	www/error_lazy_constructor_exception.jar=error_lazy_constructor_exception.jar, \
 	www/error_property_exception.jar=error_property_exception.jar, \
 	www/error_init_exception.jar=error_init_exception.jar, \
 	www/error_init_no_method.jar=error_init_no_method.jar, \

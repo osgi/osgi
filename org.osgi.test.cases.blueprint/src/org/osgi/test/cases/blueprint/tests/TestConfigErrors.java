@@ -27,6 +27,7 @@
 package org.osgi.test.cases.blueprint.tests;
 
 import org.osgi.test.cases.blueprint.framework.EventSet;
+import org.osgi.test.cases.blueprint.framework.GetComponentExceptionValidator;
 import org.osgi.test.cases.blueprint.framework.StandardErrorTestController;
 import org.osgi.test.cases.blueprint.framework.StandardTestController;
 import org.osgi.test.cases.blueprint.services.AssertionService;
@@ -166,6 +167,20 @@ public class TestConfigErrors extends DefaultTestBundleControl {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
             getWebServer()+"www/error_constructor_exception.jar");
+        controller.run();
+    }
+
+    /*
+     * Tests an exception thrown from a constructor call triggered by a getComponent() call
+     */
+    public void testLazyConstructorException() throws Exception {
+        // this should just be the standard error set
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/error_lazy_constructor_exception.jar");
+
+        // We should get the error triggered when we request the component
+        EventSet startEvents = controller.getStartEvents();
+        startEvents.addValidator(new GetComponentExceptionValidator("ConstructorException"));
         controller.run();
     }
 

@@ -125,6 +125,20 @@ public class ModuleMetadata extends Assert implements TestValidator, TestCleanup
 
 
     /**
+     * Retrieve the associated module context.  Some validators
+     * require direct access to this, so allow it to be
+     * retrieved.
+     *
+     * @return The bundle published module context.
+     * @exception Exception
+     */
+    public ModuleContext getTargetModuleContext() throws Exception {
+        getModuleContext();
+        return targetModuleContext;
+    }
+
+
+    /**
      * Retrieve a named component from module context.
      *
      * @param componentName
