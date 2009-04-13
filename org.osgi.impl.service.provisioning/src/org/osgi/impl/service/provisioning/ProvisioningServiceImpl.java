@@ -1,11 +1,24 @@
 package org.osgi.impl.service.provisioning;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.util.*;
-import java.util.zip.*;
-import org.osgi.framework.*;
-import org.osgi.service.permissionadmin.*;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.permissionadmin.PermissionAdmin;
+import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.service.provisioning.ProvisioningService;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -220,8 +233,8 @@ public class ProvisioningServiceImpl implements ProvisioningService {
 					.equalsIgnoreCase(ProvisioningService.MIME_BUNDLE_URL)) {
 				BundleToInstall b = new BundleToInstall();
 				b.name = key;
-				String url = new String(os.toByteArray());
-				InputStream is = (InputStream) new URL(url).getContent();
+				String url = new String(os.toByteArray(), "UTF-8");
+				InputStream is = new URL(url).openStream();
 				b.bundle = new ByteArrayOutputStream();
 				readData(is, b.bundle);
 				bundlesToInstall.add(b);
