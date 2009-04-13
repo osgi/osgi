@@ -2,5 +2,4 @@
 -resourceonly:                           true
 Include-Resource:                        unicode.ipa;literal='true';extra='text/plain;charset=utf-8', \
    load-status;literal='unicode.ipa';extra='text/plain;charset=utf-8', \
-   unicode.string;literal='vÐÙv';extra='text/plain;charset=utf-8'
-# unicode.string should be v\u00D0\u00D9v
+   unicode.string;literal='v\u00D0\u00D9v';extra='text/plain;charset=utf-8'
