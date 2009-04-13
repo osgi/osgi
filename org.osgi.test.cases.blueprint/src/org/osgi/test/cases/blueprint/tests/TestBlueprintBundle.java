@@ -58,6 +58,7 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         startEvents.validateComponent("comp1", SimpleTestComponent.class);
         // make sure the name is in the component list
         startEvents.addValidator(new ComponentNamePresenceValidator("comp1"));
+        startEvents.addValidator(new GetLocalComponentMetadataValidator("comp1"));
 
         // and the validate the component metadata
         startEvents.addValidator(new ComponentMetadataValidator(

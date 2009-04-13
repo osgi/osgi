@@ -65,6 +65,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // this will validate the getComponent() result and check this is also in getComponentNames();
         exportStartEvents.addValidator(new ServiceComponentValidator("ServiceOneService"));
         exportStartEvents.addValidator(new ComponentNamePresenceValidator("ServiceOneService"));
+        exportStartEvents.addValidator(new GetExportedServicesMetadataValidator("ServiceOneService"));
 
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
@@ -83,6 +84,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // validate that the component is the correct type
         importStartEvents.addValidator(new ReferenceComponentValidator("ServiceOne", TestServiceOne.class));
         importStartEvents.addValidator(new ComponentNamePresenceValidator("ServiceOne"));
+        importStartEvents.addValidator(new GetReferencedServicesMetadataValidator("ServiceOne"));
 
         // do some validation of the import metadata
         importStartEvents.addValidator(new ConstructorMetadataValidator("ServiceOneConstructor", new TestParameter[] {
@@ -415,6 +417,10 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         importStartEvents.addValidator(new ReferenceComponentValidator("ServiceOneMultiple", new Class[]  { TestServiceOne.class, TestServiceTwo.class } ));
         importStartEvents.addValidator(new ReferenceComponentValidator("ServiceOne", TestServiceOne.class));
         importStartEvents.addValidator(new ReferenceComponentValidator("ServiceTwo", TestServiceTwo.class));
+        // validate this is in the reference export list
+        importStartEvents.addValidator(new GetReferencedServicesMetadataValidator("ServiceOne"));
+        importStartEvents.addValidator(new GetReferencedServicesMetadataValidator("ServiceTwo"));
+        importStartEvents.addValidator(new GetReferencedServicesMetadataValidator("ServiceOneMultiple"));
 
         // now some expected termination stuff
         EventSet exportStopEvents = controller.getStopEvents(1);
