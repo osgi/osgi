@@ -10,27 +10,26 @@ Import-Package: org.osgi.service.blueprint.reflect; version=&quot;[1.0,2.0)&quot
 <p> This package provides a reflection-based view of the configuration information for a given
 	module context. The top-level mapping between configuration elements and reflection types is as follows:
 </p>
-<table>
-	<tr>
-		<th>Configuration Element</th><th>Corresponding Reflection Type(s)</th>
-	</tr>
-	<tr><td>component</td><td>LocalComponentMetadata, ComponentValue</td></tr>
-	<tr><td>reference</td><td>UnaryServiceReferenceComponentMetadata</td></tr>
-	<tr><td>ref-set,ref-list</td><td>CollectionBasedServiceReferenceComponentMetadata</td></tr>
-	<tr><td>service</td><td>ServiceExportComponentMetadata</td></tr>
-	<tr><td>constructor-arg</td><td>ConstructorInjectionMetadata, ParameterSpecification</td></tr>
-	<tr><td>property</td><td>PropertyInjectionMetadata</td></tr>
-	<tr><td>listener</td><td>BindingListenerMetadata</td></tr>
-	<tr><td>registration-listener</td><td>RegistrationListenerMetadata</td></tr>
-	<tr><td>array</td><td>ArrayValue</td></tr>
-	<tr><td>ref</td><td>ReferenceValue</td></tr>
-	<tr><td>id-ref</td><td>ReferenceNameValue</td></tr>
-	<tr><td>list</td><td>ListValue</td></tr>
-	<tr><td>map</td><td>MapValue</td></tr>
-	<tr><td>null</td><td>NullValue</td></tr>
-	<tr><td>props</td><td>PropertiesValue</td></tr>
-	<tr><td>set</td><td>SetValue</td></tr>
-	<tr><td>value</td><td>TypedStringValue</td></tr>
-</table>
+
+<pre>
+	Configuration Element			Corresponding Reflection Type(s)
+	component						LocalComponentMetadata, ComponentValue
+	reference						UnaryServiceReferenceComponentMetadata
+	ref-set,ref-list				CollectionBasedServiceReferenceComponentMetadata
+	service							ServiceExportComponentMetadata
+	constructor-arg					ConstructorInjectionMetadata, ParameterSpecification
+	property						PropertyInjectionMetadata
+	listener						BindingListenerMetadata
+	registration-listener			RegistrationListenerMetadata
+	array<							ArrayValue
+	ref								ReferenceValue
+	id-ref							ReferenceNameValue
+	list							ListValue
+	map								MapValue
+	null							NullValue
+	props							PropertiesValue
+	set								SetValue
+	value							TypedStringValue
+<//pre>
 </BODY>
 
