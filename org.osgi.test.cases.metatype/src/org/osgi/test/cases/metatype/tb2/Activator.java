@@ -27,7 +27,7 @@
 
 package org.osgi.test.cases.metatype.tb2;
 
-import java.util.Properties;
+import java.util.Hashtable;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
@@ -53,7 +53,7 @@ public class Activator implements BundleActivator {
 	 * Creates a new instance of Activator
 	 */
 	public Activator() {
-
+		// empty
 	}
 
 	/**
@@ -64,10 +64,11 @@ public class Activator implements BundleActivator {
 	 * @see Bundle#start
 	 */
 	public void start(BundleContext context) {
-		Properties properties;
+		Hashtable properties;
 
-		properties = new Properties();
-		properties.put(Constants.SERVICE_PID, "br.org.cesar.ocd1");
+		properties = new Hashtable();
+		properties.put(Constants.SERVICE_PID,
+				"org.osgi.test.cases.metatype.ocd1");
 
 		sr = context.registerService(new String[] {
 				ManagedService.class.getName(),

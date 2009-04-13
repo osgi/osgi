@@ -24,7 +24,7 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-package org.osgi.test.cases.metatype.tbc;
+package org.osgi.test.cases.metatype.junit;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -35,7 +35,7 @@ import org.osgi.service.metatype.AttributeDefinition;
 import org.osgi.service.metatype.MetaTypeInformation;
 import org.osgi.service.metatype.MetaTypeService;
 import org.osgi.service.metatype.ObjectClassDefinition;
-import org.osgi.test.cases.util.DefaultTestBundleControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * Get a Meta Type Service and do diverse tests.
@@ -46,45 +46,32 @@ import org.osgi.test.cases.util.DefaultTestBundleControl;
 public class TestControl extends DefaultTestBundleControl {
 
 	private Bundle			bundle;
+	private ServiceReference	ref;
 	private MetaTypeService	mts;
-
-	/**
-	 * Creates a new instance of TestControl
-	 */
-	public TestControl() {
-
-	}
-
-	/**
-	 * Check if the meta type service is present.
-	 * 
-	 * @return
-	 * @see org.osgi.test.cases.util.DefaultTestBundleControl#checkPrerequisites()
-	 */
-	public boolean checkPrerequisites() {
-		boolean result;
-		ServiceReference ref;
-
-		ref = getContext().getServiceReference(MetaTypeService.class.getName());
-		if (ref == null) {
-			log("Service MetaTypeService is required to run this test. Install the service and try again.");
-			result = false;
-		}
-		else {
-			mts = (MetaTypeService) getContext().getService(ref);
-			result = true;
-		}
-
-		return result;
-	}
 
 	/**
 	 * Install the test bundle
 	 * 
 	 * @see org.osgi.test.cases.util.DefaultTestBundleControl#setState()
 	 */
-	public void setState() throws Exception {
+	protected void setUp() throws Exception {
+		ref = getContext().getServiceReference(MetaTypeService.class.getName());
+		assertNotNull(
+				"Service MetaTypeService is required to run this test. Install the service and try again.",
+				ref);
+		mts = (MetaTypeService) getContext().getService(ref);
+		
 		bundle = installBundle("tb1.jar");
+	}
+
+	/**
+	 * Uninstall the test bundle
+	 * 
+	 * @see org.osgi.test.cases.util.DefaultTestBundleControl#clearState()
+	 */
+	protected void tearDown() throws Exception {
+		getContext().ungetService(ref);
+		bundle.uninstall();
 	}
 
 	/**
@@ -145,9 +132,7 @@ public class TestControl extends DefaultTestBundleControl {
 		// Test the method getObjectClassDefinition() with invalid locale
 		try {
 			ocd = mti.getObjectClassDefinition("com.acme.23456789", "abc");
-			assertNull(
-					"MetaTypeProvider.getObjectClassDefinition() returns null (as expected)",
-					ocd);
+			fail("MetaTypeProvider.getObjectClassDefinition() did not throw exception");
 		}
 		catch (IllegalArgumentException ex) {
 			// Ignore this exception
@@ -430,22 +415,14 @@ public class TestControl extends DefaultTestBundleControl {
 		mti = mts.getMetaTypeInformation(tb2);
 		assertEquals("Checking the number of PIDs", 1, mti.getPids().length);
 
-		ocd = mti.getObjectClassDefinition("br.org.cesar.ocd1", "pt_BR");
+		ocd = mti.getObjectClassDefinition("org.osgi.test.cases.metatype.ocd1",
+				"pt_BR");
 		assertEquals("Checking the implementation class",
 				"org.osgi.test.cases.metatype.tb2.ObjectClassDefinitionImpl", ocd
 						.getClass().getName());
 
 		tb2.stop();
 		tb2.uninstall();
-	}
-
-	/**
-	 * Uninstall the test bundle
-	 * 
-	 * @see org.osgi.test.cases.util.DefaultTestBundleControl#clearState()
-	 */
-	public void clearState() throws Exception {
-		bundle.uninstall();
 	}
 
 	/**

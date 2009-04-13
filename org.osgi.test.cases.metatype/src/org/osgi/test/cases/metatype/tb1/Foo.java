@@ -37,6 +37,7 @@ public class Foo {
 	 * Creates a new instance of Foo 
 	 */
 	public Foo() {
+		// empty
 	}
 	
 }

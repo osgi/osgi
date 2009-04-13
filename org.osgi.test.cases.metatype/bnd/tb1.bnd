@@ -1,12 +1,10 @@
-jars.compile.order = tbc.jar, \
-					 tb1.jar, \
-					 tb2.jar, \
-                     ${p}.jar
-expand.${p}.jar = ${p}
-expand.tb1.jar = [${p}.tb1]
-expand.tb2.jar = [${p}.tb2]
-expand.tbc.jar = [${p}.tbc]
-include.tb1.jar = OSGI-INF/l10n/bundle.properties=tb1/bundle.properties, \
+Bundle-Version: 4.2.0
+Bundle-SymbolicName: $(p).tb1
+
+Private-Package	: $(p).tb1
+
+Include-Resource					= \
+ OSGI-INF/l10n/bundle.properties=tb1/bundle.properties, \
  icons/icon.bmp=tb1/icon.bmp, \
  icons/icon_en_US.bmp=tb1/icon_en_US.bmp, \
  icons/icon_du.bmp=tb1/icon_du.bmp, \
@@ -15,7 +13,5 @@ include.tb1.jar = OSGI-INF/l10n/bundle.properties=tb1/bundle.properties, \
  OSGI-INF/l10n/bundle_du.properties=tb1/bundle_du.properties, \
  OSGI-INF/l10n/bundle_du_NL.properties=tb1/bundle_du_NL.properties, \
  OSGI-INF/metatype/testfile.xml=tb1/testfile.xml
-include.${p}.jar = ${target-dir}/tbc.jar, \
-	log.ref, \
-	www/tb1.jar=${target-dir}/tb1.jar, \
-	www/tb2.jar=${target-dir}/tb2.jar
+
+

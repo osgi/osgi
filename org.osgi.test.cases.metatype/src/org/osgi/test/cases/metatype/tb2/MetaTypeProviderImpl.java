@@ -46,7 +46,7 @@ public class MetaTypeProviderImpl implements ManagedService, MetaTypeProvider {
 	 * Creates a new intance of MetaTypeProviderImpl
 	 */
 	public MetaTypeProviderImpl() {
-
+		// empty
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class MetaTypeProviderImpl implements ManagedService, MetaTypeProvider {
 	 * @see org.osgi.service.cm.ManagedService#updated(java.util.Dictionary)
 	 */
 	public void updated(Dictionary properties) {
-
+		// empty
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class MetaTypeProviderImpl implements ManagedService, MetaTypeProvider {
 			String locale) {
 		ObjectClassDefinition result;
 
-		if (id.equals("br.org.cesar.ocd1")
+		if (id.equals("org.osgi.test.cases.metatype.ocd1")
         && (locale == null || locale.equals("pt_BR")) ) {
 			result = new ObjectClassDefinitionImpl();
 		}

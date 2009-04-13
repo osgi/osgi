@@ -46,7 +46,7 @@ public class ObjectClassDefinitionImpl implements ObjectClassDefinition {
 	 * Creates a new instance of ObjectClassDefinitionImpl
 	 */
 	public ObjectClassDefinitionImpl() {
-		
+		// empty
 	}
 	
 	/**
@@ -88,7 +88,7 @@ public class ObjectClassDefinitionImpl implements ObjectClassDefinition {
 	 * @see org.osgi.service.metatype.ObjectClassDefinition#getID()
 	 */
 	public String getID() {
-		return "br.org.cesar.ocd";
+		return "org.osgi.test.cases.metatype.ocd";
 	}
 
 	/**

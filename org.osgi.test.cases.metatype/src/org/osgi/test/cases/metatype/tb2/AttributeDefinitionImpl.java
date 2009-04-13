@@ -42,7 +42,7 @@ public class AttributeDefinitionImpl implements AttributeDefinition {
 	 * Creates a new instance of AttributeDefinitionImpl
 	 */
 	public AttributeDefinitionImpl() {
-		
+		// empty
 	}
 	
 	/**
