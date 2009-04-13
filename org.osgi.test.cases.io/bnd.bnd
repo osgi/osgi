@@ -19,7 +19,7 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 	${junit}
 
 -runbundles							= \
-	org.osgi.impl.service.io; version=latest, \
+	org.osgi.impl.service.io; version=latest
 
 
 -runproperties = report=true
