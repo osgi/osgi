@@ -71,6 +71,12 @@ public class ComponentNamePresenceValidator extends MetadataValidator {
         // get the named metadata (this will throw an assertion failure if not there)
         Set names = moduleMetadata.getComponentNames();
         assertTrue("Missing component name for " + componentId, names.contains(componentId));
+        try {
+            // this is an immutability test for the collection.  This should throw an error
+            names.remove(componentId);
+            fail("Immutable getComponentNames() test failure for component " + componentId);
+        } catch (Throwable e) {
+        }
     }
 }
 
