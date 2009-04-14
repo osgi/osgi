@@ -125,6 +125,9 @@ public class Position {
 		 * South, 1.5PI is West
 		 */
 		normalizeTrack: {
+			if (track == null) {
+				break normalizeTrack;
+			}
 			double dtrack = track.getValue();
 			if ((0.0D <= dtrack) && (dtrack < TRACK_RANGE)) {
 				break normalizeTrack; /* value is already normalized */
