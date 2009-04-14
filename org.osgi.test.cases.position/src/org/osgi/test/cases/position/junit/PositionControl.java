@@ -25,14 +25,15 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-package org.osgi.test.cases.position.tbc;
+package org.osgi.test.cases.position.junit;
 
-import org.osgi.test.cases.util.*;
-import org.osgi.util.measurement.Unit;
+import junit.framework.TestCase;
+
 import org.osgi.util.measurement.Measurement;
+import org.osgi.util.measurement.Unit;
 import org.osgi.util.position.Position;
 
-public class PositionControl extends DefaultTestBundleControl {
+public class PositionControl extends TestCase {
 	static double	degrees	= Math.PI / 180.0;
 
 	/**
@@ -80,7 +81,7 @@ public class PositionControl extends DefaultTestBundleControl {
 		try {
 			pos = new Position(m[12], m[12], m[12], m[12], m[12]);
 			// This code should never be reached :-)
-			log("Exeception for missing units is not thrown. :-(");
+			fail("Exeception for missing units is not thrown. :-(");
 		}
 		catch (java.lang.IllegalArgumentException e) {
 			// IllegalArgumentException should be thrown. So just be quiet!
@@ -193,7 +194,8 @@ public class PositionControl extends DefaultTestBundleControl {
 		assertLatLon("Wrap S. Pole2", -540, -450, -180, -90);
 	}
 
-	void assertLatLon(String test, int lon, int lat, int xlon, int xlat) {
+	public static void assertLatLon(String test, int lon, int lat, int xlon,
+			int xlat) {
 		Measurement mlon = new Measurement(lon * degrees, Unit.rad);
 		Measurement mlat = new Measurement(lat * degrees, Unit.rad);
 		Position pos = new Position(mlat, mlon, null, null, null);
@@ -218,7 +220,7 @@ public class PositionControl extends DefaultTestBundleControl {
 		assertTrack(-721, 359);
 	}
 
-	void assertTrack(double in, double out) {
+	public static void assertTrack(double in, double out) {
 		Position p = new Position(null, null, null, null, new Measurement(in
 				* degrees, 0, Unit.rad));
 		assertEquals("Track", out, p.getTrack().getValue() / degrees, 0.00001);
