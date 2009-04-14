@@ -26,49 +26,24 @@
 
 package org.osgi.test.cases.startlevel.tb3;
 
-import org.osgi.framework.*;
-import org.osgi.service.startlevel.*;
-import org.osgi.test.service.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.startlevel.StartLevel;
 
-public class Activator implements BundleActivator
-{
+public class Activator implements BundleActivator {
+	public void start(BundleContext bc) {
+		ServiceReference slR = bc.getServiceReference(StartLevel.class
+				.getName());
+		StartLevel sl = (StartLevel) bc.getService(slR);
+		
+		Bundle b = bc.getBundle();
+		int bundleStartLevel = sl.getBundleStartLevel(b);
+		sl.setBundleStartLevel(b, bundleStartLevel + 10);
+	}
 
-  ServiceReference loggerR;
-  TestLogger logger;
-  ServiceReference slR;
-  StartLevel sl;
-
-  public void start(BundleContext bc) 
-  {
-    loggerR = bc.getServiceReference(TestLogger.class.getName());
-    if (loggerR == null) {
-      System.out.println("tb3: failed to get TestLogger service reference");
-      return;
-    }
-    logger = (TestLogger)bc.getService(loggerR);
-    if (logger == null) {
-      System.out.println("tb3: failed to get TestLogger service");
-      return;
-    }
-
-    slR = bc.getServiceReference(StartLevel.class.getName());
-    if (slR == null) {
-      logger.log("tb3: failed to get StartLevel servce reference");
-      return;
-    }
-
-    sl = (StartLevel)bc.getService(slR);
-    if (sl == null) {
-    	logger.log("tb3: failed to get StartLevel servce reference");
-      return;
-    }
-
-    Bundle b = bc.getBundle();
-    int bundleStartLevel = sl.getBundleStartLevel(b);
-    sl.setBundleStartLevel(b, bundleStartLevel + 10);
-  }
-
-  public void stop(BundleContext bc)
-  {
-  }
+	public void stop(BundleContext bc) {
+		// empty
+	}
 }

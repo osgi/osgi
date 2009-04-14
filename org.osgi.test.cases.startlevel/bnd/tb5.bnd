@@ -1,0 +1,5 @@
+Bundle-Version: 4.2.0
+Bundle-SymbolicName: $(p).tb5
+Bundle-Activator: $(p).tb5.Activator
+
+Private-Package	: $(p).tb5

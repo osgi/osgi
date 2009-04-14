@@ -26,17 +26,16 @@
 
 package org.osgi.test.cases.startlevel.tb5;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 
-public class Activator implements BundleActivator
-{
+public class Activator implements BundleActivator {
 
-  public void start(BundleContext bc) throws Exception
-  {
-  }
+	public void start(BundleContext bc) throws Exception {
+		// empty
+	}
 
-  public void stop(BundleContext bc) throws Exception
-  {
-    throw new Exception();
-  }
+	public void stop(BundleContext bc) throws Exception {
+		throw new Exception();
+	}
 }

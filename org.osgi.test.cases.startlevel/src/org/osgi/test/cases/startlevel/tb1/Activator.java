@@ -29,13 +29,12 @@ package org.osgi.test.cases.startlevel.tb1;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
-public class Activator implements BundleActivator
-{
-  public void start(BundleContext bc) 
-  {
-  }
+public class Activator implements BundleActivator {
+	public void start(BundleContext bc) {
+		// empty
+	}
 
-  public void stop(BundleContext bc)
-  {
-  }
+	public void stop(BundleContext bc) {
+		// empty
+	}
 }
