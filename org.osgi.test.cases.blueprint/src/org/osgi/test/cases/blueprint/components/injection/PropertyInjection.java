@@ -131,6 +131,10 @@ public class PropertyInjection extends BaseTestComponent {
 
     public void setProperties(Properties value) {
         setPropertyValue("properties", value, Properties.class);
+        if (value != null) {
+            value.setProperty("$$$$$$ABC$$$$$$", "abc");
+            value.remove("$$$$$$ABC$$$$$$");
+        }
     }
 
     public void setDate(Date value) {
@@ -139,14 +143,29 @@ public class PropertyInjection extends BaseTestComponent {
 
     public void setMap(Map value) {
         setPropertyValue("map", value, Map.class);
+        // ensure this is a mutable version, so add a unique element and remove it
+        if (value != null) {
+            value.put("$$$$$$ABC$$$$$$", "abc");
+            value.remove("$$$$$$ABC$$$$$$");
+        }
     }
 
     public void setSet(Set value) {
         setPropertyValue("set", value, Set.class);
+        // ensure this is a mutable version, so add a unique element and remove it
+        if (value != null) {
+            value.add("$$$$$$ABC$$$$$$");
+            value.remove("$$$$$$ABC$$$$$$");
+        }
     }
 
     public void setList(List value) {
         setPropertyValue("list", value, List.class);
+        // ensure this is a mutable version, so add a unique element and remove it
+        if (value != null) {
+            value.add("$$$$$$ABC$$$$$$");
+            value.remove("$$$$$$ABC$$$$$$");
+        }
     }
 
     // Start of insertion of array property

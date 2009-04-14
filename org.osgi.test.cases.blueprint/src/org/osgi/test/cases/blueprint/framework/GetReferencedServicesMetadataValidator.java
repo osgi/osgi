@@ -82,6 +82,12 @@ public class GetReferencedServicesMetadataValidator extends MetadataValidator {
             ServiceReferenceComponentMetadata meta = (ServiceReferenceComponentMetadata)i.next();
             // if we find a match, just return
             if (componentId.equals(meta.getName())) {
+                try {
+                    // this is an immutability test for the collection.  This should throw an error
+                    i.remove();
+                    fail("Immutable getReferencedServicesMetadata() test failure for component " + componentId);
+                } catch (Throwable e) {
+                }
                 return;
             }
         }

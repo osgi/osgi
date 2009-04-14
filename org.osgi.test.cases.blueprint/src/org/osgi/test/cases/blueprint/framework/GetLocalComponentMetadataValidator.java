@@ -81,6 +81,12 @@ public class GetLocalComponentMetadataValidator extends MetadataValidator {
             LocalComponentMetadata meta = (LocalComponentMetadata)i.next();
             // if we find a match, just return
             if (componentId.equals(meta.getName())) {
+                try {
+                    // this is an immutability test for the collection.  This should throw an error
+                    i.remove();
+                    fail("Immutable getLocalComponentsMetadata() test failure for component " + componentId);
+                } catch (Throwable e) {
+                }
                 return;
             }
         }
