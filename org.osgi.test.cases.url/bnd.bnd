@@ -1,0 +1,22 @@
+Bundle-Description: Tests the URL service control bundle
+Bundle-Version						: 4.2.0.${project.build}
+
+Private-Package						= org.osgi.test.support.*, \
+	${p}.junit.*
+	
+Export-Package						= \
+
+Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+
+-buildpath							= \
+    org.osgi.test.support;                  version=project , \
+	org.osgi.framework;						version=project	, \
+	org.osgi.service.url;					version=project	, \
+	osgi;									version=latest	, \
+	ee.minimum; version=latest											, \
+	${junit}
+
+-runbundles							= \
+	
+
+-runproperties = report=true
