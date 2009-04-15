@@ -18,7 +18,8 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
-	org.osgi.framework;									version=project	, \
+	org.osgi.framework;						version=project	, \
+	org.osgi.service.startlevel;			version=project	, \
 	osgi;									version=latest	, \
 	ee.minimum; version=latest											, \
 	${junit}
