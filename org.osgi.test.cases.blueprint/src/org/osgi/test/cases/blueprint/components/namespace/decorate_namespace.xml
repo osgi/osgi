@@ -23,5 +23,40 @@
             <t1:bundleValue/>
         </property>
     </component>
+
+    <!-- single shared instance of the imported service -->
+    <reference id="ServiceTwo" interface="org.osgi.test.cases.blueprint.services.TestServiceTwo" availability="optional" t2:copy-component="true"/>
+
+    <component id="ServiceOne" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
+        <constructor-arg value="ServiceOne"/>
+        <t1:copy/>
+    </component>
+
+    <!-- simple export using a reference and just one interface. -->
+    <service id="ServiceOneService" ref="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" t2:copy-component="true"/>
+
+    <ref-list id="TestList" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" availability="optional" t2:copy-component="true">
+    </ref-list>
+
+    <ref-set id="TestSet" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" availability="optional" t2:copy-component="true">
+    </ref-list>
+
+    <!-- single shared instance of the imported service -->
+    <reference id="ServiceTwo2" interface="org.osgi.test.cases.blueprint.services.TestServiceTwo" availability="optional">
+        <t1:copy/>
+    </reference>
+
+    <!-- simple export using a reference and just one interface. -->
+    <service id="ServiceOneService2" ref="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
+        <t1:copy/>
+    </service>
+
+    <ref-list id="TestList2" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" availability="optional">
+        <t1:copy/>
+    </ref-list>
+
+    <ref-set id="TestSet2" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" availability="optional">
+        <t1:copy/>
+    </ref-list>
 </components>
 
