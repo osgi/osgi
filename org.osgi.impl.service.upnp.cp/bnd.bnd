@@ -1,5 +1,5 @@
-Bundle-Vendor				= SamSung
-Bundle-Version				= 0.1.0.${project.build}
+Bundle-Vendor				= Samsung
+Bundle-Version				= 0.1.1.${project.build}
 Bundle-Activator			= org.osgi.impl.service.upnp.cp.UPnPBundleActivator
 Bundle-Description			= The UPnP bundle with Control Point stack
 

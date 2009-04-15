@@ -13,7 +13,7 @@ public class SOAPMaker implements SOAPConstants {
 		synchronized (controlLock) {
 			StringBuffer soapBuf = new StringBuffer();
 			String soap;
-			soapBuf.append(startEnvelop);
+			soapBuf.append(startEnvelope);
 			soapBuf.append(rn);
 			soapBuf.append(startBody);
 			soapBuf.append(rn);
@@ -31,7 +31,7 @@ public class SOAPMaker implements SOAPConstants {
 			soapBuf.append(rn);
 			soapBuf.append(stopBody);
 			soapBuf.append(rn);
-			soapBuf.append(stopEnvelop);
+			soapBuf.append(stopEnvelope);
 			soapBuf.append(rn);
 			soap = soapBuf.toString();
 			StringBuffer controlBuf = new StringBuffer();

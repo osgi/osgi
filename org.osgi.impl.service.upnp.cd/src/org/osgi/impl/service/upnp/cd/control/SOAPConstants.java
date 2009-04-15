@@ -8,10 +8,10 @@ interface SOAPConstants {
 	public static final String	contentLength	= "CONTENT-LENGTH: ";
 	public static final String	contentType		= "CONTENT-TYPE: text/xml; charset=\"utf-8\"";
 	public static final String	soapAction		= "SOAPACTION: ";
-	public static final String	startEnvelop	= "<s:Envelop xmlns:s=\"http://schemas.xmlsoap.org/soap/envelop/\" s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">";
+	public static final String	startEnvelope	= "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">";
 	public static final String	startBody		= "<s:Body>";
 	public static final String	mpost			= "M-POST ";
-	public static final String	stopEnvelop		= "</s:Envelop>";
+	public static final String	stopEnvelope	= "</s:Envelope>";
 	public static final String	stopBody		= "</s:Body>";
 	public static final String	saUrn			= "\"urn:schemas-upnp-org:service:";
 	public static final String	date			= "DATE: ";
@@ -35,7 +35,7 @@ interface SOAPConstants {
 	public static final String	varName			= "u:varName";
 	public static final String	result			= "return";
 	public static final String	rn				= "\r\n";
-	public static final String	httpEnv			= "\"http://schemas.xmlsoap.org/soap/envelop/\"";
+	public static final String	httpEnv			= "\"http://schemas.xmlsoap.org/soap/envelope/\"";
 	public static final String	osNameVersion	= System.getProperty("os.name")
 														+ "/"
 														+ System
