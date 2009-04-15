@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2009). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -187,7 +187,7 @@ public interface StartLevel {
 	 *         uninstalled, or if the specified start level is less than or
 	 *         equal to zero, or if the specified bundle is the system bundle,
 	 *         or if the specified bundle was not created by the same framework
-	 *         instance that registered this <code>PackageAdmin</code> service.
+	 *         instance that registered this <code>StartLevel</code> service.
 	 * @throws SecurityException If the caller does not have
 	 *         <code>AdminPermission[bundle,EXECUTE]</code> and the Java runtime
 	 *         environment supports permissions.
