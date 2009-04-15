@@ -4,7 +4,7 @@ Bundle-Description					: A test case for the event generic mechanism implementat
 Private-Package						= org.osgi.test.support.*, \
 	${p}.junit
 Export-Package						= \
-	org.osgi.service.event, \
+	org.osgi.service.event;-split-package:=merge-first, \
 	${p}.service
 
 Include-Resource					= \
