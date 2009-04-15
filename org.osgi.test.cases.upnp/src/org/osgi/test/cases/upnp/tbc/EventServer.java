@@ -1,10 +1,17 @@
 package org.osgi.test.cases.upnp.tbc;
 
-import java.io.*;
-import java.net.*;
-import org.osgi.framework.*;
-import org.osgi.service.upnp.*;
-import org.osgi.test.cases.util.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.StringReader;
+import java.net.InetAddress;
+import java.net.Socket;
+
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.upnp.UPnPEventListener;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * 

@@ -1,18 +1,18 @@
 package org.osgi.test.cases.upnp.tbc.device.description;
 
-import java.io.*;
-import java.net.*;
-import javax.servlet.http.*;
-import org.osgi.service.http.*;
+import java.io.IOException;
+import java.net.URL;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.osgi.service.http.HttpContext;
 
 /**
  * 
  * 
  */
 public class DServletContext implements HttpContext {
-	public DServletContext() {
-	}
-
 	public String getMimeType(String mime) {
 		return null;
 	}

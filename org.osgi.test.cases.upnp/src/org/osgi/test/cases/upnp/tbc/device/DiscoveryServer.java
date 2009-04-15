@@ -1,10 +1,13 @@
 package org.osgi.test.cases.upnp.tbc.device;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import org.osgi.test.cases.upnp.tbc.*;
-import org.osgi.test.cases.util.*;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.net.MulticastSocket;
+import java.util.Vector;
+
+import org.osgi.test.cases.upnp.tbc.UPnPConstants;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * 

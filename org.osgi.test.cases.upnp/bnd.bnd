@@ -1,0 +1,30 @@
+Bundle-Version: 4.2.0.${project.build}
+
+Private-Package						= org.osgi.test.support.*, \
+	${p}.tbc.*
+
+Include-Resource: 
+	
+-buildpath							= \
+    org.osgi.test.support;                  version=project , \
+	org.osgi.service.upnp;			version=project	, \
+	org.osgi.impl.bundle.servlet;		version=2.1, \
+	osgi;									version=4.1		, \
+	ee.minimum; version=1.2												, \
+	${junit}
+
+-runbundles						= \
+	org.osgi.impl.service.log; version=latest, \
+	org.osgi.impl.bundle.servlet;		version=2.1, \
+	org.osgi.impl.service.http; version=latest, \
+	org.osgi.impl.service.upnp.cd; version=latest, \
+	org.osgi.impl.service.upnp.cp; version=latest
+
+-runproperties = report=true, \
+	org.osgi.service.http.hostname=127.0.0.1, \
+	org.osgi.service.http.port=8080
+
+
+Test-Cases: ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+
+

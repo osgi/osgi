@@ -1,10 +1,18 @@
 package org.osgi.test.cases.upnp.tbc;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import org.osgi.test.cases.upnp.tbc.parser.*;
-import org.osgi.test.cases.util.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InterruptedIOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.Vector;
+
+import org.osgi.test.cases.upnp.tbc.parser.XMLParser;
+import org.osgi.test.cases.upnp.tbc.parser.XMLTag;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * 

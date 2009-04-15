@@ -1,7 +1,15 @@
 package org.osgi.test.cases.upnp.tbc;
 
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * 
@@ -21,10 +29,18 @@ public class ControlPoint extends Thread {
 		msocket = new DatagramSocket();
 		running = true;
 		address = InetAddress.getByName(UPnPConstants.UPnPMCAddress);
-		start();
-		sleep(2000);
 	}
 
+	public void start() {
+		super.start();
+
+		try {
+			sleep(2000);
+		}
+		catch (InterruptedException e) {
+			// ignored
+		}
+	}
 	public void send(DatagramPacket pack) {
 		try {
 			msocket.send(pack);

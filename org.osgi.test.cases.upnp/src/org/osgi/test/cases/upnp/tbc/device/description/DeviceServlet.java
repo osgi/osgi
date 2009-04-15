@@ -1,13 +1,25 @@
 package org.osgi.test.cases.upnp.tbc.device.description;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import org.osgi.test.cases.upnp.tbc.*;
-import org.osgi.test.cases.upnp.tbc.device.event.*;
-import org.osgi.test.cases.util.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Date;
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.StringTokenizer;
+
+import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.osgi.test.cases.upnp.tbc.UPnPConstants;
+import org.osgi.test.cases.upnp.tbc.device.event.EventSender;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * 
@@ -153,7 +165,7 @@ public class DeviceServlet extends HttpServlet {
 			if (uri.equals(UPnPConstants.SR_CON)) {
 				String dsi = req.getParameter(UPnPConstants.DSI);
 				String man = req.getHeader(UPnPConstants.N_MAN);
-				if (man == null && !man.startsWith(UPnPConstants.V_MAN)) {
+				if (man == null || !man.startsWith(UPnPConstants.V_MAN)) {
 					genError(res, 500, UPnPConstants.ERR_NM);
 				}
 				String ns = man.substring(man.indexOf(UPnPConstants.V_NS) + 3)

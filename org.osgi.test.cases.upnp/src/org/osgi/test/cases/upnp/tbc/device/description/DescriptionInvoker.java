@@ -1,11 +1,15 @@
 package org.osgi.test.cases.upnp.tbc.device.description;
 
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import org.osgi.test.cases.upnp.tbc.*;
-import org.osgi.test.cases.util.*;
+import java.io.IOException;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Hashtable;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
+
+import org.osgi.test.cases.upnp.tbc.UPnPConstants;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * 
