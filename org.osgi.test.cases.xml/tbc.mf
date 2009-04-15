@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Bundle-Name: test.cases.xml.tbc
-Bundle-Vendor: Espial Group Inc
-Bundle-Version: 4.0
-Bundle-Activator: $(p).tbc.XMLControl
-$(PRIVATE-PACKAGE)
-$(IMPORT-PACKAGE)
-$(EXPORT-PACKAGE)

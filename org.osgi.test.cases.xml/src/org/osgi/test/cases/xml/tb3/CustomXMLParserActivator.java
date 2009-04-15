@@ -1,18 +1,19 @@
 package org.osgi.test.cases.xml.tb3;
 
 import java.util.Hashtable;
-import javax.xml.parsers.*;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.SAXParserFactory;
+
+import junit.framework.Assert;
+
 import org.osgi.framework.Constants;
-import org.osgi.test.cases.util.AssertionFailedError;
 import org.osgi.util.xml.XMLParserActivator;
 
 public class CustomXMLParserActivator extends XMLParserActivator {
-	public CustomXMLParserActivator() {
-	}
-
 	public void setSAXProperties(SAXParserFactory factory, Hashtable props) {
 		if ((factory instanceof SimpleSAXParserFactory) == false) {
-			throw new AssertionFailedError(
+			Assert.fail(
 					"factory is not a SimpleSAXParserFactory");
 		}
 		super.setSAXProperties(factory, props);
@@ -22,7 +23,7 @@ public class CustomXMLParserActivator extends XMLParserActivator {
 
 	public void setDOMProperties(DocumentBuilderFactory factory, Hashtable props) {
 		if ((factory instanceof SimpleDocumentBuilderFactory) == false) {
-			throw new AssertionFailedError(
+			Assert.fail(
 					"factory is not a SimpleDocumentBuilderFactory");
 		}
 		super.setDOMProperties(factory, props);

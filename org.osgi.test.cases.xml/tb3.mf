@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Bundle-Name: XMLTestBundle3
-Bundle-Vendor: Espial Group Inc.
-Bundle-Version: 4.0
-Bundle-Activator: $(p).tb3.CustomXMLParserActivator
-$(IMPORT-PACKAGE)
-$(EXPORT-PACKAGE)
-$(PRIVATE-PACKAGE)
-$(FILE-SECTION)

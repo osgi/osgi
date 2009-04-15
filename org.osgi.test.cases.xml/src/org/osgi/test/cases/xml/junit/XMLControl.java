@@ -25,12 +25,17 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-package org.osgi.test.cases.xml.tbc;
+package org.osgi.test.cases.xml.junit;
 
 import java.util.Vector;
-import javax.xml.parsers.*;
-import org.osgi.framework.*;
-import org.osgi.test.cases.util.DefaultTestBundleControl;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceReference;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.util.xml.XMLParserActivator;
 
 /**

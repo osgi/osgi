@@ -1,0 +1,30 @@
+Bundle-Description: Tests the XML service
+Bundle-Version						: 4.2.0.${project.build}
+
+Private-Package						= org.osgi.test.support.*, \
+	${p}.junit.*
+	
+Export-Package						= \
+	org.osgi.util.xml;-split-package:=merge-first
+
+
+Include-Resource = \
+	tb1.jar, \
+	tb2.jar, \
+	tb3.jar
+	
+Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+
+-buildpath							= \
+    org.osgi.test.support;                  version=project , \
+	org.osgi.util.xml;						version=project	, \
+	com.icl.saxon;			 				version=latest, \
+	osgi;									version=latest	, \
+	ee.minimum; version=latest											, \
+	${junit}
+
+-runbundles							= \
+	org.osgi.impl.bundle.jaxp; version=latest, \
+	
+
+-runproperties = report=true

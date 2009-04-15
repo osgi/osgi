@@ -1,11 +1,10 @@
 package org.osgi.test.cases.xml.tb3;
 
-import javax.xml.parsers.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 public class SimpleDocumentBuilderFactory extends DocumentBuilderFactory {
-	public SimpleDocumentBuilderFactory() {
-	}
-
 	public DocumentBuilder newDocumentBuilder()
 			throws ParserConfigurationException {
 		return null;
