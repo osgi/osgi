@@ -53,7 +53,6 @@ import info.dmtree.DmtAdmin;
 import info.dmtree.DmtException;
 import info.dmtree.DmtSession;
 import info.dmtree.Uri;
-import info.dmtree.security.DmtPermission;
 
 import java.security.MessageDigest;
 import java.util.PropertyPermission;
@@ -80,6 +79,7 @@ import org.osgi.test.cases.dmt.tc2.tbc.Uri.Mangle;
 import org.osgi.test.cases.dmt.tc2.tbc.Uri.ToPath;
 import org.osgi.test.cases.dmt.tc2.tbc.Uri.ToUri;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
+import org.osgi.test.support.Base64Encoder;
 
 public class DmtTestControl extends DefaultTestBundleControl {
 	
