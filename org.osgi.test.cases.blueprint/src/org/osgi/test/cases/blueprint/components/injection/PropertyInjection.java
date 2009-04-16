@@ -28,12 +28,18 @@
 package org.osgi.test.cases.blueprint.components.injection;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Vector;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.TreeSet;
 
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 
@@ -166,6 +172,30 @@ public class PropertyInjection extends BaseTestComponent {
             value.add("$$$$$$ABC$$$$$$");
             value.remove("$$$$$$ABC$$$$$$");
         }
+    }
+
+    public void setArrayList(ArrayList value) {
+        setPropertyValue("arrayList", value, ArrayList.class);
+    }
+
+    public void setLinkedList(LinkedList value) {
+        setPropertyValue("linkedList", value, LinkedList.class);
+    }
+
+    public void setVector(Vector value) {
+        setPropertyValue("vector", value, Vector.class);
+    }
+
+    public void setHashSet(HashSet value) {
+        setPropertyValue("hashSet", value, HashSet.class);
+    }
+
+    public void setLinkedHashSet(LinkedHashSet value) {
+        setPropertyValue("linkedHashSet", value, LinkedHashSet.class);
+    }
+
+    public void setTreeSet(TreeSet value) {
+        setPropertyValue("treeSet", value, TreeSet.class);
     }
 
     // Start of insertion of array property

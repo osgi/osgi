@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+	<type-converters>
+		<component class="org.osgi.test.cases.blueprint.components.injection.ArrayListConverter"/>
+		<component class="org.osgi.test.cases.blueprint.components.injection.LinkedListConverter"/>
+		<component class="org.osgi.test.cases.blueprint.components.injection.VectorConverter"/>
+	</type-converters>
+
+    <component id="arrayList" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="arrayList">
+            <list>
+                <value>abc</value>
+                <value>def</value>
+            </list>
+        </property>
+    </component>
+
+    <component id="linkedList" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="linkedList">
+            <list>
+                <value>abc</value>
+                <value>def</value>
+            </list>
+        </property>
+    </component>
+
+    <component id="vector" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="vector">
+            <list>
+                <value>abc</value>
+                <value>def</value>
+            </list>
+        </property>
+    </component>
+
+    <component id="arrayListFromSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="arrayList">
+            <set>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </set>
+        </property>
+    </component>
+
+    <component id="linkedListFromSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="linkedList">
+            <set>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </set>
+        </property>
+    </component>
+
+    <component id="vectorFromSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="vector">
+            <set>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </set>
+        </property>
+    </component>
+
+    <component id="implicitListFromSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="list">
+            <set>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </set>
+        </property>
+    </component>
+
+</components>
+

@@ -28,8 +28,12 @@ package org.osgi.test.cases.blueprint.tests;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Vector;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.TreeSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -617,6 +621,68 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new ArrayList();
         expected.add(innerProps);
         addPropertyValidator(startEvents, "compNestedProps", "list", expected, List.class);
+
+        controller.run();
+    }
+
+
+	public void testConvertedList() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/converted_list_injection.jar");
+        MetadataEventSet startEvents = controller.getStartEvents();
+
+        // simple list of strings
+        List expected = new ArrayList();
+        expected.add("abc");
+        expected.add("def");
+        addPropertyValidator(startEvents, "arrayList", "arrayList", expected, ArrayList.class);
+        addPropertyValidator(startEvents, "arrayListFromSet", "arrayList", expected, ArrayList.class);
+        addPropertyValidator(startEvents, "implicitListFromSet", "list", expected, List.class);
+
+        // simple list of strings
+        expected = new LinkedList();
+        expected.add("abc");
+        expected.add("def");
+        addPropertyValidator(startEvents, "linkedList", "linkedList", expected, LinkedList.class);
+        addPropertyValidator(startEvents, "linkedListFromSet", "linkedList", expected, LinkedList.class);
+
+        // simple list of strings
+        expected = new Vector();
+        expected.add("abc");
+        expected.add("def");
+        addPropertyValidator(startEvents, "vector", "vector", expected, Vector.class);
+        addPropertyValidator(startEvents, "vectorFromSet", "vector", expected, Vector.class);
+
+        controller.run();
+    }
+
+
+	public void testConvertedSet() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/converted_set_injection.jar");
+        MetadataEventSet startEvents = controller.getStartEvents();
+
+        // simple list of strings
+        Set expected = new HashSet();
+        expected.add("abc");
+        expected.add("def");
+        addPropertyValidator(startEvents, "hashSet", "hashSet", expected, HashSet.class);
+        addPropertyValidator(startEvents, "hashSetFromList", "hashSet", expected, HashSet.class);
+        addPropertyValidator(startEvents, "implicitSetFromList", "set", expected, Set.class);
+
+        // simple list of strings
+        expected = new LinkedHashSet();
+        expected.add("abc");
+        expected.add("def");
+        addPropertyValidator(startEvents, "linkedHashSet", "linkedHashSet", expected, LinkedHashSet.class);
+        addPropertyValidator(startEvents, "linkedHashSetFromList", "linkedHashSet", expected, LinkedHashSet.class);
+
+        // simple list of strings
+        expected = new TreeSet();
+        expected.add("abc");
+        expected.add("def");
+        addPropertyValidator(startEvents, "treeSet", "treeSet", expected, TreeSet.class);
+        addPropertyValidator(startEvents, "treeSetFromList", "treeSet", expected, TreeSet.class);
 
         controller.run();
     }
