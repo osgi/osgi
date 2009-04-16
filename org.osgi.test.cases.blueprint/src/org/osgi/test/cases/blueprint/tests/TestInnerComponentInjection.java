@@ -1,28 +1,17 @@
 /*
- * $Id$
+ * Copyright (c) IBM Corporation (2009). All Rights Reserved.
  *
- * Copyright (c) The OSGi Alliance (2009). All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * Implementation of certain elements of the OSGi Specification may be subject
- * to third party intellectual property rights, including without limitation,
- * patent rights (such a third party may or may not be a member of the OSGi
- * Alliance). The OSGi Alliance is not responsible and shall not be held
- * responsible in any manner for identifying or failing to identify any or all
- * such third party intellectual property rights.
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * This document and the information contained herein are provided on an "AS IS"
- * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
- * HEREIN WILL NOT INFRINGE ANY RIGHTS AND ANY IMPLIED WARRANTIES OF
- * MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL THE
- * OSGI ALLIANCE BE LIABLE FOR ANY LOSS OF PROFITS, LOSS OF BUSINESS, LOSS OF
- * USE OF DATA, INTERRUPTION OF BUSINESS, OR FOR DIRECT, INDIRECT, SPECIAL OR
- * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
- * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
- * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
- *
- * All Company, brand and product names may be trademarks that are the sole
- * property of their respective owners. All rights reserved.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package org.osgi.test.cases.blueprint.tests;
@@ -498,7 +487,7 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         controller.run();
     }
 
-    
+
     private TestComponentValue makeTestComponentValue(Class innerComponentClass, String factoryMethodName,
             Class innerArgTargetType, Class innerArgValueType, String innerArgSource){
         return new TestComponentValue(
@@ -510,20 +499,20 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
                 )
         );
     }
-    
+
     // Collection Test
     public void testCollectionInjection() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(), getWebServer()
                 + "www/inner_component_collection_injection.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
-        
+
         // List - meta
         TestComponentValue testComponentValue1 = this.makeTestComponentValue(ConstructorInjection.class, null, null, null, "compInner1");
         TestComponentValue testComponentValue2 = this.makeTestComponentValue(ConstructorInjection.class, null, null, null, "compInner2");
         startEvents.addValidator(
                 new ConstructorMetadataValidator(
-                        "compInnerList", 
-                        new TestParameter[] { 
+                        "compInnerList",
+                        new TestParameter[] {
                                 new TestParameter(
                                         new TestListValue(
                                                 new TestValue[] { testComponentValue1, testComponentValue2 }
@@ -539,10 +528,10 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         expectedList.add(inner1);
         expectedList.add(inner2);
         this.addConstructorValueValidator(startEvents, "compInnerList", expectedList, List.class);
-        
 
-        
-        
+
+
+
         // Set - meta
         TestComponentValue testComponentValue3 = this.makeTestComponentValue(ConstructorInjection.class, null, null, null, "compInner3");
         TestComponentValue testComponentValue4 = new TestComponentValue(
@@ -555,8 +544,8 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         );
         startEvents.addValidator(
                 new ConstructorMetadataValidator(
-                        "compInnerSet", 
-                        new TestParameter[] { 
+                        "compInnerSet",
+                        new TestParameter[] {
                                 new TestParameter(
                                         new TestSetValue(
                                                 new TestValue[] { testComponentValue3, testComponentValue4 }
@@ -565,8 +554,8 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
                         }
                 )
         );
-        
-        
+
+
         // Set - value
         ConstructorInjection inner3 = new ConstructorInjection("compInner3");
         PropertyInjection inner4 = new PropertyInjection();
@@ -576,9 +565,9 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         expectedSet.add(inner4);
         this.addConstructorValueValidator(startEvents, "compInnerSet", expectedSet, Set.class);
 
-        
-        
-        // Map - meta 
+
+
+        // Map - meta
         TestComponentValue compInnerEntryKey1 = this.makeTestComponentValue(ConstructorInjection.class, null, null, null, "compInnerEntryKey1");
         TestComponentValue compInnerEntryValue1 = this.makeTestComponentValue(ConstructorInjection.class, null, null, null, "compInnerEntryValue1");
         TestComponentValue compInnerEntryKey2 = new TestComponentValue(
@@ -597,11 +586,11 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
                         new TestProperty[] { new StringProperty("string", null, "compInnerEntryValue2") }
                         )
                 );
-        
+
         startEvents.addValidator(
                 new ConstructorMetadataValidator(
-                        "compInnerMap", 
-                        new TestParameter[] { 
+                        "compInnerMap",
+                        new TestParameter[] {
                                 new TestParameter(
                                         new TestMapValue(
                                                 new MapValueEntry[] {
@@ -613,25 +602,25 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
                         }
                 )
         );
-        
-        
-        
-        
+
+
+
+
         // Map - value
         ConstructorInjection innerKey1 = new ConstructorInjection("compInnerEntryKey1");
         ConstructorInjection innerValue1 = new ConstructorInjection("compInnerEntryValue1");
         PropertyInjection innerKey2 = new PropertyInjection();
         innerKey2.setString("compInnerEntryKey2");
-        PropertyInjection innerValue2 = new PropertyInjection();     
+        PropertyInjection innerValue2 = new PropertyInjection();
         innerValue2.setString("compInnerEntryValue2");
-        
+
         Map expectedMap = new HashMap();
         expectedMap.put(innerKey1, innerValue1);
         expectedMap.put(innerKey2, innerValue2);
-        
+
         this.addConstructorValueValidator(startEvents, "compInnerMap", expectedMap, Map.class);
-        
-        
+
+
         controller.run();
     }
 }
