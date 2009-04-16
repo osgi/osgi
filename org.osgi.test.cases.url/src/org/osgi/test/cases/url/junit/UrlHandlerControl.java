@@ -10,6 +10,7 @@
  */
 package org.osgi.test.cases.url.junit;
 
+import java.io.InputStream;
 import java.net.ContentHandler;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -91,6 +92,9 @@ public class UrlHandlerControl extends OSGiTestCase {
 	}
 
 	private void unregisterService(ServiceRegistration reg) {
+		if (reg == null) {
+			return;
+		}
 		try {
 			reg.unregister();
 		}
@@ -105,8 +109,12 @@ public class UrlHandlerControl extends OSGiTestCase {
 	 * Test accessing a url when there is no associated url handler for it
 	 */
 	public void testAccessingUrlWhenNoHandlerRegistered() throws Exception {
+		urlHandlerSerReg1.unregister();
+		urlHandlerSerReg2.unregister();
 		try {
-			new URL(protocol1 + "://test");
+			String url = protocol1 + "://test";
+			new URL(url);
+			fail("url creation should have failed: " + url);
 		}
 		catch (MalformedURLException e) {
 			// expected
@@ -141,12 +149,12 @@ public class UrlHandlerControl extends OSGiTestCase {
 	/**
 	 * Test getting the content after registering a content handler for it
 	 */
-	public void testContentHandlerAfterRegistering() throws Exception {
+	public void testContentHandlerWhenHandlerRegistered() throws Exception {
 		URL url = new URL(protocol1 + "://test");
 		Object ob = url.getContent();
 		assertEquals("Get content", "CustomContentHandler1", ob);
 	}
-
+	
 	// ******************************************************
 	// ******************************************************
 	/**
@@ -199,10 +207,11 @@ public class UrlHandlerControl extends OSGiTestCase {
 		// unregister the renaming handler
 		contentHandlerSerReg1.unregister();
 		url = new URL(protocol1 + "://test");
-		ob = url.getContent();
-		// should return the input stream from cuntomurlconn2
-		Object reqd = url.openConnection().getInputStream();
-		assertEquals("Get content should return input stream", reqd, ob);
+		InputStream in = (InputStream) url.getContent();
+		byte[] buf = new byte[in.available()];
+		in.read(buf);
+		assertEquals("Get content should return input stream",
+				"CustomUrlConnection1", new String(buf));
 	}
 
 	// ******************************************************
@@ -222,7 +231,9 @@ public class UrlHandlerControl extends OSGiTestCase {
 		assertEquals("Opening connection", reqd, con);
 		urlHandlerSerReg1.unregister();
 		try {
-			new URL(protocol1 + "://test");
+			String u = protocol1 + "://test";
+			new URL(u);
+			fail("URL creation did not fail as expected: " + u);
 		}
 		catch (MalformedURLException e) {
 			// expected
@@ -232,6 +243,7 @@ public class UrlHandlerControl extends OSGiTestCase {
 		}
 		try {
 			url.toExternalForm();
+			fail("toExternalForm did not fail as expected");
 		}
 		catch (IllegalStateException e) {
 			// expected

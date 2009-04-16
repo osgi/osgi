@@ -10,12 +10,14 @@
  */
 package org.osgi.test.cases.url.junit;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
 public class CustomUrlConnection1 extends URLConnection {
+	private InputStream	in;
 	public CustomUrlConnection1(URL url) {
 		super(url);
 	}
@@ -25,10 +27,13 @@ public class CustomUrlConnection1 extends URLConnection {
 	}
 
 	public void connect() throws IOException {
-		// empty
+		if (in == null) {
+			in = new ByteArrayInputStream("CustomUrlConnection1".getBytes());
+		}
 	}
 
 	public InputStream getInputStream() throws IOException {
-		return null;
+		connect();
+		return in;
 	}
 }

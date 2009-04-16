@@ -17,8 +17,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class CustomUrlConnection2 extends URLConnection {
-	private static InputStream	ins	= new ByteArrayInputStream("OSGiTest"
-											.getBytes());
+	private InputStream	in;
 
 	public CustomUrlConnection2(URL url) {
 		super(url);
@@ -29,10 +28,13 @@ public class CustomUrlConnection2 extends URLConnection {
 	}
 
 	public InputStream getInputStream() throws IOException {
-		return ins;
+		connect();
+		return in;
 	}
 
 	public void connect() throws IOException {
-		// empty
+		if (in == null) {
+			in = new ByteArrayInputStream("OSGiTest".getBytes());
+		}
 	}
 }
