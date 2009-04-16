@@ -225,42 +225,49 @@ public class PrefsControl extends DefaultTestBundleControl {
 		try {
 			try {
 				theNode.get(null, "(empty)");
+				fail("expected NullPointerException");
 			}
 			catch (NullPointerException e) {
 				// expected
 			}
 			try {
 				theNode.getBoolean(null, false);
+				fail("expected NullPointerException");
 			}
 			catch (NullPointerException e) {
 				// expected
 			}
 			try {
 				theNode.getByteArray(null, new byte[] {});
+				fail("expected NullPointerException");
 			}
 			catch (NullPointerException e) {
 				// expected
 			}
 			try {
 				theNode.getDouble(null, 0.0d);
+				fail("expected NullPointerException");
 			}
 			catch (NullPointerException e) {
 				// expected
 			}
 			try {
 				theNode.getFloat(null, 0.0f);
+				fail("expected NullPointerException");
 			}
 			catch (NullPointerException e) {
 				// expected
 			}
 			try {
 				theNode.getInt(null, 0);
+				fail("expected NullPointerException");
 			}
 			catch (NullPointerException e) {
 				// expected
 			}
 			try {
 				theNode.getLong(null, 0l);
+				fail("expected NullPointerException");
 			}
 			catch (NullPointerException e) {
 				// expected
@@ -292,54 +299,63 @@ public class PrefsControl extends DefaultTestBundleControl {
 		try {
 			try {
 				theNode.put("stringkey", null);
+				fail("expected NullPointerException");
 			}
 			catch (NullPointerException e) {
 				// expected
 			}
 			try {
 				theNode.putByteArray("bytearraykey", null);
+				fail("expected NullPointerException");
 			}
 			catch (NullPointerException e) {
 				// expected
 			}
 			try {
 				theNode.put(null, "(empty)");
+				fail("expected NullPointerException");
 			}
 			catch (NullPointerException e) {
 				// expected
 			}
 			try {
 				theNode.putBoolean(null, false);
+				fail("expected NullPointerException");
 			}
 			catch (NullPointerException e) {
 				// expected
 			}
 			try {
 				theNode.putByteArray(null, new byte[] {});
+				fail("expected NullPointerException");
 			}
 			catch (NullPointerException e) {
 				// expected
 			}
 			try {
 				theNode.putDouble(null, 0.0d);
+				fail("expected NullPointerException");
 			}
 			catch (NullPointerException e) {
 				// expected
 			}
 			try {
 				theNode.putFloat(null, 0.0f);
+				fail("expected NullPointerException");
 			}
 			catch (NullPointerException e) {
 				// expected
 			}
 			try {
 				theNode.putInt(null, 0);
+				fail("expected NullPointerException");
 			}
 			catch (NullPointerException e) {
 				// expected
 			}
 			try {
 				theNode.putLong(null, 0l);
+				fail("expected NullPointerException");
 			}
 			catch (NullPointerException e) {
 				// expected

@@ -271,23 +271,24 @@ public class MeasurementControl extends TestCase {
 		// Test ArithmeticException case when the unit is not compatible
 		try {
 			mes1.compareTo(new Measurement(100.0, 1.0, Unit.kg, 1004));
+			fail("compareTo an uncompatible unit");
 		}
 		catch (ArithmeticException e) {
 			// expected
 		}
 		catch (Exception e) {
-			fail("CompareTo an uncompatible unit", e);
+			fail("compareTo an uncompatible unit", e);
 		}
 		// Test ClassCastException case when the object passed as parameter
 		// is not a <tt>Measurement</tt> object
 		try {
 			mes1.compareTo(new State(100, "oneState"));
+			fail("CompareTo a different class");
 		}
 		catch (ClassCastException e) {
 			// expected
 		}
 		catch (Exception e) {
-			// Check that we got the correct exception
 			fail("CompareTo a different class", e);
 		}
 	}
