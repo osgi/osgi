@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="project" default="publish"> 
+	<property name="javac.source" value="5"/>
+	<import file="../cnf/build.xml"/>
+	
+	<target name="compile" depends="init" if="project.sourcepath">
+		<echo>${project.sourcepath} ${project.output}</echo>
+		<mkdir dir="${project.output}"/>
+		<javac fork="yes" 
+		executable="${javac}" 
+		srcdir="${project.sourcepath}" 
+			destdir="${project.output}" 
+			classpath="${project.buildpath}" 
+			deprecation="true" 
+			listfiles="true" 
+			target="1.5" 
+			source="1.5" 
+			debug="${javac.debug}" 
+			includeAntRuntime="no" 
+			verbose="${verbose}" />
+	</target>	
+		
+	<target name="build-war" depends="build-war2">
+		<echo>org.osgi.test.cases.webcontainer.basedir is set to ${projectdir}</echo>
+	</target>
+	
+	<target name="build-war2" depends="compile">
+		<echo>Building tw2.war file</echo>
+		<war destfile="resources/tw2/tw2.war" webxml="resources/tw2/WebContent/WEB-INF/web.xml">
+			<fileset dir="resources/tw2/WebContent/"/>
+			<classes dir="src/">
+				<include name="org/osgi/test/cases/webcontainer/tw2/**"/>
+				<include name="org/osgi/test/cases/webcontainer/util/**"/>
+			</classes>
+		</war>
+	</target>
+	
+	<target name="jars" depends="build-war,-mktarget,jars-btool,jars-bnd,copy-from"/>
+		
+	<target name="clean" depends="init">
+		<delete quiet="true" includeEmptyDirs="true" verbose="${verbose}">
+			<fileset dir="${project.output}" includes="**/*.class" />
+			<fileset dir="${target}" />
+			<fileset dir="resources" includes="**/*.war" />
+		</delete>
+	</target>
+
+</project>

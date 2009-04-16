@@ -1,0 +1,5 @@
+Bundle-ManifestVersion: 				2
+Bundle-SymbolicName: 					${p}.util
+Bundle-Name:                            ${p}.util
+Bundle-Version:                         4.2
+Private-Package:                        ${p}.util

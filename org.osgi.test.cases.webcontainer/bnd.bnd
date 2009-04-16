@@ -1,0 +1,44 @@
+# in order to build with this bnd file, i copied the geronimo servlet spec and annotation spec to the licensed/repo
+# this needs to be updated when the RFC 66 RI is in svn
+Bundle-Description: OSGi Web Container RFC 66 Compliance Test
+Bundle-Version: 4.2.0.${project.build}
+Bundle-RequiredExecutionEnvironment = J2SE-1.5
+
+Private-Package						= org.osgi.test.support.*, \
+	${p}.annotation.*, \
+	${p}.util.*
+
+Include-Resource					= \
+	resources/tw2/tw2.war, \
+	util.jar
+	
+Import-Package = \
+	javax.servlet, \
+	javax.servlet.http, \
+	javax.annotation, \
+ 	*
+ 	
+Export-Package =\
+	org.osgi.test.cases.webcontainer;version=1.0, \
+	javax.annotation; version=1.0, \
+	javax.servlet; version=2.5, \
+	javax.servlet.http; version=2.5
+	
+-buildpath							= \
+    org.apache.geronimo.specs.geronimo-servlet_2.5_spec;			version=1.2, \
+    org.apache.geronimo.specs.geronimo-annotation_1.0_spec;version=1.1.1, \
+	ee.j2se;								version=1.4, \
+	osgi;									version=4.2, \
+	org.osgi.test.support;          	    version=project , \
+	${junit}
+
+-runbundles						= \
+	org.osgi.impl.bundle.servlet;		version=2.1
+	
+-runproperties = report=true, \
+	org.osgi.service.webcontainer.hostname=127.0.0.1, \
+	org.osgi.service.webcontainer.port=8080
+
+Test-Cases						= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+
+	
