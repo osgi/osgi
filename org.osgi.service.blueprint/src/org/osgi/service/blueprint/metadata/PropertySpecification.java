@@ -19,24 +19,23 @@ package org.osgi.service.blueprint.metadata;
  * Metadata describing a property to be injected. Properties are defined
  * following JavaBeans conventions.
  */
-public interface PropertyMetadata {
-	
+public interface PropertySpecification {
+
 	/**
 	 * The name of the property to be injected, following JavaBeans conventions.
-	 * 
+	 *
 	 * Defined in the <code>name</code> attribute.
-	 * 
+	 *
 	 * @return the property name.
 	 */
 	String getName();
-	
+
 	/**
-	 * The value to inject the property with.
-	 * 
+	 * The metadata for the value to inject the property with.
+	 *
 	 * Defined in the <code>value</code> attribute or inlined component.
-	 * 
-	 * 
-	 * @return the property value.
+	 *
+	 * @return the metadata for the property value.
 	 */
-	Metadata getValue();
+	Metadata getValueMetadata();
 }
