@@ -143,7 +143,9 @@ public interface ConditionalPermissionAdmin {
 	 * <li>Its location is the empty string</li>
 	 * <li>Its state is UNINSTALLED</li>
 	 * <li>It has no headers</li>
+	 * <li>It has the empty version (0.0.0)</li>
 	 * <li>Its last modified time=0</li>
+	 * <li>Many methods will throw <code>IllegalStateException</code> because the state is UNINSTALLED</li>
 	 * <li>All other methods return a <code>null</code></li>
 	 * </ul> 
 	 * @param signers The signers for which to return an Access Control Context.
