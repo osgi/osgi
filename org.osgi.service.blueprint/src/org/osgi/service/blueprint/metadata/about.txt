@@ -1,0 +1,55 @@
+This a renamed version of the reflect package. The following rules are strictly followed:
+
+- Concrete elements are presented as camel-cased class names, suffixed with metadata
+- Attributes are also camel cased (e.g. registration-listener is RegistrationListener)
+- Where name was used, but id was meant, it is replaced in id
+- Methods that a name of something (getMethodName) are suffixed with Name
+- Consistent use of service-reference for reference, ref-list, ref-set (which is represented in their types now)
+- Methods that return metadata, end in getXXMethodMetadata
+- Value has become Metadata. The top level Metadata is now what used to be Value.
+	- This frees up ValueMetadata for the value element
+	- It removes the need for a ComponentValue, all components are values because they are all Metadata
+	- It allows more type safety
+		TargetComponentMetadata		components that can be used as target, e.g. listener
+		ComponentMetadata			All components
+		NonNullMetadata				All Metadata except for NullMetadata (for keys)
+- All collections (which includes map) are now implemented as CollectionMetadata, as we discussed.
+  MapMetadata and PropsMetadata inherit from this, the however return a EntryMetadata for the values.
+- ArgumentMetadata, ListenerMetadata, RegistrattionListenerMetadata do not extend Metadata because
+  they can only be used in a very specific context.
+- Proposed change for constructor-arg is done
+- Renamed all constants to match their value in the XML
+- Added some Javadoc but lots of work is left :-(
+
+The following reflects the type inheritance (.=Metadata for brevity)
+
+          +-- Null.                                            
+          |                                                   
+          |                                                    +--- Bean.
+Metadata--+-- NonNull. -+-- Component.   -+-- TargetComponent -+--- Service.
+                        |                 |                    +-+- Reference.
+                        |                 |                      |
+                        |                 +-- ServiceReference.--+- RefCollection.
+                        |               
+                        +-- Value.
+                        +-- Collection.---+-- Map.
+                                          +-- Props.
+            
+In the schema I found the following issues:
+- interfaces was defined as a TsetListArray type, which would allow non-string values
+- I am a bit surprised that a props can only hold strings, I would expect that this
+  was just a map where the keys/values are converted to strings?
+- The schema is not taking advantage of the typing of the attributes and defining the
+  handling of whitespace. I.e. most xsd:string should be xsd:NMTOKEN for example, or
+  better we need a subtype that validates the value for class names, method names, ids, etc.
+- Someone needs to verify that we can really extend the schema as we do for other OSGi schemas.
+  I feel the namespace option (which requires strict validation) and the extension
+  rules that BJ has defined are interacting? For example, in several places we restrict the
+  types that can be used, but then allow an anytype. I guess the ##other indicates this
+  is only for other namespaces, but then we can no extend the spec easily. Complicated :-(
+  
+
+Renames that would require schema changes:
+- Rename props to properties and prop to entry
+- Rename listener to reference-listener
+- Merge ref-list and ref-set into reference-collection (or, leave it up to type conversion which would be my preference)
