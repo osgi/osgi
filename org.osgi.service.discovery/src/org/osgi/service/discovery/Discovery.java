@@ -17,15 +17,16 @@
 package org.osgi.service.discovery;
 
 /**
- * Discovery registers a service implementing this interface. This service is
- * registered with extra properties identified at the beginning of this
- * interface to denote the name of the product providing Discovery
- * functionality, its version, vendor, used protocols etc.. 
- * 
+ * Every Discovery Provider registers a service implementing this interface.
+ * This service is registered with extra properties identified at the beginning
+ * of this interface to denote the name of the product providing Discovery
+ * functionality, its version, vendor, used protocols etc..
+ * <p>
  * Discovery allows to publish services exposed for remote access as well as to
  * search for remote services. Register a {@link ServicePublication} service in
  * order to publish service metadata and or a {@link DiscoveredServiceTracker}
- * service in order to search for remote services.<BR>
+ * service in order to search for remote services.
+ * <p>
  * Discovery service implementations usually rely on some discovery protocols or
  * other information distribution means.
  * 
@@ -35,24 +36,32 @@ package org.osgi.service.discovery;
 public interface Discovery {
 
 	/**
-	 * Service Registration property for the name of the Discovery product.
+	 * ServiceRegistration property for the name of the Discovery product.
+	 * <p>
+	 * Value of this property is of type <code>String</code>.
 	 */
-	static final String PROP_KEY_PRODUCT_NAME = "osgi.remote.discovery.product";
+	static final String	PROP_KEY_PRODUCT_NAME			= "osgi.remote.discovery.product";
 
 	/**
-	 * Service Registration property for the version of the Discovery product.
+	 * ServiceRegistration property for the version of the Discovery product.
+	 * <p>
+	 * Value of this property is of type <code>String</code>.
 	 */
-	static final String PROP_KEY_PRODUCT_VERSION = "osgi.remote.discovery.product.version";
+	static final String	PROP_KEY_PRODUCT_VERSION		= "osgi.remote.discovery.product.version";
 
 	/**
-	 * Service Registration property for the Discovery product vendor name.
+	 * ServiceRegistration property for the Discovery product vendor name.
+	 * <p>
+	 * Value of this property is of type <code>String</code>.
 	 */
-	static final String PROP_KEY_VENDOR_NAME = "osgi.remote.discovery.vendor";
+	static final String	PROP_KEY_VENDOR_NAME			= "osgi.remote.discovery.vendor";
 
 	/**
-	 * Service Registration property that lists the discovery protocols used by
-	 * this Discovery service. Value of this property is of type Collection (<?
-	 * extends String>).
+	 * ServiceRegistration property that lists the discovery protocols used by
+	 * this Discovery service.
+	 * <p>
+	 * Value of this property is of type
+	 * <code>Collection (&lt;? extends String&gt;)</code>.
 	 */
-	static final String PROP_KEY_SUPPORTED_PROTOCOLS = "osgi.remote.discovery.supported_protocols";
+	static final String	PROP_KEY_SUPPORTED_PROTOCOLS	= "osgi.remote.discovery.supported_protocols";
 }

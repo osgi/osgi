@@ -20,7 +20,7 @@ import java.util.Collection;
 
 /**
  * Interface for notification on discovered services.
- * 
+ * <p>
  * <code>DiscoveredServiceNotification</code> objects are immutable.
  * 
  * @Immutable
@@ -29,44 +29,44 @@ import java.util.Collection;
 public interface DiscoveredServiceNotification {
 
 	/**
-	 * Notification indicating that a service matching the listening criteria has been
-	 * discovered.
+	 * Notification indicating that a service matching the listening criteria
+	 * has been discovered.
 	 * <p>
 	 * The value of <code>AVAILABLE</code> is 0x00000001.
 	 */
 	public final static int	AVAILABLE			= 0x00000001;
 
 	/**
-	 * Notification indicating that the properties of a previously discovered service
-	 * have changed.
+	 * Notification indicating that the properties of a previously discovered
+	 * service have changed.
 	 * <p>
 	 * The value of <code>MODIFIED</code> is 0x00000002.
 	 */
 	public final static int	MODIFIED			= 0x00000002;
 
 	/**
-	 * Notification indicating that a previously discovered service is no longer known
-	 * to discovery.
+	 * Notification indicating that a previously discovered service is no longer
+	 * known to <code>Discovery</code>.
 	 * <p>
 	 * The value of <code>UNAVAILABLE</code> is 0x00000004.
 	 */
 	public final static int	UNAVAILABLE			= 0x00000004;
 
 	/**
-	 * Notification indicating that the properties of a previously discovered service
-	 * have changed and the new properties no longer match the listener's
-	 * filter.
+	 * Notification indicating that the properties of a previously discovered
+	 * service have changed and the new properties no longer match the
+	 * listener's filter.
 	 * <p>
 	 * The value of <code>MODIFIED_ENDMATCH</code> is 0x00000008.
 	 */
 	public final static int	MODIFIED_ENDMATCH	= 0x00000008;
 
 	/**
-	 * Returns information currently known to Discovery regarding the service
-	 * endpoint.
-	 * <p>
+	 * Returns information currently known to <code>Discovery</code> regarding
+	 * the service endpoint.
 	 * 
-	 * @return metadata of the service this Discovery notifies about.
+	 * @return metadata of the service <code>Discovery</code> notifies about. Is
+	 *         never <code>null</code>.
 	 */
 	ServiceEndpointDescription getServiceEndpointDescription();
 
@@ -85,20 +85,24 @@ public interface DiscoveredServiceNotification {
 
 	/**
 	 * Returns interface name criteria of the {@link DiscoveredServiceTracker}
-	 * object matching with the interfaces of the ServiceEndpointDescription and
-	 * thus caused the notification.
+	 * object matching with the interfaces of the
+	 * <code>ServiceEndpointDescription</code> and thus caused the notification.
 	 * 
-	 * @return matching interface name criteria of the
-	 *         {@link DiscoveredServiceTracker} object being notified.
+	 * @return <code>Collection (&lt;? extends String&gt;)</code> of matching interface name criteria of the
+	 *         <code>DiscoveredServiceTracker</code> object being notified, or
+	 *         an empty collection if notification hasn't been caused by a
+	 *         matching interface name criteria.
 	 */
-	Collection/* <String> */getInterfaces();
+	Collection/* <? extends String> */getInterfaces();
 
 	/**
-	 * Returns filters of the {@link DiscoveredServiceTracker} object matching
-	 * with the ServiceEndpointDescription and thus caused the notification.
+	 * Returns filters of the <code>DiscoveredServiceTracker</code> object
+	 * matching with the properties of the
+	 * <code>ServiceEndpointDescription</code> and thus caused the notification.
 	 * 
-	 * @return matching filters of the {@link DiscoveredServiceTracker} object
-	 *         being notified.
+	 * @return <code>Collection (&lt;? extends String&gt;)</code> of matching filters of the <code>DiscoveredServiceTracker</code>
+	 *         object being notified, or an empty collection if notification
+	 *         hasn't been caused by a matching filter criteria.
 	 */
-	Collection/* <String> */getFilters();
+	Collection/* <? extends String> */getFilters();
 }
