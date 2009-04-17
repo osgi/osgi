@@ -231,14 +231,13 @@ public interface PackageAdmin {
 	public Bundle[] getFragments(Bundle bundle);
 
 	/**
-	 * Returns an array containing the host bundle to which the specified
-	 * fragment bundle is attached or <code>null</code> if the specified bundle
-	 * is not attached to a host or is not a fragment bundle. A fragment may
-	 * only be attached to a single host bundle.
+	 * Returns an array containing the host bundles to which the specified
+	 * fragment bundle is attached or <code>null</code> if the bundle is not a 
+	 * fragment or has no hosts attached.
 	 * 
 	 * @param bundle The bundle whose host bundle is to be returned.
 	 * @return An array containing the host bundle or <code>null</code> if the
-	 *         bundle does not have a host bundle.
+	 *         bundle does not have any host bundles or is not a fragment.
 	 * @throws IllegalArgumentException If the specified <code>Bundle</code> was
 	 *         not created by the same framework instance that registered this
 	 *         <code>PackageAdmin</code> service.
