@@ -20,22 +20,22 @@ import java.util.List;
 /**
  * A java.util.Properties based value. The properties are defined as string to
  * string. This means that the actual value can be returned.
- * 
+ *
  * ### I do not like it that you loose the original order. And potential errors
  * (like duplicate keys). I think this one should just go away. The
- * CollectionMetadata has a collection type so the instantiation can ensure 
- * 
+ * CollectionMetadata has a collection type so the instantiation can ensure
+ *
  * Defined in the <code>props</code> element.
- * 
+ *
  */
 public interface PropsMetadata extends NonNullMetadata {
 
 	/**
 	 * This is the same as getValuesMetadata but more type safe.
-	 * 
+	 *
 	 * Defined in <code>prop</code> sub elements.
-	 * 
+	 *
 	 * @return
 	 */
-	List/*<EntryMetadata>*/ getEntriesMetadata();
+	List/*<MapEntry>*/ getEntries();
 }

@@ -20,5 +20,5 @@ package org.osgi.service.blueprint.metadata;
  * The name itself will be injected, not the component that the name refers to.
  *
  */
-public interface RefIdMetadata extends RefMetadata {	
+public interface IdRefMetadata extends RefMetadata {
 }

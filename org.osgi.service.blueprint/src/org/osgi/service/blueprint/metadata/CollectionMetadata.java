@@ -23,27 +23,27 @@ import java.util.List;
  */
 
 public interface CollectionMetadata extends Metadata {
-	
+
 	/**
 	 * Provide the interface that this collection must implement.
-	 * 
-	 * This is used for Arrays (Object[]), Set, Map, and List. This information
+	 *
+	 * This is used for Arrays (Object[]), Set, and List. This information
 	 * is encoded in the element name.
-	 *  
-	 * 
+	 *
+	 *
 	 * @return The interface class that the collection must implement.
 	 */
 	Class/*<?>*/ getCollectionClass();
-	
+
     /**
      * The value-type specified for the array
-     * 
+     *
      * The <code>value-type</code> attribute.
      */
-	String getValueType();
+	String getValueTypeName();
 
     /**
      * The of Metadata objects that describe the value.
      */
-	List /*<Metadata>*/ getValuesMetadata();
+	List /*<Metadata>*/ getValues();
 }

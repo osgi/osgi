@@ -23,9 +23,8 @@ public interface RefMetadata extends NonNullMetadata {
 	/**
 	 * The name of the referenced component.
 	 * Defined in the <code>component</code> attribute.
-	 * 
-	 * ### should this be getComponent?
+	 *
 	 */
 	String getComponentId();
-	
+
 }

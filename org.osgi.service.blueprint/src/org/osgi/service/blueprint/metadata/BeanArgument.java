@@ -19,7 +19,7 @@ package org.osgi.service.blueprint.metadata;
  * Metadata used in a Bean Component to inject arguments in a method or
  * constructor. This metadata class describes the <code>argument</element>
  */
-public interface ArgumentSpecification {
+public interface BeanArgument {
 
 	/**
 	 * The metadata for the value to inject into the parameter.
