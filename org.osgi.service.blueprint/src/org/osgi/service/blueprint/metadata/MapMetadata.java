@@ -23,7 +23,7 @@ import java.util.List;
  * A map is defined in the <code>map</code> element.
  *
  */
-public interface MapMetadata extends CollectionMetadata {
+public interface MapMetadata extends Metadata {
 	/**
 	 * The key-type specified for map keys, or null if none given
 	 *
