@@ -483,24 +483,6 @@ public interface Bundle {
 	public void stop() throws BundleException;
 
 	/**
-	 * Updates this bundle.
-	 * 
-	 * <p>
-	 * This method performs the same function as calling
-	 * {@link #update(InputStream)} with a <code>null</code> InputStream.
-	 * 
-	 * @throws BundleException If the update fails.
-	 * @throws IllegalStateException If this bundle has been uninstalled or this
-	 *         bundle tries to change its own state.
-	 * @throws SecurityException If the caller does not have the appropriate
-	 *         <code>AdminPermission[this,LIFECYCLE]</code> for both the current
-	 *         bundle and the updated bundle, and the Java Runtime Environment
-	 *         supports permissions.
-	 * @see #update(InputStream)
-	 */
-	public void update() throws BundleException;
-
-	/**
 	 * Updates this bundle from an <code>InputStream</code>.
 	 * 
 	 * <p>
@@ -588,6 +570,24 @@ public interface Bundle {
 	 * @see #start()
 	 */
 	public void update(InputStream input) throws BundleException;
+
+	/**
+	 * Updates this bundle.
+	 * 
+	 * <p>
+	 * This method performs the same function as calling
+	 * {@link #update(InputStream)} with a <code>null</code> InputStream.
+	 * 
+	 * @throws BundleException If the update fails.
+	 * @throws IllegalStateException If this bundle has been uninstalled or this
+	 *         bundle tries to change its own state.
+	 * @throws SecurityException If the caller does not have the appropriate
+	 *         <code>AdminPermission[this,LIFECYCLE]</code> for both the current
+	 *         bundle and the updated bundle, and the Java Runtime Environment
+	 *         supports permissions.
+	 * @see #update(InputStream)
+	 */
+	public void update() throws BundleException;
 
 	/**
 	 * Uninstalls this bundle.
@@ -688,11 +688,9 @@ public interface Bundle {
 	 * 
 	 * @return A <code>Dictionary</code> object containing this bundle's
 	 *         Manifest headers and values.
-	 * 
 	 * @throws SecurityException If the caller does not have the
 	 *         appropriate <code>AdminPermission[this,METADATA]</code>, and
 	 *         the Java Runtime Environment supports permissions.
-	 * 
 	 * @see Constants#BUNDLE_LOCALIZATION
 	 */
 	public Dictionary/* <String,String> */getHeaders();
@@ -812,13 +810,11 @@ public interface Bundle {
 	 * the same set of permissions.
 	 * 
 	 * @param permission The permission to verify.
-	 * 
 	 * @return <code>true</code> if this bundle has the specified permission
 	 *         or the permissions possessed by this bundle imply the specified
 	 *         permission; <code>false</code> if this bundle does not have the
 	 *         specified permission or <code>permission</code> is not an
 	 *         <code>instanceof</code> <code>java.security.Permission</code>.
-	 * 
 	 * @throws IllegalStateException If this bundle has been
 	 *         uninstalled.
 	 */
@@ -828,8 +824,8 @@ public interface Bundle {
 	 * Find the specified resource from this bundle's class loader.
 	 * 
 	 * This bundle's class loader is called to search for the specified
-	 * resource. If this bundle's state is <code>INSTALLED</code>, this
-	 * method must attempt to resolve this bundle before attempting to get the
+	 * resource. If this bundle's state is <code>INSTALLED</code>, this method
+	 * must attempt to resolve this bundle before attempting to get the
 	 * specified resource. If this bundle cannot be resolved, then only this
 	 * bundle must be searched for the specified resource. Imported packages
 	 * cannot be searched when this bundle has not been resolved. If this bundle
@@ -840,19 +836,17 @@ public interface Bundle {
 	 * not contain directory entries.
 	 * 
 	 * @param name The name of the resource. See
-	 *        <code>ClassLoader.getResource</code> for a description
-	 *        of the format of a resource name.
-	 * @return A URL to the named resource, or <code>null</code> if the
-	 *         resource could not be found or if this bundle is a fragment
-	 *         bundle or if the caller does not have the appropriate
-	 *         <code>AdminPermission[this,RESOURCE]</code>, and the Java
-	 *         Runtime Environment supports permissions.
-	 * 
-	 * @since 1.1
-	 * @throws IllegalStateException If this bundle has been
-	 *         uninstalled.
+	 *        <code>ClassLoader.getResource</code> for a description of the
+	 *        format of a resource name.
+	 * @return A URL to the named resource, or <code>null</code> if the resource
+	 *         could not be found or if this bundle is a fragment bundle or if
+	 *         the caller does not have the appropriate
+	 *         <code>AdminPermission[this,RESOURCE]</code>, and the Java Runtime
+	 *         Environment supports permissions.
+	 * @throws IllegalStateException If this bundle has been uninstalled.
 	 * @see #getEntry
 	 * @see #findEntries
+	 * @since 1.1
 	 */
 	public URL getResource(String name);
 
@@ -909,11 +903,9 @@ public interface Bundle {
 	 *        leading &quot;%&quot;.
 	 * @return A <code>Dictionary</code> object containing this bundle's
 	 *         Manifest headers and values.
-	 * 
 	 * @throws SecurityException If the caller does not have the
 	 *         appropriate <code>AdminPermission[this,METADATA]</code>, and
 	 *         the Java Runtime Environment supports permissions.
-	 * 
 	 * @see #getHeaders()
 	 * @see Constants#BUNDLE_LOCALIZATION
 	 * @since 1.3
@@ -924,14 +916,14 @@ public interface Bundle {
 	 * Returns the symbolic name of this bundle as specified by its
 	 * <code>Bundle-SymbolicName</code> manifest header. The name must be
 	 * unique, it is recommended to use a reverse domain name naming convention
-	 * like that used for java packages. If this bundle does not have a
-	 * specified symbolic name then <code>null</code> is returned.
+	 * like that used for java packages.
 	 * 
 	 * <p>
 	 * This method must continue to return this bundle's symbolic name while
 	 * this bundle is in the <code>UNINSTALLED</code> state.
 	 * 
-	 * @return The symbolic name of this bundle.
+	 * @return The symbolic name of this bundle or <code>null</code> if this
+	 *         bundle does not have a symbolic name.
 	 * @since 1.3
 	 */
 	public String getSymbolicName();
@@ -993,10 +985,9 @@ public interface Bundle {
 	 *         bundle is a fragment bundle or if the caller does not have the
 	 *         appropriate <code>AdminPermission[this,RESOURCE]</code>, and the
 	 *         Java Runtime Environment supports permissions.
-	 * 
-	 * @since 1.3
 	 * @throws IllegalStateException If this bundle has been uninstalled.
 	 * @throws IOException If there is an I/O error.
+	 * @since 1.3
 	 */
 	public Enumeration/* <URL> */getResources(String name) throws IOException;
 
@@ -1048,7 +1039,6 @@ public interface Bundle {
 	 *         found or if the caller does not have the appropriate
 	 *         <code>AdminPermission[this,RESOURCE]</code> and the Java
 	 *         Runtime Environment supports permissions.
-	 * 
 	 * @throws IllegalStateException If this bundle has been
 	 *         uninstalled.
 	 * @since 1.3
@@ -1123,14 +1113,15 @@ public interface Bundle {
 	 * @param recurse If <code>true</code>, recurse into subdirectories.
 	 *        Otherwise only return entries from the specified path.
 	 * @return An enumeration of URL objects for each matching entry, or
-	 *         <code>null</code> if an entry could not be found or if the
-	 *         caller does not have the appropriate
-	 *         <code>AdminPermission[this,RESOURCE]</code>, and the Java
-	 *         Runtime Environment supports permissions. The URLs are sorted
-	 *         such that entries from this bundle are returned first followed by
-	 *         the entries from attached fragments in ascending bundle id order.
-	 *         If this bundle is a fragment, then only matching entries in this
+	 *         <code>null</code> if an entry could not be found or if the caller
+	 *         does not have the appropriate
+	 *         <code>AdminPermission[this,RESOURCE]</code>, and the Java Runtime
+	 *         Environment supports permissions. The URLs are sorted such that
+	 *         entries from this bundle are returned first followed by the
+	 *         entries from attached fragments in ascending bundle id order. If
+	 *         this bundle is a fragment, then only matching entries in this
 	 *         fragment are returned.
+	 * @throws IllegalStateException If this bundle has been uninstalled.
 	 * @since 1.3
 	 */
 	public Enumeration/* <URL> */findEntries(String path, String filePattern,
