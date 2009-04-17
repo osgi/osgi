@@ -135,12 +135,12 @@ public interface ConditionalPermissionAdmin {
 	 * Returns the Access Control Context that corresponds to the specified
 	 * signers.
 	 * 
-	 * The returned Access Control Context must act is as if its protection domain
+	 * The returned Access Control Context must act as if its protection domain
 	 * came from a bundle that has the following characteristics:
 	 * <ul>
 	 * <li>It is signed by all of the given signers</li>
 	 * <li>It has a bundle id of -1</li>
-	 * <li>Its location is the empty string</;i>
+	 * <li>Its location is the empty string</li>
 	 * <li>Its state is UNINSTALLED</li>
 	 * <li>It has no headers</li>
 	 * <li>Its last modified time=0</li>
