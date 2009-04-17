@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -231,13 +231,13 @@ public interface PackageAdmin {
 	public Bundle[] getFragments(Bundle bundle);
 
 	/**
-	 * Returns an array containing the host bundles to which the specified
-	 * fragment bundle is attached or <code>null</code> if the bundle is not a 
-	 * fragment or has no hosts attached.
+	 * Returns the host bundles to which the specified fragment bundle is
+	 * attached.
 	 * 
-	 * @param bundle The bundle whose host bundle is to be returned.
-	 * @return An array containing the host bundle or <code>null</code> if the
-	 *         bundle does not have any host bundles or is not a fragment.
+	 * @param bundle The fragment bundle whose host bundles are to be returned.
+	 * @return An array containing the host bundles to which the specified
+	 *         fragment is attached or <code>null</code> if the specified bundle
+	 *         is not a fragment or is not attached to any host bundles.
 	 * @throws IllegalArgumentException If the specified <code>Bundle</code> was
 	 *         not created by the same framework instance that registered this
 	 *         <code>PackageAdmin</code> service.
