@@ -141,4 +141,13 @@ public interface BeanMetadata extends Target, ComponentMetadata {
 	 */
 
 	Class /* <?> */getRuntimeClass();
+
+    /**
+     * The names of any components listed in a "depends-on" attribute for this
+     * component.
+     *
+     * @return an immutable List of component references for components that we have explicitly
+     * declared a dependency on, or an empty set if none.
+     */
+    List/*<RefMetadata>*/ getExplicitDependencies();
 }

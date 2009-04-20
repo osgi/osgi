@@ -23,7 +23,7 @@ import java.util.List;
  * Metadata representing a service to be exported by a module context.
  *
  */
-public interface ServiceMetadata extends Target {
+public interface ServiceMetadata extends ComponentMetadata, Target {
 
 	/**
 	 * Do not auto-detect types for advertised service intefaces
@@ -105,4 +105,13 @@ public interface ServiceMetadata extends Target {
 	 * @return an immutable collection of RegistrationListenerMetadata
 	 */
 	Collection /*<RegistrationListener>*/ getRegistrationListeners();
+
+    /**
+     * The names of any components listed in a "depends-on" attribute for this
+     * component.
+     *
+     * @return an immutable List of component references for components that we have explicitly
+     * declared a dependency on, or an empty set if none.
+     */
+    List/*<RefMetadata>*/ getExplicitDependencies();
 }

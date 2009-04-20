@@ -120,7 +120,7 @@ public interface BlueprintContext {
 	 * Get the service export metadata for every service exported by this
 	 * context.
 	 *
-	 * @return an immutable collection of ServiceExportComponentMetadata, with one entry for each service export.
+	 * @return an immutable collection of ServiceMetadata, with one entry for each service export.
 	 */
 	Collection /*<ServiceMetadata>*/ getExportedServicesMetadata();
 
