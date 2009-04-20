@@ -23,7 +23,7 @@ package org.osgi.service.blueprint.metadata;
  * @see ServiceReferenceMetadata
  * @see ServiceMetadata
  */
-public interface ComponentMetadata extends Metadata {
+public interface ComponentMetadata extends NonNullMetadata {
 	
 	/**
 	 * The id of the component.

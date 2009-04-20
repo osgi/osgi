@@ -20,5 +20,12 @@ package org.osgi.service.blueprint.metadata;
  * The name itself will be injected, not the component that the name refers to.
  *
  */
-public interface IdRefMetadata extends RefMetadata {
+public interface IdRefMetadata extends NonNullMetadata {
+	/**
+	 * The name of the referenced component.
+	 * Defined in the <code>component</code> attribute.
+	 *
+	 */
+	String getComponentId();
+
 }

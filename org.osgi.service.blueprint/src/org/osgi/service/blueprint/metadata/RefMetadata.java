@@ -18,13 +18,6 @@ package org.osgi.service.blueprint.metadata;
 /**
  * A value which refers to another component in the module context by name.
  */
-public interface RefMetadata extends NonNullMetadata {
-
-	/**
-	 * The name of the referenced component.
-	 * Defined in the <code>component</code> attribute.
-	 *
-	 */
-	String getComponentId();
+public interface RefMetadata extends Target, IdRefMetadata {
 
 }

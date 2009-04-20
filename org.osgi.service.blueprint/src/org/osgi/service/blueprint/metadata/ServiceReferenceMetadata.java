@@ -83,6 +83,6 @@ public interface ServiceReferenceMetadata extends ComponentMetadata {
 	 *
 	 * @return an immutable collection of registered ListenerMetadata
 	 */
-	Collection /*<ServiceListener>*/ getServiceListeners();
+	Collection /*<Listener>*/ getServiceListeners();
 
 }

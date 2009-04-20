@@ -24,7 +24,7 @@ package org.osgi.service.blueprint.metadata;
  * 
  */
 public interface ReferenceMetadata extends ServiceReferenceMetadata,
-		TargetComponentMetadata {
+		Target {
 
 	/**
 	 * Timeout for service invocations when a matching backing service is

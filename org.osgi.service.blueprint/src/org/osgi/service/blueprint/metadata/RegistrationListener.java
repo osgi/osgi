@@ -31,7 +31,7 @@ public interface RegistrationListener {
 	 *
 	 * @return the listener component reference.
 	 */
-	Metadata getListenerComponent();
+	Target getListenerComponent();
 
 	/**
 	 * The name of the method to invoke on the listener component when

@@ -22,7 +22,7 @@ import java.util.List;
  *
  * This class describes a <code>bean</code> element.
  */
-public interface BeanMetadata extends TargetComponentMetadata {
+public interface BeanMetadata extends Target, ComponentMetadata {
 
 	static final String SCOPE_SINGLETON = "singleton";
 	static final String SCOPE_PROTOTYPE = "prototype";

@@ -17,14 +17,13 @@ package org.osgi.service.blueprint.metadata;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 
 /**
  * Metadata representing a service to be exported by a module context.
  *
  */
-public interface ServiceMetadata extends TargetComponentMetadata {
+public interface ServiceMetadata extends Target {
 
 	/**
 	 * Do not auto-detect types for advertised service intefaces
@@ -57,7 +56,7 @@ public interface ServiceMetadata extends TargetComponentMetadata {
 	 *
 	 * @return the component to be exported as a service.
 	 */
-	Metadata getServiceComponent();
+	Target getServiceComponent();
 
 	/**
 	 * The type names of the set of interface types that the service should be advertised

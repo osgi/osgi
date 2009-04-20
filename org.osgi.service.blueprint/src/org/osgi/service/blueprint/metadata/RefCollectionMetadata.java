@@ -65,7 +65,7 @@ public interface RefCollectionMetadata extends ServiceReferenceMetadata {
 	 *         ReferenceNameValue) is returned. If no comparator was specified
 	 *         then null will be returned.
 	 */
-	TargetComponentMetadata getComparator();
+	Target getComparator();
 
 	/**
 	 * The basis on which to perform ordering, if specified.

@@ -19,7 +19,7 @@ package org.osgi.service.blueprint.metadata;
  * Metadata for a listener interested in service bind and unbind events for a service
  * reference.
  */
-public interface ServiceListener {
+public interface Listener {
 
 	/**
 	 * The component instance that will receive bind and unbind
@@ -31,7 +31,7 @@ public interface ServiceListener {
 	 *
 	 * @return the listener component reference.
 	 */
-	Metadata getListenerComponent();
+	Target getListenerComponent();
 
 	/**
 	 * The name of the method to invoke on the listener component when

@@ -22,7 +22,7 @@ import java.util.List;
  * The Collection metadata can constrain (### convert) to a specific type.
  */
 
-public interface CollectionMetadata extends Metadata {
+public interface CollectionMetadata extends NonNullMetadata {
 
 	/**
 	 * Provide the interface that this collection must implement.
@@ -39,6 +39,7 @@ public interface CollectionMetadata extends Metadata {
      * The value-type specified for the array
      *
      * The <code>value-type</code> attribute.
+     * ### Shouldnt this also support getRuntimeValueType()?
      */
 	String getValueTypeName();
 

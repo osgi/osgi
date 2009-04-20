@@ -23,17 +23,19 @@ import java.util.List;
  * A map is defined in the <code>map</code> element.
  *
  */
-public interface MapMetadata extends Metadata {
+public interface MapMetadata extends NonNullMetadata {
 	/**
 	 * The key-type specified for map keys, or null if none given
 	 *
 	 * Defined in the <code>key-type</code> attribute.
+	 * ### should we have getRuntimeKeyType?
 	 */
 	String getKeyTypeName();
 
     /**
      * The value-type specified for the array
      *
+	 * ### should we have getRuntimeValueType?
      * The <code>value-type</code> attribute.
      */
 	String getValueTypeName();
