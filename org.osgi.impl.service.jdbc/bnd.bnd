@@ -14,7 +14,7 @@ Export-Service: 		org.osgi.service.jdbc.JdbcService
 
 -buildpath = \
 	org.osgi.service.jdbc; 	version=project, \
-	com.springsource.org.apache.derby, \
+	org.apache.derby, \
 	osgi;					version=4.0, \
 	ee.j2se;				version=1.4, \
 	com.springsource.junit
