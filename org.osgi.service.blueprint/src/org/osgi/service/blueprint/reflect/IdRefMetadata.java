@@ -15,22 +15,17 @@
  */
 package org.osgi.service.blueprint.reflect;
 
-
 /**
- * Base class for all components.
+ * A value which represents the name of another component in the module context.
+ * The name itself will be injected, not the component that the name refers to.
  *
- * @see BeanMetadata
- * @see ServiceReferenceMetadata
- * @see ServiceMetadata
  */
-public interface ComponentMetadata extends NonNullMetadata {
-
+public interface IdRefMetadata extends NonNullMetadata {
 	/**
-	 * The id of the component.
+	 * The name of the referenced component.
+	 * Defined in the <code>component</code> attribute.
 	 *
-	 * ### renamed to getId
-	 * @return component id. The component id can be <code>null</code> if this is an anonymously
-	 * defined inner component.
 	 */
-	String getId();
+	String getComponentId();
+
 }

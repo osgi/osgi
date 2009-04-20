@@ -15,22 +15,10 @@
  */
 package org.osgi.service.blueprint.reflect;
 
-
 /**
- * Base class for all components.
- *
- * @see BeanMetadata
- * @see ServiceReferenceMetadata
- * @see ServiceMetadata
+ * A value specified to be null via the <null/> element.
  */
-public interface ComponentMetadata extends NonNullMetadata {
+public interface NullMetadata extends Metadata {
 
-	/**
-	 * The id of the component.
-	 *
-	 * ### renamed to getId
-	 * @return component id. The component id can be <code>null</code> if this is an anonymously
-	 * defined inner component.
-	 */
-	String getId();
+	static final NullMetadata NULL = new NullMetadata() {};
 }

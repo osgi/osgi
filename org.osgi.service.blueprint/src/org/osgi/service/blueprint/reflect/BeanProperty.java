@@ -15,22 +15,27 @@
  */
 package org.osgi.service.blueprint.reflect;
 
-
 /**
- * Base class for all components.
- *
- * @see BeanMetadata
- * @see ServiceReferenceMetadata
- * @see ServiceMetadata
+ * Metadata describing a property to be injected. Properties are defined
+ * following JavaBeans conventions.
  */
-public interface ComponentMetadata extends NonNullMetadata {
+public interface BeanProperty {
 
 	/**
-	 * The id of the component.
+	 * The name of the property to be injected, following JavaBeans conventions.
 	 *
-	 * ### renamed to getId
-	 * @return component id. The component id can be <code>null</code> if this is an anonymously
-	 * defined inner component.
+	 * Defined in the <code>name</code> attribute.
+	 *
+	 * @return the property name.
 	 */
-	String getId();
+	String getName();
+
+	/**
+	 * The metadata for the value to inject the property with.
+	 *
+	 * Defined in the <code>value</code> attribute or inlined component.
+	 *
+	 * @return the metadata for the property value.
+	 */
+	Metadata getValue();
 }

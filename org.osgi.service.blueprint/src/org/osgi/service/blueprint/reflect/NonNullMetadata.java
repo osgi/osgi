@@ -15,22 +15,10 @@
  */
 package org.osgi.service.blueprint.reflect;
 
-
 /**
- * Base class for all components.
- *
- * @see BeanMetadata
- * @see ServiceReferenceMetadata
- * @see ServiceMetadata
+ * Base interfaces for metadata that cannot be null. The NullMetadata is the
+ * only element not implementing this. Mainly used for keys in maps because they
+ * cannot be null.
  */
-public interface ComponentMetadata extends NonNullMetadata {
-
-	/**
-	 * The id of the component.
-	 *
-	 * ### renamed to getId
-	 * @return component id. The component id can be <code>null</code> if this is an anonymously
-	 * defined inner component.
-	 */
-	String getId();
+public interface NonNullMetadata extends Metadata {
 }

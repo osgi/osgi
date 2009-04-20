@@ -15,22 +15,25 @@
  */
 package org.osgi.service.blueprint.reflect;
 
-
 /**
- * Base class for all components.
+ * A simple string value that will be type-converted if necessary before
+ * injecting into a target.
  *
- * @see BeanMetadata
- * @see ServiceReferenceMetadata
- * @see ServiceMetadata
+ * This class is representing the <code>value</code> element.
+ *
  */
-public interface ComponentMetadata extends NonNullMetadata {
+public interface ValueMetadata extends NonNullMetadata {
+	/**
+	 * The string value (unconverted) of this value).
+	 *
+	 * Defined in the <code>value</code> attribute or text part.
+	 */
+	String getStringValue();
 
 	/**
-	 * The id of the component.
+	 * The name of the type to which this value should be coerced. May be null.
 	 *
-	 * ### renamed to getId
-	 * @return component id. The component id can be <code>null</code> if this is an anonymously
-	 * defined inner component.
+	 * Defined in the <code>type</code> attribute.
 	 */
-	String getId();
+	String getTypeName();
 }

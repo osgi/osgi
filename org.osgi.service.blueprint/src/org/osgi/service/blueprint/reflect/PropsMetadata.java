@@ -15,22 +15,27 @@
  */
 package org.osgi.service.blueprint.reflect;
 
+import java.util.List;
 
 /**
- * Base class for all components.
+ * A java.util.Properties based value. The properties are defined as string to
+ * string. This means that the actual value can be returned.
  *
- * @see BeanMetadata
- * @see ServiceReferenceMetadata
- * @see ServiceMetadata
+ * ### I do not like it that you loose the original order. And potential errors
+ * (like duplicate keys). I think this one should just go away. The
+ * CollectionMetadata has a collection type so the instantiation can ensure
+ *
+ * Defined in the <code>props</code> element.
+ *
  */
-public interface ComponentMetadata extends NonNullMetadata {
+public interface PropsMetadata extends NonNullMetadata {
 
 	/**
-	 * The id of the component.
+	 * This is the same as getValuesMetadata but more type safe.
 	 *
-	 * ### renamed to getId
-	 * @return component id. The component id can be <code>null</code> if this is an anonymously
-	 * defined inner component.
+	 * Defined in <code>prop</code> sub elements.
+	 *
+	 * @return
 	 */
-	String getId();
+	List/*<MapEntry>*/ getEntries();
 }

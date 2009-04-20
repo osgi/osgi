@@ -15,22 +15,24 @@
  */
 package org.osgi.service.blueprint.reflect;
 
-
 /**
- * Base class for all components.
  *
- * @see BeanMetadata
- * @see ServiceReferenceMetadata
- * @see ServiceMetadata
+ * Service reference that will bind to a single matching service in the service
+ * registry.
+ *
+ * Defines the <code>reference</code> element.
+ *
  */
-public interface ComponentMetadata extends NonNullMetadata {
+public interface ReferenceMetadata extends ServiceReferenceMetadata,
+		Target {
 
 	/**
-	 * The id of the component.
+	 * Timeout for service invocations when a matching backing service is
+	 * unavailable.
+	 * Defined in the <code>timeout</code> attribute.
 	 *
-	 * ### renamed to getId
-	 * @return component id. The component id can be <code>null</code> if this is an anonymously
-	 * defined inner component.
+	 * @return service invocation timeout in milliseconds
 	 */
-	String getId();
+	long getTimeout();
+
 }
