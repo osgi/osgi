@@ -26,14 +26,14 @@ import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.osgi.service.blueprint.reflect.ComponentValue;
 import org.osgi.service.blueprint.reflect.ReferenceValue;
 import org.osgi.service.blueprint.reflect.RegistrationListenerMetadata;
-import org.osgi.service.blueprint.reflect.ServiceExportComponentMetadata;
+import org.osgi.service.blueprint.reflect.ServiceMetadata;
 import org.osgi.service.blueprint.reflect.Value;
 import org.osgi.test.cases.blueprint.services.TestUtil;
 
 import junit.framework.Assert;
 
 /**
- * Validate the metadata for a single service exported in a ModuleContext.
+ * Validate the metadata for a single service exported in a BlueprintContext.
  */
 public class ExportedService extends Assert implements TestComponentMetadata {
     // the optional assigned service id
@@ -121,11 +121,11 @@ public class ExportedService extends Assert implements TestComponentMetadata {
      */
     public boolean matches(ComponentMetadata componentMeta) {
         // we only handle Service export component references.
-        if (!(componentMeta instanceof ServiceExportComponentMetadata)) {
+        if (!(componentMeta instanceof ServiceMetadata)) {
             return false;
         }
 
-        ServiceExportComponentMetadata meta = (ServiceExportComponentMetadata)componentMeta;
+        ServiceMetadata meta = (ServiceMetadata)componentMeta;
 
         // if we have an assigned service id check on that first.  We consider
         // this to be a target match, since the service id must be unique.
@@ -176,8 +176,8 @@ public class ExportedService extends Assert implements TestComponentMetadata {
      * @exception Exception
      */
     public void validate(ModuleMetadata moduleMetadata, ComponentMetadata componentMeta) throws Exception {
-        assertTrue("Component type mismatch", componentMeta instanceof ServiceExportComponentMetadata);
-        ServiceExportComponentMetadata meta = (ServiceExportComponentMetadata)componentMeta;
+        assertTrue("Component type mismatch", componentMeta instanceof ServiceMetadata);
+        ServiceMetadata meta = (ServiceMetadata)componentMeta;
         assertEquals(exportMode, meta.getAutoExportMode());
         assertEquals(serviceRanking, meta.getRanking());
         assertEquals(dependencies, meta.getExplicitDependencies());

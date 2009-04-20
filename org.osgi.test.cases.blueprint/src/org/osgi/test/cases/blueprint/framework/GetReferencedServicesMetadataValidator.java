@@ -21,14 +21,14 @@ import java.util.Collection;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.service.blueprint.context.ComponentDefinitionException;
-import org.osgi.service.blueprint.context.ModuleContext;
+import org.osgi.service.blueprint.context.BlueprintContext;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
-import org.osgi.service.blueprint.reflect.LocalComponentMetadata;
+import org.osgi.service.blueprint.reflect.BeanMetadata;
 import org.osgi.service.blueprint.reflect.ServiceReferenceComponentMetadata;
 
 /**
  * Generic validator to verify that a named component is included in the
- * getLocalComponentMetadata() ccllection
+ * getBeanMetadata() ccllection
  */
 public class GetReferencedServicesMetadataValidator extends MetadataValidator {
     // the id of the target component
@@ -62,7 +62,7 @@ public class GetReferencedServicesMetadataValidator extends MetadataValidator {
         // ensure we have everything initialized
         super.validate(testContext);
 
-        ModuleContext context = moduleMetadata.getTargetModuleContext();
+        BlueprintContext context = moduleMetadata.getTargetBlueprintContext();
         // get the collection list
         Collection metadata = context.getReferencedServicesMetadata();
         Iterator i = metadata.iterator();

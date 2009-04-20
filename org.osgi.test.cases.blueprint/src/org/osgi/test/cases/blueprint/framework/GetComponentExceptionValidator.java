@@ -19,7 +19,7 @@ package org.osgi.test.cases.blueprint.framework;
 import java.util.Set;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.service.blueprint.context.ModuleContext;
+import org.osgi.service.blueprint.context.BlueprintContext;
 import org.osgi.service.blueprint.context.ComponentDefinitionException;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
 
@@ -59,7 +59,7 @@ public class GetComponentExceptionValidator extends MetadataValidator {
         // ensure we have everything initialized
         super.validate(testContext);
 
-        ModuleContext context = moduleMetadata.getTargetModuleContext();
+        BlueprintContext context = moduleMetadata.getTargetBlueprintContext();
         try {
             Object obj = context.getComponent(componentId);
             fail("Expected ComponentDefinitionException not thrown for component " + componentId);

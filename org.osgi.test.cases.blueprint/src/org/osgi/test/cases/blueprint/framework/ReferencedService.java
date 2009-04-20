@@ -20,7 +20,7 @@ import org.osgi.service.blueprint.reflect.ServiceReferenceComponentMetadata;
 import org.osgi.service.blueprint.reflect.UnaryServiceReferenceComponentMetadata;
 
 /**
- * A single referenced service in the ModuleContext metadata.
+ * A single referenced service in the BlueprintContext metadata.
  */
 public class ReferencedService extends ReferencedServiceBase implements TestComponentMetadata {
     // the default timeout value

@@ -21,10 +21,10 @@ import java.util.Collection;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.service.blueprint.context.ComponentDefinitionException;
-import org.osgi.service.blueprint.context.ModuleContext;
+import org.osgi.service.blueprint.context.BlueprintContext;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
-import org.osgi.service.blueprint.reflect.LocalComponentMetadata;
-import org.osgi.service.blueprint.reflect.ServiceExportComponentMetadata;
+import org.osgi.service.blueprint.reflect.BeanMetadata;
+import org.osgi.service.blueprint.reflect.ServiceMetadata;
 
 /**
  * Generic validator to verify that a named component is included in the
@@ -62,13 +62,13 @@ public class GetExportedServicesMetadataValidator extends MetadataValidator {
         // ensure we have everything initialized
         super.validate(testContext);
 
-        ModuleContext context = moduleMetadata.getTargetModuleContext();
+        BlueprintContext context = moduleMetadata.getTargetBlueprintContext();
         // get the collection list
         Collection metadata = context.getExportedServicesMetadata();
         Iterator i = metadata.iterator();
 
         while (i.hasNext()) {
-            ServiceExportComponentMetadata meta = (ServiceExportComponentMetadata)i.next();
+            ServiceMetadata meta = (ServiceMetadata)i.next();
             // if we find a match, just return
             if (componentId.equals(meta.getName())) {
                 try {
@@ -80,7 +80,7 @@ public class GetExportedServicesMetadataValidator extends MetadataValidator {
                 return;
             }
         }
-        fail("Expected ServiceExportComponentMetadata instance for component " + componentId);
+        fail("Expected ServiceMetadata instance for component " + componentId);
     }
 }
 

@@ -20,9 +20,8 @@ import java.util.Map;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
-import org.osgi.service.blueprint.context.ModuleContextEventConstants;
+import org.osgi.service.blueprint.context.EventConstants;
 import org.osgi.service.event.Event;
-import org.osgi.service.event.EventConstants;
 import org.osgi.test.cases.blueprint.services.TestUtil;
 
 /**
@@ -166,7 +165,7 @@ public class BlueprintEvent extends AdminTestEvent {
             return new AssertionFailure("Invalid or missing timestamp property on blueprint event: " + other.toString(), cause);
         }
 
-        if (!TestUtil.validateBundleVersion(bundle, (Version)other.getProperty(ModuleContextEventConstants.BUNDLE_VERSION))) {
+        if (!TestUtil.validateBundleVersion(bundle, (Version)other.getProperty(EventConstants.BUNDLE_VERSION))) {
             return new AssertionFailure("Mismatched bundle version on blueprint event expected=" + (String)bundle.getHeaders().get(Constants.BUNDLE_VERSION) + " received=" + other.getProperty("bundle.version"), cause);
         }
         if (!TestUtil.validateBundleId(bundle, (Long)other.getProperty(BUNDLE_ID))) {
@@ -181,18 +180,18 @@ public class BlueprintEvent extends AdminTestEvent {
         }
         // now validate for the extender bundle
 
-        if (!extenderBundle.equals(other.getProperty(ModuleContextEventConstants.EXTENDER_BUNDLE))) {
+        if (!extenderBundle.equals(other.getProperty(EventConstants.EXTENDER_BUNDLE))) {
             return new AssertionFailure("Mismatched extender bundle id blueprint event other=" +
-                other.getProperty(ModuleContextEventConstants.EXTENDER_BUNDLE), cause);
+                other.getProperty(EventConstants.EXTENDER_BUNDLE), cause);
         }
 
-        if (!TestUtil.validateBundleId(extenderBundle, (Long)other.getProperty(ModuleContextEventConstants.EXTENDER_ID))) {
+        if (!TestUtil.validateBundleId(extenderBundle, (Long)other.getProperty(EventConstants.EXTENDER_ID))) {
             return new AssertionFailure("Mismatched extender bundle id on blueprint event other=" +
-                other.getProperty(ModuleContextEventConstants.EXTENDER_ID), cause);
+                other.getProperty(EventConstants.EXTENDER_ID), cause);
         }
-        if (!TestUtil.validateBundleSymbolicName(extenderBundle, (String)other.getProperty(ModuleContextEventConstants.EXTENDER_SYMBOLICNAME))) {
+        if (!TestUtil.validateBundleSymbolicName(extenderBundle, (String)other.getProperty(EventConstants.EXTENDER_SYMBOLICNAME))) {
             return new AssertionFailure("Mismatched extender bundle symbolic name on blueprint event other=" +
-                other.getProperty(ModuleContextEventConstants.EXTENDER_SYMBOLICNAME), cause);
+                other.getProperty(EventConstants.EXTENDER_SYMBOLICNAME), cause);
         }
 
         // allow the superclass to validate this (which includes calling potential

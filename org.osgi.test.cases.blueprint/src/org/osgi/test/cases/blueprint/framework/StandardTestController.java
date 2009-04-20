@@ -119,8 +119,8 @@ public class StandardTestController extends BaseTestController {
         // now standard blueprint revents.
         events.addBlueprintEvent("CREATING");
         events.addBlueprintEvent("CREATED");
-        events.addModuleContextEvent("CREATED");
-        events.addServiceEvent("REGISTERED", "org.osgi.service.blueprint.context.ModuleContext");
+        events.addBlueprintContextEvent("CREATED");
+        events.addServiceEvent("REGISTERED", "org.osgi.service.blueprint.context.BlueprintContext");
 
         // this needs to be the first validator of the set, since
         // it initializes the module context.
@@ -144,14 +144,14 @@ public class StandardTestController extends BaseTestController {
         // we always expect to see a stopped bundle event at the end
         events.addBundleEvent("STOPPED");
         // we should see the module context unregistered during shutdown.
-        events.addServiceEvent("UNREGISTERING", "org.osgi.service.blueprint.context.ModuleContext");
+        events.addServiceEvent("UNREGISTERING", "org.osgi.service.blueprint.context.BlueprintContext");
         // now standard blueprint revents.
         events.addBlueprintEvent("DESTROYING");
         events.addBlueprintEvent("DESTROYED");
 
         // at the end of everything, there should no longer be a module context associated with the
         // component bundle.
-        events.addValidator(new NoModuleContextValidator());
+        events.addValidator(new NoBlueprintContextValidator());
         // the bundle should be in the STOPPED state when everything settles down
         events.addValidator(new BundleStateValidator(Bundle.RESOLVED));
         // this needs to perform some cleanup when everything is done,

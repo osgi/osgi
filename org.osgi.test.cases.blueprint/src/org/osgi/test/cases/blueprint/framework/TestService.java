@@ -33,7 +33,7 @@ import org.osgi.framework.ServiceRegistration;
  * Another useful activity is to attach this as a listener to a specific
  * test event.  This allows the toggling activity to be triggered
  * when an event is received (such as a WAITING event from a
- * ModuleContext).
+ * BlueprintContext).
  */
 public class TestService implements TestInitializer, TestCleanup, TestValidator, TestEventListener {
     // our test bundle context.

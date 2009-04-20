@@ -48,11 +48,11 @@ public class LazyActivationTestController extends ThreePhaseTestController {
         // we always expect to see a STARING bundle event, but not STARTED
         events.addBundleEvent("STARTING");
         // we should not see a Modudle context getting registered yet.
-        events.addFailureEvent(new ServiceTestEvent("REGISTERED", "org.osgi.service.blueprint.context.ModuleContext"));
+        events.addFailureEvent(new ServiceTestEvent("REGISTERED", "org.osgi.service.blueprint.context.BlueprintContext"));
         // we should not see any of the standard blueprint events
         events.addFailureEvent(new BlueprintEvent("CREATING"));
         events.addFailureEvent(new BlueprintEvent("CREATED"));
-        events.addFailureEvent(new ModuleContextEvent("CREATED"));
+        events.addFailureEvent(new BlueprintContextEvent("CREATED"));
         events.addFailureEvent(new BundleTestEvent("STARTED"));
         // the bundle should be in the STARTING state when everything settles down
         events.addValidator(new BundleStateValidator(Bundle.STARTING));
@@ -75,11 +75,11 @@ public class LazyActivationTestController extends ThreePhaseTestController {
         // we always expect to see a started bundle event
         events.addBundleEvent("STARTED");
         // we should see a service registered for the module context.
-        events.addServiceEvent("REGISTERED", "org.osgi.service.blueprint.context.ModuleContext");
+        events.addServiceEvent("REGISTERED", "org.osgi.service.blueprint.context.BlueprintContext");
         // now standard blueprint revents.
         events.addBlueprintEvent("CREATING");
         events.addBlueprintEvent("CREATED");
-        events.addModuleContextEvent("CREATED");
+        events.addBlueprintContextEvent("CREATED");
 
         // this needs to be the first validator of the set, since
         // it initializes the module context.

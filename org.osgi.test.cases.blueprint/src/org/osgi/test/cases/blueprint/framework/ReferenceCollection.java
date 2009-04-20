@@ -21,7 +21,7 @@ import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.osgi.service.blueprint.reflect.ServiceReferenceComponentMetadata;
 
 /**
- * A single referenced service in the ModuleContext metadata.
+ * A single referenced service in the BlueprintContext metadata.
  */
 public class ReferenceCollection extends ReferencedServiceBase {
     protected Class collectionType;

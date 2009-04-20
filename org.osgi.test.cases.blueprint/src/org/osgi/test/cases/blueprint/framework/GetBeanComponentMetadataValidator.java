@@ -21,15 +21,15 @@ import java.util.Collection;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.service.blueprint.context.ComponentDefinitionException;
-import org.osgi.service.blueprint.context.ModuleContext;
+import org.osgi.service.blueprint.context.BlueprintContext;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
-import org.osgi.service.blueprint.reflect.LocalComponentMetadata;
+import org.osgi.service.blueprint.reflect.BeanMetadata;
 
 /**
  * Generic validator to verify that a named component is included in the
  * getLocalComponentMetadata() ccllection
  */
-public class GetLocalComponentMetadataValidator extends MetadataValidator {
+public class GetBeanMetadataValidator extends MetadataValidator {
     // the id of the target component
     protected String componentId;
 
@@ -39,7 +39,7 @@ public class GetLocalComponentMetadataValidator extends MetadataValidator {
      * @param expectedServices
      *               The list of expected exported services.
      */
-    public GetLocalComponentMetadataValidator(String componentId) {
+    public GetBeanMetadataValidator(String componentId) {
         super();
         this.componentId = componentId;
     }
@@ -61,13 +61,13 @@ public class GetLocalComponentMetadataValidator extends MetadataValidator {
         // ensure we have everything initialized
         super.validate(testContext);
 
-        ModuleContext context = moduleMetadata.getTargetModuleContext();
+        BlueprintContext context = moduleMetadata.getTargetBlueprintContext();
         // get the collection list
         Collection metadata = context.getLocalComponentsMetadata();
         Iterator i = metadata.iterator();
 
         while (i.hasNext()) {
-            LocalComponentMetadata meta = (LocalComponentMetadata)i.next();
+            BeanMetadata meta = (BeanMetadata)i.next();
             // if we find a match, just return
             if (componentId.equals(meta.getName())) {
                 try {
@@ -79,7 +79,7 @@ public class GetLocalComponentMetadataValidator extends MetadataValidator {
                 return;
             }
         }
-        fail("Expected LocalComponentMetadata instance for component " + componentId);
+        fail("Expected BeanMetadata instance for component " + componentId);
     }
 }
 

@@ -22,7 +22,7 @@ import java.util.Set;
 import junit.framework.Assert;
 
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
-import org.osgi.service.blueprint.reflect.LocalComponentMetadata;
+import org.osgi.service.blueprint.reflect.BeanMetadata;
 
 /**
  * A wrapper for component definition metadata.
@@ -55,26 +55,26 @@ public class LocalComponent extends Assert implements TestComponentMetadata {
 
     // indicated the component is created directly from class
     public LocalComponent(String name, Class classType, TestParameter[] parms, TestProperty[] props) {
-        this(name, classType, null, null, null, parms, props, null, false, LocalComponentMetadata.SCOPE_SINGLETON);
+        this(name, classType, null, null, null, parms, props, null, false, BeanMetadata.SCOPE_SINGLETON);
     }
 
     // indicated the component is created by instance factory
     public LocalComponent(String name, String factoryMethodName, TestParameter[] parms, TestProperty[] props) {
-        this(name, null, factoryMethodName, null, null, parms, props, null, false, LocalComponentMetadata.SCOPE_SINGLETON);
+        this(name, null, factoryMethodName, null, null, parms, props, null, false, BeanMetadata.SCOPE_SINGLETON);
     }
 
     // indicated the component is created by static factory
     public LocalComponent(String name, Class classType, String factoryMethodName, TestParameter[] parms, TestProperty[] props) {
-        this(name, classType, factoryMethodName, null, null, parms, props, null, false, LocalComponentMetadata.SCOPE_SINGLETON);
+        this(name, classType, factoryMethodName, null, null, parms, props, null, false, BeanMetadata.SCOPE_SINGLETON);
     }
 
     // indicated the component is inner component
     public LocalComponent(Class classType, String factoryMethodName, TestParameter[] parms, TestProperty[] props) {
-        this(null, classType, factoryMethodName, null, null, parms, props, null, false, LocalComponentMetadata.SCOPE_SINGLETON);
+        this(null, classType, factoryMethodName, null, null, parms, props, null, false, BeanMetadata.SCOPE_SINGLETON);
     }
 
     public LocalComponent(String name, Class classType, String initMethodName, String destroyMethodName, TestParameter[] parms, TestProperty[] props) {
-        this(name, classType, null, initMethodName, destroyMethodName, parms, props, null, false, LocalComponentMetadata.SCOPE_SINGLETON);
+        this(name, classType, null, initMethodName, destroyMethodName, parms, props, null, false, BeanMetadata.SCOPE_SINGLETON);
     }
 
     public LocalComponent(String name, Class classType, String factoryMethodName, String initMethodName, String destroyMethodName, TestParameter[] parms, TestProperty[] props, String[] dependsOn, boolean isLazy, String scope) {
@@ -92,7 +92,7 @@ public class LocalComponent extends Assert implements TestComponentMetadata {
         this.scope = scope;
         // make sure we get the default set
         if (this.scope == null) {
-            this.scope = LocalComponentMetadata.SCOPE_SINGLETON;
+            this.scope = BeanMetadata.SCOPE_SINGLETON;
         }
         // these generally get set post-construction
         this.factoryTestComponentValue = null;
@@ -121,8 +121,8 @@ public class LocalComponent extends Assert implements TestComponentMetadata {
      * @exception Exception
      */
     public void validate(ModuleMetadata moduleMetadata, ComponentMetadata componentMeta) throws Exception {
-        assertTrue("Component type mismatch", componentMeta instanceof LocalComponentMetadata);
-        LocalComponentMetadata meta = (LocalComponentMetadata)componentMeta;
+        assertTrue("Component type mismatch", componentMeta instanceof BeanMetadata);
+        BeanMetadata meta = (BeanMetadata)componentMeta;
 
         if (name != null) {
             if (name.equals("*")) {
@@ -215,11 +215,11 @@ public class LocalComponent extends Assert implements TestComponentMetadata {
      */
     public boolean matches(ComponentMetadata componentMeta) {
         // we only handle local component references.
-        if (!(componentMeta instanceof LocalComponentMetadata)) {
+        if (!(componentMeta instanceof BeanMetadata)) {
             return false;
         }
 
-        LocalComponentMetadata meta = (LocalComponentMetadata)componentMeta;
+        BeanMetadata meta = (BeanMetadata)componentMeta;
         // if we have a wildcard name, then we skip the name comparison.
         if (name != null && !name.equals("*")) {
             return name.equals(meta.getName());

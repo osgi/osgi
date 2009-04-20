@@ -33,8 +33,7 @@ import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.Version;
-import org.osgi.service.blueprint.context.ModuleContextEventConstants;
-import org.osgi.service.blueprint.context.ModuleContextListener;
+import org.osgi.service.blueprint.context.BlueprintContextListener;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
@@ -43,7 +42,7 @@ import org.osgi.test.cases.blueprint.services.AssertionService;
 /**
  * A base class for the different types of test controller.
  */
-public class BaseTestController implements EventHandler, ModuleContextListener, ServiceListener {
+public class BaseTestController implements EventHandler, BlueprintContextListener, ServiceListener {
     // default timeout for the test.  For most tests, we're not dealing with
     // expected timeout situations, so a short timeout is acceptable.  This will
     // need to be set higher if we're testing actual timeout situations.
@@ -97,7 +96,7 @@ public class BaseTestController implements EventHandler, ModuleContextListener, 
     static public Bundle getExtenderBundle(Map props) {
         // if we've not been asked for this yet, extract it from the properties
         if (extenderBundle == null) {
-            extenderBundle = (Bundle)props.get(ModuleContextEventConstants.EXTENDER_BUNDLE);
+            extenderBundle = (Bundle)props.get(org.osgi.service.blueprint.context.EventConstants.EXTENDER_BUNDLE);
         }
         return extenderBundle;
     }
@@ -144,7 +143,7 @@ public class BaseTestController implements EventHandler, ModuleContextListener, 
         // we add an initializer to start our bundle when the test starts
         setupEvents.addInitializer(new TestBundleStarter(testBundle));
         // this should be the last event that will indicate successful completion
-        setupEvents.addServiceEvent("REGISTERED", "org.osgi.service.blueprint.context.ModuleContext");
+        setupEvents.addServiceEvent("REGISTERED", "org.osgi.service.blueprint.context.BlueprintContext");
         setupPhase.addEventSet(setupEvents);
 
         EventSet cleanupEvents = new EventSet(testContext, testBundle);
@@ -269,8 +268,8 @@ public class BaseTestController implements EventHandler, ModuleContextListener, 
 
         String topic = event.getTopic();
         // one of our assertions
-        if (topic.startsWith("org/osgi/test/cases/blueprint/ModuleContext")) {
-            processEvent(targetPhase, new ModuleContextEvent(event));
+        if (topic.startsWith("org/osgi/test/cases/blueprint/BlueprintContext")) {
+            processEvent(targetPhase, new BlueprintContextEvent(event));
         }
         else if (topic.startsWith("org/osgi/test/cases/blueprint/")) {
             processEvent(targetPhase, new ComponentAssertion(event));
@@ -323,7 +322,7 @@ public class BaseTestController implements EventHandler, ModuleContextListener, 
         Hashtable handlerProps = new Hashtable();
         handlerProps.put(EventConstants.EVENT_TOPIC, topics);
         this.eventAdminListener = testContext.registerService(EventHandler.class.getName(), this, handlerProps);
-        this.moduleContextListener = testContext.registerService(ModuleContextListener.class.getName(), this, null);
+        this.moduleContextListener = testContext.registerService(BlueprintContextListener.class.getName(), this, null);
         // there are some race conditions involved with service listeners that
         // preclude us using the EventAdmin service for snagging those events.  We'll need to listen for them directly.
         testContext.addServiceListener(this);
@@ -367,8 +366,8 @@ public class BaseTestController implements EventHandler, ModuleContextListener, 
 
 
     /**
-     * Method implemented for the ModuleContextListener interface. This
-     * transforms the ModuleContextEvent information into a dummy Event
+     * Method implemented for the BlueprintContextListener interface. This
+     * transforms the BlueprintContextEvent information into a dummy Event
      * for processing.
      *
      * @param bundle
@@ -382,13 +381,13 @@ public class BaseTestController implements EventHandler, ModuleContextListener, 
         props.put("bundle.version", Version.parseVersion((String)bundle.getHeaders().get(Constants.BUNDLE_VERSION)));
         props.put(EventConstants.BUNDLE, bundle);
         props.put(EventConstants.BUNDLE_ID, new Long(bundle.getBundleId()));
-        handleEvent(new Event("org/osgi/test/cases/blueprint/ModuleContext/CREATED", props));
+        handleEvent(new Event("org/osgi/test/cases/blueprint/BlueprintContext/CREATED", props));
     }
 
 
     /**
-     * Method implemented for the ModuleContextListener interface. This
-     * transforms the ModuleContextEvent information into a dummy Event
+     * Method implemented for the BlueprintContextListener interface. This
+     * transforms the BlueprintContextEvent information into a dummy Event
      * for processing.
      *
      * @param bundleSymbolicName
@@ -405,7 +404,7 @@ public class BaseTestController implements EventHandler, ModuleContextListener, 
         if (rootCause != null) {
             props.put(EventConstants.EXCEPTION, rootCause);
         }
-        handleEvent(new Event("org/osgi/test/cases/blueprint/ModuleContext/FAILED", props));
+        handleEvent(new Event("org/osgi/test/cases/blueprint/BlueprintContext/FAILED", props));
     }
 
     /**
