@@ -37,5 +37,5 @@ public interface BeanProperty {
 	 *
 	 * @return the metadata for the property value.
 	 */
-	Metadata getValueMetadata();
+	Metadata getValue();
 }

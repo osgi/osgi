@@ -28,7 +28,7 @@ public interface BeanArgument {
 	 *
 	 * @return the metadata for the value
 	 */
-	Metadata getValueMetadata();
+	Metadata getValue();
 
 	/**
 	 * The type to convert the value into when invoking the constructor or

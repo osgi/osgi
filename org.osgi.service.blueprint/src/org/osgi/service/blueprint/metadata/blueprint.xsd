@@ -27,7 +27,7 @@
 
     <!-- Schema elements for core component declarations -->
 
-    <xsd:complexType name="Tidentified" abstract="true">
+    <xsd:complexType name="Tcomponent" abstract="true">
         <xsd:attribute name="id" type="xsd:ID"/>
     </xsd:complexType>
 
@@ -111,7 +111,7 @@
 
     <xsd:complexType name="Tbean">
         <xsd:complexContent>
-            <xsd:extension base="Tidentified">
+            <xsd:extension base="Tcomponent">
                 <xsd:group ref="beanElements"/>
 				<xsd:attribute name="class" type="Tclass"/>
 				<xsd:attribute name="depends-on" type="xsd:normalizedString"/>
@@ -177,7 +177,7 @@
 
     <xsd:complexType name="Treference">
         <xsd:complexContent>
-            <xsd:extension base="Tidentified">
+            <xsd:extension base="Tcomponent">
                 <xsd:sequence minOccurs="0" maxOccurs="unbounded">
                     <xsd:element name="interfaces" type="TlistSetArray" minOccurs="0" maxOccurs="1"/>
                     <xsd:element name="listener" type="Tlistener" minOccurs="0" maxOccurs="unbounded"/>
