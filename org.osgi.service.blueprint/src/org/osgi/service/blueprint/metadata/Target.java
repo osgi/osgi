@@ -6,6 +6,6 @@ package org.osgi.service.blueprint.metadata;
  * for method calls. These are bean, reference, and ref. 
  *
  */
-public interface Target {
+public interface Target extends Metadata {
 
 }
