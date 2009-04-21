@@ -119,7 +119,7 @@ public interface BeanMetadata extends Target, ComponentMetadata {
 	 *         a non-null return value, the Metadata object returned will be a
 	 *         RefMetadata or a TargetComponentMetadata instance.
 	 */
-	Metadata getFactoryComponent();
+	Target getFactoryComponent();
 
 	/**
 	 * The specified scope for the component lifecycle.
