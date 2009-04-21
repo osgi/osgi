@@ -21,7 +21,7 @@ import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 /**
  * Simple test component that throws an exception when
  * the constructor is called.  Use to test errors
- * during ModuleContext creation.
+ * during BlueprintContext creation.
  */
 public class ConstructorException extends BaseTestComponent {
     public ConstructorException(String componentId) {

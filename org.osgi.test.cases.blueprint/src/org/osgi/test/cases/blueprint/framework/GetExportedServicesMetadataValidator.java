@@ -27,8 +27,8 @@ import org.osgi.service.blueprint.reflect.BeanMetadata;
 import org.osgi.service.blueprint.reflect.ServiceMetadata;
 
 /**
- * Generic validator to verify that a named component is included in the
- * getLocalComponentMetadata() ccllection
+ * Generic validator to verify that a named service component is included in the
+ * getExportedServicesMetadata() ccllection
  */
 public class GetExportedServicesMetadataValidator extends MetadataValidator {
     // the id of the target component
@@ -62,7 +62,7 @@ public class GetExportedServicesMetadataValidator extends MetadataValidator {
         // ensure we have everything initialized
         super.validate(testContext);
 
-        BlueprintContext context = moduleMetadata.getTargetBlueprintContext();
+        BlueprintContext context = blueprintMetadata.getTargetBlueprintContext();
         // get the collection list
         Collection metadata = context.getExportedServicesMetadata();
         Iterator i = metadata.iterator();
@@ -70,7 +70,7 @@ public class GetExportedServicesMetadataValidator extends MetadataValidator {
         while (i.hasNext()) {
             ServiceMetadata meta = (ServiceMetadata)i.next();
             // if we find a match, just return
-            if (componentId.equals(meta.getName())) {
+            if (componentId.equals(meta.getId())) {
                 try {
                     // this is an immutability test for the collection.  This should throw an error
                     i.remove();

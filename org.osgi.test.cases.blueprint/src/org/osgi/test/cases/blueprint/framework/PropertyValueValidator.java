@@ -89,7 +89,7 @@ public class PropertyValueValidator extends MetadataValidator {
         // ensure we have everything initialized
         super.validate(testContext);
         // the value must be equal
-        assertEquals("Property " + value.getName() + " value in component " + componentId, value, moduleMetadata.getComponentPropertyValue(componentId, value.getName()));
+        assertEquals("Property " + value.getName() + " value in component " + componentId, value, blueprintMetadata.getComponentPropertyValue(componentId, value.getName()));
     }
 }
 

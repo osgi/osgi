@@ -23,36 +23,27 @@ import org.osgi.service.blueprint.reflect.ComponentMetadata;
 
 
 /**
- * A ComponentMetadata implementation class used for
- * testing NamespaceHandler functions.  The blueprint
- * service implementation must be capable of receiving
- * different implementations of these classes back
- * without error, so we'll generally perform deep
- * copy operations and replace all of the interfaces
- * in the metadata with our replacement versions.
- * As long as we have a true implementation, this
- * should work ok.
+ * Base class for all components.
+ *
+ * @see BeanMetadata
+ * @see ServiceReferenceMetadata
+ * @see ServiceMetadata
  */
 public class ComponentMetadataImpl implements ComponentMetadata {
     // the name of the component;
-    private String name;
-    // the dependency set
-    private Set dependencies;
+    private String id;
 
     protected ComponentMetadataImpl() {
         this((String)null);
     }
 
-    protected ComponentMetadataImpl(String name) {
-        this.name = name;
-        dependencies = new HashSet();
+    protected ComponentMetadataImpl(String id) {
+        this.id = id;
     }
 
     protected ComponentMetadataImpl(ComponentMetadata source) {
-        name = source.getName();
-        dependencies = new HashSet(source.getExplicitDependencies());
+        id = source.getId();
     }
-
 
 
     /**
@@ -61,29 +52,15 @@ public class ComponentMetadataImpl implements ComponentMetadata {
      * @return component name. The component name may be null if this is an anonymously
      * defined inner component.
      */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * The names of any components listed in a "depends-on" attribute for this
-     * component.
-     *
-     * @return an immutable set of component names for components that we have explicitly
-     * declared a dependency on, or an empty set if none.
-     */
-    public Set getExplicitDependencies() {
-        return dependencies;
+    public String getId() {
+        return id;
     }
 
 
-    /**
-     * Add a new dependency to the explicit list.
-     *
-     * @param name   The new dependency name.
-     */
-    public void addDependency(String name) {
-        dependencies.add(name);
+    public void setId(String id) {
+        this.id = id;
     }
+
 }
+
 

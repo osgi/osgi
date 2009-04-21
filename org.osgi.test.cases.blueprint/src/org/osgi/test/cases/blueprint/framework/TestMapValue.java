@@ -16,12 +16,13 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
+import java.util.List;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.HashMap;
 
-import org.osgi.service.blueprint.reflect.MapValue;
-import org.osgi.service.blueprint.reflect.Value;
+import org.osgi.service.blueprint.reflect.MapMetadata;
+import org.osgi.service.blueprint.reflect.MapEntry;
+import org.osgi.service.blueprint.reflect.Metadata;
+import org.osgi.service.blueprint.reflect.CollectionMetadata;
 
 public class TestMapValue extends TestValue {
     // The expected set of items in the List.
@@ -40,7 +41,7 @@ public class TestMapValue extends TestValue {
     }
 
     public TestMapValue(MapValueEntry[] entries, Class key, Class value) {
-        super(MapValue.class);
+        super(MapMetadata.class);
         this.entries = entries;
         if (key != null) {
             keyType = key.getName();
@@ -58,26 +59,24 @@ public class TestMapValue extends TestValue {
      *
      * @exception Exception
      */
-    public void validate(ModuleMetadata moduleMetadata, Value v) throws Exception {
-        super.validate(moduleMetadata, v);
+    public void validate(BlueprintMetadata blueprintMetadata, Metadata v) throws Exception {
+        super.validate(blueprintMetadata, v);
         // we might not have a validation list, so use this
         // as a wildcard placeholder if asked.
         if (entries == null) {
             return;
         }
-        Map map = ((MapValue)v).getMap();
+        // convert into the proper metadata type
+        MapMetadata meta = (MapMetadata)v;
+        List mapEntries = meta.getEntries();
         // validate the size first
-        assertEquals("Map value size mismatch", entries.length, map.size());
-        assertEquals("Map default value type mismatch", valueType, ((MapValue)v).getValueType());
-        assertEquals("Map default key type mismatch", keyType, ((MapValue)v).getKeyType());
-        // we work off of a copy of this
-        Map working = new HashMap(map);
+        assertEquals("Map value size mismatch", entries.length, mapEntries.size());
+        assertEquals("Map default value type mismatch", valueType, meta.getValueTypeName());
+        assertEquals("Map default key type mismatch", keyType, meta.getKeyTypeName());
         // now validate each of the entries
         for (int i = 0; i < entries.length; i++) {
-            Map.Entry target = locateEntry(working, entries[i]);
-            assertNotNull("Target value not found in item item", target);
             // validate the real entry
-            entries[i].validate(moduleMetadata, target);
+            entries[i].validate(blueprintMetadata, (MapEntry)mapEntries.get(i));
         }
     }
 
@@ -90,7 +89,7 @@ public class TestMapValue extends TestValue {
      *
      * @return True if this can be considered a match, false for any mismatch.
      */
-    public boolean equals(Value v) {
+    public boolean equals(Metadata v) {
         // must be of matching type
         if (!super.equals(v)) {
             return false;
@@ -100,39 +99,21 @@ public class TestMapValue extends TestValue {
         if (entries == null) {
             return true;
         }
-        Map map = ((MapValue)v).getMap();
+        // convert into the proper metadata type
+        CollectionMetadata meta = (CollectionMetadata)v;
+        List mapEntries = meta.getValues();
         // not the one we need
-        if (entries.length != map.size()) {
+        if (entries.length != mapEntries.size()) {
             return false;
         }
-
-        // we work off of a copy of this
-        Map working = new HashMap(map);
         // now validate each of the entries
         for (int i = 0; i < entries.length; i++) {
-            Map.Entry target = locateEntry(working, entries[i]);
-            if (target == null) {
-                return false;
-            }
             // validate the real entry
-            if (!entries[i].equals(target)) {
+            if (!entries[i].equals((MapEntry)mapEntries.get(i))) {
                 return false;
             }
         }
         return true;
-    }
-
-
-    protected Map.Entry locateEntry(Map values, MapValueEntry target) {
-        Iterator i = values.entrySet().iterator();
-        while (i.hasNext()) {
-            Map.Entry item = (Map.Entry)i.next();
-            if (target.equals(item)) {
-                i.remove();
-                return item;
-            }
-        }
-        return null;
     }
 }
 

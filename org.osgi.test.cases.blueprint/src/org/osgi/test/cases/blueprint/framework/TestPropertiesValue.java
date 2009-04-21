@@ -16,18 +16,28 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
-import java.util.Properties;
+import java.util.ArrayList();
+import java.util.List;
 
-import org.osgi.service.blueprint.reflect.PropertiesValue;
-import org.osgi.service.blueprint.reflect.Value;
+import org.osgi.service.blueprint.reflect.PropsMetadata;
+import org.osgi.service.blueprint.reflect.Metadata;
 
 public class TestPropertiesValue extends TestValue {
     // The expected set of properties items.
-    protected Properties entries;
+    protected List entries;
 
-    public TestPropertiesValue(Properties entries) {
+    public TestPropertiesValue(List entries) {
         super(PropertiesValue.class);
         this.entries = entries;
+    }
+
+    public TestPropertiesValue() {
+        super(PropertiesValue.class);
+        this.entries = new ArrayList();
+    }
+
+    public void add(String key, String value) {
+        entries.add(new TestMapValueEntry(key, value));
     }
 
 
@@ -38,16 +48,22 @@ public class TestPropertiesValue extends TestValue {
      *
      * @exception Exception
      */
-    public void validate(ModuleMetadata moduleMetadata, Value v) throws Exception {
-        super.validate(moduleMetadata, v);
+    public void validate(BlueprintMetadata blueprintMetadata, Metadata v) throws Exception {
+        super.validate(blueprintMetadata, v);
         // don't do anything if we're not validating the contents
         if (entries == null) {
             return;
         }
 
-        Properties props = ((PropertiesValue)v).getPropertiesValue();
+        PropsMetadata meta = (PropsMetadata)v;
+        List props = meta.getEntries();
+
         // validate the size first
-        assertEquals("PropertiesValue mismatch", entries, props);
+        assertEquals("PropertiesValue mismatch", entries.size(), props.size());
+        for (int i = 0; i < entries.size(); i++) {
+            MapValueEntry entry = (MapValueEntry)entries.get(i);
+            entry.validate((MapEntry)props.get(i));
+        }
     }
 
     /**
@@ -59,7 +75,7 @@ public class TestPropertiesValue extends TestValue {
      *
      * @return True if this can be considered a match, false for any mismatch.
      */
-    public boolean equals(Value v) {
+    public boolean equals(Metadata v) {
         // must be of matching type
         if (!super.equals(v)) {
             return false;
@@ -69,8 +85,21 @@ public class TestPropertiesValue extends TestValue {
             return true;
         }
 
-        Properties props = ((PropertiesValue)v).getPropertiesValue();
-        return entries.equals(props);
+        PropsMetadata meta = (PropsMetadata)v;
+        List props = meta.getEntries();
+
+        // validate the size first
+        if (entries.size() != props.size()) {
+            return false;
+        }
+
+        for (int i = 0; i < entries.size(); i++) {
+            MapValueEntry entry = (MapValueEntry)entries.get(i);
+            if (!entry.equals((MapEntry)props.get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 }
 

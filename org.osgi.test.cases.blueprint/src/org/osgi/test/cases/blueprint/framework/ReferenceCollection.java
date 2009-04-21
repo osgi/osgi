@@ -16,9 +16,9 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
-import org.osgi.service.blueprint.reflect.CollectionBasedServiceReferenceComponentMetadata;
+import org.osgi.service.blueprint.reflect.RefCollectionMetadata;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
-import org.osgi.service.blueprint.reflect.ServiceReferenceComponentMetadata;
+import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
 
 /**
  * A single referenced service in the BlueprintContext metadata.
@@ -70,16 +70,16 @@ public class ReferenceCollection extends ReferencedServiceBase {
      *
      * @exception Exception
      */
-    public void validate(ModuleMetadata moduleMetadata, ServiceReferenceComponentMetadata metadata) throws Exception {
-        assertTrue("Mismatch on service reference type", metadata instanceof CollectionBasedServiceReferenceComponentMetadata);
+    public void validate(BlueprintMetadata blueprintMetadata, ServiceReferenceComponentMetadata metadata) throws Exception {
+        assertTrue("Mismatch on service reference type", metadata instanceof RefCollectionMetadata);
         // do the base validation
-        super.validate(moduleMetadata, metadata);
-        CollectionBasedServiceReferenceComponentMetadata meta = (CollectionBasedServiceReferenceComponentMetadata)metadata;
+        super.validate(blueprintMetadata, metadata);
+        RefCollectionMetadata meta = (RefCollectionMetadata)metadata;
         assertEquals(collectionType, meta.getCollectionType());
         if (comparator != null) {
-            comparator.validate(moduleMetadata, meta.getComparator());
+            comparator.validate(blueprintMetadata, meta.getComparator());
         }
-        assertEquals(orderingBasis, meta.getOrderingComparisonBasis());
+        assertEquals(orderingBasis, meta.getOrderingBasis());
     }
 
     /**
@@ -92,11 +92,11 @@ public class ReferenceCollection extends ReferencedServiceBase {
      */
     public boolean matches(ComponentMetadata componentMeta) {
         // we only handle service reference component references.
-        if (!(componentMeta instanceof CollectionBasedServiceReferenceComponentMetadata)) {
+        if (!(componentMeta instanceof RefCollectionMetadata)) {
             return false;
         }
 
-        CollectionBasedServiceReferenceComponentMetadata meta = (CollectionBasedServiceReferenceComponentMetadata)componentMeta;
+        RefCollectionMetadata meta = (RefCollectionMetadata)componentMeta;
         if (collectionType != meta.getCollectionType()) {
             return false;
         }

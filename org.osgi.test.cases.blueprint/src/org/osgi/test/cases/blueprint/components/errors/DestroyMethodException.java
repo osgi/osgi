@@ -22,7 +22,7 @@ import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 /**
  * Simple test component that throws an exception when
  * the destroy method is called.  Used to test errors
- * during ModuleContext creation.
+ * during BlueprintContext creation.
  */
 public class DestroyMethodException extends BaseTestComponent {
     public DestroyMethodException(String componentId) {

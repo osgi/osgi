@@ -16,13 +16,13 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
-import org.osgi.service.blueprint.reflect.NullValue;
-import org.osgi.service.blueprint.reflect.Value;
+import org.osgi.service.blueprint.reflect.NullMetadata;
+import org.osgi.service.blueprint.reflect.Metadata;
 
 public class TestNullValue extends TestValue {
 
     public TestNullValue() {
-        super(NullValue.class);
+        super(NullMetadata.class);
     }
 
 
@@ -33,8 +33,8 @@ public class TestNullValue extends TestValue {
      *
      * @exception Exception
      */
-    public void validate(ModuleMetadata moduleMetadata, Value v) throws Exception {
-        super.validate(moduleMetadata, v);
+    public void validate(BlueprintMetadata blueprintMetadata, Metadata v) throws Exception {
+        super.validate(blueprintMetadata, v);
     }
 
     /**
@@ -43,7 +43,7 @@ public class TestNullValue extends TestValue {
      * @return a descriptive string value for the type.
      */
     public String toString() {
-        return "NullValue";
+        return "NullMetadata";
     }
 }
 

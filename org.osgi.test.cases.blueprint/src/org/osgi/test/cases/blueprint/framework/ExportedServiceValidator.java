@@ -65,7 +65,7 @@ public class ExportedServiceValidator extends MetadataValidator {
         // ensure we have everything initialized
         super.validate(testContext);
         // validation is done by the metadata wrapper.
-        moduleMetadata.validateExportedServices(expectedServices);
+        blueprintMetadata.validateExportedServices(expectedServices);
     }
 }
 

@@ -49,17 +49,17 @@ public class ThreePhaseTestController extends StandardTestController {
      * Add a bundle/metadata combo to the target test controller.
      *
      * @param bundle The installed bundle.
-     * @param moduleMetadata
+     * @param blueprintMetadata
      *               The associated module metadata.
      */
-    public void addBundle(Bundle bundle, ModuleMetadata moduleMetadata) {
+    public void addBundle(Bundle bundle, BlueprintMetadata blueprintMetadata) {
         // add the standard events, then our additions
-        super.addBundle(bundle, moduleMetadata);
+        super.addBundle(bundle, blueprintMetadata);
 
         // The middle event set has no standard set of items to add.  This is filled
         // in by the test creater.
-        EventSet middleEvents = new MetadataEventSet(moduleMetadata, testContext, bundle);
-        addMiddleEvents(bundle, moduleMetadata, middleEvents);
+        EventSet middleEvents = new MetadataEventSet(blueprintMetadata, testContext, bundle);
+        addMiddleEvents(bundle, blueprintMetadata, middleEvents);
         middlePhase.addEventSet(middleEvents);
     }
 
@@ -67,11 +67,11 @@ public class ThreePhaseTestController extends StandardTestController {
      * Add a standard set of bundle middle events for this event type.
      *
      * @param bundle The bundle the event set is tracking.
-     * @param moduleMetadata
-     *               The ModuleMetadata context for this event set.
+     * @param blueprintMetadata
+     *               The BlueprintMetadata context for this event set.
      * @param events The created event set.
      */
-    public void addMiddleEvents(Bundle bundle, ModuleMetadata moduleMetadata, EventSet events) {
+    public void addMiddleEvents(Bundle bundle, BlueprintMetadata blueprintMetadata, EventSet events) {
         // no standard set for these
     }
 

@@ -59,7 +59,7 @@ public class ComponentMetadataPresenceValidator extends MetadataValidator {
         super.validate(testContext);
 
         // get the named metadata (this will throw an assertion failure if not there)
-        ComponentMetadata meta = moduleMetadata.getComponentMetadata(componentId);
+        ComponentMetadata meta = blueprintMetadata.getComponentMetadata(componentId);
         assertTrue("Wrong metadata type for component " + componentId, type.isInstance(meta));
     }
 }

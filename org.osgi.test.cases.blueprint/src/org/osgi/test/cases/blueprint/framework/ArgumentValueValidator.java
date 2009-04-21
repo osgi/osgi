@@ -95,7 +95,7 @@ public class ArgumentValueValidator extends MetadataValidator {
         // ensure we have everything initialized
         super.validate(testContext);
         // the value must be equal
-        assertEquals("Argument " + value.getName() + " value in component " + componentId, value, moduleMetadata.getComponentArgumentValue(componentId, value.getName()));
+        assertEquals("Argument " + value.getName() + " value in component " + componentId, value, blueprintMetadata.getComponentArgumentValue(componentId, value.getName()));
     }
 }
 

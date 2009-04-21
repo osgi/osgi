@@ -21,7 +21,7 @@ import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 /**
  * Simple test component that throws an exception when
  * a property set method is called.  Use to test errors
- * during ModuleContext creation.
+ * during BlueprintContext creation.
  */
 public class PropertyException extends BaseTestComponent {
     public PropertyException(String componentId) {

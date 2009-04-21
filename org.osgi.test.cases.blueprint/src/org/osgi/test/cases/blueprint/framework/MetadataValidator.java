@@ -22,17 +22,17 @@ import org.osgi.framework.BundleContext;
 import junit.framework.Assert;
 
 /**
- * Base class for all validators that use a ModuleMetadata instance
+ * Base class for all validators that use a BlueprintMetadata instance
  * to perform the validation operations.
  */
 public class MetadataValidator extends Assert implements TestValidator, MetadataAware {
     // our method context wrapper
-    protected ModuleMetadata moduleMetadata;
+    protected BlueprintMetadata blueprintMetadata;
     // our associated bundle (retrieved from the injected metadata)
     protected Bundle bundle;
 
     public MetadataValidator() {
-        this.moduleMetadata = null;
+        this.blueprintMetadata = null;
     }
 
     /**
@@ -41,10 +41,10 @@ public class MetadataValidator extends Assert implements TestValidator, Metadata
      * @param moduleContext
      *               The new module context.
      */
-    public void setModuleMetadata(ModuleMetadata moduleMetadata) {
-        this.moduleMetadata = moduleMetadata;
+    public void setBlueprintMetadata(BlueprintMetadata blueprintMetadata) {
+        this.blueprintMetadata = blueprintMetadata;
         // save the bundle also
-        this.bundle = moduleMetadata.getTargetBundle();
+        this.bundle = blueprintMetadata.getTargetBundle();
     }
 
 
@@ -64,7 +64,7 @@ public class MetadataValidator extends Assert implements TestValidator, Metadata
     public void validate(BundleContext testContext) throws Exception {
         // this will retrieve the module context, raising an error if
         // it could not be retrieved.
-        moduleMetadata.getBlueprintContext();
+        blueprintMetadata.getBlueprintContext();
     }
 }
 

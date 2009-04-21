@@ -64,7 +64,7 @@ public class ReferencedServiceValidator extends MetadataValidator {
         // ensure we have everything initialized
         super.validate(testContext);
         // validation is done by the metadata wrapper.
-        moduleMetadata.validateReferencedServices(referencedServices);
+        blueprintMetadata.validateReferencedServices(referencedServices);
     }
 }
 

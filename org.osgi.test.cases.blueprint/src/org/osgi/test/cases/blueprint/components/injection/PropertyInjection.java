@@ -24,6 +24,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.TreeMap;
 import java.util.Properties;
 import java.util.Set;
 import java.util.HashSet;
@@ -185,6 +188,18 @@ public class PropertyInjection extends BaseTestComponent {
 
     public void setTreeSet(TreeSet value) {
         setPropertyValue("treeSet", value, TreeSet.class);
+    }
+
+    public void setHashMap(HashMap value) {
+        setPropertyValue("hashMap", value, HashMap.class);
+    }
+
+    public void setHashtable(Hashtable value) {
+        setPropertyValue("hashtable", value, Hashtable.class);
+    }
+
+    public void setTreeMap(TreeMap value) {
+        setPropertyValue("treeMap", value, TreeMap.class);
     }
 
     // Start of insertion of array property

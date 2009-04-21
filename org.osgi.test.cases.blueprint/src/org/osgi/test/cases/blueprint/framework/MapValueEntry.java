@@ -16,9 +16,8 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
-import java.util.Map;
-
-import org.osgi.service.blueprint.reflect.Value;
+import org.osgi.service.blueprint.reflect.Metadata;
+import org.osgi.service.blueprint.reflect.MapEntry;
 
 /**
  * A descriptor for an index/value pair we expect to see in
@@ -56,14 +55,13 @@ public class MapValueEntry {
         this(key, new TestStringValue(type, value));
     }
 
-    public boolean equals(Map.Entry entry) {
-        Value entryKey = (Value)entry.getKey();
-        return key.equals(entryKey);
+    public boolean equals(MapEntry entry) {
+        return key.equals(entry.getKey());
     }
 
-    public void validate(ModuleMetadata moduleMetadata, Map.Entry entry) throws Exception {
-        key.validate(moduleMetadata, (Value)entry.getKey());
-        value.validate(moduleMetadata, (Value)entry.getValue());
+    public void validate(BlueprintMetadata blueprintMetadata, MapEntry entry) throws Exception {
+        key.validate(blueprintMetadata, entry.getKey());
+        value.validate(blueprintMetadata, entry.getValue());
     }
 
     public String toString() {

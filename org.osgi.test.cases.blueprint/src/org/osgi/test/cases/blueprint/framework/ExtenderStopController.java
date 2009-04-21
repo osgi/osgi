@@ -42,11 +42,11 @@ public class ExtenderStopController extends StandardTestController {
      * Add a standard set of bundle stop events for this event type.
      *
      * @param bundle The bundle the event set is tracking.
-     * @param moduleMetadata
-     *               The ModuleMetadata context for this event set.
+     * @param blueprintMetadata
+     *               The BlueprintMetadata context for this event set.
      * @param events The created event set.
      */
-    public void addStopEvents(Bundle bundle, ModuleMetadata moduleMetadata, EventSet events) {
+    public void addStopEvents(Bundle bundle, BlueprintMetadata blueprintMetadata, EventSet events) {
         // this is the same as the standard test set, except for the bundle stopper.  That
         // event is managed by stopping the extender bundle
 
@@ -63,7 +63,7 @@ public class ExtenderStopController extends StandardTestController {
         events.addValidator(new BundleStateValidator(Bundle.ACTIVE));
         // this needs to perform some cleanup when everything is done,
         // so add it to the terminator list.
-        events.addTerminator(moduleMetadata);
+        events.addTerminator(blueprintMetadata);
     }
 
 

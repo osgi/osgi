@@ -37,7 +37,7 @@ public class ReferenceSetValidator extends MetadataValidator {
         super.validate(testContext);
         // the value must be equal
 
-        Object componentObject = moduleMetadata.getComponent(componentId);
+        Object componentObject = blueprintMetadata.getComponent(componentId);
         assertNotNull("Null reference set component found for " + componentId, componentObject);
         assertTrue("Invalid reference set component found for " + componentId, componentObject instanceof Set);
     }

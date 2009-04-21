@@ -19,7 +19,7 @@ package org.osgi.test.cases.blueprint.framework;
 
 public class ReferenceProperty extends TestProperty {
     public ReferenceProperty(String propertyName, String componentId) {
-        super(new TestReferenceValue(componentId), propertyName);
+        super(new TestRefValue(componentId), propertyName);
     }
 }
 

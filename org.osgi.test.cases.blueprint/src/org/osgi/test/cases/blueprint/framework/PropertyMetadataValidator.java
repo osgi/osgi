@@ -77,7 +77,7 @@ public class PropertyMetadataValidator extends MetadataValidator {
         // ensure we have everything initialized
         super.validate(testContext);
         // validation is done by the metadata wrapper.
-        moduleMetadata.validatePropertyMetadata(componentId, props);
+        blueprintMetadata.validatePropertyMetadata(componentId, props);
     }
 }
 

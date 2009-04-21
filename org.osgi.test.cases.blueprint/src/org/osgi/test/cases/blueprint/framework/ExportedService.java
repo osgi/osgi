@@ -16,18 +16,17 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
 
+import org.osgi.service.blueprint.reflect.BeanMetadata;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
-import org.osgi.service.blueprint.reflect.ComponentValue;
-import org.osgi.service.blueprint.reflect.ReferenceValue;
-import org.osgi.service.blueprint.reflect.RegistrationListenerMetadata;
+import org.osgi.service.blueprint.reflect.RefMetadata;
+import org.osgi.service.blueprint.reflect.RegistrationListener;
 import org.osgi.service.blueprint.reflect.ServiceMetadata;
-import org.osgi.service.blueprint.reflect.Value;
+import org.osgi.service.blueprint.reflect.Metadata;
 import org.osgi.test.cases.blueprint.services.TestUtil;
 
 import junit.framework.Assert;
@@ -43,13 +42,13 @@ public class ExportedService extends Assert implements TestComponentMetadata {
     // the exported component name (can be null if we expect an anonymous component)
     protected String componentId;
     // the set of exported interfaces
-    protected Set serviceInterfaces;
+    protected List serviceInterfaces;
     // an optional set of service properties
-    protected Map serviceProperties;
+    protected List serviceProperties;
     // the exported service ranking
     protected int serviceRanking;
     // the set of explicit dependencies
-    protected Set dependencies;
+    protected List dependencies;
     // any registration listeners that might be attached to this export
     protected RegistrationListener[] listeners;
 
@@ -68,7 +67,7 @@ public class ExportedService extends Assert implements TestComponentMetadata {
      * @param deps       A set of explicit dependencies
      * @param listeners  Any optional registration listeners.
      */
-    public ExportedService(String serviceId, String componentId, Class serviceInterface, int exportMode, int ranking, Map props,
+    public ExportedService(String serviceId, String componentId, Class serviceInterface, int exportMode, int ranking, List props,
             String[] deps, RegistrationListener[] listeners) {
         this(serviceId, componentId, new Class[] { serviceInterface }, exportMode, ranking, props, deps, listeners);
     }
@@ -89,7 +88,7 @@ public class ExportedService extends Assert implements TestComponentMetadata {
      * @param deps       A set of explicit dependencies
      * @param listeners  Any optional registration listeners.
      */
-    public ExportedService(String serviceId, String componentId, Class[] interfaces, int exportMode, int ranking, Map props,
+    public ExportedService(String serviceId, String componentId, Class[] interfaces, int exportMode, int ranking, List props,
         String[] deps, RegistrationListener[] listeners) {
         this.serviceId = serviceId;
         this.componentId = componentId;
@@ -97,17 +96,19 @@ public class ExportedService extends Assert implements TestComponentMetadata {
         this.serviceRanking = ranking;
         this.serviceProperties = props;
         // convert this into a set
-        this.serviceInterfaces = new HashSet();
+        this.serviceInterfaces = new ArrayList();
         for (int i = 0; i < interfaces.length; i++) {
             serviceInterfaces.add(interfaces[i]);
         }
-        dependencies = new HashSet();
+
+        dependencies = new ArrayList();
         // handle the dependency tracking
         if (deps != null) {
             for (int i = 0; i < deps.length; i++) {
                 dependencies.add(deps[i]);
             }
         }
+
         this.listeners = listeners;
     }
 
@@ -130,40 +131,46 @@ public class ExportedService extends Assert implements TestComponentMetadata {
         // if we have an assigned service id check on that first.  We consider
         // this to be a target match, since the service id must be unique.
         if (serviceId != null) {
-            if (meta.getName() != null) {
-                return serviceId.equals(meta.getName());
+            if (meta.getId() != null) {
+                return serviceId.equals(meta.getId());
             }
+            // not a match
+            return false;
         }
 
         // match on the interfaces first
         if (!serviceInterfaces.equals(meta.getInterfaceNames())) {
             return false;
         }
-        Value component = meta.getExportedComponent();
+
+        Target component = meta.getServiceComponent();
         // if we have an explicit component id, we need to verify this
         if (componentId != null) {
             // this must be a reference to a component
-            if (!(component instanceof ReferenceValue)) {
+            if (!(component instanceof RefMetadata)) {
                 return false;
             }
             // the component names must match
-            if (!componentId.equals(((ReferenceValue)component).getComponentName())) {
+            if (!componentId.equals(((RefMetadata)component).getComponentName())) {
                 return false;
             }
         }
         else {
             // this must be an inner component
             // this must be a reference to a component
-            if (!(component instanceof ComponentValue)) {
+            if (!(component instanceof BeanMetadata)) {
                 return false;
             }
         }
+
+        // TODO:  More work needed here
+
         // for some tests, the service properties are necessary to disambiguate
         // the service.  If we have some specified, then a match is required on
         // all of these as well.
-        if (serviceProperties != null) {
-            return TestUtil.containsAll(serviceProperties, meta.getServiceProperties());
-        }
+        // if (serviceProperties != null) {
+        //    return TestUtil.containsAll(serviceProperties, meta.getServiceProperties());
+        // }
         return true;
     }
 
@@ -175,7 +182,7 @@ public class ExportedService extends Assert implements TestComponentMetadata {
      *
      * @exception Exception
      */
-    public void validate(ModuleMetadata moduleMetadata, ComponentMetadata componentMeta) throws Exception {
+    public void validate(BlueprintMetadata blueprintMetadata, ComponentMetadata componentMeta) throws Exception {
         assertTrue("Component type mismatch", componentMeta instanceof ServiceMetadata);
         ServiceMetadata meta = (ServiceMetadata)componentMeta;
         assertEquals(exportMode, meta.getAutoExportMode());
@@ -187,10 +194,12 @@ public class ExportedService extends Assert implements TestComponentMetadata {
             assertEquals(listeners.length, metaListeners.size());
             Iterator i = metaListeners.iterator();
             while (i.hasNext()) {
-                RegistrationListenerMetadata metaListener = (RegistrationListenerMetadata)i.next();
+                RegistrationListener metaListener = (RegistrationListener)i.next();
                 assertNotNull(locateListener(metaListener, listeners));
             }
         }
+
+        // TODO:  Need to validate the service properties
     }
 
 
@@ -203,7 +212,7 @@ public class ExportedService extends Assert implements TestComponentMetadata {
      *
      * @return The matching expected element, or null if no match was found.
      */
-    protected RegistrationListener locateListener(RegistrationListenerMetadata meta, RegistrationListener[] listeners) {
+    protected TestRegistrationListener locateListener(RegistrationListener meta, TestRegistrationListener[] listeners) {
         for (int i = 0; i < listeners.length; i++) {
             if (listeners[i].matches(meta)) {
                 return listeners[i];

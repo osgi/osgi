@@ -37,11 +37,11 @@ public class LazyActivationTestController extends ThreePhaseTestController {
      * Add a standard set of bundle start events for this event type.
      *
      * @param bundle The bundle the event set is tracking.
-     * @param moduleMetadata                                              1
-     *               The ModuleMetadata context for this event set.
+     * @param blueprintMetadata                                              1
+     *               The BlueprintMetadata context for this event set.
      * @param events The created event set.
      */
-    public void addStartEvents(Bundle bundle, ModuleMetadata moduleMetadata, EventSet events) {
+    public void addStartEvents(Bundle bundle, BlueprintMetadata blueprintMetadata, EventSet events) {
         // this will kick the STARTING process, but the bundle will not fully initialize
         // until we do something to force classloading
         events.addInitializer(new TestBundleStarter(bundle));
@@ -63,11 +63,11 @@ public class LazyActivationTestController extends ThreePhaseTestController {
      * Add a standard set of bundle middle events for this event type.
      *
      * @param bundle The bundle the event set is tracking.
-     * @param moduleMetadata
-     *               The ModuleMetadata context for this event set.
+     * @param blueprintMetadata
+     *               The BlueprintMetadata context for this event set.
      * @param events The created event set.
      */
-    public void addMiddleEvents(Bundle bundle, ModuleMetadata moduleMetadata, EventSet events) {
+    public void addMiddleEvents(Bundle bundle, BlueprintMetadata blueprintMetadata, EventSet events) {
 
         // these events would normally be expected in the first phase, but won't show up
         // until the second phase because of the LAZY_ACTIVATION
@@ -83,10 +83,10 @@ public class LazyActivationTestController extends ThreePhaseTestController {
 
         // this needs to be the first validator of the set, since
         // it initializes the module context.
-        events.addValidator(moduleMetadata);
+        events.addValidator(blueprintMetadata);
         // this needs to perform some cleanup when everything is done,
         // so add it to the terminator list.
-        events.addTerminator(moduleMetadata);
+        events.addTerminator(blueprintMetadata);
         // the bundle should be in the ACTIVE state when everything settles down
         events.addValidator(new BundleStateValidator(Bundle.ACTIVE));
     }

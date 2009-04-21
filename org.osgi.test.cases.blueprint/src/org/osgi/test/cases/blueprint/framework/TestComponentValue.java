@@ -16,8 +16,8 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
-import org.osgi.service.blueprint.reflect.ComponentValue;
-import org.osgi.service.blueprint.reflect.Value;
+import org.osgi.service.blueprint.reflect.Metadata;
+import org.osgi.service.blueprint.reflect.ComponentMetadata;
 
 /**
  * A wrapper for component definition metadata.
@@ -27,7 +27,7 @@ public class TestComponentValue extends TestValue {
     protected TestComponentMetadata component;
 
     public TestComponentValue(TestComponentMetadata component) {
-        super(ComponentValue.class);
+        super(ComponentMetadata.class);
         this.component = component;
     }
 
@@ -39,9 +39,9 @@ public class TestComponentValue extends TestValue {
      *
      * @exception Exception
      */
-    public void validate(ModuleMetadata moduleMetadata, Value v) throws Exception {
-        super.validate(moduleMetadata, v);
-        component.validate(moduleMetadata, ((ComponentValue)v).getComponentMetadata());
+    public void validate(BlueprintMetadata blueprintMetadata, Metadata v) throws Exception {
+        super.validate(blueprintMetadata, v);
+        component.validate(blueprintMetadata, (ComponentMetadata)v);
     }
 
 
@@ -54,13 +54,13 @@ public class TestComponentValue extends TestValue {
      *
      * @return True if this can be considered a match, false for any mismatch.
      */
-    public boolean equals(Value v) {
+    public boolean equals(Metadata v) {
         // must be of matching type
         if (!super.equals(v)) {
             return false;
         }
         // and perform the metadata matching
-        return component.matches(((ComponentValue)v).getComponentMetadata());
+        return component.matches((ComponentMetadata)v);
     }
 }
 

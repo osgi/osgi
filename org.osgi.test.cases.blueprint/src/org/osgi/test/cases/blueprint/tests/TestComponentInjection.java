@@ -19,11 +19,11 @@ package org.osgi.test.cases.blueprint.tests;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
-import org.osgi.service.blueprint.context.ModuleContext;
+import org.osgi.service.blueprint.context.BlueprintContext;
 import org.osgi.service.blueprint.convert.ConversionService;
 
-import org.osgi.service.blueprint.reflect.LocalComponentMetadata;
-import org.osgi.service.blueprint.reflect.LocalComponentMetadata;
+import org.osgi.service.blueprint.reflect.BeanMetadata;
+import org.osgi.service.blueprint.reflect.BeanMetadata;
 import org.osgi.test.cases.blueprint.components.injection.ComponentInjection;
 import org.osgi.test.cases.blueprint.framework.*;
 import org.osgi.test.cases.blueprint.services.AssertionService;
@@ -61,16 +61,16 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         // we validate metadata for a few select components
 
         startEvents.addValidator(new ComponentMetadataValidator(
-            new LocalComponent("lazyleaf1", ComponentInjection.class, null, null, null,
-            new TestParameter[] { new StringParameter("lazyleaf1") } , null,
+            new BeanComponent("lazyleaf1", ComponentInjection.class, null, null, null,
+            new TestArgument[] { new StringArgument("lazyleaf1") } , null,
             null, true, null)));
 
         // first real test.  This will cause lazyleaf1 to get instantiated in order to be injected.  That's the real test.
         startEvents.addAssertion("comp1", AssertionService.COMPONENT_CREATED);
         startEvents.validateComponent("comp1", ComponentInjection.class);
-        startEvents.addValidator(new ConstructorMetadataValidator("comp1", new TestParameter[] {
-            new StringParameter("comp1"),
-            new ReferenceParameter("lazyleaf1")
+        startEvents.addValidator(new ArgumentMetadataValidator("comp1", new TestArgument[] {
+            new StringArgument("comp1"),
+            new ReferenceArgument("lazyleaf1")
         }));
 
         // second version of this using the inverse default
@@ -79,9 +79,9 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         // first real test.  This will cause lazyleaf1a to get instantiated in order to be injected.  That's the real test.
         startEvents.addAssertion("comp1a", AssertionService.COMPONENT_CREATED);
         startEvents.validateComponent("comp1a", ComponentInjection.class);
-        startEvents.addValidator(new ConstructorMetadataValidator("comp1a", new TestParameter[] {
-            new StringParameter("comp1a"),
-            new ReferenceParameter("lazyleaf1a")
+        startEvents.addValidator(new ArgumentMetadataValidator("comp1a", new TestArgument[] {
+            new StringArgument("comp1a"),
+            new ReferenceArgument("lazyleaf1a")
         }));
 
         // the following components get instantiated in the middle phase
@@ -98,9 +98,9 @@ public class TestComponentInjection extends DefaultTestBundleControl {
 
         // component referencing two separate leaf nodes
         startEvents.addAssertion("twoleaf", AssertionService.COMPONENT_CREATED);
-        startEvents.addValidator(new ConstructorMetadataValidator("twoleaf", new TestParameter[] {
-            new StringParameter("twoleaf"),
-            new ReferenceParameter("leaf1")
+        startEvents.addValidator(new ArgumentMetadataValidator("twoleaf", new TestArgument[] {
+            new StringArgument("twoleaf"),
+            new ReferenceArgument("leaf1")
         }));
         startEvents.addValidator(new PropertyMetadataValidator("twoleaf", new TestProperty[] {
             new ReferenceProperty("componentOne", "leaf2")
@@ -108,11 +108,11 @@ public class TestComponentInjection extends DefaultTestBundleControl {
 
         // a more complex dependency graph
         startEvents.addAssertion("twocomp", AssertionService.COMPONENT_CREATED);
-        startEvents.addValidator(new ConstructorMetadataValidator("twocomp", new TestParameter[] {
-            new StringParameter("twocomp"),
-            new ReferenceParameter("leaf1"),
-            new ReferenceParameter("twoleaf"),
-            new ReferenceParameter("comp1"),
+        startEvents.addValidator(new ArgumentMetadataValidator("twocomp", new TestArgument[] {
+            new StringArgument("twocomp"),
+            new ReferenceArgument("leaf1"),
+            new ReferenceArgument("twoleaf"),
+            new ReferenceArgument("comp1"),
         }));
 
         // different collection classes
@@ -121,8 +121,8 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         // the property is a list, which references two components
         startEvents.addValidator(new PropertyMetadataValidator("twolist", new TestProperty[] {
             new TestProperty(new TestListValue(new TestValue[] {
-                new TestReferenceValue("twoleaf"),
-                new TestReferenceValue("twocomp"),
+                new TestRefValue("twoleaf"),
+                new TestRefValue("twocomp"),
             }),"componentOne")
         }));
 
@@ -130,8 +130,8 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         // the property is a set, which references two components
         startEvents.addValidator(new PropertyMetadataValidator("twoset", new TestProperty[] {
             new TestProperty( new TestSetValue(new TestValue[] {
-                new TestReferenceValue("twoleaf"),
-                new TestReferenceValue("twocomp"),
+                new TestRefValue("twoleaf"),
+                new TestRefValue("twocomp"),
             }),"componentOne")
         }));
 
@@ -139,8 +139,8 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         // the property is a set, which references two components
         startEvents.addValidator(new PropertyMetadataValidator("mapref", new TestProperty[] {
             new TestProperty(new TestMapValue(new MapValueEntry[] {
-                new MapValueEntry(new TestReferenceValue("leaf1"), new TestReferenceValue("twoleaf")),
-                new MapValueEntry(new TestReferenceValue("leaf2"), new TestReferenceValue("twocomp")),
+                new MapValueEntry(new TestRefValue("leaf1"), new TestRefValue("twoleaf")),
+                new MapValueEntry(new TestRefValue("leaf2"), new TestRefValue("twocomp")),
             }),"componentOne")
         }));
 
@@ -149,8 +149,8 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         startEvents.addAssertion("dependsOnOne", AssertionService.COMPONENT_CREATED);
 
         startEvents.addValidator(new ComponentMetadataValidator(
-            new LocalComponent("dependsOnOne", ComponentInjection.class, null, null, null,
-            new TestParameter[] { new StringParameter("dependsOnOne") } , null,
+            new BeanComponent("dependsOnOne", ComponentInjection.class, null, null, null,
+            new TestArgument[] { new StringArgument("dependsOnOne") } , null,
             new String[] { "dependsleaf1" }, false, null)));
 
         startEvents.addAssertion("dependsleaf2", AssertionService.COMPONENT_CREATED);
@@ -158,8 +158,8 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         startEvents.addAssertion("dependsOnTwo", AssertionService.COMPONENT_CREATED);
 
         startEvents.addValidator(new ComponentMetadataValidator(
-            new LocalComponent("dependsOnTwo", ComponentInjection.class, null, null, null,
-            new TestParameter[] { new StringParameter("dependsOnTwo") } , null,
+            new BeanComponent("dependsOnTwo", ComponentInjection.class, null, null, null,
+            new TestArgument[] { new StringArgument("dependsOnTwo") } , null,
             new String[] { "dependsleaf2", "dependsleaf3" }, false, null)));
 
         // validate the depends on metadata
@@ -173,16 +173,16 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         startEvents.addAssertion("singleton2", AssertionService.COMPONENT_CREATED);
         // this is the first with an explicit scope specified, so validate it
         startEvents.addValidator(new ComponentMetadataValidator(
-            new LocalComponent("singleton2", ComponentInjection.class, null, null, null,
-            new TestParameter[] { new StringParameter("singleton2") } , null,
-            null, false, LocalComponentMetadata.SCOPE_SINGLETON)));
+            new BeanComponent("singleton2", ComponentInjection.class, null, null, null,
+            new TestArgument[] { new StringArgument("singleton2") } , null,
+            null, false, BeanMetadata.SCOPE_SINGLETON)));
         startEvents.addAssertion("singleton3", AssertionService.COMPONENT_CREATED);
 
         // singleton3 is bundle scope, but since it is not exported as a service, should behave like a singleton
         startEvents.addValidator(new ComponentMetadataValidator(
-            new LocalComponent("singleton3", ComponentInjection.class, null, null, null,
-            new TestParameter[] { new StringParameter("singleton3") } , null,
-            null, false, LocalComponentMetadata.SCOPE_BUNDLE)));
+            new BeanComponent("singleton3", ComponentInjection.class, null, null, null,
+            new TestArgument[] { new StringArgument("singleton3") } , null,
+            null, false, BeanMetadata.SCOPE_BUNDLE)));
 
         // now add a failure event for each of these.  This will catch multiple creations.  The
         // first create event will be processed, and any additional ones will be flagged as a failure
@@ -195,9 +195,9 @@ public class TestComponentInjection extends DefaultTestBundleControl {
 
         // this is the first with a prototype scope
         startEvents.addValidator(new ComponentMetadataValidator(
-            new LocalComponent("prototype1", ComponentInjection.class, null, null, null,
-            new TestParameter[] { new StringParameter("prototype1") } , null,
-            null, false, LocalComponentMetadata.SCOPE_PROTOTYPE)));
+            new BeanComponent("prototype1", ComponentInjection.class, null, null, null,
+            new TestArgument[] { new StringArgument("prototype1") } , null,
+            null, false, BeanMetadata.SCOPE_PROTOTYPE)));
 
         startEvents.addAssertion("prototype1", AssertionService.COMPONENT_CREATED);
         startEvents.addAssertion("prototype1", AssertionService.COMPONENT_CREATED);

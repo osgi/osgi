@@ -32,12 +32,12 @@ import org.osgi.framework.BundleContext;
 public class MetadataEventSet extends EventSet {
     // the special validator that validates the module context and also
     // give access to component metadata.
-    protected ModuleMetadata moduleContext;
+    protected BlueprintMetadata moduleContext;
 
-    public MetadataEventSet(ModuleMetadata moduleContext, BundleContext testBundle, Bundle bundle) {
+    public MetadataEventSet(BlueprintMetadata moduleContext, BundleContext testBundle, Bundle bundle) {
         super(testBundle, bundle);
         this.moduleContext = moduleContext;
-        moduleContext = new ModuleMetadata(testBundle, bundle);
+        moduleContext = new BlueprintMetadata(testBundle, bundle);
     }
 
     /**
@@ -48,7 +48,7 @@ public class MetadataEventSet extends EventSet {
     public void addValidator(TestValidator v) {
         // inject the module context instance if this is required.
         if (v instanceof MetadataAware) {
-            ((MetadataAware)v).setModuleMetadata(moduleContext);
+            ((MetadataAware)v).setBlueprintMetadata(moduleContext);
         }
         // complete the add operation
         super.addValidator(v);
@@ -63,7 +63,7 @@ public class MetadataEventSet extends EventSet {
     public void addInitializer(TestInitializer v) {
         // inject the module context instance if this is required.
         if (v instanceof MetadataAware) {
-            ((MetadataAware)v).setModuleMetadata(moduleContext);
+            ((MetadataAware)v).setBlueprintMetadata(moduleContext);
         }
         // complete the add operation
         super.addInitializer(v);
@@ -78,7 +78,7 @@ public class MetadataEventSet extends EventSet {
     public void addTerminator(TestCleanup v) {
         // inject the module context instance if this is required.
         if (v instanceof MetadataAware) {
-            ((MetadataAware)v).setModuleMetadata(moduleContext);
+            ((MetadataAware)v).setBlueprintMetadata(moduleContext);
         }
         // complete the add operation
         super.addTerminator(v);
@@ -93,7 +93,7 @@ public class MetadataEventSet extends EventSet {
     public void addEvent(TestEvent event) {
         // inject the module context instance if this is required.
         if (event instanceof MetadataAware) {
-            ((MetadataAware)event).setModuleMetadata(moduleContext);
+            ((MetadataAware)event).setBlueprintMetadata(moduleContext);
         }
         super.addEvent(event);
     }
@@ -106,7 +106,7 @@ public class MetadataEventSet extends EventSet {
     public void addFailureEvent(TestEvent event) {
         // inject the module context instance if this is required.
         if (event instanceof MetadataAware) {
-            ((MetadataAware)event).setModuleMetadata(moduleContext);
+            ((MetadataAware)event).setBlueprintMetadata(moduleContext);
         }
         super.addFailureEvent(event);
     }

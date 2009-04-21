@@ -16,7 +16,7 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
-import org.osgi.service.blueprint.reflect.PropertyInjectionMetadata;
+import org.osgi.service.blueprint.reflect.BeanProperty;
 
 import junit.framework.Assert;
 
@@ -40,18 +40,18 @@ public class TestProperty extends Assert {
 
 
     /**
-     * Validate a ParameterSpecification against an expected value.
+     * Validate a BeanProperty against an expected value.
      *
      * @param spec   The metadata spec for this argument.
      *
      * @exception Exception
      */
-    public void validate(ModuleMetadata moduleMetadata, PropertyInjectionMetadata spec) throws Exception {
+    public void validate(BlueprintMetadata blueprintMetadata, BeanProperty spec) throws Exception {
         // validate the name
         assertEquals("Property name mismatch", propertyName, spec.getName());
         // and validate the property type information
         if (propertyTestValue != null) {
-            propertyTestValue.validate(moduleMetadata, spec.getValue());
+            propertyTestValue.validate(blueprintMetadata, spec.getValue());
         }
     }
 

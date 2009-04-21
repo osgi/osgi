@@ -66,10 +66,10 @@ public class ReferencedService extends ReferencedServiceBase implements TestComp
      *
      * @exception Exception
      */
-    public void validate(ModuleMetadata moduleMetadata, ServiceReferenceComponentMetadata metadata) throws Exception {
+    public void validate(BlueprintMetadata blueprintMetadata, ServiceReferenceComponentMetadata metadata) throws Exception {
         assertTrue("Mismatch on service reference type", metadata instanceof UnaryServiceReferenceComponentMetadata);
         // do the base validation
-        super.validate(moduleMetadata, metadata);
+        super.validate(blueprintMetadata, metadata);
         assertEquals(timeout, ((UnaryServiceReferenceComponentMetadata)metadata).getTimeout());
     }
 

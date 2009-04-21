@@ -16,7 +16,7 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
-import org.osgi.service.blueprint.reflect.Value;
+import org.osgi.service.blueprint.reflect.Metadata;
 
 import junit.framework.Assert;
 
@@ -29,16 +29,16 @@ public class TestValue extends Assert {
     }
 
     /**
-     * Validate a ParameterSpecification against an expected value.
+     * Validate a Metadata value against an expected value.
      *
      * @param spec   The metadata spec for this argument.
      *
      * @exception Exception
      */
-    public void validate(ModuleMetadata moduleMetaData, Value v) throws Exception {
-        assertNotNull("Expected Value type " + valueType.getName(), v);
+    public void validate(BlueprintMetadata moduleMetaData, Metadata v) throws Exception {
+        assertNotNull("Expected Metadata type " + valueType.getName(), v);
         // make sure the metadata is of the correct type
-        assertTrue("Value type mismatch.  Expected " + valueType.getName() + " Received " + v, valueType.isInstance(v));
+        assertTrue("Metadata type mismatch.  Expected " + valueType.getName() + " Received " + v, valueType.isInstance(v));
     }
 
     /**
@@ -50,7 +50,7 @@ public class TestValue extends Assert {
      *
      * @return True if this can be considered a match, false for any mismatch.
      */
-    public boolean equals(Value v) {
+    public boolean equals(Metadata v) {
         // this can happen in some validation contexts
         if (v == null) {
             return false;

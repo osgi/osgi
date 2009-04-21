@@ -44,7 +44,7 @@ public class ReferenceComponentValidator extends MetadataValidator {
         super.validate(testContext);
         // the value must be equal
 
-        Object componentObject = moduleMetadata.getComponent(componentId);
+        Object componentObject = blueprintMetadata.getComponent(componentId);
         assertNotNull("Null reference component found for " + componentId, componentObject);
         for (int i = 0; i < interfaces.length; i++) {
             assertTrue("Service reference object for " + componentId + " does not implement " + interfaces[i].getName(),

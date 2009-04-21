@@ -38,7 +38,7 @@ public class ComponentTypeValidator extends MetadataValidator {
         super.validate(testContext);
         // the value must be equal
 
-        Object componentObject = moduleMetadata.getComponent(componentId);
+        Object componentObject = blueprintMetadata.getComponent(componentId);
         assertNotNull("Null component component found for " + componentId, componentObject);
         assertTrue("Invalid component type found for " + componentId + ", expected " + type.getName() + ", found " + componentObject.getClass().getName(),
            type.isInstance(componentObject));

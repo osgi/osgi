@@ -119,7 +119,7 @@ public class ReferencedServiceBase extends Assert implements TestComponentMetada
      *
      * @exception Exception
      */
-    public void validate(ModuleMetadata moduleMetadata, ComponentMetadata componentMeta) throws Exception {
+    public void validate(BlueprintMetadata blueprintMetadata, ComponentMetadata componentMeta) throws Exception {
         assertTrue("Component type mismatch", componentMeta instanceof ServiceReferenceComponentMetadata);
         ServiceReferenceComponentMetadata meta = (ServiceReferenceComponentMetadata)componentMeta;
         // if we have a name to compare, they must be equal
@@ -136,7 +136,7 @@ public class ReferencedServiceBase extends Assert implements TestComponentMetada
                 BindingListenerMetadata l = locateBindingListener(bindingListeners, s);
                 assertNotNull("Missing binding listener (" + s + ") for component " + name, l);
                 // do additional validation on the listener definition.
-                s.validate(moduleMetadata, l);
+                s.validate(blueprintMetadata, l);
             }
         }
     }

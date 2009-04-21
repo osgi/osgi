@@ -26,6 +26,6 @@ public interface MetadataAware {
      * @param moduleContext
      *               The new module context.
      */
-    public void setModuleMetadata(ModuleMetadata moduleMetadata);
+    public void setBlueprintMetadata(BlueprintMetadata blueprintMetadata);
 }
 

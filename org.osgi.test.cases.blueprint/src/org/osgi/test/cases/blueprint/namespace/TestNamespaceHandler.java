@@ -89,20 +89,20 @@ public class TestNamespaceHandler extends BaseTestComponent implements Namespace
             Attr attribute = (Attr)node;
             if (attribute.getName().equals("sleepy")) {
                 // make a copy of the metadata
-                LocalComponentMetadataImpl metadata = (LocalComponentMetadataImpl)NamespaceUtil.cloneComponentMetadata(component);
-                metadata.setLazy(attribute.getValue().equals("on"));
+                BeanMetadataImpl metadata = (BeanMetadataImpl)NamespaceUtil.cloneMetadata(component);
+                metadata.setLazyInit(attribute.getValue().equals("on"));
                 return metadata;
             }
             else if (attribute.getName().equals("init")) {
                 // make a copy of the metadata
-                LocalComponentMetadataImpl metadata = (LocalComponentMetadataImpl)NamespaceUtil.cloneComponentMetadata(component);
+                BeanMetadataImpl metadata = (BeanMetadataImpl)NamespaceUtil.cloneMetadata(component);
                 metadata.setInitMethodName(attribute.getValue());
                 return metadata;
             }
             else if (attribute.getName().equals("copy-component")) {
                 // make a copy of the metadata, but don't decorate it.  This is used on all of the component elements,
                 // not just LocalComponent
-                ComponentMetadata metadata = NamespaceUtil.cloneComponentMetadata(component);
+                ComponentMetadata metadata = NamespaceUtil.cloneMetadata(component);
                 return metadata;
             }
             else if (attribute.getName().equals("raise-error")) {
@@ -111,7 +111,7 @@ public class TestNamespaceHandler extends BaseTestComponent implements Namespace
                     throw new IllegalArgumentException("raise-error=\"yes\" triggered exception");
                 }
                 // we can also use this to trigger replacement of a component
-                return NamespaceUtil.cloneComponentMetadata(component);
+                return NamespaceUtil.cloneMetadata(component);
             }
             throw new IllegalArgumentException("Unknown attribute " + attribute.getName());
         }
@@ -120,31 +120,30 @@ public class TestNamespaceHandler extends BaseTestComponent implements Namespace
             // requesting a bundle property be set
             if (element.getTagName().equalsIgnoreCase("bundle")) {
                 // make a copy of the metadata
-                LocalComponentMetadataImpl metadata = (LocalComponentMetadataImpl)NamespaceUtil.cloneComponentMetadata(component);
+                BeanMetadataImpl metadata = (BeanMetadataImpl)NamespaceUtil.cloneMetadata(component);
                 // the assigned value is a component reference
-                ReferenceValueImpl bundleRef = new ReferenceValueImpl("bundle");
-                PropertyInjectionMetadataImpl property = new PropertyInjectionMetadataImpl("bundle", bundleRef);
+                RefMetadataImpl bundleRef = new RefMetadataImpl("bundle");
+                BeanPropertyImpl property = new BeanPropertyImpl("bundle", bundleRef);
                 metadata.addProperty(property);
                 return metadata;
             }
             else if (element.getTagName().equals("copy")) {
                 // make a copy of the metadata, but don't decorate it.  This is used on all of the component elements,
                 // not just LocalComponent
-                ComponentMetadata metadata = NamespaceUtil.cloneComponentMetadata(component);
-                return metadata;
+                return NamespaceUtil.cloneMetadata(component);
             }
             // we have a different value tag
             else if (element.getTagName().equalsIgnoreCase("bundle-value")) {
                 // make a copy of the metadata for our enclosing component
-                LocalComponentMetadataImpl metadata = (LocalComponentMetadataImpl)NamespaceUtil.cloneComponentMetadata(context.getEnclosingComponent());
+                BeanMetadataImpl metadata = (BeanMetadataImpl)NamespaceUtil.cloneMetadata(context.getEnclosingComponent());
                 // we need to replace the definition of the
                 Element parent = (Element)element.getParentNode();
                 if (!parent.getTagName().equals("property")) {
                     throw new IllegalArgumentException("<bundleValue> only valid as a child of <property> element");
                 }
                 // the assigned value is a component reference
-                ReferenceValueImpl bundleRef = new ReferenceValueImpl("bundle");
-                PropertyInjectionMetadataImpl property = new PropertyInjectionMetadataImpl(parent.getAttribute("name"), bundleRef);
+                RefMetadataImpl bundleRef = new RefMetadataImpl("bundle");
+                BeanPropertyImpl property = new BeanPropertyImpl(parent.getAttribute("name"), bundleRef);
                 // replace the property definition with the fully realized value
                 metadata.replaceProperty(property);
                 return metadata;
@@ -178,8 +177,10 @@ public class TestNamespaceHandler extends BaseTestComponent implements Namespace
                     ComponentMetadata metadata = registry.getComponentDefinition(name);
                     AssertionService.assertNotNull(this, "null component returned from registry for (" + name + ")", metadata);
                     // clone this so we can perform a replacement with out version
-                    metadata = NamespaceUtil.cloneComponentMetadata(metadata);
+                    metadata = NamespaceUtil.cloneMetadata(metadata);
                     try {
+                        // there's no replace, so we need to remove this first
+                        registry.removeComponentDefinition(name);
                         // and register the replacement version
                         registry.registerComponentDefinition(metadata);
                         AssertionService.fail(this, "Exception expected on registerComponentDefinition()");
@@ -205,15 +206,15 @@ public class TestNamespaceHandler extends BaseTestComponent implements Namespace
         // we have a different value tag
         else if (element.getTagName().equalsIgnoreCase("bundle-value")) {
             // make a copy of the metadata for our enclosing component
-            LocalComponentMetadataImpl metadata = (LocalComponentMetadataImpl)NamespaceUtil.cloneComponentMetadata(context.getEnclosingComponent());
+            BeanMetadataImpl metadata = (BeanMetadataImpl)NamespaceUtil.cloneComponentMetadata(context.getEnclosingComponent());
             // we need to replace the definition of the
             Element parent = (Element)element.getParentNode();
             if (!parent.getTagName().equals("property")) {
                 throw new IllegalArgumentException("<bundleValue> only valid as a child of <property> element");
             }
             // the assigned value is a component reference
-            ReferenceValueImpl bundleRef = new ReferenceValueImpl("bundle");
-            PropertyInjectionMetadataImpl property = new PropertyInjectionMetadataImpl(parent.getAttribute("name"), bundleRef);
+            RefMetadataImpl bundleRef = new RefMetadataImpl("bundle");
+            BeanPropertyImpl property = new BeanPropertyImpl(parent.getAttribute("name"), bundleRef);
             // replace the property definition with the fully realized value
             metadata.replaceProperty(property);
         }

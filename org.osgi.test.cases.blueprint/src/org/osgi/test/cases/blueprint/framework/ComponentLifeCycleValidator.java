@@ -76,7 +76,7 @@ public class ComponentLifeCycleValidator extends MetadataValidator {
         // ensure we have everything initialized
         super.validate(testContext);
         // validation is done by the metadata wrapper.
-        moduleMetadata.validateLifeCycle(componentId, className, initMethod, destroyMethod);
+        blueprintMetadata.validateLifeCycle(componentId, className, initMethod, destroyMethod);
     }
 }
 

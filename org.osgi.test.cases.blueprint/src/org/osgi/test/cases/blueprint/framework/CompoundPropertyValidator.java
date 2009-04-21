@@ -42,7 +42,7 @@ public class CompoundPropertyValidator extends MetadataValidator {
         super.validate(testContext);
         // the value must be equal
 
-        Object componentObject = moduleMetadata.getComponent(componentId);
+        Object componentObject = blueprintMetadata.getComponent(componentId);
         if (componentObject instanceof BaseTestComponent){
             BaseTestComponent component = (BaseTestComponent)componentObject;
             List names = split(compoundName);

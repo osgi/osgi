@@ -55,7 +55,7 @@ public class ComponentNameValidator extends MetadataValidator {
         // ensure we have everything initialized
         super.validate(testContext);
         // the set of names must be equal
-        assertEquals("Named component set for " + bundle.getSymbolicName(), names, moduleMetadata.getComponentNames());
+        assertEquals("Named component set for " + bundle.getSymbolicName(), names, blueprintMetadata.getComponentNames());
     }
 }
 

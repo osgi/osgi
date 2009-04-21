@@ -35,7 +35,7 @@ public class ServiceComponentValidator extends MetadataValidator {
         super.validate(testContext);
         // the value must be equal
 
-        Object componentObject = moduleMetadata.getComponent(componentId);
+        Object componentObject = blueprintMetadata.getComponent(componentId);
         assertNotNull("Null ServiceRegistration component found for " + componentId, componentObject);
         assertTrue("Invalid ServiceRegistration component found for " + componentId + " Found " + componentObject.getClass().getName(),
            componentObject instanceof ServiceRegistration);

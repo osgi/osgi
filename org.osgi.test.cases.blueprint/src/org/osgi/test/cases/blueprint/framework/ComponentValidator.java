@@ -59,7 +59,7 @@ public class ComponentValidator extends MetadataValidator {
         // ensure we have everything initialized
         super.validate(testContext);
         // validation is done by the metadata wrapper.
-        moduleMetadata.validateComponent(componentId, componentClass, props);
+        blueprintMetadata.validateComponent(componentId, componentClass, props);
     }
 }
 

@@ -37,7 +37,7 @@ public class ReferenceListValidator extends MetadataValidator {
         super.validate(testContext);
         // the value must be equal
 
-        Object componentObject = moduleMetadata.getComponent(componentId);
+        Object componentObject = blueprintMetadata.getComponent(componentId);
         assertNotNull("Null reference list component found for " + componentId, componentObject);
         assertTrue("Invalid reference list component found for " + componentId, componentObject instanceof List);
     }

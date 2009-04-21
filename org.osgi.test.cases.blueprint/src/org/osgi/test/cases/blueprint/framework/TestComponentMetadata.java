@@ -25,7 +25,7 @@ public interface TestComponentMetadata {
     /**
      * Validate a the contained component meta data against an actual instance
      *
-     * @param moduleMetadata
+     * @param blueprintMetadata
      *               The module metadata wrapper (needed for validating
      *               embedded types)
      * @param componentMeta
@@ -33,7 +33,7 @@ public interface TestComponentMetadata {
      *
      * @exception Exception
      */
-    public void validate(ModuleMetadata moduleMetadata, ComponentMetadata componentMeta) throws Exception;
+    public void validate(BlueprintMetadata blueprintMetadata, ComponentMetadata componentMeta) throws Exception;
 
 
     /**
@@ -53,6 +53,6 @@ public interface TestComponentMetadata {
      * @return The String name of the component.  Returns null
      *         if no name has been provided.
      */
-    public String getName();
+    public String getId();
 }
 

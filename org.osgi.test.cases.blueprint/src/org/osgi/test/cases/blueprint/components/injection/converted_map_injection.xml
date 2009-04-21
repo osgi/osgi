@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+	<type-converters>
+		<component class="org.osgi.test.cases.blueprint.components.injection.HashMapConverter"/>
+		<component class="org.osgi.test.cases.blueprint.components.injection.HashtableConverter"/>
+		<component class="org.osgi.test.cases.blueprint.components.injection.TreeMapConverter"/>
+	</type-converters>
+
+    <component id="hashMap" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="hashMap">
+            <map>
+                <entry key="abc" value="1"/>
+                <entry key="def" value="2"/>
+            </map>
+        </property>
+    </component>
+
+    <component id="treeMap" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="treeMap">
+            <map>
+                <entry key="abc" value="1"/>
+                <entry key="def" value="2"/>
+            </map>
+        </property>
+    </component>
+
+    <component id="hashtable" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="hashtable">
+            <map>
+                <entry key="abc" value="1"/>
+                <entry key="def" value="2"/>
+            </map>
+        </property>
+    </component>
+
+</components>
+

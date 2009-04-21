@@ -77,10 +77,10 @@ public class StandardTestController extends BaseTestController {
         // first install this
         Bundle testBundle = installBundle(bundleName);
         // add this to our managed list.
-        ModuleMetadata moduleMetadata = new ModuleMetadata(testContext, testBundle);
-        bundleList.put(bundleName, moduleMetadata);
+        BlueprintMetadata blueprintMetadata = new BlueprintMetadata(testContext, testBundle);
+        bundleList.put(bundleName, blueprintMetadata);
         // add the bundle to the appropriate processing lists
-        addBundle(testBundle, moduleMetadata);
+        addBundle(testBundle, blueprintMetadata);
     }
 
 
@@ -88,18 +88,18 @@ public class StandardTestController extends BaseTestController {
      * Add a bundle/metadata combo to the target test controller.
      *
      * @param bundle The installed bundle.
-     * @param moduleMetadata
+     * @param blueprintMetadata
      *               The associated module metadata.
      */
-    public void addBundle(Bundle bundle, ModuleMetadata moduleMetadata) {
+    public void addBundle(Bundle bundle, BlueprintMetadata blueprintMetadata) {
         // A standard start/stop cycle test has a common set of events we look for
         // in each phase.  Add the events to each list
-        EventSet startEvents = new MetadataEventSet(moduleMetadata, testContext, bundle);
-        addStartEvents(bundle, moduleMetadata, startEvents);
+        EventSet startEvents = new MetadataEventSet(blueprintMetadata, testContext, bundle);
+        addStartEvents(bundle, blueprintMetadata, startEvents);
         startPhase.addEventSet(startEvents);
 
-        EventSet endEvents = new MetadataEventSet(moduleMetadata, testContext, bundle);
-        addStopEvents(bundle, moduleMetadata, endEvents);
+        EventSet endEvents = new MetadataEventSet(blueprintMetadata, testContext, bundle);
+        addStopEvents(bundle, blueprintMetadata, endEvents);
         endPhase.addEventSet(endEvents);
     }
 
@@ -107,11 +107,11 @@ public class StandardTestController extends BaseTestController {
      * Add a standard set of bundle start events for this event type.
      *
      * @param bundle The bundle the event set is tracking.
-     * @param moduleMetadata
-     *               The ModuleMetadata context for this event set.
+     * @param blueprintMetadata
+     *               The BlueprintMetadata context for this event set.
      * @param events The created event set.
      */
-    public void addStartEvents(Bundle bundle, ModuleMetadata moduleMetadata, EventSet events) {
+    public void addStartEvents(Bundle bundle, BlueprintMetadata blueprintMetadata, EventSet events) {
         // we add an initializer to start our bundle when the test starts
         events.addInitializer(new TestBundleStarter(bundle));
         // we always expect to see a started bundle event
@@ -124,7 +124,7 @@ public class StandardTestController extends BaseTestController {
 
         // this needs to be the first validator of the set, since
         // it initializes the module context.
-        events.addValidator(moduleMetadata);
+        events.addValidator(blueprintMetadata);
         // the bundle should be in the ACTIVE state when everything settles down
         events.addValidator(new BundleStateValidator(Bundle.ACTIVE));
     }
@@ -133,11 +133,11 @@ public class StandardTestController extends BaseTestController {
      * Add a standard set of bundle stop events for this event type.
      *
      * @param bundle The bundle the event set is tracking.
-     * @param moduleMetadata
-     *               The ModuleMetadata context for this event set.
+     * @param blueprintMetadata
+     *               The BlueprintMetadata context for this event set.
      * @param events The created event set.
      */
-    public void addStopEvents(Bundle bundle, ModuleMetadata moduleMetadata, EventSet events) {
+    public void addStopEvents(Bundle bundle, BlueprintMetadata blueprintMetadata, EventSet events) {
         // we start this test phase out by stopping the bundle.  Everything else flows
         // from that.
         events.addInitializer(new TestBundleStopper(bundle));
@@ -156,7 +156,7 @@ public class StandardTestController extends BaseTestController {
         events.addValidator(new BundleStateValidator(Bundle.RESOLVED));
         // this needs to perform some cleanup when everything is done,
         // so add it to the terminator list.
-        events.addTerminator(moduleMetadata);
+        events.addTerminator(blueprintMetadata);
     }
 
 
@@ -171,8 +171,8 @@ public class StandardTestController extends BaseTestController {
         Iterator i = bundleList.values().iterator();
         // have each of the module metadata objects uninstall the associated bundles.
         while (i.hasNext()) {
-            ModuleMetadata moduleMetadata = (ModuleMetadata)i.next();
-            moduleMetadata.cleanup(testContext);
+            BlueprintMetadata blueprintMetadata = (BlueprintMetadata)i.next();
+            blueprintMetadata.cleanup(testContext);
         }
     }
 

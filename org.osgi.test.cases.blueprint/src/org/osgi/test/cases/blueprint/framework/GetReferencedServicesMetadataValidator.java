@@ -24,7 +24,7 @@ import org.osgi.service.blueprint.context.ComponentDefinitionException;
 import org.osgi.service.blueprint.context.BlueprintContext;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.osgi.service.blueprint.reflect.BeanMetadata;
-import org.osgi.service.blueprint.reflect.ServiceReferenceComponentMetadata;
+import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
 
 /**
  * Generic validator to verify that a named component is included in the
@@ -62,15 +62,15 @@ public class GetReferencedServicesMetadataValidator extends MetadataValidator {
         // ensure we have everything initialized
         super.validate(testContext);
 
-        BlueprintContext context = moduleMetadata.getTargetBlueprintContext();
+        BlueprintContext context = blueprintMetadata.getTargetBlueprintContext();
         // get the collection list
         Collection metadata = context.getReferencedServicesMetadata();
         Iterator i = metadata.iterator();
 
         while (i.hasNext()) {
-            ServiceReferenceComponentMetadata meta = (ServiceReferenceComponentMetadata)i.next();
+            ServiceReferenceMetadata meta = (ServiceReferenceMetadata)i.next();
             // if we find a match, just return
-            if (componentId.equals(meta.getName())) {
+            if (componentId.equals(meta.getId())) {
                 try {
                     // this is an immutability test for the collection.  This should throw an error
                     i.remove();

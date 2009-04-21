@@ -83,7 +83,7 @@ public class FactoryMetadataValidator extends MetadataValidator {
         // ensure we have everything initialized
         super.validate(testContext);
         // validation is done by the metadata wrapper.
-        moduleMetadata.validateFactoryMetadata(componentId, factoryMethodName, staticFactoryClassName, factoryTestComponentValue);
+        blueprintMetadata.validateFactoryMetadata(componentId, factoryMethodName, staticFactoryClassName, factoryTestComponentValue);
     }
 }
 

@@ -18,8 +18,8 @@ package org.osgi.test.cases.blueprint.framework;
 
 import junit.framework.Assert;
 
-import org.osgi.service.blueprint.reflect.BindingListenerMetadata;
-import org.osgi.service.blueprint.reflect.Value;
+import org.osgi.service.blueprint.reflect.Listener;
+import org.osgi.service.blueprint.reflect.Metadata;
 
 /**
  * A base type for validating BindingListener metadata.
@@ -33,7 +33,7 @@ public class BindingListener extends Assert {
     protected String unbindName;
 
     public BindingListener(String componentName, String bindName, String unbindName) {
-        this(new TestReferenceValue(componentName), bindName, unbindName);
+        this(new TestRefValue(componentName), bindName, unbindName);
     }
 
     public BindingListener(TestValue listener, String bindName, String unbindName) {
@@ -50,11 +50,9 @@ public class BindingListener extends Assert {
      *
      * @return True if this appears to be the validation target, false otherwise.
      */
-    public boolean matches(BindingListenerMetadata meta) {
-        Value component = meta.getListenerComponent();
-
+    public boolean matches(Listener meta) {
         // the value type does the matching
-        return listener.equals(component);
+        return listener.equals(meta.getListenerComponent());
     }
 
 
@@ -65,10 +63,10 @@ public class BindingListener extends Assert {
      *
      * @exception Exception
      */
-    public void validate(ModuleMetadata moduleMetadata, BindingListenerMetadata meta) throws Exception {
+    public void validate(BlueprintMetadata blueprintMetadata, Listener meta) throws Exception {
         assertEquals(bindName, meta.getBindMethodName());
         assertEquals(unbindName, meta.getUnbindMethodName());
-        listener.validate(moduleMetadata, meta.getListenerComponent());
+        listener.validate(blueprintMetadata, meta.getListenerComponent());
     }
 
     public String toString() {

@@ -63,7 +63,7 @@ public class ComponentDependencyValidator extends MetadataValidator {
         // ensure we have everything initialized
         super.validate(testContext);
         // the value must be equal
-        assertEquals("Named component dependencies for " + componentId, names, moduleMetadata.getComponentDependencies(componentId));
+        assertEquals("Named component dependencies for " + componentId, names, blueprintMetadata.getComponentDependencies(componentId));
     }
 }
 

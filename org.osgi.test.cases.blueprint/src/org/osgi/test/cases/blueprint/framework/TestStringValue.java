@@ -16,8 +16,8 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
-import org.osgi.service.blueprint.reflect.TypedStringValue;
-import org.osgi.service.blueprint.reflect.Value;
+import org.osgi.service.blueprint.reflect.ValueMetadata;
+import org.osgi.service.blueprint.reflect.Metadata;
 
 public class TestStringValue extends TestValue {
     // The target conversion type (can be null)
@@ -44,7 +44,7 @@ public class TestStringValue extends TestValue {
     }
 
     public TestStringValue(Class targetType, String value) {
-        super(TypedStringValue.class);
+        super(ValueMetadata.class);
         if (targetType != null) {
             this.targetTypeName = targetType.getName();
         }
@@ -59,13 +59,13 @@ public class TestStringValue extends TestValue {
      *
      * @exception Exception
      */
-    public void validate(ModuleMetadata moduleMetadata, Value v) throws Exception {
-        super.validate(moduleMetadata, v);
-        assertEquals("String conversion type mismatch", targetTypeName, ((TypedStringValue)v).getTypeName());
+    public void validate(BlueprintMetadata blueprintMetadata, Metadata v) throws Exception {
+        super.validate(blueprintMetadata, v);
+        assertEquals("String conversion type mismatch", targetTypeName, ((ValueMetadata)v).getTypeName());
         // if we have a value to test on.  sometimes, the value is two complex
         // to specify directly.
         if (value != null) {
-            assertEquals("String conversion value mismatch", value, ((TypedStringValue)v).getStringValue());
+            assertEquals("String conversion value mismatch", value, ((ValueMetadata)v).getStringValue());
         }
     }
 
@@ -78,7 +78,7 @@ public class TestStringValue extends TestValue {
      *
      * @return True if this can be considered a match, false for any mismatch.
      */
-    public boolean equals(Value v) {
+    public boolean equals(Metadata v) {
         // must be of matching type
         if (!super.equals(v)) {
             return false;
@@ -87,17 +87,17 @@ public class TestStringValue extends TestValue {
         // if no type was explicitly specified,
         if (targetTypeName == null) {
             // then this must also be null
-            if (((TypedStringValue)v).getTypeName() != null) {
+            if (((ValueMetadata)v).getTypeName() != null) {
                 return false;
             }
         }
         // must match on the type name
-        else if (!targetTypeName.equals(((TypedStringValue)v).getTypeName())) {
+        else if (!targetTypeName.equals(((ValueMetadata)v).getTypeName())) {
             return false;
         }
 
         if (value != null) {
-            return value.equals(((TypedStringValue)v).getStringValue());
+            return value.equals(((ValueMetadata)v).getStringValue());
         }
 
         return true;

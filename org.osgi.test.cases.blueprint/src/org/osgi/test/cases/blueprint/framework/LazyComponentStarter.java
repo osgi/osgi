@@ -25,7 +25,7 @@ public class LazyComponentStarter implements TestInitializer, MetadataAware {
     // the target component id
     protected String componentId;
     // our method context wrapper
-    protected ModuleMetadata moduleMetadata;
+    protected BlueprintMetadata blueprintMetadata;
 
     /**
      * Create the starter component.
@@ -44,8 +44,8 @@ public class LazyComponentStarter implements TestInitializer, MetadataAware {
      * @param moduleContext
      *               The new module context.
      */
-    public void setModuleMetadata(ModuleMetadata moduleMetadata) {
-        this.moduleMetadata = moduleMetadata;
+    public void setBlueprintMetadata(BlueprintMetadata blueprintMetadata) {
+        this.blueprintMetadata = blueprintMetadata;
     }
 
     /**
@@ -60,7 +60,7 @@ public class LazyComponentStarter implements TestInitializer, MetadataAware {
     public void start(BundleContext testContext) throws Exception {
         // just retrieve the component.  This will serve as the first
         // request and trigger the action
-        moduleMetadata.getComponent(componentId);
+        blueprintMetadata.getComponent(componentId);
     }
 }
 

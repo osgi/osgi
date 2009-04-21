@@ -59,7 +59,7 @@ public class GetComponentExceptionValidator extends MetadataValidator {
         // ensure we have everything initialized
         super.validate(testContext);
 
-        BlueprintContext context = moduleMetadata.getTargetBlueprintContext();
+        BlueprintContext context = blueprintMetadata.getTargetBlueprintContext();
         try {
             Object obj = context.getComponent(componentId);
             fail("Expected ComponentDefinitionException not thrown for component " + componentId);
