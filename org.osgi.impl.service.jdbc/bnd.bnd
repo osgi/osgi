@@ -1,6 +1,3 @@
-javac.source = 1.5
-javac.target = 1.5
-
 Bundle-Activator: 		org.osgi.impl.service.jdbc.Activator
 Export-Package: 		org.osgi.service.jdbc;-split-package:=first, org.osgi.impl.service.jdbc
 Import-Package: 		org.apache.derby.jdbc, javax.sql, org.osgi.framework
@@ -14,7 +11,7 @@ Export-Service: 		org.osgi.service.jdbc.JdbcService
 
 -buildpath = \
 	org.osgi.service.jdbc; 	version=project, \
-	org.apache.derby, \
+	com.springsource.org.apache.derby, \
 	osgi;					version=4.0, \
 	ee.j2se;				version=1.4, \
 	com.springsource.junit

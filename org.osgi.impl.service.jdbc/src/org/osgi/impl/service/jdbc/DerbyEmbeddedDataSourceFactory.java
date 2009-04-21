@@ -28,34 +28,15 @@ import javax.sql.DataSource;
 import javax.sql.XADataSource;
 
 import org.apache.derby.jdbc.EmbeddedConnectionPoolDataSource;
-import org.apache.derby.jdbc.EmbeddedConnectionPoolDataSource40;
 import org.apache.derby.jdbc.EmbeddedDataSource;
-import org.apache.derby.jdbc.EmbeddedDataSource40;
-import org.apache.derby.jdbc.EmbeddedSimpleDataSource;
 import org.apache.derby.jdbc.EmbeddedXADataSource;
-import org.apache.derby.jdbc.EmbeddedXADataSource40;
 import org.osgi.service.jdbc.DataSourceFactory;
 
 /**
  * A factory for creating Derby embedded data sources. The properties specified
  * in the create methods determine how the created object is configured.
  * 
- * By default the DataSource returned by createDataSource is
- * {@link org.apache.derby.jdbc.EmbeddedDataSource40}. Similarly by default the
- * ConnectionPoolDataSource returned by createConnectionPoolDataSource is
- * {@link org.apache.derby.jdbc.EmbeddedConnectionPoolDataSource40} and by
- * default the XADataSource returned by createXADataSource is
- * {@link org.apache.derby.jdbc.EmbeddedXADataSource40}.
- * 
- * To override the default values use the following properties: - To use the
- * jdbc 3.0 version of the data source objects set the
- * DerbyDataSourceFactory.DERBY_JDBC_PROPERTY_NAME_VERSION to
- * DerbyDataSourceFactory.DERBY_JDBC_PROPERTY_VALUE_VERSION_30. - To use the
- * {@link org.apache.derby.jdbc.EmbeddedSimpleDataSource} set the
- * DerbyDataSourceFactory.DERBY_PROPERTY_NAME_ENVIRONMENT to
- * DerbyDataSourceFactory.DERBY_PROPERTY_VALUE_ENVIRONMENT_EMBEDDED_SIMPLE
- * 
- * The following code shows how to get a EmbeddedDataSource40.
+ * The following code shows how to get a EmbeddedDataSource.
  * 
  * ServiceTracker factoryServiceTracker = new ServiceTracker( context,
  * DerbyDataSourceFactory.class.getName(), null ); factoryServiceTracker.open();
@@ -66,38 +47,9 @@ import org.osgi.service.jdbc.DataSourceFactory;
  * 
  * DataSource ds = dsf.createDataSource( props );
  * 
- * The following code shows how to get a EmbeddedDataSource.
- * 
- * ServiceTracker factoryServiceTracker = new ServiceTracker( context,
- * DerbyDataSourceFactory.class.getName(), null ); factoryServiceTracker.open();
- * DataSourceFactory dsf = ( DataSourceFactory )
- * factoryServiceTracker.getService(); Properties props = new Properties();
- * props.put( DataSourceFactory.JDBC_DATABASE_NAME,
- * "C:\\Software\\db-derby-10.4.2.0-bin\\testdbs\\firstdb" ); props.put(
- * DerbyDataSourceFactory.DERBY_JDBC_PROPERTY_NAME_VERSION,
- * DerbyDataSourceFactory.DERBY_JDBC_PROPERTY_VALUE_VERSION_30 );
- * 
- * DataSource ds = dsf.createDataSource( props );
- * 
  */
 public class DerbyEmbeddedDataSourceFactory implements DataSourceFactory {
 	public static final String JDBC_DRIVER_PROPERTY_VALUE = "org.apache.derby.jdbc.Driver40";
-
-	/**
-	 * Property to use to indicate the version of Derby driver being used. The
-	 * default is 4.0.
-	 */
-	public static final String	DERBY_JDBC_PROPERTY_NAME_VERSION					= "derby.jdbc.version";
-	public static final String	DERBY_JDBC_PROPERTY_VALUE_VERSION_30				= "derby.jdbc.version.30";
-	public static final String	DERBY_JDBC_PROPERTY_VALUE_VERSION_40				= "derby.jdbc.version.40";
-
-	/**
-	 * Property to use to indicate the type of Derby driver to use. The default
-	 * is the embedded driver.
-	 */
-	public static final String	DERBY_PROPERTY_NAME_ENVIRONMENT						= "derby.datasource.factory.environment";
-	public static final String	DERBY_PROPERTY_VALUE_ENVIRONMENT_EMBEDDED			= "derby.datasource.factory.environment.embedded";
-	public static final String	DERBY_PROPERTY_VALUE_ENVIRONMENT_EMBEDDED_SIMPLE	= "derby.datasource.factory.environment.embedded.simple";
 
 	/**
 	 * Create a Derby DataSource object.
@@ -112,23 +64,9 @@ public class DerbyEmbeddedDataSourceFactory implements DataSourceFactory {
 		if (props == null) {
 			props = new Properties();
 		}
-		Object dataSource = null;
-		String val = props.getProperty(DERBY_JDBC_PROPERTY_NAME_VERSION);
-		if (val == null || val.equals(DERBY_JDBC_PROPERTY_VALUE_VERSION_40)) {
-			dataSource = new EmbeddedDataSource40();
-		}
-		else {
-			val = props.getProperty(DERBY_PROPERTY_NAME_ENVIRONMENT);
-			if (val == null
-					|| val.equals(DERBY_PROPERTY_VALUE_ENVIRONMENT_EMBEDDED)) {
-				dataSource = new EmbeddedDataSource();
-			}
-			else {
-				dataSource = new EmbeddedSimpleDataSource();
-			}
-		}
+		DataSource dataSource = new EmbeddedDataSource();
 		setDataSourceProperties(dataSource, props);
-		return (DataSource) dataSource;
+		return dataSource;
 	}
 
 	/**
@@ -146,16 +84,9 @@ public class DerbyEmbeddedDataSourceFactory implements DataSourceFactory {
 		if (props == null) {
 			props = new Properties();
 		}
-		Object dataSource = null;
-		String val = props.getProperty(DERBY_JDBC_PROPERTY_NAME_VERSION);
-		if (val == null || val.equals(DERBY_JDBC_PROPERTY_VALUE_VERSION_40)) {
-			dataSource = new EmbeddedConnectionPoolDataSource40();
-		}
-		else {
-			dataSource = new EmbeddedConnectionPoolDataSource();
-		}
+		ConnectionPoolDataSource dataSource = new EmbeddedConnectionPoolDataSource();
 		setDataSourceProperties(dataSource, props);
-		return (ConnectionPoolDataSource) dataSource;
+		return dataSource;
 	}
 
 	/**
@@ -172,14 +103,7 @@ public class DerbyEmbeddedDataSourceFactory implements DataSourceFactory {
 		if (props == null) {
 			props = new Properties();
 		}
-		Object dataSource = null;
-		String val = props.getProperty(DERBY_JDBC_PROPERTY_NAME_VERSION);
-		if (val == null || val.equals(DERBY_JDBC_PROPERTY_VALUE_VERSION_40)) {
-			dataSource = new EmbeddedXADataSource40();
-		}
-		else {
-			dataSource = new EmbeddedXADataSource();
-		}
+		XADataSource dataSource = new EmbeddedXADataSource();
 		setDataSourceProperties(dataSource, props);
 		return (XADataSource) dataSource;
 	}
@@ -309,11 +233,6 @@ public class DerbyEmbeddedDataSourceFactory implements DataSourceFactory {
 
 	private void setProperty(Object object, String name, String value)
 			throws SQLException {
-		if (name.equals(DERBY_JDBC_PROPERTY_NAME_VERSION)
-				|| name.equals(DERBY_PROPERTY_NAME_ENVIRONMENT)) {
-			return;
-		}
-
 		Class type = object.getClass();
 
 		java.beans.PropertyDescriptor[] descriptors;

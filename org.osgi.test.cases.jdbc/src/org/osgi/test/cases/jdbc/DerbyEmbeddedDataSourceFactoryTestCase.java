@@ -25,12 +25,8 @@ import javax.sql.DataSource;
 import javax.sql.XADataSource;
 
 import org.apache.derby.jdbc.EmbeddedConnectionPoolDataSource;
-import org.apache.derby.jdbc.EmbeddedConnectionPoolDataSource40;
 import org.apache.derby.jdbc.EmbeddedDataSource;
-import org.apache.derby.jdbc.EmbeddedDataSource40;
-import org.apache.derby.jdbc.EmbeddedSimpleDataSource;
 import org.apache.derby.jdbc.EmbeddedXADataSource;
-import org.apache.derby.jdbc.EmbeddedXADataSource40;
 import org.osgi.impl.service.jdbc.DerbyEmbeddedDataSourceFactory;
 import org.osgi.service.jdbc.DataSourceFactory;
 
@@ -50,14 +46,14 @@ public class DerbyEmbeddedDataSourceFactoryTestCase extends TestCase {
 		
 		// default no properties
 		DataSource ds = factory.createDataSource( null );
-		assertTrue( ds instanceof EmbeddedDataSource40 );
-		EmbeddedDataSource40 e40ds = ( EmbeddedDataSource40 ) ds;
-		assertNull( e40ds.getDatabaseName() );
-		assertNull( e40ds.getDataSourceName() );
-		assertNull( e40ds.getDescription() );
-		assertNull( e40ds.getPassword() );
-		assertNull( e40ds.getUser() );
-		assertEquals( 0, e40ds.getLoginTimeout() );
+		assertTrue( ds instanceof EmbeddedDataSource );
+		EmbeddedDataSource eds = ( EmbeddedDataSource ) ds;
+		assertNull( eds.getDatabaseName() );
+		assertNull( eds.getDataSourceName() );
+		assertNull( eds.getDescription() );
+		assertNull( eds.getPassword() );
+		assertNull( eds.getUser() );
+		assertEquals( 0, eds.getLoginTimeout() );
 
 		// default with properties
 		Properties props = new Properties();
@@ -69,14 +65,14 @@ public class DerbyEmbeddedDataSourceFactoryTestCase extends TestCase {
 		props.put( "loginTimeout", String.valueOf( loginTimeout ) );
 
 		ds = factory.createDataSource( props );
-		assertTrue( ds instanceof EmbeddedDataSource40 );
-		e40ds = ( EmbeddedDataSource40 ) ds;
-		assertEquals( databaseName, e40ds.getDatabaseName() );
-		assertEquals( dataSourceName, e40ds.getDataSourceName() );
-		assertEquals( description, e40ds.getDescription() );
-		assertEquals( password, e40ds.getPassword() );
-		assertEquals( user, e40ds.getUser() );
-		assertEquals( loginTimeout, e40ds.getLoginTimeout() );
+		assertTrue( ds instanceof EmbeddedDataSource );
+		eds = ( EmbeddedDataSource ) ds;
+		assertEquals( databaseName, eds.getDatabaseName() );
+		assertEquals( dataSourceName, eds.getDataSourceName() );
+		assertEquals( description, eds.getDescription() );
+		assertEquals( password, eds.getPassword() );
+		assertEquals( user, eds.getUser() );
+		assertEquals( loginTimeout, eds.getLoginTimeout() );
 		
 		// make sure we get an exception if we use an unknown property
 		props = new Properties();
@@ -94,27 +90,8 @@ public class DerbyEmbeddedDataSourceFactoryTestCase extends TestCase {
 			fail( "Should have gotten a SQLException." );
 		} catch ( SQLException ignore ) { }
 		
-		// get the specified data source: EmbeddedSimpleDataSource
-		props = new Properties();
-		props.put( DerbyEmbeddedDataSourceFactory.DERBY_JDBC_PROPERTY_NAME_VERSION,
-				   DerbyEmbeddedDataSourceFactory.DERBY_JDBC_PROPERTY_VALUE_VERSION_30 );
-		props.put( DerbyEmbeddedDataSourceFactory.DERBY_PROPERTY_NAME_ENVIRONMENT, 
-				   DerbyEmbeddedDataSourceFactory.DERBY_PROPERTY_VALUE_ENVIRONMENT_EMBEDDED_SIMPLE );
-		ds = factory.createDataSource( props );
-		assertTrue( ds instanceof EmbeddedSimpleDataSource );
-		
-		// get the specified data source: EmbeddedDataSource40
-		props = new Properties();
-		props.put( DerbyEmbeddedDataSourceFactory.DERBY_JDBC_PROPERTY_NAME_VERSION,
-				   DerbyEmbeddedDataSourceFactory.DERBY_JDBC_PROPERTY_VALUE_VERSION_40 );
-		ds = factory.createDataSource( props );
-		assertTrue( ds instanceof EmbeddedDataSource40 );
-		
-		
 		// get the specified data source: EmbeddedDataSource
 		props = new Properties();
-		props.put( DerbyEmbeddedDataSourceFactory.DERBY_JDBC_PROPERTY_NAME_VERSION,
-				   DerbyEmbeddedDataSourceFactory.DERBY_JDBC_PROPERTY_VALUE_VERSION_30 );
 		ds = factory.createDataSource( props );
 		assertTrue( ds instanceof EmbeddedDataSource );
 	}
@@ -124,14 +101,14 @@ public class DerbyEmbeddedDataSourceFactoryTestCase extends TestCase {
 		
 		// default no properties
 		ConnectionPoolDataSource ds = factory.createConnectionPoolDataSource( null );
-		assertTrue( ds instanceof EmbeddedConnectionPoolDataSource40 );
-		EmbeddedConnectionPoolDataSource40 e40ds = ( EmbeddedConnectionPoolDataSource40 ) ds;
-		assertNull( e40ds.getDatabaseName() );
-		assertNull( e40ds.getDataSourceName() );
-		assertNull( e40ds.getDescription() );
-		assertNull( e40ds.getPassword() );
-		assertNull( e40ds.getUser() );
-		assertEquals( 0, e40ds.getLoginTimeout() );
+		assertTrue( ds instanceof EmbeddedConnectionPoolDataSource );
+		EmbeddedConnectionPoolDataSource eds = ( EmbeddedConnectionPoolDataSource ) ds;
+		assertNull( eds.getDatabaseName() );
+		assertNull( eds.getDataSourceName() );
+		assertNull( eds.getDescription() );
+		assertNull( eds.getPassword() );
+		assertNull( eds.getUser() );
+		assertEquals( 0, eds.getLoginTimeout() );
 
 		// default with properties
 		Properties props = new Properties();
@@ -143,14 +120,14 @@ public class DerbyEmbeddedDataSourceFactoryTestCase extends TestCase {
 		props.put( "loginTimeout", String.valueOf( loginTimeout ) );
 
 		ds = factory.createConnectionPoolDataSource( props );
-		assertTrue( ds instanceof EmbeddedConnectionPoolDataSource40 );
-		e40ds = ( EmbeddedConnectionPoolDataSource40 ) ds;
-		assertEquals( databaseName, e40ds.getDatabaseName() );
-		assertEquals( dataSourceName, e40ds.getDataSourceName() );
-		assertEquals( description, e40ds.getDescription() );
-		assertEquals( password, e40ds.getPassword() );
-		assertEquals( user, e40ds.getUser() );
-		assertEquals( loginTimeout, e40ds.getLoginTimeout() );
+		assertTrue( ds instanceof EmbeddedConnectionPoolDataSource );
+		eds = ( EmbeddedConnectionPoolDataSource ) ds;
+		assertEquals( databaseName, eds.getDatabaseName() );
+		assertEquals( dataSourceName, eds.getDataSourceName() );
+		assertEquals( description, eds.getDescription() );
+		assertEquals( password, eds.getPassword() );
+		assertEquals( user, eds.getUser() );
+		assertEquals( loginTimeout, eds.getLoginTimeout() );
 		
 		// make sure we get an exception if we use an unknown property
 		props = new Properties();
@@ -160,18 +137,8 @@ public class DerbyEmbeddedDataSourceFactoryTestCase extends TestCase {
 			fail( "Should have gotten a SQLException." );
 		} catch ( SQLException ignore ) { }
 		
-		// get the specified data source: EmbeddedConnectionPoolDataSource40
-		props = new Properties();
-		props.put( DerbyEmbeddedDataSourceFactory.DERBY_JDBC_PROPERTY_NAME_VERSION,
-				   DerbyEmbeddedDataSourceFactory.DERBY_JDBC_PROPERTY_VALUE_VERSION_40 );
-		ds = factory.createConnectionPoolDataSource( props );
-		assertTrue( ds instanceof EmbeddedConnectionPoolDataSource40 );
-		
-		
 		// get the specified data source: EmbeddedConnectionPoolDataSource
 		props = new Properties();
-		props.put( DerbyEmbeddedDataSourceFactory.DERBY_JDBC_PROPERTY_NAME_VERSION,
-				   DerbyEmbeddedDataSourceFactory.DERBY_JDBC_PROPERTY_VALUE_VERSION_30 );
 		ds = factory.createConnectionPoolDataSource( props );
 		assertTrue( ds instanceof EmbeddedConnectionPoolDataSource );
 	}
@@ -181,14 +148,14 @@ public class DerbyEmbeddedDataSourceFactoryTestCase extends TestCase {
 		
 		// default no properties
 		XADataSource ds = factory.createXADataSource( null );
-		assertTrue( ds instanceof EmbeddedXADataSource40 );
-		EmbeddedXADataSource40 e40ds = ( EmbeddedXADataSource40 ) ds;
-		assertNull( e40ds.getDatabaseName() );
-		assertNull( e40ds.getDataSourceName() );
-		assertNull( e40ds.getDescription() );
-		assertNull( e40ds.getPassword() );
-		assertNull( e40ds.getUser() );
-		assertEquals( 0, e40ds.getLoginTimeout() );
+		assertTrue( ds instanceof EmbeddedXADataSource );
+		EmbeddedXADataSource eds = ( EmbeddedXADataSource ) ds;
+		assertNull( eds.getDatabaseName() );
+		assertNull( eds.getDataSourceName() );
+		assertNull( eds.getDescription() );
+		assertNull( eds.getPassword() );
+		assertNull( eds.getUser() );
+		assertEquals( 0, eds.getLoginTimeout() );
 
 		// default with properties
 		Properties props = new Properties();
@@ -200,14 +167,14 @@ public class DerbyEmbeddedDataSourceFactoryTestCase extends TestCase {
 		props.put( "loginTimeout", String.valueOf( loginTimeout ) );
 
 		ds = factory.createXADataSource( props );
-		assertTrue( ds instanceof EmbeddedXADataSource40 );
-		e40ds = ( EmbeddedXADataSource40 ) ds;
-		assertEquals( databaseName, e40ds.getDatabaseName() );
-		assertEquals( dataSourceName, e40ds.getDataSourceName() );
-		assertEquals( description, e40ds.getDescription() );
-		assertEquals( password, e40ds.getPassword() );
-		assertEquals( user, e40ds.getUser() );
-		assertEquals( loginTimeout, e40ds.getLoginTimeout() );
+		assertTrue( ds instanceof EmbeddedXADataSource );
+		eds = ( EmbeddedXADataSource ) ds;
+		assertEquals( databaseName, eds.getDatabaseName() );
+		assertEquals( dataSourceName, eds.getDataSourceName() );
+		assertEquals( description, eds.getDescription() );
+		assertEquals( password, eds.getPassword() );
+		assertEquals( user, eds.getUser() );
+		assertEquals( loginTimeout, eds.getLoginTimeout() );
 		
 		// make sure we get an exception if we use an unknown property
 		props = new Properties();
@@ -217,18 +184,8 @@ public class DerbyEmbeddedDataSourceFactoryTestCase extends TestCase {
 			fail( "Should have gotten a SQLException." );
 		} catch ( SQLException ignore ) { }
 		
-		// get the specified data source: EmbeddedXADataSource40
-		props = new Properties();
-		props.put( DerbyEmbeddedDataSourceFactory.DERBY_JDBC_PROPERTY_NAME_VERSION,
-				   DerbyEmbeddedDataSourceFactory.DERBY_JDBC_PROPERTY_VALUE_VERSION_40 );
-		ds = factory.createXADataSource( props );
-		assertTrue( ds instanceof EmbeddedXADataSource40 );
-		
-		
 		// get the specified data source: EmbeddedXADataSource
 		props = new Properties();
-		props.put( DerbyEmbeddedDataSourceFactory.DERBY_JDBC_PROPERTY_NAME_VERSION,
-				   DerbyEmbeddedDataSourceFactory.DERBY_JDBC_PROPERTY_VALUE_VERSION_30 );
 		ds = factory.createXADataSource( props );
 		assertTrue( ds instanceof EmbeddedXADataSource );
 	}

@@ -8,13 +8,13 @@ Private-Package						= ${p}.*
 	ee.j2se;version=latest												, \
 	org.osgi.service.jdbc; 	version=project, \
 	org.osgi.impl.service.jdbc; 	version=project, \
-	org.apache.derby, \
+	com.springsource.org.apache.derby, \
 	${junit}
 
 -runbundles						= \
 	osgi.cmpn; version=latest, \
 	org.osgi.impl.service.jdbc; version=latest, \
-	org.apache.derby; version=latest
+	com.springsource.org.apache.derby; version=latest
 
 -runproperties					= report=true
 
