@@ -78,7 +78,7 @@ public class PostConstructAnnotationTest extends DefaultTestBundleControl {
             // check if content of response is correct
             assertTrue(response.indexOf("PostConstructPreDestroyServlet1") > 0);
             assertTrue(response.indexOf("PostConstructPreDestroyServlet1.printContext " + Constants.PRINTCONTEXT) > 0);
-            assertTrue(response.indexOf("null") == -1);
+            assertEquals(response.indexOf("null"), -1);
             // check if the time stamp in response is after the beforeStart time.
             assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
             assertTrue(this.timeUtil.getTimeFromLog("PostConstructPreDestroyServlet1", Constants.POSTCONSTRUCT) > beforeInstall);
@@ -104,7 +104,7 @@ public class PostConstructAnnotationTest extends DefaultTestBundleControl {
             // check if content of response is correct
             assertTrue(response.indexOf("PostConstructPreDestroyServlet2") > 0);
             assertTrue(response.indexOf("PostConstructPreDestroyServlet2.printContext " + Constants.PRINTCONTEXT) > 0);
-            assertTrue(response.indexOf("null") == -1);
+            assertEquals(response.indexOf("null"), -1);
             // check if the time stamp in response is after the beforeStart time.
             assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
             assertTrue(this.timeUtil.getTimeFromLog("PostConstructPreDestroyServlet2", Constants.POSTCONSTRUCT) > beforeInstall);
@@ -130,7 +130,7 @@ public class PostConstructAnnotationTest extends DefaultTestBundleControl {
             // check if content of response is correct
             assertTrue(response.indexOf("PostConstructPreDestroyServlet3") > 0);
             assertTrue(response.indexOf("PostConstructPreDestroyServlet3.printContext " + Constants.PRINTCONTEXT) > 0);
-            assertTrue(response.indexOf("null") == -1);
+            assertEquals(response.indexOf("null"), -1);
             // check if the time stamp in response is after the beforeStart time.
             assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
             assertTrue(this.timeUtil.getTimeFromLog("PostConstructPreDestroyServlet3", Constants.POSTCONSTRUCT) > beforeInstall);

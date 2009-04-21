@@ -40,4 +40,10 @@ public class Constants {
     
     public static final String PREDESTROY = "preDestroy";
     public static final String POSTCONSTRUCT = "postConstruct";    
+    
+    public static final String OSGIBUNDLECONTEXT = "osgi-bundlecontext";
+    public static final String TESTLOGMSG = "test log ERROR by BundleContextTestServlet";
+    public static final String TESTLOGMSG2 = "test log WARNING by BundleContextTestServlet";
+    public static final String TESTLOGMSG3 = "test log INFO by BundleContextTestServlet";
+    public static final String TESTLOGMSG4 = "test log DEBUG by BundleContextTestServlet";
 }

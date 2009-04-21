@@ -64,8 +64,8 @@ public class ResourceAnnotationTest extends DefaultTestBundleControl {
             assertTrue(response.indexOf("ResourceServlet1") > 0);
             assertTrue(response.indexOf("Printing the injections in this ResourceServlet1 ...") > 0);
             assertTrue(response.indexOf("Done!") > 0);
-            assertTrue(response.indexOf("null") == -1);
-            assertTrue(response.indexOf("Error - unable to find name via @Resource") == -1);
+            assertEquals(response.indexOf("null"), -1);
+            assertEquals(response.indexOf("Error - unable to find name via @Resource"), -1);
         } finally {
             conn.disconnect();
         }
@@ -90,7 +90,7 @@ public class ResourceAnnotationTest extends DefaultTestBundleControl {
             assertTrue(response.indexOf("ResourceServlet2") > 0);
             assertTrue(response.indexOf("Welcome String from env-entry!") > 0);
             assertTrue(response.indexOf("5 + 5 = 10 that is true") > 0);
-            assertTrue(response.indexOf("null") == -1);
+            assertEquals(response.indexOf("null"), -1);
         } finally {
             conn.disconnect();
         }
@@ -116,8 +116,8 @@ public class ResourceAnnotationTest extends DefaultTestBundleControl {
             assertTrue(response.indexOf("ResourceServlet3") > 0);
             assertTrue(response.indexOf("Printing the injections in this ResourceServlet3 ...") > 0);
             assertTrue(response.indexOf("Done!") > 0);
-            assertTrue(response.indexOf("null") == -1);
-            assertTrue(response.indexOf("Error - unable to find name via @Resource") == -1);
+            assertEquals(response.indexOf("null"), -1);
+            assertEquals(response.indexOf("Error - unable to find name via @Resource"), -1);
         } finally {
             conn.disconnect();
         }
@@ -142,7 +142,7 @@ public class ResourceAnnotationTest extends DefaultTestBundleControl {
             assertTrue(response.indexOf("ResourceServlet4") > 0);
             assertTrue(response.indexOf("Welcome String from env-entry!") > 0);
             assertTrue(response.indexOf("5 + 5 = 10 that is true") > 0);
-            assertTrue(response.indexOf("null") == -1);
+            assertEquals(response.indexOf("null"), -1);
         } finally {
             conn.disconnect();
         }

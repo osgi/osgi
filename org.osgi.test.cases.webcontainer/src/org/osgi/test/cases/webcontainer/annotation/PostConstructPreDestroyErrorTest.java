@@ -79,8 +79,8 @@ public class PostConstructPreDestroyErrorTest extends DefaultTestBundleControl {
             }
             // check if content of response contains some error/exception
             assertTrue(response.indexOf("Exception") > 0);
-            assertTrue(this.timeUtil.getTimeFromLog("PostConstructErrorServlet1", "postConstruct1") == 0);
-            assertTrue(this.timeUtil.getTimeFromLog("PostConstructErrorServlet1", "postConstruct2") == 0);
+            assertEquals(this.timeUtil.getTimeFromLog("PostConstructErrorServlet1", "postConstruct1"), 0);
+            assertEquals(this.timeUtil.getTimeFromLog("PostConstructErrorServlet1", "postConstruct2"), 0);
         } catch (IOException e) {
             // ingore - this can be expected
         } finally {
@@ -105,7 +105,7 @@ public class PostConstructPreDestroyErrorTest extends DefaultTestBundleControl {
             }
             // check if content of response contains some error/exception
             assertTrue(response.indexOf("Exception") > 0);
-            assertTrue(this.timeUtil.getTimeFromLog("PostConstructErrorServlet2", "postConstruct") == 0);
+            assertEquals(this.timeUtil.getTimeFromLog("PostConstructErrorServlet2", "postConstruct"), 0);
         } catch (IOException e) {
             // ingore - this can be expected
         } finally {
@@ -130,7 +130,7 @@ public class PostConstructPreDestroyErrorTest extends DefaultTestBundleControl {
             }
             // check if content of response contains some error/exception
             assertTrue(response.indexOf("Exception") > 0);
-            assertTrue(this.timeUtil.getTimeFromLog("PostConstructErrorServlet3", "postConstruct") == 0);
+            assertEquals(this.timeUtil.getTimeFromLog("PostConstructErrorServlet3", "postConstruct"), 0);
         } catch (IOException e) {
             // ingore - this can be expected
         } finally {
@@ -156,10 +156,10 @@ public class PostConstructPreDestroyErrorTest extends DefaultTestBundleControl {
             // check if content of response is correct
             assertTrue(response.indexOf("PreDestroyErrorServlet1") > 0);
             assertTrue(response.indexOf("PreDestroyErrorServlet1.printContext " + Constants.PRINTCONTEXT) > 0);
-            assertTrue(response.indexOf("null") == -1);
+            assertEquals(response.indexOf("null"), -1);
             // check if the time stamp in response is after the beforeStart time.
             assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
-            assertTrue(this.timeUtil.getTimeFromLog("PreDestroyErrorServlet1", "postConstruct") == 0);
+            assertEquals(this.timeUtil.getTimeFromLog("PreDestroyErrorServlet1", "postConstruct"), 0);
         } finally {
             conn.disconnect();
         }
@@ -183,10 +183,10 @@ public class PostConstructPreDestroyErrorTest extends DefaultTestBundleControl {
             // check if content of response is correct
             assertTrue(response.indexOf("PreDestroyErrorServlet2") > 0);
             assertTrue(response.indexOf("PreDestroyErrorServlet2.printContext " + Constants.PRINTCONTEXT) > 0);
-            assertTrue(response.indexOf("null") == -1);
+            assertEquals(response.indexOf("null"), -1);
             // check if the time stamp in response is after the beforeStart time.
             assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
-            assertTrue(this.timeUtil.getTimeFromLog("PreDestroyErrorServlet2", "postConstruct") == 0);
+            assertEquals(this.timeUtil.getTimeFromLog("PreDestroyErrorServlet2", "postConstruct"), 0);
         } finally {
             conn.disconnect();
         }
@@ -210,10 +210,10 @@ public class PostConstructPreDestroyErrorTest extends DefaultTestBundleControl {
             // check if content of response is correct
             assertTrue(response.indexOf("PreDestroyErrorServlet3") > 0);
             assertTrue(response.indexOf("PreDestroyErrorServlet3.printContext " + Constants.PRINTCONTEXT) > 0);
-            assertTrue(response.indexOf("null") == -1);
+            assertEquals(response.indexOf("null"), -1);
             // check if the time stamp in response is after the beforeStart time.
             assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
-            assertTrue(this.timeUtil.getTimeFromLog("PreDestroyErrorServlet2", "postConstruct") == 0);
+            assertEquals(this.timeUtil.getTimeFromLog("PreDestroyErrorServlet2", "postConstruct"), 0);
         } finally {
             conn.disconnect();
         }
@@ -230,10 +230,10 @@ public class PostConstructPreDestroyErrorTest extends DefaultTestBundleControl {
         uninstallWar();
         // TODO do we need to wait till the war is uninstalled properly?
         
-        assertTrue(this.timeUtil.getTimeFromLog("PreDestroyErrorServlet1", "cleanup1") == 0);
-        assertTrue(this.timeUtil.getTimeFromLog("PreDestroyErrorServlet1", "cleanup2") == 0);
-        assertTrue(this.timeUtil.getTimeFromLog("PreDestroyErrorServlet2", "cleanup") == 0);
-        assertTrue(this.timeUtil.getTimeFromLog("PreDestroyErrorServlet3", "cleanup") == 0);
+        assertEquals(this.timeUtil.getTimeFromLog("PreDestroyErrorServlet1", "cleanup1"), 0);
+        assertEquals(this.timeUtil.getTimeFromLog("PreDestroyErrorServlet1", "cleanup2"), 0);
+        assertEquals(this.timeUtil.getTimeFromLog("PreDestroyErrorServlet2", "cleanup"), 0);
+        assertEquals(this.timeUtil.getTimeFromLog("PreDestroyErrorServlet3", "cleanup"), 0);
         
     }
 }

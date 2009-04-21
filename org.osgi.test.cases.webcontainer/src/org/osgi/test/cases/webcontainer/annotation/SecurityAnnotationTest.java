@@ -83,15 +83,15 @@ public class SecurityAnnotationTest extends DefaultTestBundleControl {
             if (debug) {
                 log(response);
             }
-            assertTrue(conn.getResponseCode() == 200);
-            assertTrue(conn.getContentType().equals("text/html"));
+            assertEquals(conn.getResponseCode(), 200);
+            assertEquals(conn.getContentType(), "text/html");
 
             // check if content of response is correct
             assertTrue(response.indexOf("SecurityTestServlet") > 0);
             assertTrue(response.indexOf(Constants.EMAIL + "-" + Constants.EMAILVALUE) > 0);
             assertTrue(response.indexOf(Constants.WELCOMESTRING + "-" + Constants.WELCOMESTRINGVALUE) > 0);
             assertTrue(response.indexOf(Constants.WELCOMESTATEMENT + "-" + Constants.WELCOMESTATEMENTVALUE) > 0);
-            assertTrue(response.indexOf("null") == -1); 
+            assertEquals(response.indexOf("null"), -1); 
         } finally {
             conn.disconnect();
         }
@@ -116,7 +116,7 @@ public class SecurityAnnotationTest extends DefaultTestBundleControl {
                 byte[] encodedPassword = (userName + ":" + password).getBytes();
                 conn.setRequestProperty("Authorization", "Basic "
                         + new String(Base64Encoder.encode(encodedPassword)));
-                assertTrue(conn.getResponseCode() == 401);
+                assertEquals(conn.getResponseCode(), 401);
 
             }
 
@@ -145,7 +145,7 @@ public class SecurityAnnotationTest extends DefaultTestBundleControl {
                 byte[] encodedPassword = (userName + ":" + password).getBytes();
                 conn.setRequestProperty("Authorization", "Basic "
                         + new String(Base64Encoder.encode(encodedPassword)));
-                assertTrue(conn.getResponseCode() == 401 );
+                assertEquals(conn.getResponseCode(), 401 );
 
             }
 
@@ -174,7 +174,7 @@ public class SecurityAnnotationTest extends DefaultTestBundleControl {
                 byte[] encodedPassword = (userName + ":" + password).getBytes();
                 conn.setRequestProperty("Authorization", "Basic "
                         + new String(Base64Encoder.encode(encodedPassword)));
-                assertTrue(conn.getResponseCode() == 403);
+                assertEquals(conn.getResponseCode(), 403);
 
             }
 

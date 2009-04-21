@@ -9,7 +9,9 @@ Private-Package						= org.osgi.test.support.*, \
 	${p}.util.*
 
 Include-Resource					= \
+	resources/tw1/tw1.war, \
 	resources/tw2/tw2.war, \
+	resources/tw5/tw5.war, \
 	util.jar
 	
 Import-Package = \
@@ -29,11 +31,13 @@ Export-Package =\
     org.apache.geronimo.specs.geronimo-annotation_1.0_spec;version=1.1.1, \
 	ee.j2se;								version=1.4, \
 	osgi;									version=4.2, \
-	org.osgi.test.support;          	    version=project , \
+	org.osgi.test.support;					version=project , \
+	org.osgi.service.log;					version=project , \
 	${junit}
 
 -runbundles						= \
-	org.osgi.impl.bundle.servlet;		version=2.1
+	org.osgi.impl.bundle.servlet;		version=2.1, \
+	org.osgi.impl.service.log; 			version=project
 	
 -runproperties = report=true, \
 	org.osgi.service.webcontainer.hostname=127.0.0.1, \

@@ -88,15 +88,15 @@ public class OtherAnnotationTest extends DefaultTestBundleControl {
             // check if content of response is correct
             assertTrue(response.indexOf("PostConstructPreDestroyServlet1") > 0);
             assertTrue(response.indexOf("PostConstructPreDestroyServlet1.printContext " + Constants.PRINTCONTEXT) > 0);
-            assertTrue(response.indexOf("null") == -1);
+            assertEquals(response.indexOf("null"), -1);
             // check if the time stamp in response is after the beforeStart time.
             assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
             assertTrue(this.timeUtil.getTimeFromLog("PostConstructPreDestroyServlet1", Constants.POSTCONSTRUCT) > beforeInstall);
             assertTrue(this.timeUtil.getTimeFromLog("TestFilter", Constants.POSTCONSTRUCT) > beforeInstall);
             assertTrue(this.timeUtil.getTimeFromLog("TestFilter", "init") > beforeInstall);
             assertTrue(this.timeUtil.getTimeFromLog("TestFilter", "doFilter") > this.timeUtil.getTimeFromLog("TestFilter", "init") );
-            assertTrue(this.timeUtil.getDespFromLog("TestFilter", "doFilter").equals(Constants.WELCOMESTRINGVALUE));
-            assertTrue(this.timeUtil.getDespFromLog("TestFilter", "init").equals(Constants.WELCOMESTATEMENTVALUE));
+            assertEquals(this.timeUtil.getDespFromLog("TestFilter", "doFilter"), Constants.WELCOMESTRINGVALUE);
+            assertEquals(this.timeUtil.getDespFromLog("TestFilter", "init"), Constants.WELCOMESTATEMENTVALUE);
             
             // TODO test preDestroy annotated method
         } finally {
@@ -126,15 +126,15 @@ public class OtherAnnotationTest extends DefaultTestBundleControl {
             assertTrue(response.indexOf(Constants.EMAIL + "-" + Constants.EMAILVALUE) > 0);
             assertTrue(response.indexOf(Constants.WELCOMESTRING + "-" + Constants.WELCOMESTRINGVALUE) > 0);
             assertTrue(response.indexOf(Constants.WELCOMESTATEMENT + "-" + Constants.WELCOMESTATEMENTVALUE) > 0);
-            assertTrue(response.indexOf("null") == -1);
+            assertEquals(response.indexOf("null"), -1);
 
             // check if annotated methods are invoked
             System.out.println("time is " + this.timeUtil.getTimeFromLog("ServletContextListenerServlet", Constants.POSTCONSTRUCT));
             assertTrue(this.timeUtil.getTimeFromLog("ServletContextListenerServlet", Constants.POSTCONSTRUCT) > beforeInstall);
             assertTrue(this.timeUtil.getTimeFromLog("TestServletContextListener", Constants.POSTCONSTRUCT) > beforeInstall);
             assertTrue(this.timeUtil.getTimeFromLog("TestServletContextAttributeListener", Constants.POSTCONSTRUCT) > beforeInstall);
-            assertTrue(this.timeUtil.getDespFromLog("TestServletContextListener", "contextInitialized").equals(Constants.EMAIL + "-" + Constants.EMAILVALUE));
-            assertTrue(this.timeUtil.getDespFromLog("TestServletContextAttributeListener", "attributeAdded").equals(Constants.WELCOMESTRING + "-" + Constants.WELCOMESTRINGVALUE));           
+            assertEquals(this.timeUtil.getDespFromLog("TestServletContextListener", "contextInitialized"), Constants.EMAIL + "-" + Constants.EMAILVALUE);
+            assertEquals(this.timeUtil.getDespFromLog("TestServletContextAttributeListener", "attributeAdded"), Constants.WELCOMESTRING + "-" + Constants.WELCOMESTRINGVALUE);           
         } finally {
             conn.disconnect();
         }
@@ -159,7 +159,7 @@ public class OtherAnnotationTest extends DefaultTestBundleControl {
             // check if methods are invoked
             assertTrue(this.timeUtil.getTimeFromLog("TestServletContextAttributeListener", "attributeRemoved") > beforeInstall);
             
-            assertTrue(this.timeUtil.getDespFromLog("TestServletContextAttributeListener", "attributeReplaced").equals(Constants.WELCOMESTATEMENT + "-" + Constants.WELCOMESTATEMENTVALUE));           
+            assertEquals(this.timeUtil.getDespFromLog("TestServletContextAttributeListener", "attributeReplaced"), Constants.WELCOMESTATEMENT + "-" + Constants.WELCOMESTATEMENTVALUE);           
         } finally {
             conn.disconnect();
         }
@@ -182,8 +182,8 @@ public class OtherAnnotationTest extends DefaultTestBundleControl {
             assertTrue(response.indexOf(Constants.WELCOMESTATEMENT + "-" + Constants.WELCOMESTATEMENTVALUE) > 0);
             
             // check if methods are invoked
-            assertTrue(this.timeUtil.getDespFromLog("TestServletContextAttributeListener", "attributeAdded").equals(Constants.WELCOMESTRING + "-" + Constants.WELCOMESTRINGVALUE));           
-            assertTrue(this.timeUtil.getDespFromLog("TestServletContextAttributeListener", "attributeReplaced").equals(Constants.WELCOMESTATEMENT + "-" + Constants.WELCOMESTATEMENTVALUE2));           
+            assertEquals(this.timeUtil.getDespFromLog("TestServletContextAttributeListener", "attributeAdded"), Constants.WELCOMESTRING + "-" + Constants.WELCOMESTRINGVALUE);           
+            assertEquals(this.timeUtil.getDespFromLog("TestServletContextAttributeListener", "attributeReplaced"), Constants.WELCOMESTATEMENT + "-" + Constants.WELCOMESTATEMENTVALUE2);           
         } finally {
             conn.disconnect();
         }
@@ -210,16 +210,16 @@ public class OtherAnnotationTest extends DefaultTestBundleControl {
             assertTrue(response.indexOf("RequestListenerServlet") > 0);
             assertTrue(response.indexOf(Constants.WELCOMESTRING + "-" + Constants.WELCOMESTRINGVALUE) > 0);
             assertTrue(response.indexOf(Constants.WELCOMESTATEMENT + "-" + Constants.WELCOMESTATEMENTVALUE) > 0);
-            assertTrue(response.indexOf("null") == -1);
+            assertEquals(response.indexOf("null"), -1);
 
             // check if annotated methods are invoked
             assertTrue(this.timeUtil.getTimeFromLog("RequestListenerServlet", Constants.POSTCONSTRUCT) > beforeInstall);
             assertTrue(this.timeUtil.getTimeFromLog("TestServletRequestListener", Constants.POSTCONSTRUCT) > beforeInstall);
             assertTrue(this.timeUtil.getTimeFromLog("TestServletRequestAttributeListener", Constants.POSTCONSTRUCT) > beforeInstall);
-            assertTrue(this.timeUtil.getDespFromLog("TestServletRequestListener", "requestInitialized").equals(Constants.WELCOMESTRING + "-" + Constants.WELCOMESTRINGVALUE));
-            assertTrue(this.timeUtil.getDespFromLog("TestServletRequestAttributeListener", "attributeAdded").equals(Constants.WELCOMESTRING + "-" + Constants.WELCOMESTRINGVALUE));    
+            assertEquals(this.timeUtil.getDespFromLog("TestServletRequestListener", "requestInitialized"), Constants.WELCOMESTRING + "-" + Constants.WELCOMESTRINGVALUE);
+            assertEquals(this.timeUtil.getDespFromLog("TestServletRequestAttributeListener", "attributeAdded"), Constants.WELCOMESTRING + "-" + Constants.WELCOMESTRINGVALUE);    
             assertTrue(this.timeUtil.getTimeFromLog("TestServletRequestAttributeListener", "attributeRemoved") > beforeInstall); 
-            assertTrue(this.timeUtil.getDespFromLog("TestServletRequestAttributeListener", "attributeReplaced").equals(Constants.WELCOMESTATEMENT + "-" + Constants.WELCOMESTATEMENTVALUE));    
+            assertEquals(this.timeUtil.getDespFromLog("TestServletRequestAttributeListener", "attributeReplaced"), Constants.WELCOMESTATEMENT + "-" + Constants.WELCOMESTATEMENTVALUE);    
         } finally {
             conn.disconnect();
         }
@@ -237,16 +237,16 @@ public class OtherAnnotationTest extends DefaultTestBundleControl {
             assertTrue(response.indexOf("RequestListenerServlet") > 0);
             assertTrue(response.indexOf(Constants.WELCOMESTRING + "-" + Constants.WELCOMESTRINGVALUE) > 0);
             assertTrue(response.indexOf(Constants.WELCOMESTATEMENT + "-" + Constants.WELCOMESTATEMENTVALUE) > 0);
-            assertTrue(response.indexOf("null") == -1);
+            assertEquals(response.indexOf("null"), -1);
 
             // check if annotated methods are invoked
             assertTrue(this.timeUtil.getTimeFromLog("RequestListenerServlet", Constants.POSTCONSTRUCT) > beforeInstall);
             assertTrue(this.timeUtil.getTimeFromLog("TestServletRequestListener", Constants.POSTCONSTRUCT) > beforeInstall);
             assertTrue(this.timeUtil.getTimeFromLog("TestServletRequestAttributeListener", Constants.POSTCONSTRUCT) > beforeInstall);
-            assertTrue(this.timeUtil.getDespFromLog("TestServletRequestListener", "requestInitialized").equals(Constants.WELCOMESTRING + "-" + Constants.WELCOMESTRINGVALUE));
-            assertTrue(this.timeUtil.getDespFromLog("TestServletRequestAttributeListener", "attributeAdded").equals(Constants.WELCOMESTRING + "-" + Constants.WELCOMESTRINGVALUE));    
+            assertEquals(this.timeUtil.getDespFromLog("TestServletRequestListener", "requestInitialized"), Constants.WELCOMESTRING + "-" + Constants.WELCOMESTRINGVALUE);
+            assertEquals(this.timeUtil.getDespFromLog("TestServletRequestAttributeListener", "attributeAdded"), Constants.WELCOMESTRING + "-" + Constants.WELCOMESTRINGVALUE);    
             assertTrue(this.timeUtil.getTimeFromLog("TestServletRequestAttributeListener", "attributeRemoved") > beforeInstall); 
-            assertTrue(this.timeUtil.getDespFromLog("TestServletRequestAttributeListener", "attributeReplaced").equals(Constants.WELCOMESTATEMENT + "-" + Constants.WELCOMESTATEMENTVALUE));    
+            assertEquals(this.timeUtil.getDespFromLog("TestServletRequestAttributeListener", "attributeReplaced"), Constants.WELCOMESTATEMENT + "-" + Constants.WELCOMESTATEMENTVALUE);    
         } finally {
             conn.disconnect();
         }
@@ -274,16 +274,16 @@ public class OtherAnnotationTest extends DefaultTestBundleControl {
             assertTrue(response.indexOf("HTTPSessionListenerServlet") > 0);
             assertTrue(response.indexOf(Constants.WELCOMESTRING + "-" + Constants.WELCOMESTRINGVALUE) > 0);
             assertTrue(response.indexOf(Constants.WELCOMESTATEMENT + "-" + Constants.WELCOMESTATEMENTVALUE) > 0);
-            assertTrue(response.indexOf("null") == -1);
+            assertEquals(response.indexOf("null"), -1);
 
             // check if annotated methods are invoked
             assertTrue(this.timeUtil.getTimeFromLog("HTTPSessionListenerServlet", Constants.POSTCONSTRUCT) > beforeInstall);
             assertTrue(this.timeUtil.getTimeFromLog("TestHttpSessionListener", Constants.POSTCONSTRUCT) > beforeInstall);
             assertTrue(this.timeUtil.getTimeFromLog("TestHttpSessionAttributeListener", Constants.POSTCONSTRUCT) > beforeInstall);
-            assertTrue(this.timeUtil.getDespFromLog("TestHttpSessionListener", "sessionCreated").equals(Constants.WELCOMESTRING + "-" + Constants.WELCOMESTRINGVALUE));
-            assertTrue(this.timeUtil.getDespFromLog("TestHttpSessionAttributeListener", "attributeAdded").equals(Constants.WELCOMESTRING + "-" + Constants.WELCOMESTRINGVALUE));    
+            assertEquals(this.timeUtil.getDespFromLog("TestHttpSessionListener", "sessionCreated"), Constants.WELCOMESTRING + "-" + Constants.WELCOMESTRINGVALUE);
+            assertEquals(this.timeUtil.getDespFromLog("TestHttpSessionAttributeListener", "attributeAdded"), Constants.WELCOMESTRING + "-" + Constants.WELCOMESTRINGVALUE);    
             assertTrue(this.timeUtil.getTimeFromLog("TestHttpSessionAttributeListener", "attributeRemoved") > beforeInstall); 
-            assertTrue(this.timeUtil.getDespFromLog("TestHttpSessionAttributeListener", "attributeReplaced").equals(Constants.WELCOMESTATEMENT + "-" + Constants.WELCOMESTATEMENTVALUE));    
+            assertEquals(this.timeUtil.getDespFromLog("TestHttpSessionAttributeListener", "attributeReplaced"), Constants.WELCOMESTATEMENT + "-" + Constants.WELCOMESTATEMENTVALUE);    
         } finally {
             conn.disconnect();
         }
@@ -300,16 +300,16 @@ public class OtherAnnotationTest extends DefaultTestBundleControl {
             assertTrue(response.indexOf("HTTPSessionListenerServlet") > 0);
             assertTrue(response.indexOf(Constants.WELCOMESTRING + "-" + Constants.WELCOMESTRINGVALUE) > 0);
             assertTrue(response.indexOf(Constants.WELCOMESTATEMENT + "-" + Constants.WELCOMESTATEMENTVALUE) > 0);
-            assertTrue(response.indexOf("null") == -1);
+            assertEquals(response.indexOf("null"), -1);
 
             // check if annotated methods are invoked
             assertTrue(this.timeUtil.getTimeFromLog("HTTPSessionListenerServlet", Constants.POSTCONSTRUCT) > beforeInstall);
             assertTrue(this.timeUtil.getTimeFromLog("TestHttpSessionListener", Constants.POSTCONSTRUCT) > beforeInstall);
             assertTrue(this.timeUtil.getTimeFromLog("TestHttpSessionAttributeListener", Constants.POSTCONSTRUCT) > beforeInstall);
-            assertTrue(this.timeUtil.getDespFromLog("TestHttpSessionListener", "sessionCreated").equals(Constants.WELCOMESTRING + "-" + Constants.WELCOMESTRINGVALUE));
-            assertTrue(this.timeUtil.getDespFromLog("TestHttpSessionAttributeListener", "attributeAdded").equals(Constants.WELCOMESTRING + "-" + Constants.WELCOMESTRINGVALUE));    
+            assertEquals(this.timeUtil.getDespFromLog("TestHttpSessionListener", "sessionCreated"), Constants.WELCOMESTRING + "-" + Constants.WELCOMESTRINGVALUE);
+            assertEquals(this.timeUtil.getDespFromLog("TestHttpSessionAttributeListener", "attributeAdded"), Constants.WELCOMESTRING + "-" + Constants.WELCOMESTRINGVALUE);    
             assertTrue(this.timeUtil.getTimeFromLog("TestHttpSessionAttributeListener", "attributeRemoved") > beforeInstall); 
-            assertTrue(this.timeUtil.getDespFromLog("TestHttpSessionAttributeListener", "attributeReplaced").equals(Constants.WELCOMESTATEMENT + "-" + Constants.WELCOMESTATEMENTVALUE)); 
+            assertEquals(this.timeUtil.getDespFromLog("TestHttpSessionAttributeListener", "attributeReplaced"), Constants.WELCOMESTATEMENT + "-" + Constants.WELCOMESTATEMENTVALUE); 
         } finally {
             conn.disconnect();
         }
