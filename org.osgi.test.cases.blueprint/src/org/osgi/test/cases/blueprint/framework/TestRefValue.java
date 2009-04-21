@@ -38,7 +38,7 @@ public class TestRefValue extends TestValue {
      */
     public void validate(BlueprintMetadata blueprintMetadata, Metadata v) throws Exception {
         super.validate(blueprintMetadata, v);
-        assertEquals("Component name mismatch", componentId, ((ReferenceValue)v).getComponentName());
+        assertEquals("Component name mismatch", componentId, ((RefMetadata)v).getComponentId());
     }
 
     /**
@@ -56,7 +56,7 @@ public class TestRefValue extends TestValue {
             return false;
         }
         // must match on the component name
-        return componentId.equals(((RefMetadata)v).getComponentName());
+        return componentId.equals(((RefMetadata)v).getComponentId());
     }
 
     /**

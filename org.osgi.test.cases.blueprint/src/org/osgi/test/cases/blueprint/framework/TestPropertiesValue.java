@@ -16,28 +16,29 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
-import java.util.ArrayList();
+import java.util.ArrayList;
 import java.util.List;
 
 import org.osgi.service.blueprint.reflect.PropsMetadata;
 import org.osgi.service.blueprint.reflect.Metadata;
+import org.osgi.service.blueprint.reflect.MapEntry;
 
 public class TestPropertiesValue extends TestValue {
     // The expected set of properties items.
     protected List entries;
 
     public TestPropertiesValue(List entries) {
-        super(PropertiesValue.class);
+        super(PropsMetadata.class);
         this.entries = entries;
     }
 
     public TestPropertiesValue() {
-        super(PropertiesValue.class);
+        super(PropsMetadata.class);
         this.entries = new ArrayList();
     }
 
     public void add(String key, String value) {
-        entries.add(new TestMapValueEntry(key, value));
+        entries.add(new MapValueEntry(key, value));
     }
 
 
@@ -62,7 +63,7 @@ public class TestPropertiesValue extends TestValue {
         assertEquals("PropertiesValue mismatch", entries.size(), props.size());
         for (int i = 0; i < entries.size(); i++) {
             MapValueEntry entry = (MapValueEntry)entries.get(i);
-            entry.validate((MapEntry)props.get(i));
+            entry.validate(blueprintMetadata, (MapEntry)props.get(i));
         }
     }
 

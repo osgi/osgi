@@ -22,9 +22,9 @@ import java.util.Set;
 
 import junit.framework.Assert;
 
-import org.osgi.service.blueprint.reflect.BindingListenerMetadata;
+import org.osgi.service.blueprint.reflect.Listener;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
-import org.osgi.service.blueprint.reflect.ServiceReferenceComponentMetadata;
+import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
 
 /**
  * A single referenced service in the BlueprintContext metadata.
@@ -87,10 +87,10 @@ public class ReferencedServiceBase extends Assert implements TestComponentMetada
      */
     public boolean matches(ComponentMetadata componentMeta) {
         // we only handle service reference component references.
-        if (!(componentMeta instanceof ServiceReferenceComponentMetadata)) {
+        if (!(componentMeta instanceof ServiceReferenceMetadata)) {
             return false;
         }
-        ServiceReferenceComponentMetadata meta = (ServiceReferenceComponentMetadata)componentMeta;
+        ServiceReferenceMetadata meta = (ServiceReferenceMetadata)componentMeta;
 
         // match on the interfaces first
         if (!serviceInterfaces.equals(meta.getInterfaceNames())) {
@@ -120,20 +120,20 @@ public class ReferencedServiceBase extends Assert implements TestComponentMetada
      * @exception Exception
      */
     public void validate(BlueprintMetadata blueprintMetadata, ComponentMetadata componentMeta) throws Exception {
-        assertTrue("Component type mismatch", componentMeta instanceof ServiceReferenceComponentMetadata);
-        ServiceReferenceComponentMetadata meta = (ServiceReferenceComponentMetadata)componentMeta;
+        assertTrue("Component type mismatch", componentMeta instanceof ServiceReferenceMetadata);
+        ServiceReferenceMetadata meta = (ServiceReferenceMetadata)componentMeta;
         // if we have a name to compare, they must be equal
         if (name != null) {
-            assertEquals(name, getName());
+            assertEquals(name, getId());
         }
-        assertEquals(serviceAvailability, meta.getServiceAvailabilitySpecification());
+        assertEquals(serviceAvailability, meta.getAvailability());
         // we might have a listener list also
         if (listeners != null) {
-            Collection bindingListeners = meta.getBindingListeners();
+            Collection bindingListeners = meta.getServiceListeners();
             assertEquals("Mismatch on binding listener list", listeners.length, bindingListeners.size());
             for (int i = 0; i < listeners.length; i++) {
                 BindingListener s = listeners[i];
-                BindingListenerMetadata l = locateBindingListener(bindingListeners, s);
+                Listener l = locateBindingListener(bindingListeners, s);
                 assertNotNull("Missing binding listener (" + s + ") for component " + name, l);
                 // do additional validation on the listener definition.
                 s.validate(blueprintMetadata, l);
@@ -150,10 +150,10 @@ public class ReferencedServiceBase extends Assert implements TestComponentMetada
      *
      * @return The matching services metadata, or null if no match was found.
      */
-    protected BindingListenerMetadata locateBindingListener(Collection listeners, BindingListener listener) {
+    protected Listener locateBindingListener(Collection listeners, BindingListener listener) {
         Iterator i = listeners.iterator();
         while (i.hasNext()) {
-            BindingListenerMetadata meta = (BindingListenerMetadata)i.next();
+            Listener meta = (Listener)i.next();
             if (listener.matches(meta)) {
                 return meta;
             }
@@ -169,7 +169,7 @@ public class ReferencedServiceBase extends Assert implements TestComponentMetada
      * @return The String name of the component.  Returns null
      *         if no name has been provided.
      */
-    public String getName() {
+    public String getId() {
         return name;
     }
 }

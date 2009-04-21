@@ -102,7 +102,7 @@ public class TestNamespaceHandler extends BaseTestComponent implements Namespace
             else if (attribute.getName().equals("copy-component")) {
                 // make a copy of the metadata, but don't decorate it.  This is used on all of the component elements,
                 // not just LocalComponent
-                ComponentMetadata metadata = NamespaceUtil.cloneMetadata(component);
+                ComponentMetadata metadata = (ComponentMetadata)NamespaceUtil.cloneMetadata(component);
                 return metadata;
             }
             else if (attribute.getName().equals("raise-error")) {
@@ -111,7 +111,7 @@ public class TestNamespaceHandler extends BaseTestComponent implements Namespace
                     throw new IllegalArgumentException("raise-error=\"yes\" triggered exception");
                 }
                 // we can also use this to trigger replacement of a component
-                return NamespaceUtil.cloneMetadata(component);
+                return (ComponentMetadata)NamespaceUtil.cloneMetadata(component);
             }
             throw new IllegalArgumentException("Unknown attribute " + attribute.getName());
         }
@@ -130,7 +130,7 @@ public class TestNamespaceHandler extends BaseTestComponent implements Namespace
             else if (element.getTagName().equals("copy")) {
                 // make a copy of the metadata, but don't decorate it.  This is used on all of the component elements,
                 // not just LocalComponent
-                return NamespaceUtil.cloneMetadata(component);
+                return (ComponentMetadata)NamespaceUtil.cloneMetadata(component);
             }
             // we have a different value tag
             else if (element.getTagName().equalsIgnoreCase("bundle-value")) {
@@ -177,10 +177,8 @@ public class TestNamespaceHandler extends BaseTestComponent implements Namespace
                     ComponentMetadata metadata = registry.getComponentDefinition(name);
                     AssertionService.assertNotNull(this, "null component returned from registry for (" + name + ")", metadata);
                     // clone this so we can perform a replacement with out version
-                    metadata = NamespaceUtil.cloneMetadata(metadata);
+                    metadata = (ComponentMetadata)NamespaceUtil.cloneMetadata(metadata);
                     try {
-                        // there's no replace, so we need to remove this first
-                        registry.removeComponentDefinition(name);
                         // and register the replacement version
                         registry.registerComponentDefinition(metadata);
                         AssertionService.fail(this, "Exception expected on registerComponentDefinition()");
@@ -206,7 +204,7 @@ public class TestNamespaceHandler extends BaseTestComponent implements Namespace
         // we have a different value tag
         else if (element.getTagName().equalsIgnoreCase("bundle-value")) {
             // make a copy of the metadata for our enclosing component
-            BeanMetadataImpl metadata = (BeanMetadataImpl)NamespaceUtil.cloneComponentMetadata(context.getEnclosingComponent());
+            BeanMetadataImpl metadata = (BeanMetadataImpl)NamespaceUtil.cloneMetadata(context.getEnclosingComponent());
             // we need to replace the definition of the
             Element parent = (Element)element.getParentNode();
             if (!parent.getTagName().equals("property")) {

@@ -69,7 +69,7 @@ public class TestRegistrationListener extends Assert {
                 return false;
             }
             // the component names must match
-            if (!componentId.equals(((RefMetadata)component).getComponentName())) {
+            if (!componentId.equals(((RefMetadata)component).getComponentId())) {
                 return false;
             }
         }

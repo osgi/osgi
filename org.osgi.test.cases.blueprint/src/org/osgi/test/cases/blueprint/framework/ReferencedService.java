@@ -16,8 +16,8 @@
 
 package org.osgi.test.cases.blueprint.framework;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
-import org.osgi.service.blueprint.reflect.ServiceReferenceComponentMetadata;
-import org.osgi.service.blueprint.reflect.UnaryServiceReferenceComponentMetadata;
+import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
+import org.osgi.service.blueprint.reflect.ReferenceMetadata;
 
 /**
  * A single referenced service in the BlueprintContext metadata.
@@ -66,11 +66,11 @@ public class ReferencedService extends ReferencedServiceBase implements TestComp
      *
      * @exception Exception
      */
-    public void validate(BlueprintMetadata blueprintMetadata, ServiceReferenceComponentMetadata metadata) throws Exception {
-        assertTrue("Mismatch on service reference type", metadata instanceof UnaryServiceReferenceComponentMetadata);
+    public void validate(BlueprintMetadata blueprintMetadata, ServiceReferenceMetadata metadata) throws Exception {
+        assertTrue("Mismatch on service reference type", metadata instanceof ReferenceMetadata);
         // do the base validation
         super.validate(blueprintMetadata, metadata);
-        assertEquals(timeout, ((UnaryServiceReferenceComponentMetadata)metadata).getTimeout());
+        assertEquals(timeout, ((ReferenceMetadata)metadata).getTimeout());
     }
 
     /**
@@ -83,7 +83,7 @@ public class ReferencedService extends ReferencedServiceBase implements TestComp
      */
     public boolean matches(ComponentMetadata componentMeta) {
         // we only handle service reference component references.
-        if (!(componentMeta instanceof UnaryServiceReferenceComponentMetadata)) {
+        if (!(componentMeta instanceof ReferenceMetadata)) {
             return false;
         }
 

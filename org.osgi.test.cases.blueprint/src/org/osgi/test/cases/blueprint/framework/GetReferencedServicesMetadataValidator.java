@@ -80,7 +80,7 @@ public class GetReferencedServicesMetadataValidator extends MetadataValidator {
                 return;
             }
         }
-        fail("Expected ServiceReferenceComponentMetadata instance for component " + componentId);
+        fail("Expected ServiceReferenceMetadata instance for component " + componentId);
     }
 }
 

@@ -24,7 +24,7 @@ import org.osgi.service.blueprint.reflect.BeanArgument;
 import org.osgi.service.blueprint.reflect.BeanMetadata;
 import org.osgi.service.blueprint.reflect.BeanProperty;
 import org.osgi.service.blueprint.reflect.Metadata;
-
+import org.osgi.service.blueprint.reflect.Target;
 
 import java.util.List;
 
@@ -43,7 +43,7 @@ public class BeanMetadataImpl extends ComponentMetadataImpl implements BeanMetad
     private boolean lazy;
     private List properties;
     private List arguments;
-    private Metadata factoryComponent;
+    private Target factoryComponent;
     private String factoryMethod;
     private List dependencies;
 
@@ -82,7 +82,7 @@ public class BeanMetadataImpl extends ComponentMetadataImpl implements BeanMetad
         while (propertySource.hasNext()) {
             properties.add(new BeanPropertyImpl((BeanProperty)propertySource.next()));
         }
-        factoryComponent = NamespaceUtil.cloneMetadata(source.getFactoryComponent());
+        factoryComponent = (Target)NamespaceUtil.cloneMetadata(source.getFactoryComponent());
 
         dependencies = new ArrayList();
         dependencies.addAll(source.getExplicitDependencies());
@@ -203,11 +203,11 @@ public class BeanMetadataImpl extends ComponentMetadataImpl implements BeanMetad
      * indicates that the factory method should be invoked as a static method on the
      * component class itself.
      */
-    public Metadata getFactoryComponent() {
+    public Target getFactoryComponent() {
         return factoryComponent;
     }
 
-    public void setFactoryComponent(Metadata m) {
+    public void setFactoryComponent(Target m) {
         factoryComponent = m;
     }
 

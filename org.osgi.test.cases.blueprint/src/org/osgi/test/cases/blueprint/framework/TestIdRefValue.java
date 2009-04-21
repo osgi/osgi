@@ -38,7 +38,7 @@ public class TestIdRefValue extends TestValue {
      */
     public void validate(BlueprintMetadata blueprintMetadata, Metadata v) throws Exception {
         super.validate(blueprintMetadata, v);
-        assertEquals("Component reference name mismatch", componentId, ((IdRefMetadata)v).getComponentName());
+        assertEquals("Component reference name mismatch", componentId, ((IdRefMetadata)v).getComponentId());
     }
 
     /**

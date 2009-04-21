@@ -27,6 +27,8 @@ import org.osgi.service.blueprint.reflect.RefMetadata;
 import org.osgi.service.blueprint.reflect.RegistrationListener;
 import org.osgi.service.blueprint.reflect.ServiceMetadata;
 import org.osgi.service.blueprint.reflect.Metadata;
+import org.osgi.service.blueprint.reflect.Target;
+
 import org.osgi.test.cases.blueprint.services.TestUtil;
 
 import junit.framework.Assert;
@@ -50,7 +52,7 @@ public class ExportedService extends Assert implements TestComponentMetadata {
     // the set of explicit dependencies
     protected List dependencies;
     // any registration listeners that might be attached to this export
-    protected RegistrationListener[] listeners;
+    protected TestRegistrationListener[] listeners;
 
     /**
      * Create an exported service definition.
@@ -68,7 +70,7 @@ public class ExportedService extends Assert implements TestComponentMetadata {
      * @param listeners  Any optional registration listeners.
      */
     public ExportedService(String serviceId, String componentId, Class serviceInterface, int exportMode, int ranking, List props,
-            String[] deps, RegistrationListener[] listeners) {
+            String[] deps, TestRegistrationListener[] listeners) {
         this(serviceId, componentId, new Class[] { serviceInterface }, exportMode, ranking, props, deps, listeners);
     }
 
@@ -89,7 +91,7 @@ public class ExportedService extends Assert implements TestComponentMetadata {
      * @param listeners  Any optional registration listeners.
      */
     public ExportedService(String serviceId, String componentId, Class[] interfaces, int exportMode, int ranking, List props,
-        String[] deps, RegistrationListener[] listeners) {
+        String[] deps, TestRegistrationListener[] listeners) {
         this.serviceId = serviceId;
         this.componentId = componentId;
         this.exportMode = exportMode;
@@ -151,7 +153,7 @@ public class ExportedService extends Assert implements TestComponentMetadata {
                 return false;
             }
             // the component names must match
-            if (!componentId.equals(((RefMetadata)component).getComponentName())) {
+            if (!componentId.equals(((RefMetadata)component).getComponentId())) {
                 return false;
             }
         }
@@ -229,7 +231,7 @@ public class ExportedService extends Assert implements TestComponentMetadata {
      * @return The String name of the component.  Returns null
      *         if no name has been provided.
      */
-    public String getName() {
+    public String getId() {
         return serviceId;
     }
 

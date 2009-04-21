@@ -70,7 +70,7 @@ public class ReferenceCollection extends ReferencedServiceBase {
      *
      * @exception Exception
      */
-    public void validate(BlueprintMetadata blueprintMetadata, ServiceReferenceComponentMetadata metadata) throws Exception {
+    public void validate(BlueprintMetadata blueprintMetadata, ServiceReferenceMetadata metadata) throws Exception {
         assertTrue("Mismatch on service reference type", metadata instanceof RefCollectionMetadata);
         // do the base validation
         super.validate(blueprintMetadata, metadata);
