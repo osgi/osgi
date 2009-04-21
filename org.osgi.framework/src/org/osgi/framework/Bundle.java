@@ -541,7 +541,7 @@ public interface Bundle {
 	 * <b>Postconditions, no exceptions thrown </b>
 	 * <ul>
 	 * <li><code>getState()</code> in &#x007B; <code>INSTALLED</code>,
-	 * <code>RESOLVED</code>, <code>ACTIVE</code> &#x007D.
+	 * <code>RESOLVED</code>, <code>ACTIVE</code> &#x007D;.
 	 * <li>This bundle has been updated.
 	 * </ul>
 	 * <b>Postconditions, when an exception is thrown </b>
