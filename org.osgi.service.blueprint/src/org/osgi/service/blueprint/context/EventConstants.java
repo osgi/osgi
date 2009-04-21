@@ -24,15 +24,6 @@ import org.osgi.framework.Version;
  *
  */
 public interface EventConstants {
-
-	/**
-	 * The version property defining the bundle on whose behalf a module context
-	 * event has been issued.
-	 *
-	 * @see Version
-	 */
-	public static final String BUNDLE_VERSION = "bundle.version";
-
 	/**
 	 * The extender bundle property defining the extender bundle processing the
 	 * module context for which an event has been issued.
