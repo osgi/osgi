@@ -79,8 +79,8 @@ public class OtherAnnotationTest extends DefaultTestBundleControl {
         final URL url = Dispatcher.createURL(request, this.server);
         final HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         try {
-            assertTrue(conn.getResponseCode() == 200);
-            assertTrue(conn.getContentType().equals("text/html"));
+            assertEquals(conn.getResponseCode(), 200);
+            assertEquals(conn.getContentType(),"text/html");
             String response = Dispatcher.dispatch(conn);
             if (debug) {
                 log(response);
@@ -115,8 +115,8 @@ public class OtherAnnotationTest extends DefaultTestBundleControl {
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         // add attributes
         try {
-            assertTrue(conn.getResponseCode() == 200);
-            assertTrue(conn.getContentType().equals("text/html"));
+            assertEquals(conn.getResponseCode(), 200);
+            assertEquals(conn.getContentType(),"text/html");
             String response = Dispatcher.dispatch(conn);
             if (debug) {
                 log(response);
@@ -144,8 +144,8 @@ public class OtherAnnotationTest extends DefaultTestBundleControl {
         conn = (HttpURLConnection)url.openConnection();
         // modify attributes
         try {
-            assertTrue(conn.getResponseCode() == 200);
-            assertTrue(conn.getContentType().equals("text/html"));
+            assertEquals(conn.getResponseCode(), 200);
+            assertEquals(conn.getContentType(),"text/html");
             String response = Dispatcher.dispatch(conn);
             if (debug) {
                 log(response);
@@ -157,8 +157,7 @@ public class OtherAnnotationTest extends DefaultTestBundleControl {
             assertTrue(response.indexOf(Constants.WELCOMESTATEMENT + "-" + Constants.WELCOMESTATEMENTVALUE2) > 0);
             
             // check if methods are invoked
-            assertTrue(this.timeUtil.getTimeFromLog("TestServletContextAttributeListener", "attributeRemoved") > beforeInstall);
-            
+            assertTrue(this.timeUtil.getTimeFromLog("TestServletContextAttributeListener", "attributeRemoved") > beforeInstall);           
             assertEquals(this.timeUtil.getDespFromLog("TestServletContextAttributeListener", "attributeReplaced"), Constants.WELCOMESTATEMENT + "-" + Constants.WELCOMESTATEMENTVALUE);           
         } finally {
             conn.disconnect();
@@ -169,8 +168,8 @@ public class OtherAnnotationTest extends DefaultTestBundleControl {
         conn = (HttpURLConnection)url.openConnection();
         // reset attributes back to the initial values
         try {
-            assertTrue(conn.getResponseCode() == 200);
-            assertTrue(conn.getContentType().equals("text/html"));
+            assertEquals(conn.getResponseCode(), 200);
+            assertEquals(conn.getContentType(),"text/html");
             String response = Dispatcher.dispatch(conn);
             if (debug) {
                 log(response);
@@ -200,8 +199,8 @@ public class OtherAnnotationTest extends DefaultTestBundleControl {
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         // add attributes
         try {
-            assertTrue(conn.getResponseCode() == 200);
-            assertTrue(conn.getContentType().equals("text/html"));
+            assertEquals(conn.getResponseCode(), 200);
+            assertEquals(conn.getContentType(),"text/html");
             String response = Dispatcher.dispatch(conn);
             if (debug) {
                 log(response);
@@ -227,8 +226,8 @@ public class OtherAnnotationTest extends DefaultTestBundleControl {
         conn = (HttpURLConnection)url.openConnection();
         // modify attributes
         try {
-            assertTrue(conn.getResponseCode() == 200);
-            assertTrue(conn.getContentType().equals("text/html"));
+            assertEquals(conn.getResponseCode(), 200);
+            assertEquals(conn.getContentType(),"text/html");
             String response = Dispatcher.dispatch(conn);
             if (debug) {
                 log(response);
@@ -264,8 +263,8 @@ public class OtherAnnotationTest extends DefaultTestBundleControl {
         
         // add attributes
         try {
-            assertTrue(conn.getResponseCode() == 200);
-            assertTrue(conn.getContentType().equals("text/html"));
+            assertEquals(conn.getResponseCode(), 200);
+            assertEquals(conn.getContentType(),"text/html");
             String response = Dispatcher.dispatch(conn);
             if (debug) {
                 log(response);
@@ -290,8 +289,8 @@ public class OtherAnnotationTest extends DefaultTestBundleControl {
         
         conn = (HttpURLConnection)url.openConnection();
         try {
-            assertTrue(conn.getResponseCode() == 200);
-            assertTrue(conn.getContentType().equals("text/html"));
+            assertEquals(conn.getResponseCode(), 200);
+            assertEquals(conn.getContentType(),"text/html");
             String response = Dispatcher.dispatch(conn);
             if (debug) {
                 log(response);

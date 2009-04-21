@@ -47,7 +47,6 @@ public class PostConstructErrorServlet2 extends HttpServlet {
 
     @PostConstruct
     public static void postConstruct() {
-        //System.out.println("-postConstruct is called");
         EventLogger.logEvent(new Event("org.osgi.test.cases.webcontainer.tw2.servlet.PostConstructErrorServlet2", 
                 Constants.POSTCONSTRUCT, Constants.POSTCONSTRUCTDESP));
     }

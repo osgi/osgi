@@ -1,6 +1,3 @@
-
-package org.osgi.test.cases.webcontainer.tw1.servlet;
-
 /*
  * Copyright (c) IBM Corporation (2009). All Rights Reserved.
  * 
@@ -16,6 +13,7 @@ package org.osgi.test.cases.webcontainer.tw1.servlet;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.osgi.test.cases.webcontainer.tw1.servlet;
 
 import java.io.IOException;
 

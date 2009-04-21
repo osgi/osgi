@@ -13,48 +13,51 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package org.osgi.test.cases.webcontainer.tw2.servlet;
+package org.osgi.test.cases.webcontainer.tw4.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.osgi.test.cases.webcontainer.util.Constants;
-import org.osgi.test.cases.webcontainer.util.Event;
-import org.osgi.test.cases.webcontainer.util.EventLogger;
-
 /**
  * @version $Rev$ $Date$
  *
- * Servlet implementation class BasicAnnotationServlet2
+ * Servlet implementation class TestServlet3
  */
-public class PostConstructErrorServlet3 extends HttpServlet {
+public class TestServlet3 extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public PostConstructErrorServlet3() {
+    public TestServlet3() {
         super();
         // TODO Auto-generated constructor stub
-    }
-    
-
-    @PostConstruct
-    public void postConstruct()  throws java.lang.Exception{
-        EventLogger.logEvent(new Event(this.getClass().getName(), Constants.POSTCONSTRUCT, Constants.POSTCONSTRUCTDESP));
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+	    // Servlet returns 4 MB file, 
+	    // reuse code from org.osgi.test.cases.http HTTPTestServlet1.java with modification
+        int r = 0;
+        int size = 4 * 1024 * 1024;
+        char[] osgi = { 'O', 'S', 'G', 'I' };
+        char[] buf = new char[1024];
+        for (int i = 0; i < buf.length; i += 4) {
+            System.arraycopy(osgi, 0, buf, i, osgi.length);
+        }
+        response.setContentType("text/plain");
+        PrintWriter out = response.getWriter();
+        for (r = 0; r < size; r = r + buf.length) {
+            out.print(buf);
+            out.flush();
+        }
 	}
 
 	/**

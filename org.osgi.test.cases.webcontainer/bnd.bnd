@@ -11,6 +11,7 @@ Private-Package						= org.osgi.test.support.*, \
 Include-Resource					= \
 	resources/tw1/tw1.war, \
 	resources/tw2/tw2.war, \
+	resources/tw4/tw4.war, \
 	resources/tw5/tw5.war, \
 	util.jar
 	

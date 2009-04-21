@@ -66,6 +66,7 @@ public class SecurityAnnotationTest extends DefaultTestBundleControl {
         final String request = this.warContextPath + "/SecurityTestServlet";
         final URL url = Dispatcher.createURL(request, this.server);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        // TODO allow user to specify username password at runtime or via property file
         final String userName = "admin";
         final String password = "admin";
 
@@ -84,7 +85,7 @@ public class SecurityAnnotationTest extends DefaultTestBundleControl {
                 log(response);
             }
             assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
+            assertEquals(conn.getContentType(),"text/html");
 
             // check if content of response is correct
             assertTrue(response.indexOf("SecurityTestServlet") > 0);

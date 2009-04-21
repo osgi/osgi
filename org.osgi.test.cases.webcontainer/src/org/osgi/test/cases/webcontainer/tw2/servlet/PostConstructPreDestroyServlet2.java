@@ -66,13 +66,11 @@ public class PostConstructPreDestroyServlet2 extends HttpServlet {
 
     @PostConstruct
     private void postConstruct() {
-        //System.out.println("-postConstruct is called");
         EventLogger.logEvent(new Event(this.getClass().getName(), Constants.POSTCONSTRUCT, Constants.POSTCONSTRUCTDESP));
     }
 
     @PreDestroy
     private void cleanup() {
-        //System.out.println("-preDestroy is called");
         EventLogger.logEvent(new Event(this.getClass().getName(), "cleanup", Constants.CLEANUPDESP));
     }
     

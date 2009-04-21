@@ -31,6 +31,8 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * @version $Rev$ $Date$
+ * 
+ * test able to access BundleContext from ServletContext and use the OSGi log service.
  */
 public class AccessBundleContextTest extends DefaultTestBundleControl {
     // this test case assume war files are already installed for now
@@ -60,7 +62,7 @@ public class AccessBundleContextTest extends DefaultTestBundleControl {
     }
     
     private void uninstallWar() throws Exception {
-        // TODO uninstall the war file?
+        // TODO uninstall the war file
         
     }
     
@@ -75,8 +77,8 @@ public class AccessBundleContextTest extends DefaultTestBundleControl {
         final URL url = Dispatcher.createURL(request, this.server);
         final HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         try {
-            assertTrue(conn.getResponseCode() == 200);
-            assertTrue(conn.getContentType().equals("text/html"));
+            assertEquals(conn.getResponseCode(), 200);
+            assertEquals(conn.getContentType(),"text/html");
             String response = Dispatcher.dispatch(conn);
             if (debug) {
                 log(response);
@@ -111,8 +113,8 @@ public class AccessBundleContextTest extends DefaultTestBundleControl {
         final URL url = Dispatcher.createURL(request, this.server);
         final HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         try {
-            assertTrue(conn.getResponseCode() == 200);
-            assertTrue(conn.getContentType().equals("text/html"));
+            assertEquals(conn.getResponseCode(), 200);
+            assertEquals(conn.getContentType(),"text/html");
             String response = Dispatcher.dispatch(conn);
             if (debug) {
                 log(response);
@@ -147,8 +149,8 @@ public class AccessBundleContextTest extends DefaultTestBundleControl {
         final URL url = Dispatcher.createURL(request, this.server);
         final HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         try {
-            assertTrue(conn.getResponseCode() == 200);
-            assertTrue(conn.getContentType().equals("text/html"));
+            assertEquals(conn.getResponseCode(), 200);
+            assertEquals(conn.getContentType(),"text/html");
             String response = Dispatcher.dispatch(conn);
             if (debug) {
                 log(response);
@@ -183,8 +185,8 @@ public class AccessBundleContextTest extends DefaultTestBundleControl {
         final URL url = Dispatcher.createURL(request, this.server);
         final HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         try {
-            assertTrue(conn.getResponseCode() == 200);
-            assertTrue(conn.getContentType().equals("text/html"));
+            assertEquals(conn.getResponseCode(), 200);
+            assertEquals(conn.getContentType(),"text/html");
             String response = Dispatcher.dispatch(conn);
             if (debug) {
                 log(response);

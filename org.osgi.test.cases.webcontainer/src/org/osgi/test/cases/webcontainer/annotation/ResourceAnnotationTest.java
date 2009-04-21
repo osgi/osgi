@@ -54,8 +54,8 @@ public class ResourceAnnotationTest extends DefaultTestBundleControl {
         final URL url = Dispatcher.createURL(request, this.server);
         final HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         try {
-            assertTrue(conn.getResponseCode() == 200);
-            assertTrue(conn.getContentType().equals("text/html"));
+            assertEquals(conn.getResponseCode(), 200);
+            assertEquals(conn.getContentType(),"text/html");
             String response = Dispatcher.dispatch(conn);
             if (debug) {
                 log(response);
@@ -80,8 +80,8 @@ public class ResourceAnnotationTest extends DefaultTestBundleControl {
         final URL url = Dispatcher.createURL(request, this.server);
         final HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         try {
-            assertTrue(conn.getResponseCode() == 200);
-            assertTrue(conn.getContentType().equals("text/html"));
+            assertEquals(conn.getResponseCode(), 200);
+            assertEquals(conn.getContentType(),"text/html");
             String response = Dispatcher.dispatch(conn);
             if (debug) {
                 log(response);
@@ -106,8 +106,8 @@ public class ResourceAnnotationTest extends DefaultTestBundleControl {
         final URL url = Dispatcher.createURL(request, this.server);
         final HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         try {
-            assertTrue(conn.getResponseCode() == 200);
-            assertTrue(conn.getContentType().equals("text/html"));
+            assertEquals(conn.getResponseCode(), 200);
+            assertEquals(conn.getContentType(),"text/html");
             String response = Dispatcher.dispatch(conn);
             if (debug) {
                 log(response);
@@ -132,8 +132,8 @@ public class ResourceAnnotationTest extends DefaultTestBundleControl {
         final URL url = Dispatcher.createURL(request, this.server);
         final HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         try {
-            assertTrue(conn.getResponseCode() == 200);
-            assertTrue(conn.getContentType().equals("text/html"));
+            assertEquals(conn.getResponseCode(), 200);
+            assertEquals(conn.getContentType(),"text/html");
             String response = Dispatcher.dispatch(conn);
             if (debug) {
                 log(response);

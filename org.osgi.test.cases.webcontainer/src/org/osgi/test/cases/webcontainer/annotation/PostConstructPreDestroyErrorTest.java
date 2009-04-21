@@ -72,20 +72,18 @@ public class PostConstructPreDestroyErrorTest extends DefaultTestBundleControl {
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         try {
             assertTrue(conn.getResponseCode() != 200);
-            System.out.println("content type " + conn.getContentType());
             String response = Dispatcher.dispatch(conn);
             if (debug) {
-                System.out.println(response);
+                log(response);
             }
-            // check if content of response contains some error/exception
-            assertTrue(response.indexOf("Exception") > 0);
-            assertEquals(this.timeUtil.getTimeFromLog("PostConstructErrorServlet1", "postConstruct1"), 0);
-            assertEquals(this.timeUtil.getTimeFromLog("PostConstructErrorServlet1", "postConstruct2"), 0);
+            fail("should be getting an exception");
         } catch (IOException e) {
-            // ingore - this can be expected
+            // ignore - this can be expected
         } finally {
             conn.disconnect();
         }
+        assertEquals(this.timeUtil.getTimeFromLog("PostConstructErrorServlet1", "postConstruct1"), 0);
+        assertEquals(this.timeUtil.getTimeFromLog("PostConstructErrorServlet1", "postConstruct2"), 0);
     }
     
     /*
@@ -101,16 +99,15 @@ public class PostConstructPreDestroyErrorTest extends DefaultTestBundleControl {
             assertTrue(conn.getResponseCode() != 200);
             String response = Dispatcher.dispatch(conn);
             if (debug) {
-                System.out.println(response);
+                log(response);
             }
-            // check if content of response contains some error/exception
-            assertTrue(response.indexOf("Exception") > 0);
-            assertEquals(this.timeUtil.getTimeFromLog("PostConstructErrorServlet2", "postConstruct"), 0);
+            fail("should be getting an exception");
         } catch (IOException e) {
-            // ingore - this can be expected
+            // ignore - this can be expected
         } finally {
             conn.disconnect();
         }
+        assertEquals(this.timeUtil.getTimeFromLog("PostConstructErrorServlet2", Constants.POSTCONSTRUCT), 0);
     }
     
     /*
@@ -126,16 +123,15 @@ public class PostConstructPreDestroyErrorTest extends DefaultTestBundleControl {
             assertTrue(conn.getResponseCode() != 200);
             String response = Dispatcher.dispatch(conn);
             if (debug) {
-                System.out.println(response);
+                log(response);
             }
-            // check if content of response contains some error/exception
-            assertTrue(response.indexOf("Exception") > 0);
-            assertEquals(this.timeUtil.getTimeFromLog("PostConstructErrorServlet3", "postConstruct"), 0);
+            fail("should be getting an exception");
         } catch (IOException e) {
-            // ingore - this can be expected
+            // ignore - this can be expected
         } finally {
             conn.disconnect();
         }
+        assertEquals(this.timeUtil.getTimeFromLog("PostConstructErrorServlet3", Constants.POSTCONSTRUCT), 0);
     }
     
     /*
@@ -147,8 +143,8 @@ public class PostConstructPreDestroyErrorTest extends DefaultTestBundleControl {
         final URL url = Dispatcher.createURL(request, this.server);
         final HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         try {
-            assertTrue(conn.getResponseCode() == 200);
-            assertTrue(conn.getContentType().equals("text/html"));
+            assertEquals(conn.getResponseCode(), 200);
+            assertEquals(conn.getContentType(),"text/html");
             String response = Dispatcher.dispatch(conn);
             if (debug) {
                 log(response);
@@ -159,7 +155,7 @@ public class PostConstructPreDestroyErrorTest extends DefaultTestBundleControl {
             assertEquals(response.indexOf("null"), -1);
             // check if the time stamp in response is after the beforeStart time.
             assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
-            assertEquals(this.timeUtil.getTimeFromLog("PreDestroyErrorServlet1", "postConstruct"), 0);
+            assertEquals(this.timeUtil.getTimeFromLog("PreDestroyErrorServlet1", Constants.POSTCONSTRUCT), 0);
         } finally {
             conn.disconnect();
         }
@@ -174,8 +170,8 @@ public class PostConstructPreDestroyErrorTest extends DefaultTestBundleControl {
         final URL url = Dispatcher.createURL(request, this.server);
         final HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         try {
-            assertTrue(conn.getResponseCode() == 200);
-            assertTrue(conn.getContentType().equals("text/html"));
+            assertEquals(conn.getResponseCode(), 200);
+            assertEquals(conn.getContentType(),"text/html");
             String response = Dispatcher.dispatch(conn);
             if (debug) {
                 log(response);
@@ -186,7 +182,7 @@ public class PostConstructPreDestroyErrorTest extends DefaultTestBundleControl {
             assertEquals(response.indexOf("null"), -1);
             // check if the time stamp in response is after the beforeStart time.
             assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
-            assertEquals(this.timeUtil.getTimeFromLog("PreDestroyErrorServlet2", "postConstruct"), 0);
+            assertEquals(this.timeUtil.getTimeFromLog("PreDestroyErrorServlet2", Constants.POSTCONSTRUCT), 0);
         } finally {
             conn.disconnect();
         }
@@ -201,8 +197,8 @@ public class PostConstructPreDestroyErrorTest extends DefaultTestBundleControl {
         final URL url = Dispatcher.createURL(request, this.server);
         final HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         try {
-            assertTrue(conn.getResponseCode() == 200);
-            assertTrue(conn.getContentType().equals("text/html"));
+            assertEquals(conn.getResponseCode(), 200);
+            assertEquals(conn.getContentType(),"text/html");
             String response = Dispatcher.dispatch(conn);
             if (debug) {
                 log(response);
@@ -213,7 +209,7 @@ public class PostConstructPreDestroyErrorTest extends DefaultTestBundleControl {
             assertEquals(response.indexOf("null"), -1);
             // check if the time stamp in response is after the beforeStart time.
             assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
-            assertEquals(this.timeUtil.getTimeFromLog("PreDestroyErrorServlet2", "postConstruct"), 0);
+            assertEquals(this.timeUtil.getTimeFromLog("PreDestroyErrorServlet2", Constants.POSTCONSTRUCT), 0);
         } finally {
             conn.disconnect();
         }

@@ -13,11 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.test.cases.webcontainer.tw1.servlet;
+package org.osgi.test.cases.webcontainer.tw4.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
+import java.util.Enumeration;
+import java.util.Vector;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -27,17 +31,16 @@ import org.osgi.test.cases.webcontainer.util.Constants;
 
 /**
  * @version $Rev$ $Date$
- * 
- *          Servlet implementation class BasicTestServlet
+ *
+ * Servlet implementation class TestServlet2
  */
-public class BasicTestServlet extends HttpServlet {
+public class TestServlet2 extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
-     * @see HttpServlet#HttpServlet()
+     * Default constructor.
      */
-    public BasicTestServlet() {
-        super();
+    public TestServlet2() {
         // TODO Auto-generated constructor stub
     }
 
@@ -63,7 +66,35 @@ public class BasicTestServlet extends HttpServlet {
             HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-        out.println(Constants.BASICTESTWAR1);
+        out.println(Constants.TW4BASIC);
+        out.println("<body>");
+        out.println(createContent(request, response));
+        out.println("</body>");
+        out.println("</html>");
     }
 
+    private String createContent(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        String content = "";
+        String tc = request.getParameter("tc");
+        if (tc == null) {
+            return "no test case is specified";
+        } else if (tc.equals("1")) {
+            return "param1: " + getParameter(request, "param1") 
+                   + "<br/> param2: " + getParameter(request, "param2") + "<br/>";
+        } else if (tc.equals("2")) {
+            return "param1: " + getParameter(request, "param1") + "<br/>"
+            + "param2: " + getParameter(request, "param2") + "<br/>"
+            + "param3: " + getParameter(request, "param3") + "<br/>"
+            + "param4: " + getParameter(request, "param4") + "<br/>"
+            + "param5: " + getParameter(request, "param5") + "<br/>";
+        }
+        return content;
+    }
+    
+    private String getParameter(HttpServletRequest request, String p) {
+        return request.getParameter(p) == null ? "" : request.getParameter(p);
+        
+    }
+   
 }

@@ -13,48 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package org.osgi.test.cases.webcontainer.tw2.servlet;
+package org.osgi.test.cases.webcontainer.tw4.servlet;
 
 import java.io.IOException;
-
-import javax.annotation.PostConstruct;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.osgi.test.cases.webcontainer.util.Constants;
-import org.osgi.test.cases.webcontainer.util.Event;
-import org.osgi.test.cases.webcontainer.util.EventLogger;
-
 /**
  * @version $Rev$ $Date$
  *
- * Servlet implementation class BasicAnnotationServlet2
+ * Servlet implementation class TestServlet1
  */
-public class PostConstructErrorServlet3 extends HttpServlet {
+public class TestServlet1 extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public PostConstructErrorServlet3() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-    
 
-    @PostConstruct
-    public void postConstruct()  throws java.lang.Exception{
-        EventLogger.logEvent(new Event(this.getClass().getName(), Constants.POSTCONSTRUCT, Constants.POSTCONSTRUCTDESP));
+    /**
+     * Default constructor. 
+     */
+    public TestServlet1() {
+        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+	    // test empty doGet
 	}
 
 	/**
