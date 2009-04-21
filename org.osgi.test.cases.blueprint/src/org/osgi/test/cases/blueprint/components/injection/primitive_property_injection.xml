@@ -1,310 +1,310 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
-   <component id="compImplicitString" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   <bean id="compImplicitString" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="string" value="ABC"/>
      <!-- just a component name -->
-   </component>
-   <component id="compZeroLengthString1" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compZeroLengthString1" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="string" value=""/>
-   </component>
-   <component id="compZeroLengthString2" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compZeroLengthString2" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="string"><value/></property>
-   </component>
-   <component id="compZeroLengthString3" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compZeroLengthString3" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="string"><value></value></property>
-   </component>
-   <component id="compNullString" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compNullString" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="string"><null/></property>
-   </component>
-   <component id="compPrimBooleanTrue" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimBooleanTrue" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primBoolean">
            <value type="boolean">true</value>
        </property>
-   </component>
-   <component id="compPrimBooleanFalse" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimBooleanFalse" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primBoolean" value="false"/>
-   </component>
+   </bean>
 
-   <component id="compPrimBooleanYes" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   <bean id="compPrimBooleanYes" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primBoolean" value="yes"/>
-   </component>
-   <component id="compPrimBooleanNo" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimBooleanNo" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primBoolean">
            <value>no</value>
        </property>
-   </component>
-   <component id="compPrimBooleanOn" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimBooleanOn" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primBoolean" value="on"/>
-   </component>
-   <component id="compPrimBooleanOff" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimBooleanOff" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primBoolean" value="off"/>
-   </component>
-   <component id="compWrapperedBooleanYes" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedBooleanYes" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="boolean" value="yes"/>
-   </component>
-   <component id="compWrapperedBooleanNo" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedBooleanNo" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="boolean" value="no"/>
-   </component>
-   <component id="compWrapperedBooleanTrue" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedBooleanTrue" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="boolean" value="true"/>
-   </component>
-   <component id="compWrapperedBooleanFalse" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedBooleanFalse" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="boolean" value="false"/>
-   </component>
-   <component id="compWrapperedBooleanOn" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedBooleanOn" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="boolean" value="on"/>
-   </component>
-   <component id="compWrapperedBooleanOff" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedBooleanOff" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="boolean" value="off"/>
-   </component>
-   <component id="compWrapperedBooleanNull" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedBooleanNull" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="boolean"><null/></property>
-   </component>
-   <component id="compPrimByteZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimByteZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primByte" value="0"/>
-   </component>
-   <component id="compPrimByteMax" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimByteMax" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primByte" value="127"/>
-   </component>
-   <component id="compPrimByteMin" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimByteMin" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primByte" value="-128"/>
-   </component>
-   <component id="compWrapperedByteZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedByteZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="byte" value="0"/>
-   </component>
-   <component id="compWrapperedByteMax" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedByteMax" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="byte" value="127"/>
-   </component>
-   <component id="compWrapperedByteMin" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedByteMin" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="byte" value="-128"/>
-   </component>
-   <component id="compWrapperedByteNull" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedByteNull" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="byte"><null/></property>
-   </component>
-   <component id="compPrimDoubleZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimDoubleZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primDouble" value="0"/>
-   </component>
-   <component id="compPrimDoubleMinusZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimDoubleMinusZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primDouble" value="-0.0"/>
-   </component>
-   <component id="compPrimDoubleDSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimDoubleDSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primDouble" value="1.1D "/>
-   </component>
-   <component id="compPrimDoubledSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimDoubledSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primDouble" value=" 1.1d"/>
-   </component>
-   <component id="compPrimDoubleFSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimDoubleFSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primDouble" value=" 1.1F"/>
-   </component>
-   <component id="compPrimDoublefSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimDoublefSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primDouble" value="1.1e1f"/>
-   </component>
-   <component id="compPrimDoubleMax" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimDoubleMax" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primDouble" value="1.7976931348623157E308"/>
-   </component>
-   <component id="compPrimDoubleMin" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimDoubleMin" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primDouble" value=" 4.9e-324 "/>
-   </component>
-   <component id="compPrimDoubleNaN" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimDoubleNaN" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primDouble" value="NaN"/>
-   </component>
-   <component id="compPrimDoubleInfinity" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimDoubleInfinity" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primDouble" value="Infinity"/>
-   </component>
-   <component id="compPrimDoubleNegInfinity" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimDoubleNegInfinity" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primDouble" value="-Infinity"/>
-   </component>
-   <component id="compWrapperedDoubleZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedDoubleZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="double" value="0"/>
-   </component>
-   <component id="compWrapperedDoubleMinusZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedDoubleMinusZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="double" value="-0.0"/>
-   </component>
-   <component id="compWrapperedDoubleDSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedDoubleDSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="double" value="1.1D "/>
-   </component>
-   <component id="compWrapperedDoubledSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedDoubledSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="double" value=" 1.1d"/>
-   </component>
-   <component id="compWrapperedDoubleFSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedDoubleFSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="double" value=" 1.1F"/>
-   </component>
-   <component id="compWrapperedDoublefSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedDoublefSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="double" value="1.1e1f"/>
-   </component>
-   <component id="compWrapperedDoubleMax" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedDoubleMax" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="double" value="1.7976931348623157E308"/>
-   </component>
-   <component id="compWrapperedDoubleMin" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedDoubleMin" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="double" value=" 4.9e-324 "/>
-   </component>
-   <component id="compWrapperedDoubleNaN" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedDoubleNaN" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="double" value="NaN"/>
-   </component>
-   <component id="compWrapperedDoubleInfinity" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedDoubleInfinity" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="double" value="Infinity"/>
-   </component>
-   <component id="compWrapperedDoubleNegInfinity" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedDoubleNegInfinity" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="double" value="-Infinity"/>
-   </component>
-   <component id="compWrapperedDoubleNull" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedDoubleNull" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="double"><null/></property>
-   </component>
-   <component id="compPrimFloatZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimFloatZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primFloat" value="0"/>
-   </component>
-   <component id="compPrimFloatMinusZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimFloatMinusZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primFloat" value="-0.0"/>
-   </component>
-   <component id="compPrimFloatDSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimFloatDSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primFloat" value="1.1D "/>
-   </component>
-   <component id="compPrimFloatdSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimFloatdSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primFloat" value=" 1.1d"/>
-   </component>
-   <component id="compPrimFloatFSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimFloatFSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primFloat" value=" 1.1F"/>
-   </component>
-   <component id="compPrimFloatfSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimFloatfSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primFloat" value="1.1e1f"/>
-   </component>
-   <component id="compPrimFloatMax" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimFloatMax" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primFloat" value="3.4028235E38"/>
-   </component>
-   <component id="compPrimFloatMin" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimFloatMin" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primFloat" value=" 1.4E-45 "/>
-   </component>
-   <component id="compPrimFloatNaN" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimFloatNaN" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primFloat" value="NaN"/>
-   </component>
-   <component id="compPrimFloatInfinity" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimFloatInfinity" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primFloat" value="Infinity"/>
-   </component>
-   <component id="compPrimFloatNegInfinity" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimFloatNegInfinity" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primFloat" value="-Infinity"/>
-   </component>
-   <component id="compWrapperedFloatZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedFloatZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="float" value="0"/>
-   </component>
-   <component id="compWrapperedFloatMinusZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedFloatMinusZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="float" value="-0.0"/>
-   </component>
-   <component id="compWrapperedFloatDSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedFloatDSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="float" value="1.1D "/>
-   </component>
-   <component id="compWrapperedFloatdSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedFloatdSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="float" value=" 1.1d"/>
-   </component>
-   <component id="compWrapperedFloatFSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedFloatFSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="float" value=" 1.1F"/>
-   </component>
-   <component id="compWrapperedFloatfSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedFloatfSuffix" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="float" value="1.1e1f"/>
-   </component>
-   <component id="compWrapperedFloatMax" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedFloatMax" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="float" value="3.4028235E38"/>
-   </component>
-   <component id="compWrapperedFloatMin" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedFloatMin" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="float" value=" 1.4E-45 "/>
-   </component>
-   <component id="compWrapperedFloatNaN" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedFloatNaN" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="float" value="NaN"/>
-   </component>
-   <component id="compWrapperedFloatInfinity" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedFloatInfinity" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="float" value="Infinity"/>
-   </component>
-   <component id="compWrapperedFloatNegInfinity" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedFloatNegInfinity" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="float" value="-Infinity"/>
-   </component>
-   <component id="compWrapperedFloatNull" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedFloatNull" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="float"><null/></property>
-   </component>
-   <component id="compPrimIntegerZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimIntegerZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primInteger" value="0"/>
-   </component>
-   <component id="compPrimIntegerMax" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimIntegerMax" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primInteger" value="2147483647"/>
-   </component>
-   <component id="compPrimIntegerMin" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimIntegerMin" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primInteger" value="-2147483648"/>
-   </component>
-   <component id="compWrapperedIntegerZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedIntegerZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="integer" value="0"/>
-   </component>
-   <component id="compWrapperedIntegerMax" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedIntegerMax" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="integer" value="2147483647"/>
-   </component>
-   <component id="compWrapperedIntegerMin" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedIntegerMin" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="integer" value="-2147483648"/>
-   </component>
-   <component id="compWrapperedIntegerNull" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedIntegerNull" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="integer"><null/></property>
-   </component>
-   <component id="compPrimCharacterZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimCharacterZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primCharacter" value="\u0000"/>
-   </component>
-   <component id="compPrimCharacterMax" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimCharacterMax" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primCharacter" value="\uffff"/>
-   </component>
-   <component id="compPrimCharacterA" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimCharacterA" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primCharacter" value="A"/>
-   </component>
-   <component id="compWrapperedCharacterZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedCharacterZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="character" value="\u0000"/>
-   </component>
-   <component id="compWrapperedCharacterMax" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedCharacterMax" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="character" value="\uffff"/>
-   </component>
-   <component id="compWrapperedCharacterA" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedCharacterA" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="character" value="A"/>
-   </component>
-   <component id="compWrapperedCharacterNull" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedCharacterNull" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="character"><null/></property>
-   </component>
-   <component id="compPrimShortZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimShortZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primShort" value="0"/>
-   </component>
-   <component id="compPrimShortMax" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimShortMax" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primShort" value="32767"/>
-   </component>
-   <component id="compPrimShortMin" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimShortMin" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primShort" value="-32768"/>
-   </component>
-   <component id="compWrapperedShortZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedShortZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="short" value="0"/>
-   </component>
-   <component id="compWrapperedShortMax" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedShortMax" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="short" value="32767"/>
-   </component>
-   <component id="compWrapperedShortMin" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedShortMin" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="short" value="-32768"/>
-   </component>
-   <component id="compWrapperedShortNull" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedShortNull" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="short"><null/></property>
-   </component>
-   <component id="compPrimLongZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimLongZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primLong" value="0"/>
-   </component>
-   <component id="compPrimLongMax" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimLongMax" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primLong" value="9223372036854775807"/>
-   </component>
-   <component id="compPrimLongMin" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compPrimLongMin" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primLong" value="-9223372036854775808"/>
-   </component>
-   <component id="compWrapperedLongZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedLongZero" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="long" value="0"/>
-   </component>
-   <component id="compWrapperedLongMax" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedLongMax" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="long" value="9223372036854775807"/>
-   </component>
-   <component id="compWrapperedLongMin" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedLongMin" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="long" value="-9223372036854775808"/>
-   </component>
-   <component id="compWrapperedLongNull" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+   </bean>
+   <bean id="compWrapperedLongNull" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="long"><null/></property>
-   </component>
-</components>
+   </bean>
+</blueprint>
 

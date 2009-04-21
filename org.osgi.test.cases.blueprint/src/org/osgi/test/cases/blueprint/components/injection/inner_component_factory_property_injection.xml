@@ -1,173 +1,173 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
 <!-- instance factory -->
-    <component id="compFactory" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionInstanceFactory">
+    <bean id="compFactory" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionInstanceFactory">
 		<!-- collaborators and configuration for this component go here -->
-    </component>
+    </bean>
 
-	<component id="innerCompFactory" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionInstanceFactory">
+	<bean id="innerCompFactory" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionInstanceFactory">
 		<!-- collaborators and configuration for this component go here -->
-    </component>
+    </bean>
 
 <!-- String -->
-	<component id="compInnerStringTyped" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerStringTyped" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-component="innerCompFactory">
 				<property name="string"><value type="java.lang.String">ABC</value></property>
-			</component>
+			</bean>
 		</property>
-	</component>
-	
-	<component id="compInnerString" factory-method="makeInstance" factory-component="compFactory">
+	</bean>
+
+	<bean id="compInnerString" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-component="innerCompFactory">
 				<property name="string" value="XYZ"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
 <!-- Boolean -->
-	<component id="compInnerPrimitiveBoolean" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerPrimitiveBoolean" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="primBoolean" value="true"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
-	<component id="compInnerWrapperedBoolean" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerWrapperedBoolean" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="boolean" value="false"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
 <!-- Byte -->
-	<component id="compInnerPrimitiveByte" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerPrimitiveByte" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="primByte" value="-128"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
-	<component id="compInnerWrapperedByte" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerWrapperedByte" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="byte" value="127"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
 <!-- Double -->
-	<component id="compInnerPrimitiveDouble" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerPrimitiveDouble" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="primDouble" value="4.9e-324"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
-	<component id="compInnerWrapperedDouble" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerWrapperedDouble" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="double" value="1.7976931348623157E308"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
 <!-- Float -->
-	<component id="compInnerPrimitiveFloat" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerPrimitiveFloat" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="primFloat" value="1.4E-45"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
-	<component id="compInnerWrapperedFloat" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerWrapperedFloat" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="float" value="3.4028235E38"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
 <!-- Integer -->
-	<component id="compInnerPrimitiveInteger" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerPrimitiveInteger" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="primInteger" value="-2147483648"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
-	<component id="compInnerWrapperedInteger" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerWrapperedInteger" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="integer" value="2147483647"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
 
 <!-- Character -->
-	<component id="compInnerPrimitiveCharacter" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerPrimitiveCharacter" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="primCharacter" value="a"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
-	<component id="compInnerWrapperedCharacter" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerWrapperedCharacter" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="character" value="A"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
 <!-- Short -->
-	<component id="compInnerPrimitiveShort" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerPrimitiveShort" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="primShort" value="-32768"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
-	<component id="compInnerWrapperedShort" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerWrapperedShort" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="short" value="32767"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
 
 <!-- Long -->
-	<component id="compInnerPrimitiveLong" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerPrimitiveLong" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="primLong" value="-9223372036854775808"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
-	<component id="compInnerWrapperedLong" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerWrapperedLong" factory-method="makeInstance" factory-component="compFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<property name="long" value="9223372036854775807"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
 
 
 
-</components>
+</blueprint>

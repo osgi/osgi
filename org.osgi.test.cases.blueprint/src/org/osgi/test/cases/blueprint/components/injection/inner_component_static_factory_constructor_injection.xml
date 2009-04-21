@@ -1,186 +1,186 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
 <!-- String -->
-	<component id="compInnerStringNoTyped" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerStringNoTyped" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-				<constructor-arg value="STR1"/>
-			</component>
-		</constructor-arg>
-	</component>
-	
-	<component id="compInnerStringBothTyped" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
-		<constructor-arg>
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-				<constructor-arg type="java.lang.String"><value type="java.lang.String">STR2</value></constructor-arg>
-			</component>
-		</constructor-arg>
-	</component>
-	
-	<component id="compInnerStringValueTyped" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
-		<constructor-arg>
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-				<constructor-arg><value type="java.lang.String">STR3</value></constructor-arg>
-			</component>
-		</constructor-arg>
-	</component>
-	
-	<component id="compInnerStringArgTyped" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
-		<constructor-arg>
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-				<constructor-arg type="java.lang.String"><value>STR4</value></constructor-arg>
-			</component>
-		</constructor-arg>
-	</component>
-	
-	<component id="compInnerString" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
-		<constructor-arg>
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-				<constructor-arg value="STR5" type="java.lang.String"/>
-			</component>
-		</constructor-arg>
-	</component>
-	
-<!-- Boolean -->
-	<component id="compInnerPrimitiveBoolean" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
-		<constructor-arg>
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-       			<constructor-arg value="true" type="boolean"/>
-			</component>
-		</constructor-arg>
-	</component>
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+				<argument value="STR1"/>
+			</bean>
+		</argument>
+	</bean>
 
-	<component id="compInnerWrapperedBoolean" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerStringBothTyped" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-       			<constructor-arg value="false" type="java.lang.Boolean"/>
-			</component>
-		</constructor-arg>
-	</component>
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+				<argument type="java.lang.String"><value type="java.lang.String">STR2</value></argument>
+			</bean>
+		</argument>
+	</bean>
+
+	<bean id="compInnerStringValueTyped" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+		<constructor-arg>
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+				<constructor-arg><value type="java.lang.String">STR3</value></argument>
+			</bean>
+		</argument>
+	</bean>
+
+	<bean id="compInnerStringArgTyped" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+		<constructor-arg>
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+				<argument type="java.lang.String"><value>STR4</value></argument>
+			</bean>
+		</argument>
+	</bean>
+
+	<bean id="compInnerString" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+		<constructor-arg>
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+				<argument value="STR5" type="java.lang.String"/>
+			</bean>
+		</argument>
+	</bean>
+
+<!-- Boolean -->
+	<bean id="compInnerPrimitiveBoolean" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+		<constructor-arg>
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+       			<argument value="true" type="boolean"/>
+			</bean>
+		</argument>
+	</bean>
+
+	<bean id="compInnerWrapperedBoolean" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+		<constructor-arg>
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+       			<argument value="false" type="java.lang.Boolean"/>
+			</bean>
+		</argument>
+	</bean>
 
 <!-- Byte -->
-	<component id="compInnerPrimitiveByte" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerPrimitiveByte" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-       			<constructor-arg value="-128" type="byte"/>
-			</component>
-		</constructor-arg>
-	</component>
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+       			<argument value="-128" type="byte"/>
+			</bean>
+		</argument>
+	</bean>
 
-	<component id="compInnerWrapperedByte" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerWrapperedByte" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-       			<constructor-arg value="127" type="java.lang.Byte"/>
-			</component>
-		</constructor-arg>
-	</component>
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+       			<argument value="127" type="java.lang.Byte"/>
+			</bean>
+		</argument>
+	</bean>
 
 <!-- Double -->
-	<component id="compInnerPrimitiveDouble" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerPrimitiveDouble" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-       			<constructor-arg value="4.9e-324" type="double"/>
-			</component>
-		</constructor-arg>
-	</component>
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+       			<argument value="4.9e-324" type="double"/>
+			</bean>
+		</argument>
+	</bean>
 
-	<component id="compInnerWrapperedDouble" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerWrapperedDouble" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-       			<constructor-arg value="1.7976931348623157E308" type="java.lang.Double"/>
-			</component>
-		</constructor-arg>
-	</component>
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+       			<argument value="1.7976931348623157E308" type="java.lang.Double"/>
+			</bean>
+		</argument>
+	</bean>
 
 <!-- Float -->
-	<component id="compInnerPrimitiveFloat" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerPrimitiveFloat" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-       			<constructor-arg value="1.4E-45" type="float"/>
-			</component>
-		</constructor-arg>
-	</component>
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+       			<argument value="1.4E-45" type="float"/>
+			</bean>
+		</argument>
+	</bean>
 
-	<component id="compInnerWrapperedFloat" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerWrapperedFloat" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-       			<constructor-arg value="3.4028235E38" type="java.lang.Float"/>
-			</component>
-		</constructor-arg>
-	</component>
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+       			<argument value="3.4028235E38" type="java.lang.Float"/>
+			</bean>
+		</argument>
+	</bean>
 
 <!-- Integer -->
-	<component id="compInnerPrimitiveInteger" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerPrimitiveInteger" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-       			<constructor-arg value="-2147483648" type="int"/>
-			</component>
-		</constructor-arg>
-	</component>
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+       			<argument value="-2147483648" type="int"/>
+			</bean>
+		</argument>
+	</bean>
 
-	<component id="compInnerWrapperedInteger" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerWrapperedInteger" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-       			<constructor-arg value="2147483647" type="java.lang.Integer"/>
-			</component>
-		</constructor-arg>
-	</component>
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+       			<argument value="2147483647" type="java.lang.Integer"/>
+			</bean>
+		</argument>
+	</bean>
 
 
 <!-- Character -->
-	<component id="compInnerPrimitiveCharacter" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerPrimitiveCharacter" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-       			<constructor-arg value="a" type="char"/>
-			</component>
-		</constructor-arg>
-	</component>
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+       			<argument value="a" type="char"/>
+			</bean>
+		</argument>
+	</bean>
 
-	<component id="compInnerWrapperedCharacter" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerWrapperedCharacter" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-       			<constructor-arg value="A" type="java.lang.Character"/>
-			</component>
-		</constructor-arg>
-	</component>
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+       			<argument value="A" type="java.lang.Character"/>
+			</bean>
+		</argument>
+	</bean>
 
 <!-- Short -->
-	<component id="compInnerPrimitiveShort" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerPrimitiveShort" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-       			<constructor-arg value="-32768" type="short"/>
-			</component>
-		</constructor-arg>
-	</component>
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+       			<argument value="-32768" type="short"/>
+			</bean>
+		</argument>
+	</bean>
 
-	<component id="compInnerWrapperedShort" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerWrapperedShort" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-       			<constructor-arg value="32767" type="java.lang.Short"/>
-			</component>
-		</constructor-arg>
-	</component>
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+       			<argument value="32767" type="java.lang.Short"/>
+			</bean>
+		</argument>
+	</bean>
 
 
 <!-- Long -->
-	<component id="compInnerPrimitiveLong" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerPrimitiveLong" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-       			<constructor-arg value="-9223372036854775808" type="long"/>
-			</component>
-		</constructor-arg>
-	</component>
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+       			<argument value="-9223372036854775808" type="long"/>
+			</bean>
+		</argument>
+	</bean>
 
-	<component id="compInnerWrapperedLong" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerWrapperedLong" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<constructor-arg>
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-       			<constructor-arg value="9223372036854775807" type="java.lang.Long"/>
-			</component>
-		</constructor-arg>
-	</component>
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+       			<argument value="9223372036854775807" type="java.lang.Long"/>
+			</bean>
+		</argument>
+	</bean>
 
 
-</components>
+</blueprint>

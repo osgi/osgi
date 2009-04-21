@@ -1,41 +1,41 @@
-<?xml version="1.0" encoding="UTF-8"?> 
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd" 
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd"
       default-init-method="init" default-destroy-method="destroy" default-lazy-init="true">
-    
+
     <description>
-        This is an adjunct configurtion file for the component injection tests.  This set of 
-        components operates with a different default-lazy-init value of true, then overrides in places 
-        to false. 
+        This is an adjunct configurtion file for the component injection tests.  This set of
+        components operates with a different default-lazy-init value of true, then overrides in places
+        to false.
     </description>
-      
-    <!-- a few leaf nodes for others to reference.  These are just named components --> 
-   <component id="leaf1a" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="false"> 
-       <constructor-arg value="leaf1a"/>
-   </component> 
-   <!-- lazyleaf1a will be lazy initied, but will be referenced from the start, so this will start normally --> 
-   <component id="lazyleaf1a" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"> 
-       <constructor-arg value="lazyleaf1a"/>
-   </component> 
+
+    <!-- a few leaf nodes for others to reference.  These are just named components -->
+   <bean id="leaf1a" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="false">
+       <argument value="leaf1a"/>
+   </bean>
+   <!-- lazyleaf1a will be lazy initied, but will be referenced from the start, so this will start normally -->
+   <bean id="lazyleaf1a" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+       <argument value="lazyleaf1a"/>
+   </bean>
    <!-- the component referencing lazyleaf1.  This is not lazy-inited -->
-   <component id="comp1a" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="false"> 
-       <constructor-arg value="comp1a"/>
-       <constructor-arg ref="lazyleaf1a"/>
-   </component> 
-   <!-- lazyleaf2 will be lazy initied and will not be started until requested from the module context --> 
-   <component id="lazyleaf2a" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"> 
-       <constructor-arg value="lazyleaf2a"/>
-   </component> 
-   <!-- lazyleaf3a will be lazy initied and will not be started until the referencing component is requested. --> 
-   <component id="lazyleaf3a" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"> 
-       <constructor-arg value="lazyleaf3a"/>
-   </component> 
-   <!-- lazycomp1 will be lazy initied and will not be started until the requested from the module context --> 
-   <!-- it alsl contains a reference to another lazy-inited leaf node, so this will cascade --> 
-   <component id="lazycomp1a" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"> 
-       <constructor-arg value="lazycomp1a"/>
-       <constructor-arg ref="lazyleaf3a"/>
-   </component> 
-</components> 
+   <bean id="comp1a" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="false">
+       <argument value="comp1a"/>
+       <argument ref="lazyleaf1a"/>
+   </bean>
+   <!-- lazyleaf2 will be lazy initied and will not be started until requested from the module context -->
+   <bean id="lazyleaf2a" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+       <argument value="lazyleaf2a"/>
+   </bean>
+   <!-- lazyleaf3a will be lazy initied and will not be started until the referencing component is requested. -->
+   <bean id="lazyleaf3a" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+       <argument value="lazyleaf3a"/>
+   </bean>
+   <!-- lazycomp1 will be lazy initied and will not be started until the requested from the module context -->
+   <!-- it alsl contains a reference to another lazy-inited leaf node, so this will cascade -->
+   <bean id="lazycomp1a" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+       <argument value="lazycomp1a"/>
+       <argument ref="lazyleaf3a"/>
+   </bean>
+</blueprint>
 

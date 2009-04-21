@@ -1,27 +1,27 @@
-<?xml version="1.0" encoding="UTF-8"?> 
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd"> 
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
 
-    <component id="compFactory" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionInstanceFactory">
+    <bean id="compFactory" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionInstanceFactory">
       <!-- collaborators and configuration for this component go here -->
-    </component>
+    </bean>
 
 
-    <component id="compEmptyProps" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compEmptyProps" factory-method="makeInstance" factory-component="compFactory">
         <property name="properties">
             <props></props>
         </property>
-    </component> 
+    </bean>
 
-    <component id="compNullProps" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compNullProps" factory-method="makeInstance" factory-component="compFactory">
         <property name="properties">
             <null/>
         </property>
-    </component> 
+    </bean>
 
-    <component id="compStringItems" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compStringItems" factory-method="makeInstance" factory-component="compFactory">
         <property name="properties">
             <props>
                 <prop key="administrator">administrator@example.org</prop>
@@ -29,6 +29,6 @@
 				<prop key="development">development@example.org</prop>
             </props>
         </property>
-    </component> 
+    </bean>
 
-</components>
+</blueprint>

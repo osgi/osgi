@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:osgix="http://www.osgi.org/xmlns/blueprint-compendium/v1.0.0"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
@@ -8,18 +8,18 @@
     <osgix:property-placeholder persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config2"/>
 
 
-    <component id="compConstructorArgValue" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-        <constructor-arg value="${string}" type="java.lang.String"/>
-    </component>
+    <bean id="compConstructorArgValue" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+        <argument value="${string}" type="java.lang.String"/>
+    </bean>
 
-    <component id="compPropertyValue" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <bean id="compPropertyValue" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="string" value="${string}"/>
-    </component>
+    </bean>
 
-    <component id="compMapEntryValue" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <bean id="compMapEntryValue" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="map">
             <entry key="string" value="${string}"/>
         </property>
-    </component>
+    </bean>
 
-</components>
+</blueprint>

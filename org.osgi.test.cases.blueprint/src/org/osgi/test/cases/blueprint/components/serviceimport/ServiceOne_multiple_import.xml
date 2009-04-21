@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
@@ -30,20 +30,20 @@
         </interfaces>
     </reference>
 
-   <component id="ServiceOneMultipleChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceChecker">
-       <constructor-arg value="ServiceOneMultipleChecker"/>
+   <bean id="ServiceOneMultipleChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceChecker">
+       <argument value="ServiceOneMultipleChecker"/>
        <property name="one" ref="ServiceOneMultiple"/>
        <property name="two" ref="ServiceOneMultiple"/>
-   </component>
+   </bean>
 
-   <component id="ServiceOneChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceChecker">
-       <constructor-arg value="ServiceOneChecker"/>
+   <bean id="ServiceOneChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceChecker">
+       <argument value="ServiceOneChecker"/>
        <property name="one" ref="ServiceOne"/>
-   </component>
+   </bean>
 
-   <component id="ServiceTwoChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceChecker">
-       <constructor-arg value="ServiceTwoChecker"/>
+   <bean id="ServiceTwoChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceChecker">
+       <argument value="ServiceTwoChecker"/>
        <property name="two" ref="ServiceTwo"/>
-   </component>
-</components>
+   </bean>
+</blueprint>
 

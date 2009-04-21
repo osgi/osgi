@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
-    <component id="compEmptyList" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <bean id="compEmptyList" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="list">
             <list></list>
         </property>
-    </component>
+    </bean>
 
-    <component id="compNullList" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <bean id="compNullList" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="list">
             <null/>
         </property>
-    </component>
+    </bean>
 
-    <component id="compStringItems" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <bean id="compStringItems" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="list">
             <list>
                 <value>abc</value>
                 <value>def</value>
             </list>
         </property>
-    </component>
+    </bean>
 
-    <component id="compDupItems" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <bean id="compDupItems" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="list">
             <list>
                 <value>abc</value>
                 <value>abc</value>
             </list>
         </property>
-    </component>
+    </bean>
 
-    <component id="compBooleanItems" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <bean id="compBooleanItems" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="list">
             <list>
                 <value type="java.lang.Boolean">true</value>
                 <value type="java.lang.Boolean">false</value>
             </list>
         </property>
-    </component>
+    </bean>
 
-    <component id="compMixedItems" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <bean id="compMixedItems" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="list">
             <list>
                 <value type="java.lang.String">abc</value>
@@ -60,18 +60,18 @@
                 <null/>
             </list>
         </property>
-    </component>
+    </bean>
 
-    <component id="compTypedItems" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <bean id="compTypedItems" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="list">
             <list value-type="java.lang.Double">
                 <value>0.0</value>
                 <value>1.0</value>
             </list>
         </property>
-    </component>
+    </bean>
 
-    <component id="compTypeOverride" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <bean id="compTypeOverride" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="list">
             <list value-type="java.lang.Double">
                 <value>0.0</value>
@@ -79,9 +79,9 @@
                 <value type="java.lang.Boolean">true</value>
             </list>
         </property>
-    </component>
+    </bean>
 
-    <component id="compNestedList" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <bean id="compNestedList" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="list">
             <list>
                 <list>
@@ -90,9 +90,9 @@
                 </list>
             </list>
         </property>
-    </component>
+    </bean>
 
-    <component id="compNestedSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <bean id="compNestedSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="list">
             <list>
                 <set>
@@ -101,9 +101,9 @@
                 </set>
             </list>
         </property>
-    </component>
+    </bean>
 
-    <component id="compNestedMap" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <bean id="compNestedMap" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="list">
             <list>
                 <map>
@@ -112,9 +112,9 @@
                 </map>
             </list>
         </property>
-    </component>
+    </bean>
 
-    <component id="compNestedProps" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <bean id="compNestedProps" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="list">
             <list>
                 <props>
@@ -123,6 +123,6 @@
                 </props>
             </list>
         </property>
-    </component>
-</components>
+    </bean>
+</blueprint>
 

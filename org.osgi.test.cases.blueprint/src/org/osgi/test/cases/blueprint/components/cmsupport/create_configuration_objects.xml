@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
@@ -10,13 +10,13 @@
     <!-- reference configuration admin service  -->
     <reference id="adminService" interface="org.osgi.service.cm.ConfigurationAdmin"/>
 
-    <component id="compConfigurationManager" class="org.osgi.test.cases.blueprint.services.ConfigurationManager" destroy-method="removeAllConfigs">
-        <constructor-arg ref="adminService"/>
+    <bean id="compConfigurationManager" class="org.osgi.test.cases.blueprint.services.ConfigurationManager" destroy-method="removeAllConfigs">
+        <argument ref="adminService"/>
         <constructor-arg>
             <list>
                 <!-- config1 -->
-                <component class="org.osgi.test.cases.blueprint.services.ManagedConfiguration">
-                    <constructor-arg value="org.osgi.test.cases.blueprint.components.cmsupport.config1"/>
+                <bean class="org.osgi.test.cases.blueprint.services.ManagedConfiguration">
+                    <argument value="org.osgi.test.cases.blueprint.components.cmsupport.config1"/>
                     <constructor-arg>
                         <props>
                             <prop key="str">abc</prop>
@@ -31,14 +31,14 @@
                             <prop key="str_double">8.0</prop>
                             <prop key="str_float">9.0</prop>
                         </props>
-                    </constructor-arg>
-                </component>
+                    </argument>
+                </bean>
 
                 <!-- config2 -->
-                <component class="org.osgi.test.cases.blueprint.services.ManagedConfiguration">
-                    <constructor-arg value="org.osgi.test.cases.blueprint.components.cmsupport.config2"/>
+                <bean class="org.osgi.test.cases.blueprint.services.ManagedConfiguration">
+                    <argument value="org.osgi.test.cases.blueprint.components.cmsupport.config2"/>
                     <constructor-arg>
-                        <component class="org.osgi.test.cases.blueprint.components.cmsupport.ConfigurationDictionaryBuilder">
+                        <bean class="org.osgi.test.cases.blueprint.components.cmsupport.ConfigurationDictionaryBuilder">
                             <constructor-arg>
                                 <map>
                                     <entry key="string">
@@ -77,24 +77,24 @@
                                         <value type="java.lang.Float">9.0</value>
                                     </entry>
                                 </map>
-                            </constructor-arg>
-                        </component>
-                    </constructor-arg>
-                </component>
+                            </argument>
+                        </bean>
+                    </argument>
+                </bean>
 
                 <!-- config3 -->
-                <component class="org.osgi.test.cases.blueprint.services.ManagedConfiguration">
-                    <constructor-arg value="org.osgi.test.cases.blueprint.components.cmsupport.config3"/>
-                    <constructor-arg><null/></constructor-arg>
-                </component>
+                <bean class="org.osgi.test.cases.blueprint.services.ManagedConfiguration">
+                    <argument value="org.osgi.test.cases.blueprint.components.cmsupport.config3"/>
+                    <constructor-arg><null/></argument>
+                </bean>
 
 
             </list>
-        </constructor-arg>
-    </component>
+        </argument>
+    </bean>
 
 
     <service id="srvConfigurationManager" ref="compConfigurationManager" interface="org.osgi.test.cases.blueprint.services.ConfigurationManager"/>
 
 
-</components>
+</blueprint>

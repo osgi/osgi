@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd"
     default-init-method="init" default-destroy-method="destroy">
@@ -10,21 +10,21 @@
     </description>
 
     <!-- the node this service export maps into. -->
-   <component id="ServiceOne" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
-       <constructor-arg value="ServiceOne"/>
-   </component>
+   <bean id="ServiceOne" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
+       <argument value="ServiceOne"/>
+   </bean>
 
     <!-- two lazy-inited components used for a depends on relationship -->
-   <component id="Depends1" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass" lazy-init="true">
-       <constructor-arg value="Depends1"/>
-   </component>
+   <bean id="Depends1" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass" lazy-init="true">
+       <argument value="Depends1"/>
+   </bean>
 
     <!-- two lazy-inited components used for a depends on relationship -->
-   <component id="Depends2" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass" lazy-init="true">
-       <constructor-arg value="Depends2"/>
-   </component>
+   <bean id="Depends2" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass" lazy-init="true">
+       <argument value="Depends2"/>
+   </bean>
 
    <!-- simple export using a reference and just one interface. The depends-on attribute is the real test -->
    <service id="GoodServiceService" ref="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" depends-on="Depends1,Depends2"/>
-</components>
+</blueprint>
 

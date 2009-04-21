@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd"
       default-init-method="init" default-destroy-method="destroy" default-lazy-init="false">
 
-    <component id="leaf1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
-        <constructor-arg value="leaf1"/>
-    </component>
-    <component id="leaf2" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
-        <constructor-arg value="leaf2"/>
-    </component>
-    <component id="leaf3" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
-        <constructor-arg value="leaf3"/>
-    </component>
+    <bean id="leaf1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+        <argument value="leaf1"/>
+    </bean>
+    <bean id="leaf2" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+        <argument value="leaf2"/>
+    </bean>
+    <bean id="leaf3" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+        <argument value="leaf3"/>
+    </bean>
 
    <!-- component referencing comps via a map, using both keys and value -->
-   <component id="mapref" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
-       <constructor-arg value="mapref"/>
+   <bean id="mapref" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+       <argument value="mapref"/>
        <property name="componentMap">
            <map>
                <entry key-ref="leaf1" value-ref="leaf2XXXX"/>
            </map>
        </property>
-   </component>
-</components>
+   </bean>
+</blueprint>
 

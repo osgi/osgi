@@ -1,264 +1,264 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
-	<component id="compFactory"
+	<bean id="compFactory"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionInstanceFactory">
 		<!-- collaborators and configuration for this component go here -->
-	</component>
+	</bean>
 
 	<!-- Injection of an empty array -->
-	<component id="compEmptyArray" factory-method="makeInstance"
+	<bean id="compEmptyArray" factory-method="makeInstance"
 		factory-component="compFactory">
 		<constructor-arg>
 			<array></array>
-		</constructor-arg>
-	</component>
+		</argument>
+	</bean>
 
 	<!-- Injection of a null array -->
-	<component id="compNullArray" factory-method="makeInstance"
+	<bean id="compNullArray" factory-method="makeInstance"
 		factory-component="compFactory">
 		<constructor-arg>
 			<array value-type="java.lang.Object">
 				<null />
 			</array>
-		</constructor-arg>
-	</component>
+		</argument>
+	</bean>
 
 	<!-- Injection of a String array -->
-	<component id="compStringArray" factory-method="makeInstance"
+	<bean id="compStringArray" factory-method="makeInstance"
 		factory-component="compFactory">
 		<constructor-arg>
 			<array value-type="java.lang.String">
 				<value>abc</value>
 				<value>efg</value>
 			</array>
-		</constructor-arg>
-	</component>
+		</argument>
+	</bean>
 
 	<!-- Injection of a primitive int array -->
-	<component id="compPrimIntArray" factory-method="makeInstance"
+	<bean id="compPrimIntArray" factory-method="makeInstance"
 		factory-component="compFactory">
 		<constructor-arg>
 			<array value-type="int">
 				<value>1</value>
 				<value>2</value>
 			</array>
-		</constructor-arg>
-	</component>
+		</argument>
+	</bean>
 
 	<!-- Injection of a wrapped int array -->
-	<component id="compWrappedIntArray" factory-method="makeInstance"
+	<bean id="compWrappedIntArray" factory-method="makeInstance"
 		factory-component="compFactory">
 		<constructor-arg>
 			<array value-type="java.lang.Integer">
 				<value>1</value>
 				<value>2</value>
 			</array>
-		</constructor-arg>
-	</component>
+		</argument>
+	</bean>
 
 	<!-- Injection of a primitive boolean array -->
-	<component id="compPrimBoolArray" factory-method="makeInstance"
+	<bean id="compPrimBoolArray" factory-method="makeInstance"
 		factory-component="compFactory">
 		<constructor-arg>
 			<array value-type="boolean">
 				<value>true</value>
 				<value>false</value>
 			</array>
-		</constructor-arg>
-	</component>
+		</argument>
+	</bean>
 
 	<!-- Injection of a wrapped boolean array -->
-	<component id="compWrappedBooleanArray" factory-method="makeInstance"
+	<bean id="compWrappedBooleanArray" factory-method="makeInstance"
 		factory-component="compFactory">
 		<constructor-arg>
 			<array value-type="java.lang.Boolean">
 				<value type="java.lang.Boolean">true</value>
 				<value type="java.lang.Boolean">false</value>
 			</array>
-		</constructor-arg>
-	</component>
+		</argument>
+	</bean>
 
 	<!-- Injection of a primitive byte items -->
-	<component id="compPrimByteArray" factory-method="makeInstance"
+	<bean id="compPrimByteArray" factory-method="makeInstance"
 		factory-component="compFactory">
 		<constructor-arg>
 			<array value-type="byte">
 				<value>1</value>
 				<value>2</value>
 			</array>
-		</constructor-arg>
-	</component>
+		</argument>
+	</bean>
 
 	<!-- Injection of a wrapped byte array -->
-	<component id="compWrappedByteArray" factory-method="makeInstance"
+	<bean id="compWrappedByteArray" factory-method="makeInstance"
 		factory-component="compFactory">
 		<constructor-arg>
 			<array value-type="java.lang.Byte">
 				<value>1</value>
 				<value>2</value>
 			</array>
-		</constructor-arg>
-	</component>
+		</argument>
+	</bean>
 
 	<!-- Injection of a primitive char array -->
-	<component id="compPrimCharArray" factory-method="makeInstance"
+	<bean id="compPrimCharArray" factory-method="makeInstance"
 		factory-component="compFactory">
 		<constructor-arg>
 			<array value-type="char">
 				<value>a</value>
 				<value>b</value>
 			</array>
-		</constructor-arg>
-	</component>
+		</argument>
+	</bean>
 
 	<!-- Injection of a wrapped char array -->
-	<component id="compWrappedCharArray" factory-method="makeInstance"
+	<bean id="compWrappedCharArray" factory-method="makeInstance"
 		factory-component="compFactory">
 		<constructor-arg>
 			<array value-type="java.lang.Character">
 				<value>a</value>
 				<value>b</value>
 			</array>
-		</constructor-arg>
-	</component>
+		</argument>
+	</bean>
 
 	<!-- Injection of a primitive short array -->
-	<component id="compPrimShortArray" factory-method="makeInstance"
+	<bean id="compPrimShortArray" factory-method="makeInstance"
 		factory-component="compFactory">
 		<constructor-arg>
 			<array value-type="short">
 				<value>3</value>
 				<value>4</value>
 			</array>
-		</constructor-arg>
-	</component>
+		</argument>
+	</bean>
 
 	<!-- Injection of a wrapped short array -->
-	<component id="compWrappedShortArray" factory-method="makeInstance"
+	<bean id="compWrappedShortArray" factory-method="makeInstance"
 		factory-component="compFactory">
 		<constructor-arg>
 			<array value-type="java.lang.Short">
 				<value>3</value>
 				<value>4</value>
 			</array>
-		</constructor-arg>
-	</component>
+		</argument>
+	</bean>
 
 	<!-- Injection of a primitive long array -->
-	<component id="compPrimLongArray" factory-method="makeInstance"
+	<bean id="compPrimLongArray" factory-method="makeInstance"
 		factory-component="compFactory">
 		<constructor-arg>
 			<array value-type="long">
 				<value>3</value>
 				<value>4</value>
 			</array>
-		</constructor-arg>
-	</component>
+		</argument>
+	</bean>
 
 	<!-- Injection of a wrapped long array -->
-	<component id="compWrappedLongArray" factory-method="makeInstance"
+	<bean id="compWrappedLongArray" factory-method="makeInstance"
 		factory-component="compFactory">
 		<constructor-arg>
 			<array value-type="java.lang.Long">
 				<value>3</value>
 				<value>4</value>
 			</array>
-		</constructor-arg>
-	</component>
+		</argument>
+	</bean>
 
 	<!-- Injection of a primitive double array -->
-	<component id="compPrimDoubleArray" factory-method="makeInstance"
+	<bean id="compPrimDoubleArray" factory-method="makeInstance"
 		factory-component="compFactory">
 		<constructor-arg>
 			<array value-type="double">
 				<value>3</value>
 				<value>4</value>
 			</array>
-		</constructor-arg>
-	</component>
+		</argument>
+	</bean>
 
 	<!-- Injection of a wrapped double array -->
-	<component id="compWrappedDoubleArray" factory-method="makeInstance"
+	<bean id="compWrappedDoubleArray" factory-method="makeInstance"
 		factory-component="compFactory">
 		<constructor-arg>
 			<array value-type="java.lang.Double">
 				<value>3</value>
 				<value>4</value>
 			</array>
-		</constructor-arg>
-	</component>
+		</argument>
+	</bean>
 
 	<!-- Injection of a primitive float array -->
-	<component id="compPrimFloatArray" factory-method="makeInstance"
+	<bean id="compPrimFloatArray" factory-method="makeInstance"
 		factory-component="compFactory">
 		<constructor-arg>
 			<array value-type="float">
 				<value>3</value>
 				<value>4</value>
 			</array>
-		</constructor-arg>
-	</component>
+		</argument>
+	</bean>
 
 	<!-- Injection of a wrapped float array -->
-	<component id="compWrappedFloatArray" factory-method="makeInstance"
+	<bean id="compWrappedFloatArray" factory-method="makeInstance"
 		factory-component="compFactory">
 		<constructor-arg>
 			<array value-type="java.lang.Float">
 				<value>3</value>
 				<value>4</value>
 			</array>
-		</constructor-arg>
-	</component>
+		</argument>
+	</bean>
 
 	<!-- Injection of a Date array -->
-	<component id="compDateArray" factory-method="makeInstance"
+	<bean id="compDateArray" factory-method="makeInstance"
 		factory-component="compFactory">
 		<constructor-arg>
 			<array value-type="java.util.Date">
 				<value>2009-2-19</value>
 				<value>2009-2-20</value>
 			</array>
-		</constructor-arg>
-	</component>
+		</argument>
+	</bean>
 
 	<!-- Injection of an URL array -->
-	<component id="compURLArray" factory-method="makeInstance"
+	<bean id="compURLArray" factory-method="makeInstance"
 		factory-component="compFactory">
 		<constructor-arg>
 			<array value-type="java.net.URL">
 				<value>http://www.osgi.org</value>
 				<value>http://www.gmail.com</value>
 			</array>
-		</constructor-arg>
-	</component>
+		</argument>
+	</bean>
 
 	<!-- Injection of a Class array -->
-	<component id="compClassArray" factory-method="makeInstance"
+	<bean id="compClassArray" factory-method="makeInstance"
 		factory-component="compFactory">
 		<constructor-arg>
 			<array value-type="java.lang.Class">
 				<value>java.lang.String</value>
 				<value>java.lang.Boolean</value>
 			</array>
-		</constructor-arg>
-	</component>
+		</argument>
+	</bean>
 
 	<!-- Injection of a Locale array -->
-	<component id="compLocaleArray" factory-method="makeInstance"
+	<bean id="compLocaleArray" factory-method="makeInstance"
 		factory-component="compFactory">
 		<constructor-arg>
 			<array value-type="java.lang.Locale">
 				<value>en_US</value>
 				<value>zh_CN</value>
 			</array>
-		</constructor-arg>
-	</component>
+		</argument>
+	</bean>
 
 	<!-- Injection of String values from props -->
-	<component id="compNestedProps" factory-method="makeInstance"
+	<bean id="compNestedProps" factory-method="makeInstance"
 		factory-component="compFactory">
 		<constructor-arg>
 			<array value-type="java.util.Properties">
@@ -268,11 +268,11 @@
 					<prop key="support">support@example.org</prop>
 				</props>
 			</array>
-		</constructor-arg>
-	</component>
+		</argument>
+	</bean>
 
 	<!-- Injection of String values from map -->
-	<component id="compNestedMap" factory-method="makeInstance"
+	<bean id="compNestedMap" factory-method="makeInstance"
 		factory-component="compFactory">
 		<constructor-arg>
 			<array value-type="java.util.Map">
@@ -281,11 +281,11 @@
 					<entry key="abc" value="2" />
 				</map>
 			</array>
-		</constructor-arg>
-	</component>
+		</argument>
+	</bean>
 
 	<!-- Injection of String values from set -->
-	<component id="compNestedSet" factory-method="makeInstance"
+	<bean id="compNestedSet" factory-method="makeInstance"
 		factory-component="compFactory">
 		<constructor-arg>
 			<array value-type="java.util.Set">
@@ -294,11 +294,11 @@
 					<value>support@example.org</value>
 				</set>
 			</array>
-		</constructor-arg>
-	</component>
+		</argument>
+	</bean>
 
 	<!-- Injection of String values from list -->
-	<component id="compNestedList" factory-method="makeInstance"
+	<bean id="compNestedList" factory-method="makeInstance"
 		factory-component="compFactory">
 		<constructor-arg>
 			<array value-type="java.util.List">
@@ -307,11 +307,11 @@
 					<value>support@example.org</value>
 				</list>
 			</array>
-		</constructor-arg>
-	</component>
+		</argument>
+	</bean>
 
 	<!-- Injection of nested array -->
-	<component id="compNestedArray" factory-method="makeInstance"
+	<bean id="compNestedArray" factory-method="makeInstance"
 		factory-component="compFactory">
 		<constructor-arg>
 			<array value-type="java.lang.Object">
@@ -320,8 +320,8 @@
 					<value>def</value>
 				</array>
 			</array>
-		</constructor-arg>
-	</component>
+		</argument>
+	</bean>
 
 	<!-- String values from array -->
 
@@ -331,4 +331,4 @@
 
 	<!-- Array Injection from component -->
 
-</components>
+</blueprint>

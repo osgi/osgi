@@ -1,87 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd"
       default-init-method="init" default-destroy-method="destroy" default-lazy-init="false">
 
     <!-- a few leaf nodes for others to reference.  These are just named components -->
-   <component id="leaf1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
-       <constructor-arg value="leaf1"/>
-   </component>
-   <component id="leaf2" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
-       <constructor-arg value="leaf2"/>
-   </component>
-   <component id="leaf3" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
-       <constructor-arg value="leaf3"/>
-   </component>
-   <component id="leaf4" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
-       <constructor-arg value="leaf4"/>
-   </component>
+   <bean id="leaf1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+       <argument value="leaf1"/>
+   </bean>
+   <bean id="leaf2" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+       <argument value="leaf2"/>
+   </bean>
+   <bean id="leaf3" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+       <argument value="leaf3"/>
+   </bean>
+   <bean id="leaf4" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+       <argument value="leaf4"/>
+   </bean>
    <!-- lazyleaf1 will be lazy inited, but will be referenced from the start, so this will start normally -->
-   <component id="lazyleaf1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="true">
-       <constructor-arg value="lazyleaf1"/>
-   </component>
+   <bean id="lazyleaf1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="true">
+       <argument value="lazyleaf1"/>
+   </bean>
    <!-- the component referencing lazyleaf1.  This is not lazy-inited -->
-   <component id="comp1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
-       <constructor-arg value="comp1"/>
-       <constructor-arg ref="lazyleaf1"/>
-   </component>
+   <bean id="comp1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+       <argument value="comp1"/>
+       <argument ref="lazyleaf1"/>
+   </bean>
    <!-- lazyleaf2 will be lazy inited and will not be started until requested from the module context -->
-   <component id="lazyleaf2" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="true">
-       <constructor-arg value="lazyleaf2"/>
-   </component>
+   <bean id="lazyleaf2" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="true">
+       <argument value="lazyleaf2"/>
+   </bean>
    <!-- lazyleaf3 will be lazy inited and will not be started until the referencing component is requested. -->
-   <component id="lazyleaf3" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="true">
-       <constructor-arg value="lazyleaf3"/>
-   </component>
+   <bean id="lazyleaf3" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="true">
+       <argument value="lazyleaf3"/>
+   </bean>
    <!-- lazycomp1 will be lazy inited and will not be started until the requested from the module context -->
    <!-- it alsl contains a reference to another lazy-inited leaf node, so this will cascade -->
-   <component id="lazycomp1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="true">
-       <constructor-arg value="lazycomp1"/>
-       <constructor-arg ref="lazyleaf3"/>
-   </component>
+   <bean id="lazycomp1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="true">
+       <argument value="lazycomp1"/>
+       <argument ref="lazyleaf3"/>
+   </bean>
 
    <!-- component referencing two leaf nodes -->
-   <component id="twoleaf" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
-       <constructor-arg value="twoleaf"/>
-       <constructor-arg ref="leaf1"/>
+   <bean id="twoleaf" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+       <argument value="twoleaf"/>
+       <argument ref="leaf1"/>
        <property name="componentOne">
            <ref component="leaf2" />
        </property>
-   </component>
+   </bean>
 
    <!-- component referencing multiple comps, which reference leaf nodes -->
-   <component id="twocomp" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
-       <constructor-arg value="twocomp"/>
-       <constructor-arg ref="twoleaf"/>
-       <constructor-arg ref="comp1"/>
-   </component>
+   <bean id="twocomp" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+       <argument value="twocomp"/>
+       <argument ref="twoleaf"/>
+       <argument ref="comp1"/>
+   </bean>
 
    <!-- component referencing comps via a list -->
-   <component id="twolist" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
-       <constructor-arg value="twolist"/>
+   <bean id="twolist" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+       <argument value="twolist"/>
        <property name="componentList">
            <list>
                <ref component="twoleaf"/>
                <ref component="twocomp"/>
            </list>
        </property>
-   </component>
+   </bean>
 
    <!-- component referencing comps via a set -->
-   <component id="twoset" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
-       <constructor-arg value="twoset"/>
+   <bean id="twoset" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+       <argument value="twoset"/>
        <property name="componentSet">
            <set>
                <ref component="twoleaf"/>
                <ref component="twocomp"/>
            </set>
        </property>
-   </component>
+   </bean>
 
    <!-- component referencing comps via a map, using both keys and value -->
-   <component id="mapref" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
-       <constructor-arg value="mapref"/>
+   <bean id="mapref" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+       <argument value="mapref"/>
        <property name="componentMap">
            <map>
                <entry>
@@ -93,81 +93,81 @@
                <entry key-ref="leaf2" value-ref="twocomp"/>
            </map>
        </property>
-   </component>
+   </bean>
 
    <!-- single component for a depends-on reference -->
-   <component id="dependsleaf1" class="org.osgi.test.cases.blueprint.components.injection.DependentComponent">
-       <constructor-arg value="dependsleaf1"/>
-   </component>
+   <bean id="dependsleaf1" class="org.osgi.test.cases.blueprint.components.injection.DependentComponent">
+       <argument value="dependsleaf1"/>
+   </bean>
 
    <!-- component using a depends-on relationship -->
-   <component id="dependsOnOne" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" depends-on="dependsleaf1">
-       <constructor-arg value="dependsOnOne"/>
+   <bean id="dependsOnOne" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" depends-on="dependsleaf1">
+       <argument value="dependsOnOne"/>
        <property name="dependsOn">
            <set>
                <value>dependsleaf1</value>
            </set>
        </property>
-   </component>
+   </bean>
 
    <!-- two more components for a depends-on reference, one with lazy initialization -->
-   <component id="dependsleaf2" class="org.osgi.test.cases.blueprint.components.injection.DependentComponent">
-       <constructor-arg value="dependsleaf2"/>
-   </component>
-   <component id="dependsleaf3" class="org.osgi.test.cases.blueprint.components.injection.DependentComponent" lazy-init="true">
-       <constructor-arg value="dependsleaf3"/>
-   </component>
+   <bean id="dependsleaf2" class="org.osgi.test.cases.blueprint.components.injection.DependentComponent">
+       <argument value="dependsleaf2"/>
+   </bean>
+   <bean id="dependsleaf3" class="org.osgi.test.cases.blueprint.components.injection.DependentComponent" lazy-init="true">
+       <argument value="dependsleaf3"/>
+   </bean>
 
    <!-- component using a multiple depends-on relationship -->
-   <component id="dependsOnTwo" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" depends-on="dependsleaf2,dependsleaf3">
-       <constructor-arg value="dependsOnTwo"/>
+   <bean id="dependsOnTwo" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" depends-on="dependsleaf2,dependsleaf3">
+       <argument value="dependsOnTwo"/>
        <property name="dependsOn">
            <set>
                <value>dependsleaf2</value>
                <value>dependsleaf3</value>
            </set>
        </property>
-   </component>
+   </bean>
 
    <!-- singleton1 is just the default scope.  We'll create multiple references, but should get just a single instance -->
-   <component id="singleton1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
-       <constructor-arg value="singleton1"/>
-   </component>
+   <bean id="singleton1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+       <argument value="singleton1"/>
+   </bean>
 
    <!-- singleton2 is default scope explicitly specified.  Again, we should only see a single instance. -->
-   <component id="singleton2" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" scope="singleton">
-       <constructor-arg value="singleton2"/>
-   </component>
+   <bean id="singleton2" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" scope="singleton">
+       <argument value="singleton2"/>
+   </bean>
 
    <!-- singleton3 is bundle scope, but since it is not specified as a service, this acts as singleton. -->
-   <component id="singleton3" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" scope="bundle">
-       <constructor-arg value="singleton3"/>
-   </component>
+   <bean id="singleton3" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" scope="bundle">
+       <argument value="singleton3"/>
+   </bean>
 
    <!-- prototype1 will have prototype scope, which means a new component will be instantiated for each request -->
-   <component id="prototype1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" scope="prototype">
-       <constructor-arg value="prototype1"/>
-   </component>
+   <bean id="prototype1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" scope="prototype">
+       <argument value="prototype1"/>
+   </bean>
 
    <!-- prototype2 tests prototype scope and lazy-init in combination. -->
-   <component id="prototype2" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" scope="prototype" lazy-init="true">
-       <constructor-arg value="prototype2"/>
-   </component>
+   <bean id="prototype2" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" scope="prototype" lazy-init="true">
+       <argument value="prototype2"/>
+   </bean>
 
    <!-- prototype3 is only referenced via the module context.  This should not be instantiated until referenced -->
-   <component id="prototype3" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" scope="prototype">
-       <constructor-arg value="prototype3"/>
-   </component>
+   <bean id="prototype3" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" scope="prototype">
+       <argument value="prototype3"/>
+   </bean>
 
    <!-- referenced by a list, so will create unique ones for each element. -->
-   <component id="prototype4" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" scope="prototype">
-       <constructor-arg value="prototype4"/>
-   </component>
+   <bean id="prototype4" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" scope="prototype">
+       <argument value="prototype4"/>
+   </bean>
 
    <!-- Three singletons in a set should reduce to one element -->
-   <component id="threeSingleton1" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent">
-       <constructor-arg value="threeSingleton1"/>
-       <constructor-arg value="1"/>
+   <bean id="threeSingleton1" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent">
+       <argument value="threeSingleton1"/>
+       <argument value="1"/>
        <property name="references">
            <set>
                <ref component="singleton1"/>
@@ -175,12 +175,12 @@
                <ref component="singleton1"/>
            </set>
        </property>
-   </component>
+   </bean>
 
    <!-- Three singletons in a set should reduce to one element -->
-   <component id="threeSingleton2" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent">
-       <constructor-arg value="threeSingleton2"/>
-       <constructor-arg value="1"/>
+   <bean id="threeSingleton2" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent">
+       <argument value="threeSingleton2"/>
+       <argument value="1"/>
        <property name="references">
            <set>
                <ref component="singleton2"/>
@@ -188,12 +188,12 @@
                <ref component="singleton2"/>
            </set>
        </property>
-   </component>
+   </bean>
 
    <!-- Three singletons in a set should reduce to one element -->
-   <component id="threeSingleton3" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent">
-       <constructor-arg value="threeSingleton3"/>
-       <constructor-arg value="1"/>
+   <bean id="threeSingleton3" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent">
+       <argument value="threeSingleton3"/>
+       <argument value="1"/>
        <property name="references">
            <set>
                <ref component="singleton3"/>
@@ -201,12 +201,12 @@
                <ref component="singleton3"/>
            </set>
        </property>
-   </component>
+   </bean>
 
    <!-- Expecting 3 component instances -->
-   <component id="threeListPrototype1" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent">
-       <constructor-arg value="threePrototype1"/>
-       <constructor-arg value="3"/>
+   <bean id="threeListPrototype1" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent">
+       <argument value="threePrototype1"/>
+       <argument value="3"/>
        <property name="listReferences">
            <list>
                <ref component="prototype4"/>
@@ -214,12 +214,12 @@
                <ref component="prototype4"/>
            </list>
        </property>
-   </component>
+   </bean>
 
    <!-- Expecting 3 component instances -->
-   <component id="threePrototype1" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent">
-       <constructor-arg value="threePrototype1"/>
-       <constructor-arg value="3"/>
+   <bean id="threePrototype1" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent">
+       <argument value="threePrototype1"/>
+       <argument value="3"/>
        <property name="references">
            <set>
                <ref component="prototype1"/>
@@ -227,12 +227,12 @@
                <ref component="prototype1"/>
            </set>
        </property>
-   </component>
+   </bean>
 
    <!-- Expecting 3 component instances -->
-   <component id="threePrototype2" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent">
-       <constructor-arg value="threePrototype2"/>
-       <constructor-arg value="3"/>
+   <bean id="threePrototype2" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent">
+       <argument value="threePrototype2"/>
+       <argument value="3"/>
        <property name="references">
            <set>
                <ref component="prototype2"/>
@@ -240,6 +240,6 @@
                <ref component="prototype2"/>
            </set>
        </property>
-   </component>
-</components>
+   </bean>
+</blueprint>
 

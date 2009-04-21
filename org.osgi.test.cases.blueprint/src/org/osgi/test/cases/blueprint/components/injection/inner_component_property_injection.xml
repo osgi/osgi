@@ -1,164 +1,164 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
 <!-- String -->
-	<component id="compInnerStringTyped" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+	<bean id="compInnerStringTyped" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
 		<property name="innerComponent">
-			<component class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+			<bean class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 				<property name="string"><value type="java.lang.String">ABC</value></property>
-			</component>
+			</bean>
 		</property>
-	</component>
-	
-	<component id="compInnerString" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+	</bean>
+
+	<bean id="compInnerString" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
 		<property name="innerComponent">
-			<component class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+			<bean class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 				<property name="string" value="XYZ"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
 <!-- Boolean -->
-	<component id="compInnerPrimitiveBoolean" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+	<bean id="compInnerPrimitiveBoolean" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
 		<property name="innerComponent">
-			<component class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+			<bean class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        			<property name="primBoolean" value="true"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
-	<component id="compInnerWrapperedBoolean" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+	<bean id="compInnerWrapperedBoolean" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
 		<property name="innerComponent">
-			<component class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+			<bean class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        			<property name="boolean" value="false"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
 <!-- Byte -->
-	<component id="compInnerPrimitiveByte" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+	<bean id="compInnerPrimitiveByte" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
 		<property name="innerComponent">
-			<component class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+			<bean class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        			<property name="primByte" value="-128"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
-	<component id="compInnerWrapperedByte" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+	<bean id="compInnerWrapperedByte" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
 		<property name="innerComponent">
-			<component class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+			<bean class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        			<property name="byte" value="127"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
 <!-- Double -->
-	<component id="compInnerPrimitiveDouble" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+	<bean id="compInnerPrimitiveDouble" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
 		<property name="innerComponent">
-			<component class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+			<bean class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        			<property name="primDouble" value="4.9e-324"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
-	<component id="compInnerWrapperedDouble" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+	<bean id="compInnerWrapperedDouble" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
 		<property name="innerComponent">
-			<component class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+			<bean class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        			<property name="double" value="1.7976931348623157E308"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
 <!-- Float -->
-	<component id="compInnerPrimitiveFloat" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+	<bean id="compInnerPrimitiveFloat" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
 		<property name="innerComponent">
-			<component class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+			<bean class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        			<property name="primFloat" value="1.4E-45"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
-	<component id="compInnerWrapperedFloat" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+	<bean id="compInnerWrapperedFloat" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
 		<property name="innerComponent">
-			<component class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+			<bean class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        			<property name="float" value="3.4028235E38"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
 <!-- Integer -->
-	<component id="compInnerPrimitiveInteger" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+	<bean id="compInnerPrimitiveInteger" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
 		<property name="innerComponent">
-			<component class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+			<bean class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        			<property name="primInteger" value="-2147483648"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
-	<component id="compInnerWrapperedInteger" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+	<bean id="compInnerWrapperedInteger" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
 		<property name="innerComponent">
-			<component class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+			<bean class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        			<property name="integer" value="2147483647"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
 
 <!-- Character -->
-	<component id="compInnerPrimitiveCharacter" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+	<bean id="compInnerPrimitiveCharacter" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
 		<property name="innerComponent">
-			<component class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+			<bean class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        			<property name="primCharacter" value="a"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
-	<component id="compInnerWrapperedCharacter" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+	<bean id="compInnerWrapperedCharacter" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
 		<property name="innerComponent">
-			<component class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+			<bean class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        			<property name="character" value="A"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
 <!-- Short -->
-	<component id="compInnerPrimitiveShort" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+	<bean id="compInnerPrimitiveShort" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
 		<property name="innerComponent">
-			<component class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+			<bean class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        			<property name="primShort" value="-32768"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
-	<component id="compInnerWrapperedShort" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+	<bean id="compInnerWrapperedShort" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
 		<property name="innerComponent">
-			<component class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+			<bean class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        			<property name="short" value="32767"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
 
 <!-- Long -->
-	<component id="compInnerPrimitiveLong" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+	<bean id="compInnerPrimitiveLong" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
 		<property name="innerComponent">
-			<component class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+			<bean class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        			<property name="primLong" value="-9223372036854775808"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
-	<component id="compInnerWrapperedLong" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+	<bean id="compInnerWrapperedLong" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
 		<property name="innerComponent">
-			<component class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+			<bean class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        			<property name="long" value="9223372036854775807"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
 
 
 
-</components>
+</blueprint>

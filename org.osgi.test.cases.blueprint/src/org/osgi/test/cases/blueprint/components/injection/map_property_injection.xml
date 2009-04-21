@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
-    <component id="compEmptyMap" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <bean id="compEmptyMap" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="map">
             <map></map>
         </property>
-    </component>
+    </bean>
 
-    <component id="compNullMap" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <bean id="compNullMap" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="map">
             <null/>
         </property>
-    </component>
+    </bean>
 
-    <component id="compStringItems" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <bean id="compStringItems" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="map">
             <map>
                 <entry key="abc" value="1"/>
                 <entry key="def" value="2"/>
             </map>
         </property>
-    </component>
+    </bean>
 
-    <component id="compDupItems" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <bean id="compDupItems" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="map">
             <map>
                 <entry key="abc" value="1"/>
                 <entry key="abc" value="2"/>
             </map>
         </property>
-    </component>
+    </bean>
 
-    <component id="compBooleanItems" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <bean id="compBooleanItems" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="map">
             <map>
                 <entry key="true">
@@ -44,9 +44,9 @@
                 </entry>
             </map>
         </property>
-    </component>
+    </bean>
 
-    <component id="compBooleanKeys" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <bean id="compBooleanKeys" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="map">
             <map>
                 <entry>
@@ -59,9 +59,9 @@
                 </entry>
             </map>
         </property>
-    </component>
+    </bean>
 
-    <component id="compTypedItems" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <bean id="compTypedItems" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="map">
             <map value-type="java.lang.Boolean">
                 <entry key="true" value="true">
@@ -74,9 +74,9 @@
                 </entry>
             </map>
         </property>
-    </component>
+    </bean>
 
-    <component id="compTypedKeys" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <bean id="compTypedKeys" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="map">
             <map key-type="java.lang.Boolean">
                 <entry key="true" value="true"/>
@@ -89,9 +89,9 @@
                 </entry>
             </map>
         </property>
-    </component>
+    </bean>
 
-    <component id="compMixedItems" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <bean id="compMixedItems" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="map">
             <map>
                 <entry key="String">
@@ -135,9 +135,9 @@
                 </entry>
         	</map>
         </property>
-    </component>
+    </bean>
 
-    <component id="compNestedMap" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <bean id="compNestedMap" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="map">
             <map>
                 <entry>
@@ -149,9 +149,9 @@
                 </entry>
             </map>
         </property>
-    </component>
+    </bean>
 
-    <component id="compNestedSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <bean id="compNestedSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="map">
             <map>
                 <entry>
@@ -163,9 +163,9 @@
                 </entry>
             </map>
         </property>
-    </component>
+    </bean>
 
-    <component id="compNestedList" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <bean id="compNestedList" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="map">
             <map>
                 <entry>
@@ -177,9 +177,9 @@
                 </entry>
             </map>
         </property>
-    </component>
+    </bean>
 
-    <component id="compNestedProps" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <bean id="compNestedProps" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="map">
             <map>
                 <entry>
@@ -191,6 +191,6 @@
                 </entry>
             </map>
         </property>
-    </component>
-</components>
+    </bean>
+</blueprint>
 

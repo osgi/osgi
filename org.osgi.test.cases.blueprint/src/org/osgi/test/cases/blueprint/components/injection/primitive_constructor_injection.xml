@@ -1,402 +1,402 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
-   <component id="compNoArg" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+   <bean id="compNoArg" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
      <!-- no constructor arguments -->
-   </component>
-   <component id="compOneArg" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="compOneArg"/>
-   </component>
-   <component id="compImplicitString" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="compImplicitString"/>
-       <constructor-arg value="ABC"/>
-   </component>
-   <component id="compIndexedString" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="ABC" index="1"/>
-       <constructor-arg value="compIndexedString" index="0"/>
-   </component>
-   <component id="compZeroLengthString1" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="" index="1"/>
-       <constructor-arg value="compZeroLengthString1" index="0"/>
-   </component>
-   <component id="compZeroLengthString2" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg index="1"><value/></constructor-arg>
-       <constructor-arg value="compZeroLengthString2" index="0"/>
-   </component>
-   <component id="compZeroLengthString3" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg index="1"><value></value></constructor-arg>
-       <constructor-arg value="compZeroLengthString3" index="0"/>
-   </component>
-   <component id="compNullString" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg index="1"><null/></constructor-arg>
-       <constructor-arg value="compNullString" index="0"/>
-   </component>
+   </bean>
+   <bean id="compOneArg" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="compOneArg"/>
+   </bean>
+   <bean id="compImplicitString" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="compImplicitString"/>
+       <argument value="ABC"/>
+   </bean>
+   <bean id="compIndexedString" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="ABC" index="1"/>
+       <argument value="compIndexedString" index="0"/>
+   </bean>
+   <bean id="compZeroLengthString1" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="" index="1"/>
+       <argument value="compZeroLengthString1" index="0"/>
+   </bean>
+   <bean id="compZeroLengthString2" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument index="1"><value/></argument>
+       <argument value="compZeroLengthString2" index="0"/>
+   </bean>
+   <bean id="compZeroLengthString3" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument index="1"><value></value></argument>
+       <argument value="compZeroLengthString3" index="0"/>
+   </bean>
+   <bean id="compNullString" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument index="1"><null/></argument>
+       <argument value="compNullString" index="0"/>
+   </bean>
 
-   <component id="compThreeArgImplicit" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="compThreeArgImplicit"/>
-       <constructor-arg><null/></constructor-arg>
-       <constructor-arg value="ABC"/>
-   </component>
+   <bean id="compThreeArgImplicit" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="compThreeArgImplicit"/>
+       <constructor-arg><null/></argument>
+       <argument value="ABC"/>
+   </bean>
 
-   <component id="compThreeArgOverride" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg type="java.lang.String" value="compThreeArgOverride"/>
-       <constructor-arg type="java.lang.Object">
+   <bean id="compThreeArgOverride" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument type="java.lang.String" value="compThreeArgOverride"/>
+       <argument type="java.lang.Object">
            <value type="java.lang.Boolean">true</value>
-       </constructor-arg>
-       <constructor-arg type="java.lang.String"><null/></constructor-arg>
-   </component>
+       </argument>
+       <argument type="java.lang.String"><null/></argument>
+   </bean>
 
 <!-- Boolean -->
-   <component id="compPrimBooleanYes" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg type="boolean"><value>yes</value></constructor-arg>
-   </component>
-   <component id="compPrimBooleanNo" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg><value type="boolean">no</value></constructor-arg>
-   </component>
-   <component id="compPrimBooleanTrue" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="true" type="boolean"/>
-   </component>
-   <component id="compPrimBooleanFalse" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="false" type="boolean"/>
-   </component>
-   <component id="compPrimBooleanOn" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg type="boolean"><value type="boolean">on</value></constructor-arg>
-   </component>
-   <component id="compPrimBooleanOff" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="off" type="boolean"/>
-   </component>
-   <component id="compWrapperedBooleanYes" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="yes" type="java.lang.Boolean"/>
-   </component>
-   <component id="compWrapperedBooleanNo" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg type="java.lang.Boolean" value="no"/>
-   </component>
-   <component id="compWrapperedBooleanTrue" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="true" type="java.lang.Boolean"/>
-   </component>
-   <component id="compWrapperedBooleanFalse" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="false" type="java.lang.Boolean"/>
-   </component>
-   <component id="compWrapperedBooleanOn" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="on" type="java.lang.Boolean"/>
-   </component>
-   <component id="compWrapperedBooleanOff" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="off" type="java.lang.Boolean"/>
-   </component>
-   <component id="compWrapperedBooleanNull" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg type="java.lang.Boolean"><null/></constructor-arg>
-   </component>
+   <bean id="compPrimBooleanYes" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument type="boolean"><value>yes</value></argument>
+   </bean>
+   <bean id="compPrimBooleanNo" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <constructor-arg><value type="boolean">no</value></argument>
+   </bean>
+   <bean id="compPrimBooleanTrue" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="true" type="boolean"/>
+   </bean>
+   <bean id="compPrimBooleanFalse" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="false" type="boolean"/>
+   </bean>
+   <bean id="compPrimBooleanOn" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument type="boolean"><value type="boolean">on</value></argument>
+   </bean>
+   <bean id="compPrimBooleanOff" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="off" type="boolean"/>
+   </bean>
+   <bean id="compWrapperedBooleanYes" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="yes" type="java.lang.Boolean"/>
+   </bean>
+   <bean id="compWrapperedBooleanNo" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument type="java.lang.Boolean" value="no"/>
+   </bean>
+   <bean id="compWrapperedBooleanTrue" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="true" type="java.lang.Boolean"/>
+   </bean>
+   <bean id="compWrapperedBooleanFalse" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="false" type="java.lang.Boolean"/>
+   </bean>
+   <bean id="compWrapperedBooleanOn" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="on" type="java.lang.Boolean"/>
+   </bean>
+   <bean id="compWrapperedBooleanOff" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="off" type="java.lang.Boolean"/>
+   </bean>
+   <bean id="compWrapperedBooleanNull" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument type="java.lang.Boolean"><null/></argument>
+   </bean>
 
 <!--  Byte -->
-   <component id="compPrimByteZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="0" type="byte"/>
-   </component>
-   <component id="compPrimByteMax" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="127" type="byte"/>
-   </component>
-   <component id="compPrimByteMin" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="-128" type="byte"/>
-   </component>
-   <component id="compWrapperedByteZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="0" type="java.lang.Byte"/>
-   </component>
-   <component id="compWrapperedByteMax" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="127" type="java.lang.Byte"/>
-   </component>
-   <component id="compWrapperedByteMin" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="-128" type="java.lang.Byte"/>
-   </component>
-   <component id="compWrapperedByteNull" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg type="java.lang.Byte"><null/></constructor-arg>
-   </component>
+   <bean id="compPrimByteZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="0" type="byte"/>
+   </bean>
+   <bean id="compPrimByteMax" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="127" type="byte"/>
+   </bean>
+   <bean id="compPrimByteMin" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="-128" type="byte"/>
+   </bean>
+   <bean id="compWrapperedByteZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="0" type="java.lang.Byte"/>
+   </bean>
+   <bean id="compWrapperedByteMax" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="127" type="java.lang.Byte"/>
+   </bean>
+   <bean id="compWrapperedByteMin" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="-128" type="java.lang.Byte"/>
+   </bean>
+   <bean id="compWrapperedByteNull" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument type="java.lang.Byte"><null/></argument>
+   </bean>
 
 <!-- Double -->
-   <component id="compPrimDoubleZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="0" type="double"/>
-   </component>
-   <component id="compPrimDoubleMinusZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="-0.0" type="double"/>
-   </component>
-   <component id="compPrimDoubleDSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="1.1D " type="double"/>
-   </component>
-   <component id="compPrimDoubledSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value=" 1.1d" type="double"/>
-   </component>
-   <component id="compPrimDoubleFSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value=" 1.1F " type="double"/>
-   </component>
-   <component id="compPrimDoublefSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="1.1e1f" type="double"/>
-   </component>
-   <component id="compPrimDoubleMax" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="1.7976931348623157E308" type="double"/>
-   </component>
-   <component id="compPrimDoubleMin" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value=" 4.9e-324 " type="double"/>
-   </component>
-   <component id="compPrimDoubleNaN" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="NaN" type="double"/>
-   </component>
-   <component id="compPrimDoubleInfinity" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="Infinity" type="double"/>
-   </component>
-   <component id="compPrimDoubleNegInfinity" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="-Infinity" type="double"/>
-   </component>
-   <component id="compWrapperedDoubleZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="0" type="java.lang.Double"/>
-   </component>
-   <component id="compWrapperedDoubleMinusZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="-0" type="java.lang.Double"/>
-   </component>
-   <component id="compWrapperedDoubleDSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="1.1D " type="java.lang.Double"/>
-   </component>
-   <component id="compWrapperedDoubledSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value=" 1.1d" type="java.lang.Double"/>
-   </component>
-   <component id="compWrapperedDoubleFSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value=" 1.1F " type="java.lang.Double"/>
-   </component>
-   <component id="compWrapperedDoublefSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="1.1e1f" type="java.lang.Double"/>
-   </component>
-   <component id="compWrapperedDoubleMax" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="1.7976931348623157E308" type="java.lang.Double"/>
-   </component>
-   <component id="compWrapperedDoubleMin" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value=" 4.9e-324 " type="java.lang.Double"/>
-   </component>
-   <component id="compWrapperedDoubleNaN" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="NaN" type="java.lang.Double"/>
-   </component>
-   <component id="compWrapperedDoubleInfinity" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="Infinity" type="java.lang.Double"/>
-   </component>
-   <component id="compWrapperedDoubleNegInfinity" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="-Infinity" type="java.lang.Double"/>
-   </component>
-   <component id="compWrapperedDoubleNull" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg type="java.lang.Double"><null/></constructor-arg>
-   </component>
+   <bean id="compPrimDoubleZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="0" type="double"/>
+   </bean>
+   <bean id="compPrimDoubleMinusZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="-0.0" type="double"/>
+   </bean>
+   <bean id="compPrimDoubleDSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="1.1D " type="double"/>
+   </bean>
+   <bean id="compPrimDoubledSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value=" 1.1d" type="double"/>
+   </bean>
+   <bean id="compPrimDoubleFSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value=" 1.1F " type="double"/>
+   </bean>
+   <bean id="compPrimDoublefSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="1.1e1f" type="double"/>
+   </bean>
+   <bean id="compPrimDoubleMax" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="1.7976931348623157E308" type="double"/>
+   </bean>
+   <bean id="compPrimDoubleMin" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value=" 4.9e-324 " type="double"/>
+   </bean>
+   <bean id="compPrimDoubleNaN" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="NaN" type="double"/>
+   </bean>
+   <bean id="compPrimDoubleInfinity" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="Infinity" type="double"/>
+   </bean>
+   <bean id="compPrimDoubleNegInfinity" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="-Infinity" type="double"/>
+   </bean>
+   <bean id="compWrapperedDoubleZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="0" type="java.lang.Double"/>
+   </bean>
+   <bean id="compWrapperedDoubleMinusZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="-0" type="java.lang.Double"/>
+   </bean>
+   <bean id="compWrapperedDoubleDSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="1.1D " type="java.lang.Double"/>
+   </bean>
+   <bean id="compWrapperedDoubledSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value=" 1.1d" type="java.lang.Double"/>
+   </bean>
+   <bean id="compWrapperedDoubleFSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value=" 1.1F " type="java.lang.Double"/>
+   </bean>
+   <bean id="compWrapperedDoublefSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="1.1e1f" type="java.lang.Double"/>
+   </bean>
+   <bean id="compWrapperedDoubleMax" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="1.7976931348623157E308" type="java.lang.Double"/>
+   </bean>
+   <bean id="compWrapperedDoubleMin" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value=" 4.9e-324 " type="java.lang.Double"/>
+   </bean>
+   <bean id="compWrapperedDoubleNaN" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="NaN" type="java.lang.Double"/>
+   </bean>
+   <bean id="compWrapperedDoubleInfinity" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="Infinity" type="java.lang.Double"/>
+   </bean>
+   <bean id="compWrapperedDoubleNegInfinity" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="-Infinity" type="java.lang.Double"/>
+   </bean>
+   <bean id="compWrapperedDoubleNull" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument type="java.lang.Double"><null/></argument>
+   </bean>
 
 <!-- Float -->
-   <component id="compPrimFloatZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="0" type="float"/>
-   </component>
-   <component id="compPrimFloatMinusZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="-0" type="float"/>
-   </component>
-   <component id="compPrimFloatDSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="1.1D " type="float"/>
-   </component>
-   <component id="compPrimFloatdSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value=" 1.1d" type="float"/>
-   </component>
-   <component id="compPrimFloatFSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value=" 1.1F " type="float"/>
-   </component>
-   <component id="compPrimFloatfSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="1.1e1f" type="float"/>
-   </component>
-   <component id="compPrimFloatMax" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="3.4028235E38" type="float"/>
-   </component>
-   <component id="compPrimFloatMin" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value=" 1.4E-45 " type="float"/>
-   </component>
-   <component id="compPrimFloatNaN" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="NaN" type="float"/>
-   </component>
-   <component id="compPrimFloatInfinity" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="Infinity" type="float"/>
-   </component>
-   <component id="compPrimFloatNegInfinity" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="-Infinity" type="float"/>
-   </component>
-   <component id="compWrapperedFloatZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="0" type="java.lang.Float"/>
-   </component>
-   <component id="compWrapperedFloatMinusZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="-0" type="java.lang.Float"/>
-   </component>
-   <component id="compWrapperedFloatDSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="1.1D " type="java.lang.Float"/>
-   </component>
-   <component id="compWrapperedFloatdSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value=" 1.1d" type="java.lang.Float"/>
-   </component>
-   <component id="compWrapperedFloatFSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value=" 1.1F " type="java.lang.Float"/>
-   </component>
-   <component id="compWrapperedFloatfSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="1.1e1f" type="java.lang.Float"/>
-   </component>
-   <component id="compWrapperedFloatMax" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="3.4028235E38" type="java.lang.Float"/>
-   </component>
-   <component id="compWrapperedFloatMin" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value=" 1.4E-45 " type="java.lang.Float"/>
-   </component>
-   <component id="compWrapperedFloatNaN" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="NaN" type="java.lang.Float"/>
-   </component>
-   <component id="compWrapperedFloatInfinity" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="Infinity" type="java.lang.Float"/>
-   </component>
-   <component id="compWrapperedFloatNegInfinity" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="-Infinity" type="java.lang.Float"/>
-   </component>
-   <component id="compWrapperedFloatNull" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg type="java.lang.Float"><null/></constructor-arg>
-   </component>
+   <bean id="compPrimFloatZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="0" type="float"/>
+   </bean>
+   <bean id="compPrimFloatMinusZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="-0" type="float"/>
+   </bean>
+   <bean id="compPrimFloatDSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="1.1D " type="float"/>
+   </bean>
+   <bean id="compPrimFloatdSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value=" 1.1d" type="float"/>
+   </bean>
+   <bean id="compPrimFloatFSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value=" 1.1F " type="float"/>
+   </bean>
+   <bean id="compPrimFloatfSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="1.1e1f" type="float"/>
+   </bean>
+   <bean id="compPrimFloatMax" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="3.4028235E38" type="float"/>
+   </bean>
+   <bean id="compPrimFloatMin" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value=" 1.4E-45 " type="float"/>
+   </bean>
+   <bean id="compPrimFloatNaN" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="NaN" type="float"/>
+   </bean>
+   <bean id="compPrimFloatInfinity" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="Infinity" type="float"/>
+   </bean>
+   <bean id="compPrimFloatNegInfinity" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="-Infinity" type="float"/>
+   </bean>
+   <bean id="compWrapperedFloatZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="0" type="java.lang.Float"/>
+   </bean>
+   <bean id="compWrapperedFloatMinusZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="-0" type="java.lang.Float"/>
+   </bean>
+   <bean id="compWrapperedFloatDSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="1.1D " type="java.lang.Float"/>
+   </bean>
+   <bean id="compWrapperedFloatdSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value=" 1.1d" type="java.lang.Float"/>
+   </bean>
+   <bean id="compWrapperedFloatFSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value=" 1.1F " type="java.lang.Float"/>
+   </bean>
+   <bean id="compWrapperedFloatfSuffix" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="1.1e1f" type="java.lang.Float"/>
+   </bean>
+   <bean id="compWrapperedFloatMax" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="3.4028235E38" type="java.lang.Float"/>
+   </bean>
+   <bean id="compWrapperedFloatMin" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value=" 1.4E-45 " type="java.lang.Float"/>
+   </bean>
+   <bean id="compWrapperedFloatNaN" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="NaN" type="java.lang.Float"/>
+   </bean>
+   <bean id="compWrapperedFloatInfinity" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="Infinity" type="java.lang.Float"/>
+   </bean>
+   <bean id="compWrapperedFloatNegInfinity" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="-Infinity" type="java.lang.Float"/>
+   </bean>
+   <bean id="compWrapperedFloatNull" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument type="java.lang.Float"><null/></argument>
+   </bean>
 
 <!-- Integer -->
-   <component id="compPrimIntegerZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="0" type="int"/>
-   </component>
-   <component id="compPrimIntegerMax" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="2147483647" type="int"/>
-   </component>
-   <component id="compPrimIntegerMin" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="-2147483648" type="int"/>
-   </component>
-   <component id="compWrapperedIntegerZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="0" type="java.lang.Integer"/>
-   </component>
-   <component id="compWrapperedIntegerMax" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="2147483647" type="java.lang.Integer"/>
-   </component>
-   <component id="compWrapperedIntegerMin" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="-2147483648" type="java.lang.Integer"/>
-   </component>
-   <component id="compWrapperedIntegerNull" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg type="java.lang.Integer"><null/></constructor-arg>
-   </component>
+   <bean id="compPrimIntegerZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="0" type="int"/>
+   </bean>
+   <bean id="compPrimIntegerMax" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="2147483647" type="int"/>
+   </bean>
+   <bean id="compPrimIntegerMin" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="-2147483648" type="int"/>
+   </bean>
+   <bean id="compWrapperedIntegerZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="0" type="java.lang.Integer"/>
+   </bean>
+   <bean id="compWrapperedIntegerMax" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="2147483647" type="java.lang.Integer"/>
+   </bean>
+   <bean id="compWrapperedIntegerMin" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="-2147483648" type="java.lang.Integer"/>
+   </bean>
+   <bean id="compWrapperedIntegerNull" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument type="java.lang.Integer"><null/></argument>
+   </bean>
 
 <!-- Char -->
-   <component id="compPrimCharacterZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="\u0000" type="char"/>
-   </component>
-   <component id="compPrimCharacterMax" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="\uffff" type="char"/>
-   </component>
-   <component id="compPrimCharacterA" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="A" type="char"/>
-   </component>
-   <component id="compWrapperedCharacterZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="\u0000" type="java.lang.Character"/>
-   </component>
-   <component id="compWrapperedCharacterMax" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="\uffff" type="java.lang.Character"/>
-   </component>
-   <component id="compWrapperedCharacterA" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="A" type="java.lang.Character"/>
-   </component>
-   <component id="compWrapperedCharacterNull" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg type="java.lang.Character"><null/></constructor-arg>
-   </component>
+   <bean id="compPrimCharacterZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="\u0000" type="char"/>
+   </bean>
+   <bean id="compPrimCharacterMax" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="\uffff" type="char"/>
+   </bean>
+   <bean id="compPrimCharacterA" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="A" type="char"/>
+   </bean>
+   <bean id="compWrapperedCharacterZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="\u0000" type="java.lang.Character"/>
+   </bean>
+   <bean id="compWrapperedCharacterMax" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="\uffff" type="java.lang.Character"/>
+   </bean>
+   <bean id="compWrapperedCharacterA" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="A" type="java.lang.Character"/>
+   </bean>
+   <bean id="compWrapperedCharacterNull" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument type="java.lang.Character"><null/></argument>
+   </bean>
 
 <!-- Short -->
-   <component id="compPrimShortZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="0" type="short"/>
-   </component>
-   <component id="compPrimShortMax" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="32767" type="short"/>
-   </component>
-   <component id="compPrimShortMin" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="-32768" type="short"/>
-   </component>
-   <component id="compWrapperedShortZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="0" type="java.lang.Short"/>
-   </component>
-   <component id="compWrapperedShortMax" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="32767" type="java.lang.Short"/>
-   </component>
-   <component id="compWrapperedShortMin" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="-32768" type="java.lang.Short"/>
-   </component>
-   <component id="compWrapperedShortNull" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg type="java.lang.Short"><null/></constructor-arg>
-   </component>
+   <bean id="compPrimShortZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="0" type="short"/>
+   </bean>
+   <bean id="compPrimShortMax" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="32767" type="short"/>
+   </bean>
+   <bean id="compPrimShortMin" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="-32768" type="short"/>
+   </bean>
+   <bean id="compWrapperedShortZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="0" type="java.lang.Short"/>
+   </bean>
+   <bean id="compWrapperedShortMax" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="32767" type="java.lang.Short"/>
+   </bean>
+   <bean id="compWrapperedShortMin" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="-32768" type="java.lang.Short"/>
+   </bean>
+   <bean id="compWrapperedShortNull" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument type="java.lang.Short"><null/></argument>
+   </bean>
 
 <!-- Long -->
-   <component id="compPrimLongZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="0" type="long"/>
-   </component>
-   <component id="compPrimLongMax" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="9223372036854775807" type="long"/>
-   </component>
-   <component id="compPrimLongMin" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="-9223372036854775808" type="long"/>
-   </component>
-   <component id="compWrapperedLongZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="0" type="java.lang.Long"/>
-   </component>
-   <component id="compWrapperedLongMax" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="9223372036854775807" type="java.lang.Long"/>
-   </component>
-   <component id="compWrapperedLongMin" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg value="-9223372036854775808" type="java.lang.Long"/>
-   </component>
-   <component id="compWrapperedLongNull" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <constructor-arg type="java.lang.Long"><null/></constructor-arg>
-   </component>
+   <bean id="compPrimLongZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="0" type="long"/>
+   </bean>
+   <bean id="compPrimLongMax" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="9223372036854775807" type="long"/>
+   </bean>
+   <bean id="compPrimLongMin" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="-9223372036854775808" type="long"/>
+   </bean>
+   <bean id="compWrapperedLongZero" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="0" type="java.lang.Long"/>
+   </bean>
+   <bean id="compWrapperedLongMax" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="9223372036854775807" type="java.lang.Long"/>
+   </bean>
+   <bean id="compWrapperedLongMin" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument value="-9223372036854775808" type="java.lang.Long"/>
+   </bean>
+   <bean id="compWrapperedLongNull" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+       <argument type="java.lang.Long"><null/></argument>
+   </bean>
 
 <!-- The following tests only test implicit type derivation from constructor signatures.
    We hit all of the primitive and wrappered types, but only one test per type, since we've already tested
    string conversions in the other components. -->
 
-   <component id="constructorPrimitiveBoolean" class="org.osgi.test.cases.blueprint.components.injection.PrimitiveBooleanInjection">
-       <constructor-arg><value>yes</value></constructor-arg>
-   </component>
-   <component id="constructorWrapperedBoolean" class="org.osgi.test.cases.blueprint.components.injection.WrapperedBooleanInjection">
-       <constructor-arg value="false"/>
-   </component>
-   <component id="constructorPrimitiveByte" class="org.osgi.test.cases.blueprint.components.injection.PrimitiveByteInjection">
-       <constructor-arg value="123"/>
-   </component>
-   <component id="constructorWrapperedByte" class="org.osgi.test.cases.blueprint.components.injection.WrapperedByteInjection">
-       <constructor-arg value="100"/>
-   </component>
-   <component id="constructorPrimitiveDouble" class="org.osgi.test.cases.blueprint.components.injection.PrimitiveDoubleInjection">
-       <constructor-arg value="1.1"/>
-   </component>
-   <component id="constructorWrapperedDouble" class="org.osgi.test.cases.blueprint.components.injection.WrapperedDoubleInjection">
-       <constructor-arg value="1.2"/>
-   </component>
-   <component id="constructorPrimitiveFloat" class="org.osgi.test.cases.blueprint.components.injection.PrimitiveFloatInjection">
-       <constructor-arg value="1.3"/>
-   </component>
-   <component id="constructorWrapperedFloat" class="org.osgi.test.cases.blueprint.components.injection.WrapperedFloatInjection">
-       <constructor-arg value="1.4"/>
-   </component>
-   <component id="constructorPrimitiveInteger" class="org.osgi.test.cases.blueprint.components.injection.PrimitiveIntegerInjection">
-       <constructor-arg value="12"/>
-   </component>
-   <component id="constructorWrapperedInteger" class="org.osgi.test.cases.blueprint.components.injection.WrapperedIntegerInjection">
-       <constructor-arg value="13"/>
-   </component>
-   <component id="constructorPrimitiveCharacter" class="org.osgi.test.cases.blueprint.components.injection.PrimitiveCharacterInjection">
-       <constructor-arg value="a" />
-   </component>
-   <component id="constructorWrapperedCharacter" class="org.osgi.test.cases.blueprint.components.injection.WrapperedCharacterInjection">
-       <constructor-arg value="b"/>
-   </component>
-   <component id="constructorPrimitiveShort" class="org.osgi.test.cases.blueprint.components.injection.PrimitiveShortInjection">
-       <constructor-arg value="15"/>
-   </component>
-   <component id="constructorWrapperedShort" class="org.osgi.test.cases.blueprint.components.injection.WrapperedShortInjection">
-       <constructor-arg value="16"/>
-   </component>
-   <component id="constructorPrimitiveLong" class="org.osgi.test.cases.blueprint.components.injection.PrimitiveLongInjection">
-       <constructor-arg value="17"/>
-   </component>
-   <component id="constructorWrapperedLong" class="org.osgi.test.cases.blueprint.components.injection.WrapperedLongInjection">
-       <constructor-arg value="18"/>
-   </component>
-</components>
+   <bean id="constructorPrimitiveBoolean" class="org.osgi.test.cases.blueprint.components.injection.PrimitiveBooleanInjection">
+       <constructor-arg><value>yes</value></argument>
+   </bean>
+   <bean id="constructorWrapperedBoolean" class="org.osgi.test.cases.blueprint.components.injection.WrapperedBooleanInjection">
+       <argument value="false"/>
+   </bean>
+   <bean id="constructorPrimitiveByte" class="org.osgi.test.cases.blueprint.components.injection.PrimitiveByteInjection">
+       <argument value="123"/>
+   </bean>
+   <bean id="constructorWrapperedByte" class="org.osgi.test.cases.blueprint.components.injection.WrapperedByteInjection">
+       <argument value="100"/>
+   </bean>
+   <bean id="constructorPrimitiveDouble" class="org.osgi.test.cases.blueprint.components.injection.PrimitiveDoubleInjection">
+       <argument value="1.1"/>
+   </bean>
+   <bean id="constructorWrapperedDouble" class="org.osgi.test.cases.blueprint.components.injection.WrapperedDoubleInjection">
+       <argument value="1.2"/>
+   </bean>
+   <bean id="constructorPrimitiveFloat" class="org.osgi.test.cases.blueprint.components.injection.PrimitiveFloatInjection">
+       <argument value="1.3"/>
+   </bean>
+   <bean id="constructorWrapperedFloat" class="org.osgi.test.cases.blueprint.components.injection.WrapperedFloatInjection">
+       <argument value="1.4"/>
+   </bean>
+   <bean id="constructorPrimitiveInteger" class="org.osgi.test.cases.blueprint.components.injection.PrimitiveIntegerInjection">
+       <argument value="12"/>
+   </bean>
+   <bean id="constructorWrapperedInteger" class="org.osgi.test.cases.blueprint.components.injection.WrapperedIntegerInjection">
+       <argument value="13"/>
+   </bean>
+   <bean id="constructorPrimitiveCharacter" class="org.osgi.test.cases.blueprint.components.injection.PrimitiveCharacterInjection">
+       <argument value="a" />
+   </bean>
+   <bean id="constructorWrapperedCharacter" class="org.osgi.test.cases.blueprint.components.injection.WrapperedCharacterInjection">
+       <argument value="b"/>
+   </bean>
+   <bean id="constructorPrimitiveShort" class="org.osgi.test.cases.blueprint.components.injection.PrimitiveShortInjection">
+       <argument value="15"/>
+   </bean>
+   <bean id="constructorWrapperedShort" class="org.osgi.test.cases.blueprint.components.injection.WrapperedShortInjection">
+       <argument value="16"/>
+   </bean>
+   <bean id="constructorPrimitiveLong" class="org.osgi.test.cases.blueprint.components.injection.PrimitiveLongInjection">
+       <argument value="17"/>
+   </bean>
+   <bean id="constructorWrapperedLong" class="org.osgi.test.cases.blueprint.components.injection.WrapperedLongInjection">
+       <argument value="18"/>
+   </bean>
+</blueprint>
 

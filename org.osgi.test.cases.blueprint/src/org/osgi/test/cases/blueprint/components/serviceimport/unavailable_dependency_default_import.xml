@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd"
     default-availability="optional" default-timeout="1000">
@@ -8,9 +8,9 @@
         This checks an unavailable dependency, with defaults specified.
     </description>
 
-    <component id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceOneListener">
-        <constructor-arg value="ServiceOneListener"/>
-    </component>
+    <bean id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceOneListener">
+        <argument value="ServiceOneListener"/>
+    </bean>
 
 
     <!-- single shared instance of the imported service.  The original backing service will not exist, but is optional. -->
@@ -19,12 +19,12 @@
     </reference>
 
     <!-- This gets both a ServiceManager and a reference collection injected -->
-   <component id="UnavailableDependencyChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.UnavailableDependencyChecker" init-method="init">
-       <constructor-arg value="UnavailableDependencyChecker"/>
+   <bean id="UnavailableDependencyChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.UnavailableDependencyChecker" init-method="init">
+       <argument value="UnavailableDependencyChecker"/>
        <property name="one" ref="ServiceOne"/>
        <property name="serviceManager">
            <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
        </property>
-   </component>
-</components>
+   </bean>
+</blueprint>
 

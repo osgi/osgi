@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
-    <component id="compFactory" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionInstanceFactory">
+    <bean id="compFactory" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionInstanceFactory">
       <!-- collaborators and configuration for this component go here -->
-    </component>
+    </bean>
 
-    <component id="compEmptyMap" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compEmptyMap" factory-method="makeInstance" factory-component="compFactory">
         <constructor-arg>
             <map></map>
-        </constructor-arg>
-    </component>
+        </argument>
+    </bean>
 
-    <component id="compNullMap" factory-method="makeInstance" factory-component="compFactory">
-        <constructor-arg type="java.util.Map">
+    <bean id="compNullMap" factory-method="makeInstance" factory-component="compFactory">
+        <argument type="java.util.Map">
             <null/>
-        </constructor-arg>
-    </component>
+        </argument>
+    </bean>
 
-    <component id="compStringItems" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compStringItems" factory-method="makeInstance" factory-component="compFactory">
         <constructor-arg>
             <map>
                 <entry key="abc" value="1"/>
                 <entry key="def" value="2"/>
             </map>
-        </constructor-arg>
-    </component>
+        </argument>
+    </bean>
 
-    <component id="compDupItems" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compDupItems" factory-method="makeInstance" factory-component="compFactory">
         <constructor-arg>
             <map>
                 <entry key="abc" value="1"/>
                 <entry key="abc" value="2"/>
             </map>
-        </constructor-arg>
-    </component>
+        </argument>
+    </bean>
 
-    <component id="compBooleanItems" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compBooleanItems" factory-method="makeInstance" factory-component="compFactory">
         <constructor-arg>
             <map>
                 <entry key="true">
@@ -47,10 +47,10 @@
                     <value type="java.lang.Boolean">false</value>
                 </entry>
             </map>
-        </constructor-arg>
-    </component>
+        </argument>
+    </bean>
 
-    <component id="compBooleanKeys" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compBooleanKeys" factory-method="makeInstance" factory-component="compFactory">
         <constructor-arg>
             <map>
                 <entry>
@@ -62,10 +62,10 @@
                     <value>false</value>
                 </entry>
             </map>
-        </constructor-arg>
-    </component>
+        </argument>
+    </bean>
 
-    <component id="compTypedItems" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compTypedItems" factory-method="makeInstance" factory-component="compFactory">
         <constructor-arg>
             <map value-type="java.lang.Boolean">
                 <entry key="true" value="true">
@@ -77,10 +77,10 @@
                     <value type="java.lang.Double">1.0</value>
                 </entry>
             </map>
-        </constructor-arg>
-    </component>
+        </argument>
+    </bean>
 
-    <component id="compTypedKeys" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compTypedKeys" factory-method="makeInstance" factory-component="compFactory">
         <constructor-arg>
             <map key-type="java.lang.Boolean">
                 <entry key="true" value="true"/>
@@ -92,10 +92,10 @@
                     <value>double</value>
                 </entry>
             </map>
-        </constructor-arg>
-    </component>
+        </argument>
+    </bean>
 
-    <component id="compMixedItems" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compMixedItems" factory-method="makeInstance" factory-component="compFactory">
         <constructor-arg>
             <map>
                 <entry key="String">
@@ -138,10 +138,10 @@
                     <null/>
                 </entry>
             </map>
-        </constructor-arg>
-    </component>
+        </argument>
+    </bean>
 
-    <component id="compNestedMap" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compNestedMap" factory-method="makeInstance" factory-component="compFactory">
         <constructor-arg>
             <map>
                 <entry>
@@ -152,10 +152,10 @@
                     </map>
                 </entry>
             </map>
-        </constructor-arg>
-    </component>
+        </argument>
+    </bean>
 
-    <component id="compNestedSet" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compNestedSet" factory-method="makeInstance" factory-component="compFactory">
         <constructor-arg>
             <map>
                 <entry>
@@ -166,10 +166,10 @@
                     </set>
                 </entry>
             </map>
-        </constructor-arg>
-    </component>
+        </argument>
+    </bean>
 
-    <component id="compNestedList" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compNestedList" factory-method="makeInstance" factory-component="compFactory">
         <constructor-arg>
             <map>
                 <entry>
@@ -180,10 +180,10 @@
                     </list>
                 </entry>
             </map>
-        </constructor-arg>
-    </component>
+        </argument>
+    </bean>
 
-    <component id="compNestedProps" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compNestedProps" factory-method="makeInstance" factory-component="compFactory">
         <constructor-arg>
             <map>
                 <entry>
@@ -194,7 +194,7 @@
                     </props>
                 </entry>
             </map>
-        </constructor-arg>
-    </component>
-</components>
+        </argument>
+    </bean>
+</blueprint>
 

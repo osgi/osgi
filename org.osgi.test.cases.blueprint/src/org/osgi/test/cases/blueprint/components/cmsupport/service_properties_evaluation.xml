@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:osgix="http://www.osgi.org/xmlns/blueprint-compendium/v1.0.0"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
@@ -10,9 +10,9 @@
     <!-- publish one -->
     <osgix:property-placeholder persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config1" />
 
-    <component id="compGoodService" class="org.osgi.test.cases.blueprint.services.TestGoodService">
-        <constructor-arg value="compGoodService"/>
-    </component>
+    <bean id="compGoodService" class="org.osgi.test.cases.blueprint.services.TestGoodService">
+        <argument value="compGoodService"/>
+    </bean>
 
     <service id="srvGoodService" ref="compGoodService" interface="org.osgi.test.cases.blueprint.services.TestGoodService">
         <service-properties>
@@ -21,9 +21,9 @@
     </service>
 
     <!-- publish all the properties -->
-    <component id="compGoodServiceSubclass" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
-        <constructor-arg value="compGoodServiceSubclass"/>
-    </component>
+    <bean id="compGoodServiceSubclass" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
+        <argument value="compGoodServiceSubclass"/>
+    </bean>
 
     <service id="srvGoodServiceSubclass" ref="compGoodServiceSubclass" interface="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
         <service-properties>
@@ -32,4 +32,4 @@
     </service>
 
 
-</components>
+</blueprint>

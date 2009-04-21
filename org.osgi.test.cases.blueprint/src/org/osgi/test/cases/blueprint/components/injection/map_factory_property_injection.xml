@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
-    <component id="compFactory" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionInstanceFactory">
+    <bean id="compFactory" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionInstanceFactory">
       <!-- collaborators and configuration for this component go here -->
-    </component>
+    </bean>
 
-    <component id="compEmptyMap" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compEmptyMap" factory-method="makeInstance" factory-component="compFactory">
         <property name="map">
             <map></map>
         </property>
-    </component>
+    </bean>
 
-    <component id="compNullMap" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compNullMap" factory-method="makeInstance" factory-component="compFactory">
         <property name="map">
             <null/>
         </property>
-    </component>
+    </bean>
 
-    <component id="compStringItems" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compStringItems" factory-method="makeInstance" factory-component="compFactory">
         <property name="map">
             <map>
                 <entry key="abc" value="1"/>
                 <entry key="def" value="2"/>
             </map>
         </property>
-    </component>
+    </bean>
 
-    <component id="compDupItems" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compDupItems" factory-method="makeInstance" factory-component="compFactory">
         <property name="map">
             <map>
                 <entry key="abc" value="1"/>
                 <entry key="abc" value="2"/>
             </map>
         </property>
-    </component>
+    </bean>
 
-    <component id="compBooleanItems" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compBooleanItems" factory-method="makeInstance" factory-component="compFactory">
         <property name="map">
             <map>
                 <entry key="true">
@@ -48,9 +48,9 @@
                 </entry>
             </map>
         </property>
-    </component>
+    </bean>
 
-    <component id="compBooleanKeys" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compBooleanKeys" factory-method="makeInstance" factory-component="compFactory">
         <property name="map">
             <map>
                 <entry>
@@ -63,9 +63,9 @@
                 </entry>
             </map>
         </property>
-    </component>
+    </bean>
 
-    <component id="compTypedItems" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compTypedItems" factory-method="makeInstance" factory-component="compFactory">
         <property name="map">
             <map value-type="java.lang.Boolean">
                 <entry key="true" value="true">
@@ -78,9 +78,9 @@
                 </entry>
             </map>
         </property>
-    </component>
+    </bean>
 
-    <component id="compTypedKeys" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compTypedKeys" factory-method="makeInstance" factory-component="compFactory">
         <property name="map">
             <map key-type="java.lang.Boolean">
                 <entry key="true" value="true"/>
@@ -93,9 +93,9 @@
                 </entry>
             </map>
         </property>
-    </component>
+    </bean>
 
-    <component id="compMixedItems" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compMixedItems" factory-method="makeInstance" factory-component="compFactory">
         <property name="map">
             <map>
                 <entry key="String">
@@ -139,9 +139,9 @@
                 </entry>
         	</map>
         </property>
-    </component>
+    </bean>
 
-    <component id="compNestedMap" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compNestedMap" factory-method="makeInstance" factory-component="compFactory">
         <property name="map">
             <map>
                 <entry>
@@ -153,9 +153,9 @@
                 </entry>
             </map>
         </property>
-    </component>
+    </bean>
 
-    <component id="compNestedSet" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compNestedSet" factory-method="makeInstance" factory-component="compFactory">
         <property name="map">
             <map>
                 <entry>
@@ -167,9 +167,9 @@
                 </entry>
             </map>
         </property>
-    </component>
+    </bean>
 
-    <component id="compNestedList" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compNestedList" factory-method="makeInstance" factory-component="compFactory">
         <property name="map">
             <map>
                 <entry>
@@ -181,9 +181,9 @@
                 </entry>
             </map>
         </property>
-    </component>
+    </bean>
 
-    <component id="compNestedProps" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compNestedProps" factory-method="makeInstance" factory-component="compFactory">
         <property name="map">
             <map>
                 <entry>
@@ -195,7 +195,7 @@
                 </entry>
             </map>
         </property>
-    </component>
-</components>
+    </bean>
+</blueprint>
 
 

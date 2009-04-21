@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
@@ -8,8 +8,8 @@
     </description>
 
     <!-- This is the same, but using an inverted comparison. -->
-    <component id="InvertedComparatorChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.ReferenceCollectionSortChecker" init-method="init">
-        <constructor-arg value="InvertedComparatorChecker"/>
+    <bean id="InvertedComparatorChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.ReferenceCollectionSortChecker" init-method="init">
+        <argument value="InvertedComparatorChecker"/>
         <property name="serviceManager">
             <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
         </property>
@@ -17,7 +17,7 @@
         <property name="set">
             <ref-set interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
                 <comparator>
-                    <component class="org.osgi.test.cases.blueprint.components.serviceimport.InverseNameComparator"/>
+                    <bean class="org.osgi.test.cases.blueprint.components.serviceimport.InverseNameComparator"/>
                 </comparator>
             </ref-set>
         </property>
@@ -30,6 +30,6 @@
                 <value>ServiceOneA</value>
             </list>
         </property>
-    </component>
-</components>
+    </bean>
+</blueprint>
 

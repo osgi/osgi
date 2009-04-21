@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd"
     default-init-method="init" default-destroy-method="destroy">
@@ -12,14 +12,14 @@
    <!-- this is a "shotgun" export, which is handy for checking conflicts. -->
    <service id="BadServiceService" auto-export="all-classes" ranking="2">
        <!-- the node this service export maps into. -->
-      <component class="org.osgi.test.cases.blueprint.services.TestBad">
-          <constructor-arg value="ServiceOne"/>
-      </component>
+      <bean class="org.osgi.test.cases.blueprint.services.TestBad">
+          <argument value="ServiceOne"/>
+      </bean>
       <!-- some service properties for filter tests. -->
       <service-properties>
           <entry key="serviceType" value="Bad"/>
           <entry key="autoExport" value="All"/>
       </service-properties>
    </service>
-</components>
+</blueprint>
 

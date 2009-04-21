@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
@@ -10,36 +10,36 @@
     </description>
 
     <!-- define a series of components for service export -->
-    <component id="ServiceOneA" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
-        <constructor-arg value="ServiceOneA"/>
-        <constructor-arg value="4"/>
-    </component>
+    <bean id="ServiceOneA" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
+        <argument value="ServiceOneA"/>
+        <argument value="4"/>
+    </bean>
 
-    <component id="ServiceOneB" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
-        <constructor-arg value="ServiceOneB"/>
-        <constructor-arg value="-1"/>
-    </component>
+    <bean id="ServiceOneB" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
+        <argument value="ServiceOneB"/>
+        <argument value="-1"/>
+    </bean>
 
-    <component id="ServiceOneC" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
-        <constructor-arg value="ServiceOneC"/>
-        <constructor-arg value="0"/>
-    </component>
+    <bean id="ServiceOneC" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
+        <argument value="ServiceOneC"/>
+        <argument value="0"/>
+    </bean>
 
-    <component id="ServiceOneD" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
-        <constructor-arg value="ServiceOneD"/>
-        <constructor-arg value="100"/>
-    </component>
+    <bean id="ServiceOneD" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
+        <argument value="ServiceOneD"/>
+        <argument value="100"/>
+    </bean>
 
-    <component id="ServiceOneE" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
-        <constructor-arg value="ServiceOneE"/>
-        <constructor-arg value="42"/>
-    </component>
+    <bean id="ServiceOneE" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
+        <argument value="ServiceOneE"/>
+        <argument value="42"/>
+    </bean>
 
-    <component id="ServiceManager" class="org.osgi.test.cases.blueprint.services.ServiceManager">
-        <constructor-arg ref="bundleContext"/>
+    <bean id="ServiceManager" class="org.osgi.test.cases.blueprint.services.ServiceManager">
+        <argument ref="bundleContext"/>
         <constructor-arg>
             <list>
-                <component class="org.osgi.test.cases.blueprint.services.ManagedService">
+                <bean class="org.osgi.test.cases.blueprint.services.ManagedService">
                     <property name="bundleContext" ref="bundleContext"/>
                     <property name="name">
                         <idref component="ServiceOneD"/>
@@ -52,8 +52,8 @@
                     </property>
                     <property name="start" value="true"/>
                     <property name="ranking" value="1"/>
-                </component>
-                <component class="org.osgi.test.cases.blueprint.services.ManagedService">
+                </bean>
+                <bean class="org.osgi.test.cases.blueprint.services.ManagedService">
                     <property name="bundleContext" ref="bundleContext"/>
                     <property name="name">
                         <idref component="ServiceOneB"/>
@@ -66,8 +66,8 @@
                     </property>
                     <property name="start" value="true"/>
                     <property name="ranking" value="3"/>
-                </component>
-                <component class="org.osgi.test.cases.blueprint.services.ManagedService">
+                </bean>
+                <bean class="org.osgi.test.cases.blueprint.services.ManagedService">
                     <property name="bundleContext" ref="bundleContext"/>
                     <property name="name">
                         <idref component="ServiceOneA"/>
@@ -80,8 +80,8 @@
                     </property>
                     <property name="start" value="true"/>
                     <property name="ranking" value="4"/>
-                </component>
-                <component class="org.osgi.test.cases.blueprint.services.ManagedService">
+                </bean>
+                <bean class="org.osgi.test.cases.blueprint.services.ManagedService">
                     <property name="bundleContext" ref="bundleContext"/>
                     <property name="name">
                         <idref component="ServiceOneE"/>
@@ -94,8 +94,8 @@
                     </property>
                     <property name="start" value="true"/>
                     <property name="ranking" value="0"/>
-                </component>
-                <component class="org.osgi.test.cases.blueprint.services.ManagedService">
+                </bean>
+                <bean class="org.osgi.test.cases.blueprint.services.ManagedService">
                     <property name="bundleContext" ref="bundleContext"/>
                     <property name="name">
                         <idref component="ServiceOneC"/>
@@ -108,14 +108,14 @@
                     </property>
                     <property name="start" value="true"/>
                     <property name="ranking" value="2"/>
-                </component>
+                </bean>
             </list>
-        </constructor-arg>
-    </component>
+        </argument>
+    </bean>
 
    <!-- simple the service manager service when finished.  Note that the ServiceManager component
         might register services for this bundle before it is registered itself.  For cross-bundle dependency
         purposes, we're depending on this                                                                     -->
    <service id="ServiceManagerService" ref="ServiceManager" interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
-</components>
+</blueprint>
 

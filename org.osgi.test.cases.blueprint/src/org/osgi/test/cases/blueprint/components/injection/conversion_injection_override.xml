@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
@@ -8,14 +8,14 @@
     </description>
 
 	<type-converters>
-		<component id="customBooleanConverter" class="org.osgi.test.cases.blueprint.components.injection.CustomBooleanConverter"/>
+		<bean id="customBooleanConverter" class="org.osgi.test.cases.blueprint.components.injection.CustomBooleanConverter"/>
 	</type-converters>
 
-    <component id="ConversionInjection" class="org.osgi.test.cases.blueprint.components.injection.ConversionServiceComponent">
-		<constructor-arg value="ConversionInjection"/>
-		<constructor-arg ref="conversionService"/>
+    <bean id="ConversionInjection" class="org.osgi.test.cases.blueprint.components.injection.ConversionServiceComponent">
+		<argument value="ConversionInjection"/>
+		<argument ref="conversionService"/>
         <!-- this will be converted using the converter service -->
         <property name="conversion" value="T"/>
-	</component>
-</components>
+	</bean>
+</blueprint>
 

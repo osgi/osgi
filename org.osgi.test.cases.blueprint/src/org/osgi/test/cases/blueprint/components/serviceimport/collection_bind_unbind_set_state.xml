@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
@@ -8,8 +8,8 @@
     </description>
 
     <!-- This gets both a ServiceManager and a reference collection injected -->
-   <component id="BindUnbindSetChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.BindUnbindSetChecker" init-method="init">
-       <constructor-arg value="BindUnbindSetChecker"/>
+   <bean id="BindUnbindSetChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.BindUnbindSetChecker" init-method="init">
+       <argument value="BindUnbindSetChecker"/>
        <property name="serviceManager">
            <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
        </property>
@@ -18,6 +18,6 @@
                <listener bind-method="bind" unbind-method="unbind" ref="BindUnbindSetChecker"/>
            </ref-set>
        </property>
-   </component>
-</components>
+   </bean>
+</blueprint>
 

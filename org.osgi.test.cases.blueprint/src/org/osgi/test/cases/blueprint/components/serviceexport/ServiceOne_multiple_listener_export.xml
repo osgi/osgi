@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
@@ -8,17 +8,17 @@
     </description>
 
     <!-- the node this service export maps into. -->
-   <component id="ServiceOne" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
-       <constructor-arg value="ServiceOne"/>
-   </component>
+   <bean id="ServiceOne" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
+       <argument value="ServiceOne"/>
+   </bean>
 
-   <component id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceexport.ServiceOneRegistrationListener">
-       <constructor-arg value="ServiceOneListener"/>
-   </component>
+   <bean id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceexport.ServiceOneRegistrationListener">
+       <argument value="ServiceOneListener"/>
+   </bean>
 
-   <component id="ServiceTwoListener" class="org.osgi.test.cases.blueprint.components.serviceexport.ServiceTwoRegistrationListener">
-       <constructor-arg value="ServiceTwoListener"/>
-   </component>
+   <bean id="ServiceTwoListener" class="org.osgi.test.cases.blueprint.components.serviceexport.ServiceTwoRegistrationListener">
+       <argument value="ServiceTwoListener"/>
+   </bean>
 
    <!-- simple export using a reference and just one interface. -->
    <service id="ServiceOneService" ref="ServiceOne">
@@ -36,5 +36,5 @@
            registration-method="register"
            unregistration-method="unregister"/>
    </service>
-</components>
+</blueprint>
 

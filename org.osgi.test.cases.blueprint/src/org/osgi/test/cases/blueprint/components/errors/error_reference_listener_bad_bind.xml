@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
@@ -7,9 +7,9 @@
         This imports a service reference with an attached listener.
     </description>
 
-    <component id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceOneListener">
-        <constructor-arg value="ServiceOneListener"/>
-    </component>
+    <bean id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceOneListener">
+        <argument value="ServiceOneListener"/>
+    </bean>
 
 
     <!-- single shared instance of the imported service -->
@@ -17,9 +17,9 @@
         <listener bind-method="badBind" unbind-method="unbind" ref="ServiceOneListener"/>
     </reference>
 
-   <component id="ServiceOneProperty" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceChecker">
-       <constructor-arg value="ServiceOneProperty"/>
+   <bean id="ServiceOneProperty" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceChecker">
+       <argument value="ServiceOneProperty"/>
        <property name="one" ref="ServiceOne"/>
-   </component>
-</components>
+   </bean>
+</blueprint>
 

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
     <!-- This is is a good component that will executed the destroy() correctly.  Since the other component that will
          throw the exception has this as a dependency, this destroy() method will run after the other destroy method, thus
          demonstrating that things proceed after the error -->
-    <component id="GoodDestroy" class="org.osgi.test.cases.blueprint.components.comp1.SimpleTestComponent" destroy-method="destroy">
-        <constructor-arg value="GoodDestroy"/>
-    </component>
+    <bean id="GoodDestroy" class="org.osgi.test.cases.blueprint.components.comp1.SimpleTestComponent" destroy-method="destroy">
+        <argument value="GoodDestroy"/>
+    </bean>
 
-   <component id="DestroyException" class="org.osgi.test.cases.blueprint.components.errors.DestroyMethodException" destroy-method="destroy" depends-on="GoodDestroy">
-       <constructor-arg value="DestroyException"/>
-   </component>
-</components>
+   <bean id="DestroyException" class="org.osgi.test.cases.blueprint.components.errors.DestroyMethodException" destroy-method="destroy" depends-on="GoodDestroy">
+       <argument value="DestroyException"/>
+   </bean>
+</blueprint>
 

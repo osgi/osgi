@@ -1,165 +1,165 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
 
 <!-- String -->
-	<component id="compInnerStringTyped" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerStringTyped" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
 				<property name="string"><value type="java.lang.String">ABC</value></property>
-			</component>
+			</bean>
 		</property>
-	</component>
-	
-	<component id="compInnerString" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	</bean>
+
+	<bean id="compInnerString" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
 				<property name="string" value="XYZ"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
 <!-- Boolean -->
-	<component id="compInnerPrimitiveBoolean" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerPrimitiveBoolean" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
        			<property name="primBoolean" value="true"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
-	<component id="compInnerWrapperedBoolean" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerWrapperedBoolean" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
        			<property name="boolean" value="false"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
 <!-- Byte -->
-	<component id="compInnerPrimitiveByte" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerPrimitiveByte" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
        			<property name="primByte" value="-128"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
-	<component id="compInnerWrapperedByte" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerWrapperedByte" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
        			<property name="byte" value="127"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
 <!-- Double -->
-	<component id="compInnerPrimitiveDouble" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerPrimitiveDouble" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
        			<property name="primDouble" value="4.9e-324"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
-	<component id="compInnerWrapperedDouble" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerWrapperedDouble" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
        			<property name="double" value="1.7976931348623157E308"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
 <!-- Float -->
-	<component id="compInnerPrimitiveFloat" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerPrimitiveFloat" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
        			<property name="primFloat" value="1.4E-45"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
-	<component id="compInnerWrapperedFloat" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerWrapperedFloat" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
        			<property name="float" value="3.4028235E38"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
 <!-- Integer -->
-	<component id="compInnerPrimitiveInteger" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerPrimitiveInteger" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
        			<property name="primInteger" value="-2147483648"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
-	<component id="compInnerWrapperedInteger" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerWrapperedInteger" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
        			<property name="integer" value="2147483647"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
 
 <!-- Character -->
-	<component id="compInnerPrimitiveCharacter" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerPrimitiveCharacter" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
        			<property name="primCharacter" value="a"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
-	<component id="compInnerWrapperedCharacter" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerWrapperedCharacter" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
        			<property name="character" value="A"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
 <!-- Short -->
-	<component id="compInnerPrimitiveShort" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerPrimitiveShort" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
        			<property name="primShort" value="-32768"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
-	<component id="compInnerWrapperedShort" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerWrapperedShort" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
        			<property name="short" value="32767"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
 
 <!-- Long -->
-	<component id="compInnerPrimitiveLong" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerPrimitiveLong" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
        			<property name="primLong" value="-9223372036854775808"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
-	<component id="compInnerWrapperedLong" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
+	<bean id="compInnerWrapperedLong" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<property name="innerComponent">
-			<component factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
        			<property name="long" value="9223372036854775807"/>
-			</component>
+			</bean>
 		</property>
-	</component>
+	</bean>
 
 
 
 
-</components>
+</blueprint>

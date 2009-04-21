@@ -1,61 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
-	<component id="compInnerNull" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-		<constructor-arg value="compInnerNull"/>
-		<constructor-arg><null/></constructor-arg>
-	</component>
+	<bean id="compInnerNull" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+		<argument value="compInnerNull"/>
+		<constructor-arg><null/></argument>
+	</bean>
 
-    <component id="compInnerOne" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-		<constructor-arg value="compInnerOne"/>
+    <bean id="compInnerOne" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+		<argument value="compInnerOne"/>
 		<constructor-arg>
-			<component class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-				<constructor-arg value="compInnerOne_1"/>
-			</component>
-		</constructor-arg>
-	</component>
+			<bean class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+				<argument value="compInnerOne_1"/>
+			</bean>
+		</argument>
+	</bean>
 
-    <component id="compInnerLazyOuter" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection" lazy-init="true">
-		<constructor-arg value="compInnerLazyOuter"/>
+    <bean id="compInnerLazyOuter" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection" lazy-init="true">
+		<argument value="compInnerLazyOuter"/>
 		<constructor-arg>
-			<component class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-				<constructor-arg value="compInnerLazyOuter_1"/>
-			</component>
-		</constructor-arg>
-	</component>
+			<bean class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+				<argument value="compInnerLazyOuter_1"/>
+			</bean>
+		</argument>
+	</bean>
 
-    <component id="compInnerTwo" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-		<constructor-arg value="compInnerTwo"/>
+    <bean id="compInnerTwo" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+		<argument value="compInnerTwo"/>
 		<constructor-arg>
-			<component class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-				<constructor-arg value="compInnerTwo_1"/>
-			</component>
-		</constructor-arg>
+			<bean class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+				<argument value="compInnerTwo_1"/>
+			</bean>
+		</argument>
 		<constructor-arg>
-			<component class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-				<constructor-arg value="compInnerTwo_2"/>
-			</component>
-		</constructor-arg>
-	</component>
+			<bean class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+				<argument value="compInnerTwo_2"/>
+			</bean>
+		</argument>
+	</bean>
 
 <!-- ignores -->
-    <component id="compInnerIgnoreID" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-		<constructor-arg value="compInnerIgnoreID"/>
+    <bean id="compInnerIgnoreID" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+		<argument value="compInnerIgnoreID"/>
 		<constructor-arg>
-			<component id="compInnerIgnoreID_1" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-			</component>
-		</constructor-arg>
-	</component>
+			<bean id="compInnerIgnoreID_1" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+			</bean>
+		</argument>
+	</bean>
 
-    <component id="compInnerIgnoreScope" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-		<constructor-arg value="compInnerIgnoreScope"/>
+    <bean id="compInnerIgnoreScope" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+		<argument value="compInnerIgnoreScope"/>
 		<constructor-arg>
-			<component scope="singleton" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-			</component>
-		</constructor-arg>
-	</component>
+			<bean scope="singleton" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+			</bean>
+		</argument>
+	</bean>
 
 
-</components>
+</blueprint>

@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
 	<!-- Injection of an empty array -->
-	<component id="compEmptyArray"
+	<bean id="compEmptyArray"
 		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="objectArray">
 			<array value-type="java.lang.Object"></array>
 		</property>
-	</component>
+	</bean>
 
 	<!-- Injection of a null array -->
-	<component id="compNullArray"
+	<bean id="compNullArray"
 		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="nullArray">
 			<array value-type="java.lang.Object">
 				<null />
 			</array>
 		</property>
-	</component>
+	</bean>
 
 	<!-- Injection of a String array -->
-	<component id="compStringArray"
+	<bean id="compStringArray"
 		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="stringArray">
 			<array value-type="java.lang.String">
@@ -30,10 +30,10 @@
 				<value>def</value>
 			</array>
 		</property>
-	</component>
+	</bean>
 
 	<!-- Injection of a primitive int array -->
-	<component id="compPrimIntArray"
+	<bean id="compPrimIntArray"
 		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="primIntArray">
 			<array value-type="int">
@@ -41,10 +41,10 @@
 				<value>2</value>
 			</array>
 		</property>
-	</component>
+	</bean>
 
 	<!-- Injection of a wrapped int array -->
-	<component id="compWrappedIntArray"
+	<bean id="compWrappedIntArray"
 		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="wrappedIntArray">
 			<array value-type="java.lang.Integer">
@@ -52,10 +52,10 @@
 				<value>2</value>
 			</array>
 		</property>
-	</component>
+	</bean>
 
 	<!-- Injection of a primitive boolean array -->
-	<component id="compPrimBoolArray"
+	<bean id="compPrimBoolArray"
 		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="primBoolArray">
 			<array value-type="boolean">
@@ -63,10 +63,10 @@
 				<value>false</value>
 			</array>
 		</property>
-	</component>
+	</bean>
 
 	<!-- Injection of a wrapped boolean array -->
-	<component id="compWrappedBooleanArray"
+	<bean id="compWrappedBooleanArray"
 		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="wrappedBooleanArray">
 			<array value-type="java.lang.Boolean">
@@ -74,10 +74,10 @@
 				<value type="java.lang.Boolean">false</value>
 			</array>
 		</property>
-	</component>
+	</bean>
 
 	<!-- Injection of a primitive byte items -->
-	<component id="compPrimByteArray"
+	<bean id="compPrimByteArray"
 		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="primByteArray">
 			<array value-type="byte">
@@ -85,10 +85,10 @@
 				<value>2</value>
 			</array>
 		</property>
-	</component>
+	</bean>
 
 	<!-- Injection of a wrapped byte array -->
-	<component id="compWrappedByteArray"
+	<bean id="compWrappedByteArray"
 		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="wrappedByteArray">
 			<array value-type="java.lang.Byte">
@@ -96,10 +96,10 @@
 				<value>2</value>
 			</array>
 		</property>
-	</component>
+	</bean>
 
 	<!-- Injection of a primitive char array -->
-	<component id="compPrimCharArray"
+	<bean id="compPrimCharArray"
 		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="primCharArray">
 			<array value-type="char">
@@ -107,10 +107,10 @@
 				<value>b</value>
 			</array>
 		</property>
-	</component>
+	</bean>
 
 	<!-- Injection of a wrapped char array -->
-	<component id="compWrappedCharArray"
+	<bean id="compWrappedCharArray"
 		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="wrappedCharArray">
 			<array value-type="java.lang.Character">
@@ -118,10 +118,10 @@
 				<value>b</value>
 			</array>
 		</property>
-	</component>
+	</bean>
 
 	<!-- Injection of a primitive short array -->
-	<component id="compPrimShortArray"
+	<bean id="compPrimShortArray"
 		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="primShortArray">
 			<array value-type="short">
@@ -129,10 +129,10 @@
 				<value>4</value>
 			</array>
 		</property>
-	</component>
+	</bean>
 
 	<!-- Injection of a wrapped short array -->
-	<component id="compWrappedShortArray"
+	<bean id="compWrappedShortArray"
 		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="wrappedShortArray">
 			<array value-type="java.lang.Short">
@@ -140,10 +140,10 @@
 				<value>4</value>
 			</array>
 		</property>
-	</component>
+	</bean>
 
 	<!-- Injection of a primitive long array -->
-	<component id="compPrimLongArray"
+	<bean id="compPrimLongArray"
 		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="primLongArray">
 			<array value-type="long">
@@ -151,10 +151,10 @@
 				<value>4</value>
 			</array>
 		</property>
-	</component>
+	</bean>
 
 	<!-- Injection of a wrapped long array -->
-	<component id="compWrappedLongArray"
+	<bean id="compWrappedLongArray"
 		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="wrappedLongArray">
 			<array value-type="java.lang.Long">
@@ -162,10 +162,10 @@
 				<value>4</value>
 			</array>
 		</property>
-	</component>
+	</bean>
 
 	<!-- Injection of a primitive double array -->
-	<component id="compPrimDoubleArray"
+	<bean id="compPrimDoubleArray"
 		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="primDoubleArray">
 			<array value-type="double">
@@ -173,10 +173,10 @@
 				<value>4</value>
 			</array>
 		</property>
-	</component>
+	</bean>
 
 	<!-- Injection of a wrapped double array -->
-	<component id="compWrappedDoubleArray"
+	<bean id="compWrappedDoubleArray"
 		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="wrappedDoubleArray">
 			<array value-type="java.lang.Double">
@@ -184,10 +184,10 @@
 				<value>4</value>
 			</array>
 		</property>
-	</component>
+	</bean>
 
 	<!-- Injection of a primitive float array -->
-	<component id="compPrimFloatArray"
+	<bean id="compPrimFloatArray"
 		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="primFloatArray">
 			<array value-type="float">
@@ -195,10 +195,10 @@
 				<value>4</value>
 			</array>
 		</property>
-	</component>
+	</bean>
 
 	<!-- Injection of a wrapped float array -->
-	<component id="compWrappedFloatArray"
+	<bean id="compWrappedFloatArray"
 		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="wrappedFloatArray">
 			<array value-type="java.lang.Float">
@@ -206,10 +206,10 @@
 				<value>4</value>
 			</array>
 		</property>
-	</component>
+	</bean>
 
 	<!-- Injection of a Date array -->
-	<component id="compDateArray"
+	<bean id="compDateArray"
 		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="dateArray">
 			<array value-type="java.util.Date">
@@ -217,10 +217,10 @@
 				<value>2009-2-20</value>
 			</array>
 		</property>
-	</component>
+	</bean>
 
 	<!-- Injection of an URL array -->
-	<component id="compUrlArray"
+	<bean id="compUrlArray"
 		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="urlArray">
 			<array value-type="java.net.URL">
@@ -228,10 +228,10 @@
 				<value>http://www.gmail.com</value>
 			</array>
 		</property>
-	</component>
+	</bean>
 
 	<!-- Injection of a Class array -->
-	<component id="compClassArray"
+	<bean id="compClassArray"
 		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="classArray">
 			<array value-type="java.lang.Class">
@@ -239,10 +239,10 @@
 				<value>java.lang.Boolean</value>
 			</array>
 		</property>
-	</component>
+	</bean>
 
 	<!-- Injection of a Locale array -->
-	<component id="compLocaleArray"
+	<bean id="compLocaleArray"
 		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="localeArray">
 			<array value-type="java.lang.Locale">
@@ -250,10 +250,10 @@
 				<value>zh_CN</value>
 			</array>
 		</property>
-	</component>
+	</bean>
 
 	<!-- Injection of String values from props -->
-	<component id="compNestedProps"
+	<bean id="compNestedProps"
 		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="propsArray">
 			<array value-type="java.util.Properties">
@@ -264,10 +264,10 @@
 				</props>
 			</array>
 		</property>
-	</component>
+	</bean>
 
 	<!-- Injection of String values from map -->
-	<component id="compNestedMap"
+	<bean id="compNestedMap"
 		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="mapArray">
 			<array value-type="java.util.Map">
@@ -277,10 +277,10 @@
 				</map>
 			</array>
 		</property>
-	</component>
+	</bean>
 
 	<!-- Injection of String values from set -->
-	<component id="compNestedSet"
+	<bean id="compNestedSet"
 		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="setArray">
 			<array value-type="java.util.Set">
@@ -290,10 +290,10 @@
 				</set>
 			</array>
 		</property>
-	</component>
+	</bean>
 
 	<!-- Injection of String values from list -->
-	<component id="compNestedList"
+	<bean id="compNestedList"
 		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="listArray">
 			<array value-type="java.util.List">
@@ -303,10 +303,10 @@
 				</list>
 			</array>
 		</property>
-	</component>
+	</bean>
 
 	<!-- Injection of nested array -->
-	<component id="compNestedArray"
+	<bean id="compNestedArray"
 		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="nestedArray">
 			<array value-type="java.lang.Object">
@@ -316,7 +316,7 @@
 				</array>
 			</array>
 		</property>
-	</component>
+	</bean>
 
 	<!-- String values from array -->
 
@@ -326,4 +326,4 @@
 
 	<!-- Array Injection from component -->
 
-</components>
+</blueprint>

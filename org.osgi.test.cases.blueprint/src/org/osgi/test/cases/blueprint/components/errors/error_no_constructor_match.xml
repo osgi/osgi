@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
     <description>
         This will specify 3 constructor args, but there are not 3 args on the constructor.
     </description>
 
-   <component id="comp1" class="org.osgi.test.cases.blueprint.components.comp1.SimpleTestComponent">
-       <constructor-arg value="comp1"/>
-       <constructor-arg value="comp1"/>
-       <constructor-arg value="comp1"/>
-   </component>
-</components>
+   <bean id="comp1" class="org.osgi.test.cases.blueprint.components.comp1.SimpleTestComponent">
+       <argument value="comp1"/>
+       <argument value="comp1"/>
+       <argument value="comp1"/>
+   </bean>
+</blueprint>
 

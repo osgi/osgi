@@ -1,314 +1,314 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
-    <component id="compFactory" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionInstanceFactory">
+    <bean id="compFactory" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionInstanceFactory">
       <!-- collaborators and configuration for this component go here -->
-    </component>
+    </bean>
 
-   <component id="compImplicitString" factory-method="makeInstance" factory-component="compFactory">
+   <bean id="compImplicitString" factory-method="makeInstance" factory-component="compFactory">
        <property name="string" value="ABC"/>
      <!-- just a component name -->
-   </component>
-   <component id="compZeroLengthString1" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compZeroLengthString1" factory-method="makeInstance" factory-component="compFactory">
        <property name="string" value=""/>
-   </component>
-   <component id="compZeroLengthString2" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compZeroLengthString2" factory-method="makeInstance" factory-component="compFactory">
        <property name="string"><value/></property>
-   </component>
-   <component id="compZeroLengthString3" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compZeroLengthString3" factory-method="makeInstance" factory-component="compFactory">
        <property name="string"><value></value></property>
-   </component>
-   <component id="compNullString" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compNullString" factory-method="makeInstance" factory-component="compFactory">
        <property name="string"><null/></property>
-   </component>
+   </bean>
 
-   <component id="compPrimBooleanYes" factory-method="makeInstance" factory-component="compFactory">
+   <bean id="compPrimBooleanYes" factory-method="makeInstance" factory-component="compFactory">
        <property name="primBoolean" value="yes"/>
-   </component>
-   <component id="compPrimBooleanNo" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimBooleanNo" factory-method="makeInstance" factory-component="compFactory">
        <property name="primBoolean">
            <value>no</value>
        </property>
-   </component>
-   <component id="compPrimBooleanTrue" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimBooleanTrue" factory-method="makeInstance" factory-component="compFactory">
        <property name="primBoolean">
            <value type="boolean">true</value>
        </property>
-   </component>
-   <component id="compPrimBooleanFalse" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimBooleanFalse" factory-method="makeInstance" factory-component="compFactory">
        <property name="primBoolean" value="false"/>
-   </component>
-   <component id="compPrimBooleanOn" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimBooleanOn" factory-method="makeInstance" factory-component="compFactory">
        <property name="primBoolean" value="on"/>
-   </component>
-   <component id="compPrimBooleanOff" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimBooleanOff" factory-method="makeInstance" factory-component="compFactory">
        <property name="primBoolean" value="off"/>
-   </component>
-   <component id="compWrapperedBooleanYes" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedBooleanYes" factory-method="makeInstance" factory-component="compFactory">
        <property name="boolean" value="yes"/>
-   </component>
-   <component id="compWrapperedBooleanNo" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedBooleanNo" factory-method="makeInstance" factory-component="compFactory">
        <property name="boolean" value="no"/>
-   </component>
-   <component id="compWrapperedBooleanTrue" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedBooleanTrue" factory-method="makeInstance" factory-component="compFactory">
        <property name="boolean" value="true"/>
-   </component>
-   <component id="compWrapperedBooleanFalse" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedBooleanFalse" factory-method="makeInstance" factory-component="compFactory">
        <property name="boolean" value="false"/>
-   </component>
-   <component id="compWrapperedBooleanOn" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedBooleanOn" factory-method="makeInstance" factory-component="compFactory">
        <property name="boolean" value="on"/>
-   </component>
-   <component id="compWrapperedBooleanOff" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedBooleanOff" factory-method="makeInstance" factory-component="compFactory">
        <property name="boolean" value="off"/>
-   </component>
-   <component id="compWrapperedBooleanNull" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedBooleanNull" factory-method="makeInstance" factory-component="compFactory">
        <property name="boolean"><null/></property>
-   </component>
-   <component id="compPrimByteZero" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimByteZero" factory-method="makeInstance" factory-component="compFactory">
        <property name="primByte" value="0"/>
-   </component>
-   <component id="compPrimByteMax" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimByteMax" factory-method="makeInstance" factory-component="compFactory">
        <property name="primByte" value="127"/>
-   </component>
-   <component id="compPrimByteMin" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimByteMin" factory-method="makeInstance" factory-component="compFactory">
        <property name="primByte" value="-128"/>
-   </component>
-   <component id="compWrapperedByteZero" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedByteZero" factory-method="makeInstance" factory-component="compFactory">
        <property name="byte" value="0"/>
-   </component>
-   <component id="compWrapperedByteMax" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedByteMax" factory-method="makeInstance" factory-component="compFactory">
        <property name="byte" value="127"/>
-   </component>
-   <component id="compWrapperedByteMin" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedByteMin" factory-method="makeInstance" factory-component="compFactory">
        <property name="byte" value="-128"/>
-   </component>
-   <component id="compWrapperedByteNull" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedByteNull" factory-method="makeInstance" factory-component="compFactory">
        <property name="byte"><null/></property>
-   </component>
-   <component id="compPrimDoubleZero" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimDoubleZero" factory-method="makeInstance" factory-component="compFactory">
        <property name="primDouble" value="0"/>
-   </component>
-   <component id="compPrimDoubleMinusZero" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimDoubleMinusZero" factory-method="makeInstance" factory-component="compFactory">
        <property name="primDouble" value="-0.0"/>
-   </component>
-   <component id="compPrimDoubleDSuffix" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimDoubleDSuffix" factory-method="makeInstance" factory-component="compFactory">
        <property name="primDouble" value="1.1D "/>
-   </component>
-   <component id="compPrimDoubledSuffix" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimDoubledSuffix" factory-method="makeInstance" factory-component="compFactory">
        <property name="primDouble" value=" 1.1d"/>
-   </component>
-   <component id="compPrimDoubleFSuffix" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimDoubleFSuffix" factory-method="makeInstance" factory-component="compFactory">
        <property name="primDouble" value=" 1.1F"/>
-   </component>
-   <component id="compPrimDoublefSuffix" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimDoublefSuffix" factory-method="makeInstance" factory-component="compFactory">
        <property name="primDouble" value="1.1e1f"/>
-   </component>
-   <component id="compPrimDoubleMax" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimDoubleMax" factory-method="makeInstance" factory-component="compFactory">
        <property name="primDouble" value="1.7976931348623157E308"/>
-   </component>
-   <component id="compPrimDoubleMin" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimDoubleMin" factory-method="makeInstance" factory-component="compFactory">
        <property name="primDouble" value=" 4.9e-324 "/>
-   </component>
-   <component id="compPrimDoubleNaN" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimDoubleNaN" factory-method="makeInstance" factory-component="compFactory">
        <property name="primDouble" value="NaN"/>
-   </component>
-   <component id="compPrimDoubleInfinity" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimDoubleInfinity" factory-method="makeInstance" factory-component="compFactory">
        <property name="primDouble" value="Infinity"/>
-   </component>
-   <component id="compPrimDoubleNegInfinity" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimDoubleNegInfinity" factory-method="makeInstance" factory-component="compFactory">
        <property name="primDouble" value="-Infinity"/>
-   </component>
-   <component id="compWrapperedDoubleZero" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedDoubleZero" factory-method="makeInstance" factory-component="compFactory">
        <property name="double" value="0"/>
-   </component>
-   <component id="compWrapperedDoubleMinusZero" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedDoubleMinusZero" factory-method="makeInstance" factory-component="compFactory">
        <property name="double" value="-0.0"/>
-   </component>
-   <component id="compWrapperedDoubleDSuffix" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedDoubleDSuffix" factory-method="makeInstance" factory-component="compFactory">
        <property name="double" value="1.1D "/>
-   </component>
-   <component id="compWrapperedDoubledSuffix" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedDoubledSuffix" factory-method="makeInstance" factory-component="compFactory">
        <property name="double" value=" 1.1d"/>
-   </component>
-   <component id="compWrapperedDoubleFSuffix" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedDoubleFSuffix" factory-method="makeInstance" factory-component="compFactory">
        <property name="double" value=" 1.1F"/>
-   </component>
-   <component id="compWrapperedDoublefSuffix" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedDoublefSuffix" factory-method="makeInstance" factory-component="compFactory">
        <property name="double" value="1.1e1f"/>
-   </component>
-   <component id="compWrapperedDoubleMax" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedDoubleMax" factory-method="makeInstance" factory-component="compFactory">
        <property name="double" value="1.7976931348623157E308"/>
-   </component>
-   <component id="compWrapperedDoubleMin" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedDoubleMin" factory-method="makeInstance" factory-component="compFactory">
        <property name="double" value=" 4.9e-324 "/>
-   </component>
-   <component id="compWrapperedDoubleNaN" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedDoubleNaN" factory-method="makeInstance" factory-component="compFactory">
        <property name="double" value="NaN"/>
-   </component>
-   <component id="compWrapperedDoubleInfinity" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedDoubleInfinity" factory-method="makeInstance" factory-component="compFactory">
        <property name="double" value="Infinity"/>
-   </component>
-   <component id="compWrapperedDoubleNegInfinity" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedDoubleNegInfinity" factory-method="makeInstance" factory-component="compFactory">
        <property name="double" value="-Infinity"/>
-   </component>
-   <component id="compWrapperedDoubleNull" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedDoubleNull" factory-method="makeInstance" factory-component="compFactory">
        <property name="double"><null/></property>
-   </component>
-   <component id="compPrimFloatZero" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimFloatZero" factory-method="makeInstance" factory-component="compFactory">
        <property name="primFloat" value="0"/>
-   </component>
-   <component id="compPrimFloatMinusZero" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimFloatMinusZero" factory-method="makeInstance" factory-component="compFactory">
        <property name="primFloat" value="-0.0"/>
-   </component>
-   <component id="compPrimFloatDSuffix" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimFloatDSuffix" factory-method="makeInstance" factory-component="compFactory">
        <property name="primFloat" value="1.1D "/>
-   </component>
-   <component id="compPrimFloatdSuffix" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimFloatdSuffix" factory-method="makeInstance" factory-component="compFactory">
        <property name="primFloat" value=" 1.1d"/>
-   </component>
-   <component id="compPrimFloatFSuffix" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimFloatFSuffix" factory-method="makeInstance" factory-component="compFactory">
        <property name="primFloat" value=" 1.1F"/>
-   </component>
-   <component id="compPrimFloatfSuffix" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimFloatfSuffix" factory-method="makeInstance" factory-component="compFactory">
        <property name="primFloat" value="1.1e1f"/>
-   </component>
-   <component id="compPrimFloatMax" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimFloatMax" factory-method="makeInstance" factory-component="compFactory">
        <property name="primFloat" value="3.4028235E38"/>
-   </component>
-   <component id="compPrimFloatMin" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimFloatMin" factory-method="makeInstance" factory-component="compFactory">
        <property name="primFloat" value=" 1.4E-45 "/>
-   </component>
-   <component id="compPrimFloatNaN" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimFloatNaN" factory-method="makeInstance" factory-component="compFactory">
        <property name="primFloat" value="NaN"/>
-   </component>
-   <component id="compPrimFloatInfinity" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimFloatInfinity" factory-method="makeInstance" factory-component="compFactory">
        <property name="primFloat" value="Infinity"/>
-   </component>
-   <component id="compPrimFloatNegInfinity" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimFloatNegInfinity" factory-method="makeInstance" factory-component="compFactory">
        <property name="primFloat" value="-Infinity"/>
-   </component>
-   <component id="compWrapperedFloatZero" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedFloatZero" factory-method="makeInstance" factory-component="compFactory">
        <property name="float" value="0"/>
-   </component>
-   <component id="compWrapperedFloatMinusZero" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedFloatMinusZero" factory-method="makeInstance" factory-component="compFactory">
        <property name="float" value="-0.0"/>
-   </component>
-   <component id="compWrapperedFloatDSuffix" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedFloatDSuffix" factory-method="makeInstance" factory-component="compFactory">
        <property name="float" value="1.1D "/>
-   </component>
-   <component id="compWrapperedFloatdSuffix" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedFloatdSuffix" factory-method="makeInstance" factory-component="compFactory">
        <property name="float" value=" 1.1d"/>
-   </component>
-   <component id="compWrapperedFloatFSuffix" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedFloatFSuffix" factory-method="makeInstance" factory-component="compFactory">
        <property name="float" value=" 1.1F"/>
-   </component>
-   <component id="compWrapperedFloatfSuffix" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedFloatfSuffix" factory-method="makeInstance" factory-component="compFactory">
        <property name="float" value="1.1e1f"/>
-   </component>
-   <component id="compWrapperedFloatMax" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedFloatMax" factory-method="makeInstance" factory-component="compFactory">
        <property name="float" value="3.4028235E38"/>
-   </component>
-   <component id="compWrapperedFloatMin" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedFloatMin" factory-method="makeInstance" factory-component="compFactory">
        <property name="float" value=" 1.4E-45 "/>
-   </component>
-   <component id="compWrapperedFloatNaN" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedFloatNaN" factory-method="makeInstance" factory-component="compFactory">
        <property name="float" value="NaN"/>
-   </component>
-   <component id="compWrapperedFloatInfinity" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedFloatInfinity" factory-method="makeInstance" factory-component="compFactory">
        <property name="float" value="Infinity"/>
-   </component>
-   <component id="compWrapperedFloatNegInfinity" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedFloatNegInfinity" factory-method="makeInstance" factory-component="compFactory">
        <property name="float" value="-Infinity"/>
-   </component>
-   <component id="compWrapperedFloatNull" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedFloatNull" factory-method="makeInstance" factory-component="compFactory">
        <property name="float"><null/></property>
-   </component>
-   <component id="compPrimIntegerZero" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimIntegerZero" factory-method="makeInstance" factory-component="compFactory">
        <property name="primInteger" value="0"/>
-   </component>
-   <component id="compPrimIntegerMax" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimIntegerMax" factory-method="makeInstance" factory-component="compFactory">
        <property name="primInteger" value="2147483647"/>
-   </component>
-   <component id="compPrimIntegerMin" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimIntegerMin" factory-method="makeInstance" factory-component="compFactory">
        <property name="primInteger" value="-2147483648"/>
-   </component>
-   <component id="compWrapperedIntegerZero" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedIntegerZero" factory-method="makeInstance" factory-component="compFactory">
        <property name="integer" value="0"/>
-   </component>
-   <component id="compWrapperedIntegerMax" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedIntegerMax" factory-method="makeInstance" factory-component="compFactory">
        <property name="integer" value="2147483647"/>
-   </component>
-   <component id="compWrapperedIntegerMin" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedIntegerMin" factory-method="makeInstance" factory-component="compFactory">
        <property name="integer" value="-2147483648"/>
-   </component>
-   <component id="compWrapperedIntegerNull" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedIntegerNull" factory-method="makeInstance" factory-component="compFactory">
        <property name="integer"><null/></property>
-   </component>
-   <component id="compPrimCharacterZero" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimCharacterZero" factory-method="makeInstance" factory-component="compFactory">
        <property name="primCharacter" value="\u0000"/>
-   </component>
-   <component id="compPrimCharacterMax" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimCharacterMax" factory-method="makeInstance" factory-component="compFactory">
        <property name="primCharacter" value="\uffff"/>
-   </component>
-   <component id="compPrimCharacterA" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimCharacterA" factory-method="makeInstance" factory-component="compFactory">
        <property name="primCharacter" value="A"/>
-   </component>
-   <component id="compWrapperedCharacterZero" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedCharacterZero" factory-method="makeInstance" factory-component="compFactory">
        <property name="character" value="\u0000"/>
-   </component>
-   <component id="compWrapperedCharacterMax" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedCharacterMax" factory-method="makeInstance" factory-component="compFactory">
        <property name="character" value="\uffff"/>
-   </component>
-   <component id="compWrapperedCharacterA" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedCharacterA" factory-method="makeInstance" factory-component="compFactory">
        <property name="character" value="A"/>
-   </component>
-   <component id="compWrapperedCharacterNull" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedCharacterNull" factory-method="makeInstance" factory-component="compFactory">
        <property name="character"><null/></property>
-   </component>
-   <component id="compPrimShortZero" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimShortZero" factory-method="makeInstance" factory-component="compFactory">
        <property name="primShort" value="0"/>
-   </component>
-   <component id="compPrimShortMax" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimShortMax" factory-method="makeInstance" factory-component="compFactory">
        <property name="primShort" value="32767"/>
-   </component>
-   <component id="compPrimShortMin" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimShortMin" factory-method="makeInstance" factory-component="compFactory">
        <property name="primShort" value="-32768"/>
-   </component>
-   <component id="compWrapperedShortZero" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedShortZero" factory-method="makeInstance" factory-component="compFactory">
        <property name="short" value="0"/>
-   </component>
-   <component id="compWrapperedShortMax" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedShortMax" factory-method="makeInstance" factory-component="compFactory">
        <property name="short" value="32767"/>
-   </component>
-   <component id="compWrapperedShortMin" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedShortMin" factory-method="makeInstance" factory-component="compFactory">
        <property name="short" value="-32768"/>
-   </component>
-   <component id="compWrapperedShortNull" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedShortNull" factory-method="makeInstance" factory-component="compFactory">
        <property name="short"><null/></property>
-   </component>
-   <component id="compPrimLongZero" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimLongZero" factory-method="makeInstance" factory-component="compFactory">
        <property name="primLong" value="0"/>
-   </component>
-   <component id="compPrimLongMax" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimLongMax" factory-method="makeInstance" factory-component="compFactory">
        <property name="primLong" value="9223372036854775807"/>
-   </component>
-   <component id="compPrimLongMin" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compPrimLongMin" factory-method="makeInstance" factory-component="compFactory">
        <property name="primLong" value="-9223372036854775808"/>
-   </component>
-   <component id="compWrapperedLongZero" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedLongZero" factory-method="makeInstance" factory-component="compFactory">
        <property name="long" value="0"/>
-   </component>
-   <component id="compWrapperedLongMax" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedLongMax" factory-method="makeInstance" factory-component="compFactory">
        <property name="long" value="9223372036854775807"/>
-   </component>
-   <component id="compWrapperedLongMin" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedLongMin" factory-method="makeInstance" factory-component="compFactory">
        <property name="long" value="-9223372036854775808"/>
-   </component>
-   <component id="compWrapperedLongNull" factory-method="makeInstance" factory-component="compFactory">
+   </bean>
+   <bean id="compWrapperedLongNull" factory-method="makeInstance" factory-component="compFactory">
        <property name="long"><null/></property>
-   </component>
-</components>
+   </bean>
+</blueprint>
 

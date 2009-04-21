@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
@@ -7,11 +7,11 @@
         This is a checker for different sorting combinations.
     </description>
 
-    <component id="NameComparator" class="org.osgi.test.cases.blueprint.components.serviceimport.NameComparator"/>
+    <bean id="NameComparator" class="org.osgi.test.cases.blueprint.components.serviceimport.NameComparator"/>
 
     <!-- This gets both a ServiceManager and a reference collection injected -->
-    <component id="ComparatorChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.ReferenceCollectionSortChecker" init-method="init">
-        <constructor-arg value="ComparatorChecker"/>
+    <bean id="ComparatorChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.ReferenceCollectionSortChecker" init-method="init">
+        <argument value="ComparatorChecker"/>
         <property name="serviceManager">
             <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
         </property>
@@ -32,5 +32,5 @@
                 <value>ServiceOneE</value>
             </list>
         </property>
-    </component>
-</components>
+    </bean>
+</blueprint>

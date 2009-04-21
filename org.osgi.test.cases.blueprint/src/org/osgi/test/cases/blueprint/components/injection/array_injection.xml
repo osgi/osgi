@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
-   <component id="compListArgument" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compListArgument" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <constructor-arg>
            <list>
                <value>1234</value>
                <value>5678</value>
            </list>
-       </constructor-arg>
-   </component>
+       </argument>
+   </bean>
 
-   <component id="compSetArgument" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compSetArgument" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <constructor-arg>
            <set>
                <value>1234</value>
            </set>
-       </constructor-arg>
-   </component>
+       </argument>
+   </bean>
 
-   <component id="compNullArrayArgument" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compNullArrayArgument" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <constructor-arg>
            <null/>
-       </constructor-arg>
-   </component>
+       </argument>
+   </bean>
 
-   <component id="compEmptyListArgument" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compEmptyListArgument" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <constructor-arg>
            <list>
            </list>
-       </constructor-arg>
-   </component>
+       </argument>
+   </bean>
 
-   <component id="compEmptySetArgument" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compEmptySetArgument" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <constructor-arg>
            <set>
            </set>
-       </constructor-arg>
-   </component>
+       </argument>
+   </bean>
 
-   <component id="compListPrimBoolean" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compListPrimBoolean" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="primBoolean">
            <list>
                <value>yes</value>
@@ -51,9 +51,9 @@
                <value>off</value>
            </list>
        </property>
-   </component>
+   </bean>
 
-   <component id="compSetPrimBoolean" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compSetPrimBoolean" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="primBoolean">
            <set>
                <value>yes</value>
@@ -61,29 +61,29 @@
                <value>on</value>
            </set>
        </property>
-   </component>
+   </bean>
 
-   <component id="compPrimBooleanNull" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compPrimBooleanNull" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="primBoolean">
            <null/>
        </property>
-   </component>
+   </bean>
 
-   <component id="compPrimBooleanEmptyList" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compPrimBooleanEmptyList" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="primBoolean">
            <list>
            </list>
        </property>
-   </component>
+   </bean>
 
-   <component id="compPrimBooleanEmptySet" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compPrimBooleanEmptySet" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="primBoolean">
            <set>
            </set>
        </property>
-   </component>
+   </bean>
 
-   <component id="compListWrapperedBoolean" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compListWrapperedBoolean" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="boolean">
            <list>
                <value>yes</value>
@@ -94,9 +94,9 @@
                <value>off</value>
            </list>
        </property>
-   </component>
+   </bean>
 
-   <component id="compSetWrapperedBoolean" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compSetWrapperedBoolean" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="boolean">
            <set>
                <value>yes</value>
@@ -104,9 +104,9 @@
                <value>on</value>
            </set>
        </property>
-   </component>
+   </bean>
 
-   <component id="compListPrimByte" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compListPrimByte" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="primByte">
            <list>
                <value>0</value>
@@ -114,17 +114,17 @@
                <value>-128</value>
            </list>
        </property>
-   </component>
+   </bean>
 
-   <component id="compSetPrimByte" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compSetPrimByte" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="primByte">
            <set>
                <value>123</value>
            </set>
        </property>
-   </component>
+   </bean>
 
-   <component id="compListWrapperedByte" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compListWrapperedByte" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="byte">
            <list>
                <value>0</value>
@@ -132,17 +132,17 @@
                <value>-128</value>
            </list>
        </property>
-   </component>
+   </bean>
 
-   <component id="compSetWrapperedByte" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compSetWrapperedByte" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="byte">
            <set>
                <value>123</value>
            </set>
        </property>
-   </component>
+   </bean>
 
-   <component id="compListPrimDouble" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compListPrimDouble" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="primDouble">
            <list>
                <value>0</value>
@@ -152,17 +152,17 @@
                <value>-Infinity</value>
            </list>
        </property>
-   </component>
+   </bean>
 
-   <component id="compSetPrimDouble" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compSetPrimDouble" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="primDouble">
            <set>
                <value>123</value>
            </set>
        </property>
-   </component>
+   </bean>
 
-   <component id="compListWrapperedDouble" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compListWrapperedDouble" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="double">
            <list>
                <value>0</value>
@@ -172,17 +172,17 @@
                <value>-Infinity</value>
            </list>
        </property>
-   </component>
+   </bean>
 
-   <component id="compSetWrapperedDouble" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compSetWrapperedDouble" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="double">
            <set>
                <value>123</value>
            </set>
        </property>
-   </component>
+   </bean>
 
-   <component id="compListPrimFloat" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compListPrimFloat" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="primFloat">
            <list>
                <value>0</value>
@@ -192,17 +192,17 @@
                <value>-Infinity</value>
            </list>
        </property>
-   </component>
+   </bean>
 
-   <component id="compSetPrimFloat" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compSetPrimFloat" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="primFloat">
            <set>
                <value>123</value>
            </set>
        </property>
-   </component>
+   </bean>
 
-   <component id="compListWrapperedFloat" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compListWrapperedFloat" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="float">
            <list>
                <value>0</value>
@@ -212,17 +212,17 @@
                <value>-Infinity</value>
            </list>
        </property>
-   </component>
+   </bean>
 
-   <component id="compSetWrapperedFloat" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compSetWrapperedFloat" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="float">
            <set>
                <value>123</value>
            </set>
        </property>
-   </component>
+   </bean>
 
-   <component id="compListPrimInteger" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compListPrimInteger" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="primInt">
            <list>
                <value>0</value>
@@ -230,17 +230,17 @@
                <value>-2147483648</value>
            </list>
        </property>
-   </component>
+   </bean>
 
-   <component id="compSetPrimInteger" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compSetPrimInteger" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="primInt">
            <set>
                <value>123</value>
            </set>
        </property>
-   </component>
+   </bean>
 
-   <component id="compListWrapperedInteger" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compListWrapperedInteger" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="int">
            <list>
                <value>0</value>
@@ -248,51 +248,51 @@
                <value>-2147483648</value>
            </list>
        </property>
-   </component>
+   </bean>
 
-   <component id="compSetWrapperedInteger" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compSetWrapperedInteger" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="int">
            <set>
                <value>123</value>
            </set>
        </property>
-   </component>
+   </bean>
 
-   <component id="compListPrimCharacter" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compListPrimCharacter" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="primChar">
            <list>
                <value>\u0000</value>
                <value>\uffff</value>
            </list>
        </property>
-   </component>
+   </bean>
 
-   <component id="compSetPrimCharacter" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compSetPrimCharacter" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="primChar">
            <set>
                <value>A</value>
            </set>
        </property>
-   </component>
+   </bean>
 
-   <component id="compListWrapperedCharacter" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compListWrapperedCharacter" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="char">
            <list>
                <value>\u0000</value>
                <value>\uffff</value>
            </list>
        </property>
-   </component>
+   </bean>
 
-   <component id="compSetWrapperedCharacter" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compSetWrapperedCharacter" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="char">
            <set>
                <value>1</value>
            </set>
        </property>
-   </component>
+   </bean>
 
-   <component id="compListPrimShort" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compListPrimShort" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="primShort">
            <list>
                <value>0</value>
@@ -300,17 +300,17 @@
                <value>-32768</value>
            </list>
        </property>
-   </component>
+   </bean>
 
-   <component id="compSetPrimShort" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compSetPrimShort" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="primShort">
            <set>
                <value>123</value>
            </set>
        </property>
-   </component>
+   </bean>
 
-   <component id="compListWrapperedShort" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compListWrapperedShort" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="short">
            <list>
                <value>0</value>
@@ -318,17 +318,17 @@
                <value>-32768</value>
            </list>
        </property>
-   </component>
+   </bean>
 
-   <component id="compSetWrapperedShort" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compSetWrapperedShort" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="short">
            <set>
                <value>123</value>
            </set>
        </property>
-   </component>
+   </bean>
 
-   <component id="compListPrimLong" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compListPrimLong" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="primLong">
            <list>
                <value>0</value>
@@ -336,17 +336,17 @@
                <value>-9223372036854775808</value>
            </list>
        </property>
-   </component>
+   </bean>
 
-   <component id="compSetPrimLong" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compSetPrimLong" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="primLong">
            <set>
                <value>123</value>
            </set>
        </property>
-   </component>
+   </bean>
 
-   <component id="compListWrapperedLong" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compListWrapperedLong" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="long">
            <list>
                <value>0</value>
@@ -354,15 +354,15 @@
                <value>-9223372036854775808</value>
            </list>
        </property>
-   </component>
+   </bean>
 
-   <component id="compSetWrapperedLong" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
+   <bean id="compSetWrapperedLong" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
        <property name="long">
            <set>
                <value>123</value>
            </set>
        </property>
-   </component>
-</components>
+   </bean>
+</blueprint>
 
 

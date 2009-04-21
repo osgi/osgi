@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
-    <component id="compEmptySet" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+    <bean id="compEmptySet" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
         <constructor-arg>
             <set></set>
-        </constructor-arg>
-    </component>
+        </argument>
+    </bean>
 
-    <component id="compNullSet" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-        <constructor-arg type="java.util.Set">
+    <bean id="compNullSet" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+        <argument type="java.util.Set">
             <null/>
-        </constructor-arg>
-    </component>
+        </argument>
+    </bean>
 
-    <component id="compStringItems" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+    <bean id="compStringItems" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
         <constructor-arg>
             <set>
                 <value>abc</value>
                 <value>def</value>
             </set>
-        </constructor-arg>
-    </component>
+        </argument>
+    </bean>
 
-    <component id="compDupItems" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+    <bean id="compDupItems" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
         <constructor-arg>
             <set>
                 <value>abc</value>
                 <value>abc</value>
             </set>
-        </constructor-arg>
-    </component>
+        </argument>
+    </bean>
 
-    <component id="compBooleanItems" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+    <bean id="compBooleanItems" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
         <constructor-arg>
             <set>
                 <value type="java.lang.Boolean">true</value>
                 <value type="java.lang.Boolean">false</value>
             </set>
-        </constructor-arg>
-    </component>
+        </argument>
+    </bean>
 
-    <component id="compMixedItems" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+    <bean id="compMixedItems" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
         <constructor-arg>
             <set>
                 <value type="java.lang.String">abc</value>
@@ -59,29 +59,29 @@
                 <value type="java.util.Locale">en_US</value>
                 <null/>
             </set>
-        </constructor-arg>
-    </component>
+        </argument>
+    </bean>
 
-    <component id="compTypedItems" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+    <bean id="compTypedItems" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
         <constructor-arg>
             <set value-type="java.lang.Double">
                 <value>0.0</value>
                 <value>1.0</value>
             </set>
-        </constructor-arg>
-    </component>
+        </argument>
+    </bean>
 
-    <component id="compTypeOverride" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+    <bean id="compTypeOverride" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
         <constructor-arg>
             <set value-type="java.lang.Double">
                 <value>0.0</value>
                 <value>1.0</value>
                 <value type="java.lang.Boolean">true</value>
             </set>
-        </constructor-arg>
-    </component>
+        </argument>
+    </bean>
 
-    <component id="compNestedSet" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+    <bean id="compNestedSet" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
         <constructor-arg>
             <set>
                 <set>
@@ -89,10 +89,10 @@
                     <value>def</value>
                 </set>
             </set>
-        </constructor-arg>
-    </component>
+        </argument>
+    </bean>
 
-    <component id="compNestedList" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+    <bean id="compNestedList" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
         <constructor-arg>
             <set>
                 <list>
@@ -100,10 +100,10 @@
                     <value>def</value>
                 </list>
             </set>
-        </constructor-arg>
-    </component>
+        </argument>
+    </bean>
 
-    <component id="compNestedMap" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+    <bean id="compNestedMap" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
         <constructor-arg>
             <set>
                 <map>
@@ -111,10 +111,10 @@
                     <entry key="ghi" value="jkl"/>
                 </map>
             </set>
-        </constructor-arg>
-    </component>
+        </argument>
+    </bean>
 
-    <component id="compNestedProps" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+    <bean id="compNestedProps" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
         <constructor-arg>
             <set>
                 <props>
@@ -122,7 +122,7 @@
                     <prop key="ghi">jkl</prop>
                 </props>
             </set>
-        </constructor-arg>
-    </component>
-</components>
+        </argument>
+    </bean>
+</blueprint>
 

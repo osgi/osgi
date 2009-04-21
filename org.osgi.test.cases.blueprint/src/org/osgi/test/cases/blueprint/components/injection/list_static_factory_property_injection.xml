@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
-    <component id="compEmptyList" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+    <bean id="compEmptyList" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
         <property name="list">
             <list></list>
         </property>
-    </component>
+    </bean>
 
-    <component id="compNullList" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+    <bean id="compNullList" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
         <property name="list">
             <null/>
         </property>
-    </component>
+    </bean>
 
-    <component id="compStringItems" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+    <bean id="compStringItems" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
         <property name="list">
             <list>
                 <value>abc</value>
                 <value>def</value>
             </list>
         </property>
-    </component>
+    </bean>
 
-    <component id="compDupItems" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+    <bean id="compDupItems" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
         <property name="list">
             <list>
                 <value>abc</value>
                 <value>abc</value>
             </list>
         </property>
-    </component>
+    </bean>
 
-    <component id="compBooleanItems" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+    <bean id="compBooleanItems" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
         <property name="list">
             <list>
                 <value type="java.lang.Boolean">true</value>
                 <value type="java.lang.Boolean">false</value>
             </list>
         </property>
-    </component>
+    </bean>
 
-    <component id="compMixedItems" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+    <bean id="compMixedItems" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
         <property name="list">
             <list>
                 <value type="java.lang.String">abc</value>
@@ -60,18 +60,18 @@
                 <null/>
             </list>
         </property>
-    </component>
+    </bean>
 
-    <component id="compTypedItems" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+    <bean id="compTypedItems" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
         <property name="list">
             <list value-type="java.lang.Double">
                 <value>0.0</value>
                 <value>1.0</value>
             </list>
         </property>
-    </component>
+    </bean>
 
-    <component id="compTypeOverride" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+    <bean id="compTypeOverride" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
         <property name="list">
             <list value-type="java.lang.Double">
                 <value>0.0</value>
@@ -79,9 +79,9 @@
                 <value type="java.lang.Boolean">true</value>
             </list>
         </property>
-    </component>
+    </bean>
 
-    <component id="compNestedList" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+    <bean id="compNestedList" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
         <property name="list">
             <list>
                 <list>
@@ -90,9 +90,9 @@
                 </list>
             </list>
         </property>
-    </component>
+    </bean>
 
-    <component id="compNestedSet" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+    <bean id="compNestedSet" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
         <property name="list">
             <list>
                 <set>
@@ -101,9 +101,9 @@
                 </set>
             </list>
         </property>
-    </component>
+    </bean>
 
-    <component id="compNestedMap" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+    <bean id="compNestedMap" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
         <property name="list">
             <list>
                 <map>
@@ -112,9 +112,9 @@
                 </map>
             </list>
         </property>
-    </component>
+    </bean>
 
-    <component id="compNestedProps" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
+    <bean id="compNestedProps" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
         <property name="list">
             <list>
                 <props>
@@ -123,6 +123,6 @@
                 </props>
             </list>
         </property>
-    </component>
-</components>
+    </bean>
+</blueprint>
 
