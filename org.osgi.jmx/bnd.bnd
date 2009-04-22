@@ -1,0 +1,5 @@
+-nope=true
+nodeploy=true
+
+-buildpath = \
+	osgi;					version=4.0,
