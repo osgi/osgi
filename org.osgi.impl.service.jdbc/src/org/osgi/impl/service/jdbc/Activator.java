@@ -20,6 +20,7 @@ import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.jdbc.DataSourceFactory;
 
 /**
@@ -28,6 +29,8 @@ import org.osgi.service.jdbc.DataSourceFactory;
  * @version $Revision$
  */
 public class Activator implements BundleActivator {
+    private ServiceRegistration dataSourceServiceRegistration;
+    
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -39,7 +42,7 @@ public class Activator implements BundleActivator {
 		Hashtable props = new Hashtable();
 		props.put( DataSourceFactory.JDBC_DRIVER, DerbyEmbeddedDataSourceFactory.JDBC_DRIVER_PROPERTY_VALUE );
 
-		context.registerService( DataSourceFactory.class.getName(),
+		dataSourceServiceRegistration = context.registerService( DataSourceFactory.class.getName(),
 				new DerbyEmbeddedDataSourceFactory(), 
 				props );
 	}
@@ -51,6 +54,9 @@ public class Activator implements BundleActivator {
 	 * org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
+		if ( dataSourceServiceRegistration != null ) {
+			dataSourceServiceRegistration.unregister();
+		}
 	}
 
 }
