@@ -65,7 +65,7 @@
 
     <xsd:complexType name="Ttype-converters">
         <xsd:choice minOccurs="0" maxOccurs="unbounded">
-            <xsd:group ref="refOrTargetComponent"/>
+            <xsd:group ref="targetComponent"/>
         </xsd:choice>
     </xsd:complexType>
 
@@ -76,15 +76,9 @@
 		<xsd:choice>
 			<xsd:element name="bean" type="Tbean"/>
 			<xsd:element name="reference" type="Treference"/>
+            <xsd:element name="ref" type="Tref"/>
 			<xsd:any namespace="##other" processContents="strict" minOccurs="0"
 				maxOccurs="unbounded"/>
-		</xsd:choice>
-	</xsd:group>
-
-	<xsd:group name="refOrTargetComponent">
-		<xsd:choice>
-            <xsd:element name="ref" type="Tref"/>
-			<xsd:group ref="targetComponent"/>
 		</xsd:choice>
 	</xsd:group>
 
@@ -179,7 +173,7 @@
         <xsd:complexContent>
             <xsd:extension base="Tcomponent">
                 <xsd:sequence minOccurs="0" maxOccurs="unbounded">
-                    <xsd:element name="interfaces" type="TlistSetArray" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="interfaces" type="Tinterfaces" minOccurs="0" maxOccurs="1"/>
                     <xsd:element name="listener" type="Tlistener" minOccurs="0" maxOccurs="unbounded"/>
                 </xsd:sequence>
                 <xsd:attribute name="interface" use="optional" type="xsd:token"/>
@@ -252,7 +246,7 @@
 	</xsd:complexType>
 
     <xsd:complexType name="TReferencelistener">
-        <xsd:group ref="refOrTargetComponent"/>
+        <xsd:group ref="targetComponent"/>
         <xsd:attribute name="ref" type="xsd:token"
             use="optional"/>
         <xsd:attribute name="bind-method" type="Tmethod"
@@ -277,7 +271,7 @@
     </xsd:simpleType>
 
     <xsd:complexType name="Tcomparator">
-        <xsd:group ref="refOrTargetComponent"/>
+        <xsd:group ref="targetComponent"/>
     </xsd:complexType>
 
     <!-- service -->
@@ -309,7 +303,7 @@
     </xsd:complexType>
 
     <xsd:complexType name="TregistrationListener">
-        <xsd:group ref="refOrTargetComponent"/>
+        <xsd:group ref="targetComponent"/>
         <xsd:attribute name="ref" type="Tidref"
             use="optional"/>
         <!--  ### why are there both required? -->
