@@ -46,7 +46,7 @@ public class ExportedService extends Assert implements TestComponentMetadata {
     // the set of exported interfaces
     protected List serviceInterfaces;
     // an optional set of service properties
-    protected List serviceProperties;
+    protected TestPropsValue serviceProperties;
     // the exported service ranking
     protected int serviceRanking;
     // the set of explicit dependencies
@@ -69,7 +69,7 @@ public class ExportedService extends Assert implements TestComponentMetadata {
      * @param deps       A set of explicit dependencies
      * @param listeners  Any optional registration listeners.
      */
-    public ExportedService(String serviceId, String componentId, Class serviceInterface, int exportMode, int ranking, List props,
+    public ExportedService(String serviceId, String componentId, Class serviceInterface, int exportMode, int ranking, TestPropsValue props,
             String[] deps, TestRegistrationListener[] listeners) {
         this(serviceId, componentId, new Class[] { serviceInterface }, exportMode, ranking, props, deps, listeners);
     }
@@ -90,7 +90,7 @@ public class ExportedService extends Assert implements TestComponentMetadata {
      * @param deps       A set of explicit dependencies
      * @param listeners  Any optional registration listeners.
      */
-    public ExportedService(String serviceId, String componentId, Class[] interfaces, int exportMode, int ranking, List props,
+    public ExportedService(String serviceId, String componentId, Class[] interfaces, int exportMode, int ranking, TestPropsValue props,
         String[] deps, TestRegistrationListener[] listeners) {
         this.serviceId = serviceId;
         this.componentId = componentId;
@@ -165,14 +165,13 @@ public class ExportedService extends Assert implements TestComponentMetadata {
             }
         }
 
-        // TODO:  More work needed here
 
         // for some tests, the service properties are necessary to disambiguate
         // the service.  If we have some specified, then a match is required on
         // all of these as well.
-        // if (serviceProperties != null) {
-        //    return TestUtil.containsAll(serviceProperties, meta.getServiceProperties());
-        // }
+        if (serviceProperties != null) {
+            return serviceProperties.equals(meta.getServiceProperties());
+        }
         return true;
     }
 

@@ -21,7 +21,7 @@ import org.osgi.framework.BundleContext;
 
 import org.osgi.service.blueprint.context.ModuleContext;
 import org.osgi.service.blueprint.convert.ConversionService;
-import org.osgi.service.blueprint.reflect.LocalComponentMetadata;
+import org.osgi.service.blueprint.reflect.BeanMetadata;
 
 import org.osgi.test.cases.blueprint.components.comp1.SimpleTestComponent;
 import org.osgi.test.cases.blueprint.components.factory.SimpleInstanceFactory;
@@ -48,11 +48,11 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         startEvents.validateComponent("comp1", SimpleTestComponent.class);
         // make sure the name is in the component list
         startEvents.addValidator(new ComponentNamePresenceValidator("comp1"));
-        startEvents.addValidator(new GetLocalComponentMetadataValidator("comp1"));
+        startEvents.addValidator(new GetBeanMetadataValidator("comp1"));
 
         // and the validate the component metadata
         startEvents.addValidator(new ComponentMetadataValidator(
-            new LocalComponent("comp1", SimpleTestComponent.class, new TestParameter[0], null)));
+            new BeanComponent("comp1", SimpleTestComponent.class, new TestArgument[0], null)));
 
         controller.run();
     }
@@ -88,12 +88,12 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
 
         // and the meta data for both components
         startEvents.addValidator(new ComponentMetadataValidator(
-            new LocalComponent("comp1", SimpleTestComponent.class, new TestParameter[] {
-            new StringParameter("comp1") } , null)));
+            new BeanComponent("comp1", SimpleTestComponent.class, new TestArgument[] {
+            new StringArgument("comp1") } , null)));
 
         startEvents.addValidator(new ComponentMetadataValidator(
-            new LocalComponent("comp2", SimpleTestComponent.class, new TestParameter[] {
-            new StringParameter("comp2") } , null)));
+            new BeanComponent("comp2", SimpleTestComponent.class, new TestArgument[] {
+            new StringArgument("comp2") } , null)));
         controller.run();
     }
 
@@ -171,8 +171,8 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         // and the validate the component metadata.  The wildcard indicates
         // we're looking for the nearest match
         startEvents.addValidator(new ComponentMetadataValidator(
-            new LocalComponent("*", SimpleTestComponent.class, new TestParameter[] {
-            new StringParameter("comp1") } , null)));
+            new BeanComponent("*", SimpleTestComponent.class, new TestArgument[] {
+            new StringArgument("comp1") } , null)));
 
         controller.run();
     }
@@ -194,16 +194,16 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
 
         // validate the metadata for all components
         startEvents.addValidator(new ComponentMetadataValidator(
-            new LocalComponent("comp1", SimpleTestComponent.class, "init", null,
-            new TestParameter[] { new StringParameter("comp1") } , null)));
+            new BeanComponent("comp1", SimpleTestComponent.class, "init", null,
+            new TestArgument[] { new StringArgument("comp1") } , null)));
 
         startEvents.addValidator(new ComponentMetadataValidator(
-            new LocalComponent("comp2", SimpleTestComponent.class, null, "destroy",
-            new TestParameter[] { new StringParameter("comp2") } , null)));
+            new BeanComponent("comp2", SimpleTestComponent.class, null, "destroy",
+            new TestArgument[] { new StringArgument("comp2") } , null)));
 
         startEvents.addValidator(new ComponentMetadataValidator(
-            new LocalComponent("comp3", SimpleTestComponent.class, "init", "destroy",
-            new TestParameter[] { new StringParameter("comp3") } , null)));
+            new BeanComponent("comp3", SimpleTestComponent.class, "init", "destroy",
+            new TestArgument[] { new StringArgument("comp3") } , null)));
 
         // stop events occur at the end
         EventSet stopEvents = controller.getStopEvents();
@@ -312,15 +312,15 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         startEvents.addAssertion("static-comp1", AssertionService.COMPONENT_CREATED);
         startEvents.addAssertion("comp2_id", AssertionService.COMPONENT_CREATED);
 
-        LocalComponent comp2_id =
-            new LocalComponent("comp2_id", SimpleStaticFactory.class, "createSimple",
-            new TestParameter[] { new StringParameter("comp2_id") } , null);
+        BeanComponent comp2_id =
+            new BeanComponent("comp2_id", SimpleStaticFactory.class, "createSimple",
+            new TestArgument[] { new StringArgument("comp2_id") } , null);
 
         startEvents.addValidator(new ComponentMetadataValidator(comp2_id));
 
-        LocalComponent comp1 =
-            new LocalComponent("comp1", SimpleStaticFactory.class, "createSimple",
-            new TestParameter[0], null);
+        BeanComponent comp1 =
+            new BeanComponent("comp1", SimpleStaticFactory.class, "createSimple",
+            new TestArgument[0], null);
 
         // validate the metadata for all components
         startEvents.addValidator(new ComponentMetadataValidator(comp1));
@@ -343,18 +343,18 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         startEvents.addAssertion("instance-comp1", AssertionService.COMPONENT_CREATED);
         startEvents.addAssertion("comp2_id", AssertionService.COMPONENT_CREATED);
 
-        LocalComponent comp1 =
-            new LocalComponent("comp1", "createSimple",
-            new TestParameter[0], null);
-        comp1.setFactoryComponent(new TestReferenceValue("compFactory"));
+        BeanComponent comp1 =
+            new BeanComponent("comp1", "createSimple",
+            new TestArgument[0], null);
+        comp1.setFactoryComponent(new TestRefValue("compFactory"));
 
         // validate the metadata for all components
         startEvents.addValidator(new ComponentMetadataValidator(comp1));
 
-        LocalComponent comp2_id =
-            new LocalComponent("comp2_id", "createSimple",
-            new TestParameter[] { new StringParameter("comp2_id") } , null);
-        comp2_id.setFactoryComponent(new TestReferenceValue("compFactory"));
+        BeanComponent comp2_id =
+            new BeanComponent("comp2_id", "createSimple",
+            new TestArgument[] { new StringArgument("comp2_id") } , null);
+        comp2_id.setFactoryComponent(new TestRefValue("compFactory"));
 
         startEvents.addValidator(new ComponentMetadataValidator(comp2_id));
 
@@ -380,18 +380,18 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         startEvents.addAssertion("instance-comp1", AssertionService.COMPONENT_CREATED);
         startEvents.addAssertion("comp2_id", AssertionService.COMPONENT_CREATED);
 
-        LocalComponent comp1 =
-            new LocalComponent("comp1", "createSimple",
-            new TestParameter[0], null);
-        comp1.setFactoryComponent(new TestReferenceValue("compFactory"));
+        BeanComponent comp1 =
+            new BeanComponent("comp1", "createSimple",
+            new TestArgument[0], null);
+        comp1.setFactoryComponent(new TestRefValue("compFactory"));
 
         // validate the metadata for all components
         startEvents.addValidator(new ComponentMetadataValidator(comp1));
 
-        LocalComponent comp2_id =
-            new LocalComponent("comp2_id", "createSimple",
-            new TestParameter[] { new StringParameter("comp2_id") } , null);
-        comp2_id.setFactoryComponent(new TestReferenceValue("compFactory"));
+        BeanComponent comp2_id =
+            new BeanComponent("comp2_id", "createSimple",
+            new TestArgument[] { new StringArgument("comp2_id") } , null);
+        comp2_id.setFactoryComponent(new TestRefValue("compFactory"));
 
         // make sure this was created with the correct class
         // NOTE:  the "comp1" is the XML file component id.  "instance-comp1" is an internal id created by the factory
@@ -431,10 +431,10 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         startEvents.addValidator(new ComponentNamePresenceValidator("conversionService"));
 
         // now verify that these have associated metadata
-        startEvents.addValidator(new ComponentMetadataPresenceValidator("bundle", LocalComponentMetadata.class));
-        startEvents.addValidator(new ComponentMetadataPresenceValidator("bundleContext", LocalComponentMetadata.class));
-        startEvents.addValidator(new ComponentMetadataPresenceValidator("moduleContext", LocalComponentMetadata.class));
-        startEvents.addValidator(new ComponentMetadataPresenceValidator("conversionService", LocalComponentMetadata.class));
+        startEvents.addValidator(new ComponentMetadataPresenceValidator("bundle", BeanMetadata.class));
+        startEvents.addValidator(new ComponentMetadataPresenceValidator("bundleContext", BeanMetadata.class));
+        startEvents.addValidator(new ComponentMetadataPresenceValidator("moduleContext", BeanMetadata.class));
+        startEvents.addValidator(new ComponentMetadataPresenceValidator("conversionService", BeanMetadata.class));
 
         // if we receive the above events and no assertion failures, then everything has worked.
         controller.run();

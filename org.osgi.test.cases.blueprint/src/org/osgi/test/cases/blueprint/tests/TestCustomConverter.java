@@ -16,12 +16,12 @@
 
 package org.osgi.test.cases.blueprint.tests;
 
-import org.osgi.test.cases.blueprint.framework.ConstructorMetadataValidator;
+import org.osgi.test.cases.blueprint.framework.ArgumentMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
 import org.osgi.test.cases.blueprint.framework.PropertyMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.StandardTestController;
-import org.osgi.test.cases.blueprint.framework.StringParameter;
-import org.osgi.test.cases.blueprint.framework.TestParameter;
+import org.osgi.test.cases.blueprint.framework.StringArgument;
+import org.osgi.test.cases.blueprint.framework.TestArgument;
 import org.osgi.test.cases.blueprint.framework.TestProperty;
 import org.osgi.test.cases.blueprint.framework.TestStringValue;
 import org.osgi.test.cases.blueprint.services.AssertionService;
@@ -31,9 +31,9 @@ public class TestCustomConverter extends DefaultTestBundleControl {
 
     private void addConstructorValidator(MetadataEventSet startEvents, String id, Object value, Class type) {
         startEvents.validateComponentArgument(id, "arg1", value, type);
-        startEvents.addValidator(new ConstructorMetadataValidator(id, new TestParameter[] {
+        startEvents.addValidator(new ArgumentMetadataValidator(id, new TestArgument[] {
         // all tests that can use this convenience method have a string argument as the first arg
-                new StringParameter(String.class, id), new StringParameter(type) }));
+                new StringArgument(String.class, id), new StringArgument(type) }));
     }
 
     private void addPropertyValidator(MetadataEventSet startEvents, String compName, String propertyName,
@@ -78,8 +78,8 @@ public class TestCustomConverter extends DefaultTestBundleControl {
 
         // constructor
         startEvents.validateComponentArgument("compCustomBoolean_cnst", "arg1", Boolean.TRUE, Boolean.class);
-        startEvents.addValidator(new ConstructorMetadataValidator("compCustomBoolean_cnst", new TestParameter[] {
-                new StringParameter(Boolean.class) }));
+        startEvents.addValidator(new ArgumentMetadataValidator("compCustomBoolean_cnst", new TestArgument[] {
+                new StringArgument(Boolean.class) }));
         // property
         this.addPropertyValidator(startEvents, "compCustomBoolean_prpt", "boolean", Boolean.FALSE, Boolean.class);
 

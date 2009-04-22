@@ -23,21 +23,21 @@ import org.osgi.service.blueprint.reflect.PropsMetadata;
 import org.osgi.service.blueprint.reflect.Metadata;
 import org.osgi.service.blueprint.reflect.MapEntry;
 
-public class TestPropertiesValue extends TestValue {
+public class TestPropsValue extends TestValue {
     // The expected set of properties items.
     protected List entries;
 
-    public TestPropertiesValue(List entries) {
+    public TestPropsValue(List entries) {
         super(PropsMetadata.class);
         this.entries = entries;
     }
 
-    public TestPropertiesValue() {
+    public TestPropsValue() {
         super(PropsMetadata.class);
         this.entries = new ArrayList();
     }
 
-    public void add(String key, String value) {
+    public void put(String key, String value) {
         entries.add(new MapValueEntry(key, value));
     }
 
@@ -57,8 +57,18 @@ public class TestPropertiesValue extends TestValue {
         }
 
         PropsMetadata meta = (PropsMetadata)v;
-        List props = meta.getEntries();
+        validate(blueprintMetadata, meta.getEntries());
+    }
 
+
+    /**
+     * Validate a TestPropsValue against an expected value.
+     *
+     * @param spec   The metadata spec for this argument.
+     *
+     * @exception Exception
+     */
+    public void validate(BlueprintMetadata blueprintMetadata, List props) throws Exception {
         // validate the size first
         assertEquals("PropertiesValue mismatch", entries.size(), props.size());
         for (int i = 0; i < entries.size(); i++) {
@@ -66,6 +76,7 @@ public class TestPropertiesValue extends TestValue {
             entry.validate(blueprintMetadata, (MapEntry)props.get(i));
         }
     }
+
 
     /**
      * do a comparison between a real metadata item and our test validator.
@@ -87,8 +98,19 @@ public class TestPropertiesValue extends TestValue {
         }
 
         PropsMetadata meta = (PropsMetadata)v;
-        List props = meta.getEntries();
+        return equals(meta.getEntries());
+    }
 
+    /**
+     * do a comparison between a real metadata item and our test validator.
+     * This is used primarily to locate specific values in the different
+     * CollectionValues.
+     *
+     * @param v      The target value item.
+     *
+     * @return True if this can be considered a match, false for any mismatch.
+     */
+    public boolean equals(List props) {
         // validate the size first
         if (entries.size() != props.size()) {
             return false;

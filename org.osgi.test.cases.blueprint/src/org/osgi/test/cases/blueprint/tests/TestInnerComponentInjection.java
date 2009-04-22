@@ -31,19 +31,19 @@ import org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectio
 import org.osgi.test.cases.blueprint.components.injection.PropertyInjection;
 import org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory;
 import org.osgi.test.cases.blueprint.framework.ComponentAssertion;
-import org.osgi.test.cases.blueprint.framework.ConstructorMetadataValidator;
+import org.osgi.test.cases.blueprint.framework.ArgumentMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.FactoryMetadataValidator;
-import org.osgi.test.cases.blueprint.framework.LocalComponent;
+import org.osgi.test.cases.blueprint.framework.BeanComponent;
 import org.osgi.test.cases.blueprint.framework.MapValueEntry;
 import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
 import org.osgi.test.cases.blueprint.framework.PropertyMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.StandardTestController;
-import org.osgi.test.cases.blueprint.framework.StringParameter;
+import org.osgi.test.cases.blueprint.framework.StringArgument;
 import org.osgi.test.cases.blueprint.framework.StringProperty;
 import org.osgi.test.cases.blueprint.framework.TestComponentValue;
 import org.osgi.test.cases.blueprint.framework.TestListValue;
 import org.osgi.test.cases.blueprint.framework.TestMapValue;
-import org.osgi.test.cases.blueprint.framework.TestParameter;
+import org.osgi.test.cases.blueprint.framework.TestArgument;
 import org.osgi.test.cases.blueprint.framework.TestProperty;
 import org.osgi.test.cases.blueprint.framework.TestSetValue;
 import org.osgi.test.cases.blueprint.framework.TestValue;
@@ -71,20 +71,20 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         startEvents.addAssertion("compInnerTwo_1", AssertionService.COMPONENT_CREATED);
         startEvents.addAssertion("compInnerTwo_2", AssertionService.COMPONENT_CREATED);
 
-        TestComponentValue testComponentValue = new TestComponentValue(new LocalComponent(InnerComponentInjection.class,null,null,null));
+        TestComponentValue testComponentValue = new TestComponentValue(new BeanComponent(InnerComponentInjection.class,null,null,null));
         //Ignore ID
-        startEvents.addValidator(new ConstructorMetadataValidator(
+        startEvents.addValidator(new ArgumentMetadataValidator(
                 "compInnerIgnoreID",
-                new TestParameter[] {
-                    new StringParameter("compInnerIgnoreID"),
-                    new TestParameter(testComponentValue) }
+                new TestArgument[] {
+                    new StringArgument("compInnerIgnoreID"),
+                    new TestArgument(testComponentValue) }
         ));
         //Ignore scope
-        startEvents.addValidator(new ConstructorMetadataValidator(
+        startEvents.addValidator(new ArgumentMetadataValidator(
                 "compInnerIgnoreScope",
-                new TestParameter[] {
-                    new StringParameter("compInnerIgnoreScope"),
-                    new TestParameter(testComponentValue) }
+                new TestArgument[] {
+                    new StringArgument("compInnerIgnoreScope"),
+                    new TestArgument(testComponentValue) }
         ));
 
         controller.run();
@@ -165,22 +165,22 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
      * @param innerArgTargetType    <constrator-arg type="">
      * @param innerArgValueType     <value type="">
      */
-    private void addConstructorMetadataValidator(MetadataEventSet startEvents, String outerComponentId,
+    private void addArgumentMetadataValidator(MetadataEventSet startEvents, String outerComponentId,
             Class innerComponentClass, String factoryMethodName,
             Class innerArgTargetType, Class innerArgValueType, String innerArgSource) {
         // metadata test
         TestComponentValue testComponentValue = new TestComponentValue(
-                new LocalComponent(
+                new BeanComponent(
                         innerComponentClass,
                         factoryMethodName,
-                        new TestParameter[] { new StringParameter(innerArgTargetType, innerArgSource, innerArgValueType) },
+                        new TestArgument[] { new StringArgument(innerArgTargetType, innerArgSource, innerArgValueType) },
                         null
                 )
         );
         startEvents.addValidator(
-                new ConstructorMetadataValidator(
+                new ArgumentMetadataValidator(
                         outerComponentId,
-                        new TestParameter[] { new TestParameter(testComponentValue) }
+                        new TestArgument[] { new TestArgument(testComponentValue) }
                 )
         );
     }
@@ -188,35 +188,35 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
 
     private void addConstructorMetadataTestItems(MetadataEventSet startEvents, Class innerComponentExpectedClass, String factoryMethodName) throws Exception {
         // string
-        this.addConstructorMetadataValidator(startEvents, "compInnerStringNoTyped", innerComponentExpectedClass, factoryMethodName, null, null, "STR1");
-        this.addConstructorMetadataValidator(startEvents, "compInnerStringBothTyped", innerComponentExpectedClass, factoryMethodName, String.class, String.class, "STR2");
-        this.addConstructorMetadataValidator(startEvents, "compInnerStringValueTyped", innerComponentExpectedClass, factoryMethodName, null, String.class, "STR3");
-        this.addConstructorMetadataValidator(startEvents, "compInnerStringArgTyped", innerComponentExpectedClass, factoryMethodName, String.class, null, "STR4");
-        this.addConstructorMetadataValidator(startEvents, "compInnerString", innerComponentExpectedClass, factoryMethodName, String.class, null, "STR5");
+        this.addArgumentMetadataValidator(startEvents, "compInnerStringNoTyped", innerComponentExpectedClass, factoryMethodName, null, null, "STR1");
+        this.addArgumentMetadataValidator(startEvents, "compInnerStringBothTyped", innerComponentExpectedClass, factoryMethodName, String.class, String.class, "STR2");
+        this.addArgumentMetadataValidator(startEvents, "compInnerStringValueTyped", innerComponentExpectedClass, factoryMethodName, null, String.class, "STR3");
+        this.addArgumentMetadataValidator(startEvents, "compInnerStringArgTyped", innerComponentExpectedClass, factoryMethodName, String.class, null, "STR4");
+        this.addArgumentMetadataValidator(startEvents, "compInnerString", innerComponentExpectedClass, factoryMethodName, String.class, null, "STR5");
         //boolean
-        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveBoolean", innerComponentExpectedClass, factoryMethodName, Boolean.TYPE, null, "true");
-        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedBoolean", innerComponentExpectedClass, factoryMethodName, Boolean.class, null, "false");
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveBoolean", innerComponentExpectedClass, factoryMethodName, Boolean.TYPE, null, "true");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedBoolean", innerComponentExpectedClass, factoryMethodName, Boolean.class, null, "false");
         //byte
-        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveByte", innerComponentExpectedClass, factoryMethodName, Byte.TYPE, null, "-128");
-        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedByte", innerComponentExpectedClass, factoryMethodName, Byte.class, null, "127");
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveByte", innerComponentExpectedClass, factoryMethodName, Byte.TYPE, null, "-128");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedByte", innerComponentExpectedClass, factoryMethodName, Byte.class, null, "127");
         //double
-        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveDouble", innerComponentExpectedClass, factoryMethodName, Double.TYPE, null, "4.9e-324");
-        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedDouble", innerComponentExpectedClass, factoryMethodName, Double.class, null, "1.7976931348623157E308");
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveDouble", innerComponentExpectedClass, factoryMethodName, Double.TYPE, null, "4.9e-324");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedDouble", innerComponentExpectedClass, factoryMethodName, Double.class, null, "1.7976931348623157E308");
         //float
-        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveFloat", innerComponentExpectedClass, factoryMethodName, Float.TYPE, null, "1.4E-45");
-        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedFloat", innerComponentExpectedClass, factoryMethodName, Float.class, null, "3.4028235E38");
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveFloat", innerComponentExpectedClass, factoryMethodName, Float.TYPE, null, "1.4E-45");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedFloat", innerComponentExpectedClass, factoryMethodName, Float.class, null, "3.4028235E38");
         //int
-        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveInteger", innerComponentExpectedClass, factoryMethodName, Integer.TYPE, null, "-2147483648");
-        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedInteger", innerComponentExpectedClass, factoryMethodName, Integer.class, null, "2147483647");
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveInteger", innerComponentExpectedClass, factoryMethodName, Integer.TYPE, null, "-2147483648");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedInteger", innerComponentExpectedClass, factoryMethodName, Integer.class, null, "2147483647");
         //char
-        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveCharacter", innerComponentExpectedClass, factoryMethodName, Character.TYPE, null, "a");
-        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedCharacter", innerComponentExpectedClass, factoryMethodName, Character.class, null, "A");
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveCharacter", innerComponentExpectedClass, factoryMethodName, Character.TYPE, null, "a");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedCharacter", innerComponentExpectedClass, factoryMethodName, Character.class, null, "A");
         //short
-        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveShort", innerComponentExpectedClass, factoryMethodName, Short.TYPE, null, "-32768");
-        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedShort", innerComponentExpectedClass, factoryMethodName, Short.class, null, "32767");
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveShort", innerComponentExpectedClass, factoryMethodName, Short.TYPE, null, "-32768");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedShort", innerComponentExpectedClass, factoryMethodName, Short.class, null, "32767");
         //long
-        this.addConstructorMetadataValidator(startEvents, "compInnerPrimitiveLong", innerComponentExpectedClass, factoryMethodName, Long.TYPE, null, "-9223372036854775808");
-        this.addConstructorMetadataValidator(startEvents, "compInnerWrapperedLong", innerComponentExpectedClass, factoryMethodName, Long.class, null, "9223372036854775807");
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveLong", innerComponentExpectedClass, factoryMethodName, Long.TYPE, null, "-9223372036854775808");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedLong", innerComponentExpectedClass, factoryMethodName, Long.class, null, "9223372036854775807");
     }
 
     private void addFactoryMetadataValidator(MetadataEventSet startEvents, String componentId, String factoryMethodName, String staticFactoryClassName, TestValue factoryTestComponentValue) throws Exception{
@@ -301,7 +301,7 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         this.addFactoryMetadataTestItems(startEvents,InnerComponentInjectionStaticFactory.class.getName(), null);
 
         // parameter metadata test
-        // TODO: LocalComponent, wait bugzilla 1230 1231
+        // TODO: BeanComponent, wait bugzilla 1230 1231
         this.addConstructorMetadataTestItems(startEvents, ConstructorInjectionStaticFactory.class, "makeInstance");
 
         controller.run();
@@ -401,7 +401,7 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
             Class innerComponentSpecifiedClass, String factoryMethodName,
             String innerProName, Class innerProType, String innerProSource ) {
         TestComponentValue testComponentValue = new TestComponentValue(
-                new LocalComponent(
+                new BeanComponent(
                         innerComponentSpecifiedClass,
                         factoryMethodName,
                         null,
@@ -467,7 +467,7 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         // value test
         this.addPropertyValueTestItems(startEvents, PropertyInjection.class);
         // property metadata test
-        // TODO: LocalComponent, wait bugzilla 1230 1231,
+        // TODO: BeanComponent, wait bugzilla 1230 1231,
         this.addPropertyMetadataTestItem(startEvents, null, "makeInstance");
 
         controller.run();
@@ -481,7 +481,7 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         // value test
         this.addPropertyValueTestItems(startEvents, PropertyInjection.class);
         // property metadata test
-        // TODO: LocalComponent, wait bugzilla 1230 1231,
+        // TODO: BeanComponent, wait bugzilla 1230 1231,
         this.addPropertyMetadataTestItem(startEvents, PropertyInjectionStaticFactory.class, "makeInstance");
 
         controller.run();
@@ -491,10 +491,10 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
     private TestComponentValue makeTestComponentValue(Class innerComponentClass, String factoryMethodName,
             Class innerArgTargetType, Class innerArgValueType, String innerArgSource){
         return new TestComponentValue(
-                new LocalComponent(
+                new BeanComponent(
                         innerComponentClass,
                         factoryMethodName,
-                        new TestParameter[] { new StringParameter(innerArgTargetType, innerArgSource, innerArgValueType) },
+                        new TestArgument[] { new StringArgument(innerArgTargetType, innerArgSource, innerArgValueType) },
                         null
                 )
         );
@@ -510,10 +510,10 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         TestComponentValue testComponentValue1 = this.makeTestComponentValue(ConstructorInjection.class, null, null, null, "compInner1");
         TestComponentValue testComponentValue2 = this.makeTestComponentValue(ConstructorInjection.class, null, null, null, "compInner2");
         startEvents.addValidator(
-                new ConstructorMetadataValidator(
+                new ArgumentMetadataValidator(
                         "compInnerList",
-                        new TestParameter[] {
-                                new TestParameter(
+                        new TestArgument[] {
+                                new TestArgument(
                                         new TestListValue(
                                                 new TestValue[] { testComponentValue1, testComponentValue2 }
                                         )
@@ -535,7 +535,7 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         // Set - meta
         TestComponentValue testComponentValue3 = this.makeTestComponentValue(ConstructorInjection.class, null, null, null, "compInner3");
         TestComponentValue testComponentValue4 = new TestComponentValue(
-                new LocalComponent(
+                new BeanComponent(
                         PropertyInjection.class,
                         null,
                         null,
@@ -543,10 +543,10 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
                 )
         );
         startEvents.addValidator(
-                new ConstructorMetadataValidator(
+                new ArgumentMetadataValidator(
                         "compInnerSet",
-                        new TestParameter[] {
-                                new TestParameter(
+                        new TestArgument[] {
+                                new TestArgument(
                                         new TestSetValue(
                                                 new TestValue[] { testComponentValue3, testComponentValue4 }
                                         )
@@ -571,7 +571,7 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         TestComponentValue compInnerEntryKey1 = this.makeTestComponentValue(ConstructorInjection.class, null, null, null, "compInnerEntryKey1");
         TestComponentValue compInnerEntryValue1 = this.makeTestComponentValue(ConstructorInjection.class, null, null, null, "compInnerEntryValue1");
         TestComponentValue compInnerEntryKey2 = new TestComponentValue(
-        new LocalComponent(
+        new BeanComponent(
                 PropertyInjection.class,
                 null,
                 null,
@@ -579,7 +579,7 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
                 )
         );
         TestComponentValue compInnerEntryValue2 =  new TestComponentValue(
-                new LocalComponent(
+                new BeanComponent(
                         PropertyInjection.class,
                         null,
                         null,
@@ -588,10 +588,10 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
                 );
 
         startEvents.addValidator(
-                new ConstructorMetadataValidator(
+                new ArgumentMetadataValidator(
                         "compInnerMap",
-                        new TestParameter[] {
-                                new TestParameter(
+                        new TestArgument[] {
+                                new TestArgument(
                                         new TestMapValue(
                                                 new MapValueEntry[] {
                                                         new MapValueEntry(compInnerEntryKey1, compInnerEntryValue1),

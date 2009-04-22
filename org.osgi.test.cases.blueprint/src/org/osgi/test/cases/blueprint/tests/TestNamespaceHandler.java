@@ -57,19 +57,19 @@ public class TestNamespaceHandler extends DefaultTestBundleControl {
         MetadataEventSet startEvents = controller.getStartEvents();
         // and the validate the component metadata
         startEvents.addValidator(new ComponentMetadataValidator(
-            new LocalComponent("format1", SimpleDateFormat.class,
-            new TestParameter[] { new TestParameter("yyyy.MM.dd G 'at' HH:mm:ss z", 0) }, null)));
+            new BeanComponent("format1", SimpleDateFormat.class,
+            new TestArgument[] { new TestArgument("yyyy.MM.dd G 'at' HH:mm:ss z", 0) }, null)));
 
         startEvents.addValidator(new ComponentMetadataValidator(
-            new LocalComponent("format2", SimpleDateFormat.class,
-            new TestParameter[] { new TestParameter("yyyy-MM-dd HH:mm", 0) },
+            new BeanComponent("format2", SimpleDateFormat.class,
+            new TestArgument[] { new TestArgument("yyyy-MM-dd HH:mm", 0) },
             new TestProperty[] { new TestProperty("true", "lenient")})));
 
         // and this tests the inner component metadata
         startEvents.addValidator(new PropertyMetadataValidator("checker3",
             new TestProperty(new TestComponentValue(
-            new LocalComponent(SimpleDateFormat.class, null,
-                new TestParameter[] { new TestParameter("yyyy-MM-dd HH:mm", 0) },
+            new BeanComponent(SimpleDateFormat.class, null,
+                new TestArgument[] { new TestArgument("yyyy-MM-dd HH:mm", 0) },
                 new TestProperty[] { new TestProperty("false", "lenient")})),
             "format")));
 
@@ -93,20 +93,20 @@ public class TestNamespaceHandler extends DefaultTestBundleControl {
         MetadataEventSet startEvents = controller.getStartEvents();
         // and the validate the component metadata
         startEvents.addValidator(new ComponentMetadataValidator(
-            new LocalComponent("decorate1", NamespaceChecker.class, "init", null,
-            new TestParameter[] { new StringParameter("decorate1") }, null)));
+            new BeanComponent("decorate1", NamespaceChecker.class, "init", null,
+            new TestArgument[] { new StringArgument("decorate1") }, null)));
 
         // and the validate the component metadata
         startEvents.addValidator(new ComponentMetadataValidator(
-            new LocalComponent("decorate2", NamespaceChecker.class,
-            new TestParameter[] { new StringParameter("decorate2") },
-            new TestProperty[] { new TestProperty(new TestReferenceValue("bundle"), "bundle") })));
+            new BeanComponent("decorate2", NamespaceChecker.class,
+            new TestArgument[] { new StringArgument("decorate2") },
+            new TestProperty[] { new TestProperty(new TestRefValue("bundle"), "bundle") })));
 
         // and the validate the component metadata
         startEvents.addValidator(new ComponentMetadataValidator(
-            new LocalComponent("decorate3", NamespaceChecker.class,
-            new TestParameter[] { new StringParameter("decorate3") },
-            new TestProperty[] { new TestProperty(new TestReferenceValue("bundle"), "bundle") })));
+            new BeanComponent("decorate3", NamespaceChecker.class,
+            new TestArgument[] { new StringArgument("decorate3") },
+            new TestProperty[] { new TestProperty(new TestRefValue("bundle"), "bundle") })));
 
         // we should see an init method call here
         startEvents.addAssertion("decorate1", AssertionService.COMPONENT_INIT_METHOD);
@@ -153,8 +153,8 @@ public class TestNamespaceHandler extends DefaultTestBundleControl {
 
         // and the validate the component metadata
         startEvents.addValidator(new ComponentMetadataValidator(
-            new LocalComponent("ServiceOne", TestGoodServiceSubclass.class, null, null,
-            new TestParameter[] { new StringParameter("ServiceOne") }, null)));
+            new BeanComponent("ServiceOne", TestGoodServiceSubclass.class, null, null,
+            new TestArgument[] { new StringArgument("ServiceOne") }, null)));
 
         startEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
             ServiceExportComponentMetadata.EXPORT_MODE_DISABLED, 0, null, null, null)));

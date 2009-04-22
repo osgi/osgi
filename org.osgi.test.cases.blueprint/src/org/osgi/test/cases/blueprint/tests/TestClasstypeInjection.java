@@ -22,13 +22,13 @@ import java.util.Properties;
 
 import org.osgi.test.cases.blueprint.components.injection.ConstructorInjection;
 import org.osgi.test.cases.blueprint.components.injection.PropertyInjection;
-import org.osgi.test.cases.blueprint.framework.ConstructorMetadataValidator;
+import org.osgi.test.cases.blueprint.framework.ArgumentMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
 import org.osgi.test.cases.blueprint.framework.PropertyMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.StandardTestController;
-import org.osgi.test.cases.blueprint.framework.StringParameter;
+import org.osgi.test.cases.blueprint.framework.StringArgument;
 import org.osgi.test.cases.blueprint.framework.TestNullValue;
-import org.osgi.test.cases.blueprint.framework.TestParameter;
+import org.osgi.test.cases.blueprint.framework.TestArgument;
 import org.osgi.test.cases.blueprint.framework.TestProperty;
 import org.osgi.test.cases.blueprint.framework.TestStringValue;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
@@ -38,9 +38,9 @@ public class TestClasstypeInjection extends DefaultTestBundleControl {
     private void addConstructorValidator(MetadataEventSet startEvents, String id, Object value, Class parameterType, String stringValue, Class valueType) {
         // this is what we expect to see set as a result
         startEvents.validateComponentArgument(id, "arg1", value, parameterType);
-        startEvents.addValidator(new ConstructorMetadataValidator(id, new TestParameter[] {
+        startEvents.addValidator(new ArgumentMetadataValidator(id, new TestArgument[] {
         // all of these tests just have the type argument.
-                new StringParameter(parameterType, stringValue, valueType) }));
+                new StringArgument(parameterType, stringValue, valueType) }));
     }
 
     // we only add metadata validators for a subset of these tests...they get fairly repetitive.
@@ -54,9 +54,9 @@ public class TestClasstypeInjection extends DefaultTestBundleControl {
     private void addConstructorValidator(MetadataEventSet startEvents, String id, Class parameterType) {
         // this is what we expect to see set as a result
         startEvents.validateComponentArgument(id, "arg1", null, parameterType);
-        startEvents.addValidator(new ConstructorMetadataValidator(id, new TestParameter[] {
+        startEvents.addValidator(new ArgumentMetadataValidator(id, new TestArgument[] {
                 // this is a Null value type to validate against.
-                new TestParameter(new TestNullValue(), parameterType)}));
+                new TestArgument(new TestNullValue(), parameterType)}));
     }
 
     private void addConstructorTestItem(MetadataEventSet startEvents)throws Exception{

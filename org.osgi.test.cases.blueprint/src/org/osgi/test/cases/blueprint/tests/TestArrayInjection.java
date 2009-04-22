@@ -17,12 +17,12 @@
 package org.osgi.test.cases.blueprint.tests;
 
 import org.osgi.test.cases.blueprint.framework.ArgumentValueValidator;
-import org.osgi.test.cases.blueprint.framework.ConstructorMetadataValidator;
+import org.osgi.test.cases.blueprint.framework.ArgumentMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
 import org.osgi.test.cases.blueprint.framework.PropertyValueValidator;
 import org.osgi.test.cases.blueprint.framework.StandardTestController;
 import org.osgi.test.cases.blueprint.framework.TestListValue;
-import org.osgi.test.cases.blueprint.framework.TestParameter;
+import org.osgi.test.cases.blueprint.framework.TestArgument;
 import org.osgi.test.cases.blueprint.framework.TestSetValue;
 import org.osgi.test.cases.blueprint.framework.TestStringValue;
 import org.osgi.test.cases.blueprint.framework.TestValue;
@@ -56,21 +56,21 @@ public class TestArrayInjection extends DefaultTestBundleControl {
         // Empty list
         startEvents.addValidator(new ArgumentValueValidator("compEmptyListArgument", new IntArrayValueDescriptor("arg1", new int[0])));
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compEmptyListArgument", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compEmptyListArgument", new TestArgument(
             new TestListValue(new TestValue[0]))));
         startEvents.addValidator(new ArgumentValueValidator("compEmptySetArgument", new IntArrayValueDescriptor("arg1", new int[0])));
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compEmptySetArgument", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compEmptySetArgument", new TestArgument(
             new TestSetValue(new TestValue[0]))));
         // simple list of ints
         startEvents.addValidator(new ArgumentValueValidator("compListArgument", new IntArrayValueDescriptor("arg1", new int[] {1234, 5678})));
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compListArgument", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compListArgument", new TestArgument(
             new TestListValue(new TestValue[] { new TestStringValue("1234"), new TestStringValue("5678") }))));
         // NB, Sets tend to be one item because you can't depend on order of final array
         startEvents.addValidator(new ArgumentValueValidator("compSetArgument", new IntArrayValueDescriptor("arg1", new int[] {1234})));
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compSetArgument", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compSetArgument", new TestArgument(
             new TestSetValue(new TestValue[] { new TestStringValue("1234") }))));
 
         // boolean conversions

@@ -101,7 +101,7 @@ public class TestNamespaceHandler extends BaseTestComponent implements Namespace
             }
             else if (attribute.getName().equals("copy-component")) {
                 // make a copy of the metadata, but don't decorate it.  This is used on all of the component elements,
-                // not just LocalComponent
+                // not just BeanComponent
                 ComponentMetadata metadata = (ComponentMetadata)NamespaceUtil.cloneMetadata(component);
                 return metadata;
             }
@@ -129,7 +129,7 @@ public class TestNamespaceHandler extends BaseTestComponent implements Namespace
             }
             else if (element.getTagName().equals("copy")) {
                 // make a copy of the metadata, but don't decorate it.  This is used on all of the component elements,
-                // not just LocalComponent
+                // not just BeanComponent
                 return (ComponentMetadata)NamespaceUtil.cloneMetadata(component);
             }
             // we have a different value tag

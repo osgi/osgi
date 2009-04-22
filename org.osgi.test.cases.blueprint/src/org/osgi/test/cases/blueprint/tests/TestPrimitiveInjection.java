@@ -16,14 +16,14 @@
 
 package org.osgi.test.cases.blueprint.tests;
 
-import org.osgi.test.cases.blueprint.framework.ConstructorMetadataValidator;
+import org.osgi.test.cases.blueprint.framework.ArgumentMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
 import org.osgi.test.cases.blueprint.framework.PropertyMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.StandardTestController;
-import org.osgi.test.cases.blueprint.framework.StringParameter;
+import org.osgi.test.cases.blueprint.framework.StringArgument;
 import org.osgi.test.cases.blueprint.framework.StringProperty;
 import org.osgi.test.cases.blueprint.framework.TestNullValue;
-import org.osgi.test.cases.blueprint.framework.TestParameter;
+import org.osgi.test.cases.blueprint.framework.TestArgument;
 import org.osgi.test.cases.blueprint.framework.TestProperty;
 import org.osgi.test.cases.blueprint.framework.TestStringValue;
 import org.osgi.test.cases.blueprint.services.AssertionService;
@@ -39,16 +39,16 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
         startEvents.validateComponentArgument(id, "arg1", value, type);
     }
 
-    private void addConstructorMetadataValidator(MetadataEventSet startEvents, String id, String source, Class argType, Class valueType) {
-        startEvents.addValidator(new ConstructorMetadataValidator(id, new TestParameter[] {
-            new StringParameter(argType, source, valueType)
+    private void addArgumentMetadataValidator(MetadataEventSet startEvents, String id, String source, Class argType, Class valueType) {
+        startEvents.addValidator(new ArgumentMetadataValidator(id, new TestArgument[] {
+            new StringArgument(argType, source, valueType)
         }));
     }
 
     private void addConstructorNullValidator(MetadataEventSet startEvents, String id, Class targetType) {
         startEvents.validateComponentArgument(id, "arg1", null, targetType);
-        startEvents.addValidator(new ConstructorMetadataValidator(id, new TestParameter[] {
-            new TestParameter(new TestNullValue(), targetType)
+        startEvents.addValidator(new ArgumentMetadataValidator(id, new TestArgument[] {
+            new TestArgument(new TestNullValue(), targetType)
         }));
     }
 
@@ -58,20 +58,20 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
         // this uses the default component name
         startEvents.addAssertion("comp1", AssertionService.COMPONENT_CREATED);
         // no argument validator
-        startEvents.addValidator(new ConstructorMetadataValidator("compNoArg"));
+        startEvents.addValidator(new ArgumentMetadataValidator("compNoArg"));
 
         // single string argument
         startEvents.validateComponentArgument("compOneArg", "arg1", "compOneArg");
         // just a single argument, no explicit typing
-        startEvents.addValidator(new ConstructorMetadataValidator("compOneArg", new TestParameter[] {
-            new StringParameter("compOneArg")
+        startEvents.addValidator(new ArgumentMetadataValidator("compOneArg", new TestArgument[] {
+            new StringArgument("compOneArg")
         }));
         // Two String arguments with implicit order
         startEvents.validateComponentArgument("compImplicitString", "arg1", "compImplicitString");
         startEvents.validateComponentArgument("compImplicitString", "arg2", "ABC");
-        startEvents.addValidator(new ConstructorMetadataValidator("compImplicitString", new TestParameter[] {
-            new StringParameter("compImplicitString"),
-            new StringParameter("ABC")
+        startEvents.addValidator(new ArgumentMetadataValidator("compImplicitString", new TestArgument[] {
+            new StringArgument("compImplicitString"),
+            new StringArgument("ABC")
         }));
 
         // Two String arguments with explicit order
@@ -79,9 +79,9 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
         // in index order, not specification order
         startEvents.validateComponentArgument("compIndexedString", "arg1", "compIndexedString");
         startEvents.validateComponentArgument("compIndexedString", "arg2", "ABC");
-        startEvents.addValidator(new ConstructorMetadataValidator("compIndexedString", new TestParameter[] {
-            new TestParameter(new TestStringValue("ABC"), 1),
-            new TestParameter(new TestStringValue("compIndexedString"), 0)
+        startEvents.addValidator(new ArgumentMetadataValidator("compIndexedString", new TestArgument[] {
+            new TestArgument(new TestStringValue("ABC"), 1),
+            new TestArgument(new TestStringValue("compIndexedString"), 0)
         }));
 
         // Three string arguments with different types in correct argument order
@@ -90,11 +90,11 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
         startEvents.validateComponentArgument("compThreeArgOverride", "arg2", null, String.class);
         // The boolean type argument can only match the last one (Object)
         startEvents.validateComponentArgument("compThreeArgOverride", "arg3", Boolean.TRUE, Boolean.class);
-        startEvents.addValidator(new ConstructorMetadataValidator("compThreeArgOverride", new TestParameter[] {
-            new StringParameter(String.class, "compThreeArgOverride"),
+        startEvents.addValidator(new ArgumentMetadataValidator("compThreeArgOverride", new TestArgument[] {
+            new StringArgument(String.class, "compThreeArgOverride"),
             // TODO:  The order may also need adjusting here.
-            new StringParameter(Object.class, "true", Boolean.class),
-            new TestParameter(new TestNullValue(), String.class)
+            new StringArgument(Object.class, "true", Boolean.class),
+            new TestArgument(new TestNullValue(), String.class)
         }));
 
         // Three string arguments with different types using different argument order that requires
@@ -104,46 +104,46 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
         startEvents.validateComponentArgument("compThreeArgImplicit", "arg2", null, String.class);
         // The boolean type argument can only match the last one (Object)
         startEvents.validateComponentArgument("compThreeArgImplicit", "arg3", "ABC");
-        startEvents.addValidator(new ConstructorMetadataValidator("compThreeArgImplicit", new TestParameter[] {
-            new StringParameter("compThreeArgImplicit"),
-            new TestParameter(new TestNullValue()),
-            new StringParameter("ABC")
+        startEvents.addValidator(new ArgumentMetadataValidator("compThreeArgImplicit", new TestArgument[] {
+            new StringArgument("compThreeArgImplicit"),
+            new TestArgument(new TestNullValue()),
+            new StringArgument("ABC")
         }));
 
         // Null string valued argument
         startEvents.validateComponentArgument("compZeroLengthString1", "arg2", "");
-        startEvents.addValidator(new ConstructorMetadataValidator("compZeroLengthString1", new TestParameter[] {
+        startEvents.addValidator(new ArgumentMetadataValidator("compZeroLengthString1", new TestArgument[] {
             // TODO:  Bugzilla 1163 -- these may need adjusting once 1163 is resolved.  The arguments are supposed to be
             // in index order, not specification order
-            new TestParameter(new TestStringValue(""), 1),
-            new TestParameter(new TestStringValue("compZeroLengthString1"), 0)
+            new TestArgument(new TestStringValue(""), 1),
+            new TestArgument(new TestStringValue("compZeroLengthString1"), 0)
         }));
 
         // Null string valued argument
         startEvents.validateComponentArgument("compZeroLengthString2", "arg2", "");
-        startEvents.addValidator(new ConstructorMetadataValidator("compZeroLengthString2", new TestParameter[] {
+        startEvents.addValidator(new ArgumentMetadataValidator("compZeroLengthString2", new TestArgument[] {
             // TODO:  Bugzilla 1163 -- these may need adjusting once 1163 is resolved.  The arguments are supposed to be
             // in index order, not specification order
-            new TestParameter(new TestStringValue(""), 1),
-            new TestParameter(new TestStringValue("compZeroLengthString2"), 0)
+            new TestArgument(new TestStringValue(""), 1),
+            new TestArgument(new TestStringValue("compZeroLengthString2"), 0)
         }));
 
         // Null string valued argument
         startEvents.validateComponentArgument("compZeroLengthString3", "arg2", "");
-        startEvents.addValidator(new ConstructorMetadataValidator("compZeroLengthString3", new TestParameter[] {
+        startEvents.addValidator(new ArgumentMetadataValidator("compZeroLengthString3", new TestArgument[] {
             // TODO:  Bugzilla 1163 -- these may need adjusting once 1163 is resolved.  The arguments are supposed to be
             // in index order, not specification order
-            new TestParameter(new TestStringValue(""), 1),
-            new TestParameter(new TestStringValue("compZeroLengthString3"), 0)
+            new TestArgument(new TestStringValue(""), 1),
+            new TestArgument(new TestStringValue("compZeroLengthString3"), 0)
         }));
 
         // null string valued argument
         startEvents.validateComponentArgument("compNullString", "arg2", null, String.class);
-        startEvents.addValidator(new ConstructorMetadataValidator("compNullString", new TestParameter[] {
+        startEvents.addValidator(new ArgumentMetadataValidator("compNullString", new TestArgument[] {
             // TODO:  Bugzilla 1163 -- these may need adjusting once 1163 is resolved.  The arguments are supposed to be
             // in index order, not specification order
-            new TestParameter(new TestNullValue(), 1),
-            new TestParameter(new TestStringValue("compNullString"), 0)
+            new TestArgument(new TestNullValue(), 1),
+            new TestArgument(new TestStringValue("compNullString"), 0)
         }));
 
         // from this point on, we're only testing the value of a single argument
@@ -152,19 +152,19 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
         // Primitive boolean tests
         addConstructorValueValidator(startEvents, "compPrimBooleanYes", Boolean.TRUE, Boolean.TYPE);
         // type is specified on the constructor arg, nothing on the value element
-        addConstructorMetadataValidator(startEvents, "compPrimBooleanYes", "yes", Boolean.TYPE, null);
+        addArgumentMetadataValidator(startEvents, "compPrimBooleanYes", "yes", Boolean.TYPE, null);
 
         addConstructorValueValidator(startEvents, "compPrimBooleanTrue", Boolean.TRUE, Boolean.TYPE);
         // type and value specified on the constructor arg.  The type should stick with the constructor
-        addConstructorMetadataValidator(startEvents, "compPrimBooleanTrue", "true", Boolean.TYPE, null);
+        addArgumentMetadataValidator(startEvents, "compPrimBooleanTrue", "true", Boolean.TYPE, null);
 
         addConstructorValueValidator(startEvents, "compPrimBooleanOn", Boolean.TRUE, Boolean.TYPE);
         // type specified on both the constructor argument and the value.
-        addConstructorMetadataValidator(startEvents, "compPrimBooleanOn", "on", Boolean.TYPE, Boolean.TYPE);
+        addArgumentMetadataValidator(startEvents, "compPrimBooleanOn", "on", Boolean.TYPE, Boolean.TYPE);
         // this one is slightly different.  The type is on the <value> tag.
         addConstructorValueValidator(startEvents, "compPrimBooleanNo", Boolean.FALSE, Boolean.TYPE);
         // type specified on the <value> element, not on the constructor arg
-        addConstructorMetadataValidator(startEvents, "compPrimBooleanNo", "no", null, Boolean.TYPE);
+        addArgumentMetadataValidator(startEvents, "compPrimBooleanNo", "no", null, Boolean.TYPE);
 
         addConstructorValueValidator(startEvents, "compPrimBooleanFalse", Boolean.FALSE, Boolean.TYPE);
         addConstructorValueValidator(startEvents, "compPrimBooleanOff", Boolean.FALSE, Boolean.TYPE);
@@ -224,10 +224,10 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
         // character values receive
         addConstructorValueValidator(startEvents, "compPrimCharacterZero", new Character('\0'), Character.TYPE);
         // type is specified on the constructor arg, nothing on the value element
-        addConstructorMetadataValidator(startEvents, "compPrimCharacterZero", "\\u0000", Character.TYPE, null);
+        addArgumentMetadataValidator(startEvents, "compPrimCharacterZero", "\\u0000", Character.TYPE, null);
         addConstructorValueValidator(startEvents, "compPrimCharacterMax", new Character(Character.MAX_VALUE), Character.TYPE);
         // type is specified on the constructor arg, nothing on the value element
-        addConstructorMetadataValidator(startEvents, "compPrimCharacterMax", "\\uffff", Character.TYPE, null);
+        addArgumentMetadataValidator(startEvents, "compPrimCharacterMax", "\\uffff", Character.TYPE, null);
 
         addConstructorValueValidator(startEvents, "compPrimCharacterA", new Character('A'), Character.TYPE);
 

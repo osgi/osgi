@@ -37,7 +37,7 @@ import org.osgi.test.cases.blueprint.framework.ReferencedService;
 import org.osgi.test.cases.blueprint.framework.StandardTestController;
 import org.osgi.test.cases.blueprint.framework.TestComponentValue;
 import org.osgi.test.cases.blueprint.framework.TestProperty;
-import org.osgi.test.cases.blueprint.framework.TestReferenceValue;
+import org.osgi.test.cases.blueprint.framework.TestRefValue;
 import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.services.ServiceManager;
 import org.osgi.test.cases.blueprint.services.TestServiceOne;
@@ -90,7 +90,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
         // and one for the reference to the service, which should just be a component reference
         importStartEvents.addValidator(new PropertyMetadataValidator("ReferenceChecker",
-            new TestProperty(new TestReferenceValue("TestCollection"), "list")));
+            new TestProperty(new TestRefValue("TestCollection"), "list")));
 
         // and the collection metadata
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferenceCollection("TestCollection",
@@ -552,7 +552,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
         // and one for the reference to the service, which should just be a component reference
         importStartEvents.addValidator(new PropertyMetadataValidator("ReferenceChecker",
-            new TestProperty(new TestReferenceValue("TestCollection"), "set")));
+            new TestProperty(new TestRefValue("TestCollection"), "set")));
 
         // and the collection metadata
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferenceCollection("TestCollection",
@@ -1011,7 +1011,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             new ReferenceCollection(null,
             TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
             null, Set.class,
-            new TestReferenceValue("NameComparator"),
+            new TestRefValue("NameComparator"),
             CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
             CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICES)), "set")));
 
@@ -1046,7 +1046,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             new ReferenceCollection(null,
             TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
             null, Set.class,
-            new TestReferenceValue("InvertedNameComparator"),
+            new TestRefValue("InvertedNameComparator"),
             CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
             CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICES)), "set")));
 
@@ -1078,7 +1078,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             new ReferenceCollection(null,
             TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
             null, Set.class,
-            new TestReferenceValue("ServiceReferenceComparator"),
+            new TestRefValue("ServiceReferenceComparator"),
             CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICE_REFERENCES,
             CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICES)), "set")));
 
@@ -1174,7 +1174,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             new ReferenceCollection(null,
             TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
             null, Set.class,
-            new TestReferenceValue("NameComparator"),
+            new TestRefValue("NameComparator"),
             CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
             CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICE_REFERENCES)), "set")));
 
@@ -1206,7 +1206,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             new ReferenceCollection(null,
             TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
             null, Set.class,
-            new TestReferenceValue("InvertedNameComparator"),
+            new TestRefValue("InvertedNameComparator"),
             CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
             CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICE_REFERENCES)), "set")));
 
@@ -1238,7 +1238,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             new ReferenceCollection(null,
             TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
             null, Set.class,
-            new TestReferenceValue("ServiceReferenceComparator"),
+            new TestRefValue("ServiceReferenceComparator"),
             CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICE_REFERENCES,
             CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICE_REFERENCES)), "set")));
 
@@ -1334,7 +1334,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             new ReferenceCollection(null,
             TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
             null, List.class,
-            new TestReferenceValue("NameComparator"),
+            new TestRefValue("NameComparator"),
             CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
             CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICES)), "list")));
 
@@ -1366,7 +1366,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             new ReferenceCollection(null,
             TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
             null, List.class,
-            new TestReferenceValue("InvertedNameComparator"),
+            new TestRefValue("InvertedNameComparator"),
             CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
             CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICES)), "list")));
 
@@ -1398,7 +1398,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             new ReferenceCollection(null,
             TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
             null, List.class,
-            new TestReferenceValue("ServiceReferenceComparator"),
+            new TestRefValue("ServiceReferenceComparator"),
             CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICE_REFERENCES,
             CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICES)), "list")));
 
@@ -1494,7 +1494,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             new ReferenceCollection(null,
             TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
             null, List.class,
-            new TestReferenceValue("NameComparator"),
+            new TestRefValue("NameComparator"),
             CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
             CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICE_REFERENCES)), "list")));
 
@@ -1526,7 +1526,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             new ReferenceCollection(null,
             TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
             null, List.class,
-            new TestReferenceValue("InvertedNameComparator"),
+            new TestRefValue("InvertedNameComparator"),
             CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
             CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICE_REFERENCES)), "list")));
 
@@ -1558,7 +1558,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             new ReferenceCollection(null,
             TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
             null, List.class,
-            new TestReferenceValue("ServiceReferenceComparator"),
+            new TestRefValue("ServiceReferenceComparator"),
             CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICE_REFERENCES,
             CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICE_REFERENCES)), "list")));
 

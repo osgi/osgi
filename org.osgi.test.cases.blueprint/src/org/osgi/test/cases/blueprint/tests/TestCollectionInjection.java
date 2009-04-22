@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import org.osgi.test.cases.blueprint.framework.ConstructorMetadataValidator;
+import org.osgi.test.cases.blueprint.framework.ArgumentMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.MapValueEntry;
 import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
 import org.osgi.test.cases.blueprint.framework.PropertyMetadataValidator;
@@ -38,8 +38,8 @@ import org.osgi.test.cases.blueprint.framework.StandardTestController;
 import org.osgi.test.cases.blueprint.framework.TestListValue;
 import org.osgi.test.cases.blueprint.framework.TestMapValue;
 import org.osgi.test.cases.blueprint.framework.TestNullValue;
-import org.osgi.test.cases.blueprint.framework.TestParameter;
-import org.osgi.test.cases.blueprint.framework.TestPropertiesValue;
+import org.osgi.test.cases.blueprint.framework.TestArgument;
+import org.osgi.test.cases.blueprint.framework.TestPropsValue;
 import org.osgi.test.cases.blueprint.framework.TestProperty;
 import org.osgi.test.cases.blueprint.framework.TestSetValue;
 import org.osgi.test.cases.blueprint.framework.TestStringValue;
@@ -64,13 +64,13 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         List expected = new ArrayList();
         addConstructorValidator(startEvents, "compEmptyList", expected, List.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compEmptyList", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compEmptyList", new TestArgument(
             new TestListValue(new TestValue[0]))));
 
         // null list item
         addConstructorValidator(startEvents, "compNullList", null, List.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compNullList", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compNullList", new TestArgument(
             new TestNullValue(), List.class)));
 
         // simple list of strings
@@ -79,7 +79,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add("def");
         addConstructorValidator(startEvents, "compStringItems", expected, List.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compStringItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compStringItems", new TestArgument(
             new TestListValue(new TestValue[] { new TestStringValue("abc"), new TestStringValue("def") }))));
 
         // simple list of strings with duplicates
@@ -93,7 +93,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(Boolean.FALSE);
         addConstructorValidator(startEvents, "compBooleanItems", expected, List.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compBooleanItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compBooleanItems", new TestArgument(
             new TestListValue(new TestValue[] { new TestStringValue(Boolean.class, "true"),
             new TestStringValue(Boolean.class, "false") }))));
 
@@ -115,7 +115,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compMixedItems", expected, List.class);
 
         // large metadata validation step here.
-        startEvents.addValidator(new ConstructorMetadataValidator("compMixedItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compMixedItems", new TestArgument(
             new TestListValue(new TestValue[] {
                 new TestStringValue(String.class, "abc"),
                 new TestStringValue(Boolean.class, "false"),
@@ -138,7 +138,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(new Double(1.0));
         addConstructorValidator(startEvents, "compTypedItems", expected, List.class);
 
-        startEvents.addValidator(new ConstructorMetadataValidator("compTypedItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compTypedItems", new TestArgument(
             new TestListValue(new TestValue[] {
                 new TestStringValue("0.0"),
                 new TestStringValue("1.0")
@@ -151,7 +151,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(Boolean.TRUE);
         addConstructorValidator(startEvents, "compTypeOverride", expected, List.class);
 
-        startEvents.addValidator(new ConstructorMetadataValidator("compTypeOverride", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compTypeOverride", new TestArgument(
             new TestListValue(new TestValue[] {
                 new TestStringValue("0.0"),
                 new TestStringValue("1.0"),
@@ -201,13 +201,13 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         List expected = new ArrayList();
         addConstructorValidator(startEvents, "compEmptyList", expected, List.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compEmptyList", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compEmptyList", new TestArgument(
             new TestListValue(new TestValue[0]))));
 
         // null list item
         addConstructorValidator(startEvents, "compNullList", null, List.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compNullList", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compNullList", new TestArgument(
             new TestNullValue(), List.class)));
 
         // simple list of strings
@@ -216,7 +216,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add("def");
         addConstructorValidator(startEvents, "compStringItems", expected, List.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compStringItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compStringItems", new TestArgument(
             new TestListValue(new TestValue[] { new TestStringValue("abc"), new TestStringValue("def") }))));
 
         // simple list of strings with duplicates
@@ -230,7 +230,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(Boolean.FALSE);
         addConstructorValidator(startEvents, "compBooleanItems", expected, List.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compBooleanItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compBooleanItems", new TestArgument(
             new TestListValue(new TestValue[] { new TestStringValue(Boolean.class, "true"),
             new TestStringValue(Boolean.class, "false") }))));
 
@@ -252,7 +252,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compMixedItems", expected, List.class);
 
         // large metadata validation step here.
-        startEvents.addValidator(new ConstructorMetadataValidator("compMixedItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compMixedItems", new TestArgument(
             new TestListValue(new TestValue[] {
                 new TestStringValue(String.class, "abc"),
                 new TestStringValue(Boolean.class, "false"),
@@ -275,7 +275,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(new Double(1.0));
         addConstructorValidator(startEvents, "compTypedItems", expected, List.class);
 
-        startEvents.addValidator(new ConstructorMetadataValidator("compTypedItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compTypedItems", new TestArgument(
             new TestListValue(new TestValue[] {
                 new TestStringValue("0.0"),
                 new TestStringValue("1.0")
@@ -288,7 +288,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(Boolean.TRUE);
         addConstructorValidator(startEvents, "compTypeOverride", expected, List.class);
 
-        startEvents.addValidator(new ConstructorMetadataValidator("compTypeOverride", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compTypeOverride", new TestArgument(
             new TestListValue(new TestValue[] {
                 new TestStringValue("0.0"),
                 new TestStringValue("1.0"),
@@ -338,13 +338,13 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         List expected = new ArrayList();
         addConstructorValidator(startEvents, "compEmptyList", expected, List.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compEmptyList", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compEmptyList", new TestArgument(
             new TestListValue(new TestValue[0]))));
 
         // null list item
         addConstructorValidator(startEvents, "compNullList", null, List.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compNullList", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compNullList", new TestArgument(
             new TestNullValue(), List.class)));
 
         // simple list of strings
@@ -353,7 +353,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add("def");
         addConstructorValidator(startEvents, "compStringItems", expected, List.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compStringItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compStringItems", new TestArgument(
             new TestListValue(new TestValue[] { new TestStringValue("abc"), new TestStringValue("def") }))));
 
         // simple list of strings with duplicates
@@ -367,7 +367,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(Boolean.FALSE);
         addConstructorValidator(startEvents, "compBooleanItems", expected, List.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compBooleanItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compBooleanItems", new TestArgument(
             new TestListValue(new TestValue[] { new TestStringValue(Boolean.class, "true"),
             new TestStringValue(Boolean.class, "false") }))));
 
@@ -389,7 +389,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compMixedItems", expected, List.class);
 
         // large metadata validation step here.
-        startEvents.addValidator(new ConstructorMetadataValidator("compMixedItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compMixedItems", new TestArgument(
             new TestListValue(new TestValue[] {
                 new TestStringValue(String.class, "abc"),
                 new TestStringValue(Boolean.class, "false"),
@@ -412,7 +412,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(new Double(1.0));
         addConstructorValidator(startEvents, "compTypedItems", expected, List.class);
 
-        startEvents.addValidator(new ConstructorMetadataValidator("compTypedItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compTypedItems", new TestArgument(
             new TestListValue(new TestValue[] {
                 new TestStringValue("0.0"),
                 new TestStringValue("1.0")
@@ -425,7 +425,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(Boolean.TRUE);
         addConstructorValidator(startEvents, "compTypeOverride", expected, List.class);
 
-        startEvents.addValidator(new ConstructorMetadataValidator("compTypeOverride", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compTypeOverride", new TestArgument(
             new TestListValue(new TestValue[] {
                 new TestStringValue("0.0"),
                 new TestStringValue("1.0"),
@@ -964,13 +964,13 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         Set expected = new HashSet();
         addConstructorValidator(startEvents, "compEmptySet", expected, Set.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compEmptySet", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compEmptySet", new TestArgument(
             new TestSetValue(new TestValue[0]))));
 
         // null set item
         addConstructorValidator(startEvents, "compNullSet", null, Set.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compNullSet", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compNullSet", new TestArgument(
             new TestNullValue(), Set.class)));
 
         // simple set of strings
@@ -979,7 +979,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add("def");
         addConstructorValidator(startEvents, "compStringItems", expected, Set.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compStringItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compStringItems", new TestArgument(
             new TestSetValue(new TestValue[] { new TestStringValue("abc"), new TestStringValue("def") }))));
 
         // simple set of strings with duplicates...this should be collapsed to a single
@@ -993,7 +993,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(Boolean.FALSE);
         addConstructorValidator(startEvents, "compBooleanItems", expected, Set.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compBooleanItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compBooleanItems", new TestArgument(
             new TestSetValue(new TestValue[] { new TestStringValue(Boolean.class, "true"),
             new TestStringValue(Boolean.class, "false") }))));
 
@@ -1015,7 +1015,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compMixedItems", expected, Set.class);
 
         // large metadata validation step here.
-        startEvents.addValidator(new ConstructorMetadataValidator("compMixedItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compMixedItems", new TestArgument(
             new TestSetValue(new TestValue[] {
                 new TestStringValue(String.class, "abc"),
                 new TestStringValue(Boolean.class, "false"),
@@ -1038,7 +1038,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(new Double(1.0));
         addConstructorValidator(startEvents, "compTypedItems", expected, Set.class);
 
-        startEvents.addValidator(new ConstructorMetadataValidator("compTypedItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compTypedItems", new TestArgument(
             new TestSetValue(new TestValue[] {
                 new TestStringValue("0.0"),
                 new TestStringValue("1.0")
@@ -1051,7 +1051,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(Boolean.TRUE);
         addConstructorValidator(startEvents, "compTypeOverride", expected, Set.class);
 
-        startEvents.addValidator(new ConstructorMetadataValidator("compTypeOverride", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compTypeOverride", new TestArgument(
             new TestSetValue(new TestValue[] {
                 new TestStringValue("0.0"),
                 new TestStringValue("1.0"),
@@ -1100,14 +1100,14 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         Set expected = new HashSet();
         addConstructorValidator(startEvents, "compEmptySet", expected, Set.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compEmptySet", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compEmptySet", new TestArgument(
             new TestSetValue(new TestValue[0]))));
 
         // null set item
         addConstructorValidator(startEvents, "compNullSet", null, Set.class);
         // validate the metadata for this one too
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compNullSet", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compNullSet", new TestArgument(
             new TestNullValue(), Set.class)));
 
         // simple set of strings
@@ -1116,7 +1116,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add("def");
         addConstructorValidator(startEvents, "compStringItems", expected, Set.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compStringItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compStringItems", new TestArgument(
             new TestSetValue(new TestValue[] { new TestStringValue("abc"), new TestStringValue("def") }))));
 
         // simple set of strings with duplicates...this should be collapsed to a single
@@ -1130,7 +1130,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(Boolean.FALSE);
         addConstructorValidator(startEvents, "compBooleanItems", expected, Set.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compBooleanItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compBooleanItems", new TestArgument(
             new TestSetValue(new TestValue[] { new TestStringValue(Boolean.class, "true"),
             new TestStringValue(Boolean.class, "false") }))));
 
@@ -1152,7 +1152,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compMixedItems", expected, Set.class);
 
         // large metadata validation step here.
-        startEvents.addValidator(new ConstructorMetadataValidator("compMixedItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compMixedItems", new TestArgument(
             new TestSetValue(new TestValue[] {
                 new TestStringValue(String.class, "abc"),
                 new TestStringValue(Boolean.class, "false"),
@@ -1175,7 +1175,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(new Double(1.0));
         addConstructorValidator(startEvents, "compTypedItems", expected, Set.class);
 
-        startEvents.addValidator(new ConstructorMetadataValidator("compTypedItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compTypedItems", new TestArgument(
             new TestSetValue(new TestValue[] {
                 new TestStringValue("0.0"),
                 new TestStringValue("1.0")
@@ -1188,7 +1188,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(Boolean.TRUE);
         addConstructorValidator(startEvents, "compTypeOverride", expected, Set.class);
 
-        startEvents.addValidator(new ConstructorMetadataValidator("compTypeOverride", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compTypeOverride", new TestArgument(
             new TestSetValue(new TestValue[] {
                 // TODO:  Remove explicit type once bug is fixed
                 new TestStringValue("0.0"),
@@ -1239,14 +1239,14 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         Set expected = new HashSet();
         addConstructorValidator(startEvents, "compEmptySet", expected, Set.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compEmptySet", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compEmptySet", new TestArgument(
             new TestSetValue(new TestValue[0]))));
 
         // null set item
         addConstructorValidator(startEvents, "compNullSet", null, Set.class);
         // validate the metadata for this one too
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compNullSet", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compNullSet", new TestArgument(
             new TestNullValue(), Set.class)));
 
         // simple set of strings
@@ -1255,7 +1255,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add("def");
         addConstructorValidator(startEvents, "compStringItems", expected, Set.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compStringItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compStringItems", new TestArgument(
             new TestSetValue(new TestValue[] { new TestStringValue("abc"), new TestStringValue("def") }))));
 
         // simple set of strings with duplicates...this should be collapsed to a single
@@ -1269,7 +1269,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(Boolean.FALSE);
         addConstructorValidator(startEvents, "compBooleanItems", expected, Set.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compBooleanItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compBooleanItems", new TestArgument(
             new TestSetValue(new TestValue[] { new TestStringValue(Boolean.class, "true"),
             new TestStringValue(Boolean.class, "false") }))));
 
@@ -1291,7 +1291,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compMixedItems", expected, Set.class);
 
         // large metadata validation step here.
-        startEvents.addValidator(new ConstructorMetadataValidator("compMixedItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compMixedItems", new TestArgument(
             new TestSetValue(new TestValue[] {
                 new TestStringValue(String.class, "abc"),
                 new TestStringValue(Boolean.class, "false"),
@@ -1314,7 +1314,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(new Double(1.0));
         addConstructorValidator(startEvents, "compTypedItems", expected, Set.class);
 
-        startEvents.addValidator(new ConstructorMetadataValidator("compTypedItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compTypedItems", new TestArgument(
             new TestSetValue(new TestValue[] {
                 new TestStringValue("0.0"),
                 new TestStringValue("1.0")
@@ -1327,7 +1327,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add(Boolean.TRUE);
         addConstructorValidator(startEvents, "compTypeOverride", expected, Set.class);
 
-        startEvents.addValidator(new ConstructorMetadataValidator("compTypeOverride", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compTypeOverride", new TestArgument(
             new TestSetValue(new TestValue[] {
                 new TestStringValue("0.0"),
                 new TestStringValue("1.0"),
@@ -1800,13 +1800,13 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         Map expected = new HashMap();
         addConstructorValidator(startEvents, "compEmptyMap", expected, Map.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compEmptyMap", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compEmptyMap", new TestArgument(
             new TestMapValue(new MapValueEntry[0]))));
 
         // null Map item
         addConstructorValidator(startEvents, "compNullMap", null, Map.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compNullMap", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compNullMap", new TestArgument(
             new TestNullValue(), Map.class)));
 
         // simple Map of strings
@@ -1816,7 +1816,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compStringItems", expected, Map.class);
 
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compStringItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compStringItems", new TestArgument(
             new TestMapValue(new MapValueEntry[]{
                 new MapValueEntry("abc", "1"),
                 new MapValueEntry("def", "2"),
@@ -1834,7 +1834,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compBooleanItems", expected, Map.class);
 
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compBooleanItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compBooleanItems", new TestArgument(
             new TestMapValue(new MapValueEntry[]{
                 new MapValueEntry("true", new TestStringValue(Boolean.class, "true")),
                 new MapValueEntry("false", new TestStringValue(Boolean.class, "false"))
@@ -1847,7 +1847,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compBooleanKeys", expected, Map.class);
 
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compBooleanKeys", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compBooleanKeys", new TestArgument(
             new TestMapValue(new MapValueEntry[]{
                 new MapValueEntry(new TestStringValue(Boolean.class, "true"), new TestStringValue("true")),
                 new MapValueEntry(new TestStringValue(Boolean.class, "false"), new TestStringValue("false"))
@@ -1861,7 +1861,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compTypedItems", expected, Map.class);
 
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compTypedItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compTypedItems", new TestArgument(
             new TestMapValue(new MapValueEntry[]{
                 new MapValueEntry("true", "true"),
                 new MapValueEntry("false", "false"),
@@ -1877,7 +1877,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compTypedKeys", expected, Map.class);
 
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compTypedKeys", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compTypedKeys", new TestArgument(
             new TestMapValue(new MapValueEntry[]{
                 new MapValueEntry("true", "true"),
                 new MapValueEntry("false", "false"),
@@ -1903,7 +1903,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compMixedItems", expected, Map.class);
 
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compMixedItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compMixedItems", new TestArgument(
             new TestMapValue(new MapValueEntry[]{
                 new MapValueEntry("String", new TestStringValue(String.class, "abc")),
                 new MapValueEntry("Boolean", new TestStringValue(Boolean.class, "false")),
@@ -1963,13 +1963,13 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         Map expected = new HashMap();
         addConstructorValidator(startEvents, "compEmptyMap", expected, Map.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compEmptyMap", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compEmptyMap", new TestArgument(
             new TestMapValue(new MapValueEntry[0]))));
 
         // null Map item
         addConstructorValidator(startEvents, "compNullMap", null, Map.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compNullMap", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compNullMap", new TestArgument(
             new TestNullValue(), Map.class)));
 
         // simple Map of strings
@@ -1979,7 +1979,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compStringItems", expected, Map.class);
 
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compStringItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compStringItems", new TestArgument(
             new TestMapValue(new MapValueEntry[]{
                 new MapValueEntry("abc", "1"),
                 new MapValueEntry("def", "2"),
@@ -1997,7 +1997,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compBooleanItems", expected, Map.class);
 
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compBooleanItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compBooleanItems", new TestArgument(
             new TestMapValue(new MapValueEntry[]{
                 new MapValueEntry("true", new TestStringValue(Boolean.class, "true")),
                 new MapValueEntry("false", new TestStringValue(Boolean.class, "false"))
@@ -2010,7 +2010,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compBooleanKeys", expected, Map.class);
 
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compBooleanKeys", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compBooleanKeys", new TestArgument(
             new TestMapValue(new MapValueEntry[]{
                 new MapValueEntry(new TestStringValue(Boolean.class, "true"), new TestStringValue("true")),
                 new MapValueEntry(new TestStringValue(Boolean.class, "false"), new TestStringValue("false"))
@@ -2024,7 +2024,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compTypedItems", expected, Map.class);
 
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compTypedItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compTypedItems", new TestArgument(
             new TestMapValue(new MapValueEntry[]{
                 new MapValueEntry("true", "true"),
                 new MapValueEntry("false", "false"),
@@ -2040,7 +2040,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compTypedKeys", expected, Map.class);
 
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compTypedKeys", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compTypedKeys", new TestArgument(
             new TestMapValue(new MapValueEntry[]{
                 new MapValueEntry("true", "true"),
                 new MapValueEntry("false", "false"),
@@ -2066,7 +2066,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compMixedItems", expected, Map.class);
 
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compMixedItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compMixedItems", new TestArgument(
             new TestMapValue(new MapValueEntry[]{
                 new MapValueEntry("String", new TestStringValue(String.class, "abc")),
                 new MapValueEntry("Boolean", new TestStringValue(Boolean.class, "false")),
@@ -2126,13 +2126,13 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         Map expected = new HashMap();
         addConstructorValidator(startEvents, "compEmptyMap", expected, Map.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compEmptyMap", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compEmptyMap", new TestArgument(
             new TestMapValue(new MapValueEntry[0]))));
 
         // null Map item
         addConstructorValidator(startEvents, "compNullMap", null, Map.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compNullMap", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compNullMap", new TestArgument(
             new TestNullValue(), Map.class)));
 
         // simple Map of strings
@@ -2142,7 +2142,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compStringItems", expected, Map.class);
 
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compStringItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compStringItems", new TestArgument(
             new TestMapValue(new MapValueEntry[]{
                 new MapValueEntry("abc", "1"),
                 new MapValueEntry("def", "2"),
@@ -2160,7 +2160,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compBooleanItems", expected, Map.class);
 
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compBooleanItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compBooleanItems", new TestArgument(
             new TestMapValue(new MapValueEntry[]{
                 new MapValueEntry("true", new TestStringValue(Boolean.class, "true")),
                 new MapValueEntry("false", new TestStringValue(Boolean.class, "false"))
@@ -2173,7 +2173,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compBooleanKeys", expected, Map.class);
 
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compBooleanKeys", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compBooleanKeys", new TestArgument(
             new TestMapValue(new MapValueEntry[]{
                 new MapValueEntry(new TestStringValue(Boolean.class, "true"), new TestStringValue("true")),
                 new MapValueEntry(new TestStringValue(Boolean.class, "false"), new TestStringValue("false"))
@@ -2187,7 +2187,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compTypedItems", expected, Map.class);
 
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compTypedItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compTypedItems", new TestArgument(
             new TestMapValue(new MapValueEntry[]{
                 new MapValueEntry("true", "true"),
                 new MapValueEntry("false", "false"),
@@ -2203,7 +2203,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compTypedKeys", expected, Map.class);
 
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compTypedKeys", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compTypedKeys", new TestArgument(
             new TestMapValue(new MapValueEntry[]{
                 new MapValueEntry("true", "true"),
                 new MapValueEntry("false", "false"),
@@ -2229,7 +2229,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addConstructorValidator(startEvents, "compMixedItems", expected, Map.class);
 
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compMixedItems", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compMixedItems", new TestArgument(
             new TestMapValue(new MapValueEntry[]{
                 new MapValueEntry("String", new TestStringValue(String.class, "abc")),
                 new MapValueEntry("Boolean", new TestStringValue(Boolean.class, "false")),
@@ -2772,26 +2772,25 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 	// Props
 	private void addPropsConstructorTestItem(MetadataEventSet startEvents)throws Exception{
 	    // Empty
-        Properties expected = new Properties();
-        this.addConstructorValidator(startEvents, "compEmptyProps", expected, Properties.class);
+        this.addConstructorValidator(startEvents, "compEmptyProps", new TestPropsValue(), Properties.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compEmptyProps", new TestParameter(
-            new TestPropertiesValue(expected))));
+        startEvents.addValidator(new ArgumentMetadataValidator("compEmptyProps", new TestArgument(
+            new TestPropsValue())));
         // null
         this.addConstructorValidator(startEvents, "compNullProps", null, Properties.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new ConstructorMetadataValidator("compNullProps", new TestParameter(
+        startEvents.addValidator(new ArgumentMetadataValidator("compNullProps", new TestArgument(
             new TestNullValue(), Properties.class)));
 
         // strings
-        expected = new Properties();
+        TestPropsValue expected = new TestPropsValue();
         expected.put("administrator", "administrator@example.org");
         expected.put("support", "support@example.org");
         expected.put("development", "development@example.org");
         this.addConstructorValidator(startEvents, "compStringItems", expected, Properties.class);
 
-        startEvents.addValidator(new ConstructorMetadataValidator("compStringItems", new TestParameter(
-            new TestPropertiesValue(expected))));
+        startEvents.addValidator(new ArgumentMetadataValidator("compStringItems",
+            new TestArgument(expected)));
 
     }
 
@@ -2827,11 +2826,10 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
 	private void addPropsPropertyTestItem(MetadataEventSet startEvents)throws Exception{
 	    // Empty
-	    Properties expected = new Properties();
-	    this.addPropertyValidator(startEvents, "compEmptyProps", "properties", expected, Properties.class);
+	    this.addPropertyValidator(startEvents, "compEmptyProps", "properties", new TestPropsValue(), Properties.class);
         // validate the metadata for this one too
         startEvents.addValidator(new PropertyMetadataValidator("compEmptyProps", new TestProperty(
-            new TestPropertiesValue(expected)
+            new TestPropsValue()
             , "properties")));
 
 	    // null
@@ -2843,15 +2841,14 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
             , "properties")));
 
 	    // strings
-	    expected = new Properties();
+	    TestPropsValue expected = new TestPropsValue();
 	    expected.put("administrator", "administrator@example.org");
 	    expected.put("support", "support@example.org");
 	    expected.put("development", "development@example.org");
 	    this.addPropertyValidator(startEvents, "compStringItems", "properties", expected, Properties.class);
         // validate the metadata for this one too
-        startEvents.addValidator(new PropertyMetadataValidator("compStringItems", new TestProperty(
-            new TestPropertiesValue(expected)
-            , "properties")));
+        startEvents.addValidator(new PropertyMetadataValidator("compStringItems",
+            new TestProperty(expected, "properties")));
 	}
 
     public void testPropsProperty() throws Exception {

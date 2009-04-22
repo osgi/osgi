@@ -18,8 +18,8 @@ package org.osgi.test.cases.blueprint.tests;
 
 import java.util.Hashtable;
 
-import org.osgi.service.blueprint.reflect.ServiceExportComponentMetadata;
-import org.osgi.service.blueprint.reflect.ServiceReferenceComponentMetadata;
+import org.osgi.service.blueprint.reflect.ServiceMetadata;
+import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
 import org.osgi.test.cases.blueprint.components.serviceimport.ServiceTwoListener;
 import org.osgi.test.cases.blueprint.framework.*;
 import org.osgi.test.cases.blueprint.services.*;
@@ -59,7 +59,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
-            ServiceExportComponentMetadata.EXPORT_MODE_DISABLED, 0, null, null, null)));
+            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
 
@@ -68,7 +68,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
         // also validate the metadata for the imported service (this one only has a single import, so easy to locate)
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferencedService("ServiceOne", TestServiceOne.class,
-            ServiceReferenceComponentMetadata.MANDATORY_AVAILABILITY, null, null, ReferencedService.DEFAULT_TIMEOUT)));
+            ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, null, ReferencedService.DEFAULT_TIMEOUT)));
         importStartEvents.addAssertion("ServiceOneConstructor", AssertionService.SERVICE_SUCCESS);
         importStartEvents.addAssertion("ServiceOneProperty", AssertionService.SERVICE_SUCCESS);
         // validate that the component is the correct type
@@ -77,9 +77,9 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         importStartEvents.addValidator(new GetReferencedServicesMetadataValidator("ServiceOne"));
 
         // do some validation of the import metadata
-        importStartEvents.addValidator(new ConstructorMetadataValidator("ServiceOneConstructor", new TestParameter[] {
-            new StringParameter("ServiceOneConstructor"),
-            new ReferenceParameter("ServiceOne", TestServiceOne.class)
+        importStartEvents.addValidator(new ArgumentMetadataValidator("ServiceOneConstructor", new TestArgument[] {
+            new StringArgument("ServiceOneConstructor"),
+            new ReferenceArgument("ServiceOne", TestServiceOne.class)
         }));
 
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceOneProperty", new TestProperty[] {
@@ -128,14 +128,17 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
                 TestGoodService.class, TestGoodServiceSubclass.class, TestBadService.class, BaseTestComponent.class, ComponentTestInfo.class },
            "BadService", null, serviceProps));
         // also validate the metadata for the exported service
+        TestPropsValue metaServiceProps = new TestPropsValue();
+        metaServiceProps.put("serviceType", "Bad");
+        metaServiceProps.put("autoExport", "All");
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
-            ServiceExportComponentMetadata.EXPORT_MODE_DISABLED, 0, null, null, null)));
+            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
 
         // This is the metadata for the bad service, which specifies quite a few things, including a lazy-init on the component.
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("BadServiceService", null,
             new Class[] { TestServiceOne.class, TestServiceTwo.class, TestServiceTwoSubclass.class, TestServiceAllSubclass.class,
                 TestGoodService.class, TestGoodServiceSubclass.class, TestBadService.class },
-            ServiceExportComponentMetadata.EXPORT_MODE_DISABLED, 2, serviceProps, null, null)));
+            ServiceMetadata.AUTO_EXPORT_DISABLED, 2, metaServiceProps, null, null)));
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
         // a very complex service event
@@ -149,16 +152,16 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
         // we reuse this to validate multiple entities
         ReferencedService service = new ReferencedService(null, TestServiceOne.class,
-            ServiceReferenceComponentMetadata.MANDATORY_AVAILABILITY, null, null, ReferencedService.DEFAULT_TIMEOUT);
+            ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, null, ReferencedService.DEFAULT_TIMEOUT);
 
         // also validate the metadata for the imported service (this one only has a single import, so easy to locate)
         importStartEvents.addValidator(new ReferencedServiceValidator(service));
 
         // do some validation of the import metadata of the injected parameter.  Since these are
         // embedded elements, they're reuse the definition above
-        importStartEvents.addValidator(new ConstructorMetadataValidator("ServiceOneConstructor", new TestParameter[] {
-            new StringParameter("ServiceOneConstructor"),
-            new TestParameter(new TestComponentValue(service))
+        importStartEvents.addValidator(new ArgumentMetadataValidator("ServiceOneConstructor", new TestArgument[] {
+            new StringArgument("ServiceOneConstructor"),
+            new TestArgument(new TestComponentValue(service))
         }));
 
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceOneProperty", new TestProperty[] {
@@ -213,7 +216,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, "ServiceOne", null, serviceProps));
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
-            ServiceExportComponentMetadata.EXPORT_MODE_DISABLED, 3, null, null, null)));
+            ServiceMetadata.AUTO_EXPORT_DISABLED, 3, null, null, null)));
 
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class, serviceProps);
@@ -257,9 +260,12 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         serviceProps.put("autoExport", "Disabled");
         // We should see both of these registered
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, "ServiceOne", null, serviceProps));
+        TestPropsValue metaServiceProps = new TestPropsValue();
+        metaServiceProps.put("serviceType", "Good");
+        metaServiceProps.put("autoExport", "Disabled");
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
-            ServiceExportComponentMetadata.EXPORT_MODE_DISABLED, 0, serviceProps, null, null)));
+            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, metaServiceProps, null, null)));
 
 
         // we should see a service event here indicating this was registered
@@ -272,18 +278,18 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         importStartEvents.addAssertion("ServiceOneProperty", AssertionService.SERVICE_SUCCESS);
 
         ReferencedService service = new ReferencedService(null, TestServiceOne.class,
-            ServiceReferenceComponentMetadata.MANDATORY_AVAILABILITY, "(serviceType=Good)", null, ReferencedService.DEFAULT_TIMEOUT);
+            ServiceReferenceMetadata.AVAILABILITY_MANDATORY, "(serviceType=Good)", null, ReferencedService.DEFAULT_TIMEOUT);
 
         // do some validation of the import metadata of the injected parameter.  Since these are
         // embedded elements, they're reuse the definition above
-        importStartEvents.addValidator(new ConstructorMetadataValidator("ServiceOneConstructor", new TestParameter[] {
-            new StringParameter("ServiceOneConstructor"),
-            new TestParameter(new TestComponentValue(service))
+        importStartEvents.addValidator(new ArgumentMetadataValidator("ServiceOneConstructor", new TestArgument[] {
+            new StringArgument("ServiceOneConstructor"),
+            new TestArgument(new TestComponentValue(service))
         }));
 
 
         service = new ReferencedService(null, TestServiceOne.class,
-            ServiceReferenceComponentMetadata.MANDATORY_AVAILABILITY, "(!(serviceType=Bad))", null, ReferencedService.DEFAULT_TIMEOUT);
+            ServiceReferenceMetadata.AVAILABILITY_MANDATORY, "(!(serviceType=Bad))", null, ReferencedService.DEFAULT_TIMEOUT);
 
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceOneProperty",
             new TestProperty(new TestComponentValue(service), "one")));
@@ -341,7 +347,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, "ServiceOne"));
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("GoodServiceService", "ServiceOne", TestServiceOne.class,
-            ServiceExportComponentMetadata.EXPORT_MODE_DISABLED, 0, null, new String[] { "Depends1", "Depends2"}, null)));
+            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, new String[] { "Depends1", "Depends2"}, null)));
 
         // these are lazy-inited components, but we should see them get created
         // because of the depends-on attribute
@@ -388,7 +394,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne",
             new Class[] { TestServiceOne.class, TestServiceTwo.class },
-            ServiceExportComponentMetadata.EXPORT_MODE_DISABLED, 0, null, null, null)));
+            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
 
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", new Class[] { TestServiceOne.class, TestServiceTwo.class });
@@ -444,7 +450,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne",
             TestGoodService.class,
-            ServiceExportComponentMetadata.EXPORT_MODE_DISABLED, 0, null, null, null)));
+            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
 
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", TestGoodService.class);
@@ -494,7 +500,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceInterfacesService", "ServiceInterfaces",
             new Class[] { TestServiceOne.class, TestServiceTwo.class, TestServiceAllSubclass.class, ComponentTestInfo.class },
-            ServiceExportComponentMetadata.EXPORT_MODE_INTERFACES, 0, null, null, null)));
+            ServiceMetadata.AUTO_EXPORT_INTERFACES, 0, null, null, null)));
 
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", new Class[] { TestServiceOne.class, TestServiceTwo.class,
@@ -548,7 +554,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceClassesService", "ServiceClasses",
             new Class[] { TestGoodService.class, TestGoodServiceSubclass.class, BaseTestComponent.class },
-            ServiceExportComponentMetadata.EXPORT_MODE_CLASS_HIERARCHY, 0, null, null, null)));
+            ServiceMetadata.AUTO_EXPORT_CLASS_HIERARCHY, 0, null, null, null)));
 
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", new Class[] { TestGoodService.class, TestGoodServiceSubclass.class,
@@ -599,7 +605,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceAllService", "ServiceAll",
             new Class[] { TestGoodService.class, TestGoodServiceSubclass.class, BaseTestComponent.class,
             TestServiceOne.class, TestServiceTwo.class, TestServiceAllSubclass.class, ComponentTestInfo.class },
-            ServiceExportComponentMetadata.EXPORT_MODE_ALL, 0, null, null, null)));
+            ServiceMetadata.AUTO_EXPORT_ALL_CLASSES, 0, null, null, null)));
 
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED",
@@ -654,7 +660,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, "ServiceOneFactory"));
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneFactoryService", "ServiceOneFactory", TestServiceOne.class,
-            ServiceExportComponentMetadata.EXPORT_MODE_DISABLED, 0, null, null, null)));
+            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
 
@@ -663,7 +669,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
         // also validate the metadata for the imported service (this one only has a single import, so easy to locate)
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferencedService("ServiceOne", TestServiceOne.class,
-            ServiceReferenceComponentMetadata.MANDATORY_AVAILABILITY, null, null, ReferencedService.DEFAULT_TIMEOUT)));
+            ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, null, ReferencedService.DEFAULT_TIMEOUT)));
         importStartEvents.addAssertion("ServiceOneConstructor", AssertionService.SERVICE_SUCCESS);
         importStartEvents.addAssertion("ServiceOneProperty", AssertionService.SERVICE_SUCCESS);
 
@@ -703,7 +709,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, "ServiceOne", null, props));
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
-            ServiceExportComponentMetadata.EXPORT_MODE_DISABLED, 0, null, null, null)));
+            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
         // this should be modified, and have the new service properties available.
@@ -790,7 +796,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, "ServiceOne"));
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("GoodServiceService", "ServiceOne", TestServiceOne.class,
-            ServiceExportComponentMetadata.EXPORT_MODE_DISABLED, 0, null, null, null)));
+            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
 
@@ -868,11 +874,11 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         props.put("service.component.name", "ServiceOneService");
         exportStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_REGISTERED, props));
         // we're expecting some listener metadata on the export.
-        RegistrationListener[] listeners = new RegistrationListener[] {
-            new RegistrationListener("ServiceOneListener", "register", "unregister")
+        TestRegistrationListener[] listeners = new TestRegistrationListener[] {
+            new TestRegistrationListener("ServiceOneListener", "register", "unregister")
         };
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
-            ServiceExportComponentMetadata.EXPORT_MODE_DISABLED, 0, null, null, listeners)));
+            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, listeners)));
 
         // now some expected termination stuff
         EventSet exportStopEvents = controller.getStopEvents();
@@ -900,11 +906,11 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         props.put("service.component.name", "ServiceOneService");
         exportStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_REGISTERED, props));
         // we're expecting some listener metadata on the export.
-        RegistrationListener[] listeners = new RegistrationListener[] {
-            new RegistrationListener("ServiceOneListener", "register", "unregister")
+        TestRegistrationListener[] listeners = new TestRegistrationListener[] {
+            new TestRegistrationListener("ServiceOneListener", "register", "unregister")
         };
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOneListener", TestServiceOne.class,
-            ServiceExportComponentMetadata.EXPORT_MODE_DISABLED, 0, null, null, listeners)));
+            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, listeners)));
 
         // now some expected termination stuff
         EventSet exportStopEvents = controller.getStopEvents();
@@ -939,12 +945,12 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_REGISTERED, props1));
         exportStartEvents.addEvent(new ComponentAssertion("ServiceTwoListener", AssertionService.SERVICE_REGISTERED, props2));
         // we're expecting some listener metadata on the export.
-        RegistrationListener[] listeners = new RegistrationListener[] {
-            new RegistrationListener("ServiceOneListener", "register", "unregister"),
-            new RegistrationListener("ServiceTwoListener", "register", "unregister")
+        TestRegistrationListener[] listeners = new TestRegistrationListener[] {
+            new TestRegistrationListener("ServiceOneListener", "register", "unregister"),
+            new TestRegistrationListener("ServiceTwoListener", "register", "unregister")
         };
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
-            ServiceExportComponentMetadata.EXPORT_MODE_DISABLED, 0, null, null, listeners)));
+            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, listeners)));
 
         // now some expected termination stuff
         EventSet exportStopEvents = controller.getStopEvents();
@@ -981,11 +987,11 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStartEvents.addEvent(new ComponentAssertion("ServiceOneTwoListener", AssertionService.SERVICE_REGISTERED, props1));
         exportStartEvents.addEvent(new ComponentAssertion("ServiceOneTwoListener", AssertionService.SERVICE_REGISTERED, props2));
         // we're expecting some listener metadata on the export.
-        RegistrationListener[] listeners = new RegistrationListener[] {
-            new RegistrationListener("ServiceOneTwoListener", "register", "unregister"),
+        TestRegistrationListener[] listeners = new TestRegistrationListener[] {
+            new TestRegistrationListener("ServiceOneTwoListener", "register", "unregister"),
         };
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
-            ServiceExportComponentMetadata.EXPORT_MODE_DISABLED, 0, null, null, listeners)));
+            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, listeners)));
 
         // now some expected termination stuff
         EventSet exportStopEvents = controller.getStopEvents();
@@ -1015,7 +1021,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         };
         // validate the metadata for the imported service (this one only has a single import, so easy to locate)
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferencedService("ServiceOne", TestServiceOne.class,
-            ServiceReferenceComponentMetadata.MANDATORY_AVAILABILITY, null, listeners, ReferencedService.DEFAULT_TIMEOUT)));
+            ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, listeners, ReferencedService.DEFAULT_TIMEOUT)));
         // the first property comes from the called method signature, the
         // second should be passed to the registration listener.
         Hashtable props = new Hashtable();
@@ -1051,7 +1057,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         };
         // validate the metadata for the imported service (this one only has a single import, so easy to locate)
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferencedService("ServiceOne", TestServiceOne.class,
-            ServiceReferenceComponentMetadata.MANDATORY_AVAILABILITY, null, listeners, ReferencedService.DEFAULT_TIMEOUT)));
+            ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, listeners, ReferencedService.DEFAULT_TIMEOUT)));
         // the first property comes from the called method signature, the
         // second should be passed to the registration listener.
         Hashtable props = new Hashtable();
@@ -1084,11 +1090,11 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         BindingListener[] listeners = new BindingListener[] {
             new BindingListener("ServiceOneListener", "bind", "unbind"),
             // this is done with an inner component
-            new BindingListener(new TestComponentValue(new LocalComponent(null, ServiceTwoListener.class, null, null)), "bind", "unbind"),
+            new BindingListener(new TestComponentValue(new BeanComponent(null, ServiceTwoListener.class, null, null)), "bind", "unbind"),
         };
         // validate the metadata for the imported service (this one only has a single import, so easy to locate)
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferencedService("ServiceOne", TestServiceOne.class,
-            ServiceReferenceComponentMetadata.MANDATORY_AVAILABILITY, null, listeners, ReferencedService.DEFAULT_TIMEOUT)));
+            ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, listeners, ReferencedService.DEFAULT_TIMEOUT)));
         // the first property comes from the called method signature, the
         // second should be passed to the registration listener.
         Hashtable props1 = new Hashtable();
@@ -1130,7 +1136,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         };
         // validate the metadata for the imported service (this one only has a single import, so easy to locate)
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferencedService("ServiceOne", TestServiceOne.class,
-            ServiceReferenceComponentMetadata.MANDATORY_AVAILABILITY, null, listeners, ReferencedService.DEFAULT_TIMEOUT)));
+            ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, listeners, ReferencedService.DEFAULT_TIMEOUT)));
         // the first property comes from the called method signature, the
         // second should be passed to the registration listener.
         Hashtable props1 = new Hashtable();
@@ -1172,7 +1178,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         };
         // validate the metadata for the imported service (this one only has a single import, so easy to locate)
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferencedService("ServiceOne", TestServiceOne.class,
-            ServiceReferenceComponentMetadata.MANDATORY_AVAILABILITY, null, listeners, ReferencedService.DEFAULT_TIMEOUT)));
+            ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, listeners, ReferencedService.DEFAULT_TIMEOUT)));
         // the first property comes from the called method signature, the
         // second should be passed to the registration listener.
         Hashtable props1 = new Hashtable();
