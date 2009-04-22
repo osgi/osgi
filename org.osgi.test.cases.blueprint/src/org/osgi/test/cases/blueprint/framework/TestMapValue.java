@@ -16,6 +16,7 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
 
@@ -26,23 +27,28 @@ import org.osgi.service.blueprint.reflect.CollectionMetadata;
 
 public class TestMapValue extends TestValue {
     // The expected set of items in the List.
-    protected MapValueEntry[] entries;
+    protected List entries;
     // the default value type
     protected String valueType;
     // the default key type
     protected String keyType;
 
     public TestMapValue() {
-        this(null, null, null);
-    }
-
-    public TestMapValue(MapValueEntry[] entries) {
-        this(entries, null, null);
-    }
-
-    public TestMapValue(MapValueEntry[] entries, Class key, Class value) {
         super(MapMetadata.class);
-        this.entries = entries;
+        this.entries = new ArrayList();
+    }
+
+    public TestMapValue(MapValueEntry[] e) {
+        this(e, null, null);
+    }
+
+    public TestMapValue(MapValueEntry[] e, Class key, Class value) {
+        this();
+        // copy this over to the list
+        for (int i = 0; i < e.length; i++) {
+            add(e[i]);
+        }
+
         if (key != null) {
             keyType = key.getName();
         }
@@ -51,6 +57,27 @@ public class TestMapValue extends TestValue {
         }
     }
 
+
+    /**
+     * Add a new MapEntry value to the end of the list.
+     *
+     * @param e      The new entry to add.
+     */
+    public void add(MapValueEntry e) {
+        entries.add(e);
+    }
+
+    public void put(TestValue key, TestValue value) {
+        add(new MapValueEntry(key, value));
+    }
+
+    public void put(String key, TestValue value) {
+        add(new MapValueEntry(key, value));
+    }
+
+    public void put(String key, String value) {
+        add(new MapValueEntry(key, value));
+    }
 
     /**
      * Validate a ParameterSpecification against an expected value.
@@ -70,13 +97,14 @@ public class TestMapValue extends TestValue {
         MapMetadata meta = (MapMetadata)v;
         List mapEntries = meta.getEntries();
         // validate the size first
-        assertEquals("Map value size mismatch", entries.length, mapEntries.size());
+        assertEquals("Map value size mismatch", entries.size(), mapEntries.size());
         assertEquals("Map default value type mismatch", valueType, meta.getValueTypeName());
         assertEquals("Map default key type mismatch", keyType, meta.getKeyTypeName());
         // now validate each of the entries
-        for (int i = 0; i < entries.length; i++) {
+        for (int i = 0; i < entries.size(); i++) {
+            MapValueEntry e = (MapValueEntry)entries.get(i);
             // validate the real entry
-            entries[i].validate(blueprintMetadata, (MapEntry)mapEntries.get(i));
+            e.validate(blueprintMetadata, (MapEntry)mapEntries.get(i));
         }
     }
 
@@ -103,13 +131,14 @@ public class TestMapValue extends TestValue {
         CollectionMetadata meta = (CollectionMetadata)v;
         List mapEntries = meta.getValues();
         // not the one we need
-        if (entries.length != mapEntries.size()) {
+        if (entries.size() != mapEntries.size()) {
             return false;
         }
         // now validate each of the entries
-        for (int i = 0; i < entries.length; i++) {
+        for (int i = 0; i < entries.size(); i++) {
+            MapValueEntry e = (MapValueEntry)entries.get(i);
             // validate the real entry
-            if (!entries[i].equals((MapEntry)mapEntries.get(i))) {
+            if (!e.equals((MapEntry)mapEntries.get(i))) {
                 return false;
             }
         }
