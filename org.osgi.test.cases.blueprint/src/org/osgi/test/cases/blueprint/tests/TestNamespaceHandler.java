@@ -114,6 +114,11 @@ public class TestNamespaceHandler extends DefaultTestBundleControl {
         startEvents.addAssertion("decorate2", AssertionService.METHOD_CALLED);
         startEvents.addAssertion("decorate3", AssertionService.METHOD_CALLED);
 
+        // these are created from classes not imported by the bundle, but we
+        // should see the creation events
+        startEvents.addAssertion("Good", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("FactoryGood", AssertionService.COMPONENT_CREATED);
+
         controller.run();
     }
 

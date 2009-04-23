@@ -58,5 +58,9 @@
     <ref-set id="TestSet2" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" availability="optional">
         <t1:copy/>
     </ref-list>
+
+    <t1:good id="Good"/>
+    <t1:good-factory id="FactoryGood">
+
 </blueprint>
 

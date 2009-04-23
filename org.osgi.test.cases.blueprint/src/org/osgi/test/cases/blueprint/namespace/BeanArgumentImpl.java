@@ -35,6 +35,12 @@ public class BeanArgumentImpl implements BeanArgument {
         index = -1;
     }
 
+    public BeanArgumentImpl(Metadata value) {
+        // default index marker
+        index = -1;
+        this.value = value;
+    }
+
     public BeanArgumentImpl(BeanArgument source) {
         value = NamespaceUtil.cloneMetadata(source.getValue());
         typeName = source.getValueType();

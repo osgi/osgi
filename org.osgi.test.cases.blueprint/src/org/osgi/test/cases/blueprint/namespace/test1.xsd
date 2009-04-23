@@ -13,4 +13,10 @@
     <xsd:element name="raise-error"/>
     <xsd:element name="replace-all"/>
     <xsd:element name="copy"/>
+    <xsd:element name="good" type="Tgood"/>
+    <xsd:element name="good-factory" type="Tgood"/>
+
+    <xsd:complexType name="Tgood">
+        <xsd:attribute name="id" type="xsd:ID" use="required"/>
+    </xsd:complexType>
 </xsd:schema>

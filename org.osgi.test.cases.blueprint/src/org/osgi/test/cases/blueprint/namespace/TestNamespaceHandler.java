@@ -27,6 +27,7 @@ import org.osgi.service.blueprint.namespace.ComponentDefinitionRegistry;
 import org.osgi.service.blueprint.namespace.ComponentNameAlreadyInUseException;
 import org.osgi.service.blueprint.namespace.NamespaceHandler;
 import org.osgi.service.blueprint.namespace.ParserContext;
+import org.osgi.service.blueprint.reflect.BeanArgument;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
@@ -162,8 +163,27 @@ public class TestNamespaceHandler extends BaseTestComponent implements Namespace
      */
     public ComponentMetadata parse(Element element, ParserContext context) {
         AssertionService.sendEvent(this, AssertionService.METHOD_CALLED);
+        // creates a component using a provided class
+        if (element.getTagName().equalsIgnoreCase("good")) {
+            String id = element.getAttribute("id");
+            BeanMetadataImpl bean = new BeanMetadataImpl(id);
+            // this explicitly sets the class rather than using class name
+            bean.setRuntimeClass(NamespaceGoodService.class);
+            bean.addArgument(new BeanArgumentImpl(new ValueMetadataImpl(id)));
+            return bean;
+        }
+        // creates a component using a provided class for the *factory*
+        else if (element.getTagName().equalsIgnoreCase("good-factory")) {
+            String id = element.getAttribute("id");
+            BeanMetadataImpl bean = new BeanMetadataImpl(id);
+            // this explicitly sets the class rather than using class name
+            bean.setRuntimeClass(NamespaceGoodFactory.class);
+            bean.setFactoryMethodName("create");
+            bean.addArgument(new BeanArgumentImpl(new ValueMetadataImpl(id)));
+            return bean;
+        }
         // this is a blanket replacement of all named components
-        if (element.getTagName().equalsIgnoreCase("replace-all")) {
+        else if (element.getTagName().equalsIgnoreCase("replace-all")) {
             ComponentDefinitionRegistry registry = context.getComponentDefinitionRegistry();
             Set names = registry.getComponentDefinitionNames();
             Iterator i = names.iterator();
