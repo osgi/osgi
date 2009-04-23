@@ -114,7 +114,7 @@ public interface ServicePublication {
 	 * property is provided as part of the service property map referenced by
 	 * the {@link #PROP_KEY_SERVICE_PROPERTIES} ServiceRegistration property.
 	 * <p>
-	 * Value of this property is of type <code>java.net.URL</code>, may be
+	 * Value of this property is of type <code>java.net.URI</code>, may be
 	 * <code>null</code>.
 	 */
 	public static final String	PROP_KEY_ENDPOINT_LOCATION			= "osgi.remote.endpoint.location";

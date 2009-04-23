@@ -16,7 +16,7 @@
 
 package org.osgi.service.discovery;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.Collection;
 import java.util.Map;
 
@@ -78,10 +78,10 @@ public interface ServiceEndpointDescription {
 	 * Returns the value of the property with key
 	 * {@link ServicePublication#PROP_KEY_ENDPOINT_LOCATION}.
 	 * 
-	 * @return The URL of the service location, or <code>null</code> if it
+	 * @return The url of the service location, or <code>null</code> if it
 	 *         hasn't been provided.
 	 */
-	URL getLocation();
+	URI getLocation();
 
 	/**
 	 * Returns the value of the property with key
