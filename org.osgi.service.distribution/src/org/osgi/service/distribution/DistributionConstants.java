@@ -45,7 +45,7 @@ public class DistributionConstants {
      * <p>
      * The value of this property is of type String, String[] or a Collection of Strings.
      */
-    public static final String  PROP_KEY_SERVICE_REMOTE_INTENTS     = "osgi.remote.requires.intents";
+    public static final String  PROP_KEY_SERVICE_REMOTE_REQUIRES_INTENTS = "osgi.remote.requires.intents";
 
     /**
      * This optional service registration property identifies the metadata type
@@ -69,7 +69,7 @@ public class DistributionConstants {
      * <p>
      * In case of proxies to remote services the value of this property is a
      * union of the value specified by the service provider, plus its
-     * remote-specific intents (see {@link #PROP_KEY_SERVICE_REMOTE_INTENTS}}), 
+     * remote-specific intents (see {@link #PROP_KEY_SERVICE_REMOTE_REQUIRES_INTENTS}}), 
      * plus any intents which the Distribution Software adds to describe characteristics 
      * of the distribution mechanism.
      * Therefore the value of this property can vary between the client side
