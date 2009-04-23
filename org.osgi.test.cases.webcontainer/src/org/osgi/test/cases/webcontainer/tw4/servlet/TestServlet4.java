@@ -31,9 +31,9 @@ import org.osgi.test.cases.webcontainer.util.Constants;
 
 /**
  * @version $Rev$ $Date$
- *
- * Servlet implementation class TestServlet4
- * This servlet is used to test different response content types
+ * 
+ *          Servlet implementation class TestServlet4 This servlet is used to
+ *          test different response content types
  */
 public class TestServlet4 extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -48,8 +48,8 @@ public class TestServlet4 extends HttpServlet {
 
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-     *      response)
-     *      This method is based on the mime type test cases from org.osgi.test.cases.http
+     *      response) This method is based on the mime type test cases from
+     *      org.osgi.test.cases.http
      */
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
@@ -76,7 +76,8 @@ public class TestServlet4 extends HttpServlet {
             response.setContentType("image/jpeg");
             ServletOutputStream out = response.getOutputStream(); // binary
             // output
-            InputStream in = getServletContext().getResourceAsStream("images/osgi_mobile.jpg");
+            InputStream in = getServletContext().getResourceAsStream(
+                    "images/osgi_mobile.jpg");
             byte buffer[] = new byte[4096];
             int read;
             while ((read = in.read(buffer, 0, buffer.length)) != -1) {

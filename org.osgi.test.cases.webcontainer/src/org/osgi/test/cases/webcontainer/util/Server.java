@@ -20,31 +20,32 @@ package org.osgi.test.cases.webcontainer.util;
  * @version $Rev$ $Date$
  */
 public class Server {
-    
+
     int port;
     String host;
-    
+
     public Server() {
-        // when host is not specified, let's try to read it from the system property.
+        // when host is not specified, let's try to read it from the system
+        // property.
         String p = System.getProperty("org.osgi.service.webcontainer.host");
         this.host = (p == null) ? "localhost" : p;
         this.port = guessHttpPort();
     }
-    
+
     public Server(String host) {
         this.host = host;
         this.port = guessHttpPort();
     }
-    
+
     public Server(String host, int port) {
         this.host = host;
         this.port = port;
     }
-    
+
     public void setHost(String host) {
         this.host = host;
     }
-    
+
     public String getHost() {
         return this.host;
     }
@@ -52,16 +53,16 @@ public class Server {
     public void setPort(int port) {
         this.port = port;
     }
-    
+
     public int getPort() {
         return this.port;
     }
-    
-    // TODO: the http CT has this method impl that we may be able to borrow here.
+
+    // TODO: the http CT has this method impl that we may be able to borrow
+    // here.
     int guessHttpPort() {
         // Try to find the HTTP port.
         String p = System.getProperty("org.osgi.service.webcontainer.port");
         return (p == null) ? 8080 : Integer.parseInt(p);
     }
 }
-

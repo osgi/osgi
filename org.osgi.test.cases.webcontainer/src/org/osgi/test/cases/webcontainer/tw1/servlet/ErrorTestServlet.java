@@ -23,15 +23,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 /**
  * @version $Rev$ $Date$
- *
- * Servlet implementation class ErrorTestServlet
+ * 
+ *          Servlet implementation class ErrorTestServlet
  */
 public class ErrorTestServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
+    private static final long serialVersionUID = 1L;
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -40,30 +39,36 @@ public class ErrorTestServlet extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    dispatchContext(request, response);
-	}
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    protected void doGet(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        dispatchContext(request, response);
+    }
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    dispatchContext(request, response);
-	}
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    protected void doPost(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        dispatchContext(request, response);
+    }
 
-    private void dispatchContext(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {      
+    private void dispatchContext(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
         String forwardURL = "";
         String target = request.getParameter("target");
         if (target != null && target.equals("html")) {
             forwardURL = "/404.html";
-        } else{
+        } else {
             forwardURL = "/404.jsp";
         }
-        
-        RequestDispatcher reqDisp = getServletContext().getRequestDispatcher(forwardURL);
-        reqDisp.forward(request,response);
-	}
+
+        RequestDispatcher reqDisp = getServletContext().getRequestDispatcher(
+                forwardURL);
+        reqDisp.forward(request, response);
+    }
 }

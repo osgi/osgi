@@ -32,12 +32,12 @@ import org.osgi.test.cases.webcontainer.util.EventLogger;
 
 /**
  * @version $Rev$ $Date$
- *
- * Servlet implementation class BasicAnnotationServlet
+ * 
+ *          Servlet implementation class BasicAnnotationServlet
  */
 public class PostConstructPreDestroyServlet1 extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -66,12 +66,14 @@ public class PostConstructPreDestroyServlet1 extends HttpServlet {
 
     @PostConstruct
     public void postConstruct() {
-        EventLogger.logEvent(new Event(this.getClass().getName(), Constants.POSTCONSTRUCT, Constants.POSTCONSTRUCTDESP));
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                Constants.POSTCONSTRUCT, Constants.POSTCONSTRUCTDESP));
     }
 
     @PreDestroy
     public void cleanup() {
-        EventLogger.logEvent(new Event(this.getClass().getName(), "cleanup", Constants.CLEANUPDESP));
+        EventLogger.logEvent(new Event(this.getClass().getName(), "cleanup",
+                Constants.CLEANUPDESP));
     }
 
     private void printContext(HttpServletRequest request,
@@ -83,7 +85,8 @@ public class PostConstructPreDestroyServlet1 extends HttpServlet {
         out.println("<title>PostConstructPreDestroyServlet1</title>");
         out.println("</head>");
         out.println("<body>");
-        out.println(EventLogger.printEvent(new Event(this.getClass().getName(), "printContext", Constants.PRINTCONTEXT)));
+        out.println(EventLogger.printEvent(new Event(this.getClass().getName(),
+                "printContext", Constants.PRINTCONTEXT)));
         out.println("</body>");
         out.println("</html>");
     }

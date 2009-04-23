@@ -32,19 +32,18 @@ import javax.sql.DataSource;
 /**
  * @version $Rev$ $Date$
  */
-@Resources ({
-@Resource (name = "someDataSource1", type = javax.sql.DataSource.class),
-@Resource (name = "someDataSource2", type = javax.sql.DataSource.class)
-})
+@Resources( {
+        @Resource(name = "someDataSource1", type = javax.sql.DataSource.class),
+        @Resource(name = "someDataSource2", type = javax.sql.DataSource.class) })
 public class ResourceServlet3 extends HttpServlet implements Servlet {
 
     private static final long serialVersionUID = 1L;
-    @Resource(name="someDataSource1")
+    @Resource(name = "someDataSource1")
     private DataSource ds1;
-    
-    @Resource(name="someDataSource2")
+
+    @Resource(name = "someDataSource2")
     private DataSource ds2;
-    
+
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         PrintWriter out = null;
@@ -63,4 +62,3 @@ public class ResourceServlet3 extends HttpServlet implements Servlet {
         out.close();
     }
 }
-

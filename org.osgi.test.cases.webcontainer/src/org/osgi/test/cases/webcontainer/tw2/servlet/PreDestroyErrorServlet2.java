@@ -31,12 +31,12 @@ import org.osgi.test.cases.webcontainer.util.EventLogger;
 
 /**
  * @version $Rev$ $Date$
- *
- * Servlet implementation class BasicAnnotationServlet2
+ * 
+ *          Servlet implementation class BasicAnnotationServlet2
  */
 public class PreDestroyErrorServlet2 extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
+    private static final long serialVersionUID = 1L;
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -47,24 +47,30 @@ public class PreDestroyErrorServlet2 extends HttpServlet {
 
     @PreDestroy
     public static void cleanup() {
-        EventLogger.logEvent(new Event("org.osgi.test.cases.webcontainer.tw2.servlet.PreDestroyErrorServlet2", 
-                "cleanup", Constants.CLEANUPDESP));
+        EventLogger
+                .logEvent(new Event(
+                        "org.osgi.test.cases.webcontainer.tw2.servlet.PreDestroyErrorServlet2",
+                        "cleanup", Constants.CLEANUPDESP));
     }
 
     /**
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+     *      response)
      */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
         printContext(request, response);
     }
 
     /**
-     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+     *      response)
      */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
         printContext(request, response);
     }
-    
+
     private void printContext(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
@@ -74,7 +80,8 @@ public class PreDestroyErrorServlet2 extends HttpServlet {
         out.println("<title>PreDestroyErrorServlet2</title>");
         out.println("</head>");
         out.println("<body>");
-        out.println(EventLogger.printEvent(new Event(this.getClass().getSimpleName(), "printContext", Constants.PRINTCONTEXT)));
+        out.println(EventLogger.printEvent(new Event(this.getClass()
+                .getSimpleName(), "printContext", Constants.PRINTCONTEXT)));
         out.println("</body>");
         out.println("</html>");
     }

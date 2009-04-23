@@ -33,24 +33,29 @@ public class TestHttpSessionAttributeListener implements
 
     @PostConstruct
     public void postConstruct() {
-        EventLogger.logEvent(new Event(this.getClass().getName(), Constants.POSTCONSTRUCT, ""));
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                Constants.POSTCONSTRUCT, ""));
     }
 
     @PreDestroy
     public void preDestroy() {
-        EventLogger.logEvent(new Event(this.getClass().getName(), Constants.PREDESTROY, ""));
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                Constants.PREDESTROY, ""));
     }
-    
+
     public void attributeAdded(HttpSessionBindingEvent se) {
-        EventLogger.logEvent(new Event(this.getClass().getName(), "attributeAdded", se.getName() + "-" + se.getValue()));
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                "attributeAdded", se.getName() + "-" + se.getValue()));
     }
 
     public void attributeRemoved(HttpSessionBindingEvent se) {
-        EventLogger.logEvent(new Event(this.getClass().getName(), "attributeRemoved", se.getName()));
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                "attributeRemoved", se.getName()));
     }
 
     public void attributeReplaced(HttpSessionBindingEvent se) {
-        EventLogger.logEvent(new Event(this.getClass().getName(), "attributeReplaced", se.getName() + "-" + se.getValue()));
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                "attributeReplaced", se.getName() + "-" + se.getValue()));
     }
 
 }

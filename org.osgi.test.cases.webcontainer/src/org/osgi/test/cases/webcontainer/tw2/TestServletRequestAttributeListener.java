@@ -33,24 +33,29 @@ public class TestServletRequestAttributeListener implements
 
     @PostConstruct
     public void postConstruct() {
-        EventLogger.logEvent(new Event(this.getClass().getName(), Constants.POSTCONSTRUCT, ""));
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                Constants.POSTCONSTRUCT, ""));
     }
 
     @PreDestroy
     public void preDestroy() {
-        EventLogger.logEvent(new Event(this.getClass().getName(), Constants.PREDESTROY, ""));
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                Constants.PREDESTROY, ""));
     }
-    
+
     public void attributeAdded(ServletRequestAttributeEvent srae) {
-        EventLogger.logEvent(new Event(this.getClass().getName(), "attributeAdded", srae.getName() + "-" + srae.getValue()));
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                "attributeAdded", srae.getName() + "-" + srae.getValue()));
     }
 
     public void attributeRemoved(ServletRequestAttributeEvent srae) {
-        EventLogger.logEvent(new Event(this.getClass().getName(), "attributeRemoved", srae.getName()));
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                "attributeRemoved", srae.getName()));
     }
 
     public void attributeReplaced(ServletRequestAttributeEvent srae) {
-        EventLogger.logEvent(new Event(this.getClass().getName(), "attributeReplaced", srae.getName() + "-" + srae.getValue()));
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                "attributeReplaced", srae.getName() + "-" + srae.getValue()));
     }
 
 }

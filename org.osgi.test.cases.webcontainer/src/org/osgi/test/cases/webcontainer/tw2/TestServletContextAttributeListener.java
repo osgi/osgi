@@ -33,20 +33,24 @@ public class TestServletContextAttributeListener implements
 
     @PostConstruct
     public void postConstruct() {
-        EventLogger.logEvent(new Event(this.getClass().getName(), Constants.POSTCONSTRUCT, ""));
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                Constants.POSTCONSTRUCT, ""));
     }
 
     @PreDestroy
     public void preDestroy() {
-        EventLogger.logEvent(new Event(this.getClass().getName(), Constants.PREDESTROY, ""));
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                Constants.PREDESTROY, ""));
     }
-    
+
     public void attributeAdded(ServletContextAttributeEvent scab) {
-        EventLogger.logEvent(new Event(this.getClass().getName(), "attributeAdded", scab.getName() + "-" + scab.getValue()));
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                "attributeAdded", scab.getName() + "-" + scab.getValue()));
     }
 
     public void attributeRemoved(ServletContextAttributeEvent scab) {
-        EventLogger.logEvent(new Event(this.getClass().getName(), "attributeRemoved", scab.getName()));
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                "attributeRemoved", scab.getName()));
 
     }
 
@@ -55,6 +59,7 @@ public class TestServletContextAttributeListener implements
      * returns the old value of the attribute.
      */
     public void attributeReplaced(ServletContextAttributeEvent scab) {
-        EventLogger.logEvent(new Event(this.getClass().getName(), "attributeReplaced", scab.getName() + "-" + scab.getValue()));
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                "attributeReplaced", scab.getName() + "-" + scab.getValue()));
     }
 }

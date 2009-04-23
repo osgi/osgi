@@ -31,8 +31,8 @@ import org.osgi.test.cases.webcontainer.util.Constants;
 
 /**
  * @version $Rev$ $Date$
- *
- * Servlet implementation class TestServlet2
+ * 
+ *          Servlet implementation class TestServlet2
  */
 public class TestServlet2 extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -80,21 +80,22 @@ public class TestServlet2 extends HttpServlet {
         if (tc == null) {
             return "no test case is specified";
         } else if (tc.equals("1")) {
-            return "param1: " + getParameter(request, "param1") 
-                   + "<br/> param2: " + getParameter(request, "param2") + "<br/>";
+            return "param1: " + getParameter(request, "param1")
+                    + "<br/> param2: " + getParameter(request, "param2")
+                    + "<br/>";
         } else if (tc.equals("2")) {
             return "param1: " + getParameter(request, "param1") + "<br/>"
-            + "param2: " + getParameter(request, "param2") + "<br/>"
-            + "param3: " + getParameter(request, "param3") + "<br/>"
-            + "param4: " + getParameter(request, "param4") + "<br/>"
-            + "param5: " + getParameter(request, "param5") + "<br/>";
+                    + "param2: " + getParameter(request, "param2") + "<br/>"
+                    + "param3: " + getParameter(request, "param3") + "<br/>"
+                    + "param4: " + getParameter(request, "param4") + "<br/>"
+                    + "param5: " + getParameter(request, "param5") + "<br/>";
         }
         return content;
     }
-    
+
     private String getParameter(HttpServletRequest request, String p) {
         return request.getParameter(p) == null ? "" : request.getParameter(p);
-        
+
     }
-   
+
 }

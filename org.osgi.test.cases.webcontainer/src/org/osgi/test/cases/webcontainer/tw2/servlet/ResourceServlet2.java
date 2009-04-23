@@ -16,7 +16,6 @@
 
 package org.osgi.test.cases.webcontainer.tw2.servlet;
 
-
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -28,29 +27,30 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * @version $Rev$ $Date$
- *
- * Servlet implementation class ResourceServlet2
+ * 
+ *          Servlet implementation class ResourceServlet2
  */
 public class ResourceServlet2 extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	
-	@Resource(name="someString1")
-	private String someString1;
-	
-	@Resource(name="someString2")
-	private String someString2;
-	
-    @Resource(name="someInteger1")
+    private static final long serialVersionUID = 1L;
+
+    @Resource(name = "someString1")
+    private String someString1;
+
+    @Resource(name = "someString2")
+    private String someString2;
+
+    @Resource(name = "someInteger1")
     private Integer someInteger1;
-    
-    @Resource(name="someInteger2")
+
+    @Resource(name = "someInteger2")
     private Integer someInteger2;
-    
-    @Resource(name="someInteger3")
+
+    @Resource(name = "someInteger3")
     private Integer someInteger3;
-       
-    @Resource(name="someBoolean1")
+
+    @Resource(name = "someBoolean1")
     private Boolean someBoolean1;
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -59,20 +59,24 @@ public class ResourceServlet2 extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    printContext(request, response);
-	}
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    protected void doGet(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        printContext(request, response);
+    }
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    printContext(request, response);
-	}
-	
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    protected void doPost(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        printContext(request, response);
+    }
+
     private void printContext(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
@@ -83,7 +87,8 @@ public class ResourceServlet2 extends HttpServlet {
         out.println("</head>");
         out.println("<body>");
         out.println(someString1 + " " + someString2 + "<br/>");
-        out.println(someInteger1 + " + " + someInteger2 + " = " + someInteger3 + " that is " + someBoolean1);
+        out.println(someInteger1 + " + " + someInteger2 + " = " + someInteger3
+                + " that is " + someBoolean1);
         out.println("</body>");
         out.println("</html>");
     }

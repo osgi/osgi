@@ -25,21 +25,24 @@ import java.util.Properties;
  */
 public class EventLogger {
 
-
     // log the class name, method name and the time-stamp
     public static void logEvent(Event event) {
         String className = event.getClassName();
-        String methodName = event.getMethodName() == null ? "" : event.getMethodName();
-        String desp = event.getDesp() == null ? "": event.getDesp();
+        String methodName = event.getMethodName() == null ? "" : event
+                .getMethodName();
+        String desp = event.getDesp() == null ? "" : event.getDesp();
 
         try {
             if (!ConstantsUtil.getLogFile().exists()) {
                 ConstantsUtil.getLogFile().createNewFile();
             }
-            Properties properties = EventUtil.loadProperties(ConstantsUtil.getLogFile());
-            properties.setProperty(className + "." + methodName, desp + " @ " + String.valueOf(event.getTime()));
-            
-            FileOutputStream out = new FileOutputStream(ConstantsUtil.getLogFile());
+            Properties properties = EventUtil.loadProperties(ConstantsUtil
+                    .getLogFile());
+            properties.setProperty(className + "." + methodName, desp + " @ "
+                    + String.valueOf(event.getTime()));
+
+            FileOutputStream out = new FileOutputStream(ConstantsUtil
+                    .getLogFile());
             try {
                 properties.store(out, null);
             } finally {
@@ -50,10 +53,13 @@ public class EventLogger {
             e.printStackTrace();
         }
     }
-    
+
     public static String printEvent(Event event) {
-        String methodN = event.getMethodName() == null ? "" : event.getMethodName() + " ";
+        String methodN = event.getMethodName() == null ? "" : event
+                .getMethodName()
+                + " ";
         String despN = event.getDesp() == null ? "" : event.getDesp() + " ";
-        return event.getClassName() + "."+ methodN + despN + "@ " + String.valueOf(event.getTime());
+        return event.getClassName() + "." + methodN + despN + "@ "
+                + String.valueOf(event.getTime());
     }
 }

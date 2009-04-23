@@ -34,8 +34,8 @@ import org.osgi.test.cases.webcontainer.util.EventLogger;
 
 /**
  * @version $Rev$ $Date$
- *
- * Servlet implementation class SecurityTestServlet
+ * 
+ *          Servlet implementation class SecurityTestServlet
  */
 @DeclareRoles("manager")
 public class SecurityTestServlet extends HttpServlet {
@@ -58,7 +58,7 @@ public class SecurityTestServlet extends HttpServlet {
 
     @Resource(name = "someBoolean1")
     private Boolean someBoolean1;
-    
+
     @Resource(name = "someBoolean2")
     private Boolean someBoolean2;
 

@@ -32,54 +32,63 @@ import org.osgi.test.cases.webcontainer.util.EventLogger;
  */
 public class TestServletContextListener implements ServletContextListener {
 
-    @Resource(name="someString1")
+    @Resource(name = "someString1")
     private String someString1;
-    
-    @Resource(name="someString2")
+
+    @Resource(name = "someString2")
     private String someString2;
-    
-    @Resource(name="someInteger1")
+
+    @Resource(name = "someInteger1")
     private Integer someInteger1;
-    
-    @Resource(name="someInteger2")
+
+    @Resource(name = "someInteger2")
     private Integer someInteger2;
-    
-    @Resource(name="someInteger3")
+
+    @Resource(name = "someInteger3")
     private Integer someInteger3;
-       
-    @Resource(name="someBoolean1")
+
+    @Resource(name = "someBoolean1")
     private Boolean someBoolean1;
-    
+
     @PostConstruct
     public void postConstruct() {
-        EventLogger.logEvent(new Event(this.getClass().getName(), Constants.POSTCONSTRUCT, ""));
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                Constants.POSTCONSTRUCT, ""));
     }
 
     @PreDestroy
     public void preDestroy() {
-        EventLogger.logEvent(new Event(this.getClass().getName(), Constants.PREDESTROY, ""));
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                Constants.PREDESTROY, ""));
     }
-    
+
     public void contextDestroyed(ServletContextEvent sce) {
-        EventLogger.logEvent(new Event(this.getClass().getName(), "contextDestroyed", ""));
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                "contextDestroyed", ""));
     }
 
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
         String email = context.getInitParameter("Email");
         context.setAttribute(Constants.EMAIL, email);
-        if (someInteger1 == null && someInteger2 == null && someBoolean1 == null) {
-            context.setAttribute(Constants.WELCOMESTATEMENT, null);            
+        if (someInteger1 == null && someInteger2 == null
+                && someBoolean1 == null) {
+            context.setAttribute(Constants.WELCOMESTATEMENT, null);
         } else {
-            context.setAttribute(Constants.WELCOMESTATEMENT, someInteger1 + "+" + someInteger2 + "=" + someInteger3 + " is "+ someBoolean1);
+            context
+                    .setAttribute(Constants.WELCOMESTATEMENT, someInteger1
+                            + "+" + someInteger2 + "=" + someInteger3 + " is "
+                            + someBoolean1);
         }
         if (someString1 == null && someString2 == null) {
             context.setAttribute(Constants.WELCOMESTRING, null);
         } else {
-            context.setAttribute(Constants.WELCOMESTRING, someString1 + " " + someString2);
+            context.setAttribute(Constants.WELCOMESTRING, someString1 + " "
+                    + someString2);
         }
-        EventLogger.logEvent(new Event(this.getClass().getName(), "contextInitialized", 
-                Constants.EMAIL + "-" + context.getInitParameter("Email")));
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                "contextInitialized", Constants.EMAIL + "-"
+                        + context.getInitParameter("Email")));
     }
 
 }

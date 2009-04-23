@@ -30,12 +30,12 @@ import org.osgi.test.cases.webcontainer.util.EventLogger;
 
 /**
  * @version $Rev$ $Date$
- *
- * Servlet implementation class BasicAnnotationServlet2
+ * 
+ *          Servlet implementation class BasicAnnotationServlet2
  */
 public class PostConstructErrorServlet3 extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
+    private static final long serialVersionUID = 1L;
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -43,25 +43,29 @@ public class PostConstructErrorServlet3 extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
-    
 
     @PostConstruct
-    public void postConstruct()  throws java.lang.Exception{
-        EventLogger.logEvent(new Event(this.getClass().getName(), Constants.POSTCONSTRUCT, Constants.POSTCONSTRUCTDESP));
+    public void postConstruct() throws java.lang.Exception {
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                Constants.POSTCONSTRUCT, Constants.POSTCONSTRUCTDESP));
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-	}
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    protected void doGet(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        // TODO Auto-generated method stub
+    }
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-	}
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    protected void doPost(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        // TODO Auto-generated method stub
+    }
 
 }

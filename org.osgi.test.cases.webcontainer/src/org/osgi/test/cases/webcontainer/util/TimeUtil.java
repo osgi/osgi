@@ -27,16 +27,16 @@ import java.util.Properties;
  * @version $Rev$ $Date$
  */
 public class TimeUtil {
-    
+
     String contextPath;
-    
+
     public TimeUtil(String contextPath) {
         this.contextPath = contextPath;
     }
 
     /*
-     * get the time in long format from the response.   
-     * the servlet prints the time at the end after the @ sign
+     * get the time in long format from the response. the servlet prints the
+     * time at the end after the @ sign
      */
     public long getTimeFromResponse(String response) {
         int start = response.indexOf("@") + 2;
@@ -48,20 +48,22 @@ public class TimeUtil {
             time = 0;
             ex.printStackTrace();
         }
-       
+
         return time;
     }
-    
+
     /*
-     * get the called/injection time in long format from servlet's property file   
+     * get the called/injection time in long format from servlet's property file
      * for the particular servlet class and method
      */
     public long getTimeFromLog(String className, String methodName) {
         try {
             Properties properties = loadProperties(ConstantsUtil.getLogFile());
-            String fullClassName = ConstantsUtil.getFullClassName(this.contextPath, className);
-            String value = properties.getProperty(fullClassName + "." + methodName);
-            
+            String fullClassName = ConstantsUtil.getFullClassName(
+                    this.contextPath, className);
+            String value = properties.getProperty(fullClassName + "."
+                    + methodName);
+
             if (value != null && value.indexOf("@") > 0) {
                 int start = value.indexOf("@") + 2;
                 return Long.parseLong(value.substring(start));
@@ -71,17 +73,19 @@ public class TimeUtil {
         }
         return 0;
     }
-    
+
     /*
-     * get the description in String format from servlet's property file   
-     * for the particular servlet class and method
+     * get the description in String format from servlet's property file for the
+     * particular servlet class and method
      */
     public String getDespFromLog(String className, String methodName) {
         try {
             Properties properties = loadProperties(ConstantsUtil.getLogFile());
-            String fullClassName = ConstantsUtil.getFullClassName(this.contextPath, className);
-            String value = properties.getProperty(fullClassName + "." + methodName);
-            
+            String fullClassName = ConstantsUtil.getFullClassName(
+                    this.contextPath, className);
+            String value = properties.getProperty(fullClassName + "."
+                    + methodName);
+
             if (value != null && value.indexOf("@") > 0) {
                 int end = value.lastIndexOf("@");
                 return value.substring(0, end).trim();
@@ -91,10 +95,9 @@ public class TimeUtil {
         }
         return "";
     }
-    
+
     /*
-     * Load the property file.  
-     * If the file doesn't exist, create an empty file
+     * Load the property file. If the file doesn't exist, create an empty file
      */
     protected Properties loadProperties(File f) {
         Properties properties = new Properties();
@@ -109,8 +112,8 @@ public class TimeUtil {
                 in.close();
             }
         } catch (IOException e) {
-            //not much to do
-        }   
+            // not much to do
+        }
         return properties;
     }
 }

@@ -31,50 +31,62 @@ import org.osgi.test.cases.webcontainer.util.EventLogger;
  */
 public class TestServletRequestListener implements ServletRequestListener {
 
-    @Resource(name="someString1")
+    @Resource(name = "someString1")
     private String someString1;
-    
-    @Resource(name="someString2")
+
+    @Resource(name = "someString2")
     private String someString2;
-    
-    @Resource(name="someInteger1")
+
+    @Resource(name = "someInteger1")
     private Integer someInteger1;
-    
-    @Resource(name="someInteger2")
+
+    @Resource(name = "someInteger2")
     private Integer someInteger2;
-    
-    @Resource(name="someInteger3")
+
+    @Resource(name = "someInteger3")
     private Integer someInteger3;
-       
-    @Resource(name="someBoolean1")
+
+    @Resource(name = "someBoolean1")
     private Boolean someBoolean1;
-    
+
     @PostConstruct
     public void postConstruct() {
-        EventLogger.logEvent(new Event(this.getClass().getName(), Constants.POSTCONSTRUCT, ""));
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                Constants.POSTCONSTRUCT, ""));
     }
 
     @PreDestroy
     public void preDestroy() {
-        EventLogger.logEvent(new Event(this.getClass().getName(), Constants.PREDESTROY, ""));
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                Constants.PREDESTROY, ""));
     }
-    
+
     public void requestDestroyed(ServletRequestEvent sre) {
-        EventLogger.logEvent(new Event(this.getClass().getName(), "requestDestroyed", ""));
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                "requestDestroyed", ""));
     }
 
     public void requestInitialized(ServletRequestEvent sre) {
-        if (someInteger1 == null && someInteger2 == null && someBoolean1 == null) {
-            sre.getServletRequest().setAttribute(Constants.WELCOMESTATEMENT, null);            
+        if (someInteger1 == null && someInteger2 == null
+                && someBoolean1 == null) {
+            sre.getServletRequest().setAttribute(Constants.WELCOMESTATEMENT,
+                    null);
         } else {
-            sre.getServletRequest().setAttribute(Constants.WELCOMESTATEMENT, someInteger1 + "+" + someInteger2 + "=" + someInteger3 + " is "+ someBoolean1);   
+            sre.getServletRequest().setAttribute(
+                    Constants.WELCOMESTATEMENT,
+                    someInteger1 + "+" + someInteger2 + "=" + someInteger3
+                            + " is " + someBoolean1);
         }
         if (someString1 == null && someString2 == null) {
             sre.getServletRequest().setAttribute(Constants.WELCOMESTRING, null);
         } else {
-            sre.getServletRequest().setAttribute(Constants.WELCOMESTRING, someString1 + " " + someString2);
+            sre.getServletRequest().setAttribute(Constants.WELCOMESTRING,
+                    someString1 + " " + someString2);
         }
-        EventLogger.logEvent(new Event(this.getClass().getName(), "requestInitialized",
-                Constants.WELCOMESTRING + "-" + sre.getServletRequest().getAttribute(Constants.WELCOMESTRING)));
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                "requestInitialized", Constants.WELCOMESTRING
+                        + "-"
+                        + sre.getServletRequest().getAttribute(
+                                Constants.WELCOMESTRING)));
     }
 }

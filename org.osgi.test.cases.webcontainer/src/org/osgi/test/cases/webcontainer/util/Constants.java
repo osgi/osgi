@@ -63,15 +63,14 @@ public class Constants {
     public static final String TW4BASIC = "<html><head><title>TestWar4-TestServlet</title></head>";
     public static final String PARAM2 = "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz";
     public static final String TW4LONGPARAMS = TW4BASIC
-            + "<body>param1: value1<br/> "
-            + "param2: " + PARAM2 + "<br/>"
+            + "<body>param1: value1<br/> " + "param2: " + PARAM2 + "<br/>"
             + "</body></html>";
     public static final String TW4SPECPARAMS = TW4BASIC
             + "<body>param1: &<br/>param2: &&<br/>param3: %<br/>param4:  <br/>param5: ?<br/></body></html>";
     public static final String PLAINRESPONSE = "TestWar4-TestServlet type: text";
     public static final String HTMLRESPONSE = TW4BASIC
             + "<body>type: html</body></html>";
-    
+
     // tw3 related
     public static final String NULL = "null";
 }

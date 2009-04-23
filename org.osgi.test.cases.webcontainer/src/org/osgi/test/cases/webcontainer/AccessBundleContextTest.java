@@ -100,7 +100,7 @@ public class AccessBundleContextTest extends DefaultTestBundleControl {
             LogEntry logentry = (LogEntry) e.nextElement();
             log("get log message: " + logentry.getMessage());
             assertEquals(logentry.getMessage(), Constants.TESTLOGMSG);
-            // TODO get Bundle via ISGI WebApplication getBundle(),
+            // TODO get Bundle via OSGI RFC 66 WebApplication getBundle() API,
             // then use Bundle.getBundleContext() to get BundleContext
             assertEquals(logentry.getBundle(), getContext());
             assertEquals(logentry.getLevel(), LogService.LOG_ERROR);

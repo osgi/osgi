@@ -33,23 +33,23 @@ import org.osgi.test.cases.webcontainer.util.EventLogger;
 
 /**
  * @version $Rev$ $Date$
- *
- * Servlet implementation class RequestListenerServlet
+ * 
+ *          Servlet implementation class RequestListenerServlet
  */
 public class RequestListenerServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-    @Resource(name="someInteger1")
+    private static final long serialVersionUID = 1L;
+    @Resource(name = "someInteger1")
     private Integer someInteger1;
-    
-    @Resource(name="someInteger2")
+
+    @Resource(name = "someInteger2")
     private Integer someInteger2;
-    
-    @Resource(name="someInteger3")
+
+    @Resource(name = "someInteger3")
     private Integer someInteger3;
-       
-    @Resource(name="someBoolean2")
+
+    @Resource(name = "someBoolean2")
     private Boolean someBoolean2;
-       
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -60,28 +60,34 @@ public class RequestListenerServlet extends HttpServlet {
 
     @PostConstruct
     public void postConstruct() {
-        EventLogger.logEvent(new Event(this.getClass().getName(), Constants.POSTCONSTRUCT, ""));
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                Constants.POSTCONSTRUCT, ""));
     }
 
     @PreDestroy
     public void preDestroy() {
-        EventLogger.logEvent(new Event(this.getClass().getName(), Constants.PREDESTROY, ""));
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                Constants.PREDESTROY, ""));
     }
-    
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-	    printContext(request,response);
-	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-	}
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    protected void doGet(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        // TODO Auto-generated method stub
+        printContext(request, response);
+    }
+
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    protected void doPost(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        // TODO Auto-generated method stub
+    }
 
     private void printContext(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
@@ -92,14 +98,18 @@ public class RequestListenerServlet extends HttpServlet {
         out.println("<title>RequestListenerServlet</title>");
         out.println("</head>");
         out.println("<body>");
-        out.println(Constants.WELCOMESTRING + "-" + request.getAttribute(Constants.WELCOMESTRING) + "<br/>");
-        out.println(Constants.WELCOMESTATEMENT + "-" + request.getAttribute(Constants.WELCOMESTATEMENT) + "<br/>");
+        out.println(Constants.WELCOMESTRING + "-"
+                + request.getAttribute(Constants.WELCOMESTRING) + "<br/>");
+        out.println(Constants.WELCOMESTATEMENT + "-"
+                + request.getAttribute(Constants.WELCOMESTATEMENT) + "<br/>");
         request.removeAttribute(Constants.WELCOMESTRING);
-        if (someInteger1 == null && someInteger2 == null && someInteger3 == null && someBoolean2 == null) {
+        if (someInteger1 == null && someInteger2 == null
+                && someInteger3 == null && someBoolean2 == null) {
             request.setAttribute(Constants.WELCOMESTATEMENT, null);
         } else {
-            request.setAttribute(Constants.WELCOMESTATEMENT, someInteger1 + "+" 
-                    + someInteger2 + "=" + someInteger3 + " is not "+ someBoolean2);
+            request.setAttribute(Constants.WELCOMESTATEMENT, someInteger1 + "+"
+                    + someInteger2 + "=" + someInteger3 + " is not "
+                    + someBoolean2);
         }
         out.println("</body>");
         out.println("</html>");

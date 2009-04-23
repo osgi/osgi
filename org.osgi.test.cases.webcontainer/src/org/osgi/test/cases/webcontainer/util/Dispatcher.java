@@ -25,12 +25,12 @@ import java.net.URL;
  * @version $Rev$ $Date$
  */
 public class Dispatcher {
-    
-    public static String dispatch(HttpURLConnection conn) throws Exception { 
+
+    public static String dispatch(HttpURLConnection conn) throws Exception {
         String inputLine = new String();
         StringBuffer resbuf = new StringBuffer();
         BufferedReader in = null;
-        
+
         in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
         while ((inputLine = in.readLine()) != null) {
             resbuf.append(inputLine);
@@ -38,9 +38,10 @@ public class Dispatcher {
         in.close();
         return resbuf.toString();
     }
-    
+
     public static URL createURL(String request, Server server) throws Exception {
-        final String urlstr = "http://" + server.getHost() + ":" + server.getPort() + request;
+        final String urlstr = "http://" + server.getHost() + ":"
+                + server.getPort() + request;
         return new URL(urlstr);
     }
 

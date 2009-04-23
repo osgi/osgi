@@ -33,9 +33,9 @@ import javax.sql.DataSource;
 public class ResourceServlet1 extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    @Resource(name="someDataSource1")
+    @Resource(name = "someDataSource1")
     private DataSource ds1;
-    
+
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         PrintWriter out = null;
@@ -54,4 +54,3 @@ public class ResourceServlet1 extends HttpServlet {
     }
 
 }
-

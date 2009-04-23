@@ -32,12 +32,12 @@ import org.osgi.test.cases.webcontainer.util.EventLogger;
 
 /**
  * @version $Rev$ $Date$
- *
- * Servlet implementation class BasicAnnotationServlet
+ * 
+ *          Servlet implementation class BasicAnnotationServlet
  */
 public class PostConstructPreDestroyServlet2 extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -66,14 +66,16 @@ public class PostConstructPreDestroyServlet2 extends HttpServlet {
 
     @PostConstruct
     private void postConstruct() {
-        EventLogger.logEvent(new Event(this.getClass().getName(), Constants.POSTCONSTRUCT, Constants.POSTCONSTRUCTDESP));
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                Constants.POSTCONSTRUCT, Constants.POSTCONSTRUCTDESP));
     }
 
     @PreDestroy
     private void cleanup() {
-        EventLogger.logEvent(new Event(this.getClass().getName(), "cleanup", Constants.CLEANUPDESP));
+        EventLogger.logEvent(new Event(this.getClass().getName(), "cleanup",
+                Constants.CLEANUPDESP));
     }
-    
+
     private void printContext(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
@@ -83,7 +85,8 @@ public class PostConstructPreDestroyServlet2 extends HttpServlet {
         out.println("<title>PostConstructPreDestroyServlet2</title>");
         out.println("</head>");
         out.println("<body>");
-        out.println(EventLogger.printEvent(new Event(this.getClass().getName(), "printContext", Constants.PRINTCONTEXT)));
+        out.println(EventLogger.printEvent(new Event(this.getClass().getName(),
+                "printContext", Constants.PRINTCONTEXT)));
         out.println("</body>");
         out.println("</html>");
     }

@@ -16,7 +16,6 @@
 
 package org.osgi.test.cases.webcontainer.tw2.servlet;
 
-
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -28,47 +27,48 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * @version $Rev$ $Date$
- *
- * Servlet implementation class ResourceServlet4
+ * 
+ *          Servlet implementation class ResourceServlet4
  */
 public class ResourceServlet4 extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	private String myS1;
-	private String myS2;
-	private Integer myI1;
-	private Integer myI2;
-	private Integer myI3;
-	private Boolean myB1;
-	
-	@Resource(name="someString1")
-	private void setMyS1(String s1) {
-	    this.myS1 = s1;
-	}
-	
-	@Resource(name="someString2")
+    private static final long serialVersionUID = 1L;
+    private String myS1;
+    private String myS2;
+    private Integer myI1;
+    private Integer myI2;
+    private Integer myI3;
+    private Boolean myB1;
+
+    @Resource(name = "someString1")
+    private void setMyS1(String s1) {
+        this.myS1 = s1;
+    }
+
+    @Resource(name = "someString2")
     private void setMyS2(String s2) {
         this.myS2 = s2;
     }
-	
-    @Resource(name="someInteger1")
+
+    @Resource(name = "someInteger1")
     private void setMyI1(Integer i1) {
         this.myI1 = i1;
     }
-    
-    @Resource(name="someInteger2")
+
+    @Resource(name = "someInteger2")
     private void setMyI2(Integer i2) {
         this.myI2 = i2;
     }
-    
-    @Resource(name="someInteger3")
+
+    @Resource(name = "someInteger3")
     private void setMyI3(Integer i3) {
         this.myI3 = i3;
     }
-       
-    @Resource(name="someBoolean1")
+
+    @Resource(name = "someBoolean1")
     private void setMyB1(Boolean b1) {
         this.myB1 = b1;
     }
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -77,20 +77,24 @@ public class ResourceServlet4 extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    printContext(request, response);
-	}
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    protected void doGet(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        printContext(request, response);
+    }
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    printContext(request, response);
-	}
-	
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    protected void doPost(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        printContext(request, response);
+    }
+
     private void printContext(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
@@ -101,7 +105,8 @@ public class ResourceServlet4 extends HttpServlet {
         out.println("</head>");
         out.println("<body>");
         out.println(this.myS1 + " " + this.myS2 + "<br/>");
-        out.println(this.myI1 + " + " + this.myI2 + " = " + this.myI3 + " that is " + this.myB1);
+        out.println(this.myI1 + " + " + this.myI2 + " = " + this.myI3
+                + " that is " + this.myB1);
         out.println("</body>");
         out.println("</html>");
     }

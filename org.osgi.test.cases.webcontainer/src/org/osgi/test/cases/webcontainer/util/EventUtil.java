@@ -28,18 +28,18 @@ import java.util.Properties;
  * @version $Rev$ $Date$
  */
 public class EventUtil {
-    
-    //get all events in the property file
+
+    // get all events in the property file
     public static Properties getAllEventsProperties() {
-        return loadProperties(ConstantsUtil.getLogFile());    
+        return loadProperties(ConstantsUtil.getLogFile());
     }
-    
-    //load property file
+
+    // load property file
     protected static Properties loadProperties(File f) {
         Properties properties = new Properties();
         try {
             if (!f.exists()) {
-                throw new FileNotFoundException();//f.createNewFile();
+                throw new FileNotFoundException();// f.createNewFile();
             }
             InputStream in = new FileInputStream(f);
             try {
@@ -48,19 +48,19 @@ public class EventUtil {
                 in.close();
             }
         } catch (IOException e) {
-            //not much to do
-        }   
+            // not much to do
+        }
         return properties;
     }
-    
-    //get event by classname and method name
+
+    // get event by classname and method name
     // @return null if no matching event is found
     public static Event getEvent(String className, String methodName) {
         Properties properties = getAllEventsProperties();
         for (Map.Entry entry : properties.entrySet()) {
-            String name = (String)entry.getKey();
+            String name = (String) entry.getKey();
             if (name.equalsIgnoreCase(className + "." + methodName)) {
-                String value = (String)entry.getValue();
+                String value = (String) entry.getValue();
                 int i = value.indexOf("@");
                 String desp;
                 String timeString;
@@ -76,7 +76,7 @@ public class EventUtil {
                     }
                     return new Event(className, methodName, desp.trim(), time);
                 }
-            }            
+            }
         }
         return null;
     }

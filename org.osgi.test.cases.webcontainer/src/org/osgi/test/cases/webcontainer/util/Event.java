@@ -32,7 +32,7 @@ public class Event {
         this.desp = desp;
         this.setTime();
     }
-    
+
     public Event(String className, String methodName, String desp, long time) {
         super();
         this.className = className;
@@ -40,30 +40,30 @@ public class Event {
         this.desp = desp;
         this.time = time;
     }
-    
+
     public Event(String className, String methodName) {
         super();
         this.className = className;
         this.methodName = methodName;
         this.setTime();
     }
-    
+
     public String getClassName() {
         return className;
     }
-    
+
     public void setClassName(String className) {
         this.className = className;
     }
-    
+
     public String getMethodName() {
         return methodName;
     }
-    
+
     public void setMethodName(String methodName) {
         this.methodName = methodName;
     }
-    
+
     public String getDesp() {
         return desp;
     }
@@ -71,11 +71,11 @@ public class Event {
     public void setDesp(String desp) {
         this.desp = desp;
     }
-    
+
     public void setTime() {
         this.time = System.currentTimeMillis();
     }
-    
+
     public long getTime() {
         return this.time;
     }

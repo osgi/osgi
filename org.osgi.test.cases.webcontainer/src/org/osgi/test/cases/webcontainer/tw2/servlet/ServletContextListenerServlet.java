@@ -33,8 +33,8 @@ import org.osgi.test.cases.webcontainer.util.EventLogger;
 
 /**
  * @version $Rev$ $Date$
- *
- * Servlet implementation class ServletContextListenerServlet
+ * 
+ *          Servlet implementation class ServletContextListenerServlet
  */
 public class ServletContextListenerServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -56,7 +56,7 @@ public class ServletContextListenerServlet extends HttpServlet {
 
     @Resource(name = "someBoolean1")
     private Boolean someBoolean1;
-    
+
     @Resource(name = "someBoolean2")
     private Boolean someBoolean2;
 
@@ -105,22 +105,30 @@ public class ServletContextListenerServlet extends HttpServlet {
         if (modify != null && modify.equalsIgnoreCase("true")) {
             // let's modify the attributes
             getServletContext().removeAttribute(Constants.WELCOMESTRING);
-            if (someInteger1 == null && someInteger2 == null && someInteger3 == null && someBoolean2 == null) {
-                getServletContext().setAttribute(Constants.WELCOMESTATEMENT, null);
+            if (someInteger1 == null && someInteger2 == null
+                    && someInteger3 == null && someBoolean2 == null) {
+                getServletContext().setAttribute(Constants.WELCOMESTATEMENT,
+                        null);
             } else {
-                getServletContext().setAttribute(Constants.WELCOMESTATEMENT, someInteger1 + "+" 
-                        + someInteger2 + "=" + someInteger3 + " is not "+ someBoolean2);
+                getServletContext().setAttribute(
+                        Constants.WELCOMESTATEMENT,
+                        someInteger1 + "+" + someInteger2 + "=" + someInteger3
+                                + " is not " + someBoolean2);
             }
 
         } else if (modify != null && modify.equalsIgnoreCase("reset")) {
             // let's set the attributes to their original value
             getServletContext().setAttribute(Constants.WELCOMESTRING,
                     someString1 + " " + someString2);
-            if (someInteger1 == null && someInteger2 == null && someInteger3 == null && someBoolean2 == null) {
-                getServletContext().setAttribute(Constants.WELCOMESTATEMENT, null);
+            if (someInteger1 == null && someInteger2 == null
+                    && someInteger3 == null && someBoolean2 == null) {
+                getServletContext().setAttribute(Constants.WELCOMESTATEMENT,
+                        null);
             } else {
-                getServletContext().setAttribute(Constants.WELCOMESTATEMENT, someInteger1 + "+" 
-                        + someInteger2 + "=" + someInteger3 + " is not "+ someBoolean2);
+                getServletContext().setAttribute(
+                        Constants.WELCOMESTATEMENT,
+                        someInteger1 + "+" + someInteger2 + "=" + someInteger3
+                                + " is not " + someBoolean2);
             }
 
         }
