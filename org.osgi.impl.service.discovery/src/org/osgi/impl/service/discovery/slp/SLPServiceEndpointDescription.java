@@ -22,10 +22,12 @@ package org.osgi.impl.service.discovery.slp;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.MalformedURLException;
 import java.net.ServerSocket;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+import java.rmi.dgc.VMID;
+import java.rmi.server.UID;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -34,8 +36,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.rmi.dgc.VMID;
-import java.rmi.server.UID;
 
 import org.osgi.service.discovery.ServiceEndpointDescription;
 import org.osgi.service.discovery.ServicePublication;
@@ -410,23 +410,23 @@ public final class SLPServiceEndpointDescription implements
 	 * 
 	 * @see org.osgi.impl.service.discovery.ProtocolSpecificServiceDescription#getLocation()
 	 */
-	public URL getLocation() {
+	public URI getLocation() {
 		Object urlObject = getProperty(ServicePublication.PROP_KEY_ENDPOINT_LOCATION);
-		if (urlObject instanceof URL) {
-			return (URL) urlObject;
+		if (urlObject instanceof URI) {
+			return (URI) urlObject;
 		}
 		else
 			if (urlObject instanceof String) {
 				try {
-					return new URL((String) urlObject);
+					return new URI((String) urlObject);
 				}
-				catch (MalformedURLException e) {
+				catch (URISyntaxException e) {
 					throw new RuntimeException(e.getMessage());
 				}
 			}
 			else {
 				throw new RuntimeException(
-						"Service location property is not of expected type URL or String. Property = "
+						"Service location property is not of expected type URI or String. Property = "
 								+ urlObject.toString());
 			}
 	}
