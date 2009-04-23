@@ -87,7 +87,7 @@ public class DistributionConstants {
 	 * The value of this property is of type String, String[] or Collection of
 	 * String.
 	 */
-	public static final String	DEPLOYMENT_INTENTS			= "deployment.intents";
+	public static final String	DEPLOYMENT_INTENTS			= "osgi.deployment.intents";
 
 	/**
 	 * This service registration property is set on client side service proxies
