@@ -105,19 +105,23 @@ public class ServletContextListenerServlet extends HttpServlet {
         if (modify != null && modify.equalsIgnoreCase("true")) {
             // let's modify the attributes
             getServletContext().removeAttribute(Constants.WELCOMESTRING);
-            getServletContext().setAttribute(
-                    Constants.WELCOMESTATEMENT,
-                    someInteger1 + "+" + someInteger2 + "=" + someInteger3
-                            + " is not " + someBoolean2);
+            if (someInteger1 == null && someInteger2 == null && someInteger3 == null && someBoolean2 == null) {
+                getServletContext().setAttribute(Constants.WELCOMESTATEMENT, null);
+            } else {
+                getServletContext().setAttribute(Constants.WELCOMESTATEMENT, someInteger1 + "+" 
+                        + someInteger2 + "=" + someInteger3 + " is not "+ someBoolean2);
+            }
 
         } else if (modify != null && modify.equalsIgnoreCase("reset")) {
             // let's set the attributes to their original value
             getServletContext().setAttribute(Constants.WELCOMESTRING,
                     someString1 + " " + someString2);
-            getServletContext().setAttribute(
-                    Constants.WELCOMESTATEMENT,
-                    someInteger1 + "+" + someInteger2 + "=" + someInteger3
-                            + " is " + someBoolean1);
+            if (someInteger1 == null && someInteger2 == null && someInteger3 == null && someBoolean2 == null) {
+                getServletContext().setAttribute(Constants.WELCOMESTATEMENT, null);
+            } else {
+                getServletContext().setAttribute(Constants.WELCOMESTATEMENT, someInteger1 + "+" 
+                        + someInteger2 + "=" + someInteger3 + " is not "+ someBoolean2);
+            }
 
         }
         PrintWriter out = response.getWriter();

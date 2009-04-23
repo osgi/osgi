@@ -36,7 +36,7 @@ public class ConstantsUtil {
      * this method returns the full classname based on the warContextPath and class name
      */
     public static String getFullClassName(String warContextPath, String name) {
-        if (warContextPath.equals("/tw2")) {
+        if (warContextPath.equals("/tw2") || warContextPath.equals("/tw3")) {
             return "org.osgi.test.cases.webcontainer.tw2." 
                    + (isServlet(name) == true ? "servlet." : "") + name;
         }
@@ -56,6 +56,15 @@ public class ConstantsUtil {
             return true;
         }
         return false;
+    }
+    
+    public static boolean removeLogFile() { 
+        // clean up the property file.
+        boolean success = false;
+        if (ConstantsUtil.getLogFile().exists()) {
+            success = ConstantsUtil.getLogFile().delete();
+        }
+        return success;
     }
     
 }

@@ -20,7 +20,7 @@
 			verbose="${verbose}" />
 	</target>	
 		
-	<target name="build-war" depends="build-war1, build-war2, build-war4, build-war5">
+	<target name="build-war" depends="build-war1, build-war2, build-war3, build-war4, build-war5">
 		<echo>org.osgi.test.cases.webcontainer.basedir is set to ${projectdir}</echo>
 	</target>
 	
@@ -46,6 +46,18 @@
 		</war>
 	</target>
 	
+	<target name="build-war3" depends="compile">
+		<echo>Building tw3.war file</echo>
+		<war destfile="resources/tw3/tw3.war" webxml="resources/tw3/WebContent/WEB-INF/web.xml">
+			<fileset dir="resources/tw3/WebContent/"/>
+			<classes dir="src/">
+				<!-- tw3 uses same class files as tw2 -->
+				<include name="org/osgi/test/cases/webcontainer/tw2/**"/>
+				<include name="org/osgi/test/cases/webcontainer/util/**"/>
+			</classes>
+		</war>
+	</target>
+		
 	<target name="build-war4" depends="compile">
 		<echo>Building tw4.war file</echo>
 		<war destfile="resources/tw4/tw4.war" webxml="resources/tw4/WebContent/WEB-INF/web.xml">

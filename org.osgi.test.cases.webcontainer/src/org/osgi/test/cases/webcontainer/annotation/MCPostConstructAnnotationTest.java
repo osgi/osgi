@@ -28,7 +28,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 /**
  * @version $Rev$ $Date$
  */
-public class PostConstructAnnotationTest extends DefaultTestBundleControl {
+public class MCPostConstructAnnotationTest extends DefaultTestBundleControl {
     // this test case assume war files are already installed for now
     Server server;
     boolean debug;
@@ -41,7 +41,7 @@ public class PostConstructAnnotationTest extends DefaultTestBundleControl {
 
         this.server = new Server("localhost");
         this.debug = true;
-        this.warContextPath = "/tw2";
+        this.warContextPath = "/tw3";
         this.timeUtil = new TimeUtil(this.warContextPath);
 
         // capture a time before install
@@ -61,7 +61,8 @@ public class PostConstructAnnotationTest extends DefaultTestBundleControl {
     }
 
     /*
-     * test @postConstruct annotated public method is called
+     * test @postConstruct annotated public method is not called
+     * when the metadata-complete attribute is set to true
      */
     public void testPostConstruct001() throws Exception {
         final String request = this.warContextPath
@@ -85,16 +86,17 @@ public class PostConstructAnnotationTest extends DefaultTestBundleControl {
             // check if the time stamp in response is after the beforeStart
             // time.
             assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
-            log("verify annotated methods are invoked");
-            assertTrue(this.timeUtil.getTimeFromLog(
-                    "PostConstructPreDestroyServlet1", Constants.POSTCONSTRUCT) > beforeInstall);
+            log("verify annotated methods are not invoked");
+            assertEquals(this.timeUtil.getTimeFromLog(
+                    "PostConstructPreDestroyServlet1", Constants.POSTCONSTRUCT), 0);
         } finally {
             conn.disconnect();
         }
     }
 
     /*
-     * test @postConstruct annotated private method is called
+     * test @postConstruct annotated private method is not called
+     * when the metadata-complete attribute is set to true
      */
     public void testPostConstruct002() throws Exception {
         final String request = this.warContextPath
@@ -118,16 +120,17 @@ public class PostConstructAnnotationTest extends DefaultTestBundleControl {
             // check if the time stamp in response is after the beforeStart
             // time.
             assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
-            log("verify annotated methods are invoked");
-            assertTrue(this.timeUtil.getTimeFromLog(
-                    "PostConstructPreDestroyServlet2", Constants.POSTCONSTRUCT) > beforeInstall);
+            log("verify annotated methods are not invoked");
+            assertEquals(this.timeUtil.getTimeFromLog(
+                    "PostConstructPreDestroyServlet2", Constants.POSTCONSTRUCT), 0);
         } finally {
             conn.disconnect();
         }
     }
 
     /*
-     * test @postConstruct annotated protected method is called
+     * test @postConstruct annotated protected method is not called
+     * when the metadata-complete attribute is set to true
      */
     public void testPostConstruct003() throws Exception {
         final String request = this.warContextPath
@@ -151,9 +154,9 @@ public class PostConstructAnnotationTest extends DefaultTestBundleControl {
             // check if the time stamp in response is after the beforeStart
             // time.
             assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
-            log("verify annotated methods are invoked");
-            assertTrue(this.timeUtil.getTimeFromLog(
-                    "PostConstructPreDestroyServlet3", Constants.POSTCONSTRUCT) > beforeInstall);
+            log("verify annotated methods are not invoked");
+            assertEquals(this.timeUtil.getTimeFromLog(
+                    "PostConstructPreDestroyServlet3", Constants.POSTCONSTRUCT), 0);
         } finally {
             conn.disconnect();
         }

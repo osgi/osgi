@@ -95,8 +95,12 @@ public class RequestListenerServlet extends HttpServlet {
         out.println(Constants.WELCOMESTRING + "-" + request.getAttribute(Constants.WELCOMESTRING) + "<br/>");
         out.println(Constants.WELCOMESTATEMENT + "-" + request.getAttribute(Constants.WELCOMESTATEMENT) + "<br/>");
         request.removeAttribute(Constants.WELCOMESTRING);
-        request.setAttribute(Constants.WELCOMESTATEMENT, someInteger1 + "+" 
-                + someInteger2 + "=" + someInteger3 + " is not "+ someBoolean2);
+        if (someInteger1 == null && someInteger2 == null && someInteger3 == null && someBoolean2 == null) {
+            request.setAttribute(Constants.WELCOMESTATEMENT, null);
+        } else {
+            request.setAttribute(Constants.WELCOMESTATEMENT, someInteger1 + "+" 
+                    + someInteger2 + "=" + someInteger3 + " is not "+ someBoolean2);
+        }
         out.println("</body>");
         out.println("</html>");
     }

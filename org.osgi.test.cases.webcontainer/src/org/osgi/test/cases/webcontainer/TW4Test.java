@@ -79,6 +79,7 @@ public class TW4Test extends DefaultTestBundleControl {
                 log(response);
             }
             // check if content of response is empty
+            log("verify content of response is correct");
             assertEquals(response, "");
         } finally {
             conn.disconnect();
@@ -91,7 +92,7 @@ public class TW4Test extends DefaultTestBundleControl {
      */
     public void testLongParams() throws Exception {
         String param1 = "param1=value1";
-        String param2 = "param2=abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz";
+        String param2 = "param2=" + Constants.PARAM2;
         final String request = this.warContextPath
                 + "/TestServlet1/TestServlet2?tc=1&" + param1 + "&" + param2;
         if (debug) {
@@ -107,6 +108,7 @@ public class TW4Test extends DefaultTestBundleControl {
                 log(response);
             }
             // check if content of response is correct
+            log("verify content of response is correct");
             assertEquals(response, Constants.TW4LONGPARAMS);
         } finally {
             conn.disconnect();
@@ -139,6 +141,7 @@ public class TW4Test extends DefaultTestBundleControl {
                 log(response);
             }
             // check if content of response is correct
+            log("verify content of response is correct");
             assertEquals(response, Constants.TW4SPECPARAMS);
         } finally {
             conn.disconnect();
@@ -160,13 +163,15 @@ public class TW4Test extends DefaultTestBundleControl {
             int bufsize = 0;
             int len = 0;
             char[] buf = new char[1024];
-            
-            in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+            in = new BufferedReader(
+                    new InputStreamReader(conn.getInputStream()));
             assertNotNull(in);
             while ((len = in.read(buf, 0, buf.length)) > 0)
                 bufsize += len;
             in.close();
             // check if content of response is correct
+            log("verify content of response is correct");
             log(bufsize + "");
             assertEquals(bufsize, 4194304);
         } finally {
@@ -190,6 +195,7 @@ public class TW4Test extends DefaultTestBundleControl {
                 log(response);
             }
             // check if content of response is correct
+            log("verify content of response is correct");
             assertEquals(response, Constants.PLAINRESPONSE);
         } finally {
             conn.disconnect();
@@ -212,6 +218,7 @@ public class TW4Test extends DefaultTestBundleControl {
                 log(response);
             }
             // check if content of response is correct
+            log("verify content of response is correct");
             assertEquals(response, Constants.HTMLRESPONSE);
         } finally {
             conn.disconnect();

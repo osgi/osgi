@@ -19,6 +19,7 @@ package org.osgi.test.cases.webcontainer.annotation;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.osgi.test.cases.webcontainer.util.Constants;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
 import org.osgi.test.cases.webcontainer.util.Server;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
@@ -26,7 +27,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 /**
  * @version $Rev$ $Date$
  */
-public class ResourceAnnotationTest extends DefaultTestBundleControl {
+public class MCResourceAnnotationTest extends DefaultTestBundleControl {
     // this test case assume war files are already installed for now
     Server server;
     boolean debug;
@@ -38,7 +39,7 @@ public class ResourceAnnotationTest extends DefaultTestBundleControl {
         // of running each time before each test?
         this.server = new Server("localhost");
         this.debug = true;
-        this.warContextPath = "/tw2";
+        this.warContextPath = "/tw3";
         // TODO install war file
     }
 
@@ -48,7 +49,8 @@ public class ResourceAnnotationTest extends DefaultTestBundleControl {
 
     /*
      * Test single @Resource class-level and field based annotation/injection
-     * with data type javax.sql.DataSource
+     * with data type javax.sql.DataSource, when the metadata-complete attribute
+     * is set to true.
      */
     public void testResource001() throws Exception {
         final String request = this.warContextPath + "/ResourceServlet1";
@@ -66,10 +68,8 @@ public class ResourceAnnotationTest extends DefaultTestBundleControl {
             assertTrue(response.indexOf("ResourceServlet1") > 0);
             assertTrue(response
                     .indexOf("Printing the injections in this ResourceServlet1 ...") > 0);
-            assertTrue(response.indexOf("Done!") > 0);
-            assertEquals(response.indexOf("null"), -1);
-            assertEquals(response
-                    .indexOf("Error - unable to find name via @Resource"), -1);
+            assertTrue(response
+                    .indexOf("Error - unable to find name via @Resource") > 0);
         } finally {
             conn.disconnect();
         }
@@ -77,7 +77,7 @@ public class ResourceAnnotationTest extends DefaultTestBundleControl {
 
     /*
      * Test @Resource field based annotation/injection with data type Integer,
-     * String, Boolean
+     * String, Boolean, when the metadata-complete attribute is set to true.
      */
     public void testResource002() throws Exception {
         final String request = this.warContextPath + "/ResourceServlet2";
@@ -93,9 +93,9 @@ public class ResourceAnnotationTest extends DefaultTestBundleControl {
             // check if content of response is correct
             log("verify content of response is correct");
             assertTrue(response.indexOf("ResourceServlet2") > 0);
-            assertTrue(response.indexOf("Welcome String from env-entry!") > 0);
-            assertTrue(response.indexOf("5 + 5 = 10 that is true") > 0);
-            assertEquals(response.indexOf("null"), -1);
+            assertTrue(response.indexOf(Constants.NULL + " " + Constants.NULL) > 0);
+            assertTrue(response.indexOf(Constants.NULL + " + " + Constants.NULL
+                    + " = " + Constants.NULL + " that is " + Constants.NULL) > 0);
         } finally {
             conn.disconnect();
         }
@@ -105,7 +105,8 @@ public class ResourceAnnotationTest extends DefaultTestBundleControl {
      * Test @Resources class-level annotation/injection
      * 
      * @Resource field based annotation/injection with data type
-     * javax.sql.DataSource
+     * javax.sql.DataSource, when the metadata-complete attribute is set to
+     * true.
      */
     public void testResource003() throws Exception {
         final String request = this.warContextPath + "/ResourceServlet3";
@@ -123,10 +124,8 @@ public class ResourceAnnotationTest extends DefaultTestBundleControl {
             assertTrue(response.indexOf("ResourceServlet3") > 0);
             assertTrue(response
                     .indexOf("Printing the injections in this ResourceServlet3 ...") > 0);
-            assertTrue(response.indexOf("Done!") > 0);
-            assertEquals(response.indexOf("null"), -1);
-            assertEquals(response
-                    .indexOf("Error - unable to find name via @Resource"), -1);
+            assertTrue(response
+                    .indexOf("Error - unable to find name via @Resource") > 0);
         } finally {
             conn.disconnect();
         }
@@ -134,7 +133,7 @@ public class ResourceAnnotationTest extends DefaultTestBundleControl {
 
     /*
      * Test @Resource setter based injection with data type Integer, String,
-     * Boolean
+     * Boolean, when the metadata-complete attribute is set to true.
      */
     public void testResource004() throws Exception {
         final String request = this.warContextPath + "/ResourceServlet4";
@@ -150,9 +149,9 @@ public class ResourceAnnotationTest extends DefaultTestBundleControl {
             // check if content of response is correct
             log("verify content of response is correct");
             assertTrue(response.indexOf("ResourceServlet4") > 0);
-            assertTrue(response.indexOf("Welcome String from env-entry!") > 0);
-            assertTrue(response.indexOf("5 + 5 = 10 that is true") > 0);
-            assertEquals(response.indexOf("null"), -1);
+            assertTrue(response.indexOf(Constants.NULL + " " + Constants.NULL) > 0);
+            assertTrue(response.indexOf(Constants.NULL + " + " + Constants.NULL
+                    + " = " + Constants.NULL + " that is " + Constants.NULL) > 0);
         } finally {
             conn.disconnect();
         }

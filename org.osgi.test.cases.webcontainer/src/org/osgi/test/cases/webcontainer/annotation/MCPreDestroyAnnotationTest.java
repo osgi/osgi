@@ -23,7 +23,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 /**
  * @version $Rev$ $Date$
  */
-public class PreDestroyAnnotationTest extends DefaultTestBundleControl {
+public class MCPreDestroyAnnotationTest extends DefaultTestBundleControl {
     // this test case assume war files are already installed for now
     Server server;
     boolean debug;
@@ -36,7 +36,7 @@ public class PreDestroyAnnotationTest extends DefaultTestBundleControl {
 
         this.server = new Server("localhost");
         this.debug = true;
-        this.warContextPath = "/tw2";
+        this.warContextPath = "/tw3";
         this.timeUtil = new TimeUtil(this.warContextPath);
 
         // TODO install the war file
@@ -56,17 +56,18 @@ public class PreDestroyAnnotationTest extends DefaultTestBundleControl {
     }
 
     /*
-     * test @preDestroy annotated public method is called
+     * test @preDestroy annotated public method is not called
+     * when the metadata-complete attribute is set to true.
      */
     public void testPreDestroy001() throws Exception {
         uninstallWar();
         // TODO do we need to wait till the war is uninstalled properly?
-        log("verify annotated methods are invoked");
-        assertTrue(this.timeUtil.getTimeFromLog(
-                "PostConstructPreDestroyServlet1", "cleanup") > beforeUninstall);
-        assertTrue(this.timeUtil.getTimeFromLog(
-                "PostConstructPreDestroyServlet2", "cleanup") > beforeUninstall);
-        assertTrue(this.timeUtil.getTimeFromLog(
-                "PostConstructPreDestroyServlet3", "cleanup") > beforeUninstall);
+        log("verify annotated methods are not invoked");
+        assertEquals(this.timeUtil.getTimeFromLog(
+                "PostConstructPreDestroyServlet1", "cleanup"), 0);
+        assertEquals(this.timeUtil.getTimeFromLog(
+                "PostConstructPreDestroyServlet2", "cleanup"), 0);
+        assertEquals(this.timeUtil.getTimeFromLog(
+                "PostConstructPreDestroyServlet3", "cleanup"), 0);
     }
 }

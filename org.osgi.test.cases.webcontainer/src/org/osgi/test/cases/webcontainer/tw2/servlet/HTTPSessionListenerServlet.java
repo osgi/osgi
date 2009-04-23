@@ -95,9 +95,13 @@ public class HTTPSessionListenerServlet extends HttpServlet {
         out.println(Constants.WELCOMESTRING + "-" + request.getSession().getAttribute(Constants.WELCOMESTRING) + "<br/>");
         out.println(Constants.WELCOMESTATEMENT + "-" + request.getSession().getAttribute(Constants.WELCOMESTATEMENT) + "<br/>");
         request.getSession().removeAttribute(Constants.WELCOMESTRING);
-        request.getSession().setAttribute(Constants.WELCOMESTATEMENT, someInteger1 + "+" 
-                + someInteger2 + "=" + someInteger3 + " is not "+ someBoolean2);
+        if (someInteger1 == null && someInteger2 == null && someInteger3 == null && someBoolean2 == null) {
+            request.getSession().setAttribute(Constants.WELCOMESTATEMENT, null);
+        } else {
+            request.getSession().setAttribute(Constants.WELCOMESTATEMENT, someInteger1 + "+" 
+                    + someInteger2 + "=" + someInteger3 + " is not "+ someBoolean2);
         out.println("</body>");
         out.println("</html>");
+        }
     }
 }

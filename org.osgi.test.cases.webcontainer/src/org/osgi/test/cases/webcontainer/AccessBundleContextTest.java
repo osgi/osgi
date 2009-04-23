@@ -32,7 +32,8 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 /**
  * @version $Rev$ $Date$
  * 
- * test able to access BundleContext from ServletContext and use the OSGi log service.
+ *          test able to access BundleContext from ServletContext and use the
+ *          OSGi log service.
  */
 public class AccessBundleContextTest extends DefaultTestBundleControl {
     // this test case assume war files are already installed for now
@@ -41,62 +42,65 @@ public class AccessBundleContextTest extends DefaultTestBundleControl {
     String warContextPath;
     long beforeInstall;
     TimeUtil timeUtil;
-    
+
     LogReaderService logReaderService;
-    
+
     public void setUp() throws Exception {
         // TODO if war file already exists, let's remove it first.
-        
+
         this.server = new Server();
         this.debug = true;
         this.warContextPath = "/tw5";
         this.timeUtil = new TimeUtil(this.warContextPath);
-        
+
         // capture a time before install
         beforeInstall = System.currentTimeMillis();
         // TODO install the war file
-        
-        ServiceReference logReaderServiceReference = getContext().getServiceReference(LogReaderService.class.getName());
-        logReaderService = (LogReaderService) getContext()
-                .getService(logReaderServiceReference);
+
+        ServiceReference logReaderServiceReference = getContext()
+                .getServiceReference(LogReaderService.class.getName());
+        logReaderService = (LogReaderService) getContext().getService(
+                logReaderServiceReference);
     }
-    
+
     private void uninstallWar() throws Exception {
         // TODO uninstall the war file
-        
+
     }
-    
+
     public void tearDown() throws Exception {
         uninstallWar();
     }
-    
+
     public void testLog001() throws Exception {
         long beforeLog = System.currentTimeMillis();
-        
-        final String request = this.warContextPath + "/BundleContextTestServlet";
+
+        final String request = this.warContextPath
+                + "/BundleContextTestServlet";
         final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         try {
             assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(),"text/html");
+            assertEquals(conn.getContentType(), "text/html");
             String response = Dispatcher.dispatch(conn);
             if (debug) {
                 log(response);
             }
             // check if content of response is correct
+            log("verify content of response is correct");
             assertTrue(response.indexOf("BundleContextTestServlet") > 0);
             assertTrue(response.indexOf(Constants.TESTLOGMSG) > 0);
             assertEquals(response.indexOf("null"), -1);
         } finally {
             conn.disconnect();
         }
-        
+
         Enumeration e = logReaderService.getLog();
-        while(e.hasMoreElements()) {
-            LogEntry logentry = (LogEntry)e.nextElement();
+        while (e.hasMoreElements()) {
+            LogEntry logentry = (LogEntry) e.nextElement();
             log("get log message: " + logentry.getMessage());
             assertEquals(logentry.getMessage(), Constants.TESTLOGMSG);
-            // TODO get Bundle via ISGI WebApplication getBundle(), 
+            // TODO get Bundle via ISGI WebApplication getBundle(),
             // then use Bundle.getBundleContext() to get BundleContext
             assertEquals(logentry.getBundle(), getContext());
             assertEquals(logentry.getLevel(), LogService.LOG_ERROR);
@@ -105,106 +109,112 @@ public class AccessBundleContextTest extends DefaultTestBundleControl {
             break;
         }
     }
-    
+
     public void testLog002() throws Exception {
         long beforeLog = System.currentTimeMillis();
-        
-        final String request = this.warContextPath + "/BundleContextTestServlet?log=2";
+
+        final String request = this.warContextPath
+                + "/BundleContextTestServlet?log=2";
         final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         try {
             assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(),"text/html");
+            assertEquals(conn.getContentType(), "text/html");
             String response = Dispatcher.dispatch(conn);
             if (debug) {
                 log(response);
             }
             // check if content of response is correct
+            log("verify content of response is correct");
             assertTrue(response.indexOf("BundleContextTestServlet") > 0);
             assertTrue(response.indexOf(Constants.TESTLOGMSG2) > 0);
             assertEquals(response.indexOf("null"), -1);
         } finally {
             conn.disconnect();
         }
-        
+
         Enumeration e = logReaderService.getLog();
-        while(e.hasMoreElements()) {
-            LogEntry logentry = (LogEntry)e.nextElement();
+        while (e.hasMoreElements()) {
+            LogEntry logentry = (LogEntry) e.nextElement();
             log("get log message: " + logentry.getMessage());
             assertEquals(logentry.getMessage(), Constants.TESTLOGMSG2);
-            // TODO get Bundle via ISGI WebApplication getBundle(), 
+            // TODO get Bundle via ISGI WebApplication getBundle(),
             // then use Bundle.getBundleContext() to get BundleContext
             assertEquals(logentry.getBundle(), getContext());
             assertEquals(logentry.getLevel(), LogService.LOG_WARNING);
             assertTrue(logentry.getTime() >= beforeLog);
             assertTrue(logentry.getTime() <= System.currentTimeMillis());
             break;
-        }       
+        }
     }
-    
+
     public void testLog003() throws Exception {
         long beforeLog = System.currentTimeMillis();
-        
-        final String request = this.warContextPath + "/BundleContextTestServlet?log=3";
+
+        final String request = this.warContextPath
+                + "/BundleContextTestServlet?log=3";
         final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         try {
             assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(),"text/html");
+            assertEquals(conn.getContentType(), "text/html");
             String response = Dispatcher.dispatch(conn);
             if (debug) {
                 log(response);
             }
             // check if content of response is correct
+            log("verify content of response is correct");
             assertTrue(response.indexOf("BundleContextTestServlet") > 0);
             assertTrue(response.indexOf(Constants.TESTLOGMSG3) > 0);
             assertEquals(response.indexOf("null"), -1);
         } finally {
             conn.disconnect();
         }
-        
+
         Enumeration e = logReaderService.getLog();
-        while(e.hasMoreElements()) {
-            LogEntry logentry = (LogEntry)e.nextElement();
+        while (e.hasMoreElements()) {
+            LogEntry logentry = (LogEntry) e.nextElement();
             log("get log message: " + logentry.getMessage());
             assertEquals(logentry.getMessage(), Constants.TESTLOGMSG3);
-            // TODO get Bundle via ISGI WebApplication getBundle(), 
+            // TODO get Bundle via ISGI WebApplication getBundle(),
             // then use Bundle.getBundleContext() to get BundleContext
             assertEquals(logentry.getBundle(), getContext());
             assertEquals(logentry.getLevel(), LogService.LOG_INFO);
             assertTrue(logentry.getTime() >= beforeLog);
             assertTrue(logentry.getTime() <= System.currentTimeMillis());
             break;
-        }       
+        }
     }
-    
+
     public void testLog004() throws Exception {
         long beforeLog = System.currentTimeMillis();
-        
-        final String request = this.warContextPath + "/BundleContextTestServlet?log=4";
+
+        final String request = this.warContextPath
+                + "/BundleContextTestServlet?log=4";
         final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         try {
             assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(),"text/html");
+            assertEquals(conn.getContentType(), "text/html");
             String response = Dispatcher.dispatch(conn);
             if (debug) {
                 log(response);
             }
             // check if content of response is correct
+            log("verify content of response is correct");
             assertTrue(response.indexOf("BundleContextTestServlet") > 0);
             assertTrue(response.indexOf(Constants.TESTLOGMSG4) > 0);
             assertEquals(response.indexOf("null"), -1);
         } finally {
             conn.disconnect();
         }
-        
+
         Enumeration e = logReaderService.getLog();
-        while(e.hasMoreElements()) {
-            LogEntry logentry = (LogEntry)e.nextElement();
+        while (e.hasMoreElements()) {
+            LogEntry logentry = (LogEntry) e.nextElement();
             log("get log message: " + logentry.getMessage());
             assertEquals(logentry.getMessage(), Constants.TESTLOGMSG4);
-            // TODO get Bundle via ISGI WebApplication getBundle(), 
+            // TODO get Bundle via ISGI WebApplication getBundle(),
             // then use Bundle.getBundleContext() to get BundleContext
             assertEquals(logentry.getBundle(), getContext());
             assertEquals(logentry.getLevel(), LogService.LOG_DEBUG);
@@ -212,8 +222,6 @@ public class AccessBundleContextTest extends DefaultTestBundleControl {
             assertTrue(logentry.getTime() <= System.currentTimeMillis());
             assertEquals(logentry.getException(), new RuntimeException());
             break;
-        }       
+        }
     }
 }
-
-

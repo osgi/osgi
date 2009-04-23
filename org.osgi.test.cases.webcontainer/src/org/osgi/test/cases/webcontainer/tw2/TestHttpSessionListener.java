@@ -60,8 +60,16 @@ public class TestHttpSessionListener implements HttpSessionListener {
     }
     
     public void sessionCreated(HttpSessionEvent se) {
-        se.getSession().setAttribute("WelcomeStatement", someInteger1 + "+" + someInteger2 + "=" + someInteger3 + " is "+ someBoolean1);
-        se.getSession().setAttribute("WelcomeString", someString1 + " " + someString2);
+        if (someInteger1 == null && someInteger2 == null && someBoolean1 == null) {
+            se.getSession().setAttribute(Constants.WELCOMESTATEMENT, null);            
+        } else {
+            se.getSession().setAttribute(Constants.WELCOMESTATEMENT, someInteger1 + "+" + someInteger2 + "=" + someInteger3 + " is "+ someBoolean1);
+        }
+        if (someString1 == null && someString2 == null) {
+            se.getSession().setAttribute(Constants.WELCOMESTRING, null);
+        } else {
+            se.getSession().setAttribute(Constants.WELCOMESTRING, someString1 + " " + someString2);
+        }
         EventLogger.logEvent(new Event(this.getClass().getName(), "sessionCreated", 
                 Constants.WELCOMESTRING + "-" + se.getSession().getAttribute(Constants.WELCOMESTRING)));
     }

@@ -64,11 +64,17 @@ public class TestServletRequestListener implements ServletRequestListener {
     }
 
     public void requestInitialized(ServletRequestEvent sre) {
-        sre.getServletRequest().setAttribute(Constants.WELCOMESTATEMENT, someInteger1 + "+" + someInteger2 + "=" + someInteger3 + " is "+ someBoolean1);
-        sre.getServletRequest().setAttribute(Constants.WELCOMESTRING, someString1 + " " + someString2);
-        EventLogger.logEvent(new Event(this.getClass().getName(), "requestInitialized", 
+        if (someInteger1 == null && someInteger2 == null && someBoolean1 == null) {
+            sre.getServletRequest().setAttribute(Constants.WELCOMESTATEMENT, null);            
+        } else {
+            sre.getServletRequest().setAttribute(Constants.WELCOMESTATEMENT, someInteger1 + "+" + someInteger2 + "=" + someInteger3 + " is "+ someBoolean1);   
+        }
+        if (someString1 == null && someString2 == null) {
+            sre.getServletRequest().setAttribute(Constants.WELCOMESTRING, null);
+        } else {
+            sre.getServletRequest().setAttribute(Constants.WELCOMESTRING, someString1 + " " + someString2);
+        }
+        EventLogger.logEvent(new Event(this.getClass().getName(), "requestInitialized",
                 Constants.WELCOMESTRING + "-" + sre.getServletRequest().getAttribute(Constants.WELCOMESTRING)));
-
     }
-
 }

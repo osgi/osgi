@@ -40,7 +40,7 @@ public class SecurityAnnotationTest extends DefaultTestBundleControl {
 
         this.server = new Server("localhost");
         this.debug = true;
-        this.warContextPath = "/tw2";
+        this.warContextPath = "/tw3";
 
         // capture a time before install
         // beforeInstall = System.currentTimeMillis();
@@ -66,7 +66,8 @@ public class SecurityAnnotationTest extends DefaultTestBundleControl {
         final String request = this.warContextPath + "/SecurityTestServlet";
         final URL url = Dispatcher.createURL(request, this.server);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        // TODO allow user to specify username password at runtime or via property file
+        // TODO allow user to specify username password at runtime or via
+        // property file
         final String userName = "admin";
         final String password = "admin";
 
@@ -85,19 +86,23 @@ public class SecurityAnnotationTest extends DefaultTestBundleControl {
                 log(response);
             }
             assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(),"text/html");
+            assertEquals(conn.getContentType(), "text/html");
 
             // check if content of response is correct
+            log("verify content of response is correct");
             assertTrue(response.indexOf("SecurityTestServlet") > 0);
-            assertTrue(response.indexOf(Constants.EMAIL + "-" + Constants.EMAILVALUE) > 0);
-            assertTrue(response.indexOf(Constants.WELCOMESTRING + "-" + Constants.WELCOMESTRINGVALUE) > 0);
-            assertTrue(response.indexOf(Constants.WELCOMESTATEMENT + "-" + Constants.WELCOMESTATEMENTVALUE) > 0);
-            assertEquals(response.indexOf("null"), -1); 
+            assertTrue(response.indexOf(Constants.EMAIL + "-"
+                    + Constants.EMAILVALUE) > 0);
+            assertTrue(response.indexOf(Constants.WELCOMESTRING + "-"
+                    + Constants.WELCOMESTRINGVALUE) > 0);
+            assertTrue(response.indexOf(Constants.WELCOMESTATEMENT + "-"
+                    + Constants.WELCOMESTATEMENTVALUE) > 0);
+            assertEquals(response.indexOf("null"), -1);
         } finally {
             conn.disconnect();
         }
     }
-    
+
     /*
      * test annotated methods/fields in container manager class that implement
      * javax.servlet.Filter are called, supplying the wrong password.
@@ -121,15 +126,16 @@ public class SecurityAnnotationTest extends DefaultTestBundleControl {
 
             }
 
-            assertTrue(conn.getResponseCode() != 200); 
+            assertTrue(conn.getResponseCode() != 200);
         } finally {
             conn.disconnect();
         }
     }
-    
+
     /*
      * test annotated methods/fields in container manager class that implement
-     * javax.servlet.Filter are called, supplying the wrong username and password.
+     * javax.servlet.Filter are called, supplying the wrong username and
+     * password.
      */
     public void testDeclareRolesAnnotation003() throws Exception {
         final String request = this.warContextPath + "/SecurityTestServlet";
@@ -146,19 +152,20 @@ public class SecurityAnnotationTest extends DefaultTestBundleControl {
                 byte[] encodedPassword = (userName + ":" + password).getBytes();
                 conn.setRequestProperty("Authorization", "Basic "
                         + new String(Base64Encoder.encode(encodedPassword)));
-                assertEquals(conn.getResponseCode(), 401 );
+                assertEquals(conn.getResponseCode(), 401);
 
             }
 
-            assertTrue(conn.getResponseCode() != 200); 
+            assertTrue(conn.getResponseCode() != 200);
         } finally {
             conn.disconnect();
         }
     }
-    
+
     /*
      * test annotated methods/fields in container manager class that implement
-     * javax.servlet.Filter are called, supplying the correct username and password, but inappropriate role
+     * javax.servlet.Filter are called, supplying the correct username and
+     * password, but inappropriate role
      */
     public void testDeclareRolesAnnotation004() throws Exception {
         final String request = this.warContextPath + "/SecurityTestServlet";
@@ -179,11 +186,10 @@ public class SecurityAnnotationTest extends DefaultTestBundleControl {
 
             }
 
-            assertTrue(conn.getResponseCode() != 200); 
+            assertTrue(conn.getResponseCode() != 200);
         } finally {
             conn.disconnect();
         }
     }
-    
-    
+
 }

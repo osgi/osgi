@@ -92,12 +92,15 @@ public class TimeUtil {
         return "";
     }
     
-    //load property file
+    /*
+     * Load the property file.  
+     * If the file doesn't exist, create an empty file
+     */
     protected Properties loadProperties(File f) {
         Properties properties = new Properties();
         try {
             if (!f.exists()) {
-                throw new FileNotFoundException();//f.createNewFile();
+                f.createNewFile();
             }
             InputStream in = new FileInputStream(f);
             try {

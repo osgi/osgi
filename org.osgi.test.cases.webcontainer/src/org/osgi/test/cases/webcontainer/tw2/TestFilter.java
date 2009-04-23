@@ -37,46 +37,63 @@ import org.osgi.test.cases.webcontainer.util.EventLogger;
  */
 public class TestFilter implements Filter {
 
-    @Resource(name="someString1")
+    @Resource(name = "someString1")
     private String someString1;
-    
-    @Resource(name="someString2")
+
+    @Resource(name = "someString2")
     private String someString2;
-    
-    @Resource(name="someInteger1")
+
+    @Resource(name = "someInteger1")
     private Integer someInteger1;
-    
-    @Resource(name="someInteger2")
+
+    @Resource(name = "someInteger2")
     private Integer someInteger2;
-    
-    @Resource(name="someInteger3")
+
+    @Resource(name = "someInteger3")
     private Integer someInteger3;
-       
-    @Resource(name="someBoolean1")
+
+    @Resource(name = "someBoolean1")
     private Boolean someBoolean1;
-    
+
     @PostConstruct
     public void postConstruct() {
-        EventLogger.logEvent(new Event(this.getClass().getName(), Constants.POSTCONSTRUCT, ""));
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                Constants.POSTCONSTRUCT, ""));
     }
 
     @PreDestroy
     public void preDestroy() {
-        EventLogger.logEvent(new Event(this.getClass().getName(), Constants.PREDESTROY, ""));
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                Constants.PREDESTROY, ""));
     }
+
     public void destroy() {
-        EventLogger.logEvent(new Event(this.getClass().getName(), "destroy", ""));
+        EventLogger
+                .logEvent(new Event(this.getClass().getName(), "destroy", ""));
     }
 
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
-        EventLogger.logEvent(new Event(this.getClass().getName(), "doFilter", someString1 + " " + someString2));
+        if (someString1 == null && someString2 == null) {
+            EventLogger.logEvent(new Event(this.getClass().getName(),
+                    "doFilter", "" + someString1));
+        } else {
+            EventLogger.logEvent(new Event(this.getClass().getName(),
+                    "doFilter", someString1 + " " + someString2));
+        }
         chain.doFilter(request, response);
     }
 
     public void init(FilterConfig filterConfig) throws ServletException {
-        EventLogger.logEvent(new Event(this.getClass().getName(), 
-                "init", someInteger1 + "+" + someInteger2 + "=" + someInteger3 + " is "+ someBoolean1));
+        if (someInteger1 == null && someInteger2 == null
+                && someInteger3 == null && someBoolean1 == null) {
+            EventLogger.logEvent(new Event(this.getClass().getName(), "init",
+                    "" + someInteger1));
+        } else {
+            EventLogger.logEvent(new Event(this.getClass().getName(), "init",
+                    someInteger1 + "+" + someInteger2 + "=" + someInteger3
+                            + " is " + someBoolean1));
+        }
     }
 
 }

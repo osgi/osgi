@@ -67,12 +67,19 @@ public class TestServletContextListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
         String email = context.getInitParameter("Email");
-        EventLogger.logEvent(new Event(this.getClass().getName(), "contextInitialized", 
-                Constants.EMAIL + "-" + email));
         context.setAttribute(Constants.EMAIL, email);
-        context.setAttribute(Constants.WELCOMESTATEMENT, someInteger1 + "+" + someInteger2 + "=" + someInteger3 + " is "+ someBoolean1);
-        context.setAttribute(Constants.WELCOMESTRING, someString1 + " " + someString2);
-
+        if (someInteger1 == null && someInteger2 == null && someBoolean1 == null) {
+            context.setAttribute(Constants.WELCOMESTATEMENT, null);            
+        } else {
+            context.setAttribute(Constants.WELCOMESTATEMENT, someInteger1 + "+" + someInteger2 + "=" + someInteger3 + " is "+ someBoolean1);
+        }
+        if (someString1 == null && someString2 == null) {
+            context.setAttribute(Constants.WELCOMESTRING, null);
+        } else {
+            context.setAttribute(Constants.WELCOMESTRING, someString1 + " " + someString2);
+        }
+        EventLogger.logEvent(new Event(this.getClass().getName(), "contextInitialized", 
+                Constants.EMAIL + "-" + context.getInitParameter("Email")));
     }
 
 }
