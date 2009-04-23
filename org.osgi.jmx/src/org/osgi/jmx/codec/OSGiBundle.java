@@ -15,12 +15,41 @@
  */
 package org.osgi.jmx.codec;
 
-import static org.osgi.jmx.codec.Util.*;
+import static org.osgi.jmx.codec.Util.LONG_ARRAY_TYPE;
+import static org.osgi.jmx.codec.Util.LongArrayFrom;
+import static org.osgi.jmx.codec.Util.STRING_ARRAY_TYPE;
+import static org.osgi.jmx.codec.Util.getBundleDependencies;
+import static org.osgi.jmx.codec.Util.getBundleExportedPackages;
+import static org.osgi.jmx.codec.Util.getBundleFragments;
+import static org.osgi.jmx.codec.Util.getBundleHeaders;
+import static org.osgi.jmx.codec.Util.getBundleImportedPackages;
+import static org.osgi.jmx.codec.Util.getBundleState;
+import static org.osgi.jmx.codec.Util.getBundlesRequiring;
+import static org.osgi.jmx.codec.Util.isBundleFragment;
+import static org.osgi.jmx.codec.Util.isBundlePersistentlyStarted;
+import static org.osgi.jmx.codec.Util.isBundleRequired;
+import static org.osgi.jmx.codec.Util.isRequiredBundleRemovalPending;
+import static org.osgi.jmx.codec.Util.longArrayFrom;
+import static org.osgi.jmx.codec.Util.serviceIds;
 import static org.osgi.jmx.framework.BundleStateMBean.BUNDLE_ID;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import javax.management.openmbean.*;
+import javax.management.openmbean.CompositeData;
+import javax.management.openmbean.CompositeDataSupport;
+import javax.management.openmbean.CompositeType;
+import javax.management.openmbean.OpenDataException;
+import javax.management.openmbean.OpenType;
+import javax.management.openmbean.SimpleType;
+import javax.management.openmbean.TabularData;
+import javax.management.openmbean.TabularDataSupport;
+import javax.management.openmbean.TabularType;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -133,7 +162,7 @@ public class OSGiBundle {
 	 */
 	public OSGiBundle(CompositeData data) {
 		this(
-				(String) data.get((String) BundleStateMBean.BUNDLE_LOCATION),
+				(String) data.get(BundleStateMBean.BUNDLE_LOCATION),
 				((Long) data.get(BundleStateMBean.BUNDLE_ID)).longValue(),
 				(String) data.get(BundleStateMBean.BUNDLE_SYMBOLIC_NAME),
 				((Integer) data.get(BundleStateMBean.BUNDLE_START_LEVEL))
@@ -570,7 +599,7 @@ public class OSGiBundle {
 	@SuppressWarnings("unchecked")
 	private static Map<String, String> mapFrom(TabularData data) {
 		Map<String, String> headers = new HashMap<String, String>();
-		Set<List<?>> keySet = (Set<List<?>>) data.keySet();
+		Set<List< ? >> keySet = data.keySet();
 		for (List<?> key : keySet) {
 			headers.put((String) key.get(0), (String) data.get(
 					new Object[] { key.get(0) }).get(VALUE));

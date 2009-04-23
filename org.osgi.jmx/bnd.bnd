@@ -1,5 +1,7 @@
+javac.source=1.5
+javac.target=1.5
 -nope=true
 nodeploy=true
 
 -buildpath = \
-	osgi;					version=4.0,
+	osgi;					version=4.2,
