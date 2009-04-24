@@ -38,10 +38,10 @@ public interface DiscoveredServiceTracker {
 	 * this tracker is interested in.
 	 * <p>
 	 * Value of this property is of type
-	 * <code>Collection (&lt;? extends String&gt;)</code>. May be <code>null</code> or
-	 * empty.
+	 * <code>Collection (&lt;? extends String&gt;)</code>. May be
+	 * <code>null</code> or empty.
 	 */
-	public static final String	PROP_KEY_MATCH_CRITERIA_INTERFACES	= "osgi.discovery.interest.interfaces";
+	public static final String	INTERFACE_MATCH_CRITERIA	= "osgi.remote.discovery.interest.interfaces";
 
 	/**
 	 * Optional ServiceRegistration property which contains filters for services
@@ -58,10 +58,10 @@ public interface DiscoveredServiceTracker {
 	 * <code>"(&amp;(service.interface=my.company.foo)(service.interface.version=my.company.foo|1.0.1.3))"</code>.
 	 * <p>
 	 * Value of this property is of type
-	 * <code>Collection (&lt;? extends String&gt;)</code>. May be <code>null</code>.
-	 * or empty
+	 * <code>Collection (&lt;? extends String&gt;)</code>. May be
+	 * <code>null</code>. or empty
 	 */
-	public static final String	PROP_KEY_MATCH_CRITERIA_FILTERS		= "osgi.discovery.interest.filters";
+	public static final String	FILTER_MATCH_CRITERIA		= "osgi.remote.discovery.interest.filters";
 
 	/**
 	 * Receives notification that information known to <code>Discovery</code>

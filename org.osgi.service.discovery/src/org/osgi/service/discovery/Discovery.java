@@ -40,21 +40,21 @@ public interface Discovery {
 	 * <p>
 	 * Value of this property is of type <code>String</code>.
 	 */
-	static final String	PROP_KEY_PRODUCT_NAME			= "osgi.remote.discovery.product";
+	static final String	PRODUCT_NAME		= "osgi.remote.discovery.product";
 
 	/**
 	 * ServiceRegistration property for the version of the Discovery product.
 	 * <p>
 	 * Value of this property is of type <code>String</code>.
 	 */
-	static final String	PROP_KEY_PRODUCT_VERSION		= "osgi.remote.discovery.product.version";
+	static final String	PRODUCT_VERSION		= "osgi.remote.discovery.product.version";
 
 	/**
 	 * ServiceRegistration property for the Discovery product vendor name.
 	 * <p>
 	 * Value of this property is of type <code>String</code>.
 	 */
-	static final String	PROP_KEY_VENDOR_NAME			= "osgi.remote.discovery.vendor";
+	static final String	VENDOR_NAME			= "osgi.remote.discovery.vendor";
 
 	/**
 	 * ServiceRegistration property that lists the discovery protocols used by
@@ -63,5 +63,5 @@ public interface Discovery {
 	 * Value of this property is of type
 	 * <code>Collection (&lt;? extends String&gt;)</code>.
 	 */
-	static final String	PROP_KEY_SUPPORTED_PROTOCOLS	= "osgi.remote.discovery.supported_protocols";
+	static final String	SUPPORTED_PROTOCOLS	= "osgi.remote.discovery.supported_protocols";
 }
