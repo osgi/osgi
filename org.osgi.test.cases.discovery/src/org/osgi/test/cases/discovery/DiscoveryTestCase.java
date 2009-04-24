@@ -76,8 +76,8 @@ public class DiscoveryTestCase extends TestCase {
 		Collection trackerinterfaces = new ArrayList();
 		trackerinterfaces.add(DiscoveryTestServiceInterface.class.getName());
 		
-		String filter = "(&(service.interface=" +
-		DiscoveryTestServiceInterface.class.getName() + ")(service.interface.version=" +
+		String filter = "(&(" + ServicePublication.SERVICE_INTERFACE_NAME + "=" +
+		DiscoveryTestServiceInterface.class.getName() + ")(" + ServicePublication.SERVICE_INTERFACE_VERSION + "=" +
 		DiscoveryTestServiceInterface.class.getName() + ServicePublication.SEPARATOR + "1.0.0))";
 		
 		Collection trackerfilters = new ArrayList();
