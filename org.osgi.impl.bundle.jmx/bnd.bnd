@@ -1,0 +1,18 @@
+-nope=true
+nodeploy=true
+javac.source			=1.5
+javac.target			=1.5
+
+Bundle-Activator: 		org.osgi.impl.bundle.jmx.Activator
+Export-Package: 		org.osgi.jmx.*
+Private-Package: 		${p}.*
+Import-Package:			org.osgi.service.*;resolution:=optional,*
+
+Bundle-Name: 			impl.bundle.jmx
+Bundle-Description: 	OSGi JMX Command n' Control Reference Implementation by Oracle Corporation.
+Bundle-Version: 		1.0.0.${project.build}
+Bundle-Category: 		osgi
+
+-buildpath = \
+	org.osgi.jmx; 	version=project, \
+	osgi;			version=4.0
