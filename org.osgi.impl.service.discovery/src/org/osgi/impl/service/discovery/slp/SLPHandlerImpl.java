@@ -244,11 +244,11 @@ public class SLPHandlerImpl implements Discovery {
 							attributes.length() - 1);
 					key = attributes.substring(0, attributes.indexOf("="));
 					if (!(key
-							.equals(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME)
+							.equals(ServicePublication.ENDPOINT_INTERFACE_NAME)
 							|| key
-									.equals(ServicePublication.PROP_KEY_SERVICE_INTERFACE_NAME)
+									.equals(ServicePublication.SERVICE_INTERFACE_NAME)
 							|| key
-									.equals(ServicePublication.PROP_KEY_SERVICE_INTERFACE_VERSION) || key
+									.equals(ServicePublication.SERVICE_INTERFACE_VERSION) || key
 							.equals(SLPServiceEndpointDescription.SLP_SERVICEURL))) {
 						// if the value is not a String we cannot handle that
 						// value!
@@ -730,9 +730,9 @@ public class SLPHandlerImpl implements Discovery {
 			Map/* String, Object */trackerProperties,
 			Collection matchingInterfaces, Collection matchingFilters) {
 		Collection interfaceCriteria = (Collection) trackerProperties
-				.get(DiscoveredServiceTracker.PROP_KEY_MATCH_CRITERIA_INTERFACES);
+				.get(DiscoveredServiceTracker.INTERFACE_MATCH_CRITERIA);
 		Collection filter = (Collection) trackerProperties
-				.get(DiscoveredServiceTracker.PROP_KEY_MATCH_CRITERIA_FILTERS);
+				.get(DiscoveredServiceTracker.FILTER_MATCH_CRITERIA);
 		boolean notify = false;
 		if (interfaceCriteria == null && filter == null) {
 			notify = true;

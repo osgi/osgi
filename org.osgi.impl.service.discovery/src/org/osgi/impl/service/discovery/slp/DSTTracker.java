@@ -132,32 +132,32 @@ public class DSTTracker implements ServiceTrackerCustomizer {
 		Map props = (Map) dsTrackers.get(tracker);
 		if (props != null) {
 			Collection oldInterfaceCriteria = (Collection) props
-					.get(DiscoveredServiceTracker.PROP_KEY_MATCH_CRITERIA_INTERFACES);
+					.get(DiscoveredServiceTracker.INTERFACE_MATCH_CRITERIA);
 			Collection oldFilterCriteria = (Collection) props
-					.get(DiscoveredServiceTracker.PROP_KEY_MATCH_CRITERIA_FILTERS);
+					.get(DiscoveredServiceTracker.FILTER_MATCH_CRITERIA);
 
 			Collection newInterfaceCriteria = (Collection) serviceReference
-					.getProperty(DiscoveredServiceTracker.PROP_KEY_MATCH_CRITERIA_INTERFACES);
+					.getProperty(DiscoveredServiceTracker.INTERFACE_MATCH_CRITERIA);
 			Collection newFilterCriteria = (Collection) serviceReference
-					.getProperty(DiscoveredServiceTracker.PROP_KEY_MATCH_CRITERIA_FILTERS);
+					.getProperty(DiscoveredServiceTracker.FILTER_MATCH_CRITERIA);
 
 			result
 					.put(
-							DiscoveredServiceTracker.PROP_KEY_MATCH_CRITERIA_INTERFACES,
+							DiscoveredServiceTracker.INTERFACE_MATCH_CRITERIA,
 							getAddedEntries(oldInterfaceCriteria,
 									newInterfaceCriteria));
 			result.put(
-					DiscoveredServiceTracker.PROP_KEY_MATCH_CRITERIA_FILTERS,
+					DiscoveredServiceTracker.FILTER_MATCH_CRITERIA,
 					getAddedEntries(oldFilterCriteria, newFilterCriteria));
 		}
 		else {
 			// set empty lists as values
 			result
 					.put(
-							DiscoveredServiceTracker.PROP_KEY_MATCH_CRITERIA_INTERFACES,
+							DiscoveredServiceTracker.INTERFACE_MATCH_CRITERIA,
 							new ArrayList());
 			result.put(
-					DiscoveredServiceTracker.PROP_KEY_MATCH_CRITERIA_FILTERS,
+					DiscoveredServiceTracker.FILTER_MATCH_CRITERIA,
 					new ArrayList());
 		}
 		return result;
@@ -202,15 +202,15 @@ public class DSTTracker implements ServiceTrackerCustomizer {
 		Map props = new HashMap();
 		props
 				.put(
-						DiscoveredServiceTracker.PROP_KEY_MATCH_CRITERIA_INTERFACES,
+						DiscoveredServiceTracker.INTERFACE_MATCH_CRITERIA,
 						ref
-								.getProperty(DiscoveredServiceTracker.PROP_KEY_MATCH_CRITERIA_INTERFACES));
+								.getProperty(DiscoveredServiceTracker.INTERFACE_MATCH_CRITERIA));
 
 		props
 				.put(
-						DiscoveredServiceTracker.PROP_KEY_MATCH_CRITERIA_FILTERS,
+						DiscoveredServiceTracker.FILTER_MATCH_CRITERIA,
 						ref
-								.getProperty(DiscoveredServiceTracker.PROP_KEY_MATCH_CRITERIA_FILTERS));
+								.getProperty(DiscoveredServiceTracker.FILTER_MATCH_CRITERIA));
 		dsTrackers.put((DiscoveredServiceTracker) context.getService(ref),
 				props);
 	}

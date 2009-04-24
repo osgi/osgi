@@ -96,9 +96,9 @@ public class Activator implements BundleActivator {
 
 		Dictionary props = new Hashtable();
 		// TODO: make the instance configurable, e.g. via CAS or DS
-		props.put(Discovery.PROP_KEY_VENDOR_NAME,
+		props.put(Discovery.VENDOR_NAME,
 				"Siemens Enterprise Communications GmbH & Co KG");
-		props.put(Discovery.PROP_KEY_SUPPORTED_PROTOCOLS, "jSLP 1.0.0");
+		props.put(Discovery.SUPPORTED_PROTOCOLS, "jSLP 1.0.0");
 		slpHandlerRegistration = context.registerService(Discovery.class
 				.getName(), slpDiscovery, props);
 

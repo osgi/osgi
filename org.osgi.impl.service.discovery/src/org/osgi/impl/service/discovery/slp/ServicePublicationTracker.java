@@ -84,16 +84,16 @@ public class ServicePublicationTracker implements ServiceTrackerCustomizer {
 		ServiceEndpointDescription sed = discovery
 				.publishService(
 						(Collection) arg0
-								.getProperty(ServicePublication.PROP_KEY_SERVICE_INTERFACE_NAME),
+								.getProperty(ServicePublication.SERVICE_INTERFACE_NAME),
 						(Collection) arg0
-								.getProperty(ServicePublication.PROP_KEY_SERVICE_INTERFACE_VERSION),
+								.getProperty(ServicePublication.SERVICE_INTERFACE_VERSION),
 						(Collection) arg0
-								.getProperty(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME),
+								.getProperty(ServicePublication.ENDPOINT_INTERFACE_NAME),
 						(Map) arg0
-								.getProperty(ServicePublication.PROP_KEY_SERVICE_PROPERTIES),
+								.getProperty(ServicePublication.SERVICE_PROPERTIES),
 						SLPHandlerImpl.PROP_VAL_PUBLISH_STRATEGY_PUSH,
 						(String) arg0
-								.getProperty(ServicePublication.PROP_KEY_ENDPOINT_ID));
+								.getProperty(ServicePublication.ENDPOINT_ID));
 		publicationAndSED.put(arg0, sed);
 		return sp;
 	}

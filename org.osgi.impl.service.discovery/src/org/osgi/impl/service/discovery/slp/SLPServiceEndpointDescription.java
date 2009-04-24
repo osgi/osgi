@@ -280,20 +280,20 @@ public final class SLPServiceEndpointDescription implements
 		if (properties == null) {
 			properties = new HashMap();
 		}
-		properties.put(ServicePublication.PROP_KEY_SERVICE_INTERFACE_NAME,
+		properties.put(ServicePublication.SERVICE_INTERFACE_NAME,
 				interfaceNames);
 		if (versions != null) {
 			properties.put(
-					ServicePublication.PROP_KEY_SERVICE_INTERFACE_VERSION,
+					ServicePublication.SERVICE_INTERFACE_VERSION,
 					versions);
 		}
 		if (endPointInterfaces != null) {
-			properties.put(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME,
+			properties.put(ServicePublication.ENDPOINT_INTERFACE_NAME,
 					endPointInterfaces);
 		}
 
 		if (endpntID != null) {
-			properties.put(ServicePublication.PROP_KEY_ENDPOINT_ID, endpntID);
+			properties.put(ServicePublication.ENDPOINT_ID, endpntID);
 		}
 	}
 
@@ -411,7 +411,7 @@ public final class SLPServiceEndpointDescription implements
 	 * @see org.osgi.impl.service.discovery.ProtocolSpecificServiceDescription#getLocation()
 	 */
 	public URI getLocation() {
-		Object urlObject = getProperty(ServicePublication.PROP_KEY_ENDPOINT_LOCATION);
+		Object urlObject = getProperty(ServicePublication.ENDPOINT_LOCATION);
 		if (urlObject instanceof URI) {
 			return (URI) urlObject;
 		}
@@ -452,7 +452,7 @@ public final class SLPServiceEndpointDescription implements
 				((JSlpSED) it.next()).addProperty(key, value);
 			}
 		}
-		if (key.equals(ServicePublication.PROP_KEY_ENDPOINT_ID)) {
+		if (key.equals(ServicePublication.ENDPOINT_ID)) {
 			endpointID = (String) value;
 		}
 		properties.put(key, value);
@@ -476,16 +476,16 @@ public final class SLPServiceEndpointDescription implements
 		// add interface as property to enable LDAP filtering on it
 		if (interfaceName != null) {
 			path = appendPropertyToURLPath(path,
-					ServicePublication.PROP_KEY_SERVICE_INTERFACE_NAME,
+					ServicePublication.SERVICE_INTERFACE_NAME,
 					interfaceName);
 		}
 		if (version != null)
 			path = appendPropertyToURLPath(path,
-					ServicePublication.PROP_KEY_SERVICE_INTERFACE_VERSION,
+					ServicePublication.SERVICE_INTERFACE_VERSION,
 					version);
 		if (endpointInterface != null)
 			path = appendPropertyToURLPath(path,
-					ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME,
+					ServicePublication.ENDPOINT_INTERFACE_NAME,
 					endpointInterface);
 
 		String protocol = null;
@@ -610,7 +610,7 @@ public final class SLPServiceEndpointDescription implements
 		retrievePropertiesFromPath(serviceURL.getURLPath(), props);
 
 		endpointID = (String) props
-				.get(ServicePublication.PROP_KEY_ENDPOINT_ID);
+				.get(ServicePublication.ENDPOINT_ID);
 		if (endpointID == null) {
 			endpointID = getUUID();
 		}
@@ -625,7 +625,7 @@ public final class SLPServiceEndpointDescription implements
 		// Get version info
 		String version = null;
 		String versionsValue = (String) props
-				.get(ServicePublication.PROP_KEY_SERVICE_INTERFACE_VERSION);
+				.get(ServicePublication.SERVICE_INTERFACE_VERSION);
 		if (versionsValue != null) {
 			version = versionsValue;
 		}
@@ -640,36 +640,36 @@ public final class SLPServiceEndpointDescription implements
 		// check first if we have to add interfaceNames to the existing list of
 		// interfaces in case of multiple interfaces
 		Collection interfaceNames = (Collection) properties
-				.get(ServicePublication.PROP_KEY_SERVICE_INTERFACE_NAME);
+				.get(ServicePublication.SERVICE_INTERFACE_NAME);
 		if (interfaceNames == null) {
 			interfaceNames = new ArrayList();
 		}
 		interfaceNames.add(interfaceName);
-		props.put(ServicePublication.PROP_KEY_SERVICE_INTERFACE_NAME,
+		props.put(ServicePublication.SERVICE_INTERFACE_NAME,
 				interfaceNames);
 
 		// set version if exists
 		Collection versions = (Collection) properties
-				.get(ServicePublication.PROP_KEY_SERVICE_INTERFACE_VERSION);
+				.get(ServicePublication.SERVICE_INTERFACE_VERSION);
 		if (versions == null) {
 			versions = new ArrayList();
 		}
 		versions.add(interfaceName + ServicePublication.SEPARATOR + version);
-		props.put(ServicePublication.PROP_KEY_SERVICE_INTERFACE_VERSION,
+		props.put(ServicePublication.SERVICE_INTERFACE_VERSION,
 				versions);
 
 		// Set endpoint-interface if it exists
 		Collection endpointInterfacesValues = (Collection) properties
-				.get(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME);
+				.get(ServicePublication.ENDPOINT_INTERFACE_NAME);
 		if (endpointInterfacesValues == null) {
 			endpointInterfacesValues = new ArrayList();
 		}
 		String endpointInterfacesValue = (String) props
-				.get(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME);
+				.get(ServicePublication.ENDPOINT_INTERFACE_NAME);
 		if (endpointInterfacesValue != null) {
 			jslpSED.setEndpointInterface(endpointInterfacesValue);
 			endpointInterfacesValues.add(endpointInterfacesValue);
-			props.put(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME,
+			props.put(ServicePublication.ENDPOINT_INTERFACE_NAME,
 					endpointInterfacesValues);
 		}
 

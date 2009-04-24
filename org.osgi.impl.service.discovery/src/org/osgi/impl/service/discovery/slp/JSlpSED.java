@@ -52,17 +52,17 @@ public final class JSlpSED {
 	 */
 	public void addProperty(final String key, final Object value) {
 
-		if (key.equals(ServicePublication.PROP_KEY_SERVICE_INTERFACE_NAME)) {
+		if (key.equals(ServicePublication.SERVICE_INTERFACE_NAME)) {
 			interfaceName = (String) value;
 		}
 
-		if (key.equals(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME)) {
+		if (key.equals(ServicePublication.ENDPOINT_INTERFACE_NAME)) {
 			if (!((String) value).startsWith(interfaceName)) {
 				endpointInterface = combineValue((String) value);
 			}
 		}
 
-		if (key.equals(ServicePublication.PROP_KEY_SERVICE_INTERFACE_VERSION)) {
+		if (key.equals(ServicePublication.SERVICE_INTERFACE_VERSION)) {
 			if (!((String) value).startsWith(interfaceName)) {
 				version = combineValue((String) value);
 			}

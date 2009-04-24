@@ -56,10 +56,15 @@ public class DiscoveryTestCase extends TestCase {
 		assertNotNull(discovery);
 		
 		System.out.println("Discovery:");
-		System.out.println("vendor name:         " + discoveryServiceRef.getProperty(Discovery.PROP_KEY_VENDOR_NAME));
-		System.out.println("product name:        " + discoveryServiceRef.getProperty(Discovery.PROP_KEY_PRODUCT_NAME));
-		System.out.println("product version:     " + discoveryServiceRef.getProperty(Discovery.PROP_KEY_PRODUCT_VERSION));
-		System.out.println("supported protocols: " + discoveryServiceRef.getProperty(Discovery.PROP_KEY_SUPPORTED_PROTOCOLS));
+		System.out.println("vendor name:         "
+				+ discoveryServiceRef.getProperty(Discovery.VENDOR_NAME));
+		System.out.println("product name:        "
+				+ discoveryServiceRef.getProperty(Discovery.PRODUCT_NAME));
+		System.out.println("product version:     "
+				+ discoveryServiceRef.getProperty(Discovery.PRODUCT_VERSION));
+		System.out.println("supported protocols: "
+				+ discoveryServiceRef
+						.getProperty(Discovery.SUPPORTED_PROTOCOLS));
 	}
 	
 	/**
@@ -79,8 +84,10 @@ public class DiscoveryTestCase extends TestCase {
 		trackerfilters.add(filter);
 		
 		Hashtable trackerprops = new Hashtable();
-		trackerprops.put(DiscoveredServiceTracker.PROP_KEY_MATCH_CRITERIA_INTERFACES, trackerinterfaces);
-		trackerprops.put(DiscoveredServiceTracker.PROP_KEY_MATCH_CRITERIA_FILTERS, trackerfilters);
+		trackerprops.put(DiscoveredServiceTracker.INTERFACE_MATCH_CRITERIA,
+				trackerinterfaces);
+		trackerprops.put(DiscoveredServiceTracker.FILTER_MATCH_CRITERIA,
+				trackerfilters);
 		
 		DiscoveredServiceTrackerImpl tracker = new DiscoveredServiceTrackerImpl();
 		ServiceRegistration tsr = context.registerService(DiscoveredServiceTracker.class.getName(), tracker, trackerprops);
@@ -105,21 +112,21 @@ public class DiscoveryTestCase extends TestCase {
 		ifversions.add(DiscoveryTestServiceInterface.class.getName() + ServicePublication.SEPARATOR + "1.0.0"); // TODO test case with bad version number
 		
 		Hashtable spprops = new Hashtable();
-		spprops.put(ServicePublication.PROP_KEY_SERVICE_INTERFACE_NAME, ifnames);
-		spprops.put(ServicePublication.PROP_KEY_SERVICE_INTERFACE_VERSION, ifversions);
+		spprops.put(ServicePublication.SERVICE_INTERFACE_NAME, ifnames);
+		spprops.put(ServicePublication.SERVICE_INTERFACE_VERSION, ifversions);
 		Map propertiesMap = new HashMap();
 		propertiesMap.put("myprop", properties.get("myprop"));
-		spprops.put(ServicePublication.PROP_KEY_SERVICE_PROPERTIES, propertiesMap);
+		spprops.put(ServicePublication.SERVICE_PROPERTIES, propertiesMap);
 		// TODO add test case with non existent interface
 		
 		// some optional properties
-		spprops.put(ServicePublication.PROP_KEY_ENDPOINT_ID, "myid");
+		spprops.put(ServicePublication.ENDPOINT_ID, "myid");
 		
 		Collection epifnames = new ArrayList();
 		epifnames.add(DiscoveryTestServiceInterface.class.getName()  + ServicePublication.SEPARATOR
 				+ "osgi:service:" + DiscoveryTestServiceInterface.class.getName() 
 				+ "/version=1.0.0");
-		spprops.put(ServicePublication.PROP_KEY_ENDPOINT_INTERFACE_NAME, epifnames);
+		spprops.put(ServicePublication.ENDPOINT_INTERFACE_NAME, epifnames);
 		
 		// TODO add some bad metadata test cases
 		
@@ -167,7 +174,7 @@ public class DiscoveryTestCase extends TestCase {
 		
 		// modify registration and check for event update
 		propertiesMap.put("mynewprop", "another value");
-		spprops.put(ServicePublication.PROP_KEY_SERVICE_PROPERTIES, propertiesMap);
+		spprops.put(ServicePublication.SERVICE_PROPERTIES, propertiesMap);
 		spsr.setProperties(spprops);
 
 		dsn = tracker.waitForEvent(dtimeout);
