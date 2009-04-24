@@ -191,8 +191,8 @@ public class BundleImpl implements Bundle {
 	}
 
 	@Override
-	public boolean equals(Object arg0) {
-		return bundle.equals(arg0);
+	public boolean equals(Object o) {
+		return bundle.equals(T.getWrapped((Bundle) o));
 	}
 
 	@Override

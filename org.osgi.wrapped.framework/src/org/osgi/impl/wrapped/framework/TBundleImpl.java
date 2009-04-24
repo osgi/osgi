@@ -180,8 +180,8 @@ public class TBundleImpl implements TBundle {
 	}
 
 	@Override
-	public boolean equals(Object arg0) {
-		return bundle.equals(arg0);
+	public boolean equals(Object o) {
+		return bundle.equals(T.getWrapped((TBundle) o));
 	}
 
 	@Override

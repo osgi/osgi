@@ -45,8 +45,8 @@ public class ServiceRegistrationImpl implements ServiceRegistration {
 	}
 
 	@Override
-	public boolean equals(Object arg0) {
-		return registration.equals(arg0);
+	public boolean equals(Object o) {
+		return registration.equals(T.getWrapped((ServiceRegistration) o));
 	}
 
 	@Override

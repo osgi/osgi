@@ -36,8 +36,8 @@ public class ServiceListenerImpl implements ServiceListener {
 	}
 
 	@Override
-	public boolean equals(Object arg0) {
-		return listener.equals(arg0);
+	public boolean equals(Object o) {
+		return listener.equals(T.getWrapped((ServiceListener) o));
 	}
 
 	@Override

@@ -18,20 +18,24 @@
 package org.osgi.impl.wrapped.framework;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.BundleListener;
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.wrapped.framework.TBundle;
+import org.osgi.wrapped.framework.TBundleContext;
 import org.osgi.wrapped.framework.TBundleException;
 import org.osgi.wrapped.framework.TBundleListener;
 import org.osgi.wrapped.framework.TFilter;
 import org.osgi.wrapped.framework.TFrameworkListener;
 import org.osgi.wrapped.framework.TInvalidSyntaxException;
+import org.osgi.wrapped.framework.TServiceFactory;
 import org.osgi.wrapped.framework.TServiceListener;
 import org.osgi.wrapped.framework.TServiceReference;
 import org.osgi.wrapped.framework.TServiceRegistration;
@@ -47,6 +51,10 @@ class T {
 	
 	static Bundle getWrapped(TBundle wrapped) {
 		return ((TBundleImpl) wrapped).bundle;
+	}
+	
+	static BundleContext getWrapped(TBundleContext wrapped) {
+		return ((TBundleContextImpl) wrapped).context;
 	}
 	
 	static TFrameworkListener getWrapped(FrameworkListener wrapped) {
@@ -69,6 +77,10 @@ class T {
 		return ((BundleListenerImpl) wrapped).listener;
 	}
 
+	static TServiceFactory getWrapped(ServiceFactory wrapped) {
+		return ((ServiceFactoryImpl) wrapped).factory;
+	}
+	
 	static TServiceReference[] getReferences(ServiceReference[] references) {
 		int l = references.length;
 		TServiceReference[] treferences = new TServiceReference[l];

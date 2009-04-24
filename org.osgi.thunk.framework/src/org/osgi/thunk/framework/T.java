@@ -26,6 +26,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
@@ -33,13 +34,16 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.bundle.BundleListener;
 import org.osgi.framework.bundle.FrameworkListener;
+import org.osgi.framework.bundle.ServiceFactory;
 import org.osgi.framework.bundle.ServiceListener;
 import org.osgi.wrapped.framework.TBundle;
+import org.osgi.wrapped.framework.TBundleContext;
 import org.osgi.wrapped.framework.TBundleException;
 import org.osgi.wrapped.framework.TBundleListener;
 import org.osgi.wrapped.framework.TFilter;
 import org.osgi.wrapped.framework.TFrameworkListener;
 import org.osgi.wrapped.framework.TInvalidSyntaxException;
+import org.osgi.wrapped.framework.TServiceFactory;
 import org.osgi.wrapped.framework.TServiceListener;
 import org.osgi.wrapped.framework.TServiceReference;
 import org.osgi.wrapped.framework.TServiceRegistration;
@@ -57,14 +61,22 @@ class T {
 		return ((BundleImpl) wrapped).bundle;
 	}
 	
+	static TBundleContext getWrapped(BundleContext wrapped) {
+		return ((BundleContextImpl) wrapped).context;
+	}
+	
 	static FrameworkListener getWrapped(TFrameworkListener wrapped) {
 		return ((TFrameworkListenerImpl) wrapped).listener;
 	}
 	
+	static ServiceFactory getWrapped(TServiceFactory wrapped) {
+		return ((TServiceFactoryImpl) wrapped).factory;
+	}
+
 	static ServiceListener getWrapped(TServiceListener wrapped) {
 		return ((TServiceListenerImpl) wrapped).listener;
 	}
-
+	
 	static BundleListener getWrapped(TBundleListener wrapped) {
 		return ((TBundleListenerImpl) wrapped).listener;
 	}

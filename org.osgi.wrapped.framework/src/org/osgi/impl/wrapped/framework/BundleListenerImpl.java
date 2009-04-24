@@ -34,8 +34,8 @@ public class BundleListenerImpl implements BundleListener {
 				new TBundleImpl(event.getBundle())));
 	}
 	@Override
-	public boolean equals(Object arg0) {
-		return listener.equals(arg0);
+	public boolean equals(Object o) {
+		return listener.equals(T.getWrapped((BundleListener) o));
 	}
 
 	@Override

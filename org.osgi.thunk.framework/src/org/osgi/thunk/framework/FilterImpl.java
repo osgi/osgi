@@ -43,8 +43,8 @@ public class FilterImpl implements Filter {
 	}
 	
 	@Override
-	public boolean equals(Object arg0) {
-		return filter.equals(arg0);
+	public boolean equals(Object o) {
+		return filter.equals(T.getWrapped((Filter) o));
 	}
 
 	@Override

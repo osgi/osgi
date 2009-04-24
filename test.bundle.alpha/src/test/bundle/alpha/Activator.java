@@ -32,7 +32,7 @@ public class Activator implements BundleActivator,
 	public void start(BundleContext context) throws Exception {
 		System.out.println("Hello World! " + context.toString());
 		tracker = new BundleTracker<Bundle>(context, Bundle.ACTIVE, this);
-		// tracker.open();
+		tracker.open();
 	}
 
 	public void stop(BundleContext context) throws Exception {

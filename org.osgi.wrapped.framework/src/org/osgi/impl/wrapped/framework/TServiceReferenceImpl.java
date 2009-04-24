@@ -29,8 +29,8 @@ public class TServiceReferenceImpl implements TServiceReference {
 		this.reference = reference;
 	}
 
-	public int compareTo(Object r) {
-		return reference.compareTo(r);
+	public int compareTo(Object o) {
+		return reference.compareTo(T.getWrapped((TServiceReference) o));
 	}
 
 	public TBundle getBundle() {
@@ -56,8 +56,8 @@ public class TServiceReferenceImpl implements TServiceReference {
 	}
 
 	@Override
-	public boolean equals(Object arg0) {
-		return reference.equals(arg0);
+	public boolean equals(Object o) {
+		return reference.equals(T.getWrapped((TServiceReference) o));
 	}
 
 	@Override

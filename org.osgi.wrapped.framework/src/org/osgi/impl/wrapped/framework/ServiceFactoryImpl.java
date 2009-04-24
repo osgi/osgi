@@ -38,5 +38,20 @@ public class ServiceFactoryImpl implements ServiceFactory {
 		factory.ungetService(new TBundleImpl(bundle),
 				new TServiceRegistrationImpl(registration), service);
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		return factory.equals(T.getWrapped((ServiceFactory) o));
+	}
+
+	@Override
+	public int hashCode() {
+		return factory.hashCode();
+	}
+
+	@Override
+	public String toString() {
+		return factory.toString();
+	}
 
 }

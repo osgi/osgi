@@ -224,8 +224,8 @@ public class BundleContextImpl implements BundleContext {
 	}
 
 	@Override
-	public boolean equals(Object arg0) {
-		return context.equals(arg0);
+	public boolean equals(Object o) {
+		return context.equals(T.getWrapped((BundleContext) o));
 	}
 
 	@Override

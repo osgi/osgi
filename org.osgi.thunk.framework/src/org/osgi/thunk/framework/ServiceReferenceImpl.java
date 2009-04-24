@@ -34,8 +34,8 @@ public class ServiceReferenceImpl implements ServiceReference {
 		this.reference = reference;
 	}
 
-	public int compareTo(ServiceReference r) {
-		return reference.compareTo(r);
+	public int compareTo(ServiceReference o) {
+		return reference.compareTo(T.getWrapped(o));
 	}
 
 	public Bundle getBundle() {
@@ -57,6 +57,21 @@ public class ServiceReferenceImpl implements ServiceReference {
 
 	public boolean isAssignableTo(Bundle bundle, String className) {
 		return reference.isAssignableTo(T.getWrapped(bundle), className);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		return reference.equals(T.getWrapped((ServiceReference) o));
+	}
+
+	@Override
+	public int hashCode() {
+		return reference.hashCode();
+	}
+
+	@Override
+	public String toString() {
+		return reference.toString();
 	}
 
 }

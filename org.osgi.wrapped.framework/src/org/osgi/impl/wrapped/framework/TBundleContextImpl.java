@@ -225,8 +225,8 @@ public class TBundleContextImpl implements TBundleContext {
 	}
 
 	@Override
-	public boolean equals(Object arg0) {
-		return context.equals(arg0);
+	public boolean equals(Object o) {
+		return context.equals(T.getWrapped((TBundleContext) o));
 	}
 
 	@Override
