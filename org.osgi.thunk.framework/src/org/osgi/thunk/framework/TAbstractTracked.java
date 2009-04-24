@@ -34,7 +34,7 @@ import java.util.Map;
  * @version $Revision$
  * @since 1.4
  */
-abstract class AbstractTracked<T, R, S> {
+abstract class TAbstractTracked<T, R, S> {
 	/* set this to true to compile in debug messages */
 	static final boolean		DEBUG	= false;
 
@@ -99,7 +99,7 @@ abstract class AbstractTracked<T, R, S> {
 	/**
 	 * AbstractTracked constructor.
 	 */
-	AbstractTracked() {
+	TAbstractTracked() {
 		tracked = new HashMap<T, S>();
 		trackingCount = 0;
 		adding = new ArrayList<T>(6);
@@ -121,7 +121,7 @@ abstract class AbstractTracked<T, R, S> {
 	void setInitial(List< ? extends T> list) {
 		for (T item : list) {
 			if (DEBUG) {
-				System.out.println("AbstractTracked.setInitial: " + item); //$NON-NLS-1$
+				System.out.println("TAbstractTracked.setInitial: " + item); //$NON-NLS-1$
 			}
 			initial.add(item);
 		}
@@ -154,7 +154,7 @@ abstract class AbstractTracked<T, R, S> {
 					/* if we are already tracking this item */
 					if (DEBUG) {
 						System.out
-								.println("AbstractTracked.trackInitial[already tracked]: " + item); //$NON-NLS-1$
+								.println("TAbstractTracked.trackInitial[already tracked]: " + item); //$NON-NLS-1$
 					}
 					continue; /* skip this item */
 				}
@@ -164,14 +164,14 @@ abstract class AbstractTracked<T, R, S> {
 					 */
 					if (DEBUG) {
 						System.out
-								.println("AbstractTracked.trackInitial[already adding]: " + item); //$NON-NLS-1$
+								.println("TAbstractTracked.trackInitial[already adding]: " + item); //$NON-NLS-1$
 					}
 					continue; /* skip this item */
 				}
 				adding.add(item);
 			}
 			if (DEBUG) {
-				System.out.println("AbstractTracked.trackInitial: " + item); //$NON-NLS-1$
+				System.out.println("TAbstractTracked.trackInitial: " + item); //$NON-NLS-1$
 			}
 			trackAdding(item, null); /*
 									 * Begin tracking it. We call trackAdding
@@ -206,7 +206,7 @@ abstract class AbstractTracked<T, R, S> {
 					/* if this item is already in the process of being added. */
 					if (DEBUG) {
 						System.out
-								.println("AbstractTracked.track[already adding]: " + item); //$NON-NLS-1$
+								.println("TAbstractTracked.track[already adding]: " + item); //$NON-NLS-1$
 					}
 					return;
 				}
@@ -215,7 +215,7 @@ abstract class AbstractTracked<T, R, S> {
 			else { /* we are currently tracking this item */
 				if (DEBUG) {
 					System.out
-							.println("AbstractTracked.track[modified]: " + item); //$NON-NLS-1$
+							.println("TAbstractTracked.track[modified]: " + item); //$NON-NLS-1$
 				}
 				modified(); /* increment modification count */
 			}
@@ -244,7 +244,7 @@ abstract class AbstractTracked<T, R, S> {
 	 */
 	private void trackAdding(final T item, final R related) {
 		if (DEBUG) {
-			System.out.println("AbstractTracked.trackAdding: " + item); //$NON-NLS-1$
+			System.out.println("TAbstractTracked.trackAdding: " + item); //$NON-NLS-1$
 		}
 		S object = null;
 		boolean becameUntracked = false;
@@ -280,7 +280,7 @@ abstract class AbstractTracked<T, R, S> {
 		if (becameUntracked && (object != null)) {
 			if (DEBUG) {
 				System.out
-						.println("AbstractTracked.trackAdding[removed]: " + item); //$NON-NLS-1$
+						.println("TAbstractTracked.trackAdding[removed]: " + item); //$NON-NLS-1$
 			}
 			/* Call customizer outside of synchronized region */
 			customizerRemoved(item, related, object);
@@ -306,7 +306,7 @@ abstract class AbstractTracked<T, R, S> {
 										 */
 				if (DEBUG) {
 					System.out
-							.println("AbstractTracked.untrack[removed from initial]: " + item); //$NON-NLS-1$
+							.println("TAbstractTracked.untrack[removed from initial]: " + item); //$NON-NLS-1$
 				}
 				return; /*
 						 * we have removed it from the list and it will not be
@@ -320,7 +320,7 @@ abstract class AbstractTracked<T, R, S> {
 										 */
 				if (DEBUG) {
 					System.out
-							.println("AbstractTracked.untrack[being added]: " + item); //$NON-NLS-1$
+							.println("TAbstractTracked.untrack[being added]: " + item); //$NON-NLS-1$
 				}
 				return; /*
 						 * in case the item is untracked while in the process of
@@ -337,7 +337,7 @@ abstract class AbstractTracked<T, R, S> {
 			modified(); /* increment modification count */
 		}
 		if (DEBUG) {
-			System.out.println("AbstractTracked.untrack[removed]: " + item); //$NON-NLS-1$
+			System.out.println("TAbstractTracked.untrack[removed]: " + item); //$NON-NLS-1$
 		}
 		/* Call customizer outside of synchronized region */
 		customizerRemoved(item, related, object);

@@ -56,7 +56,7 @@ import org.osgi.wrapped.framework.TSynchronousBundleListener;
  */
 class TBundleTracker<S> implements TBundleTrackerCustomizer<S> {
 	/* set this to true to compile in debug messages */
-	static final boolean			DEBUG	= false;
+	static final boolean				DEBUG	= false;
 
 	/**
 	 * The Bundle Context used by this <code>BundleTracker</code>.
@@ -142,7 +142,7 @@ class TBundleTracker<S> implements TBundleTrackerCustomizer<S> {
 				return;
 			}
 			if (DEBUG) {
-				System.out.println("BundleTracker.open"); //$NON-NLS-1$
+				System.out.println("TBundleTracker.open"); //$NON-NLS-1$
 			}
 			t = new Tracked();
 			synchronized (t) {
@@ -185,7 +185,7 @@ class TBundleTracker<S> implements TBundleTrackerCustomizer<S> {
 				return;
 			}
 			if (DEBUG) {
-				System.out.println("BundleTracker.close"); //$NON-NLS-1$
+				System.out.println("TBundleTracker.close"); //$NON-NLS-1$
 			}
 			outgoing.close();
 			bundles = getBundles();
@@ -381,7 +381,7 @@ class TBundleTracker<S> implements TBundleTrackerCustomizer<S> {
 	 * @ThreadSafe
 	 * @since 1.4
 	 */
-	class Tracked extends AbstractTracked<TBundle, TBundleEvent, S> implements
+	class Tracked extends TAbstractTracked<TBundle, TBundleEvent, S> implements
 			TSynchronousBundleListener {
 		/**
 		 * Tracked constructor.
@@ -409,7 +409,7 @@ class TBundleTracker<S> implements TBundleTrackerCustomizer<S> {
 			final int state = bundle.getState();
 			if (DEBUG) {
 				System.out
-						.println("BundleTracker.Tracked.bundleChanged[" + state + "]: " + bundle); //$NON-NLS-1$ //$NON-NLS-2$
+						.println("TBundleTracker.Tracked.bundleChanged[" + state + "]: " + bundle); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
 			if ((state & mask) != 0) {
