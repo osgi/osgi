@@ -19,6 +19,7 @@ package org.osgi.test.cases.webcontainer.annotation;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.osgi.framework.Bundle;
 import org.osgi.test.cases.webcontainer.util.Constants;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
 import org.osgi.test.cases.webcontainer.util.Server;
@@ -34,6 +35,7 @@ public class SecurityAnnotationTest extends DefaultTestBundleControl {
     boolean debug;
     String warContextPath;
     long beforeInstall;
+    Bundle b;
 
     public void setUp() throws Exception {
         // TODO if war file already exists, let's remove it first.
@@ -45,13 +47,17 @@ public class SecurityAnnotationTest extends DefaultTestBundleControl {
         // capture a time before install
         // beforeInstall = System.currentTimeMillis();
         beforeInstall = 1;
-        // TODO install the war file
 
+        // install + start the war file
+        log("install war file: tw2.war at context path " + this.warContextPath);
+        b = installBundle(getWebServer()
+                + "tw2.war", true);
     }
 
     private void uninstallWar() throws Exception {
-        // TODO uninstall the war file?
-
+        // uninstall the war file
+        log("uninstall war file: tw2.war at context path " + this.warContextPath);
+        uninstallBundle(b);
     }
 
     public void tearDown() throws Exception {

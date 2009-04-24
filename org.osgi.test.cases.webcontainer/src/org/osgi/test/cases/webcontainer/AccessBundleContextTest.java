@@ -19,6 +19,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Enumeration;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogReaderService;
@@ -42,7 +43,8 @@ public class AccessBundleContextTest extends DefaultTestBundleControl {
     String warContextPath;
     long beforeInstall;
     TimeUtil timeUtil;
-
+    Bundle b;
+    
     LogReaderService logReaderService;
 
     public void setUp() throws Exception {
@@ -55,7 +57,10 @@ public class AccessBundleContextTest extends DefaultTestBundleControl {
 
         // capture a time before install
         beforeInstall = System.currentTimeMillis();
-        // TODO install the war file
+        // install + start the war file
+        log("install war file: tw5.war at context path " + this.warContextPath);
+        b = installBundle(getWebServer()
+                + "tw5.war", true);
 
         ServiceReference logReaderServiceReference = getContext()
                 .getServiceReference(LogReaderService.class.getName());
@@ -64,8 +69,9 @@ public class AccessBundleContextTest extends DefaultTestBundleControl {
     }
 
     private void uninstallWar() throws Exception {
-        // TODO uninstall the war file
-
+        // uninstall the war file
+        log("uninstall war file: tw5.war at context path " + this.warContextPath);
+        uninstallBundle(b);
     }
 
     public void tearDown() throws Exception {

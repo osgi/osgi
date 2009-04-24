@@ -16,14 +16,12 @@
 package org.osgi.test.cases.webcontainer;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.log.LogReaderService;
+import org.osgi.framework.Bundle;
 import org.osgi.test.cases.webcontainer.util.Constants;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
 import org.osgi.test.cases.webcontainer.util.Server;
@@ -42,6 +40,7 @@ public class TW4Test extends DefaultTestBundleControl {
     String warContextPath;
     long beforeInstall;
     TimeUtil timeUtil;
+    Bundle b;
 
     public void setUp() throws Exception {
         // TODO if war file already exists, let's remove it first.
@@ -51,13 +50,17 @@ public class TW4Test extends DefaultTestBundleControl {
         this.warContextPath = "/tw4";
         this.timeUtil = new TimeUtil(this.warContextPath);
 
-        // TODO install the war file
+        // install + start the war file
+        log("install war file: tw4.war at context path " + this.warContextPath);
+        b = installBundle(getWebServer()
+                + "tw4.war", true);
 
     }
 
     private void uninstallWar() throws Exception {
-        // TODO uninstall the war file
-
+        // uninstall the war file
+        log("uninstall war file: tw4.war at context path " + this.warContextPath);
+        uninstallBundle(b);
     }
 
     public void tearDown() throws Exception {

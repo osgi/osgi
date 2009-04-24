@@ -19,6 +19,7 @@ package org.osgi.test.cases.webcontainer.annotation;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.osgi.framework.Bundle;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
 import org.osgi.test.cases.webcontainer.util.Server;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
@@ -31,6 +32,7 @@ public class ResourceAnnotationTest extends DefaultTestBundleControl {
     Server server;
     boolean debug;
     String warContextPath;
+    Bundle b;
 
     public void setUp() throws Exception {
         // install the war file?
@@ -39,11 +41,21 @@ public class ResourceAnnotationTest extends DefaultTestBundleControl {
         this.server = new Server("localhost");
         this.debug = true;
         this.warContextPath = "/tw2";
-        // TODO install war file
+
+        // install + start the war file
+        log("install war file: tw2.war at context path " + this.warContextPath);
+        b = installBundle(getWebServer()
+                + "tw2.war", true);
+    }
+
+    private void uninstallWar() throws Exception {
+        // uninstall the war file
+        log("uninstall war file: tw2.war at context path " + this.warContextPath);
+        uninstallBundle(b);
     }
 
     public void tearDown() throws Exception {
-        // uninstall the war file?
+        uninstallWar();
     }
 
     /*

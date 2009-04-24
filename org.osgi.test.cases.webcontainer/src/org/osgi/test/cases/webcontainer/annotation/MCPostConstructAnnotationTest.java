@@ -19,6 +19,7 @@ package org.osgi.test.cases.webcontainer.annotation;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.osgi.framework.Bundle;
 import org.osgi.test.cases.webcontainer.util.Constants;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
 import org.osgi.test.cases.webcontainer.util.Server;
@@ -35,6 +36,7 @@ public class MCPostConstructAnnotationTest extends DefaultTestBundleControl {
     String warContextPath;
     long beforeInstall;
     TimeUtil timeUtil;
+    Bundle b;
 
     public void setUp() throws Exception {
         // TODO if war file already exists, let's remove it first.
@@ -47,13 +49,27 @@ public class MCPostConstructAnnotationTest extends DefaultTestBundleControl {
         // capture a time before install
         // beforeInstall = System.currentTimeMillis();
         beforeInstall = 0;
-        // TODO install the war file
 
+        // clean up the property file.
+        /*
+         boolean success = ConstantsUtil.removeLogFile(); 
+         if (!success) {
+             log("Deleting File: " + ConstantsUtil.getLogFile() + " failed."); 
+         }
+         else { 
+              log (ConstantsUtil.getLogFile() + " file is deleted."); 
+         }*/
+
+        // install + start the war file
+        log("install war file: tw3.war at context path " + this.warContextPath);
+        b = installBundle(getWebServer()
+                + "tw3.war", true);
     }
 
     private void uninstallWar() throws Exception {
-        // TODO uninstall the war file?
-
+        // uninstall the war file
+        log("uninstall war file: tw3.war at context path " + this.warContextPath);
+        uninstallBundle(b);
     }
 
     public void tearDown() throws Exception {
