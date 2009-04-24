@@ -34,21 +34,21 @@ public interface DistributionProvider {
      * Service Registration property for the name of the Distribution Provider
      * product.
      */
-    static final String PROP_KEY_PRODUCT_NAME = 
+    static final String PRODUCT_NAME = 
                             "osgi.remote.distribution.product";
 
     /**
      * Service Registration property for the version of the Distribution
      * Provider product.
      */
-    static final String PROP_KEY_PRODUCT_VERSION =
+    static final String PRODUCT_VERSION =
                             "osgi.remote.distribution.product.version";
 
     /**
      * Service Registration property for the Distribution Provider product
      * vendor name.
      */
-    static final String PROP_KEY_VENDOR_NAME = 
+    static final String VENDOR_NAME = 
                             "osgi.remote.distribution.vendor";
 
 	/**
@@ -56,7 +56,7 @@ public interface DistributionProvider {
 	 * DistributionProvider. Value of this property is of type Collection of
 	 * String.
 	 */
-    static final String PROP_KEY_SUPPORTED_INTENTS =
+    static final String SUPPORTED_INTENTS =
                             "osgi.remote.distribition.supported_intents";
 
     /**
