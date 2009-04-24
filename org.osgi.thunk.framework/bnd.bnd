@@ -1,0 +1,22 @@
+bin                     = bin
+javac.source = 1.5
+javac.target = 1.5
+
+TBundle-Activator: ${p}.Activator
+
+Bundle-Version						: 0.1.0.${project.build}
+
+Export-Package						= org.osgi.framework.*, org.osgi.util.tracker
+Private-Package						= ${p}.*
+
+-buildpath = \
+	ee.j2se;					version=1.5, \
+	org.osgi.wrapped.framework; version=project, \
+	org.osgi.framework;			version=project, \
+	org.osgi.util.tracker;			version=project
+
+-runbundles							= \
+	
+
+-runproperties = report=true
+	

@@ -1,0 +1,23 @@
+XBundle-Activator: test.bundle.alpha.Activator
+
+
+bin                     = bin
+Bundle-Version						: 0.1.0.${project.build}
+
+Private-Package						= ${p}.*
+
+-buildpath = \
+	ee.j2se;					version=1.5, \
+	org.osgi.framework;			version=project, \
+	org.osgi.util.tracker;		version=project, \
+	${junit}
+
+Test-Cases: ${classes;extending;*TestCase}
+
+-runbundles							= \
+	org.osgi.wrapped.framework; version=project, \
+	org.osgi.thunk.framework; version=project
+	
+
+-runproperties = report=true
+	
