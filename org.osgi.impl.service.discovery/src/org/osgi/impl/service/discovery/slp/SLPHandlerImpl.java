@@ -68,7 +68,7 @@ public class SLPHandlerImpl implements Discovery {
 	 * 
 	 * TODO do we support this property?
 	 */
-	public static final String		PROP_KEY_PUBLISH_STRATEGY							= "osgi.discovery.strategy.publication";
+	public static final String		PUBLISH_STRATEGY							= "osgi.discovery.strategy.publication";
 
 	/**
 	 * Constant for a "push" publication strategy: published service information
@@ -130,7 +130,7 @@ public class SLPHandlerImpl implements Discovery {
 	public void init() {
 		log(LogService.LOG_DEBUG, "init");
 		// autoPublish = System
-		// .getProperty(SLPHandlerImpl.PROP_KEY_PUBLISH_STRATEGY,
+		// .getProperty(SLPHandlerImpl.PUBLISH_STRATEGY,
 		// SLPHandlerImpl.PROP_VAL_PUBLISH_STRATEGY_PUSH)
 		// .equalsIgnoreCase(SLPHandlerImpl.PROP_VAL_PUBLISH_STRATEGY_PUSH);
 		locatorTracker.open();

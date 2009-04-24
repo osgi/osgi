@@ -114,8 +114,8 @@ public class DSTTracker implements ServiceTrackerCustomizer {
 
 	/**
 	 * This method fills a map with key value pairs, where the key is
-	 * {@link#DiscoveredServiceTracker.PROP_KEY_MATCH_CRITERIA_INTERFACES} or
-	 * {@linkDiscoveredServiceTracker.PROP_KEY_MATCH_CRITERIA_FILTERS} and the
+	 * {@link#DiscoveredServiceTracker.INTERFACE_MATCH_CRITERIA} or
+	 * {@linkDiscoveredServiceTracker.FILTER_MATCH_CRITERIA} and the
 	 * value is the list of new entries or empty if nothing is new.
 	 * 
 	 * @param tracker the registered or modified tracker registration

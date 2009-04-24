@@ -535,7 +535,7 @@ public final class SLPServiceEndpointDescription implements
 		buff.append(STRING_SERVICE_OSGI);
 		buff.append(interf);
 		// if (properties == null ||
-		// properties.get(ServicePublication.PROP_KEY_ENDPOINT_LOCATION) ==
+		// properties.get(ServicePublication.ENDPOINT_LOCATION) ==
 		// null) {
 		buff.append((protocol != null ? protocol + "://" : "://"));
 		buff.append(host);
@@ -544,7 +544,7 @@ public final class SLPServiceEndpointDescription implements
 		// else {
 		// buff.append(".");
 		// buff.append(properties
-		// .get(ServicePublication.PROP_KEY_ENDPOINT_LOCATION));
+		// .get(ServicePublication.ENDPOINT_LOCATION));
 		// }
 		buff.append("/");
 		buff.append(path);
