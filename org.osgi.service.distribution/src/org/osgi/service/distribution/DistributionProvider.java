@@ -33,6 +33,8 @@ public interface DistributionProvider {
     /**
      * Service Registration property for the name of the Distribution Provider
      * product.
+	 * <p>
+	 * The value of this property is of type String.
      */
     static final String PRODUCT_NAME = 
                             "osgi.remote.distribution.product";
@@ -40,6 +42,8 @@ public interface DistributionProvider {
     /**
      * Service Registration property for the version of the Distribution
      * Provider product.
+	 * <p>
+	 * The value of this property is of type String.
      */
     static final String PRODUCT_VERSION =
                             "osgi.remote.distribution.product.version";
@@ -47,13 +51,17 @@ public interface DistributionProvider {
     /**
      * Service Registration property for the Distribution Provider product
      * vendor name.
+	 * <p>
+	 * The value of this property is of type String.
      */
     static final String VENDOR_NAME = 
                             "osgi.remote.distribution.vendor";
 
 	/**
 	 * Service Registration property that lists the intents supported by this
-	 * DistributionProvider. Value of this property is of type Collection of
+	 * DistributionProvider.
+	 * <p>
+	 * The value of this property is of type String, String[] or Collection of
 	 * String.
 	 */
     static final String SUPPORTED_INTENTS =
