@@ -45,43 +45,43 @@ class T {
 		// empty
 	}
 	
-	static ServiceRegistration getWrapped(TServiceRegistration wrapped) {
+	static ServiceRegistration unwrap(TServiceRegistration wrapped) {
 		return ((TServiceRegistrationImpl) wrapped).registration;
 	}
 	
-	static Bundle getWrapped(TBundle wrapped) {
+	static Bundle unwrap(TBundle wrapped) {
 		return ((TBundleImpl) wrapped).bundle;
 	}
 	
-	static BundleContext getWrapped(TBundleContext wrapped) {
+	static BundleContext unwrap(TBundleContext wrapped) {
 		return ((TBundleContextImpl) wrapped).context;
 	}
 	
-	static TFrameworkListener getWrapped(FrameworkListener wrapped) {
+	static TFrameworkListener unwrap(FrameworkListener wrapped) {
 		return ((FrameworkListenerImpl) wrapped).listener;
 	}
 	
-	static TServiceListener getWrapped(ServiceListener wrapped) {
+	static TServiceListener unwrap(ServiceListener wrapped) {
 		return ((ServiceListenerImpl) wrapped).listener;
 	}
 
-	static ServiceReference getWrapped(TServiceReference wrapped) {
+	static ServiceReference unwrap(TServiceReference wrapped) {
 		return ((TServiceReferenceImpl) wrapped).reference;
 	}
 	
-	static Filter getWrapped(TFilter wrapped) {
+	static Filter unwrap(TFilter wrapped) {
 		return ((TFilterImpl) wrapped).filter;
 	}
 	
-	static TBundleListener getWrapped(BundleListener wrapped) {
+	static TBundleListener unwrap(BundleListener wrapped) {
 		return ((BundleListenerImpl) wrapped).listener;
 	}
 
-	static TServiceFactory getWrapped(ServiceFactory wrapped) {
+	static TServiceFactory unwrap(ServiceFactory wrapped) {
 		return ((ServiceFactoryImpl) wrapped).factory;
 	}
 	
-	static TServiceReference[] getReferences(ServiceReference[] references) {
+	static TServiceReference[] toReferences(ServiceReference[] references) {
 		int l = references.length;
 		TServiceReference[] treferences = new TServiceReference[l];
 		for (int i = 0; i < l; i++) {
@@ -90,7 +90,7 @@ class T {
 		return treferences;
 	}
 	
-	static TBundle[] getBundles(Bundle[] bundles) {
+	static TBundle[] toBundles(Bundle[] bundles) {
 		int l = bundles.length;
 		TBundle[] tbundles = new TBundle[l];
 		for (int i = 0; i < l; i++) {

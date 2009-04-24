@@ -36,7 +36,7 @@ public class TFrameworkListenerImpl implements TFrameworkListener {
 
 	@Override
 	public boolean equals(Object o) {
-		return listener.equals(T.getWrapped((TFrameworkListener) o));
+		return listener.equals(T.unwrap((TFrameworkListener) o));
 	}
 
 	@Override

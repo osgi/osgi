@@ -93,7 +93,7 @@ public class BundleImpl implements Bundle {
 
 	public Collection< ? extends ServiceReference> getRegisteredServices() {
 		TServiceReference[] references = bundle.getRegisteredServices();
-		return T.getReferences(references);
+		return T.toReferences(references);
 	}
 
 	public URL getResource(String name) {
@@ -108,7 +108,7 @@ public class BundleImpl implements Bundle {
 
 	public Collection< ? extends ServiceReference> getServicesInUse() {
 		TServiceReference[] references = bundle.getServicesInUse();
-		return T.getReferences(references);
+		return T.toReferences(references);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -192,7 +192,7 @@ public class BundleImpl implements Bundle {
 
 	@Override
 	public boolean equals(Object o) {
-		return bundle.equals(T.getWrapped((Bundle) o));
+		return bundle.equals(T.unwrap((Bundle) o));
 	}
 
 	@Override

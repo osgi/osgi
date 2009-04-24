@@ -30,7 +30,7 @@ public class TFilterImpl implements TFilter {
 	}
 
 	public boolean match(TServiceReference reference) {
-		return filter.match(T.getWrapped(reference));
+		return filter.match(T.unwrap(reference));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -45,7 +45,7 @@ public class TFilterImpl implements TFilter {
 	
 	@Override
 	public boolean equals(Object o) {
-		return filter.equals(T.getWrapped((TFilter) o));
+		return filter.equals(T.unwrap((TFilter) o));
 	}
 
 	@Override

@@ -41,7 +41,7 @@ public class ServiceFactoryImpl implements ServiceFactory {
 	
 	@Override
 	public boolean equals(Object o) {
-		return factory.equals(T.getWrapped((ServiceFactory) o));
+		return factory.equals(T.unwrap((ServiceFactory) o));
 	}
 
 	@Override

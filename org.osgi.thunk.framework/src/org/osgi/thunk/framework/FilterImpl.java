@@ -31,7 +31,7 @@ public class FilterImpl implements Filter {
 	}
 
 	public boolean match(ServiceReference reference) {
-		return filter.match(T.getWrapped(reference));
+		return filter.match(T.unwrap(reference));
 	}
 
 	public boolean match(Map<String, Object> dictionary) {
@@ -44,7 +44,7 @@ public class FilterImpl implements Filter {
 	
 	@Override
 	public boolean equals(Object o) {
-		return filter.equals(T.getWrapped((Filter) o));
+		return filter.equals(T.unwrap((Filter) o));
 	}
 
 	@Override

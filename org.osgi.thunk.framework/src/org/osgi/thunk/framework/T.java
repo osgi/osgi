@@ -53,43 +53,43 @@ class T {
 		// empty
 	}
 	
-	static TServiceRegistration getWrapped(ServiceRegistration wrapped) {
+	static TServiceRegistration unwrap(ServiceRegistration wrapped) {
 		return ((ServiceRegistrationImpl) wrapped).registration;
 	}
 	
-	static TBundle getWrapped(Bundle wrapped) {
+	static TBundle unwrap(Bundle wrapped) {
 		return ((BundleImpl) wrapped).bundle;
 	}
 	
-	static TBundleContext getWrapped(BundleContext wrapped) {
+	static TBundleContext unwrap(BundleContext wrapped) {
 		return ((BundleContextImpl) wrapped).context;
 	}
 	
-	static FrameworkListener getWrapped(TFrameworkListener wrapped) {
+	static FrameworkListener unwrap(TFrameworkListener wrapped) {
 		return ((TFrameworkListenerImpl) wrapped).listener;
 	}
 	
-	static ServiceFactory getWrapped(TServiceFactory wrapped) {
+	static ServiceFactory unwrap(TServiceFactory wrapped) {
 		return ((TServiceFactoryImpl) wrapped).factory;
 	}
 
-	static ServiceListener getWrapped(TServiceListener wrapped) {
+	static ServiceListener unwrap(TServiceListener wrapped) {
 		return ((TServiceListenerImpl) wrapped).listener;
 	}
 	
-	static BundleListener getWrapped(TBundleListener wrapped) {
+	static BundleListener unwrap(TBundleListener wrapped) {
 		return ((TBundleListenerImpl) wrapped).listener;
 	}
 
-	static TServiceReference getWrapped(ServiceReference wrapped) {
+	static TServiceReference unwrap(ServiceReference wrapped) {
 		return ((ServiceReferenceImpl) wrapped).reference;
 	}
 	
-	static TFilter getWrapped(Filter wrapped) {
+	static TFilter unwrap(Filter wrapped) {
 		return ((FilterImpl) wrapped).filter;
 	}
 	
-	static Collection<ServiceReference> getReferences(
+	static Collection<ServiceReference> toReferences(
 			TServiceReference[] treferences) {
 		int l = treferences.length;
 		ArrayList<ServiceReference> references = new ArrayList<ServiceReference>(
@@ -100,7 +100,7 @@ class T {
 		return references;
 	}
 	
-	static Collection<Bundle> getBundles(TBundle[] tbundles) {
+	static Collection<Bundle> toBundles(TBundle[] tbundles) {
 		int l = tbundles.length;
 		ArrayList<Bundle> bundles = new ArrayList<Bundle>(l);
 		for (int i = 0; i < l; i++) {

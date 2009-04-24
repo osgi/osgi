@@ -35,7 +35,7 @@ public class TBundleListenerImpl implements TBundleListener {
 
 	@Override
 	public boolean equals(Object o) {
-		return listener.equals(T.getWrapped((TBundleListener) o));
+		return listener.equals(T.unwrap((TBundleListener) o));
 	}
 
 	@Override

@@ -35,7 +35,7 @@ public class FrameworkListenerImpl implements FrameworkListener {
 
 	@Override
 	public boolean equals(Object o) {
-		return listener.equals(T.getWrapped((FrameworkListener) o));
+		return listener.equals(T.unwrap((FrameworkListener) o));
 	}
 
 	@Override

@@ -83,7 +83,7 @@ public class TBundleImpl implements TBundle {
 
 	public TServiceReference[] getRegisteredServices() {
 		ServiceReference[] references = bundle.getRegisteredServices();
-		return T.getReferences(references);
+		return T.toReferences(references);
 	}
 
 	public URL getResource(String name) {
@@ -97,7 +97,7 @@ public class TBundleImpl implements TBundle {
 
 	public TServiceReference[] getServicesInUse() {
 		ServiceReference[] references = bundle.getServicesInUse();
-		return T.getReferences(references);
+		return T.toReferences(references);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -181,7 +181,7 @@ public class TBundleImpl implements TBundle {
 
 	@Override
 	public boolean equals(Object o) {
-		return bundle.equals(T.getWrapped((TBundle) o));
+		return bundle.equals(T.unwrap((TBundle) o));
 	}
 
 	@Override

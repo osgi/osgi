@@ -30,7 +30,7 @@ public class TServiceReferenceImpl implements TServiceReference {
 	}
 
 	public int compareTo(Object o) {
-		return reference.compareTo(T.getWrapped((TServiceReference) o));
+		return reference.compareTo(T.unwrap((TServiceReference) o));
 	}
 
 	public TBundle getBundle() {
@@ -47,17 +47,17 @@ public class TServiceReferenceImpl implements TServiceReference {
 
 	public TBundle[] getUsingBundles() {
 		Bundle[] bundles = reference.getUsingBundles();
-		return T.getBundles(bundles);
+		return T.toBundles(bundles);
 	}
 
 	public boolean isAssignableTo(TBundle bundle, String className) {
-		return reference.isAssignableTo(T.getWrapped(bundle),
+		return reference.isAssignableTo(T.unwrap(bundle),
 				className);
 	}
 
 	@Override
 	public boolean equals(Object o) {
-		return reference.equals(T.getWrapped((TServiceReference) o));
+		return reference.equals(T.unwrap((TServiceReference) o));
 	}
 
 	@Override

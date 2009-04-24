@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-
 package org.osgi.thunk.framework;
 
 import java.io.File;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Dictionary;
-import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
@@ -48,13 +47,13 @@ import org.osgi.wrapped.framework.TServiceListener;
 import org.osgi.wrapped.framework.TServiceReference;
 
 public class BundleContextImpl implements BundleContext {
-	
-	final TBundleContext	context;
-	private BundleActivator										activator;
 
-	private final Map<BundleListener, TBundleListener>			bundleListeners		= new HashMap<BundleListener, TBundleListener>();
-	private final Map<FrameworkListener, TFrameworkListener>	frameworkListeners	= new HashMap<FrameworkListener, TFrameworkListener>();
-	private final Map<ServiceListener, TServiceListener>		serviceListeners	= new HashMap<ServiceListener, TServiceListener>();
+	final TBundleContext										context;
+	private volatile BundleActivator							activator;
+
+	private final Map<BundleListener, TBundleListener>			bundleListeners		= new IdentityHashMap<BundleListener, TBundleListener>();
+	private final Map<FrameworkListener, TFrameworkListener>	frameworkListeners	= new IdentityHashMap<FrameworkListener, TFrameworkListener>();
+	private final Map<ServiceListener, TServiceListener>		serviceListeners	= new IdentityHashMap<ServiceListener, TServiceListener>();
 
 	BundleContextImpl(TBundleContext context) {
 		this.context = context;
@@ -76,43 +75,69 @@ public class BundleContextImpl implements BundleContext {
 	}
 
 	void stop() throws Exception {
-		if (activator != null) {
-			activator.start(this);
+		final BundleActivator a = activator;
+		if (a != null) {
+			a.start(this);
 		}
 	}
+
 	public void addBundleListener(BundleListener listener) {
-		TBundleListener l = (listener instanceof SynchronousBundleListener) ? new TSynchronousBundleListenerImpl(
-				listener)
-				: new TBundleListenerImpl(listener);
-		bundleListeners.put(listener, l);
-		context.addBundleListener(l);
+		synchronized (bundleListeners) {
+			TBundleListener l = bundleListeners.remove(listener);
+			if (l != null) {
+				context.removeBundleListener(l);
+			}
+			l = (listener instanceof SynchronousBundleListener) ? new TSynchronousBundleListenerImpl(
+					listener)
+					: new TBundleListenerImpl(listener);
+			bundleListeners.put(listener, l);
+			context.addBundleListener(l);
+		}
 	}
 
 	public void removeBundleListener(BundleListener listener) {
-		context.removeBundleListener(bundleListeners.remove(listener));
+		synchronized (bundleListeners) {
+			context.removeBundleListener(bundleListeners.remove(listener));
+		}
 	}
 
 	public void addFrameworkListener(FrameworkListener listener) {
-		TFrameworkListener l = new TFrameworkListenerImpl(listener);
-		frameworkListeners.put(listener, l);
-		context.addFrameworkListener(l);
+		synchronized (frameworkListeners) {
+			TFrameworkListener l = frameworkListeners.remove(listener);
+			if (l != null) {
+				context.removeFrameworkListener(l);
+			}
+			l = new TFrameworkListenerImpl(listener);
+			frameworkListeners.put(listener, l);
+			context.addFrameworkListener(l);
+		}
 	}
 
 	public void removeFrameworkListener(FrameworkListener listener) {
-		context.removeFrameworkListener(frameworkListeners.remove(listener));
+		synchronized (frameworkListeners) {
+			context
+					.removeFrameworkListener(frameworkListeners
+							.remove(listener));
+		}
 	}
 
 	public void addServiceListener(ServiceListener listener, String filter)
 			throws InvalidSyntaxException {
-		TServiceListener l = (listener instanceof AllServiceListener) ? new TAllServiceListenerImpl(
-				listener)
-				: new TServiceListenerImpl(listener);
-		serviceListeners.put(listener, l);
-		try {
-			context.addServiceListener(l, filter);
-		}
-		catch (TInvalidSyntaxException e) {
-			throw T.toInvalidSyntaxException(e);
+		synchronized (serviceListeners) {
+			TServiceListener l = serviceListeners.remove(listener);
+			if (l != null) {
+				context.removeServiceListener(l);
+			}
+			l = (listener instanceof AllServiceListener) ? new TAllServiceListenerImpl(
+					listener)
+					: new TServiceListenerImpl(listener);
+			serviceListeners.put(listener, l);
+			try {
+				context.addServiceListener(l, filter);
+			}
+			catch (TInvalidSyntaxException e) {
+				throw T.toInvalidSyntaxException(e);
+			}
 		}
 	}
 
@@ -126,7 +151,9 @@ public class BundleContextImpl implements BundleContext {
 	}
 
 	public void removeServiceListener(ServiceListener listener) {
-		context.removeServiceListener(serviceListeners.remove(listener));
+		synchronized (serviceListeners) {
+			context.removeServiceListener(serviceListeners.remove(listener));
+		}
 	}
 
 	public Filter createFilter(String filter) throws InvalidSyntaxException {
@@ -143,7 +170,7 @@ public class BundleContextImpl implements BundleContext {
 		try {
 			TServiceReference[] references = context.getAllServiceReferences(
 					clazz, filter);
-			return T.getReferences(references);
+			return T.toReferences(references);
 		}
 		catch (TInvalidSyntaxException e) {
 			throw T.toInvalidSyntaxException(e);
@@ -160,7 +187,7 @@ public class BundleContextImpl implements BundleContext {
 
 	public Collection< ? extends Bundle> getBundles() {
 		TBundle[] bundles = context.getBundles();
-		return T.getBundles(bundles);
+		return T.toBundles(bundles);
 	}
 
 	public File getDataFile(String filename) {
@@ -172,7 +199,7 @@ public class BundleContextImpl implements BundleContext {
 	}
 
 	public Object getService(ServiceReference reference) {
-		return context.getService(T.getWrapped(reference));
+		return context.getService(T.unwrap(reference));
 	}
 
 	public ServiceReference getServiceReference(String clazz) {
@@ -184,7 +211,7 @@ public class BundleContextImpl implements BundleContext {
 		try {
 			TServiceReference[] references = context.getServiceReferences(
 					clazz, filter);
-			return T.getReferences(references);
+			return T.toReferences(references);
 		}
 		catch (TInvalidSyntaxException e) {
 			throw T.toInvalidSyntaxException(e);
@@ -220,12 +247,12 @@ public class BundleContextImpl implements BundleContext {
 	}
 
 	public boolean ungetService(ServiceReference reference) {
-		return context.ungetService(T.getWrapped(reference));
+		return context.ungetService(T.unwrap(reference));
 	}
 
 	@Override
 	public boolean equals(Object o) {
-		return context.equals(T.getWrapped((BundleContext) o));
+		return context.equals(T.unwrap((BundleContext) o));
 	}
 
 	@Override

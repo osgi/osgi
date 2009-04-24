@@ -19,7 +19,7 @@ package org.osgi.impl.wrapped.framework;
 import java.io.File;
 import java.io.InputStream;
 import java.util.Dictionary;
-import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
@@ -47,11 +47,11 @@ import org.osgi.wrapped.framework.TSynchronousBundleListener;
 
 public class TBundleContextImpl implements TBundleContext {
 	final BundleContext											context;
-	private TBundleActivator									activator;
+	private volatile TBundleActivator							activator;
 
-	private final Map<TBundleListener, BundleListener>			bundleListeners		= new HashMap<TBundleListener, BundleListener>();
-	private final Map<TFrameworkListener, FrameworkListener>	frameworkListeners	= new HashMap<TFrameworkListener, FrameworkListener>();
-	private final Map<TServiceListener, ServiceListener>		serviceListeners	= new HashMap<TServiceListener, ServiceListener>();
+	private final Map<TBundleListener, BundleListener>			bundleListeners		= new IdentityHashMap<TBundleListener, BundleListener>();
+	private final Map<TFrameworkListener, FrameworkListener>	frameworkListeners	= new IdentityHashMap<TFrameworkListener, FrameworkListener>();
+	private final Map<TServiceListener, ServiceListener>		serviceListeners	= new IdentityHashMap<TServiceListener, ServiceListener>();
 
 	TBundleContextImpl(BundleContext context) {
 		this.context = context;
@@ -73,44 +73,69 @@ public class TBundleContextImpl implements TBundleContext {
 	}
 
 	void stop() throws Exception {
-		if (activator != null) {
-			activator.start(this);
+		final TBundleActivator a = activator;
+		if (a != null) {
+			a.start(this);
 		}
 	}
 
 	public void addBundleListener(TBundleListener listener) {
-		BundleListener l = (listener instanceof TSynchronousBundleListener) ? new SynchronousBundleListenerImpl(
-				listener)
-				: new BundleListenerImpl(listener);
-		bundleListeners.put(listener, l);
-		context.addBundleListener(l);
+		synchronized (bundleListeners) {
+			BundleListener l = bundleListeners.remove(listener);
+			if (l != null) {
+				context.removeBundleListener(l);
+			}
+			l = (listener instanceof TSynchronousBundleListener) ? new SynchronousBundleListenerImpl(
+					listener)
+					: new BundleListenerImpl(listener);
+			bundleListeners.put(listener, l);
+			context.addBundleListener(l);
+		}
 	}
 
 	public void removeBundleListener(TBundleListener listener) {
-		context.removeBundleListener(bundleListeners.remove(listener));
+		synchronized (bundleListeners) {
+			context.removeBundleListener(bundleListeners.remove(listener));
+		}
 	}
 
 	public void addFrameworkListener(TFrameworkListener listener) {
-		FrameworkListener l = new FrameworkListenerImpl(listener);
-		frameworkListeners.put(listener, l);
-		context.addFrameworkListener(l);
+		synchronized (frameworkListeners) {
+			FrameworkListener l = frameworkListeners.remove(listener);
+			if (l != null) {
+				context.removeFrameworkListener(l);
+			}
+			l = new FrameworkListenerImpl(listener);
+			frameworkListeners.put(listener, l);
+			context.addFrameworkListener(l);
+		}
 	}
 
 	public void removeFrameworkListener(TFrameworkListener listener) {
-		context.removeFrameworkListener(frameworkListeners.remove(listener));
+		synchronized (frameworkListeners) {
+			context
+					.removeFrameworkListener(frameworkListeners
+							.remove(listener));
+		}
 	}
 
 	public void addServiceListener(TServiceListener listener, String filter)
 			throws TInvalidSyntaxException {
-		ServiceListener l = (listener instanceof TAllServiceListener) ? new AllServiceListenerImpl(
-				listener)
-				: new ServiceListenerImpl(listener);
-		serviceListeners.put(listener, l);
-		try {
-			context.addServiceListener(l, filter);
-		}
-		catch (InvalidSyntaxException e) {
-			throw T.toTInvalidSyntaxException(e);
+		synchronized (serviceListeners) {
+			ServiceListener l = serviceListeners.remove(listener);
+			if (l != null) {
+				context.removeServiceListener(l);
+			}
+			l = (listener instanceof TAllServiceListener) ? new AllServiceListenerImpl(
+					listener)
+					: new ServiceListenerImpl(listener);
+			serviceListeners.put(listener, l);
+			try {
+				context.addServiceListener(l, filter);
+			}
+			catch (InvalidSyntaxException e) {
+				throw T.toTInvalidSyntaxException(e);
+			}
 		}
 	}
 
@@ -124,7 +149,9 @@ public class TBundleContextImpl implements TBundleContext {
 	}
 
 	public void removeServiceListener(TServiceListener listener) {
-		context.removeServiceListener(serviceListeners.remove(listener));
+		synchronized (serviceListeners) {
+			context.removeServiceListener(serviceListeners.remove(listener));
+		}
 	}
 
 	public TFilter createFilter(String filter) throws TInvalidSyntaxException {
@@ -141,7 +168,7 @@ public class TBundleContextImpl implements TBundleContext {
 		try {
 			ServiceReference[] references = context.getAllServiceReferences(
 					clazz, filter);
-			return T.getReferences(references);
+			return T.toReferences(references);
 		}
 		catch (InvalidSyntaxException e) {
 			throw T.toTInvalidSyntaxException(e);
@@ -158,7 +185,7 @@ public class TBundleContextImpl implements TBundleContext {
 
 	public TBundle[] getBundles() {
 		Bundle[] bundles = context.getBundles();
-		return T.getBundles(bundles);
+		return T.toBundles(bundles);
 	}
 
 	public File getDataFile(String filename) {
@@ -170,7 +197,7 @@ public class TBundleContextImpl implements TBundleContext {
 	}
 
 	public Object getService(TServiceReference reference) {
-		return context.getService(T.getWrapped(reference));
+		return context.getService(T.unwrap(reference));
 	}
 
 	public TServiceReference getServiceReference(String clazz) {
@@ -182,7 +209,7 @@ public class TBundleContextImpl implements TBundleContext {
 		try {
 			ServiceReference[] references = context.getServiceReferences(clazz,
 					filter);
-			return T.getReferences(references);
+			return T.toReferences(references);
 		}
 		catch (InvalidSyntaxException e) {
 			throw T.toTInvalidSyntaxException(e);
@@ -216,17 +243,16 @@ public class TBundleContextImpl implements TBundleContext {
 	@SuppressWarnings("unchecked")
 	public TServiceRegistration registerService(String clazz, Object service,
 			Dictionary properties) {
-		return registerService(new String[] {clazz},
-				service, properties);
+		return registerService(new String[] {clazz}, service, properties);
 	}
 
 	public boolean ungetService(TServiceReference reference) {
-		return context.ungetService(T.getWrapped(reference));
+		return context.ungetService(T.unwrap(reference));
 	}
 
 	@Override
 	public boolean equals(Object o) {
-		return context.equals(T.getWrapped((TBundleContext) o));
+		return context.equals(T.unwrap((TBundleContext) o));
 	}
 
 	@Override

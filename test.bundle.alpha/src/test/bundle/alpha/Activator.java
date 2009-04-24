@@ -33,6 +33,7 @@ public class Activator implements BundleActivator,
 		System.out.println("Hello World! " + context.toString());
 		tracker = new BundleTracker<Bundle>(context, Bundle.ACTIVE, this);
 		tracker.open();
+		tracker.close();
 	}
 
 	public void stop(BundleContext context) throws Exception {
@@ -41,16 +42,16 @@ public class Activator implements BundleActivator,
 	}
 
 	public Bundle addingBundle(Bundle bundle, BundleEvent event) {
-		System.out.println(bundle.toString());
+		System.out.println("Adding: " + bundle.toString());
 		return bundle;
 	}
 
 	public void modifiedBundle(Bundle bundle, BundleEvent event, Bundle tracked) {
-		// empty
+		System.out.println("Modified: " + bundle.toString());
 	}
 
 	public void removedBundle(Bundle bundle, BundleEvent event, Bundle tracked) {
-		// empty
+		System.out.println("Removed: " + bundle.toString());
 	}
 
 }
