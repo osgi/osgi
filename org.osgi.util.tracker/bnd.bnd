@@ -3,4 +3,5 @@ bin                     = bin
 nodeploy						= true
 
 -buildpath = \
+	ee.j2se;					version=1.5,  \
 	org.osgi.framework;			version=project
