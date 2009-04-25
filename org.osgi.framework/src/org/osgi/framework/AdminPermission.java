@@ -91,7 +91,7 @@ import java.util.Map;
  */
 
 public final class AdminPermission extends BasicPermission {
-	static final long			serialVersionUID			= 407051004521261705L;
+	static final long						serialVersionUID			= 307051004521261705L;
 
 	/**
 	 * The action string <code>class</code>. The <code>class</code> action
