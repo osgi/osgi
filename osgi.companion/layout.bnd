@@ -20,15 +20,16 @@ core.specs = org.osgi.framework, \
 core.packages = ${replace;$(core.specs);^.*$;$0.*}
 
 cmpn.specs = \
+	 info.dmtree, \
 	 org.osgi.application, \
 	 org.osgi.service.application, \
 	 org.osgi.service.blueprint, \
 	 org.osgi.service.cm, \
 	 org.osgi.service.component, \
 	 org.osgi.service.deploymentadmin, \
+	 org.osgi.service.device, \
 	 org.osgi.service.discovery, \
 	 org.osgi.service.distribution, \
-	 org.osgi.service.device, \
 	 org.osgi.service.event, \
 	 org.osgi.service.http, \
 	 org.osgi.service.io, \
@@ -46,8 +47,7 @@ cmpn.specs = \
 	 org.osgi.util.gsm, \
 	 org.osgi.util.mobile, \
 	 org.osgi.util.tracker, \
-	 org.osgi.util.xml, \
-	 info.dmtree
+	 org.osgi.util.xml
 # The following project are not part of compendium for 4.2
 #	 org.osgi.service.jdbc, \
 #	 org.osgi.service.command, \
@@ -56,6 +56,7 @@ cmpn.specs = \
 cmpn.packages = ${replace;$(cmpn.specs);^.*$;$0.*}
 
 enterprise.specs = \
+	 org.osgi.jmx, \
 	 org.osgi.service.blueprint, \
 	 org.osgi.service.discovery, \
 	 org.osgi.service.distribution, \
@@ -76,8 +77,8 @@ mobile.specs = \
 	 org.osgi.service.metatype, \
 	 org.osgi.service.monitor, \
 	 org.osgi.service.prefs, \
-	 org.osgi.util.gsm, \
 	 org.osgi.util.cdma, \
+	 org.osgi.util.gsm, \
 	 org.osgi.util.mobile, \
 	 org.osgi.util.tracker, \
 	 org.osgi.util.xml

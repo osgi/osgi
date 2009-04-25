@@ -38,8 +38,9 @@ build.mobile.impls = \
   	org.osgi.impl.bundle.midletcontainer
   	
 build.enterprise.impls = \
-	org.osgi.impl.service.discovery, \
-	org.osgi.impl.bundle.transaction 
+	org.osgi.impl.bundle.jmx, \
+	org.osgi.impl.bundle.transaction, \
+	org.osgi.impl.service.discovery
 # The following project does not build since the derby jars are Java 6 class files!
 #	org.osgi.impl.service.jdbc, \
   	

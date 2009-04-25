@@ -10,8 +10,8 @@ DynamicImport-Package			: *
 Export-Package					: ${mobile.packages}
 Include-Resource 				: legal/about.html, \
   								  legal/LICENSE, \
-  								  xmlns/metatype=../xmlns/metatype, \
-  								  xmlns/scr=../xmlns/scr, \
   								  xmlns/app=../xmlns/app, \
   								  xmlns/dd=../xmlns/dd, \
+  								  xmlns/metatype=../xmlns/metatype, \
+  								  xmlns/scr=../xmlns/scr, \
   								  ddf=../ddf/mobile
