@@ -105,7 +105,7 @@ public class DerbyEmbeddedDataSourceFactory implements DataSourceFactory {
 		}
 		XADataSource dataSource = new EmbeddedXADataSource();
 		setDataSourceProperties(dataSource, props);
-		return (XADataSource) dataSource;
+		return dataSource;
 	}
 
 	private void setDataSourceProperties(Object object, Properties props)
