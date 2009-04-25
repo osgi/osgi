@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>org.osgi.impl.service.log</name>
+	<name>org.osgi.impl.bundle.jmx</name>
 	<comment></comment>
 	<projects>
 	</projects>

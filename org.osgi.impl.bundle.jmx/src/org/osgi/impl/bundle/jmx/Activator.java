@@ -15,14 +15,14 @@
  */
 package org.osgi.impl.bundle.jmx;
 
-import static org.osgi.jmx.Constants.BUNDLE_STATE;
-import static org.osgi.jmx.Constants.CM_SERVICE;
-import static org.osgi.jmx.Constants.FRAMEWORK;
-import static org.osgi.jmx.Constants.PACKAGE_STATE;
-import static org.osgi.jmx.Constants.PA_SERVICE;
-import static org.osgi.jmx.Constants.PS_SERVICE;
-import static org.osgi.jmx.Constants.SERVICE_STATE;
-import static org.osgi.jmx.Constants.UA_SERVICE;
+import static org.osgi.jmx.JmxConstants.BUNDLE_STATE;
+import static org.osgi.jmx.JmxConstants.CM_SERVICE;
+import static org.osgi.jmx.JmxConstants.FRAMEWORK;
+import static org.osgi.jmx.JmxConstants.PACKAGE_STATE;
+import static org.osgi.jmx.JmxConstants.PA_SERVICE;
+import static org.osgi.jmx.JmxConstants.PS_SERVICE;
+import static org.osgi.jmx.JmxConstants.SERVICE_STATE;
+import static org.osgi.jmx.JmxConstants.UA_SERVICE;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
