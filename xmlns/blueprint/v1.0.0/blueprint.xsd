@@ -373,7 +373,7 @@
    		<xsd:element name="prop" type="Tprop" maxOccurs="unbounded"/>
 	</xsd:complexType>
 
-    <xsd:complexType name="Tprop" mixed=true">
+    <xsd:complexType name="Tprop" mixed="true">
         <xsd:attribute name="key" type="TstringValue"
             use="required"/>
         <xsd:attribute name="value" type="TstringValue"
