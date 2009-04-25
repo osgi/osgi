@@ -21,34 +21,22 @@ import javax.sql.ConnectionPoolDataSource;
 import javax.sql.DataSource;
 import javax.sql.XADataSource;
 
-import junit.framework.TestCase;
-
 import org.apache.derby.jdbc.EmbeddedConnectionPoolDataSource;
 import org.apache.derby.jdbc.EmbeddedDataSource;
 import org.apache.derby.jdbc.EmbeddedXADataSource;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.impl.service.jdbc.DerbyEmbeddedDataSourceFactory;
 import org.osgi.service.jdbc.DataSourceFactory;
+import org.osgi.test.support.OSGiTestCase;
 
-public class JDBCTestCase extends TestCase {
-
-	private BundleContext	context;
-
-	public void setBundleContext(BundleContext context) {
-		this.context = context;
-	}
+public class JDBCTestCase extends OSGiTestCase {
 
 	public void testDataSourceFactoryService() throws Exception {
-		String filter = "(" + DataSourceFactory.JDBC_DRIVER +
-				"=" +
-				DerbyEmbeddedDataSourceFactory.JDBC_DRIVER_PROPERTY_VALUE +
-				")";
-		ServiceReference[] serviceReferences = context.getServiceReferences(
-				DataSourceFactory.class.getName(), filter);
+		ServiceReference[] serviceReferences = getContext()
+				.getServiceReferences(
+				DataSourceFactory.class.getName(), null);
 		assertEquals(1, serviceReferences.length);
-		DataSourceFactory dsf = (DataSourceFactory) context.getService(serviceReferences[0]);
-		assertTrue(dsf instanceof DerbyEmbeddedDataSourceFactory);
+		DataSourceFactory dsf = (DataSourceFactory) getContext().getService(
+				serviceReferences[0]);
 
 		// get the default objects
 		DataSource ds = dsf.createDataSource(null);

@@ -27,12 +27,11 @@ import javax.sql.XADataSource;
 import org.apache.derby.jdbc.EmbeddedConnectionPoolDataSource;
 import org.apache.derby.jdbc.EmbeddedDataSource;
 import org.apache.derby.jdbc.EmbeddedXADataSource;
-import org.osgi.impl.service.jdbc.DerbyEmbeddedDataSourceFactory;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.jdbc.DataSourceFactory;
+import org.osgi.test.support.OSGiTestCase;
 
-import junit.framework.TestCase;
-
-public class DerbyEmbeddedDataSourceFactoryTestCase extends TestCase {
+public class DerbyEmbeddedDataSourceFactoryTestCase extends OSGiTestCase {
 	private String databaseName = "C:\\Software\\db-derby-10.4.2.0-bin\\testdbs\\firstdb";
 	private String dataSourceName = "dsName";
 	private String description = "desc";
@@ -40,10 +39,22 @@ public class DerbyEmbeddedDataSourceFactoryTestCase extends TestCase {
 	private String user = "usr";
 	private int loginTimeout = 5;
 	
+	private ServiceReference	ref;
+	private DataSourceFactory	factory;
+
+	protected void setUp() {
+		ref = getContext()
+				.getServiceReference(DataSourceFactory.class.getName());
+		assertNotNull("No DataSourceFactory service available", ref);
+		factory = (DataSourceFactory) getContext().getService(ref);
+		assertNotNull(factory);
+	}
+	
+	protected void tearDown() {
+		getContext().ungetService(ref);
+	}
 
 	public void testCreateDataSource() throws Exception {
-		DerbyEmbeddedDataSourceFactory factory = new DerbyEmbeddedDataSourceFactory();
-		
 		// default no properties
 		DataSource ds = factory.createDataSource( null );
 		assertTrue( ds instanceof EmbeddedDataSource );
@@ -97,8 +108,6 @@ public class DerbyEmbeddedDataSourceFactoryTestCase extends TestCase {
 	}
 
 	public void testCreateConnectionPoolDataSource() throws Exception {
-		DerbyEmbeddedDataSourceFactory factory = new DerbyEmbeddedDataSourceFactory();
-		
 		// default no properties
 		ConnectionPoolDataSource ds = factory.createConnectionPoolDataSource( null );
 		assertTrue( ds instanceof EmbeddedConnectionPoolDataSource );
@@ -144,8 +153,6 @@ public class DerbyEmbeddedDataSourceFactoryTestCase extends TestCase {
 	}
 
 	public void testCreateXADataSource() throws Exception {
-		DerbyEmbeddedDataSourceFactory factory = new DerbyEmbeddedDataSourceFactory();
-		
 		// default no properties
 		XADataSource ds = factory.createXADataSource( null );
 		assertTrue( ds instanceof EmbeddedXADataSource );
