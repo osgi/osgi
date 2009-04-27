@@ -26,7 +26,7 @@
             attributeFormDefault="unqualified"
             version="1.0.0">
 
-    <xsd:import namespace="http://www.osgi.org/xmlns/blueprint/v1.0.0"/>
+    <xsd:import namespace="http://www.osgi.org/xmlns/blueprint/v1.0.0" schemaLocation="blueprint.xsd"/>
 
     <!-- property placeholder -->
 
