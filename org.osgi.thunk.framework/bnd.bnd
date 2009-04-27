@@ -16,7 +16,6 @@ Private-Package						= ${p}.*
 	org.osgi.util.tracker;			version=project
 
 -runbundles							= \
-	
+
 
 -runproperties = report=true
-	

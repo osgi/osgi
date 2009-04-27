@@ -474,8 +474,28 @@ public interface BundleContext {
 	 * @see ServiceRegistration
 	 * @see ServiceFactory
 	 */
-	public ServiceRegistration registerService(String[] clazzes,
+	public ServiceRegistration<?> registerService(String[] clazzes,
 			Object service, Map<String, Object> properties);
+	
+	/**
+	 * @param <S>
+	 * @param clazzes
+	 * @param service
+	 * @param properties
+	 * @return x
+	 */
+	public <S> ServiceRegistration<S> registerService(Class<S> clazzes,
+			S service, Map<String, Object> properties);
+	
+	/**
+	 * @param <S>
+	 * @param service
+	 * @param properties
+	 * @param clazz
+	 * @param clazzes
+	 * @return x
+	 */
+	public <S> ServiceRegistration<S> registerService( S service, Map<String, Object> properties, Class<S> clazz, Class<?>[] clazzes);
 
 	/**
 	 * Registers the specified service object with the specified properties
@@ -503,7 +523,7 @@ public interface BundleContext {
 	 * @see #registerService(java.lang.String[], java.lang.Object,
 	 *      java.util.Map)
 	 */
-	public ServiceRegistration registerService(String clazz, Object service,
+	public ServiceRegistration<?> registerService(String clazz, Object service,
 			Map<String, Object> properties);
 
 	/**
@@ -576,8 +596,19 @@ public interface BundleContext {
 	 * @throws java.lang.IllegalStateException If this BundleContext is no
 	 *         longer valid.
 	 */
-	public Collection< ? extends ServiceReference> getServiceReferences(
+	public Collection< ? extends ServiceReference<?>> getServiceReferences(
 			String clazz, String filter)
+			throws InvalidSyntaxException;
+
+	/**
+	 * @param <S>
+	 * @param clazz
+	 * @param filter
+	 * @return x
+	 * @throws InvalidSyntaxException
+	 */
+	public <S> Collection< ? extends ServiceReference<S>> getServiceReferences(
+			Class<S> clazz, String filter)
 			throws InvalidSyntaxException;
 
 	/**
@@ -640,8 +671,19 @@ public interface BundleContext {
 	 *         longer valid.
 	 * @since 1.3
 	 */
-	public Collection< ? extends ServiceReference> getAllServiceReferences(
+	public Collection< ? extends ServiceReference<?>> getAllServiceReferences(
 			String clazz,
+			String filter) throws InvalidSyntaxException;
+
+	/**
+	 * @param <S>
+	 * @param clazz
+	 * @param filter
+	 * @return x
+	 * @throws InvalidSyntaxException
+	 */
+	public <S> Collection< ? extends ServiceReference<S>> getAllServiceReferences(
+			Class<S> clazz,
 			String filter) throws InvalidSyntaxException;
 
 	/**
@@ -674,7 +716,13 @@ public interface BundleContext {
 	 *         longer valid.
 	 * @see #getServiceReferences(String, String)
 	 */
-	public ServiceReference getServiceReference(String clazz);
+	public ServiceReference<?> getServiceReference(String clazz);
+	/**
+	 * @param <S>
+	 * @param clazz
+	 * @return x
+	 */
+	public <S> ServiceReference<S> getServiceReference(Class<S> clazz);
 
 	/**
 	 * Returns the service object referenced by the specified
@@ -717,6 +765,7 @@ public interface BundleContext {
 	 * describing the error is fired.
 	 * <li>The service object for the service is returned.
 	 * </ol>
+	 * @param <S> 
 	 * 
 	 * @param reference A reference to the service.
 	 * @return A service object for the service associated with
@@ -737,7 +786,7 @@ public interface BundleContext {
 	 * @see #ungetService(ServiceReference)
 	 * @see ServiceFactory
 	 */
-	public Object getService(ServiceReference reference);
+	public <S> S getService(ServiceReference<S> reference);
 
 	/**
 	 * Releases the service object referenced by the specified
@@ -778,7 +827,7 @@ public interface BundleContext {
 	 * @see #getService
 	 * @see ServiceFactory
 	 */
-	public boolean ungetService(ServiceReference reference);
+	public boolean ungetService(ServiceReference<?> reference);
 
 	/**
 	 * Creates a <code>File</code> object for a file in the persistent storage

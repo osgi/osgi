@@ -60,5 +60,5 @@ public interface FindHook {
 	 */
 	void find(BundleContext context, String name, String filter,
 			boolean allServices,
-			Collection< ? extends ServiceReference> references);
+			Collection< ? extends ServiceReference<?>> references);
 }

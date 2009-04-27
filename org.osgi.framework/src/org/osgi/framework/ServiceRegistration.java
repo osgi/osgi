@@ -35,9 +35,10 @@ import org.osgi.framework.bundle.ServiceFactory;
  * @see BundleContext#registerService(String[],Object,Map)
  * @ThreadSafe
  * @version $Revision$
+ * @param <S> 
  */
 
-public interface ServiceRegistration {
+public interface ServiceRegistration<S> {
 	/**
 	 * Returns a <code>ServiceReference</code> object for a service being
 	 * registered.
@@ -50,7 +51,7 @@ public interface ServiceRegistration {
 	 *         unregistered.
 	 * @return <code>ServiceReference</code> object.
 	 */
-	public ServiceReference getReference();
+	public ServiceReference<S> getReference();
 
 	/**
 	 * Updates the properties associated with a service.

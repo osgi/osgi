@@ -24,7 +24,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.wrapped.framework.TServiceRegistration;
 
-public class ServiceRegistrationImpl implements ServiceRegistration {
+public class ServiceRegistrationImpl<S> implements ServiceRegistration<S> {
 
 	final TServiceRegistration	registration;
 
@@ -32,8 +32,8 @@ public class ServiceRegistrationImpl implements ServiceRegistration {
 		this.registration = reference;
 	}
 	
-	public ServiceReference getReference() {
-		return new ServiceReferenceImpl(registration.getReference());
+	public ServiceReference<S> getReference() {
+		return new ServiceReferenceImpl<S>(registration.getReference());
 	}
 
 	public void setProperties(Map<String, Object> properties) {
@@ -44,9 +44,10 @@ public class ServiceRegistrationImpl implements ServiceRegistration {
 		registration.unregister();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean equals(Object o) {
-		return registration.equals(T.unwrap((ServiceRegistration) o));
+		return registration.equals(T.unwrap((ServiceRegistration<S>) o));
 	}
 
 	@Override

@@ -51,9 +51,10 @@ import org.osgi.framework.ServiceRegistration;
  * @see BundleContext#getService
  * @ThreadSafe
  * @version $Revision$
+ * @param <S> 
  */
 
-public interface ServiceFactory {
+public interface ServiceFactory<S> {
 	/**
 	 * Creates a new service object.
 	 * 
@@ -83,7 +84,7 @@ public interface ServiceFactory {
 	 *         the classes named when the service was registered.
 	 * @see BundleContext#getService
 	 */
-	public Object getService(Bundle bundle, ServiceRegistration registration);
+	public S getService(Bundle bundle, ServiceRegistration<S> registration);
 
 	/**
 	 * Releases a service object.
@@ -99,6 +100,6 @@ public interface ServiceFactory {
 	 *        <code>ServiceFactory.getService</code> method.
 	 * @see BundleContext#ungetService
 	 */
-	public void ungetService(Bundle bundle, ServiceRegistration registration,
-			Object service);
+	public void ungetService(Bundle bundle, ServiceRegistration<S> registration,
+			S service);
 }

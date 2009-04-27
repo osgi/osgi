@@ -216,6 +216,10 @@ public class ServiceTracker<S> implements ServiceTrackerCustomizer<S> {
 			throw iae;
 		}
 	}
+	public ServiceTracker(final BundleContext context, final Class<S> clazz,
+			final ServiceTrackerCustomizer<S> customizer) {
+		this(context, clazz.getName(), customizer );
+	}
 
 	/**
 	 * Create a <code>ServiceTracker</code> on the specified <code>Filter</code>

@@ -53,8 +53,8 @@ class T {
 		// empty
 	}
 	
-	static TServiceRegistration unwrap(ServiceRegistration wrapped) {
-		return ((ServiceRegistrationImpl) wrapped).registration;
+	static TServiceRegistration unwrap(ServiceRegistration<?> wrapped) {
+		return ((ServiceRegistrationImpl<?>) wrapped).registration;
 	}
 	
 	static TBundle unwrap(Bundle wrapped) {
@@ -69,7 +69,7 @@ class T {
 		return ((TFrameworkListenerImpl) wrapped).listener;
 	}
 	
-	static ServiceFactory unwrap(TServiceFactory wrapped) {
+	static ServiceFactory<?> unwrap(TServiceFactory wrapped) {
 		return ((TServiceFactoryImpl) wrapped).factory;
 	}
 
@@ -81,21 +81,21 @@ class T {
 		return ((TBundleListenerImpl) wrapped).listener;
 	}
 
-	static TServiceReference unwrap(ServiceReference wrapped) {
-		return ((ServiceReferenceImpl) wrapped).reference;
+	static TServiceReference unwrap(ServiceReference<?> wrapped) {
+		return ((ServiceReferenceImpl<?>) wrapped).reference;
 	}
 	
 	static TFilter unwrap(Filter wrapped) {
 		return ((FilterImpl) wrapped).filter;
 	}
 	
-	static Collection<ServiceReference> toReferences(
+	static Collection<? extends ServiceReference<?>> toReferences(
 			TServiceReference[] treferences) {
 		int l = treferences.length;
-		ArrayList<ServiceReference> references = new ArrayList<ServiceReference>(
+		ArrayList<ServiceReference<?>> references = new ArrayList<ServiceReference<?>>(
 				l);
 		for (int i = 0; i < l; i++) {
-			references.add(new ServiceReferenceImpl(treferences[i]));
+			references.add(new ServiceReferenceImpl<Object>(treferences[i]));
 		}
 		return references;
 	}

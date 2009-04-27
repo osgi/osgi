@@ -30,7 +30,7 @@ public class FilterImpl implements Filter {
 		this.filter = filter;
 	}
 
-	public boolean match(ServiceReference reference) {
+	public boolean match(ServiceReference<?> reference) {
 		return filter.match(T.unwrap(reference));
 	}
 

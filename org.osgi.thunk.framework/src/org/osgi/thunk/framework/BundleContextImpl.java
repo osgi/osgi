@@ -165,7 +165,7 @@ public class BundleContextImpl implements BundleContext {
 		}
 	}
 
-	public Collection< ? extends ServiceReference> getAllServiceReferences(
+	public Collection< ? extends ServiceReference<?>> getAllServiceReferences(
 			String clazz, String filter) throws InvalidSyntaxException {
 		try {
 			TServiceReference[] references = context.getAllServiceReferences(
@@ -198,15 +198,16 @@ public class BundleContextImpl implements BundleContext {
 		return context.getProperty(key);
 	}
 
-	public Object getService(ServiceReference reference) {
-		return context.getService(T.unwrap(reference));
+	@SuppressWarnings("unchecked")
+	public <S> S getService(ServiceReference<S> reference) {
+		return (S) context.getService(T.unwrap(reference));
 	}
 
-	public ServiceReference getServiceReference(String clazz) {
-		return new ServiceReferenceImpl(context.getServiceReference(clazz));
+	public ServiceReference<?> getServiceReference(String clazz) {
+		return new ServiceReferenceImpl<Object>(context.getServiceReference(clazz));
 	}
 
-	public Collection< ? extends ServiceReference> getServiceReferences(
+	public Collection< ? extends ServiceReference<?>> getServiceReferences(
 			String clazz, String filter) throws InvalidSyntaxException {
 		try {
 			TServiceReference[] references = context.getServiceReferences(
@@ -232,22 +233,18 @@ public class BundleContextImpl implements BundleContext {
 		return installBundle(location, null);
 	}
 
-	public ServiceRegistration registerService(String[] clazzes,
+	public ServiceRegistration<?> registerService(String[] clazzes,
 			Object service, Map<String, Object> properties) {
 		if (service instanceof ServiceFactory) {
-			service = new TServiceFactoryImpl((ServiceFactory) service);
+			service = new TServiceFactoryImpl((ServiceFactory<?>) service);
 		}
-		return new ServiceRegistrationImpl(context.registerService(clazzes,
+		return new ServiceRegistrationImpl<Object>(context.registerService(clazzes,
 				service, T.toDictionary(properties)));
 	}
 
-	public ServiceRegistration registerService(String clazz, Object service,
+	public ServiceRegistration<?> registerService(String clazz, Object service,
 			Map<String, Object> properties) {
 		return registerService(new String[] {clazz}, service, properties);
-	}
-
-	public boolean ungetService(ServiceReference reference) {
-		return context.ungetService(T.unwrap(reference));
 	}
 
 	@Override
@@ -265,4 +262,44 @@ public class BundleContextImpl implements BundleContext {
 		return context.toString();
 	}
 
+	@SuppressWarnings("unchecked")
+	public <S> Collection<? extends ServiceReference<S>> getAllServiceReferences(
+			Class<S> clazz, String filter) throws InvalidSyntaxException {
+		return (Collection<? extends ServiceReference<S>>) getAllServiceReferences(clazz.getName(), filter);
+	}
+
+
+	@SuppressWarnings("unchecked")
+	public <S> ServiceReference<S> getServiceReference(Class<S> clazz) {
+		return (ServiceReference<S>) getServiceReference(clazz.getName());
+	}
+
+	@SuppressWarnings("unchecked")
+	public <S> Collection<? extends ServiceReference<S>> getServiceReferences(
+			Class<S> clazz, String filter) throws InvalidSyntaxException {
+		return (Collection<? extends ServiceReference<S>>) getServiceReferences(clazz.getName(), filter);
+	}
+
+	@SuppressWarnings("unchecked")
+	public <S> ServiceRegistration<S> registerService(Class<S> clazz, S service,
+			Map<String, Object> properties) {
+		
+		return (ServiceRegistration<S>) registerService(clazz.getName(), service, properties);
+	}
+
+	@SuppressWarnings("unchecked")
+	public <S> ServiceRegistration<S> registerService(S service,
+			Map<String, Object> properties, Class<S> clazz, Class<?>[] moreClasses) {
+		String classes[] = new String[moreClasses.length+1];
+		classes[0] = clazz.getName();
+		for ( int i =0; i<moreClasses.length; i++ ) {
+			classes[i+1] = moreClasses[i].getName();
+		}
+		return (ServiceRegistration<S>) registerService(classes, service, properties);
+	}
+
+	public boolean ungetService(ServiceReference<?> arg0) {
+		context.ungetService(T.unwrap(arg0));
+		return false;
+	}
 }

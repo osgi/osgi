@@ -48,9 +48,10 @@ import java.util.Set;
  * @see BundleContext#getService
  * @ThreadSafe
  * @version $Revision$
+ * @param <S> 
  */
 
-public interface ServiceReference extends Comparable<ServiceReference> {
+public interface ServiceReference<S> extends Comparable<ServiceReference<S>> {
 	/**
 	 * Returns the property value to which the specified property key is mapped
 	 * in the properties <code>Dictionary</code> object of the service
@@ -181,5 +182,5 @@ public interface ServiceReference extends Comparable<ServiceReference> {
 	 *         instance as this <code>ServiceReference</code>.
 	 * @since 1.4
 	 */
-	public int compareTo(ServiceReference reference);
+	public int compareTo(ServiceReference<S> reference);
 }

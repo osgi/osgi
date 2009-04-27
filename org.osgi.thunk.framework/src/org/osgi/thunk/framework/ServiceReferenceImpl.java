@@ -27,14 +27,14 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.wrapped.framework.TBundle;
 import org.osgi.wrapped.framework.TServiceReference;
 
-public class ServiceReferenceImpl implements ServiceReference {
+public class ServiceReferenceImpl<S> implements ServiceReference<S> {
 	final TServiceReference	reference;
 
 	ServiceReferenceImpl(TServiceReference reference) {
 		this.reference = reference;
 	}
 
-	public int compareTo(ServiceReference o) {
+	public int compareTo(ServiceReference<S> o) {
 		return reference.compareTo(T.unwrap(o));
 	}
 
@@ -61,7 +61,7 @@ public class ServiceReferenceImpl implements ServiceReference {
 
 	@Override
 	public boolean equals(Object o) {
-		return reference.equals(T.unwrap((ServiceReference) o));
+		return reference.equals(T.unwrap((ServiceReference<?>) o));
 	}
 
 	@Override
