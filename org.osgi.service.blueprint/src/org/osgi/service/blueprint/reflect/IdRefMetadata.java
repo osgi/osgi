@@ -27,5 +27,4 @@ public interface IdRefMetadata extends NonNullMetadata {
 	 *
 	 */
 	String getComponentId();
-
 }
