@@ -46,7 +46,7 @@
         <!-- Defaults-->
         <xsd:attribute name="default-lazy-init" default="false"
             type="Tlazy-init"/>
-        <xsd:attribute name="default-init-method" type="Tmethod"/>
+        <xsd:attribute name="default-init-method" type="TMethod"/>
         <xsd:attribute name="default-destroy-method" type="Tmethod"/>
         <xsd:attribute name="default-timeout" type="xsd:unsignedLong"
             default="300000"/>
@@ -101,8 +101,8 @@
                 <xsd:group ref="beanElements"/>
 				<xsd:attribute name="class" type="Tclass"/>
 				<xsd:attribute name="depends-on" type="xsd:normalizedString"/>
-				<xsd:attribute name="init-method" type="Tmethod"/>
-				<xsd:attribute name="destroy-method" type="Tmethod"/>
+				<xsd:attribute name="init-method" type="TnullableMethod"/>
+				<xsd:attribute name="destroy-method" type="TnullableMethod"/>
 				<xsd:attribute name="factory-method" type="Tmethod"/>
 				<xsd:attribute name="factory-component" type="Tidref"/>
 
@@ -397,6 +397,13 @@
 	<!-- Should be used for all attributes and elements that refer to method names -->
 	<xsd:simpleType name="Tmethod">
 		<xsd:restriction base="xsd:NCName"/>
+	</xsd:simpleType>
+
+	<!-- Should be used for all attributes and elements that refer to method names -->
+	<xsd:simpleType name="TnullableMethod">
+		<xsd:restriction base="xsd:NCName">
+            <xsd:minLength value="0"/>
+        </xsd:restriction>
 	</xsd:simpleType>
 
 	<!-- Should be used for all attributes and elements that refer to method names -->
