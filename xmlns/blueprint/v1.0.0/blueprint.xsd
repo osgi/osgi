@@ -247,18 +247,7 @@
         <xsd:complexContent>
             <xsd:extension base="Tcomponent">
                 <xsd:sequence>
-     	           <xsd:element name="interfaces" type="Tinterfaces"
-        	            minOccurs="0"/>
-
-    				<!-- #### I'm not sure this should be a Tmap.  Service properties can only
-                      have string keys, and Map can have any type.  I suspect this needs its
-                      own type -->
-            	    <xsd:element name="service-properties" type="Tmap"
-                	    minOccurs="0"/>
-         	       <xsd:element name="registration-listener" type="TregistrationListener"
-            	        minOccurs="0" maxOccurs="unbounded"/>
-          		   <xsd:element name="bean" type="Tcomponent" minOccurs="0"
-                	    maxOccurs="1"/>
+                	<xsd:group ref="serviceElements"/>	
                 	<xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded"
                     	processContents="lax"/>
                 </xsd:sequence>    
@@ -270,6 +259,20 @@
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
+    
+    <xsd:group name="serviceElements">
+        <xsd:sequence>
+        	<xsd:element name="interfaces" type="Tinterfaces" minOccurs="0"/>
+
+    		<!-- #### I'm not sure this should be a Tmap.  Service properties can only
+                 have string keys, and Map can have any type.  I suspect this needs its
+                 own type -->
+            <xsd:element name="service-properties" type="Tmap" minOccurs="0"/>
+         	<xsd:element name="registration-listener" type="TregistrationListener" minOccurs="0" maxOccurs="unbounded"/>
+          	<xsd:element name="bean" type="Tcomponent" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+    </xsd:group>
+    
 
     <xsd:complexType name="TregistrationListener">
         <xsd:group ref="targetComponent"/>

@@ -44,7 +44,7 @@
                 <xsd:attribute name="persistent-id" type="xsd:string" use="required"/>
                 <xsd:attribute name="placeholder-prefix" type="xsd:string" use="optional" default="${"/>
                 <xsd:attribute name="placeholder-suffix" type="xsd:string" use="optional" default="}"/>
-                <xsd:attribute name="defaults-ref" type="Tidref" use="optional"/>
+                <xsd:attribute name="defaults-ref" type="osgi:Tidref" use="optional"/>
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
@@ -55,7 +55,7 @@
          all of the elements you can inject into a bean property? -->
     <xsd:complexType name="TdefaultProperties">
         <xsd:sequence minOccurs="0" maxOccurs="unbounded">
-            <xsd:element ref="osgi:property"/>
+            <xsd:element name="property" type="osgi:Tproperty"/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -86,7 +86,7 @@
         <xsd:complexContent>
             <xsd:extension base="osgi:Tcomponent">
                 <xsd:sequence>
-                    <xsd:group ref="osgi:serviceElements"/>
+                    <xsd:group ref="osgi:serviceElements"/> 
                     <xsd:element name="managed-component" type="TmanagedComponent" minOccurs="1" maxOccurs="1"/>
                 </xsd:sequence>
                 <xsd:attribute name="factory-pid" type="xsd:string" use="required"/>
