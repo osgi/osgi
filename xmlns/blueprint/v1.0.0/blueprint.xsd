@@ -269,7 +269,7 @@
                  own type -->
             <xsd:element name="service-properties" type="Tmap" minOccurs="0"/>
          	<xsd:element name="registration-listener" type="TregistrationListener" minOccurs="0" maxOccurs="unbounded"/>
-          	<xsd:element name="bean" type="Tcomponent" minOccurs="0" maxOccurs="1"/>
+          	<xsd:element name="bean" type="Tbean" minOccurs="0" maxOccurs="1"/>
         </xsd:sequence>
     </xsd:group>
 
