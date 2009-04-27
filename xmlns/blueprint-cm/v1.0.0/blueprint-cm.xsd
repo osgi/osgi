@@ -18,15 +18,15 @@
     * limitations under the License.
     */
     -->
-<xsd:schema xmlns="http://www.osgi.org/xmlns/blueprint-compendium/v1.0.0"
+<xsd:schema xmlns="http://www.osgi.org/xmlns/blueprint-cm/v1.0.0"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
             xmlns:osgi="http://www.osgi.org/xmlns/blueprint/v1.0.0"
-            targetNamespace="http://www.osgi.org/xmlns/blueprint-compendium/v1.0.0"
+            targetNamespace="http://www.osgi.org/xmlns/blueprint-cm/v1.0.0"
             elementFormDefault="qualified"
             attributeFormDefault="unqualified"
             version="1.0.0">
 
-    <xsd:import namespace="http://www.osgi.org/xmlns/blueprint/v1.0.0" schemaLocation="blueprint.xsd"/>
+    <xsd:import namespace="http://www.osgi.org/xmlns/blueprint/v1.0.0" schemaLocation="../../blueprint/v1.0.0/blueprint.xsd"/>
 
     <!-- property placeholder -->
 

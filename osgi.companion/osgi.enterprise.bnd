@@ -11,5 +11,6 @@ Export-Package 					: ${enterprise.packages}
 Include-Resource 				: legal/about.html, \
   								  legal/LICENSE, \
   								  xmlns/blueprint=../xmlns/blueprint, \
+  								  xmlns/blueprint-cm=../xmlns/blueprint-cm, \
   								  xmlns/sd=../xmlns/sd
   								  
