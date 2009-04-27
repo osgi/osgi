@@ -5,6 +5,9 @@
 
 package org.osgi.test.cases.discovery.internal;
 
+import java.util.Collection;
+import java.util.LinkedList;
+
 import org.osgi.service.discovery.DiscoveredServiceNotification;
 import org.osgi.service.discovery.DiscoveredServiceTracker;
 import org.osgi.test.support.compatibility.Semaphore;
@@ -14,14 +17,21 @@ import org.osgi.test.support.compatibility.Semaphore;
  * @since 1.0.0
  */
 public class DiscoveredServiceTrackerImpl implements DiscoveredServiceTracker {
-	private DiscoveredServiceNotification event;
+	private Collection events;
 	private Semaphore semaphore = new Semaphore();
+
+	/**
+	 * 
+	 */
+	public DiscoveredServiceTrackerImpl() {
+		events = new LinkedList();
+	}
 
 	/**
 	 * @see org.osgi.service.discovery.DiscoveredServiceTracker#serviceChanged(org.osgi.service.discovery.DiscoveredServiceNotification)
 	 */
-	public void serviceChanged(DiscoveredServiceNotification n) {
-		event = n;
+	public synchronized void serviceChanged(DiscoveredServiceNotification n) {
+		this.events.add(n);
 		semaphore.signal();
 	}
 
@@ -29,13 +39,19 @@ public class DiscoveredServiceTrackerImpl implements DiscoveredServiceTracker {
 	 * Block on the semaphore for the given amount of time (in millisec) and return the notification.
 	 *  
 	 * @param timeout Timeout to maximal wait for in milliseconds
-	 * @return DiscoveredServiceNotification or null if timed out
 	 * @throws InterruptedException if interrupted while blocking on semaphore
 	 */
-	public DiscoveredServiceNotification waitForEvent(long timeout) throws InterruptedException {
+	public void waitForEvent(long timeout) throws InterruptedException {
 		semaphore.waitForSignal(timeout);
-		DiscoveredServiceNotification rv = event;
-		event = null;
-		return rv;
+	}
+	
+	/**
+	 * Return the list of received events and create a new list.
+	 * @return The collection with the events received since the last call to getEvents().
+	 */
+	public synchronized Collection getEvents() {
+		Collection c = events;
+		events = new LinkedList();
+		return c;
 	}
 }

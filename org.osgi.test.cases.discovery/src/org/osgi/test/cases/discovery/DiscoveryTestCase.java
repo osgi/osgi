@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
@@ -149,7 +150,12 @@ public class DiscoveryTestCase extends TestCase {
 		// give the discovery some time to discover the service and then check for the callback
 		System.out.println("wait " + (dtimeout / 1000) + " seconds for Discovery to discover service");
 		
-		DiscoveredServiceNotification dsn = tracker.waitForEvent(dtimeout);
+		tracker.waitForEvent(dtimeout);
+		Collection events = tracker.getEvents();
+		assertNotNull(events);
+		assertFalse("No event received!", events.isEmpty());
+		
+		DiscoveredServiceNotification dsn = (DiscoveredServiceNotification) events.iterator().next();
 		assertNotNull(dsn);
 		System.out.println("found service");
 		
@@ -177,45 +183,67 @@ public class DiscoveryTestCase extends TestCase {
 		spprops.put(ServicePublication.SERVICE_PROPERTIES, propertiesMap);
 		spsr.setProperties(spprops);
 
-		dsn = tracker.waitForEvent(dtimeout);
-		assertNotNull(dsn);
+		// wait for events
+		tracker.waitForEvent(dtimeout);
+		events = tracker.getEvents();
+		assertNotNull(events);
+		assertFalse("No event received!", events.isEmpty());
+
 		System.out.println("service modified");
-		
-		if (DiscoveredServiceNotification.MODIFIED == dsn.getType()) {
-			System.out.println("Discovery support for MODIFIED event");
-			
-			assertNotNull(dsn.getFilters());
-			assertEquals(filter, dsn.getFilters().toArray()[0]);
-			assertNotNull(dsn.getInterfaces());
-			assertTrue(dsn.getInterfaces().size() > 0);
-			assertEquals(DiscoveryTestServiceInterface.class.getName(), dsn.getInterfaces().toArray()[0]);
-			assertFalse(dsn.getInterfaces().contains(DoNotPublishInterface.class.getName()));
 
-			sed = dsn.getServiceEndpointDescription();
-			assertNotNull(sed);
-			
-			assertEquals("myid", sed.getEndpointID());
-			assertEquals("another value", sed.getProperty("mynewprop"));
-		} else if (DiscoveredServiceNotification.UNAVAILABLE == dsn.getType()) {
-			dsn = tracker.waitForEvent(dtimeout);
+		for (Iterator i = events.iterator(); i.hasNext();) {
+			dsn = (DiscoveredServiceNotification) i.next();
 			assertNotNull(dsn);
-			
-			System.out.println("Discovery does not support MODIFIED, but implements re-registration");
-			
-			assertNotNull(dsn.getFilters());
-			assertEquals(filter, dsn.getFilters().toArray()[0]);
-			assertNotNull(dsn.getInterfaces());
-			assertTrue(dsn.getInterfaces().size() > 0);
-			assertEquals(DiscoveryTestServiceInterface.class.getName(), dsn.getInterfaces().toArray()[0]);
-			assertFalse(dsn.getInterfaces().contains(DoNotPublishInterface.class.getName()));
 
-			sed = dsn.getServiceEndpointDescription();
-			assertNotNull(sed);
-			
-			assertEquals("myid", sed.getEndpointID());
-			assertEquals("another value", sed.getProperty("mynewprop"));
-		} else {
-			fail("Modification of Service properties should be handled by MODIFIED event or re-registration. received event " + dsn.getType());
+			if (DiscoveredServiceNotification.MODIFIED == dsn.getType()) {
+				System.out.println("Discovery support for MODIFIED event");
+
+				assertNotNull(dsn.getFilters());
+				assertEquals(filter, dsn.getFilters().toArray()[0]);
+				assertNotNull(dsn.getInterfaces());
+				assertTrue(dsn.getInterfaces().size() > 0);
+				assertEquals(DiscoveryTestServiceInterface.class.getName(), dsn.getInterfaces().toArray()[0]);
+				assertFalse(dsn.getInterfaces().contains(DoNotPublishInterface.class.getName()));
+
+				sed = dsn.getServiceEndpointDescription();
+				assertNotNull(sed);
+
+				assertEquals("myid", sed.getEndpointID());
+				assertEquals("another value", sed.getProperty("mynewprop"));
+			} else if (DiscoveredServiceNotification.UNAVAILABLE == dsn.getType()) {
+				System.out.println("Discovery sent UNAVAILABLE event");
+
+				assertNotNull(dsn.getFilters());
+				assertEquals(filter, dsn.getFilters().toArray()[0]);
+				assertNotNull(dsn.getInterfaces());
+				assertTrue(dsn.getInterfaces().size() > 0);
+				assertEquals(DiscoveryTestServiceInterface.class.getName(), dsn.getInterfaces().toArray()[0]);
+				assertFalse(dsn.getInterfaces().contains(DoNotPublishInterface.class.getName()));
+
+				sed = dsn.getServiceEndpointDescription();
+				assertNotNull(sed);
+
+				assertEquals("myid", sed.getEndpointID());
+				assertNull("UNAVAILABLE event contains information about updated service publication!", sed.getProperty("mynewprop"));
+			} else if (DiscoveredServiceNotification.AVAILABLE == dsn.getType()) {
+				System.out.println("Discovery sent AVAILABLE event");
+
+				assertNotNull(dsn.getFilters());
+				assertEquals(filter, dsn.getFilters().toArray()[0]);
+				assertNotNull(dsn.getInterfaces());
+				assertTrue(dsn.getInterfaces().size() > 0);
+				assertEquals(DiscoveryTestServiceInterface.class.getName(), dsn.getInterfaces().toArray()[0]);
+				assertFalse(dsn.getInterfaces().contains(DoNotPublishInterface.class.getName()));
+
+				sed = dsn.getServiceEndpointDescription();
+				assertNotNull(sed);
+
+				assertEquals("myid", sed.getEndpointID());
+				assertEquals("another value", sed.getProperty("mynewprop"));
+			} else {
+				fail("Modification of Service properties should be handled by MODIFIED event or AVAILABLE/UNAVAILABLE event sequence. received event " +
+						dsn.getType());
+			}
 		}
 		
 		
@@ -227,7 +255,12 @@ public class DiscoveryTestCase extends TestCase {
 		// give the discovery some time to discover the unregistration of the service and then check for the callback
 		System.out.println("wait " + (udtimeout / 1000) + " seconds for Discovery to recognize unregistration of the service");
 		
-		dsn = tracker.waitForEvent(udtimeout);
+		tracker.waitForEvent(udtimeout);
+		events = tracker.getEvents();
+		assertNotNull(events);
+		assertFalse("No event received!", events.isEmpty());
+		
+		dsn = (DiscoveredServiceNotification) events.iterator().next();
 		assertNotNull("service unregistration was not discovered in time", dsn);
 		
 		assertEquals(DiscoveredServiceNotification.UNAVAILABLE, dsn.getType());
