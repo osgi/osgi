@@ -46,7 +46,7 @@
         <!-- Defaults-->
         <xsd:attribute name="default-lazy-init" default="false"
             type="Tlazy-init"/>
-        <xsd:attribute name="default-init-method" type="TMethod"/>
+        <xsd:attribute name="default-init-method" type="Tmethod"/>
         <xsd:attribute name="default-destroy-method" type="Tmethod"/>
         <xsd:attribute name="default-timeout" type="xsd:unsignedLong"
             default="300000"/>
