@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:osgix="http://www.osgi.org/xmlns/blueprint-compendium/v1.0.0"
-    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
-    http://www.osgi.org/xmlns/blueprint-compendium/v1.0.0 http://www.osgi.org/xmlns/blueprint-compendium/v1.0.0/blueprint-compendium.xsd">
+    xmlns:bpcm="http://www.osgi.org/xmlns/blueprint-cm/v1.0.0">
 
     <description> inject configuration admin properties to component property </description>
 
     <bean id="compStrategyDefault" class="org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection">
-        <osgix:managed-properties persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config2"/>
+        <bpcm:managed-properties persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config2"/>
     </bean>
 
     <bean id="compStrategyNone" class="org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection">
-        <osgix:managed-properties persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config2" update-strategy="none"/>
+        <bpcm:managed-properties persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config2" update-strategy="none"/>
     </bean>
 
     <bean id="compStrategyComponent" class="org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection">
-        <osgix:managed-properties persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config2" update-strategy="component-managed" update-method="makeUpdate"/>
+        <bpcm:managed-properties persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config2" update-strategy="component-managed" update-method="makeUpdate"/>
         <argument value="compStrategyComponent"/>
     </bean>
 
     <bean id="compStrategyContainer" class="org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection">
-        <osgix:managed-properties persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config2" update-strategy="container-managed"/>
+        <bpcm:managed-properties persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config2" update-strategy="container-managed"/>
     </bean>
 
 

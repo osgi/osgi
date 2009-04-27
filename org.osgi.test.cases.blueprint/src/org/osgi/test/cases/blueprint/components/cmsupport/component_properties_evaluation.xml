@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:osgix="http://www.osgi.org/xmlns/blueprint-compendium/v1.0.0"
-    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
-    http://www.osgi.org/xmlns/blueprint-compendium/v1.0.0 http://www.osgi.org/xmlns/blueprint-compendium/v1.0.0/blueprint-compendium.xsd">
+    xmlns:bpcm="http://www.osgi.org/xmlns/blueprint-cm/v1.0.0">
 
     <description> inject configuration admin properties to component property </description>
 
     <bean id="comp1" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
-        <osgix:managed-properties persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config2"/>
+        <bpcm:managed-properties persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config2"/>
     </bean>
 
     <!-- test the config-properties take precedence, property elements act as a default value -->
     <bean id="comp2" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
-        <osgix:managed-properties persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config2"/>
+        <bpcm:managed-properties persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config2"/>
         <property name="string" value="def"/>
         <property name="boolean" value="false"/>
         <property name="byte" value="1"/>
