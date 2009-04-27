@@ -34,7 +34,7 @@
 
     <xsd:complexType name="TpropertyPlaceholder">
         <xsd:complexContent>
-            <xsd:extension base="osgi:Tidentified">
+            <xsd:extension base="osgi:Tcomponent">
                 <xsd:sequence>
                     <!-- nested properties declaration -->
                     <xsd:element name="default-properties" type="TdefaultProperties" minOccurs="0" maxOccurs="1"/>
