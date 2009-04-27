@@ -162,7 +162,7 @@
 			<xsd:extension base="TserviceReference">
 				<xsd:sequence>
                      <xsd:element name="comparator" type="Tcomparator" minOccurs="0" maxOccurs="1"/>
-                </xsd:sequence>     
+                </xsd:sequence>
 
 				<xsd:attribute name="comparator-ref" type="xsd:token"
 					use="optional"/>
@@ -200,7 +200,7 @@
      				<!-- listener ### why is this called listerm and not reference listener? -->
      				<xsd:element name="listener" type="TReferenceListener" minOccurs="0"
    	    				maxOccurs="unbounded"/>
-   				</xsd:sequence>	
+   				</xsd:sequence>
 
 				<xsd:attribute name="interface" use="optional" type="Tclass"/>
 				<xsd:attribute name="filter" use="optional" type="xsd:normalizedString"/>
@@ -247,10 +247,10 @@
         <xsd:complexContent>
             <xsd:extension base="Tcomponent">
                 <xsd:sequence>
-                	<xsd:group ref="serviceElements"/>	
+                	<xsd:group ref="serviceElements"/>
                 	<xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded"
                     	processContents="lax"/>
-                </xsd:sequence>    
+                </xsd:sequence>
                 <xsd:attribute name="interface" type="Tclass" use="optional"/>
                 <xsd:attribute name="ref" type="Tidref" use="optional"/>
                 <xsd:attribute name="depends-on" type="xsd:normalizedString" use="optional"/>
@@ -259,7 +259,7 @@
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
-    
+
     <xsd:group name="serviceElements">
         <xsd:sequence>
         	<xsd:element name="interfaces" type="Tinterfaces" minOccurs="0"/>
@@ -272,7 +272,7 @@
           	<xsd:element name="bean" type="Tcomponent" minOccurs="0" maxOccurs="1"/>
         </xsd:sequence>
     </xsd:group>
-    
+
 
     <xsd:complexType name="TregistrationListener">
         <xsd:group ref="targetComponent"/>
@@ -344,11 +344,9 @@
    		</xsd:sequence>
 	</xsd:complexType>
 
-    <xsd:complexType name="Tprop" mixed="true">
-        <xsd:attribute name="key" type="TstringValue"
-            use="required"/>
-        <xsd:attribute name="value" type="TstringValue"
-            use="optional"/>
+    <xsd:complexType name="Tprop">
+        <xsd:attribute name="key" type="TstringValue" use="required"/>
+        <xsd:attribute name="value" type="TstringValue" use="required"/>
     </xsd:complexType>
 
     <!-- 'map' element type -->
@@ -410,7 +408,7 @@
 	<xsd:simpleType name="TstringValue">
 		<xsd:restriction base="xsd:normalizedString"/>
 	</xsd:simpleType>
-	
+
     <xsd:simpleType name="TautoExportModes">
         <xsd:restriction base="xsd:token">
             <xsd:enumeration value="disabled"/>
@@ -419,6 +417,6 @@
             <xsd:enumeration value="all-classes"/>
         </xsd:restriction>
     </xsd:simpleType>
-	
+
 
 </xsd:schema>
