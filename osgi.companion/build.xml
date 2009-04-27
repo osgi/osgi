@@ -85,6 +85,32 @@
 			<arg value="${licensed-repo}/com.icl.saxon/com.icl.saxon-6.5.1.jar" />
 			<arg line="${japi.osgi.mobile}" />
 		</java>
+		<echo>osgi.enterprise</echo>
+		<java classname="net.wuffies.japi.Japize">
+			<classpath path="${project.workspace}/licensed/japitools/share/java/japitools.jar" />
+			<arg value="unzip" />
+			<arg value="as" />
+			<arg value="${target}/japi/osgi.enterprise-latest.japi" />
+			<arg value="packages" />
+			<arg value="${release.target}/ee.foundation.jar" />
+			<arg value="${release.target}/osgi.core.jar" />
+			<arg value="${release.target}/osgi.enterprise.jar" />
+			<arg value="${licensed-repo}/com.icl.saxon/com.icl.saxon-6.5.1.jar" />
+			<arg line="${japi.osgi.enterprise}" />
+		</java>
+		<echo>osgi.proposed</echo>
+		<java classname="net.wuffies.japi.Japize">
+			<classpath path="${project.workspace}/licensed/japitools/share/java/japitools.jar" />
+			<arg value="unzip" />
+			<arg value="as" />
+			<arg value="${target}/japi/osgi.proposed-latest.japi" />
+			<arg value="packages" />
+			<arg value="${release.target}/ee.foundation.jar" />
+			<arg value="${release.target}/osgi.core.jar" />
+			<arg value="${release.target}/osgi.proposed.jar" />
+			<arg value="${licensed-repo}/com.icl.saxon/com.icl.saxon-6.5.1.jar" />
+			<arg line="${japi.osgi.proposed}" />
+		</java>
 		<echo>ee.minimum</echo>
 		<java classname="net.wuffies.japi.Japize">
 			<classpath path="${project.workspace}/licensed/japitools/share/java/japitools.jar" />
