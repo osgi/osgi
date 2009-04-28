@@ -1,6 +1,7 @@
 
 package org.osgi.test.support.compatibility;
 
+
 /**
  * A classic Semaphore class.
  */
@@ -35,15 +36,24 @@ public class Semaphore {
 	public void waitForSignal() throws InterruptedException {
 		waitForSignal(0);
 	}
-	
+
 	/**
 	 * Waits until a signal is (or has been) given.
+	 * 
+	 * @param timeout The maximum number of milliseconds to wait for a signal or
+	 *        0 to wait indefinitely.
+	 * @return true if the signal is received; false if the wait times out.
 	 */
-	public synchronized void waitForSignal(long timeout) throws InterruptedException {
+	public synchronized boolean waitForSignal(long timeout)
+			throws InterruptedException {
 		while (count == 0) {
 			wait(timeout);
+			if ((count == 0) && (timeout != 0)) {
+				return false;
+			}
 		}
 		count--;
+		return true;
 	}
 	
 	/**
