@@ -271,7 +271,10 @@
                  own type -->
             <xsd:element name="service-properties" type="Tmap" minOccurs="0"/>
          	<xsd:element name="registration-listener" type="TregistrationListener" minOccurs="0" maxOccurs="unbounded"/>
-          	<xsd:element name="bean" type="Ttarget" minOccurs="0" maxOccurs="1"/>
+         	<xsd:choice minOccurs="1" maxOccurs="1">
+          	    <xsd:element name="bean" type="Tbean"/>
+          	    <xsd:element name="ref" type="Tref"/>
+            </xsd:choice>
         </xsd:sequence>
     </xsd:group>
 
@@ -403,8 +406,9 @@
 
 	<!-- Should be used for all attributes and elements that refer to method names -->
 	<xsd:simpleType name="TnullableMethod">
-		<xsd:restriction base="xsd:NCName">
-            <xsd:minLength value="0"/>
+	    <xsd:restriction base="xsd:token">
+            <xsd:pattern value="[\i-[:]][\c-[:]]*"/>
+            <xsd:pattern value=""/>                        
         </xsd:restriction>
 	</xsd:simpleType>
 
