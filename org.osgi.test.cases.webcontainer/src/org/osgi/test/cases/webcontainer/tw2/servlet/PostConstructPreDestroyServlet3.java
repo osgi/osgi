@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.osgi.test.cases.webcontainer.util.Constants;
+import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Event;
 import org.osgi.test.cases.webcontainer.util.EventLogger;
 
@@ -66,13 +66,13 @@ public class PostConstructPreDestroyServlet3 extends HttpServlet {
     @PostConstruct
     protected void postConstruct() {
         EventLogger.logEvent(new Event(this.getClass().getName(),
-                Constants.POSTCONSTRUCT, Constants.POSTCONSTRUCTDESP));
+                ConstantsUtil.POSTCONSTRUCT, ConstantsUtil.POSTCONSTRUCTDESP));
     }
 
     @PreDestroy
     protected void cleanup() {
         EventLogger.logEvent(new Event(this.getClass().getName(), "cleanup",
-                Constants.CLEANUPDESP));
+                ConstantsUtil.CLEANUPDESP));
     }
 
     private void printContext(HttpServletRequest request,
@@ -85,7 +85,7 @@ public class PostConstructPreDestroyServlet3 extends HttpServlet {
         out.println("</head>");
         out.println("<body>");
         out.println(EventLogger.printEvent(new Event(this.getClass().getName(),
-                "printContext", Constants.PRINTCONTEXT)));
+                "printContext", ConstantsUtil.PRINTCONTEXT)));
         out.println("</body>");
         out.println("</html>");
     }

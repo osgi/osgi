@@ -20,7 +20,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.osgi.framework.Bundle;
-import org.osgi.test.cases.webcontainer.util.Constants;
+import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
 import org.osgi.test.cases.webcontainer.util.Server;
 import org.osgi.test.cases.webcontainer.util.TimeUtil;
@@ -64,12 +64,12 @@ public class MCOtherAnnotationTest extends DefaultTestBundleControl {
 
         // clean up the property file.
         /*
-         boolean success = ConstantsUtil.removeLogFile(); 
+         boolean success = ConstantsUtilUtil.removeLogFile(); 
          if (!success) {
-             log("Deleting File: " + ConstantsUtil.getLogFile() + " failed."); 
+             log("Deleting File: " + ConstantsUtilUtil.getLogFile() + " failed."); 
          }
          else { 
-              log (ConstantsUtil.getLogFile() + " file is deleted."); 
+              log (ConstantsUtilUtil.getLogFile() + " file is deleted."); 
          }*/
 
         // install + start the war file
@@ -110,7 +110,7 @@ public class MCOtherAnnotationTest extends DefaultTestBundleControl {
             assertTrue(response.indexOf("PostConstructPreDestroyServlet1") > 0);
             assertTrue(response
                     .indexOf("PostConstructPreDestroyServlet1.printContext "
-                            + Constants.PRINTCONTEXT) > 0);
+                            + ConstantsUtil.PRINTCONTEXT) > 0);
             assertEquals(response.indexOf("null"), -1);
             // check if the time stamp in response is after the beforeStart
             // time.
@@ -121,9 +121,9 @@ public class MCOtherAnnotationTest extends DefaultTestBundleControl {
             assertEquals(
                     this.timeUtil.getTimeFromLog(
                             "PostConstructPreDestroyServlet1",
-                            Constants.POSTCONSTRUCT), 0);
+                            ConstantsUtil.POSTCONSTRUCT), 0);
             assertEquals(this.timeUtil.getTimeFromLog("TestFilter",
-                    Constants.POSTCONSTRUCT), 0);
+                    ConstantsUtil.POSTCONSTRUCT), 0);
 
             log("verify non-annotated methods are still called");
             assertTrue(this.timeUtil.getTimeFromLog("TestFilter", "init") > beforeInstall);
@@ -131,12 +131,12 @@ public class MCOtherAnnotationTest extends DefaultTestBundleControl {
                     .getTimeFromLog("TestFilter", "init"));
             assertEquals(
                     this.timeUtil.getDespFromLog("TestFilter", "doFilter"),
-                    Constants.NULL);
+                    ConstantsUtil.NULL);
             assertEquals(this.timeUtil.getDespFromLog("TestFilter", "init"),
-                    Constants.NULL);
+                    ConstantsUtil.NULL);
             assertEquals(this.timeUtil.getDespFromLog(
                     "TestServletRequestListener", "requestInitialized"),
-                    Constants.WELCOMESTRING + "-" + Constants.NULL);
+                    ConstantsUtil.WELCOMESTRING + "-" + ConstantsUtil.NULL);
         } finally {
             conn.disconnect();
         }
@@ -165,30 +165,30 @@ public class MCOtherAnnotationTest extends DefaultTestBundleControl {
             // check if content of response is correct
             log("verify content of response is correct");
             assertTrue(response.indexOf("ServletContextListenerServlet") > 0);
-            assertTrue(response.indexOf(Constants.EMAIL + "-"
-                    + Constants.EMAILVALUE) > 0);
-            assertTrue(response.indexOf(Constants.WELCOMESTRING + "-"
-                    + Constants.NULL) > 0);
-            assertTrue(response.indexOf(Constants.WELCOMESTATEMENT + "-"
-                    + Constants.NULL) > 0);
+            assertTrue(response.indexOf(ConstantsUtil.EMAIL + "-"
+                    + ConstantsUtil.EMAILVALUE) > 0);
+            assertTrue(response.indexOf(ConstantsUtil.WELCOMESTRING + "-"
+                    + ConstantsUtil.NULL) > 0);
+            assertTrue(response.indexOf(ConstantsUtil.WELCOMESTATEMENT + "-"
+                    + ConstantsUtil.NULL) > 0);
 
             // check if annotated methods are not invoked
             log("verify annotated methods are not invoked");
             assertEquals(this.timeUtil.getTimeFromLog(
-                    "ServletContextListenerServlet", Constants.POSTCONSTRUCT),
+                    "ServletContextListenerServlet", ConstantsUtil.POSTCONSTRUCT),
                     0);
             assertEquals(this.timeUtil.getTimeFromLog(
-                    "TestServletContextListener", Constants.POSTCONSTRUCT), 0);
+                    "TestServletContextListener", ConstantsUtil.POSTCONSTRUCT), 0);
             assertEquals(this.timeUtil.getTimeFromLog(
                     "TestServletContextAttributeListener",
-                    Constants.POSTCONSTRUCT), 0);
+                    ConstantsUtil.POSTCONSTRUCT), 0);
             log("verify non-annotated methods are still called");
             assertEquals(this.timeUtil.getDespFromLog(
                     "TestServletContextListener", "contextInitialized"),
-                    Constants.EMAIL + "-" + Constants.EMAILVALUE);
+                    ConstantsUtil.EMAIL + "-" + ConstantsUtil.EMAILVALUE);
             assertEquals(this.timeUtil.getDespFromLog(
                     "TestServletContextAttributeListener", "attributeAdded"),
-                    Constants.EMAIL + "-" + Constants.EMAILVALUE);
+                    ConstantsUtil.EMAIL + "-" + ConstantsUtil.EMAILVALUE);
         } finally {
             conn.disconnect();
         }
@@ -215,23 +215,23 @@ public class MCOtherAnnotationTest extends DefaultTestBundleControl {
             // check if content of response is correct
             log("verify content of response is correct");
             assertTrue(response.indexOf("RequestListenerServlet") > 0);
-            assertTrue(response.indexOf(Constants.WELCOMESTRING + "-"
-                    + Constants.NULL) > 0);
-            assertTrue(response.indexOf(Constants.WELCOMESTATEMENT + "-"
-                    + Constants.NULL) > 0);
+            assertTrue(response.indexOf(ConstantsUtil.WELCOMESTRING + "-"
+                    + ConstantsUtil.NULL) > 0);
+            assertTrue(response.indexOf(ConstantsUtil.WELCOMESTATEMENT + "-"
+                    + ConstantsUtil.NULL) > 0);
 
             // check if annotated methods are not invoked
             log("verify annotated methods are not invoked");
             assertEquals(this.timeUtil.getTimeFromLog("RequestListenerServlet",
-                    Constants.POSTCONSTRUCT), 0);
+                    ConstantsUtil.POSTCONSTRUCT), 0);
             assertEquals(this.timeUtil.getTimeFromLog(
-                    "TestServletRequestListener", Constants.POSTCONSTRUCT), 0);
+                    "TestServletRequestListener", ConstantsUtil.POSTCONSTRUCT), 0);
             assertEquals(this.timeUtil.getTimeFromLog(
                     "TestServletRequestAttributeListener",
-                    Constants.POSTCONSTRUCT), 0);
+                    ConstantsUtil.POSTCONSTRUCT), 0);
             assertEquals(this.timeUtil.getDespFromLog(
                     "TestServletRequestListener", "requestInitialized"),
-                    Constants.WELCOMESTRING + "-" + Constants.NULL);
+                    ConstantsUtil.WELCOMESTRING + "-" + ConstantsUtil.NULL);
         } finally {
             conn.disconnect();
         }
@@ -259,24 +259,24 @@ public class MCOtherAnnotationTest extends DefaultTestBundleControl {
             // check if content of response is correct
             log("verify content of response is correct");
             assertTrue(response.indexOf("HTTPSessionListenerServlet") > 0);
-            assertTrue(response.indexOf(Constants.WELCOMESTRING + "-"
-                    + Constants.NULL) > 0);
-            assertTrue(response.indexOf(Constants.WELCOMESTATEMENT + "-"
-                    + Constants.NULL) > 0);
+            assertTrue(response.indexOf(ConstantsUtil.WELCOMESTRING + "-"
+                    + ConstantsUtil.NULL) > 0);
+            assertTrue(response.indexOf(ConstantsUtil.WELCOMESTATEMENT + "-"
+                    + ConstantsUtil.NULL) > 0);
 
             // check if annotated methods are not invoked
             log("verify annotated methods are not invoked");
             assertEquals(this.timeUtil.getTimeFromLog(
-                    "HTTPSessionListenerServlet", Constants.POSTCONSTRUCT), 0);
+                    "HTTPSessionListenerServlet", ConstantsUtil.POSTCONSTRUCT), 0);
             assertEquals(this.timeUtil.getTimeFromLog("TestHttpSessionListener",
-                    Constants.POSTCONSTRUCT), 0);
+                    ConstantsUtil.POSTCONSTRUCT), 0);
             assertEquals(this.timeUtil
                     .getTimeFromLog("TestHttpSessionAttributeListener",
-                            Constants.POSTCONSTRUCT), 0);
+                            ConstantsUtil.POSTCONSTRUCT), 0);
             assertEquals(this.timeUtil.getDespFromLog(
                     "TestHttpSessionListener", "sessionCreated"),
-                    Constants.WELCOMESTRING + "-"
-                            + Constants.NULL);
+                    ConstantsUtil.WELCOMESTRING + "-"
+                            + ConstantsUtil.NULL);
         } finally {
             conn.disconnect();
         }
@@ -298,24 +298,24 @@ public class MCOtherAnnotationTest extends DefaultTestBundleControl {
         // check if annotated methods are not invoked
         log("verify annotated methods are not invoked");
         assertEquals(this.timeUtil.getTimeFromLog("TestFilter",
-                Constants.PREDESTROY), 0);
+                ConstantsUtil.PREDESTROY), 0);
         assertEquals(this.timeUtil.getTimeFromLog(
-                "ServletContextListenerServlet", Constants.PREDESTROY), 0);
+                "ServletContextListenerServlet", ConstantsUtil.PREDESTROY), 0);
         assertEquals(this.timeUtil.getTimeFromLog("TestServletContextListener",
-                Constants.PREDESTROY), 0);
+                ConstantsUtil.PREDESTROY), 0);
         assertEquals(this.timeUtil.getTimeFromLog(
-                "TestServletContextAttributeListener", Constants.PREDESTROY), 0);
+                "TestServletContextAttributeListener", ConstantsUtil.PREDESTROY), 0);
         assertEquals(this.timeUtil.getTimeFromLog("RequestListenerServlet",
-                Constants.PREDESTROY), 0);
+                ConstantsUtil.PREDESTROY), 0);
         assertEquals(this.timeUtil.getTimeFromLog("TestServletRequestListener",
-                Constants.PREDESTROY), 0);
+                ConstantsUtil.PREDESTROY), 0);
         assertEquals(this.timeUtil.getTimeFromLog(
-                "TestServletRequestAttributeListener", Constants.PREDESTROY), 0);
+                "TestServletRequestAttributeListener", ConstantsUtil.PREDESTROY), 0);
         assertEquals(this.timeUtil.getTimeFromLog("HTTPSessionListenerServlet",
-                Constants.PREDESTROY), 0);
+                ConstantsUtil.PREDESTROY), 0);
         assertEquals(this.timeUtil.getTimeFromLog("TestHttpSessionListener",
-                Constants.PREDESTROY), 0);
+                ConstantsUtil.PREDESTROY), 0);
         assertEquals(this.timeUtil.getTimeFromLog(
-                "TestHttpSessionAttributeListener", Constants.PREDESTROY), 0);
+                "TestHttpSessionAttributeListener", ConstantsUtil.PREDESTROY), 0);
     }
 }

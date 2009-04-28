@@ -20,7 +20,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.osgi.framework.Bundle;
-import org.osgi.test.cases.webcontainer.util.Constants;
+import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
 import org.osgi.test.cases.webcontainer.util.Server;
 import org.osgi.test.cases.webcontainer.util.TimeUtil;
@@ -52,12 +52,12 @@ public class PostConstructAnnotationTest extends DefaultTestBundleControl {
         // TODO install the war file
         // clean up the property file.
         /*
-         boolean success = ConstantsUtil.removeLogFile(); 
+         boolean success = ConstantsUtilUtil.removeLogFile(); 
          if (!success) {
-             log("Deleting File: " + ConstantsUtil.getLogFile() + " failed."); 
+             log("Deleting File: " + ConstantsUtilUtil.getLogFile() + " failed."); 
          }
          else { 
-              log (ConstantsUtil.getLogFile() + " file is deleted."); 
+              log (ConstantsUtilUtil.getLogFile() + " file is deleted."); 
          }*/
 
         // install + start the war file
@@ -96,14 +96,14 @@ public class PostConstructAnnotationTest extends DefaultTestBundleControl {
             assertTrue(response.indexOf("PostConstructPreDestroyServlet1") > 0);
             assertTrue(response
                     .indexOf("PostConstructPreDestroyServlet1.printContext "
-                            + Constants.PRINTCONTEXT) > 0);
+                            + ConstantsUtil.PRINTCONTEXT) > 0);
             assertEquals(response.indexOf("null"), -1);
             // check if the time stamp in response is after the beforeStart
             // time.
             assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
             log("verify annotated methods are invoked");
             assertTrue(this.timeUtil.getTimeFromLog(
-                    "PostConstructPreDestroyServlet1", Constants.POSTCONSTRUCT) > beforeInstall);
+                    "PostConstructPreDestroyServlet1", ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
         } finally {
             conn.disconnect();
         }
@@ -129,14 +129,14 @@ public class PostConstructAnnotationTest extends DefaultTestBundleControl {
             assertTrue(response.indexOf("PostConstructPreDestroyServlet2") > 0);
             assertTrue(response
                     .indexOf("PostConstructPreDestroyServlet2.printContext "
-                            + Constants.PRINTCONTEXT) > 0);
+                            + ConstantsUtil.PRINTCONTEXT) > 0);
             assertEquals(response.indexOf("null"), -1);
             // check if the time stamp in response is after the beforeStart
             // time.
             assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
             log("verify annotated methods are invoked");
             assertTrue(this.timeUtil.getTimeFromLog(
-                    "PostConstructPreDestroyServlet2", Constants.POSTCONSTRUCT) > beforeInstall);
+                    "PostConstructPreDestroyServlet2", ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
         } finally {
             conn.disconnect();
         }
@@ -162,14 +162,14 @@ public class PostConstructAnnotationTest extends DefaultTestBundleControl {
             assertTrue(response.indexOf("PostConstructPreDestroyServlet3") > 0);
             assertTrue(response
                     .indexOf("PostConstructPreDestroyServlet3.printContext "
-                            + Constants.PRINTCONTEXT) > 0);
+                            + ConstantsUtil.PRINTCONTEXT) > 0);
             assertEquals(response.indexOf("null"), -1);
             // check if the time stamp in response is after the beforeStart
             // time.
             assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
             log("verify annotated methods are invoked");
             assertTrue(this.timeUtil.getTimeFromLog(
-                    "PostConstructPreDestroyServlet3", Constants.POSTCONSTRUCT) > beforeInstall);
+                    "PostConstructPreDestroyServlet3", ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
         } finally {
             conn.disconnect();
         }

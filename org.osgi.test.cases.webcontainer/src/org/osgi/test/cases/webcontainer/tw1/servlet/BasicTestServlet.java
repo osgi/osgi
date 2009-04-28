@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.osgi.test.cases.webcontainer.util.Constants;
+import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 
 /**
  * @version $Rev$ $Date$
@@ -63,7 +63,7 @@ public class BasicTestServlet extends HttpServlet {
             HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-        out.println(Constants.BASICTESTWAR1);
+        out.println(ConstantsUtil.BASICTESTWAR1);
     }
 
 }

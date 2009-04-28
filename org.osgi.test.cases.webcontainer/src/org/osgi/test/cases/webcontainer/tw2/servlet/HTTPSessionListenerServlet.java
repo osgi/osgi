@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.osgi.test.cases.webcontainer.util.Constants;
+import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Event;
 import org.osgi.test.cases.webcontainer.util.EventLogger;
 
@@ -61,13 +61,13 @@ public class HTTPSessionListenerServlet extends HttpServlet {
     @PostConstruct
     public void postConstruct() {
         EventLogger.logEvent(new Event(this.getClass().getName(),
-                Constants.POSTCONSTRUCT, ""));
+                ConstantsUtil.POSTCONSTRUCT, ""));
     }
 
     @PreDestroy
     public void preDestroy() {
         EventLogger.logEvent(new Event(this.getClass().getName(),
-                Constants.PREDESTROY, ""));
+                ConstantsUtil.PREDESTROY, ""));
     }
 
     /**
@@ -98,19 +98,19 @@ public class HTTPSessionListenerServlet extends HttpServlet {
         out.println("<title>HTTPSessionListenerServlet</title>");
         out.println("</head>");
         out.println("<body>");
-        out.println(Constants.WELCOMESTRING + "-"
-                + request.getSession().getAttribute(Constants.WELCOMESTRING)
+        out.println(ConstantsUtil.WELCOMESTRING + "-"
+                + request.getSession().getAttribute(ConstantsUtil.WELCOMESTRING)
                 + "<br/>");
-        out.println(Constants.WELCOMESTATEMENT + "-"
-                + request.getSession().getAttribute(Constants.WELCOMESTATEMENT)
+        out.println(ConstantsUtil.WELCOMESTATEMENT + "-"
+                + request.getSession().getAttribute(ConstantsUtil.WELCOMESTATEMENT)
                 + "<br/>");
-        request.getSession().removeAttribute(Constants.WELCOMESTRING);
+        request.getSession().removeAttribute(ConstantsUtil.WELCOMESTRING);
         if (someInteger1 == null && someInteger2 == null
                 && someInteger3 == null && someBoolean2 == null) {
-            request.getSession().setAttribute(Constants.WELCOMESTATEMENT, null);
+            request.getSession().setAttribute(ConstantsUtil.WELCOMESTATEMENT, null);
         } else {
             request.getSession().setAttribute(
-                    Constants.WELCOMESTATEMENT,
+                    ConstantsUtil.WELCOMESTATEMENT,
                     someInteger1 + "+" + someInteger2 + "=" + someInteger3
                             + " is not " + someBoolean2);
             out.println("</body>");

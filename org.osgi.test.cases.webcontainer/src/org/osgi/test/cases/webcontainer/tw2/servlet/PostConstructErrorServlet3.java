@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.osgi.test.cases.webcontainer.util.Constants;
+import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Event;
 import org.osgi.test.cases.webcontainer.util.EventLogger;
 
@@ -47,7 +47,7 @@ public class PostConstructErrorServlet3 extends HttpServlet {
     @PostConstruct
     public void postConstruct() throws java.lang.Exception {
         EventLogger.logEvent(new Event(this.getClass().getName(),
-                Constants.POSTCONSTRUCT, Constants.POSTCONSTRUCTDESP));
+                ConstantsUtil.POSTCONSTRUCT, ConstantsUtil.POSTCONSTRUCTDESP));
     }
 
     /**

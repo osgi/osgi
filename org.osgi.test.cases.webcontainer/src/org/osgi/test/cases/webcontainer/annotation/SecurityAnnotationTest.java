@@ -20,7 +20,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.osgi.framework.Bundle;
-import org.osgi.test.cases.webcontainer.util.Constants;
+import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
 import org.osgi.test.cases.webcontainer.util.Server;
 import org.osgi.test.support.Base64Encoder;
@@ -97,12 +97,12 @@ public class SecurityAnnotationTest extends DefaultTestBundleControl {
             // check if content of response is correct
             log("verify content of response is correct");
             assertTrue(response.indexOf("SecurityTestServlet") > 0);
-            assertTrue(response.indexOf(Constants.EMAIL + "-"
-                    + Constants.EMAILVALUE) > 0);
-            assertTrue(response.indexOf(Constants.WELCOMESTRING + "-"
-                    + Constants.WELCOMESTRINGVALUE) > 0);
-            assertTrue(response.indexOf(Constants.WELCOMESTATEMENT + "-"
-                    + Constants.WELCOMESTATEMENTVALUE) > 0);
+            assertTrue(response.indexOf(ConstantsUtil.EMAIL + "-"
+                    + ConstantsUtil.EMAILVALUE) > 0);
+            assertTrue(response.indexOf(ConstantsUtil.WELCOMESTRING + "-"
+                    + ConstantsUtil.WELCOMESTRINGVALUE) > 0);
+            assertTrue(response.indexOf(ConstantsUtil.WELCOMESTATEMENT + "-"
+                    + ConstantsUtil.WELCOMESTATEMENTVALUE) > 0);
             assertEquals(response.indexOf("null"), -1);
         } finally {
             conn.disconnect();

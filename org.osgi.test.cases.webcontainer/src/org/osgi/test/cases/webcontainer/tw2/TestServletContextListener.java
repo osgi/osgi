@@ -23,7 +23,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import org.osgi.test.cases.webcontainer.util.Constants;
+import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Event;
 import org.osgi.test.cases.webcontainer.util.EventLogger;
 
@@ -53,13 +53,13 @@ public class TestServletContextListener implements ServletContextListener {
     @PostConstruct
     public void postConstruct() {
         EventLogger.logEvent(new Event(this.getClass().getName(),
-                Constants.POSTCONSTRUCT, ""));
+                ConstantsUtil.POSTCONSTRUCT, ""));
     }
 
     @PreDestroy
     public void preDestroy() {
         EventLogger.logEvent(new Event(this.getClass().getName(),
-                Constants.PREDESTROY, ""));
+                ConstantsUtil.PREDESTROY, ""));
     }
 
     public void contextDestroyed(ServletContextEvent sce) {
@@ -70,24 +70,24 @@ public class TestServletContextListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
         String email = context.getInitParameter("Email");
-        context.setAttribute(Constants.EMAIL, email);
+        context.setAttribute(ConstantsUtil.EMAIL, email);
         if (someInteger1 == null && someInteger2 == null
                 && someBoolean1 == null) {
-            context.setAttribute(Constants.WELCOMESTATEMENT, null);
+            context.setAttribute(ConstantsUtil.WELCOMESTATEMENT, null);
         } else {
             context
-                    .setAttribute(Constants.WELCOMESTATEMENT, someInteger1
+                    .setAttribute(ConstantsUtil.WELCOMESTATEMENT, someInteger1
                             + "+" + someInteger2 + "=" + someInteger3 + " is "
                             + someBoolean1);
         }
         if (someString1 == null && someString2 == null) {
-            context.setAttribute(Constants.WELCOMESTRING, null);
+            context.setAttribute(ConstantsUtil.WELCOMESTRING, null);
         } else {
-            context.setAttribute(Constants.WELCOMESTRING, someString1 + " "
+            context.setAttribute(ConstantsUtil.WELCOMESTRING, someString1 + " "
                     + someString2);
         }
         EventLogger.logEvent(new Event(this.getClass().getName(),
-                "contextInitialized", Constants.EMAIL + "-"
+                "contextInitialized", ConstantsUtil.EMAIL + "-"
                         + context.getInitParameter("Email")));
     }
 

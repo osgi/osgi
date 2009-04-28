@@ -24,7 +24,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogReaderService;
 import org.osgi.service.log.LogService;
-import org.osgi.test.cases.webcontainer.util.Constants;
+import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
 import org.osgi.test.cases.webcontainer.util.Server;
 import org.osgi.test.cases.webcontainer.util.TimeUtil;
@@ -95,7 +95,7 @@ public class AccessBundleContextTest extends DefaultTestBundleControl {
             // check if content of response is correct
             log("verify content of response is correct");
             assertTrue(response.indexOf("BundleContextTestServlet") > 0);
-            assertTrue(response.indexOf(Constants.TESTLOGMSG) > 0);
+            assertTrue(response.indexOf(ConstantsUtil.TESTLOGMSG) > 0);
             assertEquals(response.indexOf("null"), -1);
         } finally {
             conn.disconnect();
@@ -105,7 +105,7 @@ public class AccessBundleContextTest extends DefaultTestBundleControl {
         while (e.hasMoreElements()) {
             LogEntry logentry = (LogEntry) e.nextElement();
             log("get log message: " + logentry.getMessage());
-            assertEquals(logentry.getMessage(), Constants.TESTLOGMSG);
+            assertEquals(logentry.getMessage(), ConstantsUtil.TESTLOGMSG);
             // TODO get Bundle via OSGI RFC 66 WebApplication getBundle() API,
             // then use Bundle.getBundleContext() to get BundleContext
             assertEquals(logentry.getBundle(), getContext());
@@ -133,7 +133,7 @@ public class AccessBundleContextTest extends DefaultTestBundleControl {
             // check if content of response is correct
             log("verify content of response is correct");
             assertTrue(response.indexOf("BundleContextTestServlet") > 0);
-            assertTrue(response.indexOf(Constants.TESTLOGMSG2) > 0);
+            assertTrue(response.indexOf(ConstantsUtil.TESTLOGMSG2) > 0);
             assertEquals(response.indexOf("null"), -1);
         } finally {
             conn.disconnect();
@@ -143,7 +143,7 @@ public class AccessBundleContextTest extends DefaultTestBundleControl {
         while (e.hasMoreElements()) {
             LogEntry logentry = (LogEntry) e.nextElement();
             log("get log message: " + logentry.getMessage());
-            assertEquals(logentry.getMessage(), Constants.TESTLOGMSG2);
+            assertEquals(logentry.getMessage(), ConstantsUtil.TESTLOGMSG2);
             // TODO get Bundle via ISGI WebApplication getBundle(),
             // then use Bundle.getBundleContext() to get BundleContext
             assertEquals(logentry.getBundle(), getContext());
@@ -171,7 +171,7 @@ public class AccessBundleContextTest extends DefaultTestBundleControl {
             // check if content of response is correct
             log("verify content of response is correct");
             assertTrue(response.indexOf("BundleContextTestServlet") > 0);
-            assertTrue(response.indexOf(Constants.TESTLOGMSG3) > 0);
+            assertTrue(response.indexOf(ConstantsUtil.TESTLOGMSG3) > 0);
             assertEquals(response.indexOf("null"), -1);
         } finally {
             conn.disconnect();
@@ -181,7 +181,7 @@ public class AccessBundleContextTest extends DefaultTestBundleControl {
         while (e.hasMoreElements()) {
             LogEntry logentry = (LogEntry) e.nextElement();
             log("get log message: " + logentry.getMessage());
-            assertEquals(logentry.getMessage(), Constants.TESTLOGMSG3);
+            assertEquals(logentry.getMessage(), ConstantsUtil.TESTLOGMSG3);
             // TODO get Bundle via ISGI WebApplication getBundle(),
             // then use Bundle.getBundleContext() to get BundleContext
             assertEquals(logentry.getBundle(), getContext());
@@ -209,7 +209,7 @@ public class AccessBundleContextTest extends DefaultTestBundleControl {
             // check if content of response is correct
             log("verify content of response is correct");
             assertTrue(response.indexOf("BundleContextTestServlet") > 0);
-            assertTrue(response.indexOf(Constants.TESTLOGMSG4) > 0);
+            assertTrue(response.indexOf(ConstantsUtil.TESTLOGMSG4) > 0);
             assertEquals(response.indexOf("null"), -1);
         } finally {
             conn.disconnect();
@@ -219,7 +219,7 @@ public class AccessBundleContextTest extends DefaultTestBundleControl {
         while (e.hasMoreElements()) {
             LogEntry logentry = (LogEntry) e.nextElement();
             log("get log message: " + logentry.getMessage());
-            assertEquals(logentry.getMessage(), Constants.TESTLOGMSG4);
+            assertEquals(logentry.getMessage(), ConstantsUtil.TESTLOGMSG4);
             // TODO get Bundle via ISGI WebApplication getBundle(),
             // then use Bundle.getBundleContext() to get BundleContext
             assertEquals(logentry.getBundle(), getContext());

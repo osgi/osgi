@@ -45,7 +45,7 @@ public class PreDestroyAnnotationTest extends DefaultTestBundleControl {
         /*
          boolean success = ConstantsUtil.removeLogFile(); 
          if (!success) {
-             log("Deleting File: " + ConstantsUtil.getLogFile() + " failed."); 
+             log("Deleting File: " + ConstantsUtilUtil.getLogFile() + " failed."); 
          }
          else { 
               log (ConstantsUtil.getLogFile() + " file is deleted."); 

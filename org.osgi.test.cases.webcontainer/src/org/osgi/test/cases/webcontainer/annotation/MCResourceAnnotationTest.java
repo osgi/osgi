@@ -20,7 +20,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.osgi.framework.Bundle;
-import org.osgi.test.cases.webcontainer.util.Constants;
+import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
 import org.osgi.test.cases.webcontainer.util.Server;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
@@ -106,9 +106,9 @@ public class MCResourceAnnotationTest extends DefaultTestBundleControl {
             // check if content of response is correct
             log("verify content of response is correct");
             assertTrue(response.indexOf("ResourceServlet2") > 0);
-            assertTrue(response.indexOf(Constants.NULL + " " + Constants.NULL) > 0);
-            assertTrue(response.indexOf(Constants.NULL + " + " + Constants.NULL
-                    + " = " + Constants.NULL + " that is " + Constants.NULL) > 0);
+            assertTrue(response.indexOf(ConstantsUtil.NULL + " " + ConstantsUtil.NULL) > 0);
+            assertTrue(response.indexOf(ConstantsUtil.NULL + " + " + ConstantsUtil.NULL
+                    + " = " + ConstantsUtil.NULL + " that is " + ConstantsUtil.NULL) > 0);
         } finally {
             conn.disconnect();
         }
@@ -162,9 +162,9 @@ public class MCResourceAnnotationTest extends DefaultTestBundleControl {
             // check if content of response is correct
             log("verify content of response is correct");
             assertTrue(response.indexOf("ResourceServlet4") > 0);
-            assertTrue(response.indexOf(Constants.NULL + " " + Constants.NULL) > 0);
-            assertTrue(response.indexOf(Constants.NULL + " + " + Constants.NULL
-                    + " = " + Constants.NULL + " that is " + Constants.NULL) > 0);
+            assertTrue(response.indexOf(ConstantsUtil.NULL + " " + ConstantsUtil.NULL) > 0);
+            assertTrue(response.indexOf(ConstantsUtil.NULL + " + " + ConstantsUtil.NULL
+                    + " = " + ConstantsUtil.NULL + " that is " + ConstantsUtil.NULL) > 0);
         } finally {
             conn.disconnect();
         }

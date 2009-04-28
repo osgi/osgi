@@ -28,7 +28,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import org.osgi.test.cases.webcontainer.util.Constants;
+import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Event;
 import org.osgi.test.cases.webcontainer.util.EventLogger;
 
@@ -58,13 +58,13 @@ public class TestFilter implements Filter {
     @PostConstruct
     public void postConstruct() {
         EventLogger.logEvent(new Event(this.getClass().getName(),
-                Constants.POSTCONSTRUCT, ""));
+                ConstantsUtil.POSTCONSTRUCT, ""));
     }
 
     @PreDestroy
     public void preDestroy() {
         EventLogger.logEvent(new Event(this.getClass().getName(),
-                Constants.PREDESTROY, ""));
+                ConstantsUtil.PREDESTROY, ""));
     }
 
     public void destroy() {

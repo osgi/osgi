@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.osgi.test.cases.webcontainer.util.Constants;
+import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Event;
 import org.osgi.test.cases.webcontainer.util.EventLogger;
 
@@ -48,13 +48,13 @@ public class PreDestroyErrorServlet1 extends HttpServlet {
     @PreDestroy
     public void cleanup1() {
         EventLogger.logEvent(new Event(this.getClass().getName(), "cleanup",
-                Constants.CLEANUPDESP));
+                ConstantsUtil.CLEANUPDESP));
     }
 
     @PreDestroy
     public void cleanup2() {
         EventLogger.logEvent(new Event(this.getClass().getName(), "cleanup2",
-                Constants.CLEANUPDESP2));
+                ConstantsUtil.CLEANUPDESP2));
     }
 
     /**
@@ -85,7 +85,7 @@ public class PreDestroyErrorServlet1 extends HttpServlet {
         out.println("</head>");
         out.println("<body>");
         out.println(EventLogger.printEvent(new Event(this.getClass().getName(),
-                "printContext", Constants.PRINTCONTEXT)));
+                "printContext", ConstantsUtil.PRINTCONTEXT)));
         out.println("</body>");
         out.println("</html>");
     }

@@ -21,7 +21,7 @@ import javax.annotation.PreDestroy;
 import javax.servlet.ServletRequestAttributeEvent;
 import javax.servlet.ServletRequestAttributeListener;
 
-import org.osgi.test.cases.webcontainer.util.Constants;
+import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Event;
 import org.osgi.test.cases.webcontainer.util.EventLogger;
 
@@ -34,13 +34,13 @@ public class TestServletRequestAttributeListener implements
     @PostConstruct
     public void postConstruct() {
         EventLogger.logEvent(new Event(this.getClass().getName(),
-                Constants.POSTCONSTRUCT, ""));
+                ConstantsUtil.POSTCONSTRUCT, ""));
     }
 
     @PreDestroy
     public void preDestroy() {
         EventLogger.logEvent(new Event(this.getClass().getName(),
-                Constants.PREDESTROY, ""));
+                ConstantsUtil.PREDESTROY, ""));
     }
 
     public void attributeAdded(ServletRequestAttributeEvent srae) {

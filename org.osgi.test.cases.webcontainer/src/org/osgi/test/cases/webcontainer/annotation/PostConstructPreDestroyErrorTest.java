@@ -21,7 +21,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.osgi.framework.Bundle;
-import org.osgi.test.cases.webcontainer.util.Constants;
+import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
 import org.osgi.test.cases.webcontainer.util.Server;
 import org.osgi.test.cases.webcontainer.util.TimeUtil;
@@ -52,12 +52,12 @@ public class PostConstructPreDestroyErrorTest extends DefaultTestBundleControl {
 
         // clean up the property file.
         /*
-         boolean success = ConstantsUtil.removeLogFile(); 
+         boolean success = ConstantsUtilUtil.removeLogFile(); 
          if (!success) {
-             log("Deleting File: " + ConstantsUtil.getLogFile() + " failed."); 
+             log("Deleting File: " + ConstantsUtilUtil.getLogFile() + " failed."); 
          }
          else { 
-              log (ConstantsUtil.getLogFile() + " file is deleted."); 
+              log (ConstantsUtilUtil.getLogFile() + " file is deleted."); 
          }*/
 
         // install + start the war file
@@ -128,7 +128,7 @@ public class PostConstructPreDestroyErrorTest extends DefaultTestBundleControl {
         }
         log("verify annotated methods are not invoked when @postConstruct annotated method is static");
         assertEquals(this.timeUtil.getTimeFromLog("PostConstructErrorServlet2",
-                Constants.POSTCONSTRUCT), 0);
+                ConstantsUtil.POSTCONSTRUCT), 0);
     }
 
     /*
@@ -155,7 +155,7 @@ public class PostConstructPreDestroyErrorTest extends DefaultTestBundleControl {
         }
         log("verify annotated methods are not invoked when @postConstruct annotated method throws Exception");
         assertEquals(this.timeUtil.getTimeFromLog("PostConstructErrorServlet3",
-                Constants.POSTCONSTRUCT), 0);
+                ConstantsUtil.POSTCONSTRUCT), 0);
     }
 
     /*
@@ -177,14 +177,14 @@ public class PostConstructPreDestroyErrorTest extends DefaultTestBundleControl {
             log("verify content of response is correct");
             assertTrue(response.indexOf("PreDestroyErrorServlet1") > 0);
             assertTrue(response.indexOf("PreDestroyErrorServlet1.printContext "
-                    + Constants.PRINTCONTEXT) > 0);
+                    + ConstantsUtil.PRINTCONTEXT) > 0);
             assertEquals(response.indexOf("null"), -1);
             // check if the time stamp in response is after the beforeStart
             // time.
             assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
             log("verify annotated methods are not invoked when there are multiple @preDestroy annotations");
             assertEquals(this.timeUtil.getTimeFromLog(
-                    "PreDestroyErrorServlet1", Constants.POSTCONSTRUCT), 0);
+                    "PreDestroyErrorServlet1", ConstantsUtil.POSTCONSTRUCT), 0);
         } finally {
             conn.disconnect();
         }
@@ -209,14 +209,14 @@ public class PostConstructPreDestroyErrorTest extends DefaultTestBundleControl {
             log("verify content of response is correct");
             assertTrue(response.indexOf("PreDestroyErrorServlet2") > 0);
             assertTrue(response.indexOf("PreDestroyErrorServlet2.printContext "
-                    + Constants.PRINTCONTEXT) > 0);
+                    + ConstantsUtil.PRINTCONTEXT) > 0);
             assertEquals(response.indexOf("null"), -1);
             // check if the time stamp in response is after the beforeStart
             // time.
             assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
             log("verify annotated methods are not invoked when @preDestroy annotated method is static");
             assertEquals(this.timeUtil.getTimeFromLog(
-                    "PreDestroyErrorServlet2", Constants.POSTCONSTRUCT), 0);
+                    "PreDestroyErrorServlet2", ConstantsUtil.POSTCONSTRUCT), 0);
         } finally {
             conn.disconnect();
         }
@@ -241,14 +241,14 @@ public class PostConstructPreDestroyErrorTest extends DefaultTestBundleControl {
             log("verify content of response is correct");
             assertTrue(response.indexOf("PreDestroyErrorServlet3") > 0);
             assertTrue(response.indexOf("PreDestroyErrorServlet3.printContext "
-                    + Constants.PRINTCONTEXT) > 0);
+                    + ConstantsUtil.PRINTCONTEXT) > 0);
             assertEquals(response.indexOf("null"), -1);
             // check if the time stamp in response is after the beforeStart
             // time.
             assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
             log("verify annotated methods are not invoked when @preDestroy annotated method throws Exception");
             assertEquals(this.timeUtil.getTimeFromLog(
-                    "PreDestroyErrorServlet2", Constants.POSTCONSTRUCT), 0);
+                    "PreDestroyErrorServlet2", ConstantsUtil.POSTCONSTRUCT), 0);
         } finally {
             conn.disconnect();
         }

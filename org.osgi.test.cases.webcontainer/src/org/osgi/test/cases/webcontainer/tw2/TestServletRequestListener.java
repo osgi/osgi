@@ -22,7 +22,7 @@ import javax.annotation.Resource;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
 
-import org.osgi.test.cases.webcontainer.util.Constants;
+import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Event;
 import org.osgi.test.cases.webcontainer.util.EventLogger;
 
@@ -52,13 +52,13 @@ public class TestServletRequestListener implements ServletRequestListener {
     @PostConstruct
     public void postConstruct() {
         EventLogger.logEvent(new Event(this.getClass().getName(),
-                Constants.POSTCONSTRUCT, ""));
+                ConstantsUtil.POSTCONSTRUCT, ""));
     }
 
     @PreDestroy
     public void preDestroy() {
         EventLogger.logEvent(new Event(this.getClass().getName(),
-                Constants.PREDESTROY, ""));
+                ConstantsUtil.PREDESTROY, ""));
     }
 
     public void requestDestroyed(ServletRequestEvent sre) {
@@ -69,24 +69,24 @@ public class TestServletRequestListener implements ServletRequestListener {
     public void requestInitialized(ServletRequestEvent sre) {
         if (someInteger1 == null && someInteger2 == null
                 && someBoolean1 == null) {
-            sre.getServletRequest().setAttribute(Constants.WELCOMESTATEMENT,
+            sre.getServletRequest().setAttribute(ConstantsUtil.WELCOMESTATEMENT,
                     null);
         } else {
             sre.getServletRequest().setAttribute(
-                    Constants.WELCOMESTATEMENT,
+                    ConstantsUtil.WELCOMESTATEMENT,
                     someInteger1 + "+" + someInteger2 + "=" + someInteger3
                             + " is " + someBoolean1);
         }
         if (someString1 == null && someString2 == null) {
-            sre.getServletRequest().setAttribute(Constants.WELCOMESTRING, null);
+            sre.getServletRequest().setAttribute(ConstantsUtil.WELCOMESTRING, null);
         } else {
-            sre.getServletRequest().setAttribute(Constants.WELCOMESTRING,
+            sre.getServletRequest().setAttribute(ConstantsUtil.WELCOMESTRING,
                     someString1 + " " + someString2);
         }
         EventLogger.logEvent(new Event(this.getClass().getName(),
-                "requestInitialized", Constants.WELCOMESTRING
+                "requestInitialized", ConstantsUtil.WELCOMESTRING
                         + "-"
                         + sre.getServletRequest().getAttribute(
-                                Constants.WELCOMESTRING)));
+                                ConstantsUtil.WELCOMESTRING)));
     }
 }

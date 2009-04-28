@@ -43,9 +43,9 @@ public class MCPreDestroyAnnotationTest extends DefaultTestBundleControl {
 
         // clean up the property file.
         /*
-         boolean success = ConstantsUtil.removeLogFile(); 
+         boolean success = ConstantsUtilUtil.removeLogFile(); 
          if (!success) {
-             log("Deleting File: " + ConstantsUtil.getLogFile() + " failed."); 
+             log("Deleting File: " + ConstantsUtilUtil.getLogFile() + " failed."); 
          }
          else { 
               log (ConstantsUtil.getLogFile() + " file is deleted."); 

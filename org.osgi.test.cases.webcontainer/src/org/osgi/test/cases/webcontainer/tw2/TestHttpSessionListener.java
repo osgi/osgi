@@ -22,7 +22,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
-import org.osgi.test.cases.webcontainer.util.Constants;
+import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Event;
 import org.osgi.test.cases.webcontainer.util.EventLogger;
 
@@ -52,37 +52,37 @@ public class TestHttpSessionListener implements HttpSessionListener {
     @PostConstruct
     public void postConstruct() {
         EventLogger.logEvent(new Event(this.getClass().getName(),
-                Constants.POSTCONSTRUCT, ""));
+                ConstantsUtil.POSTCONSTRUCT, ""));
     }
 
     @PreDestroy
     public void preDestroy() {
         EventLogger.logEvent(new Event(this.getClass().getName(),
-                Constants.PREDESTROY, ""));
+                ConstantsUtil.PREDESTROY, ""));
     }
 
     public void sessionCreated(HttpSessionEvent se) {
         if (someInteger1 == null && someInteger2 == null
                 && someBoolean1 == null) {
-            se.getSession().setAttribute(Constants.WELCOMESTATEMENT, null);
+            se.getSession().setAttribute(ConstantsUtil.WELCOMESTATEMENT, null);
         } else {
             se.getSession().setAttribute(
-                    Constants.WELCOMESTATEMENT,
+                    ConstantsUtil.WELCOMESTATEMENT,
                     someInteger1 + "+" + someInteger2 + "=" + someInteger3
                             + " is " + someBoolean1);
         }
         if (someString1 == null && someString2 == null) {
-            se.getSession().setAttribute(Constants.WELCOMESTRING, null);
+            se.getSession().setAttribute(ConstantsUtil.WELCOMESTRING, null);
         } else {
-            se.getSession().setAttribute(Constants.WELCOMESTRING,
+            se.getSession().setAttribute(ConstantsUtil.WELCOMESTRING,
                     someString1 + " " + someString2);
         }
         EventLogger
                 .logEvent(new Event(this.getClass().getName(),
-                        "sessionCreated", Constants.WELCOMESTRING
+                        "sessionCreated", ConstantsUtil.WELCOMESTRING
                                 + "-"
                                 + se.getSession().getAttribute(
-                                        Constants.WELCOMESTRING)));
+                                        ConstantsUtil.WELCOMESTRING)));
     }
 
     public void sessionDestroyed(HttpSessionEvent se) {

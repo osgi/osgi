@@ -20,7 +20,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.osgi.framework.Bundle;
-import org.osgi.test.cases.webcontainer.util.Constants;
+import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
 import org.osgi.test.cases.webcontainer.util.Server;
 import org.osgi.test.cases.webcontainer.util.TimeUtil;
@@ -52,12 +52,12 @@ public class MCPostConstructAnnotationTest extends DefaultTestBundleControl {
 
         // clean up the property file.
         /*
-         boolean success = ConstantsUtil.removeLogFile(); 
+         boolean success = ConstantsUtilUtil.removeLogFile(); 
          if (!success) {
-             log("Deleting File: " + ConstantsUtil.getLogFile() + " failed."); 
+             log("Deleting File: " + ConstantsUtilUtil.getLogFile() + " failed."); 
          }
          else { 
-              log (ConstantsUtil.getLogFile() + " file is deleted."); 
+              log (ConstantsUtilUtil.getLogFile() + " file is deleted."); 
          }*/
 
         // install + start the war file
@@ -97,14 +97,14 @@ public class MCPostConstructAnnotationTest extends DefaultTestBundleControl {
             assertTrue(response.indexOf("PostConstructPreDestroyServlet1") > 0);
             assertTrue(response
                     .indexOf("PostConstructPreDestroyServlet1.printContext "
-                            + Constants.PRINTCONTEXT) > 0);
+                            + ConstantsUtil.PRINTCONTEXT) > 0);
             assertEquals(response.indexOf("null"), -1);
             // check if the time stamp in response is after the beforeStart
             // time.
             assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
             log("verify annotated methods are not invoked");
             assertEquals(this.timeUtil.getTimeFromLog(
-                    "PostConstructPreDestroyServlet1", Constants.POSTCONSTRUCT), 0);
+                    "PostConstructPreDestroyServlet1", ConstantsUtil.POSTCONSTRUCT), 0);
         } finally {
             conn.disconnect();
         }
@@ -131,14 +131,14 @@ public class MCPostConstructAnnotationTest extends DefaultTestBundleControl {
             assertTrue(response.indexOf("PostConstructPreDestroyServlet2") > 0);
             assertTrue(response
                     .indexOf("PostConstructPreDestroyServlet2.printContext "
-                            + Constants.PRINTCONTEXT) > 0);
+                            + ConstantsUtil.PRINTCONTEXT) > 0);
             assertEquals(response.indexOf("null"), -1);
             // check if the time stamp in response is after the beforeStart
             // time.
             assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
             log("verify annotated methods are not invoked");
             assertEquals(this.timeUtil.getTimeFromLog(
-                    "PostConstructPreDestroyServlet2", Constants.POSTCONSTRUCT), 0);
+                    "PostConstructPreDestroyServlet2", ConstantsUtil.POSTCONSTRUCT), 0);
         } finally {
             conn.disconnect();
         }
@@ -165,14 +165,14 @@ public class MCPostConstructAnnotationTest extends DefaultTestBundleControl {
             assertTrue(response.indexOf("PostConstructPreDestroyServlet3") > 0);
             assertTrue(response
                     .indexOf("PostConstructPreDestroyServlet3.printContext "
-                            + Constants.PRINTCONTEXT) > 0);
+                            + ConstantsUtil.PRINTCONTEXT) > 0);
             assertEquals(response.indexOf("null"), -1);
             // check if the time stamp in response is after the beforeStart
             // time.
             assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
             log("verify annotated methods are not invoked");
             assertEquals(this.timeUtil.getTimeFromLog(
-                    "PostConstructPreDestroyServlet3", Constants.POSTCONSTRUCT), 0);
+                    "PostConstructPreDestroyServlet3", ConstantsUtil.POSTCONSTRUCT), 0);
         } finally {
             conn.disconnect();
         }

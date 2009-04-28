@@ -22,7 +22,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 import org.osgi.framework.Bundle;
-import org.osgi.test.cases.webcontainer.util.Constants;
+import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
 import org.osgi.test.cases.webcontainer.util.Server;
 import org.osgi.test.cases.webcontainer.util.TimeUtil;
@@ -95,7 +95,7 @@ public class TW4Test extends DefaultTestBundleControl {
      */
     public void testLongParams() throws Exception {
         String param1 = "param1=value1";
-        String param2 = "param2=" + Constants.PARAM2;
+        String param2 = "param2=" + ConstantsUtil.PARAM2;
         final String request = this.warContextPath
                 + "/TestServlet1/TestServlet2?tc=1&" + param1 + "&" + param2;
         if (debug) {
@@ -112,7 +112,7 @@ public class TW4Test extends DefaultTestBundleControl {
             }
             // check if content of response is correct
             log("verify content of response is correct");
-            assertEquals(response, Constants.TW4LONGPARAMS);
+            assertEquals(response, ConstantsUtil.TW4LONGPARAMS);
         } finally {
             conn.disconnect();
         }
@@ -145,7 +145,7 @@ public class TW4Test extends DefaultTestBundleControl {
             }
             // check if content of response is correct
             log("verify content of response is correct");
-            assertEquals(response, Constants.TW4SPECPARAMS);
+            assertEquals(response, ConstantsUtil.TW4SPECPARAMS);
         } finally {
             conn.disconnect();
         }
@@ -199,7 +199,7 @@ public class TW4Test extends DefaultTestBundleControl {
             }
             // check if content of response is correct
             log("verify content of response is correct");
-            assertEquals(response, Constants.PLAINRESPONSE);
+            assertEquals(response, ConstantsUtil.PLAINRESPONSE);
         } finally {
             conn.disconnect();
         }
@@ -222,7 +222,7 @@ public class TW4Test extends DefaultTestBundleControl {
             }
             // check if content of response is correct
             log("verify content of response is correct");
-            assertEquals(response, Constants.HTMLRESPONSE);
+            assertEquals(response, ConstantsUtil.HTMLRESPONSE);
         } finally {
             conn.disconnect();
         }

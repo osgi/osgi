@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.osgi.test.cases.webcontainer.util.Constants;
+import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Event;
 import org.osgi.test.cases.webcontainer.util.EventLogger;
 
@@ -61,13 +61,13 @@ public class RequestListenerServlet extends HttpServlet {
     @PostConstruct
     public void postConstruct() {
         EventLogger.logEvent(new Event(this.getClass().getName(),
-                Constants.POSTCONSTRUCT, ""));
+                ConstantsUtil.POSTCONSTRUCT, ""));
     }
 
     @PreDestroy
     public void preDestroy() {
         EventLogger.logEvent(new Event(this.getClass().getName(),
-                Constants.PREDESTROY, ""));
+                ConstantsUtil.PREDESTROY, ""));
     }
 
     /**
@@ -98,16 +98,16 @@ public class RequestListenerServlet extends HttpServlet {
         out.println("<title>RequestListenerServlet</title>");
         out.println("</head>");
         out.println("<body>");
-        out.println(Constants.WELCOMESTRING + "-"
-                + request.getAttribute(Constants.WELCOMESTRING) + "<br/>");
-        out.println(Constants.WELCOMESTATEMENT + "-"
-                + request.getAttribute(Constants.WELCOMESTATEMENT) + "<br/>");
-        request.removeAttribute(Constants.WELCOMESTRING);
+        out.println(ConstantsUtil.WELCOMESTRING + "-"
+                + request.getAttribute(ConstantsUtil.WELCOMESTRING) + "<br/>");
+        out.println(ConstantsUtil.WELCOMESTATEMENT + "-"
+                + request.getAttribute(ConstantsUtil.WELCOMESTATEMENT) + "<br/>");
+        request.removeAttribute(ConstantsUtil.WELCOMESTRING);
         if (someInteger1 == null && someInteger2 == null
                 && someInteger3 == null && someBoolean2 == null) {
-            request.setAttribute(Constants.WELCOMESTATEMENT, null);
+            request.setAttribute(ConstantsUtil.WELCOMESTATEMENT, null);
         } else {
-            request.setAttribute(Constants.WELCOMESTATEMENT, someInteger1 + "+"
+            request.setAttribute(ConstantsUtil.WELCOMESTATEMENT, someInteger1 + "+"
                     + someInteger2 + "=" + someInteger3 + " is not "
                     + someBoolean2);
         }

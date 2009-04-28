@@ -17,13 +17,23 @@ package org.osgi.test.cases.webcontainer;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.JarURLConnection;
 import java.net.URL;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Map;
+import java.util.Properties;
+import java.util.jar.Attributes;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
 
 import org.osgi.framework.Bundle;
-import org.osgi.test.cases.webcontainer.util.Constants;
+import org.osgi.framework.Constants;
+import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
 import org.osgi.test.cases.webcontainer.util.Server;
 import org.osgi.test.cases.webcontainer.util.TimeUtil;
+import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
@@ -39,6 +49,7 @@ public class TW1Test extends DefaultTestBundleControl {
     long beforeInstall;
     TimeUtil timeUtil;
     Bundle b;
+    Map deployOptions;
 
     public void setUp() throws Exception {
         // TODO if war file already exists, let's remove it first.
@@ -52,6 +63,7 @@ public class TW1Test extends DefaultTestBundleControl {
         log("install war file: tw1.war at context path " + this.warContextPath);
         b = installBundle(getWebServer()
                 + "tw1.war", true);
+        // TODO:  set deployOptions when passed into installBundle
     }
 
     private void uninstallWar() throws Exception {
@@ -63,6 +75,21 @@ public class TW1Test extends DefaultTestBundleControl {
     public void tearDown() throws Exception {
         uninstallWar();
     }
+    
+    public void testBundleManifest001() throws Exception {
+        // test bundle manifest is constructed per user's deployment options
+        String location = System.getProperty("user.dir") + "/resources/tw1/tw1.war";
+        log("jar:file:" + location + "!/");
+        URL url = new URL("jar:file:" + location + "!/");
+        JarURLConnection conn = (JarURLConnection)url.openConnection();
+        JarFile jarfile = conn.getJarFile();
+        Manifest originalManifest = jarfile.getManifest();
+        if (originalManifest.getMainAttributes().getValue(Attributes.Name.MANIFEST_VERSION) != null)
+            log(originalManifest.getMainAttributes().getValue(Attributes.Name.MANIFEST_VERSION));
+        
+        BundleManifestValidator validator = new BundleManifestValidator(this.b, originalManifest, this.deployOptions, this.debug);
+        validator.validate();
+    }
 
     public void testBasic001() throws Exception {
         final String request = this.warContextPath + "/";
@@ -72,7 +99,7 @@ public class TW1Test extends DefaultTestBundleControl {
             assertEquals(conn.getResponseCode(), 200);
             assertEquals(conn.getContentType(), "text/html");
             String response = Dispatcher.dispatch(conn);
-            if (debug) {
+            if (this.debug) {
                 log(response);
             }
             // check if content of response is correct
@@ -99,12 +126,12 @@ public class TW1Test extends DefaultTestBundleControl {
             assertEquals(conn.getResponseCode(), 200);
             assertEquals(conn.getContentType(), "text/html");
             String response = Dispatcher.dispatch(conn);
-            if (debug) {
+            if (this.debug) {
                 log(response);
             }
             // check if content of response is correct
             log("verify content of response is correct");
-            assertEquals(response, Constants.BASICTESTWAR1);
+            assertEquals(response, ConstantsUtil.BASICTESTWAR1);
         } finally {
             conn.disconnect();
         }
@@ -118,12 +145,12 @@ public class TW1Test extends DefaultTestBundleControl {
             assertEquals(conn.getResponseCode(), 200);
             assertEquals(conn.getContentType(), "text/html");
             String response = Dispatcher.dispatch(conn);
-            if (debug) {
+            if (this.debug) {
                 log(response);
             }
             // check if content of response is correct
             log("verify content of response is correct");
-            assertEquals(response, Constants.ERROR404HTML);
+            assertEquals(response, ConstantsUtil.ERROR404HTML);
         } finally {
             conn.disconnect();
         }
@@ -137,12 +164,12 @@ public class TW1Test extends DefaultTestBundleControl {
             assertEquals(conn.getResponseCode(), 200);
             assertEquals(conn.getContentType(), "text/html");
             String response = Dispatcher.dispatch(conn);
-            if (debug) {
+            if (this.debug) {
                 log(response);
             }
             // check if content of response is correct
             log("verify content of response is correct");
-            assertEquals(response, Constants.ERROR404HTML);
+            assertEquals(response, ConstantsUtil.ERROR404HTML);
         } finally {
             conn.disconnect();
         }
@@ -157,11 +184,11 @@ public class TW1Test extends DefaultTestBundleControl {
             log(conn.getContentType());
             assertTrue(conn.getContentType().indexOf("text/html") > -1);
             String response = Dispatcher.dispatch(conn);
-            if (debug) {
+            if (this.debug) {
                 log(response);
             }
             // check if content of response is correct
-            assertEquals(response, Constants.ERROR404JSP);
+            assertEquals(response, ConstantsUtil.ERROR404JSP);
         } finally {
             conn.disconnect();
         }
@@ -175,7 +202,7 @@ public class TW1Test extends DefaultTestBundleControl {
             assertEquals(conn.getResponseCode(), 404);
             assertTrue(conn.getContentType().indexOf("text/html") > -1);
             String response = Dispatcher.dispatch(conn);
-            if (debug) {
+            if (this.debug) {
                 log(response);
             }
             fail("should be getting an exception");
@@ -194,12 +221,12 @@ public class TW1Test extends DefaultTestBundleControl {
             assertEquals(conn.getResponseCode(), 200);
             assertEquals(conn.getContentType(), "text/html");
             String response = Dispatcher.dispatch(conn);
-            if (debug) {
+            if (this.debug) {
                 log(response);
             }
             // check if content of response is correct
             log("verify content of response is correct");
-            assertEquals(response, Constants.IMAGEHTML);
+            assertEquals(response, ConstantsUtil.IMAGEHTML);
         } finally {
             conn.disconnect();
         }
@@ -210,7 +237,7 @@ public class TW1Test extends DefaultTestBundleControl {
         final URL url = Dispatcher.createURL(request, this.server);
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         try {
-            if (debug) {
+            if (this.debug) {
                 log(conn.getContentType());
             }
             assertEquals(conn.getResponseCode(), 200);
