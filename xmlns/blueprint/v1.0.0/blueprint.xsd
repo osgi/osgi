@@ -208,6 +208,7 @@
 					use="optional"/>
 				<xsd:attribute name="availability" type="Tavailability"
 					use="optional" default="mandatory"/>
+                <xsd:anyAttribute namespace="##other" processContents="lax"/>
 			</xsd:extension>
 		</xsd:complexContent>
 	</xsd:complexType>
@@ -256,6 +257,7 @@
                 <xsd:attribute name="depends-on" type="xsd:normalizedString" use="optional"/>
                 <xsd:attribute name="auto-export" type="TautoExportModes" default="disabled"/>
                 <xsd:attribute name="ranking" type="xsd:int" default="0"/>
+                <xsd:anyAttribute namespace="##other" processContents="lax"/>
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
@@ -269,7 +271,7 @@
                  own type -->
             <xsd:element name="service-properties" type="Tmap" minOccurs="0"/>
          	<xsd:element name="registration-listener" type="TregistrationListener" minOccurs="0" maxOccurs="unbounded"/>
-          	<xsd:element name="bean" type="Tbean" minOccurs="0" maxOccurs="1"/>
+          	<xsd:element name="bean" type="Ttarget" minOccurs="0" maxOccurs="1"/>
         </xsd:sequence>
     </xsd:group>
 
