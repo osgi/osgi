@@ -20,12 +20,11 @@ Import-Package = \
 	org.osgi.test.support;          		version=project , \
 	${junit}
 
- -runbundles						= \
+-runbundles						= \
 	org.osgi.impl.bundle.transaction; version=project
 	
--runproperties					= report=true
-# allows a user to specify wait time during the first test setup in seconds.  default is 30 seconds
-#	org.osgi.test.cases.transaction.waittime=30
+-runproperties					= report=true, \
+    org.osgi.test.cases.transaction.waittime=30
 
 Test-Cases						= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
 

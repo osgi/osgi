@@ -49,7 +49,6 @@ public abstract class TransactionTestBundleControl extends DefaultTestBundleCont
             String p;
             int waitTime = DEFAULTTIME;
             // First check if the user has a preference.
-            log("context is " + getContext());
             p = getContext().getProperty("org.osgi.test.cases.transaction.waittime");
             if (p == null) {
                 p = System.getProperty("org.osgi.test.cases.transaction.waittime");
