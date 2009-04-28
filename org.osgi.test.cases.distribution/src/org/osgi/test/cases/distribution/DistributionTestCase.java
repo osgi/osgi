@@ -3,25 +3,21 @@
  */
 package org.osgi.test.cases.distribution;
 
-import java.net.URL;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 import junit.framework.TestCase;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceEvent;
+import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.framework.hooks.service.ListenerHook;
-import org.osgi.service.discovery.Discovery;
-import org.osgi.service.discovery.ServiceEndpointDescription;
 import org.osgi.service.discovery.ServicePublication;
+import org.osgi.service.distribution.DistributionConstants;
 import org.osgi.service.distribution.DistributionProvider;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
@@ -32,7 +28,6 @@ import org.osgi.test.cases.distribution.internal.DistributedServiceImpl;
 import org.osgi.test.cases.distribution.internal.DoNotPublishInterface;
 import org.osgi.test.support.compatibility.Semaphore;
 import org.osgi.util.tracker.ServiceTracker;
-import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  * RFC 119 Distributed OSGi TCK
@@ -42,44 +37,37 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
  * @since 1.0.0
  */
-public class DistributionTestCase extends TestCase {
-	/**
-	 * 
-	 */
-	private static final String OSGI_REMOTE = "osgi.remote";
-
-	/**
-	 * 
-	 */
-	private static final String OSGI_INTENTS = "service.intents";
-
-	/**
-	 * 
-	 */
-	private static final String OSGI_REMOTE_REQUIRES_INTENTS = "osgi.remote.requires.intents";
-
-	/**
-	 * 
-	 */
-	private static final String OSGI_REMOTE_INTERFACES = "osgi.remote.interfaces";
-	
+public class DistributionTestCase extends TestCase {	
 	DistributionProvider provider;
 	EventAdmin eventAdmin;
 	ServiceReference distributionReference;
 	ServiceReference eventAdminReference;
+	ServiceRegistration doNotPublishRegistration;
 	BundleContext context;
 	EventHandler eventHandler;
-	DistributedService distributedService;
+	Object proxy;
+	
+	ServiceTracker doNotPublishTracker;
+	boolean failed = false;
 
-	final Object lock = new Object();
-	String exposedTopic = DistributionProvider.class.getName().replace('.', '/') + "/service/exposed";
-	String unsatisfiedTopic = DistributionProvider.class.getName().replace('.', '/') + "/service/unsatisfied";
+	Semaphore semExposed;
+	Semaphore semUnsatisfied;
+	
+	final String ExposedTopic = DistributionProvider.class.getName().replace('.', '/') + "/service/exposed";
+	final String UnsatisfiedTopic = DistributionProvider.class.getName().replace('.', '/') + "/service/unsatisfied";
 
 	
+	/**
+	 * @param context
+	 */
 	public void setBundleContext(BundleContext context) {
 		this.context = context;
 	}
 
+	void setFailed() {
+		failed = true;
+	}
+	
 	protected void setUp() throws Exception {
 		distributionReference = context.getServiceReference(DistributionProvider.class.getName());
 		assertNotNull(distributionReference);
@@ -91,17 +79,65 @@ public class DistributionTestCase extends TestCase {
 		eventAdmin = (EventAdmin) context.getService(eventAdminReference);
 		assertNotNull(eventAdmin);
 		
+		semExposed = new Semaphore();
+		semUnsatisfied = new Semaphore();
+
 		eventHandler = new EventHandler() {
 			public void handleEvent(Event event) {
-				synchronized (lock) {
-					lock.notifyAll();
+				Semaphore semaphore = null;
+				
+				if (event.getTopic().equals(ExposedTopic)) {
+					semaphore = semExposed;
+				} else if (event.getTopic().equals(UnsatisfiedTopic)) {
+					semaphore = semUnsatisfied;
+				} else {
+					return;
 				}
+				
+				semaphore.signal();
 			}
 		};
 
+		// register a service that should not be published
+		// since this not condition is hard to test, I do this for every test case and throughout the
+		// life of a test case, since the tests cannot block for ever to find out whether the service
+		// was accidentally registered or not.
+//		DoNotPublishInterface service = new DoNotPublishInterface() {};
+//		
+//		Filter filter = context.createFilter("(&(objectClass=" + ServicePublication.class.getName() + ")(" +
+//				ServicePublication.SERVICE_INTERFACE_NAME + "=" + DoNotPublishInterface.class.getName() + "))");
+//		
+//		doNotPublishRegistration = context.registerService(DoNotPublishInterface.class.getName(), service, new Hashtable());
+//		doNotPublishTracker = new ServiceTracker(context, filter, new ServiceTrackerCustomizer() {
+//
+//			public Object addingService(ServiceReference reference) {
+//				setFailed();
+//				return null;
+//			}
+//
+//			public void modifiedService(ServiceReference reference,
+//					Object service) {
+//				setFailed();
+//			}
+//
+//			public void removedService(ServiceReference reference,
+//					Object service) {
+//				setFailed();
+//			}
+//		});
+//		doNotPublishTracker.open();
+		
 	}
 
 	protected void tearDown() throws Exception {
+//		if (doNotPublishTracker != null) {
+//			doNotPublishTracker.close();
+//			doNotPublishTracker = null;
+//		}
+//		if (doNotPublishRegistration != null) {
+//			doNotPublishRegistration.unregister();
+//			doNotPublishRegistration = null;
+//		}
 		if (distributionReference != null) {
 			context.ungetService(distributionReference);
 			distributionReference = null;
@@ -109,6 +145,9 @@ public class DistributionTestCase extends TestCase {
 		if (eventAdminReference != null) {
 			context.ungetService(eventAdminReference);
 			eventAdminReference = null;
+		}
+		if (failed) {
+			fail("Failed: Service was published that was not supposed to be published: DoNotPublishInterface");
 		}
 	}
 /*
@@ -136,29 +175,37 @@ public class DistributionTestCase extends TestCase {
 	 * @throws Exception
 	 */
 	public void testPublishExposed() throws Exception {
+		// register an event handler for the exposed event emitted by the DSW
+		Properties props = new Properties();
+		props.put(EventConstants.EVENT_TOPIC, new String[]{EventConstants.EVENT_TOPIC, ExposedTopic});
+		ServiceRegistration eventHandlerServiceRegistration = context.registerService(EventHandler.class.getName(), eventHandler, props);
+		
+		// create and register a test service
 		DistributedServiceImpl service = new DistributedServiceImpl();
 		
 		Hashtable properties = new Hashtable();
-		properties.put(OSGI_REMOTE_INTERFACES, "*");
+		properties.put(DistributionConstants.REMOTE_INTERFACES, "*");
 		properties.put("mykey", "myvalue");
 		
-		Properties props = new Properties();
-		props.put(EventConstants.EVENT_TOPIC, new String[]{EventConstants.EVENT_TOPIC, exposedTopic});
-		ServiceRegistration ehsr = context.registerService(EventHandler.class.getName(), eventHandler, props);
+		// infrastructure to wait for ServicePublication registration, or not;
+		// depends on whether DSW supports Discovery integration or not
+		final Semaphore sem = new Semaphore();
 		
-		ServiceRegistration sr = context.registerService(DistributedService.class.getName(), service, properties);
+		ServiceListener listener = new ServiceListener() {
+			public void serviceChanged(ServiceEvent event) {
+				sem.signal();
+			}
+		};
+		context.addServiceListener(listener, "(objectClass="+ServicePublication.class.getName()+")");
+		
+		// register the services
+		ServiceRegistration serviceRegistration = context.registerService(DistributedService.class.getName(), service, properties);
+		ServiceReference serviceReference = serviceRegistration.getReference();
+		assertNotNull(serviceReference);
 		
 		try {
-			synchronized (lock) {
-				try {
-					lock.wait(/*5 **/ 60000); // wait 5 min
-				} catch (InterruptedException ie) {
-					fail("timeout for service registration notification");
-				}
-			}
-			
-			ServiceReference sref = context.getServiceReference(DistributedService.class.getName());
-			assertNotNull(sref);
+			// first register service and make sure it is registered
+			assertTrue("Timeout for service to be exposed by DSW!", semExposed.waitForSignal(20000)); // wait for maximum of 20s
 			
 			Collection refs = provider.getExposedServices();
 			assertNotNull(refs);
@@ -166,26 +213,30 @@ public class DistributionTestCase extends TestCase {
 			boolean found = false;
 			for (Iterator i = refs.iterator(); !found && i.hasNext();) {
 				ServiceReference r = (ServiceReference) i.next();
-				found = r.equals(sref);
+				found = r.equals(serviceReference);
 			}
-			assertTrue("timeout for service registration notification", found);
+			assertTrue("service not exposed by DSW", found);
 			
-			assertEquals("myvalue", sref.getProperty("mykey"));
+			System.out.println(" service " + serviceReference + " is exposed by DSW.");
+			
+			sem.waitForSignal(4000); // wait for max 4 sec for the ServicePublication registration
 			
 			ServiceReference spsref = context.getServiceReference(ServicePublication.class.getName());
-			if (sref != null) {
+			if (spsref != null) {
 				System.out.println("DSW implementation supports Discovery integration!");
 				
-				ServicePublication sp = (ServicePublication) context.getService(spsref);
 				try {
-					assertEquals(sref, sp.getReference());
+					ServicePublication sp = (ServicePublication) context.getService(spsref);
+					
+					assertEquals(serviceReference, sp.getReference());
 				} finally {
 					context.ungetService(spsref);
 				}
 			}
 		} finally {
-			ehsr.unregister();
-			sr.unregister();
+			context.removeServiceListener(listener);
+			eventHandlerServiceRegistration.unregister();
+			serviceRegistration.unregister();
 		}
 	}
 
@@ -198,12 +249,11 @@ public class DistributionTestCase extends TestCase {
 	 * @throws Exception
 	 */
 	public void testRequiredIntentNotSatisfied() throws Exception {
-		DistributedServiceImpl service = new DistributedServiceImpl();
-
+		// make up an intent
 		String myFancyIntent = "OSGi_TCK" + System.currentTimeMillis();
 		
 		// make sure DSW does not support this intent
-		String supported = (String) distributionReference.getProperty(DistributionProvider.PROP_KEY_SUPPORTED_INTENTS);
+		String supported = (String) distributionReference.getProperty(DistributionProvider.SUPPORTED_INTENTS);
 		if (supported != null) {
 			String[] supportedIntents = supported.split(" ");
 			for (int i = 0; i < supportedIntents.length; i++) {
@@ -211,28 +261,26 @@ public class DistributionTestCase extends TestCase {
 			}
 		}
 		
-		Hashtable properties = new Hashtable();
-		properties.put(OSGI_REMOTE_INTERFACES, "*");
-		properties.put(OSGI_REMOTE_REQUIRES_INTENTS, myFancyIntent);
-		properties.put("mykey", "myvalue");
-		
+		// register an event handler for the unsatisfied event emitted by the DSW
 		Properties props = new Properties();
-		props.put(EventConstants.EVENT_TOPIC, new String[]{EventConstants.EVENT_TOPIC, unsatisfiedTopic});
+		props.put(EventConstants.EVENT_TOPIC, new String[]{EventConstants.EVENT_TOPIC, UnsatisfiedTopic});
 		ServiceRegistration ehsr = context.registerService(EventHandler.class.getName(), eventHandler, props);
 		
+		// register the test service
+		Hashtable properties = new Hashtable();
+		properties.put(DistributionConstants.REMOTE_INTERFACES, "*");
+		properties.put(DistributionConstants.REMOTE_REQUIRES_INTENTS, myFancyIntent);
+		properties.put("mykey", "myvalue");
+		
+		DistributedServiceImpl service = new DistributedServiceImpl();
+
 		ServiceRegistration sr = context.registerService(DistributedService.class.getName(), service, properties);
+		ServiceReference sref = sr.getReference();
+		assertNotNull(sref);
 		
 		try {
-			synchronized (lock) {
-				try {
-					lock.wait(/*5 **/ 60000); // wait 5 min
-				} catch (InterruptedException ie) {
-					fail("timeout for service exposure failed notification");
-				}
-			}
-			
-			ServiceReference sref = context.getServiceReference(DistributedService.class.getName());
-			assertNotNull(sref);
+			// first register service and make sure it is registered
+			assertTrue("Timeout for service unsatisfied event emitted by DSW!", semUnsatisfied.waitForSignal(20000)); // wait for maximum of 20s
 			
 			Collection refs = provider.getExposedServices();
 			assertNotNull(refs);
@@ -242,8 +290,16 @@ public class DistributionTestCase extends TestCase {
 				ServiceReference r = (ServiceReference) i.next();
 				found = r.equals(sref);
 			}
+			assertFalse("service should not have been exposed as the required intent is not satisified", found);
 			
-			assertFalse("service should not have been exposed as the required intents is not satisified", found);
+			// check for unwanted ServicePublication registration
+			ServiceReference spsref = context.getServiceReference(ServicePublication.class.getName());
+			try {
+				assertTrue("service should not have been published as the required intent is not satisified", spsref == null);
+			} catch (Exception t) {
+				context.ungetService(spsref);
+				throw t;
+			}
 		} finally {
 			ehsr.unregister();
 			sr.unregister();
@@ -257,48 +313,50 @@ public class DistributionTestCase extends TestCase {
 	 * @throws Exception
 	 */
 	public void testMatchRequiredIntent() throws Exception {
-		String supported = (String) distributionReference.getProperty(DistributionProvider.PROP_KEY_SUPPORTED_INTENTS);
+		// get the supported intents of the DSW
+		String supported = (String) distributionReference.getProperty(DistributionProvider.SUPPORTED_INTENTS);
 		String[] intentstrings = supported.split(" ");
 		if (intentstrings.length == 0) {
 			System.out.println("provider does not support any intents");
-			return;
+			return; // automatic pass
 		}
+
+		// register an event handler for the registration events of the DSW
+		Properties props = new Properties();
+		props.put(EventConstants.EVENT_TOPIC, new String[]{EventConstants.EVENT_TOPIC, ExposedTopic});
+		ServiceRegistration ehsr = context.registerService(EventHandler.class.getName(), eventHandler, props);
 		
+		// create and register a test service
 		DistributedServiceImpl service = new DistributedServiceImpl();
 		
 		Hashtable properties = new Hashtable();
-		properties.put(OSGI_REMOTE_INTERFACES, "*");
-		properties.put(OSGI_REMOTE_REQUIRES_INTENTS, intentstrings[0]);
+		properties.put(DistributionConstants.REMOTE_INTERFACES, "*");
+		properties.put(DistributionConstants.REMOTE_REQUIRES_INTENTS, intentstrings[0]);
 		properties.put("mykey", "myvalue");
 		
-		Properties props = new Properties();
-		props.put(EventConstants.EVENT_TOPIC, new String[]{EventConstants.EVENT_TOPIC, exposedTopic});
-		ServiceRegistration ehsr = context.registerService(EventHandler.class.getName(), eventHandler, props);
-		
 		ServiceRegistration sr = context.registerService(DistributedService.class.getName(), service, properties);
+		ServiceReference sref = sr.getReference();
+		assertNotNull(sref);
 		
 		try {
-			synchronized (lock) {
-				try {
-					lock.wait(/*5 **/ 60000); // wait 5 min
-				} catch (InterruptedException ie) {
-					fail("timeout for service registration notification");
-				}
-			}
+			// first register service and make sure it is registered
+			assertTrue("Timeout for service to be exposed by DSW!", semExposed.waitForSignal(20000)); // wait for maximum of 20s
 			
+			// look for the DistributedService in the list of exposed services from the DSW
 			Collection refs = provider.getExposedServices();
 			assertNotNull(refs);
 		
-			ServiceReference sref = context.getServiceReference(DistributedService.class.getName());
 			boolean found = false;
 			for (Iterator i = refs.iterator(); !found && i.hasNext();) {
 				ServiceReference r = (ServiceReference) i.next();
-				found = sref.equals(r);
+				found = r.equals(sref);
 			}
 			assertTrue("timeout for service registration notification", found);
 
+			// check for the osgi.deployment.intents and ensure that the required intent is
+			// included
 			Map pubprops = provider.getExposedProperties(sref);
-			String intent = (String) pubprops.get(OSGI_INTENTS);
+			String intent = (String) pubprops.get(DistributionConstants.DEPLOYMENT_INTENTS);
 			assertNotNull(intent);
 			assertTrue(intent.indexOf(intentstrings[0]) != -1);
 		} finally {
@@ -307,102 +365,103 @@ public class DistributionTestCase extends TestCase {
 		}
 	}
 	
+	/**
+	 * Register a service with no intents. Ensure that the proxy is created with the appropriate
+	 * properties, e.g. osgi.remote and supported.intents
+	 * @throws Exception
+	 */
 	public void testFindServiceNoIntents() throws Exception {
+		// register an event handler waiting for registration events from the DSW
+		Properties props = new Properties();
+		props.put(EventConstants.EVENT_TOPIC, new String[]{EventConstants.EVENT_TOPIC, ExposedTopic});
+		ServiceRegistration eventHandlerServiceRegistration = context.registerService(EventHandler.class.getName(), eventHandler, props);
+		assertNotNull(eventHandlerServiceRegistration);
+		
+		// my test service implementation
 		DistributedServiceImpl service = new DistributedServiceImpl();
 		
+		// properties for the service to register
+		// only the DistributedService interface is supposed to be published
 		Hashtable properties = new Hashtable();
-		properties.put(OSGI_REMOTE_INTERFACES, "*");
+		properties.put(DistributionConstants.REMOTE_INTERFACES, DistributedService.class.getName());
 		properties.put("mykey", "myvalue");
 		
-		Properties props = new Properties();
-		props.put(EventConstants.EVENT_TOPIC, new String[]{EventConstants.EVENT_TOPIC, exposedTopic});
-		ServiceRegistration ehsr = context.registerService(EventHandler.class.getName(), eventHandler, props);
-		assertNotNull(ehsr);
-		
-		ServiceRegistration sr = context.registerService(DistributedService.class.getName(), service, properties);
-		assertNotNull(sr);
+		ServiceRegistration distributedServiceRegistration = context.registerService(DistributedService.class.getName(), service, properties);
+		assertNotNull(distributedServiceRegistration);
+		ServiceReference distributedServiceReference = distributedServiceRegistration.getReference();
+		assertNotNull(distributedServiceReference);
 				
-		ServiceTracker serviceTracker = null;
+		// infrastructure to wait for DistributedService proxy registration;
+		final Semaphore sem = new Semaphore();
 		
-		final Set serviceReferences = new HashSet();
+		ServiceListener listener = new ServiceListener() {
+			public void serviceChanged(ServiceEvent event) {
+				// look for registration events for the DistributedService where the osgi.remote
+				// property is set
+				if (event.getType() == ServiceEvent.REGISTERED &&
+						event.getServiceReference().getProperty(DistributionConstants.REMOTE) != null) {
+					// store the reference for the test case to evaluate
+					proxy = event.getServiceReference();
+					
+					sem.signal();
+				}
+			}
+		};
+		// register for events for the DistributedService interface only
+		context.addServiceListener(listener, "(objectClass="+DistributedService.class.getName()+")");
 		
 		try {
 			// first register service and make sure it is registered
-			synchronized (lock) {
-				try {
-					lock.wait(/*5 **/ 60000); // wait 5 min
-				} catch (InterruptedException ie) {
-					fail("timeout for service registration notification");
-				}
-			}
+			assertTrue("Timeout for service to be exposed by DSW!", semExposed.waitForSignal(20000)); // wait for maximum of 20s
 			
+			// check to see if the DSW has exposed the service
 			Collection refs = provider.getExposedServices();
 			assertNotNull(refs);
 		
-			ServiceReference sref = context.getServiceReference(DistributedService.class.getName());
+			// look for the DistributedService in the list of exposed services from the DSW
 			boolean found = false;
 			for (Iterator i = refs.iterator(); !found && i.hasNext();) {
 				ServiceReference r = (ServiceReference) i.next();
-				found = sref.equals(r);
+				found = r.equals(distributedServiceReference);
 			}
-			assertTrue("timeout for service registration notification", found);
+			assertTrue("service " + DistributedService.class.getName() + " was not exposed by DSW", found);
 			
-			// now wait for the service proxy to be registered
-			final Semaphore semaphore = new Semaphore();
+			// check all registered DistributedService services for their properties
+			String filter = "(" + DistributionConstants.REMOTE_INTERFACES + "=" + DistributedService.class.getName() + ")";
+			ServiceReference[] srefs = context.getAllServiceReferences(DistributedService.class.getName(), filter);
+			assertNotNull(srefs);
 			
-			// then look up service from client side
-			serviceTracker = new ServiceTracker(context, DistributedService.class.getName(), new ServiceTrackerCustomizer() {
+			// if this fails, it means that the registered proxy also has the osgi.remote.interfaces property set
+			// and the DSW would run into a endless publishing loop
+			assertEquals("There must be only one registered service satisfying the filter " + filter, 1, srefs.length);
 
-				public Object addingService(ServiceReference reference) {
-					Object remote = reference.getProperty(OSGI_REMOTE);
-					if (remote != null) {
-						distributedService = (DistributedService) context.getService(reference);
-						serviceReferences.add(reference);
-						semaphore.signal();
-					}
-					return distributedService;
-				}
-
-				public void modifiedService(ServiceReference reference,
-						Object service) {
-					distributedService = (DistributedService) service;
-				}
-
-				public void removedService(ServiceReference reference,
-						Object service) {
-					distributedService = null;
-				}
-				
-			});
-			serviceTracker.open();
+			// wait for the proxy to become available
+			assertTrue("Timeout for registration of proxy service instance for " + 
+					DistributedService.class.getName(), sem.waitForSignal(25000));
 			
-			semaphore.waitForSignal(10000);
+			// evaluate the properties and attributes of the proxy
+			assertNotNull(proxy);
+			assertTrue(proxy instanceof ServiceReference);
+			ServiceReference proxyreference = (ServiceReference) proxy;
 			
-			assertNotNull(distributedService);
-			assertTrue(distributedService instanceof DistributedService);
-			assertTrue(distributedService instanceof DoNotPublishInterface);
+			// check whether the proxy object actually implements all interfaces
+			Object serviceObj = context.getService(proxyreference);
+			assertNotNull(serviceObj);
+			assertTrue(serviceObj instanceof DistributedService);
+			assertFalse("The proxy MUST NOT implement the interface that was not in the osgi.remote.interfaces set!",
+					serviceObj instanceof DoNotPublishInterface);
 			
-			assertFalse(serviceReferences.isEmpty());
+			// invoke the proxy to ensure it is working
+			assertEquals("ollah", ((DistributedService)serviceObj).reverse("hallo"));
 			
-			assertEquals("ollah", distributedService.reverse("hallo"));
-			
-			ServiceReference reference = (ServiceReference) serviceReferences.iterator().next();
-			
-			String dpsupportedintents = (String)distributionReference.getProperty(DistributionProvider.PROP_KEY_SUPPORTED_INTENTS);
-			String supportintents = (String) reference.getProperty(DistributionProvider.PROP_KEY_SUPPORTED_INTENTS);
+			// check for the intents on the proxy object
+			String dpsupportedintents = (String)distributionReference.getProperty(DistributionProvider.SUPPORTED_INTENTS);
+			String supportintents = (String) proxyreference.getProperty(DistributionProvider.SUPPORTED_INTENTS);
 			assertEquals(dpsupportedintents, supportintents);
 		} finally {
-			ehsr.unregister();
-			sr.unregister();
-			
-			if (serviceTracker != null) {
-				serviceTracker.close();
-			}
-			if (!serviceReferences.isEmpty()) {
-				context.ungetService((ServiceReference) serviceReferences.iterator().next());
-				
-				serviceReferences.clear();
-			}
+			context.removeServiceListener(listener);
+			eventHandlerServiceRegistration.unregister();
+			distributedServiceRegistration.unregister();
 		}
 	}
 	

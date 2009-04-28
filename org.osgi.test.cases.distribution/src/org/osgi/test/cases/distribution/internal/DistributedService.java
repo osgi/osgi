@@ -1,5 +1,7 @@
 package org.osgi.test.cases.distribution.internal;
 
-public interface DistributedService {
+import java.io.Serializable;
+
+public interface DistributedService extends Serializable {
 	String reverse(String string);
 }
