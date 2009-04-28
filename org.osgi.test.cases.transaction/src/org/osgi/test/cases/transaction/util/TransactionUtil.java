@@ -23,7 +23,7 @@ import javax.transaction.UserTransaction;
 /**
  * @version $Rev$ $Date$
  */
-public class TransactionUtil {
+public class TransactionUtil {  
 	
 	// start with a clean transaction manager by roll back previous active transaction
 	// and clear out XAResourceImpl left from previous test

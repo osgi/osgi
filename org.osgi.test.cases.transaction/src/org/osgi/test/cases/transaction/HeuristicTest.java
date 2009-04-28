@@ -26,7 +26,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.test.cases.transaction.util.TransactionManagerFactory;
 import org.osgi.test.cases.transaction.util.TransactionUtil;
 import org.osgi.test.cases.transaction.util.XAResourceImpl;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * @version $Rev$ $Date$
@@ -35,20 +34,26 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  *
  *
  */
-public class HeuristicTest extends DefaultTestBundleControl {
+public class HeuristicTest extends TransactionTestBundleControl {
     BundleContext context;
     TransactionManager tm;
 
     public void setBundleContext(BundleContext context) {
-        this.context = context;
+        super.setBundleContext(context);
         TransactionManagerFactory.setBundleContext(context);
     }
 
     public void setUp() throws Exception {
     	tm = TransactionManagerFactory.getTransactionManager();
+    	
+    	if (tm == null) {
+    	    super.waitSomeTime();
+    	    // let's try get tm again after the waiting
+    	    tm = TransactionManagerFactory.getTransactionManager();
+    	}
     	TransactionUtil.startWithCleanTM(tm); 
     }
-    
+
     public void testHE001() throws Exception {
         try
         {

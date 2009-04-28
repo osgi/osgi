@@ -28,7 +28,6 @@ import org.osgi.test.cases.transaction.util.SimpleTestResource;
 import org.osgi.test.cases.transaction.util.TransactionManagerFactory;
 import org.osgi.test.cases.transaction.util.TransactionUtil;
 import org.osgi.test.cases.transaction.util.UserTransactionFactory;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * @version $Rev$ $Date$
@@ -38,20 +37,25 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  *
  */
 
-public class SimpleUserTransactionTest extends DefaultTestBundleControl {
+public class SimpleUserTransactionTest extends TransactionTestBundleControl {
 
     UserTransaction ut;
     TransactionManager tm;
     BundleContext context;
 
     public void setBundleContext(BundleContext context) {
-        this.context = context;
+        super.setBundleContext(context);
         TransactionManagerFactory.setBundleContext(context);
         UserTransactionFactory.setBundleContext(context);
     }
     
     public void setUp() throws Exception {
         tm = TransactionManagerFactory.getTransactionManager();
+        if (tm == null) {
+            super.waitSomeTime();
+            // let's try get tm again after the waiting
+            tm = TransactionManagerFactory.getTransactionManager();
+        }
         ut = UserTransactionFactory.getUserTransaction();
         TransactionUtil.startWithClean(tm, ut); 
     }

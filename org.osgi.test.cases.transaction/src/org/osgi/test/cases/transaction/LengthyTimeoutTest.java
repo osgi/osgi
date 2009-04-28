@@ -25,7 +25,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.test.cases.transaction.util.TransactionManagerFactory;
 import org.osgi.test.cases.transaction.util.TransactionUtil;
 import org.osgi.test.cases.transaction.util.XAResourceImpl;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * @version $Rev$ $Date$
@@ -34,7 +33,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  *
  *
  */
-public class LengthyTimeoutTest extends DefaultTestBundleControl {
+public class LengthyTimeoutTest extends TransactionTestBundleControl {
     private static final int DEFAULT_TRANSACTION_TIMEOUT = 20;
     private static final int TEST_TRANSACTION_TIMEOUT = 10;
     private static final int SUITABLE_DELAY = 5;
@@ -44,12 +43,18 @@ public class LengthyTimeoutTest extends DefaultTestBundleControl {
     TransactionManager tm;
 
     public void setBundleContext(BundleContext context) {
-        this.context = context;
+        super.setBundleContext(context);
         TransactionManagerFactory.setBundleContext(context);
     }
     
     public void setUp() throws Exception {
     	tm = TransactionManagerFactory.getTransactionManager();
+        
+        if (tm == null) {
+            super.waitSomeTime();
+            // let's try get tm again after the waiting
+            tm = TransactionManagerFactory.getTransactionManager();
+        }
     	TransactionUtil.startWithCleanTM(tm); 
     }
     

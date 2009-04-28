@@ -27,7 +27,6 @@ import org.osgi.test.cases.transaction.util.SimpleTestResource;
 import org.osgi.test.cases.transaction.util.TransactionManagerFactory;
 import org.osgi.test.cases.transaction.util.TransactionSynchronizationRegistryFactory;
 import org.osgi.test.cases.transaction.util.TransactionUtil;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * @version $Rev$ $Date$
@@ -36,14 +35,14 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * 
  *
  */
-public class SimpleTransactionSynchronizationRegistryTest extends DefaultTestBundleControl {
+public class SimpleTransactionSynchronizationRegistryTest extends TransactionTestBundleControl {
 
     
     TransactionManager tm;
     BundleContext context;
 
     public void setBundleContext(BundleContext context) {
-        this.context = context;
+        super.setBundleContext(context);
         TransactionManagerFactory.setBundleContext(context);
         TransactionSynchronizationRegistryFactory.setBundleContext(context);
     }
@@ -51,6 +50,11 @@ public class SimpleTransactionSynchronizationRegistryTest extends DefaultTestBun
     // 4.4 locating TransactionSynchronizationRegistry OSGi service
     public void setUp() throws Exception {
         tm = TransactionManagerFactory.getTransactionManager();
+        if (tm == null) {
+            super.waitSomeTime();
+            // let's try get tm again after the waiting
+            tm = TransactionManagerFactory.getTransactionManager();
+        }
         TransactionUtil.startWithCleanTM(tm);
     }
  

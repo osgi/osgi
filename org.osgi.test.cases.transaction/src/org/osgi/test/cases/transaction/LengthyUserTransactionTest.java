@@ -22,7 +22,6 @@ import javax.transaction.UserTransaction;
 import org.osgi.framework.BundleContext;
 import org.osgi.test.cases.transaction.util.TransactionUtil;
 import org.osgi.test.cases.transaction.util.UserTransactionFactory;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * @version $Rev$ $Date$
@@ -31,7 +30,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  *
  *
  */
-public class LengthyUserTransactionTest extends DefaultTestBundleControl {
+public class LengthyUserTransactionTest extends TransactionTestBundleControl {
     private static final int TOTAL_TRANSACTION_LIFETIME_TIMEOUT = 10;
     private static final int SUITABLE_DELAY = 5;
 
@@ -39,12 +38,17 @@ public class LengthyUserTransactionTest extends DefaultTestBundleControl {
     UserTransaction ut;
 
     public void setBundleContext(BundleContext context) {
-        this.context = context;
+        super.setBundleContext(context);
         UserTransactionFactory.setBundleContext(context);
     }
     
     public void setUp() throws Exception {
     	ut = UserTransactionFactory.getUserTransaction();
+        if (ut == null) {
+            super.waitSomeTime();
+            // let's try get tm again after the waiting
+            ut = UserTransactionFactory.getUserTransaction();
+        }
     	TransactionUtil.startWithCleanUT(ut); 
     }
   
