@@ -349,9 +349,9 @@
    		</xsd:sequence>
 	</xsd:complexType>
 
-    <xsd:complexType name="Tprop">
+    <xsd:complexType name="Tprop" mixed="true">
         <xsd:attribute name="key" type="TstringValue" use="required"/>
-        <xsd:attribute name="value" type="TstringValue" use="required"/>
+        <xsd:attribute name="value" type="TstringValue" use="optional"/>
     </xsd:complexType>
 
     <!-- 'map' element type -->
@@ -408,7 +408,7 @@
 	<xsd:simpleType name="TnullableMethod">
 	    <xsd:restriction base="xsd:token">
             <xsd:pattern value="[\i-[:]][\c-[:]]*"/>
-            <xsd:pattern value=""/>                        
+            <xsd:pattern value=""/>
         </xsd:restriction>
 	</xsd:simpleType>
 
