@@ -9,7 +9,7 @@
 
     <!-- This gets both a ServiceManager and a reference collection injected -->
    <component id="PatternChecker" class="org.osgi.test.cases.blueprint.java5.components.injection.PatternInjection">
-       <constructor-arg value="a*b"/>
+       <argument value="a*b"/>
        <property name="pattern" value="a*b"/>
    </component>
 </components>
