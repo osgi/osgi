@@ -43,7 +43,7 @@
 
     <bean id="compThreeArgImplicit" factory-component="compFactory" factory-method="makeInstance">
         <argument value="compThreeArgImplicit"/>
-        <constructor-arg>
+        <argument>
             <null/>
         </argument>
         <argument value="ABC"/>
@@ -65,7 +65,7 @@
         </argument>
     </bean>
     <bean id="compPrimBooleanNo" factory-component="compFactory" factory-method="makeInstance">
-        <constructor-arg>
+        <argument>
             <value type="boolean">no</value>
         </argument>
     </bean>
@@ -369,7 +369,7 @@
     string conversions in the other components. -->
 
     <bean id="constructorPrimitiveBoolean"  factory-component="compFactory" factory-method="makePrimitiveBoolean">
-        <constructor-arg>
+        <argument>
             <value>yes</value>
         </argument>
     </bean>

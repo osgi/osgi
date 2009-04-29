@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <bean id="compTypedItems" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-        <constructor-arg>
+        <argument>
             <list value-type="java.lang.DoubleXXXX">
                 <value>0.0</value>
                 <value>1.0</value>

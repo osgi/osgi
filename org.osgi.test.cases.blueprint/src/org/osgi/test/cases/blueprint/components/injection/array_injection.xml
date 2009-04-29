@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
    <bean id="compListArgument" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
-       <constructor-arg>
+       <argument>
            <list>
                <value>1234</value>
                <value>5678</value>
@@ -12,7 +12,7 @@
    </bean>
 
    <bean id="compSetArgument" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
-       <constructor-arg>
+       <argument>
            <set>
                <value>1234</value>
            </set>
@@ -20,20 +20,20 @@
    </bean>
 
    <bean id="compNullArrayArgument" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
-       <constructor-arg>
+       <argument>
            <null/>
        </argument>
    </bean>
 
    <bean id="compEmptyListArgument" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
-       <constructor-arg>
+       <argument>
            <list>
            </list>
        </argument>
    </bean>
 
    <bean id="compEmptySetArgument" class="org.osgi.test.cases.blueprint.components.injection.ArrayInjection">
-       <constructor-arg>
+       <argument>
            <set>
            </set>
        </argument>

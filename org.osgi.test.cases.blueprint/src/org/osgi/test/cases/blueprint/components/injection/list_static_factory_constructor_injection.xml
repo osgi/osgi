@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <bean id="compEmptyList" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-        <constructor-arg>
+        <argument>
             <list></list>
         </argument>
     </bean>
@@ -15,7 +15,7 @@
     </bean>
 
     <bean id="compStringItems" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-        <constructor-arg>
+        <argument>
             <list>
                 <value>abc</value>
                 <value>def</value>
@@ -24,7 +24,7 @@
     </bean>
 
     <bean id="compDupItems" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-        <constructor-arg>
+        <argument>
             <list>
                 <value>abc</value>
                 <value>abc</value>
@@ -33,7 +33,7 @@
     </bean>
 
     <bean id="compBooleanItems" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-        <constructor-arg>
+        <argument>
             <list>
                 <value type="java.lang.Boolean">true</value>
                 <value type="java.lang.Boolean">false</value>
@@ -42,7 +42,7 @@
     </bean>
 
     <bean id="compMixedItems" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-        <constructor-arg>
+        <argument>
             <list>
                 <value type="java.lang.String">abc</value>
                 <value type="java.lang.Boolean">false</value>
@@ -62,7 +62,7 @@
     </bean>
 
     <bean id="compNestedList" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-        <constructor-arg>
+        <argument>
             <list>
                 <list>
                     <value>abc</value>
@@ -73,7 +73,7 @@
     </bean>
 
     <bean id="compTypedItems" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-        <constructor-arg>
+        <argument>
             <list value-type="java.lang.Double">
                 <value>0.0</value>
                 <value>1.0</value>
@@ -82,7 +82,7 @@
     </bean>
 
     <bean id="compTypeOverride" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-        <constructor-arg>
+        <argument>
             <list value-type="java.lang.Double">
                 <value>0.0</value>
                 <value>1.0</value>
@@ -92,7 +92,7 @@
     </bean>
 
     <bean id="compNestedSet" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-        <constructor-arg>
+        <argument>
             <list>
                 <set>
                     <value>abc</value>
@@ -103,7 +103,7 @@
     </bean>
 
     <bean id="compNestedMap" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-        <constructor-arg>
+        <argument>
             <list>
                 <map>
                     <entry key="abc" value="def"/>
@@ -114,7 +114,7 @@
     </bean>
 
     <bean id="compNestedProps" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-        <constructor-arg>
+        <argument>
             <list>
                 <props>
                     <prop key="abc">def</prop>

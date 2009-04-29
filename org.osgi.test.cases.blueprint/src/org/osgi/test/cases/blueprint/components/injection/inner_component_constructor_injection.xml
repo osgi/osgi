@@ -4,7 +4,7 @@
 
 <!-- String -->
 	<bean id="compInnerStringNoTyped" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-		<constructor-arg>
+		<argument>
 			<bean class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
 				<argument value="STR1"/>
 			</bean>
@@ -12,7 +12,7 @@
 	</bean>
 
 	<bean id="compInnerStringBothTyped" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-		<constructor-arg>
+		<argument>
 			<bean class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
 				<argument type="java.lang.String"><value type="java.lang.String">STR2</value></argument>
 			</bean>
@@ -20,15 +20,15 @@
 	</bean>
 
 	<bean id="compInnerStringValueTyped" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-		<constructor-arg>
+		<argument>
 			<bean class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-				<constructor-arg><value type="java.lang.String">STR3</value></argument>
+				<argument><value type="java.lang.String">STR3</value></argument>
 			</bean>
 		</argument>
 	</bean>
 
 	<bean id="compInnerStringArgTyped" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-		<constructor-arg>
+		<argument>
 			<bean class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
 				<argument type="java.lang.String"><value>STR4</value></argument>
 			</bean>
@@ -36,7 +36,7 @@
 	</bean>
 
 	<bean id="compInnerString" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-		<constructor-arg>
+		<argument>
 			<bean class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
 				<argument value="STR5" type="java.lang.String"/>
 			</bean>
@@ -45,7 +45,7 @@
 
 <!-- Boolean -->
 	<bean id="compInnerPrimitiveBoolean" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-		<constructor-arg>
+		<argument>
 			<bean class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
        			<argument value="true" type="boolean"/>
 			</bean>
@@ -53,7 +53,7 @@
 	</bean>
 
 	<bean id="compInnerWrapperedBoolean" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-		<constructor-arg>
+		<argument>
 			<bean class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
        			<argument value="false" type="java.lang.Boolean"/>
 			</bean>
@@ -62,7 +62,7 @@
 
 <!-- Byte -->
 	<bean id="compInnerPrimitiveByte" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-		<constructor-arg>
+		<argument>
 			<bean class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
        			<argument value="-128" type="byte"/>
 			</bean>
@@ -70,7 +70,7 @@
 	</bean>
 
 	<bean id="compInnerWrapperedByte" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-		<constructor-arg>
+		<argument>
 			<bean class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
        			<argument value="127" type="java.lang.Byte"/>
 			</bean>
@@ -79,7 +79,7 @@
 
 <!-- Double -->
 	<bean id="compInnerPrimitiveDouble" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-		<constructor-arg>
+		<argument>
 			<bean class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
        			<argument value="4.9e-324" type="double"/>
 			</bean>
@@ -87,7 +87,7 @@
 	</bean>
 
 	<bean id="compInnerWrapperedDouble" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-		<constructor-arg>
+		<argument>
 			<bean class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
        			<argument value="1.7976931348623157E308" type="java.lang.Double"/>
 			</bean>
@@ -96,7 +96,7 @@
 
 <!-- Float -->
 	<bean id="compInnerPrimitiveFloat" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-		<constructor-arg>
+		<argument>
 			<bean class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
        			<argument value="1.4E-45" type="float"/>
 			</bean>
@@ -104,7 +104,7 @@
 	</bean>
 
 	<bean id="compInnerWrapperedFloat" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-		<constructor-arg>
+		<argument>
 			<bean class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
        			<argument value="3.4028235E38" type="java.lang.Float"/>
 			</bean>
@@ -113,7 +113,7 @@
 
 <!-- Integer -->
 	<bean id="compInnerPrimitiveInteger" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-		<constructor-arg>
+		<argument>
 			<bean class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
        			<argument value="-2147483648" type="int"/>
 			</bean>
@@ -121,7 +121,7 @@
 	</bean>
 
 	<bean id="compInnerWrapperedInteger" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-		<constructor-arg>
+		<argument>
 			<bean class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
        			<argument value="2147483647" type="java.lang.Integer"/>
 			</bean>
@@ -131,7 +131,7 @@
 
 <!-- Character -->
 	<bean id="compInnerPrimitiveCharacter" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-		<constructor-arg>
+		<argument>
 			<bean class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
        			<argument value="a" type="char"/>
 			</bean>
@@ -139,7 +139,7 @@
 	</bean>
 
 	<bean id="compInnerWrapperedCharacter" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-		<constructor-arg>
+		<argument>
 			<bean class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
        			<argument value="A" type="java.lang.Character"/>
 			</bean>
@@ -148,7 +148,7 @@
 
 <!-- Short -->
 	<bean id="compInnerPrimitiveShort" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-		<constructor-arg>
+		<argument>
 			<bean class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
        			<argument value="-32768" type="short"/>
 			</bean>
@@ -156,7 +156,7 @@
 	</bean>
 
 	<bean id="compInnerWrapperedShort" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-		<constructor-arg>
+		<argument>
 			<bean class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
        			<argument value="32767" type="java.lang.Short"/>
 			</bean>
@@ -166,7 +166,7 @@
 
 <!-- Long -->
 	<bean id="compInnerPrimitiveLong" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-		<constructor-arg>
+		<argument>
 			<bean class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
        			<argument value="-9223372036854775808" type="long"/>
 			</bean>
@@ -174,7 +174,7 @@
 	</bean>
 
 	<bean id="compInnerWrapperedLong" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-		<constructor-arg>
+		<argument>
 			<bean class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
        			<argument value="9223372036854775807" type="java.lang.Long"/>
 			</bean>

@@ -11,12 +11,12 @@
 
     <bean id="compConfigurationManager" class="org.osgi.test.cases.blueprint.services.ConfigurationManager" destroy-method="removeAllConfigs">
         <argument ref="adminService"/>
-        <constructor-arg>
+        <argument>
             <list>
                 <!-- config1 -->
                 <bean class="org.osgi.test.cases.blueprint.services.ManagedConfiguration">
                     <argument value="org.osgi.test.cases.blueprint.components.cmsupport.config1"/>
-                    <constructor-arg>
+                    <argument>
                         <props>
                             <prop key="str">abc</prop>
                             <prop key="str_empty"></prop>
@@ -36,9 +36,9 @@
                 <!-- config2 -->
                 <bean class="org.osgi.test.cases.blueprint.services.ManagedConfiguration">
                     <argument value="org.osgi.test.cases.blueprint.components.cmsupport.config2"/>
-                    <constructor-arg>
+                    <argument>
                         <bean class="org.osgi.test.cases.blueprint.components.cmsupport.ConfigurationDictionaryBuilder">
-                            <constructor-arg>
+                            <argument>
                                 <map>
                                     <entry key="string">
                                         <value type="java.lang.String">abc</value>
@@ -84,7 +84,7 @@
                 <!-- config3 -->
                 <bean class="org.osgi.test.cases.blueprint.services.ManagedConfiguration">
                     <argument value="org.osgi.test.cases.blueprint.components.cmsupport.config3"/>
-                    <constructor-arg><null/></argument>
+                    <argument><null/></argument>
                 </bean>
 
 

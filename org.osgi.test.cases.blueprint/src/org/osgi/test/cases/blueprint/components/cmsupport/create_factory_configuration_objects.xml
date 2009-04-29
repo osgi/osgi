@@ -13,16 +13,16 @@
 
     <bean id="compConfigurationManager" class="org.osgi.test.cases.blueprint.services.ConfigurationManager" destroy-method="removeAllConfigs">
         <argument ref="adminService"/>
-        <constructor-arg>
+        <argument>
             <list>
                 <!-- config factory 1 -->
                 <bean class="org.osgi.test.cases.blueprint.services.ManagedConfigurationFactory">
                     <argument value="org.osgi.test.cases.blueprint.components.cmsupport.configfactory1"/>
-                    <constructor-arg>
+                    <argument>
                         <list>
                             <!-- for the 1st factory configration object -->
                             <bean class="org.osgi.test.cases.blueprint.components.cmsupport.ConfigurationDictionaryBuilder">
-                                <constructor-arg>
+                                <argument>
                                     <map>
                                         <entry key="string">
                                             <value type="java.lang.String">abc</value>
@@ -35,7 +35,7 @@
                             </bean>
                             <!-- for the 2nd factory configration object -->
                             <bean class="org.osgi.test.cases.blueprint.components.cmsupport.ConfigurationDictionaryBuilder">
-                                <constructor-arg>
+                                <argument>
                                     <map>
                                         <entry key="string">
                                             <value type="java.lang.String">bcd</value>

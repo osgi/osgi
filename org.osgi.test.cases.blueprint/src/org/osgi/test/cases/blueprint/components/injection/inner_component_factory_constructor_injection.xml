@@ -13,7 +13,7 @@
 
 <!-- String -->
 	<bean id="compInnerStringNoTyped" factory-method="makeInstance" factory-component="compFactory">
-		<constructor-arg>
+		<argument>
 			<bean factory-method="makeInstance" factory-component="innerCompFactory">
 				<argument value="STR1"/>
 			</bean>
@@ -21,7 +21,7 @@
 	</bean>
 
 	<bean id="compInnerStringBothTyped" factory-method="makeInstance" factory-component="compFactory">
-		<constructor-arg>
+		<argument>
 			<bean factory-method="makeInstance" factory-component="innerCompFactory">
 				<argument type="java.lang.String"><value type="java.lang.String">STR2</value></argument>
 			</bean>
@@ -29,15 +29,15 @@
 	</bean>
 
 	<bean id="compInnerStringValueTyped" factory-method="makeInstance" factory-component="compFactory">
-		<constructor-arg>
+		<argument>
 			<bean factory-method="makeInstance" factory-component="innerCompFactory">
-				<constructor-arg><value type="java.lang.String">STR3</value></argument>
+				<argument><value type="java.lang.String">STR3</value></argument>
 			</bean>
 		</argument>
 	</bean>
 
 	<bean id="compInnerStringArgTyped" factory-method="makeInstance" factory-component="compFactory">
-		<constructor-arg>
+		<argument>
 			<bean factory-method="makeInstance" factory-component="innerCompFactory">
 				<argument type="java.lang.String"><value>STR4</value></argument>
 			</bean>
@@ -45,7 +45,7 @@
 	</bean>
 
 	<bean id="compInnerString" factory-method="makeInstance" factory-component="compFactory">
-		<constructor-arg>
+		<argument>
 			<bean factory-method="makeInstance" factory-component="innerCompFactory">
 				<argument value="STR5" type="java.lang.String"/>
 			</bean>
@@ -54,7 +54,7 @@
 
 <!-- Boolean -->
 	<bean id="compInnerPrimitiveBoolean" factory-method="makeInstance" factory-component="compFactory">
-		<constructor-arg>
+		<argument>
 			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<argument value="true" type="boolean"/>
 			</bean>
@@ -62,7 +62,7 @@
 	</bean>
 
 	<bean id="compInnerWrapperedBoolean" factory-method="makeInstance" factory-component="compFactory">
-		<constructor-arg>
+		<argument>
 			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<argument value="false" type="java.lang.Boolean"/>
 			</bean>
@@ -71,7 +71,7 @@
 
 <!-- Byte -->
 	<bean id="compInnerPrimitiveByte" factory-method="makeInstance" factory-component="compFactory">
-		<constructor-arg>
+		<argument>
 			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<argument value="-128" type="byte"/>
 			</bean>
@@ -79,7 +79,7 @@
 	</bean>
 
 	<bean id="compInnerWrapperedByte" factory-method="makeInstance" factory-component="compFactory">
-		<constructor-arg>
+		<argument>
 			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<argument value="127" type="java.lang.Byte"/>
 			</bean>
@@ -88,7 +88,7 @@
 
 <!-- Double -->
 	<bean id="compInnerPrimitiveDouble" factory-method="makeInstance" factory-component="compFactory">
-		<constructor-arg>
+		<argument>
 			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<argument value="4.9e-324" type="double"/>
 			</bean>
@@ -96,7 +96,7 @@
 	</bean>
 
 	<bean id="compInnerWrapperedDouble" factory-method="makeInstance" factory-component="compFactory">
-		<constructor-arg>
+		<argument>
 			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<argument value="1.7976931348623157E308" type="java.lang.Double"/>
 			</bean>
@@ -105,7 +105,7 @@
 
 <!-- Float -->
 	<bean id="compInnerPrimitiveFloat" factory-method="makeInstance" factory-component="compFactory">
-		<constructor-arg>
+		<argument>
 			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<argument value="1.4E-45" type="float"/>
 			</bean>
@@ -113,7 +113,7 @@
 	</bean>
 
 	<bean id="compInnerWrapperedFloat" factory-method="makeInstance" factory-component="compFactory">
-		<constructor-arg>
+		<argument>
 			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<argument value="3.4028235E38" type="java.lang.Float"/>
 			</bean>
@@ -122,7 +122,7 @@
 
 <!-- Integer -->
 	<bean id="compInnerPrimitiveInteger" factory-method="makeInstance" factory-component="compFactory">
-		<constructor-arg>
+		<argument>
 			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<argument value="-2147483648" type="int"/>
 			</bean>
@@ -130,7 +130,7 @@
 	</bean>
 
 	<bean id="compInnerWrapperedInteger" factory-method="makeInstance" factory-component="compFactory">
-		<constructor-arg>
+		<argument>
 			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<argument value="2147483647" type="java.lang.Integer"/>
 			</bean>
@@ -140,7 +140,7 @@
 
 <!-- Character -->
 	<bean id="compInnerPrimitiveCharacter" factory-method="makeInstance" factory-component="compFactory">
-		<constructor-arg>
+		<argument>
 			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<argument value="a" type="char"/>
 			</bean>
@@ -148,7 +148,7 @@
 	</bean>
 
 	<bean id="compInnerWrapperedCharacter" factory-method="makeInstance" factory-component="compFactory">
-		<constructor-arg>
+		<argument>
 			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<argument value="A" type="java.lang.Character"/>
 			</bean>
@@ -157,7 +157,7 @@
 
 <!-- Short -->
 	<bean id="compInnerPrimitiveShort" factory-method="makeInstance" factory-component="compFactory">
-		<constructor-arg>
+		<argument>
 			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<argument value="-32768" type="short"/>
 			</bean>
@@ -165,7 +165,7 @@
 	</bean>
 
 	<bean id="compInnerWrapperedShort" factory-method="makeInstance" factory-component="compFactory">
-		<constructor-arg>
+		<argument>
 			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<argument value="32767" type="java.lang.Short"/>
 			</bean>
@@ -175,7 +175,7 @@
 
 <!-- Long -->
 	<bean id="compInnerPrimitiveLong" factory-method="makeInstance" factory-component="compFactory">
-		<constructor-arg>
+		<argument>
 			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<argument value="-9223372036854775808" type="long"/>
 			</bean>
@@ -183,7 +183,7 @@
 	</bean>
 
 	<bean id="compInnerWrapperedLong" factory-method="makeInstance" factory-component="compFactory">
-		<constructor-arg>
+		<argument>
 			<bean factory-method="makeInstance" factory-component="innerCompFactory">
        			<argument value="9223372036854775807" type="java.lang.Long"/>
 			</bean>

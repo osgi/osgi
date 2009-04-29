@@ -5,7 +5,7 @@
 	<!-- Injection of an empty array -->
 	<bean id="compEmptyArray" factory-method="makeInstance"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-		<constructor-arg>
+		<argument>
 			<array value-type="java.lang.Object"></array>
 		</argument>
 	</bean>
@@ -13,7 +13,7 @@
 	<!-- Injection of a null array -->
 	<bean id="compNullArray" factory-method="makeInstance"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-		<constructor-arg>
+		<argument>
 			<array value-type="java.lang.Object">
 				<null />
 			</array>
@@ -23,7 +23,7 @@
 	<!-- Injection of a String array -->
 	<bean id="compStringArray" factory-method="makeInstance"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-		<constructor-arg>
+		<argument>
 			<array value-type="java.lang.String">
 				<value>abc</value>
 				<value>efg</value>
@@ -34,7 +34,7 @@
 	<!-- Injection of a primitive int array -->
 	<bean id="compPrimIntArray" factory-method="makeInstance"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-		<constructor-arg>
+		<argument>
 			<array value-type="int">
 				<value>1</value>
 				<value>2</value>
@@ -45,7 +45,7 @@
 	<!-- Injection of a wrapped int array -->
 	<bean id="compWrappedIntArray" factory-method="makeInstance"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-		<constructor-arg>
+		<argument>
 			<array value-type="java.lang.Integer">
 				<value>1</value>
 				<value>2</value>
@@ -56,7 +56,7 @@
 	<!-- Injection of a primitive boolean array -->
 	<bean id="compPrimBoolArray" factory-method="makeInstance"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-		<constructor-arg>
+		<argument>
 			<array value-type="boolean">
 				<value>true</value>
 				<value>false</value>
@@ -67,7 +67,7 @@
 	<!-- Injection of a wrapped boolean array -->
 	<bean id="compWrappedBooleanArray" factory-method="makeInstance"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-		<constructor-arg>
+		<argument>
 			<array value-type="java.lang.Boolean">
 				<value type="java.lang.Boolean">true</value>
 				<value type="java.lang.Boolean">false</value>
@@ -78,7 +78,7 @@
 	<!-- Injection of a primitive byte items -->
 	<bean id="compPrimByteArray" factory-method="makeInstance"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-		<constructor-arg>
+		<argument>
 			<array value-type="byte">
 				<value>1</value>
 				<value>2</value>
@@ -89,7 +89,7 @@
 	<!-- Injection of a wrapped byte array -->
 	<bean id="compWrappedByteArray" factory-method="makeInstance"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-		<constructor-arg>
+		<argument>
 			<array value-type="java.lang.Byte">
 				<value>1</value>
 				<value>2</value>
@@ -100,7 +100,7 @@
 	<!-- Injection of a primitive char array -->
 	<bean id="compPrimCharArray" factory-method="makeInstance"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-		<constructor-arg>
+		<argument>
 			<array value-type="char">
 				<value>a</value>
 				<value>b</value>
@@ -111,7 +111,7 @@
 	<!-- Injection of a wrapped char array -->
 	<bean id="compWrappedCharArray" factory-method="makeInstance"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-		<constructor-arg>
+		<argument>
 			<array value-type="java.lang.Character">
 				<value>a</value>
 				<value>b</value>
@@ -122,7 +122,7 @@
 	<!-- Injection of a primitive short array -->
 	<bean id="compPrimShortArray" factory-method="makeInstance"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-		<constructor-arg>
+		<argument>
 			<array value-type="short">
 				<value>3</value>
 				<value>4</value>
@@ -133,7 +133,7 @@
 	<!-- Injection of a wrapped short array -->
 	<bean id="compWrappedShortArray" factory-method="makeInstance"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-		<constructor-arg>
+		<argument>
 			<array value-type="java.lang.Short">
 				<value>3</value>
 				<value>4</value>
@@ -144,7 +144,7 @@
 	<!-- Injection of a primitive long array -->
 	<bean id="compPrimLongArray" factory-method="makeInstance"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-		<constructor-arg>
+		<argument>
 			<array value-type="long">
 				<value>3</value>
 				<value>4</value>
@@ -155,7 +155,7 @@
 	<!-- Injection of a wrapped long array -->
 	<bean id="compWrappedLongArray" factory-method="makeInstance"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-		<constructor-arg>
+		<argument>
 			<array value-type="java.lang.Long">
 				<value>3</value>
 				<value>4</value>
@@ -166,7 +166,7 @@
 	<!-- Injection of a primitive double array -->
 	<bean id="compPrimDoubleArray" factory-method="makeInstance"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-		<constructor-arg>
+		<argument>
 			<array value-type="double">
 				<value>3</value>
 				<value>4</value>
@@ -177,7 +177,7 @@
 	<!-- Injection of a wrapped double array -->
 	<bean id="compWrappedDoubleArray" factory-method="makeInstance"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-		<constructor-arg>
+		<argument>
 			<array value-type="java.lang.Double">
 				<value>3</value>
 				<value>4</value>
@@ -188,7 +188,7 @@
 	<!-- Injection of a primitive float array -->
 	<bean id="compPrimFloatArray" factory-method="makeInstance"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-		<constructor-arg>
+		<argument>
 			<array value-type="float">
 				<value>3</value>
 				<value>4</value>
@@ -199,7 +199,7 @@
 	<!-- Injection of a wrapped float array -->
 	<bean id="compWrappedFloatArray" factory-method="makeInstance"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-		<constructor-arg>
+		<argument>
 			<array value-type="java.lang.Float">
 				<value>3</value>
 				<value>4</value>
@@ -210,7 +210,7 @@
 	<!-- Injection of a Date array -->
 	<bean id="compDateArray" factory-method="makeInstance"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-		<constructor-arg>
+		<argument>
 			<array value-type="java.util.Date">
 				<value>2009-2-19</value>
 				<value>2009-2-20</value>
@@ -221,7 +221,7 @@
 	<!-- Injection of an URL array -->
 	<bean id="compURLArray" factory-method="makeInstance"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-		<constructor-arg>
+		<argument>
 			<array value-type="java.net.URL">
 				<value>http://www.osgi.org</value>
 				<value>http://www.gmail.com</value>
@@ -232,7 +232,7 @@
 	<!-- Injection of a Class array -->
 	<bean id="compClassArray" factory-method="makeInstance"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-		<constructor-arg>
+		<argument>
 			<array value-type="java.lang.Class">
 				<value>java.lang.String</value>
 				<value>java.lang.Boolean</value>
@@ -243,7 +243,7 @@
 	<!-- Injection of a Locale array -->
 	<bean id="compLocaleArray" factory-method="makeInstance"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-		<constructor-arg>
+		<argument>
 			<array value-type="java.lang.Locale">
 				<value>en_US</value>
 				<value>zh_CN</value>
@@ -254,7 +254,7 @@
 	<!-- Injection of String values from props -->
 	<bean id="compNestedProps" factory-method="makeInstance"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-		<constructor-arg>
+		<argument>
 			<array value-type="java.util.Properties">
 				<props>
 					<prop key="administrator">administrator@example.org
@@ -268,7 +268,7 @@
 	<!-- Injection of String values from map -->
 	<bean id="compNestedMap" factory-method="makeInstance"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-		<constructor-arg>
+		<argument>
 			<array value-type="java.util.Map">
 				<map>
 					<entry key="abc" value="1" />
@@ -281,7 +281,7 @@
 	<!-- Injection of String values from set -->
 	<bean id="compNestedSet" factory-method="makeInstance"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-		<constructor-arg>
+		<argument>
 			<array value-type="java.util.Set">
 				<set>
 					<value>administrator@example.org</value>
@@ -294,7 +294,7 @@
 	<!-- Injection of String values from list -->
 	<bean id="compNestedList" factory-method="makeInstance"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-		<constructor-arg>
+		<argument>
 			<array value-type="java.util.List">
 				<list>
 					<value>administrator@example.org</value>
@@ -307,7 +307,7 @@
 	<!-- Injection of nested array -->
 	<bean id="compNestedArray" factory-method="makeInstance"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-		<constructor-arg>
+		<argument>
 			<array value-type="java.lang.Object">
 				<array value-type="java.lang.String">
 					<value>abc</value>

@@ -9,7 +9,7 @@
 <!-- Constructor -->
     <bean id="compAsia_cnst" class="org.osgi.test.cases.blueprint.components.injection.RegionCodeInjection">
 		<argument value="compAsia_cnst"/>
-		<constructor-arg><value type="org.osgi.test.cases.blueprint.components.injection.AsianRegionCode">CN+86</value></argument>
+		<argument><value type="org.osgi.test.cases.blueprint.components.injection.AsianRegionCode">CN+86</value></argument>
 	</bean>
 
 	<bean id="compImplicit_cnst" class="org.osgi.test.cases.blueprint.components.injection.RegionCodeInjection">

@@ -37,7 +37,7 @@
 
    <bean id="compThreeArgImplicit" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
        <argument value="compThreeArgImplicit"/>
-       <constructor-arg><null/></argument>
+       <argument><null/></argument>
        <argument value="ABC"/>
    </bean>
 
@@ -53,7 +53,7 @@
        <argument type="boolean"><value>yes</value></argument>
    </bean>
    <bean id="compPrimBooleanNo" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-       <constructor-arg><value type="boolean">no</value></argument>
+       <argument><value type="boolean">no</value></argument>
    </bean>
    <bean id="compPrimBooleanTrue" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
        <argument value="true" type="boolean"/>
@@ -338,7 +338,7 @@
    string conversions in the other components. -->
 
    <bean id="constructorPrimitiveBoolean"  class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory" factory-method="makePrimitiveBoolean">
-       <constructor-arg><value>yes</value></argument>
+       <argument><value>yes</value></argument>
    </bean>
    <bean id="constructorWrapperedBoolean"  class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory" factory-method="makeWrapperedBoolean">
        <argument value="no"/>

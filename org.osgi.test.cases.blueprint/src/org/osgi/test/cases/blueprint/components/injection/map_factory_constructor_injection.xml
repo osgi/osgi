@@ -7,7 +7,7 @@
     </bean>
 
     <bean id="compEmptyMap" factory-method="makeInstance" factory-component="compFactory">
-        <constructor-arg>
+        <argument>
             <map></map>
         </argument>
     </bean>
@@ -19,7 +19,7 @@
     </bean>
 
     <bean id="compStringItems" factory-method="makeInstance" factory-component="compFactory">
-        <constructor-arg>
+        <argument>
             <map>
                 <entry key="abc" value="1"/>
                 <entry key="def" value="2"/>
@@ -28,7 +28,7 @@
     </bean>
 
     <bean id="compDupItems" factory-method="makeInstance" factory-component="compFactory">
-        <constructor-arg>
+        <argument>
             <map>
                 <entry key="abc" value="1"/>
                 <entry key="abc" value="2"/>
@@ -37,7 +37,7 @@
     </bean>
 
     <bean id="compBooleanItems" factory-method="makeInstance" factory-component="compFactory">
-        <constructor-arg>
+        <argument>
             <map>
                 <entry key="true">
                     <value type="java.lang.Boolean">true</value>
@@ -50,7 +50,7 @@
     </bean>
 
     <bean id="compBooleanKeys" factory-method="makeInstance" factory-component="compFactory">
-        <constructor-arg>
+        <argument>
             <map>
                 <entry>
                     <key><value type="java.lang.Boolean">true</value></key>
@@ -65,7 +65,7 @@
     </bean>
 
     <bean id="compTypedItems" factory-method="makeInstance" factory-component="compFactory">
-        <constructor-arg>
+        <argument>
             <map value-type="java.lang.Boolean">
                 <entry key="true" value="true">
                 </entry>
@@ -80,7 +80,7 @@
     </bean>
 
     <bean id="compTypedKeys" factory-method="makeInstance" factory-component="compFactory">
-        <constructor-arg>
+        <argument>
             <map key-type="java.lang.Boolean">
                 <entry key="true" value="true"/>
                 <entry value="false">
@@ -95,7 +95,7 @@
     </bean>
 
     <bean id="compMixedItems" factory-method="makeInstance" factory-component="compFactory">
-        <constructor-arg>
+        <argument>
             <map>
                 <entry key="String">
                     <value type="java.lang.String">abc</value>
@@ -141,7 +141,7 @@
     </bean>
 
     <bean id="compNestedMap" factory-method="makeInstance" factory-component="compFactory">
-        <constructor-arg>
+        <argument>
             <map>
                 <entry>
                     <key><value>inner</value></key>
@@ -155,7 +155,7 @@
     </bean>
 
     <bean id="compNestedSet" factory-method="makeInstance" factory-component="compFactory">
-        <constructor-arg>
+        <argument>
             <map>
                 <entry>
                     <key><value>inner</value></key>
@@ -169,7 +169,7 @@
     </bean>
 
     <bean id="compNestedList" factory-method="makeInstance" factory-component="compFactory">
-        <constructor-arg>
+        <argument>
             <map>
                 <entry>
                     <key><value>inner</value></key>
@@ -183,7 +183,7 @@
     </bean>
 
     <bean id="compNestedProps" factory-method="makeInstance" factory-component="compFactory">
-        <constructor-arg>
+        <argument>
             <map>
                 <entry>
                     <key><value>inner</value></key>

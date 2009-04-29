@@ -8,7 +8,7 @@
 
    <bean id="checker1" class="org.osgi.test.cases.blueprint.components.namespace.DateChecker">
        <argument value="checker1"/>
-       <constructor-arg>
+       <argument>
            <bean class="java.text.SimpleDateFormat">
                 <argument value="yyyy.MM.dd G 'at' HH:mm:ss z"/>
            </bean>
@@ -18,7 +18,7 @@
 
    <bean id="checker2" class="org.osgi.test.cases.blueprint.components.namespace.DateChecker">
        <argument value="checker2"/>
-       <constructor-arg>
+       <argument>
            <bean class="java.text.SimpleDateFormat">
                 <argument value="yyyy-MM-dd HH:mm"/>
                 <property name="lenient" value="true"/>
@@ -29,7 +29,7 @@
 
    <bean id="checker3" class="org.osgi.test.cases.blueprint.components.namespace.DateChecker">
        <argument value="checker3"/>
-       <constructor-arg>
+       <argument>
            <bean class="java.text.SimpleDateFormat">
                 <argument value="yyyy-MM-dd HH:mm"/>
                 <property name="lenient" value="false"/>

@@ -9,7 +9,7 @@
     <!-- the node this service export maps into. -->
    <bean id="ServiceRegistrationChecker" class="org.osgi.test.cases.blueprint.components.serviceexport.ServiceRegistrationChecker">
        <argument value="ServiceRegistrationChecker"/>
-       <constructor-arg>
+       <argument>
            <map>
                <entry key="component.name" value="ServiceRegistrationChecker"/>
                <entry key="component.version" value="1"/>

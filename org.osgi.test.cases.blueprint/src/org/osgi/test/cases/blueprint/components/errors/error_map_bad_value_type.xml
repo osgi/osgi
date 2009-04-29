@@ -4,7 +4,7 @@
     default-init-method="init" default-destroy-method="destroy" default-lazy-init="false">
 
     <bean id="compTypedKeys" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-        <constructor-arg>
+        <argument>
             <map key-type="java.lang.BooleanXXXX">
                 <entry key="true" value="true"/>
                 <entry value="false">

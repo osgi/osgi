@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <bean id="compEmptyMap" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-        <constructor-arg>
+        <argument>
             <map></map>
         </argument>
     </bean>
@@ -15,7 +15,7 @@
     </bean>
 
     <bean id="compStringItems" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-        <constructor-arg>
+        <argument>
             <map>
                 <entry key="abc">
                     <value>1</value>
@@ -29,7 +29,7 @@
     </bean>
 
     <bean id="compDupItems" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-        <constructor-arg>
+        <argument>
             <map>
                 <entry key="abc" value="1"/>
                 <entry key="abc" value="2"/>
@@ -38,7 +38,7 @@
     </bean>
 
     <bean id="compBooleanItems" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-        <constructor-arg>
+        <argument>
             <map>
                 <entry key="true">
                     <value type="java.lang.Boolean">true</value>
@@ -51,7 +51,7 @@
     </bean>
 
     <bean id="compBooleanKeys" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-        <constructor-arg>
+        <argument>
             <map>
                 <entry>
                     <key><value type="java.lang.Boolean">true</value></key>
@@ -66,7 +66,7 @@
     </bean>
 
     <bean id="compTypedItems" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-        <constructor-arg>
+        <argument>
             <map value-type="java.lang.Boolean">
                 <entry key="true" value="true">
                 </entry>
@@ -81,7 +81,7 @@
     </bean>
 
     <bean id="compTypedKeys" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-        <constructor-arg>
+        <argument>
             <map key-type="java.lang.Boolean">
                 <entry key="true" value="true"/>
                 <entry value="false">
@@ -96,7 +96,7 @@
     </bean>
 
     <bean id="compMixedItems" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-        <constructor-arg>
+        <argument>
             <map>
                 <entry key="String">
                     <value type="java.lang.String">abc</value>
@@ -142,7 +142,7 @@
     </bean>
 
     <bean id="compNestedMap" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-        <constructor-arg>
+        <argument>
             <map>
                 <entry>
                     <key><value>inner</value></key>
@@ -156,7 +156,7 @@
     </bean>
 
     <bean id="compNestedSet" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-        <constructor-arg>
+        <argument>
             <map>
                 <entry>
                     <key><value>inner</value></key>
@@ -170,7 +170,7 @@
     </bean>
 
     <bean id="compNestedList" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-        <constructor-arg>
+        <argument>
             <map>
                 <entry>
                     <key><value>inner</value></key>
@@ -184,7 +184,7 @@
     </bean>
 
     <bean id="compNestedProps" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-        <constructor-arg>
+        <argument>
             <map>
                 <entry>
                     <key><value>inner</value></key>

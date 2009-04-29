@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <bean id="compEmptyProps" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-        <constructor-arg>
+        <argument>
             <props></props>
         </argument>
     </bean>
@@ -15,7 +15,7 @@
     </bean>
 
     <bean id="compStringItems" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-        <constructor-arg>
+        <argument>
             <props>
                 <prop key="administrator">administrator@example.org</prop>
 				<prop key="support">support@example.org</prop>

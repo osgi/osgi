@@ -7,7 +7,7 @@
     </bean>
 
     <bean id="compEmptyProps" factory-method="makeInstance" factory-component="compFactory">
-        <constructor-arg>
+        <argument>
             <props></props>
         </argument>
     </bean>
@@ -19,7 +19,7 @@
     </bean>
 
     <bean id="compStringItems" factory-method="makeInstance" factory-component="compFactory">
-        <constructor-arg>
+        <argument>
             <props>
                 <prop key="administrator">administrator@example.org</prop>
 				<prop key="support">support@example.org</prop>

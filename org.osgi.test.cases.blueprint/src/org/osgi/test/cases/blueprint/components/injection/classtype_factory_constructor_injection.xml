@@ -17,7 +17,7 @@
 	</bean>
 
 	<bean id="compURL_EleValue" factory-method="makeInstance" factory-component="compFactory">
-		<constructor-arg><value type="java.net.URL">http://www.osgi.org</value></argument>
+		<argument><value type="java.net.URL">http://www.osgi.org</value></argument>
 	</bean>
 
 <!-- Date: 5 cases -->
@@ -39,7 +39,7 @@
 	</bean>
 
 	<bean id="compDate_EleValue" factory-method="makeInstance" factory-component="compFactory">
-		<constructor-arg><value type="java.util.Date">1970-1-1</value></argument>
+		<argument><value type="java.util.Date">1970-1-1</value></argument>
 	</bean>
     -->
 
@@ -61,7 +61,7 @@
 	</bean>
 
 	<bean id="compLocale_EleValue" factory-method="makeInstance" factory-component="compFactory">
-		<constructor-arg><value type="java.util.Locale">en_US</value></argument>
+		<argument><value type="java.util.Locale">en_US</value></argument>
 	</bean>
 
 <!-- Class:3 cases -->
@@ -74,7 +74,7 @@
 	</bean>
 
 	<bean id="compClass_EleValue" factory-method="makeInstance" factory-component="compFactory">
-		<constructor-arg><value type="java.lang.Class">org.osgi.test.cases.blueprint.components.injection.ConstructorInjection</value></argument>
+		<argument><value type="java.lang.Class">org.osgi.test.cases.blueprint.components.injection.ConstructorInjection</value></argument>
 	</bean>
 
 <!-- Properties: 4 cases -->
