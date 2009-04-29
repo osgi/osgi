@@ -6,7 +6,8 @@ Bundle-RequiredExecutionEnvironment = J2SE-1.5
 
 Private-Package						= org.osgi.test.support.*, \
 	${p}.annotation.*, \
-	${p}.util.*
+	${p}.util.*, \
+	${p}.validate.*
 
 Include-Resource					= \
 	resources/tw1/tw1.war, \

@@ -18,6 +18,7 @@ package org.osgi.test.cases.webcontainer;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Enumeration;
+import java.util.jar.Manifest;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
@@ -26,9 +27,8 @@ import org.osgi.service.log.LogReaderService;
 import org.osgi.service.log.LogService;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
-import org.osgi.test.cases.webcontainer.util.Server;
 import org.osgi.test.cases.webcontainer.util.TimeUtil;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
 
 /**
  * @version $Rev$ $Date$
@@ -36,48 +36,49 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  *          test able to access BundleContext from ServletContext and use the
  *          OSGi log service.
  */
-public class AccessBundleContextTest extends DefaultTestBundleControl {
-    // this test case assume war files are already installed for now
-    Server server;
-    boolean debug;
+public class AccessBundleContextTest extends WebContainerTestBundleControl {
     String warContextPath;
-    long beforeInstall;
     TimeUtil timeUtil;
     Bundle b;
-    
     LogReaderService logReaderService;
 
     public void setUp() throws Exception {
-        // TODO if war file already exists, let's remove it first.
-
-        this.server = new Server();
-        this.debug = true;
+        super.setUp();
         this.warContextPath = "/tw5";
         this.timeUtil = new TimeUtil(this.warContextPath);
 
         // capture a time before install
-        beforeInstall = System.currentTimeMillis();
+        this.beforeInstall = System.currentTimeMillis();
         // install + start the war file
         log("install war file: tw5.war at context path " + this.warContextPath);
-        b = installBundle(getWebServer()
+        this.b = installBundle(getWebServer()
                 + "tw5.war", true);
 
         ServiceReference logReaderServiceReference = getContext()
                 .getServiceReference(LogReaderService.class.getName());
-        logReaderService = (LogReaderService) getContext().getService(
+        this.logReaderService = (LogReaderService) getContext().getService(
                 logReaderServiceReference);
     }
 
     private void uninstallWar() throws Exception {
         // uninstall the war file
         log("uninstall war file: tw5.war at context path " + this.warContextPath);
-        uninstallBundle(b);
+        uninstallBundle(this.b);
     }
 
     public void tearDown() throws Exception {
         uninstallWar();
     }
 
+    /*
+     * set deployOptions to null to rely on the web container service to generate the manifest
+     */
+    public void testBundleManifest() throws Exception {
+        Manifest originalManifest = super.getManifest("/resources/tw5/tw5.war");
+        BundleManifestValidator validator = new BundleManifestValidator(this.b, originalManifest, null, this.debug);
+        validator.validate();
+    }
+    
     public void testLog001() throws Exception {
         long beforeLog = System.currentTimeMillis();
 
@@ -89,7 +90,7 @@ public class AccessBundleContextTest extends DefaultTestBundleControl {
             assertEquals(conn.getResponseCode(), 200);
             assertEquals(conn.getContentType(), "text/html");
             String response = Dispatcher.dispatch(conn);
-            if (debug) {
+            if (this.debug) {
                 log(response);
             }
             // check if content of response is correct
@@ -127,7 +128,7 @@ public class AccessBundleContextTest extends DefaultTestBundleControl {
             assertEquals(conn.getResponseCode(), 200);
             assertEquals(conn.getContentType(), "text/html");
             String response = Dispatcher.dispatch(conn);
-            if (debug) {
+            if (this.debug) {
                 log(response);
             }
             // check if content of response is correct
@@ -165,7 +166,7 @@ public class AccessBundleContextTest extends DefaultTestBundleControl {
             assertEquals(conn.getResponseCode(), 200);
             assertEquals(conn.getContentType(), "text/html");
             String response = Dispatcher.dispatch(conn);
-            if (debug) {
+            if (this.debug) {
                 log(response);
             }
             // check if content of response is correct
@@ -203,7 +204,7 @@ public class AccessBundleContextTest extends DefaultTestBundleControl {
             assertEquals(conn.getResponseCode(), 200);
             assertEquals(conn.getContentType(), "text/html");
             String response = Dispatcher.dispatch(conn);
-            if (debug) {
+            if (this.debug) {
                 log(response);
             }
             // check if content of response is correct

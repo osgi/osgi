@@ -17,6 +17,7 @@
 package org.osgi.test.cases.webcontainer.annotation;
 
 import org.osgi.framework.Bundle;
+import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.Server;
 import org.osgi.test.cases.webcontainer.util.TimeUtil;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
@@ -24,36 +25,21 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 /**
  * @version $Rev$ $Date$
  */
-public class PreDestroyAnnotationTest extends DefaultTestBundleControl {
-    // this test case assume war files are already installed for now
-    Server server;
-    boolean debug;
+public class PreDestroyAnnotationTest extends WebContainerTestBundleControl {
     String warContextPath;
     long beforeUninstall;
     TimeUtil timeUtil;
     Bundle b;
 
     public void setUp() throws Exception {
-        // TODO if war file already exists, let's remove it first.
-
-        this.server = new Server("localhost");
-        this.debug = true;
+        super.setUp();
         this.warContextPath = "/tw2";
         this.timeUtil = new TimeUtil(this.warContextPath);
 
-        // clean up the property file.
-        /*
-         boolean success = ConstantsUtil.removeLogFile(); 
-         if (!success) {
-             log("Deleting File: " + ConstantsUtilUtil.getLogFile() + " failed."); 
-         }
-         else { 
-              log (ConstantsUtil.getLogFile() + " file is deleted."); 
-         }*/
-
+        super.cleanupPropertyFile();
         // install + start the war file
         log("install war file: tw2.war at context path " + this.warContextPath);
-        b = installBundle(getWebServer()
+        this.b = installBundle(getWebServer()
                 + "tw2.war", true);
         
         // capture a time before uninstall
@@ -63,7 +49,7 @@ public class PreDestroyAnnotationTest extends DefaultTestBundleControl {
     private void uninstallWar() throws Exception {
         // uninstall the war file
         log("uninstall war file: tw2.war at context path " + this.warContextPath);
-        uninstallBundle(b);
+        uninstallBundle(this.b);
     }
 
     public void tearDown() throws Exception {

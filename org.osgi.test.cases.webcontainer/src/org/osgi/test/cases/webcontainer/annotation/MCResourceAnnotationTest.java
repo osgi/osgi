@@ -20,32 +20,24 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.osgi.framework.Bundle;
+import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
-import org.osgi.test.cases.webcontainer.util.Server;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * @version $Rev$ $Date$
  */
-public class MCResourceAnnotationTest extends DefaultTestBundleControl {
-    // this test case assume war files are already installed for now
-    Server server;
-    boolean debug;
+public class MCResourceAnnotationTest extends WebContainerTestBundleControl {
     String warContextPath;
     Bundle b;
 
     public void setUp() throws Exception {
-        // install the war file?
-        // can we get setUp and tearDown only run once through the test, instead
-        // of running each time before each test?
-        this.server = new Server("localhost");
-        this.debug = true;
+        super.setUp();
         this.warContextPath = "/tw3";
 
         // install + start the war file
         log("install war file: tw3.war at context path " + this.warContextPath);
-        b = installBundle(getWebServer()
+        this.b = installBundle(getWebServer()
                 + "tw3.war", true);
     }
 
@@ -57,7 +49,7 @@ public class MCResourceAnnotationTest extends DefaultTestBundleControl {
     private void uninstallWar() throws Exception {
         // uninstall the war file
         log("uninstall war file: tw3.war at context path " + this.warContextPath);
-        uninstallBundle(b);
+        uninstallBundle(this.b);
     }
 
     /*
@@ -73,7 +65,7 @@ public class MCResourceAnnotationTest extends DefaultTestBundleControl {
             assertEquals(conn.getResponseCode(), 200);
             assertEquals(conn.getContentType(), "text/html");
             String response = Dispatcher.dispatch(conn);
-            if (debug) {
+            if (this.debug) {
                 log(response);
             }
             // check if content of response is correct
@@ -100,7 +92,7 @@ public class MCResourceAnnotationTest extends DefaultTestBundleControl {
             assertEquals(conn.getResponseCode(), 200);
             assertEquals(conn.getContentType(), "text/html");
             String response = Dispatcher.dispatch(conn);
-            if (debug) {
+            if (this.debug) {
                 log(response);
             }
             // check if content of response is correct
@@ -129,7 +121,7 @@ public class MCResourceAnnotationTest extends DefaultTestBundleControl {
             assertEquals(conn.getResponseCode(), 200);
             assertEquals(conn.getContentType(), "text/html");
             String response = Dispatcher.dispatch(conn);
-            if (debug) {
+            if (this.debug) {
                 log(response);
             }
             // check if content of response is correct
@@ -156,7 +148,7 @@ public class MCResourceAnnotationTest extends DefaultTestBundleControl {
             assertEquals(conn.getResponseCode(), 200);
             assertEquals(conn.getContentType(), "text/html");
             String response = Dispatcher.dispatch(conn);
-            if (debug) {
+            if (this.debug) {
                 log(response);
             }
             // check if content of response is correct

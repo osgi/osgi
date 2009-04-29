@@ -21,55 +21,37 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.osgi.framework.Bundle;
+import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
-import org.osgi.test.cases.webcontainer.util.Server;
 import org.osgi.test.cases.webcontainer.util.TimeUtil;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * @version $Rev$ $Date$
  */
-public class PostConstructPreDestroyErrorTest extends DefaultTestBundleControl {
-    // this test case assume war files are already installed for now
-    Server server;
-    boolean debug;
+public class PostConstructPreDestroyErrorTest extends WebContainerTestBundleControl {
     String warContextPath;
     long beforeInstall;
     TimeUtil timeUtil;
     Bundle b;
 
     public void setUp() throws Exception {
-        // TODO if war file already exists, let's remove it first.
-
-        this.server = new Server("localhost");
-        this.debug = true;
+        super.setUp();
         this.warContextPath = "/tw2";
         this.timeUtil = new TimeUtil(this.warContextPath);
 
-        // capture a time before install
-        beforeInstall = System.currentTimeMillis();
-
-        // clean up the property file.
-        /*
-         boolean success = ConstantsUtilUtil.removeLogFile(); 
-         if (!success) {
-             log("Deleting File: " + ConstantsUtilUtil.getLogFile() + " failed."); 
-         }
-         else { 
-              log (ConstantsUtilUtil.getLogFile() + " file is deleted."); 
-         }*/
+        super.cleanupPropertyFile();
 
         // install + start the war file
         log("install war file: tw2.war at context path " + this.warContextPath);
-        b = installBundle(getWebServer()
+        this.b = installBundle(getWebServer()
                 + "tw2.war", true);
     }
 
     private void uninstallWar() throws Exception {
         // uninstall the war file
         log("uninstall war file: tw2.war at context path " + this.warContextPath);
-        uninstallBundle(b);
+        uninstallBundle(this.b);
     }
 
     public void tearDown() throws Exception {
@@ -88,7 +70,7 @@ public class PostConstructPreDestroyErrorTest extends DefaultTestBundleControl {
         try {
             assertTrue(conn.getResponseCode() != 200);
             String response = Dispatcher.dispatch(conn);
-            if (debug) {
+            if (this.debug) {
                 log(response);
             }
             fail("should be getting an exception");
@@ -117,7 +99,7 @@ public class PostConstructPreDestroyErrorTest extends DefaultTestBundleControl {
         try {
             assertTrue(conn.getResponseCode() != 200);
             String response = Dispatcher.dispatch(conn);
-            if (debug) {
+            if (this.debug) {
                 log(response);
             }
             fail("should be getting an exception");
@@ -144,7 +126,7 @@ public class PostConstructPreDestroyErrorTest extends DefaultTestBundleControl {
         try {
             assertTrue(conn.getResponseCode() != 200);
             String response = Dispatcher.dispatch(conn);
-            if (debug) {
+            if (this.debug) {
                 log(response);
             }
             fail("should be getting an exception");
@@ -170,7 +152,7 @@ public class PostConstructPreDestroyErrorTest extends DefaultTestBundleControl {
             assertEquals(conn.getResponseCode(), 200);
             assertEquals(conn.getContentType(), "text/html");
             String response = Dispatcher.dispatch(conn);
-            if (debug) {
+            if (this.debug) {
                 log(response);
             }
             // check if content of response is correct
@@ -202,7 +184,7 @@ public class PostConstructPreDestroyErrorTest extends DefaultTestBundleControl {
             assertEquals(conn.getResponseCode(), 200);
             assertEquals(conn.getContentType(), "text/html");
             String response = Dispatcher.dispatch(conn);
-            if (debug) {
+            if (this.debug) {
                 log(response);
             }
             // check if content of response is correct
@@ -234,7 +216,7 @@ public class PostConstructPreDestroyErrorTest extends DefaultTestBundleControl {
             assertEquals(conn.getResponseCode(), 200);
             assertEquals(conn.getContentType(), "text/html");
             String response = Dispatcher.dispatch(conn);
-            if (debug) {
+            if (this.debug) {
                 log(response);
             }
             // check if content of response is correct

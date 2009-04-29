@@ -18,13 +18,14 @@ package org.osgi.test.cases.webcontainer.annotation;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.jar.Manifest;
 
 import org.osgi.framework.Bundle;
+import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
-import org.osgi.test.cases.webcontainer.util.Server;
 import org.osgi.test.cases.webcontainer.util.TimeUtil;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
 
 /**
  * @version $Rev$ $Date$
@@ -41,51 +42,41 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * 
  *          when the metadata-complete attribute is set to true.
  */
-public class MCOtherAnnotationTest extends DefaultTestBundleControl {
-    // this test case assume war files are already installed for now
-    Server server;
-    boolean debug;
+public class MCOtherAnnotationTest extends WebContainerTestBundleControl {
     String warContextPath;
-    long beforeInstall;
     TimeUtil timeUtil;
     Bundle b;
 
     public void setUp() throws Exception {
-        // TODO if war file already exists, let's remove it first.
-
-        this.server = new Server();
-        this.debug = true;
+        super.setUp();
         this.warContextPath = "/tw3";
         this.timeUtil = new TimeUtil(this.warContextPath);
-
-        // capture a time before install
-        // beforeInstall = System.currentTimeMillis();
-        beforeInstall = 1;
-
-        // clean up the property file.
-        /*
-         boolean success = ConstantsUtilUtil.removeLogFile(); 
-         if (!success) {
-             log("Deleting File: " + ConstantsUtilUtil.getLogFile() + " failed."); 
-         }
-         else { 
-              log (ConstantsUtilUtil.getLogFile() + " file is deleted."); 
-         }*/
+ 
+        super.cleanupPropertyFile();
 
         // install + start the war file
         log("install war file: tw3.war at context path " + this.warContextPath);
-        b = installBundle(getWebServer()
+        this.b = installBundle(getWebServer()
                 + "tw3.war", true);
     }
 
     private void uninstallWar() throws Exception {
         // uninstall the war file
         log("uninstall war file: tw3.war at context path " + this.warContextPath);
-        uninstallBundle(b);
+        uninstallBundle(this.b);
     }
 
     public void tearDown() throws Exception {
         uninstallWar();
+    }
+    
+    /*
+     * set deployOptions to null to rely on the web container service to generate the manifest
+     */
+    public void testBundleManifest() throws Exception {
+        Manifest originalManifest = super.getManifest("/resources/tw3/tw3.war");
+        BundleManifestValidator validator = new BundleManifestValidator(this.b, originalManifest, null, this.debug);
+        validator.validate();
     }
 
     /*
@@ -102,7 +93,7 @@ public class MCOtherAnnotationTest extends DefaultTestBundleControl {
             assertEquals(conn.getResponseCode(), 200);
             assertEquals(conn.getContentType(), "text/html");
             String response = Dispatcher.dispatch(conn);
-            if (debug) {
+            if (this.debug) {
                 log(response);
             }
             // check if content of response is correct
@@ -159,7 +150,7 @@ public class MCOtherAnnotationTest extends DefaultTestBundleControl {
             assertEquals(conn.getResponseCode(), 200);
             assertEquals(conn.getContentType(), "text/html");
             String response = Dispatcher.dispatch(conn);
-            if (debug) {
+            if (this.debug) {
                 log(response);
             }
             // check if content of response is correct
@@ -209,7 +200,7 @@ public class MCOtherAnnotationTest extends DefaultTestBundleControl {
             assertEquals(conn.getResponseCode(), 200);
             assertEquals(conn.getContentType(), "text/html");
             String response = Dispatcher.dispatch(conn);
-            if (debug) {
+            if (this.debug) {
                 log(response);
             }
             // check if content of response is correct
@@ -253,7 +244,7 @@ public class MCOtherAnnotationTest extends DefaultTestBundleControl {
             assertEquals(conn.getResponseCode(), 200);
             assertEquals(conn.getContentType(), "text/html");
             String response = Dispatcher.dispatch(conn);
-            if (debug) {
+            if (this.debug) {
                 log(response);
             }
             // check if content of response is correct

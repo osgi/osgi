@@ -17,77 +17,53 @@ package org.osgi.test.cases.webcontainer;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.JarURLConnection;
 import java.net.URL;
-import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.Map;
-import java.util.Properties;
-import java.util.jar.Attributes;
-import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.Constants;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
-import org.osgi.test.cases.webcontainer.util.Server;
 import org.osgi.test.cases.webcontainer.util.TimeUtil;
 import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * @version $Rev$ $Date$
  * 
  *          test class for tw1
  */
-public class TW1Test extends DefaultTestBundleControl {
+public class TW1Test extends WebContainerTestBundleControl {
     // this test case assume war files are already installed for now
-    Server server;
-    boolean debug;
     String warContextPath;
-    long beforeInstall;
     TimeUtil timeUtil;
     Bundle b;
-    Map deployOptions;
-
+    
     public void setUp() throws Exception {
-        // TODO if war file already exists, let's remove it first.
-
-        this.server = new Server();
-        this.debug = true;
+        super.setUp();
         this.warContextPath = "/tw1";
         this.timeUtil = new TimeUtil(this.warContextPath);
 
         // install + start the war file
         log("install war file: tw1.war at context path " + this.warContextPath);
-        b = installBundle(getWebServer()
+        this.b = installBundle(getWebServer()
                 + "tw1.war", true);
-        // TODO:  set deployOptions when passed into installBundle
     }
 
     private void uninstallWar() throws Exception {
         // uninstall the war file
         log("uninstall war file: tw1.war at context path " + this.warContextPath);
-        uninstallBundle(b);
+        uninstallBundle(this.b);
     }
 
     public void tearDown() throws Exception {
         uninstallWar();
     }
     
-    public void testBundleManifest001() throws Exception {
-        // test bundle manifest is constructed per user's deployment options
-        String location = System.getProperty("user.dir") + "/resources/tw1/tw1.war";
-        log("jar:file:" + location + "!/");
-        URL url = new URL("jar:file:" + location + "!/");
-        JarURLConnection conn = (JarURLConnection)url.openConnection();
-        JarFile jarfile = conn.getJarFile();
-        Manifest originalManifest = jarfile.getManifest();
-        if (originalManifest.getMainAttributes().getValue(Attributes.Name.MANIFEST_VERSION) != null)
-            log(originalManifest.getMainAttributes().getValue(Attributes.Name.MANIFEST_VERSION));
-        
-        BundleManifestValidator validator = new BundleManifestValidator(this.b, originalManifest, this.deployOptions, this.debug);
+    /*
+     * set deployOptions to null to rely on the web container service to generate the manifest
+     */
+    public void testBundleManifest() throws Exception {
+        Manifest originalManifest = super.getManifest("/resources/tw1/tw1.war");
+        BundleManifestValidator validator = new BundleManifestValidator(this.b, originalManifest, null, this.debug);
         validator.validate();
     }
 
