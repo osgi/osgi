@@ -361,7 +361,7 @@
                 <xsd:sequence>
                 	<xsd:element name="entry" type="Tentry" minOccurs="0" maxOccurs="unbounded"/>
                 </xsd:sequence>
-                <xsd:attribute name="key-type" type="xsd:string"/>
+                <xsd:attribute name="key-type" type="Tclass"/>
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
