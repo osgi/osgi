@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
 	<type-converters>
-        <ref id="compCustomBoolean_cnst">
+             <ref component="compCustomBoolean_cnst"/>
 	</type-converters>
 
     <bean id="customBooleanConverter" class="org.osgi.test.cases.blueprint.components.injection.CustomBooleanConverter"/>

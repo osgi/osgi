@@ -78,7 +78,7 @@
 	<bean id="compStringArray"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
 		<argument>
-			<array value-type="String">
+			<array value-type="java.lang.String">
 				<value>abc</value>
 				<value>def</value>
 			</array>
@@ -254,7 +254,7 @@
 	<bean id="compLocaleArray"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
 		<argument>
-			<array value-type="java.lang.Locale">
+			<array value-type="java.util.Locale">
 				<value>en_US</value>
 				<value>zh_CN</value>
 			</array>

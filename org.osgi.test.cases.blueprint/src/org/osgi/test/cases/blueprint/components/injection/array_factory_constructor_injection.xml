@@ -249,7 +249,7 @@
 	<bean id="compLocaleArray" factory-method="makeInstance"
 		factory-component="compFactory">
 		<argument>
-			<array value-type="java.lang.Locale">
+			<array value-type="java.util.Locale">
 				<value>en_US</value>
 				<value>zh_CN</value>
 			</array>

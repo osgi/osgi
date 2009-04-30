@@ -244,7 +244,7 @@
 	<bean id="compLocaleArray"
 		class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="localeArray">
-			<array value-type="java.lang.Locale">
+			<array value-type="java.util.Locale">
 				<value>en_US</value>
 				<value>zh_CN</value>
 			</array>

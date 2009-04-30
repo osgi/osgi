@@ -32,10 +32,10 @@
    <service id="ServiceTwoService" ref="ServiceTwo" interface="org.osgi.test.cases.blueprint.services.TestServiceTwo">
        <registration-listener ref="ServiceTwoListener"
            registration-method="register"
-           registration-method="unregister"/>
+           unregistration-method="unregister"/>
    </service>
 
    <!-- This service will not be registered before activation because uses auto-export -->
-   <service id="ServiceOneService" ref="ServiceThree" auto-export="interface"/>
+   <service id="ServiceThreeService" ref="ServiceThree" auto-export="interfaces"/>
 </blueprint>
 
