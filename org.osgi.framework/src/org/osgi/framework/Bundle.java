@@ -914,9 +914,10 @@ public interface Bundle {
 
 	/**
 	 * Returns the symbolic name of this bundle as specified by its
-	 * <code>Bundle-SymbolicName</code> manifest header. The name must be
-	 * unique, it is recommended to use a reverse domain name naming convention
-	 * like that used for java packages.
+	 * <code>Bundle-SymbolicName</code> manifest header. The bundle symbolic
+	 * name together with a version must identify a unique bundle. The bundle
+	 * symbolic name should be based on the reverse domain name naming
+	 * convention like that used for java packages.
 	 * 
 	 * <p>
 	 * This method must continue to return this bundle's symbolic name while
