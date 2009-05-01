@@ -2,11 +2,11 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-   <bean id="ContextAware" class="org.osgi.test.cases.blueprint.components.comp1.ModuleContextAwareComponent" init-method="init">
+   <bean id="ContextAware" class="org.osgi.test.cases.blueprint.components.comp1.BlueprintContextAwareComponent" init-method="init">
        <argument value="ContextAware"/>
        <property name="bundle" ref="bundle"/>
        <property name="bundleContext" ref="bundleContext"/>
-       <property name="moduleContext" ref="moduleContext"/>
+       <property name="blueprintContext" ref="blueprintContext"/>
    </bean>
 </blueprint>
 

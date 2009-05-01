@@ -23,9 +23,9 @@
 
     <!-- default config three -->
     <bpcm:property-placeholder persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config3" placeholder-prefix="#[" placeholder-suffix="]">
-        <default-properties>
-            <property name="str_3" value="def"/>
-        </default-properties>
+        <bpcm:default-properties>
+            <bpcm:property name="str_3" value="def"/>
+        </bpcm:default-properties>
     </bpcm:property-placeholder>
 
     <bean id="compString3" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">

@@ -23,7 +23,7 @@
            <entry key="test.case.property.long"><value type="long">5</value></entry>
            <entry key="test.case.property.boolean"><value type="boolean">true</value></entry>
            <entry key="test.case.property.float"><value type="float">6.0</value></entry>
-           <entry key="test.case.property.double"><value type="float">7.0</value></entry>
+           <entry key="test.case.property.double"><value type="double">7.0</value></entry>
 
            <entry key="test.case.property.java.lang.Integer"><value type="java.lang.Integer">11</value></entry>
            <entry key="test.case.property.java.lang.Short"><value type="java.lang.Short">12</value></entry>
