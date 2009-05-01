@@ -45,5 +45,10 @@ public class SimpleInstanceFactory extends BaseTestComponent {
         AssertionService.sendEvent(SimpleInstanceFactory.class, AssertionService.FACTORY_CALLED);
         return new AltSimpleTestComponent(id);
     }
+
+    protected Object nonPublicMethod(String id) {
+        AssertionService.sendEvent(SimpleInstanceFactory.class, AssertionService.FACTORY_CALLED);
+        return new SimpleTestComponent(id);
+    }
 }
 

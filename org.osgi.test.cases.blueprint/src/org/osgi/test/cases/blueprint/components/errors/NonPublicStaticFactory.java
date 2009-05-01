@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.blueprint.components.staticfactory;
+package org.osgi.test.cases.blueprint.components.errors;
 
 import org.osgi.test.cases.blueprint.components.comp1.AltSimpleTestComponent;
 import org.osgi.test.cases.blueprint.components.comp1.SimpleTestComponent;
 
-public class SimpleStaticFactory {
+class NonPublicStaticFactory {
     // make this non-instantiable
-    private SimpleStaticFactory() {}
+    private NonPublicStaticFactory() {}
 
     public static Object createSimple() {
         return new SimpleTestComponent("static-comp1");
@@ -45,17 +45,6 @@ public class SimpleStaticFactory {
     public Object nonStaticMethod(String id) {
         return new SimpleTestComponent(id);
     }
-
-    /**
-     * Method to test attempting to invoke non-static factory method.
-     *
-     * @param id     The component id.
-     *
-     * @return A new instance (but never should be invoked).
-     */
-    static protected Object nonPublicMethod(String id) {
-        return new SimpleTestComponent(id);
-    }
-
 }
+
 

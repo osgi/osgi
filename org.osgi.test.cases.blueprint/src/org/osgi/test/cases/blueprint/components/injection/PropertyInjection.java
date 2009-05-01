@@ -336,4 +336,14 @@ public class PropertyInjection extends BaseTestComponent {
     public Object getBadBean() {
         return null;     // not really used
     }
+
+    // protected setter
+    protected void setProtected(String v) {
+        setPropertyValue("protected", v, String.class);
+    }
+
+    // private setter
+    private void setPrivate(String v) {
+        setPropertyValue("private", v, String.class);
+    }
 }

@@ -101,6 +101,26 @@ public class TestConfigErrors extends DefaultTestBundleControl {
     }
 
     /*
+     * Tests a config file with a factory that does not have public access
+     */
+    public void testStaticFactoryNonPublicClass() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_static_factory_non_public_class.jar");
+        controller.run();
+    }
+
+    /*
+     * Tests a config file with a factory that does not have public access
+     */
+    public void testStaticFactoryNonPublicMethod() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_static_factory_non_public_class.jar");
+        controller.run();
+    }
+
+    /*
      * Tests a config file with a non-static factory method name.
      */
     public void testStaticFactoryNonStaticMethod() throws Exception {
@@ -265,6 +285,16 @@ public class TestConfigErrors extends DefaultTestBundleControl {
     }
 
     /**
+     * Using a non-public constructor for a <bean> component.
+     */
+    public void testConstructorNonPrivate() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_constructor_non_private.jar");
+        controller.run();
+    }
+
+    /**
      * Tests constructor type argument where there is a conversion error.
      */
     public void testConversionError() throws Exception {
@@ -371,6 +401,26 @@ public class TestConfigErrors extends DefaultTestBundleControl {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
             getWebServer()+"www/error_ambiguous_property.jar");
+        controller.run();
+    }
+
+    /**
+     * Tests the checking for protected properties
+     */
+    public void testProtectedProperty() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_protected_property.jar");
+        controller.run();
+    }
+
+    /**
+     * Tests the checking for private properties
+     */
+    public void testPrivateProperty() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_private_property.jar");
         controller.run();
     }
 
