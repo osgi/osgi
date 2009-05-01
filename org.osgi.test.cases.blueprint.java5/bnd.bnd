@@ -27,5 +27,5 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 	org.apache.felix.configadmin;  version=latest, \
 	org.eclipse.equinox.event; version=latest, \
  	osgi; version=latest, \
- 	org.osgi.test.cases.blueprint;  version=latest, \
-        org.springsource.service.blueprint; version=latest
+ 	org.osgi.test.cases.blueprint;  version=project, \
+    org.springsource.service.blueprint; version=latest
