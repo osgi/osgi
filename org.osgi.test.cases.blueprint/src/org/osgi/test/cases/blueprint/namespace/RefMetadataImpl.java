@@ -41,7 +41,7 @@ public class RefMetadataImpl extends NonNullMetadataImpl implements RefMetadata 
         this.id = id;
     }
 
-    protected RefMetadataImpl(IdRefMetadata source) {
+    protected RefMetadataImpl(RefMetadata source) {
         super();
         id = source.getComponentId();
     }
