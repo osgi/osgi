@@ -28,17 +28,38 @@ import org.osgi.service.blueprint.reflect.Target;
  * The name itself will be injected, not the component that the name refers to.
  *
  */
-public class RefMetadataImpl extends IdRefMetadataImpl implements RefMetadata {
+public class RefMetadataImpl extends NonNullMetadataImpl implements RefMetadata {
+    // the name of the component;
+    private String id;
+
     protected RefMetadataImpl() {
-        super();
+        this((String)null);
     }
 
     protected RefMetadataImpl(String id) {
-        super(id);
+        super();
+        this.id = id;
     }
 
-    protected RefMetadataImpl(RefMetadata source) {
-        super(source);
+    protected RefMetadataImpl(IdRefMetadata source) {
+        super();
+        id = source.getComponentId();
+    }
+
+
+    /**
+     * The name of the component.
+     *
+     * @return component name. The component name may be null if this is an anonymously
+     * defined inner component.
+     */
+    public String getComponentId() {
+        return id;
+    }
+
+
+    public void setComponentId(String id) {
+        this.id = id;
     }
 }
 

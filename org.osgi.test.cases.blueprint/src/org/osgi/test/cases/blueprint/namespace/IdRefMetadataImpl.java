@@ -36,10 +36,12 @@ public class IdRefMetadataImpl extends NonNullMetadataImpl implements IdRefMetad
     }
 
     protected IdRefMetadataImpl(String id) {
+        super();
         this.id = id;
     }
 
     protected IdRefMetadataImpl(IdRefMetadata source) {
+        super();
         id = source.getComponentId();
     }
 
