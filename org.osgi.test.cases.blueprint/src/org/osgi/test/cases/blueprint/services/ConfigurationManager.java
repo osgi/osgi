@@ -85,9 +85,7 @@ public class ConfigurationManager {
      * Remove all the configurations.
      */
     public void removeAllConfigs(){
-
-        Set keys = this.managedConfigs.keySet();
-        Iterator i = keys.iterator();
+        Iterator i = this.managedConfigs.values().iterator();
         while (i.hasNext()){
             ManagedConfigurationInterface config = (ManagedConfigurationInterface)i.next();
             config.remove(this.admin);
