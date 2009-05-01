@@ -4,6 +4,7 @@ javac.target 			= 1.5
 Private-Package						= org.osgi.test.support.*
 Bundle-Version: 4.2.0.${project.build}
 Export-Package						= ${p}.*
+Bundle-RequiredExecutionEnvironment = J2SE-1.5
 
 Include-Resource					= \
 	www/generic_collection_injection.jar=generic_collection_injection.jar , \
