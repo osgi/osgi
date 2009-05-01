@@ -345,7 +345,7 @@
 
 	<xsd:complexType name="Tprops">
 	    <xsd:sequence>
-   			<xsd:element name="prop" type="Tprop" maxOccurs="unbounded"/>
+   			<xsd:element name="prop" type="Tprop" minOccurs="0" maxOccurs="unbounded"/>
    		</xsd:sequence>
 	</xsd:complexType>
 
