@@ -173,7 +173,7 @@ public class BeanComponent extends Assert implements TestComponentMetadata {
         }
 
         assertEquals("Component " + meta.getId() + " init-method mismatch", initMethodName, meta.getInitMethodName());
-        assertEquals("Component " + meta.getId() + " destroy-method mismatch", initMethodName, meta.getDestroyMethodName());
+        assertEquals("Component " + meta.getId() + " destroy-method mismatch", destroyMethodName, meta.getDestroyMethodName());
 
         if (dependsOn != null) {
             List test = new ArrayList();

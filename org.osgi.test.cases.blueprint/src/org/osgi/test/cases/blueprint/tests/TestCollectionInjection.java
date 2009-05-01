@@ -2826,7 +2826,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
 	private void addPropsPropertyTestItem(MetadataEventSet startEvents)throws Exception{
 	    // Empty
-	    this.addPropertyValidator(startEvents, "compEmptyProps", "properties", new TestPropsValue(), Properties.class);
+	    this.addPropertyValidator(startEvents, "compEmptyProps", "properties", new Properties(), Properties.class);
         // validate the metadata for this one too
         startEvents.addValidator(new PropertyMetadataValidator("compEmptyProps", new TestProperty(
             new TestPropsValue()
@@ -2841,12 +2841,16 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
             , "properties")));
 
 	    // strings
-	    TestPropsValue expected = new TestPropsValue();
-	    expected.put("administrator", "administrator@example.org");
+            Properties expectedValue = new Properties();
+	    expectedValue.put("administrator", "administrator@example.org");
+	    expectedValue.put("support", "support@example.org");
+	    expectedValue.put("development", "development@example.org");
+	    this.addPropertyValidator(startEvents, "compStringItems", "properties", expectedValue, Properties.class);
+        // validate the metadata for this one too
+            TestPropsValue expected = new TestPropsValue();
+            expected.put("administrator", "administrator@example.org");
 	    expected.put("support", "support@example.org");
 	    expected.put("development", "development@example.org");
-	    this.addPropertyValidator(startEvents, "compStringItems", "properties", expected, Properties.class);
-        // validate the metadata for this one too
         startEvents.addValidator(new PropertyMetadataValidator("compStringItems",
             new TestProperty(expected, "properties")));
 	}

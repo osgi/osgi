@@ -89,10 +89,10 @@ public class ConfigurationManager {
         Set keys = this.managedConfigs.keySet();
         Iterator i = keys.iterator();
         while (i.hasNext()){
-            ManagedConfigurationInterface config = (ManagedConfigurationInterface)this.managedConfigs.remove(i.next());
+            ManagedConfigurationInterface config = (ManagedConfigurationInterface)i.next();
             config.remove(this.admin);
         }
-
+        this.managedConfigs.clear();
     }
 
 
