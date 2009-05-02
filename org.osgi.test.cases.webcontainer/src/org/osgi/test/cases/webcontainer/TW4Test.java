@@ -25,7 +25,6 @@ import java.util.jar.Manifest;
 import org.osgi.framework.Bundle;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
-import org.osgi.test.cases.webcontainer.util.TimeUtil;
 import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
 
 /**
@@ -34,41 +33,38 @@ import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
  *          test class for tw4
  */
 public class TW4Test extends WebContainerTestBundleControl {
-    // this test case assume war files are already installed for now
-    String warContextPath;
-    TimeUtil timeUtil;
     Bundle b;
-
+    
     public void setUp() throws Exception {
         super.setUp();
-        this.warContextPath = "/tw4";
-        this.timeUtil = new TimeUtil(this.warContextPath);
-
+        super.prepare("/tw4");
         // install + start the war file
         log("install war file: tw4.war at context path " + this.warContextPath);
-        this.b = installBundle(getWebServer()
-                + "tw4.war", true);
+        this.b = installBundle(super.getWarURL("tw4.war", this.options), true);
     }
 
     private void uninstallWar() throws Exception {
         // uninstall the war file
-        log("uninstall war file: tw4.war at context path " + this.warContextPath);
+        log("uninstall war file: tw4.war at context path "
+                + this.warContextPath);
         uninstallBundle(this.b);
     }
 
     public void tearDown() throws Exception {
         uninstallWar();
     }
-    
+
     /*
-     * set deployOptions to null to rely on the web container service to generate the manifest
+     * set deployOptions to null to rely on the web container service to
+     * generate the manifest
      */
     public void testBundleManifest() throws Exception {
         Manifest originalManifest = super.getManifest("/resources/tw4/tw4.war");
-        BundleManifestValidator validator = new BundleManifestValidator(this.b, originalManifest, null, this.debug);
+        BundleManifestValidator validator = new BundleManifestValidator(this.b,
+                originalManifest, this.options, this.debug);
         validator.validate();
     }
-    
+
     /*
      * test empty doGet
      */
@@ -100,24 +96,10 @@ public class TW4Test extends WebContainerTestBundleControl {
         String param2 = "param2=" + ConstantsUtil.PARAM2;
         final String request = this.warContextPath
                 + "/TestServlet1/TestServlet2?tc=1&" + param1 + "&" + param2;
-        if (this.debug) {
-            log(request);
-        }
-        final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertEquals(response, ConstantsUtil.TW4LONGPARAMS);
-        } finally {
-            conn.disconnect();
-        }
+        String response = super.getResponse(request);
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertEquals(response, ConstantsUtil.TW4LONGPARAMS);
     }
 
     /*
@@ -133,24 +115,10 @@ public class TW4Test extends WebContainerTestBundleControl {
         final String request = this.warContextPath
                 + "/TestServlet1/TestServlet2?tc=2&" + param1 + "&" + param2
                 + "&" + param3 + "&" + param4 + "&" + param5;
-        if (this.debug) {
-            log(request);
-        }
-        final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertEquals(response, ConstantsUtil.TW4SPECPARAMS);
-        } finally {
-            conn.disconnect();
-        }
+        String response = super.getResponse(request);
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertEquals(response, ConstantsUtil.TW4SPECPARAMS);
     }
 
     /*
@@ -213,21 +181,10 @@ public class TW4Test extends WebContainerTestBundleControl {
     public void testHTMLResponse() throws Exception {
         final String request = this.warContextPath
                 + "/TestServlet1/TestServlet2/TestServlet3/TestServlet4?type=html";
-        final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertEquals(response, ConstantsUtil.HTMLRESPONSE);
-        } finally {
-            conn.disconnect();
-        }
+        String response = super.getResponse(request);
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertEquals(response, ConstantsUtil.HTMLRESPONSE);
     }
 
     /*

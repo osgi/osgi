@@ -17,13 +17,11 @@
 package org.osgi.test.cases.webcontainer.annotation;
 
 import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.jar.Manifest;
 
 import org.osgi.framework.Bundle;
 import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
-import org.osgi.test.cases.webcontainer.util.Dispatcher;
 import org.osgi.test.cases.webcontainer.util.TimeUtil;
 import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
 
@@ -41,25 +39,21 @@ import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
  *          javax.servlet.http.HttpSessionAttributeListener
  */
 public class OtherAnnotationTest extends WebContainerTestBundleControl {
-    String warContextPath;
-    TimeUtil timeUtil;
     Bundle b;
 
     public void setUp() throws Exception {
         super.setUp();
-        this.warContextPath = "/tw2";
-        this.timeUtil = new TimeUtil(this.warContextPath);
-
+        super.prepare("/tw2");
         super.cleanupPropertyFile();
         // install + start the war file
         log("install war file: tw2.war at context path " + this.warContextPath);
-        this.b = installBundle(getWebServer()
-                + "tw2.war", true);
+        this.b = installBundle(super.getWarURL("tw3.war", this.options), true);
     }
 
     private void uninstallWar() throws Exception {
         // uninstall the war file
-        log("uninstall war file: tw2.war at context path " + this.warContextPath);
+        log("uninstall war file: tw2.war at context path "
+                + this.warContextPath);
         uninstallBundle(this.b);
     }
 
@@ -68,14 +62,16 @@ public class OtherAnnotationTest extends WebContainerTestBundleControl {
     }
 
     /*
-     * set deployOptions to null to rely on the web container service to generate the manifest
+     * set deployOptions to null to rely on the web container service to
+     * generate the manifest
      */
     public void testBundleManifest() throws Exception {
         Manifest originalManifest = super.getManifest("/resources/tw2/tw2.war");
-        BundleManifestValidator validator = new BundleManifestValidator(this.b, originalManifest, null, this.debug);
+        BundleManifestValidator validator = new BundleManifestValidator(this.b,
+                originalManifest, this.options, this.debug);
         validator.validate();
     }
-    
+
     /*
      * test annotated methods/fields in container manager class that implement
      * javax.servlet.Filter are called
@@ -83,45 +79,33 @@ public class OtherAnnotationTest extends WebContainerTestBundleControl {
     public void testFilter() throws Exception {
         final String request = this.warContextPath
                 + "/PostConstructPreDestroyServlet1";
-        final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertTrue(response.indexOf("PostConstructPreDestroyServlet1") > 0);
-            assertTrue(response
-                    .indexOf("PostConstructPreDestroyServlet1.printContext "
-                            + ConstantsUtil.PRINTCONTEXT) > 0);
-            assertEquals(response.indexOf("null"), -1);
-            // check if the time stamp in response is after the beforeStart
-            // time.
-            log("check if the time stamp in response is after the beforeStart time.");
-            assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
-            
-            log("verify annotated methods are invoked");
-            assertTrue(this.timeUtil.getTimeFromLog(
-                    "PostConstructPreDestroyServlet1", ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
-            assertTrue(this.timeUtil.getTimeFromLog("TestFilter",
-                    ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
-            
-            log("verify other methods are invoked");
-            assertTrue(this.timeUtil.getTimeFromLog("TestFilter", "init") > beforeInstall);
-            assertTrue(this.timeUtil.getTimeFromLog("TestFilter", "doFilter") > this.timeUtil
-                    .getTimeFromLog("TestFilter", "init"));
-            assertEquals(
-                    this.timeUtil.getDespFromLog("TestFilter", "doFilter"),
-                    ConstantsUtil.WELCOMESTRINGVALUE);
-            assertEquals(this.timeUtil.getDespFromLog("TestFilter", "init"),
-                    ConstantsUtil.WELCOMESTATEMENTVALUE);
-        } finally {
-            conn.disconnect();
-        }
+        String response = super.getResponse(request);
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertTrue(response.indexOf("PostConstructPreDestroyServlet1") > 0);
+        assertTrue(response
+                .indexOf("PostConstructPreDestroyServlet1.printContext "
+                        + ConstantsUtil.PRINTCONTEXT) > 0);
+        assertEquals(response.indexOf("null"), -1);
+        // check if the time stamp in response is after the beforeStart
+        // time.
+        log("check if the time stamp in response is after the beforeStart time.");
+        assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
+
+        log("verify annotated methods are invoked");
+        assertTrue(this.timeUtil.getTimeFromLog(
+                "PostConstructPreDestroyServlet1", ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
+        assertTrue(this.timeUtil.getTimeFromLog("TestFilter",
+                ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
+
+        log("verify other methods are invoked");
+        assertTrue(this.timeUtil.getTimeFromLog("TestFilter", "init") > beforeInstall);
+        assertTrue(this.timeUtil.getTimeFromLog("TestFilter", "doFilter") > this.timeUtil
+                .getTimeFromLog("TestFilter", "init"));
+        assertEquals(this.timeUtil.getDespFromLog("TestFilter", "doFilter"),
+                ConstantsUtil.WELCOMESTRINGVALUE);
+        assertEquals(this.timeUtil.getDespFromLog("TestFilter", "init"),
+                ConstantsUtil.WELCOMESTATEMENTVALUE);
     }
 
     /*
@@ -131,118 +115,80 @@ public class OtherAnnotationTest extends WebContainerTestBundleControl {
      */
     public void testServletContext() throws Exception {
         String request = this.warContextPath + "/ServletContextListenerServlet";
-        URL url = Dispatcher.createURL(request, this.server);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        // add attributes
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertTrue(response.indexOf("ServletContextListenerServlet") > 0);
-            assertTrue(response.indexOf(ConstantsUtil.EMAIL + "-"
-                    + ConstantsUtil.EMAILVALUE) > 0);
-            assertTrue(response.indexOf(ConstantsUtil.WELCOMESTRING + "-"
-                    + ConstantsUtil.WELCOMESTRINGVALUE) > 0);
-            assertTrue(response.indexOf(ConstantsUtil.WELCOMESTATEMENT + "-"
-                    + ConstantsUtil.WELCOMESTATEMENTVALUE) > 0);
-            assertEquals(response.indexOf("null"), -1);
+        String response = super.getResponse(request);
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertTrue(response.indexOf("ServletContextListenerServlet") > 0);
+        assertTrue(response.indexOf(ConstantsUtil.EMAIL + "-"
+                + ConstantsUtil.EMAILVALUE) > 0);
+        assertTrue(response.indexOf(ConstantsUtil.WELCOMESTRING + "-"
+                + ConstantsUtil.WELCOMESTRINGVALUE) > 0);
+        assertTrue(response.indexOf(ConstantsUtil.WELCOMESTATEMENT + "-"
+                + ConstantsUtil.WELCOMESTATEMENTVALUE) > 0);
+        assertEquals(response.indexOf("null"), -1);
 
-            // check if annotated methods are invoked
-            log("verify annotated methods are invoked");
-            assertTrue(this.timeUtil.getTimeFromLog(
-                    "ServletContextListenerServlet", ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
-            assertTrue(this.timeUtil.getTimeFromLog(
-                    "TestServletContextListener", ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
-            assertTrue(this.timeUtil.getTimeFromLog(
-                    "TestServletContextAttributeListener",
-                    ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
-            log("verify other methods are invoked");
-            assertEquals(this.timeUtil.getDespFromLog(
-                    "TestServletContextListener", "contextInitialized"),
-                    ConstantsUtil.EMAIL + "-" + ConstantsUtil.EMAILVALUE);
-            assertEquals(this.timeUtil.getDespFromLog(
-                    "TestServletContextAttributeListener", "attributeAdded"),
-                    ConstantsUtil.WELCOMESTRING + "-"
-                            + ConstantsUtil.WELCOMESTRINGVALUE);
-        } finally {
-            conn.disconnect();
-        }
+        // check if annotated methods are invoked
+        log("verify annotated methods are invoked");
+        assertTrue(this.timeUtil.getTimeFromLog(
+                "ServletContextListenerServlet", ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
+        assertTrue(this.timeUtil.getTimeFromLog("TestServletContextListener",
+                ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
+        assertTrue(this.timeUtil.getTimeFromLog(
+                "TestServletContextAttributeListener",
+                ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
+        log("verify other methods are invoked");
+        assertEquals(this.timeUtil.getDespFromLog("TestServletContextListener",
+                "contextInitialized"), ConstantsUtil.EMAIL + "-"
+                + ConstantsUtil.EMAILVALUE);
+        assertEquals(this.timeUtil.getDespFromLog(
+                "TestServletContextAttributeListener", "attributeAdded"),
+                ConstantsUtil.WELCOMESTRING + "-"
+                        + ConstantsUtil.WELCOMESTRINGVALUE);
 
         request = this.warContextPath
                 + "/ServletContextListenerServlet?modifyAttribute=true";
-        url = Dispatcher.createURL(request, this.server);
-        conn = (HttpURLConnection) url.openConnection();
-        // modify attributes
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertTrue(response.indexOf("ServletContextListenerServlet") > 0);
-            assertTrue(response.indexOf(ConstantsUtil.EMAIL + "-"
-                    + ConstantsUtil.EMAILVALUE) > 0);
-            assertTrue(response.indexOf(ConstantsUtil.WELCOMESTRING + "-" + "null") > 0);
-            assertTrue(response.indexOf(ConstantsUtil.WELCOMESTATEMENT + "-"
-                    + ConstantsUtil.WELCOMESTATEMENTVALUE2) > 0);
+        response = super.getResponse(request);
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertTrue(response.indexOf("ServletContextListenerServlet") > 0);
+        assertTrue(response.indexOf(ConstantsUtil.EMAIL + "-"
+                + ConstantsUtil.EMAILVALUE) > 0);
+        assertTrue(response.indexOf(ConstantsUtil.WELCOMESTRING + "-" + "null") > 0);
+        assertTrue(response.indexOf(ConstantsUtil.WELCOMESTATEMENT + "-"
+                + ConstantsUtil.WELCOMESTATEMENTVALUE2) > 0);
 
-            // check if methods are invoked
-            log("verify other methods are invoked");
-            assertTrue(this.timeUtil.getTimeFromLog(
-                    "TestServletContextAttributeListener", "attributeRemoved") > beforeInstall);
-            assertEquals(
-                    this.timeUtil.getDespFromLog(
-                            "TestServletContextAttributeListener",
-                            "attributeReplaced"), ConstantsUtil.WELCOMESTATEMENT
-                            + "-" + ConstantsUtil.WELCOMESTATEMENTVALUE);
-        } finally {
-            conn.disconnect();
-        }
+        // check if methods are invoked
+        log("verify other methods are invoked");
+        assertTrue(this.timeUtil.getTimeFromLog(
+                "TestServletContextAttributeListener", "attributeRemoved") > beforeInstall);
+        assertEquals(this.timeUtil.getDespFromLog(
+                "TestServletContextAttributeListener", "attributeReplaced"),
+                ConstantsUtil.WELCOMESTATEMENT + "-"
+                        + ConstantsUtil.WELCOMESTATEMENTVALUE);
 
         request = this.warContextPath
                 + "/ServletContextListenerServlet?modifyAttribute=reset";
-        url = Dispatcher.createURL(request, this.server);
-        conn = (HttpURLConnection) url.openConnection();
-        // reset attributes back to the initial values
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertTrue(response.indexOf("ServletContextListenerServlet") > 0);
-            assertTrue(response.indexOf(ConstantsUtil.EMAIL + "-"
-                    + ConstantsUtil.EMAILVALUE) > 0);
-            assertTrue(response.indexOf(ConstantsUtil.WELCOMESTRING + "-"
-                    + ConstantsUtil.WELCOMESTRINGVALUE) > 0);
-            assertTrue(response.indexOf(ConstantsUtil.WELCOMESTATEMENT + "-"
-                    + ConstantsUtil.WELCOMESTATEMENTVALUE) > 0);
+        response = super.getResponse(request);
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertTrue(response.indexOf("ServletContextListenerServlet") > 0);
+        assertTrue(response.indexOf(ConstantsUtil.EMAIL + "-"
+                + ConstantsUtil.EMAILVALUE) > 0);
+        assertTrue(response.indexOf(ConstantsUtil.WELCOMESTRING + "-"
+                + ConstantsUtil.WELCOMESTRINGVALUE) > 0);
+        assertTrue(response.indexOf(ConstantsUtil.WELCOMESTATEMENT + "-"
+                + ConstantsUtil.WELCOMESTATEMENTVALUE) > 0);
 
-            // check if methods are invoked
-            log("verify other methods are invoked");
-            assertEquals(this.timeUtil.getDespFromLog(
-                    "TestServletContextAttributeListener", "attributeAdded"),
-                    ConstantsUtil.WELCOMESTRING + "-"
-                            + ConstantsUtil.WELCOMESTRINGVALUE);
-            assertEquals(
-                    this.timeUtil.getDespFromLog(
-                            "TestServletContextAttributeListener",
-                            "attributeReplaced"), ConstantsUtil.WELCOMESTATEMENT
-                            + "-" + ConstantsUtil.WELCOMESTATEMENTVALUE2);
-        } finally {
-            conn.disconnect();
-        }
+        // check if methods are invoked
+        log("verify other methods are invoked");
+        assertEquals(this.timeUtil.getDespFromLog(
+                "TestServletContextAttributeListener", "attributeAdded"),
+                ConstantsUtil.WELCOMESTRING + "-"
+                        + ConstantsUtil.WELCOMESTRINGVALUE);
+        assertEquals(this.timeUtil.getDespFromLog(
+                "TestServletContextAttributeListener", "attributeReplaced"),
+                ConstantsUtil.WELCOMESTATEMENT + "-"
+                        + ConstantsUtil.WELCOMESTATEMENTVALUE2);
     }
 
     /*
@@ -252,100 +198,74 @@ public class OtherAnnotationTest extends WebContainerTestBundleControl {
      */
     public void testServletRequest() throws Exception {
         String request = this.warContextPath + "/RequestListenerServlet";
-        URL url = Dispatcher.createURL(request, this.server);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        // add attributes
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log ("verify content of response is correct");
-            assertTrue(response.indexOf("RequestListenerServlet") > 0);
-            assertTrue(response.indexOf(ConstantsUtil.WELCOMESTRING + "-"
-                    + ConstantsUtil.WELCOMESTRINGVALUE) > 0);
-            assertTrue(response.indexOf(ConstantsUtil.WELCOMESTATEMENT + "-"
-                    + ConstantsUtil.WELCOMESTATEMENTVALUE) > 0);
-            assertEquals(response.indexOf("null"), -1);
+        String response = super.getResponse(request);
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertTrue(response.indexOf("RequestListenerServlet") > 0);
+        assertTrue(response.indexOf(ConstantsUtil.WELCOMESTRING + "-"
+                + ConstantsUtil.WELCOMESTRINGVALUE) > 0);
+        assertTrue(response.indexOf(ConstantsUtil.WELCOMESTATEMENT + "-"
+                + ConstantsUtil.WELCOMESTATEMENTVALUE) > 0);
+        assertEquals(response.indexOf("null"), -1);
 
-            // check if annotated methods are invoked
-            log("verify annotated methods are invoked");
-            assertTrue(this.timeUtil.getTimeFromLog("RequestListenerServlet",
-                    ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
-            assertTrue(this.timeUtil.getTimeFromLog(
-                    "TestServletRequestListener", ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
-            assertTrue(this.timeUtil.getTimeFromLog(
-                    "TestServletRequestAttributeListener",
-                    ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
-            log("verify other methods are invoked");
-            assertEquals(this.timeUtil.getDespFromLog(
-                    "TestServletRequestListener", "requestInitialized"),
-                    ConstantsUtil.WELCOMESTRING + "-"
-                            + ConstantsUtil.WELCOMESTRINGVALUE);
-            assertEquals(this.timeUtil.getDespFromLog(
-                    "TestServletRequestAttributeListener", "attributeAdded"),
-                    ConstantsUtil.WELCOMESTRING + "-"
-                            + ConstantsUtil.WELCOMESTRINGVALUE);
-            assertTrue(this.timeUtil.getTimeFromLog(
-                    "TestServletRequestAttributeListener", "attributeRemoved") > beforeInstall);
-            assertEquals(
-                    this.timeUtil.getDespFromLog(
-                            "TestServletRequestAttributeListener",
-                            "attributeReplaced"), ConstantsUtil.WELCOMESTATEMENT
-                            + "-" + ConstantsUtil.WELCOMESTATEMENTVALUE);
-        } finally {
-            conn.disconnect();
-        }
+        // check if annotated methods are invoked
+        log("verify annotated methods are invoked");
+        assertTrue(this.timeUtil.getTimeFromLog("RequestListenerServlet",
+                ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
+        assertTrue(this.timeUtil.getTimeFromLog("TestServletRequestListener",
+                ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
+        assertTrue(this.timeUtil.getTimeFromLog(
+                "TestServletRequestAttributeListener",
+                ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
+        log("verify other methods are invoked");
+        assertEquals(this.timeUtil.getDespFromLog("TestServletRequestListener",
+                "requestInitialized"), ConstantsUtil.WELCOMESTRING + "-"
+                + ConstantsUtil.WELCOMESTRINGVALUE);
+        assertEquals(this.timeUtil.getDespFromLog(
+                "TestServletRequestAttributeListener", "attributeAdded"),
+                ConstantsUtil.WELCOMESTRING + "-"
+                        + ConstantsUtil.WELCOMESTRINGVALUE);
+        assertTrue(this.timeUtil.getTimeFromLog(
+                "TestServletRequestAttributeListener", "attributeRemoved") > beforeInstall);
+        assertEquals(this.timeUtil.getDespFromLog(
+                "TestServletRequestAttributeListener", "attributeReplaced"),
+                ConstantsUtil.WELCOMESTATEMENT + "-"
+                        + ConstantsUtil.WELCOMESTATEMENTVALUE);
 
-        conn = (HttpURLConnection) url.openConnection();
         // modify attributes
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertTrue(response.indexOf("RequestListenerServlet") > 0);
-            assertTrue(response.indexOf(ConstantsUtil.WELCOMESTRING + "-"
-                    + ConstantsUtil.WELCOMESTRINGVALUE) > 0);
-            assertTrue(response.indexOf(ConstantsUtil.WELCOMESTATEMENT + "-"
-                    + ConstantsUtil.WELCOMESTATEMENTVALUE) > 0);
-            assertEquals(response.indexOf("null"), -1);
+        response = super.getResponse(request);
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertTrue(response.indexOf("RequestListenerServlet") > 0);
+        assertTrue(response.indexOf(ConstantsUtil.WELCOMESTRING + "-"
+                + ConstantsUtil.WELCOMESTRINGVALUE) > 0);
+        assertTrue(response.indexOf(ConstantsUtil.WELCOMESTATEMENT + "-"
+                + ConstantsUtil.WELCOMESTATEMENTVALUE) > 0);
+        assertEquals(response.indexOf("null"), -1);
 
-            // check if annotated methods are invoked
-            log("verify annotated methods are invoked");
-            assertTrue(this.timeUtil.getTimeFromLog("RequestListenerServlet",
-                    ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
-            assertTrue(this.timeUtil.getTimeFromLog(
-                    "TestServletRequestListener", ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
-            assertTrue(this.timeUtil.getTimeFromLog(
-                    "TestServletRequestAttributeListener",
-                    ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
-            log("check if other methods are invoked");
-            assertEquals(this.timeUtil.getDespFromLog(
-                    "TestServletRequestListener", "requestInitialized"),
-                    ConstantsUtil.WELCOMESTRING + "-"
-                            + ConstantsUtil.WELCOMESTRINGVALUE);
-            assertEquals(this.timeUtil.getDespFromLog(
-                    "TestServletRequestAttributeListener", "attributeAdded"),
-                    ConstantsUtil.WELCOMESTRING + "-"
-                            + ConstantsUtil.WELCOMESTRINGVALUE);
-            assertTrue(this.timeUtil.getTimeFromLog(
-                    "TestServletRequestAttributeListener", "attributeRemoved") > beforeInstall);
-            assertEquals(
-                    this.timeUtil.getDespFromLog(
-                            "TestServletRequestAttributeListener",
-                            "attributeReplaced"), ConstantsUtil.WELCOMESTATEMENT
-                            + "-" + ConstantsUtil.WELCOMESTATEMENTVALUE);
-        } finally {
-            conn.disconnect();
-        }
+        // check if annotated methods are invoked
+        log("verify annotated methods are invoked");
+        assertTrue(this.timeUtil.getTimeFromLog("RequestListenerServlet",
+                ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
+        assertTrue(this.timeUtil.getTimeFromLog("TestServletRequestListener",
+                ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
+        assertTrue(this.timeUtil.getTimeFromLog(
+                "TestServletRequestAttributeListener",
+                ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
+        log("check if other methods are invoked");
+        assertEquals(this.timeUtil.getDespFromLog("TestServletRequestListener",
+                "requestInitialized"), ConstantsUtil.WELCOMESTRING + "-"
+                + ConstantsUtil.WELCOMESTRINGVALUE);
+        assertEquals(this.timeUtil.getDespFromLog(
+                "TestServletRequestAttributeListener", "attributeAdded"),
+                ConstantsUtil.WELCOMESTRING + "-"
+                        + ConstantsUtil.WELCOMESTRINGVALUE);
+        assertTrue(this.timeUtil.getTimeFromLog(
+                "TestServletRequestAttributeListener", "attributeRemoved") > beforeInstall);
+        assertEquals(this.timeUtil.getDespFromLog(
+                "TestServletRequestAttributeListener", "attributeReplaced"),
+                ConstantsUtil.WELCOMESTATEMENT + "-"
+                        + ConstantsUtil.WELCOMESTATEMENTVALUE);
     }
 
     /*
@@ -355,98 +275,74 @@ public class OtherAnnotationTest extends WebContainerTestBundleControl {
      */
     public void testHTTPSession() throws Exception {
         String request = this.warContextPath + "/HTTPSessionListenerServlet";
-        URL url = Dispatcher.createURL(request, this.server);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        String response = super.getResponse(request);
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertTrue(response.indexOf("HTTPSessionListenerServlet") > 0);
+        assertTrue(response.indexOf(ConstantsUtil.WELCOMESTRING + "-"
+                + ConstantsUtil.WELCOMESTRINGVALUE) > 0);
+        assertTrue(response.indexOf(ConstantsUtil.WELCOMESTATEMENT + "-"
+                + ConstantsUtil.WELCOMESTATEMENTVALUE) > 0);
+        assertEquals(response.indexOf("null"), -1);
 
-        // add attributes
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertTrue(response.indexOf("HTTPSessionListenerServlet") > 0);
-            assertTrue(response.indexOf(ConstantsUtil.WELCOMESTRING + "-"
-                    + ConstantsUtil.WELCOMESTRINGVALUE) > 0);
-            assertTrue(response.indexOf(ConstantsUtil.WELCOMESTATEMENT + "-"
-                    + ConstantsUtil.WELCOMESTATEMENTVALUE) > 0);
-            assertEquals(response.indexOf("null"), -1);
+        // check if annotated methods are invoked
+        log("verify annotated methods are invoked");
+        assertTrue(this.timeUtil.getTimeFromLog("HTTPSessionListenerServlet",
+                ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
+        assertTrue(this.timeUtil.getTimeFromLog("TestHttpSessionListener",
+                ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
+        assertTrue(this.timeUtil
+                .getTimeFromLog("TestHttpSessionAttributeListener",
+                        ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
+        log("verify other methods are invoked");
+        assertEquals(this.timeUtil.getDespFromLog("TestHttpSessionListener",
+                "sessionCreated"), ConstantsUtil.WELCOMESTRING + "-"
+                + ConstantsUtil.WELCOMESTRINGVALUE);
+        assertEquals(this.timeUtil.getDespFromLog(
+                "TestHttpSessionAttributeListener", "attributeAdded"),
+                ConstantsUtil.WELCOMESTRING + "-"
+                        + ConstantsUtil.WELCOMESTRINGVALUE);
+        assertTrue(this.timeUtil.getTimeFromLog(
+                "TestHttpSessionAttributeListener", "attributeRemoved") > beforeInstall);
+        assertEquals(this.timeUtil.getDespFromLog(
+                "TestHttpSessionAttributeListener", "attributeReplaced"),
+                ConstantsUtil.WELCOMESTATEMENT + "-"
+                        + ConstantsUtil.WELCOMESTATEMENTVALUE);
 
-            // check if annotated methods are invoked
-            log("verify annotated methods are invoked");
-            assertTrue(this.timeUtil.getTimeFromLog(
-                    "HTTPSessionListenerServlet", ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
-            assertTrue(this.timeUtil.getTimeFromLog("TestHttpSessionListener",
-                    ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
-            assertTrue(this.timeUtil
-                    .getTimeFromLog("TestHttpSessionAttributeListener",
-                            ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
-            log("verify other methods are invoked");
-            assertEquals(this.timeUtil.getDespFromLog(
-                    "TestHttpSessionListener", "sessionCreated"),
-                    ConstantsUtil.WELCOMESTRING + "-"
-                            + ConstantsUtil.WELCOMESTRINGVALUE);
-            assertEquals(this.timeUtil.getDespFromLog(
-                    "TestHttpSessionAttributeListener", "attributeAdded"),
-                    ConstantsUtil.WELCOMESTRING + "-"
-                            + ConstantsUtil.WELCOMESTRINGVALUE);
-            assertTrue(this.timeUtil.getTimeFromLog(
-                    "TestHttpSessionAttributeListener", "attributeRemoved") > beforeInstall);
-            assertEquals(this.timeUtil.getDespFromLog(
-                    "TestHttpSessionAttributeListener", "attributeReplaced"),
-                    ConstantsUtil.WELCOMESTATEMENT + "-"
-                            + ConstantsUtil.WELCOMESTATEMENTVALUE);
-        } finally {
-            conn.disconnect();
-        }
+        response = super.getResponse(request);
 
-        conn = (HttpURLConnection) url.openConnection();
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertTrue(response.indexOf("HTTPSessionListenerServlet") > 0);
-            assertTrue(response.indexOf(ConstantsUtil.WELCOMESTRING + "-"
-                    + ConstantsUtil.WELCOMESTRINGVALUE) > 0);
-            assertTrue(response.indexOf(ConstantsUtil.WELCOMESTATEMENT + "-"
-                    + ConstantsUtil.WELCOMESTATEMENTVALUE) > 0);
-            assertEquals(response.indexOf("null"), -1);
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertTrue(response.indexOf("HTTPSessionListenerServlet") > 0);
+        assertTrue(response.indexOf(ConstantsUtil.WELCOMESTRING + "-"
+                + ConstantsUtil.WELCOMESTRINGVALUE) > 0);
+        assertTrue(response.indexOf(ConstantsUtil.WELCOMESTATEMENT + "-"
+                + ConstantsUtil.WELCOMESTATEMENTVALUE) > 0);
+        assertEquals(response.indexOf("null"), -1);
 
-            // check if annotated methods are invoked
-            log("verify annotated methods are invoked");
-            assertTrue(this.timeUtil.getTimeFromLog(
-                    "HTTPSessionListenerServlet", ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
-            assertTrue(this.timeUtil.getTimeFromLog("TestHttpSessionListener",
-                    ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
-            assertTrue(this.timeUtil
-                    .getTimeFromLog("TestHttpSessionAttributeListener",
-                            ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
-            log("verify other methods are invoked");
-            assertEquals(this.timeUtil.getDespFromLog(
-                    "TestHttpSessionListener", "sessionCreated"),
-                    ConstantsUtil.WELCOMESTRING + "-"
-                            + ConstantsUtil.WELCOMESTRINGVALUE);
-            assertEquals(this.timeUtil.getDespFromLog(
-                    "TestHttpSessionAttributeListener", "attributeAdded"),
-                    ConstantsUtil.WELCOMESTRING + "-"
-                            + ConstantsUtil.WELCOMESTRINGVALUE);
-            assertTrue(this.timeUtil.getTimeFromLog(
-                    "TestHttpSessionAttributeListener", "attributeRemoved") > beforeInstall);
-            assertEquals(this.timeUtil.getDespFromLog(
-                    "TestHttpSessionAttributeListener", "attributeReplaced"),
-                    ConstantsUtil.WELCOMESTATEMENT + "-"
-                            + ConstantsUtil.WELCOMESTATEMENTVALUE);
-        } finally {
-            conn.disconnect();
-        }
+        // check if annotated methods are invoked
+        log("verify annotated methods are invoked");
+        assertTrue(this.timeUtil.getTimeFromLog("HTTPSessionListenerServlet",
+                ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
+        assertTrue(this.timeUtil.getTimeFromLog("TestHttpSessionListener",
+                ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
+        assertTrue(this.timeUtil
+                .getTimeFromLog("TestHttpSessionAttributeListener",
+                        ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
+        log("verify other methods are invoked");
+        assertEquals(this.timeUtil.getDespFromLog("TestHttpSessionListener",
+                "sessionCreated"), ConstantsUtil.WELCOMESTRING + "-"
+                + ConstantsUtil.WELCOMESTRINGVALUE);
+        assertEquals(this.timeUtil.getDespFromLog(
+                "TestHttpSessionAttributeListener", "attributeAdded"),
+                ConstantsUtil.WELCOMESTRING + "-"
+                        + ConstantsUtil.WELCOMESTRINGVALUE);
+        assertTrue(this.timeUtil.getTimeFromLog(
+                "TestHttpSessionAttributeListener", "attributeRemoved") > beforeInstall);
+        assertEquals(this.timeUtil.getDespFromLog(
+                "TestHttpSessionAttributeListener", "attributeReplaced"),
+                ConstantsUtil.WELCOMESTATEMENT + "-"
+                        + ConstantsUtil.WELCOMESTATEMENTVALUE);
     }
 
     /*
@@ -471,14 +367,16 @@ public class OtherAnnotationTest extends WebContainerTestBundleControl {
                 "ServletContextListenerServlet", ConstantsUtil.PREDESTROY) > beforeUninstall);
         assertTrue(this.timeUtil.getTimeFromLog("TestServletContextListener",
                 ConstantsUtil.PREDESTROY) > beforeUninstall);
-        assertTrue(this.timeUtil.getTimeFromLog(
-                "TestServletContextAttributeListener", ConstantsUtil.PREDESTROY) > beforeUninstall);
+        assertTrue(this.timeUtil
+                .getTimeFromLog("TestServletContextAttributeListener",
+                        ConstantsUtil.PREDESTROY) > beforeUninstall);
         assertTrue(this.timeUtil.getTimeFromLog("RequestListenerServlet",
                 ConstantsUtil.PREDESTROY) > beforeUninstall);
         assertTrue(this.timeUtil.getTimeFromLog("TestServletRequestListener",
                 ConstantsUtil.PREDESTROY) > beforeUninstall);
-        assertTrue(this.timeUtil.getTimeFromLog(
-                "TestServletRequestAttributeListener", ConstantsUtil.PREDESTROY) > beforeUninstall);
+        assertTrue(this.timeUtil
+                .getTimeFromLog("TestServletRequestAttributeListener",
+                        ConstantsUtil.PREDESTROY) > beforeUninstall);
         assertTrue(this.timeUtil.getTimeFromLog("HTTPSessionListenerServlet",
                 ConstantsUtil.PREDESTROY) > beforeUninstall);
         assertTrue(this.timeUtil.getTimeFromLog("TestHttpSessionListener",

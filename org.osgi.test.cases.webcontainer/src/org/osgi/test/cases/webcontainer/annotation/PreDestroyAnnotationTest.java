@@ -18,29 +18,23 @@ package org.osgi.test.cases.webcontainer.annotation;
 
 import org.osgi.framework.Bundle;
 import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
-import org.osgi.test.cases.webcontainer.util.Server;
 import org.osgi.test.cases.webcontainer.util.TimeUtil;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * @version $Rev$ $Date$
  */
 public class PreDestroyAnnotationTest extends WebContainerTestBundleControl {
-    String warContextPath;
     long beforeUninstall;
-    TimeUtil timeUtil;
     Bundle b;
 
     public void setUp() throws Exception {
         super.setUp();
-        this.warContextPath = "/tw2";
-        this.timeUtil = new TimeUtil(this.warContextPath);
+        super.prepare("/tw2");
 
         super.cleanupPropertyFile();
         // install + start the war file
         log("install war file: tw2.war at context path " + this.warContextPath);
-        this.b = installBundle(getWebServer()
-                + "tw2.war", true);
+        this.b = installBundle(super.getWarURL("tw3.war", this.options), true);
         
         // capture a time before uninstall
         beforeUninstall = System.currentTimeMillis();

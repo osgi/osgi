@@ -16,33 +16,28 @@
 
 package org.osgi.test.cases.webcontainer.annotation;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import org.osgi.framework.Bundle;
 import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
-import org.osgi.test.cases.webcontainer.util.Dispatcher;
 
 /**
  * @version $Rev$ $Date$
  */
 public class ResourceAnnotationTest extends WebContainerTestBundleControl {
-    String warContextPath;
     Bundle b;
 
     public void setUp() throws Exception {
         super.setUp();
-        this.warContextPath = "/tw2";
+        super.prepare("/tw2");
 
         // install + start the war file
         log("install war file: tw2.war at context path " + this.warContextPath);
-        this.b = installBundle(getWebServer()
-                + "tw2.war", true);
+        this.b = installBundle(super.getWarURL("tw3.war", this.options), true);
     }
 
     private void uninstallWar() throws Exception {
         // uninstall the war file
-        log("uninstall war file: tw2.war at context path " + this.warContextPath);
+        log("uninstall war file: tw2.war at context path "
+                + this.warContextPath);
         uninstallBundle(this.b);
     }
 
@@ -56,27 +51,16 @@ public class ResourceAnnotationTest extends WebContainerTestBundleControl {
      */
     public void testResource001() throws Exception {
         final String request = this.warContextPath + "/ResourceServlet1";
-        final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertTrue(response.indexOf("ResourceServlet1") > 0);
-            assertTrue(response
-                    .indexOf("Printing the injections in this ResourceServlet1 ...") > 0);
-            assertTrue(response.indexOf("Done!") > 0);
-            assertEquals(response.indexOf("null"), -1);
-            assertEquals(response
-                    .indexOf("Error - unable to find name via @Resource"), -1);
-        } finally {
-            conn.disconnect();
-        }
+        String response = super.getResponse(request);
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertTrue(response.indexOf("ResourceServlet1") > 0);
+        assertTrue(response
+                .indexOf("Printing the injections in this ResourceServlet1 ...") > 0);
+        assertTrue(response.indexOf("Done!") > 0);
+        assertEquals(response.indexOf("null"), -1);
+        assertEquals(response
+                .indexOf("Error - unable to find name via @Resource"), -1);
     }
 
     /*
@@ -85,24 +69,13 @@ public class ResourceAnnotationTest extends WebContainerTestBundleControl {
      */
     public void testResource002() throws Exception {
         final String request = this.warContextPath + "/ResourceServlet2";
-        final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertTrue(response.indexOf("ResourceServlet2") > 0);
-            assertTrue(response.indexOf("Welcome String from env-entry!") > 0);
-            assertTrue(response.indexOf("5 + 5 = 10 that is true") > 0);
-            assertEquals(response.indexOf("null"), -1);
-        } finally {
-            conn.disconnect();
-        }
+        String response = super.getResponse(request);
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertTrue(response.indexOf("ResourceServlet2") > 0);
+        assertTrue(response.indexOf("Welcome String from env-entry!") > 0);
+        assertTrue(response.indexOf("5 + 5 = 10 that is true") > 0);
+        assertEquals(response.indexOf("null"), -1);
     }
 
     /*
@@ -113,27 +86,16 @@ public class ResourceAnnotationTest extends WebContainerTestBundleControl {
      */
     public void testResource003() throws Exception {
         final String request = this.warContextPath + "/ResourceServlet3";
-        final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertTrue(response.indexOf("ResourceServlet3") > 0);
-            assertTrue(response
-                    .indexOf("Printing the injections in this ResourceServlet3 ...") > 0);
-            assertTrue(response.indexOf("Done!") > 0);
-            assertEquals(response.indexOf("null"), -1);
-            assertEquals(response
-                    .indexOf("Error - unable to find name via @Resource"), -1);
-        } finally {
-            conn.disconnect();
-        }
+        String response = super.getResponse(request);
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertTrue(response.indexOf("ResourceServlet3") > 0);
+        assertTrue(response
+                .indexOf("Printing the injections in this ResourceServlet3 ...") > 0);
+        assertTrue(response.indexOf("Done!") > 0);
+        assertEquals(response.indexOf("null"), -1);
+        assertEquals(response
+                .indexOf("Error - unable to find name via @Resource"), -1);
     }
 
     /*
@@ -142,24 +104,13 @@ public class ResourceAnnotationTest extends WebContainerTestBundleControl {
      */
     public void testResource004() throws Exception {
         final String request = this.warContextPath + "/ResourceServlet4";
-        final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertTrue(response.indexOf("ResourceServlet4") > 0);
-            assertTrue(response.indexOf("Welcome String from env-entry!") > 0);
-            assertTrue(response.indexOf("5 + 5 = 10 that is true") > 0);
-            assertEquals(response.indexOf("null"), -1);
-        } finally {
-            conn.disconnect();
-        }
+        String response = super.getResponse(request);
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertTrue(response.indexOf("ResourceServlet4") > 0);
+        assertTrue(response.indexOf("Welcome String from env-entry!") > 0);
+        assertTrue(response.indexOf("5 + 5 = 10 that is true") > 0);
+        assertEquals(response.indexOf("null"), -1);
     }
 
 }

@@ -23,8 +23,11 @@ import java.util.jar.Manifest;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
+import org.osgi.framework.Version;
+import org.osgi.service.webcontainer.WebContainer;
 
 import junit.framework.Assert;
+import junit.framework.AssertionFailedError;
 
 /**
  * @version $Rev$ $Date$
@@ -39,7 +42,7 @@ public class BundleManifestValidator extends Assert implements Validator{
     Dictionary dictionary;
     Manifest manifest;
     Map deployOptions;
-    private static final String[] REQUIREDIMPORT = {"javax.servlet; version=2.5","javax.servlet.http; version=2.5", "javax.servlet.jsp; version=2.1", "javax.servlet.jsp.tagext; version=2.1"};
+    private final String[] REQUIREDIMPORT = {"javax.servlet; version=2.5","javax.servlet.http; version=2.5", "javax.servlet.jsp; version=2.1", "javax.servlet.jsp.tagext; version=2.1"};
     private static final String WEBINFCLASSES = "WEB-INF/classes";
     
     public BundleManifestValidator(Bundle b) {
@@ -71,7 +74,7 @@ public class BundleManifestValidator extends Assert implements Validator{
     
     public void validate() throws Exception {
         validateSymbolicName();
-        validateBundleManifestVersion();
+        validateBundleVersion();
         validateBundleManifestVersion();
         validateBundleClassPath();
         validateImportPackage();
@@ -87,7 +90,7 @@ public class BundleManifestValidator extends Assert implements Validator{
      * 1. the deployer specified Bundle-SymbolicName value will be used.
      * 2. Otherwise, preserve the Bundle-SymbolicName value in the manifest file
      */
-    private void validateSymbolicName() throws Exception {
+    public void validateSymbolicName() throws Exception {
         assertNotNull(this.dictionary);
         
         // test bundle manifest is constructed per user's deployment options
@@ -98,26 +101,59 @@ public class BundleManifestValidator extends Assert implements Validator{
         assertNotNull(this.b.getSymbolicName());
         
         // dSymbolicName - deployer specified Bundle-SymbolicName value
-        String dSymbolicName = this.deployOptions == null ? null : (String)this.deployOptions.get(Constants.BUNDLE_SYMBOLICNAME);
+        Object dSymbolicName = this.deployOptions == null ? null : this.deployOptions.get(Constants.BUNDLE_SYMBOLICNAME);
         // mSymbolicName - manifest Bundle-SymbolicName value
-        String mSymbolicName = this.manifest == null ? null : this.manifest.getMainAttributes().getValue(Constants.BUNDLE_SYMBOLICNAME);
+        Object mSymbolicName = this.manifest == null ? null : this.manifest.getMainAttributes().getValue(Constants.BUNDLE_SYMBOLICNAME);
         if (dSymbolicName != null) {
-            assertEquals(this.b.getSymbolicName(), dSymbolicName);
+            assertEquals(this.b.getSymbolicName(), (String)dSymbolicName);
         } else if (mSymbolicName != null) {
-            assertEquals(this.b.getSymbolicName(), mSymbolicName);
+            assertEquals(this.b.getSymbolicName(), (String)mSymbolicName);
         } 
         
         // TODO: can we verify if the symbolic name is unique?
         // TODO: possible test case: what if a deployer or manifest specifies a non-unique symbolic name?
     }
     
-    /*
-     * validate the existence of Bundle-Version as it is required
+    /* TODO: depends on clarification of RFC 66
+     * validate Bundle-Version is required.
      * Also validate:
      * 1. the deployer specified Bundle-Version value will be used.
      * 2. Otherwise, preserve the Bundle-Version value in the manifest file
      */
-    private void validateBundleManifestVersion() throws Exception {
+    public void validateBundleVersion() throws Exception {
+        assertNotNull(this.dictionary);
+        Object versionObj = this.dictionary.get(Constants.BUNDLE_VERSION);
+        assertNotNull(versionObj);
+        String version = (String)versionObj;
+        if (this.debug) {
+            log(Constants.BUNDLE_VERSION + " is " + version);
+        }       
+
+        // validate the version
+        // this could throw IllegalArgumentException 
+        // if v is improperly formatted
+        Version v = new Version(version);
+
+        // dVersion - deployer specified Bundle-Version value
+        Object dVersion = this.deployOptions == null ? null : this.deployOptions.get(Constants.BUNDLE_VERSION);
+        // mVersion - manifest Bundle-Version value
+        Object mVersion = this.manifest == null ? null : this.manifest.getMainAttributes().getValue(Constants.BUNDLE_VERSION);
+        if (dVersion != null) {
+            assertEquals(version, (String)dVersion);
+        } else if (mVersion !=null) {
+            assertEquals(version, (String)mVersion);
+        }   
+    }
+    
+    /*
+     * validate the existence of Bundle-ManifestVersion as it is required
+     * and it is >=2.
+     * Also validate:
+     * 1. the deployer specified Bundle-ManifestVersion value will be used.
+     * 2. Otherwise, preserve the Bundle-ManifestVersion value in the manifest file
+     * 3. otherwise, set it to 2.
+     */
+    public void validateBundleManifestVersion() throws Exception {
         assertNotNull(this.dictionary);
         
         log("verify Bundle-ManifestVersion exists and >=2");
@@ -128,13 +164,13 @@ public class BundleManifestValidator extends Assert implements Validator{
         assertTrue((Integer.parseInt((String) this.dictionary.get(Constants.BUNDLE_MANIFESTVERSION))) >= 2);
         
         // dVersion - deployer specified Bundle-Version value
-        String dVersion = this.deployOptions == null ? null : (String)this.deployOptions.get(Constants.BUNDLE_MANIFESTVERSION);
+        Object dVersion = this.deployOptions == null ? null : this.deployOptions.get(Constants.BUNDLE_MANIFESTVERSION);
         // mVersion - manifest Bundle-Version value
-        String mVersion = this.manifest == null ? null : (String)this.manifest.getMainAttributes().getValue(Constants.BUNDLE_MANIFESTVERSION);
+        Object mVersion = this.manifest == null ? null : this.manifest.getMainAttributes().getValue(Constants.BUNDLE_MANIFESTVERSION);
         if (dVersion != null) {
-            assertEquals((String) this.dictionary.get(Constants.BUNDLE_MANIFESTVERSION), dVersion);
+            assertEquals((String) this.dictionary.get(Constants.BUNDLE_MANIFESTVERSION), (String)dVersion);
         } else if (mVersion !=null) {
-            assertEquals((String) this.dictionary.get(Constants.BUNDLE_MANIFESTVERSION), mVersion);
+            assertEquals((String) this.dictionary.get(Constants.BUNDLE_MANIFESTVERSION), (String)mVersion);
         } else {
             assertEquals((String) this.dictionary.get(Constants.BUNDLE_MANIFESTVERSION), "2");
         }
@@ -148,7 +184,7 @@ public class BundleManifestValidator extends Assert implements Validator{
      * 2. adding each of the libraries from “WEB-INF/lib” if not already present on path. 
      * 3. append any Bundle-ClassPath deploy options
      */
-    private void validateBundleClassPath() throws Exception {
+    public void validateBundleClassPath() throws Exception {
         assertNotNull(this.dictionary);
         
         // verify Bundle-Classpath exists
@@ -160,14 +196,14 @@ public class BundleManifestValidator extends Assert implements Validator{
         assertNotNull(actualClasspath);
         
         // mClasspath - original manifest classpath String array
-        String[] mClasspath = this.manifest == null ? null : (String[])this.manifest.getMainAttributes().get(Constants.BUNDLE_CLASSPATH);
+        Object mClasspath = this.manifest == null ? null : this.manifest.getMainAttributes().get(Constants.BUNDLE_CLASSPATH);
         // dClasspath - deployer specified classpath String array
-        String[] dClasspath = this.deployOptions == null ? null : (String[])this.deployOptions.get(Constants.BUNDLE_CLASSPATH);
+        Object dClasspath = this.deployOptions == null ? null : this.deployOptions.get(Constants.BUNDLE_CLASSPATH);
 
         if (mClasspath == null) {
             // verify initializing the first path entry to "WEB-INF/classes" 
             assertEquals(actualClasspath[0], WEBINFCLASSES);
-        } else if (!exist(WEBINFCLASSES, mClasspath, false)){
+        } else if (!exist(WEBINFCLASSES, (String[])mClasspath, false)){
             assertTrue(exist(WEBINFCLASSES, actualClasspath, false));
         } else {
             assertTrue(exist(WEBINFCLASSES, actualClasspath, false));
@@ -179,8 +215,9 @@ public class BundleManifestValidator extends Assert implements Validator{
         
         // verify deployer specified classpath is added on the classpath
         if (dClasspath != null) {
-            for (int i = 0; i < dClasspath.length; i++) {
-                assertTrue(exist(dClasspath[i], actualClasspath, false));
+            String[] dcp = (String[])dClasspath;
+            for (int i = 0; i < dcp.length; i++) {
+                assertTrue(exist(dcp[i], actualClasspath, false));
             }
         }
         
@@ -194,7 +231,7 @@ public class BundleManifestValidator extends Assert implements Validator{
      * javax.servlet.jsp and javax.servlet.jsp.tagext packages:
      * also verify deploy options should overwrite original manifest options.
      */
-    private void validateImportPackage() throws Exception {
+    public void validateImportPackage() throws Exception {
         assertNotNull(this.dictionary);
         String[] actualImports = (String[])this.dictionary.get(Constants.IMPORT_PACKAGE);
         // verify Import-package exists
@@ -204,9 +241,9 @@ public class BundleManifestValidator extends Assert implements Validator{
         assertNotNull(actualImports);
         
         // mImports - original manifest Import-Package String array
-        String[] mImports = this.manifest == null ? null : (String[])this.manifest.getMainAttributes().get(Constants.IMPORT_PACKAGE);
+        Object mImports = this.manifest == null ? null : this.manifest.getMainAttributes().get(Constants.IMPORT_PACKAGE);
         // dImports - deployer specified Import-Package String arrary
-        String[] dImports = this.deployOptions == null ? null : (String[])this.deployOptions.get(Constants.IMPORT_PACKAGE);
+        Object dImports = this.deployOptions == null ? null : this.deployOptions.get(Constants.IMPORT_PACKAGE);
  
         // verify the existence of the servlet and jsp packages on Import-pacakage header
         // we use loose check here to allow directives
@@ -216,20 +253,22 @@ public class BundleManifestValidator extends Assert implements Validator{
         
         // verify dImports are added to the actualImports
         if (dImports != null) {
-            for (int i = 0; i < dImports.length ; i++) {
-                assertTrue(exist(dImports[i], actualImports, true));
+            String[] di = (String[])dImports;
+            for (int i = 0; i < di.length ; i++) {
+                assertTrue(exist(di[i], actualImports, true));
             }
         }
         
         // verify package specified by mImports are on the actualImports
         // if there are conflicts with dImports, dImports should win
         if (mImports != null) {
-            for (int i = 0; i< mImports.length; i++) {
-                boolean exist = exist(mImports[i], actualImports, true);
+            String[] mi = (String[])mImports;
+            for (int i = 0; i< mi.length; i++) {
+                boolean exist = exist(mi[i], actualImports, true);
                 if (!exist) {
                     // it is possible because of the conflicts with dImports
-                    assertTrue(existLoose(getPackage(mImports[i]), dImports));
-                    assertTrue(existLoose(getPackage(mImports[i]), actualImports));
+                    assertTrue(existLoose(getPackage(mi[i]), (String[])dImports));
+                    assertTrue(existLoose(getPackage(mi[i]), actualImports));
                 }              
             }
         }
@@ -242,7 +281,7 @@ public class BundleManifestValidator extends Assert implements Validator{
      * Export-Package is optional
      * verify deploy options should overwrite original manifest options.
      */
-    private void validateExportPackage() throws Exception {
+    public void validateExportPackage() throws Exception {
         assertNotNull(this.dictionary);
         String[] actualExports = (String[])this.dictionary.get(Constants.EXPORT_PACKAGE);
         // verify Import-package exists
@@ -252,26 +291,28 @@ public class BundleManifestValidator extends Assert implements Validator{
         // assertNotNull(actualExports);
         
         // mExports - original manifest Export-Package String array
-        String[] mExports = this.manifest == null ? null : (String[])this.manifest.getMainAttributes().get(Constants.EXPORT_PACKAGE);
+        Object mExports = this.manifest == null ? null : this.manifest.getMainAttributes().get(Constants.EXPORT_PACKAGE);
         // dExports - deployer specified Export-Package String array
-        String[] dExports = this.deployOptions == null ? null : (String[])this.deployOptions.get(Constants.EXPORT_PACKAGE);
+        Object dExports = this.deployOptions == null ? null : this.deployOptions.get(Constants.EXPORT_PACKAGE);
         
         // verify dImports are added to the actualImports
         if (dExports != null) {
-            for (int i = 0; i < dExports.length ; i++) {
-                assertTrue(exist(dExports[i], actualExports, true));
+            String[] de = (String[])dExports;
+            for (int i = 0; i < de.length ; i++) {
+                assertTrue(exist(de[i], actualExports, true));
             }
         }
         
         // verify package specified by mExports are on the actualExports
         // if there are conflicts with dExports, dExports should win
         if (mExports != null) {
-            for (int i = 0; i< mExports.length; i++) {
-                boolean exist = exist(mExports[i], actualExports, true);
+            String[] me = (String[])mExports;
+            for (int i = 0; i< me.length; i++) {
+                boolean exist = exist(me[i], actualExports, true);
                 if (!exist) {
                     // it is possible because of the conflicts with dExports
-                    assertTrue(existLoose(getPackage(mExports[i]), dExports));
-                    assertTrue(existLoose(getPackage(mExports[i]), actualExports));
+                    assertTrue(existLoose(getPackage(me[i]), (String[])dExports));
+                    assertTrue(existLoose(getPackage(me[i]), actualExports));
                 }              
             }
         }
@@ -286,23 +327,22 @@ public class BundleManifestValidator extends Assert implements Validator{
      * 1. the deployer specified Web-ContextPath value will be used.
      * 2. Otherwise, preserve the Web-ContextPath value in the manifest file
      */
-    private void validateWebContextPath() throws Exception {
+    public void validateWebContextPath() throws Exception {
         // verify Web-ContextPath exists
-        // TODO replace "Web-ContextPath" with the Constants defined from RFC 66 API WebContainer.WEB_CONTEXT_PATH
-        log("verify Web-ContextPath exists as it is required");
+        log(WebContainer.WEB_CONTEXT_PATH + " must exist as it is required");
         if (this.debug) {
-            log("Web-ContextPath is " + (String)this.dictionary.get("Web-ContextPath"));
+            log(WebContainer.WEB_CONTEXT_PATH + " is " + (String)this.dictionary.get(WebContainer.WEB_CONTEXT_PATH));
         }
-        assertNotNull((String)this.dictionary.get("Web-ContextPath"));
+        assertNotNull((String)this.dictionary.get(WebContainer.WEB_CONTEXT_PATH));
         
         // dWebContextPath - deployer specified Web-ContextPath value
-        String dWebContextPath = this.deployOptions == null ? null : (String)this.deployOptions.get("Web-ContextPath");
+        Object dWebContextPath = this.deployOptions == null ? null : this.deployOptions.get(WebContainer.WEB_CONTEXT_PATH);
         // mWebContextPath - manifest Web-ContextPath value
-        String mWebContextPath = this.manifest == null ? null : (String)this.manifest.getMainAttributes().getValue("Web-ContextPath");
+        Object mWebContextPath = this.manifest == null ? null : this.manifest.getMainAttributes().getValue(WebContainer.WEB_CONTEXT_PATH);
         if (dWebContextPath != null) {
-            assertEquals((String) this.dictionary.get("Web-ContextPath"), dWebContextPath);
+            assertEquals((String) this.dictionary.get(WebContainer.WEB_CONTEXT_PATH), (String)dWebContextPath);
         } else if (mWebContextPath !=null) {
-            assertEquals((String) this.dictionary.get("Web-ContextPath"), mWebContextPath);
+            assertEquals((String) this.dictionary.get(WebContainer.WEB_CONTEXT_PATH), (String)mWebContextPath);
         }
         // TODO: verify Web-ContextPath is unique on the server
     }
@@ -313,23 +353,24 @@ public class BundleManifestValidator extends Assert implements Validator{
      * 1. the deployer specified Web-JSPExtractLocation value will be used.
      * 2. Otherwise, use the Web-JSPExtractLocation value in the manifest file
      */
-    private void validateJSPExtractLocation() throws Exception {
+    public void validateJSPExtractLocation() throws Exception {
         // verify Web-ContextPath exists
-        // TODO replace "Web-JSPExtractLocation" with the Constants defined from RFC 66 API WebContainer.JSPExtractLocation.WEB_JSP_EXTRACT_LOCATION 
-        log("verify Web-ContextPath exists as it is required");
+        log(WebContainer.WEB_JSP_EXTRACT_LOCATION + " is optional");
         if (this.debug) {
-            log("Web-JSPExtractLocation is " + (String)this.dictionary.get("Web-JSPExtractLocation"));
+            log(WebContainer.WEB_JSP_EXTRACT_LOCATION + " is " + (String)this.dictionary.get(WebContainer.WEB_JSP_EXTRACT_LOCATION));
         }
         
         // dWebContextPath - deployer specified Web-ContextPath value
-        String dJSPExtractLocation = this.deployOptions == null ? null : (String)this.deployOptions.get("Web-JSPExtractLocation");
+        Object dJSPExtractLocation = this.deployOptions == null ? null : this.deployOptions.get(WebContainer.WEB_JSP_EXTRACT_LOCATION);
         // mWebContextPath - manifest Web-ContextPath value
-        String mJSPExtractLocation = this.manifest == null ? null : (String)this.manifest.getMainAttributes().getValue("Web-JSPExtractLocation");
+        Object mJSPExtractLocation = this.manifest == null ? null : this.manifest.getMainAttributes().getValue(WebContainer.WEB_JSP_EXTRACT_LOCATION);
         if (dJSPExtractLocation != null) {
-            assertEquals((String) this.dictionary.get("Web-JSPExtractLocation"), dJSPExtractLocation);
+            assertEquals((String) this.dictionary.get(WebContainer.WEB_JSP_EXTRACT_LOCATION), (String)dJSPExtractLocation);
         } else if (mJSPExtractLocation !=null) {
-            assertEquals((String) this.dictionary.get("Web-JSPExtractLocation"), mJSPExtractLocation);
+            assertEquals((String) this.dictionary.get(WebContainer.WEB_JSP_EXTRACT_LOCATION), (String)mJSPExtractLocation);
         }
+        
+        // TODO verify the extract location exists and has the right content.
     }
     
     // check if a particular classpath exist in the classpath c String array

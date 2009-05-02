@@ -16,39 +16,34 @@
 
 package org.osgi.test.cases.webcontainer.annotation;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import org.osgi.framework.Bundle;
 import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
-import org.osgi.test.cases.webcontainer.util.Dispatcher;
 
 /**
  * @version $Rev$ $Date$
  */
 public class MCResourceAnnotationTest extends WebContainerTestBundleControl {
-    String warContextPath;
     Bundle b;
 
     public void setUp() throws Exception {
         super.setUp();
-        this.warContextPath = "/tw3";
+        super.prepare("/tw3");
 
         // install + start the war file
         log("install war file: tw3.war at context path " + this.warContextPath);
-        this.b = installBundle(getWebServer()
-                + "tw3.war", true);
+        this.b = installBundle(super.getWarURL("tw3.war", this.options), true);
     }
 
     public void tearDown() throws Exception {
         // uninstall the war file?
         uninstallWar();
     }
-    
+
     private void uninstallWar() throws Exception {
         // uninstall the war file
-        log("uninstall war file: tw3.war at context path " + this.warContextPath);
+        log("uninstall war file: tw3.war at context path "
+                + this.warContextPath);
         uninstallBundle(this.b);
     }
 
@@ -59,25 +54,15 @@ public class MCResourceAnnotationTest extends WebContainerTestBundleControl {
      */
     public void testResource001() throws Exception {
         final String request = this.warContextPath + "/ResourceServlet1";
-        final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertTrue(response.indexOf("ResourceServlet1") > 0);
-            assertTrue(response
-                    .indexOf("Printing the injections in this ResourceServlet1 ...") > 0);
-            assertTrue(response
-                    .indexOf("Error - unable to find name via @Resource") > 0);
-        } finally {
-            conn.disconnect();
-        }
+        String response = super.getResponse(request);
+
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertTrue(response.indexOf("ResourceServlet1") > 0);
+        assertTrue(response
+                .indexOf("Printing the injections in this ResourceServlet1 ...") > 0);
+        assertTrue(response
+                .indexOf("Error - unable to find name via @Resource") > 0);
     }
 
     /*
@@ -86,24 +71,16 @@ public class MCResourceAnnotationTest extends WebContainerTestBundleControl {
      */
     public void testResource002() throws Exception {
         final String request = this.warContextPath + "/ResourceServlet2";
-        final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertTrue(response.indexOf("ResourceServlet2") > 0);
-            assertTrue(response.indexOf(ConstantsUtil.NULL + " " + ConstantsUtil.NULL) > 0);
-            assertTrue(response.indexOf(ConstantsUtil.NULL + " + " + ConstantsUtil.NULL
-                    + " = " + ConstantsUtil.NULL + " that is " + ConstantsUtil.NULL) > 0);
-        } finally {
-            conn.disconnect();
-        }
+        String response = super.getResponse(request);
+
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertTrue(response.indexOf("ResourceServlet2") > 0);
+        assertTrue(response.indexOf(ConstantsUtil.NULL + " "
+                + ConstantsUtil.NULL) > 0);
+        assertTrue(response.indexOf(ConstantsUtil.NULL + " + "
+                + ConstantsUtil.NULL + " = " + ConstantsUtil.NULL + " that is "
+                + ConstantsUtil.NULL) > 0);
     }
 
     /*
@@ -115,25 +92,15 @@ public class MCResourceAnnotationTest extends WebContainerTestBundleControl {
      */
     public void testResource003() throws Exception {
         final String request = this.warContextPath + "/ResourceServlet3";
-        final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertTrue(response.indexOf("ResourceServlet3") > 0);
-            assertTrue(response
-                    .indexOf("Printing the injections in this ResourceServlet3 ...") > 0);
-            assertTrue(response
-                    .indexOf("Error - unable to find name via @Resource") > 0);
-        } finally {
-            conn.disconnect();
-        }
+        String response = super.getResponse(request);
+
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertTrue(response.indexOf("ResourceServlet3") > 0);
+        assertTrue(response
+                .indexOf("Printing the injections in this ResourceServlet3 ...") > 0);
+        assertTrue(response
+                .indexOf("Error - unable to find name via @Resource") > 0);
     }
 
     /*
@@ -142,24 +109,16 @@ public class MCResourceAnnotationTest extends WebContainerTestBundleControl {
      */
     public void testResource004() throws Exception {
         final String request = this.warContextPath + "/ResourceServlet4";
-        final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertTrue(response.indexOf("ResourceServlet4") > 0);
-            assertTrue(response.indexOf(ConstantsUtil.NULL + " " + ConstantsUtil.NULL) > 0);
-            assertTrue(response.indexOf(ConstantsUtil.NULL + " + " + ConstantsUtil.NULL
-                    + " = " + ConstantsUtil.NULL + " that is " + ConstantsUtil.NULL) > 0);
-        } finally {
-            conn.disconnect();
-        }
+        String response = super.getResponse(request);
+
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertTrue(response.indexOf("ResourceServlet4") > 0);
+        assertTrue(response.indexOf(ConstantsUtil.NULL + " "
+                + ConstantsUtil.NULL) > 0);
+        assertTrue(response.indexOf(ConstantsUtil.NULL + " + "
+                + ConstantsUtil.NULL + " = " + ConstantsUtil.NULL + " that is "
+                + ConstantsUtil.NULL) > 0);
     }
 
 }

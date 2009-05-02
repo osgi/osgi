@@ -15,13 +15,20 @@
  */
 package org.osgi.test.cases.webcontainer;
 
+import java.net.HttpURLConnection;
 import java.net.JarURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
+import org.osgi.framework.Bundle;
+import org.osgi.service.webcontainer.WebContainer;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
+import org.osgi.test.cases.webcontainer.util.Dispatcher;
 import org.osgi.test.cases.webcontainer.util.Server;
+import org.osgi.test.cases.webcontainer.util.TimeUtil;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
@@ -29,44 +36,157 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * 
  *          abstract test class for webcontainer
  */
-public abstract class WebContainerTestBundleControl extends DefaultTestBundleControl {
-    // this test case assume war files are already installed for now
+public abstract class WebContainerTestBundleControl extends
+        DefaultTestBundleControl {
     protected Server server;
     protected boolean debug;
     protected long beforeInstall;
+    protected Map options = new HashMap();
+    protected String warContextPath;
+    protected TimeUtil timeUtil;
+    private final String WARSCHEMA = "war:";
 
     public void setUp() throws Exception {
         // TODO if war file already exists, let's remove it first.
         this.server = new Server();
         this.debug = true;
-        
+
         // capture a time before install
         this.beforeInstall = System.currentTimeMillis();
     }
+    
+    protected void prepare(String wcp) throws Exception {
+        this.warContextPath = wcp;
+        this.timeUtil = new TimeUtil(this.warContextPath);
+        this.options.put(WebContainer.WEB_CONTEXT_PATH, this.warContextPath);
+    }
 
     /*
-     * return original manifest from the test war file
+     * return original manifest from the test war path
      */
     protected Manifest getManifest(String warPath) throws Exception {
         // test bundle manifest is constructed per user's deployment options
         String location = System.getProperty("user.dir") + warPath;
         log("jar:file:" + location + "!/");
         URL url = new URL("jar:file:" + location + "!/");
-        JarURLConnection conn = (JarURLConnection)url.openConnection();
+        JarURLConnection conn = (JarURLConnection) url.openConnection();
         JarFile jarfile = conn.getJarFile();
         Manifest originalManifest = jarfile.getManifest();
-        
+
         return originalManifest;
     }
     
+    /*
+     * return original manifest from the test war name
+     */
+    protected Manifest getManifestFromWarName(String warName) throws Exception {
+        return getManifest(getWarPath(warName));
+    }
+
+    /*
+     * return the warPath based on the warName, for example tw1.war path
+     * is /resources/tw1/tw1.war
+     */
+    private String getWarPath(String warName) throws Exception {
+        int i = warName.indexOf(".");
+        return "/resources/" + warName.substring(0, i) + "/" + warName;
+    }
+
     protected static void cleanupPropertyFile() {
-        // clean up the property file.        
-         boolean success = ConstantsUtil.removeLogFile(); 
-         if (!success) {
-             log("Deleting File: " + ConstantsUtil.getLogFile() + " failed."); 
-         }
-         else { 
-              log (ConstantsUtil.getLogFile() + " file is deleted."); 
-         }
+        // clean up the property file.
+        boolean success = ConstantsUtil.removeLogFile();
+        if (!success) {
+            log("Deleting File: " + ConstantsUtil.getLogFile() + " failed.");
+        } else {
+            log(ConstantsUtil.getLogFile() + " file is deleted.");
+        }
+    }
+
+    // TODO: fill in this method when the schema is defined in the RFC 66 spec
+    protected String getWarURL(String name, Map options) {
+        return getWebServer() + name; // TODO hook in options: + "?" + generateQuery(options);
+    }
+
+    protected String getResponse(String path) throws Exception {
+        // final String request = warContextPath + "/";
+        final URL url = Dispatcher.createURL(path, this.server);
+        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        final String response;
+        try {
+            assertEquals(conn.getResponseCode(), 200);
+            assertEquals(conn.getContentType(), "text/html");
+            response = Dispatcher.dispatch(conn);
+            if (this.debug) {
+                log(response);
+            }
+        } finally {
+            conn.disconnect();
+        }
+        return response;
+    }
+    
+    protected boolean ableAccessPath(String path) throws Exception {
+        try {
+            getResponse(path);
+            return true;
+        } catch (Exception e) {
+            return false;
+        } catch (Error e) {
+            return false;
+        }
+    }
+
+    protected void checkTW1HomeResponse(String response) throws Exception {
+        log("verify content of response is correct");
+        assertTrue(response.indexOf("TestWar1") > 0);
+        assertTrue(response.indexOf("/BasicTest") > 0);
+        assertTrue(response.indexOf("404.html (static link)") > 0);
+        assertTrue(response
+                .indexOf("404.html (through servlet.RequestDispatcher.forward())") > 0);
+        assertTrue(response
+                .indexOf("404.jsp (through servlet.RequestDispatcher.forward())") > 0);
+        assertTrue(response.indexOf("Broken Link (for call ErrorPage)") > 0);
+        assertTrue(response.indexOf("image.html") > 0);
+    }
+    
+    protected void checkTW3HomeResponse(String response) throws Exception {
+        log("verify content of response is correct");
+        assertTrue(response.indexOf("TestWar3") > 0);
+        assertTrue(response.indexOf("This is TestWar3") > 0);
+        assertTrue(response.indexOf("PostConstructPreDestroyServlet1") > 0);
+        assertTrue(response.indexOf("ResourceServlet1") > 0);
+        assertTrue(response.indexOf("ServletContextListenerServlet") > 0);
+        assertTrue(response.indexOf("RequestListenerServlet") > 0);
+        assertTrue(response.indexOf("HTTPSessionListenerServlet") > 0);
+    }
+    
+    protected void checkHomeResponse(String response, String warName) throws Exception {
+        if (warName.equalsIgnoreCase("tw1.war")) { 
+        		checkTW1HomeResponse(response);
+        } else if (warName.equalsIgnoreCase("tw2.war")) { 
+            checkTW2HomeResponse(response);
+        } else if (warName.equalsIgnoreCase("tw3.war")) { 
+            checkTW3HomeResponse(response);
+        } else if (warName.equalsIgnoreCase("tw4.war")) { 
+            checkTW4HomeResponse(response);
+        } else if (warName.equalsIgnoreCase("tw5.war")) { 
+            checkTW5HomeResponse(response);
+        }
+    }
+    
+    protected void checkTW2HomeResponse(String response) throws Exception {
+        
+    }
+    
+    protected void checkTW4HomeResponse(String response) throws Exception {
+        
+    }
+    
+    protected void checkTW5HomeResponse(String response) throws Exception {
+        
+    }
+    // TODO fill this in when the schema is defined in RFC 66
+    private String generateQuery(Map options) {
+        return "";
     }
 }

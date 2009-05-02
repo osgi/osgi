@@ -29,18 +29,15 @@ import org.osgi.test.support.Base64Encoder;
  * @version $Rev$ $Date$
  */
 public class SecurityAnnotationTest extends WebContainerTestBundleControl {
-    String warContextPath;
-    long beforeInstall;
     Bundle b;
 
     public void setUp() throws Exception {
         super.setUp();
-        this.warContextPath = "/tw3";
+        super.prepare("/tw2");
         
         // install + start the war file
         log("install war file: tw2.war at context path " + this.warContextPath);
-        this.b = installBundle(getWebServer()
-                + "tw2.war", true);
+        this.b = installBundle(super.getWarURL("tw3.war", this.options), true);
     }
 
     private void uninstallWar() throws Exception {

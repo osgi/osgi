@@ -16,39 +16,31 @@
 
 package org.osgi.test.cases.webcontainer.annotation;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import org.osgi.framework.Bundle;
 import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
-import org.osgi.test.cases.webcontainer.util.Dispatcher;
-import org.osgi.test.cases.webcontainer.util.TimeUtil;
 
 /**
  * @version $Rev$ $Date$
  */
 public class PostConstructAnnotationTest extends WebContainerTestBundleControl {
-    String warContextPath;
-    TimeUtil timeUtil;
     Bundle b;
 
     public void setUp() throws Exception {
         super.setUp();
-        this.warContextPath = "/tw2";
-        this.timeUtil = new TimeUtil(this.warContextPath);
+        super.prepare("/tw2");
 
         super.cleanupPropertyFile();
 
         // install + start the war file
         log("install war file: tw2.war at context path " + this.warContextPath);
-        this.b = installBundle(getWebServer()
-                + "tw2.war", true);
+        this.b = installBundle(super.getWarURL("tw3.war", this.options), true);
     }
 
     private void uninstallWar() throws Exception {
         // uninstall the war file
-        log("uninstall war file: tw2.war at context path " + this.warContextPath);
+        log("uninstall war file: tw2.war at context path "
+                + this.warContextPath);
         uninstallBundle(this.b);
     }
 
@@ -62,31 +54,23 @@ public class PostConstructAnnotationTest extends WebContainerTestBundleControl {
     public void testPostConstruct001() throws Exception {
         final String request = this.warContextPath
                 + "/PostConstructPreDestroyServlet1";
-        final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertTrue(response.indexOf("PostConstructPreDestroyServlet1") > 0);
-            assertTrue(response
-                    .indexOf("PostConstructPreDestroyServlet1.printContext "
-                            + ConstantsUtil.PRINTCONTEXT) > 0);
-            assertEquals(response.indexOf("null"), -1);
-            // check if the time stamp in response is after the beforeStart
-            // time.
-            assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
-            log("verify annotated methods are invoked");
-            assertTrue(this.timeUtil.getTimeFromLog(
-                    "PostConstructPreDestroyServlet1", ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
-        } finally {
-            conn.disconnect();
+        String response = super.getResponse(request);
+        if (this.debug) {
+            log(response);
         }
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertTrue(response.indexOf("PostConstructPreDestroyServlet1") > 0);
+        assertTrue(response
+                .indexOf("PostConstructPreDestroyServlet1.printContext "
+                        + ConstantsUtil.PRINTCONTEXT) > 0);
+        assertEquals(response.indexOf("null"), -1);
+        // check if the time stamp in response is after the beforeStart
+        // time.
+        assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
+        log("verify annotated methods are invoked");
+        assertTrue(this.timeUtil.getTimeFromLog(
+                "PostConstructPreDestroyServlet1", ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
     }
 
     /*
@@ -95,31 +79,20 @@ public class PostConstructAnnotationTest extends WebContainerTestBundleControl {
     public void testPostConstruct002() throws Exception {
         final String request = this.warContextPath
                 + "/PostConstructPreDestroyServlet2";
-        final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertTrue(response.indexOf("PostConstructPreDestroyServlet2") > 0);
-            assertTrue(response
-                    .indexOf("PostConstructPreDestroyServlet2.printContext "
-                            + ConstantsUtil.PRINTCONTEXT) > 0);
-            assertEquals(response.indexOf("null"), -1);
-            // check if the time stamp in response is after the beforeStart
-            // time.
-            assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
-            log("verify annotated methods are invoked");
-            assertTrue(this.timeUtil.getTimeFromLog(
-                    "PostConstructPreDestroyServlet2", ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
-        } finally {
-            conn.disconnect();
-        }
+        String response = super.getResponse(request);
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertTrue(response.indexOf("PostConstructPreDestroyServlet2") > 0);
+        assertTrue(response
+                .indexOf("PostConstructPreDestroyServlet2.printContext "
+                        + ConstantsUtil.PRINTCONTEXT) > 0);
+        assertEquals(response.indexOf("null"), -1);
+        // check if the time stamp in response is after the beforeStart
+        // time.
+        assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
+        log("verify annotated methods are invoked");
+        assertTrue(this.timeUtil.getTimeFromLog(
+                "PostConstructPreDestroyServlet2", ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
     }
 
     /*
@@ -128,30 +101,19 @@ public class PostConstructAnnotationTest extends WebContainerTestBundleControl {
     public void testPostConstruct003() throws Exception {
         final String request = this.warContextPath
                 + "/PostConstructPreDestroyServlet3";
-        final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertTrue(response.indexOf("PostConstructPreDestroyServlet3") > 0);
-            assertTrue(response
-                    .indexOf("PostConstructPreDestroyServlet3.printContext "
-                            + ConstantsUtil.PRINTCONTEXT) > 0);
-            assertEquals(response.indexOf("null"), -1);
-            // check if the time stamp in response is after the beforeStart
-            // time.
-            assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
-            log("verify annotated methods are invoked");
-            assertTrue(this.timeUtil.getTimeFromLog(
-                    "PostConstructPreDestroyServlet3", ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
-        } finally {
-            conn.disconnect();
-        }
+        String response = super.getResponse(request);
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertTrue(response.indexOf("PostConstructPreDestroyServlet3") > 0);
+        assertTrue(response
+                .indexOf("PostConstructPreDestroyServlet3.printContext "
+                        + ConstantsUtil.PRINTCONTEXT) > 0);
+        assertEquals(response.indexOf("null"), -1);
+        // check if the time stamp in response is after the beforeStart
+        // time.
+        assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
+        log("verify annotated methods are invoked");
+        assertTrue(this.timeUtil.getTimeFromLog(
+                "PostConstructPreDestroyServlet3", ConstantsUtil.POSTCONSTRUCT) > beforeInstall);
     }
 }

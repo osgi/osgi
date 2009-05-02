@@ -23,7 +23,6 @@ import java.util.jar.Manifest;
 import org.osgi.framework.Bundle;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
-import org.osgi.test.cases.webcontainer.util.TimeUtil;
 import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
 
 /**
@@ -32,123 +31,67 @@ import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
  *          test class for tw1
  */
 public class TW1Test extends WebContainerTestBundleControl {
-    // this test case assume war files are already installed for now
-    String warContextPath;
-    TimeUtil timeUtil;
     Bundle b;
-    
+
     public void setUp() throws Exception {
         super.setUp();
-        this.warContextPath = "/tw1";
-        this.timeUtil = new TimeUtil(this.warContextPath);
+        super.prepare("/tw1");
 
         // install + start the war file
         log("install war file: tw1.war at context path " + this.warContextPath);
-        this.b = installBundle(getWebServer()
-                + "tw1.war", true);
+        this.b = installBundle(super.getWarURL("tw1.war", this.options), true);
     }
 
     private void uninstallWar() throws Exception {
         // uninstall the war file
-        log("uninstall war file: tw1.war at context path " + this.warContextPath);
+        log("uninstall war file: tw1.war at context path "
+                + this.warContextPath);
         uninstallBundle(this.b);
     }
 
     public void tearDown() throws Exception {
         uninstallWar();
     }
-    
+
     /*
-     * set deployOptions to null to rely on the web container service to generate the manifest
+     * set deployOptions to null to rely on the web container service to
+     * generate the manifest
      */
     public void testBundleManifest() throws Exception {
         Manifest originalManifest = super.getManifest("/resources/tw1/tw1.war");
-        BundleManifestValidator validator = new BundleManifestValidator(this.b, originalManifest, null, this.debug);
+        BundleManifestValidator validator = new BundleManifestValidator(this.b,
+                originalManifest, this.options, this.debug);
         validator.validate();
     }
 
     public void testBasic001() throws Exception {
         final String request = this.warContextPath + "/";
-        final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertTrue(response.indexOf("TestWar1") > 0);
-            assertTrue(response.indexOf("/BasicTest") > 0);
-            assertTrue(response.indexOf("404.html (static link)") > 0);
-            assertTrue(response
-                    .indexOf("404.html (through servlet.RequestDispatcher.forward())") > 0);
-            assertTrue(response
-                    .indexOf("404.jsp (through servlet.RequestDispatcher.forward())") > 0);
-            assertTrue(response.indexOf("Broken Link (for call ErrorPage)") > 0);
-            assertTrue(response.indexOf("image.html") > 0);
-        } finally {
-            conn.disconnect();
-        }
+        String response = super.getResponse(request);
+        super.checkTW1HomeResponse(response);
     }
 
     public void testBasic002() throws Exception {
         final String request = this.warContextPath + "/BasicTest";
-        final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertEquals(response, ConstantsUtil.BASICTESTWAR1);
-        } finally {
-            conn.disconnect();
-        }
+        String response = super.getResponse(request);
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertEquals(response, ConstantsUtil.BASICTESTWAR1);
     }
 
     public void testBasic003() throws Exception {
         final String request = this.warContextPath + "/404.html";
-        final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertEquals(response, ConstantsUtil.ERROR404HTML);
-        } finally {
-            conn.disconnect();
-        }
+        String response = super.getResponse(request);
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertEquals(response, ConstantsUtil.ERROR404HTML);
     }
 
     public void testBasic004() throws Exception {
         final String request = this.warContextPath + "/ErrorTest?target=html";
-        final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertEquals(response, ConstantsUtil.ERROR404HTML);
-        } finally {
-            conn.disconnect();
-        }
+        String response = super.getResponse(request);
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertEquals(response, ConstantsUtil.ERROR404HTML);
     }
 
     public void testBasic005() throws Exception {
@@ -191,21 +134,10 @@ public class TW1Test extends WebContainerTestBundleControl {
 
     public void testBasic007() throws Exception {
         final String request = this.warContextPath + "/image.html";
-        final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertEquals(response, ConstantsUtil.IMAGEHTML);
-        } finally {
-            conn.disconnect();
-        }
+        String response = super.getResponse(request);
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertEquals(response, ConstantsUtil.IMAGEHTML);
     }
 
     public void testBasic008() throws Exception {

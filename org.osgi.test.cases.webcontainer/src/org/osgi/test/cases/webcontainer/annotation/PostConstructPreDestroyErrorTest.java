@@ -24,33 +24,29 @@ import org.osgi.framework.Bundle;
 import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
-import org.osgi.test.cases.webcontainer.util.TimeUtil;
 
 /**
  * @version $Rev$ $Date$
  */
-public class PostConstructPreDestroyErrorTest extends WebContainerTestBundleControl {
-    String warContextPath;
-    long beforeInstall;
-    TimeUtil timeUtil;
+public class PostConstructPreDestroyErrorTest extends
+        WebContainerTestBundleControl {
     Bundle b;
 
     public void setUp() throws Exception {
         super.setUp();
-        this.warContextPath = "/tw2";
-        this.timeUtil = new TimeUtil(this.warContextPath);
+        super.prepare("/tw2");
 
         super.cleanupPropertyFile();
 
         // install + start the war file
         log("install war file: tw2.war at context path " + this.warContextPath);
-        this.b = installBundle(getWebServer()
-                + "tw2.war", true);
+        this.b = installBundle(super.getWarURL("tw3.war", this.options), true);
     }
 
     private void uninstallWar() throws Exception {
         // uninstall the war file
-        log("uninstall war file: tw2.war at context path " + this.warContextPath);
+        log("uninstall war file: tw2.war at context path "
+                + this.warContextPath);
         uninstallBundle(this.b);
     }
 
@@ -146,30 +142,19 @@ public class PostConstructPreDestroyErrorTest extends WebContainerTestBundleCont
      */
     public void testPreDestroyError001() throws Exception {
         final String request = this.warContextPath + "/PreDestroyErrorServlet1";
-        final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertTrue(response.indexOf("PreDestroyErrorServlet1") > 0);
-            assertTrue(response.indexOf("PreDestroyErrorServlet1.printContext "
-                    + ConstantsUtil.PRINTCONTEXT) > 0);
-            assertEquals(response.indexOf("null"), -1);
-            // check if the time stamp in response is after the beforeStart
-            // time.
-            assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
-            log("verify annotated methods are not invoked when there are multiple @preDestroy annotations");
-            assertEquals(this.timeUtil.getTimeFromLog(
-                    "PreDestroyErrorServlet1", ConstantsUtil.POSTCONSTRUCT), 0);
-        } finally {
-            conn.disconnect();
-        }
+        String response = super.getResponse(request);
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertTrue(response.indexOf("PreDestroyErrorServlet1") > 0);
+        assertTrue(response.indexOf("PreDestroyErrorServlet1.printContext "
+                + ConstantsUtil.PRINTCONTEXT) > 0);
+        assertEquals(response.indexOf("null"), -1);
+        // check if the time stamp in response is after the beforeStart
+        // time.
+        assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
+        log("verify annotated methods are not invoked when there are multiple @preDestroy annotations");
+        assertEquals(this.timeUtil.getTimeFromLog("PreDestroyErrorServlet1",
+                ConstantsUtil.POSTCONSTRUCT), 0);
     }
 
     /*
@@ -178,30 +163,19 @@ public class PostConstructPreDestroyErrorTest extends WebContainerTestBundleCont
      */
     public void testPreDestroyError002() throws Exception {
         final String request = this.warContextPath + "/PreDestroyErrorServlet2";
-        final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertTrue(response.indexOf("PreDestroyErrorServlet2") > 0);
-            assertTrue(response.indexOf("PreDestroyErrorServlet2.printContext "
-                    + ConstantsUtil.PRINTCONTEXT) > 0);
-            assertEquals(response.indexOf("null"), -1);
-            // check if the time stamp in response is after the beforeStart
-            // time.
-            assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
-            log("verify annotated methods are not invoked when @preDestroy annotated method is static");
-            assertEquals(this.timeUtil.getTimeFromLog(
-                    "PreDestroyErrorServlet2", ConstantsUtil.POSTCONSTRUCT), 0);
-        } finally {
-            conn.disconnect();
-        }
+        String response = super.getResponse(request);
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertTrue(response.indexOf("PreDestroyErrorServlet2") > 0);
+        assertTrue(response.indexOf("PreDestroyErrorServlet2.printContext "
+                + ConstantsUtil.PRINTCONTEXT) > 0);
+        assertEquals(response.indexOf("null"), -1);
+        // check if the time stamp in response is after the beforeStart
+        // time.
+        assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
+        log("verify annotated methods are not invoked when @preDestroy annotated method is static");
+        assertEquals(this.timeUtil.getTimeFromLog("PreDestroyErrorServlet2",
+                ConstantsUtil.POSTCONSTRUCT), 0);
     }
 
     /*
@@ -210,30 +184,19 @@ public class PostConstructPreDestroyErrorTest extends WebContainerTestBundleCont
      */
     public void testPreDestroyError003() throws Exception {
         final String request = this.warContextPath + "/PreDestroyErrorServlet3";
-        final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertTrue(response.indexOf("PreDestroyErrorServlet3") > 0);
-            assertTrue(response.indexOf("PreDestroyErrorServlet3.printContext "
-                    + ConstantsUtil.PRINTCONTEXT) > 0);
-            assertEquals(response.indexOf("null"), -1);
-            // check if the time stamp in response is after the beforeStart
-            // time.
-            assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
-            log("verify annotated methods are not invoked when @preDestroy annotated method throws Exception");
-            assertEquals(this.timeUtil.getTimeFromLog(
-                    "PreDestroyErrorServlet2", ConstantsUtil.POSTCONSTRUCT), 0);
-        } finally {
-            conn.disconnect();
-        }
+        String response = super.getResponse(request);
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertTrue(response.indexOf("PreDestroyErrorServlet3") > 0);
+        assertTrue(response.indexOf("PreDestroyErrorServlet3.printContext "
+                + ConstantsUtil.PRINTCONTEXT) > 0);
+        assertEquals(response.indexOf("null"), -1);
+        // check if the time stamp in response is after the beforeStart
+        // time.
+        assertTrue(this.timeUtil.getTimeFromResponse(response) > beforeInstall);
+        log("verify annotated methods are not invoked when @preDestroy annotated method throws Exception");
+        assertEquals(this.timeUtil.getTimeFromLog("PreDestroyErrorServlet2",
+                ConstantsUtil.POSTCONSTRUCT), 0);
     }
 
     /*

@@ -15,8 +15,6 @@
  */
 package org.osgi.test.cases.webcontainer;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Enumeration;
 import java.util.jar.Manifest;
 
@@ -26,8 +24,6 @@ import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogReaderService;
 import org.osgi.service.log.LogService;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
-import org.osgi.test.cases.webcontainer.util.Dispatcher;
-import org.osgi.test.cases.webcontainer.util.TimeUtil;
 import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
 
 /**
@@ -37,22 +33,16 @@ import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
  *          OSGi log service.
  */
 public class AccessBundleContextTest extends WebContainerTestBundleControl {
-    String warContextPath;
-    TimeUtil timeUtil;
     Bundle b;
     LogReaderService logReaderService;
 
     public void setUp() throws Exception {
         super.setUp();
-        this.warContextPath = "/tw5";
-        this.timeUtil = new TimeUtil(this.warContextPath);
+        super.prepare("/tw5");
 
-        // capture a time before install
-        this.beforeInstall = System.currentTimeMillis();
         // install + start the war file
         log("install war file: tw5.war at context path " + this.warContextPath);
-        this.b = installBundle(getWebServer()
-                + "tw5.war", true);
+        this.b = installBundle(super.getWarURL("tw5.war", this.options), true);
 
         ServiceReference logReaderServiceReference = getContext()
                 .getServiceReference(LogReaderService.class.getName());
@@ -62,7 +52,8 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
 
     private void uninstallWar() throws Exception {
         // uninstall the war file
-        log("uninstall war file: tw5.war at context path " + this.warContextPath);
+        log("uninstall war file: tw5.war at context path "
+                + this.warContextPath);
         uninstallBundle(this.b);
     }
 
@@ -71,45 +62,34 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
     }
 
     /*
-     * set deployOptions to null to rely on the web container service to generate the manifest
+     * set deployOptions to null to rely on the web container service to
+     * generate the manifest
      */
     public void testBundleManifest() throws Exception {
         Manifest originalManifest = super.getManifest("/resources/tw5/tw5.war");
-        BundleManifestValidator validator = new BundleManifestValidator(this.b, originalManifest, null, this.debug);
+        BundleManifestValidator validator = new BundleManifestValidator(this.b,
+                originalManifest, this.options, this.debug);
         validator.validate();
     }
-    
+
     public void testLog001() throws Exception {
         long beforeLog = System.currentTimeMillis();
 
         final String request = this.warContextPath
                 + "/BundleContextTestServlet";
-        final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertTrue(response.indexOf("BundleContextTestServlet") > 0);
-            assertTrue(response.indexOf(ConstantsUtil.TESTLOGMSG) > 0);
-            assertEquals(response.indexOf("null"), -1);
-        } finally {
-            conn.disconnect();
-        }
+        String response = super.getResponse(request);
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertTrue(response.indexOf("BundleContextTestServlet") > 0);
+        assertTrue(response.indexOf(ConstantsUtil.TESTLOGMSG) > 0);
+        assertEquals(response.indexOf("null"), -1);
 
         Enumeration e = logReaderService.getLog();
         while (e.hasMoreElements()) {
             LogEntry logentry = (LogEntry) e.nextElement();
             log("get log message: " + logentry.getMessage());
             assertEquals(logentry.getMessage(), ConstantsUtil.TESTLOGMSG);
-            // TODO get Bundle via OSGI RFC 66 WebApplication getBundle() API,
-            // then use Bundle.getBundleContext() to get BundleContext
-            assertEquals(logentry.getBundle(), getContext());
+            assertEquals(logentry.getBundle(), this.b.getBundleContext());
             assertEquals(logentry.getLevel(), LogService.LOG_ERROR);
             assertTrue(logentry.getTime() >= beforeLog);
             assertTrue(logentry.getTime() <= System.currentTimeMillis());
@@ -122,32 +102,19 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
 
         final String request = this.warContextPath
                 + "/BundleContextTestServlet?log=2";
-        final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertTrue(response.indexOf("BundleContextTestServlet") > 0);
-            assertTrue(response.indexOf(ConstantsUtil.TESTLOGMSG2) > 0);
-            assertEquals(response.indexOf("null"), -1);
-        } finally {
-            conn.disconnect();
-        }
+        String response = super.getResponse(request);
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertTrue(response.indexOf("BundleContextTestServlet") > 0);
+        assertTrue(response.indexOf(ConstantsUtil.TESTLOGMSG2) > 0);
+        assertEquals(response.indexOf("null"), -1);
 
         Enumeration e = logReaderService.getLog();
         while (e.hasMoreElements()) {
             LogEntry logentry = (LogEntry) e.nextElement();
             log("get log message: " + logentry.getMessage());
             assertEquals(logentry.getMessage(), ConstantsUtil.TESTLOGMSG2);
-            // TODO get Bundle via ISGI WebApplication getBundle(),
-            // then use Bundle.getBundleContext() to get BundleContext
-            assertEquals(logentry.getBundle(), getContext());
+            assertEquals(logentry.getBundle(), this.b.getBundleContext());
             assertEquals(logentry.getLevel(), LogService.LOG_WARNING);
             assertTrue(logentry.getTime() >= beforeLog);
             assertTrue(logentry.getTime() <= System.currentTimeMillis());
@@ -160,32 +127,20 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
 
         final String request = this.warContextPath
                 + "/BundleContextTestServlet?log=3";
-        final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertTrue(response.indexOf("BundleContextTestServlet") > 0);
-            assertTrue(response.indexOf(ConstantsUtil.TESTLOGMSG3) > 0);
-            assertEquals(response.indexOf("null"), -1);
-        } finally {
-            conn.disconnect();
-        }
+        String response = super.getResponse(request);
+
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertTrue(response.indexOf("BundleContextTestServlet") > 0);
+        assertTrue(response.indexOf(ConstantsUtil.TESTLOGMSG3) > 0);
+        assertEquals(response.indexOf("null"), -1);
 
         Enumeration e = logReaderService.getLog();
         while (e.hasMoreElements()) {
             LogEntry logentry = (LogEntry) e.nextElement();
             log("get log message: " + logentry.getMessage());
             assertEquals(logentry.getMessage(), ConstantsUtil.TESTLOGMSG3);
-            // TODO get Bundle via ISGI WebApplication getBundle(),
-            // then use Bundle.getBundleContext() to get BundleContext
-            assertEquals(logentry.getBundle(), getContext());
+            assertEquals(logentry.getBundle(), this.b.getBundleContext());
             assertEquals(logentry.getLevel(), LogService.LOG_INFO);
             assertTrue(logentry.getTime() >= beforeLog);
             assertTrue(logentry.getTime() <= System.currentTimeMillis());
@@ -198,32 +153,20 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
 
         final String request = this.warContextPath
                 + "/BundleContextTestServlet?log=4";
-        final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            log("verify content of response is correct");
-            assertTrue(response.indexOf("BundleContextTestServlet") > 0);
-            assertTrue(response.indexOf(ConstantsUtil.TESTLOGMSG4) > 0);
-            assertEquals(response.indexOf("null"), -1);
-        } finally {
-            conn.disconnect();
-        }
+        String response = super.getResponse(request);
+
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertTrue(response.indexOf("BundleContextTestServlet") > 0);
+        assertTrue(response.indexOf(ConstantsUtil.TESTLOGMSG4) > 0);
+        assertEquals(response.indexOf("null"), -1);
 
         Enumeration e = logReaderService.getLog();
         while (e.hasMoreElements()) {
             LogEntry logentry = (LogEntry) e.nextElement();
             log("get log message: " + logentry.getMessage());
             assertEquals(logentry.getMessage(), ConstantsUtil.TESTLOGMSG4);
-            // TODO get Bundle via ISGI WebApplication getBundle(),
-            // then use Bundle.getBundleContext() to get BundleContext
-            assertEquals(logentry.getBundle(), getContext());
+            assertEquals(logentry.getBundle(), this.b.getBundleContext());
             assertEquals(logentry.getLevel(), LogService.LOG_DEBUG);
             assertTrue(logentry.getTime() >= beforeLog);
             assertTrue(logentry.getTime() <= System.currentTimeMillis());
