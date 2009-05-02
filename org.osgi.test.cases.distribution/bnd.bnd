@@ -1,6 +1,6 @@
 Bundle-Version: 1.0.0.${project.build}
 
-Export-Package                      = org.osgi.service.distribution
+Export-Package                      = org.osgi.test.cases.distribution.internal
 
 Private-Package						= ${p}.*, \
     org.osgi.test.support.*
