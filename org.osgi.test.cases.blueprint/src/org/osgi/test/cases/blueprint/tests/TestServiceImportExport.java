@@ -440,7 +440,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // and secondary "bad" service.  We should resolve to the good service.
         StandardTestController controller = new StandardTestController(getContext(),
             getWebServer()+"www/ServiceOne_multiple_import.jar",
-            getWebServer()+"www/ServiceOne_service_listener_export.jar",
+            getWebServer()+"www/ServiceOne_service_listener.jar",
             getWebServer()+"www/registration_listener_export.jar");
         // we add different validation stuff to each jar.  We'll start with the
         // export jar

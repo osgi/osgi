@@ -86,6 +86,28 @@ public class TestCustomConverter extends DefaultTestBundleControl {
         controller.run();
     }
 
+    /**
+     * Same as the test above, but the type converter is an
+     * imported service.
+     *
+     * @exception Exception
+     */
+    public void testServiceBooleanConverter() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer() + "www/converter_service_boolean_converter.jar",
+            getWebServer() + "www/type_converter_service.jar");
+        MetadataEventSet startEvents = controller.getStartEvents();
+
+        // constructor
+        startEvents.validateComponentArgument("compCustomBoolean_cnst", "arg1", Boolean.TRUE, Boolean.class);
+        startEvents.addValidator(new ArgumentMetadataValidator("compCustomBoolean_cnst", new TestArgument[] {
+                new StringArgument(Boolean.class) }));
+        // property
+        this.addPropertyValidator(startEvents, "compCustomBoolean_prpt", "boolean", Boolean.FALSE, Boolean.class);
+
+        controller.run();
+    }
+
     public void testSubclassConverterInstead() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
             getWebServer() + "www/converter_subclass_converter_instead.jar");
