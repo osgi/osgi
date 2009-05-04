@@ -21,13 +21,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.jar.Manifest;
 
+import junit.framework.Assert;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
 import org.osgi.service.webcontainer.WebContainer;
-
-import junit.framework.Assert;
-import junit.framework.AssertionFailedError;
 
 /**
  * @version $Rev$ $Date$

@@ -64,6 +64,9 @@ public class TW1Test extends WebContainerTestBundleControl {
         validator.validate();
     }
 
+    /*
+     * test home page
+     */
     public void testBasic001() throws Exception {
         final String request = this.warContextPath + "/";
         String response = super.getResponse(request);

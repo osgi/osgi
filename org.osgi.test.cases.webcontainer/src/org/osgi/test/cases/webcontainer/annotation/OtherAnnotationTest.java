@@ -71,7 +71,16 @@ public class OtherAnnotationTest extends WebContainerTestBundleControl {
                 originalManifest, this.options, this.debug);
         validator.validate();
     }
-
+    
+    /*
+     * test home page
+     */
+    public void testHome() throws Exception {
+        final String request = this.warContextPath + "/";
+        String response = super.getResponse(request);
+        super.checkTW2HomeResponse(response);
+    }
+    
     /*
      * test annotated methods/fields in container manager class that implement
      * javax.servlet.Filter are called

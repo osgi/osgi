@@ -137,30 +137,15 @@ public abstract class WebContainerTestBundleControl extends
     }
 
     protected void checkTW1HomeResponse(String response) throws Exception {
-        log("verify content of response is correct");
-        assertTrue(response.indexOf("TestWar1") > 0);
-        assertTrue(response.indexOf("/BasicTest") > 0);
-        assertTrue(response.indexOf("404.html (static link)") > 0);
-        assertTrue(response
-                .indexOf("404.html (through servlet.RequestDispatcher.forward())") > 0);
-        assertTrue(response
-                .indexOf("404.jsp (through servlet.RequestDispatcher.forward())") > 0);
-        assertTrue(response.indexOf("Broken Link (for call ErrorPage)") > 0);
-        assertTrue(response.indexOf("image.html") > 0);
+        assertEquals(response, "<html><head><title>TestWar1</title></head><body>This is TestWar1.<P><A href=\"BasicTest\">/BasicTest</A><BR><A href=\"404.html\">404.html (static link)</A><BR><A href=\"ErrorTest?target=html\">404.html (through servlet.RequestDispatcher.forward())</A><BR><A href=\"ErrorTest\">404.jsp (through servlet.RequestDispatcher.forward())</A><BR><A href=\"aaa\">Broken Link (for call ErrorPage)</A><BR><A href=\"image.html\">image.html</A></P><BR></body></html>");
     }
     
-    protected void checkTW3HomeResponse(String response) throws Exception {
-        log("verify content of response is correct");
-        assertTrue(response.indexOf("TestWar3") > 0);
-        assertTrue(response.indexOf("This is TestWar3") > 0);
-        assertTrue(response.indexOf("PostConstructPreDestroyServlet1") > 0);
-        assertTrue(response.indexOf("ResourceServlet1") > 0);
-        assertTrue(response.indexOf("ServletContextListenerServlet") > 0);
-        assertTrue(response.indexOf("RequestListenerServlet") > 0);
-        assertTrue(response.indexOf("HTTPSessionListenerServlet") > 0);
+    protected void checkTW3HomeResponse(String response) throws Exception {       
+        assertEquals(response, "<html><head><title>TestWar3</title></head><body>This is TestWar3.<P><A href=\"PostConstructPreDestroyServlet1\">PostConstructPreDestroyServlet1</A><BR><A href=\"PostConstructPreDestroyServlet2\">PostConstructPreDestroyServlet2</A><BR><A href=\"PostConstructPreDestroyServlet3\">PostConstructPreDestroyServlet3</A><BR><A href=\"ResourceServlet1\">ResourceServlet1</A><BR><A href=\"ResourceServlet2\">ResourceServlet2</A><BR><A href=\"ResourceServlet3\">ResourceServlet3</A><BR><A href=\"ResourceServlet4\">ResourceServlet4</A><BR><A href=\"ServletContextListenerServlet\">ServletContextListenerServlet</A><BR><A href=\"RequestListenerServlet\">RequestListenerServlet</A><BR><A href=\"HTTPSessionListenerServlet\">HTTPSessionListenerServlet</A><BR></P></body></html>");
     }
     
     protected void checkHomeResponse(String response, String warName) throws Exception {
+        log("verify content of response is correct");
         if (warName.equalsIgnoreCase("tw1.war")) { 
         		checkTW1HomeResponse(response);
         } else if (warName.equalsIgnoreCase("tw2.war")) { 
@@ -175,15 +160,15 @@ public abstract class WebContainerTestBundleControl extends
     }
     
     protected void checkTW2HomeResponse(String response) throws Exception {
-        
+        assertEquals(response, "<html><head><title>TestWar2</title></head><body>This is TestWar2.<P><A href=\"PostConstructPreDestroyServlet1\">PostConstructPreDestroyServlet1</A><BR><A href=\"PostConstructPreDestroyServlet2\">PostConstructPreDestroyServlet2</A><BR><A href=\"PostConstructPreDestroyServlet3\">PostConstructPreDestroyServlet3</A><BR><A href=\"ResourceServlet1\">ResourceServlet1</A><BR><A href=\"ResourceServlet2\">ResourceServlet2</A><BR><A href=\"ResourceServlet3\">ResourceServlet3</A><BR><A href=\"ResourceServlet4\">ResourceServlet4</A><BR><A href=\"PostConstructErrorServlet1\">PostConstructErrorServlet1</A><BR><A href=\"PostConstructErrorServlet2\">PostConstructErrorServlet2</A><BR><A href=\"PostConstructErrorServlet3\">PostConstructErrorServlet3</A><BR><A href=\"PreDestroyErrorServlet1\">PreDestroyErrorServlet1</A><BR><A href=\"PreDestroyErrorServlet2\">PreDestroyErrorServlet2</A><BR><A href=\"PreDestroyErrorServlet3\">PreDestroyErrorServlet3</A><BR><A href=\"ServletContextListenerServlet\">ServletContextListenerServlet</A><BR><A href=\"SecurityTestServlet\">SecurityTestServlet</A><BR><A href=\"RequestListenerServlet\">RequestListenerServlet</A><BR><A href=\"HTTPSessionListenerServlet\">HTTPSessionListenerServlet</A><BR></P></body></html>");
     }
     
     protected void checkTW4HomeResponse(String response) throws Exception {
-        
+        assertEquals(response, "<html><head><title>TestWar4</title></head><body>This is TestWar4.<P><a href=\"TestServlet1\">TestServlet1</a><br/><a href=\"TestServlet1/TestServlet2?tc=1&param1=value1&param2=abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz\">TestServlet2?tc=1</a><BR><br/><a href=\"TestServlet1/TestServlet2/TestServlet3\">TestServlet3</a><br/><a href=\"TestServlet1/TestServlet2/TestServlet3/TestServlet4?type=plain\">TestServlet4 plain</a><br/><a href=\"TestServlet1/TestServlet2/TestServlet3/TestServlet4?type=html\">TestServlet4 html</a><br/><a href=\"TestServlet1/TestServlet2/TestServlet3/TestServlet4?type=jpg\">TestServlet4 jpg</a><br/></P></body></html>");
     }
     
     protected void checkTW5HomeResponse(String response) throws Exception {
-        
+        assertEquals(response, "<html><head><title>TestWar5</title></head><body>This is TestWar5.<P><A href=\"BundleTestServlet\">/BundleTestServlet</A><BR></P></body></html>");
     }
     // TODO fill this in when the schema is defined in RFC 66
     private String generateQuery(Map options) {

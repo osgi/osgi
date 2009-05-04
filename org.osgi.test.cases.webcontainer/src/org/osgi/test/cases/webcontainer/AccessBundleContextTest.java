@@ -72,6 +72,15 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
         validator.validate();
     }
 
+    /*
+     * test home page
+     */
+    public void testHome() throws Exception {
+        final String request = this.warContextPath + "/";
+        String response = super.getResponse(request);
+        super.checkTW5HomeResponse(response);
+    }
+    
     public void testLog001() throws Exception {
         long beforeLog = System.currentTimeMillis();
 

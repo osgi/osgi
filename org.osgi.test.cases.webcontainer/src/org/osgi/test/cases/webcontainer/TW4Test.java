@@ -66,6 +66,15 @@ public class TW4Test extends WebContainerTestBundleControl {
     }
 
     /*
+     * test home page
+     */
+    public void testHome() throws Exception {
+        final String request = this.warContextPath + "/";
+        String response = super.getResponse(request);
+        super.checkTW4HomeResponse(response);
+    }
+    
+    /*
      * test empty doGet
      */
     public void testEmptyDoGet() throws Exception {

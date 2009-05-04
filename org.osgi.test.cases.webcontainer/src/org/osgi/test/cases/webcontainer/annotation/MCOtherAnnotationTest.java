@@ -75,6 +75,15 @@ public class MCOtherAnnotationTest extends WebContainerTestBundleControl {
     }
 
     /*
+     * test home page
+     */
+    public void testHome() throws Exception {
+        final String request = this.warContextPath + "/";
+        String response = super.getResponse(request);
+        super.checkTW3HomeResponse(response);
+    }
+    
+    /*
      * test annotated methods/fields in container manager class that implement
      * javax.servlet.Filter are not called when the metadata-complete attribute
      * is set to true.
