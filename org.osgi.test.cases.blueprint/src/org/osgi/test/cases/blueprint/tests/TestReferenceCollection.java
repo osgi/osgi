@@ -480,7 +480,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/reference_listener_import.jar",
+            getWebServer()+"www/list_reference_listener_import.jar",
             getWebServer()+"www/managed_null_service_export.jar",
             getWebServer()+"www/reference_listener_export.jar");
 
