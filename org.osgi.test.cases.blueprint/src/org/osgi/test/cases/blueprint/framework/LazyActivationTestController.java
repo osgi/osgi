@@ -44,13 +44,12 @@ public class LazyActivationTestController extends ThreePhaseTestController {
     public void addStartEvents(Bundle bundle, BlueprintMetadata blueprintMetadata, EventSet events) {
         // this will kick the STARTING process, but the bundle will not fully initialize
         // until we do something to force classloading
-        events.addInitializer(new TestBundleStarter(bundle));
-        // we always expect to see a STARING bundle event, but not STARTED
-        events.addBundleEvent("STARTING");
+        events.addInitializer(new TestBundleStarter(bundle, 0, Bundle.START_ACTIVATION_POLICY | Bundle.START_TRANSIENT));
         // we should not see a Modudle context getting registered yet.
         events.addFailureEvent(new ServiceTestEvent("REGISTERED", "org.osgi.service.blueprint.context.BlueprintContext"));
+        // we shhould see the CREATING blueprint event.
+        events.addBlueprintEvent("CREATING");
         // we should not see any of the standard blueprint events
-        events.addFailureEvent(new BlueprintEvent("CREATING"));
         events.addFailureEvent(new BlueprintEvent("CREATED"));
         events.addFailureEvent(new BlueprintContextEvent("CREATED"));
         events.addFailureEvent(new BundleTestEvent("STARTED"));
@@ -77,16 +76,12 @@ public class LazyActivationTestController extends ThreePhaseTestController {
         // we should see a service registered for the module context.
         events.addServiceEvent("REGISTERED", "org.osgi.service.blueprint.context.BlueprintContext");
         // now standard blueprint revents.
-        events.addBlueprintEvent("CREATING");
         events.addBlueprintEvent("CREATED");
         events.addBlueprintContextEvent("CREATED");
 
         // this needs to be the first validator of the set, since
         // it initializes the module context.
         events.addValidator(blueprintMetadata);
-        // this needs to perform some cleanup when everything is done,
-        // so add it to the terminator list.
-        events.addTerminator(blueprintMetadata);
         // the bundle should be in the ACTIVE state when everything settles down
         events.addValidator(new BundleStateValidator(Bundle.ACTIVE));
     }

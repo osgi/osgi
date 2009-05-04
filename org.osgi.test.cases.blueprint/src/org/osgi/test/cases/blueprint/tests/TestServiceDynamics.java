@@ -347,10 +347,10 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         // now some expected termination stuff
         EventSet stopEvents = controller.getStopEvents(0);
         // normal shutdown processing
-        stopEvents.addFailureEvent(new ServiceTestEvent("UNREGISTERING", TestServiceOne.class));
-        stopEvents.addFailureEvent(new ServiceTestEvent("UNREGISTERING", TestServiceTwo.class));
-        stopEvents.addFailureEvent(new ServiceTestEvent("UNREGISTERING", new Class[] { TestServiceOne.class, TestServiceTwo.class,
-            TestServiceAllSubclass.class, ComponentTestInfo.class }));
+        stopEvents.addServiceEvent("UNREGISTERING", TestServiceOne.class);
+        stopEvents.addServiceEvent("UNREGISTERING", TestServiceTwo.class);
+        stopEvents.addServiceEvent("UNREGISTERING", new Class[] { TestServiceOne.class, TestServiceTwo.class,
+            TestServiceAllSubclass.class, ComponentTestInfo.class });
 
         controller.run();
     }
@@ -400,10 +400,10 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         // now some expected termination stuff
         EventSet stopEvents = controller.getStopEvents(0);
         // normal shutdown processing
-        stopEvents.addFailureEvent(new ServiceTestEvent("UNREGISTERING", TestServiceOne.class));
-        stopEvents.addFailureEvent(new ServiceTestEvent("UNREGISTERING", TestServiceTwo.class));
-        stopEvents.addFailureEvent(new ServiceTestEvent("UNREGISTERING", new Class[] { TestServiceOne.class, TestServiceTwo.class,
-            TestServiceAllSubclass.class, ComponentTestInfo.class }));
+        stopEvents.addServiceEvent("UNREGISTERING", TestServiceOne.class);
+        stopEvents.addServiceEvent("UNREGISTERING", TestServiceTwo.class);
+        stopEvents.addServiceEvent("UNREGISTERING", new Class[] { TestServiceOne.class, TestServiceTwo.class,
+            TestServiceAllSubclass.class, ComponentTestInfo.class });
 
         controller.run();
     }

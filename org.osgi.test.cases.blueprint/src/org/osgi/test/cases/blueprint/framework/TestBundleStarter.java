@@ -27,14 +27,20 @@ public class TestBundleStarter implements TestInitializer {
     protected Bundle bundle;
     // a delay to apply to the start (in milliseconds)
     protected long delay = 0;
+    protected int startOptions = 0;
 
     public TestBundleStarter(Bundle bundle) {
         this.bundle = bundle;
     }
 
     public TestBundleStarter(Bundle bundle, long delay) {
+        this(bundle, delay, 0);
+    }
+
+    public TestBundleStarter(Bundle bundle, long delay, int startOptions) {
         this.bundle = bundle;
         this.delay = delay;
+        this.startOptions = startOptions;
     }
 
 
@@ -58,6 +64,6 @@ public class TestBundleStarter implements TestInitializer {
         }
 
         System.out.println(">>>>>>>> starting bundle " + bundle);
-        bundle.start();
+        bundle.start(startOptions);
     }
 }

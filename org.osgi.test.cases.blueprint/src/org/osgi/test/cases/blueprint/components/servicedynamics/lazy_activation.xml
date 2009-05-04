@@ -31,8 +31,8 @@
    <!-- This service will not be registered before activation because it uses a listener -->
    <service id="ServiceTwoService" ref="ServiceTwo" interface="org.osgi.test.cases.blueprint.services.TestServiceTwo">
        <registration-listener ref="ServiceTwoListener"
-           registration-method="register"
-           unregistration-method="unregister"/>
+           registration-method="registered"
+           unregistration-method="unregistered"/>
    </service>
 
    <!-- This service will not be registered before activation because uses auto-export -->

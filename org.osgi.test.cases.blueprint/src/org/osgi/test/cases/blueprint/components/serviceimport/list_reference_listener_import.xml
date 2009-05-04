@@ -5,7 +5,7 @@
 
     <description>
         Dual-purpose test.  This tests that reference collections honor the default-availability and tests a binding
-        listener as a <reference>.
+        listener as a reference.
     </description>
 
     <reference id="ServiceOneListener" interface="org.osgi.test.cases.blueprint.services.ServiceOneListenerInterface"/>
