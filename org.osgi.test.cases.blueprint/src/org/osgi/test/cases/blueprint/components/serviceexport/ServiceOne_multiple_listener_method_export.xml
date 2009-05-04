@@ -21,8 +21,8 @@
            <entry key="service.component.name" value="ServiceOneService"/>
        </service-properties>
        <registration-listener
-           registration-method="register"
-           unregistration-method="unregister">
+           registration-method="registered"
+           unregistration-method="unregistered">
            <bean class="org.osgi.test.cases.blueprint.components.serviceexport.ServiceOneTwoRegistrationListener">
                <argument value="ServiceOneTwoListener"/>
            </bean>

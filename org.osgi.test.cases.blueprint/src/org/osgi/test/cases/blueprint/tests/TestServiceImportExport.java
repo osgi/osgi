@@ -431,6 +431,63 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
 
 	/**
+	 * This tests the use of an imported registraton listener.
+	 */
+	public void testRegistrationListenerImport() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.  The export jar will export both the target "good" service
+        // and secondary "bad" service.  We should resolve to the good service.
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/ServiceOne_multiple_import.jar",
+            getWebServer()+"www/ServiceOne_service_listener_export.jar",
+            getWebServer()+"www/registration_listener_export.jar");
+        // we add different validation stuff to each jar.  We'll start with the
+        // export jar
+        MetadataEventSet exportStartEvents = controller.getStartEvents(1);
+        // Check the registration of both of these classes.  Note, the validation
+        // requests each of these interface individually, but the properties should be the same for all.
+        exportStartEvents.addValidator(new ServiceRegistrationValidator(new Class[] { TestServiceOne.class, TestServiceTwo.class }, "ServiceOne"));
+        // also validate the metadata for the exported service
+        exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne",
+            new Class[] { TestServiceOne.class, TestServiceTwo.class },
+            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
+
+        // we should see a service event here indicating this was registered
+        exportStartEvents.addServiceEvent("REGISTERED", new Class[] { TestServiceOne.class, TestServiceTwo.class });
+
+        // now the importing side.  We've got a couple of service injections to validate, plus the injection
+        // results
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+        // we inject two properties, each of which does a service test using different interfaces.
+        // We expect two of these events.
+        importStartEvents.addAssertion("ServiceOneMultipleChecker", AssertionService.SERVICE_SUCCESS);
+        importStartEvents.addAssertion("ServiceOneMultipleChecker", AssertionService.SERVICE_SUCCESS);
+        // and two additional components that just request this using a single interface.
+        importStartEvents.addAssertion("ServiceOneChecker", AssertionService.SERVICE_SUCCESS);
+        importStartEvents.addAssertion("ServiceTwoChecker", AssertionService.SERVICE_SUCCESS);
+        // validate each of the imported references
+        importStartEvents.addValidator(new ReferenceComponentValidator("ServiceOneMultiple", new Class[]  { TestServiceOne.class, TestServiceTwo.class } ));
+        importStartEvents.addValidator(new ReferenceComponentValidator("ServiceOne", TestServiceOne.class));
+        importStartEvents.addValidator(new ReferenceComponentValidator("ServiceTwo", TestServiceTwo.class));
+        // validate this is in the reference export list
+        importStartEvents.addValidator(new GetReferencedServicesMetadataValidator("ServiceOne"));
+        importStartEvents.addValidator(new GetReferencedServicesMetadataValidator("ServiceTwo"));
+        importStartEvents.addValidator(new GetReferencedServicesMetadataValidator("ServiceOneMultiple"));
+
+        // now some expected termination stuff
+        EventSet exportStopEvents = controller.getStopEvents(1);
+        // we should see a service event here indicating this is being deregistered
+        exportStopEvents.addServiceEvent("UNREGISTERING", new Class[] { TestServiceOne.class, TestServiceTwo.class });
+        // and there should not be a registration active anymore
+        exportStopEvents.addValidator(new ServiceUnregistrationValidator(new Class[] { TestServiceOne.class, TestServiceTwo.class },
+            "(osgi.service.blueprint.compname=ServiceOne)"));
+
+        controller.run();
+    }
+
+
+	/**
 	 * This tests the use of concrete class implementations as the exported interface.
 	 */
 	public void testConcreteInterface() throws Exception {
@@ -907,7 +964,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_REGISTERED, props));
         // we're expecting some listener metadata on the export.
         TestRegistrationListener[] listeners = new TestRegistrationListener[] {
-            new TestRegistrationListener("ServiceOneListener", "register", "unregister")
+            new TestRegistrationListener("ServiceOneListener", "registered", "unregistered")
         };
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOneListener", TestServiceOne.class,
             ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, listeners)));
@@ -946,8 +1003,8 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStartEvents.addEvent(new ComponentAssertion("ServiceTwoListener", AssertionService.SERVICE_REGISTERED, props2));
         // we're expecting some listener metadata on the export.
         TestRegistrationListener[] listeners = new TestRegistrationListener[] {
-            new TestRegistrationListener("ServiceOneListener", "register", "unregister"),
-            new TestRegistrationListener("ServiceTwoListener", "register", "unregister")
+            new TestRegistrationListener("ServiceOneListener", "registered", "unregistered"),
+            new TestRegistrationListener("ServiceTwoListener", "registered", "unregistered")
         };
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
             ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, listeners)));
@@ -987,8 +1044,9 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStartEvents.addEvent(new ComponentAssertion("ServiceOneTwoListener", AssertionService.SERVICE_REGISTERED, props1));
         exportStartEvents.addEvent(new ComponentAssertion("ServiceOneTwoListener", AssertionService.SERVICE_REGISTERED, props2));
         // we're expecting some listener metadata on the export.
+        // listener is an inner component
         TestRegistrationListener[] listeners = new TestRegistrationListener[] {
-            new TestRegistrationListener("ServiceOneTwoListener", "register", "unregister"),
+            new TestRegistrationListener(null, "registered", "unregistered"),
         };
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
             ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, listeners)));
@@ -1002,16 +1060,18 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
-	/*
+	/**
 	 * A service listener test.  This should only see calls on startup and shutdown.
+     * This is the same as the test above, but the listener is an imported service
 	 */
-	public void testServiceListenerImport() throws Exception {
+	public void testServiceImportedListenerImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ServiceOne_listener_import.jar",
-            getWebServer()+"www/ServiceOne_export.jar");
+            getWebServer()+"www/ServiceOne_service_listener_import.jar",
+            getWebServer()+"www/ServiceOne_export.jar",
+            getWebServer()+"www/reference_listener_import.jar");
         // The export jar has been well covered already in other tests.  We'll just focus
         // on the import listener details.
         MetadataEventSet importStartEvents = controller.getStartEvents(0);

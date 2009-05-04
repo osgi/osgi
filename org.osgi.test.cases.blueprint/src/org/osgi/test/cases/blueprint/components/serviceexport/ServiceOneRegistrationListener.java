@@ -20,13 +20,14 @@ import java.util.Map;
 
 import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.services.TestServiceOne;
+import org.osgi.test.cases.blueprint.services.ServiceOneRegistrationListenerInterface;
 
 
 /**
  * A base class for different reference listeners used to validate
  * reference registration/deregistration calls.
  */
-public class ServiceOneRegistrationListener extends RegistrationListener  {
+public class ServiceOneRegistrationListener extends RegistrationListener implements ServiceOneRegistrationListenerInterface {
     public ServiceOneRegistrationListener(String componentId) {
         super(componentId);
     }

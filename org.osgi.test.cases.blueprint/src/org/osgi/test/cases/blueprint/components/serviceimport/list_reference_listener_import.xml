@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    default-availability="optional">
+
+    <description>
+        Dual-purpose test.  This tests that reference collections honor the default-availability and tests a binding
+        listener as a <reference>.
+    </description>
+
+    <reference id="ServiceOneListener" interface="org.osgi.test.cases.blueprint.services.ServiceOneListenerInterface"/>
+
+    <!-- This gets both a ServiceManager and a reference collection injected -->
+   <bean id="NullReferenceChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.NullReferenceList" init-method="init">
+       <argument value="NullReferenceChecker"/>
+       <property name="serviceManager">
+           <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
+       </property>
+       <property name="list">
+           <ref-list interface="org.osgi.test.cases.blueprint.services.TestServiceOne" member-type="service-instance">
+               <listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
+           </ref-list>
+       </property>
+   </bean>
+</blueprint>
+

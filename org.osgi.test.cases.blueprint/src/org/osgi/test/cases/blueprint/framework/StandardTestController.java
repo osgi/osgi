@@ -64,6 +64,13 @@ public class StandardTestController extends BaseTestController {
         addBundle(bundle2);
     }
 
+    public StandardTestController(BundleContext testContext, String bundle1, String bundle2, String bundle3) throws Exception {
+        this(testContext);
+        addBundle(bundle1);
+        addBundle(bundle2);
+        addBundle(bundle3);
+    }
+
 
     /**
      * Add a bundle to this test phase.  This installs the bundle and

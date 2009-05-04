@@ -290,7 +290,7 @@ public class TestConfigErrors extends DefaultTestBundleControl {
     public void testConstructorNonPrivate() throws Exception {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
-            getWebServer()+"www/error_constructor_non_private.jar");
+            getWebServer()+"www/error_constructor_non_public.jar");
         controller.run();
     }
 

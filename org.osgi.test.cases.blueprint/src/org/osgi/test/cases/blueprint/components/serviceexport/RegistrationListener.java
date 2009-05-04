@@ -44,7 +44,7 @@ public class RegistrationListener extends BaseTestComponent {
         Hashtable props = new Hashtable();
         props.putAll(serviceProperties);
         props.put("service.interface.name", serviceInterface.getName());
-        AssertionService.sendEvent(this, "UNSERVICE_REGISTERED", props);
+        AssertionService.sendEvent(this, AssertionService.SERVICE_UNREGISTERED, props);
     }
 }
 

@@ -466,6 +466,67 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
 
 	/**
+	 * Import a list of services and validate against an expected set.
+     * The initial list will be empty, with optional availability.  Then it
+     * will register all of the services and validate the result against the expected
+     * service set.  This is the same as testEmptyListCollectionImport(), but the
+     * availability is specified using default-availability.
+     *
+     * This is identical to the test above, but the attached listener is provided
+     * by an imported service.
+	 */
+	public void testEmptyListCollectionServiceListener() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/reference_listener_import.jar",
+            getWebServer()+"www/managed_null_service_export.jar",
+            getWebServer()+"www/reference_listener_export.jar");
+
+
+        // all of our validation here is on the importing side
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+
+        // create a property bundle set for each of the services we expect to see
+        // bind and unbind
+        Hashtable propsA = new Hashtable();
+        propsA.put("service.interface.name", TestServiceOne.class.getName());
+        propsA.put("service.listener.type", "interface");
+        propsA.put("test.service.name", "ServiceOneA");
+
+        Hashtable propsB = new Hashtable();
+        propsB.put("service.interface.name", TestServiceOne.class.getName());
+        propsB.put("service.listener.type", "interface");
+        propsB.put("test.service.name", "ServiceOneB");
+
+        Hashtable propsC = new Hashtable();
+        propsC.put("service.interface.name", TestServiceOne.class.getName());
+        propsC.put("service.listener.type", "interface");
+        propsC.put("test.service.name", "ServiceOneC");
+
+        // we start out with an empty list, register everything, then unregister everything.
+        // we should see a pair of events for each service.
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsA));
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsB));
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsC));
+
+        // next it unregisters everything.  We should see an unbind for each service that
+        // goes away
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsA));
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsB));
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsC));
+
+        // this event signals completion of all of the checking work.  If there
+        // have been any errors, these get signalled as assertion failures and will
+        // fail the test.
+        importStartEvents.addAssertion("NullReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
+
+        controller.run();
+    }
+
+
+	/**
 	 * Import a list of ServiceReferences and validate against an expected set.
      * The initial list will be empty, with optional availability.  Then it
      * will register all of the services and validate the result against the expected

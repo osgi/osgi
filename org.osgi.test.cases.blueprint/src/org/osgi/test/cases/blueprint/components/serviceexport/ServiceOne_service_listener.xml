@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <description>
-        This is just a simple exported service using a single interface.
+        This is just a simple exported service with a listener that's an imported service
     </description>
 
     <!-- the node this service export maps into. -->
@@ -11,13 +11,7 @@
        <argument value="ServiceOne"/>
    </bean>
 
-   <bean id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceexport.ServiceOneRegistrationListener">
-       <argument value="ServiceOneListener"/>
-   </bean>
-
-   <bean id="ServiceTwoListener" class="org.osgi.test.cases.blueprint.components.serviceexport.ServiceTwoRegistrationListener">
-       <argument value="ServiceTwoListener"/>
-   </bean>
+   <reference id="ServiceOneListener" interface="org.osgi.test.cases.blueprint.service..ServiceOneRegistrationListenerInterface"/>
 
    <!-- simple export using a reference and just one interface. -->
    <service id="ServiceOneService" ref="ServiceOne">
@@ -29,9 +23,6 @@
            <entry key="service.component.name" value="ServiceOneService"/>
        </service-properties>
        <registration-listener ref="ServiceOneListener"
-           registration-method="registered"
-           unregistration-method="unregistered"/>
-       <registration-listener ref="ServiceTwoListener"
            registration-method="registered"
            unregistration-method="unregistered"/>
    </service>
