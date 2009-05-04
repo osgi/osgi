@@ -29,10 +29,9 @@
       This is the XML Schema for the OSGi Blueprint service 1.0.0
       development descriptor.  Blueprint configuration files
       using this schema must indicate the schema using the
-      blueprint/v1.0.0 namespace as shown below:
+      blueprint/v1.0.0 namespace.  For example,
 
-      <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
       if used as a qualified namespace, "bp:" is the recommended
       namespace prefix.
