@@ -1404,6 +1404,41 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
 
 	/**
+	 * A number of sort/Iterator tests, including some service dynamics elements.  The
+     * sorting comparator is imported as a service.
+	 */
+	public void testRefListNameSortService() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/ref_list_name_sort.jar",
+            getWebServer()+"www/sorting_service_export.jar",
+            getWebServer()+"www/name_comparator_service.jar");
+
+        // all of our validation here is on the importing side
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+
+        // all of the real tests are performed in the instantiated components, so
+        // we're just looking for the completion methods.  Any assertion failures
+        // will terminate the test.
+        importStartEvents.addAssertion("ComparatorChecker", AssertionService.COMPONENT_INIT_METHOD);
+
+        // validate the metadata for the different collection types/comparator combinations
+        importStartEvents.addValidator(new PropertyMetadataValidator("ComparatorChecker",
+            new TestProperty(new TestComponentValue(
+            new ReferenceCollection(null,
+            TestServiceOne.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
+            null, List.class,
+            new TestRefValue("NameComparator"),
+            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
+            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICES)), "list")));
+
+        controller.run();
+    }
+
+
+	/**
 	 * A number of sort/Iterator tests, including some service dynamics elements.
 	 */
 	public void testRefListInvertedNameSort() throws Exception {

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+        This performs the sorting using a comparator imported as a service.
+    </description>
+
+    <reference id="NameComparator" interface="org.osgi.test.cases.blueprint.services.ServiceInstanceComparator"/>
+
+    <!-- This gets both a ServiceManager and a reference collection injected -->
+    <bean id="ComparatorChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.ReferenceCollectionSortChecker" init-method="init">
+        <argument value="ComparatorChecker"/>
+        <property name="serviceManager">
+            <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
+        </property>
+        <property name="bundleContext" ref="bundleContext"/>
+        <property name="list">
+            <ref-list interface="org.osgi.test.cases.blueprint.services.TestServiceOne" ordering-basis="service">
+                <comparator>
+                    <ref component="NameComparator"/>
+                </comparator>
+            </ref-list>
+        </property>
+        <property name="sortOrder">
+            <list>
+                <value>ServiceOneA</value>
+                <value>ServiceOneB</value>
+                <value>ServiceOneC</value>
+                <value>ServiceOneD</value>
+                <value>ServiceOneE</value>
+            </list>
+        </property>
+    </bean>
+</blueprint>
+
