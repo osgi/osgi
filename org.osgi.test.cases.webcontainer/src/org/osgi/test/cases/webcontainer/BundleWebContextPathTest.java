@@ -24,7 +24,7 @@ import org.osgi.service.webcontainer.WebContainer;
 /**
  * @version $Rev$ $Date$
  * 
- *          test Bundle-Web manifest header processed correctly with various
+ *          test Web-ContextPath manifest header processed correctly with various
  *          scenarios
  */
 public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
@@ -238,7 +238,7 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
         return super.generalHeadersTest(options, warName, start);
     }
 
-    // TODO create war manifest that contains the Bundle-SymbolicName header and
+    // TODO create war manifest that contains the Web-ContextPath header and
     // more
     // tests
 }

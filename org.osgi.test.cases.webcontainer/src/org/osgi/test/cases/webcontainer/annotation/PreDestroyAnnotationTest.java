@@ -18,7 +18,6 @@ package org.osgi.test.cases.webcontainer.annotation;
 
 import org.osgi.framework.Bundle;
 import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
-import org.osgi.test.cases.webcontainer.util.TimeUtil;
 
 /**
  * @version $Rev$ $Date$

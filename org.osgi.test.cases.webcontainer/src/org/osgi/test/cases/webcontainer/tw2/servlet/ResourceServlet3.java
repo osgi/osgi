@@ -17,7 +17,6 @@
 package org.osgi.test.cases.webcontainer.tw2.servlet;
 
 import java.io.IOException;
-
 import java.io.PrintWriter;
 
 import javax.annotation.Resource;

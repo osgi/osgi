@@ -16,13 +16,11 @@
 
 package org.osgi.test.cases.webcontainer.annotation;
 
-import java.net.HttpURLConnection;
 import java.util.jar.Manifest;
 
 import org.osgi.framework.Bundle;
 import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
-import org.osgi.test.cases.webcontainer.util.TimeUtil;
 import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
 
 /**

@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
-import org.osgi.framework.Bundle;
 import org.osgi.service.webcontainer.WebContainer;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
@@ -170,6 +169,7 @@ public abstract class WebContainerTestBundleControl extends
     protected void checkTW5HomeResponse(String response) throws Exception {
         assertEquals(response, "<html><head><title>TestWar5</title></head><body>This is TestWar5.<P><A href=\"BundleTestServlet\">/BundleTestServlet</A><BR></P></body></html>");
     }
+    
     // TODO fill this in when the schema is defined in RFC 66
     private String generateQuery(Map options) {
         return "";
