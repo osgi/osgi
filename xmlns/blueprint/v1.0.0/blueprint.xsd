@@ -479,6 +479,7 @@
         <xsd:complexContent>
             <xsd:extension base="Tcomponent">
                 <xsd:sequence>
+                    <xsd:element name="description" type="Tdescription" minOccurs="0" />
                     <xsd:element name="interfaces" minOccurs="0" maxOccurs="1" type="Tinterfaces">
                         <xsd:annotation>
                             <xsd:documentation>
@@ -663,6 +664,7 @@
             </xsd:documentation>
         </xsd:annotation>
         <xsd:sequence>
+            <xsd:element name="description" type="Tdescription" minOccurs="0" />
             <xsd:element name="interfaces" type="Tinterfaces" minOccurs="0">
                 <xsd:annotation>
                     <xsd:documentation>
