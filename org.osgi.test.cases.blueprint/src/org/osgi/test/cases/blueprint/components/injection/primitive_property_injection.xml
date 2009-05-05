@@ -19,6 +19,7 @@
    </bean>
    <bean id="compPrimBooleanTrue" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="primBoolean">
+           <description>Property elements can have descriptions also.</description>
            <value type="boolean">true</value>
        </property>
    </bean>

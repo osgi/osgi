@@ -5,6 +5,9 @@
     <bpcm:managed-service-factory id="srvFactory1"
         factory-pid="org.osgi.test.cases.blueprint.components.cmsupport.configfactory1"
         auto-export="all-classes">
+        <description>
+            Testing that the description element is working ok
+        </description>
         <bpcm:managed-component class="org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection"/>
     </bpcm:managed-service-factory>
 

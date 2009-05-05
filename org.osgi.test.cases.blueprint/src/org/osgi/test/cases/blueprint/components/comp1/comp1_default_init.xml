@@ -3,23 +3,23 @@
     default-init-method="init">
 
    <bean id="comp1" class="org.osgi.test.cases.blueprint.components.comp1.SimpleTestComponent">
-     <!-- collaborators and configuration for this component go here -->
-       <argument value="comp1"/>
+       <description>Just a simple test component for lifecycle.  This description element is also part of the test.</description>
+       <argument value="comp1">
+           <description>
+               This description is also part of the test
+           </description>
+       </argument>
    </bean>
    <bean id="comp1a" class="org.osgi.test.cases.blueprint.components.comp1.AltSimpleTestComponent" init-method="altinit">
-     <!-- collaborators and configuration for this component go here -->
        <argument value="comp1a"/>
    </bean>
    <bean id="comp1b" class="org.osgi.test.cases.blueprint.components.comp1.AltSimpleTestComponent" init-method="">
-     <!-- collaborators and configuration for this component go here -->
        <argument value="comp1b"/>
    </bean>
    <bean id="comp1c" class="org.osgi.test.cases.blueprint.components.comp1.SimpleTestComponent" destroy-method="destroy">
-     <!-- collaborators and configuration for this component go here -->
        <argument value="comp1c"/>
    </bean>
    <bean id="comp1d" class="org.osgi.test.cases.blueprint.services.BaseTestComponent">
-     <!-- collaborators and configuration for this component go here -->
        <argument value="comp1d"/>
    </bean>
 </blueprint>

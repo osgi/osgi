@@ -7,7 +7,9 @@
 
 
     <!-- single shared instance of the imported service -->
-    <reference id="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne"/>
+    <reference id="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
+        <description>Testing descriptions also</description>
+    </reference>
 
    <!-- we import this both as a property and constructor arg -->
    <bean id="ServiceOneConstructor" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceChecker">

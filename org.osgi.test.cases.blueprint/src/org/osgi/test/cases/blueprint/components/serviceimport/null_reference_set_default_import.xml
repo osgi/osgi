@@ -17,6 +17,7 @@
        </property>
        <property name="set">
            <ref-set interface="org.osgi.test.cases.blueprint.services.TestServiceOne" availability="optional">
+               <description>Testing descriptions also</description>
                <listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
            </ref-set>
        </property>
