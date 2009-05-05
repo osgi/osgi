@@ -1071,7 +1071,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         StandardTestController controller = new StandardTestController(getContext(),
             getWebServer()+"www/ServiceOne_service_listener_import.jar",
             getWebServer()+"www/ServiceOne_export.jar",
-            getWebServer()+"www/reference_listener_import.jar");
+            getWebServer()+"www/reference_listener_export.jar");
         // The export jar has been well covered already in other tests.  We'll just focus
         // on the import listener details.
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
