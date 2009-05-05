@@ -64,6 +64,23 @@ public class BaseTestComponent implements ComponentTestInfo{
     }
 
     /**
+     * Returns the unique component identifier for an
+     * instance.  This is used to distinquish equality for some
+     * injection components.
+     *
+     * @return The unique component identifer.
+     */
+    public int getComponentInstance() {
+        Integer id = (Integer)props.get(COMPONENT_INSTANCE);
+        // we should always have one of these
+        if (id == null) {
+            return 0;
+        }
+        return id.intValue();
+    }
+
+
+    /**
      * Returns a set of properties related to this created component.
      *
      * @return A dictionary with properties related to this component.  All
@@ -352,7 +369,6 @@ public class BaseTestComponent implements ComponentTestInfo{
             }
         }
         return r;
-
     }
 
 

@@ -143,22 +143,22 @@
    </bean>
 
    <!-- prototype1 will have prototype scope, which means a new component will be instantiated for each request -->
-   <bean id="prototype1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" scope="prototype">
+   <bean id="prototype1" class="org.osgi.test.cases.blueprint.components.injection.PrototypeComponentInjection" scope="prototype">
        <argument value="prototype1"/>
    </bean>
 
    <!-- prototype2 tests prototype scope and lazy-init in combination. -->
-   <bean id="prototype2" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" scope="prototype" lazy-init="true">
+   <bean id="prototype2" class="org.osgi.test.cases.blueprint.components.injection.PrototypeComponentInjection" scope="prototype" lazy-init="true">
        <argument value="prototype2"/>
    </bean>
 
    <!-- prototype3 is only referenced via the module context.  This should not be instantiated until referenced -->
-   <bean id="prototype3" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" scope="prototype">
+   <bean id="prototype3" class="org.osgi.test.cases.blueprint.components.injection.PrototypeComponentInjection" scope="prototype">
        <argument value="prototype3"/>
    </bean>
 
    <!-- referenced by a list, so will create unique ones for each element. -->
-   <bean id="prototype4" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" scope="prototype">
+   <bean id="prototype4" class="org.osgi.test.cases.blueprint.components.injection.PrototypeComponentInjection" scope="prototype">
        <argument value="prototype4"/>
    </bean>
 

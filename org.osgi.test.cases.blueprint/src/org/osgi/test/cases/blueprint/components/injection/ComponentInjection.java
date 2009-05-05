@@ -305,5 +305,12 @@ public class ComponentInjection extends BaseTestComponent {
     protected Object getDependentComponent(String id) {
         return dependentComponents.get(id);
     }
+
+    /**
+     * Used when we're managing is an inner component..
+     */
+    public boolean equals(Object o) {
+        return this == o;
+    }
 }
 

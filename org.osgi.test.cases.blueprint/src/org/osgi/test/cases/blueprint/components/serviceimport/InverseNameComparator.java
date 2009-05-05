@@ -16,9 +16,8 @@
 
 package org.osgi.test.cases.blueprint.components.serviceimport;
 
-import java.util.Comparator;
-
 import org.osgi.test.cases.blueprint.services.TestServiceOne;
+import org.osgi.test.cases.blueprint.services.ServiceInstanceComparator;
 
 
 /**
@@ -26,7 +25,7 @@ import org.osgi.test.cases.blueprint.services.TestServiceOne;
  * will also register a service using the service manager to see that the new
  * registration is picked up.
  */
-public class InverseNameComparator implements Comparator {
+public class InverseNameComparator implements ServiceInstanceComparator {
 
     public InverseNameComparator() {
     }

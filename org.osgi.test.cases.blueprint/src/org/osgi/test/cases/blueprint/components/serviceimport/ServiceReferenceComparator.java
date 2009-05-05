@@ -16,8 +16,6 @@
 
 package org.osgi.test.cases.blueprint.components.serviceimport;
 
-import java.util.Comparator;
-
 import org.osgi.framework.ServiceReference;
 
 /**
@@ -25,7 +23,7 @@ import org.osgi.framework.ServiceReference;
  * will also register a service using the service manager to see that the new
  * registration is picked up.
  */
-public class ServiceReferenceComparator implements Comparator {
+public class ServiceReferenceComparator implements org.osgi.test.cases.blueprint.services.ServiceReferenceComparator {
 
     public ServiceReferenceComparator() {
     }
