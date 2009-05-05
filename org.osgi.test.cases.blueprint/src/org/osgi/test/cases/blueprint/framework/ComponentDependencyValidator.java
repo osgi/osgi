@@ -16,8 +16,8 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.osgi.framework.BundleContext;
 
@@ -28,7 +28,7 @@ public class ComponentDependencyValidator extends MetadataValidator {
     // the target component id
     protected String componentId;
     // the set of names we expect to find
-    protected Set names;
+    protected List names;
 
     /**
      * Create the validator.
@@ -39,7 +39,7 @@ public class ComponentDependencyValidator extends MetadataValidator {
      */
     public ComponentDependencyValidator(String componentId, String[] nameList) {
         this.componentId = componentId;
-        this.names = new HashSet();
+        this.names = new ArrayList();
         // convert this into a set that can be validate directly
         for (int i = 0; i < nameList.length; i++) {
             names.add(nameList[i]);

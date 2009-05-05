@@ -24,13 +24,13 @@
         </property>
         <property name="list">
             <ref-list>
-                <comparator>
-                    <ref component="NamedComponent"/>
-                </comparator>
                 <interfaces>
                     <value>org.osgi.test.cases.blueprint.services.TestServiceOne</value>
                     <value>org.osgi.test.cases.blueprint.services.TestServiceTwo</value>
                 </interfaces>
+                <comparator>
+                    <ref component="NamedComponent"/>
+                </comparator>
             </ref-list>
         </property>
         <property name="sortOrder">

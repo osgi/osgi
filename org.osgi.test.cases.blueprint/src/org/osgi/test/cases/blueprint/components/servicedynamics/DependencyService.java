@@ -33,7 +33,7 @@ public class DependencyService extends BaseTestComponent implements TestServiceD
     protected TestServiceOne serviceOne;
     protected TestServiceTwo serviceTwo;
 
-    protected DependencyService(String componentId) {
+    public DependencyService(String componentId) {
         super(componentId);
     }
 

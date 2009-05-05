@@ -25,6 +25,7 @@ import org.osgi.service.blueprint.convert.ConversionService;
 import org.osgi.service.blueprint.reflect.BeanMetadata;
 import org.osgi.service.blueprint.reflect.BeanMetadata;
 import org.osgi.test.cases.blueprint.components.injection.ComponentInjection;
+import org.osgi.test.cases.blueprint.components.injection.PrototypeComponentInjection;
 import org.osgi.test.cases.blueprint.framework.*;
 import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
@@ -110,7 +111,6 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         startEvents.addAssertion("twocomp", AssertionService.COMPONENT_CREATED);
         startEvents.addValidator(new ArgumentMetadataValidator("twocomp", new TestArgument[] {
             new StringArgument("twocomp"),
-            new ReferenceArgument("leaf1"),
             new ReferenceArgument("twoleaf"),
             new ReferenceArgument("comp1"),
         }));
@@ -123,7 +123,7 @@ public class TestComponentInjection extends DefaultTestBundleControl {
             new TestProperty(new TestListValue(new TestValue[] {
                 new TestRefValue("twoleaf"),
                 new TestRefValue("twocomp"),
-            }),"componentOne")
+            }),"componentList")
         }));
 
         startEvents.addAssertion("twoset", AssertionService.COMPONENT_CREATED);
@@ -132,7 +132,7 @@ public class TestComponentInjection extends DefaultTestBundleControl {
             new TestProperty( new TestSetValue(new TestValue[] {
                 new TestRefValue("twoleaf"),
                 new TestRefValue("twocomp"),
-            }),"componentOne")
+            }),"componentSet")
         }));
 
         startEvents.addAssertion("mapref", AssertionService.COMPONENT_CREATED);
@@ -141,7 +141,7 @@ public class TestComponentInjection extends DefaultTestBundleControl {
             new TestProperty(new TestMapValue(new MapValueEntry[] {
                 new MapValueEntry(new TestRefValue("leaf1"), new TestRefValue("twoleaf")),
                 new MapValueEntry(new TestRefValue("leaf2"), new TestRefValue("twocomp")),
-            }),"componentOne")
+            }),"componentMap")
         }));
 
         // now some dependson tests.  The dependency ordering tests are done in the module
@@ -195,7 +195,7 @@ public class TestComponentInjection extends DefaultTestBundleControl {
 
         // this is the first with a prototype scope
         startEvents.addValidator(new ComponentMetadataValidator(
-            new BeanComponent("prototype1", ComponentInjection.class, null, null, null,
+            new BeanComponent("prototype1", PrototypeComponentInjection.class, null, null, null,
             new TestArgument[] { new StringArgument("prototype1") } , null,
             null, false, BeanMetadata.SCOPE_PROTOTYPE)));
 
@@ -243,8 +243,8 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         middleEvents.addInitializer(new LazyComponentStarter("prototype3"));
         middleEvents.addInitializer(new LazyComponentStarter("prototype3"));
 
-        middleEvents.addAssertion("prototype2", AssertionService.COMPONENT_CREATED);
-        middleEvents.addAssertion("prototype2", AssertionService.COMPONENT_CREATED);
+        middleEvents.addAssertion("prototype3", AssertionService.COMPONENT_CREATED);
+        middleEvents.addAssertion("prototype3", AssertionService.COMPONENT_CREATED);
         // cap this creation
         middleEvents.addFailureEvent(new ComponentAssertion("prototype3", AssertionService.COMPONENT_CREATED));
 

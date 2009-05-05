@@ -10,7 +10,7 @@
        <argument value="ServiceOne"/>
    </bean>
 
-   <reference id="ServiceOneListener" interface="org.osgi.test.cases.blueprint.service.ServiceOneRegistrationListenerInterface"/>
+   <reference id="ServiceOneListener" interface="org.osgi.test.cases.blueprint.services.ServiceOneRegistrationListenerInterface"/>
 
    <!-- simple export using a reference and just one interface. -->
    <service id="ServiceOneService" ref="ServiceOne">

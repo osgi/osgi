@@ -9,15 +9,15 @@
 
    <!-- this is a "shotgun" export, which is handy for checking conflicts. -->
    <service id="BadServiceService" auto-export="all-classes" ranking="2">
-       <!-- the node this service export maps into. -->
-      <bean class="org.osgi.test.cases.blueprint.services.TestBad">
-          <argument value="ServiceOne"/>
-      </bean>
       <!-- some service properties for filter tests. -->
       <service-properties>
           <entry key="serviceType" value="Bad"/>
           <entry key="autoExport" value="All"/>
       </service-properties>
+       <!-- the node this service export maps into. -->
+      <bean class="org.osgi.test.cases.blueprint.services.TestBad">
+          <argument value="ServiceOne"/>
+      </bean>
    </service>
 </blueprint>
 
