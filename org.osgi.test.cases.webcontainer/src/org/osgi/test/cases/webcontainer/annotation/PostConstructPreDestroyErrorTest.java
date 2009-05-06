@@ -44,10 +44,12 @@ public class PostConstructPreDestroyErrorTest extends
     }
 
     private void uninstallWar() throws Exception {
-        // uninstall the war file
-        log("uninstall war file: tw2.war at context path "
-                + this.warContextPath);
-        uninstallBundle(this.b);
+        if (this.b != null && this.b.getState() != Bundle.UNINSTALLED) {
+            // uninstall the war file
+            log("uninstall war file: tw2.war at context path "
+                    + this.warContextPath);
+            uninstallBundle(this.b);
+        }
     }
 
     public void tearDown() throws Exception {

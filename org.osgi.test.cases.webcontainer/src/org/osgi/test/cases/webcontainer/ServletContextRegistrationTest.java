@@ -133,7 +133,7 @@ public class ServletContextRegistrationTest extends
         Bundle b2 = registerWarBundleTest(createOptions("1.1", null, null), "tw1.war", true);
         Bundle b3 = registerWarBundleTest(createOptions("1.2", null, null), "tw1.war", true);
         // TODO possible add additional test here when rfc 66 determines the behavior here.  should
-        // the bundle-symbolcname be the same for all 3 bundles?
+        // the bundle-symbolicname be the same for all 3 bundles?
         uninstallBundle(b2);
         uninstallBundle(b3);
     }
@@ -168,10 +168,10 @@ public class ServletContextRegistrationTest extends
     /*
      * verify install 100 web applications
      */
-    public void testWebContextPath0018() throws Exception {
+    public void testMultiServletContextReg005() throws Exception {
         Bundle[] bundles = new Bundle[100];
         for (int i = 0; i < 100; i++) {
-            bundles[i] = registerWarBundleTest(null, "tw1.war", true);
+            bundles[i] = registerWarBundleTest(new HashMap(), "tw1.war", true);
         }
         for (int i = 0; i < 100; i++) {
             uninstallBundle(bundles[i]);
