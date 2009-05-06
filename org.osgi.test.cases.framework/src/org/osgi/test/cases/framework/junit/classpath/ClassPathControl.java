@@ -51,7 +51,6 @@ public class ClassPathControl extends DefaultTestBundleControl {
 				assertEquals(Bundle.INSTALLED, tb.getState());
 				try {
 					tb.start();
-					tb.stop();
 					fail("No exception thrown, Error!");
 				}
 				catch (BundleException be) {
@@ -76,7 +75,6 @@ public class ClassPathControl extends DefaultTestBundleControl {
 		try {
 			try {
 				tb.start();
-				tb.stop();
 			}
 			catch (BundleException be) {
 				if (tb.getState() == Bundle.INSTALLED)
@@ -116,8 +114,8 @@ public class ClassPathControl extends DefaultTestBundleControl {
 				getWebServer() + "classpath.tb4b.jar");
 		try {
 			tba.start();
-			tbb.start();
 			assertEquals(Bundle.ACTIVE, tba.getState());
+			tbb.start();
 			assertEquals(Bundle.ACTIVE, tbb.getState());
 		}
 		finally {
