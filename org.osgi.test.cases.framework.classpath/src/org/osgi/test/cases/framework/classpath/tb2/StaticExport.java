@@ -15,8 +15,8 @@ public class StaticExport implements BundleActivator {
 	 * Starts the bundle.
 	 */
 	public void start(BundleContext bc) {
-		org.osgi.test.cases.framework.classpath.tbc.exp.Exported e;
-		e = new org.osgi.test.cases.framework.classpath.tbc.exp.Exported();
+		org.osgi.test.cases.framework.classpath.exported.Exported e;
+		e = new org.osgi.test.cases.framework.classpath.exported.Exported();
 	}
 
 	/**

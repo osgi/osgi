@@ -1,0 +1,6 @@
+Bundle-Description: Tests  export of a package.
+Bundle-Version: 4.2.0
+Bundle-SymbolicName: $(p).tb2
+Bundle-Activator: $(p).tb2.Export
+
+Private-Package	: $(p).tb2

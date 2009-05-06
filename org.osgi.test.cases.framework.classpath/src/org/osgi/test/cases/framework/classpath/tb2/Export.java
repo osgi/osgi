@@ -19,8 +19,8 @@ public class Export implements BundleActivator {
 	 * "org.osgi.test.cases.framework.classpath.tbc.exp.Exported".
 	 */
 	public void start(BundleContext bc) {
-		org.osgi.test.cases.framework.classpath.tbc.exp.Exported e;
-		e = new org.osgi.test.cases.framework.classpath.tbc.exp.Exported();
+		org.osgi.test.cases.framework.classpath.exported.Exported e;
+		e = new org.osgi.test.cases.framework.classpath.exported.Exported();
 	}
 
 	/**
