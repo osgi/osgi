@@ -5,6 +5,7 @@ Private-Package						= org.osgi.test.support.*, \
 	${p}.junit.*
 	
 Export-Package						= \
+	${p}.classpath.exported
 
 
 Include-Resource = \
@@ -19,6 +20,11 @@ Include-Resource = \
 	activationpolicy.tblazy4.jar, \
 	activationpolicy.tblazy5.jar, \
 	activationpolicy.tblazy6.jar, \
+	classpath.tb1.jar, \
+	classpath.tb2.jar, \
+	classpath.tb3.jar, \
+	classpath.tb4a.jar, \
+	classpath.tb4b.jar, \
 	filter.tb1.jar, \
 	launch.tb1.jar, \
 	launch.tb2.jar, \
