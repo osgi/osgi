@@ -223,9 +223,17 @@ public class ServletContextRegistrationTest extends
         sc = (ServletContext)getContext().getService(sr);
         assertEquals("check if servlet context path is correct", sc.getContextPath(), (String)b.getHeaders().get(WebContainer.WEB_CONTEXT_PATH));
         
-        // get the service reference by Bundle-SymbolicName
+        // get the service reference by Bundle-SymbolicName and Bundle-Version
         ServiceReference[] srs = getContext().getServiceReferences(ServletContext.class.getName(), "(" + Constants.BUNDLE_SYMBOLICNAME + "=" + (String)b.getHeaders().get(Constants.BUNDLE_SYMBOLICNAME));
         assertNotNull(srs);
+        for (int i = 0; i < srs.length; i ++) {
+            // assume bundle-version is required which is not clear in rfc 66 currently
+            String bv1 = (String)srs[i].getProperty(Constants.BUNDLE_VERSION);
+            String bv2 = (String)b.getHeaders().get(Constants.BUNDLE_SYMBOLICNAME);
+            if (bv1.equals(bv2)) {
+                sr = srs[i];
+            }
+        }
         assertEquals((ServletContext)getContext().getService(srs[0]), sc);
         
         // get the service reference by context-path
@@ -252,8 +260,8 @@ public class ServletContextRegistrationTest extends
         assertFalse("Bundle not started yet - should not be able to access "
                 + cp, super.ableAccessPath(cp));
         
-        sr = getContext().getServiceReference(ServletContext.class.getName());
-        assertNull("sr should be null as the bundle has been stopped", sr);
+        srs = getContext().getServiceReferences(ServletContext.class.getName(), "(" + WebContainer.WEB_CONTEXT_PATH + "=" + (String)b.getHeaders().get(WebContainer.WEB_CONTEXT_PATH));
+        assertNull("srs should be null as the bundle has been stopped", srs);
 
         if (start) {
             b.start();
