@@ -506,6 +506,8 @@
                             </xsd:documentation>
                         </xsd:annotation>
                     </xsd:element>
+                    <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded"
+                        processContents="lax" />
                 </xsd:sequence>
 
                 <xsd:attribute name="interface" use="optional" type="Tclass" />
