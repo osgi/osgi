@@ -46,6 +46,6 @@ Export-Package =\
 	org.osgi.service.webcontainer.hostname=127.0.0.1, \
 	org.osgi.service.webcontainer.port=8080
 
-Test-Cases						= ${classes;extending;org.junit.framework.TestCase|*WebContainerTestBundleControl|*ManifestHeadersTestBundleControl}
+Test-Cases						= ${classes;extending;org.junit.framework.TestCase|*TestBundleControl}
 
 	

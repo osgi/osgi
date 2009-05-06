@@ -1,3 +1,10 @@
 Manifest-Version: 1.0
-Class-Path: 
+Bundle-Vendor: OSGi Alliance
+Bundle-ManifestVersion: 2
+Bundle-Classpath: .,WEB-INF/classes/
+Bundle-Name: org.osgi.test.cases.webcontainer.wmtw4
+Bundle-Description: OSGi Web Container RFC 66 Compliance Test test war 4 with manifest pre-specified
+Import-Package: javax.servlet;version="2.5",javax.servlet.http;version="2.5"
+Export-Package: org.osgi.test.cases.webcontainer.tw4;version="1.0"
+Web-ContextPath: /wmtw4
 
