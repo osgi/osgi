@@ -80,9 +80,6 @@ public abstract class ManifestHeadersTestBundleControl extends
             cp = (String) b.getHeaders().get(WebContainer.WEB_CONTEXT_PATH);
         }
 
-        // rough test able to access the app
-        assertTrue("should be able to access " + cp, super.ableAccessPath(cp));
-
         if (!start) {
             // test unable to access pathes yet as it is not started
             assertEquals("Bundle status should be Resolved but not Active", b
@@ -92,6 +89,9 @@ public abstract class ManifestHeadersTestBundleControl extends
                             + cp, super.ableAccessPath(cp));
             b.start();
         }
+        
+        // rough test able to access the app
+        assertTrue("should be able to access " + cp, super.ableAccessPath(cp));
 
         assertEquals("Bundle status should be Active", b.getState(),
                 Bundle.ACTIVE);
