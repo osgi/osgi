@@ -1,7 +1,0 @@
-Bundle-Description: Classpath help bundle, tests import of a package not installed
-Bundle-Version: 4.2.0
-Bundle-SymbolicName: $(p).tb1
-Bundle-Activator: $(p).tb1.ImportUninstalled
-
-Private-Package	: $(p).tb1
-Import-Package:   $(p).notinstalled, *
