@@ -18,7 +18,7 @@
     <bean id="decorate3" class="org.osgi.test.cases.blueprint.components.namespace.NamespaceChecker">
         <argument value="decorate1"/>
         <property name="altBundle">
-            <t1:bundleValue/>
+            <t1:bundle-value/>
         </property>
     </bean>
 
@@ -37,7 +37,7 @@
     </ref-list>
 
     <ref-set id="TestSet" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" availability="optional" t2:copy-component="true">
-    </ref-list>
+    </ref-set>
 
     <!-- single shared instance of the imported service -->
     <reference id="ServiceTwo2" interface="org.osgi.test.cases.blueprint.services.TestServiceTwo" availability="optional">
@@ -55,10 +55,10 @@
 
     <ref-set id="TestSet2" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" availability="optional">
         <t1:copy/>
-    </ref-list>
+    </ref-set>
 
     <t1:good id="Good"/>
-    <t1:good-factory id="FactoryGood">
+    <t1:good-factory id="FactoryGood"/>
 
 </blueprint>
 

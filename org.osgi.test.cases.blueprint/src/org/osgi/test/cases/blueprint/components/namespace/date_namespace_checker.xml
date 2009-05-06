@@ -35,9 +35,7 @@
            </bean>
        </argument>
        <property name="format">
-           <!-- tests use as an inner component and also tests the boolean type conversion
-                when used indirectly -->
-           <date:dateformat id="format2" pattern="yyyy-MM-dd HH:mm" lenient="no"/>
+           <date:dateformat pattern="yyyy-MM-dd HH:mm" lenient="false"/>
        </property>
    </bean>
 </blueprint>

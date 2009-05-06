@@ -36,7 +36,10 @@ import org.osgi.service.blueprint.reflect.ValueMetadata;
  */
 public class NamespaceUtil {
     static public Metadata cloneMetadata(Metadata source) {
-        if (source instanceof CollectionMetadata) {
+        if (source == null) {
+            return null;
+        } 
+        else if (source instanceof CollectionMetadata) {
             return new CollectionMetadataImpl((CollectionMetadata)source);
         }
         else if (source instanceof MapMetadata) {
@@ -49,10 +52,10 @@ public class NamespaceUtil {
             return new PropsMetadataImpl((PropsMetadata)source);
         }
         else if (source instanceof RefMetadata) {
-            return new RefMetadataImpl((RefMetadataImpl)source);
+            return new RefMetadataImpl((RefMetadata)source);
         }
         else if (source instanceof IdRefMetadata) {
-            return new IdRefMetadataImpl((IdRefMetadataImpl)source);
+            return new IdRefMetadataImpl((IdRefMetadata)source);
         }
         else if (source instanceof ValueMetadata) {
             return new ValueMetadataImpl((ValueMetadata)source);

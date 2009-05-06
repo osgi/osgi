@@ -36,6 +36,7 @@ public class DateChecker extends BaseTestComponent {
 
     public DateChecker(String componentId, SimpleDateFormat target) {
         super(componentId);
+        this.target = target;
     }
 
     /**

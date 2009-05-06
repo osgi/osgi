@@ -21,9 +21,9 @@ import java.util.Set;
 
 import java.text.SimpleDateFormat;
 import org.osgi.service.blueprint.namespace.NamespaceHandler;
-import org.osgi.service.blueprint.reflect.CollectionBasedServiceReferenceComponentMetadata;
-import org.osgi.service.blueprint.reflect.ServiceReferenceComponentMetadata;
-import org.osgi.service.blueprint.reflect.ServiceExportComponentMetadata;
+import org.osgi.service.blueprint.reflect.RefCollectionMetadata;
+import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
+import org.osgi.service.blueprint.reflect.ServiceMetadata;
 
 import org.osgi.test.cases.blueprint.components.namespace.NamespaceChecker;
 import org.osgi.test.cases.blueprint.framework.*;
@@ -141,20 +141,20 @@ public class TestNamespaceHandler extends DefaultTestBundleControl {
 
         // and the collection metadata
         startEvents.addValidator(new ComponentMetadataValidator(new ReferenceCollection("list",
-            NamespaceHandler.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
+            NamespaceHandler.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, List.class, null,
-            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
-            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICES)));
+            RefCollectionMetadata.ORDERING_BASIS_SERVICE,
+            RefCollectionMetadata.MEMBER_TYPE_SERVICE_INSTANCE)));
 
         startEvents.addValidator(new ComponentMetadataValidator(new ReferenceCollection("set",
-            NamespaceHandler.class, ServiceReferenceComponentMetadata.OPTIONAL_AVAILABILITY, null,
+            NamespaceHandler.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, Set.class, null,
-            CollectionBasedServiceReferenceComponentMetadata.ORDER_BASIS_SERVICES,
-            CollectionBasedServiceReferenceComponentMetadata.MEMBER_TYPE_SERVICES)));
+            RefCollectionMetadata.ORDERING_BASIS_SERVICE,
+            RefCollectionMetadata.MEMBER_TYPE_SERVICE_INSTANCE)));
 
         // also validate the metadata for the imported service (this one only has a single import, so easy to locate)
         startEvents.addValidator(new ComponentMetadataValidator(new ReferencedService("handler", NamespaceHandler.class,
-            ServiceReferenceComponentMetadata.MANDATORY_AVAILABILITY, null, null, ReferencedService.DEFAULT_TIMEOUT)));
+            ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, null, ReferencedService.DEFAULT_TIMEOUT)));
 
         // and the validate the component metadata
         startEvents.addValidator(new ComponentMetadataValidator(
@@ -162,7 +162,7 @@ public class TestNamespaceHandler extends DefaultTestBundleControl {
             new TestArgument[] { new StringArgument("ServiceOne") }, null)));
 
         startEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
-            ServiceExportComponentMetadata.EXPORT_MODE_DISABLED, 0, null, null, null)));
+            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
 
         controller.run();
     }

@@ -6,7 +6,7 @@
         <argument ref="bundleContext"/>
     </bean>
 
-    <service ref="dateNamespaceHandler"
+    <service ref="testNamespaceHandler"
        interface="org.osgi.service.blueprint.namespace.NamespaceHandler">
         <service-properties>
             <entry key="osgi.service.blueprint.namespace">

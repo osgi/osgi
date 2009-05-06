@@ -85,7 +85,7 @@ public class DateNamespaceHandler implements NamespaceHandler {
      * component or an anonymous inner component.
      */
     private ComponentMetadata parseDateFormat(Element element) {
-        String name = element.hasAttribute("id") ? element.getAttribute("id") : "";
+        String name = element.hasAttribute("id") ? element.getAttribute("id") : null;
         BeanMetadataImpl componentMetadata = new BeanMetadataImpl(name);
         componentMetadata.setClassName(SimpleDateFormat.class.getName());
 

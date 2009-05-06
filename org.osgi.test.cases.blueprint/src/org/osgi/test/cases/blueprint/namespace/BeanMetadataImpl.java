@@ -117,11 +117,12 @@ public class BeanMetadataImpl extends ComponentMetadataImpl implements BeanMetad
      * @param value  The string source value.
      * @param index  The index position
      */
-	public void addArgument(String value, int index) {
+    public void addArgument(String value, int index) {
         BeanArgumentImpl spec = new BeanArgumentImpl();
         spec.setIndex(index);
         spec.setValue(new ValueMetadataImpl(value));
-	}
+        arguments.add(spec);
+    }
 
 
     /**

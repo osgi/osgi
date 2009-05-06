@@ -88,25 +88,25 @@ public class TestNamespaceHandler extends BaseTestComponent implements Namespace
 
         if (node instanceof Attr) {
             Attr attribute = (Attr)node;
-            if (attribute.getName().equals("sleepy")) {
+            if (attribute.getLocalName().equals("sleepy")) {
                 // make a copy of the metadata
                 BeanMetadataImpl metadata = (BeanMetadataImpl)NamespaceUtil.cloneMetadata(component);
                 metadata.setLazyInit(attribute.getValue().equals("on"));
                 return metadata;
             }
-            else if (attribute.getName().equals("init")) {
+            else if (attribute.getLocalName().equals("init")) {
                 // make a copy of the metadata
                 BeanMetadataImpl metadata = (BeanMetadataImpl)NamespaceUtil.cloneMetadata(component);
                 metadata.setInitMethodName(attribute.getValue());
                 return metadata;
             }
-            else if (attribute.getName().equals("copy-component")) {
+            else if (attribute.getLocalName().equals("copy-component")) {
                 // make a copy of the metadata, but don't decorate it.  This is used on all of the component elements,
                 // not just BeanComponent
                 ComponentMetadata metadata = (ComponentMetadata)NamespaceUtil.cloneMetadata(component);
                 return metadata;
             }
-            else if (attribute.getName().equals("raise-error")) {
+            else if (attribute.getLocalName().equals("raise-error")) {
                 // make a copy of the metadata
                 if (attribute.getValue().equals("yes")) {
                     throw new IllegalArgumentException("raise-error=\"yes\" triggered exception");
@@ -114,12 +114,12 @@ public class TestNamespaceHandler extends BaseTestComponent implements Namespace
                 // we can also use this to trigger replacement of a component
                 return (ComponentMetadata)NamespaceUtil.cloneMetadata(component);
             }
-            throw new IllegalArgumentException("Unknown attribute " + attribute.getName());
+            throw new IllegalArgumentException("Unknown attribute " + attribute.getLocalName());
         }
         else {
             Element element = (Element)node;
             // requesting a bundle property be set
-            if (element.getTagName().equalsIgnoreCase("bundle")) {
+            if (element.getLocalName().equalsIgnoreCase("bundle")) {
                 // make a copy of the metadata
                 BeanMetadataImpl metadata = (BeanMetadataImpl)NamespaceUtil.cloneMetadata(component);
                 // the assigned value is a component reference
@@ -128,19 +128,19 @@ public class TestNamespaceHandler extends BaseTestComponent implements Namespace
                 metadata.addProperty(property);
                 return metadata;
             }
-            else if (element.getTagName().equals("copy")) {
+            else if (element.getLocalName().equals("copy")) {
                 // make a copy of the metadata, but don't decorate it.  This is used on all of the component elements,
                 // not just BeanComponent
                 return (ComponentMetadata)NamespaceUtil.cloneMetadata(component);
             }
             // we have a different value tag
-            else if (element.getTagName().equalsIgnoreCase("bundle-value")) {
+            else if (element.getLocalName().equalsIgnoreCase("bundle-value")) {
                 // make a copy of the metadata for our enclosing component
                 BeanMetadataImpl metadata = (BeanMetadataImpl)NamespaceUtil.cloneMetadata(context.getEnclosingComponent());
                 // we need to replace the definition of the
                 Element parent = (Element)element.getParentNode();
-                if (!parent.getTagName().equals("property")) {
-                    throw new IllegalArgumentException("<bundleValue> only valid as a child of <property> element");
+                if (!parent.getLocalName().equals("property")) {
+                    throw new IllegalArgumentException("<bundle-value> only valid as a child of <property> element");
                 }
                 // the assigned value is a component reference
                 RefMetadataImpl bundleRef = new RefMetadataImpl("bundle");
@@ -150,10 +150,10 @@ public class TestNamespaceHandler extends BaseTestComponent implements Namespace
                 return metadata;
             }
             // we have a different value tag
-            else if (element.getTagName().equalsIgnoreCase("raise-error")) {
+            else if (element.getLocalName().equalsIgnoreCase("raise-error")) {
                 throw new IllegalArgumentException("<raise-error> triggered exception");
             }
-            throw new IllegalArgumentException("Unknown element " + element.getTagName());
+            throw new IllegalArgumentException("Unknown element " + element.getLocalName());
         }
     }
 
@@ -164,7 +164,7 @@ public class TestNamespaceHandler extends BaseTestComponent implements Namespace
     public ComponentMetadata parse(Element element, ParserContext context) {
         AssertionService.sendEvent(this, AssertionService.METHOD_CALLED);
         // creates a component using a provided class
-        if (element.getTagName().equalsIgnoreCase("good")) {
+        if (element.getLocalName().equalsIgnoreCase("good")) {
             String id = element.getAttribute("id");
             BeanMetadataImpl bean = new BeanMetadataImpl(id);
             // this explicitly sets the class rather than using class name
@@ -173,7 +173,7 @@ public class TestNamespaceHandler extends BaseTestComponent implements Namespace
             return bean;
         }
         // creates a component using a provided class for the *factory*
-        else if (element.getTagName().equalsIgnoreCase("good-factory")) {
+        else if (element.getLocalName().equalsIgnoreCase("good-factory")) {
             String id = element.getAttribute("id");
             BeanMetadataImpl bean = new BeanMetadataImpl(id);
             // this explicitly sets the class rather than using class name
@@ -183,7 +183,7 @@ public class TestNamespaceHandler extends BaseTestComponent implements Namespace
             return bean;
         }
         // this is a blanket replacement of all named components
-        else if (element.getTagName().equalsIgnoreCase("replace-all")) {
+        else if (element.getLocalName().equalsIgnoreCase("replace-all")) {
             ComponentDefinitionRegistry registry = context.getComponentDefinitionRegistry();
             Set names = registry.getComponentDefinitionNames();
             Iterator i = names.iterator();
@@ -220,27 +220,29 @@ public class TestNamespaceHandler extends BaseTestComponent implements Namespace
                     AssertionService.fail(this, "Unexpected exception", e);
                 }
             }
+            return null;
         }
         // we have a different value tag
-        else if (element.getTagName().equalsIgnoreCase("bundle-value")) {
+        else if (element.getLocalName().equalsIgnoreCase("bundle-value")) {
             // make a copy of the metadata for our enclosing component
             BeanMetadataImpl metadata = (BeanMetadataImpl)NamespaceUtil.cloneMetadata(context.getEnclosingComponent());
             // we need to replace the definition of the
             Element parent = (Element)element.getParentNode();
-            if (!parent.getTagName().equals("property")) {
-                throw new IllegalArgumentException("<bundleValue> only valid as a child of <property> element");
+            if (!parent.getLocalName().equals("property")) {
+                throw new IllegalArgumentException("<bundle-value> only valid as a child of <property> element");
             }
             // the assigned value is a component reference
             RefMetadataImpl bundleRef = new RefMetadataImpl("bundle");
             BeanPropertyImpl property = new BeanPropertyImpl(parent.getAttribute("name"), bundleRef);
             // replace the property definition with the fully realized value
             metadata.replaceProperty(property);
+            return metadata;
         }
         // we have a different value tag
-        else if (element.getTagName().equalsIgnoreCase("raise-error")) {
+        else if (element.getLocalName().equalsIgnoreCase("raise-error")) {
             throw new IllegalArgumentException("<raise-error> triggered exception");
         }
-        throw new IllegalArgumentException("Unknown element " + element.getTagName());
+        throw new IllegalArgumentException("Unknown element " + element.getLocalName());
     }
 }
 
