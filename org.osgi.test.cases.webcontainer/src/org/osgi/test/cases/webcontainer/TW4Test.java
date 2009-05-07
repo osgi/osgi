@@ -199,7 +199,7 @@ public class TW4Test extends WebContainerTestBundleControl {
     /*
      * test simple image/jpeg response
      */
-   public void testJPGResponse() throws Exception {
+    public void testJPGResponse() throws Exception {
         final String request = this.warContextPath
                 + "/TestServlet1/TestServlet2/TestServlet3/TestServlet4?type=jpg";
         final URL url = Dispatcher.createURL(request, this.server);

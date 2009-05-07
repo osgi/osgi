@@ -80,44 +80,115 @@ public class BundleVersionTest extends ManifestHeadersTestBundleControl {
     }
 
     /*
-     * verify when Bundle-Version is not specified
+     * verify valid deployOptions overwrite original manifest Bundle-Version
      */
     public void testBundleVersion006() throws Exception {
+        this.b = generalVersionTest(VERSION1, "/tw1", "wmtw1.war", false);
+    }
+
+    /*
+     * verify valid deployOptions overwrite original manifest Bundle-Version
+     */
+    public void testBundleVersion007() throws Exception {
+        this.b = generalVersionTest(VERSION2, "/tw2", "wmtw2.war", false);
+    }
+
+    /*
+     * verify valid deployOptions overwrite original manifest Bundle-Version
+     */
+    public void testBundleVersion008() throws Exception {
+        this.b = generalVersionTest(VERSION3, "/tw3", "wmtw3.war", false);
+    }
+
+    /*
+     * verify valid deployOptions overwrite original manifest Bundle-Version
+     */
+    public void testBundleVersion009() throws Exception {
+        this.b = generalVersionTest(VERSION3, "/tw4", "wmtw4.war", true);
+    }
+
+    /*
+     * verify valid deployOptions overwrite original manifest Bundle-Version
+     */
+    public void testBundleVersion010() throws Exception {
+        this.b = generalVersionTest(VERSION3, "/tw5", "wmtw5.war", false);
+    }
+
+    
+    /*
+     * verify when Bundle-Version is not specified in deployoptions
+     */
+    public void testBundleVersion011() throws Exception {
         this.b = generalVersionTest(null, "/tw1", "tw1.war", false);
     }
 
     /*
-     * verify when Bundle-Version is not specified
+     * verify when Bundle-Version is not specified in deployoptions
      */
-    public void testBundleVersion007() throws Exception {
+    public void testBundleVersion012() throws Exception {
         this.b = generalVersionTest(null, "/tw2", "tw2.war", false);
     }
 
     /*
-     * verify when Bundle-Version is not specified
+     * verify when Bundle-Version is not specified in deployoptions
      */
-    public void testBundleVersion008() throws Exception {
+    public void testBundleVersion013() throws Exception {
         this.b = generalVersionTest(null, "/tw3", "tw3.war", false);
     }
 
     /*
-     * verify when Bundle-Version is not specified
+     * verify when Bundle-Version is not specified in deployoptions
      */
-    public void testBundleVersion009() throws Exception {
+    public void testBundleVersion014() throws Exception {
         this.b = generalVersionTest(null, "/tw4", "tw4.war", false);
     }
 
     /*
-     * verify when Bundle-Version is not specified
+     * verify when Bundle-Version is not specified in deployoptions
      */
-    public void testBundleVersion010() throws Exception {
+    public void testBundleVersion015() throws Exception {
         this.b = generalVersionTest(null, "/tw5", "tw5.war", false);
     }
 
     /*
+     * verify when Bundle-Version is not specified in deployoptions
+     */
+    public void testBundleVersion016() throws Exception {
+        this.b = generalVersionTest(null, "/tw1", "wmtw1.war", false);
+    }
+
+    /*
+     * verify when Bundle-Version is not specified in deployoptions
+     */
+    public void testBundleVersion017() throws Exception {
+        this.b = generalVersionTest(null, "/tw2", "wmtw2.war", false);
+    }
+
+    /*
+     * verify when Bundle-Version is not specified in deployoptions
+     */
+    public void testBundleVersion018() throws Exception {
+        this.b = generalVersionTest(null, "/tw3", "wmtw3.war", false);
+    }
+
+    /*
+     * verify when Bundle-Version is not specified in deployoptions
+     */
+    public void testBundleVersion019() throws Exception {
+        this.b = generalVersionTest(null, "/tw4", "wmtw4.war", false);
+    }
+
+    /*
+     * verify when Bundle-Version is not specified in deployoptions
+     */
+    public void testBundleVersion020() throws Exception {
+        this.b = generalVersionTest(null, "/tw5", "wmtw5.war", false);
+    }
+    
+    /*
      * error case, when version specified by deployer is invalid
      */
-    public void testBundleVersion011() throws Exception {
+    public void testBundleVersionError001() throws Exception {
         // specify install options
         final Map options = new HashMap();
         options.put(Constants.BUNDLE_VERSION, VERSION4);
@@ -142,7 +213,7 @@ public class BundleVersionTest extends ManifestHeadersTestBundleControl {
     /*
      * error case, when version specified by deployer is invalid
      */
-    public void testBundleVersion012() throws Exception {
+    public void testBundleVersionError002() throws Exception {
         // specify install options
         final Map options = new HashMap();
         options.put(Constants.BUNDLE_VERSION, VERSION5);
@@ -175,7 +246,4 @@ public class BundleVersionTest extends ManifestHeadersTestBundleControl {
         options.put(WebContainer.WEB_CONTEXT_PATH, cp);
         return super.generalHeadersTest(options, warName, start);
     }
-
-    // TODO create war manifest that contains the Bundle-Version header and more
-    // tests
 }
