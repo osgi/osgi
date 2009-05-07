@@ -55,7 +55,6 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
      */
     public void testWebContextPath001() throws Exception {
         this.b = generalWebContextPathTest(WEBCONTEXTPATH1, "tw1.war", false);
-
     }
 
     /*
@@ -63,7 +62,6 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
      */
     public void testWebContextPath002() throws Exception {
         this.b = generalWebContextPathTest(WEBCONTEXTPATH2, "tw2.war", false);
-
     }
 
     /*
@@ -71,7 +69,6 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
      */
     public void testWebContextPath003() throws Exception {
         this.b = generalWebContextPathTest(WEBCONTEXTPATH3, "tw3.war", true);
-
     }
 
     /*
@@ -79,7 +76,6 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
      */
     public void testWebContextPath004() throws Exception {
         this.b = generalWebContextPathTest(WEBCONTEXTPATH4, "tw4.war", true);
-
     }
 
     /*
@@ -87,83 +83,158 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
      */
     public void testWebContextPath005() throws Exception {
         this.b = generalWebContextPathTest(WEBCONTEXTPATH5, "tw5.war", false);
+    }
+    
+    /*
+     * verify valid deployOptions overwrite original manifest Web-ContextPath
+     */
+    public void testWebContextPath006() throws Exception {
+        this.b = generalWebContextPathTest(WEBCONTEXTPATH1, "wmtw1.war", false);
+    }
 
+    /*
+     * verify valid deployOptions overwrite original manifest Web-ContextPath
+     */
+    public void testWebContextPath007() throws Exception {
+        this.b = generalWebContextPathTest(WEBCONTEXTPATH2, "wmtw2.war", false);
+    }
+
+    /*
+     * verify valid deployOptions overwrite original manifest Web-ContextPath
+     */
+    public void testWebContextPath008() throws Exception {
+        this.b = generalWebContextPathTest(WEBCONTEXTPATH3, "wmtw3.war", true);
+    }
+
+    /*
+     * verify valid deployOptions overwrite original manifest Web-ContextPath
+     */
+    public void testWebContextPath009() throws Exception {
+        this.b = generalWebContextPathTest(WEBCONTEXTPATH4, "wmtw4.war", true);
+    }
+
+    /*
+     * verify valid deployOptions overwrite original manifest Web-ContextPath
+     */
+    public void testWebContextPath010() throws Exception {
+        this.b = generalWebContextPathTest(WEBCONTEXTPATH5, "wmtw5.war", false);
     }
 
     /*
      * verify null Web-ContextPath specified in deployOptions
      */
-    public void testWebContextPath006() throws Exception {
+    public void testWebContextPath011() throws Exception {
         this.b = generalWebContextPathTest(null, "tw1.war", true);
     }
 
     /*
      * verify null Web-ContextPath specified in deployOptions
      */
-    public void testWebContextPath007() throws Exception {
+    public void testWebContextPath012() throws Exception {
         this.b = generalWebContextPathTest(null, "tw2.war", true);
     }
 
     /*
      * verify null Web-ContextPath specified in deployOptions
      */
-    public void testWebContextPath008() throws Exception {
+    public void testWebContextPath013() throws Exception {
         this.b = generalWebContextPathTest(null, "tw3.war", false);
     }
 
     /*
      * verify null Web-ContextPath specified in deployOptions
      */
-    public void testWebContextPath009() throws Exception {
+    public void testWebContextPath014() throws Exception {
         this.b = generalWebContextPathTest(null, "tw4.war", false);
     }
 
     /*
      * verify null Web-ContextPath specified in deployOptions
      */
-    public void testWebContextPath010() throws Exception {
+    public void testWebContextPath015() throws Exception {
         this.b = generalWebContextPathTest(null, "tw5.war", true);
     }
 
     /*
+     * verify null Web-ContextPath specified in deployOptions
+     */
+    public void testWebContextPath016() throws Exception {
+        this.b = generalWebContextPathTest(null, "wmtw1.war", true);
+    }
+
+    /*
+     * verify null Web-ContextPath specified in deployOptions
+     */
+    public void testWebContextPath017() throws Exception {
+        this.b = generalWebContextPathTest(null, "wmtw2.war", true);
+    }
+
+    /*
+     * verify null Web-ContextPath specified in deployOptions
+     */
+    public void testWebContextPath018() throws Exception {
+        this.b = generalWebContextPathTest(null, "wmtw3.war", false);
+    }
+
+    /*
+     * verify null Web-ContextPath specified in deployOptions
+     */
+    public void testWebContextPath019() throws Exception {
+        this.b = generalWebContextPathTest(null, "wmtw4.war", false);
+    }
+
+    /*
+     * verify null Web-ContextPath specified in deployOptions
+     */
+    public void testWebContextPath020() throws Exception {
+        this.b = generalWebContextPathTest(null, "wmtw5.war", true);
+    }
+    /*
      * verify long Web-ContextPath specified in deployOptions
      */
-    public void testWebContextPath011() throws Exception {
+    public void testLongWebContextPath001() throws Exception {
         this.b = generalWebContextPathTest(LONGWEBCONTEXTPATH, "tw1.war", false);
     }
 
     /*
      * verify long Web-ContextPath specified in deployOptions
      */
-    public void testWebContextPath012() throws Exception {
-        this.b = generalWebContextPathTest(LONGWEBCONTEXTPATH, "tw2.war", false);
+    public void testLongWebContextPath002() throws Exception {
+        this.b = generalWebContextPathTest(LONGWEBCONTEXTPATH2, "tw2.war", false);
     }
 
     /*
      * verify long Web-ContextPath specified in deployOptions
      */
-    public void testWebContextPath013() throws Exception {
-        this.b = generalWebContextPathTest(LONGWEBCONTEXTPATH2, "tw3.war", true);
+    public void testLongWebContextPath003() throws Exception {
+        this.b = generalWebContextPathTest(LONGWEBCONTEXTPATH3, "tw3.war", true);
     }
 
     /*
      * verify long Web-ContextPath specified in deployOptions
      */
-    public void testWebContextPath014() throws Exception {
-        this.b = generalWebContextPathTest(LONGWEBCONTEXTPATH2, "tw4.war", true);
+    public void testLongWebContextPath004() throws Exception {
+        this.b = generalWebContextPathTest(LONGWEBCONTEXTPATH, "wmtw1.war", true);
     }
 
     /*
      * verify long Web-ContextPath specified in deployOptions
      */
-    public void testWebContextPath015() throws Exception {
-        this.b = generalWebContextPathTest(LONGWEBCONTEXTPATH3, "tw5.war", true);
+    public void testLongWebContextPath005() throws Exception {
+        this.b = generalWebContextPathTest(LONGWEBCONTEXTPATH2, "wmtw2.war", true);
+    }
+
+    /*
+     * verify long Web-ContextPath specified in deployOptions
+     */
+    public void testLongWebContextPath006() throws Exception {
+        this.b = generalWebContextPathTest(LONGWEBCONTEXTPATH2, "wmtw3.war", true);
     }
 
     /*
      * verify Web-ContextPath has to be unique
      */
-    public void testWebContextPath0016() throws Exception {
+    public void testWebContextPathError001() throws Exception {
         this.b = generalWebContextPathTest(WEBCONTEXTPATH3, "tw3.war", true);
 
         // install the war file, reuse the same options as tw1
@@ -188,7 +259,7 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
     /*
      * verify install 10 web applications
      */
-    public void testWebContextPath0017() throws Exception {
+    public void testMultipleWebContextPath001() throws Exception {
         this.b = generalWebContextPathTest(WEBCONTEXTPATH1, "tw1.war", true);
         Bundle b2 = generalWebContextPathTest(WEBCONTEXTPATH2, "tw2.war", false);
         Bundle b3 = generalWebContextPathTest(WEBCONTEXTPATH3, "tw3.war", false);
@@ -216,7 +287,7 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
     /*
      * verify install 100 web applications
      */
-    public void testWebContextPath0018() throws Exception {
+    public void testMultipleWebContextPath002() throws Exception {
         Bundle[] bundles = new Bundle[100];
         for (int i = 0; i < 100; i++) {
             bundles[i] = generalWebContextPathTest(null, "tw1.war", true);
@@ -237,8 +308,4 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
         options.put(WebContainer.WEB_CONTEXT_PATH, cp);
         return super.generalHeadersTest(options, warName, start);
     }
-
-    // TODO create war manifest that contains the Web-ContextPath header and
-    // more
-    // tests
 }

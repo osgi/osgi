@@ -78,48 +78,124 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
      * Bundle-ManifestVersion
      */
     public void testBundleManifestVersion005() throws Exception {
-        generalManifestVersionTest(MANIFESTVERSION1, "/tw5", "tw5.war", false);
+        generalManifestVersionTest(MANIFESTVERSION1, "/tw5", "wmtw5.war", false);
+    }
+    
+    /*
+     * verify valid deployOptions overwrite original manifest
+     * Bundle-ManifestVersion
+     */
+    public void testBundleManifestVersion006() throws Exception {
+        generalManifestVersionTest(MANIFESTVERSION1, "/tw1", "wmtw1.war", false);
+    }
+
+    /*
+     * verify valid deployOptions overwrite original manifest
+     * Bundle-ManifestVersion
+     */
+    public void testBundleManifestVersion007() throws Exception {
+        generalManifestVersionTest(MANIFESTVERSION1, "/tw2", "wmtw2.war", true);
+    }
+
+    /*
+     * verify valid deployOptions overwrite original manifest
+     * Bundle-ManifestVersion
+     */
+    public void testBundleManifestVersion008() throws Exception {
+        generalManifestVersionTest(MANIFESTVERSION1, "/tw3", "wmtw3.war", true);
+    }
+
+    /*
+     * verify valid deployOptions overwrite original manifest
+     * Bundle-ManifestVersion
+     */
+    public void testBundleManifestVersion009() throws Exception {
+        generalManifestVersionTest(MANIFESTVERSION1, "/tw4", "wmtw4.war", false);
+    }
+
+    /*
+     * verify valid deployOptions overwrite original manifest
+     * Bundle-ManifestVersion
+     */
+    public void testBundleManifestVersion010() throws Exception {
+        generalManifestVersionTest(MANIFESTVERSION1, "/tw5", "wmtw5.war", false);
     }
 
     /*
      * verify Bundle-ManifestVersion being null in deployOptions
      */
-    public void testBundleManifestVersion006() throws Exception {
+    public void testBundleManifestVersion011() throws Exception {
         generalManifestVersionTest(null, "/tw1", "tw1.war", true);
     }
 
     /*
      * verify Bundle-ManifestVersion being null in deployOptions
      */
-    public void testBundleManifestVersion007() throws Exception {
+    public void testBundleManifestVersion012() throws Exception {
         generalManifestVersionTest(null, "/tw2", "tw2.war", false);
     }
 
     /*
      * verify Bundle-ManifestVersion being null in deployOptions
      */
-    public void testBundleManifestVersion008() throws Exception {
+    public void testBundleManifestVersion013() throws Exception {
         generalManifestVersionTest(null, "/tw3", "tw3.war", false);
     }
 
     /*
      * verify Bundle-ManifestVersion being null in deployOptions
      */
-    public void testBundleManifestVersion009() throws Exception {
+    public void testBundleManifestVersion014() throws Exception {
         generalManifestVersionTest(null, "/tw4", "tw4.war", false);
     }
 
     /*
      * verify Bundle-ManifestVersion being null in deployOptions
      */
-    public void testBundleManifestVersion010() throws Exception {
+    public void testBundleManifestVersion015() throws Exception {
         generalManifestVersionTest(null, "/tw5", "tw5.war", true);
     }
+    
+    /*
+     * verify Bundle-ManifestVersion being null in deployOptions
+     */
+    public void testBundleManifestVersion016() throws Exception {
+        generalManifestVersionTest(null, "/tw1", "wmtw1.war", true);
+    }
+
+    /*
+     * verify Bundle-ManifestVersion being null in deployOptions
+     */
+    public void testBundleManifestVersion017() throws Exception {
+        generalManifestVersionTest(null, "/tw2", "wmtw2.war", false);
+    }
+
+    /*
+     * verify Bundle-ManifestVersion being null in deployOptions
+     */
+    public void testBundleManifestVersion018() throws Exception {
+        generalManifestVersionTest(null, "/tw3", "wmtw3.war", false);
+    }
+
+    /*
+     * verify Bundle-ManifestVersion being null in deployOptions
+     */
+    public void testBundleManifestVersion019() throws Exception {
+        generalManifestVersionTest(null, "/tw4", "wmtw4.war", false);
+    }
+
+    /*
+     * verify Bundle-ManifestVersion being null in deployOptions
+     */
+    public void testBundleManifestVersion020() throws Exception {
+        generalManifestVersionTest(null, "/tw5", "wmtw5.war", true);
+    }
+
 
     /*
      * verify invalid Bundle-ManifestVersion in deployOptions
      */
-    public void testBundleManifestVersion011() throws Exception {
+    public void testBundleManifestVersionError001() throws Exception {
         // specify install options
         final Map options = new HashMap();
         options.put(Constants.BUNDLE_VERSION, MANIFESTVERSION2);
@@ -146,7 +222,7 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
     /*
      * verify invalid Bundle-ManifestVersion in deployOptions
      */
-    public void testBundleManifestVersion012() throws Exception {
+    public void testBundleManifestVersionError002() throws Exception {
         // specify install options
         final Map options = new HashMap();
         options.put(Constants.BUNDLE_VERSION, MANIFESTVERSION3);
@@ -178,8 +254,4 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
         options.put(WebContainer.WEB_CONTEXT_PATH, cp);
         return super.generalHeadersTest(options, warName, start);
     }
-
-    // TODO create war manifest that contains the Bundle-ManifestVersion header
-    // and more
-    // tests
 }

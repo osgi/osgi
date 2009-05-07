@@ -88,7 +88,11 @@ public abstract class WebContainerTestBundleControl extends
      */
     private String getWarPath(String warName) throws Exception {
         int i = warName.indexOf(".");
-        return "/resources/" + warName.substring(0, i) + "/" + warName;
+        if (warName.startsWith("wm")) {
+            return "/resources/" + warName.substring(2, i) + "/" + warName;
+        } else {
+          return "/resources/" + warName.substring(0, i) + "/" + warName;
+        }
     }
 
     protected static void cleanupPropertyFile() {

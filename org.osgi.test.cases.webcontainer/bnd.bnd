@@ -15,6 +15,11 @@ Include-Resource					= \
 	resources/tw3/tw3.war, \
 	resources/tw4/tw4.war, \
 	resources/tw5/tw5.war, \
+	resources/tw1/wmtw1.war, \
+	resources/tw2/wmtw2.war, \
+	resources/tw3/wmtw3.war, \
+	resources/tw4/wmtw4.war, \
+	resources/tw5/wmtw5.war, \
 	util.jar
 	
 Import-Package = \
