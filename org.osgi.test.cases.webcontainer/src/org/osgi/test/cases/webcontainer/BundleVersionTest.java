@@ -200,7 +200,7 @@ public class BundleVersionTest extends ManifestHeadersTestBundleControl {
         try {
             this.b = installBundle(super.getWarURL("tw4.war", options), false);
             fail("should be getting install BundleException as version format is invalid");
-        } catch (BundleException e) {
+        } catch (BundleException be) {
             // expected
         }
         assertNull("Bundle b should be null", this.b);
@@ -223,9 +223,9 @@ public class BundleVersionTest extends ManifestHeadersTestBundleControl {
         // may not be able to installBundle correctly if version is specified
         // improperly
         try {
-            this.b = installBundle(super.getWarURL("tw5.war", options), true);
+            this.b = installBundle(super.getWarURL("tw5.war", options), false);
             fail("should be getting install BundleException as version format is invalid");
-        } catch (BundleException e) {
+        } catch (BundleException be) {
             // expected
         }
         assertNull("Bundle b should be null", this.b);

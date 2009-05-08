@@ -211,9 +211,9 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
         options.put(Constants.BUNDLE_VERSION, VERSION10);
         options2.put(WebContainer.WEB_CONTEXT_PATH, "/tw3");
         try {
-            b2 = installBundle(super.getWarURL("tw3.war", options2), true);
+            b2 = installBundle(super.getWarURL("tw3.war", options2), false);
             fail("bundle install should fail as " + Constants.BUNDLE_SYMBOLICNAME + "is not unique: " + Constants.BUNDLE_SYMBOLICNAME + " = " + SYMBOLICNAME1);
-        } catch (BundleException e) {
+        } catch (BundleException be) {
             // expected
         }
         assertNull("Bundle b2 should be null", b2);

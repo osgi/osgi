@@ -31,17 +31,12 @@ import org.osgi.service.webcontainer.WebContainer;
  */
 public class BundleImportPackageTest extends ManifestHeadersTestBundleControl {
     private static final String[] IMPORTS1 = {"javax.servlet; version=2.5", "javax.servlet.http; version=2.5"}; 
-    private static final String[] IMPORTS2 = {"javax.servlet;version=2.5", "javax.servlet.http;version=2.5"}; 
-    private static final String[] IMPORTS3 = {"javax.servlet;version=2.5", "javax.servlet.http;version=2.5", "javax.servlet.jsp; version=2.1", "javax.servlet.jsp.tagext; version=2.1"}; 
-    private static final String[] IMPORTS4 = {"javax.servlet; version=2.4", "javax.servlet.http; version=2.4"};
-    private static final String[] IMPORTS5 = {"javax.servlet.jsp; version=2.0", "javax.servlet.jsp.tagext; version=2.0"}; 
-    private static final String[] IMPORTS6 = {"org.osgi.service.log"};
-    private static final String[] IMPORTS7 = {"org.osgi.service.log", "javax.servlet; version=2.4", "javax.servlet.http; version=2.4"};
-    private static final String[] IMPORTS8 = {"org.osgi.service.log", "javax.servlet; version=2.5", "javax.servlet.http; version=2.5"};
-    private static final String[] IMPORTS9 = {"javax.transaction;version=1.1", "javax.transaction.xa;version=1.1"};
-    private static final String[] IMPORTS10 = {"javax.transaction;version=[1.1, 2.0)", "javax.transaction.xa;version=[1.1, 2.0)", "javax.servlet; version=2.5", "javax.servlet.http; version=2.5", "javax.servlet.jsp; version=2.0", "javax.servlet.jsp.tagext; version=2.0"};
-    private static final String[] IMPORTS11 = {"javax.transaction;version=1.2", "javax.transaction.xa;version=1.2", "javax.servlet; version=2.5"};
-    
+    private static final String[] IMPORTS2 = {"javax.servlet;version=2.5", "javax.servlet.http;version=2.5", "javax.servlet.jsp; version=2.1", "javax.servlet.jsp.tagext; version=2.1"}; 
+    private static final String[] IMPORTS3 = {"javax.servlet; version=(2.1, 2.5]", "javax.servlet.http; version=(2.1, 2.5]"};
+    private static final String[] IMPORTS4 = {"javax.servlet.jsp; version=[2.0,2.1]", "javax.servlet.jsp.tagext; version=[2.0,2.1]"}; 
+    private static final String[] IMPORTS5 = {"org.osgi.service.log", "javax.servlet; version=2.4", "javax.servlet.http; version=2.4"};
+    private static final String[] IMPORTS9 = {"javax.servlet; version=2.6", "javax.servlet.http; version=2.6"};
+    private static final String[] IMPORTS10 = {"org.osgi.service.log;version=2.0"};
     
     public void setUp() throws Exception {
         super.setUp();
@@ -83,106 +78,222 @@ public class BundleImportPackageTest extends ManifestHeadersTestBundleControl {
      * verify valid deployOptions overwrite original manifest Import-Package
      */
     public void testBundleImportPackage005() throws Exception {
-        this.b = generalImportPackageTest(IMPORTS5, "/tw5", "tw5.war", false);
+        this.b = generalImportPackageTest(IMPORTS4, "/tw5", "tw5.war", false);
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Import-Package
      */
     public void testBundleImportPackage006() throws Exception {
-        this.b = generalImportPackageTest(IMPORTS6, "/tw1", "tw1.war", true);
+        this.b = generalImportPackageTest(IMPORTS5, "/tw5", "tw5.war", false);
     }
-    
+
     /*
      * verify valid deployOptions overwrite original manifest Import-Package
      */
     public void testBundleImportPackage007() throws Exception {
-        this.b = generalImportPackageTest(IMPORTS7, "/tw2", "tw2.war", false);
+        this.b = generalImportPackageTest(IMPORTS1, "/tw1", "wmtw1.war", false);
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Import-Package
      */
     public void testBundleImportPackage008() throws Exception {
-        this.b = generalImportPackageTest(IMPORTS8, "/tw5", "tw5.war", true);
+        this.b = generalImportPackageTest(IMPORTS2, "/tw2", "wmtw2.war", true);
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Import-Package
      */
     public void testBundleImportPackage009() throws Exception {
-        this.b = generalImportPackageTest(IMPORTS9, "/tw2", "tw2.war", true);
+        this.b = generalImportPackageTest(IMPORTS3, "/tw3", "wmtw3.war", false);
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Import-Package
      */
     public void testBundleImportPackage010() throws Exception {
-        this.b = generalImportPackageTest(IMPORTS10, "/tw3", "tw3.war", true);
+        this.b = generalImportPackageTest(IMPORTS4, "/tw4", "wmtw4.war", true);
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Import-Package
      */
     public void testBundleImportPackage011() throws Exception {
-        this.b = generalImportPackageTest(null, "/tw1", "tw1.war", false);
+        this.b = generalImportPackageTest(IMPORTS4, "/tw5", "wmtw5.war", false);
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Import-Package
      */
     public void testBundleImportPackage012() throws Exception {
-        this.b = generalImportPackageTest(null, "/tw2", "tw2.war", true);
+        this.b = generalImportPackageTest(IMPORTS5, "/tw5", "wmtw5.war", false);
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Import-Package
      */
     public void testBundleImportPackage013() throws Exception {
-        this.b = generalImportPackageTest(null, "/tw3", "tw3.war", false);
+        this.b = generalImportPackageTest(IMPORTS1, "/tw5", "wm2tw5.war", false);
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Import-Package
      */
     public void testBundleImportPackage014() throws Exception {
+        this.b = generalImportPackageTest(IMPORTS3, "/tw5", "wm3tw5.war", false);
+    }
+   
+    /*
+     * verify valid deployOptions overwrite original manifest Import-Package
+     */
+    public void testBundleImportPackage015() throws Exception {
+        this.b = generalImportPackageTest(null, "/tw1", "tw1.war", true);
+    }
+    
+    /*
+     * verify valid deployOptions overwrite original manifest Import-Package
+     */
+    public void testBundleImportPackage016() throws Exception {
+        this.b = generalImportPackageTest(null, "/tw2", "tw2.war", true);
+    }
+    
+    /*
+     * verify valid deployOptions overwrite original manifest Import-Package
+     */
+    public void testBundleImportPackage017() throws Exception {
+        this.b = generalImportPackageTest(null, "/tw3", "tw3.war", false);
+    }
+    
+    /*
+     * verify valid deployOptions overwrite original manifest Import-Package
+     */
+    public void testBundleImportPackage018() throws Exception {
         this.b = generalImportPackageTest(null, "/tw4", "tw4.war", true);
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Import-Package
      */
-    public void testBundleImportPackage015() throws Exception {
+    public void testBundleImportPackage019() throws Exception {
         this.b = generalImportPackageTest(null, "/tw5", "tw5.war", true);
     }
     
     /*
-     * error case, when Import-Package specified by deployer is valid but canot be resolved
+     * verify valid deployOptions overwrite original manifest Import-Package
+     */
+    public void testBundleImportPackage020() throws Exception {
+        this.b = generalImportPackageTest(null, "/tw1", "wmtw1.war", true);
+    }
+    
+    /*
+     * verify valid deployOptions overwrite original manifest Import-Package
+     */
+    public void testBundleImportPackage021() throws Exception {
+        this.b = generalImportPackageTest(null, "/tw2", "wmtw2.war", true);
+    }
+    
+    /*
+     * verify valid deployOptions overwrite original manifest Import-Package
+     */
+    public void testBundleImportPackage022() throws Exception {
+        this.b = generalImportPackageTest(null, "/tw3", "wmtw3.war", false);
+    }
+    
+    /*
+     * verify valid deployOptions overwrite original manifest Import-Package
+     */
+    public void testBundleImportPackage023() throws Exception {
+        this.b = generalImportPackageTest(null, "/tw4", "wmtw4.war", true);
+    }
+    
+    /*
+     * verify valid deployOptions overwrite original manifest Import-Package
+     */
+    public void testBundleImportPackage024() throws Exception {
+        this.b = generalImportPackageTest(null, "/tw5", "wmtw5.war", true);
+    }
+    
+    /*
+     * verify valid deployOptions overwrite original manifest Import-Package
+     */
+    public void testBundleImportPackage025() throws Exception {
+        this.b = generalImportPackageTest(null, "/tw5", "wm2tw5.war", true);
+    }
+    
+    /*
+     * verify valid deployOptions overwrite original manifest Import-Package
+     */
+    public void testBundleImportPackage026() throws Exception {
+        this.b = generalImportPackageTest(null, "/tw5", "wm3tw5.war", true);
+    }
+    
+    /*
+     * error case, when Import-Package specified by deployer has invalid version
      * 
      */
-    public void testBundleImportPackage016() throws Exception {
+    public void testBundleImportPackageError001() throws Exception {
         // specify install options
         final Map options = new HashMap();
-        options.put(Constants.IMPORT_PACKAGE, IMPORTS11);
+        options.put(Constants.IMPORT_PACKAGE, IMPORTS9);
         options.put(WebContainer.WEB_CONTEXT_PATH, "/tw4");
         // install the war file
         log("install war file: tw4.war at context path /tw4");
         // may not be able to installBundle correctly if version is specified
         // improperly??
         try {
-            this.b = installBundle(super.getWarURL("tw4.war", options), true);
+            this.b = installBundle(super.getWarURL("tw4.war", options), false);
         } catch (BundleException e) {
             fail("Bundle should be installed but not resolved as Import-Package contains package that won't be resolved");
         }
         assertNotNull("Bundle b should not be null", this.b);
-
         assertEquals("Checking Bundle state is installed", b.getState(), Bundle.INSTALLED);
         
+        try {
+            this.b.start();
+            fail("No exception thrown, Error!");
+        } catch (BundleException be) {
+            // expected
+        }
         // test unable to access /tw4 yet as it is not installed
         assertFalse("should not be able to access /tw4", super
                 .ableAccessPath("/tw4/"));
     }
 
+    
+    /*
+     * error case, when Import-Package specified by deployer has invalid version
+     * 
+     */
+    public void testBundleImportPackageError002() throws Exception {
+        // specify install options
+        final Map options = new HashMap();
+        options.put(Constants.IMPORT_PACKAGE, IMPORTS10);
+        options.put(WebContainer.WEB_CONTEXT_PATH, "/tw5");
+        // install the war file
+        log("install war file: tw5.war at context path /tw5");
+        // may not be able to installBundle correctly if version is specified
+        // improperly??
+        try {
+            this.b = installBundle(super.getWarURL("tw5.war", options), false);
+        } catch (BundleException e) {
+            fail("Bundle should be installed but not resolved as Import-Package contains package that won't be resolved");
+        }
+        assertNotNull("Bundle b should not be null", this.b);
+        assertEquals("Checking Bundle state is installed", b.getState(), Bundle.INSTALLED);
+        
+        try {
+            this.b.start();
+            fail("No exception thrown, Error!");
+        } catch (BundleException be) {
+            // expected
+        }
+        
+        // test unable to access /tw4 yet as it is not installed
+        assertFalse("should not be able to access /tw4", super
+                .ableAccessPath("/tw4/"));
+    }
+    
     /*
      * generalImportPackageTest to be used by non-error test
      */
@@ -194,7 +305,4 @@ public class BundleImportPackageTest extends ManifestHeadersTestBundleControl {
         options.put(WebContainer.WEB_CONTEXT_PATH, cp);
         return super.generalHeadersTest(options, warName, start);
     }
-
-    // TODO create war manifest that contains the Import-Package header and more
-    // tests
 }

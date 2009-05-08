@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleException;
 import org.osgi.service.webcontainer.WebContainer;
 
 /**
@@ -243,11 +244,11 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
         Map options = new HashMap();
         options.put(WebContainer.WEB_CONTEXT_PATH, WEBCONTEXTPATH3);
         try {
-            b2 = installBundle(super.getWarURL("tw3.war", options), true);
+            b2 = installBundle(super.getWarURL("tw3.war", options), false);
             fail("bundle install should fail as "
                     + WebContainer.WEB_CONTEXT_PATH + "is not unique: "
                     + WebContainer.WEB_CONTEXT_PATH + " = " + WEBCONTEXTPATH3);
-        } catch (Exception e) {
+        } catch (BundleException e) {
             // expected
         }
         assertNull("Bundle b2 should be null as install failed", b2);

@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.service.webcontainer.WebContainer;
 
@@ -206,7 +207,7 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
             this.b = installBundle(super.getWarURL("tw2.war", options), false);
             fail("bundle install should fail: " + Constants.BUNDLE_VERSION
                     + " = " + MANIFESTVERSION2);
-        } catch (Exception e) {
+        } catch (BundleException be) {
             // expected unless the framework supports Bundle-ManifestVersion
             // greater than 2
             log("this is expected if the framework doesn't support the "
@@ -230,10 +231,10 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
         // install the war file
         log("install and start war file: tw3.war at context path /tw3");
         try {
-            this.b = installBundle(super.getWarURL("tw3.war", options), true);
+            this.b = installBundle(super.getWarURL("tw3.war", options), false);
             fail("bundle install should fail: " + Constants.BUNDLE_VERSION
                     + " = " + MANIFESTVERSION3);
-        } catch (Exception e) {
+        } catch (BundleException be) {
             // expected;
         }
         assertNull("Bundle b should be null", this.b);

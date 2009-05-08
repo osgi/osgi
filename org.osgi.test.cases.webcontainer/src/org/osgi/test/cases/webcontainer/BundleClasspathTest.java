@@ -33,7 +33,7 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
     private static final String[] CLASSPATH1 = {"WEB-INF/lib/org.apache.commons-logging-1.0.4.jar"}; 
     private static final String[] CLASSPATH2 = {"WEB-INF/lib/org.apache.commons-logging-1.0.4.jar","WEB-INF/lib/org.osgi.test.cases.webcontainer.simple.jar"};
     private static final String[] CLASSPATH3 = {"WEB-INF/classes/"};
-    private static final String[] CLASSPATH4 = {"WEB-INF/lib//org.apache.commons-loggingjar"};
+    private static final String[] CLASSPATH4 = {"WEB-INF/lib//org.apache.commons-logging.jar"};
     private static final String[] CLASSPATH5 = {"WEB-INF/lib/org.apache.commons-logging-1.0.4.jar", "libs/utiljar"};
 
     public void setUp() throws Exception {
@@ -196,16 +196,22 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
         options.put(WebContainer.WEB_CONTEXT_PATH, "/tw4");
         // install the war file
         log("install war file: tw4.war at context path /tw4");
-        // may not be able to installBundle correctly if version is specified
+        // may not be able to installBundle correctly if Bundle-Classpath is specified
         // improperly??
         try {
             this.b = installBundle(super.getWarURL("tw4.war", options), false);
-            fail("should be getting install BundleException as Bundle-Classpath contains jar that doesn't exist");
-        } catch (BundleException e) {
+        } catch (BundleException be) {
+            fail("should not be getting install BundleException as Bundle-Classpath contains jar that have valid format");
+        }
+        assertNotNull("Bundle b should be not null", this.b);
+        assertEquals("Checking Bundle state is installed", b.getState(), Bundle.INSTALLED);
+        
+        try {
+            this.b.start();
+            fail("No exception thrown, Error!");
+        } catch (BundleException be) {
             // expected
         }
-        assertNull("Bundle b should be null", this.b);
-
         // test unable to access /tw4 yet as it is not installed
         assertFalse("should not be able to access /tw4", super
                 .ableAccessPath("/tw4/"));
@@ -224,9 +230,9 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
         // may not be able to installBundle correctly if version is specified
         // improperly
         try {
-            this.b = installBundle(super.getWarURL("tw5.war", options), true);
+            this.b = installBundle(super.getWarURL("tw5.war", options), false);
             fail("should be getting install BundleException as Bundle-Classpath format is invalid");
-        } catch (BundleException e) {
+        } catch (BundleException be) {
             // expected
         }
         assertNull("Bundle b should be null", this.b);
@@ -247,7 +253,4 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
         options.put(WebContainer.WEB_CONTEXT_PATH, cp);
         return super.generalHeadersTest(options, warName, start);
     }
-
-    // TODO create war manifest that contains the Bundle-Version header and more
-    // tests
 }
