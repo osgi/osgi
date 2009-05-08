@@ -31,7 +31,7 @@ public interface RefCollectionMetadata extends ServiceReferenceMetadata {
 	/**
 	 * Create ordering based on comparison of service reference objects.
 	 */
-	public static final int ORDER_BASIS_SERVICE_REFERENCE = 2;
+	public static final int ORDERING_BASIS_SERVICE_REFERENCE = 2;
 
 	/**
 	 * Collection contains service instances
