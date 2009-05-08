@@ -37,12 +37,12 @@ public interface ServiceEndpointDescription {
 	 * Returns the value of the property with key
 	 * {@link ServicePublication#SERVICE_INTERFACE_NAME}.
 	 * 
-	 * @return <code>Collection (&lt;? extends String&gt;)</code> of service
-	 *         interface names provided by the advertised service endpoint. The
-	 *         collection is never <code>null</code> or empty but contains at
-	 *         least one service interface.
+	 * @return <code>Collection (&lt;String&gt;)</code> of service interface
+	 *         names provided by the advertised service endpoint. The collection
+	 *         is never <code>null</code> or empty but contains at least one
+	 *         service interface.
 	 */
-	Collection /* <? extends String> */getProvidedInterfaces();
+	Collection /* <String> */getProvidedInterfaces();
 
 	/**
 	 * Returns non-Java endpoint interface name associated with the given
@@ -104,15 +104,15 @@ public interface ServiceEndpointDescription {
 	/**
 	 * Returns all names of service endpoint properties.
 	 * 
-	 * @return a <code>Collection (&lt;? extends String&gt;)</code> of property
-	 *         names available in the ServiceEndpointDescription. The collection
-	 *         is never <code>null</code> or empty but contains at least names
-	 *         of mandatory <code>ServicePublication</code> properties. Since
+	 * @return a <code>Collection (&lt;String&gt;)</code> of property names
+	 *         available in the ServiceEndpointDescription. The collection is
+	 *         never <code>null</code> or empty but contains at least names of
+	 *         mandatory <code>ServicePublication</code> properties. Since
 	 *         <code>ServiceEndpointDescription</code> objects are immutable,
 	 *         the returned collection is also not going to be updated at a
 	 *         later point of time.
 	 */
-	Collection/* <? extends String> */getPropertyKeys();
+	Collection/* <String> */getPropertyKeys();
 
 	/**
 	 * Returns all service endpoint properties.

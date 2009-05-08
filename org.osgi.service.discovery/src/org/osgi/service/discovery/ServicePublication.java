@@ -58,7 +58,7 @@ public interface ServicePublication {
 	 * endpoint.
 	 * <p>
 	 * Value of this property is of type
-	 * <code>Collection (&lt;? extends String&gt;)</code>.
+	 * <code>Collection (&lt;String&gt;)</code>.
 	 */
 	public static final String	SERVICE_INTERFACE_NAME		= "osgi.remote.service.interfaces";
 
@@ -71,8 +71,8 @@ public interface ServicePublication {
 	 * constant.
 	 * <p>
 	 * Value of this property is of type
-	 * <code>Collection (&lt;? extends String&gt;)</code>, may be
-	 * <code>null</code> or empty.
+	 * <code>Collection (&lt;String&gt;)</code>, may be <code>null</code> or
+	 * empty.
 	 */
 	public static final String	SERVICE_INTERFACE_VERSION	= "osgi.remote.service.interfaces.version";
 
@@ -91,8 +91,8 @@ public interface ServicePublication {
 	 * interface.
 	 * <p>
 	 * Value of this property is of type
-	 * <code>Collection (&lt;? extends String&gt;)</code>, may be
-	 * <code>null</code> or empty.
+	 * <code>Collection (&lt;String&gt;)</code>, may be <code>null</code> or
+	 * empty.
 	 */
 	public static final String	ENDPOINT_INTERFACE_NAME		= "osgi.remote.endpoint.interfaces";
 

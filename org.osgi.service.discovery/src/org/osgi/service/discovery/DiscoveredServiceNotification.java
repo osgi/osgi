@@ -88,21 +88,22 @@ public interface DiscoveredServiceNotification {
 	 * object matching with the interfaces of the
 	 * <code>ServiceEndpointDescription</code> and thus caused the notification.
 	 * 
-	 * @return <code>Collection (&lt;? extends String&gt;)</code> of matching interface name criteria of the
-	 *         <code>DiscoveredServiceTracker</code> object being notified, or
-	 *         an empty collection if notification hasn't been caused by a
-	 *         matching interface name criteria.
+	 * @return <code>Collection (&lt;String&gt;)</code> of matching interface
+	 *         name criteria of the <code>DiscoveredServiceTracker</code> object
+	 *         being notified, or an empty collection if notification hasn't
+	 *         been caused by a matching interface name criteria.
 	 */
-	Collection/* <? extends String> */getInterfaces();
+	Collection/* <String> */getInterfaces();
 
 	/**
 	 * Returns filters of the <code>DiscoveredServiceTracker</code> object
 	 * matching with the properties of the
 	 * <code>ServiceEndpointDescription</code> and thus caused the notification.
 	 * 
-	 * @return <code>Collection (&lt;? extends String&gt;)</code> of matching filters of the <code>DiscoveredServiceTracker</code>
-	 *         object being notified, or an empty collection if notification
-	 *         hasn't been caused by a matching filter criteria.
+	 * @return <code>Collection (&lt;String&gt;)</code> of matching filters of
+	 *         the <code>DiscoveredServiceTracker</code> object being notified,
+	 *         or an empty collection if notification hasn't been caused by a
+	 *         matching filter criteria.
 	 */
-	Collection/* <? extends String> */getFilters();
+	Collection/* <String> */getFilters();
 }

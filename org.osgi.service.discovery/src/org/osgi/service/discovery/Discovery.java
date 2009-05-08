@@ -61,7 +61,7 @@ public interface Discovery {
 	 * this Discovery service.
 	 * <p>
 	 * Value of this property is of type
-	 * <code>Collection (&lt;? extends String&gt;)</code>.
+	 * <code>Collection (&lt;String&gt;)</code>.
 	 */
 	static final String	SUPPORTED_PROTOCOLS	= "osgi.remote.discovery.supported_protocols";
 }

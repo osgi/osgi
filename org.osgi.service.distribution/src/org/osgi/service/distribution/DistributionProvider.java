@@ -72,7 +72,7 @@ public interface DistributionProvider {
      *         Registry that are proxies to remote services. If no proxies are
      *         registered, then an empty collection is returned.
      */
-    Collection /*<? extends ServiceReference>*/ getRemoteServices();
+    Collection /* <ServiceReference> */getRemoteServices();
 
     /**
      * @return ServiceReferences of local services that are exposed remotely 
@@ -81,7 +81,7 @@ public interface DistributionProvider {
      *         API returns all the exposed services. If no services are exposed an 
      *         empty collection is returned.
      */
-    Collection /*<? extends ServiceReference>*/ getExposedServices();
+    Collection /* <ServiceReference> */getExposedServices();
 
 	/**
 	 * Provides access to extra properties set by the DistributionProvider on
