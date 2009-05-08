@@ -30,9 +30,11 @@ import org.osgi.service.webcontainer.WebContainer;
  *          scenarios
  */
 public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
-    private static final String[] CLASSPATH1 = {"lib2/log.jar"}; 
-    private static final String[] CLASSPATH2 = {"lib2/util.jar","lib2/log.jar"};
-    private static final String[] CLASSPATH3 = {"lib2/util.jar","lib2/log.jar", "libs/utiljar"};
+    private static final String[] CLASSPATH1 = {"WEB-INF/lib/org.apache.commons-logging-1.0.4.jar"}; 
+    private static final String[] CLASSPATH2 = {"WEB-INF/lib/org.apache.commons-logging-1.0.4.jar","WEB-INF/lib/org.osgi.test.cases.webcontainer.simple.jar"};
+    private static final String[] CLASSPATH3 = {"WEB-INF/classes/"};
+    private static final String[] CLASSPATH4 = {"WEB-INF/lib//org.apache.commons-loggingjar"};
+    private static final String[] CLASSPATH5 = {"WEB-INF/lib/org.apache.commons-logging-1.0.4.jar", "libs/utiljar"};
 
     public void setUp() throws Exception {
         super.setUp();
@@ -46,59 +48,151 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
      * verify valid deployOptions overwrite original manifest Bundle-Classpath
      */
     public void testBundleClasspath001() throws Exception {
-        this.b = generalClasspathTest(CLASSPATH1, "/tw1", "tw1.war", false);
+        this.b = generalClasspathTest(CLASSPATH3, "/tw1", "tw1.war", false);
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Bundle-Classpath
      */
     public void testBundleClasspath002() throws Exception {
-        this.b = generalClasspathTest(CLASSPATH2, "/tw2", "tw2.war", false);
+        this.b = generalClasspathTest(CLASSPATH3, "/tw2", "tw2.war", false);
+    }
+    
+    /*
+     * verify valid deployOptions overwrite original manifest Bundle-Classpath
+     */
+    public void testBundleClasspath003() throws Exception {
+        this.b = generalClasspathTest(CLASSPATH1, "/tw5", "tw5.war", false);
+    }
+    
+    /*
+     * verify valid deployOptions overwrite original manifest Bundle-Classpath
+     */
+    public void testBundleClasspath004() throws Exception {
+        this.b = generalClasspathTest(CLASSPATH2, "/tw5", "tw5.war", false);
     }
 
     /*
-     * verify when Bundle-Classpath is not specified
+     * verify valid deployOptions overwrite original manifest Bundle-Classpath
+     */
+    public void testBundleClasspath005() throws Exception {
+        this.b = generalClasspathTest(CLASSPATH1, "/tw5", "wm2tw5.war", false);
+    }
+    
+    /*
+     * verify valid deployOptions overwrite original manifest Bundle-Classpath
      */
     public void testBundleClasspath006() throws Exception {
-        this.b = generalClasspathTest(null, "/tw1", "tw5.war", false);
+        this.b = generalClasspathTest(CLASSPATH1, "/tw5", "wm2tw5.war", false);
     }
     
     /*
-     * verify when Bundle-Classpath is not specified
+     * verify valid deployOptions overwrite original manifest Bundle-Classpath
      */
-    public void testBundlClasspath007() throws Exception {
-        this.b = generalClasspathTest(null, "/tw5", "tw5.war", false);
+    public void testBundleClasspath007() throws Exception {
+        this.b = generalClasspathTest(CLASSPATH2, "/tw5", "wm3tw5.war", false);
     }
     
     /*
-     * verify when Bundle-Classpath is not specified
+     * verify valid deployOptions overwrite original manifest Bundle-Classpath
      */
     public void testBundleClasspath008() throws Exception {
-        this.b = generalClasspathTest(null, "/tw5", "tw5.war", false);
+        this.b = generalClasspathTest(CLASSPATH2, "/tw5", "wm3tw5.war", false);
     }
     
     /*
      * verify when Bundle-Classpath is not specified
      */
     public void testBundleClasspath009() throws Exception {
+        this.b = generalClasspathTest(null, "/tw1", "tw1.war", false);
+    }
+    
+    /*
+     * verify when Bundle-Classpath is not specified
+     */
+    public void testBundlClasspath010() throws Exception {
+        this.b = generalClasspathTest(null, "/tw2", "tw2.war", false);
+    }
+    
+    /*
+     * verify when Bundle-Classpath is not specified
+     */
+    public void testBundleClasspath011() throws Exception {
+        this.b = generalClasspathTest(null, "/tw3", "tw3.war", false);
+    }
+    
+    /*
+     * verify when Bundle-Classpath is not specified
+     */
+    public void testBundleClasspath012() throws Exception {
+        this.b = generalClasspathTest(null, "/tw4", "tw4.war", false);
+    }
+    
+    /*
+     * verify when Bundle-Classpath is not specified
+     */
+    public void testBundleClasspath013() throws Exception {
         this.b = generalClasspathTest(null, "/tw5", "tw5.war", false);
     }
     
     /*
      * verify when Bundle-Classpath is not specified
      */
-    public void testBundleClasspath010() throws Exception {
-        this.b = generalClasspathTest(null, "/tw5", "tw5.war", false);
+    public void testBundleClasspath014() throws Exception {
+        this.b = generalClasspathTest(null, "/tw1", "wmtw1.war", false);
     }
+    
+    /*
+     * verify when Bundle-Classpath is not specified
+     */
+    public void testBundlClasspath015() throws Exception {
+        this.b = generalClasspathTest(null, "/tw2", "wmtw2.war", false);
+    }
+    
+    /*
+     * verify when Bundle-Classpath is not specified
+     */
+    public void testBundleClasspath016() throws Exception {
+        this.b = generalClasspathTest(null, "/tw3", "wmtw3.war", false);
+    }
+    
+    /*
+     * verify when Bundle-Classpath is not specified
+     */
+    public void testBundleClasspath017() throws Exception {
+        this.b = generalClasspathTest(null, "/tw4", "wmtw4.war", false);
+    }
+    
+    /*
+     * verify when Bundle-Classpath is not specified
+     */
+    public void testBundleClasspath018() throws Exception {
+        this.b = generalClasspathTest(null, "/tw5", "wmtw5.war", false);
+    }
+
+    /*
+     * verify when Bundle-Classpath is not specified
+     */
+    public void testBundleClasspath019() throws Exception {
+        this.b = generalClasspathTest(null, "/tw5", "wm2tw5.war", false);
+    }
+    
+    /*
+     * verify when Bundle-Classpath is not specified
+     */
+    public void testBundleClasspath020() throws Exception {
+        this.b = generalClasspathTest(null, "/tw5", "wm3tw5.war", false);
+    }
+
 
     /*
      * error case, when Bundle-Classpath specified by deployer is valid but cannot locate the file
      * 
      */
-    public void testBundleClasspath011() throws Exception {
+    public void testBundleClasspathError001() throws Exception {
         // specify install options
         final Map options = new HashMap();
-        options.put(Constants.BUNDLE_CLASSPATH, CLASSPATH1);
+        options.put(Constants.BUNDLE_CLASSPATH, CLASSPATH4);
         options.put(WebContainer.WEB_CONTEXT_PATH, "/tw4");
         // install the war file
         log("install war file: tw4.war at context path /tw4");
@@ -120,10 +214,10 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
     /*
      * error case, when Bundle-Classpath specified by deployer is invalid format
      */
-    public void testBundleClasspath012() throws Exception {
+    public void testBundleClasspathError002() throws Exception {
         // specify install options
         final Map options = new HashMap();
-        options.put(Constants.BUNDLE_CLASSPATH, CLASSPATH3);
+        options.put(Constants.BUNDLE_CLASSPATH, CLASSPATH5);
         options.put(WebContainer.WEB_CONTEXT_PATH, "/tw5");
         // install the war file
         log("install war file: tw5.war at context path /tw5");

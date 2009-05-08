@@ -171,7 +171,7 @@ public abstract class WebContainerTestBundleControl extends
     }
     
     protected void checkTW5HomeResponse(String response) throws Exception {
-        assertEquals(response, "<html><head><title>TestWar5</title></head><body>This is TestWar5.<P><A href=\"BundleTestServlet\">/BundleTestServlet</A><BR></P></body></html>");
+        assertEquals(response, "<html><head><title>TestWar5</title></head><body>This is TestWar5.<P><A href=\"BundleTestServlet\">/BundleTestServlet</A><BR><A href=\"ClasspathTestServlet\">/ClasspathTestServlet</A><BR></P></body></html>");
     }
     
     // TODO fill this in when the schema is defined in RFC 66
