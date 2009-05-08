@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.test.cases.webcontainer;
+package org.osgi.test.cases.webcontainer.junit;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -21,6 +21,7 @@ import java.net.URL;
 import java.util.jar.Manifest;
 
 import org.osgi.framework.Bundle;
+import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
 import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;

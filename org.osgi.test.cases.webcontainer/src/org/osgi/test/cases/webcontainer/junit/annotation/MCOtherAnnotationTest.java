@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.webcontainer.annotation;
+package org.osgi.test.cases.webcontainer.junit.annotation;
 
 import java.util.jar.Manifest;
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.webcontainer.annotation;
+package org.osgi.test.cases.webcontainer.junit.annotation;
 
 import org.osgi.framework.Bundle;
 import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
@@ -22,45 +22,48 @@ import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
 /**
  * @version $Rev$ $Date$
  */
-public class PreDestroyAnnotationTest extends WebContainerTestBundleControl {
-    long beforeUninstall;
+public class MCPreDestroyAnnotationTest extends WebContainerTestBundleControl {
     Bundle b;
+    long beforeUninstall;
 
     public void setUp() throws Exception {
         super.setUp();
-        super.prepare("/tw2");
+        super.prepare("/tw3");
 
         super.cleanupPropertyFile();
+
         // install + start the war file
-        log("install war file: tw2.war at context path " + this.warContextPath);
+        log("install war file: tw3.war at context path " + this.warContextPath);
         this.b = installBundle(super.getWarURL("tw3.war", this.options), true);
         
         // capture a time before uninstall
-        beforeUninstall = System.currentTimeMillis();
+        this.beforeUninstall = System.currentTimeMillis();
     }
 
     private void uninstallWar() throws Exception {
         // uninstall the war file
-        log("uninstall war file: tw2.war at context path " + this.warContextPath);
+        log("uninstall war file: tw3.war at context path " + this.warContextPath);
         uninstallBundle(this.b);
     }
 
     public void tearDown() throws Exception {
-        uninstallWar();
+        // already uninstalled in the test
+        // uninstallWar();
     }
 
     /*
-     * test @preDestroy annotated public method is called
+     * test @preDestroy annotated public method is not called
+     * when the metadata-complete attribute is set to true.
      */
     public void testPreDestroy001() throws Exception {
         uninstallWar();
         // TODO do we need to wait till the war is uninstalled properly?
-        log("verify annotated methods are invoked");
-        assertTrue(this.timeUtil.getTimeFromLog(
-                "PostConstructPreDestroyServlet1", "cleanup") > beforeUninstall);
-        assertTrue(this.timeUtil.getTimeFromLog(
-                "PostConstructPreDestroyServlet2", "cleanup") > beforeUninstall);
-        assertTrue(this.timeUtil.getTimeFromLog(
-                "PostConstructPreDestroyServlet3", "cleanup") > beforeUninstall);
+        log("verify annotated methods are not invoked");
+        assertEquals(this.timeUtil.getTimeFromLog(
+                "PostConstructPreDestroyServlet1", "cleanup"), 0);
+        assertEquals(this.timeUtil.getTimeFromLog(
+                "PostConstructPreDestroyServlet2", "cleanup"), 0);
+        assertEquals(this.timeUtil.getTimeFromLog(
+                "PostConstructPreDestroyServlet3", "cleanup"), 0);
     }
 }

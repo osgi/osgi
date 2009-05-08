@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.test.cases.webcontainer;
+package org.osgi.test.cases.webcontainer.junit;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +21,7 @@ import java.util.Map;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.service.webcontainer.WebContainer;
+import org.osgi.test.cases.webcontainer.ManifestHeadersTestBundleControl;
 
 /**
  * @version $Rev$ $Date$

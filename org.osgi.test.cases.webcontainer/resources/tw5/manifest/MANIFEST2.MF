@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-Vendor: OSGi Alliance
+Bundle-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.osgi.test.cases.webcontainer.wm2tw5
+Bundle-Name: org.osgi.test.cases.webcontainer.wm2tw5
+Bundle-Description: OSGi Web Container RFC 66 Compliance Test test war 5 with manifest somewhat pre-specified.  Bundle-Classpath is specified incorrectly
+Web-ContextPath: /wmtw5
+Bundle-Classpath: .,WEB-INF/classes/
+
