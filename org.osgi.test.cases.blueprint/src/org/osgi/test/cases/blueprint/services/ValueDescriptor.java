@@ -16,6 +16,9 @@
 
 package org.osgi.test.cases.blueprint.services;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 import junit.framework.Assert;
 
 /**
@@ -70,18 +73,11 @@ public class ValueDescriptor extends Assert {
          }
 
          ValueDescriptor other = (ValueDescriptor)o;
-         // if one is null, the must both be null.
-         if (value == null) {
-             return other.value == null;
-         }
-         // and vice versa
-         if (other.value == null) {
+         
+         if (!compareObjects(value, other.value)) {
              return false;
          }
-         // compare the values
-         if (!value.equals(other.value)) {
-             return false;
-         }
+
          // if our expected class is not the same as the value class, this
          // is a failure too.  This is mostly to bypass confusion over
          // wrapper vs. primitive types.
@@ -114,5 +110,42 @@ public class ValueDescriptor extends Assert {
 
      public String toString() {
          return "Name=" + name + ", Value=" + value + ", Class=" + clz;
+     }
+     
+     private static boolean compareObjects(Object obj1, Object obj2) {
+         // if one is null, the must both be null.
+         if (obj1 == null) {
+             return obj2 == null;
+         }
+         // and vice versa
+         if (obj2 == null) {
+             return false;
+         }
+         // compare the values
+         if (obj1.getClass().isArray()) {
+             if (obj2.getClass().isArray()) {
+                 return compareArrays(obj1, obj2);
+             } else {
+                 return false;
+             }
+         } else {
+             return obj1.equals(obj2);
+         }
+     }
+     
+     private static boolean compareArrays(Object array1, Object array2) {
+         int size1 = Array.getLength(array1);
+         int size2 = Array.getLength(array2);
+         if (size1 != size2) {
+             return false;            
+         }
+         for (int i = 0; i < size1; i++) {
+             Object obj1 = Array.get(array1, i);
+             Object obj2 = Array.get(array2, i);             
+             if (!compareObjects(obj2, obj2)) {
+                 return false;
+             }
+         }
+         return true;
      }
 }

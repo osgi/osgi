@@ -260,7 +260,7 @@ public class PropertyInjection extends BaseTestComponent {
     }
 
     public void setWrappedLongArray(Long[] arr) {
-        setPropertyValue("wrappedShortArray", arr, Long[].class);
+        setPropertyValue("wrappedLongArray", arr, Long[].class);
     }
 
     public void setPrimDoubleArray(double[] arr) {

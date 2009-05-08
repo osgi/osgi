@@ -221,8 +221,8 @@
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
 		<argument>
 			<array value-type="java.util.Date">
-				<value>2009-2-19</value>
-				<value>2009-2-20</value>
+				<value>19 Feb 2009</value>
+				<value>20 Feb 2009</value>
 			</array>
 		</argument>
 	</bean>

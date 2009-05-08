@@ -68,7 +68,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
         this.addConstructorValidator(startEvents, "compEmptyArray", expected, expected.getClass());
 
         // Null array
-        this.addConstructorValidator(startEvents, "compNullArray", null, Object[].class);
+        expected = new Object[1];
+        this.addConstructorValidator(startEvents, "compNullArray", expected, Object[].class);
 
         // Single item array
         int[] expectedIntArr = new int[1];
@@ -259,7 +260,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
         this.addFactoryConstructorValidator(startEvents, "compEmptyArray", expected, expected.getClass());
 
         // Null array
-        this.addFactoryConstructorValidator(startEvents, "compNullArray", null, Object[].class);
+        expected = new Object[1];
+        this.addFactoryConstructorValidator(startEvents, "compNullArray", expected, Object[].class);
 
         // String array
         expected = new String[2];
@@ -449,7 +451,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
                         .getClass());
 
         // Null array
-        this.addFactoryConstructorValidator(startEvents, "compNullArray", "compFactory", null, Object[].class);
+        expected = new Object[1];
+        this.addFactoryConstructorValidator(startEvents, "compNullArray", "compFactory", expected, Object[].class);
 
         // String array
         expected = new String[2];
@@ -651,10 +654,11 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Empty array
         Object[] expected = new Object[0];
-        addPropertyValidator(startEvents, "compEmptyArray", "objectArray", expected, expected.getClass());
+        addPropertyValidator(startEvents, "compEmptyArray", "emptyArray", expected, expected.getClass());
 
         // Null array
-        addPropertyValidator(startEvents, "compNullArray", "nullArray", null, Object[].class);
+        expected = new Object[1];
+        addPropertyValidator(startEvents, "compNullArray", "nullArray", expected, Object[].class);
 
         // String array
         expected = new String[2];
@@ -840,10 +844,11 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Empty array
         Object[] expected = new Object[0];
-        addPropertyValidator(startEvents, "compEmptyArray", "objectArray", expected, expected.getClass());
+        addPropertyValidator(startEvents, "compEmptyArray", "emptyArray", expected, expected.getClass());
 
         // Null array
-        addPropertyValidator(startEvents, "compNullArray", "nullArray", null, Object[].class);
+        expected = new Object[1];
+        addPropertyValidator(startEvents, "compNullArray", "nullArray", expected, Object[].class);
 
         // String array
         expected = new String[2];
@@ -1029,10 +1034,11 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Empty array
         Object[] expected = new Object[0];
-        addPropertyValidator(startEvents, "compEmptyArray", "objectArray", expected, expected.getClass());
+        addPropertyValidator(startEvents, "compEmptyArray", "emptyArray", expected, expected.getClass());
 
         // Null array
-        addPropertyValidator(startEvents, "compNullArray", "nullArray", null, Object[].class);
+        expected = new Object[1];
+        addPropertyValidator(startEvents, "compNullArray", "nullArray", expected, Object[].class);
 
         // String array
         expected = new String[2];
