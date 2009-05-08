@@ -16,6 +16,8 @@
 
 package org.osgi.framework;
 
+import org.osgi.framework.bundle.ServiceListener;
+
 /**
  * A Framework exception used to indicate that a filter string has an invalid
  * syntax.

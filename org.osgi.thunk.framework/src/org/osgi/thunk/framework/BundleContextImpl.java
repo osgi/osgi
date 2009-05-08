@@ -27,7 +27,6 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Filter;
-import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.bundle.AllServiceListener;
@@ -67,9 +66,10 @@ public class BundleContextImpl implements BundleContext {
 		if (activatorName == null) {
 			return;
 		}
-		Class< ? > activatorClass = bundle.loadClass(activatorName);
-		BundleActivator activatorObject = (BundleActivator) activatorClass
-				.newInstance();
+		@SuppressWarnings("unchecked")
+		Class<BundleActivator> activatorClass = bundle
+				.loadClass(activatorName);
+		BundleActivator activatorObject = activatorClass.newInstance();
 		activatorObject.start(this);
 		activator = activatorObject;
 	}
@@ -77,7 +77,7 @@ public class BundleContextImpl implements BundleContext {
 	void stop() throws Exception {
 		final BundleActivator a = activator;
 		if (a != null) {
-			a.start(this);
+			a.stop(this);
 		}
 	}
 
@@ -121,8 +121,7 @@ public class BundleContextImpl implements BundleContext {
 		}
 	}
 
-	public void addServiceListener(ServiceListener listener, String filter)
-			throws InvalidSyntaxException {
+	public void addServiceListener(ServiceListener listener, String filter) {
 		synchronized (serviceListeners) {
 			TServiceListener l = serviceListeners.remove(listener);
 			if (l != null) {
@@ -142,12 +141,7 @@ public class BundleContextImpl implements BundleContext {
 	}
 
 	public void addServiceListener(ServiceListener listener) {
-		try {
-			addServiceListener(listener, null);
-		}
-		catch (InvalidSyntaxException e) {
-			// empty
-		}
+		addServiceListener(listener, null);
 	}
 
 	public void removeServiceListener(ServiceListener listener) {
@@ -156,7 +150,7 @@ public class BundleContextImpl implements BundleContext {
 		}
 	}
 
-	public Filter createFilter(String filter) throws InvalidSyntaxException {
+	public Filter createFilter(String filter) {
 		try {
 			return new FilterImpl(context.createFilter(filter));
 		}
@@ -165,8 +159,8 @@ public class BundleContextImpl implements BundleContext {
 		}
 	}
 
-	public Collection< ? extends ServiceReference<?>> getAllServiceReferences(
-			String clazz, String filter) throws InvalidSyntaxException {
+	public Collection<ServiceReference< ? >> getAllServiceReferences(
+			String clazz, String filter) {
 		try {
 			TServiceReference[] references = context.getAllServiceReferences(
 					clazz, filter);
@@ -185,7 +179,7 @@ public class BundleContextImpl implements BundleContext {
 		return new BundleImpl(context.getBundle(id));
 	}
 
-	public Collection< ? extends Bundle> getBundles() {
+	public Collection<Bundle> getBundles() {
 		TBundle[] bundles = context.getBundles();
 		return T.toBundles(bundles);
 	}
@@ -203,12 +197,21 @@ public class BundleContextImpl implements BundleContext {
 		return (S) context.getService(T.unwrap(reference));
 	}
 
+	public boolean ungetService(ServiceReference< ? > reference) {
+		return context.ungetService(T.unwrap(reference));
+	}
+
 	public ServiceReference<?> getServiceReference(String clazz) {
 		return new ServiceReferenceImpl<Object>(context.getServiceReference(clazz));
 	}
 
-	public Collection< ? extends ServiceReference<?>> getServiceReferences(
-			String clazz, String filter) throws InvalidSyntaxException {
+	@SuppressWarnings("unchecked")
+	public <S> ServiceReference<S> getServiceReference(Class<S> clazz) {
+		return (ServiceReference<S>) getServiceReference(clazz.getName());
+	}
+
+	public Collection<ServiceReference< ? >> getServiceReferences(
+			String clazz, String filter) {
 		try {
 			TServiceReference[] references = context.getServiceReferences(
 					clazz, filter);
@@ -217,6 +220,13 @@ public class BundleContextImpl implements BundleContext {
 		catch (TInvalidSyntaxException e) {
 			throw T.toInvalidSyntaxException(e);
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public <S> Collection<ServiceReference<S>> getServiceReferences(
+			Class<S> clazz, String filter) {
+		return (Collection) getServiceReferences(
+				clazz.getName(), filter);
 	}
 
 	public Bundle installBundle(String location, InputStream input)
@@ -233,10 +243,11 @@ public class BundleContextImpl implements BundleContext {
 		return installBundle(location, null);
 	}
 
+	@SuppressWarnings("unchecked")
 	public ServiceRegistration<?> registerService(String[] clazzes,
 			Object service, Map<String, Object> properties) {
 		if (service instanceof ServiceFactory) {
-			service = new TServiceFactoryImpl((ServiceFactory<?>) service);
+			service = new TServiceFactoryImpl((ServiceFactory<Object>) service);
 		}
 		return new ServiceRegistrationImpl<Object>(context.registerService(clazzes,
 				service, T.toDictionary(properties)));
@@ -245,6 +256,25 @@ public class BundleContextImpl implements BundleContext {
 	public ServiceRegistration<?> registerService(String clazz, Object service,
 			Map<String, Object> properties) {
 		return registerService(new String[] {clazz}, service, properties);
+	}
+
+	@SuppressWarnings("unchecked")
+	public <S> ServiceRegistration<S> registerService(Class<S> clazz,
+			S service,
+			Map<String, Object> properties) {
+		
+		return (ServiceRegistration<S>) registerService(clazz.getName(), service, properties);
+	}
+
+	@SuppressWarnings("unchecked")
+	public <S> ServiceRegistration<S> registerService(Class<S> clazz,
+			S service, Map<String, Object> properties, Class< ? >[] moreClasses) {
+		String classes[] = new String[moreClasses.length+1];
+		classes[0] = clazz.getName();
+		for (int i = 0; i < moreClasses.length; i++) {
+			classes[i+1] = moreClasses[i].getName();
+		}
+		return (ServiceRegistration<S>) registerService(classes, service, properties);
 	}
 
 	@Override
@@ -260,46 +290,5 @@ public class BundleContextImpl implements BundleContext {
 	@Override
 	public String toString() {
 		return context.toString();
-	}
-
-	@SuppressWarnings("unchecked")
-	public <S> Collection<? extends ServiceReference<S>> getAllServiceReferences(
-			Class<S> clazz, String filter) throws InvalidSyntaxException {
-		return (Collection<? extends ServiceReference<S>>) getAllServiceReferences(clazz.getName(), filter);
-	}
-
-
-	@SuppressWarnings("unchecked")
-	public <S> ServiceReference<S> getServiceReference(Class<S> clazz) {
-		return (ServiceReference<S>) getServiceReference(clazz.getName());
-	}
-
-	@SuppressWarnings("unchecked")
-	public <S> Collection<? extends ServiceReference<S>> getServiceReferences(
-			Class<S> clazz, String filter) throws InvalidSyntaxException {
-		return (Collection<? extends ServiceReference<S>>) getServiceReferences(clazz.getName(), filter);
-	}
-
-	@SuppressWarnings("unchecked")
-	public <S> ServiceRegistration<S> registerService(Class<S> clazz, S service,
-			Map<String, Object> properties) {
-		
-		return (ServiceRegistration<S>) registerService(clazz.getName(), service, properties);
-	}
-
-	@SuppressWarnings("unchecked")
-	public <S> ServiceRegistration<S> registerService(S service,
-			Map<String, Object> properties, Class<S> clazz, Class<?>[] moreClasses) {
-		String classes[] = new String[moreClasses.length+1];
-		classes[0] = clazz.getName();
-		for ( int i =0; i<moreClasses.length; i++ ) {
-			classes[i+1] = moreClasses[i].getName();
-		}
-		return (ServiceRegistration<S>) registerService(classes, service, properties);
-	}
-
-	public boolean ungetService(ServiceReference<?> arg0) {
-		context.ungetService(T.unwrap(arg0));
-		return false;
 	}
 }

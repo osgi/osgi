@@ -232,7 +232,7 @@ public interface BundleContext {
 	 * @return An array of <code>Bundle</code> objects, one object per
 	 *         installed bundle.
 	 */
-	public Collection< ? extends Bundle> getBundles();
+	public Collection<Bundle> getBundles();
 
 	/**
 	 * Adds the specified <code>ServiceListener</code> object with the
@@ -286,8 +286,7 @@ public interface BundleContext {
 	 * @see ServiceListener
 	 * @see ServicePermission
 	 */
-	public void addServiceListener(ServiceListener listener, String filter)
-			throws InvalidSyntaxException;
+	public void addServiceListener(ServiceListener listener, String filter);
 
 	/**
 	 * Adds the specified <code>ServiceListener</code> object to the context
@@ -476,26 +475,6 @@ public interface BundleContext {
 	 */
 	public ServiceRegistration<?> registerService(String[] clazzes,
 			Object service, Map<String, Object> properties);
-	
-	/**
-	 * @param <S>
-	 * @param clazzes
-	 * @param service
-	 * @param properties
-	 * @return x
-	 */
-	public <S> ServiceRegistration<S> registerService(Class<S> clazzes,
-			S service, Map<String, Object> properties);
-	
-	/**
-	 * @param <S>
-	 * @param service
-	 * @param properties
-	 * @param clazz
-	 * @param clazzes
-	 * @return x
-	 */
-	public <S> ServiceRegistration<S> registerService( S service, Map<String, Object> properties, Class<S> clazz, Class<?>[] clazzes);
 
 	/**
 	 * Registers the specified service object with the specified properties
@@ -525,6 +504,27 @@ public interface BundleContext {
 	 */
 	public ServiceRegistration<?> registerService(String clazz, Object service,
 			Map<String, Object> properties);
+
+	/**
+	 * @param <S>
+	 * @param clazz
+	 * @param service
+	 * @param properties
+	 * @return x
+	 */
+	public <S> ServiceRegistration<S> registerService(Class<S> clazz,
+			S service, Map<String, Object> properties);
+
+	/**
+	 * @param <S>
+	 * @param clazz
+	 * @param service
+	 * @param properties
+	 * @param clazzes
+	 * @return x
+	 */
+	public <S> ServiceRegistration<S> registerService(Class<S> clazz,
+			S service, Map<String, Object> properties, Class< ? >[] clazzes);
 
 	/**
 	 * Returns an array of <code>ServiceReference</code> objects. The returned
@@ -596,9 +596,8 @@ public interface BundleContext {
 	 * @throws java.lang.IllegalStateException If this BundleContext is no
 	 *         longer valid.
 	 */
-	public Collection< ? extends ServiceReference<?>> getServiceReferences(
-			String clazz, String filter)
-			throws InvalidSyntaxException;
+	public Collection<ServiceReference< ? >> getServiceReferences(
+			String clazz, String filter);
 
 	/**
 	 * @param <S>
@@ -607,9 +606,8 @@ public interface BundleContext {
 	 * @return x
 	 * @throws InvalidSyntaxException
 	 */
-	public <S> Collection< ? extends ServiceReference<S>> getServiceReferences(
-			Class<S> clazz, String filter)
-			throws InvalidSyntaxException;
+	public <S> Collection<ServiceReference<S>> getServiceReferences(
+			Class<S> clazz, String filter);
 
 	/**
 	 * Returns an array of <code>ServiceReference</code> objects. The returned
@@ -671,20 +669,9 @@ public interface BundleContext {
 	 *         longer valid.
 	 * @since 1.3
 	 */
-	public Collection< ? extends ServiceReference<?>> getAllServiceReferences(
+	public Collection<ServiceReference< ? >> getAllServiceReferences(
 			String clazz,
-			String filter) throws InvalidSyntaxException;
-
-	/**
-	 * @param <S>
-	 * @param clazz
-	 * @param filter
-	 * @return x
-	 * @throws InvalidSyntaxException
-	 */
-	public <S> Collection< ? extends ServiceReference<S>> getAllServiceReferences(
-			Class<S> clazz,
-			String filter) throws InvalidSyntaxException;
+			String filter);
 
 	/**
 	 * Returns a <code>ServiceReference</code> object for a service that
@@ -717,6 +704,7 @@ public interface BundleContext {
 	 * @see #getServiceReferences(String, String)
 	 */
 	public ServiceReference<?> getServiceReference(String clazz);
+	
 	/**
 	 * @param <S>
 	 * @param clazz
@@ -877,5 +865,5 @@ public interface BundleContext {
 	 * @see "Framework specification for a description of the filter string syntax."
 	 * @see FrameworkUtil#createFilter(String)
 	 */
-	public Filter createFilter(String filter) throws InvalidSyntaxException;
+	public Filter createFilter(String filter);
 }

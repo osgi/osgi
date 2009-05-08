@@ -21,23 +21,22 @@ import org.osgi.wrapped.framework.TBundle;
 import org.osgi.wrapped.framework.TServiceFactory;
 import org.osgi.wrapped.framework.TServiceRegistration;
 
-public class TServiceFactoryImpl<S> implements TServiceFactory {
-	final ServiceFactory<S>	factory;
+public class TServiceFactoryImpl implements TServiceFactory {
+	final ServiceFactory<Object>	factory;
 
-	public TServiceFactoryImpl(ServiceFactory<S> factory) {
+	public TServiceFactoryImpl(ServiceFactory<Object> factory) {
 		this.factory = factory;
 	}
 
 	public Object getService(TBundle bundle, TServiceRegistration registration) {
 		return factory.getService(new BundleImpl(bundle),
-				new ServiceRegistrationImpl<S>(registration));
+				new ServiceRegistrationImpl<Object>(registration));
 	}
 
-	@SuppressWarnings("unchecked")
 	public void ungetService(TBundle bundle, TServiceRegistration registration,
 			Object service) {
 		factory.ungetService(new BundleImpl(bundle),
-				new ServiceRegistrationImpl<S>(registration), (S) service);
+				new ServiceRegistrationImpl<Object>(registration), service);
 	}
 	
 	@Override

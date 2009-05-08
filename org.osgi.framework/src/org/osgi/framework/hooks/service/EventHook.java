@@ -51,5 +51,5 @@ public interface EventHook {
 	 *        synchronized.
 	 */
 	void event(ServiceEvent event,
-			Collection< ? extends BundleContext> contexts);
+			Collection<BundleContext> contexts);
 }

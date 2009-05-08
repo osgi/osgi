@@ -91,7 +91,7 @@ public class BundleImpl implements Bundle {
 		return bundle.getLocation();
 	}
 
-	public Collection< ? extends ServiceReference<?>> getRegisteredServices() {
+	public Collection<ServiceReference< ? >> getRegisteredServices() {
 		TServiceReference[] references = bundle.getRegisteredServices();
 		return T.toReferences(references);
 	}
@@ -106,7 +106,7 @@ public class BundleImpl implements Bundle {
 		return Collections.list(e);
 	}
 
-	public Collection< ? extends ServiceReference<?>> getServicesInUse() {
+	public Collection<ServiceReference< ? >> getServicesInUse() {
 		TServiceReference[] references = bundle.getServicesInUse();
 		return T.toReferences(references);
 	}

@@ -47,6 +47,7 @@ public class FrameworkUtil {
 	 * FrameworkUtil objects may not be constructed.
 	 */
 	private FrameworkUtil() {
+		// empty
 	}
 
 	/**
@@ -74,8 +75,7 @@ public class FrameworkUtil {
 	 * 
 	 * @see Filter
 	 */
-	public static Filter createFilter(String filter)
-			throws InvalidSyntaxException {
+	public static Filter createFilter(String filter) {
 		return FilterImpl.newInstance(filter);
 	}
 
@@ -375,8 +375,7 @@ public class FrameworkUtil {
 		 *                If the filter parameter contains an invalid filter
 		 *                string that cannot be parsed.
 		 */
-		static FilterImpl newInstance(String filterString)
-				throws InvalidSyntaxException {
+		static FilterImpl newInstance(String filterString) {
 			return new Parser(filterString).parse();
 		}
 
@@ -1219,7 +1218,7 @@ public class FrameworkUtil {
 				pos = 0;
 			}
 
-			FilterImpl parse() throws InvalidSyntaxException {
+			FilterImpl parse() {
 				FilterImpl filter;
 				try {
 					filter = parse_filter();
@@ -1237,8 +1236,7 @@ public class FrameworkUtil {
 				return filter;
 			}
 
-			private FilterImpl parse_filter()
-					throws InvalidSyntaxException {
+			private FilterImpl parse_filter() {
 				FilterImpl filter;
 				skipWhiteSpace();
 
@@ -1265,8 +1263,7 @@ public class FrameworkUtil {
 				return filter;
 			}
 
-			private FilterImpl parse_filtercomp()
-					throws InvalidSyntaxException {
+			private FilterImpl parse_filtercomp() {
 				skipWhiteSpace();
 
 				char c = filterChars[pos];
@@ -1288,8 +1285,7 @@ public class FrameworkUtil {
 				return parse_item();
 			}
 
-			private FilterImpl parse_and()
-					throws InvalidSyntaxException {
+			private FilterImpl parse_and() {
 				skipWhiteSpace();
 
 				if (filterChars[pos] != '(') {
@@ -1308,8 +1304,7 @@ public class FrameworkUtil {
 						.toArray(new FilterImpl[operands.size()]));
 			}
 
-			private FilterImpl parse_or()
-					throws InvalidSyntaxException {
+			private FilterImpl parse_or() {
 				skipWhiteSpace();
 
 				if (filterChars[pos] != '(') {
@@ -1328,8 +1323,7 @@ public class FrameworkUtil {
 						.toArray(new FilterImpl[operands.size()]));
 			}
 
-			private FilterImpl parse_not()
-					throws InvalidSyntaxException {
+			private FilterImpl parse_not() {
 				skipWhiteSpace();
 
 				if (filterChars[pos] != '(') {
@@ -1342,8 +1336,7 @@ public class FrameworkUtil {
 				return new FilterImpl(FilterImpl.NOT, null, child);
 			}
 
-			private FilterImpl parse_item()
-					throws InvalidSyntaxException {
+			private FilterImpl parse_item() {
 				String attr = parse_attr();
 
 				skipWhiteSpace();
@@ -1401,7 +1394,7 @@ public class FrameworkUtil {
 						+ filterstring.substring(pos), filterstring); 
 			}
 
-			private String parse_attr() throws InvalidSyntaxException {
+			private String parse_attr() {
 				skipWhiteSpace();
 
 				int begin = pos;
@@ -1430,7 +1423,7 @@ public class FrameworkUtil {
 				return new String(filterChars, begin, length);
 			}
 
-			private String parse_value() throws InvalidSyntaxException {
+			private String parse_value() {
 				StringBuffer sb = new StringBuffer(filterChars.length - pos);
 
 				parseloop: while (true) {
@@ -1468,7 +1461,7 @@ public class FrameworkUtil {
 				return sb.toString();
 			}
 
-			private Object parse_substring() throws InvalidSyntaxException {
+			private Object parse_substring() {
 				StringBuffer sb = new StringBuffer(filterChars.length - pos);
 
 				List<String> operands = new ArrayList<String>(10);

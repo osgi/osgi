@@ -30,6 +30,7 @@ package org.osgi.framework;
 
 public class FrameworkConstants {
 	private FrameworkConstants() {
+		// empty
 	}
 	/**
 	 * Location identifier of the OSGi <i>system bundle </i>, which is defined

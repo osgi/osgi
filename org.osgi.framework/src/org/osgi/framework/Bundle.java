@@ -764,7 +764,7 @@ public interface Bundle {
 	 * @see ServiceReference
 	 * @see ServicePermission
 	 */
-	public Collection< ? extends ServiceReference<?>> getRegisteredServices();
+	public Collection<ServiceReference< ? >> getRegisteredServices();
 
 	/**
 	 * Returns this bundle's <code>ServiceReference</code> list for all
@@ -790,7 +790,7 @@ public interface Bundle {
 	 * @see ServiceReference
 	 * @see ServicePermission
 	 */
-	public Collection< ? extends ServiceReference<?>> getServicesInUse();
+	public Collection<ServiceReference< ? >> getServicesInUse();
 
 	/**
 	 * Determines if this bundle has the specified permissions.

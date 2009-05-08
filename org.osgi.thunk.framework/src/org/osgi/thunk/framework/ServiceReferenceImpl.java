@@ -50,7 +50,7 @@ public class ServiceReferenceImpl<S> implements ServiceReference<S> {
 		return new HashSet<String>(Arrays.asList(reference.getPropertyKeys()));
 	}
 
-	public Collection< ? extends Bundle> getUsingBundles() {
+	public Collection<Bundle> getUsingBundles() {
 		TBundle[] bundles = reference.getUsingBundles();
 		return T.toBundles(bundles);
 	}

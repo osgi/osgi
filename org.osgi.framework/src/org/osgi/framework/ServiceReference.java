@@ -122,7 +122,7 @@ public interface ServiceReference<S> extends Comparable<ServiceReference<S>> {
 	 * 
 	 * @since 1.1
 	 */
-	public Collection< ? extends Bundle> getUsingBundles();
+	public Collection<Bundle> getUsingBundles();
 
 	/**
 	 * Tests if the bundle that registered the service referenced by this

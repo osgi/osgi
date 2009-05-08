@@ -164,21 +164,6 @@ public class BundleException extends Exception {
 	}
 
 	/**
-	 * Returns the cause of this exception or <code>null</code> if no cause was
-	 * specified when this exception was created.
-	 * 
-	 * <p>
-	 * This method predates the general purpose exception chaining mechanism.
-	 * The <code>getCause()</code> method is now the preferred means of
-	 * obtaining this information.
-	 * 
-	 * @return The result of calling <code>getCause()</code>.
-	 */
-	public Throwable getNestedException() {
-		return getCause();
-	}
-
-	/**
 	 * Returns the type for this exception or <code>UNSPECIFIED</code> if the
 	 * type was unspecified or unknown.
 	 * 

@@ -19,6 +19,7 @@ package org.osgi.util.tracker;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -57,6 +58,7 @@ import org.osgi.framework.bundle.ServiceListener;
  * 
  * @ThreadSafe
  * @version $Revision$
+ * @param <S>
  */
 public class ServiceTracker<S> implements ServiceTrackerCustomizer<S> {
 	/* set this to true to compile in debug messages */
@@ -91,7 +93,7 @@ public class ServiceTracker<S> implements ServiceTrackerCustomizer<S> {
 	 * Reference to be tracked. If this field is set, then we are tracking a
 	 * single ServiceReference.
 	 */
-	private final ServiceReference		trackReference;
+	private final ServiceReference<S>	trackReference;
 	/**
 	 * Tracked services: <code>ServiceReference</code> -> customized Object and
 	 * <code>ServiceListener</code> object
@@ -114,7 +116,7 @@ public class ServiceTracker<S> implements ServiceTrackerCustomizer<S> {
 	 * 
 	 * This field is volatile since it is accessed by multiple threads.
 	 */
-	private volatile ServiceReference	cachedReference;
+	private volatile ServiceReference<S>	cachedReference;
 	/**
 	 * Cached service object for getService.
 	 * 
@@ -149,7 +151,7 @@ public class ServiceTracker<S> implements ServiceTrackerCustomizer<S> {
 	 *        <code>ServiceTrackerCustomizer</code> methods on itself.
 	 */
 	public ServiceTracker(final BundleContext context,
-			final ServiceReference reference,
+			final ServiceReference<S> reference,
 			final ServiceTrackerCustomizer<S> customizer) {
 		this.context = context;
 		this.trackReference = reference;
@@ -216,6 +218,12 @@ public class ServiceTracker<S> implements ServiceTrackerCustomizer<S> {
 			throw iae;
 		}
 	}
+	
+	/**
+	 * @param context
+	 * @param clazz
+	 * @param customizer
+	 */
 	public ServiceTracker(final BundleContext context, final Class<S> clazz,
 			final ServiceTrackerCustomizer<S> customizer) {
 		this(context, clazz.getName(), customizer );
@@ -246,9 +254,9 @@ public class ServiceTracker<S> implements ServiceTrackerCustomizer<S> {
 		this.context = context;
 		this.trackReference = null;
 		this.trackClass = null;
-		final Version frameworkVersion = (Version) AccessController
-				.doPrivileged(new PrivilegedAction() {
-					public Object run() {
+		final Version frameworkVersion = AccessController
+				.doPrivileged(new PrivilegedAction<Version>() {
+					public Version run() {
 						String version = context
 								.getProperty(FrameworkConstants.FRAMEWORK_VERSION);
 						return (version == null) ? Version.emptyVersion
@@ -316,7 +324,7 @@ public class ServiceTracker<S> implements ServiceTrackerCustomizer<S> {
 			synchronized (t) {
 				try {
 					context.addServiceListener(t, listenerFilter);
-					List<ServiceReference> references = null;
+					List<ServiceReference<S>> references = null;
 					if (trackClass != null) {
 						references = getInitialReferences(trackAllServices,
 								trackClass, null);
@@ -364,16 +372,20 @@ public class ServiceTracker<S> implements ServiceTrackerCustomizer<S> {
 	 * @throws InvalidSyntaxException If the specified filterString has an
 	 *         invalid syntax.
 	 */
-	private List<ServiceReference> getInitialReferences(
+	private List<ServiceReference<S>> getInitialReferences(
 			boolean trackAllServices,
 			String className, String filterString)
 			throws InvalidSyntaxException {
 		if (trackAllServices) {
-			return new ArrayList<ServiceReference>(context
-					.getAllServiceReferences(className, filterString));
+			@SuppressWarnings("unchecked")
+			Collection<ServiceReference<S>> result = (Collection) context
+					.getAllServiceReferences(className, filterString);
+			return new ArrayList<ServiceReference<S>>(result);
 		}
-		return new ArrayList<ServiceReference>(context.getServiceReferences(
-				className, filterString));
+		@SuppressWarnings("unchecked")
+		Collection<ServiceReference<S>> result = (Collection) context
+				.getServiceReferences(className, filterString);
+		return new ArrayList<ServiceReference<S>>(result);
 	}
 
 	/**
@@ -389,7 +401,7 @@ public class ServiceTracker<S> implements ServiceTrackerCustomizer<S> {
 	 */
 	public void close() {
 		final Tracked outgoing;
-		final List<ServiceReference> references;
+		final List<ServiceReference<S>> references;
 		synchronized (this) {
 			outgoing = tracked;
 			if (outgoing == null) {
@@ -412,7 +424,7 @@ public class ServiceTracker<S> implements ServiceTrackerCustomizer<S> {
 		synchronized (outgoing) {
 			outgoing.notifyAll(); /* wake up any waiters */
 		}
-		for (ServiceReference reference : references) {
+		for (ServiceReference<S> reference : references) {
 			outgoing.untrack(reference, null);
 		}
 		if (DEBUG) {
@@ -450,10 +462,8 @@ public class ServiceTracker<S> implements ServiceTrackerCustomizer<S> {
 	 *         <code>ServiceTracker</code>.
 	 * @see ServiceTrackerCustomizer#addingService(ServiceReference)
 	 */
-	public S addingService(ServiceReference reference) {
-		@SuppressWarnings("unchecked")
-		S result = (S) context.getService(reference);
-		return result;
+	public S addingService(ServiceReference<S> reference) {
+		return context.getService(reference);
 	}
 
 	/**
@@ -471,7 +481,7 @@ public class ServiceTracker<S> implements ServiceTrackerCustomizer<S> {
 	 * @param service The service object for the modified service.
 	 * @see ServiceTrackerCustomizer#modifiedService(ServiceReference, Object)
 	 */
-	public void modifiedService(ServiceReference reference, S service) {
+	public void modifiedService(ServiceReference<S> reference, S service) {
 		/* do nothing */
 	}
 
@@ -496,7 +506,7 @@ public class ServiceTracker<S> implements ServiceTrackerCustomizer<S> {
 	 * @param service The service object for the removed service.
 	 * @see ServiceTrackerCustomizer#removedService(ServiceReference, Object)
 	 */
-	public void removedService(ServiceReference reference, S service) {
+	public void removedService(ServiceReference<S> reference, S service) {
 		context.ungetService(reference);
 	}
 
@@ -552,7 +562,7 @@ public class ServiceTracker<S> implements ServiceTrackerCustomizer<S> {
 	 * @return Array of <code>ServiceReference</code>s or <code>null</code> if
 	 *         no services are being tracked.
 	 */
-	public List<ServiceReference> getServiceReferences() {
+	public List<ServiceReference<S>> getServiceReferences() {
 		final Tracked t = tracked();
 		if (t == null) { /* if ServiceTracker is not open */
 			return null;
@@ -582,8 +592,8 @@ public class ServiceTracker<S> implements ServiceTrackerCustomizer<S> {
 	 *         services are being tracked.
 	 * @since 1.1
 	 */
-	public ServiceReference getServiceReference() {
-		ServiceReference reference = cachedReference;
+	public ServiceReference<S> getServiceReference() {
+		ServiceReference<S> reference = cachedReference;
 		if (reference != null) {
 			if (DEBUG) {
 				System.out
@@ -595,7 +605,7 @@ public class ServiceTracker<S> implements ServiceTrackerCustomizer<S> {
 		if (DEBUG) {
 			System.out.println("ServiceTracker.getServiceReference: " + filter); 
 		}
-		List<ServiceReference> references = getServiceReferences();
+		List<ServiceReference<S>> references = getServiceReferences();
 		int length = references.size();
 		if (length == 0) { /* if no service is being tracked */
 			return null;
@@ -651,7 +661,7 @@ public class ServiceTracker<S> implements ServiceTrackerCustomizer<S> {
 	 *         by the specified <code>ServiceReference</code> is not being
 	 *         tracked.
 	 */
-	public S getService(ServiceReference reference) {
+	public S getService(ServiceReference<S> reference) {
 		final Tracked t = tracked();
 		if (t == null) { /* if ServiceTracker is not open */
 			return null;
@@ -680,13 +690,13 @@ public class ServiceTracker<S> implements ServiceTrackerCustomizer<S> {
 			return null;
 		}
 		synchronized (t) {
-			List<ServiceReference> references = getServiceReferences();
+			List<ServiceReference<S>> references = getServiceReferences();
 			int length = references.size();
 			if (length == 0) {
 				return Collections.emptyList();
 			}
 			List<S> objects = new ArrayList<S>(length);
-			for (ServiceReference reference : references) {
+			for (ServiceReference<S> reference : references) {
 				objects.add(getService(reference)); 
 			}
 			return objects;
@@ -717,7 +727,7 @@ public class ServiceTracker<S> implements ServiceTrackerCustomizer<S> {
 		if (DEBUG) {
 			System.out.println("ServiceTracker.getService: " + filter); 
 		}
-		ServiceReference reference = getServiceReference(); 
+		ServiceReference<S> reference = getServiceReference(); 
 		if (reference == null) {
 			return null;
 		}
@@ -734,7 +744,7 @@ public class ServiceTracker<S> implements ServiceTrackerCustomizer<S> {
 	 * 
 	 * @param reference The reference to the service to be removed.
 	 */
-	public void remove(ServiceReference reference) {
+	public void remove(ServiceReference<S> reference) {
 		final Tracked t = tracked();
 		if (t == null) { /* if ServiceTracker is not open */
 			return;
@@ -811,7 +821,8 @@ public class ServiceTracker<S> implements ServiceTrackerCustomizer<S> {
 	 * 
 	 * @ThreadSafe
 	 */
-	class Tracked extends AbstractTracked<ServiceReference, ServiceEvent, S>
+	class Tracked extends
+			AbstractTracked<ServiceReference<S>, ServiceEvent, S>
 			implements ServiceListener {
 		/**
 		 * Tracked constructor.
@@ -835,7 +846,9 @@ public class ServiceTracker<S> implements ServiceTrackerCustomizer<S> {
 			if (closed) {
 				return;
 			}
-			final ServiceReference reference = event.getServiceReference();
+			@SuppressWarnings("unchecked")
+			final ServiceReference<S> reference = (ServiceReference<S>) event
+					.getServiceReference();
 			if (DEBUG) {
 				System.out
 						.println("ServiceTracker.Tracked.serviceChanged["
@@ -901,7 +914,7 @@ public class ServiceTracker<S> implements ServiceTrackerCustomizer<S> {
 		 * @return Customized object for the tracked item or <code>null</code>
 		 *         if the item is not to be tracked.
 		 */
-		S customizerAdding(final ServiceReference item,
+		S customizerAdding(final ServiceReference<S> item,
 				final ServiceEvent related) {
 			return customizer.addingService(item);
 		}
@@ -914,7 +927,7 @@ public class ServiceTracker<S> implements ServiceTrackerCustomizer<S> {
 		 * @param related Action related object.
 		 * @param object Customized object for the tracked item.
 		 */
-		void customizerModified(final ServiceReference item,
+		void customizerModified(final ServiceReference<S> item,
 				final ServiceEvent related, final S object) {
 			customizer.modifiedService(item, object);
 		}
@@ -927,7 +940,7 @@ public class ServiceTracker<S> implements ServiceTrackerCustomizer<S> {
 		 * @param related Action related object.
 		 * @param object Customized object for the tracked item.
 		 */
-		void customizerRemoved(final ServiceReference item,
+		void customizerRemoved(final ServiceReference<S> item,
 				final ServiceEvent related, final S object) {
 			customizer.removedService(item, object);
 		}

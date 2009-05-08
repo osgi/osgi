@@ -89,7 +89,7 @@ class T {
 		return ((FilterImpl) wrapped).filter;
 	}
 	
-	static Collection<? extends ServiceReference<?>> toReferences(
+	static Collection<ServiceReference< ? >> toReferences(
 			TServiceReference[] treferences) {
 		int l = treferences.length;
 		ArrayList<ServiceReference<?>> references = new ArrayList<ServiceReference<?>>(
