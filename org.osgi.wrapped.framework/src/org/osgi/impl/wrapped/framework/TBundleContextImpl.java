@@ -65,8 +65,10 @@ public class TBundleContextImpl implements TBundleContext {
 		if (activatorName == null) {
 			return;
 		}
-		Class< ? > activatorClass = bundle.loadClass(activatorName);
-		TBundleActivator activatorObject = (TBundleActivator) activatorClass
+		@SuppressWarnings("unchecked")
+		Class<TBundleActivator> activatorClass = bundle
+				.loadClass(activatorName);
+		TBundleActivator activatorObject = activatorClass
 				.newInstance();
 		activatorObject.start(this);
 		activator = activatorObject;
@@ -75,7 +77,7 @@ public class TBundleContextImpl implements TBundleContext {
 	void stop() throws Exception {
 		final TBundleActivator a = activator;
 		if (a != null) {
-			a.start(this);
+			a.stop(this);
 		}
 	}
 
