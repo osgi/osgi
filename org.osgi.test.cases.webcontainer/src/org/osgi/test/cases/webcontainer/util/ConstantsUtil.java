@@ -50,7 +50,8 @@ public class ConstantsUtil {
     public static final String TESTLOGMSG2 = "test log WARNING by BundleContextTestServlet";
     public static final String TESTLOGMSG3 = "test log INFO by BundleContextTestServlet";
     public static final String TESTLOGMSG4 = "test log DEBUG by BundleContextTestServlet";
-
+    public static final String ABLEGETLOG = "able to get the log from LogFactory";
+    public static final String ABLEGETSIMPLEHELLO = "able to get the simple hello from org.osgi.test.cases.webcontainer.simple.jar";
     // tw1 related
     public static final String BASICTESTWAR1 = "<html><head><title>Basic Test War</title></head>"
             + "<body><h1>Basic Test War</h1></body></html>";

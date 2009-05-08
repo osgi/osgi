@@ -16,10 +16,22 @@
 		<description></description>
 		<display-name>BundleTestServlet</display-name>
 		<servlet-name>BundleTestServlet</servlet-name>
-		<servlet-class>org.osgi.test.cases.webcontainer.tw5.servlet.BundleTestServlet</servlet-class>
+		<servlet-class>
+			org.osgi.test.cases.webcontainer.tw5.servlet.BundleTestServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>BundleTestServlet</servlet-name>
 		<url-pattern>/BundleTestServlet</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<description></description>
+		<display-name>ClasspathTestServlet</display-name>
+		<servlet-name>ClasspathTestServlet</servlet-name>
+		<servlet-class>
+			org.osgi.test.cases.webcontainer.tw5.servlet.ClasspathTestServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ClasspathTestServlet</servlet-name>
+		<url-pattern>/ClasspathTestServlet</url-pattern>
 	</servlet-mapping>
 </web-app>

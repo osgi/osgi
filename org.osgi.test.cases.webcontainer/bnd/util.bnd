@@ -3,3 +3,4 @@ Bundle-SymbolicName: 					${p}.util
 Bundle-Name:                            ${p}.util
 Bundle-Version:                         4.2
 Private-Package:                        ${p}.util
+Export-Package:                         ${p}.util;version=1.0

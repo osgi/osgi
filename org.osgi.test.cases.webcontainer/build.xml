@@ -75,11 +75,15 @@
 		
 	<target name="build-war5" depends="compile">
 		<echo>Building tw5.war file</echo>
+		<echo>copy commons-logging jar from repo to the lib dir</echo>
+		<copy file="../licensed/repo/org.apache.commons-logging/org.apache.commons-logging-1.0.4.jar" todir="resources/tw5/WebContent/WEB-INF/lib"/>		
+		<echo>copy simple jar to the lib dir</echo>
+		<copy file="generated/org.osgi.test.cases.webcontainer.simple.jar" todir="resources/tw5/WebContent/WEB-INF/lib"/>	
 		<war destfile="resources/tw5/tw5.war" webxml="resources/tw5/WebContent/WEB-INF/web.xml">
 			<fileset dir="resources/tw5/WebContent/"/>
 			<classes dir="src/">
 				<include name="org/osgi/test/cases/webcontainer/tw5/**"/>
-				<include name="org/osgi/test/cases/webcontainer/util/**"/>
+				<!--<include name="org/osgi/test/cases/webcontainer/util/**"/>-->
 			</classes>
 		</war>
 	</target>
@@ -134,7 +138,7 @@
 	
 	<!-- same as tw5.war file but with pre-specified manifest - wmtw5.war -->
 	<target name="build-wmwar5" depends="compile">
-		<echo>Building wmtw5.war file</echo>
+		<echo>Building wmtw5.war file</echo>	
 		<war destfile="resources/tw5/wmtw5.war" webxml="resources/tw5/WebContent/WEB-INF/web.xml" manifest="resources/tw5/WebContent/META-INF/MANIFEST.MF">
 			<fileset dir="resources/tw5/WebContent/"/>
 			<classes dir="src/">
@@ -144,13 +148,23 @@
 		</war>
 	</target>
 	
-	<target name="jars" depends="build-war,build-wmwar,-mktarget,jars-btool,jars-bnd,copy-from"/>
+	<!-- build the simple jar to test Bundle-Classpath header -->
+	<target name="build-simplejar" depends="compile">
+	    <echo>Building simple jar file</echo>
+	    <jar destfile="generated/org.osgi.test.cases.webcontainer.simple.jar"
+		     basedir="src/"
+		     includes="org/osgi/test/cases/webcontainer/simple/**"
+	    />
+	</target>
+	
+	<target name="jars" depends="build-simplejar, build-war,build-wmwar, -mktarget,jars-btool,jars-bnd,copy-from"/>
 		
 	<target name="clean" depends="init">
 		<delete quiet="true" includeEmptyDirs="true" verbose="${verbose}">
 			<fileset dir="${project.output}" includes="**/*.class" />
 			<fileset dir="${target}" />
 			<fileset dir="resources" includes="**/*.war" />
+			<fileset dir="resources" includes="**/*.jar" />
 		</delete>
 	</target>
 

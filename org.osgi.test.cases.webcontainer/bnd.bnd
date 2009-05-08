@@ -39,9 +39,10 @@ Export-Package =\
     org.apache.geronimo.specs.geronimo-annotation_1.0_spec;version=1.1.1, \
 	ee.j2se;								version=1.4, \
 	osgi;									version=4.2, \
-	org.osgi.test.support;					version=project , \
-	org.osgi.service.log;					version=project , \
-	${junit}
+	org.osgi.test.support;					version=project, \
+	org.osgi.service.log;					version=project, \
+	${junit}, \
+	org.apache.commons-logging;version=1.0.4
 
 -runbundles						= \
 	org.osgi.impl.bundle.servlet;		version=2.1, \
