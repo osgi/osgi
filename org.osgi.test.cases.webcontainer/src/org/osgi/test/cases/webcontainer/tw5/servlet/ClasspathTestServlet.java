@@ -34,21 +34,24 @@ import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
  *          Servlet implementation class ClasspathTestServlet
  */
 public class ClasspathTestServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	private static final Log log = LogFactory.getLog(ClasspathTestServlet.class);
-	private static final SimpleHello simple = new SimpleHello();
+    private static final long serialVersionUID = 1L;
+    private static final Log log = LogFactory
+            .getLog(ClasspathTestServlet.class);
+    private static final SimpleHello simple = new SimpleHello();
 
     /**
-     * Default constructor. 
+     * Default constructor.
      */
     public ClasspathTestServlet() {
         // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    protected void doGet(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
         PrintWriter out = response.getWriter();
         log.info("processing http servlet request");
         response.setContentType("text/html");
@@ -65,13 +68,15 @@ public class ClasspathTestServlet extends HttpServlet {
         }
         out.println("</body>");
         out.println("</html>");
-	}
+    }
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-	}
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    protected void doPost(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        // TODO Auto-generated method stub
+    }
 
 }

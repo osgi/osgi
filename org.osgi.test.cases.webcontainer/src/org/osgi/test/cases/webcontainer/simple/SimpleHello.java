@@ -15,12 +15,11 @@
  */
 package org.osgi.test.cases.webcontainer.simple;
 
-
 /**
  * @version $Rev$ $Date$
  * 
- * SimpleHello class used to test the Bundle-Classpath manifest header 
- * processed correctly
+ *          SimpleHello class used to test the Bundle-Classpath manifest header
+ *          processed correctly
  */
 public class SimpleHello {
     public SimpleHello() {
