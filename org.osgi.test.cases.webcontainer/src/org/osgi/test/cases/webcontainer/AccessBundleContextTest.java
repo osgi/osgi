@@ -183,4 +183,15 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
             break;
         }
     }
+    
+    /*
+     * test ClasspathTestServlet
+     */
+    public void testClasspassServlet() throws Exception {
+        final String request = this.warContextPath
+        + "/ClasspathTestServlet";
+        String response = super.getResponse(request);
+        assertEquals("checking response content", response,"<html><head><title>ClasspathTestServlet</title></head><body>" 
+                + ConstantsUtil.ABLEGETLOG + "<br/>" +  ConstantsUtil.ABLEGETSIMPLEHELLO + "<br/></body></html>");
+    }
 }

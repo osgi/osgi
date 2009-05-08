@@ -22,6 +22,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.service.webcontainer.WebContainer;
+import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 
 /**
  * @version $Rev$ $Date$
@@ -62,42 +63,48 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
      * verify valid deployOptions overwrite original manifest Bundle-Classpath
      */
     public void testBundleClasspath003() throws Exception {
-        this.b = generalClasspathTest(CLASSPATH1, "/tw5", "tw5.war", false);
+        this.b = generalClasspathTest(CLASSPATH1, "/tw5", "tw5.war", true);
+        classpassServletTest();
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Bundle-Classpath
      */
     public void testBundleClasspath004() throws Exception {
-        this.b = generalClasspathTest(CLASSPATH2, "/tw5", "tw5.war", false);
+        this.b = generalClasspathTest(CLASSPATH2, "/tw5", "tw5.war", true);
+        classpassServletTest();
     }
 
     /*
      * verify valid deployOptions overwrite original manifest Bundle-Classpath
      */
     public void testBundleClasspath005() throws Exception {
-        this.b = generalClasspathTest(CLASSPATH1, "/tw5", "wm2tw5.war", false);
+        this.b = generalClasspathTest(CLASSPATH1, "/tw5", "wm2tw5.war", true);
+        classpassServletTest();
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Bundle-Classpath
      */
     public void testBundleClasspath006() throws Exception {
-        this.b = generalClasspathTest(CLASSPATH1, "/tw5", "wm2tw5.war", false);
+        this.b = generalClasspathTest(CLASSPATH1, "/tw5", "wm2tw5.war", true);
+        classpassServletTest();
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Bundle-Classpath
      */
     public void testBundleClasspath007() throws Exception {
-        this.b = generalClasspathTest(CLASSPATH2, "/tw5", "wm3tw5.war", false);
+        this.b = generalClasspathTest(CLASSPATH2, "/tw5", "wm3tw5.war", true);
+        classpassServletTest();
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Bundle-Classpath
      */
     public void testBundleClasspath008() throws Exception {
-        this.b = generalClasspathTest(CLASSPATH2, "/tw5", "wm3tw5.war", false);
+        this.b = generalClasspathTest(CLASSPATH2, "/tw5", "wm3tw5.war", true);
+        classpassServletTest();
     }
     
     /*
@@ -132,7 +139,8 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
      * verify when Bundle-Classpath is not specified
      */
     public void testBundleClasspath013() throws Exception {
-        this.b = generalClasspathTest(null, "/tw5", "tw5.war", false);
+        this.b = generalClasspathTest(null, "/tw5", "tw5.war", true);
+        classpassServletTest();
     }
     
     /*
@@ -167,21 +175,24 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
      * verify when Bundle-Classpath is not specified
      */
     public void testBundleClasspath018() throws Exception {
-        this.b = generalClasspathTest(null, "/tw5", "wmtw5.war", false);
+        this.b = generalClasspathTest(null, "/tw5", "wmtw5.war", true);
+        classpassServletTest();
     }
 
     /*
      * verify when Bundle-Classpath is not specified
      */
     public void testBundleClasspath019() throws Exception {
-        this.b = generalClasspathTest(null, "/tw5", "wm2tw5.war", false);
+        this.b = generalClasspathTest(null, "/tw5", "wm2tw5.war", true);
+        classpassServletTest();
     }
     
     /*
      * verify when Bundle-Classpath is not specified
      */
     public void testBundleClasspath020() throws Exception {
-        this.b = generalClasspathTest(null, "/tw5", "wm3tw5.war", false);
+        this.b = generalClasspathTest(null, "/tw5", "wm3tw5.war", true);
+        classpassServletTest();
     }
 
 
@@ -252,5 +263,15 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
         options.put(Constants.BUNDLE_CLASSPATH, classpath);
         options.put(WebContainer.WEB_CONTEXT_PATH, cp);
         return super.generalHeadersTest(options, warName, start);
+    }
+    
+    /*
+     * test ClasspathTestServlet
+     */
+    private void classpassServletTest() throws Exception {
+        final String request = "/tw5/ClasspathTestServlet";
+        String response = super.getResponse(request);
+        assertEquals("checking response content", response,"<html><head><title>ClasspathTestServlet</title></head><body>" 
+                + ConstantsUtil.ABLEGETLOG + "<br/>" +  ConstantsUtil.ABLEGETSIMPLEHELLO + "<br/></body></html>");
     }
 }
