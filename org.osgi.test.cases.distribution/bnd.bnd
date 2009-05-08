@@ -1,9 +1,20 @@
 Bundle-Version: 1.0.0.${project.build}
+Bundle-Description: Remote Services Test R4
+Bundle-Vendor: OSGi Alliance
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
 
-Export-Package                      = org.osgi.test.cases.distribution.internal
+Export-Package                      = ${p}.internal, ${p}.common
 
 Private-Package						= ${p}.*, \
-    org.osgi.test.support.*
+	org.osgi.test.support.*
+
+Include-Resource					= \
+	tb1.jar, \
+	tb2.jar
+	
+Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \

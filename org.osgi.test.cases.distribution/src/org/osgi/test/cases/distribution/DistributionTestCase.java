@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
@@ -209,6 +210,12 @@ public class DistributionTestCase extends DefaultTestBundleControl {
 					assertEquals(serviceReference, sp.getReference());
 					
 					Collection interf = (Collection) spsref.getProperty(ServicePublication.SERVICE_INTERFACE_NAME);
+					
+					System.out.println("ServicePublication property " + ServicePublication.SERVICE_INTERFACE_NAME + ":");
+					for (Iterator it = interf.iterator(); it.hasNext();) {
+						System.out.println(" " + it.next());
+					}
+					
 					assertNotNull("no interfaces listed", interf);
 					assertTrue("Failed to list interface " + DistributedService.class.getName(), interf.contains(DistributedService.class.getName()));
 					assertTrue("Failed to list interface " + DoNotPublishInterface.class.getName(), interf.contains(DoNotPublishInterface.class.getName()));
@@ -226,73 +233,6 @@ public class DistributionTestCase extends DefaultTestBundleControl {
 		}
 	}
 
-	/**
-	 * Registers a DistributedService service with a required intent that is not listed as
-	 * supported intent by the DSW implementation.
-	 * 
-	 * Make sure that the service does not get published by the DSW.
-	 * 
-	 * @throws Exception
-	 */
-	public void testRequiredIntentNotSatisfied() throws Exception {
-		// make up an intent
-		String myFancyIntent = "OSGi_TCK" + System.currentTimeMillis();
-		
-		// make sure DSW does not support this intent
-		String supported = (String) distributionReference.getProperty(DistributionProvider.SUPPORTED_INTENTS);
-		if (supported != null) {
-			String[] supportedIntents = supported.split(" ");
-			for (int i = 0; i < supportedIntents.length; i++) {
-				assertFalse("Somebody cheated the implementation to satisfy every intent!", supportedIntents[i].equalsIgnoreCase(myFancyIntent));
-			}
-		}
-		
-		// register an event handler for the unsatisfied event emitted by the DSW
-		Properties props = new Properties();
-		props.put(EventConstants.EVENT_TOPIC, new String[]{EventConstants.EVENT_TOPIC, UnsatisfiedTopic});
-		registerService(EventHandler.class.getName(), eventHandler, props);
-		
-		// register the test service
-		Hashtable properties = new Hashtable();
-		properties.put(DistributionConstants.REMOTE_INTERFACES, ALL_INTERFACES);
-		properties.put(DistributionConstants.REMOTE_REQUIRES_INTENTS, myFancyIntent);
-		properties.put("mykey", "myvalue");
-		
-		DistributedServiceImpl service = new DistributedServiceImpl();
-
-		ServiceRegistration serviceRegistration = getContext().registerService(
-				new String[]{DistributedService.class.getName(), DoNotPublishInterface.class.getName()}, service, properties);
-		ServiceReference sref = serviceRegistration.getReference();
-		assertNotNull(sref);
-		
-		try {
-			// first register service and make sure it is registered
-			assertTrue("Timeout for service unsatisfied event emitted by DSW!", semUnsatisfied.waitForSignal(exposeTimeout));
-			
-			Collection refs = provider.getExposedServices();
-			assertNotNull(refs);
-		
-			boolean found = false;
-			for (Iterator i = refs.iterator(); !found && i.hasNext();) {
-				ServiceReference r = (ServiceReference) i.next();
-				found = r.equals(sref);
-			}
-			assertFalse("service should not have been exposed as the required intent is not satisified", found);
-			
-			// check for unwanted ServicePublication registration
-			ServiceReference spsref = getContext().getServiceReference(ServicePublication.class.getName());
-			try {
-				assertTrue("service should not have been published as the required intent is not satisified", spsref == null);
-			} finally {
-				if (spsref != null) {
-					getContext().ungetService(spsref);
-				};
-			}
-		} finally {
-			serviceRegistration.unregister();
-		}
-	}
-	
 	/**
 	 * Take the list of supported intents from the DistributionProvider service and register the
 	 * DistributedService with the first intent from the list. Ensure that the service gets remoted.
@@ -540,14 +480,4 @@ public class DistributionTestCase extends DefaultTestBundleControl {
 			distributedServiceRegistration.unregister();
 		}
 	}
-	
-	/**
-	 * Register multiple service instances with different versions. Ensure that the exposed service
-	 * has the correct version properties.
-	 * @throws Exception
-	 */
-	public void testMultipleVersions() throws Exception {
-		// much more complicated and requires multiple different bundles to be deployed
-	}
-	
 }
