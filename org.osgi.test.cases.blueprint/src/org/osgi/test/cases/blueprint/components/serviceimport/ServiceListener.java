@@ -52,14 +52,14 @@ public class ServiceListener extends BaseTestComponent {
         AssertionService.sendEvent(this, AssertionService.SERVICE_UNBIND, props);
     }
 
-    protected void bindReference(ServiceReference ref) {
+    public void bindReference(ServiceReference ref) {
         Hashtable props = new Hashtable();
         props.putAll(TestUtil.getProperties(ref));
         props.put("service.listener.type", "reference");
         AssertionService.sendEvent(this, AssertionService.SERVICE_BIND, props);
     }
 
-    protected void unbindReference(ServiceReference ref) {
+    public void unbindReference(ServiceReference ref) {
         Hashtable props = new Hashtable();
         props.putAll(TestUtil.getProperties(ref));
         props.put("service.listener.type", "reference");

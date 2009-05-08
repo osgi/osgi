@@ -437,6 +437,12 @@ public class BaseTestController implements EventHandler, BlueprintContextListene
         props.put(EventConstants.BUNDLE, bundle);
         props.put(EventConstants.BUNDLE_ID, new Long(bundle.getBundleId()));
         props.put(Constants.OBJECTCLASS, ref.getProperty(Constants.OBJECTCLASS));
+        
+        for (int i = 0; i < ref.getPropertyKeys().length; i++) {
+            String key = ref.getPropertyKeys()[i];
+            props.put(key, ref.getProperty(key));
+        }
+        
         handleEvent(new Event(topic, props));
     }
 

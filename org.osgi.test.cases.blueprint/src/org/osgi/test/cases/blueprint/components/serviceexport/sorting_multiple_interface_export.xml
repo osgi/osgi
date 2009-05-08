@@ -37,7 +37,6 @@
     <bean id="BadServiceOneA" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
         <argument value="BadServiceOneA"/>
         <argument value="43"/>
-    /*  */
     </bean>
     <bean id="BadServiceOneB" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
         <argument value="BadServiceOneB"/>

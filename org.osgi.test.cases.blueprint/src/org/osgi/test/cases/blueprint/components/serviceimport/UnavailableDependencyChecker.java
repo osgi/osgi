@@ -30,7 +30,7 @@ import org.osgi.service.blueprint.context.ServiceUnavailableException;
  */
 public class UnavailableDependencyChecker extends DependencyDriver {
 
-    protected UnavailableDependencyChecker(String componentId) {
+    public UnavailableDependencyChecker(String componentId) {
         super(componentId);
     }
 

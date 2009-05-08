@@ -682,7 +682,7 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
     public void validateExportedServices(ExportedService[] expected) throws Exception {
         Collection exportedServices = targetBlueprintContext.getExportedServicesMetadata();
 
-        assertEquals("Mismatch on the number of exported services", exportedServices.size(), expected.length);
+        assertEquals("Mismatch on the number of exported services", expected.length, exportedServices.size());
         for (int i = 0; i < expected.length; i++) {
             ExportedService e = (ExportedService)expected[i];
             ServiceMetadata service = locateServiceExport(exportedServices, e);
@@ -723,7 +723,7 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
     public void validateReferencedServices(ReferencedService[] expected) throws Exception {
         Collection referencedServices = targetBlueprintContext.getReferencedServicesMetadata();
 
-        assertEquals("Mismatch on the number of referenced services", referencedServices.size(), expected.length);
+        assertEquals("Mismatch on the number of referenced services", expected.length, referencedServices.size());
         for (int i = 0; i < expected.length; i++) {
             ReferencedService e = (ReferencedService)expected[i];
             ServiceReferenceMetadata service = locateServiceReference(referencedServices, e);

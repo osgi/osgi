@@ -15,7 +15,7 @@
           <entry key="autoExport" value="All"/>
       </service-properties>
        <!-- the node this service export maps into. -->
-      <bean class="org.osgi.test.cases.blueprint.services.TestBad">
+      <bean class="org.osgi.test.cases.blueprint.services.TestBadService">
           <argument value="ServiceOne"/>
       </bean>
    </service>

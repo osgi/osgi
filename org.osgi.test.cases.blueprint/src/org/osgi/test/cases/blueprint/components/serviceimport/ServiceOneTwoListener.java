@@ -41,7 +41,7 @@ public class ServiceOneTwoListener extends ServiceListener {
     }
 
     public void bind(TestServiceTwo service, Map serviceProperties) {
-        bind(TestServiceOne.class, serviceProperties);
+        bind(TestServiceTwo.class, serviceProperties);
     }
 
     public void unbind(TestServiceTwo service, Map serviceProperties) {

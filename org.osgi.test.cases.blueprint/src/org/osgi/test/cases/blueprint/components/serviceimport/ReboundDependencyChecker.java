@@ -29,7 +29,7 @@ import org.osgi.test.cases.blueprint.services.AssertionService;
  */
 public class ReboundDependencyChecker extends DependencyDriver {
 
-    protected ReboundDependencyChecker(String componentId) {
+    public ReboundDependencyChecker(String componentId) {
         super(componentId);
     }
 

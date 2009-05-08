@@ -29,6 +29,10 @@ public class TestBadService extends TestGoodServiceSubclass {
         super("BadService");
     }
 
+    public TestBadService(String componentId) {
+        super(componentId);
+    }
+
     public TestBadService(String componentId, int serviceId) {
         super(componentId, serviceId);
     }

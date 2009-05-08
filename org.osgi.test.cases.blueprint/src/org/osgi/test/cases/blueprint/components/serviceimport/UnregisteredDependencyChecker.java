@@ -30,7 +30,7 @@ import org.osgi.test.cases.blueprint.services.AssertionService;
  */
 public class UnregisteredDependencyChecker extends DependencyDriver {
 
-    protected UnregisteredDependencyChecker(String componentId) {
+    public UnregisteredDependencyChecker(String componentId) {
         super(componentId);
     }
 
