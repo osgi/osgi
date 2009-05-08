@@ -1,7 +1,7 @@
 Bundle-SymbolicName:                     ${p}.ServiceOne_multiple_listener_method_import
 Bundle-Version:                          4.2
 Import-Package:                          ${p}.components.serviceimport, ${p}.services
-Private-Package:                         $(p).build
+-resourceonly: true
 Include-Resource					= \
 	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/serviceimport/ServiceOne_multiple_listener_method_import.xml
 

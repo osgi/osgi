@@ -1,7 +1,7 @@
 Bundle-SymbolicName:                     ${p}.collection_bind_unbind_list_state
 Bundle-Version:                          4.2
 Import-Package:                          ${p}.components.serviceimport, ${p}.services
-Private-Package:                         $(p).build
+-resourceonly: true
 Include-Resource					= \
 	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/serviceimport/collection_bind_unbind_list_state.xml
 

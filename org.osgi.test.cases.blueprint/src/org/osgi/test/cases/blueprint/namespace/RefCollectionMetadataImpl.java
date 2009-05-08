@@ -87,7 +87,7 @@ public class RefCollectionMetadataImpl extends ServiceReferenceMetadataImpl impl
     /**
      * The basis on which to perform natural ordering, if specified.
      *
-     * @return one of ORDER_BASIS_SERVICES and ORDER_BASIS_SERVICE_REFERENCES
+     * @return one of ORDERING_BASIS_SERVICE and ORDERING_BASIS_SERVICE_REFERENCE
      */
     public int getOrderingBasis() {
         return orderingBasis;

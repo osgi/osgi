@@ -2,7 +2,7 @@ Bundle-SymbolicName:                     ${p}.lazy_injected_component
 Bundle-Version:                          4.2
 Bundle-ActivationPolicy:                 lazy
 Import-Package:                          ${p}.components.servicedynamics, ${p}.services
-Private-Package:                         $(p).build
+-resourceonly: true
 Include-Resource					= \
 	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/servicedynamics/injected_component.xml
 

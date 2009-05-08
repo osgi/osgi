@@ -17,7 +17,6 @@
 package org.osgi.test.cases.blueprint.components.injection;
 
 import org.osgi.service.blueprint.convert.Converter;
-import org.osgi.service.blueprint.reflect.TypedStringValue;
 import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 
@@ -30,8 +29,8 @@ public class EuropeanRegionCodeConverter extends BaseTestComponent implements Co
 
     public Object convert(Object source) throws RuntimeException {
         AssertionService.sendEvent(this, AssertionService.METHOD_CALLED);
-        if (source instanceof TypedStringValue) {
-            return new EuropeanRegionCode(((TypedStringValue) source).getStringValue());
+        if (source instanceof String) {
+            return new EuropeanRegionCode((String)source);
         }
         return null;
 

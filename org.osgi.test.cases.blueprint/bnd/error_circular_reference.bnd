@@ -1,7 +1,7 @@
 Bundle-SymbolicName:                     ${p}.error_circular_reference
 Bundle-Version:                          4.2
 Import-Package:                          ${p}.components.injection, ${p}.services
-Private-Package:                         $(p).build
+-resourceonly: true
 Include-Resource					= \
 	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/errors/error_circular_reference.xml
 

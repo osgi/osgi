@@ -1,7 +1,7 @@
 Bundle-SymbolicName:                     ${p}.factory_managed_component_init_and_destroy
 Bundle-Version:                          4.2
 Import-Package:                          ${p}.components.cmsupport, ${p}.services
-Private-Package:                         $(p).build
+-resourceonly: true
 Include-Resource					= \
 	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/cmsupport/factory_managed_component_init_and_destroy.xml
 

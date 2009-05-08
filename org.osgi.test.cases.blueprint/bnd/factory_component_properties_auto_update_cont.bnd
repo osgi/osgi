@@ -1,7 +1,7 @@
 Bundle-SymbolicName:                     ${p}.factory_component_properties_auto_update_cont
 Bundle-Version:                          4.2
 Import-Package:                          ${p}.components.cmsupport, ${p}.services
-Private-Package:                         $(p).build
+-resourceonly: true
 Include-Resource					= \
 	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/cmsupport/factory_component_properties_auto_update_cont.xml
 

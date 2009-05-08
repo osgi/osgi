@@ -1,7 +1,7 @@
 Bundle-SymbolicName:                     ${p}.comp1_default_init_destroy
 Bundle-Version:                          4.2
 Import-Package:                          ${p}.components.comp1, ${p}.services
-Private-Package:                         $(p).build
+-resourceonly: true
 Include-Resource					= \
 	OSGI-INF/blueprint/comp1_default_init.xml=src/org/osgi/test/cases/blueprint/components/comp1/comp1_default_init.xml, \
 	OSGI-INF/blueprint/comp2_default_destroy.xml=src/org/osgi/test/cases/blueprint/components/comp1/comp2_default_destroy.xml, \

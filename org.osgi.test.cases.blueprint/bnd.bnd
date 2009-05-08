@@ -4,6 +4,7 @@ Export-Package						= ${p}.*
 Private-Package						= org.osgi.test.support.*
 
 Include-Resource					= \
+	www/blueprint_version_two.jar=blueprint_version_two.jar, \
 	www/comp1a_no_header.jar=comp1a_no_header.jar , \
 	www/comp1_no_header.jar=comp1_no_header.jar , \
 	www/comp1_wildcard_header.jar=comp1_wildcard_header.jar , \

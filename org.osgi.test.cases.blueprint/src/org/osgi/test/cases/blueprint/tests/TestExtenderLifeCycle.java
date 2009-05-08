@@ -21,8 +21,6 @@ import java.util.Hashtable;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
-import org.osgi.service.blueprint.reflect.ServiceExportComponentMetadata;
-import org.osgi.service.blueprint.reflect.ServiceReferenceComponentMetadata;
 import org.osgi.test.cases.blueprint.components.serviceimport.ServiceTwoListener;
 import org.osgi.test.cases.blueprint.framework.*;
 import org.osgi.test.cases.blueprint.services.*;

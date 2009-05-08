@@ -1,7 +1,7 @@
 Bundle-SymbolicName:                     ${p}.error_ref_list_no_interface
 Bundle-Version:                          4.2
 Import-Package:                          ${p}.components.serviceimport, ${p}.services
-Private-Package:                         $(p).build
+-resourceonly: true
 Include-Resource					= \
 	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/errors/error_ref_list_no_interface.xml
 

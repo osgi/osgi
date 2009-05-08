@@ -1,7 +1,7 @@
 Bundle-SymbolicName:                     ${p}.nowait_injected_component;blueprint.wait-for-dependencies:=false
 Bundle-Version:                          4.2
 Import-Package:                          ${p}.components.servicedynamics, ${p}.services
-Private-Package:                         $(p).build
+-resourceonly: true
 Include-Resource					= \
 	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/servicedynamics/injected_component.xml
 

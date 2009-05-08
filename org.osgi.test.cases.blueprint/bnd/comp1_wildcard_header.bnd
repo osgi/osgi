@@ -1,7 +1,7 @@
 Bundle-SymbolicName:                     ${p}.comp1_wildcard_header
 Bundle-Version:                          4.2
 Import-Package:                          ${p}.components.comp1, ${p}.services
-Private-Package:                         $(p).build
+-resourceonly: true
 Bundle-Blueprint: OSGI-INF/blueprint/*.xml
 Include-Resource					= \
 	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/comp1/comp1_named.xml

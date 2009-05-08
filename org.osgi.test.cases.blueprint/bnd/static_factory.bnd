@@ -1,7 +1,7 @@
 Bundle-SymbolicName:                     ${p}.static_factory
 Bundle-Version:                          4.2
 Import-Package:                          ${p}.components.staticfactory, ${p}.services
-Private-Package:                         $(p).build
+-resourceonly: true
 Include-Resource					= \
 	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/staticfactory/static_factory.xml
 
