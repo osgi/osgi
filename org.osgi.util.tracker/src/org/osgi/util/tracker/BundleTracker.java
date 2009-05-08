@@ -25,7 +25,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.bundle.SynchronousBundleListener;
 
-
 /**
  * The <code>BundleTracker</code> class simplifies tracking bundles much like
  * the <code>ServiceTracker</code> simplifies tracking services.
@@ -49,6 +48,7 @@ import org.osgi.framework.bundle.SynchronousBundleListener;
  * 
  * @ThreadSafe
  * @version $Revision$
+ * @param <S>
  * @since 1.4
  */
 public class BundleTracker<S> implements BundleTrackerCustomizer<S> {

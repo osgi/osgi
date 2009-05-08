@@ -19,7 +19,6 @@ package org.osgi.util.tracker;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 
-
 /**
  * The <code>BundleTrackerCustomizer</code> interface allows a
  * <code>BundleTracker</code> to customize the <code>Bundle</code>s that are
@@ -46,6 +45,7 @@ import org.osgi.framework.BundleEvent;
  * 
  * @ThreadSafe
  * @version $Revision$
+ * @param <S>
  * @since 1.4
  */
 public interface BundleTrackerCustomizer<S> {
