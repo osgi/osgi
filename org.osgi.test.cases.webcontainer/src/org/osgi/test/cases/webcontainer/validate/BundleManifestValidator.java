@@ -370,6 +370,7 @@ public class BundleManifestValidator extends Assert implements Validator{
         }
         
         // TODO verify the extract location exists and has the right content.
+        // TODO what if a user specifies a non-unique jsp extract location?
     }
     
     // check if a particular classpath exist in the classpath c String array

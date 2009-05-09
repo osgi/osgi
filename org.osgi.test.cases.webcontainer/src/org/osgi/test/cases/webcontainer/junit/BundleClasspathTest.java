@@ -32,12 +32,6 @@ import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
  *          scenarios
  */
 public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
-    private static final String[] CLASSPATH1 = {"WEB-INF/lib/org.apache.commons-logging-1.0.4.jar"}; 
-    private static final String[] CLASSPATH2 = {"WEB-INF/lib/org.apache.commons-logging-1.0.4.jar","WEB-INF/lib/org.osgi.test.cases.webcontainer.simple.jar"};
-    private static final String[] CLASSPATH3 = {"WEB-INF/classes/"};
-    private static final String[] CLASSPATH4 = {"WEB-INF/lib//org.apache.commons-logging.jar"};
-    private static final String[] CLASSPATH5 = {"WEB-INF/lib/org.apache.commons-logging-1.0.4.jar", "libs/utiljar"};
-
     public void setUp() throws Exception {
         super.setUp();
     }
@@ -65,7 +59,7 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleClasspath003() throws Exception {
         this.b = generalClasspathTest(CLASSPATH1, "/tw5", "tw5.war", true);
-        classpassServletTest();
+        classpassServletTest(this.b);
     }
     
     /*
@@ -73,7 +67,7 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleClasspath004() throws Exception {
         this.b = generalClasspathTest(CLASSPATH2, "/tw5", "tw5.war", true);
-        classpassServletTest();
+        classpassServletTest(this.b);
     }
 
     /*
@@ -81,7 +75,7 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleClasspath005() throws Exception {
         this.b = generalClasspathTest(CLASSPATH1, "/tw5", "wm2tw5.war", true);
-        classpassServletTest();
+        classpassServletTest(this.b);
     }
     
     /*
@@ -89,7 +83,7 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleClasspath006() throws Exception {
         this.b = generalClasspathTest(CLASSPATH1, "/tw5", "wm2tw5.war", true);
-        classpassServletTest();
+        classpassServletTest(this.b);
     }
     
     /*
@@ -97,7 +91,7 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleClasspath007() throws Exception {
         this.b = generalClasspathTest(CLASSPATH2, "/tw5", "wm3tw5.war", true);
-        classpassServletTest();
+        classpassServletTest(this.b);
     }
     
     /*
@@ -105,79 +99,7 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleClasspath008() throws Exception {
         this.b = generalClasspathTest(CLASSPATH2, "/tw5", "wm3tw5.war", true);
-        classpassServletTest();
-    }
-    
-    /*
-     * verify when Bundle-Classpath is not specified
-     */
-    public void testBundleClasspath009() throws Exception {
-        this.b = generalClasspathTest(null, "/tw1", "tw1.war", false);
-    }
-    
-    /*
-     * verify when Bundle-Classpath is not specified
-     */
-    public void testBundlClasspath010() throws Exception {
-        this.b = generalClasspathTest(null, "/tw2", "tw2.war", false);
-    }
-    
-    /*
-     * verify when Bundle-Classpath is not specified
-     */
-    public void testBundleClasspath011() throws Exception {
-        this.b = generalClasspathTest(null, "/tw3", "tw3.war", false);
-    }
-    
-    /*
-     * verify when Bundle-Classpath is not specified
-     */
-    public void testBundleClasspath012() throws Exception {
-        this.b = generalClasspathTest(null, "/tw4", "tw4.war", false);
-    }
-    
-    /*
-     * verify when Bundle-Classpath is not specified
-     */
-    public void testBundleClasspath013() throws Exception {
-        this.b = generalClasspathTest(null, "/tw5", "tw5.war", true);
-        classpassServletTest();
-    }
-    
-    /*
-     * verify when Bundle-Classpath is not specified
-     */
-    public void testBundleClasspath014() throws Exception {
-        this.b = generalClasspathTest(null, "/tw1", "wmtw1.war", false);
-    }
-    
-    /*
-     * verify when Bundle-Classpath is not specified
-     */
-    public void testBundlClasspath015() throws Exception {
-        this.b = generalClasspathTest(null, "/tw2", "wmtw2.war", false);
-    }
-    
-    /*
-     * verify when Bundle-Classpath is not specified
-     */
-    public void testBundleClasspath016() throws Exception {
-        this.b = generalClasspathTest(null, "/tw3", "wmtw3.war", false);
-    }
-    
-    /*
-     * verify when Bundle-Classpath is not specified
-     */
-    public void testBundleClasspath017() throws Exception {
-        this.b = generalClasspathTest(null, "/tw4", "wmtw4.war", false);
-    }
-    
-    /*
-     * verify when Bundle-Classpath is not specified
-     */
-    public void testBundleClasspath018() throws Exception {
-        this.b = generalClasspathTest(null, "/tw5", "wmtw5.war", true);
-        classpassServletTest();
+        classpassServletTest(this.b);
     }
 
     /*
@@ -185,7 +107,7 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleClasspath019() throws Exception {
         this.b = generalClasspathTest(null, "/tw5", "wm2tw5.war", true);
-        classpassServletTest();
+        classpassServletTest(this.b);
     }
     
     /*
@@ -193,7 +115,7 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleClasspath020() throws Exception {
         this.b = generalClasspathTest(null, "/tw5", "wm3tw5.war", true);
-        classpassServletTest();
+        classpassServletTest(this.b);
     }
 
 
@@ -264,15 +186,5 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
         options.put(Constants.BUNDLE_CLASSPATH, classpath);
         options.put(WebContainer.WEB_CONTEXT_PATH, cp);
         return super.generalHeadersTest(options, warName, start);
-    }
-    
-    /*
-     * test ClasspathTestServlet
-     */
-    private void classpassServletTest() throws Exception {
-        final String request = "/tw5/ClasspathTestServlet";
-        String response = super.getResponse(request);
-        assertEquals("checking response content", response,"<html><head><title>ClasspathTestServlet</title></head><body>" 
-                + ConstantsUtil.ABLEGETLOG + "<br/>" +  ConstantsUtil.ABLEGETSIMPLEHELLO + "<br/></body></html>");
     }
 }

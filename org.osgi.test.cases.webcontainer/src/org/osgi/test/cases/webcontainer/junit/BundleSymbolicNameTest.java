@@ -33,13 +33,7 @@ import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
  *          with various scenarios
  */
 public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
-    private static final String SYMBOLICNAME1 = "ct-testwar1";
-    private static final String SYMBOLICNAME2 = "ct-testwar2asdacakjdlkjasldja;dk;k121pi2910-921-0lkajdlkajsdlsadjlaksdjskajdklsajdklasjdksakdjaksljdaksljd";
-    private static final String SYMBOLICNAME3 = "ct-testwar3-----------aklsdmklajsdl kajskldjaldlasjdklajdlksa;djklajsdkljakldjskaljdkaljsdlksjadklsajdkasdj";
-    private static final String SYMBOLICNAME4 = "ct-testwar4--//laksldkl; laksldk;askd;aslkd;laksdlksaldkl;laksdpqoeiewihrfrhbgsmndb123e32";
-    private static final String SYMBOLICNAME5 = "ct-testwar5";
-    private static final String VERSION10 = "1.0";
-    
+
     public void setUp() throws Exception {
         super.setUp();
     }
@@ -124,77 +118,6 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleSymbolicName010() throws Exception {
         generalSymbolicNameTest(SYMBOLICNAME5, "/tw5", "wmtw5.war", false);
-    }
-    
-    /*
-     * verify null SymbolicName specified in deployOptions
-     */
-    public void testBundleSymbolicName011() throws Exception {
-        generalSymbolicNameTest(null, "/tw1", "tw1.war", false);
-    }
-    
-    /*
-     * verify null SymbolicName specified in deployOptions
-     */
-    public void testBundleSymbolicName012() throws Exception {
-        generalSymbolicNameTest(null, "/tw2", "tw2.war", true);
-    }
-    
-    /*
-     * verify null SymbolicName specified in deployOptions
-     */
-    public void testBundleSymbolicName013() throws Exception {
-        generalSymbolicNameTest(null, "/tw3", "tw3.war", false);
-    }
-    
-    /*
-     * verify null SymbolicName specified in deployOptions
-     */
-    public void testBundleSymbolicName014() throws Exception {
-        generalSymbolicNameTest(null, "/tw4", "tw4.war", true);
-    }
-    
-    /*
-     * verify null SymbolicName specified in deployOptions
-     */
-    public void testBundleSymbolicName015() throws Exception {
-        generalSymbolicNameTest(null, "/tw5", "tw5.war", false);
-    }
-    
-    
-    /*
-     * verify null SymbolicName specified in deployOptions
-     */
-    public void testBundleSymbolicName016() throws Exception {
-        generalSymbolicNameTest(null, "/tw1", "wmtw1.war", false);
-    }
-    
-    /*
-     * verify null SymbolicName specified in deployOptions
-     */
-    public void testBundleSymbolicName017() throws Exception {
-        generalSymbolicNameTest(null, "/tw2", "tw2.war", true);
-    }
-    
-    /*
-     * verify null SymbolicName specified in deployOptions
-     */
-    public void testBundleSymbolicName018() throws Exception {
-        generalSymbolicNameTest(null, "/tw3", "wmtw3.war", false);
-    }
-    
-    /*
-     * verify null SymbolicName specified in deployOptions
-     */
-    public void testBundleSymbolicName019() throws Exception {
-        generalSymbolicNameTest(null, "/tw4", "wmtw4.war", true);
-    }
-    
-    /*
-     * verify null SymbolicName specified in deployOptions
-     */
-    public void testBundleSymbolicName020() throws Exception {
-        generalSymbolicNameTest(null, "/tw5", "wmtw5.war", false);
     }
 
     /*

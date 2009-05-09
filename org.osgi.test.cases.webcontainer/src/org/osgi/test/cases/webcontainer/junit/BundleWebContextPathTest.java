@@ -30,16 +30,6 @@ import org.osgi.test.cases.webcontainer.ManifestHeadersTestBundleControl;
  *          scenarios
  */
 public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
-    private static final String WEBCONTEXTPATH1 = "/ct-testwar1";
-    private static final String WEBCONTEXTPATH2 = "/ct-testwar2";
-    private static final String WEBCONTEXTPATH3 = "/ct-testwar3";
-    private static final String WEBCONTEXTPATH4 = "/ct-testwar4";
-    private static final String WEBCONTEXTPATH5 = "/ct-testwar5";
-
-    private static final String LONGWEBCONTEXTPATH = "/abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxy";
-    private static final String LONGWEBCONTEXTPATH2 = "/abcdefghijk/lmnopqrstuvwxyzabcdefgh/ijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrs";
-    private static final String LONGWEBCONTEXTPATH3 = "/abcde/fghijklmnopqrstuvwxyzabcdefghijk/lmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghi/12345678901233543523423424242342342";
-    private Bundle b;
 
     public void setUp() throws Exception {
         super.setUp();
@@ -122,75 +112,6 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
         this.b = generalWebContextPathTest(WEBCONTEXTPATH5, "wmtw5.war", false);
     }
 
-    /*
-     * verify null Web-ContextPath specified in deployOptions
-     */
-    public void testWebContextPath011() throws Exception {
-        this.b = generalWebContextPathTest(null, "tw1.war", true);
-    }
-
-    /*
-     * verify null Web-ContextPath specified in deployOptions
-     */
-    public void testWebContextPath012() throws Exception {
-        this.b = generalWebContextPathTest(null, "tw2.war", true);
-    }
-
-    /*
-     * verify null Web-ContextPath specified in deployOptions
-     */
-    public void testWebContextPath013() throws Exception {
-        this.b = generalWebContextPathTest(null, "tw3.war", false);
-    }
-
-    /*
-     * verify null Web-ContextPath specified in deployOptions
-     */
-    public void testWebContextPath014() throws Exception {
-        this.b = generalWebContextPathTest(null, "tw4.war", false);
-    }
-
-    /*
-     * verify null Web-ContextPath specified in deployOptions
-     */
-    public void testWebContextPath015() throws Exception {
-        this.b = generalWebContextPathTest(null, "tw5.war", true);
-    }
-
-    /*
-     * verify null Web-ContextPath specified in deployOptions
-     */
-    public void testWebContextPath016() throws Exception {
-        this.b = generalWebContextPathTest(null, "wmtw1.war", true);
-    }
-
-    /*
-     * verify null Web-ContextPath specified in deployOptions
-     */
-    public void testWebContextPath017() throws Exception {
-        this.b = generalWebContextPathTest(null, "wmtw2.war", true);
-    }
-
-    /*
-     * verify null Web-ContextPath specified in deployOptions
-     */
-    public void testWebContextPath018() throws Exception {
-        this.b = generalWebContextPathTest(null, "wmtw3.war", false);
-    }
-
-    /*
-     * verify null Web-ContextPath specified in deployOptions
-     */
-    public void testWebContextPath019() throws Exception {
-        this.b = generalWebContextPathTest(null, "wmtw4.war", false);
-    }
-
-    /*
-     * verify null Web-ContextPath specified in deployOptions
-     */
-    public void testWebContextPath020() throws Exception {
-        this.b = generalWebContextPathTest(null, "wmtw5.war", true);
-    }
     /*
      * verify long Web-ContextPath specified in deployOptions
      */

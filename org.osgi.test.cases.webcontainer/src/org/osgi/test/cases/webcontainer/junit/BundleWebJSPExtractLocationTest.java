@@ -33,9 +33,6 @@ import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
  *          be successful - testWebContextPath003
  */
 public class BundleWebJSPExtractLocationTest extends ManifestHeadersTestBundleControl {
-    private static final String JSPEXTRACTLOAC1 = "resources/tw1";
-    private static final String JSPEXTRACTLOAC2 = "resources/tw1/jspextract";
-    private Bundle b;
 
     public void setUp() throws Exception {
         super.setUp();
@@ -80,20 +77,6 @@ public class BundleWebJSPExtractLocationTest extends ManifestHeadersTestBundleCo
     public void testWebContextPath004() throws Exception {
         this.b = generalWebJSPExtractLocationTest(ConstantsUtil.getBaseDir(), "/tw1", "tw1.war", true);
 
-    }
-
-    /*
-     * verify null Web-JSPExtractLocation specified in deployOptions
-     */
-    public void testWebContextPath005() throws Exception {
-        this.b = generalWebJSPExtractLocationTest(null, "/tw1", "tw1.war", false);
-    }
-
-    /*
-     * verify null Web-JSPExtractLocation specified in deployOptions
-     */
-    public void testWebContextPath006() throws Exception {
-        this.b = generalWebJSPExtractLocationTest(null, "/tw1", "tw1.war", true);
     }
 
     /*

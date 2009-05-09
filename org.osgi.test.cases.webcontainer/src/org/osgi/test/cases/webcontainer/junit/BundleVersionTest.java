@@ -31,11 +31,6 @@ import org.osgi.test.cases.webcontainer.ManifestHeadersTestBundleControl;
  *          scenarios
  */
 public class BundleVersionTest extends ManifestHeadersTestBundleControl {
-    private static final String VERSION1 = "2.0";
-    private static final String VERSION2 = "1.1.1";
-    private static final String VERSION3 = "22.3.58.build-345678";
-    private static final String VERSION4 = "22.1.1.build - 12121";
-    private static final String VERSION5 = "version2.0";
 
     public void setUp() throws Exception {
         super.setUp();
@@ -113,77 +108,6 @@ public class BundleVersionTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleVersion010() throws Exception {
         this.b = generalVersionTest(VERSION3, "/tw5", "wmtw5.war", false);
-    }
-
-    
-    /*
-     * verify when Bundle-Version is not specified in deployoptions
-     */
-    public void testBundleVersion011() throws Exception {
-        this.b = generalVersionTest(null, "/tw1", "tw1.war", false);
-    }
-
-    /*
-     * verify when Bundle-Version is not specified in deployoptions
-     */
-    public void testBundleVersion012() throws Exception {
-        this.b = generalVersionTest(null, "/tw2", "tw2.war", false);
-    }
-
-    /*
-     * verify when Bundle-Version is not specified in deployoptions
-     */
-    public void testBundleVersion013() throws Exception {
-        this.b = generalVersionTest(null, "/tw3", "tw3.war", false);
-    }
-
-    /*
-     * verify when Bundle-Version is not specified in deployoptions
-     */
-    public void testBundleVersion014() throws Exception {
-        this.b = generalVersionTest(null, "/tw4", "tw4.war", false);
-    }
-
-    /*
-     * verify when Bundle-Version is not specified in deployoptions
-     */
-    public void testBundleVersion015() throws Exception {
-        this.b = generalVersionTest(null, "/tw5", "tw5.war", false);
-    }
-
-    /*
-     * verify when Bundle-Version is not specified in deployoptions
-     */
-    public void testBundleVersion016() throws Exception {
-        this.b = generalVersionTest(null, "/tw1", "wmtw1.war", false);
-    }
-
-    /*
-     * verify when Bundle-Version is not specified in deployoptions
-     */
-    public void testBundleVersion017() throws Exception {
-        this.b = generalVersionTest(null, "/tw2", "wmtw2.war", false);
-    }
-
-    /*
-     * verify when Bundle-Version is not specified in deployoptions
-     */
-    public void testBundleVersion018() throws Exception {
-        this.b = generalVersionTest(null, "/tw3", "wmtw3.war", false);
-    }
-
-    /*
-     * verify when Bundle-Version is not specified in deployoptions
-     */
-    public void testBundleVersion019() throws Exception {
-        this.b = generalVersionTest(null, "/tw4", "wmtw4.war", false);
-    }
-
-    /*
-     * verify when Bundle-Version is not specified in deployoptions
-     */
-    public void testBundleVersion020() throws Exception {
-        this.b = generalVersionTest(null, "/tw5", "wmtw5.war", false);
     }
     
     /*
