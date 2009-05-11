@@ -24,29 +24,28 @@ import org.osgi.framework.ServiceReference;
 /**
  * @version $Rev$ $Date$
  */
-public class TransactionSynchronizationRegistryFactory
-{
-	
+public class TransactionSynchronizationRegistryFactory {
+
     private static ServiceReference _sr;
     private static TransactionSynchronizationRegistry _tsr;
     private static BundleContext _context;
 
-    public static void setBundleContext(BundleContext context)
-    {
+    public static void setBundleContext(BundleContext context) {
         _context = context;
+    }
+
+    public static TransactionSynchronizationRegistry getTransactionSynchronizationRegistry() {
+        if (_tsr != null) {
+            return _tsr;
+        }
         
         // setup TransactionSynchronizationRegistryFactory
-        _sr = _context.getServiceReference(TransactionSynchronizationRegistry.class.getName());
-        _tsr = (TransactionSynchronizationRegistry) _context.getService(_sr);        
-
-    }
-    
-    public static TransactionSynchronizationRegistry getTransactionSynchronizationRegistry()
-    {
-
+        _sr = _context
+                .getServiceReference(TransactionSynchronizationRegistry.class
+                        .getName());
+        _tsr = (TransactionSynchronizationRegistry) _context.getService(_sr);
         return _tsr;
-    	
+
     }
-    
 
 }

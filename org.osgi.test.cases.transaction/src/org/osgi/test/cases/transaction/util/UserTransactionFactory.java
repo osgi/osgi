@@ -40,6 +40,9 @@ public class UserTransactionFactory {
     }
 
     public static UserTransaction getUserTransaction(int waitTime) {
+        if (_userTx != null) {
+            return _userTx;
+        }
         if (waitTime == 0) {
             // get UserTransaction from Service Reference
             _userTxServiceRef = _context

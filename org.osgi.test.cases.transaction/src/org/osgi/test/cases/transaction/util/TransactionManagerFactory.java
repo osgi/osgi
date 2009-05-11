@@ -39,6 +39,10 @@ public class TransactionManagerFactory {
     }
 
     public static TransactionManager getTransactionManager(int waitTime) {
+        if (_tm != null) {
+            return _tm;
+        }
+        
         if (waitTime == 0) {
             // get TransactionManager from Service Reference
             _tmRef = _context.getServiceReference(TransactionManager.class
