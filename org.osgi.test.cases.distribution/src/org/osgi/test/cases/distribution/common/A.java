@@ -3,6 +3,4 @@
  */
 package org.osgi.test.cases.distribution.common;
 
-public class A {
-
-}
+public interface A { }
