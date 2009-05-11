@@ -56,7 +56,7 @@ public class GenericCollectionChecker extends DependencyDriver {
     // our bundle context (used for requesting service instances)
     protected BundleContext bundleContext;
 
-    protected GenericCollectionChecker(String componentId) {
+    public GenericCollectionChecker(String componentId) {
         super(componentId);
     }
 
