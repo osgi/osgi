@@ -16,6 +16,8 @@
 
 package org.osgi.test.cases.blueprint.tests;
 
+import org.osgi.test.cases.blueprint.components.injection.AsianRegionCode;
+import org.osgi.test.cases.blueprint.components.injection.RegionCode;
 import org.osgi.test.cases.blueprint.framework.ArgumentMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
 import org.osgi.test.cases.blueprint.framework.PropertyMetadataValidator;
@@ -28,13 +30,6 @@ import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 public class TestCustomConverter extends DefaultTestBundleControl {
-
-    private void addConstructorValidator(MetadataEventSet startEvents, String id, Object value, Class type) {
-        startEvents.validateComponentArgument(id, "arg1", value, type);
-        startEvents.addValidator(new ArgumentMetadataValidator(id, new TestArgument[] {
-        // all tests that can use this convenience method have a string argument as the first arg
-                new StringArgument(String.class, id), new StringArgument(type) }));
-    }
 
     private void addPropertyValidator(MetadataEventSet startEvents, String compName, String propertyName,
             Object propertyValue, Class type) {
@@ -50,12 +45,25 @@ public class TestCustomConverter extends DefaultTestBundleControl {
         MetadataEventSet startEvents = controller.getStartEvents();
 
         // constructor
-        this.addConstructorValidator(startEvents, "compAsia_cnst", new org.osgi.test.cases.blueprint.components.injection.AsianRegionCode("CN+86"), org.osgi.test.cases.blueprint.components.injection.AsianRegionCode.class);
-        this.addConstructorValidator(startEvents, "compImplicit_cnst", new org.osgi.test.cases.blueprint.components.injection.AsianRegionCode("CN+86"), org.osgi.test.cases.blueprint.components.injection.AsianRegionCode.class);
-        // property
-        this.addPropertyValidator(startEvents, "compAsia_prpt", "regionCode", new org.osgi.test.cases.blueprint.components.injection.AsianRegionCode("CN+86"), org.osgi.test.cases.blueprint.components.injection.AsianRegionCode.class);
-        this.addPropertyValidator(startEvents, "compImplicit_prpt", "regionCode", new org.osgi.test.cases.blueprint.components.injection.AsianRegionCode("CN+86"), org.osgi.test.cases.blueprint.components.injection.AsianRegionCode.class);
+        startEvents.validateComponentArgument("compAsia_cnst", "arg2", new AsianRegionCode("CN+86"), AsianRegionCode.class);
+        startEvents.addValidator(new ArgumentMetadataValidator("compAsia_cnst", new TestArgument[] {
+                new StringArgument("compAsia_cnst"), 
+                new TestArgument(new TestStringValue(AsianRegionCode.class, "CN+86")) }));
 
+        startEvents.validateComponentArgument("compImplicit_cnst", "arg2", new AsianRegionCode("CN+86"), AsianRegionCode.class);
+        startEvents.addValidator(new ArgumentMetadataValidator("compImplicit_cnst", new TestArgument[] {
+                new StringArgument("compImplicit_cnst"), 
+                new StringArgument("CN+86") }));
+                
+        // property
+        startEvents.validateComponentProperty("compAsia_prpt", "regionCode", new AsianRegionCode("CN+86"), AsianRegionCode.class);
+        startEvents.addValidator(new PropertyMetadataValidator("compAsia_prpt", new TestProperty[] {
+            new TestProperty(new TestStringValue(AsianRegionCode.class, "CN+86"), "regionCode") }));
+        
+        startEvents.validateComponentProperty("compImplicit_prpt", "regionCode", new AsianRegionCode("CN+86"), AsianRegionCode.class);
+        startEvents.addValidator(new PropertyMetadataValidator("compImplicit_prpt", new TestProperty[] {
+            new TestProperty(new TestStringValue("CN+86"), "regionCode") }));
+        
         controller.run();
     }
 
@@ -65,8 +73,15 @@ public class TestCustomConverter extends DefaultTestBundleControl {
         MetadataEventSet startEvents = controller.getStartEvents();
 
         // constructor
-        this.addConstructorValidator(startEvents, "comp_cnst", new org.osgi.test.cases.blueprint.components.injection.RegionCode("CN+86"), org.osgi.test.cases.blueprint.components.injection.RegionCode.class);
-        this.addConstructorValidator(startEvents, "compAsia_cnst", new org.osgi.test.cases.blueprint.components.injection.AsianRegionCode("CN+86"), org.osgi.test.cases.blueprint.components.injection.AsianRegionCode.class);
+        startEvents.validateComponentArgument("comp_cnst", "arg2", new RegionCode("CN+86"), RegionCode.class);
+        startEvents.addValidator(new ArgumentMetadataValidator("comp_cnst", new TestArgument[] {
+                new StringArgument("comp_cnst"), 
+                new StringArgument(RegionCode.class, "CN+86") }));
+        
+        startEvents.validateComponentArgument("compAsia_cnst", "arg2", new AsianRegionCode("CN+86"), AsianRegionCode.class);
+        startEvents.addValidator(new ArgumentMetadataValidator("compAsia_cnst", new TestArgument[] {
+                new StringArgument("compAsia_cnst"), 
+                new StringArgument(AsianRegionCode.class, "CN+86") }));
 
         controller.run();
     }
@@ -94,8 +109,8 @@ public class TestCustomConverter extends DefaultTestBundleControl {
      */
     public void testServiceBooleanConverter() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer() + "www/converter_service_boolean_converter.jar",
-            getWebServer() + "www/type_converter_service.jar");
+            getWebServer() + "www/converter_custom_service_converter.jar",
+            getWebServer() + "www/converter_type_converter_service.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
 
         // constructor
@@ -114,9 +129,15 @@ public class TestCustomConverter extends DefaultTestBundleControl {
         MetadataEventSet startEvents = controller.getStartEvents();
 
         // constructor
-        this.addConstructorValidator(startEvents, "comp_cnst", new org.osgi.test.cases.blueprint.components.injection.AsianRegionCode("CN+86"), org.osgi.test.cases.blueprint.components.injection.AsianRegionCode.class);
+        startEvents.validateComponentArgument("comp_cnst", "arg2", new AsianRegionCode("CN+86"), AsianRegionCode.class);
+        startEvents.addValidator(new ArgumentMetadataValidator("comp_cnst", new TestArgument[] {
+                new StringArgument("comp_cnst"), 
+                new StringArgument(RegionCode.class, "CN+86") }));
+
         // property
-        this.addPropertyValidator(startEvents, "comp_prpt", "regionCode", new org.osgi.test.cases.blueprint.components.injection.AsianRegionCode("CN+86"), org.osgi.test.cases.blueprint.components.injection.AsianRegionCode.class);
+        startEvents.validateComponentProperty("comp_prpt", "regionCode", new AsianRegionCode("CN+86"), AsianRegionCode.class);
+        startEvents.addValidator(new PropertyMetadataValidator("comp_prpt", new TestProperty[] {
+            new TestProperty(new TestStringValue(RegionCode.class, "CN+86"), "regionCode") }));
 
         controller.run();
     }

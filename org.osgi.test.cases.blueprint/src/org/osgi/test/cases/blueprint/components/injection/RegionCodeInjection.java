@@ -33,7 +33,7 @@ public class RegionCodeInjection extends BaseTestComponent{
     }
 
     public void setRegionCode(RegionCode arg2) {
-        this.setPropertyValue("regionCode", arg2, RegionCode.class);
+        this.setPropertyValue("regionCode", arg2);
     }
 
 

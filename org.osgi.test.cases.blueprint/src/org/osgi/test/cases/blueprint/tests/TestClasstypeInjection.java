@@ -147,7 +147,7 @@ public class TestClasstypeInjection extends DefaultTestBundleControl {
 
     private void addPropertyValidator(MetadataEventSet startEvents, String compName, String propertyName,
             Class propertyType) {
-        startEvents.validateComponentProperty(compName, propertyName, null, null);
+        startEvents.validateComponentProperty(compName, propertyName, null, propertyType);
         startEvents.addValidator(new PropertyMetadataValidator(compName, new TestProperty[] {
             new TestProperty(new TestNullValue(), propertyName)}));
     }

@@ -3,7 +3,7 @@
 
     <bean id="customBooleanConverter" class="org.osgi.test.cases.blueprint.components.injection.CustomBooleanConverter"/>
 
-    <service ref="customBooleanConverter" interface="org.osgi.service.blueprint.convert.Converter">
+    <service ref="customBooleanConverter" interface="org.osgi.service.blueprint.convert.Converter"/>
 
 </blueprint>
 
