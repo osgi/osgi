@@ -15,6 +15,14 @@
  */
 package org.osgi.test.cases.transaction;
 
+import javax.transaction.TransactionManager;
+import javax.transaction.UserTransaction;
+
+import org.osgi.framework.BundleContext;
+import org.osgi.test.cases.transaction.util.TransactionManagerFactory;
+import org.osgi.test.cases.transaction.util.TransactionSynchronizationRegistryFactory;
+import org.osgi.test.cases.transaction.util.TransactionUtil;
+import org.osgi.test.cases.transaction.util.UserTransactionFactory;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
@@ -28,23 +36,22 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  */
 public abstract class TransactionTestBundleControl extends DefaultTestBundleControl {
 
+    BundleContext context;
     private final int DEFAULTTIME = 30;
-    
-    /*
-     * let's wait a little bit to make sure the services are registerred.
-     */
-    protected void waitSomeTime() throws InterruptedException {
-            int t = getWaitTime();
-            log("let's wait " + t + " seconds to make sure the services are registered.");
-            synchronized(this) {
-                wait(t * 1000);
-            }
+    static TransactionManager tm;
+    static UserTransaction ut;
+
+    public void setBundleContext(BundleContext context) {
+        super.setBundleContext(context);
+        TransactionManagerFactory.setBundleContext(context);
+        UserTransactionFactory.setBundleContext(context);
+        TransactionSynchronizationRegistryFactory.setBundleContext(context);
     }
     
     /*
      * get the wait time in seconds, check the user preference first
      */
-    private int getWaitTime() {
+    protected int getWaitTime() {
         // check if wait time is specified in system property
             String p;
             int waitTime = DEFAULTTIME;
@@ -60,4 +67,23 @@ public abstract class TransactionTestBundleControl extends DefaultTestBundleCont
             } 
             return waitTime;
     }
+    
+    public void setUpTransactionManager() throws Exception {
+        if (tm == null) {
+            tm = TransactionManagerFactory.getTransactionManager(getWaitTime());
+        }
+        assertNotNull(tm);
+        TransactionUtil.startWithCleanTM(tm); 
+    }
+    
+
+    
+    public void setUpUserTransaction() throws Exception {
+        if (ut == null) {
+            ut = UserTransactionFactory.getUserTransaction(getWaitTime());
+        }
+        assertNotNull(ut);
+        TransactionUtil.startWithCleanUT(ut); 
+    }
+
 }

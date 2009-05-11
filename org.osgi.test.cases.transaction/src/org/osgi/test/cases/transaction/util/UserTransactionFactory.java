@@ -16,6 +16,7 @@
 
 package org.osgi.test.cases.transaction.util;
 
+import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 
 import org.osgi.framework.BundleContext;
@@ -26,20 +27,59 @@ import org.osgi.framework.ServiceReference;
  */
 public class UserTransactionFactory {
 
-	private static ServiceReference _userTxServiceRef;
-	private static UserTransaction _userTx;
-	private static BundleContext _context;
+    private static ServiceReference _userTxServiceRef;
+    private static UserTransaction _userTx;
+    private static BundleContext _context;
 
-	public static void setBundleContext(BundleContext context) {
-		_context = context;
-
-		_userTxServiceRef = _context.getServiceReference(UserTransaction.class
-				.getName());
-		_userTx = (UserTransaction) _context.getService(_userTxServiceRef);
-	}
-	
-    public static UserTransaction getUserTransaction() {
-        return _userTx;	
+    public static void setBundleContext(BundleContext context) {
+        _context = context;
     }
-    
+
+    public static UserTransaction getUserTransaction() {
+        return getUserTransaction(0);
+    }
+
+    public static UserTransaction getUserTransaction(int waitTime) {
+        if (waitTime == 0) {
+            // get UserTransaction from Service Reference
+            _userTxServiceRef = _context
+                    .getServiceReference(UserTransaction.class.getName());
+        }
+
+        if (waitTime > 0) {
+            boolean done = false;
+            int count = 0;
+            while (!done) {
+                // get UserTransaction from Service Reference
+                _userTxServiceRef = _context
+                        .getServiceReference(TransactionManager.class.getName());
+
+                // check if we are able to get a valid _tmRef. If not, wait a
+                // second
+                // and try again
+                if (_userTxServiceRef == null) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ie) {
+                        ie.printStackTrace();
+                    }
+                    count++;
+                    if (count == waitTime) {
+                        System.out.println("cannot get UserTransaction after "
+                                + count + " seconds");
+                        done = true;
+                    }
+
+                } else {
+                    System.out.println("able to get UserTransaction after "
+                            + count + " seconds");
+                    done = true;
+                }
+            }
+        }
+
+        _userTx = (UserTransaction) _context.getService(_userTxServiceRef);
+        return _userTx;
+    }
+
 }

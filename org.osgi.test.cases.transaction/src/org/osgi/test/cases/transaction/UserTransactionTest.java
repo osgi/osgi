@@ -22,14 +22,8 @@ import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;
 import javax.transaction.Status;
 import javax.transaction.SystemException;
-import javax.transaction.TransactionManager;
-import javax.transaction.UserTransaction;
 import javax.transaction.xa.XAException;
 
-import org.osgi.framework.BundleContext;
-import org.osgi.test.cases.transaction.util.TransactionManagerFactory;
-import org.osgi.test.cases.transaction.util.TransactionUtil;
-import org.osgi.test.cases.transaction.util.UserTransactionFactory;
 import org.osgi.test.cases.transaction.util.XAResourceImpl;
 
 /**
@@ -40,25 +34,10 @@ import org.osgi.test.cases.transaction.util.XAResourceImpl;
  *
  */
 public class UserTransactionTest extends TransactionTestBundleControl {
-    BundleContext context;
-    UserTransaction ut;
-    TransactionManager tm;
-
-    public void setBundleContext(BundleContext context) {
-        super.setBundleContext(context);
-        UserTransactionFactory.setBundleContext(context);
-        TransactionManagerFactory.setBundleContext(context);
-    }
     
     public void setUp() throws Exception {
-        tm = TransactionManagerFactory.getTransactionManager();
-        if (tm == null) {
-            super.waitSomeTime();
-            // let's try get tm again after the waiting
-            tm = TransactionManagerFactory.getTransactionManager();
-        }
-        ut = UserTransactionFactory.getUserTransaction();
-        TransactionUtil.startWithClean(tm, ut); 
+        super.setUpTransactionManager();
+        super.setUpUserTransaction();
     }
     
     public void testUT001() throws Exception {

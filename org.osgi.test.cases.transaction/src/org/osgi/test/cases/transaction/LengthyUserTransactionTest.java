@@ -17,11 +17,6 @@
 package org.osgi.test.cases.transaction;
 
 import javax.transaction.RollbackException;
-import javax.transaction.UserTransaction;
-
-import org.osgi.framework.BundleContext;
-import org.osgi.test.cases.transaction.util.TransactionUtil;
-import org.osgi.test.cases.transaction.util.UserTransactionFactory;
 
 /**
  * @version $Rev$ $Date$
@@ -34,22 +29,8 @@ public class LengthyUserTransactionTest extends TransactionTestBundleControl {
     private static final int TOTAL_TRANSACTION_LIFETIME_TIMEOUT = 10;
     private static final int SUITABLE_DELAY = 5;
 
-    BundleContext context;
-    UserTransaction ut;
-
-    public void setBundleContext(BundleContext context) {
-        super.setBundleContext(context);
-        UserTransactionFactory.setBundleContext(context);
-    }
-    
     public void setUp() throws Exception {
-    	ut = UserTransactionFactory.getUserTransaction();
-        if (ut == null) {
-            super.waitSomeTime();
-            // let's try get tm again after the waiting
-            ut = UserTransactionFactory.getUserTransaction();
-        }
-    	TransactionUtil.startWithCleanUT(ut); 
+        super.setUpUserTransaction();
     }
   
     public void testUT028() throws Exception {

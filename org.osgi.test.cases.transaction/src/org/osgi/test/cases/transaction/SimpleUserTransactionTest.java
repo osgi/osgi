@@ -19,15 +19,9 @@ package org.osgi.test.cases.transaction;
 import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;
 import javax.transaction.Status;
-import javax.transaction.TransactionManager;
-import javax.transaction.UserTransaction;
 import javax.transaction.xa.XAResource;
 
-import org.osgi.framework.BundleContext;
 import org.osgi.test.cases.transaction.util.SimpleTestResource;
-import org.osgi.test.cases.transaction.util.TransactionManagerFactory;
-import org.osgi.test.cases.transaction.util.TransactionUtil;
-import org.osgi.test.cases.transaction.util.UserTransactionFactory;
 
 /**
  * @version $Rev$ $Date$
@@ -38,26 +32,10 @@ import org.osgi.test.cases.transaction.util.UserTransactionFactory;
  */
 
 public class SimpleUserTransactionTest extends TransactionTestBundleControl {
-
-    UserTransaction ut;
-    TransactionManager tm;
-    BundleContext context;
-
-    public void setBundleContext(BundleContext context) {
-        super.setBundleContext(context);
-        TransactionManagerFactory.setBundleContext(context);
-        UserTransactionFactory.setBundleContext(context);
-    }
     
     public void setUp() throws Exception {
-        tm = TransactionManagerFactory.getTransactionManager();
-        if (tm == null) {
-            super.waitSomeTime();
-            // let's try get tm again after the waiting
-            tm = TransactionManagerFactory.getTransactionManager();
-        }
-        ut = UserTransactionFactory.getUserTransaction();
-        TransactionUtil.startWithClean(tm, ut); 
+        super.setUpTransactionManager();
+        super.setUpUserTransaction();
     }
     
     // 4.5.3 4.5.5 simple test user transaction commit without resource 

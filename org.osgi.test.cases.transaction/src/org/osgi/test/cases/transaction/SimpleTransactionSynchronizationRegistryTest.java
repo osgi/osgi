@@ -17,16 +17,12 @@
 package org.osgi.test.cases.transaction;
 
 import javax.transaction.Status;
-import javax.transaction.TransactionManager;
 import javax.transaction.TransactionSynchronizationRegistry;
 import javax.transaction.xa.XAResource;
 
-import org.osgi.framework.BundleContext;
 import org.osgi.test.cases.transaction.util.SimpleSynchronization;
 import org.osgi.test.cases.transaction.util.SimpleTestResource;
-import org.osgi.test.cases.transaction.util.TransactionManagerFactory;
 import org.osgi.test.cases.transaction.util.TransactionSynchronizationRegistryFactory;
-import org.osgi.test.cases.transaction.util.TransactionUtil;
 
 /**
  * @version $Rev$ $Date$
@@ -36,26 +32,10 @@ import org.osgi.test.cases.transaction.util.TransactionUtil;
  *
  */
 public class SimpleTransactionSynchronizationRegistryTest extends TransactionTestBundleControl {
-
-    
-    TransactionManager tm;
-    BundleContext context;
-
-    public void setBundleContext(BundleContext context) {
-        super.setBundleContext(context);
-        TransactionManagerFactory.setBundleContext(context);
-        TransactionSynchronizationRegistryFactory.setBundleContext(context);
-    }
     
     // 4.4 locating TransactionSynchronizationRegistry OSGi service
     public void setUp() throws Exception {
-        tm = TransactionManagerFactory.getTransactionManager();
-        if (tm == null) {
-            super.waitSomeTime();
-            // let's try get tm again after the waiting
-            tm = TransactionManagerFactory.getTransactionManager();
-        }
-        TransactionUtil.startWithCleanTM(tm);
+        super.setUpTransactionManager();
     }
  
     // 4.3.3 4.4 simple test TransactionSynchronizationRegistry rollback without resource

@@ -17,11 +17,6 @@
 package org.osgi.test.cases.transaction;
 
 import javax.transaction.RollbackException;
-import javax.transaction.TransactionManager;
-
-import org.osgi.framework.BundleContext;
-import org.osgi.test.cases.transaction.util.TransactionManagerFactory;
-import org.osgi.test.cases.transaction.util.TransactionUtil;
 
 /**
  * @version $Rev$ $Date$
@@ -35,22 +30,8 @@ public class LengthyTransactionManagerTest extends TransactionTestBundleControl 
     private static final int TOTAL_TRANSACTION_LIFETIME_TIMEOUT = 10;
     private static final int SUITABLE_DELAY = 5;
 
-    BundleContext context;
-    TransactionManager tm;
-
-    public void setBundleContext(BundleContext context) {
-        super.setBundleContext(context);
-        TransactionManagerFactory.setBundleContext(context);
-    }
-    
     public void setUp() throws Exception {
-    	tm = TransactionManagerFactory.getTransactionManager();
-    	if (tm == null) {
-            super.waitSomeTime();
-            // let's try get tm again after the waiting
-            tm = TransactionManagerFactory.getTransactionManager();
-    	}
-    	TransactionUtil.startWithCleanTM(tm); 
+        super.setUpTransactionManager();
     }
     
     public void testTM035() throws Exception {

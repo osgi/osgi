@@ -18,14 +18,10 @@ package org.osgi.test.cases.transaction;
 
 import javax.transaction.RollbackException;
 import javax.transaction.Status;
-import javax.transaction.TransactionManager;
 import javax.transaction.TransactionSynchronizationRegistry;
 
-import org.osgi.framework.BundleContext;
 import org.osgi.test.cases.transaction.util.SynchronizationImpl;
-import org.osgi.test.cases.transaction.util.TransactionManagerFactory;
 import org.osgi.test.cases.transaction.util.TransactionSynchronizationRegistryFactory;
-import org.osgi.test.cases.transaction.util.TransactionUtil;
 
 /**
  * @version $Rev$ $Date$
@@ -35,23 +31,9 @@ import org.osgi.test.cases.transaction.util.TransactionUtil;
  *
  */
 public class TransactionSynchronizationRegistryTest extends TransactionTestBundleControl {
-    BundleContext context;
-    TransactionManager tm;
 
-    public void setBundleContext(BundleContext context) {
-        super.setBundleContext(context);
-        TransactionManagerFactory.setBundleContext(context);
-        TransactionSynchronizationRegistryFactory.setBundleContext(context);
-    }
-    
     public void setUp() throws Exception {
-        tm = TransactionManagerFactory.getTransactionManager();
-        if (tm == null) {
-            super.waitSomeTime();
-            // let's try get tm again after the waiting
-            tm = TransactionManagerFactory.getTransactionManager();
-        }
-        TransactionUtil.startWithCleanTM(tm); 
+        super.setUpTransactionManager();
     }
     
     public void testTSR001() throws Exception {

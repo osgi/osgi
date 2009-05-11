@@ -24,26 +24,61 @@ import org.osgi.framework.ServiceReference;
 /**
  * @version $Rev$ $Date$
  */
-public class TransactionManagerFactory 
-{
-	
+public class TransactionManagerFactory {
+
     private static ServiceReference _tmRef;
     private static TransactionManager _tm;
     private static BundleContext _context;
 
-    public static void setBundleContext(BundleContext context)
-    {
+    public static void setBundleContext(BundleContext context) {
         _context = context;
-        
-        // setup TransactionManager
-        _tmRef = _context.getServiceReference(TransactionManager.class.getName());
-        _tm = (TransactionManager) _context.getService(_tmRef);        
     }
-    
-    public static TransactionManager getTransactionManager()
-    {
-        return _tm;	
+
+    public static TransactionManager getTransactionManager() {
+        return getTransactionManager(0);
     }
-    
+
+    public static TransactionManager getTransactionManager(int waitTime) {
+        if (waitTime == 0) {
+            // get TransactionManager from Service Reference
+            _tmRef = _context.getServiceReference(TransactionManager.class
+                    .getName());
+        }
+
+        if (waitTime > 0) {
+            boolean done = false;
+            int count = 0;
+            while (!done) {
+                // get TransactionManager from Service Reference
+                _tmRef = _context.getServiceReference(TransactionManager.class
+                        .getName());
+
+                // check if we are able to get a valid _tmRef. If not, wait a
+                // second
+                // and try again
+                if (_tmRef == null) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ie) {
+                        ie.printStackTrace();
+                    }
+                    count++;
+                    if (count == waitTime) {
+                        System.out.println("cannot get TransactionManager after "
+                                        + count + " seconds");
+                        done = true;
+                    }
+
+                } else {
+                    System.out.println("able to get TransactionManager after "
+                            + count + " seconds");
+                    done = true;
+                }
+            }
+        }
+
+        _tm = (TransactionManager) _context.getService(_tmRef);
+        return _tm;
+    }
 
 }

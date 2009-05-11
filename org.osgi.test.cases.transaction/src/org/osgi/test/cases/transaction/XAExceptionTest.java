@@ -19,12 +19,8 @@ package org.osgi.test.cases.transaction;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
-import javax.transaction.TransactionManager;
 import javax.transaction.xa.XAException;
 
-import org.osgi.framework.BundleContext;
-import org.osgi.test.cases.transaction.util.TransactionManagerFactory;
-import org.osgi.test.cases.transaction.util.TransactionUtil;
 import org.osgi.test.cases.transaction.util.XAResourceImpl;
 
 /**
@@ -36,22 +32,9 @@ import org.osgi.test.cases.transaction.util.XAResourceImpl;
  */
 
 public class XAExceptionTest extends TransactionTestBundleControl {
-    BundleContext context;
-    TransactionManager tm;
-
-    public void setBundleContext(BundleContext context) {
-        super.setBundleContext(context);
-        TransactionManagerFactory.setBundleContext(context);
-    }
     
     public void setUp() throws Exception {
-        tm = TransactionManagerFactory.getTransactionManager();
-        if (tm == null) {
-            super.waitSomeTime();
-            // let's try get tm again after the waiting
-            tm = TransactionManagerFactory.getTransactionManager();
-        }
-        TransactionUtil.startWithCleanTM(tm); 
+        super.setUpTransactionManager();
     }
 
     public void testEX001() throws Exception {
