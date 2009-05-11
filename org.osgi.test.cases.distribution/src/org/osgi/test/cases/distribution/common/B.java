@@ -1,6 +1,15 @@
-/**
- * OSGi Test Suite Implementation. OSGi Confidential.
+/*
+ * Copyright (c) 2008 TIBCO Software Inc.
+ * All Rights Reserved.
  */
+
 package org.osgi.test.cases.distribution.common;
 
-public interface B { }
+/**
+ * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
+ *
+ */
+public interface B {
+	String getB();
+}
+
