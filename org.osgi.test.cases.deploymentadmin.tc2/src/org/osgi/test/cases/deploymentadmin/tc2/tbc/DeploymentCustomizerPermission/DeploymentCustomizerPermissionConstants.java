@@ -62,7 +62,7 @@ public class DeploymentCustomizerPermissionConstants {
 	 * 
 	 * @spec 114.14.4
 	 */
-	private void testConstants001() {
+	public void testConstants001() {
 		tbc.log("#testConstants001");
 		tbc.assertEquals("Asserting ACTION_PRIVATEAREA value", "privatearea", DeploymentCustomizerPermission.PRIVATEAREA);
 	}

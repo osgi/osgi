@@ -77,7 +77,7 @@ public class DeploymentAdminPermission {
 	 * 
 	 * @spec DeploymentAdminPermission.DeploymentAdminPermission(String,String)
 	 */
-	private void testDeploymentAdminPermission001() {
+	public void testDeploymentAdminPermission001() {
 		tbc.log("#testDeploymentAdminPermission001");
 		try {
 			org.osgi.service.deploymentadmin.DeploymentAdminPermission dpAdmPerm = new org.osgi.service.deploymentadmin.DeploymentAdminPermission(
@@ -97,7 +97,7 @@ public class DeploymentAdminPermission {
 	 * 
 	 * @spec DeploymentAdminPermission.DeploymentAdminPermission(String,String) 
 	 */
-	private void testDeploymentAdminPermission002() {
+	public void testDeploymentAdminPermission002() {
 		tbc.log("#testDeploymentAdminPermission002");
 		try {
 			String actions = org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL
@@ -138,7 +138,7 @@ public class DeploymentAdminPermission {
 	 * 
 	 * @spec DeploymentAdminPermission.DeploymentAdminPermission(String,String)
 	 */
-	private void testDeploymentAdminPermission003() {
+	public void testDeploymentAdminPermission003() {
 		tbc.log("#testDeploymentAdminPermission003");
 		try {
 			 new org.osgi.service.deploymentadmin.DeploymentAdminPermission(
@@ -160,7 +160,7 @@ public class DeploymentAdminPermission {
 	 * 
  	 * @spec DeploymentAdminPermission.DeploymentAdminPermission(String,String)
 	 */
-	private void testDeploymentAdminPermission004() {
+	public void testDeploymentAdminPermission004() {
 		tbc.log("#testDeploymentAdminPermission004");
 		try {
 			new org.osgi.service.deploymentadmin.DeploymentAdminPermission(
@@ -183,7 +183,7 @@ public class DeploymentAdminPermission {
 	 * 
 	 * @spec DeploymentAdminPermission.DeploymentAdminPermission(String,String)
 	 */
-	private void testDeploymentAdminPermission005() {
+	public void testDeploymentAdminPermission005() {
 		tbc.log("#testDeploymentAdminPermission005");
 		try {
 			String invalidAction = "invalid";
@@ -207,7 +207,7 @@ public class DeploymentAdminPermission {
 	 * 
 	 * @spec DeploymentAdminPermission.DeploymentAdminPermission(String,String)
 	 */
-	private void testDeploymentAdminPermission006() {
+	public void testDeploymentAdminPermission006() {
 		tbc.log("#testDeploymentAdminPermission006");
 		try {
 			new org.osgi.service.deploymentadmin.DeploymentAdminPermission(
@@ -229,7 +229,7 @@ public class DeploymentAdminPermission {
 	 * an empty filter name is passed
 	 * @spec DeploymentAdminPermission.DeploymentAdminPermission(String,String)
 	 */
-	private void testDeploymentAdminPermission007() {
+	public void testDeploymentAdminPermission007() {
 		tbc.log("#testDeploymentAdminPermission007");
 		try {
 			new org.osgi.service.deploymentadmin.DeploymentAdminPermission(
@@ -251,7 +251,7 @@ public class DeploymentAdminPermission {
      * 
      * @spec DeploymentAdminPermission.DeploymentAdminPermission(String,String)
      */
-    private void testDeploymentAdminPermission008() {
+    public void testDeploymentAdminPermission008() {
         tbc.log("#testDeploymentAdminPermission008");
         try {
             new org.osgi.service.deploymentadmin.DeploymentAdminPermission(
@@ -273,7 +273,7 @@ public class DeploymentAdminPermission {
      * 
      * @spec DeploymentAdminPermission.DeploymentAdminPermission(String,String)
      */
-    private void testDeploymentAdminPermission009() {
+    public void testDeploymentAdminPermission009() {
         tbc.log("#testDeploymentAdminPermission009");
         try {
             new org.osgi.service.deploymentadmin.DeploymentAdminPermission(

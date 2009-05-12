@@ -69,7 +69,7 @@ public class Equals {
 	 * 
 	 * @spec DeploymentCustomizerPermission.equals(Object)
 	 */
-	private void testEquals001() {
+	public void testEquals001() {
 		tbc.log("#testEquals001");
 		try {
 			org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission deployPermission = new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
@@ -96,7 +96,7 @@ public class Equals {
 	 * 
 	 * @spec DeploymentCustomizerPermission.equals(Object)
 	 */
-	private void testEquals002() {
+	public void testEquals002() {
 		tbc.log("#testEquals002");
 		try {
 			org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission deployPermission = new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(

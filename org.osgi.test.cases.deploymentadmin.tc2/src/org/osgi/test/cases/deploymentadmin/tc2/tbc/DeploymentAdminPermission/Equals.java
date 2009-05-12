@@ -74,7 +74,7 @@ public class Equals {
 	 * 
 	 * @spec DeploymentAdminPermission.equals(Object)
 	 */
-	private void testEquals001() {
+	public void testEquals001() {
 		tbc.log("#testEquals001");
 		try {
 		DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
@@ -91,7 +91,7 @@ public class Equals {
 	 *  
 	 * @spec DeploymentAdminPermission.equals(Object)
 	 */
-	private void testEquals002() {
+	public void testEquals002() {
 		tbc.log("#testEquals002");
 		try {
 		DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
@@ -108,7 +108,7 @@ public class Equals {
 	 * 
 	 * @spec DeploymentAdminPermission.equals(Object)
 	 */
-	private void testEquals003() {
+	public void testEquals003() {
 		tbc.log("#testEquals003");
 		try {
 		DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
@@ -125,7 +125,7 @@ public class Equals {
 	 * 
 	 * @spec DeploymentAdminPermission.equals(Object)
 	 */
-	private void testEquals004() {
+	public void testEquals004() {
 		tbc.log("#testEquals004");
 		try {
 		DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,DeploymentAdminPermission.INSTALL+","+DeploymentAdminPermission.CANCEL);
@@ -141,7 +141,7 @@ public class Equals {
 	 * 
 	 * @spec DeploymentAdminPermission.equals(Object)
 	 */
-	private void testEquals005() {
+	public void testEquals005() {
 		tbc.log("#testEquals005");
 		try {
 		DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,DeploymentAdminPermission.INSTALL+","+DeploymentAdminPermission.CANCEL);

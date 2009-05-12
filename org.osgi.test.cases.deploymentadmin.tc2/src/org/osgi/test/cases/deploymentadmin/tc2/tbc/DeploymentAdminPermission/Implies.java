@@ -78,7 +78,7 @@ public class Implies {
 	 * 
 	 * @spec DeploymentAdminPermission.implies(Permission)
 	 */
-	private void testImplies001() {
+	public void testImplies001() {
 		tbc.log("#testImplies001");
 		try {
 			DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
@@ -104,7 +104,7 @@ public class Implies {
 	 * 
 	 * @spec DeploymentAdminPermission.implies(Permission)
 	 */
-	private void testImplies002() {
+	public void testImplies002() {
 		tbc.log("#testImplies002");
 		try {
 			DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
@@ -132,7 +132,7 @@ public class Implies {
 	 * 
 	 * @spec DeploymentAdminPermission.implies(Permission)
 	 */
-	private void testImplies003() {
+	public void testImplies003() {
 		tbc.log("#testImplies003");
 		try {
 			DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
@@ -161,7 +161,7 @@ public class Implies {
 	 * 
 	 * @spec DeploymentAdminPermission.implies(Permission)
 	 */
-	private void testImplies004() {
+	public void testImplies004() {
 		tbc.log("#testImplies004");
 		try {
 			DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
@@ -188,7 +188,7 @@ public class Implies {
 	 * 
 	 * @spec DeploymentAdminPermission.implies(Permission)
 	 */
-	private void testImplies005() {
+	public void testImplies005() {
 		tbc.log("#testImplies005");
 		try {
 			DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
@@ -215,7 +215,7 @@ public class Implies {
      * 
      * @spec DeploymentAdminPermission.implies(Permission)
      */
-    private void testImplies006() {
+    public void testImplies006() {
         tbc.log("#testImplies006");
         try {
             DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
@@ -242,7 +242,7 @@ public class Implies {
      * 
      * @spec DeploymentAdminPermission.implies(Permission)
      */
-    private void testImplies007() {
+    public void testImplies007() {
         tbc.log("#testImplies007");
         try {
             DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
@@ -268,7 +268,7 @@ public class Implies {
      * 
      * @spec DeploymentAdminPermission.implies(Permission)
      */
-    private void testImplies008() {
+    public void testImplies008() {
         tbc.log("#testImplies008");
         try {
             DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
@@ -296,7 +296,7 @@ public class Implies {
      * 
      * @spec DeploymentAdminPermission.implies(Permission)
      */
-    private void testImplies009() {
+    public void testImplies009() {
         tbc.log("#testImplies009");
         try {
             

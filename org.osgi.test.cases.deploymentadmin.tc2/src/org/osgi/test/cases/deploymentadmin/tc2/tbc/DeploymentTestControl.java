@@ -62,15 +62,7 @@ import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.log.LogReaderService;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.test.cases.deploymentadmin.tc2.tbc.Configuration.Configuration;
-import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentAdminPermission.DeploymentAdminPermissionConstants;
-import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentCustomizerPermission.DeploymentCustomizerPermissionConstants;
-import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentException.DeploymentExceptionConstants;
-import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentSession.DeploymentSession;
-import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentSession.InstallSession;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.Event.BundleListenerImpl;
-import org.osgi.test.cases.deploymentadmin.tc2.tbc.ResourceProcessor.ResourceProcessor;
-import org.osgi.test.cases.deploymentadmin.tc2.tbc.ResourceProcessorException.ResourceProcessorException;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingBundle;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingDeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingManagedService;
@@ -82,7 +74,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * @author Luiz Felipe Guimaraes
  * 
  */
-public class DeploymentTestControl extends DefaultTestBundleControl {
+public abstract class DeploymentTestControl extends DefaultTestBundleControl {
 
 	private DeploymentAdmin deploymentAdmin;
 	private PermissionAdmin permissionAdmin;
@@ -107,7 +99,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	 * 
 	 * @throws InvalidSyntaxException
 	 */
-	public void setUp() {
+	protected void setUp() {
 		log("#before each run");
 		
 		permissionAdmin = (PermissionAdmin) getContext().getService(getContext().getServiceReference(PermissionAdmin.class.getName()));
@@ -275,28 +267,10 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * <remove>Prepare for each method. It is important that each method can be
-	 * executed independently of each other method. Do not keep state between
-	 * methods, if possible. This method can be used to clean up any possible
-	 * remaining state. </remove>
-	 * 
-	 */
-	public void setState() {
-		log("#before each method");
-	}
-	/**
-	 * Clean up after each method. Notice that during debugging many times the
-	 * unsetState is never reached.
-	 */
-	public void unsetState() {
-		log("#after each method");
-	}
-
-	/**
 	 * Clean up after a run. Notice that during debugging many times the
 	 * unprepare is never reached.
 	 */
-	public void tearDown() {
+	protected void tearDown() {
 		log("#after each run");
 		getContext().removeBundleListener(bundleListener);
 	}
@@ -311,80 +285,87 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	}
 
 	// Configuration
-	public void testConfiguration() {
-		new Configuration(this).run();
-	}
-
-	//DeploymentAdminPermission Test Cases
-	public void testDeploymentAdminPermission() {
-		new org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentAdminPermission.DeploymentAdminPermission(this).run();
-	}
-	
-	//Equals
-	public void testDeploymentAdminPermissionEquals() {
-		new org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentAdminPermission.Equals(this).run();
-	}
-	
-	//Implies
-	public void testDeploymentAdminPermissionImplies() {
-		new org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentAdminPermission.Implies(this).run();
-	}
-	
-	//Constants
-	public void testDeploymentAdminPermissionConstants() {
-		new DeploymentAdminPermissionConstants(this).run();
-	}
-	
-	//DeploymentCustomizerPermission Test Cases
-	public void testDeploymentCustomizerPermission() {
-		new org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentCustomizerPermission.DeploymentCustomizerPermission(this).run();
-	}
-	
-	//Equals
-	public void testDeploymentCustomizerPermissionEquals() {
-		new org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentCustomizerPermission.Equals(this).run();
-	}
-	
-	//Implies
-	public void testDeploymentCustomizerPermissionImplies() {
-		new org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentCustomizerPermission.Implies(this).run();
-	}
-	
-	//Constants
-	public void testDeploymentCustomizerPermissionConstants() {
-		new DeploymentCustomizerPermissionConstants(this).run();
-	}
-	
-	// DeploymentException Test Cases
-	// DeploymentException
-	public void testDeploymentException() {
-		new org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentException.DeploymentException(this).run();
-	}
-	
-	// DeploymentException Constants
-	public void testDeploymentExceptionConstants() {
-		new DeploymentExceptionConstants(this).run();
-	}
-	
-	//DeploymentSession Test Cases
-	public void testDeploymentSession() {
-		new DeploymentSession(this).run();
-	}
-    
-    //DeploymentSession Test Cases
-    public void testInstallSession() {
-        new InstallSession(this).run();
-    }   
-	
-	// ResourceProcessor Test Cases
-	public void testResourceProcessor() {
-		new ResourceProcessor(this).run();
-	}
-    
-    // ResourceProcessorException Test Cases
-    public void testResourceProcessorException() {
-        new ResourceProcessorException(this).run();
-    }
+	// public void testConfiguration() {
+	// new Configuration(this).run();
+	// }
+	//
+	// //DeploymentAdminPermission Test Cases
+	// public void testDeploymentAdminPermission() {
+	// new
+	// org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentAdminPermission.DeploymentAdminPermission(this).run();
+	// }
+	//	
+	// //Equals
+	// public void testDeploymentAdminPermissionEquals() {
+	// new
+	// org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentAdminPermission.Equals(this).run();
+	// }
+	//	
+	// //Implies
+	// public void testDeploymentAdminPermissionImplies() {
+	// new
+	// org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentAdminPermission.Implies(this).run();
+	// }
+	//	
+	// //Constants
+	// public void testDeploymentAdminPermissionConstants() {
+	// new DeploymentAdminPermissionConstants(this).run();
+	// }
+	//	
+	// //DeploymentCustomizerPermission Test Cases
+	// public void testDeploymentCustomizerPermission() {
+	// new
+	// org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentCustomizerPermission.DeploymentCustomizerPermission(this).run();
+	// }
+	//	
+	// //Equals
+	// public void testDeploymentCustomizerPermissionEquals() {
+	// new
+	// org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentCustomizerPermission.Equals(this).run();
+	// }
+	//	
+	// //Implies
+	// public void testDeploymentCustomizerPermissionImplies() {
+	// new
+	// org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentCustomizerPermission.Implies(this).run();
+	// }
+	//	
+	// //Constants
+	// public void testDeploymentCustomizerPermissionConstants() {
+	// new DeploymentCustomizerPermissionConstants(this).run();
+	// }
+	//	
+	// // DeploymentException Test Cases
+	// // DeploymentException
+	// public void testDeploymentException() {
+	// new
+	// org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentException.DeploymentException(this).run();
+	// }
+	//	
+	// // DeploymentException Constants
+	// public void testDeploymentExceptionConstants() {
+	// new DeploymentExceptionConstants(this).run();
+	// }
+	//	
+	// //DeploymentSession Test Cases
+	// public void testDeploymentSession() {
+	// new DeploymentSession(this).run();
+	// }
+	//    
+	// //DeploymentSession Test Cases
+	// public void testInstallSession() {
+	// new InstallSession(this).run();
+	// }
+	//	
+	// // ResourceProcessor Test Cases
+	// public void testResourceProcessor() {
+	// new ResourceProcessor(this).run();
+	// }
+	//    
+	// // ResourceProcessorException Test Cases
+	// public void testResourceProcessorException() {
+	// new ResourceProcessorException(this).run();
+	// }
     
 	/**
 	 * @return Returns the permissionAdmin.
@@ -493,8 +474,8 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	 * @return Returns the bundleEventHandler.
 	 */
 	public BundleListenerImpl getBundleListener() {
-		if (bundleListener==null)
-			throw new NullPointerException("BundleListener implementation instance is null");
+		assertNotNull("BundleListener implementation instance is null",
+				bundleListener);
 		return bundleListener;
 	}
 
@@ -502,8 +483,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
      * @return Returns the logReader.
      */
     public LogReaderService getLogReader() {
-        if (logReader==null)
-            throw new NullPointerException("Log Reader Service instance is null");
+    	assertNotNull("Log Reader Service instance is null", logReader);
         return logReader;
     }
 
@@ -512,8 +492,8 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
      * @return Returns the condPermAdmin.
      */
     public ConditionalPermissionAdmin getCondPermAdmin() {
-        if (condPermAdmin==null)
-            throw new NullPointerException("Conditional Permission Admin Service instance is null");
+    	assertNotNull("Conditional Permission Admin Service instance is null",
+				condPermAdmin);
         return condPermAdmin;
     }
     

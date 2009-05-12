@@ -71,7 +71,7 @@ public class DeploymentCustomizerPermission {
 	 * 
 	 * @spec DeploymentCustomizerPermission.DeploymentCustomizerPermission(String, String)
 	 */
-	private void testDeploymentCustomizerPermission001() {
+	public void testDeploymentCustomizerPermission001() {
 		tbc.log("#testDeploymentCustomizerPermission001");
 		try {
 			org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission dpCustPerm = new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
@@ -100,7 +100,7 @@ public class DeploymentCustomizerPermission {
 	 * 
 	 * @spec DeploymentCustomizerPermission.DeploymentCustomizerPermission(String, String)
 	 */
-	private void testDeploymentCustomizerPermission002() {
+	public void testDeploymentCustomizerPermission002() {
 		tbc.log("#testDeploymentCustomizerPermission002");
 		try {
 			new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
@@ -124,7 +124,7 @@ public class DeploymentCustomizerPermission {
 	 * 
 	 * @spec DeploymentCustomizerPermission.DeploymentCustomizerPermission(String, String)
 	 */
-	private void testDeploymentCustomizerPermission003() {
+	public void testDeploymentCustomizerPermission003() {
 		tbc.log("#testDeploymentCustomizerPermission003");
 		try {
 			new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
@@ -147,7 +147,7 @@ public class DeploymentCustomizerPermission {
 	 * 
 	 * @spec DeploymentCustomizerPermission.DeploymentCustomizerPermission(String, String)
 	 */
-	private void testDeploymentCustomizerPermission004() {
+	public void testDeploymentCustomizerPermission004() {
 		tbc.log("#testDeploymentCustomizerPermission004");
 		try {
 			new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
@@ -170,7 +170,7 @@ public class DeploymentCustomizerPermission {
 	 * 
 	 * @spec DeploymentCustomizerPermission.DeploymentCustomizerPermission(String, String)
 	 */
-	private void testDeploymentCustomizerPermission005() {
+	public void testDeploymentCustomizerPermission005() {
 		tbc.log("#testDeploymentCustomizerPermission005");
 		try {
 			new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
@@ -191,7 +191,7 @@ public class DeploymentCustomizerPermission {
 	 * 
 	 * @spec DeploymentCustomizerPermission.DeploymentCustomizerPermission(String, String)
 	 */
-	private void testDeploymentCustomizerPermission006() {
+	public void testDeploymentCustomizerPermission006() {
 		tbc.log("#testDeploymentCustomizerPermission006");
 		try {
 			new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(

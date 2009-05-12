@@ -61,34 +61,24 @@ import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingManagedServiceFac
  * This class tests Deployment Configuration
  */
 
-public class Configuration {
+public class Configuration extends DeploymentTestControl {
 	
-	private DeploymentTestControl tbc;
 	private DeploymentPackage dp;
-	public Configuration(DeploymentTestControl tbc) {
-		this.tbc = tbc;
-	}
-	
-	public void run() {
-		testConfiguration001();
-		testConfiguration002();
-		testConfiguration003();
-		testConfiguration004();
-	}
-
-
 
 	/**
 	 * Installs the auto config deployment package
 	 */
 	private DeploymentPackage installAutoConfigDP() {
-		tbc.log("#Installing config deployment package");
-		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.AUTO_CONFIG_DP);
+		log("#Installing config deployment package");
+		TestingDeploymentPackage testDP = getTestingDeploymentPackage(DeploymentConstants.AUTO_CONFIG_DP);
 		ConditionalPermissionInfo info = null;
 		try {
-			info = tbc.getCondPermAdmin().addConditionalPermissionInfo(DeploymentConstants.CONDITION_SIGNER, DeploymentConstants.ALL_PERMISSION);
-			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,
+			info = getCondPermAdmin().addConditionalPermissionInfo(
+					DeploymentConstants.CONDITION_SIGNER,
+					DeploymentConstants.ALL_PERMISSION);
+			dp = installDeploymentPackage(getWebServer() + testDP.getFilename());
+			assertNotNull(MessagesConstants.getMessage(
+					MessagesConstants.ASSERT_NOT_NULL,
 					new String[] { "Deployment Package" }), dp);
 			return dp;
 		} catch (Exception e) {
@@ -103,7 +93,8 @@ public class Configuration {
         }
       }
       
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { 
+			fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { 
 					e.getClass().getName() }));
 		} finally {
 			if (info!=null) {
@@ -120,32 +111,35 @@ public class Configuration {
 	 * 
 	 * @spec 115.2 Configuration Data
 	 */
-	private void testConfiguration001() {
-		tbc.log("#testConfiguration001");
+	public void testConfiguration001() {
+		log("#testConfiguration001");
 		DeploymentPackage dp = null;
     Dictionary properties = null;
 		try {
 			dp = installAutoConfigDP();
-      TestingManagedService msf = tbc.getManagedService();
+      TestingManagedService msf = getManagedService();
       if(!msf.isUpdated()){
         for(int i=0;i<50&!msf.isUpdated();i++){
           Thread.sleep(100);
         }
       }
 			properties = msf.getProperties();
-			tbc.assertTrue("The Resource Processor updated the same Dictionary properties as received by the ManagedService",
+			assertTrue(
+					"The Resource Processor updated the same Dictionary properties as received by the ManagedService",
 					properties.get(TestingManagedService.ATTRIBUTE_A).equals(TestingManagedService.ATTRIBUTE_A_VALUE) &&
 					properties.get(TestingManagedService.ATTRIBUTE_B).equals(TestingManagedService.ATTRIBUTE_B_VALUE) &&
 					properties.get(TestingManagedService.ATTRIBUTE_C).equals(TestingManagedService.ATTRIBUTE_C_VALUE)
 					);
 		} catch (InvalidSyntaxException e) {
-			tbc.fail("InvalidSyntaxException: Failed to get service");
+			fail("InvalidSyntaxException: Failed to get service");
 		} catch (Exception e) {
       e.printStackTrace();
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { 
-					e.getClass().getName() }));
+			fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { 
+					e
+							.getClass().getName()}), e);
 		} finally {
-			tbc.uninstall(dp);
+			uninstall(dp);
 		}
 	}
 	
@@ -156,13 +150,13 @@ public class Configuration {
 	 * 
 	 * @spec 115.2 Configuration Data
 	 */
-	private void testConfiguration002() {
-		tbc.log("#testConfiguration002");
+	public void testConfiguration002() {
+		log("#testConfiguration002");
 		DeploymentPackage dp = null;
 		try {
 			Dictionary properties=null;
       dp = installAutoConfigDP();
-      TestingManagedServiceFactory msf = tbc.getManagedServiceFactory();
+      TestingManagedServiceFactory msf = getManagedServiceFactory();
       if(!msf.isUpdated()){
         for(int i=0;i<50&!msf.isUpdated();i++){
           Thread.sleep(100);
@@ -170,20 +164,22 @@ public class Configuration {
       }
 			properties = msf.getProperties();
 			//We check only our properties because there are some automatic properties added by the Configuration Admin
-			tbc.assertTrue("The Resource Processor updated the same Dictionary properties as received by the ManagedServiceFactory",
+			assertTrue(
+					"The Resource Processor updated the same Dictionary properties as received by the ManagedServiceFactory",
 					properties.get(TestingManagedServiceFactory.ATTRIBUTE_A).equals(TestingManagedServiceFactory.ATTRIBUTE_A_VALUE) &&
 					properties.get(TestingManagedServiceFactory.ATTRIBUTE_B).equals(TestingManagedServiceFactory.ATTRIBUTE_B_VALUE) &&
 					properties.get(TestingManagedServiceFactory.ATTRIBUTE_C).equals(TestingManagedServiceFactory.ATTRIBUTE_C_VALUE)
 					);
 			
 		} catch (InvalidSyntaxException e) {
-			tbc.fail("InvalidSyntaxException: Failed to get service");
+			fail("InvalidSyntaxException: Failed to get service");
 		} catch (Exception e) {
       e.printStackTrace();
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { 
+			fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { 
 					e.getClass().getName() }));
 		} finally {
-			tbc.uninstall(dp);
+			uninstall(dp);
 		}
 	}
 	
@@ -193,14 +189,14 @@ public class Configuration {
 	 * 
 	 * @spec 115.4.2 Autoconf Resource Permissions
 	 */
-	private void testConfiguration003() {
-	  tbc.log("#testConfiguration003");
-    TestingDeploymentPackage testDP = tbc
-        .getTestingDeploymentPackage(DeploymentConstants.AUTO_CONFIG_DP);
+	public void testConfiguration003() {
+	  log("#testConfiguration003");
+		TestingDeploymentPackage testDP = getTestingDeploymentPackage(DeploymentConstants.AUTO_CONFIG_DP);
     Vector cpis = new Vector();
     ConditionalPermissionInfo cpi = null;
     try {
-      Enumeration infos = tbc.getCondPermAdmin().getConditionalPermissionInfos();
+      Enumeration infos = getCondPermAdmin()
+					.getConditionalPermissionInfos();
       if (infos != null)
         while (infos.hasMoreElements()) {
           ConditionalPermissionInfo info = (ConditionalPermissionInfo) infos.nextElement();
@@ -210,19 +206,22 @@ public class Configuration {
             cpis.addElement(info);
           }
         }
-      cpi = tbc.getCondPermAdmin().addConditionalPermissionInfo(
+      cpi = getCondPermAdmin()
+					.addConditionalPermissionInfo(
           DeploymentConstants.CONDITION_SIGNER, new PermissionInfo[0]);
-      dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-      tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,
+      dp = installDeploymentPackage(getWebServer() + testDP.getFilename());
+			assertNotNull(MessagesConstants.getMessage(
+					MessagesConstants.ASSERT_NOT_NULL,
           new String[] { "Deployment Package" }), dp);
-      tbc.failException("", DeploymentException.class);
+      failException("", DeploymentException.class);
     } catch (DeploymentException e) {
 //      tbc
 //          .pass("A DeploymentException was correctly thrown if the Autoconf Resource processor does not have ConfigurationPermission[*,CONFIGURE]. Message: "
 //              + e.getMessage());
     } catch (Exception e) {
       e.printStackTrace();
-      tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION,
+      fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION,
           new String[] { e.getClass().getName() }));
     } finally {
       if (cpi != null) {
@@ -230,10 +229,10 @@ public class Configuration {
       }
       for (int i = 0; i < cpis.size(); i++) {
         ConditionalPermissionInfo info = (ConditionalPermissionInfo) cpis.elementAt(i);
-        tbc.getCondPermAdmin().setConditionalPermissionInfo(info.getName(),
+        getCondPermAdmin().setConditionalPermissionInfo(info.getName(),
             info.getConditionInfos(), info.getPermissionInfos());
       }
-      tbc.uninstall(dp);
+      uninstall(dp);
     }
 	}
 	
@@ -243,23 +242,28 @@ public class Configuration {
 	 * 
 	 * @spec 115.4.2 Autoconf Resource Permissions
 	 */
-	private void testConfiguration004() {
-		tbc.log("#testConfiguration004");
-		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.AUTO_CONFIG_DP);
+	public void testConfiguration004() {
+		log("#testConfiguration004");
+		TestingDeploymentPackage testDP = getTestingDeploymentPackage(DeploymentConstants.AUTO_CONFIG_DP);
 		ConditionalPermissionInfo info = null;
 		try {
-			info = tbc.getCondPermAdmin().addConditionalPermissionInfo(DeploymentConstants.CONDITION_SIGNER, new PermissionInfo[] { new PermissionInfo(ConfigurationPermission.class.getName(),"*",ConfigurationPermission.CONFIGURE)});
-			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-//			tbc.pass("A Deployment Package was installed using only ConfigurationPermission[*,CONFIGURE].");
+			info = getCondPermAdmin().addConditionalPermissionInfo(
+					DeploymentConstants.CONDITION_SIGNER,
+					new PermissionInfo[] {new PermissionInfo(
+							ConfigurationPermission.class.getName(), "*",
+							ConfigurationPermission.CONFIGURE)});
+			dp = installDeploymentPackage(getWebServer() + testDP.getFilename());
+			// pass("A Deployment Package was installed using only ConfigurationPermission[*,CONFIGURE].");
 		} catch (Exception e) {
       e.printStackTrace();
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { 
+			fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { 
 					e.getClass().getName() }));
 		} finally {
 			if (info!=null) {
 				info.delete();
 			}
-			tbc.uninstall(dp);
+			uninstall(dp);
 		}
 	}
 	

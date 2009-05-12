@@ -58,7 +58,7 @@ public class DeploymentAdminPermissionConstants {
 	 * 
 	 * @spec 114.14.3 
 	 */
-	private void testConstants001() {
+	public void testConstants001() {
 		tbc.log("#testConstants001");
 		tbc.assertEquals("Asserting ACTION_INSTALL value", "install", DeploymentAdminPermission.INSTALL);
 		tbc.assertEquals("Asserting ACTION_CANCEL value", "cancel", DeploymentAdminPermission.CANCEL);

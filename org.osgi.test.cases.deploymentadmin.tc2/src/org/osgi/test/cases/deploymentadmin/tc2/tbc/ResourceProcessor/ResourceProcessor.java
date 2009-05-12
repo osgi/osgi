@@ -80,7 +80,7 @@ public class ResourceProcessor {
 	 * 
 	 * @spec 114.10 Resource Processors
 	 */
-	private void testResourceProcessor001()  {
+	public void testResourceProcessor001()  {
 		tbc.log("#testResourceProcessor001");
 		DeploymentPackage dpResourceProcessor = null;
 		DeploymentPackage dpInstallResource = null;
@@ -114,7 +114,7 @@ public class ResourceProcessor {
 	 * 
 	 * @spec 114.10 Resource Processors			
 	 */
-	private void testResourceProcessor002() {
+	public void testResourceProcessor002() {
 		tbc.log("#testResourceProcessor002");
 		TestingResourceProcessor resourceProcessor = null;
 		DeploymentPackage dpResourceProcessor = null;
@@ -155,7 +155,7 @@ public class ResourceProcessor {
 	 * 
 	 * @spec 114.10 Resource Processors
 	 */
-	private void testResourceProcessor003() {
+	public void testResourceProcessor003() {
 		tbc.log("#testResourceProcessor003");
 		TestingDeploymentPackage testRP;
 		DeploymentPackage dpResourceProcessor = null;
@@ -199,7 +199,7 @@ public class ResourceProcessor {
      * 
      * @spec 114.10 Resource Processors
      */
-	private void testResourceProcessor004() {
+	public void testResourceProcessor004() {
 		tbc.log("#testResourceProcessor004");
 		TestingResourceProcessor resourceProcessor = null;
 		TestingDeploymentPackage testRP;
@@ -240,7 +240,7 @@ public class ResourceProcessor {
      * 
      * @spec 114.10 Resource Processors
      */
-	private void testResourceProcessor005() {
+	public void testResourceProcessor005() {
 		tbc.log("#testResourceProcessor005");
 		TestingResourceProcessor resourceProcessor = null;
 		DeploymentPackage dpResourceProcessor = null;
@@ -281,7 +281,7 @@ public class ResourceProcessor {
      * 
      * @spec 114.10 Resource Processors
      */
-	private void testResourceProcessor006() {
+	public void testResourceProcessor006() {
 		tbc.log("#testResourceProcessor006");
 		TestingDeploymentPackage testRP;
 		DeploymentPackage dpResourceProcessor = null;
@@ -319,7 +319,7 @@ public class ResourceProcessor {
      * 
      * @spec 114.5 Customizer
      */
-    private void testResourceProcessor007() {
+    public void testResourceProcessor007() {
         tbc.log("#testResourceProcessor007");
         
         DeploymentPackage dp1 = null, dp2 = null;
@@ -346,7 +346,7 @@ public class ResourceProcessor {
      * 
      * @spec 114.8 Installing a Deployment Package
      */
-    private void testResourceProcessor008() {
+    public void testResourceProcessor008() {
         tbc.log("#testResourceProcessor008");
         DeploymentPackage dp = null, rp=null;
         TestingSessionResourceProcessor tsrp = null;

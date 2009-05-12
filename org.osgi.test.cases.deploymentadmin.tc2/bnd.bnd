@@ -40,7 +40,7 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 	org.osgi.impl.service.log; version=latest,\
 	org.eclipse.equinox.event;  version=latest, \
 	org.osgi.impl.bundle.autoconf; version=project, \
-	org.osgi.impl.service.deploymentadmin; version=latest, \
+	org.osgi.impl.service.deploymentadmin; version=project, \
 	org.apache.felix.configadmin;  version=latest, \
 	osgi; version="[4.1,4.1]"
 
@@ -52,11 +52,13 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 		
 -runproperties= \
 	report=true, \
+	org.osgi.framework.security=osgi, \
+	org.osgi.framework.trust.repositories=${build}/keystore, \
 	org.osgi.test.cases.deploymentadmin.timeout=180000, \
 	org.osgi.test.cases.deploymentadmin.short_timeout=3500, \
 	org.osgi.vendor.deploymentadmin=org.osgi.impl.service.deploymentadmin.perm, \
 	info.dmtree.osgi.root=./OSGi/, \
-	org.osgi.impl.service.deploymentadmin.deliveredarea=delivered
+	org.osgi.impl.service.deploymentadmin.deliveredarea=${target-dir}/delivered
 	
 	
 -runsystempackages=javax.xml.parsers, org.xml.sax, org.xml.sax.helpers, javax.security.auth.x500		

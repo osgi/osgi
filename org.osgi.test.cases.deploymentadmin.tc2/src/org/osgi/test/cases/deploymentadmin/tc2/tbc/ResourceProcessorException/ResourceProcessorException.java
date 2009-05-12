@@ -65,7 +65,7 @@ public class ResourceProcessorException {
      * 
      * @spec ResourceProcessorException.ResourceProcessorException(int, String) 
      */
-    private void testResourceProcessorException001() {
+    public void testResourceProcessorException001() {
         tbc.log("#testResourceProcessorException001");
         try {
             org.osgi.service.deploymentadmin.spi.ResourceProcessorException e = new org.osgi.service.deploymentadmin.spi.ResourceProcessorException(
@@ -86,7 +86,7 @@ public class ResourceProcessorException {
      * 
      * @spec ResourceProcessorException.ResourceProcessorException(int, String, Throwable) 
      */
-    private void testResourceProcessorException002() {
+    public void testResourceProcessorException002() {
         tbc.log("#testResourceProcessorException002");
         try {
             Exception ex = new Exception("test");

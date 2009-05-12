@@ -67,7 +67,7 @@ public class Implies {
 	 * 
 	 * @spec DeploymentCustomizerPermission.implies(Permission)
 	 */
-	private void testImplies001() {
+	public void testImplies001() {
 		tbc.log("#testImplies001");
 		try {
 			org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission deployPermission = new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
@@ -93,7 +93,7 @@ public class Implies {
 	 * 
 	 * @spec DeploymentCustomizerPermission.implies(Permission)
 	 */
-	private void testImplies002() {
+	public void testImplies002() {
 		tbc.log("#testImplies002");
 		try {
 			org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission deployPermission = new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(

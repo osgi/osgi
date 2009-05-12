@@ -129,7 +129,7 @@ public class InstallSession {
      * 
      * @spec 114.8 Installing a Deployment Package
      */
-    private void testInstallSession001() {
+    public void testInstallSession001() {
         tbc.log("#testInstallSession001");
         DeploymentPackage dp = null;
         try {
@@ -152,7 +152,7 @@ public class InstallSession {
      * 
      * @spec 114.8 Installing a Deployment Package
      */
-    private void testInstallSession002() {
+    public void testInstallSession002() {
         tbc.log("#testInstallSession002");
         DeploymentPackage dp = null;
         TestingSessionResourceProcessor tsrp = null;
@@ -186,7 +186,7 @@ public class InstallSession {
      * 
      * @spec 114.8 Installing a Deployment Package
      */
-    private void testInstallSession003() {
+    public void testInstallSession003() {
         tbc.log("#testInstallSession003");
         // cannot assert Resource Processor rollback method
         // resource from DP will not have been processed when Exception is thrown
@@ -214,7 +214,7 @@ public class InstallSession {
      * 
      * @spec 114.8 Installing a Deployment Package
      */
-    private void testInstallSession004() {
+    public void testInstallSession004() {
         tbc.log("#testInstallSession004");
         // cannot assert Resource Processor rollback method
         // resource from DP will not have been processed when Exception is thrown
@@ -241,7 +241,7 @@ public class InstallSession {
      * 
      * @spec 114.8 Installing a Deployment Package
      */
-    private void testInstallSession005() {
+    public void testInstallSession005() {
         tbc.log("#testInstallSession005");
         DeploymentPackage dp = null;
         try {
@@ -280,7 +280,7 @@ public class InstallSession {
      * 
      * @spec 114.8 Installing a Deployment Package
      */
-    private void testInstallSession006() {
+    public void testInstallSession006() {
         tbc.log("#testInstallSession006");
         DeploymentPackage dp = null;
         TestingSessionResourceProcessor tsrp = null;
@@ -322,7 +322,7 @@ public class InstallSession {
      * 
      * @spec 114.8 Installing a Deployment Package
      */
-    private void testInstallSession007() {
+    public void testInstallSession007() {
         tbc.log("#testInstallSession007");
         DeploymentPackage dp = null;
         TestingSessionResourceProcessor tsrp = null;
@@ -354,7 +354,7 @@ public class InstallSession {
      * 
      * @spec 114.8 Installing a Deployment Package
      */
-    private void testInstallSession008() {
+    public void testInstallSession008() {
         tbc.log("#testInstallSession008");
         TestingSessionResourceProcessor tsrp = null;
         DeploymentPackage dp1 = null;
@@ -393,7 +393,7 @@ public class InstallSession {
      * 
      * @spec 114.8 Installing a Deployment Package
      */
-    private void testInstallSession009() {
+    public void testInstallSession009() {
         tbc.log("#testInstallSession009");
         TestingSessionResourceProcessor tsrp = null;
         DeploymentPackage dp1 = null;
@@ -436,7 +436,7 @@ public class InstallSession {
      * 
      * @spec 114.8 Installing a Deployment Package
      */
-    private void testInstallSession010() {
+    public void testInstallSession010() {
         tbc.log("#testInstallSession010");
         DeploymentPackage dp1 = null;
         TestingSessionResourceProcessor tsrp = null;
@@ -475,7 +475,7 @@ public class InstallSession {
      * 
      * @spec 114.8 Installing a Deployment Package
      */
-    private void testInstallSession011() {
+    public void testInstallSession011() {
         tbc.log("#testInstallSession011");
         DeploymentPackage dp1 = null, dp2 = null;
         try {
@@ -517,7 +517,7 @@ public class InstallSession {
      * 
      * @spec 114.8 Installing a Deployment Package
      */
-    private void testInstallSession012() {
+    public void testInstallSession012() {
         tbc.log("#testInstallSession012");
         DeploymentPackage dp1 = null, dp2 = null;
         TestingSessionResourceProcessor tsrp = null;
@@ -549,7 +549,7 @@ public class InstallSession {
      * 
      * @spec 114.8 Installing a Deployment Package
      */
-    private void testInstallSession013() {
+    public void testInstallSession013() {
         tbc.log("#testInstallSession013");
         DeploymentPackage dp1 = null, rp = null;
         TestingSessionResourceProcessor tsrp = null;
@@ -593,7 +593,7 @@ public class InstallSession {
      * 
      * @spec 114.8 Installing a Deployment Package
      */
-    private void testInstallSession014() {
+    public void testInstallSession014() {
         tbc.log("#testInstallSession014");
         DeploymentPackage dp1 = null;
         TestingSessionResourceProcessor tsrp = null;
@@ -623,7 +623,7 @@ public class InstallSession {
      * 
      * @spec 114.8 Installing a Deployment Package
      */
-    private void testInstallSession015() {
+    public void testInstallSession015() {
         tbc.log("#testInstallSession015");
         DeploymentPackage dp1 = null;
         TestingSessionResourceProcessor tsrp = null;
@@ -669,7 +669,7 @@ public class InstallSession {
      * 
      * @spec 114.8 Installing a Deployment Package
      */
-    private void testInstallSession016() {
+    public void testInstallSession016() {
         tbc.log("#testInstallSession016");
         DeploymentPackage dp1 = null;
         TestingSessionResourceProcessor tsrp = null;
@@ -706,7 +706,7 @@ public class InstallSession {
      * 
      * @spec 114.8 Installing a Deployment Package
      */
-    private void testInstallSession017() {
+    public void testInstallSession017() {
         tbc.log("#testInstallSession017");
         DeploymentPackage dp1 = null, dp2 = null;
         try {

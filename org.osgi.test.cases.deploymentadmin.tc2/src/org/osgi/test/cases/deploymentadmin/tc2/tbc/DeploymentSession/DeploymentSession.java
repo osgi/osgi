@@ -115,7 +115,7 @@ public class DeploymentSession {
 	 * 
 	 * @spec DeploymentSession.getDataFile(Bundle)
 	 */
-	private void testDeploymentSession001()  {
+	public void testDeploymentSession001()  {
 		tbc.log("#testDeploymentSession001");
 		
 		setResourceProcessorPermissions(
@@ -158,7 +158,7 @@ public class DeploymentSession {
 	 * 
 	 * @spec DeploymentSession.getDataFile(Bundle)
 	 */
-	private void testDeploymentSession002()  {
+	public void testDeploymentSession002()  {
 		tbc.log("#testDeploymentSession002");
 		
 		setResourceProcessorPermissions(
@@ -190,7 +190,7 @@ public class DeploymentSession {
 	 * 
 	 * @spec DeploymentSession.getSourceDeploymentPackage()
 	 */
-	private void testDeploymentSession003()  {
+	public void testDeploymentSession003()  {
 		tbc.log("#testDeploymentSession003");
 		
 		setResourceProcessorPermissions(
@@ -221,7 +221,7 @@ public class DeploymentSession {
 	 * 
 	 * @spec DeploymentSession.getTargetDeploymentPackage()
 	 */
-	private void testDeploymentSession004()  {
+	public void testDeploymentSession004()  {
 		tbc.log("#testDeploymentSession004");
 
 		setResourceProcessorPermissions(
@@ -259,7 +259,7 @@ public class DeploymentSession {
 	 * 
 	 * @spec DeploymentSession.getTargetDeploymentPackage()
 	 */
-	private void testDeploymentSession005()  {
+	public void testDeploymentSession005()  {
 		tbc.log("#testDeploymentSession005");
 
 		setResourceProcessorPermissions(
@@ -299,7 +299,7 @@ public class DeploymentSession {
 	 * 
 	 * @spec 114.7 Sessions
 	 */
-	private void testDeploymentSession006()  {
+	public void testDeploymentSession006()  {
 		tbc.log("#testDeploymentSession006");
 		
 		setResourceProcessorPermissions(
@@ -340,7 +340,7 @@ public class DeploymentSession {
 	 * 
 	 * @spec 114.7 Sessions
 	 */
-	private void testDeploymentSession007()  {
+	public void testDeploymentSession007()  {
 		tbc.log("#testDeploymentSession007");
         
         setResourceProcessorPermissions(DeploymentConstants.OSGI_DP_LOCATION
@@ -378,7 +378,7 @@ public class DeploymentSession {
 	 * 
 	 * @spec 114.7 Sessions
 	 */
-	private void testDeploymentSession008()  {
+	public void testDeploymentSession008()  {
 		tbc.log("#testDeploymentSession008");
         
         setResourceProcessorPermissions(DeploymentConstants.OSGI_DP_LOCATION
@@ -413,7 +413,7 @@ public class DeploymentSession {
 	 * 
 	 * @spec 114.7.1 Roll Back
 	 */
-	private void testDeploymentSession009()  {
+	public void testDeploymentSession009()  {
 		tbc.log("#testDeploymentSession009");
 		TestingDeploymentPackage testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.SESSION_TEST_DP);
 		DeploymentPackage targetDP = null;
@@ -512,7 +512,7 @@ public class DeploymentSession {
 	 * 
 	 * @spec DeploymentSession.getSourceDeploymentPackage()
 	 */
-	private void testDeploymentSession011()  {
+	public void testDeploymentSession011()  {
 		tbc.log("#testDeploymentSession011");
 
 		setResourceProcessorPermissions(
