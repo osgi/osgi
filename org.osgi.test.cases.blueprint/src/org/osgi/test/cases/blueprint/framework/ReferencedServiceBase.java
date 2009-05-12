@@ -126,7 +126,7 @@ public class ReferencedServiceBase extends Assert implements TestComponentMetada
         if (name != null) {
             assertEquals(name, getId());
         }
-        assertEquals(serviceAvailability, meta.getAvailability());
+        assertEquals("Availability setting mismatch", serviceAvailability, meta.getAvailability());
         // we might have a listener list also
         if (listeners != null) {
             Collection bindingListeners = meta.getServiceListeners();

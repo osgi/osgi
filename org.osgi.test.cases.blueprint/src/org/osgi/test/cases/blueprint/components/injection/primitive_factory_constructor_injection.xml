@@ -64,7 +64,7 @@
         </argument>
     </bean>
     <bean id="compPrimBooleanNo" factory-component="compFactory" factory-method="makeInstance">
-        <argument>
+        <argument type="boolean">
             <value type="boolean">no</value>
         </argument>
     </bean>

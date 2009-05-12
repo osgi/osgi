@@ -29,7 +29,7 @@
                     <value>org.osgi.test.cases.blueprint.services.TestServiceTwo</value>
                 </interfaces>
                 <comparator>
-                    <ref component="NamedComponent"/>
+                    <ref component="NameComparator"/>
                 </comparator>
             </ref-list>
         </property>

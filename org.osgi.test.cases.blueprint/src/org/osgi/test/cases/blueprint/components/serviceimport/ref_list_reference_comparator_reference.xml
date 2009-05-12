@@ -25,7 +25,7 @@
                 <value>ServiceOneB</value>
                 <value>ServiceOneC</value>
                 <value>ServiceOneD</value>
-                <value>TestServiceF</value>
+                <value>ServiceOneE</value>
             </list>
         </property>
     </bean>

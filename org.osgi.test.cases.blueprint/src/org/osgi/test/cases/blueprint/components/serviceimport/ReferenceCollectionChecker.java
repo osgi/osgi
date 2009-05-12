@@ -82,7 +82,6 @@ public class ReferenceCollectionChecker extends DependencyDriver {
         sortOrder = order;
     }
 
-
     public void setUseReferences(boolean b) {
         usesReferences = b;
     }
@@ -190,7 +189,7 @@ public class ReferenceCollectionChecker extends DependencyDriver {
             AssertionService.assertTrue(this, "Mismatch on iteration size", counter < names.length);
             checkServiceName(i.next(), names[counter++]);
         }
-        AssertionService.assertEquals(this, "Truncated iteration sequence", counter, names.length);
+        AssertionService.assertEquals(this, "Truncated iteration sequence", names.length, counter);
     }
 
 

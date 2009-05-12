@@ -51,7 +51,7 @@
        <argument type="boolean"><value>yes</value></argument>
    </bean>
    <bean id="compPrimBooleanNo" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <argument><value type="boolean">no</value></argument>
+       <argument type="boolean"><value type="boolean">no</value></argument>
    </bean>
    <bean id="compPrimBooleanTrue" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
        <argument value="true" type="boolean"/>

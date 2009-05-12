@@ -68,5 +68,9 @@ public class CircularRegistrationListener extends ServiceOneRegistrationListener
     public String getServiceName() {
         return componentId;
     }
+
+    public int compareTo(Object other) {
+        return getServiceId() - ((TestServiceOne)other).getServiceId();
+    }
 }
 

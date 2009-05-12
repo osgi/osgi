@@ -20,7 +20,7 @@ package org.osgi.test.cases.blueprint.services;
 /**
  * Base interface for a test service implementation.
  */
-public interface TestServiceOne {
+public interface TestServiceOne extends Comparable {
     /**
      * A method that can be called for test verification purposes.
      *

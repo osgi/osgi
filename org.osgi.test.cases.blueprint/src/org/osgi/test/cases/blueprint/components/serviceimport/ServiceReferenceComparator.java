@@ -35,8 +35,7 @@ public class ServiceReferenceComparator implements org.osgi.test.cases.blueprint
         String comp1 = (String)ref1.getProperty("test.service.name");
         String comp2 = (String)ref2.getProperty("test.service.name");
 
-        // this sorts inverted by component name
-        return -comp1.compareTo(comp2);
+        return comp1.compareTo(comp2);
     }
 }
 

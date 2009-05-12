@@ -1071,7 +1071,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addValidator(new PropertyMetadataValidator("ComparatorChecker",
             new TestProperty(new TestComponentValue(
             new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, Set.class,
             new TestRefValue("NameComparator"),
             RefCollectionMetadata.ORDERING_BASIS_SERVICE,
@@ -1106,7 +1106,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addValidator(new PropertyMetadataValidator("InvertedComparatorChecker",
             new TestProperty(new TestComponentValue(
             new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, Set.class,
             new TestRefValue("InvertedNameComparator"),
             RefCollectionMetadata.ORDERING_BASIS_SERVICE,
@@ -1138,7 +1138,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceComparatorChecker",
             new TestProperty(new TestComponentValue(
             new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, Set.class,
             new TestRefValue("ServiceReferenceComparator"),
             RefCollectionMetadata.ORDERING_BASIS_SERVICE_REFERENCE,
@@ -1171,7 +1171,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceOrderChecker",
             new TestProperty(new TestComponentValue(
             new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, Set.class,
             null,
             RefCollectionMetadata.ORDERING_BASIS_SERVICE,
@@ -1203,7 +1203,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceOrderChecker",
             new TestProperty(new TestComponentValue(
             new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, Set.class,
             null,
             RefCollectionMetadata.ORDERING_BASIS_SERVICE_REFERENCE,
@@ -1234,7 +1234,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addValidator(new PropertyMetadataValidator("ComparatorChecker",
             new TestProperty(new TestComponentValue(
             new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, Set.class,
             new TestRefValue("NameComparator"),
             RefCollectionMetadata.ORDERING_BASIS_SERVICE,
@@ -1266,7 +1266,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addValidator(new PropertyMetadataValidator("InvertedComparatorChecker",
             new TestProperty(new TestComponentValue(
             new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, Set.class,
             new TestRefValue("InvertedNameComparator"),
             RefCollectionMetadata.ORDERING_BASIS_SERVICE,
@@ -1298,7 +1298,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceComparatorChecker",
             new TestProperty(new TestComponentValue(
             new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, Set.class,
             new TestRefValue("ServiceReferenceComparator"),
             RefCollectionMetadata.ORDERING_BASIS_SERVICE_REFERENCE,
@@ -1331,7 +1331,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceOrderChecker",
             new TestProperty(new TestComponentValue(
             new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, Set.class,
             null,
             RefCollectionMetadata.ORDERING_BASIS_SERVICE,
@@ -1363,7 +1363,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceOrderChecker",
             new TestProperty(new TestComponentValue(
             new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, Set.class,
             null,
             RefCollectionMetadata.ORDERING_BASIS_SERVICE_REFERENCE,
@@ -1394,7 +1394,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addValidator(new PropertyMetadataValidator("ComparatorChecker",
             new TestProperty(new TestComponentValue(
             new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, List.class,
             new TestRefValue("NameComparator"),
             RefCollectionMetadata.ORDERING_BASIS_SERVICE,
@@ -1429,7 +1429,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addValidator(new PropertyMetadataValidator("ComparatorChecker",
             new TestProperty(new TestComponentValue(
             new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, List.class,
             new TestRefValue("NameComparator"),
             RefCollectionMetadata.ORDERING_BASIS_SERVICE,
@@ -1461,7 +1461,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addValidator(new PropertyMetadataValidator("InvertedComparatorChecker",
             new TestProperty(new TestComponentValue(
             new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, List.class,
             new TestRefValue("InvertedNameComparator"),
             RefCollectionMetadata.ORDERING_BASIS_SERVICE,
@@ -1493,7 +1493,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceComparatorChecker",
             new TestProperty(new TestComponentValue(
             new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, List.class,
             new TestRefValue("ServiceReferenceComparator"),
             RefCollectionMetadata.ORDERING_BASIS_SERVICE_REFERENCE,
@@ -1526,7 +1526,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceOrderChecker",
             new TestProperty(new TestComponentValue(
             new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, List.class,
             null,
             RefCollectionMetadata.ORDERING_BASIS_SERVICE,
@@ -1558,7 +1558,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceOrderChecker",
             new TestProperty(new TestComponentValue(
             new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, List.class,
             null,
             RefCollectionMetadata.ORDERING_BASIS_SERVICE_REFERENCE,
@@ -1589,7 +1589,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addValidator(new PropertyMetadataValidator("ComparatorChecker",
             new TestProperty(new TestComponentValue(
             new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, List.class,
             new TestRefValue("NameComparator"),
             RefCollectionMetadata.ORDERING_BASIS_SERVICE,
@@ -1621,7 +1621,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addValidator(new PropertyMetadataValidator("InvertedComparatorChecker",
             new TestProperty(new TestComponentValue(
             new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, List.class,
             new TestRefValue("InvertedNameComparator"),
             RefCollectionMetadata.ORDERING_BASIS_SERVICE,
@@ -1653,7 +1653,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceComparatorChecker",
             new TestProperty(new TestComponentValue(
             new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, List.class,
             new TestRefValue("ServiceReferenceComparator"),
             RefCollectionMetadata.ORDERING_BASIS_SERVICE_REFERENCE,
@@ -1686,7 +1686,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceOrderChecker",
             new TestProperty(new TestComponentValue(
             new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, List.class,
             null,
             RefCollectionMetadata.ORDERING_BASIS_SERVICE,
@@ -1718,7 +1718,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceOrderChecker",
             new TestProperty(new TestComponentValue(
             new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, List.class,
             null,
             RefCollectionMetadata.ORDERING_BASIS_SERVICE_REFERENCE,

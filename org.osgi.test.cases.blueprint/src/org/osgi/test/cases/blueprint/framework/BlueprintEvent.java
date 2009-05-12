@@ -91,7 +91,7 @@ public class BlueprintEvent extends AdminTestEvent {
         BlueprintEvent other = (BlueprintEvent)o;
 
         // fail immediately on a mismatch on id or type
-        if (bundle != bundle || !topic.equals(other.topic)) {
+        if (bundle != other.bundle || !topic.equals(other.topic)) {
             return false;
         }
 
