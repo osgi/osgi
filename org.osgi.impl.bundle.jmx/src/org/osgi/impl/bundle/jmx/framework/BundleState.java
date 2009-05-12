@@ -78,8 +78,10 @@ public class BundleState extends Monitor implements BundleStateMBean {
 	 * @see org.osgi.jmx.core.BundleStateMBean#getExportedPackages()
 	 */
 	public String[] getExportedPackages(long bundleId) throws IOException {
-		ExportedPackage[] packages = admin
-				.getExportedPackages(bundle(bundleId));
+		ExportedPackage[] packages = admin.getExportedPackages(bundle(bundleId));
+		if (packages == null) {
+			return new String[0];
+		}
 		String[] ep = new String[packages.length];
 		for (int i = 0; i < packages.length; i++) {
 			ep[i] = packages[i].getName() + ";" + packages[i].getVersion();
@@ -111,7 +113,11 @@ public class BundleState extends Monitor implements BundleStateMBean {
 	 * @see org.osgi.jmx.core.BundleStateMBean#getHosts(long)
 	 */
 	public long[] getHosts(long fragment) throws IOException {
-		return Util.bundleIds(admin.getHosts(bundle(fragment)));
+		Bundle[] hosts = admin.getHosts(bundle(fragment));
+		if (hosts == null) {
+			return new long[0];
+		}
+		return Util.bundleIds(hosts);
 	}
 
 	/*
