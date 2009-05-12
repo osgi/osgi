@@ -37,14 +37,21 @@
 
 package org.osgi.test.cases.deploymentadmin.tc2.tbc.Configuration;
 
+import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Vector;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.service.cm.ConfigurationPermission;
+import org.osgi.service.condpermadmin.BundleLocationCondition;
 import org.osgi.service.condpermadmin.ConditionInfo;
+import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
+import org.osgi.service.condpermadmin.ConditionalPermissionUpdate;
+import org.osgi.service.condpermadmin.ConditionalPermissionsUpdate;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.permissionadmin.PermissionInfo;
@@ -71,11 +78,26 @@ public class Configuration extends DeploymentTestControl {
 	private DeploymentPackage installAutoConfigDP() {
 		log("#Installing config deployment package");
 		TestingDeploymentPackage testDP = getTestingDeploymentPackage(DeploymentConstants.AUTO_CONFIG_DP);
-		ConditionalPermissionInfo info = null;
 		try {
-			info = getCondPermAdmin().addConditionalPermissionInfo(
+			ConditionalPermissionAdmin ca = getCondPermAdmin();
+			ConditionalPermissionUpdate update = ca.newConditionalPermissionUpdate();
+			List rows = update.getConditionalPermissionInfos();
+			// Must grant all existing bundles all permission
+			Bundle[] bundles = getContext().getBundles();
+			for (int i = 0; i < bundles.length; i++) {
+				if (bundles[i].getBundleId() == 0)
+					continue;
+				rows.add(ca.newConditionalPermissionInfo(null, 
+						new ConditionInfo[] {new ConditionInfo(BundleLocationCondition.class.getName(), new String[] {bundles[i].getLocation()})},
+						DeploymentConstants.ALL_PERMISSION, 
+						ConditionalPermissionInfo.ALLOW));
+			}
+			// now add the signer condition.
+			rows.add(ca.newConditionalPermissionInfo(null,
 					DeploymentConstants.CONDITION_SIGNER,
-					DeploymentConstants.ALL_PERMISSION);
+					DeploymentConstants.ALL_PERMISSION,
+					ConditionalPermissionInfo.ALLOW));
+			update.commit();
 			dp = installDeploymentPackage(getWebServer() + testDP.getFilename());
 			assertNotNull(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_NOT_NULL,
@@ -97,9 +119,10 @@ public class Configuration extends DeploymentTestControl {
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { 
 					e.getClass().getName() }));
 		} finally {
-			if (info!=null) {
-				info.delete();
-			}
+			ConditionalPermissionUpdate update = getCondPermAdmin().newConditionalPermissionUpdate();
+			List l = update.getConditionalPermissionInfos();
+			l.clear();
+			update.commit();
 		}
 		return null;
 	}
