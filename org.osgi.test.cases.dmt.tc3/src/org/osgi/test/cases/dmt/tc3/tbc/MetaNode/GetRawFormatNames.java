@@ -61,7 +61,7 @@ public class GetRawFormatNames {
 	 * 
 	 * @spec MetaNode.getRawFormatNames()
 	 */
-	private void testGetRawFormatNames001() {
+	public void testGetRawFormatNames001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetRawFormatNames001");

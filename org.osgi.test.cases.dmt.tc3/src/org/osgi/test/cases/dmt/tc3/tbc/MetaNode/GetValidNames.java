@@ -64,7 +64,7 @@ public class GetValidNames {
 	 * 
 	 * @spec MetaNode.getMaxOccurrence()
 	 */
-	private void testGetValidNames001() {
+	public void testGetValidNames001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetValidNames001");

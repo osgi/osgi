@@ -48,29 +48,21 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  * This Class Validates the implementation of <code>DmtServiceFactory.getDmtAdmin()<code> method, 
  * according to MEG specification
  */
-public class GetDmtAdmin {
-	private DmtTestControl tbc;
-	
-	public GetDmtAdmin(DmtTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testGetDmtAdmin001();
-	}
-
+public class GetDmtAdmin extends DmtTestControl {
 	/**
 	 * Asserts that DmtServiceFactory.getDmtAdmin() does not return null
 	 * 
 	 * @spec DmtServiceFactory.getDmtAdmin()
 	 */
-	private void testGetDmtAdmin001() {
+	public void testGetDmtAdmin001() {
 
 		try {
-			tbc.log("#testGetDmtAdmin001");
-			tbc.assertNotNull("Asserts that DmtServiceFactory.getDmtAdmin() does not return null", DmtServiceFactory.getDmtAdmin());
+			log("#testGetDmtAdmin001");
+			assertNotNull(
+					"Asserts that DmtServiceFactory.getDmtAdmin() does not return null",
+					DmtServiceFactory.getDmtAdmin());
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	
 	}

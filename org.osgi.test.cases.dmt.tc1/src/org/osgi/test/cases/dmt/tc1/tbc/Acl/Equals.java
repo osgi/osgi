@@ -37,6 +37,7 @@
 package org.osgi.test.cases.dmt.tc1.tbc.Acl;
 
 import info.dmtree.Acl;
+
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 /**
@@ -45,35 +46,26 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  * This test case validates the implementation of <code>equals</code> method of Acl, 
  * according to MEG specification
  */
-public class Equals {
-	private DmtTestControl tbc;
+public class Equals extends DmtTestControl {
 	
-	public Equals(DmtTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testEquals001();
-		testEquals002();
-		testEquals003();
-	}
-
 	/**
 	 * Asserts that two Acl are equal when they have the same set of principals and permissions
 	 * 
 	 * @spec Acl.equals(Object)
 	 */
-	private void testEquals001() {
+	public void testEquals001() {
 		try {
-			tbc.log("#testEquals001");
+			log("#testEquals001");
 			String[] principals = { DmtConstants.PRINCIPAL, DmtConstants.PRINCIPAL_2 } ;
 			int[] permissions = { Acl.ADD, Acl.GET };
 			Acl Acl = new Acl(principals,permissions);
 			Acl Acl2 = new Acl(principals,permissions);
 
-			tbc.assertTrue("Asserts that two Acl are equal when they have the same set of principals and permissions",Acl.equals(Acl2));
+			assertTrue(
+					"Asserts that two Acl are equal when they have the same set of principals and permissions",
+					Acl.equals(Acl2));
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -82,17 +74,19 @@ public class Equals {
 	 * 
 	 * @spec Acl.equals(Object)
 	 */
-	private void testEquals002() {
+	public void testEquals002() {
 		try {
-			tbc.log("#testEquals002");
+			log("#testEquals002");
 			String[] principals = { DmtConstants.PRINCIPAL, DmtConstants.PRINCIPAL_2 } ;
 			String[] principals2 = { DmtConstants.PRINCIPAL, DmtConstants.PRINCIPAL_3 } ;
 			int[] permissionsBoth = { Acl.ADD, Acl.GET };
 			Acl Acl = new Acl(principals,permissionsBoth);
 			Acl Acl2 = new Acl(principals2,permissionsBoth);
-			tbc.assertTrue("Asserts that two Acl are different when they have the same set of permissions but different principals",!Acl.equals(Acl2));
+			assertTrue(
+					"Asserts that two Acl are different when they have the same set of permissions but different principals",
+					!Acl.equals(Acl2));
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}	
 	/**
@@ -100,17 +94,19 @@ public class Equals {
 	 * 
 	 * @spec Acl.equals(Object)
 	 */
-	private void testEquals003() {
+	public void testEquals003() {
 		try {
-			tbc.log("#testEquals003");
+			log("#testEquals003");
 			String[] principalsBoth = { DmtConstants.PRINCIPAL, DmtConstants.PRINCIPAL_2 } ;
 			int[] permissions = { Acl.ADD, Acl.GET };
 			int[] permissions2 = { Acl.GET, Acl.ADD };
 			Acl Acl = new Acl(principalsBoth,permissions);
 			Acl Acl2 = new Acl(principalsBoth,permissions2);
-			tbc.assertTrue("Asserts that two Acl are different when they have the same set of principals but different permissions",!Acl.equals(Acl2));
+			assertTrue(
+					"Asserts that two Acl are different when they have the same set of principals but different permissions",
+					!Acl.equals(Acl2));
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 

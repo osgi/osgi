@@ -65,7 +65,7 @@ public class GetNodeSize {
 	 * 
 	 * @spec ReadableDataSession.getNodeSize(String[])
 	 */
-	private void testGetNodeSize001() {
+	public void testGetNodeSize001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetNodeSize001");
@@ -87,7 +87,7 @@ public class GetNodeSize {
 	 * 
 	 * @spec ReadableDataSession.getNodeSize(String[])
 	 */
-	private void testGetNodeSize002() {
+	public void testGetNodeSize002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetNodeSize002");

@@ -86,31 +86,31 @@ import org.osgi.test.cases.dmt.tc3.tbc.Plugins.OverlappingSubtreeDataPluginActiv
 import org.osgi.test.cases.dmt.tc3.tbc.Plugins.ToBeOverlappedDataPluginActivator;
 import org.osgi.test.cases.dmt.tc3.tbc.TreeStructure.Configuration;
 import org.osgi.test.cases.dmt.tc3.tbc.TreeStructure.Log;
-import org.osgi.test.cases.util.DefaultTestBundleControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 public class DmtTestControl extends DefaultTestBundleControl {
 
-	private DmtAdmin dmtAdmin;
+	private static DmtAdmin									dmtAdmin;
 
-	private TestDataPluginActivator testDataPluginActivator;
+	private static TestDataPluginActivator					testDataPluginActivator;
 	
-	private TestExecPluginActivator testExecPluginActivator;
+	private static TestExecPluginActivator					testExecPluginActivator;
 	
-	private TestMetaNodeDataPluginActivator testMetaNodeDataPluginActivator;
+	private static TestMetaNodeDataPluginActivator			testMetaNodeDataPluginActivator;
 	
-	private OverlappingDataPluginActivator overlappingDataPluginActivator;
+	private static OverlappingDataPluginActivator			overlappingDataPluginActivator;
 	
-	private OverlappingExecPluginActivator overlappingExecPluginActivator;
+	private static OverlappingExecPluginActivator			overlappingExecPluginActivator;
 	
-	private OverlappingSubtreeDataPluginActivator overlappingSubtreeDataPluginActivator;
+	private static OverlappingSubtreeDataPluginActivator	overlappingSubtreeDataPluginActivator;
 	
-	private ToBeOverlappedDataPluginActivator toBeOverlappedDataPluginActivator;
+	private static ToBeOverlappedDataPluginActivator		toBeOverlappedDataPluginActivator;
 	
-	private NewDataPluginActivator newDataPluginActivator;
+	private static NewDataPluginActivator					newDataPluginActivator;
 	
-	private FatalExceptionDataPluginActivator fatalExceptionDataPluginActivator;
+	private static FatalExceptionDataPluginActivator		fatalExceptionDataPluginActivator;
 	
-	private TestPluginMetaDataActivator testPluginMetaDataActivator; 
+	private static TestPluginMetaDataActivator				testPluginMetaDataActivator; 
 	
 	public void prepare() {
 		try {
@@ -126,7 +126,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	}
 
 
-	public void registerTestPlugins() {
+	private void registerTestPlugins() {
 		try {
 			testDataPluginActivator = new TestDataPluginActivator(this);
 			testDataPluginActivator.start(getContext());
@@ -379,10 +379,8 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	 * @return Returns the factory.
 	 */
 	public DmtAdmin getDmtAdmin() {
-		if (dmtAdmin != null)
-			return dmtAdmin;
-		else
-			throw new NullPointerException("DmtAdmin is null");
+		assertNotNull(dmtAdmin);
+		return dmtAdmin;
 	}
 
 	/**
@@ -456,11 +454,12 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		}
 		
 	}
-	public void failUnexpectedException(Exception exception) {
+	public static void failUnexpectedException(Exception exception) {
 		fail("Unexpected Exception: " + exception.getClass().getName() + " [Message: " + exception.getMessage() +"]");
 	}
 	
-	public void failExpectedOtherException(Class expected,Throwable found) {
+	public static void failExpectedOtherException(Class expected,
+			Throwable found) {
 		fail("Expected " + expected.getName()+ " but was " + found.getClass().getName());
 	}
 

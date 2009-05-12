@@ -82,7 +82,7 @@ public class Log {
 	 * @spec 3.3 Log Management Object
 	 */					
 
-	private void testLog001() {
+	public void testLog001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testLog001");
@@ -105,7 +105,7 @@ public class Log {
 	 * @spec 3.3 Log Management Object
 	 */					
 
-	private void testLog002() {
+	public void testLog002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testLog002");
@@ -131,7 +131,7 @@ public class Log {
 	 * @spec 3.3 Log Management Object
 	 */					
 
-	private void testLog003() {
+	public void testLog003() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testLog003");
@@ -156,7 +156,7 @@ public class Log {
 	 * @spec 3.3 Log Management Object
 	 */					
 
-	private void testLog004() {
+	public void testLog004() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testLog004");
@@ -181,7 +181,7 @@ public class Log {
 	 * @spec 3.3 Log Management Object
 	 */					
 
-	private void testLog005() {
+	public void testLog005() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testLog005");
@@ -206,7 +206,7 @@ public class Log {
 	 * @spec 3.3 Log Management Object
 	 */					
 
-	private void testLog006() {
+	public void testLog006() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testLog006");
@@ -230,7 +230,7 @@ public class Log {
 	 * @spec 3.3 Log Management Object
 	 */					
 
-	private void testLog007() {
+	public void testLog007() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testLog007");
@@ -259,7 +259,7 @@ public class Log {
 	 * @spec 3.3 Log Management Object
 	 */					
 
-	private void testLog008() {
+	public void testLog008() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testLog008");
@@ -288,7 +288,7 @@ public class Log {
 	 * @spec 3.3 Log Management Object
 	 */					
 
-	private void testLog009() {
+	public void testLog009() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testLog009");
@@ -317,7 +317,7 @@ public class Log {
 	 * @spec 3.3 Log Management Object
 	 */					
 
-	private void testLog010() {
+	public void testLog010() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testLog010");
@@ -345,7 +345,7 @@ public class Log {
 	 * @spec 3.3 Log Management Object
 	 */					
 
-	private void testLog011() {
+	public void testLog011() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testLog011");
@@ -373,7 +373,7 @@ public class Log {
 	 * @spec 3.3 Log Management Object
 	 */					
 
-	private void testLog012() {
+	public void testLog012() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testLog012");
@@ -401,7 +401,7 @@ public class Log {
 	 * @spec 3.3 Log Management Object
 	 */					
 
-	private void testLog013() {
+	public void testLog013() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testLog013");

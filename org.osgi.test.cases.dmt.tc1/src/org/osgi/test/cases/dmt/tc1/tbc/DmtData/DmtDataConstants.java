@@ -36,41 +36,37 @@
 package org.osgi.test.cases.dmt.tc1.tbc.DmtData;
 
 import info.dmtree.DmtData;
-import org.osgi.test.cases.util.DefaultTestBundleControl;
+
+import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
 /**
  * This Test Case Validates the values of all constants> of DmtData, according to MEG specification
  */
-public class DmtDataConstants {
-	private DefaultTestBundleControl tbc;
-
-	public DmtDataConstants(DefaultTestBundleControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testConstants001();
-	}
-
+public class DmtDataConstants extends DmtTestControl {
 	/**
 	 * This method asserts the constants values
 	 * 
 	 * @spec 117.12.5
 	 */
-	private void testConstants001() {
-		tbc.log("#testConstants001");
-		tbc.assertEquals("Asserting FORMAT_BASE64 value", 128,DmtData.FORMAT_BASE64);
-		tbc.assertEquals("Asserting FORMAT_BINARY value", 64,DmtData.FORMAT_BINARY);
-        tbc.assertEquals("Asserting FORMAT_BOOLEAN value", 8,DmtData.FORMAT_BOOLEAN);
-        tbc.assertEquals("Asserting FORMAT_DATE value", 16,DmtData.FORMAT_DATE);
-        tbc.assertEquals("Asserting FORMAT_FLOAT value", 2,DmtData.FORMAT_FLOAT);
-        tbc.assertEquals("Asserting FORMAT_INTEGER value", 1,DmtData.FORMAT_INTEGER);
-        tbc.assertEquals("Asserting FORMAT_NODE value", 1024,DmtData.FORMAT_NODE);
-        tbc.assertEquals("Asserting FORMAT_NULL value", 512,DmtData.FORMAT_NULL);
-        tbc.assertEquals("Asserting FORMAT_STRING value", 4,DmtData.FORMAT_STRING);
-        tbc.assertEquals("Asserting FORMAT_XML value", 256,DmtData.FORMAT_XML);
-        tbc.assertEquals("Asserting FORMAT_RAW_BINARY value", 4096,DmtData.FORMAT_RAW_BINARY);
-        tbc.assertEquals("Asserting FORMAT_RAW_STRING value", 2048,DmtData.FORMAT_RAW_STRING);
+	public void testConstants001() {
+		log("#testConstants001");
+		assertEquals("Asserting FORMAT_BASE64 value", 128,
+				DmtData.FORMAT_BASE64);
+		assertEquals("Asserting FORMAT_BINARY value", 64, DmtData.FORMAT_BINARY);
+		assertEquals("Asserting FORMAT_BOOLEAN value", 8,
+				DmtData.FORMAT_BOOLEAN);
+		assertEquals("Asserting FORMAT_DATE value", 16, DmtData.FORMAT_DATE);
+		assertEquals("Asserting FORMAT_FLOAT value", 2, DmtData.FORMAT_FLOAT);
+		assertEquals("Asserting FORMAT_INTEGER value", 1,
+				DmtData.FORMAT_INTEGER);
+		assertEquals("Asserting FORMAT_NODE value", 1024, DmtData.FORMAT_NODE);
+		assertEquals("Asserting FORMAT_NULL value", 512, DmtData.FORMAT_NULL);
+		assertEquals("Asserting FORMAT_STRING value", 4, DmtData.FORMAT_STRING);
+		assertEquals("Asserting FORMAT_XML value", 256, DmtData.FORMAT_XML);
+		assertEquals("Asserting FORMAT_RAW_BINARY value", 4096,
+				DmtData.FORMAT_RAW_BINARY);
+		assertEquals("Asserting FORMAT_RAW_STRING value", 2048,
+				DmtData.FORMAT_RAW_STRING);
 
 	}
 }

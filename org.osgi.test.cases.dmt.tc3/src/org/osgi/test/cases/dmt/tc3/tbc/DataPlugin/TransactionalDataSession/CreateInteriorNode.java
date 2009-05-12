@@ -69,7 +69,7 @@ public class CreateInteriorNode {
 	 * 
 	 * @spec ReadWriteDataSession.createInteriorNode(String[],String)
 	 */
-	private void testCreateInteriorNode001() {
+	public void testCreateInteriorNode001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testCreateInteriorNode001");
@@ -100,7 +100,7 @@ public class CreateInteriorNode {
 	 * @spec ReadWriteDataSession.createInteriorNode(String[],String)
 	 */
 
-	private void testCreateInteriorNode002() {
+	public void testCreateInteriorNode002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testCreateInteriorNode002");
@@ -142,7 +142,7 @@ public class CreateInteriorNode {
 	 * 
 	 * @spec ReadWriteDataSession.createInteriorNode(String[],String)
 	 */
-	private void testCreateInteriorNode003() {
+	public void testCreateInteriorNode003() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testCreateInteriorNode003");
@@ -174,7 +174,7 @@ public class CreateInteriorNode {
 	 * @spec ReadWriteDataSession.createInteriorNode(String[],String)
 	 */
 
-	private void testCreateInteriorNode004() {
+	public void testCreateInteriorNode004() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testCreateInteriorNode004");

@@ -68,7 +68,7 @@ public class SetNodeTitle {
 	 * 
 	 * @spec ReadWriteDataSession.setNodeTitle(String[],String)
 	 */
-	private void testSetNodeTitle001() {
+	public void testSetNodeTitle001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testSetNodeTitle001");
@@ -92,7 +92,7 @@ public class SetNodeTitle {
 	 * 
 	 * @spec ReadWriteDataSession.setNodeTitle(String[],String)
 	 */
-	private void testSetNodeTitle002() {
+	public void testSetNodeTitle002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testSetNodeTitle002");

@@ -65,7 +65,7 @@ public class GetMaxOccurrence {
 	 * 
 	 * @spec MetaNode.getMaxOccurrence()
 	 */
-	private void testGetMaxOccurrence001() {
+	public void testGetMaxOccurrence001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetMaxOccurrence001");

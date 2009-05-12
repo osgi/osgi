@@ -67,7 +67,7 @@ public class GetNodeValue {
 	 * 
 	 * @spec ReadableDataSession.getNodeValue(String[])
 	 */
-	private void testGetNodeValue001() {
+	public void testGetNodeValue001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetNodeValue001");
@@ -89,7 +89,7 @@ public class GetNodeValue {
 	 * 
 	 * @spec ReadableDataSession.getNodeValue(String[])
 	 */
-	private void testGetNodeValue002() {
+	public void testGetNodeValue002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetNodeValue002");

@@ -67,7 +67,7 @@ public class GetMetaNode {
 	 * 
 	 * @spec ReadableDataSession.getMetaNode(String[])
 	 */
-	private void testGetMetaNode001() {
+	public void testGetMetaNode001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetMetaNode001");
@@ -90,7 +90,7 @@ public class GetMetaNode {
 	 * 
 	 * @spec ReadableDataSession.getMetaNode(String[])
 	 */
-	private void testGetMetaNode002() {
+	public void testGetMetaNode002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetMetaNode002");

@@ -55,33 +55,7 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  * This Class Validates the implementation of <code>Acl<code> costructor, 
  * according to MEG specification
  */
-public class Acl {
-	private DmtTestControl tbc;
-	
-	public Acl(DmtTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testAcl001();
-		testAcl002();
-		testAcl003();
-		testAcl004();
-		testAcl005();
-		testAcl006();
-		testAcl007();
-		testAcl008();
-		testAcl009();
-		testAcl010();
-		testAcl011();
-		testAcl012();
-		testAcl013();
-		testAcl014();
-		testAcl015();
-        testAcl016();
-        testAcl017();
-
-	}
+public class Acl extends DmtTestControl {
 
 	/**
 	 * This method asserts that an instance of the ACL is created from its canonic string representation. 
@@ -89,15 +63,15 @@ public class Acl {
 	 * 
 	 * @spec Acl.Acl(String)
 	 */
-	private void testAcl001() {
+	public void testAcl001() {
 
 		try {
-			tbc.log("#testAcl001");
+			log("#testAcl001");
 			info.dmtree.Acl Acl = null;
 			Acl = new info.dmtree.Acl("Add="
 					+ DmtConstants.PRINCIPAL + "&Delete="
 					+ DmtConstants.PRINCIPAL + "&Get=*");
-			tbc.assertEquals(
+			assertEquals(
 					"Asserting that all of the permissions were found",
 					info.dmtree.Acl.ADD
 							| info.dmtree.Acl.DELETE
@@ -106,13 +80,13 @@ public class Acl {
 
 			boolean found = false;
 			for (int i = 0; i < Acl.getPrincipals().length && !found; i++) {
-				String principal = (String) Acl.getPrincipals()[i];
+				String principal = Acl.getPrincipals()[i];
 				found = (principal != null && principal
 						.equals(DmtConstants.PRINCIPAL)) ? true : false;
 			}
-			tbc.assertTrue("Asserting that the principal was found", found);
+			assertTrue("Asserting that the principal was found", found);
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -122,9 +96,9 @@ public class Acl {
 	 * 
 	 * @spec Acl.Acl(String[],int[])
 	 */
-	private void testAcl002() {
+	public void testAcl002() {
 		try {
-			tbc.log("#testAcl002");
+			log("#testAcl002");
 			String[] principals = { DmtConstants.PRINCIPAL,
 					DmtConstants.PRINCIPAL_2 };
 			int[] perm = {
@@ -140,12 +114,14 @@ public class Acl {
 					passed = true;
 				}
 			}
-            tbc.assertTrue("All permissions granted to different principals were found",passed);
+            assertTrue(
+					"All permissions granted to different principals were found",
+					passed);
 
 			int totalExpected = principals.length;
 			int totalFound = 0;
 			for (int i = 0; i < acl.getPrincipals().length; i++) {
-				String principal = (String) acl.getPrincipals()[i];
+				String principal = acl.getPrincipals()[i];
 				for (int j = 0; j < principals.length; j++) {
 					if (principal.equals(principals[j])) {
 						totalFound++;
@@ -153,10 +129,10 @@ public class Acl {
 				}
 
 			}
-			tbc.assertEquals("Asserting that all of the principals were found",
+			assertEquals("Asserting that all of the principals were found",
 					totalExpected, totalFound);
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -167,15 +143,16 @@ public class Acl {
 	 * 
 	 * @spec Acl.Acl(String)
 	 */
-	private void testAcl003() {
+	public void testAcl003() {
 		try {
-			tbc.log("#testAcl003");
+			log("#testAcl003");
 			new info.dmtree.Acl(DmtConstants.INVALID);
-			tbc.failException("#", IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-			tbc.pass("Exception correctly thrown");
+			pass("Exception correctly thrown");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
+			failExpectedOtherException(
+					IllegalArgumentException.class, e);
 		}
 	}
 
@@ -186,21 +163,21 @@ public class Acl {
 	 * @spec Acl.Acl(String)
 	 */
 
-	private void testAcl004() {
+	public void testAcl004() {
 		try {
-			tbc.log("#testAcl004");
+			log("#testAcl004");
 			info.dmtree.Acl Acl = new info.dmtree.Acl(
 					null);
 			String[] principals = Acl.getPrincipals();
 			int permissions = Acl.getPermissions("*");
 
-			tbc.assertNotNull("Principals are not null", principals);
-			tbc.assertTrue("Asserting empty principals",
+			assertNotNull("Principals are not null", principals);
+			assertTrue("Asserting empty principals",
 					(principals.length == 0));
-			tbc.assertTrue("Asserting that no global permissions were granted",
+			assertTrue("Asserting that no global permissions were granted",
 					permissions == 0);
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 
 	}
@@ -210,19 +187,19 @@ public class Acl {
 	 * 
 	 * @spec Acl.Acl(String)
 	 */
-	private void testAcl005() {
+	public void testAcl005() {
 		try {
-			tbc.log("#testAcl005");
+			log("#testAcl005");
 			String[] principal = { DmtConstants.PRINCIPAL,
 					DmtConstants.PRINCIPAL_2 };
 			info.dmtree.Acl Acl = null;
 			Acl = new info.dmtree.Acl("Add=" + principal[0]
 					+ "&Delete=" + principal[1] + "&Get=*");
-			tbc.assertEquals("Asserting permissions of " + principal[0],
+			assertEquals("Asserting permissions of " + principal[0],
 					info.dmtree.Acl.ADD
 							| info.dmtree.Acl.GET, Acl
 							.getPermissions(principal[0]));
-			tbc.assertEquals("Asserting permissions of " + principal[1],
+			assertEquals("Asserting permissions of " + principal[1],
 					info.dmtree.Acl.DELETE
 							| info.dmtree.Acl.GET, Acl
 							.getPermissions(principal[1]));
@@ -230,17 +207,17 @@ public class Acl {
 			int found = 0;
 			for (int i = 0; i < Acl.getPrincipals().length
 					&& found < principal.length; i++) {
-				String pr = (String) Acl.getPrincipals()[i];
+				String pr = Acl.getPrincipals()[i];
 				for (int j = 0; j < principal.length; j++) {
 					if (pr.equals(principal[j])) {
 						found++;
 					}
 				}
 			}
-			tbc.assertEquals("All principals were found", principal.length,
+			assertEquals("All principals were found", principal.length,
 					found);
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -250,19 +227,19 @@ public class Acl {
 	 * 
 	 * @spec Acl.Acl(String)
 	 */
-	private void testAcl006() {
+	public void testAcl006() {
 		try {
-			tbc.log("#testAcl006");
+			log("#testAcl006");
 			
             new info.dmtree.Acl("Invalid="
 					+ DmtConstants.PRINCIPAL + "&Install="
 					+ DmtConstants.PRINCIPAL + "&Remove=*");
             
-			tbc.failException("#", IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-			tbc.pass("Correctly caught IllegalArgumentException");
+			pass("Correctly caught IllegalArgumentException");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
+			failExpectedOtherException(IllegalArgumentException.class, e);
 		}
 	}
 
@@ -272,17 +249,17 @@ public class Acl {
 	 * 
 	 * @spec Acl.Acl(String)
 	 */
-	private void testAcl007() {
+	public void testAcl007() {
 		try {
-			tbc.log("#testAcl007");
+			log("#testAcl007");
             
 			new info.dmtree.Acl("Add="+ DmtConstants.INVALID + "&Delete="
 					+ DmtConstants.INVALID + "&Get=*");
-			tbc.failException("#", IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-			tbc.pass("Correctly caught IllegalArgumentException");
+			pass("Correctly caught IllegalArgumentException");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
+			failExpectedOtherException(IllegalArgumentException.class, e);
 		}
 	}
 
@@ -292,9 +269,9 @@ public class Acl {
 	 * 
 	 * @spec Acl.Acl(String[],int[])
 	 */
-	private void testAcl008() {
+	public void testAcl008() {
 		try {
-			tbc.log("#testAcl008");
+			log("#testAcl008");
 			String[] principal = { DmtConstants.PRINCIPAL,
 					DmtConstants.PRINCIPAL_2 };
 			int[] perm = { info.dmtree.Acl.GET
@@ -303,12 +280,12 @@ public class Acl {
 
 			new info.dmtree.Acl(principal, perm);
             
-			tbc.failException("#", IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 
 		} catch (IllegalArgumentException e) {
-			tbc.pass("Correctly caught IllegalArgumentException.");
+			pass("Correctly caught IllegalArgumentException.");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
+			failExpectedOtherException(IllegalArgumentException.class, e);
 		}
 	}
 
@@ -318,20 +295,20 @@ public class Acl {
 	 * 
 	 * @spec Acl.Acl(String[],int[])
 	 */
-	private void testAcl009() {
+	public void testAcl009() {
 		try {
-			tbc.log("#testAcl009");
+			log("#testAcl009");
 			String[] principal = { DmtConstants.PRINCIPAL,
 					DmtConstants.PRINCIPAL_2 };
 			int[] perm = { info.dmtree.Acl.GET | 99 };
 			
             new info.dmtree.Acl(principal, perm);
 			
-            tbc.failException("#", IllegalArgumentException.class);
+            failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-			tbc.pass("Correctly caught IllegalArgumentException.");
+			pass("Correctly caught IllegalArgumentException.");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
+			failExpectedOtherException(IllegalArgumentException.class, e);
 		}
 	}
 
@@ -341,9 +318,9 @@ public class Acl {
 	 * 
 	 * @spec Acl.Acl(String[],int[])
 	 */
-	private void testAcl010() {
+	public void testAcl010() {
 		try {
-			tbc.log("#testAcl010");
+			log("#testAcl010");
 			String[] principal = { DmtConstants.PRINCIPAL,
 					DmtConstants.INVALID };
 			int[] perm = { info.dmtree.Acl.GET,
@@ -351,11 +328,11 @@ public class Acl {
 			
             new info.dmtree.Acl(principal, perm);
 			
-            tbc.failException("#", IllegalArgumentException.class);
+            failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-			tbc.pass("Correctly caught IllegalArgumentException.");
+			pass("Correctly caught IllegalArgumentException.");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
+			failExpectedOtherException(IllegalArgumentException.class, e);
 		}
 	}
 
@@ -364,9 +341,9 @@ public class Acl {
 	 * 
 	 * @spec Acl.Acl(String[],int[])
 	 */
-	private void testAcl011() {
+	public void testAcl011() {
 		try {
-			tbc.log("#testAcl011");
+			log("#testAcl011");
 			String[] principal = { DmtConstants.PRINCIPAL,
 					DmtConstants.PRINCIPAL_2, "*" };
 			int[] perm = { info.dmtree.Acl.GET,
@@ -383,12 +360,12 @@ public class Acl {
 					passed = true;
 				}
 			}
-			tbc.assertTrue(
+			assertTrue(
 					"Asserts if '*' grants permissions to all principals.",
 					passed);
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -397,9 +374,9 @@ public class Acl {
 	 * 
 	 * @spec Acl.Acl(String[],int[])
 	 */
-	private void testAcl012() {
+	public void testAcl012() {
 		try {
-			tbc.log("#testAcl012");
+			log("#testAcl012");
 			String[] principal = { DmtConstants.PRINCIPAL, "*" };
 			int[] perm = { info.dmtree.Acl.GET,
 					info.dmtree.Acl.ADD };
@@ -413,13 +390,13 @@ public class Acl {
 					passed = true;
 				}
 			}
-			tbc.assertTrue(
+			assertTrue(
 					"Asserts if '*' grants permissions to all principals, "
 							+ "even if it is not passed on the constructor.",
 					passed);
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -428,9 +405,9 @@ public class Acl {
 	 * 
 	 * @spec Acl.Acl(String[],int[])
 	 */
-	private void testAcl013() {
+	public void testAcl013() {
 		try {
-			tbc.log("#testAcl013");
+			log("#testAcl013");
 			String[] principal = { DmtConstants.PRINCIPAL,
 					DmtConstants.PRINCIPAL_2, DmtConstants.PRINCIPAL };
 			int[] perm = { info.dmtree.Acl.GET,
@@ -439,12 +416,11 @@ public class Acl {
 			
             new info.dmtree.Acl(principal, perm);
             
-			tbc.failException("#", IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-			tbc
-					.pass("IllegalArgumentException was thrown when a principal appeared multiple times in the principals array");
+			pass("IllegalArgumentException was thrown when a principal appeared multiple times in the principals array");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
+			failExpectedOtherException(IllegalArgumentException.class, e);
 		}
 	}
 
@@ -454,9 +430,9 @@ public class Acl {
 	 * 
 	 * @spec Acl.Acl(String[],int[])
 	 */
-	private void testAcl014() {
+	public void testAcl014() {
 		try {
-			tbc.log("#testAcl014");
+			log("#testAcl014");
 			String[] principal = { DmtConstants.PRINCIPAL,
 					DmtConstants.PRINCIPAL_2 };
 			int[] perm = {
@@ -466,11 +442,11 @@ public class Acl {
 			 info.dmtree.Acl acl = new info.dmtree.Acl(principal, perm);
 			 
 			 acl.getPermissions(principal[1]);
-				tbc.failException("#", IllegalArgumentException.class);
+				failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-			tbc.pass("Correctly caught IllegalArgumentException. The constructor is ignoring principals with empty permissions.");
+			pass("Correctly caught IllegalArgumentException. The constructor is ignoring principals with empty permissions.");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
+			failExpectedOtherException(IllegalArgumentException.class, e);
 		}
 	}
     
@@ -480,17 +456,18 @@ public class Acl {
      * 
      * @spec Acl.getPermissions(String)
      */
-    private void testAcl015() {
+    public void testAcl015() {
         try {
-            tbc.log("#testAcl015");
+            log("#testAcl015");
             info.dmtree.Acl acl = new info.dmtree.Acl("Add=*&Get=" + DmtConstants.PRINCIPAL +"&Replace="+DmtConstants.PRINCIPAL_2);
             
             int perm = acl.getPermissions("*");
-            tbc.assertTrue("Asserts that getPermissions '*' gets the permissions that are granted globally, to all principals", 
+            assertTrue(
+					"Asserts that getPermissions '*' gets the permissions that are granted globally, to all principals", 
                 perm==info.dmtree.Acl.ADD);
 
         } catch (Exception e) {
-        	tbc.failUnexpectedException(e);
+        	failUnexpectedException(e);
         }
     }
     
@@ -501,20 +478,21 @@ public class Acl {
 	 * @spec Acl.Acl(String)
 	 */
 
-	private void testAcl016() {
+	public void testAcl016() {
 		try {
-			tbc.log("#testAcl016");
+			log("#testAcl016");
 			info.dmtree.Acl Acl = new info.dmtree.Acl("");
 			String[] principals = Acl.getPrincipals();
 			int permissions = Acl.getPermissions("*");
 
-			tbc.assertNotNull("Principals are not null", principals);
+			assertNotNull("Principals are not null", principals);
 			
-			tbc.assertTrue("Asserting empty principals",(principals.length == 0));
+			assertTrue("Asserting empty principals", (principals.length == 0));
 			
-			tbc.assertTrue("Asserting that no global permissions were granted",permissions == 0);
+			assertTrue("Asserting that no global permissions were granted",
+					permissions == 0);
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 
 	}
@@ -526,22 +504,23 @@ public class Acl {
 	 * 
 	 * @spec Acl.Acl(String)
 	 */
-	private void testAcl017() {
+	public void testAcl017() {
 		char[] invalidAclChar = new char[] { '=','&','*',' ' };
 		
 		try {
-			tbc.log("#testAcl017");
+			log("#testAcl017");
 			for (int i = 0; i < invalidAclChar.length; i++) {
 				try {
 					new info.dmtree.Acl("Add=prin" + invalidAclChar[i] + "cipal");
-					tbc.failException("", IllegalArgumentException.class);
+					failException("", IllegalArgumentException.class);
 				} catch (IllegalArgumentException e) {
-					tbc.pass("IllegalArgumentException correctly thrown when creating an Acl " +
+					pass("IllegalArgumentException correctly thrown when creating an Acl "
+							+
 							"using the invalid character \"" + invalidAclChar[i] + "\" in the remote server id");
 				}
 			}
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
+			failExpectedOtherException(IllegalArgumentException.class, e);
 		}
 	}
 }

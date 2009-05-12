@@ -63,7 +63,7 @@ public class GetDescription {
 	 * 
 	 * @spec MetaNode.getDescription()
 	 */
-	private void testGetDescription001() {
+	public void testGetDescription001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetDescription001");

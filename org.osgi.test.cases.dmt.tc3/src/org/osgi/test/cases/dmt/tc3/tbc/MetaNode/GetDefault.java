@@ -65,7 +65,7 @@ public class GetDefault {
 	 * 
 	 * @spec MetaNode.getDefault()
 	 */
-	private void testGetDefault001() {
+	public void testGetDefault001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetDefault001");

@@ -37,6 +37,7 @@
 package org.osgi.test.cases.dmt.tc1.tbc.Acl;
 
 import info.dmtree.Acl;
+
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 /**
@@ -45,33 +46,24 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  * This test case validates the implementation of <code>hashcode<code> method of Acl, 
  * according to MEG specification
  */
-public class Hashcode {
-	private DmtTestControl tbc;
-	
-	public Hashcode(DmtTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testHashcode001();
-	}
-
+public class Hashcode extends DmtTestControl {
 	/**
 	 * Asserts that two Acl have the same hashcode when they are equals
 	 * 
 	 * @spec Acl.hashcode()
 	 */
-	private void testHashcode001() {
+	public void testHashcode001() {
 		try {
-			tbc.log("#testHashcode001");
+			log("#testHashcode001");
 			String[] principals = { DmtConstants.PRINCIPAL, DmtConstants.PRINCIPAL_2 } ;
 			int[] permissions = { Acl.ADD, Acl.GET };
 			Acl Acl = new Acl(principals,permissions);
 			Acl Acl2 = new Acl(principals,permissions);
-			tbc.assertTrue("Asserts that two Acl have the same hashcode when they are equals",
+			assertTrue(
+					"Asserts that two Acl have the same hashcode when they are equals",
 					Acl.hashcode()==Acl2.hashcode());
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 

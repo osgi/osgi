@@ -43,6 +43,7 @@
 package org.osgi.test.cases.dmt.tc1.tbc.Acl;
 
 import info.dmtree.Acl;
+
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 /**
@@ -51,46 +52,33 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  * This test case validates the implementation of <code>addPermission<code> method of Acl, 
  * according to MEG specification
  */
-public class AddPermission {
-	private DmtTestControl tbc;
+public class AddPermission extends DmtTestControl {
 	
 	private static final String ACL_DEFAULT = "Add=" + DmtConstants.PRINCIPAL + "&Get=*";
 
 	
-	public AddPermission(DmtTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testAddPermission001();
-		testAddPermission002();
-		testAddPermission003();
-		testAddPermission004();
-		testAddPermission005();
-		testAddPermission006();
-	}
-
 	/**
 	 * This method creates a new Acl and asserts that a new permission is correctly added to 
 	 * the Acl principal and that "*" grants permissions to all principals.
 	 * 
 	 * @spec Acl.addPermission(String,int)
 	 */
-	private void testAddPermission001() {
+	public void testAddPermission001() {
 		try {
-			tbc.log("#testAddPermission001");
+			log("#testAddPermission001");
 			Acl acl = new Acl(
 					ACL_DEFAULT);
 	
 			acl =  acl.addPermission(DmtConstants.PRINCIPAL, Acl.DELETE);
 	
-			tbc.assertEquals("Asserting added permission",
+			assertEquals("Asserting added permission",
 					Acl.ADD | Acl.GET | Acl.DELETE, acl
 							.getPermissions(DmtConstants.PRINCIPAL));
-			tbc.assertEquals("Asserting that '*' grants permissions to all principals",
+			assertEquals(
+					"Asserting that '*' grants permissions to all principals",
 					Acl.GET, acl.getPermissions(DmtConstants.PRINCIPAL_2));			
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -99,22 +87,23 @@ public class AddPermission {
 	 * 
 	 * @spec Acl.addPermission(String,int)
 	 */
-	private void testAddPermission002() {
+	public void testAddPermission002() {
 		try {
-			tbc.log("#testAddPermission002");
+			log("#testAddPermission002");
 			Acl acl = new Acl(
 					ACL_DEFAULT);
 	
 			acl = acl.addPermission(DmtConstants.PRINCIPAL, Acl.DELETE | Acl.EXEC | Acl.REPLACE);
 	
-			tbc.assertEquals("Asserting principal permissions",
+			assertEquals("Asserting principal permissions",
 					Acl.ALL_PERMISSION, acl
 							.getPermissions(DmtConstants.PRINCIPAL));
-			tbc.assertEquals("Asserting that '*' grants permissions to all principals",
+			assertEquals(
+					"Asserting that '*' grants permissions to all principals",
 					Acl.GET, acl.getPermissions(DmtConstants.PRINCIPAL_2));			
 			
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -124,16 +113,16 @@ public class AddPermission {
 	 * 
 	 * @spec Acl.addPermission(String,int)
 	 */
-	private void testAddPermission003() {
+	public void testAddPermission003() {
 		try {
-			tbc.log("#testAddPermission003");
+			log("#testAddPermission003");
 			Acl acl = new Acl(ACL_DEFAULT);
 			acl = acl.addPermission(DmtConstants.PRINCIPAL, 2005);
-			tbc.failException("#",IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-			tbc.pass("IllegalArgumentException correctly thrown");
+			pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
+			failExpectedOtherException(IllegalArgumentException.class, e);
 		}		
 	}
 
@@ -143,16 +132,16 @@ public class AddPermission {
 	 * 
 	 * @spec Acl.addPermission(String,int)
 	 */
-	private void testAddPermission004() {
-		tbc.log("#testAddPermission004");
+	public void testAddPermission004() {
+		log("#testAddPermission004");
 		Acl acl = new Acl(ACL_DEFAULT);
 		try {
 			acl = acl.addPermission(DmtConstants.INVALID, Acl.DELETE);
-			tbc.failException("#",IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-			tbc.pass("IllegalArgumentException correctly thrown");
+			pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
+			failExpectedOtherException(IllegalArgumentException.class, e);
 		}
 	}
 	/**
@@ -160,23 +149,23 @@ public class AddPermission {
 	 * 
 	 * @spec Acl.addPermission(String,int)
 	 */
-	private void testAddPermission005() {
+	public void testAddPermission005() {
 		try {
-			tbc.log("#testAddPermission005");
+			log("#testAddPermission005");
 			Acl acl = new Acl(
 					"Add=" + DmtConstants.PRINCIPAL + "&Delete=" + DmtConstants.PRINCIPAL + "&Exec="
 					+ DmtConstants.PRINCIPAL + "&Replace=" + DmtConstants.PRINCIPAL + "&Get=*");
 			
 			acl = acl.addPermission(DmtConstants.PRINCIPAL_2, Acl.GET
 					| Acl.EXEC);
-			tbc.assertEquals("Assert " + DmtConstants.PRINCIPAL_2 + " permission",
+			assertEquals("Assert " + DmtConstants.PRINCIPAL_2 + " permission",
 					Acl.GET
 							| Acl.EXEC, acl.getPermissions(DmtConstants.PRINCIPAL_2));
-			tbc.assertEquals("Assert " + DmtConstants.PRINCIPAL + " permission",
+			assertEquals("Assert " + DmtConstants.PRINCIPAL + " permission",
 					Acl.ALL_PERMISSION, acl.getPermissions(DmtConstants.PRINCIPAL));
 			
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 	
@@ -185,9 +174,9 @@ public class AddPermission {
 	 * 
 	 * @spec Acl.addPermission(String,int)
 	 */
-	private void testAddPermission006() {
+	public void testAddPermission006() {
 		try {
-			tbc.log("#testAddPermission006");
+			log("#testAddPermission006");
 			String[] principal = { DmtConstants.PRINCIPAL ,DmtConstants.PRINCIPAL_2 };
 			int[] perm = { Acl.GET, Acl.EXEC };
 			
@@ -200,10 +189,11 @@ public class AddPermission {
 					passed = true;
 				}
 			}
-			tbc.assertTrue("Asserts if '*' grants permissions to all principals.",passed);
+			assertTrue("Asserts if '*' grants permissions to all principals.",
+					passed);
 			
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}	
 

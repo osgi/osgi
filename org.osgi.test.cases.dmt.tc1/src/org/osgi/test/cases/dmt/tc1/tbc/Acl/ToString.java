@@ -40,6 +40,7 @@
 package org.osgi.test.cases.dmt.tc1.tbc.Acl;
 
 import info.dmtree.Acl;
+
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
@@ -49,19 +50,10 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  * This test case validates the implementation of <code>toString<code> method of Acl, 
  * according to MEG reference specification.
  */
-public class ToString {
-	private DmtTestControl tbc;
+public class ToString extends DmtTestControl {
 
 	private Acl Acl;
 
-	public ToString(DmtTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testToString001();
-		testToString002();
-	}
 
 	/**
 	 * This method asserts that the operations are in the following order: 
@@ -70,10 +62,10 @@ public class ToString {
 	 * 
 	 * @spec Acl.toString()
 	 */
-	private void testToString001() {
+	public void testToString001() {
 		try {
 
-			tbc.log("#testToString001");
+			log("#testToString001");
 
 			String canonic = "Exec=" + DmtConstants.PRINCIPAL + "&Add="
 					+ DmtConstants.PRINCIPAL_2 + "&Delete="
@@ -85,7 +77,7 @@ public class ToString {
 
 			String result = Acl.toString();
 
-			tbc.assertEquals("Asserts toString returned value", "Add="
+			assertEquals("Asserts toString returned value", "Add="
 					+ DmtConstants.PRINCIPAL + "+"+ DmtConstants.PRINCIPAL_2 +"&Delete="
 					+ DmtConstants.PRINCIPAL + "&Exec="
 					+ DmtConstants.PRINCIPAL + "&Get="
@@ -93,7 +85,7 @@ public class ToString {
 					+ DmtConstants.PRINCIPAL, result);
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -103,9 +95,9 @@ public class ToString {
 	 * 
 	 * @spec Acl.toString()
 	 */
-	private void testToString002() {
+	public void testToString002() {
 		try {
-			tbc.log("#testToString002");
+			log("#testToString002");
 
 			String canonic = "Get=" + DmtConstants.PRINCIPAL + "&Add=*&Get="
 					+ DmtConstants.PRINCIPAL_2;
@@ -113,12 +105,12 @@ public class ToString {
 
 			String result = Acl.toString();
 
-			tbc.assertEquals("Asserts toString returned value", "Add=*"
+			assertEquals("Asserts toString returned value", "Add=*"
 					+ "&Get=" + DmtConstants.PRINCIPAL + "+"
 					+ DmtConstants.PRINCIPAL_2, result);
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 }

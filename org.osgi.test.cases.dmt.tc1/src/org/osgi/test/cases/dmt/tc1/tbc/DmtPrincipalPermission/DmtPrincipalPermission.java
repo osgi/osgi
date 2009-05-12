@@ -50,27 +50,7 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  * 
  */
 
-public class DmtPrincipalPermission {
-
-	private DmtTestControl tbc;
-
-	public DmtPrincipalPermission(DmtTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testDmtPrincipalPermission001();
-		testDmtPrincipalPermission002();
-		testDmtPrincipalPermission003();
-		testDmtPrincipalPermission004();
-		testDmtPrincipalPermission005();
-		testDmtPrincipalPermission006();
-		testDmtPrincipalPermission007();
-		testDmtPrincipalPermission008();
-		testDmtPrincipalPermission009();
-		testDmtPrincipalPermission010();
-		testDmtPrincipalPermission011();
-	}
+public class DmtPrincipalPermission extends DmtTestControl {
 
 	/**
 	 * It asserts if the principal passed in the constructor is
@@ -78,20 +58,19 @@ public class DmtPrincipalPermission {
 	 * 
 	 * @spec DmtPrincipalPermission.DmtPrincipalPermission(String)
 	 */
-	private void testDmtPrincipalPermission001() {
+	public void testDmtPrincipalPermission001() {
 		try {
-			tbc.log("#testDmtPrincipalPermission001");
+			log("#testDmtPrincipalPermission001");
 			info.dmtree.security.DmtPrincipalPermission dmtPrincipalPermission = new info.dmtree.security.DmtPrincipalPermission(
 					DmtConstants.PRINCIPAL);
-			tbc
-					.assertEquals(
+			assertEquals(
 							"Asserts that the principal passed as parameter is equal to the returned value",
 							DmtConstants.PRINCIPAL, dmtPrincipalPermission
 									.getName());
-			tbc.assertEquals("Asserts that the actions returned is '*'", "*",
+			assertEquals("Asserts that the actions returned is '*'", "*",
 					dmtPrincipalPermission.getActions());
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -100,19 +79,18 @@ public class DmtPrincipalPermission {
 	 * 
 	 * @spec DmtPrincipalPermission.DmtPrincipalPermission(String)
 	 */
-	private void testDmtPrincipalPermission002() {
+	public void testDmtPrincipalPermission002() {
 		try {
-			tbc.log("#testDmtPrincipalPermission002");
+			log("#testDmtPrincipalPermission002");
 			info.dmtree.security.DmtPrincipalPermission dmtPrincipalPermission = new info.dmtree.security.DmtPrincipalPermission(
 					"*");
-			tbc
-					.assertEquals(
+			assertEquals(
 							"Asserts that the principal passed as parameter is equal to the returned value.",
 							"*", dmtPrincipalPermission.getName());
-			tbc.assertEquals("Asserts that the actions returned is '*'.", "*",
+			assertEquals("Asserts that the actions returned is '*'.", "*",
 					dmtPrincipalPermission.getActions());
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -122,22 +100,20 @@ public class DmtPrincipalPermission {
 	 * 
 	 * @spec DmtPrincipalPermission.DmtPrincipalPermission(String,String)
 	 */
-	private void testDmtPrincipalPermission003() {
+	public void testDmtPrincipalPermission003() {
 		try {
-			tbc.log("#testDmtPrincipalPermission003");
+			log("#testDmtPrincipalPermission003");
 			info.dmtree.security.DmtPrincipalPermission dmtPrincipalPermission = new info.dmtree.security.DmtPrincipalPermission(
 					DmtConstants.PRINCIPAL, "*");
-			tbc
-					.assertEquals(
+			assertEquals(
 							"Asserts that the principal passed as parameter is equal to the returned value",
 							DmtConstants.PRINCIPAL, dmtPrincipalPermission
 									.getName());
-			tbc
-					.assertEquals(
+			assertEquals(
 							"Asserts that the actions passed as parameter is equal to the returned value",
 							"*", dmtPrincipalPermission.getActions());
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -146,15 +122,15 @@ public class DmtPrincipalPermission {
 	 * 
 	 * @spec DmtPrincipalPermission.DmtPrincipalPermission(String)
 	 */
-	private void testDmtPrincipalPermission004() {
+	public void testDmtPrincipalPermission004() {
 		try {
-			tbc.log("#testDmtPrincipalPermission004");
+			log("#testDmtPrincipalPermission004");
 			new info.dmtree.security.DmtPrincipalPermission(null);
-			tbc.failException("#", NullPointerException.class);
+			failException("#", NullPointerException.class);
 		} catch (NullPointerException e) {
-			tbc.pass("NullPointerException correctly thrown");
+			pass("NullPointerException correctly thrown");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(NullPointerException.class,e);
+			failExpectedOtherException(NullPointerException.class, e);
 		}
 	}
 
@@ -163,15 +139,15 @@ public class DmtPrincipalPermission {
 	 * 
 	 * @spec DmtPrincipalPermission.DmtPrincipalPermission(String)
 	 */
-	private void testDmtPrincipalPermission005() {
+	public void testDmtPrincipalPermission005() {
 		try {
-			tbc.log("#testDmtPrincipalPermission005");
+			log("#testDmtPrincipalPermission005");
 			new info.dmtree.security.DmtPrincipalPermission("");
-			tbc.failException("#", IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-			tbc.pass("IllegalArgumentException correctly thrown");
+			pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
+			failExpectedOtherException(IllegalArgumentException.class, e);
 		}
 	}
 
@@ -180,15 +156,15 @@ public class DmtPrincipalPermission {
 	 * 
 	 * @spec DmtPrincipalPermission.DmtPrincipalPermission(String,String)
 	 */
-	private void testDmtPrincipalPermission006() {
+	public void testDmtPrincipalPermission006() {
 		try {
-			tbc.log("#testDmtPrincipalPermission006");
+			log("#testDmtPrincipalPermission006");
 			new info.dmtree.security.DmtPrincipalPermission(null, "*");
-			tbc.failException("#", NullPointerException.class);
+			failException("#", NullPointerException.class);
 		} catch (NullPointerException e) {
-			tbc.pass("NullPointerException correctly thrown");
+			pass("NullPointerException correctly thrown");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(NullPointerException.class,e);
+			failExpectedOtherException(NullPointerException.class, e);
 		}
 	}
 
@@ -197,15 +173,15 @@ public class DmtPrincipalPermission {
 	 * 
 	 * @spec DmtPrincipalPermission.DmtPrincipalPermission(String,String)
 	 */
-	private void testDmtPrincipalPermission007() {
+	public void testDmtPrincipalPermission007() {
 		try {
-			tbc.log("#testDmtPrincipalPermission007");
+			log("#testDmtPrincipalPermission007");
 			new info.dmtree.security.DmtPrincipalPermission("", "*");
-			tbc.failException("#", IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-			tbc.pass("IllegalArgumentException correctly thrown");
+			pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
+			failExpectedOtherException(IllegalArgumentException.class, e);
 		}
 	}
 
@@ -214,16 +190,16 @@ public class DmtPrincipalPermission {
 	 * 
 	 * @spec DmtPrincipalPermission.DmtPrincipalPermission(String,String)
 	 */
-	private void testDmtPrincipalPermission008() {
+	public void testDmtPrincipalPermission008() {
 		try {
-			tbc.log("#testDmtPrincipalPermission008");
+			log("#testDmtPrincipalPermission008");
 			new info.dmtree.security.DmtPrincipalPermission(
 					DmtConstants.PRINCIPAL, null);
-			tbc.failException("#", NullPointerException.class);
+			failException("#", NullPointerException.class);
 		} catch (NullPointerException e) {
-			tbc.pass("NullPointerException correctly thrown");
+			pass("NullPointerException correctly thrown");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(NullPointerException.class,e);
+			failExpectedOtherException(NullPointerException.class, e);
 		}
 	}
 
@@ -232,16 +208,16 @@ public class DmtPrincipalPermission {
 	 * 
 	 * @spec DmtPrincipalPermission.DmtPrincipalPermission(String,String)
 	 */
-	private void testDmtPrincipalPermission009() {
+	public void testDmtPrincipalPermission009() {
 		try {
-			tbc.log("#testDmtPrincipalPermission009");
+			log("#testDmtPrincipalPermission009");
 			new info.dmtree.security.DmtPrincipalPermission(
 					DmtConstants.PRINCIPAL, "");
-			tbc.failException("#", IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-			tbc.pass("IllegalArgumentException correctly thrown");
+			pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
+			failExpectedOtherException(IllegalArgumentException.class, e);
 		}
 	}
 
@@ -251,20 +227,19 @@ public class DmtPrincipalPermission {
 	 * 
 	 * @spec DmtPrincipalPermission.DmtPrincipalPermission(String)
 	 */
-	private void testDmtPrincipalPermission010() {
+	public void testDmtPrincipalPermission010() {
 		try {
-			tbc.log("#testDmtPrincipalPermission010");
+			log("#testDmtPrincipalPermission010");
 			String principal = "www.cesar*";
 			info.dmtree.security.DmtPrincipalPermission dmtPrincipalPermission = new info.dmtree.security.DmtPrincipalPermission(
 					principal);
-			tbc
-					.assertEquals(
+			assertEquals(
 							"Asserts that the principal passed as parameter is equal to the returned value",
 							principal, dmtPrincipalPermission.getName());
-			tbc.assertEquals("Asserts that the actions returned is '*'", "*",
+			assertEquals("Asserts that the actions returned is '*'", "*",
 					dmtPrincipalPermission.getActions());
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -274,20 +249,19 @@ public class DmtPrincipalPermission {
 	 * 
 	 * @spec DmtPrincipalPermission.DmtPrincipalPermission(String,String)
 	 */
-	private void testDmtPrincipalPermission011() {
+	public void testDmtPrincipalPermission011() {
 		try {
-			tbc.log("#testDmtPrincipalPermission011");
+			log("#testDmtPrincipalPermission011");
 			String principal = "www.cesar*";
 			info.dmtree.security.DmtPrincipalPermission dmtPrincipalPermission = new info.dmtree.security.DmtPrincipalPermission(
 					principal, "*");
-			tbc
-					.assertEquals(
+			assertEquals(
 							"Asserts that the principal passed as parameter is equal to the returned value",
 							principal, dmtPrincipalPermission.getName());
-			tbc.assertEquals("Asserts that the actions returned is '*'", "*",
+			assertEquals("Asserts that the actions returned is '*'", "*",
 					dmtPrincipalPermission.getActions());
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 }

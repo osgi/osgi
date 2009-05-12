@@ -64,7 +64,7 @@ public class GetMin {
 	 * 
 	 * @spec MetaNode.getMin()
 	 */
-	private void testGetMin001() {
+	public void testGetMin001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetMin001");

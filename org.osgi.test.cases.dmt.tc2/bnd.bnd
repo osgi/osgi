@@ -1,0 +1,34 @@
+Bundle-Version: 4.2.0.${project.build}
+Bundle-Description: Dmt Test Case 002
+Export-Package						= ${p}.tbc.*, \
+	org.osgi.test.support.*
+	
+Include-Resource					= \
+	tb1.jar
+
+Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+
+-buildpath							= \
+    org.osgi.test.support;                  version=project , \
+	osgi;									version=4.1		, \
+	ee.foundation;								version=1.1		, \
+	${junit}
+
+-runbundles							= \
+	osgi.mobile; version=latest, \
+	org.osgi.impl.service.log; version=latest, \
+	org.apache.felix.configadmin; version=latest, \
+	org.eclipse.equinox.event; version=latest, \
+	org.osgi.impl.service.dmt;  version=project
+
+-runproperties = report=true, \
+	org.osgi.framework.security=osgi, \
+	org.osgi.framework.trust.repositories=${build}/keystore, \
+	org.osgi.vendor.dmtree.DigestDelegate=org.osgi.impl.service.dmt.export.Digest, \
+	org.osgi.test.cases.dmt.tc2.timeout=30000, \
+	org.osgi.test.cases.dmt.tc2.supports_node_title=true, \
+	org.osgi.test.cases.dmt.tc2.supports_node_timestamp=true, \
+	org.osgi.test.cases.dmt.tc2.supports_node_size=true, \
+	org.osgi.test.cases.dmt.tc2.supports_node_version=true, \
+	org.osgi.test.cases.dmt.tc2.wait_for_event=1200, \
+	org.osgi.test.cases.dmt.tc2.supports_asynchronous_notifications=true

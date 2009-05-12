@@ -69,7 +69,7 @@ public class Execute {
 	 * 
 	 * @spec ExecPlugin.execute(DmtSession,String[],String,String)
 	 */
-	private void testExecute001() {
+	public void testExecute001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testExecute001");
@@ -93,7 +93,7 @@ public class Execute {
 	 * 
 	 * @spec ExecPlugin.execute(DmtSession,String[],String,String)
 	 */
-	private void testExecute002() {
+	public void testExecute002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testExecute002");
@@ -122,7 +122,7 @@ public class Execute {
 	 * 
 	 * @spec ExecPlugin.execute(DmtSession,String[],String,String)
 	 */
-	private void testExecute003() {
+	public void testExecute003() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testExecute003");
@@ -145,7 +145,7 @@ public class Execute {
 	 * 
 	 * @spec ExecPlugin.execute(DmtSession,String[],String,String)
 	 */
-	private void testExecute004() {
+	public void testExecute004() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testExecute004");

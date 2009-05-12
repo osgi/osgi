@@ -72,7 +72,7 @@ public class GetChildNodeNames {
 	 * 
 	 * @spec ReadableDataSession.getChildNodeNames(String[])
 	 */
-	private void testGetChildNodeNames001() {
+	public void testGetChildNodeNames001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetChildNodeNames001");
@@ -92,7 +92,7 @@ public class GetChildNodeNames {
 	 * 
 	 * @spec ReadableDataSession.getChildNodeNames(String[])
 	 */
-	private void testGetChildNodeNames002() {
+	public void testGetChildNodeNames002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetChildNodeNames002");

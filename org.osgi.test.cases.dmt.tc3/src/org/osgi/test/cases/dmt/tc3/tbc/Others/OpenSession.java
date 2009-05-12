@@ -68,7 +68,7 @@ public class OpenSession {
 	 * 
 	 * @spec 117.6.1 Data Sessions
 	 */
-	private void testOpenSession001() {
+	public void testOpenSession001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testOpenSession001");
@@ -93,7 +93,7 @@ public class OpenSession {
      * 
      * @spec 117.6.1 Data Sessions
      */
-    private void testOpenSession002() {
+    public void testOpenSession002() {
         DmtSession session = null;
         try {
             tbc.log("#testOpenSession002");
@@ -117,7 +117,7 @@ public class OpenSession {
      * 
      * @spec 117.6.1 Data Sessions
      */
-    private void testOpenSession003() {
+    public void testOpenSession003() {
         DmtSession session = null;
         try {
             tbc.log("#testOpenSession003");

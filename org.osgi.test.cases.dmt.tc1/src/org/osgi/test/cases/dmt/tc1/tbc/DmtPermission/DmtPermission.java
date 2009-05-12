@@ -45,25 +45,7 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  * This class tests DmtPermission constructors according to MEG specification 
  */
 
-public class DmtPermission {
-	private DmtTestControl tbc;
-
-	public DmtPermission(DmtTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testDmtPermission001();
-		testDmtPermission002();
-		testDmtPermission003();
-		testDmtPermission004();
-		testDmtPermission005();
-		testDmtPermission006();
-		testDmtPermission007();
-		testDmtPermission008();
-		testDmtPermission009();
-	}
-
+public class DmtPermission extends DmtTestControl {
 	/**
 	 * It asserts that the actions passed in the constructor is equals to 
 	 * DmtPermission.getActions() method (listed in this order: 
@@ -71,9 +53,9 @@ public class DmtPermission {
 	 * 
 	 * @spec DmtPermission.DmtPermission(String,String)
 	 */
-	private void testDmtPermission001() {
+	public void testDmtPermission001() {
 		try {
-			tbc.log("#testDmtPermission001");
+			log("#testDmtPermission001");
 			StringTokenizer stringToken = new StringTokenizer(
 					new info.dmtree.security.DmtPermission(
 							DmtConstants.OSGi_LOG, DmtConstants.ACTIONS)
@@ -105,16 +87,16 @@ public class DmtPermission {
 				}
 			}
 
-			tbc.assertTrue(
+			assertTrue(
 					"Asserts that no unexpected permissions were returned.",
 					!errorFound);
-			tbc.assertTrue("Asserts that all of the actions were returned.",
+			assertTrue("Asserts that all of the actions were returned.",
 					hasADD && hasGET && hasREPLACE);
-			tbc.assertTrue(
+			assertTrue(
 					"Asserts that the order returned was the specified.",
 					ordered);
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -125,9 +107,9 @@ public class DmtPermission {
 	 * 
 	 * @spec DmtPermission.DmtPermission(String,String)
 	 */
-	private void testDmtPermission002() {
+	public void testDmtPermission002() {
 		try {
-			tbc.log("#testDmtPermission002");
+			log("#testDmtPermission002");
 			StringTokenizer stringToken = new StringTokenizer(
 					new info.dmtree.security.DmtPermission(
 							DmtConstants.OSGi_LOG, "*").getActions(), ",");
@@ -176,16 +158,16 @@ public class DmtPermission {
 
 			}
 
-			tbc.assertTrue(
+			assertTrue(
 					"Asserts that no unexpected permissions were returned.",
 					!errorFound);
-			tbc.assertTrue("Asserts that all of the actions were returned.",
+			assertTrue("Asserts that all of the actions were returned.",
 					hasADD && hasDELETE && hasEXEC && hasGET && hasREPLACE);
-			tbc.assertTrue(
+			assertTrue(
 					"Asserts that the order returned was the specified.",
 					ordered);
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -194,16 +176,16 @@ public class DmtPermission {
 	 * 
 	 * @spec DmtPermission.DmtPermission(String,String)
 	 */
-	private void testDmtPermission003() {
-		tbc.log("#testDmtPermission003");
+	public void testDmtPermission003() {
+		log("#testDmtPermission003");
 		try {
 			new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,
 					null);
-			tbc.failException("#", NullPointerException.class);
+			failException("#", NullPointerException.class);
 		} catch (NullPointerException e) {
-			tbc.pass("NullPointerException correctly thrown");
+			pass("NullPointerException correctly thrown");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(NullPointerException.class,e);
+			failExpectedOtherException(NullPointerException.class, e);
 		}
 
 	}
@@ -213,15 +195,15 @@ public class DmtPermission {
 	 * 
 	 * @spec DmtPermission.DmtPermission(String,String)
 	 */
-	private void testDmtPermission004() {
-		tbc.log("#testDmtPermission004");
+	public void testDmtPermission004() {
+		log("#testDmtPermission004");
 		try {
 			new info.dmtree.security.DmtPermission(null, DmtConstants.ACTIONS);
-			tbc.failException("#", NullPointerException.class);
+			failException("#", NullPointerException.class);
 		} catch (NullPointerException e) {
-			tbc.pass("NullPointerException correctly thrown");
+			pass("NullPointerException correctly thrown");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(NullPointerException.class,e);
+			failExpectedOtherException(NullPointerException.class, e);
 		}
 
 	}
@@ -231,16 +213,16 @@ public class DmtPermission {
 	 * 
 	 * @spec DmtPermission.DmtPermission(String,String)
 	 */
-	private void testDmtPermission005() {
-		tbc.log("#testDmtPermission005");
+	public void testDmtPermission005() {
+		log("#testDmtPermission005");
 		try {
 			new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,
 					DmtConstants.TITLE);
-			tbc.failException("#", IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-			tbc.pass("IllegalArgumentException correctly thrown");
+			pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
+			failExpectedOtherException(IllegalArgumentException.class, e);
 		}
 
 	}
@@ -250,16 +232,16 @@ public class DmtPermission {
 	 * 
 	 * @spec DmtPermission.DmtPermission(String,String)
 	 */
-	private void testDmtPermission006() {
-		tbc.log("#testDmtPermission006");
+	public void testDmtPermission006() {
+		log("#testDmtPermission006");
 		try {
 			new info.dmtree.security.DmtPermission(DmtConstants.INVALID,
 					DmtConstants.ACTIONS);
-			tbc.failException("#", IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-			tbc.pass("IllegalArgumentException correctly thrown");
+			pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
+			failExpectedOtherException(IllegalArgumentException.class, e);
 		}
 
 	}
@@ -269,17 +251,17 @@ public class DmtPermission {
 	 * 
 	 * @spec DmtPermission.DmtPermission(String,String)
 	 */
-	private void testDmtPermission007() {
-		tbc.log("#testDmtPermission007");
+	public void testDmtPermission007() {
+		log("#testDmtPermission007");
 		try {
 			String actions = new info.dmtree.security.DmtPermission(
 					DmtConstants.OSGi_ROOT + "/l*",
 					info.dmtree.security.DmtPermission.GET).getActions();
 
-			tbc.assertEquals("Asserts that a wildcard is permitted on dmtUri",
+			assertEquals("Asserts that a wildcard is permitted on dmtUri",
 					info.dmtree.security.DmtPermission.GET, actions.trim());
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 
 	}
@@ -289,20 +271,19 @@ public class DmtPermission {
 	 * 
 	 * @spec DmtPermission.DmtPermission(String,String)
 	 */
-	private void testDmtPermission008() {
-		tbc.log("#testDmtPermission008");
+	public void testDmtPermission008() {
+		log("#testDmtPermission008");
 		try {
 			String actions = new info.dmtree.security.DmtPermission(
 					DmtConstants.OSGi_ROOT + "/*",
 					info.dmtree.security.DmtPermission.GET).getActions();
 
-			tbc
-					.assertEquals(
+			assertEquals(
 							"Asserts that a wildcard is permitted on dmtUri after '/' character",
 							info.dmtree.security.DmtPermission.GET, actions
 									.trim());
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 	
@@ -313,8 +294,8 @@ public class DmtPermission {
 	 * 
 	 * @spec DmtPermission.DmtPermission(String,String)
 	 */
-	private void testDmtPermission009() {
-		tbc.log("#testDmtPermission009");
+	public void testDmtPermission009() {
+		log("#testDmtPermission009");
 		try {
 			String expectedActions = info.dmtree.security.DmtPermission.ADD + "," + 
 			info.dmtree.security.DmtPermission.DELETE + "," +
@@ -326,12 +307,14 @@ public class DmtPermission {
 			String actions = new info.dmtree.security.DmtPermission(
 					DmtConstants.OSGi_ROOT,expectedActions.toUpperCase()).getActions();
 
-			tbc.assertEquals("Asserts that action names are interpreted case-insensitively, " +
+			assertEquals(
+					"Asserts that action names are interpreted case-insensitively, "
+							+
 					"and that the canonical action string returned by getActions() uses the " +
 					"forms defined by the action constants.",expectedActions,actions);
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 }

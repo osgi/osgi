@@ -67,7 +67,7 @@ public class UseCases {
      * 
      * @spec 117.6.6 Plugins and Transactions
 	 */
-	private void testUseCases001() {
+	public void testUseCases001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testUseCases001");
@@ -94,7 +94,7 @@ public class UseCases {
      * 
      * @spec 117.6.6 Plugins and Transactions
 	 */
-	private void testUseCases002() {
+	public void testUseCases002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testUseCases002");
@@ -120,7 +120,7 @@ public class UseCases {
      * 
      * @spec 117.6.6 Plugins and Transactions
 	 */
-	private void testUseCases003() {
+	public void testUseCases003() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testUseCases003");
@@ -146,7 +146,7 @@ public class UseCases {
      * 
      * @spec 117.6.6 Plugins and Transactions
 	 */
-	private void testUseCases004() {
+	public void testUseCases004() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testUseCases004");
@@ -175,7 +175,7 @@ public class UseCases {
      * 
      * @spec 117.6.6 Plugins and Transactions
 	 */
-	private void testUseCases005() {
+	public void testUseCases005() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testUseCases005");
@@ -203,7 +203,7 @@ public class UseCases {
      * 
      * @spec 117.6.6 Plugins and Transactions
 	 */
-	private void testUseCases006() {
+	public void testUseCases006() {
 		DmtSession session = null;
 		FatalExceptionDataPluginActivator fatalExceptionActivator = tbc.getFatalExceptionDataPluginActivator();
 		try {
@@ -244,7 +244,7 @@ public class UseCases {
      * 
      * 117.6.3 Associating a Subtree
 	 */
-	private void testUseCases007() {
+	public void testUseCases007() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testUseCases007");

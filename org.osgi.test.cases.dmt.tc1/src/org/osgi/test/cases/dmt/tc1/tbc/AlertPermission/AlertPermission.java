@@ -43,40 +43,22 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  * This test case validates the implementation of <code>AlertPermission</code> constructor, 
  * according to MEG specification
  */
-public class AlertPermission {
-	private DmtTestControl tbc;
-
-	public AlertPermission(DmtTestControl tbc) {
-		this.tbc = tbc;
-
-	}
-
-	public void run() {
-		testAlertPermission001();
-		testAlertPermission002();
-		testAlertPermission003();
-		testAlertPermission004();
-		testAlertPermission005();
-		testAlertPermission006();
-		testAlertPermission007();
-		testAlertPermission008();
-		testAlertPermission009();
-	}
+public class AlertPermission extends DmtTestControl {
 
 	/**
 	 * Asserts that NullPointerException is thrown if target is null
 	 * 
 	 * @spec AlertPermission.AlertPermission(String)
 	 */
-	private void testAlertPermission001() {
+	public void testAlertPermission001() {
 		try {		
-			tbc.log("#testAlertPermission001");
+			log("#testAlertPermission001");
 			new info.dmtree.security.AlertPermission(null);
-            tbc.failException("", NullPointerException.class);
+            failException("", NullPointerException.class);
 		} catch(NullPointerException e) {
-			tbc.pass(e.getClass().getName() + " correctly thrown");
+			pass(e.getClass().getName() + " correctly thrown");
 		} catch(Exception e) {
-			tbc.failExpectedOtherException(NullPointerException.class,e);
+			failExpectedOtherException(NullPointerException.class, e);
 		}
 			
 	}
@@ -85,15 +67,15 @@ public class AlertPermission {
 	 * 
 	 * @spec AlertPermission.AlertPermission(String)
 	 */
-	private void testAlertPermission002() {
+	public void testAlertPermission002() {
 		try {		
-			tbc.log("#testAlertPermission002");
+			log("#testAlertPermission002");
 			new info.dmtree.security.AlertPermission("");
-            tbc.failException("", IllegalArgumentException.class);
+            failException("", IllegalArgumentException.class);
 		} catch(IllegalArgumentException e) {
-			tbc.pass(e.getClass().getName() + " correctly thrown");
+			pass(e.getClass().getName() + " correctly thrown");
 		} catch(Exception e) {
-			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
+			failExpectedOtherException(IllegalArgumentException.class, e);
 		}
 			
 	}
@@ -104,15 +86,15 @@ public class AlertPermission {
 	 * 
 	 * @spec AlertPermission.AlertPermission(String,String)
 	 */
-	private void testAlertPermission003() {
+	public void testAlertPermission003() {
 		try {		
-			tbc.log("#testAlertPermission003");
+			log("#testAlertPermission003");
 			new info.dmtree.security.AlertPermission(null,"*");
-            tbc.failException("", NullPointerException.class);
+            failException("", NullPointerException.class);
 		} catch(NullPointerException e) {
-			tbc.pass(e.getClass().getName() + " correctly thrown");
+			pass(e.getClass().getName() + " correctly thrown");
 		} catch(Exception e) {
-			tbc.failExpectedOtherException(NullPointerException.class,e);
+			failExpectedOtherException(NullPointerException.class, e);
 		}
 			
 	}
@@ -121,15 +103,15 @@ public class AlertPermission {
 	 * 
 	 * @spec AlertPermission.AlertPermission(String,String)
 	 */
-	private void testAlertPermission004() {
+	public void testAlertPermission004() {
 		try {		
-			tbc.log("#testAlertPermission004");
+			log("#testAlertPermission004");
 			new info.dmtree.security.AlertPermission("","*");
-            tbc.failException("", IllegalArgumentException.class);
+            failException("", IllegalArgumentException.class);
 		} catch(IllegalArgumentException e) {
-			tbc.pass(e.getClass().getName() + " correctly thrown");
+			pass(e.getClass().getName() + " correctly thrown");
 		} catch(Exception e) {
-			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
+			failExpectedOtherException(IllegalArgumentException.class, e);
 		}
 			
 	}
@@ -138,15 +120,15 @@ public class AlertPermission {
 	 * 
 	 * @spec AlertPermission.AlertPermission(String,String)
 	 */
-	private void testAlertPermission005() {
+	public void testAlertPermission005() {
 		try {		
-			tbc.log("#testAlertPermission005");
+			log("#testAlertPermission005");
 			new info.dmtree.security.AlertPermission(DmtConstants.REMOTE_SERVER,"");
-            tbc.failException("", IllegalArgumentException.class);
+            failException("", IllegalArgumentException.class);
 		} catch(IllegalArgumentException e) {
-			tbc.pass(e.getClass().getName() + " correctly thrown");
+			pass(e.getClass().getName() + " correctly thrown");
 		} catch(Exception e) {
-			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
+			failExpectedOtherException(IllegalArgumentException.class, e);
 		}
 			
 	}
@@ -155,13 +137,14 @@ public class AlertPermission {
 	 * 
 	 * @spec AlertPermission.AlertPermission(String)
 	 */
-	private void testAlertPermission006() {
+	public void testAlertPermission006() {
 		try {		
-			tbc.log("#testAlertPermission006");
+			log("#testAlertPermission006");
 			info.dmtree.security.AlertPermission permission = new info.dmtree.security.AlertPermission(DmtConstants.REMOTE_SERVER);
-			tbc.assertEquals("Asserts that getActions returns '*'","*",permission.getActions());
+			assertEquals("Asserts that getActions returns '*'", "*", permission
+					.getActions());
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);	
+			failUnexpectedException(e);	
 		}
 			
 	}
@@ -170,13 +153,14 @@ public class AlertPermission {
 	 * 
 	 * @spec AlertPermission.AlertPermission(String,String)
 	 */
-	private void testAlertPermission007() {
+	public void testAlertPermission007() {
 		try {		
-			tbc.log("#testAlertPermission007");
+			log("#testAlertPermission007");
 			info.dmtree.security.AlertPermission permission = new info.dmtree.security.AlertPermission(DmtConstants.REMOTE_SERVER,"*");
-			tbc.assertEquals("Asserts that getActions returns '*'","*",permission.getActions());
+			assertEquals("Asserts that getActions returns '*'", "*", permission
+					.getActions());
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);	
+			failUnexpectedException(e);	
 		}
 			
 	}
@@ -185,13 +169,13 @@ public class AlertPermission {
 	 * 
 	 * @spec AlertPermission.AlertPermission(String)
 	 */
-	private void testAlertPermission008() {
+	public void testAlertPermission008() {
 		try {		
-			tbc.log("#testAlertPermission008");
+			log("#testAlertPermission008");
 			new info.dmtree.security.AlertPermission(DmtConstants.REMOTE_SERVER + "*");
-			tbc.pass("The target can end with '*'");
+			pass("The target can end with '*'");
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);	
+			failUnexpectedException(e);	
 		}
 			
 	}
@@ -200,13 +184,13 @@ public class AlertPermission {
 	 * 
 	 * @spec AlertPermission.AlertPermission(String,String)
 	 */
-	private void testAlertPermission009() {
+	public void testAlertPermission009() {
 		try {		
-			tbc.log("#testAlertPermission009");
+			log("#testAlertPermission009");
 			new info.dmtree.security.AlertPermission(DmtConstants.REMOTE_SERVER + "*","*");
-			tbc.pass("The target can end with '*'");
+			pass("The target can end with '*'");
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);	
+			failUnexpectedException(e);	
 		}
 			
 	}

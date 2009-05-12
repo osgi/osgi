@@ -72,7 +72,7 @@ public class CreateLeafNode {
 	 * 
 	 * @spec ReadWriteDataSession.createLeafNode(String[],DmtData,String)
 	 */
-	private void testCreateLeafNode001() {
+	public void testCreateLeafNode001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testCreateLeafNode001");
@@ -94,7 +94,7 @@ public class CreateLeafNode {
 	 * 
 	 * @spec ReadWriteDataSession.createLeafNode(String[],DmtData,String)
 	 */
-	private void testCreateLeafNode002() {
+	public void testCreateLeafNode002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testCreateLeafNode002");
@@ -122,7 +122,7 @@ public class CreateLeafNode {
 	 * 
 	 * @spec ReadWriteDataSession.createLeafNode(String[],DmtData,String)
 	 */
-	private void testCreateLeafNode003() {
+	public void testCreateLeafNode003() {
 		DmtSession session = null;
 		DmtData data = new DmtData(8);
 		try {
@@ -146,7 +146,7 @@ public class CreateLeafNode {
 	 * 
 	 * @spec ReadWriteDataSession.createLeafNode(String[],DmtData,String)
 	 */
-	private void testCreateLeafNode004() {
+	public void testCreateLeafNode004() {
 		DmtSession session = null;
 		DmtData data = new DmtData(5);
 		try {
@@ -175,7 +175,7 @@ public class CreateLeafNode {
 	 * 
 	 * @spec ReadWriteDataSession.createLeafNode(String[],DmtData,String)
 	 */
-	private void testCreateLeafNode005() {
+	public void testCreateLeafNode005() {
 		DmtSession session = null;
 		DmtData data = new DmtData(8);
 		String mimeType = "text/xml";
@@ -201,7 +201,7 @@ public class CreateLeafNode {
 	 * 
 	 * @spec ReadWriteDataSession.createLeafNode(String[],DmtData,String)
 	 */
-	private void testCreateLeafNode006() {
+	public void testCreateLeafNode006() {
 		DmtSession session = null;
 		DmtData data = new DmtData(5);
 		String mimeType = "text/xml";

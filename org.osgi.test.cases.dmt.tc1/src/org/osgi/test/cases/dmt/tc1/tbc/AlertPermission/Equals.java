@@ -43,33 +43,22 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  * This test case validates the implementation of <code>equals<code> method of AlerPermission, 
  * according to MEG specification
  */
-public class Equals {
-	private DmtTestControl tbc;
-
-	public Equals(DmtTestControl tbc) {
-		this.tbc = tbc;
-
-	}
-
-	public void run() {
-		testEquals001();
-		testEquals002();
-		
-	}
-
+public class Equals extends DmtTestControl {
 	/**
 	 * Asserts that two AlertPermission instances are equal if they have the same target string
 	 * 
 	 * @spec AlertPermission.equals(Object)
 	 */
-	private void testEquals001() {
+	public void testEquals001() {
 		try {		
-			tbc.log("#testEquals001");
+			log("#testEquals001");
 			info.dmtree.security.AlertPermission permission = new info.dmtree.security.AlertPermission(DmtConstants.REMOTE_SERVER);
 			info.dmtree.security.AlertPermission permission2 = new info.dmtree.security.AlertPermission(DmtConstants.REMOTE_SERVER);
-			tbc.assertTrue("Asserts that two AlertPermission instances are equal if they have the same target string",permission.equals(permission2));
+			assertTrue(
+					"Asserts that two AlertPermission instances are equal if they have the same target string",
+					permission.equals(permission2));
 		} catch(Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 			
 	}
@@ -79,14 +68,16 @@ public class Equals {
 	 * 
 	 * @spec AlertPermission.equals(Object)
 	 */
-	private void testEquals002() {
+	public void testEquals002() {
 		try {		
-			tbc.log("#testEquals002");
+			log("#testEquals002");
 			info.dmtree.security.AlertPermission permission = new info.dmtree.security.AlertPermission(DmtConstants.REMOTE_SERVER);
 			info.dmtree.security.AlertPermission permission2 = new info.dmtree.security.AlertPermission(DmtConstants.REMOTE_SERVER + "a");
-			tbc.assertTrue("Asserts that two AlertPermission instances are different if they have different target strings",!permission.equals(permission2));
+			assertTrue(
+					"Asserts that two AlertPermission instances are different if they have different target strings",
+					!permission.equals(permission2));
 		} catch(Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 			
 	}

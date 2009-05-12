@@ -43,6 +43,7 @@
 package org.osgi.test.cases.dmt.tc1.tbc.Acl;
 
 import info.dmtree.Acl;
+
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 /**
@@ -51,24 +52,9 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  * This test case validates the implementation of <code>setPermission</code> method of Acl, 
  * according to MEG specification.
  */
-public class SetPermission {
-	private DmtTestControl tbc;
+public class SetPermission extends DmtTestControl {
 	
 	private static final String ACL_DEFAULT = "Add=" + DmtConstants.PRINCIPAL + "&Delete=" + DmtConstants.PRINCIPAL;
-
-	public SetPermission(DmtTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testSetPermission001();
-		testSetPermission002();
-		testSetPermission003();
-		testSetPermission004();
-		testSetPermission005();
-		testSetPermission006();
-		testSetPermission007();
-	}
 
 
 	/**
@@ -76,18 +62,18 @@ public class SetPermission {
 	 * 
 	 * @spec Acl.setPermission(String,int)
 	 */
-	private void testSetPermission001() {
+	public void testSetPermission001() {
 		try {		
-			tbc.log("#testSetPermission001");
+			log("#testSetPermission001");
 			Acl acl = new Acl(ACL_DEFAULT);
 	
 			acl = acl.setPermission(DmtConstants.PRINCIPAL, Acl.ADD
 					| Acl.EXEC);
 	
-			tbc.assertEquals("Asserting Get Permission",Acl.ADD | Acl.EXEC,
+			assertEquals("Asserting Get Permission", Acl.ADD | Acl.EXEC,
 					acl.getPermissions(DmtConstants.PRINCIPAL));
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -97,18 +83,18 @@ public class SetPermission {
 	 * 
 	 * @spec Acl.setPermission(String,int)
 	 */
-	private void testSetPermission002() {
+	public void testSetPermission002() {
 		try {
-			tbc.log("#testSetPermission002");
+			log("#testSetPermission002");
 			Acl acl = new Acl(ACL_DEFAULT);
 			
 			acl = acl.setPermission(DmtConstants.PRINCIPAL,Acl.ADD | 2005);
 
-			tbc.failException("#",IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-			tbc.pass("IllegalArgumentException correctly thrown");
+			pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
+			failExpectedOtherException(IllegalArgumentException.class, e);
 		}
 	}
 
@@ -118,17 +104,17 @@ public class SetPermission {
 	 * 
 	 * @spec Acl.setPermission(String,int)
 	 */
-	private void testSetPermission003() {
+	public void testSetPermission003() {
 		try {
-			tbc.log("#testSetPermission003");
+			log("#testSetPermission003");
 			Acl acl = new Acl(ACL_DEFAULT);
 			acl = acl.setPermission(DmtConstants.INVALID, Acl.ADD | Acl.REPLACE);
 
-			tbc.failException("#",IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-			tbc.pass("IllegalArgumentException correctly thrown");
+			pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
+			failExpectedOtherException(IllegalArgumentException.class, e);
 		}
 	}
 
@@ -137,21 +123,21 @@ public class SetPermission {
 	 * 
 	 * @spec Acl.setPermission(String,int)
 	 */
-	private void testSetPermission004() {
+	public void testSetPermission004() {
 		try {
-			tbc.log("#testSetPermission004");
+			log("#testSetPermission004");
 			Acl acl = new Acl(
 					"Add=" + DmtConstants.PRINCIPAL + "&Delete=" + DmtConstants.PRINCIPAL + "&Get=*");
 			
 			acl = acl.setPermission(DmtConstants.PRINCIPAL, 
 					Acl.EXEC | Acl.REPLACE | Acl.GET);
 			
-			tbc.assertEquals("Assert " + DmtConstants.PRINCIPAL + " permission.",
+			assertEquals("Assert " + DmtConstants.PRINCIPAL + " permission.",
 					Acl.REPLACE | Acl.GET | Acl.EXEC, 
 					acl.getPermissions(DmtConstants.PRINCIPAL));
 			
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -161,19 +147,19 @@ public class SetPermission {
 	 * 
 	 * @spec Acl.setPermission(String,int)
 	 */
-	private void testSetPermission005() {
+	public void testSetPermission005() {
 		try {
-			tbc.log("#testSetPermission005");
+			log("#testSetPermission005");
 			Acl acl = new Acl(
 					"Add=" + DmtConstants.PRINCIPAL + "&Delete=" + DmtConstants.PRINCIPAL + "&Get=*");
 			
 			acl = acl.setPermission(DmtConstants.PRINCIPAL, Acl.EXEC
 					| Acl.REPLACE);
-			tbc.failException("#",IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-			tbc.pass("IllegalArgumentException correctly thrown");
+			pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
+			failExpectedOtherException(IllegalArgumentException.class, e);
 		}
 	}	
 	/**
@@ -181,19 +167,20 @@ public class SetPermission {
 	 * 
 	 * @spec Acl.setPermission(String,int) 
 	 */
-	private void testSetPermission006() {
+	public void testSetPermission006() {
 		try {
-			tbc.log("#testSetPermission006");
+			log("#testSetPermission006");
 			Acl acl = new Acl(
 					"Add=" + DmtConstants.PRINCIPAL + "&Delete=" + DmtConstants.PRINCIPAL + "&Exec=" + DmtConstants.PRINCIPAL );			
 			acl = acl.setPermission(DmtConstants.PRINCIPAL, 
 					Acl.ADD | Acl.GET | Acl.EXEC | Acl.DELETE | Acl.REPLACE);
 			
-			tbc.assertEquals("Assert " + DmtConstants.PRINCIPAL + " all permissions",
+			assertEquals("Assert " + DmtConstants.PRINCIPAL
+					+ " all permissions",
 					Acl.ALL_PERMISSION, acl.getPermissions(DmtConstants.PRINCIPAL));
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 	/**
@@ -201,21 +188,25 @@ public class SetPermission {
 	 * 
 	 * @spec Acl.setPermission(String,int)
 	 */
-	private void testSetPermission007() {
+	public void testSetPermission007() {
 		try {
-			tbc.log("#testSetPermission007");
+			log("#testSetPermission007");
 			Acl acl = new Acl(
 					"Add=" + DmtConstants.PRINCIPAL);			
 			acl = acl.setPermission("*", Acl.ADD | Acl.GET | Acl.EXEC | 
 					Acl.DELETE | Acl.REPLACE);
 			
-			tbc.assertEquals("Assert that '*' grants permissions to all principals [" + DmtConstants.PRINCIPAL + "]",
+			assertEquals(
+					"Assert that '*' grants permissions to all principals ["
+							+ DmtConstants.PRINCIPAL + "]",
 					Acl.ALL_PERMISSION, acl.getPermissions(DmtConstants.PRINCIPAL));
-			tbc.assertEquals("Assert that '*' grants permissions to all principals [" + DmtConstants.PRINCIPAL_2 + "]",
+			assertEquals(
+					"Assert that '*' grants permissions to all principals ["
+							+ DmtConstants.PRINCIPAL_2 + "]",
 					Acl.ALL_PERMISSION, acl.getPermissions(DmtConstants.PRINCIPAL_2));
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}	
 

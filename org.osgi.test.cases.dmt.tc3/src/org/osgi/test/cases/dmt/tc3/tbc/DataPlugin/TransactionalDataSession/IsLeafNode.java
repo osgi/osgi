@@ -65,7 +65,7 @@ public class IsLeafNode {
 	 * @spec ReadableDataSession.isLeafNode(String[])
 	 */
 
-	private void testIsLeafNode001() {
+	public void testIsLeafNode001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testIsLeafNode001");
@@ -87,7 +87,7 @@ public class IsLeafNode {
 	 * @spec ReadableDataSession.isLeafNode(String[])
 	 */
 
-	private void testIsLeafNode002() {
+	public void testIsLeafNode002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testIsLeafNode002");

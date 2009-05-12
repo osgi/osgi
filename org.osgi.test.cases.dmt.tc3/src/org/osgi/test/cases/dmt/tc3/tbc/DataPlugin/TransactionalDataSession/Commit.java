@@ -69,7 +69,7 @@ public class Commit {
 	 * 
 	 * @spec TransactionalDataSession.commit()
 	 */
-	private void testCommit001() {
+	public void testCommit001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testCommit001");
@@ -116,7 +116,7 @@ public class Commit {
      * 
      * @spec TransactionalDataSession.commit()
      */
-    private void testCommit002() {
+    public void testCommit002() {
         DmtSession session = null;
         try {
             tbc.log("#testCommit002");

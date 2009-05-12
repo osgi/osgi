@@ -66,7 +66,7 @@ public class GetFormat {
 	 * 
 	 * @spec MetaNode.getFormat()
 	 */
-	private void testGetFormat001() {
+	public void testGetFormat001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetFormat001");

@@ -37,66 +37,43 @@
 
 package org.osgi.test.cases.dmt.tc1.tbc.DmtData;
 
+import java.util.Arrays;
+
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
 /**
  * 
  * This class contains all the test methods for all the DmtData constructors.
  */
-public class DmtData {
-	private DmtTestControl tbc;
-	public DmtData(DmtTestControl tbc) {
-		this.tbc = tbc;
-
-	}
-
-	public void run() {
-		testDmtData001();
-		testDmtData002();
-		testDmtData003();
-		testDmtData004();
-		testDmtData005();
-		testDmtData006();
-		testDmtData007();
-		testDmtData008();
-		testDmtData009();
-		testDmtData010();
-		testDmtData011();
-		testDmtData012();
-		testDmtData013();
-        testDmtData014();
-        testDmtData015();
-        testDmtData016();
-        testDmtData017();
-        testDmtData018();
-
-	}
-
+public class DmtData extends DmtTestControl {
 	/**
 	 * This method asserts that when a DmtData(byte[],true) is created, the format is
 	 * DmtData.FORMAT_BASE64, DmtData.getSize() and DmtData.getBase64() return the expected value
 	 * 
 	 * @spec DmtData.DmtData(byte[],boolean)
 	 */
-	private void testDmtData001() {
+	public void testDmtData001() {
 		try {		
-			tbc.log("#testDmtData001");
+			log("#testDmtData001");
 			byte[] value = new byte[] { 1, 10, 127 };
 			String expectedValue= "01 0A 7F";
 			info.dmtree.DmtData data  = new info.dmtree.DmtData(value,true);
-			tbc.assertEquals("Asserting DmtData.FORMAT_BASE64",
+			assertEquals("Asserting DmtData.FORMAT_BASE64",
 					info.dmtree.DmtData.FORMAT_BASE64, data.getFormat());
 			
-			tbc.assertEquals("Asserting the value", value, data.getBase64());
+			assertTrue("Asserting the value", Arrays.equals(value, data
+					.getBase64()));
 			
-			tbc.assertEquals("Asserting the size", value.length, data.getSize());
+			assertEquals("Asserting the size", value.length, data.getSize());
 			
-			tbc.assertEquals("Asserts that two-digit hexadecimal numbers for each byte separated by spaces is " +
+			assertEquals(
+					"Asserts that two-digit hexadecimal numbers for each byte separated by spaces is "
+							+
 					"returned in case of FORMAT_BASE64",
 					expectedValue, data.toString());
 			
 		} catch(Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 
 		}
 	}
@@ -109,25 +86,28 @@ public class DmtData {
 	 * 
 	 * @spec DmtData.DmtData(byte[])
 	 */
-	private void testDmtData002() {
+	public void testDmtData002() {
 		try {		
-			tbc.log("#testDmtData002");
+			log("#testDmtData002");
 			byte[] value = new byte[] { 3, 55, 100 };
 			String expectedValue= "03 37 64";
 			info.dmtree.DmtData data  = new info.dmtree.DmtData(value);
-			tbc.assertEquals("Asserting DmtData.FORMAT_BINARY",
+			assertEquals("Asserting DmtData.FORMAT_BINARY",
 					info.dmtree.DmtData.FORMAT_BINARY, data.getFormat());
 			
-			tbc.assertEquals("Asserting the value", value, data.getBinary());
+			assertTrue("Asserting the value", Arrays.equals(value, data
+					.getBinary()));
 			
-			tbc.assertEquals("Asserting the size", value.length, data.getSize());
+			assertEquals("Asserting the size", value.length, data.getSize());
 			
-			tbc.assertEquals("Asserts that two-digit hexadecimal numbers for each byte separated by " +
+			assertEquals(
+					"Asserts that two-digit hexadecimal numbers for each byte separated by "
+							+
 					"spaces is returned in case of FORMAT_BINARY",
 					expectedValue, data.toString());
 			
 		} catch(Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 
 		}
 	}
@@ -140,20 +120,21 @@ public class DmtData {
 	 * 
 	 * @spec DmtData.DmtData(boolean)
 	 */
-	private void testDmtData003() {
+	public void testDmtData003() {
 		try {		
-			tbc.log("#testDmtData003");
+			log("#testDmtData003");
 			boolean value = false;
 			info.dmtree.DmtData data  = new info.dmtree.DmtData(value);
-			tbc.assertEquals("Asserting DmtData.FORMAT_BOOLEAN",
+			assertEquals("Asserting DmtData.FORMAT_BOOLEAN",
 					info.dmtree.DmtData.FORMAT_BOOLEAN, data.getFormat());
 			
-			tbc.assertEquals("Asserting the value", value, data.getBoolean());
-			tbc.assertEquals("Asserting the size", 1, data.getSize());
-			tbc.assertEquals("Asserting the string returned", String.valueOf(value), data.toString());
+			assertEquals("Asserting the value", value, data.getBoolean());
+			assertEquals("Asserting the size", 1, data.getSize());
+			assertEquals("Asserting the string returned",
+					String.valueOf(value), data.toString());
 			
 		} catch(Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 
 		}
 	}
@@ -166,22 +147,24 @@ public class DmtData {
 	 * 
 	 * @spec DmtData.DmtData(String,int)
 	 */
-	private void testDmtData004() {
+	public void testDmtData004() {
 		try {		
-			tbc.log("#testDmtData004");
+			log("#testDmtData004");
 			String value = "20051001";
 			info.dmtree.DmtData data  = new info.dmtree.DmtData(value,info.dmtree.DmtData.FORMAT_DATE);
-			tbc.assertEquals("Asserting DmtData.FORMAT_DATE",
+			assertEquals("Asserting DmtData.FORMAT_DATE",
 					info.dmtree.DmtData.FORMAT_DATE, data.getFormat());
 			
-			tbc.assertEquals("Asserting the value", value, data.getDate());
+			assertEquals("Asserting the value", value, data.getDate());
 			
-			tbc.assertEquals("Asserting the string returned", value, data.toString());
+			assertEquals("Asserting the string returned", value, data
+					.toString());
 			
-			tbc.assertEquals("Asserting the size", data.toString().length(), data.getSize());
+			assertEquals("Asserting the size", data.toString().length(), data
+					.getSize());
 			
 		} catch(Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 
 		}
 	}
@@ -194,21 +177,22 @@ public class DmtData {
 	 * 
 	 * @spec DmtData.DmtData(float)
 	 */
-	private void testDmtData005() {
+	public void testDmtData005() {
 		try {		
-			tbc.log("#testDmtData005");
+			log("#testDmtData005");
 			float value = 2.4F;
 			info.dmtree.DmtData data  = new info.dmtree.DmtData(value);
-			tbc.assertEquals("Asserting DmtData.FORMAT_FLOAT",
+			assertEquals("Asserting DmtData.FORMAT_FLOAT",
 					info.dmtree.DmtData.FORMAT_FLOAT, data.getFormat());
 			
-			tbc.assertTrue("Asserting the value", value == data.getFloat());
+			assertTrue("Asserting the value", value == data.getFloat());
 			
-			tbc.assertEquals("Asserting the size", 4, data.getSize());
+			assertEquals("Asserting the size", 4, data.getSize());
 			
-			tbc.assertEquals("Asserting the string returned", String.valueOf(value), data.toString());
+			assertEquals("Asserting the string returned",
+					String.valueOf(value), data.toString());
 		} catch(Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 
 		}
 	}
@@ -220,22 +204,23 @@ public class DmtData {
 	 * 
 	 * @spec DmtData.DmtData(int)
 	 */
-	private void testDmtData006() {
+	public void testDmtData006() {
 		try {		
-			tbc.log("#testDmtData006");
+			log("#testDmtData006");
 			int value = 2;
 			info.dmtree.DmtData data  = new info.dmtree.DmtData(value);
-			tbc.assertEquals("Asserting DmtData.FORMAT_INTEGER",
+			assertEquals("Asserting DmtData.FORMAT_INTEGER",
 					info.dmtree.DmtData.FORMAT_INTEGER, data.getFormat());
 			
-			tbc.assertEquals("Asserting the value", value,data.getInt());
+			assertEquals("Asserting the value", value, data.getInt());
 			
-			tbc.assertEquals("Asserting the size", 4, data.getSize());
+			assertEquals("Asserting the size", 4, data.getSize());
 			
-			tbc.assertEquals("Asserting the string returned", String.valueOf(value), data.toString());
+			assertEquals("Asserting the string returned",
+					String.valueOf(value), data.toString());
 			
 		} catch(Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 
 		}
 	}
@@ -246,19 +231,20 @@ public class DmtData {
 	 * 
 	 * @spec DmtData.NULL_VALUE
 	 */
-	private void testDmtData007() {
+	public void testDmtData007() {
 		try {		
-			tbc.log("#testDmtData007");
+			log("#testDmtData007");
 			info.dmtree.DmtData data  = info.dmtree.DmtData.NULL_VALUE;
-			tbc.assertEquals("Asserting DmtData.FORMAT_NULL",
+			assertEquals("Asserting DmtData.FORMAT_NULL",
 					info.dmtree.DmtData.FORMAT_NULL, data.getFormat());
 			
-			tbc.assertEquals("Asserting the size", 0, data.getSize());
+			assertEquals("Asserting the size", 0, data.getSize());
 			
-			tbc.assertEquals("Asserting the string returned", "null", data.toString());
+			assertEquals("Asserting the string returned", "null", data
+					.toString());
 			
 		} catch(Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 
 		}
 	}
@@ -270,22 +256,23 @@ public class DmtData {
 	 * 
 	 * @spec DmtData.DmtData(String)
 	 */
-	private void testDmtData008() {
+	public void testDmtData008() {
 		try {		
-			tbc.log("#testDmtData008");
+			log("#testDmtData008");
 			String value = "TestString";
 			info.dmtree.DmtData data  = new info.dmtree.DmtData(value);
-			tbc.assertEquals("Asserting DmtData.FORMAT_STRING",
+			assertEquals("Asserting DmtData.FORMAT_STRING",
 					info.dmtree.DmtData.FORMAT_STRING, data.getFormat());
 			
-			tbc.assertEquals("Asserting the value", value, data.getString());
+			assertEquals("Asserting the value", value, data.getString());
 			
-			tbc.assertEquals("Asserting the size", value.length(), data.getSize());
+			assertEquals("Asserting the size", value.length(), data.getSize());
 			
-			tbc.assertEquals("Asserting the string returned", value, data.toString());
+			assertEquals("Asserting the string returned", value, data
+					.toString());
 			
 		} catch(Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 
 		}
 	}
@@ -297,22 +284,24 @@ public class DmtData {
 	 * 
 	 * @spec DmtData.DmtData(String,int)
 	 */
-	private void testDmtData009() {
+	public void testDmtData009() {
 		try {		
-			tbc.log("#testDmtData009");
+			log("#testDmtData009");
 			String value = "120000";
 			info.dmtree.DmtData data  = new info.dmtree.DmtData(value,info.dmtree.DmtData.FORMAT_TIME);
-			tbc.assertEquals("Asserting DmtData.FORMAT_TIME",
+			assertEquals("Asserting DmtData.FORMAT_TIME",
 					info.dmtree.DmtData.FORMAT_TIME, data.getFormat());
 			
-			tbc.assertEquals("Asserting the value", value, data.getTime());
+			assertEquals("Asserting the value", value, data.getTime());
 			
-			tbc.assertEquals("Asserting the string returned", value, data.toString());
+			assertEquals("Asserting the string returned", value, data
+					.toString());
 			
-			tbc.assertEquals("Asserting the size", data.toString().length(), data.getSize());
+			assertEquals("Asserting the size", data.toString().length(), data
+					.getSize());
 			
 		} catch(Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 
 		}
 	}
@@ -323,20 +312,21 @@ public class DmtData {
 	 * 
 	 * @spec DmtData.DmtData(String,int)
 	 */
-	private void testDmtData010() {
+	public void testDmtData010() {
 		try {		
-			tbc.log("#testDmtData010");
+			log("#testDmtData010");
 			String value = "120000Z";
 			info.dmtree.DmtData data  = new info.dmtree.DmtData(value,info.dmtree.DmtData.FORMAT_TIME);
-			tbc.assertEquals("Asserting DmtData.FORMAT_TIME",
+			assertEquals("Asserting DmtData.FORMAT_TIME",
 					info.dmtree.DmtData.FORMAT_TIME, data.getFormat());
 			
-			tbc.assertEquals("Asserting the value", value, data.getTime());
+			assertEquals("Asserting the value", value, data.getTime());
 			
-			tbc.assertEquals("Asserting the string returned", value, data.toString());
+			assertEquals("Asserting the string returned", value, data
+					.toString());
 			
 		} catch(Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 
 		}
 	}
@@ -347,23 +337,24 @@ public class DmtData {
 	 * 
 	 * @spec DmtData.DmtData(String,int)
 	 */
-	private void testDmtData011() {
+	public void testDmtData011() {
 		try {		
-			tbc.log("#testDmtData011");
+			log("#testDmtData011");
 			String value = "testXml";
 			info.dmtree.DmtData data  = new info.dmtree.DmtData(value,info.dmtree.DmtData.FORMAT_XML);
-			tbc.assertEquals("Asserting DmtData.FORMAT_XML",
+			assertEquals("Asserting DmtData.FORMAT_XML",
 					info.dmtree.DmtData.FORMAT_XML, data.getFormat());
 			
-			tbc.assertEquals("Asserting the value", value, data.getXml());
+			assertEquals("Asserting the value", value, data.getXml());
 			
-			tbc.assertEquals("Asserting the size", value.length(), data.getSize());
+			assertEquals("Asserting the size", value.length(), data.getSize());
 			
-			tbc.assertEquals("Asserting the string returned", value, data.toString());
+			assertEquals("Asserting the string returned", value, data
+					.toString());
 			
 			
 		} catch(Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 
 		}
 	}
@@ -375,23 +366,24 @@ public class DmtData {
 	 * 
 	 * @spec DmtData.DmtData(String,int)
 	 */
-	private void testDmtData012() {
+	public void testDmtData012() {
 		try {		
-			tbc.log("#testDmtData012");
+			log("#testDmtData012");
 			String value = "TestString2";
 			
 			info.dmtree.DmtData data  = new info.dmtree.DmtData(value,info.dmtree.DmtData.FORMAT_STRING);
-			tbc.assertEquals("Asserting DmtData.FORMAT_STRING",
+			assertEquals("Asserting DmtData.FORMAT_STRING",
 					info.dmtree.DmtData.FORMAT_STRING, data.getFormat());
 			
-			tbc.assertEquals("Asserting the value", value, data.getString());
+			assertEquals("Asserting the value", value, data.getString());
 			
-			tbc.assertEquals("Asserting the size", value.length(), data.getSize());
+			assertEquals("Asserting the size", value.length(), data.getSize());
 			
-			tbc.assertEquals("Asserting the string returned", value, data.toString());
+			assertEquals("Asserting the string returned", value, data
+					.toString());
 			
 		} catch(Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 
 		}
 	}
@@ -402,25 +394,28 @@ public class DmtData {
      * 
      * @spec DmtData.DmtData(byte[],boolean)
      */
-    private void testDmtData013() {
+    public void testDmtData013() {
         try {       
-            tbc.log("#testDmtData013");
+            log("#testDmtData013");
             byte[] value = new byte[] { 1, 10, 127 };
             String expectedValue= "01 0A 7F";
             info.dmtree.DmtData data  = new info.dmtree.DmtData(value,false);
-            tbc.assertEquals("Asserting DmtData.FORMAT_BINARY",
+            assertEquals("Asserting DmtData.FORMAT_BINARY",
                     info.dmtree.DmtData.FORMAT_BINARY, data.getFormat());
             
-            tbc.assertEquals("Asserting the value", value, data.getBinary());
+            assertTrue("Asserting the value", Arrays.equals(value, data
+					.getBinary()));
             
-            tbc.assertEquals("Asserting the size", value.length, data.getSize());
+            assertEquals("Asserting the size", value.length, data.getSize());
             
-            tbc.assertEquals("Asserts that two-digit hexadecimal numbers for each byte separated by spaces is " +
+            assertEquals(
+					"Asserts that two-digit hexadecimal numbers for each byte separated by spaces is "
+							+
                     "returned in case of FORMAT_BINARY",
                     expectedValue, data.toString());
             
         } catch(Exception e) {
-        	tbc.failUnexpectedException(e);
+        	failUnexpectedException(e);
 
         }
     }
@@ -431,21 +426,21 @@ public class DmtData {
 	 * 
 	 * @spec DmtData.DmtData(String)
 	 */
-	private void testDmtData014() {
+	public void testDmtData014() {
 		try {		
-			tbc.log("#testDmtData014");
+			log("#testDmtData014");
 			info.dmtree.DmtData data  = new info.dmtree.DmtData((String)null);
-			tbc.assertEquals("Asserting DmtData.FORMAT_STRING",
+			assertEquals("Asserting DmtData.FORMAT_STRING",
 					info.dmtree.DmtData.FORMAT_STRING, data.getFormat());
 			
-			tbc.assertNull("Asserting the value", data.getString());
+			assertNull("Asserting the value", data.getString());
 
-			tbc.assertEquals("Asserting the size", 0, data.getSize());
+			assertEquals("Asserting the size", 0, data.getSize());
 			
-			tbc.assertEquals("Asserting the string returned", "",data.toString());
+			assertEquals("Asserting the string returned", "", data.toString());
 			
 		} catch(Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 
 		}
 	}
@@ -456,21 +451,21 @@ public class DmtData {
 	 * 
 	 * @spec DmtData.DmtData(String,int)
 	 */
-	private void testDmtData015() {
+	public void testDmtData015() {
 		try {		
-			tbc.log("#testDmtData015");
+			log("#testDmtData015");
 			info.dmtree.DmtData data  = new info.dmtree.DmtData(null,info.dmtree.DmtData.FORMAT_STRING);
-			tbc.assertEquals("Asserting DmtData.FORMAT_STRING",
+			assertEquals("Asserting DmtData.FORMAT_STRING",
 					info.dmtree.DmtData.FORMAT_STRING, data.getFormat());
 			
-			tbc.assertNull("Asserting the value", data.getString());
+			assertNull("Asserting the value", data.getString());
 
-			tbc.assertEquals("Asserting the size", 0, data.getSize());
+			assertEquals("Asserting the size", 0, data.getSize());
 			
-			tbc.assertEquals("Asserting the string returned", "",data.toString());
+			assertEquals("Asserting the string returned", "", data.toString());
 			
 		} catch(Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 
 		}
 	}
@@ -481,21 +476,21 @@ public class DmtData {
 	 * 
 	 * @spec DmtData.DmtData(String,int)
 	 */
-	private void testDmtData016() {
+	public void testDmtData016() {
 		try {		
-			tbc.log("#testDmtData016");
+			log("#testDmtData016");
 			info.dmtree.DmtData data  = new info.dmtree.DmtData(null,info.dmtree.DmtData.FORMAT_XML);
-			tbc.assertEquals("Asserting DmtData.FORMAT_XML",
+			assertEquals("Asserting DmtData.FORMAT_XML",
 					info.dmtree.DmtData.FORMAT_XML, data.getFormat());
 			
-			tbc.assertNull("Asserting the value", data.getXml());
+			assertNull("Asserting the value", data.getXml());
 
-			tbc.assertEquals("Asserting the size", 0, data.getSize());
+			assertEquals("Asserting the size", 0, data.getSize());
 			
-			tbc.assertEquals("Asserting the string returned", "",data.toString());
+			assertEquals("Asserting the string returned", "", data.toString());
 			
 		} catch(Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 
 		}
 	}
@@ -506,21 +501,21 @@ public class DmtData {
 	 * 
 	 * @spec DmtData.DmtData(String,String)
 	 */
-	private void testDmtData017() {
+	public void testDmtData017() {
 		try {		
-			tbc.log("#testDmtData017");
+			log("#testDmtData017");
 			String format = "format";
 			String value = "data";
 			info.dmtree.DmtData data  = new info.dmtree.DmtData(format,value);
-			tbc.assertEquals("Asserting DmtData.FORMAT_RAW_STRING",
+			assertEquals("Asserting DmtData.FORMAT_RAW_STRING",
 					info.dmtree.DmtData.FORMAT_RAW_STRING, data.getFormat());
 			
-			tbc.assertEquals("Asserting the value", value, data.getRawString());
+			assertEquals("Asserting the value", value, data.getRawString());
 			
-			tbc.assertEquals("Asserting the size", value.length(), data.getSize());
+			assertEquals("Asserting the size", value.length(), data.getSize());
 			
 		} catch(Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 
 		}
 	}
@@ -531,21 +526,22 @@ public class DmtData {
 	 * 
 	 * @spec DmtData.DmtData(String,byte[])
 	 */
-	private void testDmtData018() {
+	public void testDmtData018() {
 		try {		
-			tbc.log("#testDmtData018");
+			log("#testDmtData018");
 			String format = "format";
 			byte[] value = new byte[] {1};
 			info.dmtree.DmtData data  = new info.dmtree.DmtData(format,value);
-			tbc.assertEquals("Asserting DmtData.FORMAT_RAW_BINARY",
+			assertEquals("Asserting DmtData.FORMAT_RAW_BINARY",
 					info.dmtree.DmtData.FORMAT_RAW_BINARY, data.getFormat());
 			
-			tbc.assertEquals("Asserting the value", value, data.getRawBinary());
+			assertTrue("Asserting the value", Arrays.equals(value, data
+					.getRawBinary()));
 			
-			tbc.assertEquals("Asserting the size",value.length, data.getSize());
+			assertEquals("Asserting the size", value.length, data.getSize());
 			
 		} catch(Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 
 		}
 	}

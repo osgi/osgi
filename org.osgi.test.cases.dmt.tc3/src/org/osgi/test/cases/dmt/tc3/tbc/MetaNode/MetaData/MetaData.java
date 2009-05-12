@@ -140,7 +140,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.createLeafNode(String,DmtData)  
 	 */
-	private void testMetaData001() {
+	public void testMetaData001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData001");
@@ -173,7 +173,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.createLeafNode(String,DmtData) 
 	 */
-	private void testMetaData002() {
+	public void testMetaData002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData002");
@@ -208,7 +208,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.createLeafNode(String,DmtData) 
 	 */
-	private void testMetaData003() {
+	public void testMetaData003() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData003");
@@ -244,7 +244,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.createLeafNode(String,DmtData)
 	 */
-	private void testMetaData004() {
+	public void testMetaData004() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData004");
@@ -278,7 +278,7 @@ public class MetaData {
 	 * 
 	 * 	 * @spec DmtSession.createLeafNode(String,DmtData)
 	 */
-	private void testMetaData005() {
+	public void testMetaData005() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData005");
@@ -314,7 +314,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.createLeafNode(String,DmtData,String)
 	 */
-	private void testMetaData006() {
+	public void testMetaData006() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData006");
@@ -348,7 +348,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.createLeafNode(String,DmtData,String)
 	 */
-	private void testMetaData007() {
+	public void testMetaData007() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData007");
@@ -382,7 +382,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.createLeafNode(String,DmtData,String)
 	 */
-	private void testMetaData008() {
+	public void testMetaData008() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData008");
@@ -420,7 +420,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.createLeafNode(String,DmtData,String)
 	 */
-	private void testMetaData009() {
+	public void testMetaData009() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData009");
@@ -454,7 +454,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.createLeafNode(String,DmtData,String)
 	 */
-	private void testMetaData010() {
+	public void testMetaData010() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData010");
@@ -487,7 +487,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.createLeafNode(String,DmtData,String)
 	 */
-	private void testMetaData011() {
+	public void testMetaData011() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData011");
@@ -522,7 +522,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.setDefaultNodeValue(String)
 	 */
-	private void testMetaData012() {
+	public void testMetaData012() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData012");
@@ -557,7 +557,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.setDefaultNodeValue(String)
 	 */
-	private void testMetaData013() {
+	public void testMetaData013() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData013");
@@ -593,7 +593,7 @@ public class MetaData {
 	 * 
 	 * DmtSession.setNodeValue(String,DmtData)
 	 */
-	private void testMetaData014() {
+	public void testMetaData014() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData014");
@@ -632,7 +632,7 @@ public class MetaData {
 	 * 
 	 * DmtSession.setNodeValue(String,DmtData)
 	 */
-	private void testMetaData015() {
+	public void testMetaData015() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData015");
@@ -667,7 +667,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.createInteriorNode(String)
 	 */
-	private void testMetaData016() {
+	public void testMetaData016() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData016");
@@ -699,7 +699,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.createInteriorNode(String,String)
 	 */
-	private void testMetaData017() {
+	public void testMetaData017() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData017");
@@ -732,7 +732,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.createInteriorNode(String)
 	 */
-	private void testMetaData018() {
+	public void testMetaData018() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData018");
@@ -765,7 +765,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.createInteriorNode(String,String)
 	 */
-	private void testMetaData019() {
+	public void testMetaData019() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData019");
@@ -798,7 +798,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.deleteNode(String) 
 	 */
-	private void testMetaData020() {
+	public void testMetaData020() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData020");
@@ -833,7 +833,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.deleteNode(String)
 	 */
-	private void testMetaData021() {
+	public void testMetaData021() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData021");
@@ -866,7 +866,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.renameNode(String,String)
 	 */
-	private void testMetaData022() {
+	public void testMetaData022() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData022");
@@ -899,7 +899,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.setNodeTitle(String,String)
 	 */
-	private void testMetaData023() {
+	public void testMetaData023() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData023");
@@ -933,7 +933,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.setNodeType(String,String)
 	 */
-	private void testMetaData024() {
+	public void testMetaData024() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData024");
@@ -967,7 +967,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.getNodeType(String)
 	 */
-	private void testMetaData025() {
+	public void testMetaData025() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData025");
@@ -1001,7 +1001,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.getChildNodeNames(String)
 	 */
-	private void testMetaData026() {
+	public void testMetaData026() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData026");
@@ -1034,7 +1034,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.getNodeSize(String)
 	 */
-	private void testMetaData027() {
+	public void testMetaData027() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData027");
@@ -1067,7 +1067,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.getNodeTimestamp(String)
 	 */
-	private void testMetaData028() {
+	public void testMetaData028() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData028");
@@ -1100,7 +1100,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.getNodeTitle(String)
 	 */
-	private void testMetaData029() {
+	public void testMetaData029() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData029");
@@ -1133,7 +1133,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.getNodeValue(String)
 	 */
-	private void testMetaData030() {
+	public void testMetaData030() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData030");
@@ -1166,7 +1166,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.getNodeVersion(String)
 	 */
-	private void testMetaData031() {
+	public void testMetaData031() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData031");
@@ -1199,7 +1199,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.isLeafNode(String)
 	 */
-	private void testMetaData032() {
+	public void testMetaData032() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData032");
@@ -1232,7 +1232,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.getEffectiveNodeAcl(String)
 	 */
-	private void testMetaData033() {
+	public void testMetaData033() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData033");
@@ -1265,7 +1265,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.getNodeAcl(String)
 	 */
-	private void testMetaData034() {
+	public void testMetaData034() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData034");
@@ -1299,7 +1299,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.deleteNode(String)
 	 */
-	private void testMetaData035() {
+	public void testMetaData035() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData035");
@@ -1332,7 +1332,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.createInteriorNode(String)
 	 */
-	private void testMetaData036() {
+	public void testMetaData036() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData036");
@@ -1365,7 +1365,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.execute(String,String) 
 	 */
-	private void testMetaData037() {
+	public void testMetaData037() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData037");
@@ -1398,7 +1398,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.execute(String,String,String) 
 	 */
-	private void testMetaData038() {
+	public void testMetaData038() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData038");
@@ -1432,7 +1432,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.createInteriorNode(String,String)
 	 */
-	private void testMetaData039() {
+	public void testMetaData039() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData039");
@@ -1466,7 +1466,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.createInteriorNode(String)
 	 */
-	private void testMetaData040() {
+	public void testMetaData040() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData040");
@@ -1499,7 +1499,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.createInteriorNode(String,String)
 	 */
-	private void testMetaData041() {
+	public void testMetaData041() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData041");
@@ -1532,7 +1532,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.createLeafNode(String,DmtData)
 	 */
-	private void testMetaData042() {
+	public void testMetaData042() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData042");
@@ -1567,7 +1567,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.createLeafNode(String,DmtData,String)
 	 */
-	private void testMetaData043() {
+	public void testMetaData043() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData043");
@@ -1604,7 +1604,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.createLeafNode(String)
 	 */
-	private void testMetaData044() {
+	public void testMetaData044() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData044");
@@ -1641,7 +1641,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.createLeafNode(String)
 	 */
-	private void testMetaData045() {
+	public void testMetaData045() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData045");
@@ -1677,7 +1677,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.createLeafNode(String)
 	 */
-	private void testMetaData046() {
+	public void testMetaData046() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData046");
@@ -1710,7 +1710,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.createLeafNode(String)
 	 */
-	private void testMetaData047() {
+	public void testMetaData047() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData047");
@@ -1743,7 +1743,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.createLeafNode(String) 
 	 */
-	private void testMetaData048() {
+	public void testMetaData048() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData048");
@@ -1779,7 +1779,7 @@ public class MetaData {
 	 * 
 	 * @spec DmtSession.createLeafNode(String) 
 	 */
-	private void testMetaData049() {
+	public void testMetaData049() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testMetaData049");
@@ -1810,7 +1810,7 @@ public class MetaData {
      * 
      * @spec DmtSession.setNodeType(String,String)
      */
-    private void testMetaData050() {
+    public void testMetaData050() {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData050");
@@ -1842,7 +1842,7 @@ public class MetaData {
      * 
      * @spec DmtSession.renameNode(String,String)
      */
-    private void testMetaData051() {
+    public void testMetaData051() {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData051");
@@ -1872,7 +1872,7 @@ public class MetaData {
      * 
      * @spec DmtSession.renameNode(String,String)
      */
-    private void testMetaData052() {
+    public void testMetaData052() {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData052");
@@ -1905,7 +1905,7 @@ public class MetaData {
      * 
      * @spec DmtSession.renameNode(String,String)
      */
-    private void testMetaData053() {
+    public void testMetaData053() {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData053");
@@ -1935,7 +1935,7 @@ public class MetaData {
      * 
      * @spec DmtSession.renameNode(String,String)
      */
-    private void testMetaData054() {
+    public void testMetaData054() {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData054");
@@ -1965,7 +1965,7 @@ public class MetaData {
      * 
      * DmtSession.setNodeValue(String,DmtData)
      */
-    private void testMetaData055() {
+    public void testMetaData055() {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData055");
@@ -1999,7 +1999,7 @@ public class MetaData {
      * 
      * DmtSession.setNodeValue(String,DmtData)
      */
-    private void testMetaData056() {
+    public void testMetaData056() {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData056");
@@ -2035,7 +2035,7 @@ public class MetaData {
      * 
      * @spec DmtSession.createLeafNode(String,DmtData,String)
      */
-    private void testMetaData057() {
+    public void testMetaData057() {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData057");
@@ -2068,7 +2068,7 @@ public class MetaData {
      * 
      * @spec DmtSession.renameNode(String,String)
      */
-    private void testMetaData058() {
+    public void testMetaData058() {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData058");
@@ -2093,7 +2093,7 @@ public class MetaData {
      * 
      * @spec DmtSession.createInteriorNode(String)
      */
-    private void testMetaData059() {
+    public void testMetaData059() {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData059");
@@ -2119,7 +2119,7 @@ public class MetaData {
      * 
      * @spec DmtSession.createInteriorNode(String,String)
      */
-    private void testMetaData060() {
+    public void testMetaData060() {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData060");
@@ -2145,7 +2145,7 @@ public class MetaData {
      * 
      * @spec DmtSession.createLeafNode(String)
      */
-    private void testMetaData061() {
+    public void testMetaData061() {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData061");
@@ -2171,7 +2171,7 @@ public class MetaData {
      * 
      * @spec DmtSession.createLeafNode(String,DmtData)
      */
-    private void testMetaData062() {
+    public void testMetaData062() {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData062");
@@ -2196,7 +2196,7 @@ public class MetaData {
      * 
      * @spec DmtSession.createLeafNode(String,DmtData,String)
      */
-    private void testMetaData063() {
+    public void testMetaData063() {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData063");
@@ -2222,7 +2222,7 @@ public class MetaData {
      * 
      * @spec DmtSession.copy(String,String,boolean)
      */
-    private void testMetaData064() {
+    public void testMetaData064() {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData064");
@@ -2248,7 +2248,7 @@ public class MetaData {
      * 
      * @spec DmtSession.renameNode(String,String)
      */
-    private void testMetaData065() {
+    public void testMetaData065() {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData065");
@@ -2274,7 +2274,7 @@ public class MetaData {
      * 
      * @spec DmtSession.createLeafNode(String,DmtData)
      */
-    private void testMetaData066() {
+    public void testMetaData066() {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData066");
@@ -2299,7 +2299,7 @@ public class MetaData {
      * 
      * @spec DmtSession.createLeafNode(String,DmtData,String)
      */
-    private void testMetaData067() {
+    public void testMetaData067() {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData067");
@@ -2325,7 +2325,7 @@ public class MetaData {
      * 
      * @spec DmtSession.setNodeValue(String,DmtData)
      */
-    private void testMetaData068() {
+    public void testMetaData068() {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData068");
@@ -2351,7 +2351,7 @@ public class MetaData {
      * 
      * @spec DmtSession.deleteNode(String)
      */
-    private void testMetaData069() {
+    public void testMetaData069() {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData069");
@@ -2377,7 +2377,7 @@ public class MetaData {
      * 
      * @spec DmtSession.renameNode(String,String)
      */
-    private void testMetaData070() {
+    public void testMetaData070() {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData070");
@@ -2406,7 +2406,7 @@ public class MetaData {
      * 
      * @spec DmtSession.renameNode(String,String)
      */
-    private void testMetaData071() {
+    public void testMetaData071() {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData071");
@@ -2436,7 +2436,7 @@ public class MetaData {
      * 
      * @spec DmtSession.createLeafNode(String,DmtData)
      */
-    private void testMetaData072() {
+    public void testMetaData072() {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData072");
@@ -2468,7 +2468,7 @@ public class MetaData {
      * 
      * @spec DmtSession.renameNode(String,String)
      */
-    private void testMetaData073() {
+    public void testMetaData073() {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData073");

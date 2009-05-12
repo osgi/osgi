@@ -66,7 +66,7 @@ public class GetNodeTitle {
 	 * 
 	 * @spec ReadableDataSession.getNodeTitle(String[]) 
 	 */
-	private void testGetNodeTitle001() {
+	public void testGetNodeTitle001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetNodeTitle001");
@@ -89,7 +89,7 @@ public class GetNodeTitle {
 	 * 
 	 * @spec ReadableDataSession.getNodeTitle(String[])
 	 */
-	private void testGetNodeTitle002() {
+	public void testGetNodeTitle002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetNodeTitle002");

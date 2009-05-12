@@ -68,7 +68,7 @@ public class GetMimeTypes {
 	 * 
 	 * @spec MetaNode.getMimeTypes()
 	 */
-	private void testGetMimeTypes001() {
+	public void testGetMimeTypes001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetMimeTypes001");
@@ -94,7 +94,7 @@ public class GetMimeTypes {
      * 
      * @spec MetaNode.getMimeTypes()
      */
-    private void testGetMimeTypes002() {
+    public void testGetMimeTypes002() {
         DmtSession session = null;
         try {
             tbc.log("#testGetMimeTypes002");
@@ -118,7 +118,7 @@ public class GetMimeTypes {
      * 
      * @spec MetaNode.getMimeTypes()
      */
-    private void testGetMimeTypes003() {
+    public void testGetMimeTypes003() {
         DmtSession session = null;
         try {
             tbc.log("#testGetMimeTypes003");
@@ -142,7 +142,7 @@ public class GetMimeTypes {
      * 
      * @spec MetaNode.getMimeTypes()
      */
-    private void testGetMimeTypes004() {
+    public void testGetMimeTypes004() {
         DmtSession session = null;
         try {
             tbc.log("#testGetMimeTypes004");
@@ -165,7 +165,7 @@ public class GetMimeTypes {
      * 
      * @spec MetaNode.getMimeTypes()
      */
-    private void testGetMimeTypes005() {
+    public void testGetMimeTypes005() {
         DmtSession session = null;
         try {
             tbc.log("#testGetMimeTypes005");

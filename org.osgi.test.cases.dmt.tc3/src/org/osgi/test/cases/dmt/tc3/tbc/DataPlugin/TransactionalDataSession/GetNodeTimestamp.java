@@ -68,7 +68,7 @@ public class GetNodeTimestamp {
 	 * 
 	 * @spec ReadableDataSession.getNodeTimestamp(String[])
 	 */
-	private void testGetNodeTimestamp001() {
+	public void testGetNodeTimestamp001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetNodeTimestamp001");
@@ -90,7 +90,7 @@ public class GetNodeTimestamp {
 	 * 
 	 * @spec ReadableDataSession.getNodeTimestamp(String[])
 	 */
-	private void testGetNodeTimestamp002() {
+	public void testGetNodeTimestamp002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetNodeTimestamp002");

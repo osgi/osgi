@@ -66,7 +66,7 @@ public class Can {
 	 * 
 	 * @spec MetaNode.can(int) 
 	 */
-	private void testCan001() {
+	public void testCan001() {
 		DmtSession session = null;
 		try {
 		tbc.log("#testCan001");
@@ -95,7 +95,7 @@ public class Can {
      * 
      * @spec MetaNode.can(int) 
      */
-    private void testCan002() {
+    public void testCan002() {
         DmtSession session = null;
         try {
         tbc.log("#testCan002");

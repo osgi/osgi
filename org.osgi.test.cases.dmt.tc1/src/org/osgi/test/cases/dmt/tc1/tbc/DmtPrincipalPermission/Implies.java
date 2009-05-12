@@ -37,6 +37,7 @@
 package org.osgi.test.cases.dmt.tc1.tbc.DmtPrincipalPermission;
 
 import info.dmtree.security.DmtPrincipalPermission;
+
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
@@ -44,38 +45,24 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  * This test case validates the implementation of <code>implies</code> method of DmtPrincipalPermission, 
  * according to MEG specification
  */
-public class Implies {
-	private DmtTestControl tbc;
-
-	public Implies(DmtTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testImplies001();
-		testImplies002();
-		testImplies003();
-        testImplies004();
-	}
-
+public class Implies extends DmtTestControl {
 	/**
 	 * This method asserts that an object implies other object using the same target
 	 * 
 	 * @spec DmtPrincipalPermission.implies(Permission)
 	 */
-	private void testImplies001() {
+	public void testImplies001() {
 		try {
-			tbc.log("#testImplies001");
+			log("#testImplies001");
 			DmtPrincipalPermission d1 = new DmtPrincipalPermission("*");
 			DmtPrincipalPermission d2 = new DmtPrincipalPermission("*");
 
-			tbc
-					.assertTrue(
+			assertTrue(
 							"Asserts that an object implies other object using the same target",
 							d1.implies(d2));
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -84,22 +71,21 @@ public class Implies {
 	 * 
 	 * @spec DmtPrincipalPermission.implies(Permission)
 	 */
-	private void testImplies002() {
+	public void testImplies002() {
 		try {
-			tbc.log("#testImplies002");
+			log("#testImplies002");
 
 			DmtPrincipalPermission d1 = new DmtPrincipalPermission(
 					DmtConstants.PRINCIPAL, "*");
 			DmtPrincipalPermission d2 = new DmtPrincipalPermission(
 					DmtConstants.PRINCIPAL, "*");
 
-			tbc
-					.assertTrue(
+			assertTrue(
 							"Asserts that an object implies other object using the same target and actions",
 							d1.implies(d2));
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -108,21 +94,20 @@ public class Implies {
 	 * 
 	 * @spec DmtPrincipalPermission.implies(Permission)
 	 */
-	private void testImplies003() {
+	public void testImplies003() {
 		try {
-			tbc.log("#testImplies003");
+			log("#testImplies003");
 
 			DmtPrincipalPermission d1 = new DmtPrincipalPermission(
 					DmtConstants.PRINCIPAL, "*");
 			DmtPrincipalPermission d2 = new DmtPrincipalPermission("*", "*");
 
-			tbc
-					.assertTrue(
+			assertTrue(
 							"Asserts that an object does not imply other object using the different target and actions",
 							!d1.implies(d2));
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -131,22 +116,21 @@ public class Implies {
      * 
      * @spec DmtPrincipalPermission.implies(Permission)
      */
-    private void testImplies004() {
+    public void testImplies004() {
         try {
-            tbc.log("#testImplies004");
+            log("#testImplies004");
 
 
             DmtPrincipalPermission d1 = new DmtPrincipalPermission(DmtConstants.PRINCIPAL + "*", "*");
             DmtPrincipalPermission d2 = new DmtPrincipalPermission(
                 DmtConstants.PRINCIPAL +"a", "*");
 
-            tbc
-                    .assertTrue(
+            assertTrue(
                             "Asserts that an object implies other object using a wildcard",
                             d1.implies(d2));
 
         } catch (Exception e) {
-            tbc.failUnexpectedException(e);
+            failUnexpectedException(e);
         }
     }
 }

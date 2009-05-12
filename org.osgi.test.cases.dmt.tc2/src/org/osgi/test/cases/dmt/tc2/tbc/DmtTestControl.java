@@ -78,32 +78,32 @@ import org.osgi.test.cases.dmt.tc2.tbc.Uri.IsValidUri;
 import org.osgi.test.cases.dmt.tc2.tbc.Uri.Mangle;
 import org.osgi.test.cases.dmt.tc2.tbc.Uri.ToPath;
 import org.osgi.test.cases.dmt.tc2.tbc.Uri.ToUri;
-import org.osgi.test.cases.util.DefaultTestBundleControl;
 import org.osgi.test.support.Base64Encoder;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 public class DmtTestControl extends DefaultTestBundleControl {
 	
-	private TestExecPluginActivator testExecPluginActivator;
+	private static TestExecPluginActivator		testExecPluginActivator;
 	
-    private TestNonAtomicPluginActivator testNonAtomicPluginActivator;
+    private static TestNonAtomicPluginActivator	testNonAtomicPluginActivator;
     
-	private TestReadOnlyPluginActivator testReadOnlyPluginActivator;
+	private static TestReadOnlyPluginActivator	testReadOnlyPluginActivator;
 	
-	private RemoteAlertSenderActivator remoteAlertSenderActivator;
+	private static RemoteAlertSenderActivator	remoteAlertSenderActivator;
 	
-	private DmtAdmin dmtAdmin;
+	private static DmtAdmin						dmtAdmin;
 	
-	private EventHandlerActivator testDmtHandlerActivator; 
+	private static EventHandlerActivator		testDmtHandlerActivator; 
 	
 	public static String LOCATION = "";
 
-	private PermissionAdmin permissionAdmin;
+	private static PermissionAdmin				permissionAdmin;
 	
-	private TB1Service tb1Service;
+	private static TB1Service					tb1Service;
 	
-	private TestInterface[] testClasses;
+	private static TestInterface[]				testClasses;
     
-    private PermissionWorker permissionWorker;
+    private static PermissionWorker				permissionWorker;
 
 	//URIs too long, to be used simulating DmtException.URI_TOO_LONG
 	public final static String[] URIS_TOO_LONG;
@@ -630,7 +630,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
             
         } catch (Exception e) {
             fail("Unexpected Exception: " + e.getClass().getName()
-                + " [Message: " + e.getMessage() + "]");
+                + " [Message: " + e.getMessage() + "]", e);
         } finally {
             closeSession(session);
         }
@@ -638,11 +638,13 @@ public class DmtTestControl extends DefaultTestBundleControl {
     }
     
 	public void failUnexpectedException(Exception exception) {
-		fail("Unexpected Exception: " + exception.getClass().getName() + " [Message: " + exception.getMessage() +"]");
+		fail("Unexpected Exception: " + exception.getClass().getName()
+				+ " [Message: " + exception.getMessage() + "]", exception);
 	}
 	
 	public void failExpectedOtherException(Class expected,Throwable found) {
-		fail("Expected " + expected.getName()+ " but was " + found.getClass().getName());
+		fail("Expected " + expected.getName() + " but was "
+				+ found.getClass().getName(), found);
 	}
 
     

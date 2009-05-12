@@ -69,7 +69,7 @@ public class SetNodeValue {
 	 * 
 	 * @spec ReadWriteDataSession.setNodeValue(String[],DmtData)
 	 */
-	private void testSetNodeValue001() {
+	public void testSetNodeValue001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testSetNodeValue001");
@@ -91,7 +91,7 @@ public class SetNodeValue {
 	 * 
 	 * @spec ReadWriteDataSession.setNodeValue(String[],DmtData)
 	 */
-	private void testSetNodeValue002() {
+	public void testSetNodeValue002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testSetNodeValue002");

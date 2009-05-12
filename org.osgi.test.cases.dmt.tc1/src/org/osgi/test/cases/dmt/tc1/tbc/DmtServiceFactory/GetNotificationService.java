@@ -48,29 +48,22 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  * This Class Validates the implementation of <code>DmtServiceFactory.getNotificationService()<code> method, 
  * according to MEG specification
  */
-public class GetNotificationService {
-	private DmtTestControl tbc;
-	
-	public GetNotificationService(DmtTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testGetNotificationService001();
-	}
+public class GetNotificationService extends DmtTestControl {
 
 	/**
 	 * Asserts that DmtServiceFactory.getDmtAdmin() does not return null
 	 * 
 	 * @spec DmtServiceFactory.getDmtAdmin()
 	 */
-	private void testGetNotificationService001() {
+	public void testGetNotificationService001() {
 
 		try {
-			tbc.log("#testGetNotificationService001");
-			tbc.assertNotNull("Asserts that DmtServiceFactory.getNotificationService() does not return null", DmtServiceFactory.getNotificationService());
+			log("#testGetNotificationService001");
+			assertNotNull(
+					"Asserts that DmtServiceFactory.getNotificationService() does not return null",
+					DmtServiceFactory.getNotificationService());
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	
 	}

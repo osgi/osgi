@@ -61,7 +61,7 @@ public class Close {
 	 * 
 	 * @spec ReadableDataSession.close()
 	 */
-	private void testClose001() {
+	public void testClose001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testClose001");
@@ -103,7 +103,7 @@ public class Close {
 	 * 
 	 * @spec ReadableDataSession.close()
 	 */
-	private void testClose002() {
+	public void testClose002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testClose002");

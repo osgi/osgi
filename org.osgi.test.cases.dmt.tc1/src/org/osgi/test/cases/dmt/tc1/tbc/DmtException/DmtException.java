@@ -50,27 +50,8 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  * This class tests DmtException constructors according to MEG specification 
  */
 
-public class DmtException {
-	private DmtTestControl tbc;
+public class DmtException extends DmtTestControl {
 	private static final String EXCEPTION_MSG = "exception_msg";
-	public DmtException(DmtTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testDmtException001();
-		testDmtException002();
-		testDmtException003();
-		testDmtException004();
-		testDmtException005();
-		testDmtException006();
-		testDmtException007();
-		testDmtException008();
-		testDmtException009();
-		testDmtException010();
-        testDmtException011();
-        testDmtException012();
-	}
 
 	/**
 	 * Tests if the values that are passed as parameters for the constructor are equal 
@@ -80,21 +61,25 @@ public class DmtException {
 	 * @spec DmtException.DmtException(String,int,String)
 	 * 
 	 */
-	private void testDmtException001() {
-		tbc.log("#testDmtException001");
+	public void testDmtException001() {
+		log("#testDmtException001");
 		info.dmtree.DmtException de = new info.dmtree.DmtException(
 				DmtConstants.OSGi_LOG,
 				info.dmtree.DmtException.INVALID_URI,
 				DmtConstants.MESSAGE);
 
-		tbc.assertEquals("Asserts getURI() method", DmtConstants.OSGi_LOG, de.getURI());
-		tbc.assertEquals("Asserts getMessage() method","INVALID_URI: '"+DmtConstants.OSGi_LOG+"': "+DmtConstants.MESSAGE,de.getMessage());
+		assertEquals("Asserts getURI() method", DmtConstants.OSGi_LOG, de
+				.getURI());
+		assertEquals("Asserts getMessage() method", "INVALID_URI: '"
+				+ DmtConstants.OSGi_LOG + "': " + DmtConstants.MESSAGE, de
+				.getMessage());
 		
-		tbc.assertEquals("Asserts getCode() method",info.dmtree.DmtException.INVALID_URI, de.getCode());
+		assertEquals("Asserts getCode() method",
+				info.dmtree.DmtException.INVALID_URI, de.getCode());
 		
-		tbc.assertEquals("Asserts getCauses() method", 0, de.getCauses().length);
-		tbc.assertNull("Asserts getCause() method", de.getCause());
-		tbc.assertTrue("Asserts isFatal() method", !de.isFatal());
+		assertEquals("Asserts getCauses() method", 0, de.getCauses().length);
+		assertNull("Asserts getCause() method", de.getCause());
+		assertTrue("Asserts isFatal() method", !de.isFatal());
 	}
 	
 	
@@ -106,17 +91,20 @@ public class DmtException {
 	 * @spec DmtException.DmtException(String,int,String)
 	 * 
 	 */
-	private void testDmtException002() {
-		tbc.log("#testDmtException002");
+	public void testDmtException002() {
+		log("#testDmtException002");
 		info.dmtree.DmtException de = new info.dmtree.DmtException((String)null, info.dmtree.DmtException.CONCURRENT_ACCESS, null);
-		tbc.assertNull("Asserts getURI() method", de.getURI());
+		assertNull("Asserts getURI() method", de.getURI());
         
-		tbc.assertEquals("Asserts getCode() method", info.dmtree.DmtException.CONCURRENT_ACCESS, de.getCode());
-        tbc.assertEquals("Asserts getMessage() method","CONCURRENT_ACCESS",de.getMessage());
-		tbc.assertNull("Asserts getCause() method", de.getCause());		
-		tbc.assertTrue("Asserts that getCauses() returns an empty array if there is no cause", 
+		assertEquals("Asserts getCode() method",
+				info.dmtree.DmtException.CONCURRENT_ACCESS, de.getCode());
+		assertEquals("Asserts getMessage() method", "CONCURRENT_ACCESS", de
+				.getMessage());
+		assertNull("Asserts getCause() method", de.getCause());
+		assertTrue(
+				"Asserts that getCauses() returns an empty array if there is no cause", 
 				de.getCauses().length==0);
-		tbc.assertTrue("Asserts isFatal() method", !de.isFatal());
+		assertTrue("Asserts isFatal() method", !de.isFatal());
 		
 	}
 	
@@ -128,8 +116,8 @@ public class DmtException {
 	 * @spec DmtException.DmtException(String[],int,String)
 	 * 
 	 */
-	private void testDmtException003() {
-		tbc.log("#testDmtException003");
+	public void testDmtException003() {
+		log("#testDmtException003");
 		info.dmtree.DmtException de = new info.dmtree.DmtException(
 				new String[] {".","a","b","c" },
 				info.dmtree.DmtException.COMMAND_NOT_ALLOWED,
@@ -137,16 +125,17 @@ public class DmtException {
 
 		String uri = "./a/b/c";
 
-		tbc.assertEquals("Asserts getURI() method", uri, de.getURI());
+		assertEquals("Asserts getURI() method", uri, de.getURI());
 
-        tbc.assertEquals("Asserts getMessage() method","COMMAND_NOT_ALLOWED: '"+uri+"': "+DmtConstants.MESSAGE,de.getMessage());
+        assertEquals("Asserts getMessage() method", "COMMAND_NOT_ALLOWED: '"
+				+ uri + "': " + DmtConstants.MESSAGE, de.getMessage());
 
-		tbc.assertEquals("Asserts getCode() method",
+		assertEquals("Asserts getCode() method",
 				info.dmtree.DmtException.COMMAND_NOT_ALLOWED, de.getCode());
 		
-		tbc.assertEquals("Asserts getCauses() method", 0, de.getCauses().length);
-		tbc.assertNull("Asserts getCause() method", de.getCause());
-		tbc.assertTrue("Asserts isFatal() method", !de.isFatal());
+		assertEquals("Asserts getCauses() method", 0, de.getCauses().length);
+		assertNull("Asserts getCause() method", de.getCause());
+		assertTrue("Asserts isFatal() method", !de.isFatal());
 
 	}
 	
@@ -159,18 +148,21 @@ public class DmtException {
 	 * @spec DmtException.DmtException(String[],int,String)
 	 * 
 	 */
-	private void testDmtException004() {
-		tbc.log("#testDmtException004");
+	public void testDmtException004() {
+		log("#testDmtException004");
 		info.dmtree.DmtException de = new info.dmtree.DmtException((String[])null, info.dmtree.DmtException.ALERT_NOT_ROUTED, null);
 		
-		tbc.assertNull("Asserts getURI() method", de.getURI());
+		assertNull("Asserts getURI() method", de.getURI());
 		
-		tbc.assertEquals("Asserts getCode() method", info.dmtree.DmtException.ALERT_NOT_ROUTED, de.getCode());
-        tbc.assertEquals("Asserts getMessage() method","ALERT_NOT_ROUTED",de.getMessage());
-		tbc.assertNull("Asserts getCause() method", de.getCause());		
-		tbc.assertTrue("Asserts that getCauses() returns an empty array if there is no cause", 
+		assertEquals("Asserts getCode() method",
+				info.dmtree.DmtException.ALERT_NOT_ROUTED, de.getCode());
+		assertEquals("Asserts getMessage() method", "ALERT_NOT_ROUTED", de
+				.getMessage());
+		assertNull("Asserts getCause() method", de.getCause());
+		assertTrue(
+				"Asserts that getCauses() returns an empty array if there is no cause", 
 				de.getCauses().length==0);
-		tbc.assertTrue("Asserts isFatal() method", !de.isFatal());
+		assertTrue("Asserts isFatal() method", !de.isFatal());
 		
 	}
 
@@ -182,28 +174,32 @@ public class DmtException {
 	 * @spec DmtException.DmtException(String,int,String,Throwable)
 	 * 
 	 */
-	private void testDmtException005() {
-		tbc.log("#testDmtException005");
+	public void testDmtException005() {
+		log("#testDmtException005");
 		info.dmtree.DmtException de = new info.dmtree.DmtException(
 				DmtConstants.OSGi_LOG,
 				info.dmtree.DmtException.CONCURRENT_ACCESS,
 				DmtConstants.MESSAGE, new Exception());
 
-		tbc.assertEquals("Asserts getURI() method", DmtConstants.OSGi_LOG, de
+		assertEquals("Asserts getURI() method", DmtConstants.OSGi_LOG, de
 				.getURI());
 		
 
-        tbc.assertEquals("Asserts getMessage() method","CONCURRENT_ACCESS: '"+DmtConstants.OSGi_LOG+"': "+DmtConstants.MESSAGE,de.getMessage());
-		tbc.assertEquals("Asserts getCode() method",
+        assertEquals("Asserts getMessage() method", "CONCURRENT_ACCESS: '"
+				+ DmtConstants.OSGi_LOG + "': " + DmtConstants.MESSAGE, de
+				.getMessage());
+		assertEquals("Asserts getCode() method",
 				info.dmtree.DmtException.CONCURRENT_ACCESS, de.getCode());
 		
-		tbc.assertException("Asserts getCause() method", Exception.class, de.getCause());
+		assertException("Asserts getCause() method", Exception.class, de
+				.getCause());
 		
-		tbc.assertEquals("Asserts getCauses() method", 1, de.getCauses().length);
+		assertEquals("Asserts getCauses() method", 1, de.getCauses().length);
 		
-		tbc.assertException("Asserts getCauses() method", Exception.class,
-				(Exception) de.getCauses()[0]);
-		tbc.assertTrue("Asserts isFatal() method", !de.isFatal());
+		assertException("Asserts getCauses() method", Exception.class,
+				de
+				.getCauses()[0]);
+		assertTrue("Asserts isFatal() method", !de.isFatal());
 	}
 	/**
 	 * Tests if the values that are passed as parameters for the constructor are equal 
@@ -213,19 +209,22 @@ public class DmtException {
 	 * @spec DmtException.DmtException(String,int,String,Throwable)
 	 * 
 	 */
-	private void testDmtException006() {
-		tbc.log("#testDmtException006");
+	public void testDmtException006() {
+		log("#testDmtException006");
 		info.dmtree.DmtException de = new info.dmtree.DmtException((String)null, info.dmtree.DmtException.COMMAND_FAILED, null,
 				(Throwable)null);
-		tbc.assertNull("Asserts getURI() method", de.getURI());
-        tbc.assertEquals("Asserts getMessage() method","COMMAND_FAILED",de.getMessage());
+		assertNull("Asserts getURI() method", de.getURI());
+		assertEquals("Asserts getMessage() method", "COMMAND_FAILED", de
+				.getMessage());
 		
-		tbc.assertEquals("Asserts getCode() method",  info.dmtree.DmtException.COMMAND_FAILED, de.getCode());
+		assertEquals("Asserts getCode() method",
+				info.dmtree.DmtException.COMMAND_FAILED, de.getCode());
 		
-		tbc.assertNull("Asserts getCause() method",de.getCause());
-		tbc.assertTrue("Asserts that getCauses() returns an empty array if there is no cause", 
+		assertNull("Asserts getCause() method", de.getCause());
+		assertTrue(
+				"Asserts that getCauses() returns an empty array if there is no cause", 
 				de.getCauses().length==0);
-		tbc.assertTrue("Asserts isFatal() method", !de.isFatal());
+		assertTrue("Asserts isFatal() method", !de.isFatal());
 
 	}	
 	/**
@@ -236,28 +235,31 @@ public class DmtException {
 	 * @spec DmtException.DmtException(String[],int,String,Throwable)
 	 * 
 	 */
-	private void testDmtException007() {
-		tbc.log("#testDmtException007");
+	public void testDmtException007() {
+		log("#testDmtException007");
 		info.dmtree.DmtException de = new info.dmtree.DmtException(
 				new String[] {".","d", "e", "f"},
 				info.dmtree.DmtException.REMOTE_ERROR,
 				DmtConstants.MESSAGE, new IllegalArgumentException());
 		String uri = "./d/e/f";
 
-		tbc.assertEquals("Asserts getURI() method", uri, de.getURI());
+		assertEquals("Asserts getURI() method", uri, de.getURI());
 
-        tbc.assertEquals("Asserts getMessage() method","REMOTE_ERROR: '"+uri+"': "+DmtConstants.MESSAGE,de.getMessage());
+        assertEquals("Asserts getMessage() method", "REMOTE_ERROR: '" + uri
+				+ "': " + DmtConstants.MESSAGE, de.getMessage());
         
-		tbc.assertEquals("Asserts getCode() method",
+		assertEquals("Asserts getCode() method",
 				info.dmtree.DmtException.REMOTE_ERROR, de.getCode());
 		
-		tbc.assertException("Asserts getCause() method", IllegalArgumentException.class, de.getCause());
+		assertException("Asserts getCause() method",
+				IllegalArgumentException.class, de.getCause());
 		
-		tbc.assertEquals("Asserts getCauses() method", 1, de.getCauses().length);
+		assertEquals("Asserts getCauses() method", 1, de.getCauses().length);
 		
-		tbc.assertException("Asserts getCauses() method", IllegalArgumentException.class,
-				(Exception) de.getCauses()[0]);
-		tbc.assertTrue("Asserts isFatal() method", !de.isFatal());
+		assertException("Asserts getCauses() method",
+				IllegalArgumentException.class,
+				de.getCauses()[0]);
+		assertTrue("Asserts isFatal() method", !de.isFatal());
 	}
 	/**
 	 * Tests if the values that are passed as parameters for the constructor are equal 
@@ -267,17 +269,20 @@ public class DmtException {
 	 * @spec DmtException.DmtException(String[],int,String,Throwable)
 	 * 
 	 */
-	private void testDmtException008() {
-		tbc.log("#testDmtException008");
+	public void testDmtException008() {
+		log("#testDmtException008");
 		info.dmtree.DmtException de = new info.dmtree.DmtException((String[])null, info.dmtree.DmtException.URI_TOO_LONG, null,
 				(Throwable)null);
-		tbc.assertNull("Asserts getURI() method", de.getURI());
-        tbc.assertEquals("Asserts getMessage() method","URI_TOO_LONG",de.getMessage());
-		tbc.assertEquals("Asserts getCode() method", info.dmtree.DmtException.URI_TOO_LONG, de.getCode());
-		tbc.assertNull("Asserts getCause() method",de.getCause());
-		tbc.assertTrue("Asserts that getCauses() returns an empty array if there is no cause", 
+		assertNull("Asserts getURI() method", de.getURI());
+		assertEquals("Asserts getMessage() method", "URI_TOO_LONG", de
+				.getMessage());
+		assertEquals("Asserts getCode() method",
+				info.dmtree.DmtException.URI_TOO_LONG, de.getCode());
+		assertNull("Asserts getCause() method", de.getCause());
+		assertTrue(
+				"Asserts that getCauses() returns an empty array if there is no cause", 
 				de.getCauses().length==0);
-		tbc.assertTrue("Asserts isFatal() method", !de.isFatal());
+		assertTrue("Asserts isFatal() method", !de.isFatal());
 
 	}
 	/**
@@ -288,8 +293,8 @@ public class DmtException {
 	 * @spec DmtException.DmtException(String,int,String,Vector,boolean)
 	 * 
 	 */
-	private void testDmtException009() {
-		tbc.log("#testDmtException009");
+	public void testDmtException009() {
+		log("#testDmtException009");
 		Vector causes = new Vector();
 		causes.add(0, new DmtIllegalStateException(EXCEPTION_MSG));
 		causes.add(1, new Exception(EXCEPTION_MSG));
@@ -299,17 +304,23 @@ public class DmtException {
 				info.dmtree.DmtException.COMMAND_NOT_ALLOWED,
 				DmtConstants.MESSAGE, causes,true);
 
-		tbc.assertEquals("Asserts getURI() method", DmtConstants.OSGi_CONFIGURATION, de.getURI());
+		assertEquals("Asserts getURI() method",
+				DmtConstants.OSGi_CONFIGURATION, de.getURI());
 		
-        tbc.assertEquals("Asserts getMessage() method","COMMAND_NOT_ALLOWED: '"+DmtConstants.OSGi_CONFIGURATION+"': "+DmtConstants.MESSAGE,de.getMessage());
+        assertEquals("Asserts getMessage() method", "COMMAND_NOT_ALLOWED: '"
+				+ DmtConstants.OSGi_CONFIGURATION + "': "
+				+ DmtConstants.MESSAGE, de.getMessage());
         
-		tbc.assertEquals("Asserts getCode() method",info.dmtree.DmtException.COMMAND_NOT_ALLOWED, de.getCode());
+		assertEquals("Asserts getCode() method",
+				info.dmtree.DmtException.COMMAND_NOT_ALLOWED, de.getCode());
 		
-		tbc.assertException("Asserts that getCause returns the first exception in case of more than one exception", 
+		assertException(
+				"Asserts that getCause returns the first exception in case of more than one exception", 
 				DmtIllegalStateException.class, de.getCause());
 		
 		Throwable[] causesReturned = de.getCauses();
-		tbc.assertEquals("Asserts the size of getCauses() method", causes.size(), causesReturned.length);
+		assertEquals("Asserts the size of getCauses() method", causes.size(),
+				causesReturned.length);
 		
 		int found=0;
 		int expected = causes.size();
@@ -330,8 +341,10 @@ public class DmtException {
             }           
             
 		}
-		tbc.assertEquals("Asserts the all of the exceptions were returned correctly",expected,found);
-		tbc.assertTrue("Asserts isFatal() method", de.isFatal());
+		assertEquals(
+				"Asserts the all of the exceptions were returned correctly",
+				expected, found);
+		assertTrue("Asserts isFatal() method", de.isFatal());
 	}
 
 	/**
@@ -342,15 +355,19 @@ public class DmtException {
 	 * @spec DmtException.DmtException(String,int,String,Vector,boolean)
 	 * 
 	 */
-	private void testDmtException010() {
-		tbc.log("#testDmtException010");
+	public void testDmtException010() {
+		log("#testDmtException010");
 		info.dmtree.DmtException de = new info.dmtree.DmtException((String)null, info.dmtree.DmtException.TRANSACTION_ERROR, null, (Vector)null, true);
-		tbc.assertNull("Asserts getURI() method", de.getURI());
-        tbc.assertEquals("Asserts getMessage() method","TRANSACTION_ERROR",de.getMessage());
-		tbc.assertEquals("Asserts getCode() method",info.dmtree.DmtException.TRANSACTION_ERROR, de.getCode());
-		tbc.assertNull("Asserts getCause() method",de.getCause());
-		tbc.assertTrue("Asserts that getCauses() returns an empty array if there is no cause", de.getCauses().length==0);
-		tbc.assertTrue("Asserts isFatal() method", de.isFatal());
+		assertNull("Asserts getURI() method", de.getURI());
+		assertEquals("Asserts getMessage() method", "TRANSACTION_ERROR", de
+				.getMessage());
+		assertEquals("Asserts getCode() method",
+				info.dmtree.DmtException.TRANSACTION_ERROR, de.getCode());
+		assertNull("Asserts getCause() method", de.getCause());
+		assertTrue(
+				"Asserts that getCauses() returns an empty array if there is no cause",
+				de.getCauses().length == 0);
+		assertTrue("Asserts isFatal() method", de.isFatal());
 	}
 	
 	/**
@@ -361,8 +378,8 @@ public class DmtException {
 	 * @spec DmtException.DmtException(String[],int,String,Vector,boolean)
 	 * 
 	 */
-	private void testDmtException011() {
-		tbc.log("#testDmtException011");
+	public void testDmtException011() {
+		log("#testDmtException011");
 		Vector causes = new Vector();
 		causes.add(0, new IllegalArgumentException(EXCEPTION_MSG));
 		causes.add(1, new Exception(EXCEPTION_MSG));
@@ -374,17 +391,20 @@ public class DmtException {
 
 		String uri = "./g/h/i";
 
-		tbc.assertEquals("Asserts getURI() method", uri, de.getURI());
+		assertEquals("Asserts getURI() method", uri, de.getURI());
 
-        tbc.assertEquals("Asserts getMessage() method","FEATURE_NOT_SUPPORTED: '"+uri+"': "+DmtConstants.MESSAGE,de.getMessage());
-		tbc.assertEquals("Asserts getCode() method",
+        assertEquals("Asserts getMessage() method", "FEATURE_NOT_SUPPORTED: '"
+				+ uri + "': " + DmtConstants.MESSAGE, de.getMessage());
+		assertEquals("Asserts getCode() method",
 				info.dmtree.DmtException.FEATURE_NOT_SUPPORTED, de.getCode());
 
-		tbc.assertException("Asserts that getCause returns the first exception in case of more than one exception", 
+		assertException(
+				"Asserts that getCause returns the first exception in case of more than one exception", 
 				IllegalArgumentException.class, de.getCause());
 		
 		Throwable[] causesReturned = de.getCauses();
-		tbc.assertEquals("Asserts the size of getCauses() method", causes.size(), causesReturned.length);
+		assertEquals("Asserts the size of getCauses() method", causes.size(),
+				causesReturned.length);
         
         int found=0;
         int expected = causes.size();
@@ -405,8 +425,10 @@ public class DmtException {
             }
 		}
 
-		tbc.assertEquals("Asserts the all of the exceptions were returned correctly",expected,found);
-		tbc.assertTrue("Asserts isFatal() method", de.isFatal());
+		assertEquals(
+				"Asserts the all of the exceptions were returned correctly",
+				expected, found);
+		assertTrue("Asserts isFatal() method", de.isFatal());
 	}
 
 	/**
@@ -417,18 +439,21 @@ public class DmtException {
 	 * @spec DmtException.DmtException(String[],int,String,Vector,boolean)
 	 * 
 	 */
-	private void testDmtException012() {
-		tbc.log("#testDmtException012");
+	public void testDmtException012() {
+		log("#testDmtException012");
 		info.dmtree.DmtException de = new info.dmtree.DmtException((String[])null, info.dmtree.DmtException.NODE_ALREADY_EXISTS, null, (Vector)null, true);
 		
-		tbc.assertNull("Asserts getURI() method", de.getURI());
-        tbc.assertEquals("Asserts getMessage() method","NODE_ALREADY_EXISTS",de.getMessage());
-		tbc.assertEquals("Asserts getCode() method", info.dmtree.DmtException.NODE_ALREADY_EXISTS, de.getCode());
-		tbc.assertNull("Asserts getCause() method",de.getCause());
-		tbc.assertTrue("Asserts that getCauses() returns an empty Vector if there is no cause", 
+		assertNull("Asserts getURI() method", de.getURI());
+		assertEquals("Asserts getMessage() method", "NODE_ALREADY_EXISTS", de
+				.getMessage());
+		assertEquals("Asserts getCode() method",
+				info.dmtree.DmtException.NODE_ALREADY_EXISTS, de.getCode());
+		assertNull("Asserts getCause() method", de.getCause());
+		assertTrue(
+				"Asserts that getCauses() returns an empty Vector if there is no cause", 
 				de.getCauses().length==0);
 		
-		tbc.assertTrue("Asserts isFatal() method", de.isFatal());
+		assertTrue("Asserts isFatal() method", de.isFatal());
 	}
 	
 

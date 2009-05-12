@@ -37,6 +37,7 @@
 package org.osgi.test.cases.dmt.tc1.tbc.DmtPermission;
 
 import info.dmtree.security.DmtPermission;
+
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
@@ -44,37 +45,25 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  * This test case validates the implementation of <code>hashCode<code> method of DmtPermission, 
  * according to MEG specification
  */
-public class HashCode {
-	private DmtTestControl tbc;
-
-	public HashCode(DmtTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testHashCode001();
-		testHashCode002();
-	}
-
+public class HashCode extends DmtTestControl {
 	/**
 	 * Asserts that two objects initialized with the same dmtUri and actions have the same hashcode
 	 * 
 	 * @spec DmtPermission.hashCode()
 	 */
-	private void testHashCode001() {
+	public void testHashCode001() {
 		try {
-			tbc.log("#testHashCode001");
+			log("#testHashCode001");
 			info.dmtree.security.DmtPermission permission = new info.dmtree.security.DmtPermission(
 					DmtConstants.OSGi_LOG, DmtConstants.ACTIONS);
-			tbc
-					.assertEquals(
+			assertEquals(
 							"Asserting that two objects initialized with the same dmtUri and actions have the same hashcode",
 							new info.dmtree.security.DmtPermission(
 									DmtConstants.OSGi_LOG,
 									DmtConstants.ACTIONS).hashCode(),
 							permission.hashCode());
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -84,24 +73,23 @@ public class HashCode {
 	 * 
 	 * @spec DmtPermission.hashCode()
 	 */
-	private void testHashCode002() {
+	public void testHashCode002() {
 		try {
-			tbc.log("#testHashCode002");
+			log("#testHashCode002");
 			String actions = DmtPermission.ADD + "," + DmtPermission.DELETE
 					+ "," + DmtPermission.EXEC;
 			String actionsDifferentOrder = DmtPermission.DELETE + ","
 					+ DmtPermission.EXEC + "," + DmtPermission.ADD;
 			info.dmtree.security.DmtPermission permission = new info.dmtree.security.DmtPermission(
 					DmtConstants.OSGi_LOG, actions);
-			tbc
-					.assertEquals(
+			assertEquals(
 							"Asserting that two objects initialized with the same dmtUri and actions are equal",
 							permission.hashCode(),
 							(new info.dmtree.security.DmtPermission(
 									DmtConstants.OSGi_LOG,
 									actionsDifferentOrder)).hashCode());
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 

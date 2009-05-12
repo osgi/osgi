@@ -65,7 +65,7 @@ public class GetScope {
 	 * 
 	 * @spec MetaNode.getScope()
 	 */
-	private void testGetScope001() {
+	public void testGetScope001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetScope001");
@@ -90,7 +90,7 @@ public class GetScope {
      * 
      * @spec MetaNode.getScope()
      */
-    private void testGetScope002() {
+    public void testGetScope002() {
         DmtSession session = null;
         try {
             tbc.log("#testGetScope002");

@@ -50,25 +50,14 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  * This test case validates the implementation of <code>printStackTrace</code> method of DmtException, 
  * according to MEG specification
  */
-public class PrintStackTrace {
-	private DmtTestControl tbc;
-
-	public PrintStackTrace(DmtTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testPrintStackTrace001();
-		testPrintStackTrace002();
-	}
-
+public class PrintStackTrace extends DmtTestControl {
 	/**
 	 *  Asserts that any causes that were specified for this exception are printed
 	 * 
 	 * @spec DmtException.printStackTrace(java.io.PrintStream)
 	 */
-	private void testPrintStackTrace001() {
-		tbc.log("#testPrintStackTrace001");
+	public void testPrintStackTrace001() {
+		log("#testPrintStackTrace001");
         try {
     		info.dmtree.DmtException de = new info.dmtree.DmtException(
     				(String)null, 0, null, new Exception());
@@ -77,16 +66,17 @@ public class PrintStackTrace {
     		PrintStream ps = new PrintStream(baos);
     		de.printStackTrace(ps);
     
-    		tbc.assertTrue("Asserts printStackTrace method",
+    		assertTrue("Asserts printStackTrace method",
     						baos.toString().indexOf("java.lang.Exception") > -1);
     		
     		try {
     			ps.close();
     			baos.close();
     		} catch (IOException e) {
+    			// ignore
     		}
         } catch (Exception e) {
-        	tbc.failUnexpectedException(e);
+        	failUnexpectedException(e);
         }
 	}
 	
@@ -96,8 +86,8 @@ public class PrintStackTrace {
 	 * 
 	 * @spec DmtException.printStackTrace(java.io.PrintStream)
 	 */
-	private void testPrintStackTrace002() {
-		tbc.log("#testPrintStackTrace002");
+	public void testPrintStackTrace002() {
+		log("#testPrintStackTrace002");
         try {
     		Vector causes = new Vector();
     		causes.add(0,new Exception());
@@ -110,19 +100,20 @@ public class PrintStackTrace {
     		PrintStream ps = new PrintStream(baos);
     		de.printStackTrace(ps);
     
-    		tbc.assertTrue("Asserts printStackTrace method",
+    		assertTrue("Asserts printStackTrace method",
     						baos.toString().indexOf("java.lang.Exception") > -1);
     
-    		tbc.assertTrue("Asserts printStackTrace method",
+    		assertTrue("Asserts printStackTrace method",
     				baos.toString().indexOf("java.lang.NullPointerException") > -1);
     
     		try {
     			ps.close();
     			baos.close();
     		} catch (IOException e) {
+    			// ignore
     		}
         } catch (Exception e) {
-        	tbc.failUnexpectedException(e);
+        	failUnexpectedException(e);
         }
 	}
 

@@ -59,7 +59,7 @@ public class DmtMetaNodeConstants {
 	 * 
 	 * @spec 117.12.8
 	 */
-	private void testConstants001(){
+	public void testConstants001(){
 		tbc.log("#testConstants001");
 		tbc.assertEquals("Asserts MetaNode.CMD_ADD",0,MetaNode.CMD_ADD);
 		tbc.assertEquals("Asserts MetaNode.CMD_DELETE",1,MetaNode.CMD_DELETE);

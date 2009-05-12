@@ -64,7 +64,7 @@ public class GetValidValues {
 	 * 
 	 * @spec MetaNode.getMaxOccurrence()
 	 */
-	private void testGetValidValues001() {
+	public void testGetValidValues001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetValidValues001");

@@ -38,16 +38,16 @@ package org.osgi.test.cases.dmt.tc3.tbc.TreeStructure;
 import info.dmtree.DmtData;
 import info.dmtree.DmtSession;
 import info.dmtree.MetaNode;
+
 import org.osgi.test.cases.dmt.tc3.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
-import org.osgi.test.cases.util.DefaultTestBundleControl;
 
 /**
  * @author Luiz Felipe Guimaraes
  * 
  * This test class validates the implementation of Configuration Management Object
  */
-public class Configuration extends DefaultTestBundleControl {
+public class Configuration {
     
 	private DmtTestControl tbc;
 	
@@ -102,7 +102,7 @@ public class Configuration extends DefaultTestBundleControl {
 	 * 
 	 * @spec 3.2 Configuration Management Object
 	 */
-	private void testConfiguration001() {
+	public void testConfiguration001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testConfiguration001");
@@ -126,7 +126,7 @@ public class Configuration extends DefaultTestBundleControl {
 	 * 
 	 * @spec 3.2 Configuration Management Object
 	 */
-	private void testConfiguration002() {
+	public void testConfiguration002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testConfiguration002");
@@ -153,7 +153,7 @@ public class Configuration extends DefaultTestBundleControl {
 	 * 
 	 * @spec 3.2 Configuration Management Object
 	 */
-	private void testConfiguration003() {
+	public void testConfiguration003() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testConfiguration003");
@@ -180,7 +180,7 @@ public class Configuration extends DefaultTestBundleControl {
 	 * 
 	 * @spec 3.2 Configuration Management Object
 	 */
-	private void testConfiguration004() {
+	public void testConfiguration004() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testConfiguration004");
@@ -208,7 +208,7 @@ public class Configuration extends DefaultTestBundleControl {
 	 * 
 	 * @spec 3.2 Configuration Management Object
 	 */
-	private void testConfiguration005() {
+	public void testConfiguration005() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testConfiguration005");
@@ -236,7 +236,7 @@ public class Configuration extends DefaultTestBundleControl {
 	 * 
 	 * @spec 3.2 Configuration Management Object
 	 */
-	private void testConfiguration006() {
+	public void testConfiguration006() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testConfiguration006");
@@ -261,7 +261,7 @@ public class Configuration extends DefaultTestBundleControl {
 	 * 
 	 * @spec 3.2 Configuration Management Object
 	 */
-	private void testConfiguration007() {
+	public void testConfiguration007() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testConfiguration007");
@@ -290,7 +290,7 @@ public class Configuration extends DefaultTestBundleControl {
 	 * 
 	 * @spec 3.2 Configuration Management Object
 	 */
-	private void testConfiguration008() {
+	public void testConfiguration008() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testConfiguration008");
@@ -319,7 +319,7 @@ public class Configuration extends DefaultTestBundleControl {
 	 * 
 	 * @spec 3.2 Configuration Management Object
 	 */
-	private void testConfiguration009() {
+	public void testConfiguration009() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testConfiguration009");
@@ -348,7 +348,7 @@ public class Configuration extends DefaultTestBundleControl {
 	 * 
 	 * @spec 3.2 Configuration Management Object
 	 */
-	private void testConfiguration010() {
+	public void testConfiguration010() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testConfiguration010");
@@ -381,7 +381,7 @@ public class Configuration extends DefaultTestBundleControl {
 	 * 
 	 * @spec 3.2 Configuration Management Object
 	 */
-	private void testConfiguration011() {
+	public void testConfiguration011() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testConfiguration011");
@@ -410,7 +410,7 @@ public class Configuration extends DefaultTestBundleControl {
 	 * 
 	 * @spec 3.2 Configuration Management Object
 	 */
-	private void testConfiguration012() {
+	public void testConfiguration012() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testConfiguration012");

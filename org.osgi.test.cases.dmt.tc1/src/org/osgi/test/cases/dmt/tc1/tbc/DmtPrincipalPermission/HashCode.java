@@ -37,6 +37,7 @@
 package org.osgi.test.cases.dmt.tc1.tbc.DmtPrincipalPermission;
 
 import info.dmtree.security.DmtPrincipalPermission;
+
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
@@ -44,36 +45,25 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  * This test ccase validates the implementation of <code>hashCode</code> method of DmtPrincipalPermission, 
  * according to MEG specification
  */
-public class HashCode {
-	private DmtTestControl tbc;
-
-	public HashCode(DmtTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testHashCode001();
-		testHashCode002();
-	}
-
+public class HashCode extends DmtTestControl {
 	/**
 	 * Assert if hashCodes are the same for two DmtPrincipalPermission instances that are equal
 	 * 
 	 * @spec DmtPrincipalPermission.hashCode()
 	 */
-	private void testHashCode001() {
+	public void testHashCode001() {
 		try {
-			tbc.log("#testHashCode001");
+			log("#testHashCode001");
 
 			DmtPrincipalPermission d1 = new DmtPrincipalPermission("*");
 			DmtPrincipalPermission d2 = new DmtPrincipalPermission("*");
 
-			tbc.assertTrue(
+			assertTrue(
 					"Assert if hashCodes are the same for two DmtPrincipalPermission instances that are equal",
 					d1.hashCode()==d2.hashCode());
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 	
@@ -83,19 +73,19 @@ public class HashCode {
 	 * 
 	 * @spec DmtPrincipalPermission.hashCode()
 	 */
-	private void testHashCode002() {
+	public void testHashCode002() {
 		try {
-			tbc.log("#testHashCode002");
+			log("#testHashCode002");
 
 			DmtPrincipalPermission d1 = new DmtPrincipalPermission(DmtConstants.PRINCIPAL,"*");
 			DmtPrincipalPermission d2 = new DmtPrincipalPermission(DmtConstants.PRINCIPAL,"*");
 
-			tbc.assertTrue(
+			assertTrue(
 					"Assert if hashCodes are the same for two DmtPrincipalPermission instances that are equal",
 					d1.hashCode()==d2.hashCode());
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 

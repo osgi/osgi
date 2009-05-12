@@ -37,6 +37,7 @@
 package org.osgi.test.cases.dmt.tc1.tbc.AlertPermission;
 
 import info.dmtree.security.AlertPermission;
+
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
@@ -44,39 +45,26 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  * This test case validates the implementation of <code>implies<code> method of AlertPermission, 
  * according to MEG specification
  */
-public class Implies {
-	private DmtTestControl tbc;
-
-	public Implies(DmtTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testImplies001();
-		testImplies002();
-		testImplies003();
-        testImplies004();
-	}
+public class Implies extends DmtTestControl {
 
 	/**
 	 * This method asserts that an object implies other object using the same target
 	 * 
 	 * @spec AlertPermission.implies(Permission)
 	 */
-	private void testImplies001() {
+	public void testImplies001() {
 		try {
-			tbc.log("#testImplies001");
+			log("#testImplies001");
 
 			AlertPermission d1 = new AlertPermission(DmtConstants.REMOTE_SERVER);
 			AlertPermission d2 = new AlertPermission(DmtConstants.REMOTE_SERVER);
 
-			tbc
-					.assertTrue(
+			assertTrue(
 							"Asserts that an object implies other object using the same target",
 							d1.implies(d2));
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -85,22 +73,21 @@ public class Implies {
 	 * 
 	 * @spec AlertPermission.implies(Permission)
 	 */
-	private void testImplies002() {
+	public void testImplies002() {
 		try {
-			tbc.log("#testImplies002");
+			log("#testImplies002");
 
 			AlertPermission d1 = new AlertPermission(
 					DmtConstants.REMOTE_SERVER, "*");
 			AlertPermission d2 = new AlertPermission(
 					DmtConstants.REMOTE_SERVER, "*");
 
-			tbc
-					.assertTrue(
+			assertTrue(
 							"Asserts that an object implies other object using the same target and actions",
 							d1.implies(d2));
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -109,21 +96,20 @@ public class Implies {
 	 * 
 	 * @spec AlertPermission.implies(Permission)
 	 */
-	private void testImplies003() {
+	public void testImplies003() {
 		try {
-			tbc.log("#testImplies003");
+			log("#testImplies003");
 
 			AlertPermission d1 = new AlertPermission(
 					DmtConstants.REMOTE_SERVER, "*");
 			AlertPermission d2 = new AlertPermission(DmtConstants.REMOTE_SERVER + "a", "*");
 
-			tbc
-					.assertTrue(
+			assertTrue(
 							"Asserts that an object does not imply other object using the different target and actions",
 							!d1.implies(d2));
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
     
@@ -132,21 +118,20 @@ public class Implies {
      * 
      * @spec AlertPermission.implies(Permission)
      */
-    private void testImplies004() {
+    public void testImplies004() {
         try {
-            tbc.log("#testImplies004");
+            log("#testImplies004");
 
             AlertPermission d1 = new AlertPermission(
                     DmtConstants.REMOTE_SERVER+"*", "*");
             AlertPermission d2 = new AlertPermission(DmtConstants.REMOTE_SERVER + "a", "*");
 
-            tbc
-                    .assertTrue(
+            assertTrue(
                             "Asserts that an object implies other object using the '*' wildcard",
                             d1.implies(d2));
 
         } catch (Exception e) {
-            tbc.failUnexpectedException(e);
+            failUnexpectedException(e);
         }
     }
 

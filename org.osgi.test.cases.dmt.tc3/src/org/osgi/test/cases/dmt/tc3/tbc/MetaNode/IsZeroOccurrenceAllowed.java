@@ -65,7 +65,7 @@ public class IsZeroOccurrenceAllowed {
 	 * 
 	 * @spec MetaNode.isZeroOccurrenceAllowed()
 	 */
-	private void testIsZeroOccurrenceAllowed001() {
+	public void testIsZeroOccurrenceAllowed001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testIsZeroOccurrenceAllowed001");

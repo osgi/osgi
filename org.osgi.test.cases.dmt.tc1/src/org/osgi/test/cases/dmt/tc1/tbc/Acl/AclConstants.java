@@ -40,6 +40,7 @@
 package org.osgi.test.cases.dmt.tc1.tbc.Acl;
 
 import info.dmtree.Acl;
+
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
 /**
@@ -48,28 +49,18 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  * This test case validates all <code>constants</code> of Acl, according to MEG specification
  * 
  */
-public class AclConstants {
-	private DmtTestControl tbc;
-
-
-	public AclConstants(DmtTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testConstants001();
-	}
+public class AclConstants extends DmtTestControl {
 
 	/**
 	 * Tests all constants values according to the specified values
 	 */
-	private void testConstants001() {
-		tbc.log("#testConstants001");
-		tbc.assertEquals("Asserting GET value", 1, Acl.GET);
-		tbc.assertEquals("Asserting ADD value", 2, Acl.ADD);
-		tbc.assertEquals("Asserting REPLACE value", 4, Acl.REPLACE);
-		tbc.assertEquals("Asserting DELETE value", 8, Acl.DELETE);
-		tbc.assertEquals("Asserting EXEC value", 16, Acl.EXEC);
-		tbc.assertEquals("Asserting ALL_PERMISSION 	 value", 31, Acl.ALL_PERMISSION);
+	public void testConstants001() {
+		log("#testConstants001");
+		assertEquals("Asserting GET value", 1, Acl.GET);
+		assertEquals("Asserting ADD value", 2, Acl.ADD);
+		assertEquals("Asserting REPLACE value", 4, Acl.REPLACE);
+		assertEquals("Asserting DELETE value", 8, Acl.DELETE);
+		assertEquals("Asserting EXEC value", 16, Acl.EXEC);
+		assertEquals("Asserting ALL_PERMISSION 	 value", 31, Acl.ALL_PERMISSION);
 	}
 }

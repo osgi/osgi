@@ -63,7 +63,7 @@ public class IsValidName {
 	 * 
 	 * @spec MetaNode.isValidName(String)
 	 */
-	private void testIsValidName001() {
+	public void testIsValidName001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testIsValidName001");
@@ -90,7 +90,7 @@ public class IsValidName {
 	 * 
 	 * @spec MetaNode.isValidName(String)
 	 */
-	private void testIsValidName002() {
+	public void testIsValidName002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testIsValidName002");

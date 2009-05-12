@@ -67,7 +67,7 @@ public class NodeChanged {
 	 * 
 	 * @spec ReadableDataSession.nodeChanged(String[])
 	 */
-	private void testNodeChanged001() {
+	public void testNodeChanged001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testNodeChanged001");

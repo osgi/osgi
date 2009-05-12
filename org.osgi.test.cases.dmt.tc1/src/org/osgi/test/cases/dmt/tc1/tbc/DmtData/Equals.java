@@ -38,6 +38,7 @@
 package org.osgi.test.cases.dmt.tc1.tbc.DmtData;
 
 import info.dmtree.DmtData;
+
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 /**
@@ -45,26 +46,15 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  * This Test Case Validates the implementation of <code>equals</code> method of DmtData, 
  * according to MEG specification
  */
-public class Equals {
-	private DmtTestControl tbc;
-	
-	public Equals(DmtTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testEquals001();
-
-	}
-
+public class Equals extends DmtTestControl {
 	/**
 	 * Asserts that a DmtData object with FORMAT_STRING is different from each other type of DmtData
 	 * 
 	 * @spec DmtData.equals(Object)
 	 */
-	private void testEquals001() {
+	public void testEquals001() {
 		try {
-			tbc.log("#testEquals001");
+			log("#testEquals001");
 
 			for (int i=DmtData.FORMAT_INTEGER;i<=DmtData.FORMAT_RAW_BINARY;i=i<<1){
 				//A DmtData instance can not have FORMAT_NODE,
@@ -73,14 +63,34 @@ public class Equals {
 					String baseName = DmtConstants.getDmtDataCodeText(i);
 					for (int j=DmtData.FORMAT_INTEGER;j<=DmtData.FORMAT_RAW_BINARY;j=j<<1){
 						if (i==j) {
-							tbc.assertEquals("Asserts that two DmtData with the same format ("+ baseName +") and value are equal",baseData,DmtConstants.getDmtData(j));
+							assertEquals(
+									"Asserts that two DmtData with the same format ("
+											+ baseName
+											+ ") and value are equal",
+									baseData, DmtConstants.getDmtData(j));
 							//Obviously format null cannot have a different value 
 							if (i!=info.dmtree.DmtData.FORMAT_NULL) {
 							    DmtData variantDataDifferentValue = DmtConstants.getDmtData(j,true);
-								tbc.assertTrue("Asserts that two DmtData with the same format ("+ baseName +") but different values (\""+ baseData.toString() +"\" x \""+ variantDataDifferentValue.toString() +"\") are different",!baseData.equals(variantDataDifferentValue));
+								assertTrue(
+										"Asserts that two DmtData with the same format ("
+												+ baseName
+												+ ") but different values (\""
+												+ baseData.toString()
+												+ "\" x \""
+												+ variantDataDifferentValue
+														.toString()
+												+ "\") are different",
+										!baseData
+												.equals(variantDataDifferentValue));
 							}
 						} else {
-							tbc.assertTrue("Asserts that two DmtData with the different formats ("+ baseName +" x "+ DmtConstants.getDmtDataCodeText(j) +") are different",
+							assertTrue(
+									"Asserts that two DmtData with the different formats ("
+											+ baseName
+											+ " x "
+											+ DmtConstants
+													.getDmtDataCodeText(j)
+											+ ") are different",
 							    !baseData.equals(DmtConstants.getDmtData(j)));
 						}
 					}
@@ -88,7 +98,7 @@ public class Equals {
 			}
 			
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 

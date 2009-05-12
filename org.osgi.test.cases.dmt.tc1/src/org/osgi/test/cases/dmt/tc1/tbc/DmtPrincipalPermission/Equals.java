@@ -37,6 +37,7 @@
 package org.osgi.test.cases.dmt.tc1.tbc.DmtPrincipalPermission;
 
 import info.dmtree.security.DmtPrincipalPermission;
+
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
@@ -44,37 +45,25 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  * This test class validates the implementation of <code>equals<code> method of DmtPrincipalPermission, 
  * according to MEG specification
  */
-public class Equals {
-	private DmtTestControl tbc;
-
-	public Equals(DmtTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testEquals001();
-		testEquals002();
-		testEquals003();
-		testEquals004();
-        testEquals005();
-	}
-
+public class Equals extends DmtTestControl {
 	/**
 	 * Assert if two DmtPrincipalPermission instances are equal
 	 * 
 	 * DmtPrincipalPermission.equals(Object)
 	 */
-	private void testEquals001() {
+	public void testEquals001() {
 		try {
-			tbc.log("#testEquals001");
+			log("#testEquals001");
 
 			DmtPrincipalPermission d1 = new DmtPrincipalPermission("*");
 			DmtPrincipalPermission d2 = new DmtPrincipalPermission("*");
 
-			tbc.assertTrue("Assert if two DmtPrincipalPermission instances are equal", d1.equals(d2));
+			assertTrue(
+					"Assert if two DmtPrincipalPermission instances are equal",
+					d1.equals(d2));
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 	
@@ -84,17 +73,19 @@ public class Equals {
 	 * 
 	 * DmtPrincipalPermission.equals(Object)
 	 */
-	private void testEquals002() {
+	public void testEquals002() {
 		try {
-			tbc.log("#testEquals002");
+			log("#testEquals002");
 
 			DmtPrincipalPermission d1 = new DmtPrincipalPermission("*","*");
 			DmtPrincipalPermission d2 = new DmtPrincipalPermission("*","*");
 
-			tbc.assertTrue("Assert if two DmtPrincipalPermission instances are equal", d1.equals(d2));
+			assertTrue(
+					"Assert if two DmtPrincipalPermission instances are equal",
+					d1.equals(d2));
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -103,17 +94,19 @@ public class Equals {
 	 * 
 	 * DmtPrincipalPermission.equals(Object)
 	 */
-	private void testEquals003() {
+	public void testEquals003() {
 		try {
-			tbc.log("#testEquals003");
+			log("#testEquals003");
 
 			DmtPrincipalPermission d1 = new DmtPrincipalPermission(DmtConstants.PRINCIPAL);
 			DmtPrincipalPermission d2 = new DmtPrincipalPermission("*");
 
-			tbc.assertTrue("Assert if two DmtPrincipalPermission instances are not equal", !d1.equals(d2));
+			assertTrue(
+					"Assert if two DmtPrincipalPermission instances are not equal",
+					!d1.equals(d2));
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -123,17 +116,19 @@ public class Equals {
 	 * 
 	 * DmtPrincipalPermission.equals(Object)
 	 */
-	private void testEquals004() {
+	public void testEquals004() {
 		try {
-			tbc.log("#testEquals004");
+			log("#testEquals004");
 
 			DmtPrincipalPermission d1 = new DmtPrincipalPermission(DmtConstants.PRINCIPAL,"*");
 			DmtPrincipalPermission d2 = new DmtPrincipalPermission("*","*");
 
-			tbc.assertTrue("Assert if two DmtPrincipalPermission instances are not equal", !d1.equals(d2));
+			assertTrue(
+					"Assert if two DmtPrincipalPermission instances are not equal",
+					!d1.equals(d2));
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
     
@@ -142,17 +137,19 @@ public class Equals {
      * 
      * DmtPrincipalPermission.equals(Object)
      */
-    private void testEquals005() {
+    public void testEquals005() {
         try {
-            tbc.log("#testEquals005");
+            log("#testEquals005");
 
             DmtPrincipalPermission d1 = new DmtPrincipalPermission(DmtConstants.PRINCIPAL,"*");
             DmtPrincipalPermission d2 = new DmtPrincipalPermission(DmtConstants.PRINCIPAL);
 
-            tbc.assertTrue("Assert if two DmtPrincipalPermission instances are equal using different constructors", d1.equals(d2));
+            assertTrue(
+					"Assert if two DmtPrincipalPermission instances are equal using different constructors",
+					d1.equals(d2));
 
         } catch (Exception e) {
-            tbc.failUnexpectedException(e);
+            failUnexpectedException(e);
         }
     }
 }

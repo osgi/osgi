@@ -65,7 +65,7 @@ public class GetMax {
 	 * 
 	 * @spec MetaNode.getMax()
 	 */
-	private void testGetMax001(){
+	public void testGetMax001(){
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetMax001");

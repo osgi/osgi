@@ -53,45 +53,31 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  * This test case validates the implementation of <code>deletePermission<code> method of Acl, 
  * according to MEG specification
  */
-public class DeletePermission {
-	private DmtTestControl tbc;
+public class DeletePermission extends DmtTestControl {
 
 	private static final String ACL_DEFAULT = "Add=" + DmtConstants.PRINCIPAL
 			+ "&Delete=" + DmtConstants.PRINCIPAL + "&Exec="
 			+ DmtConstants.PRINCIPAL + "&Get=*";
 
-	public DeletePermission(DmtTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testDeletePermission001();
-		testDeletePermission002();
-		testDeletePermission003();
-		testDeletePermission004();
-		testDeletePermission005();
-		testDeletePermission006();
-		testDeletePermission007();
-	}
 
 	/**
 	 * This method asserts that a principal permission is correctly deleted from its Acl.
 	 * 
 	 * @spec Acl.deletePermission(String,int)
 	 */
-	private void testDeletePermission001() {
+	public void testDeletePermission001() {
 		try {
-			tbc.log("#testDeletePermission001");
+			log("#testDeletePermission001");
 			Acl acl = new Acl(ACL_DEFAULT);
 
 			acl = acl.deletePermission(DmtConstants.PRINCIPAL,
 					Acl.DELETE);
 
-			tbc.assertEquals("Asserting deleted permission", Acl.ADD
+			assertEquals("Asserting deleted permission", Acl.ADD
 					| Acl.EXEC | Acl.GET, acl
 					.getPermissions(DmtConstants.PRINCIPAL));
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -100,19 +86,19 @@ public class DeletePermission {
 	 * 
 	 * @spec Acl.deletePermission(String,int)
 	 */
-	private void testDeletePermission002() {
+	public void testDeletePermission002() {
 		try {
-			tbc.log("#testDeletePermission002");
+			log("#testDeletePermission002");
 			Acl acl = new Acl(ACL_DEFAULT);
 
 			acl = acl.deletePermission(DmtConstants.PRINCIPAL,
 					Acl.DELETE | Acl.EXEC);
 
-			tbc.assertEquals("Asserting deleted permission", Acl.ADD
+			assertEquals("Asserting deleted permission", Acl.ADD
 					| Acl.GET, acl
 					.getPermissions(DmtConstants.PRINCIPAL));
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -122,16 +108,16 @@ public class DeletePermission {
 	 * 
 	 * @spec Acl.deletePermission(String,int)
 	 */
-	private void testDeletePermission003() {
+	public void testDeletePermission003() {
 		try {
-			tbc.log("#testDeletePermission003");
+			log("#testDeletePermission003");
 			Acl acl = new Acl(ACL_DEFAULT);
 			acl = acl.deletePermission(DmtConstants.PRINCIPAL, 2005);
-			tbc.failException("#", IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-			tbc.pass("IllegalArgumentException correctly thrown");
+			pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
+			failExpectedOtherException(IllegalArgumentException.class, e);
 		}
 	}
 
@@ -141,17 +127,17 @@ public class DeletePermission {
 	 * 
 	 * @spec Acl.deletePermission(String,int)
 	 */
-	private void testDeletePermission004() {
+	public void testDeletePermission004() {
 		try {
-			tbc.log("#testDeletePermission004");
+			log("#testDeletePermission004");
 			Acl acl = new Acl(ACL_DEFAULT);
 			acl = acl.deletePermission(DmtConstants.INVALID,
 					Acl.EXEC);
-			tbc.failException("#", IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-			tbc.pass("IllegalArgumentException correctly thrown");
+			pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
+			failExpectedOtherException(IllegalArgumentException.class, e);
 		}
 	}
 
@@ -161,9 +147,9 @@ public class DeletePermission {
 	 * 
 	 * @spec Acl.deletePermission(String,int)
 	 */
-	private void testDeletePermission005() {
+	public void testDeletePermission005() {
 		try {
-			tbc.log("#testDeletePermission005");
+			log("#testDeletePermission005");
 			Acl acl = new Acl("Add=" + DmtConstants.PRINCIPAL
 					+ "&Delete=" + DmtConstants.PRINCIPAL + "&Exec="
 					+ DmtConstants.PRINCIPAL + "&Get=*");
@@ -171,26 +157,26 @@ public class DeletePermission {
 			Acl acl2 = acl.deletePermission(DmtConstants.PRINCIPAL,
 					Acl.EXEC);
 
-			tbc.assertEquals("Assert " + DmtConstants.PRINCIPAL
+			assertEquals("Assert " + DmtConstants.PRINCIPAL
 					+ " permission", Acl.GET | Acl.ADD | Acl.EXEC
 					| Acl.DELETE, acl
 					.getPermissions(DmtConstants.PRINCIPAL));
 
-			tbc.assertEquals(
+			assertEquals(
 					"Assert that '*' grants permission to all principals",
 					Acl.GET, acl2
 							.getPermissions(DmtConstants.PRINCIPAL_2));
 
-			tbc.assertEquals("Assert " + DmtConstants.PRINCIPAL
+			assertEquals("Assert " + DmtConstants.PRINCIPAL
 					+ " permission", Acl.GET | Acl.ADD | Acl.DELETE,
 					acl2.getPermissions(DmtConstants.PRINCIPAL));
 
-			tbc.assertEquals(
+			assertEquals(
 					"Assert that '*' grants permission to all principals",
 					Acl.GET, acl
 							.getPermissions(DmtConstants.PRINCIPAL_2));
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -200,18 +186,18 @@ public class DeletePermission {
 	 * 
 	 * @spec Acl.deletePermission(String,int)
 	 */
-	private void testDeletePermission006() {
+	public void testDeletePermission006() {
 		try {
-			tbc.log("#testDeletePermission006");
+			log("#testDeletePermission006");
 			Acl acl = new Acl(ACL_DEFAULT);
 
 			acl = acl.deletePermission(DmtConstants.PRINCIPAL,
 					Acl.GET);
-			tbc.failException("#", IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-			tbc.pass("IllegalArgumentException correctly thrown");
+			pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
+			failExpectedOtherException(IllegalArgumentException.class, e);
 		}
 	}
 
@@ -220,9 +206,9 @@ public class DeletePermission {
 	 * 
 	 * @spec Acl.deletePermission(String,int)
 	 */
-	private void testDeletePermission007() {
+	public void testDeletePermission007() {
 		try {
-			tbc.log("#testDeletePermission007");
+			log("#testDeletePermission007");
 			String[] principal = { DmtConstants.PRINCIPAL,
 					DmtConstants.PRINCIPAL_2, "*" };
 			int[] perm = { Acl.GET, Acl.EXEC, Acl.ADD };
@@ -236,12 +222,12 @@ public class DeletePermission {
 					passed = true;
 				}
 			}
-			tbc.assertTrue(
+			assertTrue(
 					"Asserts if '*' revokes permissions from all principals.",
 					passed);
 
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 

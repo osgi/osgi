@@ -42,27 +42,22 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  * @generalDescription This class tests all of <code>constants<code> of DmtPermission
  */
 
-public class DmtPermissionConstants {
-	private DmtTestControl tbc;
-
-	public DmtPermissionConstants(DmtTestControl tbc) {
-		this.tbc = tbc;
-	}
-	
-	public void run(){
-		testConstants001();
-	}
-
+public class DmtPermissionConstants extends DmtTestControl {
 	/**
 	 * This method asserts the constants values
 	 */
-	private void testConstants001() {
-		tbc.log("#testConstants001");
-		tbc.assertEquals("Asserting DmtPermission.ADD","Add",info.dmtree.security.DmtPermission.ADD);
-		tbc.assertEquals("Asserting DmtPermission.DELETE","Delete",info.dmtree.security.DmtPermission.DELETE);
-		tbc.assertEquals("Asserting DmtPermission.EXEC","Exec",info.dmtree.security.DmtPermission.EXEC);
-		tbc.assertEquals("Asserting DmtPermission.GET","Get",info.dmtree.security.DmtPermission.GET);
-		tbc.assertEquals("Asserting DmtPermission.REPLACE","Replace",info.dmtree.security.DmtPermission.REPLACE);
+	public void testConstants001() {
+		log("#testConstants001");
+		assertEquals("Asserting DmtPermission.ADD", "Add",
+				info.dmtree.security.DmtPermission.ADD);
+		assertEquals("Asserting DmtPermission.DELETE", "Delete",
+				info.dmtree.security.DmtPermission.DELETE);
+		assertEquals("Asserting DmtPermission.EXEC", "Exec",
+				info.dmtree.security.DmtPermission.EXEC);
+		assertEquals("Asserting DmtPermission.GET", "Get",
+				info.dmtree.security.DmtPermission.GET);
+		assertEquals("Asserting DmtPermission.REPLACE", "Replace",
+				info.dmtree.security.DmtPermission.REPLACE);
 	}
 	
 

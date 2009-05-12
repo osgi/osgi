@@ -42,32 +42,22 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  * This class validates the implementation of <code>hashCode<code> method, 
  * according to MEG specification.
  */
-public class HashCode {
-	private DmtTestControl tbc;
-
-	public HashCode(DmtTestControl tbc) {
-		this.tbc = tbc;
-
-	}
-
-	public void run() {
-		testHashCode001();
-		
-	}
-
+public class HashCode extends DmtTestControl {
 	/**
 	 * Asserts that two AlertPermission instances produces the same hashCode if they have the same target string
      * 
      * @spec AlertPermission.hashCode()
 	 */
-	private void testHashCode001() {
+	public void testHashCode001() {
 		try {		
-			tbc.log("#testHashCode001");
+			log("#testHashCode001");
 			info.dmtree.security.AlertPermission permission = new info.dmtree.security.AlertPermission(DmtConstants.REMOTE_SERVER);
 			info.dmtree.security.AlertPermission permission2 = new info.dmtree.security.AlertPermission(DmtConstants.REMOTE_SERVER);
-			tbc.assertTrue("Asserts that two AlertPermission instances produces the same hashCode if they have the same target string",permission.hashCode() == permission2.hashCode());
+			assertTrue(
+					"Asserts that two AlertPermission instances produces the same hashCode if they have the same target string",
+					permission.hashCode() == permission2.hashCode());
 		} catch(Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 			
 	}

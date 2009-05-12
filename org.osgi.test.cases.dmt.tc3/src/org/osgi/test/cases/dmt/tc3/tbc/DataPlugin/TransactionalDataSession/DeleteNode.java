@@ -67,7 +67,7 @@ public class DeleteNode {
 	 * 
 	 * @spec ReadWriteDataSession.deleteNode(String[])
 	 */
-	private void testDeleteNode001() {
+	public void testDeleteNode001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testDeleteNode001");
@@ -88,7 +88,7 @@ public class DeleteNode {
 	 * 
 	 * @spec ReadWriteDataSession.deleteNode(String[])
 	 */
-	private void testDeleteNode002() {
+	public void testDeleteNode002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testDeleteNode002");

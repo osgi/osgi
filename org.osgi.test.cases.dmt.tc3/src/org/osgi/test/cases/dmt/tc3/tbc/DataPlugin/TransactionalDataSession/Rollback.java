@@ -66,7 +66,7 @@ public class Rollback {
 	 * 
 	 * @spec TransactionalDataSession.rollback()
 	 */
-	private void testRollback001() {
+	public void testRollback001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testRollback001");

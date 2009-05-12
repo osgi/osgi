@@ -37,6 +37,7 @@
 package org.osgi.test.cases.dmt.tc1.tbc.DmtPermission;
 
 import info.dmtree.security.DmtPermission;
+
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
@@ -45,34 +46,21 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  * This test case validates the implementation of <code>equals</code> method of DmtPermission, 
  * according to MEG specification
  */
-public class Equals {
-	private DmtTestControl tbc;
-
-	public Equals(DmtTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testEquals001();
-		testEquals002();
-		testEquals003();
-		testEquals004();
-		testEquals005();
-	}
-
+public class Equals extends DmtTestControl {
 	/**
 	 * Asserts that two objects initialized with the same dmtUri and actions are equal
 	 * 
 	 * @spec DmtPermission.equals(Object)
 	 */
-	private void testEquals001() {
+	public void testEquals001() {
 		try {
-			tbc.log("#testEquals001");
-			tbc.assertTrue("Asserting that two objects initialized with the same dmtUri and actions are equal", 
+			log("#testEquals001");
+			assertTrue(
+					"Asserting that two objects initialized with the same dmtUri and actions are equal", 
 					new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.ACTIONS)
 					.equals(new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.ACTIONS)));
 		} catch (Exception e) { 
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 	
@@ -81,14 +69,15 @@ public class Equals {
 	 * 
 	 * @spec DmtPermission.equals(Object)
 	 */
-	private void testEquals002() {
+	public void testEquals002() {
 		try {
-			tbc.log("#testEquals002");
-			tbc.assertTrue("Asserting that two objects initialized with the same dmtUri but different actions are different", 
+			log("#testEquals002");
+			assertTrue(
+					"Asserting that two objects initialized with the same dmtUri but different actions are different", 
 					!new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.ACTIONS)
 					.equals(new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.DIFFERENT_ACTIONS)));
 		} catch (Exception e) { 
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 	
@@ -97,14 +86,15 @@ public class Equals {
 	 * 
 	 * @spec DmtPermission.equals(Object)
 	 */
-	private void testEquals003() {
+	public void testEquals003() {
 		try {
-			tbc.log("#testEquals003");
-			tbc.assertTrue("Asserting that two objects initialized with the same actions but different dmtUri are different", 
+			log("#testEquals003");
+			assertTrue(
+					"Asserting that two objects initialized with the same actions but different dmtUri are different", 
 					!new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.ACTIONS)
 					.equals(new info.dmtree.security.DmtPermission(DmtConstants.OSGi_CONFIGURATION,DmtConstants.ACTIONS)));
 		} catch (Exception e) { 
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 	/**
@@ -113,16 +103,17 @@ public class Equals {
 	 * 
 	 * @spec DmtPermission.equals(Object)
 	 */
-	private void testEquals004() {
+	public void testEquals004() {
 		try {
-			tbc.log("#testEquals004");
+			log("#testEquals004");
 			String actions = DmtPermission.ADD + "," + DmtPermission.DELETE + "," +DmtPermission.EXEC;
 			String actionsDifferentOrder = DmtPermission.DELETE + "," +DmtPermission.EXEC+"," +DmtPermission.ADD;
-			tbc.assertTrue("Asserting that two objects initialized with the same dmtUri and actions are equal", 
+			assertTrue(
+					"Asserting that two objects initialized with the same dmtUri and actions are equal", 
 					new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,actions)
 					.equals(new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,actionsDifferentOrder)));
 		} catch (Exception e) { 
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}	
 	
@@ -131,14 +122,15 @@ public class Equals {
 	 * 
 	 * @spec DmtPermission.equals(Object)
 	 */
-	private void testEquals005() {
+	public void testEquals005() {
 		try {
-			tbc.log("#testEquals005");
-			tbc.assertTrue("Asserts that the \"*\" action mask is considered equal to a mask containing all actions.", 
+			log("#testEquals005");
+			assertTrue(
+					"Asserts that the \"*\" action mask is considered equal to a mask containing all actions.", 
 					new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,"*")
 					.equals(new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.ALL_ACTIONS)));
 		} catch (Exception e) { 
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 }

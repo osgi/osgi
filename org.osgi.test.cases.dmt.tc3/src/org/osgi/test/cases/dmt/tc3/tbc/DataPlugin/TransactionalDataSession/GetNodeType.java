@@ -66,7 +66,7 @@ public class GetNodeType {
 	 * 
 	 * @spec ReadableDataSession.getNodeType(String[])
 	 */
-	private void testGetNodeType001() {
+	public void testGetNodeType001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetNodeType001");
@@ -87,7 +87,7 @@ public class GetNodeType {
 	 * 
 	 * @spec ReadableDataSession.getNodeType(String[])
 	 */
-	private void testGetNodeType002() {
+	public void testGetNodeType002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetNodeType002");

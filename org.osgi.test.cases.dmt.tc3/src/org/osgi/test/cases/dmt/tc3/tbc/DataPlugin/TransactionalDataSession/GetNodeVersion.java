@@ -65,7 +65,7 @@ public class GetNodeVersion {
 	 * 
 	 * @spec ReadableDataSession.getNodeVersion(String[])
 	 */
-	private void testGetNodeVersion001() {
+	public void testGetNodeVersion001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetNodeVersion001");
@@ -88,7 +88,7 @@ public class GetNodeVersion {
 	 * 
 	 * @spec ReadableDataSession.getNodeVersion(String[])
 	 */
-	private void testGetNodeVersion002() {
+	public void testGetNodeVersion002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetNodeVersion002");

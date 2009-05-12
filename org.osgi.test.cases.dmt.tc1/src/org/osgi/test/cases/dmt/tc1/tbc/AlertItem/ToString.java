@@ -36,6 +36,7 @@
 package org.osgi.test.cases.dmt.tc1.tbc.AlertItem;
 
 import info.dmtree.DmtData;
+
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
@@ -43,33 +44,24 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  * This class validates the implementation of <code>toString<code> method of AlertItem, 
  * according to MEG specification.
  */
-public class ToString {
-	private DmtTestControl tbc;
-
-	public ToString(DmtTestControl tbc) {
-		this.tbc = tbc;
-
-	}
-
-	public void run() {
-		testToString001();
-		testToString002();
-	}
-
+public class ToString extends DmtTestControl {
 	/**
 	 * Asserts that the toString() returns the expected value
 	 * 
 	 * @spec AlertItem.toString()
 	 */
-	private void testToString001() {
+	public void testToString001() {
 		try {		
-			tbc.log("#testToString001");
+			log("#testToString001");
 			String mark = "mark";
 			DmtData data = new DmtData("test");
 			info.dmtree.notification.AlertItem alert = new info.dmtree.notification.AlertItem(DmtConstants.OSGi_LOG,DmtConstants.MIMETYPE,mark,data);
-			tbc.assertEquals("Asserts that the expected string is returned","AlertItem(" + alert.getSource() + ", "+ alert.getType() +", "+ alert.getMark() + ", "+ alert.getData() +")",alert.toString());
+			assertEquals("Asserts that the expected string is returned",
+					"AlertItem(" + alert.getSource() + ", " + alert.getType()
+							+ ", " + alert.getMark() + ", " + alert.getData()
+							+ ")", alert.toString());
 		} catch(Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 			
 	}
@@ -78,13 +70,14 @@ public class ToString {
 	 * 
 	 * @spec AlertItem.toString()
 	 */
-	private void testToString002() {
+	public void testToString002() {
 		try {		
-			tbc.log("#testToString002");
+			log("#testToString002");
 			info.dmtree.notification.AlertItem alert = new info.dmtree.notification.AlertItem((String)null,null,null,null);
-			tbc.assertEquals("Asserts that the expected string is returned","AlertItem(null, null, null, null)",alert.toString());
+			assertEquals("Asserts that the expected string is returned",
+					"AlertItem(null, null, null, null)", alert.toString());
 		} catch(Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 			
 	}

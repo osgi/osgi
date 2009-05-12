@@ -40,6 +40,7 @@
 package org.osgi.test.cases.dmt.tc1.tbc.Acl;
 
 import info.dmtree.Acl;
+
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
@@ -49,37 +50,29 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  * This test case validates the implementation of <code>isPermitted<code> method of Acl, 
  * according to MEG specification
  */
-public class IsPermitted {
-	private DmtTestControl tbc;
+public class IsPermitted extends DmtTestControl {
 	private static final String ACL_DEFAULT = "Add=" + DmtConstants.PRINCIPAL
 			+ "&Delete=" + DmtConstants.PRINCIPAL + "&Get=*";
-
-	public IsPermitted(DmtTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testIsPermitted001();
-		testIsPermitted002();
-		testIsPermitted003();
-		testIsPermitted004();
-	}
 
 	/**
 	 * This method tests if a given permission is granted to a principal.
 	 * 
 	 * @spec Acl.isPermitted(String,int)
 	 */
-	private void testIsPermitted001() {
+	public void testIsPermitted001() {
 		try {
-			tbc.log("#testIsPermitted001");
+			log("#testIsPermitted001");
 			Acl acl = new Acl(ACL_DEFAULT);
-			tbc.assertTrue("Asserting that isPermitted returns true only for permissions granted", acl.isPermitted(
+			assertTrue(
+					"Asserting that isPermitted returns true only for permissions granted",
+					acl.isPermitted(
 					DmtConstants.PRINCIPAL, Acl.GET | Acl.ADD | Acl.DELETE));
-			tbc.assertTrue("Asserting that isPermitted returns false for permissions not granted", !acl.isPermitted(
+			assertTrue(
+					"Asserting that isPermitted returns false for permissions not granted",
+					!acl.isPermitted(
 					DmtConstants.PRINCIPAL, Acl.EXEC | Acl.REPLACE));			
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -89,17 +82,17 @@ public class IsPermitted {
 	 * 
 	 * @spec Acl.isPermitted(String,int)
 	 */
-	private void testIsPermitted002() {
+	public void testIsPermitted002() {
 		try {
-			tbc.log("#testIsPermitted002");
+			log("#testIsPermitted002");
 			Acl acl = new Acl(ACL_DEFAULT);
 			acl.isPermitted(DmtConstants.PRINCIPAL, 2005);
 
-			tbc.failException("#",IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-			tbc.pass("IllegalArgumentException correctly thrown on isPermitted method");
+			pass("IllegalArgumentException correctly thrown on isPermitted method");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
+			failExpectedOtherException(IllegalArgumentException.class, e);
 		}
 
 	}
@@ -110,17 +103,17 @@ public class IsPermitted {
 	 * 
 	 * @spec Acl.isPermitted(String,int)
 	 */
-	private void testIsPermitted003() {
+	public void testIsPermitted003() {
 		try {
-			tbc.log("#testIsPermitted003");
+			log("#testIsPermitted003");
 			Acl acl = new Acl(ACL_DEFAULT);
 			
 			acl.isPermitted(DmtConstants.INVALID, Acl.DELETE | Acl.GET);
-			tbc.failException("#",IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-			tbc.pass("IllegalArgumentException correctly thrown on isPermitted method");
+			pass("IllegalArgumentException correctly thrown on isPermitted method");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
+			failExpectedOtherException(IllegalArgumentException.class, e);
 		}
 	}
 
@@ -129,15 +122,20 @@ public class IsPermitted {
 	 * 
 	 * @spec Acl.isPermitted(String,int)
 	 */
-	private void testIsPermitted004() {
+	public void testIsPermitted004() {
 		try {
-			tbc.log("#testIsPermitted004");
+			log("#testIsPermitted004");
 			Acl acl = new Acl(ACL_DEFAULT);
 			
-			tbc.assertTrue("Asserting that '*' returns true if the permission is global", acl.isPermitted("*", Acl.GET));
-			tbc.assertTrue("Asserting that '*' returns false if the permission is not global", !acl.isPermitted("*", Acl.ADD | Acl.DELETE | Acl.EXEC | Acl.REPLACE));
+			assertTrue(
+					"Asserting that '*' returns true if the permission is global",
+					acl.isPermitted("*", Acl.GET));
+			assertTrue(
+					"Asserting that '*' returns false if the permission is not global",
+					!acl.isPermitted("*", Acl.ADD | Acl.DELETE | Acl.EXEC
+							| Acl.REPLACE));
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 }

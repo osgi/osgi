@@ -75,7 +75,7 @@ public class DmtSessionConstraints {
      * 
      * @spec 117.3 The DMT Admin Service
 	 */
-	private void testConstraints001() {
+	public void testConstraints001() {
 		DmtSession session1 = null;
 		DmtSession session2 = null;
 		try {
@@ -100,7 +100,7 @@ public class DmtSessionConstraints {
      * @spec 117.3 The DMT Admin Service
 	 */
 
-	private void testConstraints002() {
+	public void testConstraints002() {
 		DmtSession session1 = null;
 		DmtSession session2 = null;
 		try {
@@ -127,7 +127,7 @@ public class DmtSessionConstraints {
      * 
      * @spec 117.3 The DMT Admin Service
 	 */
-	private void testConstraints003() {
+	public void testConstraints003() {
 		tbc.log("#testConstraints003");
 		DmtSession session1 = null;
 		DmtSession session2 = null;
@@ -155,7 +155,7 @@ public class DmtSessionConstraints {
      * 
      * @spec 117.3 The DMT Admin Service
 	 */
-	private void testConstraints004() {
+	public void testConstraints004() {
 		tbc.log("#testConstraints004");
 		DmtSession session1 = null;
 		DmtSession session2 = null;
@@ -182,7 +182,7 @@ public class DmtSessionConstraints {
      * 
      * @spec 117.3 The DMT Admin Service
 	 */
-	private void testConstraints005() {
+	public void testConstraints005() {
 		tbc.log("#testConstraints005");
 		DmtSession session1 = null;
 		DmtSession session2 = null;
@@ -209,7 +209,7 @@ public class DmtSessionConstraints {
      * 
      * @spec 117.3 The DMT Admin Service
 	 */
-	private void testConstraints006() {
+	public void testConstraints006() {
 		tbc.log("#testConstraints006");
 		DmtSession session1 = null;
 		DmtSession session2 = null;
@@ -237,7 +237,7 @@ public class DmtSessionConstraints {
      * 
      * @spec 117.3 The DMT Admin Service
 	 */
-	private void testConstraints007() {
+	public void testConstraints007() {
 		tbc.log("#testConstraints007");
 		DmtSession session1 = null;
 		DmtSession session2 = null;
@@ -267,7 +267,7 @@ public class DmtSessionConstraints {
      * @spec 117.3 The DMT Admin Service
 	 */
 
-	private void testConstraints008() {
+	public void testConstraints008() {
 		tbc.log("#testConstraints008");
 		DmtSession session1 = null;
 		DmtSession session2 = null;
@@ -296,7 +296,7 @@ public class DmtSessionConstraints {
      * @spec 117.3 The DMT Admin Service
 	 */
 
-	private void testConstraints009() {
+	public void testConstraints009() {
 		tbc.log("#testConstraints009");
 		DmtSession session1 = null;
 		DmtSession session2 = null;

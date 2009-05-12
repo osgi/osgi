@@ -65,7 +65,7 @@ public class IsValidValue {
 	 * 
 	 * @spec MetaNode.isValidValue(DmtData)
 	 */
-	private void testIsValidValue001() {
+	public void testIsValidValue001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testIsValidValue001");
@@ -91,7 +91,7 @@ public class IsValidValue {
 	 * 
 	 * @spec MetaNode.isValidValue(DmtData)
 	 */
-	private void testIsValidValue002() {
+	public void testIsValidValue002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testIsValidValue001");

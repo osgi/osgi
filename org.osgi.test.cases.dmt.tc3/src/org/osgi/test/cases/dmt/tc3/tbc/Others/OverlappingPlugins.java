@@ -37,6 +37,7 @@
 package org.osgi.test.cases.dmt.tc3.tbc.Others;
 
 import info.dmtree.DmtSession;
+
 import org.osgi.test.cases.dmt.tc3.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPlugin;
@@ -55,17 +56,17 @@ import org.osgi.test.cases.dmt.tc3.tbc.Plugins.ToBeOverlappedDataPlugin;
  */
 public class OverlappingPlugins {
 
-	private DmtTestControl tbc;
+	private DmtTestControl	tbc;
 
 	public OverlappingPlugins(DmtTestControl tbc) {
 		this.tbc = tbc;
 	}
 
 	public void run() {
-	    testOverlappingPlugins001();
-	    testOverlappingPlugins002();
-	    testOverlappingPlugins003();
-	    testOverlappingPlugins004();
+		testOverlappingPlugins001();
+		testOverlappingPlugins002();
+		testOverlappingPlugins003();
+		testOverlappingPlugins004();
 	}
 
 	/**
@@ -73,19 +74,23 @@ public class OverlappingPlugins {
 	 * 
 	 * @spec 117.6 Plugins
 	 */
-	private void testOverlappingPlugins001() {
+	public void testOverlappingPlugins001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testOverlappingPlugins001");
 
-			session = tbc.getDmtAdmin().getSession(OverlappingDataPluginActivator.ROOT,
+			session = tbc.getDmtAdmin().getSession(
+					OverlappingDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
 			String nodeTitle = session.getNodeTitle(OverlappingDataPluginActivator.ROOT);
-			tbc.assertEquals("Asserts that a DataPlugin cannot be overlapped by other DataPlugin",TestDataPlugin.GETNODETITLE,nodeTitle);
+			tbc
+					.assertEquals(
+							"Asserts that a DataPlugin cannot be overlapped by other DataPlugin",
+							TestDataPlugin.GETNODETITLE, nodeTitle);
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
-			tbc.cleanUp(session,true);
+			tbc.cleanUp(session, true);
 		}
 	}
 	/**
@@ -94,19 +99,23 @@ public class OverlappingPlugins {
 	 * 
 	 * @spec 117.6 Plugins
 	 */
-	private void testOverlappingPlugins002() {
+	public void testOverlappingPlugins002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testOverlappingPlugins002");
-			session = tbc.getDmtAdmin().getSession(OverlappingSubtreeDataPluginActivator.ROOT,
+			session = tbc.getDmtAdmin().getSession(
+					OverlappingSubtreeDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
 			String nodeTitle = session.getNodeTitle(OverlappingSubtreeDataPluginActivator.ROOT);
-			tbc.assertEquals("Asserts that a it is not possible for a plugin to control the same, or part of the same, " +
+			tbc
+					.assertEquals(
+							"Asserts that a it is not possible for a plugin to control the same, or part of the same, "
+									+
 					"subtree that another plugins controls.",TestDataPlugin.GETNODETITLE,nodeTitle);
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
-			tbc.cleanUp(session,true);
+			tbc.cleanUp(session, true);
 
 		}
 	}
@@ -115,23 +124,30 @@ public class OverlappingPlugins {
 	 * 
 	 * @spec 117.6 Plugins
 	 */
-	private void testOverlappingPlugins003() {
+	public void testOverlappingPlugins003() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testOverlappingPlugins003");
 
-			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,
+			session = tbc.getDmtAdmin().getSession(
+					TestExecPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			String nodeTitle = session.getNodeTitle(TestExecPluginActivator.ROOT);
-			tbc.assertEquals("Asserts that DmtAdmin allows that an ExecPlugin overlaps a DataPlugin",ToBeOverlappedDataPlugin.MESSAGE,nodeTitle);
+			tbc
+					.assertEquals(
+							"Asserts that DmtAdmin allows that an ExecPlugin overlaps a DataPlugin",
+							ToBeOverlappedDataPlugin.MESSAGE, nodeTitle);
 			
 			session.execute(TestExecPluginActivator.ROOT, "");
-			tbc.assertEquals("Asserts that DmtAdmin allows that an ExecPlugin overlaps a DataPlugin",TestExecPlugin.EXECUTE,DmtConstants.TEMPORARY);
+			tbc
+					.assertEquals(
+							"Asserts that DmtAdmin allows that an ExecPlugin overlaps a DataPlugin",
+							TestExecPlugin.EXECUTE, DmtConstants.TEMPORARY);
 			
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
-			tbc.cleanUp(session,true);
+			tbc.cleanUp(session, true);
 		}
 	}
 	
@@ -140,23 +156,30 @@ public class OverlappingPlugins {
 	 * 
 	 * @spec 117.6 Plugins
 	 */
-	private void testOverlappingPlugins004() {
+	public void testOverlappingPlugins004() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testOverlappingPlugins004");
 
-			session = tbc.getDmtAdmin().getSession(OverlappingExecPluginActivator.ROOT,
+			session = tbc.getDmtAdmin().getSession(
+					OverlappingExecPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			String nodeTitle = session.getNodeTitle(OverlappingExecPluginActivator.ROOT);
-			tbc.assertEquals("Asserts that DmtAdmin does not allow that an ExecPlugin overlaps another ExecPlugin",ToBeOverlappedDataPlugin.MESSAGE,nodeTitle);
+			tbc
+					.assertEquals(
+							"Asserts that DmtAdmin does not allow that an ExecPlugin overlaps another ExecPlugin",
+							ToBeOverlappedDataPlugin.MESSAGE, nodeTitle);
 			
 			session.execute(OverlappingExecPluginActivator.ROOT, "");
-			tbc.assertEquals("Asserts that DmtAdmin does not allow that an ExecPlugin overlaps another ExecPlugin",TestExecPlugin.EXECUTE,DmtConstants.TEMPORARY);
+			tbc
+					.assertEquals(
+							"Asserts that DmtAdmin does not allow that an ExecPlugin overlaps another ExecPlugin",
+							TestExecPlugin.EXECUTE, DmtConstants.TEMPORARY);
 			
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
-			tbc.cleanUp(session,true);
+			tbc.cleanUp(session, true);
 		}
 	}
 }

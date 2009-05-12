@@ -38,6 +38,7 @@ package org.osgi.test.cases.dmt.tc1.tbc.DmtPermission;
 
 import info.dmtree.security.AlertPermission;
 import info.dmtree.security.DmtPermission;
+
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
@@ -45,42 +46,24 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  * This test case validates the implementation of <code>implies</code> method of DmtPermission, 
  * according to MEG specification
  */
-public class Implies {
-	private DmtTestControl tbc;
-
-	public Implies(DmtTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testImplies001();
-		testImplies002();
-		testImplies003();
-		testImplies004();
-		testImplies005();
-        testImplies006();
-        testImplies007();
-        testImplies008();
-	}
-
+public class Implies extends DmtTestControl {
 	/**
 	 * This method asserts that an object implies other object using the same uri actions
 	 * 
 	 * @spec DmtPermission.implies(Permission)
 	 */
-	private void testImplies001() {
+	public void testImplies001() {
 		try {
-			tbc.log("#testImplies001");
+			log("#testImplies001");
 			DmtPermission permission = new DmtPermission(
 					DmtConstants.OSGi_LOG, DmtConstants.ACTIONS);
 			DmtPermission permission2 = new DmtPermission(
 					DmtConstants.OSGi_LOG, DmtConstants.ACTIONS);
-			tbc
-					.assertTrue(
+			assertTrue(
 							"Asserts that an object implies other object using the same uri and actions",
 							permission.implies(permission2));
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -89,20 +72,19 @@ public class Implies {
 	 * 
 	 * @spec DmtPermission.implies(Permission)
 	 */
-	private void testImplies002() {
+	public void testImplies002() {
 		try {
-			tbc.log("#testImplies002");
+			log("#testImplies002");
 			DmtPermission permission = new DmtPermission(
 					DmtConstants.OSGi_LOG, DmtPermission.ADD + ","
 							+ DmtPermission.GET);
 			DmtPermission permission2 = new DmtPermission(
 					DmtConstants.OSGi_LOG, DmtPermission.ADD);
-			tbc
-					.assertTrue(
+			assertTrue(
 							"Asserts that an object implies other object using the same uri and the actions it contains",
 							permission.implies(permission2));
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -112,20 +94,19 @@ public class Implies {
 	 * 
 	 * @spec DmtPermission.implies(Permission)
 	 */
-	private void testImplies003() {
+	public void testImplies003() {
 		try {
-			tbc.log("#testImplies003");
+			log("#testImplies003");
 			DmtPermission permission = new DmtPermission(
 					DmtConstants.OSGi_LOG, DmtPermission.ADD);
 			DmtPermission permission2 = new DmtPermission(
 					DmtConstants.OSGi_LOG, DmtPermission.ADD + ","
 							+ DmtPermission.GET);
-			tbc
-					.assertTrue(
+			assertTrue(
 							"Asserts that an object doesn't imply other object using the same uri and the actions it doesn't contain",
 							!permission.implies(permission2));
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -134,19 +115,18 @@ public class Implies {
 	 * 
 	 * @spec DmtPermission.implies(Permission)
 	 */
-	private void testImplies004() {
+	public void testImplies004() {
 		try {
-			tbc.log("#testImplies004");
+			log("#testImplies004");
 			DmtPermission permission = new DmtPermission(
 					DmtConstants.OSGi_LOG, DmtPermission.ADD);
 			DmtPermission permission2 = new DmtPermission(
 					DmtConstants.OSGi_CONFIGURATION, DmtPermission.ADD);
-			tbc
-					.assertTrue(
+			assertTrue(
 							"Asserts that an object implies other object using the same uri and the same actions",
 							!permission.implies(permission2));
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
 
@@ -155,21 +135,20 @@ public class Implies {
 	 * 
 	 * @spec DmtPermission.implies(Permission)
 	 */
-	private void testImplies005() {
+	public void testImplies005() {
 		try {
-			tbc.log("#testImplies005");
+			log("#testImplies005");
 			DmtPermission permission = new DmtPermission(
 					DmtConstants.OSGi_LOG, DmtPermission.ADD + ","
 							+ DmtPermission.REPLACE);
 			DmtPermission permission2 = new DmtPermission(
 					DmtConstants.OSGi_LOG, DmtPermission.REPLACE + ","
 							+ DmtPermission.ADD);
-			tbc
-					.assertTrue(
+			assertTrue(
 							"Asserts that an object imply other object using the same uri and actions but in a different order",
 							permission.implies(permission2));
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
     
@@ -178,19 +157,18 @@ public class Implies {
      * 
      * @spec DmtPermission.implies(Permission)
      */
-    private void testImplies006() {
+    public void testImplies006() {
         try {
-            tbc.log("#testImplies006");
+            log("#testImplies006");
             DmtPermission permission = new DmtPermission(
             		DmtConstants.OSGi_CONFIGURATION + "/a*", DmtPermission.ADD);
             DmtPermission permission2 = new DmtPermission(
             		DmtConstants.OSGi_CONFIGURATION + "/abc", DmtPermission.ADD);
-            tbc
-                    .assertTrue(
+            assertTrue(
                             "Asserts that an object implies other object when using wildcard to match the uri",
                             permission.implies(permission2));
         } catch (Exception e) {
-            tbc.failUnexpectedException(e);
+            failUnexpectedException(e);
         }
     }
 	/**
@@ -198,16 +176,16 @@ public class Implies {
 	 * 
 	 * @spec DmtPermission.implies(Permission)
 	 */
-	private void testImplies007() {
+	public void testImplies007() {
 		try {
-			tbc.log("#testImplies007");
+			log("#testImplies007");
 			DmtPermission permission = new DmtPermission("./*","*");
 			AlertPermission permission2 = new AlertPermission("./*","*");
-			tbc.assertTrue(
+			assertTrue(
 						"Asserts that an object doesn't imply other object if they are from different types",
 						!permission.implies(permission2));
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			failUnexpectedException(e);
 		}
 	}
     
@@ -216,16 +194,16 @@ public class Implies {
      * 
      * @spec DmtPermission.implies(Permission)
      */
-    private void testImplies008() {
+    public void testImplies008() {
         try {
-            tbc.log("#testImplies008");
+            log("#testImplies008");
             DmtPermission permission = new DmtPermission("*",DmtConstants.ALL_ACTIONS);
             DmtPermission permission2 = new DmtPermission(".", "Get");
-            tbc.assertTrue(
+            assertTrue(
                         "Asserts that the \"*\" implies \".\"",
                         permission.implies(permission2));
         } catch (Exception e) {
-            tbc.failUnexpectedException(e);
+            failUnexpectedException(e);
         }
     }
 }

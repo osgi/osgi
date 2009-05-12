@@ -64,7 +64,7 @@ public class IsNodeUri {
 	 * 
 	 * @spec ReadableDataSession.isNodeUri(String[])
 	 */
-	private void testIsNodeUri001() {
+	public void testIsNodeUri001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testIsNodeUri001");
@@ -85,7 +85,7 @@ public class IsNodeUri {
 	 * 
 	 * @spec ReadableDataSession.isNodeUri(String[])
 	 */
-	private void testIsNodeUri002() {
+	public void testIsNodeUri002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testIsNodeUri002");

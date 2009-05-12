@@ -65,7 +65,7 @@ public class IsLeaf {
 	 * 
 	 * @spec MetaNode.getMaxOccurrence()
 	 */
-	private void testIsLeaf001() {
+	public void testIsLeaf001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testIsLeaf001");

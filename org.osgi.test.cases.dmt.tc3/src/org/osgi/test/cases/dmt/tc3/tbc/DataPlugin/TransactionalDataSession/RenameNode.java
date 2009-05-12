@@ -65,7 +65,7 @@ public class RenameNode {
 	 * 
 	 * @spec ReadWriteDataSession.renameNode(String[],String)
 	 */
-	private void testRenameNode001() {
+	public void testRenameNode001() {
 		DmtSession session = null;
 		
 		try {
@@ -88,7 +88,7 @@ public class RenameNode {
 	 * 
 	 * @spec ReadWriteDataSession.renameNode(String[],String)
 	 */
-	private void testRenameNode002() {
+	public void testRenameNode002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testRenameNode002");

@@ -68,7 +68,7 @@ public class Copy {
 	 * 
 	 * @spec ReadWriteDataSession.copy(String[],String[],boolean)
 	 */
-	private void testCopy001() {
+	public void testCopy001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testCopy001");
@@ -106,7 +106,7 @@ public class Copy {
 	 * 
 	 * @spec ReadWriteDataSession.copy(String[],String[],boolean)
 	 */
-	private void testCopy002() {
+	public void testCopy002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testCopy002");

@@ -61,7 +61,7 @@ public class GetExtensionPropertyKeys {
 	 * 
 	 * @spec MetaNode.getExtensionPropertyKeys()
 	 */
-	private void testGetExtensionPropertyKeys001() {
+	public void testGetExtensionPropertyKeys001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetExtensionPropertyKeys001");
