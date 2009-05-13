@@ -127,6 +127,16 @@ public interface UserManagerMBean {
 	void createGroup(String name) throws IOException;
 
 	/**
+	 * Create a Role
+	 * 
+	 * @param name
+	 *            - the role to create
+	 * @throws IOException
+	 *             if the operation fails
+	 */
+	void createRole(String name) throws IOException;
+
+	/**
 	 * Answer the authorization for the user name
 	 * <p>
 	 * 
@@ -368,6 +378,26 @@ public interface UserManagerMBean {
 	 *             if the operation fails
 	 */
 	boolean removeRole(String name) throws IOException;
+
+	/**
+	 * Remove the Group associated with the name
+	 * 
+	 * @param name
+	 * @return true if the remove succeeded
+	 * @throws IOException
+	 *             if the operation fails
+	 */
+	boolean removeGroup(String name) throws IOException;
+
+	/**
+	 * Remove the User associated with the name
+	 * 
+	 * @param name
+	 * @return true if the remove succeeded
+	 * @throws IOException
+	 *             if the operation fails
+	 */
+	boolean removeUser(String name) throws IOException;
 
 	/**
 	 * The Role name for the user/group

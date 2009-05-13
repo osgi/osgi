@@ -158,6 +158,17 @@ public class UserManager extends Monitor implements UserManagerMBean {
 		admin.createRole(name, Role.USER);
 	}
 
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.osgi.jmx.compendium.UserManagerMBean#createRole(java.lang.String)
+	 */
+	public void createRole(String name) throws IOException {
+		admin.createRole(name, Role.ROLE);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -191,6 +202,9 @@ public class UserManager extends Monitor implements UserManagerMBean {
 		try {
 			user = (User) admin.getRole(username);
 		} catch (ClassCastException e) {
+			throw new IllegalArgumentException("Not a user: " + username);
+		}
+		if (user == null) { 
 			throw new IllegalArgumentException("Not a user: " + username);
 		}
 		return OSGiProperties.tableFrom(user.getCredentials());
@@ -533,6 +547,26 @@ public class UserManager extends Monitor implements UserManagerMBean {
 	 * org.osgi.jmx.compendium.UserManagerMBean#removeRole(java.lang.String)
 	 */
 	public boolean removeRole(String name) throws IOException {
+		return admin.removeRole(name);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.osgi.jmx.compendium.UserManagerMBean#removeUser(java.lang.String)
+	 */
+	public boolean removeUser(String name) throws IOException {
+		return admin.removeRole(name);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.osgi.jmx.compendium.UserManagerMBean#removeGroup(java.lang.String)
+	 */
+	public boolean removeGroup(String name) throws IOException {
 		return admin.removeRole(name);
 	}
 
