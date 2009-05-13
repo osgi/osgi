@@ -52,7 +52,7 @@ import org.osgi.test.cases.monitor.tb1.MonitorAdmin.SwitchEvents;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 import org.osgi.test.cases.monitor.tbc.TB1Service;
 import org.osgi.test.cases.monitor.tbc.TestInterface;
-import org.osgi.test.cases.util.DefaultTestBundleControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * @author Alexandre Santos

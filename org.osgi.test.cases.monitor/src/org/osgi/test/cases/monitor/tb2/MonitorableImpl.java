@@ -70,7 +70,7 @@ public class MonitorableImpl implements Monitorable, TestingMonitorable {
      * @return the name of StatusVariables published by this object
      */
 	public String[] getStatusVariableNames() {
-		log("#Start getStatusVariableNames()");
+		log("#Start tb2.getStatusVariableNames()");
 		return new String[]{sv0.getID(),sv1.getID()};
 	}
 
@@ -87,7 +87,7 @@ public class MonitorableImpl implements Monitorable, TestingMonitorable {
      *         StatusVariable
      */
 	public StatusVariable getStatusVariable(String arg0) throws IllegalArgumentException {
-		log("#Start getStatusVariable()");
+		log("#Start tb2.getStatusVariable(" + arg0  + ")");
 		
 		if(arg0==null || arg0.equals(MonitorConstants.INVALID_MONITORABLE_SV)){
 			throw new IllegalArgumentException();
@@ -120,7 +120,7 @@ public class MonitorableImpl implements Monitorable, TestingMonitorable {
      *             StatusVariable
      */
 	public boolean notifiesOnChange(String arg0) throws IllegalArgumentException {
-		log("#Start notifiesOnChange()");
+		log("#Start tb2.notifiesOnChange(" + arg0  + ")");
 		log("#notifiesOnChange receives " + arg0 + " as argument.");
 		
 		if(arg0==null || arg0.equals(MonitorConstants.INVALID_MONITORABLE_SV)){
@@ -151,7 +151,7 @@ public class MonitorableImpl implements Monitorable, TestingMonitorable {
      *         StatusVariable
      */
 	public boolean resetStatusVariable(String arg0) throws IllegalArgumentException {
-		log("#Start resetStatusVariable()");
+		log("#Start tb2.resetStatusVariable(" + arg0 + ")");
 		
 		if(arg0==null || arg0.equals(MonitorConstants.INVALID_MONITORABLE_SV)){
 			throw new IllegalArgumentException();
@@ -176,7 +176,7 @@ public class MonitorableImpl implements Monitorable, TestingMonitorable {
      *         StatusVariable
      */
 	public String getDescription(String arg0) throws IllegalArgumentException  {		
-		log("#Start getDescription()");
+		log("#Start tb2.getDescription(" + arg0 + ")");
 		
 		if(arg0==null || arg0.equals(MonitorConstants.INVALID_MONITORABLE_SV)){
 			throw new IllegalArgumentException();
@@ -195,6 +195,7 @@ public class MonitorableImpl implements Monitorable, TestingMonitorable {
 	 * the updated statusvariable in the report.
 	 */
 	public void setStatusVariable(StatusVariable sv) throws IllegalArgumentException {
+    log("#Start tb2.setStatusVariable(" + sv + ")");
 		if (sv.getID().equals(sv0.getID())) {
 			sv0 = sv;			
 		} else if (sv.getID().equals(sv1.getID())) {

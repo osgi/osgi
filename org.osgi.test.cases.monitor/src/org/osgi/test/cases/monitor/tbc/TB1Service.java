@@ -36,7 +36,7 @@
  */
 package org.osgi.test.cases.monitor.tbc;
 
-import org.osgi.test.cases.util.DefaultTestBundleControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * @author Alexandre Santos

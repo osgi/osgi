@@ -74,7 +74,7 @@ import org.osgi.test.cases.monitor.tbc.MonitoringJob.Stop;
 import org.osgi.test.cases.monitor.tbc.StatusVariable.StatusVariable;
 import org.osgi.test.cases.monitor.tbc.StatusVariable.StatusVariableConstants;
 import org.osgi.test.cases.monitor.tbc.TreeStructure.TreeStructure;
-import org.osgi.test.cases.util.DefaultTestBundleControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * @author Alexandre Santos
@@ -83,47 +83,47 @@ import org.osgi.test.cases.util.DefaultTestBundleControl;
  */
 public class MonitorTestControl extends DefaultTestBundleControl {
 	
-	private boolean broadcast = false;
+	private static boolean broadcast = false;
 	
-	private MonitorAdmin monitorAdmin;
+	private static MonitorAdmin monitorAdmin;
 
-	private MonitorListener monitorListener;
+	private static MonitorListener monitorListener;
 
-	private Monitorable monitorable;
+	private static Monitorable monitorable;
 
-	private PermissionAdmin permissionAdmin;
+	private static PermissionAdmin permissionAdmin;
 	
-	private MonitorHandlerActivator monitorHandlerActivator;
+	private static MonitorHandlerActivator monitorHandlerActivator;
 
-	private DmtAdmin dmtAdmin;
+	private static DmtAdmin dmtAdmin;
 	
-	private String tb1Location;
+	private static String tb1Location;
 	
-	private TestInterface[] testInterfaces;
+	private static TestInterface[] testInterfaces;
 	
-	private String serverId = null;
+	private static String serverId = null;
 	
-	private String correlator = null;
+	private static String correlator = null;
 	
-	private AlertItem[] alerts = null;
+	private static AlertItem[] alerts = null;
 	
-	private boolean receivedAlert = false;
+	private static boolean receivedAlert = false;
 
-	private boolean isMonitorablePid = false;
-	private boolean isStatusVariableName = false;
-	private boolean isStatusVariableValue = false;
-	private boolean isListenerId = false;	
+	private static boolean isMonitorablePid = false;
+	private static boolean isStatusVariableName = false;
+	private static boolean isStatusVariableValue = false;
+	private static boolean isListenerId = false;	
 	
-	private Bundle tb2 = null;
-	private Bundle tb3 = null;
-	private Bundle tb5 = null;
+	private static Bundle tb2 = null;
+	private static Bundle tb3 = null;
+	private static Bundle tb5 = null;
 	
-	private String statusVariableName = null;
-	private String statusVariableValue = null;
-	private String monitorablePid = null;
-	private String listenerId = null;
+	private static String statusVariableName = null;
+	private static String statusVariableValue = null;
+	private static String monitorablePid = null;
+	private static String listenerId = null;
 	
-	private PermissionWorker worker;
+	private static PermissionWorker worker;
 	
 
 	
@@ -443,7 +443,7 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	 * Executes MonitorAdmin.startJob test methods
 	 */
 	public void testMonitorAdminStartJob() {
-		testInterfaces[7].run();		
+		testInterfaces[7].run();
 	}
 
 	/*
@@ -476,7 +476,7 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	public void testMonitorListenerUpdated() {
 		new Updated(
 				this).run();
-	}	
+	}
 
 	/*
 	 * Executes the TreeStructure tests
@@ -484,20 +484,20 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	public void testTreeStructure() {
 		new TreeStructure(this).run();
 	}
-	
+
 	/*
 	 * Executes the RemoteStartJob tests
 	 */
 	public void testRemoteAlertSender() {
 		new RemoteAlertSender(this).run();
-	}	
-	
+	}
+
 	/*
 	 * Executes the Monitorables tests
 	 */
 	public void testMonitorables() {
 		new Monitorables(this).run();
-	}		
+	}
 
 	/**
 	 * @return Returns the monitorAdmin.

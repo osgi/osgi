@@ -370,7 +370,7 @@ public class TreeStructure {
 			tbc
 					.assertEquals(
 							"Asserting the value stored in /Monitor/cesar/test0/Results",
-							"test1",
+							"test",
 							session
 									.getNodeValue(
 											MonitorConstants.DMT_URI_MONITORABLE_SV1_RESULTS)

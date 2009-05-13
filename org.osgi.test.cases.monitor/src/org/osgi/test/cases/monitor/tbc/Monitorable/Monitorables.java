@@ -36,6 +36,10 @@
  */
 package org.osgi.test.cases.monitor.tbc.Monitorable;
 
+import java.util.Arrays;
+
+import junit.framework.Assert;
+
 import org.osgi.test.cases.monitor.tbc.MonitorConstants;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 import org.osgi.test.cases.monitor.tbc.Activators.MonitorableActivatorInvalid;
@@ -76,7 +80,7 @@ public class Monitorables {
 			MonitorableActivatorInvalid monitorableActivatorEmpty = new MonitorableActivatorInvalid(tbc, "");
 			monitorableActivatorEmpty.start(tbc.getContext());
 			String[] monitorablesAfter = tbc.getMonitorAdmin().getMonitorableNames();
-			tbc.assertEquals("Asserting if no monitorables was installed when we use a monitorable an empty string as service.pid.", monitorablesBefore, monitorablesAfter);
+			Assert.assertTrue("Asserting if no monitorables was installed when we use a monitorable an empty string as service.pid.", Arrays.equals(monitorablesBefore, monitorablesAfter));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
@@ -95,7 +99,7 @@ public class Monitorables {
 			MonitorableActivatorInvalid monitorableActivatorInvalid = new MonitorableActivatorInvalid(tbc, MonitorConstants.INVALID_ID);
 			monitorableActivatorInvalid.start(tbc.getContext());		
 			String[] monitorablesAfter = tbc.getMonitorAdmin().getMonitorableNames();
-			tbc.assertEquals("Asserting if no monitorables was installed when we use a monitorable an invalid id as service.pid.", monitorablesBefore, monitorablesAfter);
+			Assert.assertTrue("Asserting if no monitorables was installed when we use a monitorable an empty string as service.pid.", Arrays.equals(monitorablesBefore, monitorablesAfter));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
@@ -115,7 +119,7 @@ public class Monitorables {
 			MonitorableActivatorInvalid monitorableActivatorInvalid = new MonitorableActivatorInvalid(tbc, MonitorConstants.LONGID);
 			monitorableActivatorInvalid.start(tbc.getContext());		
 			String[] monitorablesAfter = tbc.getMonitorAdmin().getMonitorableNames();
-			tbc.assertEquals("Asserting if no monitorables was installed when we use a monitorable id with more than 20 characters.", monitorablesBefore, monitorablesAfter);
+			Assert.assertTrue("Asserting if no monitorables was installed when we use a monitorable id with more than 20 characters.", Arrays.equals(monitorablesBefore, monitorablesAfter));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}

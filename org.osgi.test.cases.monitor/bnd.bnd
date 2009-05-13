@@ -1,0 +1,37 @@
+Bundle-Version						: 3.0.0.${project.build}
+Bundle-Description					: A test case for the event generic mechanism implementation.
+
+Export-Package						= \
+    org.osgi.test.support.*        , \
+	${p}.tbc.*
+
+Include-Resource					= \
+	tb1.jar, \
+	tb2.jar, \
+	tb3.jar, \
+	tb4.jar, \
+	tb5.jar
+
+Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+
+-buildpath							= \
+    org.osgi.test.support;                  version=project , \
+    org.osgi.service.monitor;               version=project , \
+	osgi;									version=latest	, \
+	ee.foundation;                          version=1.1     , \
+	${junit}
+
+-runbundles							= \
+	org.eclipse.equinox.event; version=latest, \
+    org.apache.felix.configadmin; version=latest, \
+	org.osgi.impl.service.dmt; version=latest, \
+	org.osgi.impl.service.monitor; version=project, \
+	org.osgi.impl.service.log; version=latest, \
+	osgi; version=latest
+
+
+
+-runproperties = report=true, \
+	org.osgi.framework.security=osgi, \
+	org.osgi.framework.trust.repositories=${build}/keystore
+
