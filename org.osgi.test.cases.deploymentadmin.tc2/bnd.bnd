@@ -1,4 +1,4 @@
-Bundle-Version: 4.1.0.${project.build}
+Bundle-Version: 4.2.0.${project.build}
 
 Private-Package						= ${p}.tbc.*;-split-package:=merge-first, \
 	org.osgi.test.support.*;-split-package:=merge-first
@@ -8,7 +8,7 @@ Export-Package						= ${p}.tbc.*;-split-package:=merge-first
 Bundle-Category: osgi,test
 	
 Include-Resource					= \
-  www/simple.dp=res/simple.dp,\
+	www/simple.dp=res/simple.dp,\
 	www/rp_resource_install.dp=res/rp_resource_install.dp,\
 	www/rp_resource_update.dp=res/rp_resource_update.dp,\
 	www/rp_resource_uninstall.dp=res/rp_resource_uninstall.dp,\
@@ -38,27 +38,34 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 
 -runbundles							= \
 	org.osgi.impl.service.log; version=latest,\
+	org.eclipse.equinox.util;  version=latest, \
+	org.eclipse.equinox.ds;  version=latest, \
+	org.osgi.impl.bundle.jaxp;  version=latest, \
+	org.eclipse.equinox.metatype;  version=latest, \
 	org.eclipse.equinox.event;  version=latest, \
 	org.osgi.impl.bundle.autoconf; version=project, \
 	org.osgi.impl.service.deploymentadmin; version=project, \
 	org.apache.felix.configadmin;  version=latest, \
-	osgi; version="[4.1,4.1]"
+	osgi; version=latest
 
 -buildpath=\
     org.osgi.test.support; version=project , \
-		osgi;	version=4.2, \
-		ee.foundation, \
-		${junit}
+	org.osgi.service.deploymentadmin; version=project, \
+	osgi;	version=4.2, \
+	ee.foundation; version=1.1, \
+	${junit}
 		
 -runproperties= \
 	report=true, \
 	org.osgi.framework.security=osgi, \
 	org.osgi.framework.trust.repositories=${build}/keystore, \
+	org.osgi.impl.service.deploymentadmin.keystore.file=${build}/keystore, \
+	org.osgi.impl.service.deploymentadmin.userprompt=false, \
+	org.osgi.impl.service.deploymentadmin.deliveredarea=${target-dir}, \
 	org.osgi.test.cases.deploymentadmin.timeout=180000, \
 	org.osgi.test.cases.deploymentadmin.short_timeout=3500, \
 	org.osgi.vendor.deploymentadmin=org.osgi.impl.service.deploymentadmin.perm, \
-	info.dmtree.osgi.root=./OSGi/, \
-	org.osgi.impl.service.deploymentadmin.deliveredarea=${target-dir}/delivered
+	info.dmtree.osgi.root=./OSGi/
 	
 	
 -runsystempackages=javax.xml.parsers, org.xml.sax, org.xml.sax.helpers, javax.security.auth.x500		
