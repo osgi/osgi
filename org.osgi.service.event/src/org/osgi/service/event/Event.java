@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -72,20 +71,6 @@ public class Event {
 		}
 		p.put(EventConstants.EVENT_TOPIC, topic);
 		this.properties = p; // safely publish the map
-	}
-
-	/**
-	 * Constructs an event.
-	 * 
-	 * @param topic The topic of the event.
-	 * @param properties The event's properties (may be <code>null</code>). A
-	 *        property whose key is not of type <code>String</code> will be
-	 *        ignored.
-	 * @throws IllegalArgumentException If topic is not a valid topic name.
-	 * @since 1.2
-	 */
-	public Event(String topic, Hashtable/* <String,Object> */properties) {
-		this(topic, (Map) properties);
 	}
 
 	/**

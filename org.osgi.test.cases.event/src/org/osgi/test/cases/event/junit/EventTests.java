@@ -38,7 +38,7 @@ public class EventTests extends OSGiTestCase {
 		for (int i = 0; i < illegalTopics.length; i++) {
 			String topic = illegalTopics[i];
 			try {
-				new Event(topic, properties);
+				new Event(topic, (Dictionary) properties);
 				fail("Excepted IllegalArgumentException for topic:[" + topic
 						+ "]");
 			}
@@ -58,7 +58,7 @@ public class EventTests extends OSGiTestCase {
 			String topic = legalTopics[i];
 			Event event = null;
 			try {
-				event = new Event(topic, null);
+				event = new Event(topic, (Dictionary) null);
 			}
 			catch (Throwable e) {
 				fail("Exception in event construction with topic:[" + topic
@@ -87,7 +87,7 @@ public class EventTests extends OSGiTestCase {
 		m3.put("foo", "bar");
 
 		Event e1 = new Event(t1, m1);
-		Event e2 = new Event(t1, m2);
+		Event e2 = new Event(t1, (Dictionary) m2);
 		Event e3 = new Event(t1, m3);
 
 		assertEquals("topic not set", new String(t1), e1.getTopic());

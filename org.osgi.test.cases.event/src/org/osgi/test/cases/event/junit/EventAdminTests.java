@@ -26,6 +26,7 @@
  */
 package org.osgi.test.cases.event.junit;
 
+import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -167,7 +168,7 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		Hashtable ht = new Hashtable();
 		ht.put("topic", "org/osgi/test/cases/event");
 		Event event1 = new Event("org/osgi/test/cases/event/ACTION1",
-				properties);
+				(Dictionary) properties);
 		checkTestingPermissions(event1);
 
 		PermissionInfo[] perm1 = permissionAdmin.getPermissions(tb1
@@ -283,7 +284,7 @@ public class EventAdminTests extends DefaultTestBundleControl {
 
 		Event event;
 		for (int i = 0; i < events.length; i++) {
-			event = new Event(events[i], new Hashtable());
+			event = new Event(events[i], (Dictionary) new Hashtable());
 			eventAdmin.sendEvent(event);
 			pass("before 1");
 			assertEvent(event, tb1, tbcService1, eventsMap1[i].booleanValue());
@@ -315,7 +316,8 @@ public class EventAdminTests extends DefaultTestBundleControl {
 
 		Event[] events = new Event[10];
 		for (int i = 0; i < events.length; i++) {
-			events[i] = new Event("test/Event" + i, new Hashtable());
+			events[i] = new Event("test/Event" + i,
+					(Dictionary) new Hashtable());
 		}
 
 		for (int i = 0; i < events.length; i++) {
@@ -380,7 +382,8 @@ public class EventAdminTests extends DefaultTestBundleControl {
 
 		Event[] events = new Event[10];
 		for (int i = 0; i < events.length; i++) {
-			events[i] = new Event("test/Event" + i, new Hashtable());
+			events[i] = new Event("test/Event" + i,
+					(Dictionary) new Hashtable());
 		}
 
 		MultiPostSendThread[] mpts = new MultiPostSendThread[events.length];
@@ -509,7 +512,8 @@ public class EventAdminTests extends DefaultTestBundleControl {
 
 		Event[] events = new Event[10];
 		for (int i = 0; i < events.length; i++) {
-			events[i] = new Event("test/Event" + i, new Hashtable());
+			events[i] = new Event("test/Event" + i,
+					(Dictionary) new Hashtable());
 		}
 
 		MultiPostSendThread[] mpts = new MultiPostSendThread[events.length];
