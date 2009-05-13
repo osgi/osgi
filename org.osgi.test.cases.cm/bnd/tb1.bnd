@@ -14,4 +14,4 @@ Private-Package						= \
 	${p}.common
 
 Include-Resource					= \
-	{META-INF/permissions.perm=perms/tb1.perm}
+	{OSGI-INF/permissions.perm=perms/tb1.perm}
