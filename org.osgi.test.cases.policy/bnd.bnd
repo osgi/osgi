@@ -1,0 +1,37 @@
+Bundle-Version						: 4.0.0.${project.build}
+Bundle-Description					: Policy Test Case.
+Bundle-DocUrl                       : http://www.osgi.org/testcases/4/test.cases.template
+
+Export-Package						= \
+    org.osgi.test.support.*        , \
+	${p}.tbc.*
+
+Include-Resource					= \
+	tb1.jar, \
+	com.provider.messages.jar
+
+Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+
+-buildpath							= \
+	org.osgi.impl.service.policy;           version=project, \
+    org.osgi.test.support;                  version=project , \
+    org.osgi.service.event;                 version=project , \
+	osgi;									version=latest	, \
+    org.osgi.internal;                      version=latest  , \
+	ee.foundation;							version=1.1	, \
+	${junit}
+
+-runbundles							= \
+	org.eclipse.equinox.event;        version=latest, \
+	org.eclipse.equinox.ds;           version=latest, \
+	org.eclipse.equinox.util;         version=latest, \
+	org.osgi.impl.service.policy;     version=project, \
+    org.apache.felix.configadmin;     version=latest, \
+	org.osgi.impl.service.dmt;        version=latest, \
+	osgi;                             version=latest
+
+
+
+-runproperties = report=true, \
+    org.osgi.test.cases.policy.automatic=true, \
+    org.osgi.vendor.dmtree.DigestDelegate=org.osgi.impl.service.dmt.export.Digest

@@ -92,4 +92,179 @@ public class TestIMEI extends TestCase {
 				new String[] {"777*"}));
 		assertFalse(imei.isSatisfied());
 	}
+
+  /**
+   * This test asserts if a condition is sucessfully created when imei
+   * parameter is a valid code
+   *
+   * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
+   */
+
+  public void testGetCondition001() {
+          Condition cond = IMEICondition.getCondition(
+                  bundle,
+                  new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{PolicyConstants.IMEI_VALID_CODE}));
+
+          assertNotNull("created condition", cond);
+  }
+
+
+  /**
+   * testGetCondition002 has been removed as it is no valid anymore... used to be:
+   * This test asserts if NullPointerException is thrown when null is
+   * passed for the first parameter
+   */
+
+  /**
+   * This test asserts if NullPointerException is thrown when null is
+   * passed for the second parameter
+   *
+   * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
+   */
+
+  public void testGetCondition003() {
+      try {
+          IMEICondition.getCondition(
+              bundle, null);
+
+          failException("", NullPointerException.class);
+      } catch (NullPointerException e) {
+        // expected
+      }
+  }
+
+
+  /**
+   * This test asserts if IllegalArgumentException is thrown if the
+   * imei code is not a valid string
+   *
+   * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
+   */
+
+  public void testGetCondition004() {
+      try {
+          IMEICondition.getCondition(
+              bundle,
+                  new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{PolicyConstants.INVALID_CODE}));
+
+          failException("", IllegalArgumentException.class);
+      } catch (IllegalArgumentException e) {
+        // expected
+      }
+  }
+
+
+  /**
+   * This test asserts if IllegalArgumentException is thrown if the
+   * imei code is a string with less than 15 digits
+   *
+   * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
+   */
+
+  public void testGetCondition005() {
+      try {
+          IMEICondition.getCondition(
+              bundle,
+                  new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{PolicyConstants.IMEI_LESS_DIGIT_CODE}));
+
+          failException("", IllegalArgumentException.class);
+      } catch (IllegalArgumentException e) {
+        // expected
+      }
+  }
+
+
+  /**
+   * This test asserts if IllegalArgumentException is thrown if the
+   * imei code is a string with more than 15 digits
+   *
+   * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
+   */
+
+  public void testGetCondition006() {
+      try {
+          IMEICondition.getCondition(
+              bundle,
+                  new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{PolicyConstants.IMEI_MORE_DIGIT_CODE}));
+
+          failException("", IllegalArgumentException.class);
+      } catch (IllegalArgumentException e) {
+        // expected
+      }
+  }
+
+
+  /**
+   * This test asserts if a condition is not created when imei
+   * parameter is a char code
+   *
+   * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
+   */
+
+  public void testGetCondition007() {
+      try {
+          IMEICondition.getCondition(bundle,
+                  new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{PolicyConstants.IMEI_CHAR_CODE}));
+
+          failException("", IllegalArgumentException.class);
+      } catch (IllegalArgumentException e) {
+        // expected
+      }
+  }
+
+
+  /**
+   * This test asserts if IllegalArgumentException is thrown if the
+   * imei code is a string with hyphens
+   *
+   * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
+   */
+
+  public void testGetCondition008() {
+      try {
+          IMEICondition.getCondition(
+              bundle,
+                  new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{PolicyConstants.IMEI_INVALID_CODE}));
+
+          failException("", IllegalArgumentException.class);
+      } catch (IllegalArgumentException e) {
+        // expected
+      }
+  }
+
+  /**
+   * This test asserts if a condition is sucessfully created when the imei
+   * parameter ends with a wildcard
+   *
+   * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
+   */
+
+  public void testGetCondition009() {
+          Condition cond = IMEICondition.getCondition(
+              bundle,
+                  new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{PolicyConstants.IMEI_VALID_CODE_WILDCARD}));
+
+          assertNotNull("created condition", cond);
+  }
+
+  /**
+   * This test asserts if a condition is sucessfully created when the imei
+   * parameter has only one element, a wildcard.
+   *
+   * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
+   */
+
+  public void testGetCondition010() {
+          Condition cond = IMEICondition.getCondition(
+              bundle,
+                  new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{"*"}));
+
+        assertNotNull("created condition", cond);
+  }
+
+  public static void failException(String message,
+      Class expectedExceptionClass) {
+    fail(message + " expected:[" + expectedExceptionClass.getName()
+        + "] and got nothing");
+  }
 }

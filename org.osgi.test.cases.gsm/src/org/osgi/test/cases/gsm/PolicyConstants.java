@@ -30,24 +30,38 @@
  * Date         Author(s)
  * CR           Headline
  * ===========  ==============================================================
- * 04/03/2005   Leonardo Barros
- * CR 33        Implement MEG TCK
+ * Aug 3, 2005  Leonardo Barros
+ * 33           Implement MEGTCK for the application RFC
+ * 2009/05/13   Yan Pujante: copied/adapted from org.osgi.test.cases.policy
  * ===========  ==============================================================
  */
-package org.osgi.test.cases.policy;
+package org.osgi.test.cases.gsm;
 
-import org.osgi.test.cases.util.director.DefaultTestCase;
+public class PolicyConstants
+{
+    public static final String IMEI_VALID_CODE = "012345678912345";
 
+  	public static final String IMEI_VALID_CODE_WILDCARD = "01234567891234*";
 
-/**
- * This Test Case Validates the implementation of
- * <code>Policy<code> service, according to SPEC
- * documentation.
- * 
- * @testcase org.osgi.test.cases.policy
- * @version $Revision$
- */
+	  public static final String IMEI_INVALID_CODE = "0123456-8912345";
 
-public class TestPolicy extends DefaultTestCase {
+  	public static final String IMEI_CHAR_CODE = "abcdefghijklmno";
 
+  	public static final String IMEI_LESS_DIGIT_CODE = "12345";
+
+  	public static final String IMEI_MORE_DIGIT_CODE = "1234567890123456";
+
+    public static final String IMSI_VALID_CODE = "012345678912345";
+
+    public static final String IMSI_VALID_CODE_WILDCARD = "01234567891234*";
+
+    public static final String IMSI_CHAR_CODE = "abcdefghijklmno";
+
+    public static final String IMSI_LESS_DIGIT_CODE = "12345";
+
+    public static final String IMSI_INVALID_CODE = "0123456-8912345";
+
+    public static final String IMSI_MORE_DIGIT_CODE = "1234567890123456";
+
+  	public static final String INVALID_CODE = "@#$%sA!&_";
 }

@@ -90,4 +90,181 @@ public class TestIMSI extends TestCase {
 				new String[] {"777*"}));
 		assertFalse(IMSI.isSatisfied());
 	}
+
+  /**
+   * This test asserts if a condition is sucessfully created when imsi
+   * parameter is a valid code
+   *
+   * @spec IMSICondition.getCondition(Bundle,ConditionInfo)
+   */
+
+  public void testGetCondition001() {
+          Condition cond = IMSICondition.getCondition(
+              bundle,
+                  new ConditionInfo("org.osgi.util.gsm.IMSICondition",new String[]{PolicyConstants.IMSI_VALID_CODE}));
+
+          assertNotNull("created condition", cond);
+  }
+
+
+  /**
+   * testGetCondition002 has been removed as it is no valid anymore... used to be:
+   * This test asserts if NullPointerException is thrown when null is
+   * passed for the first parameter
+   */
+
+
+  /**
+   * This test asserts if NullPointerException is thrown when null is
+   * passed for the second parameter
+   *
+   * @spec IMSICondition.getCondition(Bundle,ConditionInfo)
+   */
+
+  public void testGetCondition003() {
+      try {
+          IMSICondition.getCondition(
+              bundle, null);
+
+          failException("", NullPointerException.class);
+      } catch (NullPointerException e) {
+        // expected
+      }
+  }
+
+
+  /**
+   * This test asserts if IllegalArgumentException is thrown if the
+   * imsi is not a valid string
+   *
+   * @spec IMSICondition.getCondition(Bundle,ConditionInfo)
+   */
+
+  public void testGetCondition004() {
+      try {
+          IMSICondition.getCondition(
+              bundle,
+                  new ConditionInfo("org.osgi.util.gsm.IMSICondition",new String[]{PolicyConstants.INVALID_CODE}));
+
+          failException("", IllegalArgumentException.class);
+      } catch (IllegalArgumentException e) {
+        // expected
+      }
+  }
+
+
+  /**
+   * This test asserts if IllegalArgumentException is thrown if the
+   * imsi code is with more than 15 digits
+   *
+   * @spec IMSICondition.getCondition(Bundle,ConditionInfo)
+   */
+
+  public void testGetCondition005() {
+      try {
+          IMSICondition.getCondition(
+              bundle,
+                  new ConditionInfo("org.osgi.util.gsm.IMSICondition",new String[]{PolicyConstants.IMSI_MORE_DIGIT_CODE}));
+
+          failException("", IllegalArgumentException.class);
+      } catch (IllegalArgumentException e) {
+        // expected
+      }
+  }
+
+
+  /**
+   * This test asserts if a condition is not created when imsi
+   * parameter is an invalid char code
+   *
+   * @spec IMSICondition.getCondition(Bundle,ConditionInfo)
+   */
+
+  public void testGetCondition006() {
+      try {
+          IMSICondition.getCondition(bundle,
+                  new ConditionInfo("org.osgi.util.gsm.IMSICondition",new String[]{PolicyConstants.IMSI_CHAR_CODE}));
+
+          failException("", IllegalArgumentException.class);
+      } catch (IllegalArgumentException e) {
+        // expected
+      }
+  }
+
+
+  /**
+   * This test asserts if IllegalArgumentException is thrown if the
+   * imsi code is with less than 15 digits
+   *
+   * @spec IMSICondition.getCondition(Bundle,ConditionInfo)
+   */
+
+  public void testGetCondition007() {
+      try {
+          IMSICondition.getCondition(
+              bundle,
+                  new ConditionInfo("org.osgi.util.gsm.IMSICondition",new String[]{PolicyConstants.IMSI_LESS_DIGIT_CODE}));
+
+             failException("", IllegalArgumentException.class);
+      } catch (IllegalArgumentException e) {
+        // expected
+      }
+  }
+
+
+  /**
+   * This test asserts if IllegalArgumentException is thrown if the
+   * imsi code is a string with hyphens
+   *
+   * @spec IMSICondition.getCondition(Bundle,ConditionInfo)
+   */
+
+  public void testGetCondition008() {
+      try {
+          IMSICondition.getCondition(
+              bundle,
+                  new ConditionInfo("org.osgi.util.gsm.IMSICondition",new String[]{PolicyConstants.IMSI_INVALID_CODE}));
+
+          failException("", IllegalArgumentException.class);
+      } catch (IllegalArgumentException e) {
+        // expected
+      }
+  }
+
+  /**
+   * This test asserts if a condition is sucessfully created when the imei
+   * parameter ends with a wildcard
+   *
+   * @spec IMSICondition.getCondition(Bundle,ConditionInfo)
+   */
+
+  public void testGetCondition009() {
+        Condition cond = IMSICondition.getCondition(
+            bundle,
+                  new ConditionInfo("org.osgi.util.gsm.IMSICondition",new String[]{PolicyConstants.IMSI_VALID_CODE_WILDCARD}));
+
+          assertNotNull("created condition", cond);
+  }
+
+
+  /**
+   * This test asserts if a condition is sucessfully created when the imei
+   * parameter has only one element, a wildcard.
+   *
+   * @spec IMSICondition.getCondition(Bundle,ConditionInfo)
+   */
+
+  public void testGetCondition010() {
+        Condition cond = IMSICondition.getCondition(
+            bundle,
+                  new ConditionInfo("org.osgi.util.gsm.IMSICondition",new String[]{"*"}));
+
+        assertNotNull("created condition", cond);
+  }
+
+  public static void failException(String message,
+      Class expectedExceptionClass) {
+    fail(message + " expected:[" + expectedExceptionClass.getName()
+        + "] and got nothing");
+  }  
 }

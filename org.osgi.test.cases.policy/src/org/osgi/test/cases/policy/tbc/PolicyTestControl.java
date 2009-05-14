@@ -58,27 +58,27 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.policy.tbc.UserPromptCondition.IsMutable;
 import org.osgi.test.cases.policy.tbc.UserPromptCondition.IsPostponed;
 import org.osgi.test.cases.policy.tbc.UserPromptCondition.IsSatisfied;
-import org.osgi.test.cases.util.DefaultTestBundleControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * Controls the execution of the test case
  */
 public class PolicyTestControl extends DefaultTestBundleControl {
 	
-	private TB1Service tb1Service;
+	private static TB1Service tb1Service;
 
-	private TestInterface[] testBundleTB1;
+	private static TestInterface[] testBundleTB1;
 
-	private ConditionalPermissionAdmin cpa;
+	private static ConditionalPermissionAdmin cpa;
 
-	private PermissionAdmin pa;
+	private static PermissionAdmin pa;
 	
-	private DmtAdmin da;
+	private static DmtAdmin da;
 
-	private Bundle bundle;
+	private static Bundle bundle;
 	
-	private Bundle providerMessages;
-	
+	private static Bundle providerMessages;
+
 	public void prepare() {
 		cpa = (ConditionalPermissionAdmin) getContext().getService(
 				getContext().getServiceReference(
@@ -90,7 +90,7 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 
 		da = (DmtAdmin) getContext().getService(
 				getContext().getServiceReference(DmtAdmin.class.getName()));
-        
+
         bundle = this.getContext().getBundle();
         
         try {
@@ -102,59 +102,48 @@ public class PolicyTestControl extends DefaultTestBundleControl {
         installBundle();		
 	}
 	
-	/**
-	 * override getMethods()
-	 *
-	 */
-	public String[] getMethods() {
-		String value = System.getProperty("org.osgi.test.cases.policy.automatic");
-		if (value != null && value.equals("false")) {
-			return new String[] {
-					"testIMEIConditionGetCondition",
-					"testIMSIConditionGetCondition",
-					"testIsMutable",
-					"testIsPostponed",
-					"testIsSatisfied",
-					"testMetaNode",
-					"testTreeStructure",
-					"testUserPromptConditionGetCondition"			
-			};
-		} else {
-			return new String[] {
-					"testIMEIConditionGetCondition",
-					"testIMSIConditionGetCondition",
-					"testMetaNode",
-					"testTreeStructure",
-					"testUserPromptConditionGetCondition"		
-				};
-		}
-	}
+  public boolean isPolicyAutomatic()
+  {
+    String value = System.getProperty("org.osgi.test.cases.policy.automatic");
+    return !(value != null && value.equals("false"));
+  }
 
-	/*
-	 * Calls IMSICondition.getCondition test methods
-	 */
-	public void testIMSIConditionGetCondition() {
-		new org.osgi.test.cases.policy.tbc.IMSICondition.GetCondition(this)
-				.run();
-	}
+  /**
+   * Executes test methods for isMutable
+   */
+  public void testIsMutable() {
+    if(isPolicyAutomatic())
+      System.out.println("testIsMutable skipped in automatic mode");
+    else
+      new IsMutable(this).run();
+  }
 
-	
-	/*
-	 * Calls IMEICondition.getCondition test methods
-	 */
-	public void testIMEIConditionGetCondition() {
-		new org.osgi.test.cases.policy.tbc.IMEICondition.GetCondition(this)
-				.run();
-	}
+  /**
+   * Executes test methods for isPostponed
+   */
+  public void testIsPostponed() {
+    if(isPolicyAutomatic())
+      System.out.println("testIsPostponed skipped in automatic mode");
+    else
+    new IsPostponed(this).run();
+  }
 
-	
-	/*
-	 * Calls UserPromptCondition.getCondition test methods
-	 */
-	public void testUserPromptConditionGetCondition() {
-		new org.osgi.test.cases.policy.tbc.UserPromptCondition.GetCondition(
-				this).run();
-	}
+  /**
+   * Executes test methods for isSatisfied
+   */
+  public void testIsSatisfied() {
+    if(isPolicyAutomatic())
+      System.out.println("testIsSatisfied skipped in automatic mode");
+    else
+      new IsSatisfied(this).run();
+  }
+
+  /*
+   * Executes test methods for tree structure meta nodes
+   */
+  public void testMetaNode() {
+      testBundleTB1[1].run();
+  }
 
 	/*
 	 * Executes test methods for tree structure
@@ -162,35 +151,15 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 	public void testTreeStructure() {
 		testBundleTB1[0].run();
 	}
-    
-    /*
-     * Executes test methods for tree structure meta nodes
-     */
-    public void testMetaNode() {
-        testBundleTB1[1].run();
-    }
-    
-    
-    /**
-     * Executes test methods for isSatisfied 
-     */
-    public void testIsSatisfied() {
-    	new IsSatisfied(this).run();
-    }
-    
-    /**
-     * Executes test methods for isMutable 
-     */
-    public void testIsMutable() {
-    	new IsMutable(this).run();
-    }    
-    
-    /**
-     * Executes test methods for isPostponed 
-     */
-    public void testIsPostponed() {
-    	new IsPostponed(this).run();
-    }        
+
+  /*
+   * Calls UserPromptCondition.getCondition test methods
+   */
+  public void testUserPromptConditionGetCondition() {
+    new org.osgi.test.cases.policy.tbc.UserPromptCondition.GetCondition(
+        this).run();
+  }
+
 
 	public ConditionalPermissionAdmin getConditionalPermissionAdmin() {
 		return cpa;

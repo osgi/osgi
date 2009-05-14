@@ -44,7 +44,7 @@ import org.osgi.test.cases.policy.tb1.TreeStructure.TreeStructure;
 import org.osgi.test.cases.policy.tbc.PolicyTestControl;
 import org.osgi.test.cases.policy.tbc.TB1Service;
 import org.osgi.test.cases.policy.tbc.TestInterface;
-import org.osgi.test.cases.util.DefaultTestBundleControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 public class Activator implements BundleActivator, TB1Service {
 	private ServiceRegistration servReg;

@@ -112,9 +112,9 @@ public class MetaNode implements TestInterface {
                 metaNode.can(info.dmtree.MetaNode.CMD_GET));
             
         } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.EXCEPTION_THROWN, new String[]{
-                    DmtException.class.getName(), e.getClass().getName()}));
+          tbc.fail(MessagesConstants.getMessage(
+              MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{
+                  e.getClass().getName()}));
         } finally {
             tbc.closeSession(session);
         }
@@ -134,45 +134,45 @@ public class MetaNode implements TestInterface {
         try {
             session = tbc.getDmtAdmin().getSession(PolicyConstants.LOCATION_PERMISSION_NODE,
                 DmtSession.LOCK_TYPE_ATOMIC);
-            
+
             if (!session.isNodeUri(PolicyConstants.DEFAULT_PERMISSION_NODE)) {
                 session.createLeafNode(PolicyConstants.DEFAULT_PERMISSION_NODE, new DmtData(""));
             }
-            
+
             info.dmtree.MetaNode metaNode = session.getMetaNode(PolicyConstants.DEFAULT_PERMISSION_NODE);
-            
+
             tbc.assertEquals(
                     "Asserts if $/Policy/Java/LocationPermission/Default node is dynamic",
                     info.dmtree.MetaNode.DYNAMIC, metaNode.getScope());
-            
+
             tbc.assertEquals(
                     "Asserts format of $/Policy/Java/LocationPermission/Default node",
                     DmtData.FORMAT_STRING, metaNode.getFormat());
-            
+
             tbc.assertTrue(
                     "Asserts cardinality $/Policy/Java/LocationPermission/Default node",
                     metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence() == 1);
-            
+
             tbc.assertTrue(
                     "Asserts if $/Policy/Java/LocationPermission/Default node can add",
                     metaNode.can(info.dmtree.MetaNode.CMD_ADD));
-            
+
             tbc.assertTrue(
                     "Asserts if $/Policy/Java/LocationPermission/Default node can get",
                     metaNode.can(info.dmtree.MetaNode.CMD_GET));
-            
+
             tbc.assertTrue(
                     "Asserts if $/Policy/Java/LocationPermission/Default node can replace",
                     metaNode.can(info.dmtree.MetaNode.CMD_REPLACE));
-            
+
             tbc.assertTrue(
                     "Asserts if $/Policy/Java/LocationPermission/Default node can delete",
                     metaNode.can(info.dmtree.MetaNode.CMD_DELETE));
-            
+
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.EXCEPTION_THROWN, new String[]{
-                    DmtException.class.getName(), e.getClass().getName()}));
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{
+                    e.getClass().getName()}));
         } finally {
             tbc.closeSession(session);
         }
@@ -222,8 +222,9 @@ public class MetaNode implements TestInterface {
                     metaNode.can(info.dmtree.MetaNode.CMD_DELETE));
             
         } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.EXCEPTION_THROWN, new String[]{DmtException.class.getName(), e.getClass().getName()}));
+          tbc.fail(MessagesConstants.getMessage(
+              MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{
+                  e.getClass().getName()}));
         } finally {
             tbc.cleanUp(session, new String[]{PolicyConstants.TEST_NODE});
         }
@@ -268,8 +269,9 @@ public class MetaNode implements TestInterface {
                     metaNode.can(info.dmtree.MetaNode.CMD_REPLACE));
             
         } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.EXCEPTION_THROWN, new String[]{DmtException.class.getName(), e.getClass().getName()}));
+          tbc.fail(MessagesConstants.getMessage(
+              MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{
+                  e.getClass().getName()}));
         } finally {
             tbc.cleanUp(session, new String[]{PolicyConstants.TEST_NODE});
         }
@@ -313,8 +315,9 @@ public class MetaNode implements TestInterface {
                     metaNode.can(info.dmtree.MetaNode.CMD_REPLACE));
             
         } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.EXCEPTION_THROWN, new String[]{DmtException.class.getName(), e.getClass().getName()}));
+          tbc.fail(MessagesConstants.getMessage(
+              MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{
+                  e.getClass().getName()}));
         } finally {
             tbc.cleanUp(session, new String[]{PolicyConstants.TEST_NODE});
         }
@@ -351,8 +354,9 @@ public class MetaNode implements TestInterface {
                 metaNode.can(info.dmtree.MetaNode.CMD_GET));
             
         } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.EXCEPTION_THROWN, new String[]{DmtException.class.getName(), e.getClass().getName()}));
+          tbc.fail(MessagesConstants.getMessage(
+              MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{
+                  e.getClass().getName()}));
         } finally {
             tbc.closeSession(session);
         }
@@ -398,8 +402,9 @@ public class MetaNode implements TestInterface {
                     "Asserts if $/Policy/Java/DmtPrincipalPermission/<principal> node can delete",
                     metaNode.can(info.dmtree.MetaNode.CMD_DELETE));
         } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.EXCEPTION_THROWN, new String[]{DmtException.class.getName(), e.getClass().getName()}));
+          tbc.fail(MessagesConstants.getMessage(
+              MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{
+                  e.getClass().getName()}));
         } finally {
             tbc.cleanUp(session, new String[]{PolicyConstants.PRINCIPAL});
         }
@@ -442,8 +447,9 @@ public class MetaNode implements TestInterface {
                     metaNode.can(info.dmtree.MetaNode.CMD_REPLACE));
             
         } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.EXCEPTION_THROWN, new String[]{DmtException.class.getName(), e.getClass().getName()}));
+          tbc.fail(MessagesConstants.getMessage(
+              MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{
+                  e.getClass().getName()}));
         } finally {
             tbc.cleanUp(session, new String[]{PolicyConstants.PRINCIPAL});
         }
@@ -486,8 +492,9 @@ public class MetaNode implements TestInterface {
                     "Asserts if $/Policy/Java/DmtPrincipalPermission/<principal>/PermissionInfo node can replace",
                     metaNode.can(info.dmtree.MetaNode.CMD_REPLACE));
         } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.EXCEPTION_THROWN, new String[]{DmtException.class.getName(), e.getClass().getName()}));
+          tbc.fail(MessagesConstants.getMessage(
+              MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{
+                  e.getClass().getName()}));
         } finally {
             tbc.cleanUp(session, new String[]{PolicyConstants.PRINCIPAL});
         }
@@ -525,9 +532,9 @@ public class MetaNode implements TestInterface {
                     metaNode.can(info.dmtree.MetaNode.CMD_GET));
             
         } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                    MessagesConstants.EXCEPTION_THROWN, new String[] {
-                            DmtException.class.getName(),e.getClass().getName() }));
+          tbc.fail(MessagesConstants.getMessage(
+              MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{
+                  e.getClass().getName()}));
         } finally {
             tbc.closeSession(session);
         }
@@ -577,8 +584,9 @@ public class MetaNode implements TestInterface {
                     metaNode.can(info.dmtree.MetaNode.CMD_DELETE));
             
         } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.EXCEPTION_THROWN, new String[]{DmtException.class.getName(), e.getClass().getName()}));
+          tbc.fail(MessagesConstants.getMessage(
+              MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{
+                  e.getClass().getName()}));
         } finally {
             tbc.cleanUp(session,
                 new String[]{PolicyConstants.CONDITIONAL_PERMISSION_NODE + "/"
@@ -626,8 +634,9 @@ public class MetaNode implements TestInterface {
                     metaNode.can(info.dmtree.MetaNode.CMD_REPLACE));
             
         } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.EXCEPTION_THROWN, new String[]{DmtException.class.getName(), e.getClass().getName()}));
+          tbc.fail(MessagesConstants.getMessage(
+              MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{
+                  e.getClass().getName()}));
         } finally {
             tbc.cleanUp(session,
                 new String[]{PolicyConstants.CONDITIONAL_PERMISSION_NODE + "/"
@@ -676,8 +685,9 @@ public class MetaNode implements TestInterface {
                     metaNode.can(info.dmtree.MetaNode.CMD_REPLACE));
             
         } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.EXCEPTION_THROWN, new String[]{DmtException.class.getName(), e.getClass().getName()}));
+          tbc.fail(MessagesConstants.getMessage(
+              MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{
+                  e.getClass().getName()}));
         } finally {
             tbc.cleanUp(session,
                 new String[]{PolicyConstants.CONDITIONAL_PERMISSION_NODE + "/"
@@ -726,8 +736,9 @@ public class MetaNode implements TestInterface {
                     metaNode.can(info.dmtree.MetaNode.CMD_REPLACE));
             
         } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.EXCEPTION_THROWN, new String[]{DmtException.class.getName(), e.getClass().getName()}));
+          tbc.fail(MessagesConstants.getMessage(
+              MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{
+                  e.getClass().getName()}));
         } finally {
             tbc.cleanUp(session,
                 new String[]{PolicyConstants.CONDITIONAL_PERMISSION_NODE + "/"

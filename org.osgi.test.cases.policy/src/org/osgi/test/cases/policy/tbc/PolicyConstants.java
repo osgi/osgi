@@ -48,31 +48,7 @@ public class PolicyConstants {
 
 	public static final String ALL_NODES = "./*";
 
-	public static final String IMEI_VALID_CODE = "012345678912345";
-	
-	public static final String IMEI_VALID_CODE_WILDCARD = "01234567891234*";
-
-	public static final String IMEI_INVALID_CODE = "0123456-8912345";
-
-	public static final String IMEI_CHAR_CODE = "abcdefghijklmno";
-
-	public static final String IMEI_LESS_DIGIT_CODE = "12345";
-
-	public static final String IMEI_MORE_DIGIT_CODE = "1234567890123456";
-
-	public static final String IMSI_VALID_CODE = "012345678912345";
-	
-	public static final String IMSI_VALID_CODE_WILDCARD = "01234567891234*";
-
-	public static final String IMSI_CHAR_CODE = "abcdefghijklmno";
-
-	public static final String IMSI_LESS_DIGIT_CODE = "12345";
-
-	public static final String IMSI_INVALID_CODE = "0123456-8912345";
-
-	public static final String IMSI_MORE_DIGIT_CODE = "1234567890123456";
-
-	public static final String INVALID_CODE = "@#$%sA!&_";
+  public static final String INVALID_CODE = "@#$%sA!&_";
 
 	public static final String CONDITION_NAME = "conditionName";
 	
