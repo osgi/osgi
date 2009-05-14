@@ -15,32 +15,66 @@
  */
 package org.osgi.service.blueprint.context;
 
+import org.osgi.framework.ServiceException;
+
 /**
- * Thrown when an invocation is made on an OSGi service reference component, and 
+ * Thrown when an invocation is made on an OSGi service reference component, and
  * a backing service is not available.
  */
-public class ServiceUnavailableException extends RuntimeException {
+public class ServiceUnavailableException extends ServiceException {
 
 	private final Class serviceType;
 	private final String filter;
-	
+
+
+    /**
+     * Creates a <code>ServiceUnavaiableException</code> with the specified message.
+     *
+     * @param message The associated message.
+     * @param serviceType
+     *                The class of the target service.
+     * @param filterExpression
+     *                The filter expression used for the service lookup.
+     */
 	public ServiceUnavailableException(
            String message,
            Class serviceType,
            String filterExpression) {
-		super(message);
+		super(message, UNREGISTERED);
 		this.serviceType = serviceType;
 		this.filter = filterExpression;
 	}
-  
+
+
 	/**
-	 * The type of the service that would have needed to be available in 
+	 * Creates a <code>ServiceUnavaiableException</code> with the specified message and
+	 * exception cause.
+	 *
+	 * @param message The associated message.
+     * @param serviceType
+     *                The class of the target service.
+     * @param filterExpression
+     *                The filter expression used for the service lookup.
+	 * @param cause The cause of this exception.
+	 */
+	public ServiceUnavailableException(
+           String message,
+           Class serviceType,
+           String filterExpression,
+           Throwable cause) {
+		super(message, UNREGISTERED, cause);
+		this.serviceType = serviceType;
+		this.filter = filterExpression;
+	}
+
+	/**
+	 * The type of the service that would have needed to be available in
 	 * order for the invocation to proceed.
 	 */
 	public Class getServiceType() {
 		return this.serviceType;
 	}
- 
+
 	/**
 	 * The filter expression that a service would have needed to satisfy in order
 	 * for the invocation to proceed.
