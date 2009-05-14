@@ -16,7 +16,9 @@
 
 package org.osgi.test.cases.blueprint.components.serviceimport;
 
+import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.osgi.framework.ServiceReference;
@@ -44,6 +46,7 @@ public class DependencyDriver extends BaseTestComponent {
     // two test services to test reference validity
     protected TestServiceOne serviceOne;
     protected TestServiceTwo serviceTwo;
+    protected Collection     refCollection;
 
     protected DependencyDriver(String componentId) {
         super(componentId);
@@ -77,10 +80,36 @@ public class DependencyDriver extends BaseTestComponent {
     }
 
     /**
+     * Inject a reference reference collection
+     *
+     * @param service The service instance
+     */
+    public void setCollection(Collection services) {
+        refCollection = services;
+    }
+
+
+    /**
+     * Retrieve the first service from an injected collection.
+     *
+     * @return The service instance, or null if the collection is
+     *         empty.
+     */
+    public TestServiceOne getCollectionService() {
+        Iterator i = refCollection.iterator();
+        if (!i.hasNext()) {
+            return null;
+        }
+        // return the first item
+        return (TestServiceOne)i.next();
+    }
+
+    /**
      * Some dependency drivers also double as listners, so have this base methods
      * available.
     */
-    protected void bind(Class serviceInterface, Map serviceProperties) {
+    protected void bind(Class serviceInterface, Map serviceProperties)
+  {
         Hashtable props = new Hashtable();
         props.putAll(serviceProperties);
         props.put("service.interface.name", serviceInterface.getName());

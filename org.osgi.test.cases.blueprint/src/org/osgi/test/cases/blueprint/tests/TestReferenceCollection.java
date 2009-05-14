@@ -24,6 +24,7 @@ import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
 import org.osgi.service.blueprint.reflect.RefCollectionMetadata;
 
 import org.osgi.test.cases.blueprint.framework.BindingListener;
+import org.osgi.test.cases.blueprint.framework.BlueprintEvent;
 import org.osgi.test.cases.blueprint.framework.ComponentAssertion;
 import org.osgi.test.cases.blueprint.framework.ComponentMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.ComponentNamePresenceValidator;
@@ -1860,6 +1861,90 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // fail the test.
         importStartEvents.addAssertion("BindUnbindListChecker", AssertionService.COMPONENT_INIT_METHOD);
 
+        controller.run();
+    }
+
+
+	/*
+	 * This tests the behavior of unregistered manadatory services and
+	 */
+	public void testUnregisteredListServiceDependency() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/unregistered_list_dependency.jar");
+        // this is added as a setup bundle because we want to ensure we don't see any
+        // waiting events.  This gets the first bundle established before we initialize.
+        controller.addSetupBundle(getWebServer()+"www/managed_one_service_export.jar");
+
+        // The export jar has been well covered already in other tests.  We'll just focus
+        // on the import listener details.
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+        // metadata issues have been well tested elsewhere.  We're going to focus on the service dynamics.
+
+        // the first property comes from the called method signature, the
+        // second should be passed to the registration listener.
+        Hashtable props1 = new Hashtable();
+        props1.put("service.interface.name", TestServiceOne.class.getName());
+        props1.put("service.listener.type", "interface");
+        props1.put("osgi.service.blueprint.compname", "ServiceOneA");
+        // this is the initial bind operation at ModuleContext creation
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, props1));
+        // this is followed by an UNBIND operation when the service goes away
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, props1));
+        // And then rebound again by the driver code.
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, props1));
+        // this indicates successful completion of the test phase
+        importStartEvents.addAssertion("UnregisteredDependencyChecker", AssertionService.COMPONENT_INIT_METHOD);
+
+
+        // there should be no wait event with this
+        importStartEvents.addFailureEvent(new BlueprintEvent("WAITING"));
+
+        // now some expected termination stuff
+        EventSet importStopEvents = controller.getStopEvents(0);
+        // the final UNBIND operation
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, props1));
+        controller.run();
+    }
+
+
+	/*
+	 * This tests the behavior of unregistered manadatory services and
+	 */
+	public void testUnregisteredSetServiceDependency() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/unregistered_set_dependency.jar");
+        // this is added as a setup bundle because we want to ensure we don't see any
+        // waiting events.  This gets the first bundle established before we initialize.
+        controller.addSetupBundle(getWebServer()+"www/managed_one_service_export.jar");
+
+        // The export jar has been well covered already in other tests.  We'll just focus
+        // on the import listener details.
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+        // metadata issues have been well tested elsewhere.  We're going to focus on the service dynamics.
+
+        // the first property comes from the called method signature, the
+        // second should be passed to the registration listener.
+        Hashtable props1 = new Hashtable();
+        props1.put("service.interface.name", TestServiceOne.class.getName());
+        props1.put("service.listener.type", "interface");
+        props1.put("osgi.service.blueprint.compname", "ServiceOneA");
+        // this is the initial bind operation at ModuleContext creation
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, props1));
+        // this is followed by an UNBIND operation when the service goes away
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, props1));
+        // And then rebound again by the driver code.
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, props1));
+        // this indicates successful completion of the test phase
+        importStartEvents.addAssertion("UnregisteredDependencyChecker", AssertionService.COMPONENT_INIT_METHOD);
+
+
+        // there should be no wait event with this
+        importStartEvents.addFailureEvent(new BlueprintEvent("WAITING"));
+
+        // now some expected termination stuff
+        EventSet importStopEvents = controller.getStopEvents(0);
+        // the final UNBIND operation
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, props1));
         controller.run();
     }
 }
