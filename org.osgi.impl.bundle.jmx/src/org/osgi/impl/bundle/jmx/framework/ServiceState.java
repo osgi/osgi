@@ -74,8 +74,11 @@ public class ServiceState extends Monitor implements ServiceStateMBean {
 	public TabularData getServices() {
 		ArrayList<OSGiService> services = new ArrayList<OSGiService>();
 		for (Bundle bundle : bc.getBundles()) {
-			for (ServiceReference ref : bundle.getRegisteredServices()) {
-				services.add(new OSGiService(ref));
+			ServiceReference[] refs = bundle.getRegisteredServices();
+			if (refs != null) {
+				for (ServiceReference ref : refs) {
+					services.add(new OSGiService(ref));
+				}
 			}
 		}
 		return OSGiService.tableFrom(services);

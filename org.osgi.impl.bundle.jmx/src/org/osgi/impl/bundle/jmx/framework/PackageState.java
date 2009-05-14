@@ -86,8 +86,11 @@ public class PackageState implements PackageStateMBean {
 	public TabularData getPackages() {
 		ArrayList<OSGiPackage> packages = new ArrayList<OSGiPackage>();
 		for (Bundle bundle : bc.getBundles()) {
-			for (ExportedPackage pkg : admin.getExportedPackages(bundle)) {
-				packages.add(new OSGiPackage(pkg));
+			ExportedPackage[] pkgs = admin.getExportedPackages(bundle);
+			if (pkgs != null) {
+				for (ExportedPackage pkg : pkgs) {
+					packages.add(new OSGiPackage(pkg));
+				} 
 			}
 		}
 		return OSGiPackage.tableFrom(packages);

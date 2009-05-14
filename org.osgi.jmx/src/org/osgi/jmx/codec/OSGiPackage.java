@@ -19,7 +19,7 @@ package org.osgi.jmx.codec;
 import static org.osgi.jmx.codec.Util.LONG_ARRAY_TYPE;
 import static org.osgi.jmx.codec.Util.LongArrayFrom;
 import static org.osgi.jmx.codec.Util.longArrayFrom;
-import static org.osgi.jmx.framework.PackageStateMBean.PACKAGE_NAME;
+import static org.osgi.jmx.framework.PackageStateMBean.*;
 
 import java.util.ArrayList;
 
@@ -131,7 +131,7 @@ public class OSGiPackage {
 	private static TabularType createPackageTableType() {
 		try {
 			return new TabularType("Packages", "The table of all packages",
-					PACKAGE, new String[] { PACKAGE_NAME });
+					PACKAGE, new String[] { BUNDLE_IDENTIFIER, PACKAGE_NAME });
 		} catch (OpenDataException e) {
 			e.printStackTrace();
 			return null;
