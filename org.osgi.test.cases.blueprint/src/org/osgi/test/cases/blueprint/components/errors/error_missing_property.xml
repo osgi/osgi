@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
+    <description>
+        This is testing that the bean setters and getters are following appropriate
+        JavaBean protocols with respect to types.  If the bean has both a getter and a
+        setter for a given name, then JavaBean protocols require that the getter and the
+        setter return and take the same type.  The badBean property has conflicting type
+        values.
+    </description>
+
    <!-- inject a null into a primitive type target -->
    <bean id="compPrimInteger" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
        <property name="badBean" value="123"/>
