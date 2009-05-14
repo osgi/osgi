@@ -49,11 +49,11 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.jar.Manifest;
 
-import org.eclipse.osgi.internal.signedcontent.DNChainMatching;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
+import org.osgi.test.cases.deploymentadmin.mo.tbc.DNChainMatching;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.DeploymentmoConstants;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.DeploymentmoTestControl;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.SessionWorker;

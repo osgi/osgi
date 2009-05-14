@@ -133,17 +133,10 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
 		
 		deploymentAdmin = (DeploymentAdmin) bc.getService(bc.getServiceReference(DeploymentAdmin.class.getName()));
 
-	    try {
-	      //install the helper bundle
-	      installBundle("/www/DNChainMatching.jar");
-	    } catch (Exception e) {
-	      e.printStackTrace();
-	      log("# Failed to install bundle DNChainMatching.jar");
-	    }
 		try {
 			installBundle("/www/tb1.jar");
 		} catch (Exception e) {
-			log("# Failed to install bundle tb1");
+			fail("# Failed to install bundle tb1", e);
 		}
 		ServiceReference tb1Ref = bc.getServiceReference(TB1Service.class.getName());
 		
@@ -176,7 +169,7 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
             session.setNodeAcl(DeploymentmoConstants.DEPLOYMENT,new Acl(new String[] {"*"}, new int[] {Acl.ALL_PERMISSION }));
             session.close();
         } catch (Exception e) {
-			log("# Failed to set the acl");
+			fail("# Failed to set the acl", e);
         }
         
         for (int i=0;i<DeploymentmoConstants.MAP_CODE_TO_ARTIFACT.length;i++){
@@ -553,7 +546,7 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
 		}
 		catch (Exception e) {
 			this.fail("Unexpected exception at prepare(installRemoteAlertSender). "
-					+ e.getClass());			
+					+ e.getClass(), e);			
 		}				
 	}
 	

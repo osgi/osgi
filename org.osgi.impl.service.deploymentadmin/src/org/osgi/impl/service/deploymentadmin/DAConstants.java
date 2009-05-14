@@ -44,7 +44,7 @@ public class DAConstants {
     // used system properties 
     public static final String KEYSTORE_TYPE   	    = "org.osgi.impl.service.deploymentadmin.keystore.type";
     public static final String KEYSTORE_PATH   	    = "org.osgi.impl.service.deploymentadmin.keystore.file";
-    public static final String KEYSTORE_FW_URL	    = "osgi.framework.keystore";
+    public static final String	KEYSTORE_FW_URL					= "org.osgi.framework.trust.repositories";
     public static final String KEYSTORE_PWD    	    = "org.osgi.impl.service.deploymentadmin.keystore.pwd";
     public static final String DELIVERED_AREA       = "org.osgi.impl.service.deploymentadmin.deliveredarea";
     public static final String USER_PROMPT          = "org.osgi.impl.service.deploymentadmin.userprompt";

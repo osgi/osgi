@@ -52,10 +52,10 @@ import java.io.File;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
-import org.eclipse.osgi.internal.signedcontent.DNChainMatching;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
+import org.osgi.test.cases.deploymentadmin.mo.tbc.DNChainMatching;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.DeploymentmoConstants;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.DeploymentmoTestControl;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.SessionWorker;
@@ -635,7 +635,8 @@ public class DownloadAndInstallAndActivate implements TestInterface {
         } catch (Exception e) {
           e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
         	if (!nodeId.equals("")) {
         		tbc.executeRemoveNode(session,DeploymentmoConstants.getDeployedOperationsRemove(nodeId));
