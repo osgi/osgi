@@ -44,7 +44,7 @@ public interface PermissionManagerMBean {
 	String[] getPermissions(String location) throws IOException;
 
 	/**
-	 * Set the default permissions assiged to bundle locations that have no
+	 * Set the default permissions assigned to bundle locations that have no
 	 * assigned permissions
 	 * 
 	 * @param encodedPermissions
@@ -53,6 +53,16 @@ public interface PermissionManagerMBean {
 	 *             if the operation fails
 	 */
 	void setDefaultPermissions(String[] encodedPermissions) throws IOException;
+	
+	/**
+	 * Answer the list of encoded permissions representing the default permissions
+	 * assigned to bundle locations that have no assigned permissions
+	 *
+	 * @return the array of String encoded permissions
+	 * @throws IOException
+	 *             if the operation fails
+	 */
+	String[] getDefaultPermissions()  throws IOException;
 
 	/**
 	 * Set the permissions on the bundle specified by the bundle location

@@ -82,6 +82,25 @@ public class PermissionManager implements PermissionManagerMBean {
 	 * (non-Javadoc)
 	 * 
 	 * @see
+	 * org.osgi.jmx.compendium.PermissionManagerMBean#getDefaultPermissions()
+	 */
+	public String[] getDefaultPermissions() throws IOException {
+		PermissionInfo[] permissions = admin.getDefaultPermissions();
+		if (permissions == null) {
+			return null;
+		}
+		String[] encodedPermissions = new String[permissions.length];
+		int i = 0;
+		for (PermissionInfo permission : permissions) {
+			encodedPermissions[i++] = permission.getEncoded();
+		}
+		return encodedPermissions;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
 	 * org.osgi.jmx.compendium.PermissionManagerMBean#setPermissions(java.lang
 	 * .String, java.lang.String[])
 	 */
