@@ -12,9 +12,6 @@
     <!-- This gets both a ServiceManager and a reference collection injected -->
    <bean id="NullReferenceChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.NullReferenceList" init-method="init">
        <argument value="NullReferenceChecker"/>
-       <property name="serviceManager">
-           <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
-       </property>
        <property name="list">
            <ref-list interface="org.osgi.test.cases.blueprint.services.TestServiceOneXXXX" availability="optional" member-type="service-instance">
                <listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
