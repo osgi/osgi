@@ -53,6 +53,7 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 
 -runproperties = report=true, \
 	osgi.compatibility.bootdelegation=false, \
+	osgi.resolverMode=strict, \
 	org.osgi.framework.security=osgi, \
 	org.osgi.framework.trust.repositories=${build}/keystore
 	
