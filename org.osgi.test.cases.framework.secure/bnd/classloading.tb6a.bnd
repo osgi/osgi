@@ -1,0 +1,7 @@
+-nouses=true
+Bundle-Name:                             ${p}.classloading.tb6a
+Bundle-SymbolicName:                     ${p}.classloading.tb6a
+Bundle-Version:                          4
+Private-Package:                         ${p}.classloading.tb6a
+
+Export-Package: ${p}.classloading.exports.security;version="1.0.0";-noimport:=true

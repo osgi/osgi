@@ -1,0 +1,8 @@
+-nouses=true
+Bundle-Name: ${p}.classloading.tb16d
+Bundle-SymbolicName: ${p}.classloading.tb16d
+Bundle-Version: 1
+Bundle-Activator: ${p}.classloading.tb16d.Activator
+Require-Bundle: ${p}.classloading.tb16b; resolution:="mandatory" 
+Private-Package:                         ${p}.classloading.tb16d
+Include-Resource: {OSGI-INF/permissions.perm=perms/classloading.tb16d.perm}
