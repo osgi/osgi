@@ -29,9 +29,6 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class TestLib {
-	public TestLib() {
-	}
-
 	public String version() throws IOException {
 		Properties props = new Properties();
 		props.load(getClass().getResourceAsStream("TestLib.properties"));

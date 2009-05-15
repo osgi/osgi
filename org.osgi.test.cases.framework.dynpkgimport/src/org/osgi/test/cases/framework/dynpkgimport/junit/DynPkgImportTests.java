@@ -23,41 +23,39 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-package org.osgi.test.cases.framework.dynpkgimport.tbc;
+package org.osgi.test.cases.framework.dynpkgimport.junit;
 
-import org.osgi.framework.*;
-import org.osgi.service.packageadmin.*;
-import org.osgi.test.cases.util.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.FrameworkEvent;
+import org.osgi.framework.FrameworkListener;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.packageadmin.PackageAdmin;
+import org.osgi.test.cases.framework.dynpkgimport.exported.TestService;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
-public class DynPkgImportControl extends DefaultTestBundleControl implements
+public class DynPkgImportTests extends DefaultTestBundleControl implements
 		FrameworkListener {
-	PackageAdmin	pa	= null;
+	private PackageAdmin	pa	= null;
 
-	public boolean checkPrerequisites() {
-		return true;
-	}
-
-	public void prepare() throws Exception {
+	protected void setUp() throws Exception {
 		pa = (PackageAdmin) getService(PackageAdmin.class);
 		getContext().addFrameworkListener(this);
 	}
 
-	public void unprepare() throws Exception {
-	}
-
-	public void setState() throws Exception {
+	protected void tearDown() throws Exception {
 		pa.refreshPackages(null);
+		ungetService(pa);
 		Thread.sleep(2000);
-	}
-
-	public void clearState() throws Exception {
 	}
 
 	public void testInitial() throws Exception {
 		try {
-			Bundle tlx = getContext().installBundle(getWebServer() + "tlx.jar");
+			Bundle tlx = getContext().installBundle(
+					getWebServer() + "dynpkgimport.tlx.jar");
 			tlx.start();
-			Bundle tb0 = getContext().installBundle(getWebServer() + "tb0.jar");
+			Bundle tb0 = getContext().installBundle(
+					getWebServer() + "dynpkgimport.tb0.jar");
 			tb0.start();
 			ServiceReference tsR = getContext().getServiceReference(
 					TestService.class.getName());
@@ -88,9 +86,11 @@ public class DynPkgImportControl extends DefaultTestBundleControl implements
 
 	public void testBasicImport1() throws Exception {
 		try {
-			Bundle tlx = getContext().installBundle(getWebServer() + "tlx.jar");
+			Bundle tlx = getContext().installBundle(
+					getWebServer() + "dynpkgimport.tlx.jar");
 			tlx.start();
-			Bundle tb1 = getContext().installBundle(getWebServer() + "tb1.jar");
+			Bundle tb1 = getContext().installBundle(
+					getWebServer() + "dynpkgimport.tb1.jar");
 			tb1.start();
 			ServiceReference tsR = getContext().getServiceReference(
 					TestService.class.getName());
@@ -115,9 +115,11 @@ public class DynPkgImportControl extends DefaultTestBundleControl implements
 
 	public void testBasicImport2() throws Exception {
 		try {
-			Bundle tlx = getContext().installBundle(getWebServer() + "tlx.jar");
+			Bundle tlx = getContext().installBundle(
+					getWebServer() + "dynpkgimport.tlx.jar");
 			tlx.start();
-			Bundle tb2 = getContext().installBundle(getWebServer() + "tb2.jar");
+			Bundle tb2 = getContext().installBundle(
+					getWebServer() + "dynpkgimport.tb2.jar");
 			tb2.start();
 			ServiceReference tsR = getContext().getServiceReference(
 					TestService.class.getName());
@@ -141,9 +143,11 @@ public class DynPkgImportControl extends DefaultTestBundleControl implements
 	}
 
 	public void testPrecedence() throws Exception {
-		Bundle tlx = getContext().installBundle(getWebServer() + "tlx.jar");
+		Bundle tlx = getContext().installBundle(
+				getWebServer() + "dynpkgimport.tlx.jar");
 		tlx.start();
-		Bundle tb3 = getContext().installBundle(getWebServer() + "tb3.jar");
+		Bundle tb3 = getContext().installBundle(
+				getWebServer() + "dynpkgimport.tb3.jar");
 		tb3.start();
 		ServiceReference tsR = getContext().getServiceReference(
 				TestService.class.getName());
@@ -162,13 +166,15 @@ public class DynPkgImportControl extends DefaultTestBundleControl implements
 	}
 
 	public void testUninstall() throws Exception {
-		Bundle tlx = getContext().installBundle(getWebServer() + "tlx.jar");
+		Bundle tlx = getContext().installBundle(
+				getWebServer() + "dynpkgimport.tlx.jar");
 		tlx.start();
 		tlx.stop();
 		tlx.uninstall();
 		pa.refreshPackages(null);
 		Thread.sleep(2000);
-		Bundle tb2 = getContext().installBundle(getWebServer() + "tb2.jar");
+		Bundle tb2 = getContext().installBundle(
+				getWebServer() + "dynpkgimport.tb2.jar");
 		tb2.start();
 		ServiceReference tsR = getContext().getServiceReference(
 				TestService.class.getName());

@@ -23,17 +23,8 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-package org.osgi.test.cases.framework.dynpkgimport;
+package org.osgi.test.cases.framework.dynpkgimport.exported;
 
-import org.osgi.test.cases.util.director.DefaultTestCase;
-
-
-/**
- * 
- *
- * TODO Add Javadoc comment for this type.
- * @testcase org.osgi.framework
- * @version $Revision$
- */
-public class DynPkgImportTestCase extends DefaultTestCase {
+public interface TestService {
+	void test1() throws Exception;
 }

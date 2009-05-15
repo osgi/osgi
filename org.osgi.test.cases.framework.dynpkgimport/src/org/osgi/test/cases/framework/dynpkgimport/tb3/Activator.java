@@ -25,10 +25,14 @@
  */
 package org.osgi.test.cases.framework.dynpkgimport.tb3;
 
-import java.util.*;
-import org.osgi.framework.*;
-import org.osgi.test.cases.framework.dynpkgimport.tbc.*;
-import org.osgi.test.cases.framework.dynpkgimport.tlx.*;
+import java.util.Dictionary;
+import java.util.Hashtable;
+
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.test.cases.framework.dynpkgimport.exported.TestService;
+import org.osgi.test.cases.framework.dynpkgimport.tlx.TestLib;
 
 public class Activator implements BundleActivator, TestService {
 	ServiceRegistration	testServiceReg	= null;
