@@ -5,7 +5,6 @@ build.core.tests = \
     org.osgi.test.cases.framework, \
     org.osgi.test.cases.framework.secure, \
     org.osgi.test.cases.framework.div, \
-    org.osgi.test.cases.framework.dynpkgimport, \
     org.osgi.test.cases.framework.lifecycle, \
     org.osgi.test.cases.framework.syncbundlelistener, \
     org.osgi.test.cases.packageadmin.tc1, \
