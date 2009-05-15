@@ -1,0 +1,8 @@
+-nouses=true
+Bundle-Name:                             ${p}.dynpkgimport.tb2
+Bundle-SymbolicName:                     ${p}.dynpkgimport.tb2
+Bundle-Version: 1.0.0
+Bundle-Activator: ${p}.dynpkgimport.tb2.Activator
+Export-Package:                         ${p}.dynpkgimport.tb2;-noimport:=true
+Import-Package: org.osgi.framework, ${p}.dynpkgimport.exported
+DynamicImport-Package: ${p}.dynpkgimport.tlx

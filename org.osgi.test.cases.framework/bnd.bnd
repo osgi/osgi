@@ -5,7 +5,8 @@ Private-Package						= org.osgi.test.support.*, \
 	${p}.junit.*
 	
 Export-Package						= \
-	${p}.classpath.exported
+	${p}.classpath.exported, \
+	${p}.dynpkgimport.exported
 
 Include-Resource = \
 	activationpolicy.tbchain1.jar, \
@@ -117,6 +118,11 @@ Include-Resource = \
 	classpath.tb3.jar, \
 	classpath.tb4a.jar, \
 	classpath.tb4b.jar, \
+	dynpkgimport.tb0.jar, \
+	dynpkgimport.tb1.jar, \
+	dynpkgimport.tb2.jar, \
+	dynpkgimport.tb3.jar, \
+	dynpkgimport.tlx.jar, \
 	filter.tb1.jar, \
 	launch.tb1.jar, \
 	launch.tb2.jar, \

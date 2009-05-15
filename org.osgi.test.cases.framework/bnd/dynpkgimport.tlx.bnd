@@ -1,0 +1,6 @@
+-nouses=true
+Bundle-Name:                             ${p}.dynpkgimport.tlx
+Bundle-SymbolicName:                     ${p}.dynpkgimport.tlx
+Bundle-Version: 1.0.0
+Export-Package:                         ${p}.dynpkgimport.tlx;-noimport:=true
+Include-Resource = ${replace;${p}.dynpkgimport.tlx;\\.;/}/TestLib.properties=resources/dynpkgimport.tlx/TestLib.properties

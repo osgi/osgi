@@ -1,0 +1,9 @@
+-nouses=true
+Bundle-Name:                             ${p}.dynpkgimport.tb3
+Bundle-SymbolicName:                     ${p}.dynpkgimport.tb3
+Bundle-Version: 1.0.0
+Bundle-Activator: ${p}.dynpkgimport.tb3.Activator
+Export-Package:                         ${p}.dynpkgimport.tb3;${p}.dynpkgimport.tlx;-noimport:=true
+Import-Package: org.osgi.framework, ${p}.dynpkgimport.exported
+DynamicImport-Package: ${p}.dynpkgimport.tlx
+Include-Resource = ${replace;${p}.dynpkgimport.tlx;\\.;/}/TestLib.properties=resources/dynpkgimport.tb3/TestLib.properties
