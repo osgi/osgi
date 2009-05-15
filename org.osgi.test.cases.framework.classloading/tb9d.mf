@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Bundle-Name: ${p}.tb9d
-Bundle-SymbolicName: ${p}.tb9d
-Bundle-Version: 4
-Bundle-ClassPath: .
-$(EXPORT-PACKAGE)
-$(IMPORT-PACKAGE)
-$(PRIVATE-PACKAGE)
-

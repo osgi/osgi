@@ -1,0 +1,6 @@
+-nouses=true
+Bundle-Name: ${p}.tb15e
+Bundle-SymbolicName: ${p}.tb15e
+Bundle-Version: 1
+Import-Package: ${p}.exports.service;version="1.0.0";specification-version="1.0.0"
+Private-Package:                         ${p}.tb15e

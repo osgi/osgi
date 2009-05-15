@@ -1,3 +1,0 @@
-$(PACKAGEPERMISSIONS)
-(org.osgi.framework.ServicePermission "*" "register,get")
-(org.osgi.test.cases.framework.classloading.exp.security.SomePermission "*" "*")

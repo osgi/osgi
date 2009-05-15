@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Bundle-Name: ${p}.tb13d
-Bundle-SymbolicName: ${p}.tb13d
-Bundle-ManifestVersion: 2
-Bundle-Version: 1
-Export-Package: ${p}.exports.service;uses:="resources"
-$(PRIVATE-PACKAGE)
-

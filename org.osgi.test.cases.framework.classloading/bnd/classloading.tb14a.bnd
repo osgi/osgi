@@ -1,0 +1,7 @@
+-nouses=true
+Bundle-Name: ${p}.tb14a
+Bundle-SymbolicName: ${p}.tb14a
+Bundle-Version: 1
+Bundle-ManifestVersion: 3
+Bundle-Activator: ${p}.tb14a.Activator
+Private-Package:                         ${p}.tb14a

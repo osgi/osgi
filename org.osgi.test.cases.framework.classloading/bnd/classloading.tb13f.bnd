@@ -1,0 +1,6 @@
+-nouses=true
+Bundle-Name: ${p}.tb13f
+Bundle-SymbolicName: ${p}.tb13f
+Bundle-Version: 1
+Import-Package: ${p}.exports.security, resources
+Private-Package:                         ${p}.tb13f

@@ -1,0 +1,7 @@
+Manifest-Version: 1.0                                     
+Bundle-ManifestVersion: 2                                       
+Bundle-Name: ${p}.tb17c
+Bundle-SymbolicName: ${p}.tb17c
+Bundle-Version: 1.0.1
+DynamicImport-Package: resources;bundle-symbolic-name="${p}.tb8b",resources;bundle-symbolic-name="${p}.tb8a"
+

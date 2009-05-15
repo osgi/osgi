@@ -1,0 +1,6 @@
+-nouses=true
+Bundle-Name: ${p}.tb17b
+Bundle-SymbolicName: ${p}.tb17b
+Bundle-Version: 1
+DynamicImport-Package: ${p}.exports.*,resources;version="0.0.0"
+Private-Package:                         ${p}.tb17b

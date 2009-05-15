@@ -1,0 +1,8 @@
+-nouses=true
+Bundle-Name:                             ${p}.tb1b
+Bundle-SymbolicName:                     ${p}.tb1b
+Bundle-Version:                          4.2
+Private-Package:                         ${p}.tb1b
+
+Bundle-Activator: ${p}.tb1b.Activator
+Import-Package: ${p}.exports.service;version="1.0.0", org.osgi.framework

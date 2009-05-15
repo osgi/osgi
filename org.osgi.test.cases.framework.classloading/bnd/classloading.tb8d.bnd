@@ -1,0 +1,15 @@
+-nouses=true
+Bundle-Name:                             ${p}.tb8d
+Bundle-SymbolicName:                     ${p}.tb8d
+Bundle-Version:                          4
+Private-Package:                         ${p}.tb8d, \
+                 java.lang;-split-package:=first, \
+                 javax.xml.parsers;-split-package:=first
+
+Bundle-ClassPath: .
+Import-Package: resources;bundle-symbolic-name=${p}.tb8a
+Require-Bundle: ${p}.tb8b
+DynamicImport-Package: resources;bundle-symbolic-name=${p}.tb8c
+Include-Resource = resources/tb8a-resource.txt=resources/classloading.tb8d/tb8a-resource.txt, \
+                   resources/tb8b-resource.txt=resources/classloading.tb8d/tb8b-resource.txt, \
+                   resources/tb8c-resource.txt=resources/classloading.tb8d/tb8c-resource.txt

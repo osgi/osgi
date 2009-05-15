@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Bundle-Name: ${p}.tb17j
-Bundle-SymbolicName: ${p}.tb17j
-Bundle-ManifestVersion: 2
-Bundle-Version: 1
-Import-Package: ${p}.exports.service;bundle-symbolic-name="${p}.tb17i"
-$(EXPORT-PACKAGE)
-$(PRIVATE-PACKAGE)
-

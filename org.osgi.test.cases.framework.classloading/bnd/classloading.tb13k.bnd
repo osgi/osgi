@@ -1,0 +1,6 @@
+-nouses=true
+Bundle-Name: ${p}.tb13k
+Bundle-SymbolicName: ${p}.tb13k
+Bundle-Version: 1
+Export-Package: ${p}.exports.service;version="1.0.0";specification-version="1.0.0";-noimport:=true
+Private-Package:                         ${p}.tb13k
