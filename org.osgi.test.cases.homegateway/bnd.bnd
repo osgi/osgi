@@ -10,4 +10,8 @@ Private-Package: ${p}
 
 Test-Cases = ${classes;extending;*TestCase}
 
--runbundles = org.osgi.impl.service.homegateway; version=project
+-runbundles = \
+    org.apache.felix.configadmin, \
+    org.osgi.impl.service.homegateway; version=project, \
+    org.osgi.impl.service.dmt; version=project, \
+    osgi;version=4.1    
