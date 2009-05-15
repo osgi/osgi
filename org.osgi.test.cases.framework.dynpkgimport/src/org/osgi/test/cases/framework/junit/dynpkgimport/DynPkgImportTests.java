@@ -23,7 +23,7 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-package org.osgi.test.cases.framework.dynpkgimport.junit;
+package org.osgi.test.cases.framework.junit.dynpkgimport;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
