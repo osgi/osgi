@@ -3,11 +3,11 @@ Private-Package: ${p}
 
 -buildpath = \
 	osgi; version=4.1, \
-	org.osgi.service.router; version=project, \
+	org.osgi.service.homegateway; version=project, \
 	ee.j2se; version=1.4, \
 	com.springsource.junit
 	
 
 Test-Cases = ${classes;extending;*TestCase}
 
--runbundles = org.osgi.impl.service.router; version=project
+-runbundles = org.osgi.impl.service.homegateway; version=project
