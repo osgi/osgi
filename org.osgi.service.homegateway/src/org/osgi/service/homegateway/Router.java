@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.service.router;
+package org.osgi.service.homegateway;
 
 public interface Router {
 
