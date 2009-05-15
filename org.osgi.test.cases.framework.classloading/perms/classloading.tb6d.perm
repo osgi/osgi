@@ -1,3 +1,0 @@
-${permissions;packages}
-(org.osgi.framework.ServicePermission "*" "register,get")
-(${p}.exp.security.SomePermission "*" "*")

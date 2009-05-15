@@ -1,7 +1,0 @@
--nouses=true
-Bundle-Name: ${p}.tb17h
-Bundle-SymbolicName: ${p}.tb17h
-Bundle-ManifestVersion: 2
-Bundle-Version: 1
-DynamicImport-Package: ${p}.exports.listener;version="1.0.0";myattribute="abc"
-Private-Package:                         ${p}.tb17h

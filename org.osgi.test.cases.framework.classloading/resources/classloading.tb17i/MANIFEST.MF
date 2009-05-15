@@ -1,8 +1,0 @@
-Manifest-Version: 1.0                                     
-Bundle-ManifestVersion: 2                                       
-Bundle-Name: ${p}.tb17i
-Bundle-SymbolicName: ${p}.tb17i
-Bundle-Version: 1
-DynamicImport-Package: ${p}.exports.service
-Export-Package: ${p}.exports.service
-

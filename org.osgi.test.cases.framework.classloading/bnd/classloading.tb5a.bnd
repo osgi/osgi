@@ -1,8 +1,0 @@
--nouses=true
-Bundle-Name:                             ${p}.tb5a
-Bundle-SymbolicName:                     ${p}.tb5a
-Bundle-Version:                          4
-Private-Package:                         ${p}.tb5a
-
-Bundle-Activator: ${p}.tb5a.Activator
-Import-Package: ${p}.exports.service;version="2.0.0", ${p}.exports.listener, org.osgi.framework

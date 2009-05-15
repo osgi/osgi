@@ -1,6 +1,0 @@
--nouses=true
-Bundle-Name: ${p}.tb14h
-Bundle-SymbolicName: ${p}.tb14h
-Bundle-Version: 1
-Bundle-Activator: ${p}.tb14a.Activator
-Private-Package:                         ${p}.tb14h

@@ -1,8 +1,0 @@
--nouses=true
-Bundle-Name:                             ${p}.tb1a
-Bundle-SymbolicName:                     ${p}.tb1a
-Bundle-Version:                          4.2
-Private-Package:                         ${p}.tb1a
-
-Bundle-Activator: ${p}.tb1a.Activator
-Import-Package: ${p}.exports.service;version="1.0.0", org.osgi.framework

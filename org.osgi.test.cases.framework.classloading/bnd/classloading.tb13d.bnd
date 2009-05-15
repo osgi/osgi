@@ -1,6 +1,0 @@
--nouses=true
-Bundle-Name: ${p}.tb13d
-Bundle-SymbolicName: ${p}.tb13d
-Bundle-Version: 1
-Export-Package: ${p}.exports.service;uses:="resources";-noimport:=true
-Private-Package:                         ${p}.tb13d

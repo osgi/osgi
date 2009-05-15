@@ -1,7 +1,0 @@
--nouses=true
-Bundle-Name:                             ${p}.tb7b
-Bundle-SymbolicName:                     ${p}.tb7b
-Bundle-Version:                          4
-Private-Package:                         ${p}.tb7b
-
-Export-Package: java.lang;-split-package:=first;-noimport:=true

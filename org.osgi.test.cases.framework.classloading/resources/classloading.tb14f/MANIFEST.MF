@@ -1,7 +1,0 @@
-Manifest-Version: 1.0                                     
-Bundle-ManifestVersion: 2                                       
-Bundle-Name: ${p}.tb14f
-Bundle-SymbolicName: ${p}.tb14f; fragment-attach:="none"
-Bundle-Version: invalid
-Bundle-Activator: ${p}.tb14a.Activator
-

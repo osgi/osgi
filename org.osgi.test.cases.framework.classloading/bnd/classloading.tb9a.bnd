@@ -1,8 +1,0 @@
--nouses=true
-Bundle-Name:                             ${p}.tb9a
-Bundle-SymbolicName:                     ${p}.tb9a
-Bundle-Version:                          4
-Private-Package:                         ${p}.tb9a
-
-Export-Package: resources;-noimport:=true
-Include-Resource = resources/tb9a-resource.txt=resources/classloading.tb9a/tb9a-resource.txt

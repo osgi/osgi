@@ -1,6 +1,0 @@
--nouses=true
-Bundle-Name: ${p}.tb14b
-Bundle-SymbolicName: ${p}.tb14b;fragment-attachment:="always";fragment-attachment:="never"
-Bundle-Version: 1
-Bundle-Activator: ${p}.tb14a.Activator
-Private-Package:                         ${p}.tb14a

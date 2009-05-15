@@ -1,7 +1,0 @@
--nouses=true
-Bundle-Name:                             ${p}.tb6a
-Bundle-SymbolicName:                     ${p}.tb6a
-Bundle-Version:                          4
-Private-Package:                         ${p}.tb6a
-
-Export-Package: ${p}.exports.security;version="1.0.0";-noimport:=true

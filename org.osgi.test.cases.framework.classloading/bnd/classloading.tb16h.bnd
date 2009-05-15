@@ -1,8 +1,0 @@
--nouses=true
-Bundle-Name: ${p}.tb16h
-Bundle-SymbolicName: ${p}.tb16h
-Bundle-Version: 1
-Bundle-Activator: ${p}.tb16h.Activator
-Require-Bundle: ${p}.tb13b
-Import-Package: org.osgi.framework, resources
-Private-Package:                         ${p}.tb16h

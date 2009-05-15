@@ -1,8 +1,0 @@
--nouses=true
-Bundle-Name:                             ${p}.tb6b
-Bundle-SymbolicName:                     ${p}.tb6b
-Bundle-Version:                          4
-Private-Package:                         ${p}.tb6b
-
-Export-Package: ${p}.exports.security;version="2.0.0";-noimport:=true
-Include-Resource = tb6b.properties=resources/classloading.tb6b/tb6b.properties

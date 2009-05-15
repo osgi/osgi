@@ -1,8 +1,0 @@
--nouses=true
-Bundle-Name: ${p}.tb16e
-Bundle-SymbolicName: ${p}.tb16e
-Bundle-Version: 1
-Bundle-Activator: ${p}.tb16e.Activator
-Require-Bundle: ${p}.tb16b; resolution:="optional"
-Private-Package:                         ${p}.tb16e
-

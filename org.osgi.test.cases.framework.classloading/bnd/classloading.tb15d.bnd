@@ -1,6 +1,0 @@
--nouses=true
-Bundle-Name: ${p}.tb15d
-Bundle-SymbolicName: ${p}.tb15d
-Bundle-Version: 1
-Import-Package: ${p}.exports.service;resolution:="optional"
-Private-Package:                         ${p}.tb15d

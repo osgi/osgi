@@ -1,9 +1,0 @@
--nouses=true
-Bundle-Name:                             ${p}.tb9d
-Bundle-SymbolicName:                     ${p}.tb9d
-Bundle-Version:                          4
-Private-Package:                         ${p}.tb9d
-
-Bundle-ClassPath: .
-Include-Resource = resources/tb9d-resource.txt=resources/classloading.tb9d/tb9d-resource.txt
-

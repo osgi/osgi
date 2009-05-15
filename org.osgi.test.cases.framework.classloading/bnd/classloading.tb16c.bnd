@@ -1,9 +1,0 @@
--nouses=true
-Bundle-Name: ${p}.tb16c
-Bundle-SymbolicName: ${p}.tb16c
-Bundle-Version: 1
-Bundle-Activator: ${p}.tb16c.Activator
-Export-Package: test.package.resources;-noimport:=true
-Require-Bundle: ${p}.tb16a
-Private-Package:                         ${p}.tb16c
-Include-Resource = test/package/resources/resource.txt=resources/classloading.tb16c/resource.txt

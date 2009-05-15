@@ -1,8 +1,0 @@
--nouses=true
-Bundle-Name:                             ${p}.tb4d
-Bundle-SymbolicName:                     ${p}.tb4d
-Bundle-Version:                          4
-Private-Package:                         ${p}.tb4d
-
-Bundle-Activator: ${p}.tb4d.Activator
-Import-Package: ${p}.exports.service, org.osgi.framework

@@ -1,7 +1,0 @@
--nouses=true
-Bundle-Name: ${p}.tb13a
-Bundle-SymbolicName: ${p}.tb13a
-Bundle-Version: 1
-Export-Package: ${p}.exports.service;${p}.exports.listener;include:="*";version="0.0.0";-noimport:=true, \
-	${p}.exports.service;version="1.0.0";-noimport:=true
-Private-Package:                         ${p}.tb13a

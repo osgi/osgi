@@ -1,7 +1,0 @@
-Manifest-Version: 1.0                                     
-Bundle-ManifestVersion: 2                                       
-Bundle-Name: ${p}.tb17f
-Bundle-SymbolicName: ${p}.tb17f
-Bundle-Version: 1
-DynamicImport-Package: .
-

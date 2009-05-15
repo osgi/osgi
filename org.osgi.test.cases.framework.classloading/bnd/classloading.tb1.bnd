@@ -1,7 +1,0 @@
--nouses=true
-Bundle-Name:                             ${p}.tb1
-Bundle-SymbolicName:                     ${p}.tb1
-Bundle-Version:                          4
-Private-Package:                         ${p}.tb1
-
-Export-Package: ${p}.exports.service;version="1.0.0";-noimport:=true

@@ -1,6 +1,0 @@
--nouses=true
-Bundle-Name: ${p}.tb13o
-Bundle-SymbolicName: ${p}.tb13o
-Bundle-Version: 1
-Import-Package: ${p}.exports.listener
-Private-Package:                         ${p}.tb13o

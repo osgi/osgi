@@ -1,9 +1,0 @@
--nouses=true
-Bundle-Name:                             ${p}.tb3
-Bundle-SymbolicName:                     ${p}.tb3
-Bundle-Version:                          4
-Private-Package:                         ${p}.tb3
-Export-Package: ${p}.exports.service;version="3.0.0";-noimport:=true
-
-
-

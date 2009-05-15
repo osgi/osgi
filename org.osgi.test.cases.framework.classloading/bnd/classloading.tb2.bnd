@@ -1,9 +1,0 @@
--nouses=true
-Bundle-Name:                             ${p}.tb2
-Bundle-SymbolicName:                     ${p}.tb2
-Bundle-Version:                          4
-Private-Package:                         ${p}.tb2
-Export-Package: ${p}.exports.service;version="2.0.0";-noimport:=true
-
-
-

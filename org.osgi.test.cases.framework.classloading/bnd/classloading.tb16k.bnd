@@ -1,9 +1,0 @@
--nouses=true
-Bundle-Name: ${p}.tb16a
-Bundle-SymbolicName: ${p}.tb16a
-Bundle-Version: 1
-Bundle-Activator: ${p}.tb16a.Activator
-Require-Bundle: ${p}.tb16b;visibility:="private"
-Private-Package:                         ${p}.tb16a
-Include-Resource = test/package/resources/resource.txt=resources/classloading.tb16a/resource.txt, \
-					test/package/resources/tb16a-resource.txt=resources/classloading.tb16a/tb16a-resource.txt

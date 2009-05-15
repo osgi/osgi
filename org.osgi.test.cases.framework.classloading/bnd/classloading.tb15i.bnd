@@ -1,6 +1,0 @@
--nouses=true
-Bundle-Name: ${p}.tb15i
-Bundle-SymbolicName: ${p}.tb15i
-Bundle-Version: 1
-Import-Package: resources
-Private-Package:                         ${p}.tb15i

@@ -1,8 +1,0 @@
--nouses=true
-Bundle-Name:                             ${p}.tb6c
-Bundle-SymbolicName:                     ${p}.tb6c
-Bundle-Version:                          4
-Private-Package:                         ${p}.tb6c
-
-Bundle-Activator: ${p}.tb6c.Activator
-Import-Package: ${p}.exports.service, ${p}.exports.security;version="1.0.0", org.osgi.framework

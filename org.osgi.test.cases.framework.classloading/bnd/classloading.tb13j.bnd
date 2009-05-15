@@ -1,6 +1,0 @@
--nouses=true
-Bundle-Name: ${p}.tb13j
-Bundle-SymbolicName: ${p}.tb13j
-Bundle-Version: 1
-Export-Package: ${p}.exports.listener;include:="ServiceListener*";exclude:="All*";-noimport:=true
-Private-Package:                         ${p}.tb13j
