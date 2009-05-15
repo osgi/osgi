@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.discovery;
+package org.osgi.service.remoteserviceadmin;
 
 /**
  * Interface of trackers for discovered remote services.

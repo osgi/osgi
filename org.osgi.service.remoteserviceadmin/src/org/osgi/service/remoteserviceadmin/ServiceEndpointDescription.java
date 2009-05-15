@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.discovery;
+package org.osgi.service.remoteserviceadmin;
 
 import java.net.URI;
 import java.util.Collection;

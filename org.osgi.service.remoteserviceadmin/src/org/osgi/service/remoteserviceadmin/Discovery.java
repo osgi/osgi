@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.discovery;
+package org.osgi.service.remoteserviceadmin;
 
 /**
  * Every Discovery Provider registers a service implementing this interface.
