@@ -1,9 +1,0 @@
--nouses=true
-Bundle-Name:                             ${p}.tb3
-Bundle-SymbolicName:                     ${p}.tb3
-Bundle-Version: 1.0.0
-Bundle-Activator: ${p}.tb3.Activator
-Export-Package:                         ${p}.tb3;${p}.tlx;-noimport:=true
-Import-Package: org.osgi.framework, ${p}.exported
-DynamicImport-Package: ${p}.tlx
-Include-Resource = ${replace;${p}.tlx;\\.;/}/TestLib.properties=resources/dynpkgimport.tb3/TestLib.properties

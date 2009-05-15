@@ -1,6 +1,0 @@
--nouses=true
-Bundle-Name:                             ${p}.tb0
-Bundle-SymbolicName:                     ${p}.tb0
-Bundle-Version: 1.0.0
-Bundle-Activator: ${p}.tb0.Activator
-Export-Package:                         ${p}.tb0;-noimport:=true

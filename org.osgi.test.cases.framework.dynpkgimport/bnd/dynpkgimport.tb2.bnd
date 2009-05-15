@@ -1,8 +1,0 @@
--nouses=true
-Bundle-Name:                             ${p}.tb2
-Bundle-SymbolicName:                     ${p}.tb2
-Bundle-Version: 1.0.0
-Bundle-Activator: ${p}.tb2.Activator
-Export-Package:                         ${p}.tb2;-noimport:=true
-Import-Package: org.osgi.framework, ${p}.exported
-DynamicImport-Package: ${p}.tlx
