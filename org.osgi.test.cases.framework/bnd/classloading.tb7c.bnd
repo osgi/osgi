@@ -1,0 +1,11 @@
+-nouses=true
+Bundle-Name:                             ${p}.classloading.tb7c
+Bundle-SymbolicName:                     ${p}.classloading.tb7c
+Bundle-Version:                          4
+Private-Package:                         ${p}.classloading.tb7c
+
+Bundle-Activator: ${p}.classloading.tb7c.Activator
+Import-Package: org.osgi.framework
+
+
+

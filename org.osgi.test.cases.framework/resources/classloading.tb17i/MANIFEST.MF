@@ -1,0 +1,8 @@
+Manifest-Version: 1.0                                     
+Bundle-ManifestVersion: 2                                       
+Bundle-Name: ${p}.classloading.tb17i
+Bundle-SymbolicName: ${p}.classloading.tb17i
+Bundle-Version: 1
+DynamicImport-Package: ${p}.classloading.exports.service
+Export-Package: ${p}.classloading.exports.service
+

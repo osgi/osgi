@@ -1,0 +1,7 @@
+-nouses=true
+Bundle-Name:                             ${p}.classloading.tb7b
+Bundle-SymbolicName:                     ${p}.classloading.tb7b
+Bundle-Version:                          4
+Private-Package:                         ${p}.classloading.tb7b
+
+Export-Package: java.lang;-split-package:=first;-noimport:=true

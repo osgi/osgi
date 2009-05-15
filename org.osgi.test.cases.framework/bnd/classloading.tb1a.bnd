@@ -1,0 +1,8 @@
+-nouses=true
+Bundle-Name:                             ${p}.classloading.tb1a
+Bundle-SymbolicName:                     ${p}.classloading.tb1a
+Bundle-Version:                          4.2
+Private-Package:                         ${p}.classloading.tb1a
+
+Bundle-Activator: ${p}.classloading.tb1a.Activator
+Import-Package: ${p}.classloading.exports.service;version="1.0.0", org.osgi.framework

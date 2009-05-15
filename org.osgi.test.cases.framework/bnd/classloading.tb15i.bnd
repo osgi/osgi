@@ -1,0 +1,6 @@
+-nouses=true
+Bundle-Name: ${p}.classloading.tb15i
+Bundle-SymbolicName: ${p}.classloading.tb15i
+Bundle-Version: 1
+Import-Package: resources
+Private-Package:                         ${p}.classloading.tb15i

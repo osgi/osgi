@@ -1,0 +1,7 @@
+-nouses=true
+Bundle-Name:                             ${p}.classloading.tb4b
+Bundle-SymbolicName:                     ${p}.classloading.tb4b
+Bundle-Version:                          4
+Private-Package:                         ${p}.classloading.tb4b
+
+Bundle-Activator: ${p}.classloading.tb4b.Activator

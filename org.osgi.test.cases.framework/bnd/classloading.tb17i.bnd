@@ -1,0 +1,5 @@
+-nouses=true
+-nomanifest=true
+-failok=true
+Include-Resource = {META-INF/MANIFEST.MF=resources/classloading.tb17i/MANIFEST.MF}
+Private-Package:                         ${p}.classloading.tb17i

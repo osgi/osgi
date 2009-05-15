@@ -1,0 +1,8 @@
+-nouses=true
+Bundle-Name: ${p}.classloading.tb16h
+Bundle-SymbolicName: ${p}.classloading.tb16h
+Bundle-Version: 1
+Bundle-Activator: ${p}.classloading.tb16h.Activator
+Require-Bundle: ${p}.classloading.tb13b
+Import-Package: org.osgi.framework, resources
+Private-Package:                         ${p}.classloading.tb16h

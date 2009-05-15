@@ -1,0 +1,5 @@
+-nouses=true
+Bundle-Name: 							 ${p}.classloading.tb12b
+Bundle-SymbolicName: 					 ${p}.classloading.tb12a
+Bundle-Version: 						 1
+Private-Package:                         ${p}.classloading.tb12b

@@ -1,0 +1,8 @@
+-nouses=true
+Bundle-Name: ${p}.classloading.tb16j
+Bundle-SymbolicName: ${p}.classloading.tb16a
+Bundle-Version: 1
+Bundle-Activator: ${p}.classloading.tb16a.Activator
+Require-Bundle: ${p}.classloading.tb16c;visibility:="reexport", ${p}.classloading.tb16b;visibility:="reexport"
+Reexport-Package: test.package.resources
+Private-Package:                         ${p}.classloading.tb16a

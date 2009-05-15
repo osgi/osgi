@@ -1,0 +1,8 @@
+-nouses=true
+Bundle-Name:                             ${p}.classloading.tb4c
+Bundle-SymbolicName:                     ${p}.classloading.tb4c
+Bundle-Version:                          4
+Private-Package:                         ${p}.classloading.tb4c
+
+Bundle-Activator: ${p}.classloading.tb4c.Activator
+Import-Package: ${p}.classloading.exports.service;version="3.0.0", org.osgi.framework

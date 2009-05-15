@@ -1,0 +1,7 @@
+-nouses=true
+Bundle-Name: ${p}.classloading.tb13a
+Bundle-SymbolicName: ${p}.classloading.tb13a
+Bundle-Version: 1
+Export-Package: ${p}.classloading.exports.service;${p}.classloading.exports.listener;include:="*";version="0.0.0";-noimport:=true, \
+	${p}.classloading.exports.service;version="1.0.0";-noimport:=true
+Private-Package:                         ${p}.classloading.tb13a

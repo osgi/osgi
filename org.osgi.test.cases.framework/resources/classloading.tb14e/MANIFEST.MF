@@ -1,0 +1,8 @@
+Manifest-Version: 1.0                                     
+Bundle-ManifestVersion: 2                                       
+Bundle-Name: ${p}.classloading.tb14e
+Bundle-SymbolicName: ${p}.classloading.tb14e
+Bundle-Version: 1
+Bundle-Activator: ${p}.classloading.tb14a.Activator
+Export-Package: .
+

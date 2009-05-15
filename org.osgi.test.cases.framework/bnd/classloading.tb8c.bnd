@@ -1,0 +1,10 @@
+-nouses=true
+Bundle-Name:                             ${p}.classloading.tb8c
+Bundle-SymbolicName:                     ${p}.classloading.tb8c
+Bundle-Version:                          4
+Private-Package:                         ${p}.classloading.tb8c
+
+Export-Package: resources;-noimport:=true
+Include-Resource = resources/tb8a-resource.txt=resources/classloading.tb8c/tb8a-resource.txt, \
+                   resources/tb8b-resource.txt=resources/classloading.tb8c/tb8b-resource.txt, \
+                   resources/tb8c-resource.txt=resources/classloading.tb8c/tb8c-resource.txt

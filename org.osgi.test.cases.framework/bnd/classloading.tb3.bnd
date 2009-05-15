@@ -1,0 +1,9 @@
+-nouses=true
+Bundle-Name:                             ${p}.classloading.tb3
+Bundle-SymbolicName:                     ${p}.classloading.tb3
+Bundle-Version:                          4
+Private-Package:                         ${p}.classloading.tb3
+Export-Package: ${p}.classloading.exports.service;version="3.0.0";-noimport:=true
+
+
+

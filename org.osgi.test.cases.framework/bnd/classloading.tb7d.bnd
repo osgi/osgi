@@ -1,0 +1,10 @@
+-nouses=true
+Bundle-Name:                             ${p}.classloading.tb7d
+Bundle-SymbolicName:                     ${p}.classloading.tb7d
+Bundle-Version:                          4
+Private-Package:                         ${p}.classloading.tb7d
+
+Import-Package: org.osgi.framework, javax.xml.parsers
+
+
+

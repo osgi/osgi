@@ -1,0 +1,6 @@
+-nouses=true
+Bundle-Name: ${p}.classloading.tb14b
+Bundle-SymbolicName: ${p}.classloading.tb14b;fragment-attachment:="always";fragment-attachment:="never"
+Bundle-Version: 1
+Bundle-Activator: ${p}.classloading.tb14a.Activator
+Private-Package:                         ${p}.classloading.tb14a

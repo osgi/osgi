@@ -1,0 +1,6 @@
+-nouses=true
+Bundle-Name: ${p}.classloading.tb17j
+Bundle-SymbolicName: ${p}.classloading.tb17j
+Bundle-Version: 1
+Import-Package: ${p}.classloading.exports.service;bundle-symbolic-name="${p}.classloading.tb17i",org.osgi.framework
+Private-Package:                         ${p}.classloading.tb17j

@@ -1,0 +1,9 @@
+-nouses=true
+Bundle-Name:                             ${p}.classloading.tb4f
+Bundle-SymbolicName:                     ${p}.classloading.tb4f
+Bundle-Version:                          4
+Private-Package:                         ${p}.classloading.tb4f
+
+Bundle-Activator: ${p}.classloading.tb4f.Activator
+Import-Package: ${p}.classloading.exports.service;version="1.0.0", org.osgi.framework
+

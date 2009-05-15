@@ -1,0 +1,8 @@
+-nouses=true
+Bundle-Name:                             ${p}.classloading.tb5b
+Bundle-SymbolicName:                     ${p}.classloading.tb5b
+Bundle-Version:                          4
+Private-Package:                         ${p}.classloading.tb5b
+
+Bundle-Activator: ${p}.classloading.tb5b.Activator
+Import-Package: ${p}.classloading.exports.service;version="1.0.0", ${p}.classloading.exports.listener, org.osgi.framework

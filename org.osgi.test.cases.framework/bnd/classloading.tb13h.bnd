@@ -1,0 +1,6 @@
+-nouses=true
+Bundle-Name: ${p}.classloading.tb13h
+Bundle-SymbolicName: ${p}.classloading.tb13h
+Bundle-Version: 1
+Import-Package: ${p}.classloading.exports.listener;version="1.0.0";myattribute="foo"
+Private-Package:                         ${p}.classloading.tb13h
