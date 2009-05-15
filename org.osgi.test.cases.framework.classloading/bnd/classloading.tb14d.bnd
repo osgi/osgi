@@ -1,0 +1,7 @@
+-nouses=true
+Bundle-Name: ${p}.tb14d
+Bundle-SymbolicName: ${p}.tb14d
+Bundle-Version: 1
+Bundle-Activator: ${p}.tb14a.Activator
+Import-Package: org.osgi.framework, .
+Private-Package:                         ${p}.tb14a

@@ -1,0 +1,8 @@
+-nouses=true
+Bundle-Name:                             ${p}.tb8f
+Bundle-SymbolicName:                     ${p}.tb8f
+Bundle-Version:                          4
+Private-Package:                         ${p}.tb8f
+
+Bundle-ClassPath: .
+DynamicImport-Package: resources;bundle-symbolic-name=${p}.tb8c

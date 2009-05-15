@@ -1,0 +1,5 @@
+-nouses=true
+Bundle-Name: 							 ${p}.tb11d
+Bundle-SymbolicName: 					 ${p}.tb11b;singleton:=false
+Bundle-Version: 						 3
+Private-Package:                         ${p}.tb11d

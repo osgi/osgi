@@ -1,0 +1,7 @@
+-nouses=true
+Bundle-Name:                             ${p}.tb6d
+Bundle-SymbolicName:                     ${p}.tb6d
+Bundle-Version:                          4
+Private-Package:                         ${p}.tb6d
+Bundle-Activator: ${p}.tb6d.Activator
+Include-Resource: {OSGI-INF/permissions.perm=perms/classloading.tb6d.perm}

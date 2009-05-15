@@ -1,0 +1,10 @@
+-nouses=true
+Bundle-Name:                             ${p}.tb7d
+Bundle-SymbolicName:                     ${p}.tb7d
+Bundle-Version:                          4
+Private-Package:                         ${p}.tb7d
+
+Import-Package: org.osgi.framework, javax.xml.parsers
+
+
+

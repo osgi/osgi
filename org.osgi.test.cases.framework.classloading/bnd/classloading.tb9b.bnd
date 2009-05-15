@@ -1,0 +1,10 @@
+-nouses=true
+Bundle-Name:                             ${p}.tb9b
+Bundle-SymbolicName:                     ${p}.tb9b
+Bundle-Version:                          4
+Private-Package:                         ${p}.tb9b, \
+                 java.lang;-split-package:=first
+
+Import-Package: resources
+Bundle-ClassPath: .
+
