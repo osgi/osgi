@@ -1,5 +1,6 @@
 Bundle-Version: 4.2.0.${project.build}
 Bundle-RequiredExecutionEnvironment = J2SE-1.5
+Signature-Packages:  javax.transaction, javax.transaction.xa
 
 Private-Package						= org.osgi.test.support.*, \
 	${p}.*
@@ -10,7 +11,9 @@ Import-Package = \
  	*
 
  Export-Package =\
-	org.osgi.test.cases.transaction.util;version=1.0
+	org.osgi.test.cases.transaction.util;version=1.0, \
+	javax.transaction.*, \
+	javax.transaction.xa.*
 	
 -buildpath							= \
 	org.apache.geronimo.specs.geronimo-j2ee-connector_1.5_spec;version=2.0, \
@@ -26,6 +29,6 @@ Import-Package = \
 -runproperties					= report=true, \
     org.osgi.test.cases.transaction.waittime=30
 
-Test-Cases						= ${classes;extending;org.junit.framework.TestCase|*TransactionTestBundleControl}
+Test-Cases						= ${classes;extending;org.junit.framework.TestCase|*TransactionTestBundleControl|*DefaultSignatureTestControl}
 
 	
