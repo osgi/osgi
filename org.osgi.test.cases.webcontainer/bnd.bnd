@@ -3,6 +3,7 @@
 Bundle-Description: OSGi Web Container RFC 66 Compliance Test
 Bundle-Version: 4.2.0.${project.build}
 Bundle-RequiredExecutionEnvironment = J2SE-1.5
+Signature-Packages:  javax.servlet, javax.servlet.http
 
 Private-Package						= org.osgi.test.support.*, \
 	${p}.junit.*, \
@@ -50,11 +51,12 @@ Export-Package =\
 -runbundles						= \
 	org.osgi.impl.bundle.servlet;		version=2.1, \
 	org.osgi.impl.service.log; 			version=project
+# TODO add the ri bundle here
 	
 -runproperties = report=true, \
 	org.osgi.service.webcontainer.hostname=127.0.0.1, \
 	org.osgi.service.webcontainer.port=8080
 
-Test-Cases						= ${classes;extending;org.junit.framework.TestCase|*TestBundleControl}
+Test-Cases						= ${classes;extending;org.junit.framework.TestCase|*WebContainerTestBundleControl|*ManifestHeadersTestBundleControl|*SignatureTestControl}
 
 	
