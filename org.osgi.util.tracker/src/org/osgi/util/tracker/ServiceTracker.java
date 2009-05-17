@@ -16,21 +16,18 @@
 
 package org.osgi.util.tracker;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkConstants;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceReference;
-import org.osgi.framework.Version;
+import org.osgi.framework.ServiceRegistry;
 import org.osgi.framework.bundle.AllServiceListener;
 import org.osgi.framework.bundle.ServiceListener;
 
@@ -67,7 +64,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	/**
 	 * The Bundle Context used by this <code>ServiceTracker</code>.
 	 */
-	protected final BundleContext		context;
+	protected final ServiceRegistry			registry;
 	/**
 	 * The Filter used by this <code>ServiceTracker</code> which specifies the
 	 * search criteria for the services to track.
@@ -126,12 +123,6 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	private volatile T						cachedService;
 
 	/**
-	 * org.osgi.framework package version which introduced
-	 * {@link ServiceEvent#MODIFIED_ENDMATCH}
-	 */
-	private static final Version		endMatchVersion	= new Version(1, 5, 0);
-
-	/**
 	 * Create a <code>ServiceTracker</code> on the specified
 	 * <code>ServiceReference</code>.
 	 * 
@@ -139,7 +130,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 * The service referenced by the specified <code>ServiceReference</code>
 	 * will be tracked by this <code>ServiceTracker</code>.
 	 * 
-	 * @param context The <code>BundleContext</code> against which the tracking
+	 * @param registry The <code>BundleContext</code> against which the tracking
 	 *        is done.
 	 * @param reference The <code>ServiceReference</code> for the service to be
 	 *        tracked.
@@ -151,10 +142,10 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 *        <code>ServiceTracker</code> will call the
 	 *        <code>ServiceTrackerCustomizer</code> methods on itself.
 	 */
-	public ServiceTracker(final BundleContext context,
+	public ServiceTracker(final ServiceRegistry registry,
 			final ServiceReference<S> reference,
 			final ServiceTrackerCustomizer<S, T> customizer) {
-		this.context = context;
+		this.registry = registry;
 		this.trackReference = reference;
 		this.trackClass = null;
 		this.customizer = (customizer == null) ? this : customizer;
@@ -185,7 +176,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 * Services registered under the specified class name will be tracked by
 	 * this <code>ServiceTracker</code>.
 	 * 
-	 * @param context The <code>BundleContext</code> against which the tracking
+	 * @param registry The <code>BundleContext</code> against which the tracking
 	 *        is done.
 	 * @param clazz The class name of the services to be tracked.
 	 * @param customizer The customizer object to call when services are added,
@@ -196,9 +187,9 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 *        <code>ServiceTracker</code> will call the
 	 *        <code>ServiceTrackerCustomizer</code> methods on itself.
 	 */
-	public ServiceTracker(final BundleContext context, final String clazz,
+	public ServiceTracker(final ServiceRegistry registry, final String clazz,
 			final ServiceTrackerCustomizer<S, T> customizer) {
-		this.context = context;
+		this.registry = registry;
 		this.trackReference = null;
 		this.trackClass = clazz;
 		this.customizer = (customizer == null) ? this : customizer;
@@ -221,13 +212,13 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	}
 	
 	/**
-	 * @param context
+	 * @param registry
 	 * @param clazz
 	 * @param customizer
 	 */
-	public ServiceTracker(final BundleContext context, final Class<S> clazz,
+	public ServiceTracker(final ServiceRegistry registry, final Class<S> clazz,
 			final ServiceTrackerCustomizer<S, T> customizer) {
-		this(context, clazz.getName(), customizer );
+		this(registry, clazz.getName(), customizer );
 	}
 
 	/**
@@ -238,7 +229,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 * Services which match the specified <code>Filter</code> object will be
 	 * tracked by this <code>ServiceTracker</code>.
 	 * 
-	 * @param context The <code>BundleContext</code> against which the tracking
+	 * @param registry The <code>BundleContext</code> against which the tracking
 	 *        is done.
 	 * @param filter The <code>Filter</code> to select the services to be
 	 *        tracked.
@@ -250,26 +241,15 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 *        <code>ServiceTrackerCustomizer</code> methods on itself.
 	 * @since 1.1
 	 */
-	public ServiceTracker(final BundleContext context, final Filter filter,
+	public ServiceTracker(final ServiceRegistry registry, final Filter filter,
 			final ServiceTrackerCustomizer<S, T> customizer) {
-		this.context = context;
+		this.registry = registry;
 		this.trackReference = null;
 		this.trackClass = null;
-		final Version frameworkVersion = AccessController
-				.doPrivileged(new PrivilegedAction<Version>() {
-					public Version run() {
-						String version = context
-								.getProperty(FrameworkConstants.FRAMEWORK_VERSION);
-						return (version == null) ? Version.emptyVersion
-								: new Version(version);
-					}
-				});
-		final boolean endMatchSupported = (frameworkVersion
-				.compareTo(endMatchVersion) >= 0);
-		this.listenerFilter = endMatchSupported ? filter.toString() : null;
+		this.listenerFilter = filter.toString();
 		this.filter = filter;
 		this.customizer = (customizer == null) ? this : customizer;
-		if ((context == null) || (filter == null)) {
+		if ((registry == null) || (filter == null)) {
 			/*
 			 * we throw a NPE here to be consistent with the other constructors
 			 */
@@ -324,7 +304,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 			t = trackAllServices ? new AllTracked() : new Tracked();
 			synchronized (t) {
 				try {
-					context.addServiceListener(t, listenerFilter);
+					registry.addServiceListener(t, listenerFilter);
 					List<ServiceReference<S>> references = null;
 					if (trackClass != null) {
 						references = getInitialReferences(trackAllServices,
@@ -379,12 +359,12 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 			throws InvalidSyntaxException {
 		if (trackAllServices) {
 			@SuppressWarnings("unchecked")
-			Collection<ServiceReference<S>> result = (Collection) context
+			Collection<ServiceReference<S>> result = (Collection) registry
 					.getAllServiceReferences(className, filterString);
 			return new ArrayList<ServiceReference<S>>(result);
 		}
 		@SuppressWarnings("unchecked")
-		Collection<ServiceReference<S>> result = (Collection) context
+		Collection<ServiceReference<S>> result = (Collection) registry
 				.getServiceReferences(className, filterString);
 		return new ArrayList<ServiceReference<S>>(result);
 	}
@@ -415,7 +395,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 			references = getServiceReferences();
 			tracked = null;
 			try {
-				context.removeServiceListener(outgoing);
+				registry.removeServiceListener(outgoing);
 			}
 			catch (IllegalStateException e) {
 				/* In case the context was stopped. */
@@ -465,7 +445,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 */
 	public T addingService(ServiceReference<S> reference) {
 		@SuppressWarnings("unchecked")
-		T result = (T) context.getService(reference);
+		T result = (T) registry.getService(reference);
 		return result;
 	}
 
@@ -511,7 +491,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 * @see ServiceTrackerCustomizer#removedService(ServiceReference, Object)
 	 */
 	public void removedService(ServiceReference<S> reference, T service) {
-		context.ungetService(reference);
+		registry.ungetService(reference);
 	}
 
 	/**
