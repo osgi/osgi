@@ -18,6 +18,7 @@
 package org.osgi.thunk.framework;
 
 import org.osgi.framework.ServiceEvent;
+import org.osgi.framework.ServiceEvent.Type;
 import org.osgi.framework.bundle.ServiceListener;
 import org.osgi.wrapped.framework.TServiceEvent;
 import org.osgi.wrapped.framework.TServiceListener;
@@ -31,8 +32,8 @@ public class TServiceListenerImpl implements TServiceListener {
 	}
 
 	public void serviceChanged(TServiceEvent event) {
-		listener.serviceChanged(new ServiceEvent(event.getType(),
-				new ServiceReferenceImpl(event.getServiceReference())));
+		listener.serviceChanged(new ServiceEvent(getType(event.getType()),
+				new ServiceReferenceImpl<Object>(event.getServiceReference())));
 	}
 
 	@Override
@@ -50,4 +51,12 @@ public class TServiceListenerImpl implements TServiceListener {
 		return listener.toString();
 	}
 
+	private Type getType(int value) {
+		for (Type type : Type.values()) {
+			if (type.getValue() == value) {
+				return type;
+			}
+		}
+		throw new AssertionError("unknown ServiceEvent type: " + value);
+	}
 }

@@ -22,22 +22,25 @@ import java.io.InputStream;
 import java.net.URL;
 import java.security.Permission;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Dictionary;
+import java.util.EnumSet;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleException;
+import org.osgi.framework.ExportedPackage;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
 import org.osgi.wrapped.framework.TBundle;
 import org.osgi.wrapped.framework.TBundleException;
 import org.osgi.wrapped.framework.TServiceReference;
-import org.osgi.wrapped.framework.TVersion;
+import org.osgi.wrapped.service.packageadmin.TPackageAdmin;
+import org.osgi.wrapped.service.packageadmin.TRequiredBundle;
 
 public class BundleImpl implements Bundle {
 	final TBundle	bundle;
@@ -46,15 +49,15 @@ public class BundleImpl implements Bundle {
 		this.bundle = bundle;
 	}
 
+	public BundleContext getBundleContext() {
+		return new BundleContextImpl(bundle.getBundleContext());
+	}
+
 	public Iterable<URL> findEntries(String path, String filePattern,
 			boolean recurse) {
 		@SuppressWarnings("unchecked")
 		Enumeration<URL> e = bundle.findEntries(path, filePattern, recurse);
 		return Collections.list(e);
-	}
-
-	public BundleContext getBundleContext() {
-		return new BundleContextImpl(bundle.getBundleContext());
 	}
 
 	public long getBundleId() {
@@ -113,12 +116,18 @@ public class BundleImpl implements Bundle {
 
 	@SuppressWarnings("unchecked")
 	public Map<X509Certificate, List<X509Certificate>> getSignerCertificates(
-			int signersType) {
-		return bundle.getSignerCertificates(signersType);
+			SignerOption signersType) {
+		return bundle.getSignerCertificates(signersType.getValue());
 	}
 
-	public int getState() {
-		return bundle.getState();
+	public State getState() {
+		int value = bundle.getState();
+		for (State state : State.values()) {
+			if (state.getValue() == value) {
+				return state;
+			}
+		}
+		throw new AssertionError("unknown Bundle state: " + value);
 	}
 
 	public String getSymbolicName() {
@@ -126,12 +135,7 @@ public class BundleImpl implements Bundle {
 	}
 
 	public Version getVersion() {
-		TVersion version = bundle.getVersion();
-		if (version == TVersion.emptyVersion) {
-			return Version.emptyVersion;
-		}
-		return new Version(version.getMajor(), version.getMinor(), version
-				.getMicro(), version.getQualifier());
+		return T.toVersion(bundle.getVersion());
 	}
 
 	public boolean hasPermission(Permission permission) {
@@ -142,33 +146,34 @@ public class BundleImpl implements Bundle {
 		return bundle.loadClass(name);
 	}
 
-	public void start() throws BundleException {
-		start(0);
-	}
-
-	public void start(int options) throws BundleException {
+	public void start(StartOption... options) {
+		// EnumSet<StartOption> set = EnumSet.copyOf(Arrays.asList(options));
+		int value = 0;
+		for (StartOption option : options) {
+			value |= option.getValue();
+		}
 		try {
-			bundle.start(options);
+			bundle.start(value);
 		}
 		catch (TBundleException e) {
 			throw T.toBundleException(e);
 		}
 	}
 
-	public void stop() throws BundleException {
-		stop(0);
-	}
-
-	public void stop(int options) throws BundleException {
+	public void stop(StopOption... options) {
+		int value = 0;
+		for (StopOption option : options) {
+			value |= option.getValue();
+		}
 		try {
-			bundle.stop(options);
+			bundle.stop(value);
 		}
 		catch (TBundleException e) {
 			throw T.toBundleException(e);
 		}
 	}
 
-	public void uninstall() throws BundleException {
+	public void uninstall() {
 		try {
 			bundle.uninstall();
 		}
@@ -177,17 +182,63 @@ public class BundleImpl implements Bundle {
 		}
 	}
 
-	public void update() throws BundleException {
-		update(null);
-	}
-
-	public void update(InputStream input) throws BundleException {
+	public void update(InputStream input) {
 		try {
 			bundle.update(input);
 		}
 		catch (TBundleException e) {
 			throw T.toBundleException(e);
 		}
+	}
+
+	public Collection<ExportedPackage> getExportedPackages() {
+		return T.toExportedPackages(Activator.getTPackageAdmin()
+				.getExportedPackages(bundle));
+	}
+
+	public Collection<Bundle> getFragments() {
+		return T.toBundles(Activator.getTPackageAdmin().getFragments(bundle));
+	}
+
+	public Collection<Bundle> getHosts() {
+		return T.toBundles(Activator.getTPackageAdmin().getHosts(bundle));
+	}
+
+	public EnumSet<Type> getTypes() {
+		if (Activator.getTPackageAdmin().getBundleType(bundle) == TPackageAdmin.BUNDLE_TYPE_FRAGMENT) {
+			return EnumSet.of(Type.FRAGMENT);
+		}
+		return EnumSet.of(Type.BUNDLE);
+	}
+
+	public Collection<Bundle> getRequiringBundles() {
+		TRequiredBundle[] trbs = Activator.getTPackageAdmin()
+				.getRequiredBundles(getSymbolicName());
+		if (trbs == null) {
+			return Collections.emptyList();
+		}
+		ArrayList<Bundle> bundles = new ArrayList<Bundle>(trbs.length);
+		for (TRequiredBundle trb : trbs) {
+			TBundle tbundle = trb.getBundle();
+			if (tbundle.equals(bundle)) {
+				bundles.add(new BundleImpl(tbundle));
+			}
+		}
+		return bundles;
+	}
+
+	public boolean isRemovalPending() {
+		TRequiredBundle[] trbs = Activator.getTPackageAdmin()
+				.getRequiredBundles(getSymbolicName());
+		if (trbs == null) {
+			return false;
+		}
+		for (TRequiredBundle trb : trbs) {
+			if (trb.isRemovalPending()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override

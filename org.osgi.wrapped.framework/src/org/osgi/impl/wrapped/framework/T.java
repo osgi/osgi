@@ -28,6 +28,10 @@ import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.Version;
+import org.osgi.service.packageadmin.ExportedPackage;
+import org.osgi.service.packageadmin.PackageAdmin;
+import org.osgi.service.packageadmin.RequiredBundle;
 import org.osgi.wrapped.framework.TBundle;
 import org.osgi.wrapped.framework.TBundleContext;
 import org.osgi.wrapped.framework.TBundleException;
@@ -39,6 +43,10 @@ import org.osgi.wrapped.framework.TServiceFactory;
 import org.osgi.wrapped.framework.TServiceListener;
 import org.osgi.wrapped.framework.TServiceReference;
 import org.osgi.wrapped.framework.TServiceRegistration;
+import org.osgi.wrapped.framework.TVersion;
+import org.osgi.wrapped.service.packageadmin.TExportedPackage;
+import org.osgi.wrapped.service.packageadmin.TPackageAdmin;
+import org.osgi.wrapped.service.packageadmin.TRequiredBundle;
 
 class T {
 	private T() {
@@ -81,7 +89,29 @@ class T {
 		return ((ServiceFactoryImpl) wrapped).factory;
 	}
 	
-	static TServiceReference[] toReferences(ServiceReference[] references) {
+	static PackageAdmin unwrap(TPackageAdmin wrapped) {
+		return ((TPackageAdminImpl) wrapped).pa;
+	}
+
+	static ExportedPackage unwrap(TExportedPackage wrapped) {
+		return ((TExportedPackageImpl) wrapped).ep;
+	}
+
+	static RequiredBundle unwrap(TRequiredBundle wrapped) {
+		return ((TRequiredBundleImpl) wrapped).rb;
+	}
+
+	static TServiceReference toTServiceReference(ServiceReference reference) {
+		if (reference == null) {
+			return null;
+		}
+		return new TServiceReferenceImpl(reference);
+	}
+	
+	static TServiceReference[] toTServiceReferences(ServiceReference[] references) {
+		if (references == null) {
+			return null;
+		}
 		int l = references.length;
 		TServiceReference[] treferences = new TServiceReference[l];
 		for (int i = 0; i < l; i++) {
@@ -90,13 +120,35 @@ class T {
 		return treferences;
 	}
 	
-	static TBundle[] toBundles(Bundle[] bundles) {
+	static TBundle toTBundle(Bundle bundle) {
+		if (bundle == null) {
+			return null;
+		}
+		return new TBundleImpl(bundle);
+	}
+
+	static TBundle[] toTBundles(Bundle[] bundles) {
+		if (bundles == null) {
+			return null;
+		}
 		int l = bundles.length;
 		TBundle[] tbundles = new TBundle[l];
 		for (int i = 0; i < l; i++) {
 			tbundles[i] = new TBundleImpl(bundles[i]);
 		}
 		return tbundles;
+	}
+	
+	static Bundle[] toBundles(TBundle[] tbundles) {
+		if (tbundles == null) {
+			return null;
+		}
+		int l = tbundles.length;
+		Bundle[] bundles = new Bundle[l];
+		for (int i = 0; i < l; i++) {
+			bundles[i] = T.unwrap(tbundles[i]);
+		}
+		return bundles;
 	}
 
 	static TInvalidSyntaxException toTInvalidSyntaxException(
@@ -118,4 +170,44 @@ class T {
 		return t;
 	}
 
+	static TExportedPackage toTExportedPackage(
+			ExportedPackage exportedPackage) {
+		if (exportedPackage == null) {
+			return null;
+		}
+		return new TExportedPackageImpl(exportedPackage);
+	}
+	
+	static TExportedPackage[] toTExportedPackages(
+			ExportedPackage[] exportedPackages) {
+		if (exportedPackages == null) {
+			return null;
+		}
+		int l = exportedPackages.length;
+		TExportedPackage[] tExportedPackages = new TExportedPackage[l];
+		for (int i = 0; i < l; i++) {
+			tExportedPackages[i] = new TExportedPackageImpl(exportedPackages[i]);
+		}
+		return tExportedPackages;
+	}
+	
+	static TVersion toTVersion(Version version) {
+		if (version == Version.emptyVersion) {
+			return TVersion.emptyVersion;
+		}
+		return new TVersion(version.getMajor(), version.getMinor(), version
+				.getMicro(), version.getQualifier());
+	}
+
+	static TRequiredBundle[] toTRequiredBundles(RequiredBundle[] requiredBundles) {
+		if (requiredBundles == null) {
+			return null;
+		}
+		int l = requiredBundles.length;
+		TRequiredBundle[] tRequiredBundles = new TRequiredBundle[l];
+		for (int i = 0; i < l; i++) {
+			tRequiredBundles[i] = new TRequiredBundleImpl(requiredBundles[i]);
+		}
+		return tRequiredBundles;
+	}
 }

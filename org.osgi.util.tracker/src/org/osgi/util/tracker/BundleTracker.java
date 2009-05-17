@@ -17,12 +17,15 @@
 package org.osgi.util.tracker;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
+import org.osgi.framework.Framework;
+import org.osgi.framework.Bundle.State;
 import org.osgi.framework.bundle.SynchronousBundleListener;
 
 /**
@@ -48,10 +51,10 @@ import org.osgi.framework.bundle.SynchronousBundleListener;
  * 
  * @ThreadSafe
  * @version $Revision$
- * @param <S>
+ * @param <T>
  * @since 1.4
  */
-public class BundleTracker<S> implements BundleTrackerCustomizer<S> {
+public class BundleTracker<T> implements BundleTrackerCustomizer<T> {
 	/* set this to true to compile in debug messages */
 	static final boolean			DEBUG	= false;
 
@@ -63,7 +66,7 @@ public class BundleTracker<S> implements BundleTrackerCustomizer<S> {
 	/**
 	 * The <code>BundleTrackerCustomizer</code> object for this tracker.
 	 */
-	final BundleTrackerCustomizer<S>	customizer;
+	final BundleTrackerCustomizer<T>	customizer;
 
 	/**
 	 * Tracked bundles: <code>Bundle</code> object -> customized Object and
@@ -86,7 +89,7 @@ public class BundleTracker<S> implements BundleTrackerCustomizer<S> {
 	 * State mask for bundles being tracked. This field contains the ORed values
 	 * of the bundle states being tracked.
 	 */
-	final int						mask;
+	final EnumSet<State>	mask;
 
 	/**
 	 * Create a <code>BundleTracker</code> for bundles whose state is present in
@@ -109,8 +112,8 @@ public class BundleTracker<S> implements BundleTrackerCustomizer<S> {
 	 *        <code>BundleTrackerCustomizer</code> methods on itself.
 	 * @see Bundle#getState()
 	 */
-	public BundleTracker(BundleContext context, int stateMask,
-			BundleTrackerCustomizer<S> customizer) {
+	public BundleTracker(BundleContext context, EnumSet<State> stateMask,
+			BundleTrackerCustomizer<T> customizer) {
 		this.context = context;
 		this.mask = stateMask;
 		this.customizer = (customizer == null) ? this : customizer;
@@ -143,13 +146,14 @@ public class BundleTracker<S> implements BundleTrackerCustomizer<S> {
 			}
 			t = new Tracked();
 			synchronized (t) {
-				context.addBundleListener(t);
-				List<Bundle> bundles = new ArrayList<Bundle>(context
+				Framework framework = context.getFramework();
+				framework.addBundleListener(t);
+				List<Bundle> bundles = new ArrayList<Bundle>(framework
 						.getBundles());
 				for (Iterator<Bundle> i = bundles.iterator(); i.hasNext();) {
 					Bundle bundle = i.next();
-					int state = bundle.getState();
-					if ((state & mask) == 0) {
+					State state = bundle.getState();
+					if (!mask.contains(state)) {
 						i.remove();
 					}
 				}
@@ -188,7 +192,7 @@ public class BundleTracker<S> implements BundleTrackerCustomizer<S> {
 			bundles = getBundles();
 			tracked = null;
 			try {
-				context.removeBundleListener(outgoing);
+				context.getFramework().removeBundleListener(outgoing);
 			}
 			catch (IllegalStateException e) {
 				/* In case the context was stopped. */
@@ -222,9 +226,9 @@ public class BundleTracker<S> implements BundleTrackerCustomizer<S> {
 	 * @return The specified bundle.
 	 * @see BundleTrackerCustomizer#addingBundle(Bundle, BundleEvent)
 	 */
-	public S addingBundle(Bundle bundle, BundleEvent event) {
+	public T addingBundle(Bundle bundle, BundleEvent event) {
 		@SuppressWarnings("unchecked")
-		S result = (S) bundle;
+		T result = (T) bundle;
 		return result;
 	}
 
@@ -246,7 +250,7 @@ public class BundleTracker<S> implements BundleTrackerCustomizer<S> {
 	 * @param object The customized object for the specified Bundle.
 	 * @see BundleTrackerCustomizer#modifiedBundle(Bundle, BundleEvent, Object)
 	 */
-	public void modifiedBundle(Bundle bundle, BundleEvent event, S object) {
+	public void modifiedBundle(Bundle bundle, BundleEvent event, T object) {
 		/* do nothing */
 	}
 
@@ -268,7 +272,7 @@ public class BundleTracker<S> implements BundleTrackerCustomizer<S> {
 	 * @param object The customized object for the specified bundle.
 	 * @see BundleTrackerCustomizer#removedBundle(Bundle, BundleEvent, Object)
 	 */
-	public void removedBundle(Bundle bundle, BundleEvent event, S object) {
+	public void removedBundle(Bundle bundle, BundleEvent event, T object) {
 		/* do nothing */
 	}
 
@@ -298,7 +302,7 @@ public class BundleTracker<S> implements BundleTrackerCustomizer<S> {
 	 *         <code>null</code> if the specified <code>Bundle</code> is not
 	 *         being tracked.
 	 */
-	public S getObject(Bundle bundle) {
+	public T getObject(Bundle bundle) {
 		final Tracked t = tracked();
 		if (t == null) { /* if BundleTracker is not open */
 			return null;
@@ -378,7 +382,7 @@ public class BundleTracker<S> implements BundleTrackerCustomizer<S> {
 	 * @ThreadSafe
 	 * @since 1.4
 	 */
-	class Tracked extends AbstractTracked<Bundle, BundleEvent, S> implements
+	class Tracked extends AbstractTracked<Bundle, BundleEvent, T> implements
 			SynchronousBundleListener {
 		/**
 		 * Tracked constructor.
@@ -403,13 +407,13 @@ public class BundleTracker<S> implements BundleTrackerCustomizer<S> {
 				return;
 			}
 			final Bundle bundle = event.getBundle();
-			final int state = bundle.getState();
+			final State state = bundle.getState();
 			if (DEBUG) {
 				System.out
 						.println("BundleTracker.Tracked.bundleChanged[" + state + "]: " + bundle); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
-			if ((state & mask) != 0) {
+			if (mask.contains(state)) {
 				track(bundle, event);
 				/*
 				 * If the customizer throws an unchecked exception, it is safe
@@ -434,7 +438,7 @@ public class BundleTracker<S> implements BundleTrackerCustomizer<S> {
 		 * @return Customized object for the tracked item or <code>null</code>
 		 *         if the item is not to be tracked.
 		 */
-		S customizerAdding(final Bundle item, final BundleEvent related) {
+		T customizerAdding(final Bundle item, final BundleEvent related) {
 			return customizer
 					.addingBundle(item, related);
 		}
@@ -448,7 +452,7 @@ public class BundleTracker<S> implements BundleTrackerCustomizer<S> {
 		 * @param object Customized object for the tracked item.
 		 */
 		void customizerModified(final Bundle item, final BundleEvent related,
-				final S object) {
+				final T object) {
 			customizer.modifiedBundle(item, related, object);
 		}
 
@@ -461,7 +465,7 @@ public class BundleTracker<S> implements BundleTrackerCustomizer<S> {
 		 * @param object Customized object for the tracked item.
 		 */
 		void customizerRemoved(final Bundle item, final BundleEvent related,
-				final S object) {
+				final T object) {
 			customizer.removedBundle(item, related, object);
 		}
 	}

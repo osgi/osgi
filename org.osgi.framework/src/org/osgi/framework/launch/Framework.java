@@ -88,7 +88,7 @@ public interface Framework extends Bundle {
 	 *             property is set.
 	 *             
 	 */
-	public void init() throws BundleException;
+	public void init();
 
 	/**
 	 * Wait until this Framework has completely stopped. The <code>stop</code>
@@ -169,7 +169,7 @@ public interface Framework extends Bundle {
 	 *             Runtime Environment supports permissions.
 	 * @see "Start Level Service Specification"
 	 */
-	public void start() throws BundleException;
+	public void start();
 
 	/**
 	 * Start this Framework.
@@ -188,7 +188,7 @@ public interface Framework extends Bundle {
 	 *             Runtime Environment supports permissions.
 	 * @see #start()
 	 */
-	public void start(int options) throws BundleException;
+	public void start(int options);
 
 	/**
 	 * Stop this Framework.
@@ -225,7 +225,7 @@ public interface Framework extends Bundle {
 	 *             Runtime Environment supports permissions.
 	 * @see "Start Level Service Specification"
 	 */
-	public void stop() throws BundleException;
+	public void stop();
 
 	/**
 	 * Stop this Framework.
@@ -244,7 +244,7 @@ public interface Framework extends Bundle {
 	 *             Runtime Environment supports permissions.
 	 * @see #stop()
 	 */
-	public void stop(int options) throws BundleException;
+	public void stop(int options);
 
 	/**
 	 * The Framework cannot be uninstalled.
@@ -259,7 +259,7 @@ public interface Framework extends Bundle {
 	 *             <code>AdminPermission[this,LIFECYCLE]</code>, and the Java
 	 *             Runtime Environment supports permissions.
 	 */
-	public void uninstall() throws BundleException;
+	public void uninstall();
 
 	/**
 	 * Stop and restart this Framework.
@@ -282,7 +282,7 @@ public interface Framework extends Bundle {
 	 *             <code>AdminPermission[this,LIFECYCLE]</code>, and the Java
 	 *             Runtime Environment supports permissions.
 	 */
-	public void update() throws BundleException;
+	public void update();
 
 	/**
 	 * Stop and restart this Framework.
@@ -302,7 +302,7 @@ public interface Framework extends Bundle {
 	 *             <code>AdminPermission[this,LIFECYCLE]</code>, and the Java
 	 *             Runtime Environment supports permissions.
 	 */
-	public void update(InputStream in) throws BundleException;
+	public void update(InputStream in);
 
 	/**
 	 * Returns the Framework unique identifier. This Framework is assigned the

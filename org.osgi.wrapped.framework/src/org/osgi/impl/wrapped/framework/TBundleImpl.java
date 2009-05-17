@@ -83,7 +83,7 @@ public class TBundleImpl implements TBundle {
 
 	public TServiceReference[] getRegisteredServices() {
 		ServiceReference[] references = bundle.getRegisteredServices();
-		return T.toReferences(references);
+		return T.toTServiceReferences(references);
 	}
 
 	public URL getResource(String name) {
@@ -97,7 +97,7 @@ public class TBundleImpl implements TBundle {
 
 	public TServiceReference[] getServicesInUse() {
 		ServiceReference[] references = bundle.getServicesInUse();
-		return T.toReferences(references);
+		return T.toTServiceReferences(references);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -115,19 +115,14 @@ public class TBundleImpl implements TBundle {
 
 	public TVersion getVersion() {
 		Version version = bundle.getVersion();
-		if (version == Version.emptyVersion) {
-			return TVersion.emptyVersion;
-		}
-		return new TVersion(version.getMajor(), version.getMinor(), version
-				.getMicro(), version.getQualifier());
+		return T.toTVersion(version);
 	}
 
 	public boolean hasPermission(Object permission) {
 		return bundle.hasPermission(permission);
 	}
 
-	@SuppressWarnings("unchecked")
-	public Class loadClass(String name) throws ClassNotFoundException {
+	public Class< ? > loadClass(String name) throws ClassNotFoundException {
 		return bundle.loadClass(name);
 	}
 

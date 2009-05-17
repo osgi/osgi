@@ -18,15 +18,19 @@ package org.osgi.thunk.framework;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.IdentityHashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
-import org.osgi.framework.Filter;
+import org.osgi.framework.ExportedPackage;
+import org.osgi.framework.Framework;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.bundle.AllServiceListener;
@@ -45,7 +49,7 @@ import org.osgi.wrapped.framework.TInvalidSyntaxException;
 import org.osgi.wrapped.framework.TServiceListener;
 import org.osgi.wrapped.framework.TServiceReference;
 
-public class BundleContextImpl implements BundleContext {
+public class BundleContextImpl implements BundleContext, Framework {
 
 	final TBundleContext										context;
 	private volatile BundleActivator							activator;
@@ -140,22 +144,9 @@ public class BundleContextImpl implements BundleContext {
 		}
 	}
 
-	public void addServiceListener(ServiceListener listener) {
-		addServiceListener(listener, null);
-	}
-
 	public void removeServiceListener(ServiceListener listener) {
 		synchronized (serviceListeners) {
 			context.removeServiceListener(serviceListeners.remove(listener));
-		}
-	}
-
-	public Filter createFilter(String filter) {
-		try {
-			return new FilterImpl(context.createFilter(filter));
-		}
-		catch (TInvalidSyntaxException e) {
-			throw T.toInvalidSyntaxException(e);
 		}
 	}
 
@@ -172,11 +163,11 @@ public class BundleContextImpl implements BundleContext {
 	}
 
 	public Bundle getBundle() {
-		return new BundleImpl(context.getBundle());
+		return T.toBundle(context.getBundle());
 	}
 
 	public Bundle getBundle(long id) {
-		return new BundleImpl(context.getBundle(id));
+		return T.toBundle(context.getBundle(id));
 	}
 
 	public Collection<Bundle> getBundles() {
@@ -202,7 +193,7 @@ public class BundleContextImpl implements BundleContext {
 	}
 
 	public ServiceReference<?> getServiceReference(String clazz) {
-		return new ServiceReferenceImpl<Object>(context.getServiceReference(clazz));
+		return T.toReference(context.getServiceReference(clazz));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -210,11 +201,10 @@ public class BundleContextImpl implements BundleContext {
 		return (ServiceReference<S>) getServiceReference(clazz.getName());
 	}
 
-	public Collection<ServiceReference< ? >> getServiceReferences(
-			String clazz, String filter) {
+	public Collection<ServiceReference< ? >> getServiceReferences(String filter) {
 		try {
-			TServiceReference[] references = context.getServiceReferences(
-					clazz, filter);
+			TServiceReference[] references = context.getServiceReferences(null,
+					filter);
 			return T.toReferences(references);
 		}
 		catch (TInvalidSyntaxException e) {
@@ -222,6 +212,19 @@ public class BundleContextImpl implements BundleContext {
 		}
 	}
 
+	public Collection<ServiceReference< ? >> getServiceReferences(
+			String clazz, String filter) {
+		try {
+			TServiceReference[] references = context.getServiceReferences(
+					clazz
+					.toString(), filter);
+			return T.toReferences(references);
+		}
+		catch (TInvalidSyntaxException e) {
+			throw T.toInvalidSyntaxException(e);
+		}
+	}
+	
 	@SuppressWarnings("unchecked")
 	public <S> Collection<ServiceReference<S>> getServiceReferences(
 			Class<S> clazz, String filter) {
@@ -239,17 +242,13 @@ public class BundleContextImpl implements BundleContext {
 		}
 	}
 
-	public Bundle installBundle(String location) throws BundleException {
-		return installBundle(location, null);
-	}
-
 	@SuppressWarnings("unchecked")
 	public ServiceRegistration<?> registerService(String[] clazzes,
 			Object service, Map<String, Object> properties) {
 		if (service instanceof ServiceFactory) {
 			service = new TServiceFactoryImpl((ServiceFactory<Object>) service);
 		}
-		return new ServiceRegistrationImpl<Object>(context.registerService(clazzes,
+		return T.toRegistration(context.registerService(clazzes,
 				service, T.toDictionary(properties)));
 	}
 
@@ -266,15 +265,74 @@ public class BundleContextImpl implements BundleContext {
 		return (ServiceRegistration<S>) registerService(clazz.getName(), service, properties);
 	}
 
-	@SuppressWarnings("unchecked")
-	public <S> ServiceRegistration<S> registerService(Class<S> clazz,
-			S service, Map<String, Object> properties, Class< ? >[] moreClasses) {
-		String classes[] = new String[moreClasses.length+1];
-		classes[0] = clazz.getName();
-		for (int i = 0; i < moreClasses.length; i++) {
-			classes[i+1] = moreClasses[i].getName();
+	public Framework getFramework() {
+		return this;
+	}
+
+	private final List<GottenService< ? extends Object>>	gets	= new ArrayList<GottenService< ? extends Object>>(); 
+	private static class GottenService<S> {
+		final ServiceReference<S>	reference;
+		final S						service;
+		GottenService(ServiceReference<S> ref, S service) {
+			this.reference = ref;
+			this.service = service;
 		}
-		return (ServiceRegistration<S>) registerService(classes, service, properties);
+	}
+	
+	public <S> S getService(Class<S> clazz) {
+		ServiceReference<S> reference = getServiceReference(clazz);
+		if (reference == null) {
+			return null;
+		}
+		S service = getService(reference);
+		if (service == null) {
+			return null;
+		}
+		
+		GottenService<S> reg = new GottenService<S>(reference,service);
+		gets.add(reg);
+		return service;
+	}
+
+	public <S> void ungetService(S service) {
+		for (Iterator<GottenService< ? >> iter = gets.iterator(); iter
+				.hasNext();) {
+			GottenService< ? > gotten = iter.next();
+			if (gotten.service == service) {
+				iter.remove();
+				ungetService(gotten.reference);
+			}
+		}
+	}
+
+	public Bundle getBundle(Class< ? > clazz) {
+		return T.toBundle(Activator.getTPackageAdmin().getBundle(clazz));
+	}
+
+	public Collection<Bundle> getBundles(String symbolicName,
+			String versionRange) {
+		return T.toBundles(Activator.getTPackageAdmin().getBundles(
+				symbolicName, versionRange));
+	}
+
+	public Collection<ExportedPackage> getExportedPackages(String name) {
+		if (name == null) {
+			return T.toExportedPackages(Activator.getTPackageAdmin()
+					.getExportedPackages((TBundle) null));
+		}
+		return T.toExportedPackages(Activator.getTPackageAdmin()
+				.getExportedPackages(name));
+	}
+
+	public void refreshPackages(Bundle... bundles) {
+		Activator.getTPackageAdmin().refreshPackages(
+				(bundles == null) ? null : T.toTBundles(bundles));
+	}
+
+	public boolean resolveBundles(Bundle... bundles) {
+		return Activator.getTPackageAdmin().resolveBundles(
+				(bundles == null) ? null : 
+				T.toTBundles(bundles));
 	}
 
 	@Override

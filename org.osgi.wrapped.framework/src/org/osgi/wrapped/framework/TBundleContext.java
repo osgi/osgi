@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.Dictionary;
 
+import org.osgi.wrapped.service.packageadmin.TPackageAdmin;
+
 /**
  * A bundle's execution context within the Framework. The context is used to
  * grant access to other methods so that this bundle can interact with the
@@ -753,4 +755,6 @@ public interface TBundleContext {
 	 * @since 1.1
 	 */
 	public TFilter createFilter(String filter) throws TInvalidSyntaxException;
+	
+	public TPackageAdmin getTPackageAdmin();
 }

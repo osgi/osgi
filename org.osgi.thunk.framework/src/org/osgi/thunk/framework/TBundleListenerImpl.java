@@ -17,6 +17,7 @@
 package org.osgi.thunk.framework;
 
 import org.osgi.framework.BundleEvent;
+import org.osgi.framework.BundleEvent.Type;
 import org.osgi.framework.bundle.BundleListener;
 import org.osgi.wrapped.framework.TBundleEvent;
 import org.osgi.wrapped.framework.TBundleListener;
@@ -29,7 +30,8 @@ public class TBundleListenerImpl implements TBundleListener {
 	}
 
 	public void bundleChanged(TBundleEvent event) {
-		listener.bundleChanged(new BundleEvent(event.getType(), new BundleImpl(
+		listener.bundleChanged(new BundleEvent(getType(event.getType()),
+				new BundleImpl(
 				event.getBundle())));
 	}
 
@@ -46,6 +48,15 @@ public class TBundleListenerImpl implements TBundleListener {
 	@Override
 	public String toString() {
 		return listener.toString();
+	}
+	
+	private Type getType(int value) {
+		for (Type type : Type.values()) {
+			if (type.getValue() == value) {
+				return type;
+			}
+		}
+		throw new AssertionError("unknown BundleEvent type: " + value);
 	}
 
 }

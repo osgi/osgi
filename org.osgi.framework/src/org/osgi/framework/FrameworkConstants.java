@@ -1125,7 +1125,7 @@ public class FrameworkConstants {
 	 * must be activated when the first class load is made from the bundle.
 	 * <p>
 	 * A bundle with the lazy activation policy that is started with the
-	 * {@link Bundle#START_ACTIVATION_POLICY START_ACTIVATION_POLICY} option
+	 * {@link Bundle#ACTIVATION_POLICY START_ACTIVATION_POLICY} option
 	 * will wait in the {@link Bundle#STARTING STARTING} state until the first
 	 * class load from the bundle occurs. The bundle will then be activated
 	 * before the class is returned to the requestor.
@@ -1139,7 +1139,7 @@ public class FrameworkConstants {
 	 * 
 	 * @see FrameworkConstants#BUNDLE_ACTIVATIONPOLICY
 	 * @see Bundle#start(int)
-	 * @see Bundle#START_ACTIVATION_POLICY
+	 * @see Bundle#ACTIVATION_POLICY
 	 * @since 1.4
 	 */
 	public final static String	ACTIVATION_LAZY							= "lazy";

@@ -35,7 +35,7 @@ package org.osgi.framework;
  * @version $Revision$
  */
 
-public class BundleException extends Exception {
+public class BundleException extends RuntimeException {
 	static final long		serialVersionUID		= 3571095144220455665L;
 	/**
 	 * Type of bundle exception.

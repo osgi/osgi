@@ -30,6 +30,7 @@ import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.wrapped.framework.TAllServiceListener;
 import org.osgi.wrapped.framework.TBundle;
 import org.osgi.wrapped.framework.TBundleActivator;
@@ -39,11 +40,13 @@ import org.osgi.wrapped.framework.TBundleListener;
 import org.osgi.wrapped.framework.TFilter;
 import org.osgi.wrapped.framework.TFrameworkListener;
 import org.osgi.wrapped.framework.TInvalidSyntaxException;
+import org.osgi.wrapped.framework.TServiceException;
 import org.osgi.wrapped.framework.TServiceFactory;
 import org.osgi.wrapped.framework.TServiceListener;
 import org.osgi.wrapped.framework.TServiceReference;
 import org.osgi.wrapped.framework.TServiceRegistration;
 import org.osgi.wrapped.framework.TSynchronousBundleListener;
+import org.osgi.wrapped.service.packageadmin.TPackageAdmin;
 
 public class TBundleContextImpl implements TBundleContext {
 	final BundleContext											context;
@@ -170,7 +173,7 @@ public class TBundleContextImpl implements TBundleContext {
 		try {
 			ServiceReference[] references = context.getAllServiceReferences(
 					clazz, filter);
-			return T.toReferences(references);
+			return T.toTServiceReferences(references);
 		}
 		catch (InvalidSyntaxException e) {
 			throw T.toTInvalidSyntaxException(e);
@@ -178,16 +181,16 @@ public class TBundleContextImpl implements TBundleContext {
 	}
 
 	public TBundle getBundle() {
-		return new TBundleImpl(context.getBundle());
+		return T.toTBundle(context.getBundle());
 	}
 
 	public TBundle getBundle(long id) {
-		return new TBundleImpl(context.getBundle(id));
+		return T.toTBundle(context.getBundle(id));
 	}
 
 	public TBundle[] getBundles() {
 		Bundle[] bundles = context.getBundles();
-		return T.toBundles(bundles);
+		return T.toTBundles(bundles);
 	}
 
 	public File getDataFile(String filename) {
@@ -203,7 +206,7 @@ public class TBundleContextImpl implements TBundleContext {
 	}
 
 	public TServiceReference getServiceReference(String clazz) {
-		return new TServiceReferenceImpl(context.getServiceReference(clazz));
+		return T.toTServiceReference(context.getServiceReference(clazz));
 	}
 
 	public TServiceReference[] getServiceReferences(String clazz, String filter)
@@ -211,7 +214,7 @@ public class TBundleContextImpl implements TBundleContext {
 		try {
 			ServiceReference[] references = context.getServiceReferences(clazz,
 					filter);
-			return T.toReferences(references);
+			return T.toTServiceReferences(references);
 		}
 		catch (InvalidSyntaxException e) {
 			throw T.toTInvalidSyntaxException(e);
@@ -267,4 +270,19 @@ public class TBundleContextImpl implements TBundleContext {
 		return context.toString();
 	}
 
+	public TPackageAdmin getTPackageAdmin() {
+		ServiceReference reference = context
+				.getServiceReference(PackageAdmin.class.getName());
+		if (reference == null) {
+			throw new TServiceException("Could not find PackageAdmin",
+					TServiceException.UNREGISTERED);
+		}
+
+		PackageAdmin pa = (PackageAdmin) context.getService(reference);
+		if (pa == null) {
+			throw new TServiceException("Could not get PackageAdmin",
+					TServiceException.FACTORY_ERROR);
+		}
+		return new TPackageAdminImpl(pa);
+	}
 }

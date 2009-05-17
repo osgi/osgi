@@ -48,7 +48,7 @@ import org.osgi.framework.ServiceReference;
  * @version $Revision$
  * @param <S>
  */
-public interface ServiceTrackerCustomizer<S> {
+public interface ServiceTrackerCustomizer<S, T> {
 	/**
 	 * A service is being added to the <code>ServiceTracker</code>.
 	 * 
@@ -67,7 +67,7 @@ public interface ServiceTrackerCustomizer<S> {
 	 *         service or <code>null</code> if the specified referenced service
 	 *         should not be tracked.
 	 */
-	public S addingService(ServiceReference<S> reference);
+	public T addingService(ServiceReference<S> reference);
 
 	/**
 	 * A service tracked by the <code>ServiceTracker</code> has been modified.
@@ -79,7 +79,7 @@ public interface ServiceTrackerCustomizer<S> {
 	 * @param reference The reference to the service that has been modified.
 	 * @param service The service object for the specified referenced service.
 	 */
-	public void modifiedService(ServiceReference<S> reference, S service);
+	public void modifiedService(ServiceReference<S> reference, T service);
 
 	/**
 	 * A service tracked by the <code>ServiceTracker</code> has been removed.
@@ -91,5 +91,5 @@ public interface ServiceTrackerCustomizer<S> {
 	 * @param reference The reference to the service that has been removed.
 	 * @param service The service object for the specified referenced service.
 	 */
-	public void removedService(ServiceReference<S> reference, S service);
+	public void removedService(ServiceReference<S> reference, T service);
 }

@@ -47,7 +47,7 @@ public class TServiceReferenceImpl implements TServiceReference {
 
 	public TBundle[] getUsingBundles() {
 		Bundle[] bundles = reference.getUsingBundles();
-		return T.toBundles(bundles);
+		return T.toTBundles(bundles);
 	}
 
 	public boolean isAssignableTo(TBundle bundle, String className) {

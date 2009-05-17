@@ -18,6 +18,7 @@
 package org.osgi.thunk.framework;
 
 import org.osgi.framework.FrameworkEvent;
+import org.osgi.framework.FrameworkEvent.Type;
 import org.osgi.framework.bundle.FrameworkListener;
 import org.osgi.wrapped.framework.TFrameworkEvent;
 import org.osgi.wrapped.framework.TFrameworkListener;
@@ -30,7 +31,7 @@ public class TFrameworkListenerImpl implements TFrameworkListener {
 	}
 
 	public void frameworkEvent(TFrameworkEvent event) {
-		listener.frameworkEvent(new FrameworkEvent(event.getType(),
+		listener.frameworkEvent(new FrameworkEvent(getType(event.getType()),
 				new BundleImpl(event.getBundle()), event.getThrowable()));
 	}
 
@@ -47,6 +48,15 @@ public class TFrameworkListenerImpl implements TFrameworkListener {
 	@Override
 	public String toString() {
 		return listener.toString();
+	}
+	
+	private Type getType(int value) {
+		for (Type type : Type.values()) {
+			if (type.getValue() == value) {
+				return type;
+			}
+		}
+		throw new AssertionError("unknown FrameworkEvent type: " + value);
 	}
 
 }

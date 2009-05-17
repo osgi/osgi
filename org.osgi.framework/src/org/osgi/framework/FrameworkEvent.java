@@ -18,7 +18,6 @@ package org.osgi.framework;
 
 import org.osgi.framework.bundle.FrameworkListener;
 
-
 /**
  * A general event from the Framework.
  * 
@@ -37,7 +36,7 @@ import org.osgi.framework.bundle.FrameworkListener;
  */
 
 public class FrameworkEvent {
-	static final long		serialVersionUID				= 207051004521261705L;
+	static final long		serialVersionUID	= 207051004521261705L;
 	/**
 	 * Bundle related to the event.
 	 */
@@ -51,137 +50,7 @@ public class FrameworkEvent {
 	/**
 	 * Type of event.
 	 */
-	private final int		type;
-
-	/**
-	 * The Framework has started.
-	 * 
-	 * <p>
-	 * This event is fired when the Framework has started after all installed
-	 * bundles that are marked to be started have been started and the Framework
-	 * has reached the initial start level. The source of this event is the
-	 * System Bundle.
-	 * 
-	 * <p>
-	 * The value of <code>STARTED</code> is 0x00000001.
-	 * 
-	 * @see "<code>StartLevel</code>"
-	 */
-	public final static int	STARTED							= 0x00000001;
-
-	/**
-	 * An error has occurred.
-	 * 
-	 * <p>
-	 * There was an error associated with a bundle.
-	 * 
-	 * <p>
-	 * The value of <code>ERROR</code> is 0x00000002.
-	 */
-	public final static int	ERROR							= 0x00000002;
-
-	/**
-	 * A PackageAdmin.refreshPackage operation has completed.
-	 * 
-	 * <p>
-	 * This event is fired when the Framework has completed the refresh packages
-	 * operation initiated by a call to the PackageAdmin.refreshPackages method.
-	 * The source of this event is the System Bundle.
-	 * 
-	 * <p>
-	 * The value of <code>PACKAGES_REFRESHED</code> is 0x00000004.
-	 * 
-	 * @since 1.2
-	 * @see "<code>PackageAdmin.refreshPackages</code>"
-	 */
-	public final static int	PACKAGES_REFRESHED				= 0x00000004;
-
-	/**
-	 * A StartLevel.setStartLevel operation has completed.
-	 * 
-	 * <p>
-	 * This event is fired when the Framework has completed changing the active
-	 * start level initiated by a call to the StartLevel.setStartLevel method.
-	 * The source of this event is the System Bundle.
-	 * 
-	 * <p>
-	 * The value of <code>STARTLEVEL_CHANGED</code> is 0x00000008.
-	 * 
-	 * @since 1.2
-	 * @see "<code>StartLevel</code>"
-	 */
-	public final static int	STARTLEVEL_CHANGED				= 0x00000008;
-
-	/**
-	 * A warning has occurred.
-	 * 
-	 * <p>
-	 * There was a warning associated with a bundle.
-	 * 
-	 * <p>
-	 * The value of <code>WARNING</code> is 0x00000010.
-	 * 
-	 * @since 1.3
-	 */
-	public final static int	WARNING							= 0x00000010;
-
-	/**
-	 * An informational event has occurred.
-	 * 
-	 * <p>
-	 * There was an informational event associated with a bundle.
-	 * 
-	 * <p>
-	 * The value of <code>INFO</code> is 0x00000020.
-	 * 
-	 * @since 1.3
-	 */
-	public final static int	INFO							= 0x00000020;
-
-	/**
-	 * The Framework has stopped.
-	 * 
-	 * <p>
-	 * This event is fired when the Framework has been stopped because of a stop
-	 * operation on the system bundle. The source of this event is the System
-	 * Bundle.
-	 * 
-	 * <p>
-	 * The value of <code>STOPPED</code> is 0x00000040.
-	 * 
-	 * @since 1.5
-	 */
-	public final static int	STOPPED							= 0x00000040;
-
-	/**
-	 * The Framework has stopped during update.
-	 * 
-	 * <p>
-	 * This event is fired when the Framework has been stopped because of an
-	 * update operation on the system bundle. The Framework will be restarted
-	 * after this event is fired. The source of this event is the System Bundle.
-	 * 
-	 * <p>
-	 * The value of <code>STOPPED_UPDATE</code> is 0x00000080.
-	 * 
-	 * @since 1.5
-	 */
-	public final static int	STOPPED_UPDATE					= 0x00000080;
-
-	/**
-	 * The Framework has stopped and the boot class path has changed.
-	 * 
-	 * <p>
-	 * This event is fired when the Framework has been stopped because of a stop
-	 * operation on the system bundle and a bootclasspath extension bundle has
-	 * been installed or updated. The source of this event is the System Bundle.
-	 * 
-	 * <p>
-	 * The value of <code>STOPPED_BOOTCLASSPATH_MODIFIED</code> is 0x00000100.
-	 * 
-	 * @since 1.5
-	 */
-	public final static int	STOPPED_BOOTCLASSPATH_MODIFIED	= 0x00000100;
+	private final Type		type;
 
 	/**
 	 * Creates a Framework event regarding the specified bundle.
@@ -191,7 +60,7 @@ public class FrameworkEvent {
 	 * @param throwable The related exception. This argument may be
 	 *        <code>null</code> if there is no related exception.
 	 */
-	public FrameworkEvent(int type, Bundle bundle, Throwable throwable) {
+	public FrameworkEvent(Type type, Bundle bundle, Throwable throwable) {
 		this.type = type;
 		this.bundle = bundle;
 		this.throwable = throwable;
@@ -232,7 +101,150 @@ public class FrameworkEvent {
 	 * @return The type of state change.
 	 */
 
-	public int getType() {
+	public Type getType() {
 		return type;
 	}
+
+	public static enum Type {
+		/**
+		 * The Framework has started.
+		 * 
+		 * <p>
+		 * This event is fired when the Framework has started after all
+		 * installed bundles that are marked to be started have been started and
+		 * the Framework has reached the initial start level. The source of this
+		 * event is the System Bundle.
+		 * 
+		 * <p>
+		 * The value of <code>STARTED</code> is 0x00000001.
+		 * 
+		 * @see "<code>StartLevel</code>"
+		 */
+		STARTED(0x00000001),
+		/**
+		 * An error has occurred.
+		 * 
+		 * <p>
+		 * There was an error associated with a bundle.
+		 * 
+		 * <p>
+		 * The value of <code>ERROR</code> is 0x00000002.
+		 */
+		ERROR(0x00000002),
+		/**
+		 * A PackageAdmin.refreshPackage operation has completed.
+		 * 
+		 * <p>
+		 * This event is fired when the Framework has completed the refresh
+		 * packages operation initiated by a call to the
+		 * PackageAdmin.refreshPackages method. The source of this event is the
+		 * System Bundle.
+		 * 
+		 * <p>
+		 * The value of <code>PACKAGES_REFRESHED</code> is 0x00000004.
+		 * 
+		 * @since 1.2
+		 * @see "<code>PackageAdmin.refreshPackages</code>"
+		 */
+		PACKAGES_REFRESHED(0x00000004),
+		/**
+		 * A StartLevel.setStartLevel operation has completed.
+		 * 
+		 * <p>
+		 * This event is fired when the Framework has completed changing the
+		 * active start level initiated by a call to the
+		 * StartLevel.setStartLevel method. The source of this event is the
+		 * System Bundle.
+		 * 
+		 * <p>
+		 * The value of <code>STARTLEVEL_CHANGED</code> is 0x00000008.
+		 * 
+		 * @since 1.2
+		 * @see "<code>StartLevel</code>"
+		 */
+		STARTLEVEL_CHANGED(0x00000008),
+		/**
+		 * A warning has occurred.
+		 * 
+		 * <p>
+		 * There was a warning associated with a bundle.
+		 * 
+		 * <p>
+		 * The value of <code>WARNING</code> is 0x00000010.
+		 * 
+		 * @since 1.3
+		 */
+		WARNING(0x00000010),
+		/**
+		 * An informational event has occurred.
+		 * 
+		 * <p>
+		 * There was an informational event associated with a bundle.
+		 * 
+		 * <p>
+		 * The value of <code>INFO</code> is 0x00000020.
+		 * 
+		 * @since 1.3
+		 */
+		INFO(0x00000020),
+		/**
+		 * The Framework has stopped.
+		 * 
+		 * <p>
+		 * This event is fired when the Framework has been stopped because of a
+		 * stop operation on the system bundle. The source of this event is the
+		 * System Bundle.
+		 * 
+		 * <p>
+		 * The value of <code>STOPPED</code> is 0x00000040.
+		 * 
+		 * @since 1.5
+		 */
+		STOPPED(0x00000040),
+		/**
+		 * The Framework has stopped during update.
+		 * 
+		 * <p>
+		 * This event is fired when the Framework has been stopped because of an
+		 * update operation on the system bundle. The Framework will be
+		 * restarted after this event is fired. The source of this event is the
+		 * System Bundle.
+		 * 
+		 * <p>
+		 * The value of <code>STOPPED_UPDATE</code> is 0x00000080.
+		 * 
+		 * @since 1.5
+		 */
+		STOPPED_UPDATE(0x00000080),
+		/**
+		 * The Framework has stopped and the boot class path has changed.
+		 * 
+		 * <p>
+		 * This event is fired when the Framework has been stopped because of a
+		 * stop operation on the system bundle and a bootclasspath extension
+		 * bundle has been installed or updated. The source of this event is the
+		 * System Bundle.
+		 * 
+		 * <p>
+		 * The value of <code>STOPPED_BOOTCLASSPATH_MODIFIED</code> is
+		 * 0x00000100.
+		 * 
+		 * @since 1.5
+		 */
+		STOPPED_BOOTCLASSPATH_MODIFIED(0x00000100);
+		private final int	value;
+
+		Type(int value) {
+			this.value = value;
+		}
+
+		/**
+		 * @return value
+		 */
+		public int getValue() {
+			return value;
+		}
+
+	}
+
 }

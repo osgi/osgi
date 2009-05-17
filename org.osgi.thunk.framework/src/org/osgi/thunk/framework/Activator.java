@@ -17,17 +17,29 @@
 
 package org.osgi.thunk.framework;
 
+import org.osgi.framework.ServiceException;
 import org.osgi.wrapped.framework.TBundle;
 import org.osgi.wrapped.framework.TBundleActivator;
 import org.osgi.wrapped.framework.TBundleContext;
 import org.osgi.wrapped.framework.TBundleEvent;
+import org.osgi.wrapped.service.packageadmin.TPackageAdmin;
 
 public class Activator implements TBundleActivator,
 		TBundleTrackerCustomizer<BundleContextImpl> {
 
 	private TBundleTracker<BundleContextImpl>	tracker;
+	private static TPackageAdmin				packageAdmin;
+
+	static TPackageAdmin getTPackageAdmin() {
+		if (packageAdmin == null) {
+			throw new ServiceException("No PackageAdmin service avalable",
+					ServiceException.UNREGISTERED);
+		}
+		return packageAdmin;
+	}
 
 	public void start(TBundleContext tcontext) throws Exception {
+		packageAdmin = tcontext.getTPackageAdmin();
 		tracker = new TBundleTracker<BundleContextImpl>(tcontext,
 				TBundle.ACTIVE,
 				this);
@@ -43,11 +55,12 @@ public class Activator implements TBundleActivator,
 				.getBundleContext());
 		try {
 			targetContext.start();
+			return targetContext;
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		return targetContext;
+		return null;
 	}
 
 	public void modifiedBundle(TBundle bundle, TBundleEvent event,

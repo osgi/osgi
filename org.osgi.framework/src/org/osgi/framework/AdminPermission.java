@@ -16,6 +16,8 @@
 
 package org.osgi.framework;
 
+import static org.osgi.framework.Bundle.SignerOption.TRUSTED;
+
 import java.io.IOException;
 import java.io.InvalidObjectException;
 import java.security.AccessController;
@@ -950,7 +952,7 @@ public final class AdminPermission extends BasicPermission {
 			Bundle matchBundle = bundle != null ? bundle : other.bundle;
 			String matchPattern = bundle != null ? other.pattern : pattern;
 			Map<X509Certificate, List<X509Certificate>> signers = matchBundle
-					.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
+					.getSignerCertificates(TRUSTED);
 			for (List<X509Certificate> signerCerts : signers.values()) {
 				List<String> dnChain = new ArrayList<String>(signerCerts.size());
 				for (X509Certificate cert : signerCerts) {
@@ -978,7 +980,7 @@ public final class AdminPermission extends BasicPermission {
 				return false;
 			}
 			Map<X509Certificate, List<X509Certificate>> signers = bundle
-					.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
+					.getSignerCertificates(TRUSTED);
 			return !signers.isEmpty();
 		}
 	}

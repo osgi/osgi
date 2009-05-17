@@ -5,7 +5,7 @@ javac.target = 1.5
 Bundle-Activator: org.osgi.impl.wrapped.framework.Activator
 Bundle-Version						: 0.1.0.${project.build}
 
-Export-Package: 	${p}.*
+Export-Package: 	org.osgi.wrapped.*
 Private-Package: 	org.osgi.impl.wrapped.framework.*
 
 

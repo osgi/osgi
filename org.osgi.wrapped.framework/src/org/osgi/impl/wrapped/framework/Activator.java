@@ -25,15 +25,15 @@ import org.osgi.util.tracker.BundleTracker;
 import org.osgi.util.tracker.BundleTrackerCustomizer;
 
 public class Activator implements BundleActivator, BundleTrackerCustomizer {
-	private BundleTracker	tracker;
+	private BundleTracker	bundleTracker;
 
 	public void start(BundleContext context) throws Exception {
-		tracker = new BundleTracker(context, Bundle.ACTIVE, this);
-		tracker.open();
+		bundleTracker = new BundleTracker(context, Bundle.ACTIVE, this);
+		bundleTracker.open();
 	}
 
 	public void stop(BundleContext context) throws Exception {
-		tracker.close();
+		bundleTracker.close();
 	}
 
 	public Object addingBundle(Bundle bundle, BundleEvent event) {
@@ -61,5 +61,4 @@ public class Activator implements BundleActivator, BundleTrackerCustomizer {
 			e.printStackTrace();
 		}
 	}
-
 }

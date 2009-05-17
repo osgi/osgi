@@ -17,6 +17,9 @@
 
 package test.bundle.alpha;
 
+import static java.util.EnumSet.of;
+import static org.osgi.framework.Bundle.State.ACTIVE;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
@@ -31,7 +34,7 @@ public class Activator implements BundleActivator,
 
 	public void start(BundleContext context) throws Exception {
 		System.out.println("Hello World! " + context.toString());
-		tracker = new BundleTracker<Bundle>(context, Bundle.ACTIVE, this);
+		tracker = new BundleTracker<Bundle>(context, of(ACTIVE), this);
 		tracker.open();
 		tracker.close();
 	}
