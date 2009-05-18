@@ -25,7 +25,6 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.webcontainer.WebContainer;
 import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
 
@@ -183,13 +182,13 @@ public class ServletContextRegistrationTest extends
         final Map options = new HashMap();
         options.put(Constants.BUNDLE_VERSION, version);
         options.put(Constants.BUNDLE_SYMBOLICNAME, sname);
-        options.put(WebContainer.WEB_CONTEXT_PATH, cp);
+        options.put(WEB_CONTEXT_PATH, cp);
         return options;
     }
     
     private Bundle registerWarBundleTest(Map options, String warName, boolean start) throws Exception {
-        String cp = options.get(WebContainer.WEB_CONTEXT_PATH) == null ? null
-                : (String) options.get(WebContainer.WEB_CONTEXT_PATH);
+        String cp = options.get(WEB_CONTEXT_PATH) == null ? null
+                : (String) options.get(WEB_CONTEXT_PATH);
         // install the war file
         log("install and start war file: " + warName + " at contextPath " + cp);
         Bundle b = null;
@@ -222,7 +221,7 @@ public class ServletContextRegistrationTest extends
         sr = getContext().getServiceReference(ServletContext.class.getName());
         assertNotNull(sr);
         sc = (ServletContext)getContext().getService(sr);
-        assertEquals("check if servlet context path is correct", sc.getContextPath(), (String)b.getHeaders().get(WebContainer.WEB_CONTEXT_PATH));
+        assertEquals("check if servlet context path is correct", sc.getContextPath(), (String)b.getHeaders().get(WEB_CONTEXT_PATH));
         
         // get the service reference by Bundle-SymbolicName and Bundle-Version
         ServiceReference[] srs = getContext().getServiceReferences(ServletContext.class.getName(), "(" + Constants.BUNDLE_SYMBOLICNAME + "=" + (String)b.getHeaders().get(Constants.BUNDLE_SYMBOLICNAME));
@@ -238,7 +237,7 @@ public class ServletContextRegistrationTest extends
         assertEquals((ServletContext)getContext().getService(srs[0]), sc);
         
         // get the service reference by context-path
-        srs = getContext().getServiceReferences(ServletContext.class.getName(), "(" + WebContainer.WEB_CONTEXT_PATH + "=" + (String)b.getHeaders().get(WebContainer.WEB_CONTEXT_PATH));
+        srs = getContext().getServiceReferences(ServletContext.class.getName(), "(" + WEB_CONTEXT_PATH + "=" + (String)b.getHeaders().get(WEB_CONTEXT_PATH));
         assertNotNull(srs);
         assertEquals((ServletContext)getContext().getService(srs[0]), sc);
         
@@ -261,7 +260,7 @@ public class ServletContextRegistrationTest extends
         assertFalse("Bundle not started yet - should not be able to access "
                 + cp, super.ableAccessPath(cp));
         
-        srs = getContext().getServiceReferences(ServletContext.class.getName(), "(" + WebContainer.WEB_CONTEXT_PATH + "=" + (String)b.getHeaders().get(WebContainer.WEB_CONTEXT_PATH));
+        srs = getContext().getServiceReferences(ServletContext.class.getName(), "(" + WEB_CONTEXT_PATH + "=" + (String)b.getHeaders().get(WEB_CONTEXT_PATH));
         assertNull("srs should be null as the bundle has been stopped", srs);
 
         if (start) {

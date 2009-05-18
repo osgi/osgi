@@ -21,7 +21,6 @@ import java.util.Map;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
-import org.osgi.service.webcontainer.WebContainer;
 import org.osgi.test.cases.webcontainer.ManifestHeadersTestBundleControl;
 
 /**
@@ -146,7 +145,7 @@ public class BundleImportPackageTest extends ManifestHeadersTestBundleControl {
         // specify install options
         final Map options = new HashMap();
         options.put(Constants.IMPORT_PACKAGE, IMPORTS9);
-        options.put(WebContainer.WEB_CONTEXT_PATH, "/tw4");
+        options.put(WEB_CONTEXT_PATH, "/tw4");
         // install the war file
         log("install war file: tw4.war at context path /tw4");
         // may not be able to installBundle correctly if version is specified
@@ -179,7 +178,7 @@ public class BundleImportPackageTest extends ManifestHeadersTestBundleControl {
         // specify install options
         final Map options = new HashMap();
         options.put(Constants.IMPORT_PACKAGE, IMPORTS10);
-        options.put(WebContainer.WEB_CONTEXT_PATH, "/tw5");
+        options.put(WEB_CONTEXT_PATH, "/tw5");
         // install the war file
         log("install war file: tw5.war at context path /tw5");
         // may not be able to installBundle correctly if version is specified
@@ -212,7 +211,7 @@ public class BundleImportPackageTest extends ManifestHeadersTestBundleControl {
         // specify install options
         final Map options = new HashMap();
         options.put(Constants.IMPORT_PACKAGE, imports);
-        options.put(WebContainer.WEB_CONTEXT_PATH, cp);
+        options.put(WEB_CONTEXT_PATH, cp);
         return super.generalHeadersTest(options, warName, start);
     }
 }

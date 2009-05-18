@@ -20,7 +20,6 @@ import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
-import org.osgi.service.webcontainer.WebContainer;
 import org.osgi.test.cases.webcontainer.ManifestHeadersTestBundleControl;
 
 /**
@@ -123,7 +122,7 @@ public class BundleExportPackageTest extends ManifestHeadersTestBundleControl {
         // specify install options
         final Map options = new HashMap();
         options.put(Constants.EXPORT_PACKAGE, imports);
-        options.put(WebContainer.WEB_CONTEXT_PATH, cp);
+        options.put(WEB_CONTEXT_PATH, cp);
         return super.generalHeadersTest(options, warName, start);
     }
 }

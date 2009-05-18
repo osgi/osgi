@@ -20,7 +20,6 @@ import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
-import org.osgi.service.webcontainer.WebContainer;
 import org.osgi.test.cases.webcontainer.ManifestHeadersTestBundleControl;
 
 /**
@@ -460,8 +459,8 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
         options.put(Constants.BUNDLE_CLASSPATH, classpath);
         options.put(Constants.IMPORT_PACKAGE, imports);
         options.put(Constants.EXPORT_PACKAGE, exports);
-        options.put(WebContainer.WEB_CONTEXT_PATH, cp);
-        options.put(WebContainer.WEB_JSP_EXTRACT_LOCATION, jspLoc);
+        options.put(WEB_CONTEXT_PATH, cp);
+        options.put(WEB_JSP_EXTRACT_LOCATION, jspLoc);
         return options;
     }
 }

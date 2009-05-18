@@ -20,7 +20,6 @@ import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
-import org.osgi.service.webcontainer.WebContainer;
 import org.osgi.test.cases.webcontainer.ManifestHeadersTestBundleControl;
 
 /**
@@ -164,12 +163,12 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
         log("attempt to install war file: tw3.war at context path /tw3");
         Bundle b2 = null;
         Map options = new HashMap();
-        options.put(WebContainer.WEB_CONTEXT_PATH, WEBCONTEXTPATH3);
+        options.put(WEB_CONTEXT_PATH, WEBCONTEXTPATH3);
         try {
             b2 = installBundle(super.getWarURL("tw3.war", options), false);
             fail("bundle install should fail as "
-                    + WebContainer.WEB_CONTEXT_PATH + "is not unique: "
-                    + WebContainer.WEB_CONTEXT_PATH + " = " + WEBCONTEXTPATH3);
+                    + WEB_CONTEXT_PATH + "is not unique: "
+                    + WEB_CONTEXT_PATH + " = " + WEBCONTEXTPATH3);
         } catch (BundleException e) {
             // expected
         }
@@ -228,7 +227,7 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
         // specify install options
         final Map options = new HashMap();
         String cp = contextPath;
-        options.put(WebContainer.WEB_CONTEXT_PATH, cp);
+        options.put(WEB_CONTEXT_PATH, cp);
         return super.generalHeadersTest(options, warName, start);
     }
 }

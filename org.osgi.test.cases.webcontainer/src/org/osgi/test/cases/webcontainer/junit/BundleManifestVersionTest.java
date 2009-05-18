@@ -21,7 +21,6 @@ import java.util.Map;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
-import org.osgi.service.webcontainer.WebContainer;
 import org.osgi.test.cases.webcontainer.ManifestHeadersTestBundleControl;
 
 /**
@@ -127,7 +126,7 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
         // specify install options
         final Map options = new HashMap();
         options.put(Constants.BUNDLE_VERSION, MANIFESTVERSION2);
-        options.put(WebContainer.WEB_CONTEXT_PATH, "/tw2");
+        options.put(WEB_CONTEXT_PATH, "/tw2");
         // install the war file
         log("install war file: tw2.war at context path /tw2");
         try {
@@ -154,7 +153,7 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
         // specify install options
         final Map options = new HashMap();
         options.put(Constants.BUNDLE_VERSION, MANIFESTVERSION3);
-        options.put(WebContainer.WEB_CONTEXT_PATH, "/tw3");
+        options.put(WEB_CONTEXT_PATH, "/tw3");
         // install the war file
         log("install and start war file: tw3.war at context path /tw3");
         try {
@@ -179,7 +178,7 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
         // specify install options
         final Map options = new HashMap();
         options.put(Constants.BUNDLE_MANIFESTVERSION, version);
-        options.put(WebContainer.WEB_CONTEXT_PATH, cp);
+        options.put(WEB_CONTEXT_PATH, cp);
         return super.generalHeadersTest(options, warName, start);
     }
 }

@@ -26,7 +26,6 @@ import junit.framework.Assert;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
-import org.osgi.service.webcontainer.WebContainer;
 
 /**
  * @version $Rev$ $Date$
@@ -328,20 +327,20 @@ public class BundleManifestValidator extends Assert implements Validator{
      */
     public void validateWebContextPath() throws Exception {
         // verify Web-ContextPath exists
-        log(WebContainer.WEB_CONTEXT_PATH + " must exist as it is required");
+        log(WEB_CONTEXT_PATH + " must exist as it is required");
         if (this.debug) {
-            log(WebContainer.WEB_CONTEXT_PATH + " is " + (String)this.dictionary.get(WebContainer.WEB_CONTEXT_PATH));
+            log(WEB_CONTEXT_PATH + " is " + (String)this.dictionary.get(WEB_CONTEXT_PATH));
         }
-        assertNotNull((String)this.dictionary.get(WebContainer.WEB_CONTEXT_PATH));
+        assertNotNull((String)this.dictionary.get(WEB_CONTEXT_PATH));
         
         // dWebContextPath - deployer specified Web-ContextPath value
-        Object dWebContextPath = this.deployOptions == null ? null : this.deployOptions.get(WebContainer.WEB_CONTEXT_PATH);
+        Object dWebContextPath = this.deployOptions == null ? null : this.deployOptions.get(WEB_CONTEXT_PATH);
         // mWebContextPath - manifest Web-ContextPath value
-        Object mWebContextPath = this.manifest == null ? null : this.manifest.getMainAttributes().getValue(WebContainer.WEB_CONTEXT_PATH);
+        Object mWebContextPath = this.manifest == null ? null : this.manifest.getMainAttributes().getValue(WEB_CONTEXT_PATH);
         if (dWebContextPath != null) {
-            assertEquals((String) this.dictionary.get(WebContainer.WEB_CONTEXT_PATH), (String)dWebContextPath);
+            assertEquals((String) this.dictionary.get(WEB_CONTEXT_PATH), (String)dWebContextPath);
         } else if (mWebContextPath !=null) {
-            assertEquals((String) this.dictionary.get(WebContainer.WEB_CONTEXT_PATH), (String)mWebContextPath);
+            assertEquals((String) this.dictionary.get(WEB_CONTEXT_PATH), (String)mWebContextPath);
         }
         // TODO: verify Web-ContextPath is unique on the server
     }
@@ -354,19 +353,19 @@ public class BundleManifestValidator extends Assert implements Validator{
      */
     public void validateJSPExtractLocation() throws Exception {
         // verify Web-ContextPath exists
-        log(WebContainer.WEB_JSP_EXTRACT_LOCATION + " is optional");
+        log(WEB_JSP_EXTRACT_LOCATION + " is optional");
         if (this.debug) {
-            log(WebContainer.WEB_JSP_EXTRACT_LOCATION + " is " + (String)this.dictionary.get(WebContainer.WEB_JSP_EXTRACT_LOCATION));
+            log(WEB_JSP_EXTRACT_LOCATION + " is " + (String)this.dictionary.get(WEB_JSP_EXTRACT_LOCATION));
         }
         
         // dWebContextPath - deployer specified Web-ContextPath value
-        Object dJSPExtractLocation = this.deployOptions == null ? null : this.deployOptions.get(WebContainer.WEB_JSP_EXTRACT_LOCATION);
+        Object dJSPExtractLocation = this.deployOptions == null ? null : this.deployOptions.get(WEB_JSP_EXTRACT_LOCATION);
         // mWebContextPath - manifest Web-ContextPath value
-        Object mJSPExtractLocation = this.manifest == null ? null : this.manifest.getMainAttributes().getValue(WebContainer.WEB_JSP_EXTRACT_LOCATION);
+        Object mJSPExtractLocation = this.manifest == null ? null : this.manifest.getMainAttributes().getValue(WEB_JSP_EXTRACT_LOCATION);
         if (dJSPExtractLocation != null) {
-            assertEquals((String) this.dictionary.get(WebContainer.WEB_JSP_EXTRACT_LOCATION), (String)dJSPExtractLocation);
+            assertEquals((String) this.dictionary.get(WEB_JSP_EXTRACT_LOCATION), (String)dJSPExtractLocation);
         } else if (mJSPExtractLocation !=null) {
-            assertEquals((String) this.dictionary.get(WebContainer.WEB_JSP_EXTRACT_LOCATION), (String)mJSPExtractLocation);
+            assertEquals((String) this.dictionary.get(WEB_JSP_EXTRACT_LOCATION), (String)mJSPExtractLocation);
         }
         
         // TODO verify the extract location exists and has the right content.

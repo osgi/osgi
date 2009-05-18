@@ -23,11 +23,11 @@ import java.util.Map;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
-import org.osgi.service.webcontainer.WebContainer;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
 import org.osgi.test.cases.webcontainer.util.Server;
 import org.osgi.test.cases.webcontainer.util.TimeUtil;
+import org.osgi.test.cases.webcontainer.validate.Validator;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
@@ -43,8 +43,10 @@ public abstract class WebContainerTestBundleControl extends
     protected Map options = new HashMap();
     protected String warContextPath;
     protected TimeUtil timeUtil;
-    private final String WARSCHEMA = "war:";
-
+    protected static final String WARSCHEMA = "webbundle:";
+    protected static final String WEB_CONTEXT_PATH = Validator.WEB_CONTEXT_PATH;
+    protected static final String WEB_JSP_EXTRACT_LOCATION = Validator.WEB_JSP_EXTRACT_LOCATION;
+    
     public void setUp() throws Exception {
         // TODO if war file already exists, let's remove it first.
         this.server = new Server();
@@ -57,7 +59,7 @@ public abstract class WebContainerTestBundleControl extends
     protected void prepare(String wcp) throws Exception {
         this.warContextPath = wcp;
         this.timeUtil = new TimeUtil(this.warContextPath);
-        this.options.put(WebContainer.WEB_CONTEXT_PATH, this.warContextPath);
+        this.options.put(WEB_CONTEXT_PATH, this.warContextPath);
     }
 
     /*

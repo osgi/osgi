@@ -22,7 +22,6 @@ import java.util.jar.Manifest;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
-import org.osgi.service.webcontainer.WebContainer;
 import org.osgi.test.cases.webcontainer.ManifestHeadersTestBundleControl;
 import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
 
@@ -133,7 +132,7 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
         final Map options2 = new HashMap();
         options2.put(Constants.BUNDLE_SYMBOLICNAME, SYMBOLICNAME1);
         options.put(Constants.BUNDLE_VERSION, VERSION10);
-        options2.put(WebContainer.WEB_CONTEXT_PATH, "/tw3");
+        options2.put(WEB_CONTEXT_PATH, "/tw3");
         try {
             b2 = installBundle(super.getWarURL("tw3.war", options2), false);
             fail("bundle install should fail as " + Constants.BUNDLE_SYMBOLICNAME + "is not unique: " + Constants.BUNDLE_SYMBOLICNAME + " = " + SYMBOLICNAME1);
@@ -149,7 +148,7 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
         final Map options3 = new HashMap();
         options3.put(Constants.BUNDLE_SYMBOLICNAME, null);
         options.put(Constants.BUNDLE_VERSION, VERSION10);
-        options3.put(WebContainer.WEB_CONTEXT_PATH, "/tw3");
+        options3.put(WEB_CONTEXT_PATH, "/tw3");
         log("2nd attempt to install war file: tw3.war at context path /tw3");
         try {
             b2 = installBundle(super.getWarURL("tw3.war", options3), true);
@@ -252,7 +251,7 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
         // specify install options
         final Map options = new HashMap();
         options.put(Constants.BUNDLE_SYMBOLICNAME, name);
-        options.put(WebContainer.WEB_CONTEXT_PATH, cp);
+        options.put(WEB_CONTEXT_PATH, cp);
         return super.generalHeadersTest(options, warName, start);
     }
     
@@ -265,7 +264,7 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
         final Map options = new HashMap();
         options.put(Constants.BUNDLE_SYMBOLICNAME, name);
         options.put(Constants.BUNDLE_VERSION, VERSION10);
-        options.put(WebContainer.WEB_CONTEXT_PATH, cp);
+        options.put(WEB_CONTEXT_PATH, cp);
         return super.generalHeadersTest(options, warName, start);
     }
 }

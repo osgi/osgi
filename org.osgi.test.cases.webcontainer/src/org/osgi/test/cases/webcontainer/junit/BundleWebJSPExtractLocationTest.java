@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
-import org.osgi.service.webcontainer.WebContainer;
 import org.osgi.test.cases.webcontainer.ManifestHeadersTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 
@@ -86,8 +85,8 @@ public class BundleWebJSPExtractLocationTest extends ManifestHeadersTestBundleCo
             String warName, boolean start) throws Exception {
         // specify install options
         final Map options = new HashMap();
-        options.put(WebContainer.WEB_JSP_EXTRACT_LOCATION, jspExtractLoc);
-        options.put(WebContainer.WEB_CONTEXT_PATH, cp);
+        options.put(WEB_JSP_EXTRACT_LOCATION, jspExtractLoc);
+        options.put(WEB_CONTEXT_PATH, cp);
         return super.generalHeadersTest(options, warName, start);
     }
 

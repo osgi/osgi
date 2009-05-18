@@ -22,5 +22,8 @@ package org.osgi.test.cases.webcontainer.validate;
  */
 public interface Validator {
 
+    public static final String WEB_CONTEXT_PATH = "Web-ContextPath";
+    public static final String WEB_JSP_EXTRACT_LOCATION = "Web-JSPExtractLocation";
+    
     public void validate() throws Exception;
 }
