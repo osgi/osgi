@@ -932,7 +932,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_REGISTERED, props));
         // we're expecting some listener metadata on the export.
         TestRegistrationListener[] listeners = new TestRegistrationListener[] {
-            new TestRegistrationListener("ServiceOneListener", "register", "unregister")
+            new TestRegistrationListener("ServiceOneListener", "registered", "unregistered")
         };
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
             ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, listeners)));
