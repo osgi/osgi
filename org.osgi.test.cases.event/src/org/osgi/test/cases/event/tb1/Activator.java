@@ -30,7 +30,9 @@ package org.osgi.test.cases.event.tb1;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.event.EventConstants;
@@ -106,7 +108,7 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
    * 
    * @param event The event that occurred.
    */
-  public void handleEvent(Event event) {
+  public synchronized void handleEvent(Event event) {
     if (lastEvents == null) {
       lastEvents = new Vector();
     }
@@ -117,7 +119,7 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
    * Returns the last received event and then elements in the vector with last events are removed.
    * @see org.osgi.test.cases.event.service.TBCService#getLastReceivedEvent()
    */
-  public Event getLastReceivedEvent() {
+  public synchronized Event getLastReceivedEvent() {
     if (lastEvents == null || lastEvents.size() < 1) return null;
     Event event = (Event) lastEvents.lastElement();
     lastEvents.removeAllElements();
@@ -128,7 +130,7 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
    * Returns the last received events and then elements in the vector with last events are removed.
    * @see org.osgi.test.cases.event.service.TBCService#getLastReceivedEvents()
    */
-  public Vector getLastReceivedEvents() {
+  public synchronized Vector getLastReceivedEvents() {
     Vector events = (Vector) lastEvents.clone();
     lastEvents.removeAllElements();
     return events;

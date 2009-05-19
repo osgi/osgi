@@ -461,9 +461,9 @@ public class EventAdminTests extends DefaultTestBundleControl {
 	 * This is used to start posting or sending simultaneously.
 	 */
 	class MultiPostSendThread extends Thread {
-		private Event event;
-		private Object lock;
-		private boolean post;
+		private final Event		event;
+		private final Object	lock;
+		private final boolean	post;
 
 		MultiPostSendThread(Event event, Object lock, String name, boolean post) {
 			super(name);
