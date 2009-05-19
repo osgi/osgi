@@ -5,7 +5,7 @@
      <!-- no constructor arguments -->
    </bean>
    <bean id="compOneArg" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <argument value="compOneArg"/>
+       <argument type="java.lang.String" value="compOneArg"/>
    </bean>
    <bean id="compImplicitString" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
        <argument value="compImplicitString"/>

@@ -24,6 +24,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.test.cases.blueprint.services.TestUtil;
 
 import junit.framework.Assert;
+import junit.framework.AssertionFailedError;
 
 /**
  * Validate that a target service is registered at the requested
@@ -219,20 +220,30 @@ public class ServiceRegistrationValidator extends Assert implements TestValidato
         // We might have services registered from multiple bundles, so scan this list
         // looking for one from the target bundle and validate that information.
         for (int i = 0; i < refs.length; i++) {
-            if (bundle == refs[i].getBundle()) {
-                // validate the component name property if one is expected
-                if (componentName != null) {
-                    assertEquals("Incorrect component name on exported service for interface " + interfaceName + " in bundle " + bundle.getSymbolicName() + ", service=" +refs[i],
-                        componentName, refs[i].getProperty("osgi.service.blueprint.compname"));
-                }
+            try {
+                if (bundle == refs[i].getBundle()) {
+                    // validate the component name property if one is expected
+                    if (componentName != null) {
+                        assertEquals("Incorrect component name on exported service for interface " + interfaceName + " in bundle " + bundle.getSymbolicName() + ", service=" +refs[i],
+                            componentName, refs[i].getProperty("osgi.service.blueprint.compname"));
+                    }
 
-                // might have service properties to validate also
-                if (serviceProperties != null) {
-                    assertTrue("Mismatch on expected service properties for interface " + interfaceName + " in bundle " + bundle.getSymbolicName(),
-                        TestUtil.containsAll(serviceProperties, refs[i]));
+                    // might have service properties to validate also
+                    if (serviceProperties != null) {
+                        assertTrue("Mismatch on expected service properties for interface " + interfaceName + " in bundle " + bundle.getSymbolicName(),
+                            TestUtil.containsAll(serviceProperties, refs[i]));
+                    }
+                    // we're finished
+                    return;
                 }
-                // we're finished
-                return;
+            } catch (AssertionFailedError e) {
+                // if we only have one possible match and we got a validation failure, then
+                // just rethrow that error.  Otherwise, this means we didn't find the one
+                // we're looking for.  If we fail on all of them, we'll give the registration
+                // not found error
+                if (refs.length == 1) {
+                    throw e;
+                }
             }
         }
         // none found with the target bundle

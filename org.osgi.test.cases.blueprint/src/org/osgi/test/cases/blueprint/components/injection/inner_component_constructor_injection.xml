@@ -2,14 +2,6 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
 <!-- String -->
-	<bean id="compInnerStringNoTyped" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-		<argument>
-			<bean class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-				<argument value="STR1"/>
-			</bean>
-		</argument>
-	</bean>
-
 	<bean id="compInnerStringBothTyped" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
 		<argument>
 			<bean class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
@@ -179,7 +171,4 @@
 			</bean>
 		</argument>
 	</bean>
-
-
-
 </blueprint>

@@ -961,4 +961,34 @@ public class TestConfigErrors extends DefaultTestBundleControl {
             getWebServer()+"www/error_converter_wrong_type.jar");
         controller.run();
     }
+
+    /**
+     * ambiguous constructor argument
+     */
+    public void testAmbiguousConstructor() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_ambiguous_constructor.jar");
+        controller.run();
+    }
+
+    /**
+     * ambiguous factory constructor argument
+     */
+    public void testAmbiguousFactoryConstructor() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_factory_ambiguous_constructor.jar");
+        controller.run();
+    }
+
+    /**
+     * ambiguous static factory constructor argument
+     */
+    public void testAmbiguousStaticFactoryConstructor() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_static_factory_ambiguous_constructor.jar");
+        controller.run();
+    }
 }

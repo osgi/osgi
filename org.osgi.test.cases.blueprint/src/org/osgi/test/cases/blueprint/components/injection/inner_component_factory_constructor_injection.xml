@@ -11,14 +11,6 @@
     </bean>
 
 <!-- String -->
-	<bean id="compInnerStringNoTyped" factory-method="makeInstance" factory-component="compFactory">
-		<argument>
-			<bean factory-method="makeInstance" factory-component="innerCompFactory">
-				<argument value="STR1"/>
-			</bean>
-		</argument>
-	</bean>
-
 	<bean id="compInnerStringBothTyped" factory-method="makeInstance" factory-component="compFactory">
 		<argument>
 			<bean factory-method="makeInstance" factory-component="innerCompFactory">

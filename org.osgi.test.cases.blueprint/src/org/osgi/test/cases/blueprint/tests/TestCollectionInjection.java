@@ -2772,7 +2772,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 	// Props
 	private void addPropsConstructorTestItem(MetadataEventSet startEvents)throws Exception{
 	    // Empty
-        this.addConstructorValidator(startEvents, "compEmptyProps", new TestPropsValue(), Properties.class);
+        this.addConstructorValidator(startEvents, "compEmptyProps", new Properties(), Properties.class);
         // validate the metadata for this one too
         startEvents.addValidator(new ArgumentMetadataValidator("compEmptyProps", new TestArgument(
             new TestPropsValue())));
@@ -2783,12 +2783,16 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
             new TestNullValue(), Properties.class)));
 
         // strings
+        Properties props = new Properties();
+        props.put("administrator", "administrator@example.org");
+        props.put("support", "support@example.org");
+        props.put("development", "development@example.org");
+        this.addConstructorValidator(startEvents, "compStringItems", props, Properties.class);
+
         TestPropsValue expected = new TestPropsValue();
         expected.put("administrator", "administrator@example.org");
         expected.put("support", "support@example.org");
         expected.put("development", "development@example.org");
-        this.addConstructorValidator(startEvents, "compStringItems", expected, Properties.class);
-
         startEvents.addValidator(new ArgumentMetadataValidator("compStringItems",
             new TestArgument(expected)));
 

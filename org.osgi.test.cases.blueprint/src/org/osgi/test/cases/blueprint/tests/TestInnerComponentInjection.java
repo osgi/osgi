@@ -108,8 +108,6 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
     private void addConstructorValueTestItems(MetadataEventSet startEvents, Class innerComponentExpectedClass) throws Exception {
         ConstructorInjection ci;
         //string
-        ci = new ConstructorInjection("STR1");
-        this.addConstructorValueValidator(startEvents, "compInnerStringNoTyped", ci, innerComponentExpectedClass);
         ci = new ConstructorInjection("STR2");
         this.addConstructorValueValidator(startEvents, "compInnerStringBothTyped", ci, innerComponentExpectedClass);
         ci = new ConstructorInjection("STR3");
@@ -188,7 +186,6 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
 
     private void addConstructorMetadataTestItems(MetadataEventSet startEvents, Class innerComponentExpectedClass, String factoryMethodName) throws Exception {
         // string
-        this.addArgumentMetadataValidator(startEvents, "compInnerStringNoTyped", innerComponentExpectedClass, factoryMethodName, null, null, "STR1");
         this.addArgumentMetadataValidator(startEvents, "compInnerStringBothTyped", innerComponentExpectedClass, factoryMethodName, String.class, String.class, "STR2");
         this.addArgumentMetadataValidator(startEvents, "compInnerStringValueTyped", innerComponentExpectedClass, factoryMethodName, null, String.class, "STR3");
         this.addArgumentMetadataValidator(startEvents, "compInnerStringArgTyped", innerComponentExpectedClass, factoryMethodName, String.class, null, "STR4");
@@ -231,7 +228,6 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
     }
 
     private void addFactoryMetadataTestItems(MetadataEventSet startEvents, String staticFactoryClassName, TestValue factoryTestComponentValue)throws Exception{
-        this.addFactoryMetadataValidator(startEvents, "compInnerStringNoTyped", "makeInstance", staticFactoryClassName, factoryTestComponentValue);
         this.addFactoryMetadataValidator(startEvents, "compInnerStringBothTyped", "makeInstance", staticFactoryClassName, factoryTestComponentValue);
         this.addFactoryMetadataValidator(startEvents, "compInnerStringValueTyped", "makeInstance", staticFactoryClassName, factoryTestComponentValue);
         this.addFactoryMetadataValidator(startEvents, "compInnerStringArgTyped", "makeInstance", staticFactoryClassName, factoryTestComponentValue);

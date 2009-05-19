@@ -5,7 +5,7 @@
      <!-- no constructor arguments -->
    </bean>
    <bean id="compOneArg" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-       <argument value="compOneArg"/>
+       <argument type="java.lang.String" value="compOneArg"/>
      <!-- just a component name -->
    </bean>
    <bean id="compImplicitString" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">

@@ -34,11 +34,11 @@
                 <entry>
                     <key>
                         <bean class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-							<argument value="compInnerEntryKey1"/>
+							<argument type="java.lang.String" value="compInnerEntryKey1"/>
 						</bean>
                     </key>
                     <bean class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-						<argument value="compInnerEntryValue1"/>
+						<argument type="java.lang.String" value="compInnerEntryValue1"/>
 					</bean>
                 </entry>
                 <entry>

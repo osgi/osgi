@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 <!-- String -->
-	<bean id="compInnerStringNoTyped" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
-		<argument>
-			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-				<argument value="STR1"/>
-			</bean>
-		</argument>
-	</bean>
-
 	<bean id="compInnerStringBothTyped" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory">
 		<argument>
 			<bean factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">

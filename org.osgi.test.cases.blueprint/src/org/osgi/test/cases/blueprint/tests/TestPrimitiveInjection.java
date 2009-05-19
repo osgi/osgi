@@ -64,7 +64,7 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
         startEvents.validateComponentArgument("compOneArg", "arg1", "compOneArg");
         // just a single argument, no explicit typing
         startEvents.addValidator(new ArgumentMetadataValidator("compOneArg", new TestArgument[] {
-            new StringArgument("compOneArg")
+            new StringArgument(String.class, "compOneArg")
         }));
         // Two String arguments with implicit order
         startEvents.validateComponentArgument("compImplicitString", "arg1", "compImplicitString");

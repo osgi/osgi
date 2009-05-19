@@ -9,7 +9,7 @@
         <!-- no constructor arguments -->
     </bean>
     <bean id="compOneArg" factory-component="compFactory" factory-method="makeInstance">
-        <argument value="compOneArg"/>
+        <argument type="java.lang.String" value="compOneArg"/>
         <!-- just a component name -->
     </bean>
     <bean id="compImplicitString" factory-component="compFactory" factory-method="makeInstance">
