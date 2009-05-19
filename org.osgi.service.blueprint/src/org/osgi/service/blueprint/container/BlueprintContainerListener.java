@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.service.blueprint.context;
+package org.osgi.service.blueprint.container;
 
 import org.osgi.framework.Bundle;
 
-public interface BlueprintContextListener {
+public interface BlueprintContainerListener {
 
 	void contextCreated(Bundle forBundle);
 

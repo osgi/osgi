@@ -13,27 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.service.blueprint.context;
+package org.osgi.service.blueprint.container;
 
 /**
  * Thrown when an attempt is made to lookup a component by name and no such named
- * component exists in the module context.
+ * component exists in the blueprint container.
  */
 public class NoSuchComponentException extends RuntimeException {
 
 	private final String componentName;
-	
+
 	public NoSuchComponentException(String componentName) {
 		this.componentName = componentName;
 	}
-	
+
 	public String getComponentName() {
 		return this.componentName;
 	}
 
 	public String getMessage() {
-		return "No component named '" + 
-		       (this.componentName == null ? "<null>" : this.componentName) + 
+		return "No component named '" +
+		       (this.componentName == null ? "<null>" : this.componentName) +
 		       "' could be found";
 	}
 }

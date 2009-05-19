@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.service.blueprint.context;
+package org.osgi.service.blueprint.container;
 
 import java.util.Collection;
 import java.util.Set;
@@ -22,27 +22,27 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
 
 /**
- * BlueprintContext providing access to the components, service exports, and
+ * BlueprintContainer providing access to the components, service exports, and
  * service references of a bundle using blueprint services. Only bundles in the
- * ACTIVE state may have an associated BlueprintContext. A given BundleContext
- * has at most one associated BlueprintContext.
+ * ACTIVE state may have an associated BlueprintContainer. A given BundleContext
+ * has at most one associated BlueprintContainer.
  *
- * An instance of BlueprintContext may be obtained from within a blueprint context by
- * injecting the predefined "blueprintContext" component.
- * Alternatively you can look up BlueprintContext services in the service registry.
+ * An instance of BlueprintContainer may be obtained from within a blueprint context by
+ * injecting the predefined "blueprintContainer" component.
+ * Alternatively you can look up BlueprintContainer services in the service registry.
  * The Constants.BUNDLE_SYMBOLICNAME and Constants.BUNDLE_VERSION service
- * properties can be used to determine which bundle the published BlueprintContext
+ * properties can be used to determine which bundle the published BlueprintContainer
  * service is associated with.
  *
- * A BlueprintContext implementation must support safe concurrent access. It is
+ * A BlueprintContainer implementation must support safe concurrent access. It is
  * legal for the set of named components and component metadata to change
  * between invocations on the same thread if another thread is concurrently
- * modifying the same mutable BlueprintContext implementation object.
+ * modifying the same mutable BlueprintContainer implementation object.
  *
  * @see org.osgi.framework.Constants
  *
  */
-public interface BlueprintContext {
+public interface BlueprintContainer {
 
 	/**
 	 * reason code for destroy method callback of a managed service factory
