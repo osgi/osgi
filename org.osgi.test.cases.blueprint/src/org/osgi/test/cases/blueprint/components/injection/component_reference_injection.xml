@@ -1,46 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
-    default-init-method="init" default-destroy-method="destroy" default-lazy-init="false">
+    default-lazy-init="false">
 
     <!-- a few leaf nodes for others to reference.  These are just named components -->
-   <bean id="leaf1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+   <bean id="leaf1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
+       init-method="init" destroy-method="destroy">
        <argument value="leaf1"/>
    </bean>
-   <bean id="leaf2" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+   <bean id="leaf2" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
+       init-method="init" destroy-method="destroy">
        <argument value="leaf2"/>
    </bean>
-   <bean id="leaf3" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+   <bean id="leaf3" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
+       init-method="init" destroy-method="destroy">
        <argument value="leaf3"/>
    </bean>
-   <bean id="leaf4" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+   <bean id="leaf4" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
+       init-method="init" destroy-method="destroy">
        <argument value="leaf4"/>
    </bean>
    <!-- lazyleaf1 will be lazy inited, but will be referenced from the start, so this will start normally -->
-   <bean id="lazyleaf1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="true">
+   <bean id="lazyleaf1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="true"
+       init-method="init" destroy-method="destroy">
        <argument value="lazyleaf1"/>
    </bean>
    <!-- the component referencing lazyleaf1.  This is not lazy-inited -->
-   <bean id="comp1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+   <bean id="comp1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
+       init-method="init" destroy-method="destroy">
        <argument value="comp1"/>
        <argument ref="lazyleaf1"/>
    </bean>
    <!-- lazyleaf2 will be lazy inited and will not be started until requested from the module context -->
-   <bean id="lazyleaf2" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="true">
+   <bean id="lazyleaf2" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="true"
+       init-method="init" destroy-method="destroy">
        <argument value="lazyleaf2"/>
    </bean>
    <!-- lazyleaf3 will be lazy inited and will not be started until the referencing component is requested. -->
-   <bean id="lazyleaf3" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="true">
+   <bean id="lazyleaf3" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="true"
+       init-method="init" destroy-method="destroy">
        <argument value="lazyleaf3"/>
    </bean>
    <!-- lazycomp1 will be lazy inited and will not be started until the requested from the module context -->
    <!-- it alsl contains a reference to another lazy-inited leaf node, so this will cascade -->
-   <bean id="lazycomp1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="true">
+   <bean id="lazycomp1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="true"
+       init-method="init" destroy-method="destroy">
        <argument value="lazycomp1"/>
        <argument ref="lazyleaf3"/>
    </bean>
 
    <!-- component referencing two leaf nodes -->
-   <bean id="twoleaf" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+   <bean id="twoleaf" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
+       init-method="init" destroy-method="destroy">
        <argument value="twoleaf"/>
        <argument ref="leaf1"/>
        <property name="componentOne">
@@ -49,14 +59,16 @@
    </bean>
 
    <!-- component referencing multiple comps, which reference leaf nodes -->
-   <bean id="twocomp" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+   <bean id="twocomp" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
+       init-method="init" destroy-method="destroy">
        <argument value="twocomp"/>
        <argument ref="twoleaf"/>
        <argument ref="comp1"/>
    </bean>
 
    <!-- component referencing comps via a list -->
-   <bean id="twolist" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+   <bean id="twolist" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
+       init-method="init" destroy-method="destroy">
        <argument value="twolist"/>
        <property name="componentList">
            <list>
@@ -67,7 +79,8 @@
    </bean>
 
    <!-- component referencing comps via a set -->
-   <bean id="twoset" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+   <bean id="twoset" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
+       init-method="init" destroy-method="destroy">
        <argument value="twoset"/>
        <property name="componentSet">
            <set>
@@ -78,7 +91,8 @@
    </bean>
 
    <!-- component referencing comps via a map, using both keys and value -->
-   <bean id="mapref" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+   <bean id="mapref" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
+       init-method="init" destroy-method="destroy">
        <argument value="mapref"/>
        <property name="componentMap">
            <map>
@@ -94,12 +108,14 @@
    </bean>
 
    <!-- single component for a depends-on reference -->
-   <bean id="dependsleaf1" class="org.osgi.test.cases.blueprint.components.injection.DependentComponent">
+   <bean id="dependsleaf1" class="org.osgi.test.cases.blueprint.components.injection.DependentComponent"
+       init-method="init" destroy-method="destroy">
        <argument value="dependsleaf1"/>
    </bean>
 
    <!-- component using a depends-on relationship -->
-   <bean id="dependsOnOne" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" depends-on="dependsleaf1">
+   <bean id="dependsOnOne" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" depends-on="dependsleaf1"
+       init-method="init" destroy-method="destroy">
        <argument value="dependsOnOne"/>
        <property name="dependsOn">
            <set>
@@ -109,15 +125,18 @@
    </bean>
 
    <!-- two more components for a depends-on reference, one with lazy initialization -->
-   <bean id="dependsleaf2" class="org.osgi.test.cases.blueprint.components.injection.DependentComponent">
+   <bean id="dependsleaf2" class="org.osgi.test.cases.blueprint.components.injection.DependentComponent"
+       init-method="init" destroy-method="destroy">
        <argument value="dependsleaf2"/>
    </bean>
-   <bean id="dependsleaf3" class="org.osgi.test.cases.blueprint.components.injection.DependentComponent" lazy-init="true">
+   <bean id="dependsleaf3" class="org.osgi.test.cases.blueprint.components.injection.DependentComponent" lazy-init="true"
+       init-method="init" destroy-method="destroy">
        <argument value="dependsleaf3"/>
    </bean>
 
    <!-- component using a multiple depends-on relationship -->
-   <bean id="dependsOnTwo" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" depends-on="dependsleaf2,dependsleaf3">
+   <bean id="dependsOnTwo" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" depends-on="dependsleaf2,dependsleaf3"
+       init-method="init" destroy-method="destroy">
        <argument value="dependsOnTwo"/>
        <property name="dependsOn">
            <set>
@@ -128,42 +147,50 @@
    </bean>
 
    <!-- singleton1 is just the default scope.  We'll create multiple references, but should get just a single instance -->
-   <bean id="singleton1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+   <bean id="singleton1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
+       init-method="init" destroy-method="destroy">
        <argument value="singleton1"/>
    </bean>
 
    <!-- singleton2 is default scope explicitly specified.  Again, we should only see a single instance. -->
-   <bean id="singleton2" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" scope="singleton">
+   <bean id="singleton2" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" scope="singleton"
+       init-method="init" destroy-method="destroy">
        <argument value="singleton2"/>
    </bean>
 
    <!-- singleton3 is bundle scope, but since it is not specified as a service, this acts as singleton. -->
-   <bean id="singleton3" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" scope="bundle">
+   <bean id="singleton3" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" scope="bundle"
+       init-method="init" destroy-method="destroy">
        <argument value="singleton3"/>
    </bean>
 
    <!-- prototype1 will have prototype scope, which means a new component will be instantiated for each request -->
-   <bean id="prototype1" class="org.osgi.test.cases.blueprint.components.injection.PrototypeComponentInjection" scope="prototype">
+   <bean id="prototype1" class="org.osgi.test.cases.blueprint.components.injection.PrototypeComponentInjection" scope="prototype"
+       init-method="init" destroy-method="destroy">
        <argument value="prototype1"/>
    </bean>
 
    <!-- prototype2 tests prototype scope and lazy-init in combination. -->
-   <bean id="prototype2" class="org.osgi.test.cases.blueprint.components.injection.PrototypeComponentInjection" scope="prototype" lazy-init="true">
+   <bean id="prototype2" class="org.osgi.test.cases.blueprint.components.injection.PrototypeComponentInjection" scope="prototype" lazy-init="true"
+       init-method="init" destroy-method="destroy">
        <argument value="prototype2"/>
    </bean>
 
    <!-- prototype3 is only referenced via the module context.  This should not be instantiated until referenced -->
-   <bean id="prototype3" class="org.osgi.test.cases.blueprint.components.injection.PrototypeComponentInjection" scope="prototype">
+   <bean id="prototype3" class="org.osgi.test.cases.blueprint.components.injection.PrototypeComponentInjection" scope="prototype"
+       init-method="init" destroy-method="destroy">
        <argument value="prototype3"/>
    </bean>
 
    <!-- referenced by a list, so will create unique ones for each element. -->
-   <bean id="prototype4" class="org.osgi.test.cases.blueprint.components.injection.PrototypeComponentInjection" scope="prototype">
+   <bean id="prototype4" class="org.osgi.test.cases.blueprint.components.injection.PrototypeComponentInjection" scope="prototype"
+       init-method="init" destroy-method="destroy">
        <argument value="prototype4"/>
    </bean>
 
    <!-- Three singletons in a set should reduce to one element -->
-   <bean id="threeSingleton1" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent">
+   <bean id="threeSingleton1" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent"
+       init-method="init" destroy-method="destroy">
        <argument value="threeSingleton1"/>
        <argument value="1"/>
        <property name="references">
@@ -176,7 +203,8 @@
    </bean>
 
    <!-- Three singletons in a set should reduce to one element -->
-   <bean id="threeSingleton2" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent">
+   <bean id="threeSingleton2" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent"
+       init-method="init" destroy-method="destroy">
        <argument value="threeSingleton2"/>
        <argument value="1"/>
        <property name="references">
@@ -189,7 +217,8 @@
    </bean>
 
    <!-- Three singletons in a set should reduce to one element -->
-   <bean id="threeSingleton3" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent">
+   <bean id="threeSingleton3" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent"
+       init-method="init" destroy-method="destroy">
        <argument value="threeSingleton3"/>
        <argument value="1"/>
        <property name="references">
@@ -202,7 +231,8 @@
    </bean>
 
    <!-- Expecting 3 component instances -->
-   <bean id="threeListPrototype1" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent">
+   <bean id="threeListPrototype1" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent"
+       init-method="init" destroy-method="destroy">
        <argument value="threePrototype1"/>
        <argument value="3"/>
        <property name="listReferences">
@@ -215,7 +245,8 @@
    </bean>
 
    <!-- Expecting 3 component instances -->
-   <bean id="threePrototype1" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent">
+   <bean id="threePrototype1" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent"
+       init-method="init" destroy-method="destroy">
        <argument value="threePrototype1"/>
        <argument value="3"/>
        <property name="references">
@@ -228,7 +259,8 @@
    </bean>
 
    <!-- Expecting 3 component instances -->
-   <bean id="threePrototype2" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent">
+   <bean id="threePrototype2" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent"
+       init-method="init" destroy-method="destroy">
        <argument value="threePrototype2"/>
        <argument value="3"/>
        <property name="references">

@@ -22,7 +22,6 @@ Include-Resource					= \
 	www/error_constructor_invalid_type.jar=error_constructor_invalid_type.jar, \
 	www/comp1_no_name.jar=comp1_no_name.jar, \
 	www/comp1_init_destroy.jar=comp1_init_destroy.jar, \
-	www/comp1_default_init_destroy.jar=comp1_default_init_destroy.jar, \
 	www/module_context_aware.jar=module_context_aware.jar, \
 	www/static_factory.jar=static_factory.jar, \
 	www/error_static_factory_missing_class.jar=error_static_factory_missing_class.jar, \

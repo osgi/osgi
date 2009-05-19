@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
-    default-init-method="init" default-destroy-method="destroy" default-lazy-init="false">
+    default-lazy-init="false">
 
-    <bean id="compTypedKeys" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+    <bean id="compTypedKeys" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection"
+       init-method="init" destroy-method="destroy">
         <argument>
             <map value-type="java.lang.BooleanXXXX">
                 <entry key="true" value="true"/>

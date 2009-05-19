@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
-    default-init-method="init" default-destroy-method="destroy" default-lazy-init="false">
+    default-lazy-init="false">
 
    <!-- impossible circular reference because it's in the constructor -->
-   <bean id="comp1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+   <bean id="comp1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
+       init-method="init" destroy-method="destroy">
        <argument value="comp1"/>
        <argument ref="comp1"/>
    </bean>

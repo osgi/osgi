@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
-    default-init-method="init" default-destroy-method="destroy" default-lazy-init="false">
+    default-lazy-init="false">
 
     <bean id="compTypedKeys" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
         <argument>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
-    default-init-method="init" default-destroy-method="destroy">
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
     <description>
         This exports a reference listener object as a service...useful for multiple tests
     </description>
 
 
-    <bean id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceOneListener">
+    <bean id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceOneListener"
+       init-method="init" destroy-method="destroy">
         <argument value="ServiceOneListener"/>
     </bean>
 

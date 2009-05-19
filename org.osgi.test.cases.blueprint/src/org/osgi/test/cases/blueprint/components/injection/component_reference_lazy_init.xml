@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
-    default-init-method="init" default-destroy-method="destroy" default-lazy-init="true">
+    default-lazy-init="true">
 
     <description>
         This is an adjunct configurtion file for the component injection tests.  This set of
@@ -9,29 +9,35 @@
     </description>
 
     <!-- a few leaf nodes for others to reference.  These are just named components -->
-   <bean id="leaf1a" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="false">
+   <bean id="leaf1a" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="false"
+       init-method="init" destroy-method="destroy">
        <argument value="leaf1a"/>
    </bean>
    <!-- lazyleaf1a will be lazy initied, but will be referenced from the start, so this will start normally -->
-   <bean id="lazyleaf1a" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+   <bean id="lazyleaf1a" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
+       init-method="init" destroy-method="destroy">
        <argument value="lazyleaf1a"/>
    </bean>
    <!-- the component referencing lazyleaf1.  This is not lazy-inited -->
-   <bean id="comp1a" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="false">
+   <bean id="comp1a" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="false"
+       init-method="init" destroy-method="destroy">
        <argument value="comp1a"/>
        <argument ref="lazyleaf1a"/>
    </bean>
    <!-- lazyleaf2 will be lazy initied and will not be started until requested from the module context -->
-   <bean id="lazyleaf2a" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+   <bean id="lazyleaf2a" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
+       init-method="init" destroy-method="destroy">
        <argument value="lazyleaf2a"/>
    </bean>
    <!-- lazyleaf3a will be lazy initied and will not be started until the referencing component is requested. -->
-   <bean id="lazyleaf3a" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+   <bean id="lazyleaf3a" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
+       init-method="init" destroy-method="destroy">
        <argument value="lazyleaf3a"/>
    </bean>
    <!-- lazycomp1 will be lazy initied and will not be started until the requested from the module context -->
    <!-- it alsl contains a reference to another lazy-inited leaf node, so this will cascade -->
-   <bean id="lazycomp1a" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+   <bean id="lazycomp1a" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
+       init-method="init" destroy-method="destroy">
        <argument value="lazycomp1a"/>
        <argument ref="lazyleaf3a"/>
    </bean>
