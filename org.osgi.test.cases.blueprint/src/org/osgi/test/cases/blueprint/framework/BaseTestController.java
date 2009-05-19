@@ -275,7 +275,7 @@ public class BaseTestController implements EventHandler, BlueprintContainerListe
             processEvent(targetPhase, new ComponentAssertion(event));
         }
         // one of our assertions
-        else if (topic.startsWith("org/osgi/service/blueprint/context")) {
+        else if (topic.startsWith("org/osgi/service/blueprint/container")) {
             processEvent(targetPhase, new BlueprintEvent(event));
         }
         else if (topic.startsWith("org/osgi/framework/FrameworkEvent/")) {
