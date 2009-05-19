@@ -48,7 +48,7 @@
        init-method="init" destroy-method="destroy">
        <argument value="conversionServiceUser"/>
        <property name="componentOne">
-           <ref component="conversionServiceUser" />
+           <ref component="conversionService" />
        </property>
    </bean>
 </blueprint>

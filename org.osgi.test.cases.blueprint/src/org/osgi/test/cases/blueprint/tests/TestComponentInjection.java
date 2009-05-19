@@ -62,7 +62,7 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         // we validate metadata for a few select components
 
         startEvents.addValidator(new ComponentMetadataValidator(
-            new BeanComponent("lazyleaf1", ComponentInjection.class, null, null, null,
+            new BeanComponent("lazyleaf1", ComponentInjection.class, null, "init", "destroy",
             new TestArgument[] { new StringArgument("lazyleaf1") } , null,
             null, true, null)));
 
@@ -149,7 +149,7 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         startEvents.addAssertion("dependsOnOne", AssertionService.COMPONENT_CREATED);
 
         startEvents.addValidator(new ComponentMetadataValidator(
-            new BeanComponent("dependsOnOne", ComponentInjection.class, null, null, null,
+            new BeanComponent("dependsOnOne", ComponentInjection.class, null, "init", "destroy",
             new TestArgument[] { new StringArgument("dependsOnOne") } , null,
             new String[] { "dependsleaf1" }, false, null)));
 
@@ -158,7 +158,7 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         startEvents.addAssertion("dependsOnTwo", AssertionService.COMPONENT_CREATED);
 
         startEvents.addValidator(new ComponentMetadataValidator(
-            new BeanComponent("dependsOnTwo", ComponentInjection.class, null, null, null,
+            new BeanComponent("dependsOnTwo", ComponentInjection.class, null, "init", "destroy",
             new TestArgument[] { new StringArgument("dependsOnTwo") } , null,
             new String[] { "dependsleaf2", "dependsleaf3" }, false, null)));
 
@@ -173,14 +173,14 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         startEvents.addAssertion("singleton2", AssertionService.COMPONENT_CREATED);
         // this is the first with an explicit scope specified, so validate it
         startEvents.addValidator(new ComponentMetadataValidator(
-            new BeanComponent("singleton2", ComponentInjection.class, null, null, null,
+            new BeanComponent("singleton2", ComponentInjection.class, null, "init", "destroy",
             new TestArgument[] { new StringArgument("singleton2") } , null,
             null, false, BeanMetadata.SCOPE_SINGLETON)));
         startEvents.addAssertion("singleton3", AssertionService.COMPONENT_CREATED);
 
         // singleton3 is bundle scope, but since it is not exported as a service, should behave like a singleton
         startEvents.addValidator(new ComponentMetadataValidator(
-            new BeanComponent("singleton3", ComponentInjection.class, null, null, null,
+            new BeanComponent("singleton3", ComponentInjection.class, null, "init", "destroy",
             new TestArgument[] { new StringArgument("singleton3") } , null,
             null, false, BeanMetadata.SCOPE_BUNDLE)));
 
@@ -195,7 +195,7 @@ public class TestComponentInjection extends DefaultTestBundleControl {
 
         // this is the first with a prototype scope
         startEvents.addValidator(new ComponentMetadataValidator(
-            new BeanComponent("prototype1", PrototypeComponentInjection.class, null, null, null,
+            new BeanComponent("prototype1", PrototypeComponentInjection.class, null, "init", "destroy",
             new TestArgument[] { new StringArgument("prototype1") } , null,
             null, false, BeanMetadata.SCOPE_PROTOTYPE)));
 
