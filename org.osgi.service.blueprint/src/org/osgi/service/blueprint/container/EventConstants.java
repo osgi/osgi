@@ -53,31 +53,31 @@ public interface EventConstants {
 	/**
 	 * Topic for Blueprint Service CREATING events
 	 */
-	public static final String TOPIC_CREATING = TOPIC_BLUEPRINT_EVENTS + "/context/CREATING";
+	public static final String TOPIC_CREATING = TOPIC_BLUEPRINT_EVENTS + "/container/CREATING";
 
 	/**
  	 * Topic for Blueprint Service CREATED events
  	 */
-	public static final String TOPIC_CREATED = TOPIC_BLUEPRINT_EVENTS + "/context/CREATED";
+	public static final String TOPIC_CREATED = TOPIC_BLUEPRINT_EVENTS + "/container/CREATED";
 
 	/**
  	 * Topic for Blueprint Service DESTROYING events
  	 */
-	public static final String TOPIC_DESTROYING = TOPIC_BLUEPRINT_EVENTS + "/context/DESTROYING";
+	public static final String TOPIC_DESTROYING = TOPIC_BLUEPRINT_EVENTS + "/container/DESTROYING";
 
 	/**
 	 * Topic for Blueprint Service DESTROYED events
 	 */
-	public static final String TOPIC_DESTROYED = TOPIC_BLUEPRINT_EVENTS + "/context/DESTROYED";
+	public static final String TOPIC_DESTROYED = TOPIC_BLUEPRINT_EVENTS + "/container/DESTROYED";
 
 	/**
 	 * Topic for Blueprint Service WAITING events
 	 */
-	public static final String TOPIC_WAITING = TOPIC_BLUEPRINT_EVENTS + "/context/WAITING";
+	public static final String TOPIC_WAITING = TOPIC_BLUEPRINT_EVENTS + "/container/WAITING";
 
 	/**
 	 * Topic for Blueprint Service FAILURE events
 	 */
-	public static final String TOPIC_FAILURE = TOPIC_BLUEPRINT_EVENTS + "/context/FAILURE";
+	public static final String TOPIC_FAILURE = TOPIC_BLUEPRINT_EVENTS + "/container/FAILURE";
 
 }
