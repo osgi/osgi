@@ -47,23 +47,23 @@ public class TestCustomConverter extends DefaultTestBundleControl {
         // constructor
         startEvents.validateComponentArgument("compAsia_cnst", "arg2", new AsianRegionCode("CN+86"), AsianRegionCode.class);
         startEvents.addValidator(new ArgumentMetadataValidator("compAsia_cnst", new TestArgument[] {
-                new StringArgument("compAsia_cnst"), 
+                new StringArgument("compAsia_cnst"),
                 new TestArgument(new TestStringValue(AsianRegionCode.class, "CN+86")) }));
 
         startEvents.validateComponentArgument("compImplicit_cnst", "arg2", new AsianRegionCode("CN+86"), AsianRegionCode.class);
         startEvents.addValidator(new ArgumentMetadataValidator("compImplicit_cnst", new TestArgument[] {
-                new StringArgument("compImplicit_cnst"), 
+                new StringArgument("compImplicit_cnst"),
                 new StringArgument("CN+86") }));
-                
+
         // property
         startEvents.validateComponentProperty("compAsia_prpt", "regionCode", new AsianRegionCode("CN+86"), AsianRegionCode.class);
         startEvents.addValidator(new PropertyMetadataValidator("compAsia_prpt", new TestProperty[] {
             new TestProperty(new TestStringValue(AsianRegionCode.class, "CN+86"), "regionCode") }));
-        
+
         startEvents.validateComponentProperty("compImplicit_prpt", "regionCode", new AsianRegionCode("CN+86"), AsianRegionCode.class);
         startEvents.addValidator(new PropertyMetadataValidator("compImplicit_prpt", new TestProperty[] {
             new TestProperty(new TestStringValue("CN+86"), "regionCode") }));
-        
+
         controller.run();
     }
 
@@ -75,12 +75,12 @@ public class TestCustomConverter extends DefaultTestBundleControl {
         // constructor
         startEvents.validateComponentArgument("comp_cnst", "arg2", new RegionCode("CN+86"), RegionCode.class);
         startEvents.addValidator(new ArgumentMetadataValidator("comp_cnst", new TestArgument[] {
-                new StringArgument("comp_cnst"), 
+                new StringArgument("comp_cnst"),
                 new StringArgument(RegionCode.class, "CN+86") }));
-        
+
         startEvents.validateComponentArgument("compAsia_cnst", "arg2", new AsianRegionCode("CN+86"), AsianRegionCode.class);
         startEvents.addValidator(new ArgumentMetadataValidator("compAsia_cnst", new TestArgument[] {
-                new StringArgument("compAsia_cnst"), 
+                new StringArgument("compAsia_cnst"),
                 new StringArgument(AsianRegionCode.class, "CN+86") }));
 
         controller.run();
@@ -131,7 +131,7 @@ public class TestCustomConverter extends DefaultTestBundleControl {
         // constructor
         startEvents.validateComponentArgument("comp_cnst", "arg2", new AsianRegionCode("CN+86"), AsianRegionCode.class);
         startEvents.addValidator(new ArgumentMetadataValidator("comp_cnst", new TestArgument[] {
-                new StringArgument("comp_cnst"), 
+                new StringArgument("comp_cnst"),
                 new StringArgument(RegionCode.class, "CN+86") }));
 
         // property
@@ -147,7 +147,7 @@ public class TestCustomConverter extends DefaultTestBundleControl {
             getWebServer() + "www/converter_called.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
 
-        startEvents.addAssertion("compEuropean_cnst", AssertionService.METHOD_CALLED);
+        startEvents.addAssertion("europeanRegionCodeConverter", AssertionService.METHOD_CALLED);
 
         controller.run();
     }
