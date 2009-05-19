@@ -978,7 +978,7 @@ public class TestConfigErrors extends DefaultTestBundleControl {
     public void testAmbiguousFactoryConstructor() throws Exception {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
-            getWebServer()+"www/error_factory_ambiguous_constructor.jar");
+            getWebServer()+"www/error_ambiguous_factory_constructor.jar");
         controller.run();
     }
 
@@ -988,7 +988,7 @@ public class TestConfigErrors extends DefaultTestBundleControl {
     public void testAmbiguousStaticFactoryConstructor() throws Exception {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
-            getWebServer()+"www/error_static_factory_ambiguous_constructor.jar");
+            getWebServer()+"www/error_ambiguous_static_factory_constructor.jar");
         controller.run();
     }
 }
