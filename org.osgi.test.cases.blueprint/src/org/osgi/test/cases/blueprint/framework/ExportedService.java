@@ -34,7 +34,7 @@ import org.osgi.test.cases.blueprint.services.TestUtil;
 import junit.framework.Assert;
 
 /**
- * Validate the metadata for a single service exported in a BlueprintContext.
+ * Validate the metadata for a single service exported in a BlueprintContainer.
  */
 public class ExportedService extends Assert implements TestComponentMetadata {
     // the optional assigned service id

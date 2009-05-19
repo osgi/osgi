@@ -18,19 +18,19 @@ package org.osgi.test.cases.blueprint.components.comp1;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.service.blueprint.context.BlueprintContext;
+import org.osgi.service.blueprint.container.BlueprintContainer;
 import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 
-public class BlueprintContextAwareComponent extends BaseTestComponent {
+public class BlueprintContainerAwareComponent extends BaseTestComponent {
     // an injected bundle
     protected Bundle bundle;
     // an injected bundleContext;
     protected BundleContext bundleContext;
-    // the injected BlueprintContext
-    protected BlueprintContext moduleContext;
+    // the injected BlueprintContainer
+    protected BlueprintContainer moduleContext;
 
-    public BlueprintContextAwareComponent(String componentId) {
+    public BlueprintContainerAwareComponent(String componentId) {
         super(componentId);
     }
 
@@ -52,7 +52,7 @@ public class BlueprintContextAwareComponent extends BaseTestComponent {
      */
     public void setBundleContext(BundleContext bundleContext) {
         // there's no defined ordering for property injections, so we'll handle
-        // this one silently.  The injected value is required by the setBlueprintContext method
+        // this one silently.  The injected value is required by the setBlueprintContainer method
         this.bundleContext = bundleContext;
     }
 
@@ -64,10 +64,10 @@ public class BlueprintContextAwareComponent extends BaseTestComponent {
 	 * @param context the module context in which the implementor of
 	 * this interface is executing.
 	 */
-	public void setBlueprintContext(BlueprintContext context) {
+	public void setBlueprintContainer(BlueprintContainer context) {
         // save this for the init method to check
         this.moduleContext = context;
-        AssertionService.assertNotNull(this, "null BlueprintContext injectioned", context);
+        AssertionService.assertNotNull(this, "null BlueprintContainer injectioned", context);
         // send an event indicating this has occurred.
         AssertionService.sendEvent(this, AssertionService.MODULE_CONTEXT_INJECTED);
     }
@@ -75,8 +75,8 @@ public class BlueprintContextAwareComponent extends BaseTestComponent {
 
     public void init() {
         // validate the information is consistent
-        AssertionService.assertEquals(this, "Mismatch in BlueprintContext BundleContext", bundleContext, moduleContext.getBundleContext());
-        AssertionService.assertEquals(this, "Mismatch in BlueprintContext Bundle", bundle, moduleContext.getBundleContext().getBundle());
+        AssertionService.assertEquals(this, "Mismatch in BlueprintContainer BundleContext", bundleContext, moduleContext.getBundleContext());
+        AssertionService.assertEquals(this, "Mismatch in BlueprintContainer Bundle", bundle, moduleContext.getBundleContext().getBundle());
         super.init();
     }
 }

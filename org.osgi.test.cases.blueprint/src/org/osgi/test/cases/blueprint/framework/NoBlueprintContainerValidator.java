@@ -18,19 +18,20 @@ package org.osgi.test.cases.blueprint.framework;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.framework.Version;
-import org.osgi.test.cases.blueprint.services.TestUtil;
 
 import junit.framework.Assert;
 
 /**
- * Validate that a module context exists.
+ * Validate that there is no module context defined as a service
+ * for this bundle.  This is used to validate stop() event cleanup,
+ * as well as verifying that there is no module context published
+ * when context creation errors occur.
  */
-public class BlueprintContextValidator extends Assert implements TestValidator, BundleAware {
+public class NoBlueprintContainerValidator extends Assert implements TestValidator, BundleAware {
     // the bundle we're validating for
     protected Bundle bundle;
 
-    public BlueprintContextValidator() {
+    NoBlueprintContainerValidator() {
     }
 
     /**
@@ -56,16 +57,8 @@ public class BlueprintContextValidator extends Assert implements TestValidator, 
      * @exception Exception
      */
     public void validate(BundleContext testContext) throws Exception {
-        ServiceReference[] refs = testContext.getServiceReferences("org.osgi.service.blueprint.context.BlueprintContext", "(osgi.blueprint.context.symbolicName=" + bundle.getSymbolicName() + ")");
-        if (refs == null || refs[0].getBundle() != bundle) {
-            fail("No BlueprintContext located for bundle " + bundle.getSymbolicName());
-        }
-
-        // now validate the bundle version
-        Version bundleVersion = (Version)refs[0].getProperty("osgi.blueprint.context.symbolicName");
-        assertNotNull("no osgi.blueprint.context.version property set", bundleVersion);
-
-        assertTrue("Incorrect osgi.blueprint.context.version ", TestUtil.validateBundleVersion(bundle, bundleVersion));
+        ServiceReference[] refs = testContext.getServiceReferences("org.osgi.service.blueprint.container.BlueprintContainer", "(osgi.blueprint.container.verson=" + bundle.getSymbolicName() + ")");
+        assertNull("Unexpected BlueprintContainer located", refs);
     }
 }
 

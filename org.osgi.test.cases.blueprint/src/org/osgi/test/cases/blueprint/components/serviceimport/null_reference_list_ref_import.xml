@@ -20,6 +20,7 @@
                <listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
            </ref-list>
        </property>
+       <property name="useReferences" value="true" />
    </bean>
 </blueprint>
 

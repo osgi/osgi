@@ -16,7 +16,7 @@
 
 package org.osgi.test.cases.blueprint.components.serviceimport;
 
-import org.osgi.service.blueprint.context.ServiceUnavailableException;
+import org.osgi.service.blueprint.container.ServiceUnavailableException;
 import org.osgi.test.cases.blueprint.framework.TestService;
 import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.services.TestServiceOne;
@@ -50,12 +50,12 @@ public class UnregisteredCollectionDependencyChecker extends DependencyDriver {
         TestServiceOne service = getCollectionService();
 
         // first test the service is live
-        AssertionService.assertTrue(this, "Bad service injected", serviceOne.testOne());
+        AssertionService.assertTrue(this, "Bad service injected", service.testOne());
         // this should unregister our dependent service
         serviceManager.toggleServices();
         try {
             // this should give an exception
-            AssertionService.assertFalse(this, "Service proxy not detached", serviceOne.testOne());
+            AssertionService.assertFalse(this, "Service proxy not detached", service.testOne());
         } catch (ServiceUnavailableException e) {
             // we expect to get here
         }
@@ -64,7 +64,7 @@ public class UnregisteredCollectionDependencyChecker extends DependencyDriver {
         try {
             // this should still give an exception since service proxies obtained from
             // reference collections do not have damping behavior.
-            AssertionService.assertFalse(this, "Service proxy not detached", serviceOne.testOne());
+            AssertionService.assertFalse(this, "Service proxy not detached", service.testOne());
         } catch (ServiceUnavailableException e) {
             // we expect to get here
         }

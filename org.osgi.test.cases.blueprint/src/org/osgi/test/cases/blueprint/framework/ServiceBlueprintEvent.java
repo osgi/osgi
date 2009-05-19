@@ -66,7 +66,7 @@ public class ServiceBlueprintEvent extends BlueprintEvent {
      * @param listener A listener that will be triggered with this event is received.
      */
     public ServiceBlueprintEvent(String topic, Class[] interfaces, Map props, TestEventListener listener) {
-        super("org/osgi/service/blueprint/context/" + topic, props, listener);
+        super("org/osgi/service/blueprint/container/" + topic, props, listener);
         this.interfaces = interfaces;
     }
 

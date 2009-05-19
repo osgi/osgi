@@ -22,16 +22,16 @@ import org.osgi.test.cases.blueprint.services.TestUtil;
 
 
 /**
- * A wrapper for BlueprintContext events broadcast via the EventAdmin
+ * A wrapper for BlueprintContainer events broadcast via the EventAdmin
  * service.
  */
-public class BlueprintContextEvent extends AdminTestEvent {
+public class BlueprintContainerEvent extends AdminTestEvent {
     /**
      * Create the event wrapper.
      *
      * @param topic  The expected event topic.
      */
-    public BlueprintContextEvent(String topic) {
+    public BlueprintContainerEvent(String topic) {
         this(topic, null, null);
     }
 
@@ -41,7 +41,7 @@ public class BlueprintContextEvent extends AdminTestEvent {
      * @param topic  The expected event topic.
      * @param props  A set of properties we expect to receive with the event.
      */
-    public BlueprintContextEvent(String topic, Map props) {
+    public BlueprintContainerEvent(String topic, Map props) {
         this(topic, props, null);
     }
 
@@ -53,8 +53,8 @@ public class BlueprintContextEvent extends AdminTestEvent {
      * @param props    A set of properties we expect to receive with the event.
      * @param listener An event listener we will poke when this event is received.
      */
-    public BlueprintContextEvent(String topic, Map props, TestEventListener listener) {
-        super("org/osgi/test/cases/blueprint/BlueprintContext/" + topic, props, listener);
+    public BlueprintContainerEvent(String topic, Map props, TestEventListener listener) {
+        super("org/osgi/test/cases/blueprint/BlueprintContainer/" + topic, props, listener);
     }
 
 
@@ -65,7 +65,7 @@ public class BlueprintContextEvent extends AdminTestEvent {
      *
      * @param event  The received event.
      */
-    public BlueprintContextEvent(Event event) {
+    public BlueprintContainerEvent(Event event) {
         super(event);
     }
 
@@ -77,11 +77,11 @@ public class BlueprintContextEvent extends AdminTestEvent {
      * @return True if these events match on the required properties.
      */
     public boolean matches(TestEvent o) {
-        if (!(o instanceof BlueprintContextEvent)) {
+        if (!(o instanceof BlueprintContainerEvent)) {
             return false;
         }
 
-        BlueprintContextEvent other = (BlueprintContextEvent)o;
+        BlueprintContainerEvent other = (BlueprintContainerEvent)o;
 
         // fail immediately on a mismatch on id or type
         if (bundle != bundle || !topic.equals(other.topic)) {
@@ -103,10 +103,10 @@ public class BlueprintContextEvent extends AdminTestEvent {
      */
     public String toString() {
         if (props != null) {
-            return "BlueprintContextEvent " + topic + " for bundle " + bundle.getSymbolicName() + " with properties: " + TestUtil.formatProperties(props);
+            return "BlueprintContainerEvent " + topic + " for bundle " + bundle.getSymbolicName() + " with properties: " + TestUtil.formatProperties(props);
         }
         else {
-            return "BlueprintContextEvent " + topic + " for bundle " + bundle.getSymbolicName();
+            return "BlueprintContainerEvent " + topic + " for bundle " + bundle.getSymbolicName();
         }
     }
 
@@ -116,7 +116,7 @@ public class BlueprintContextEvent extends AdminTestEvent {
      * @return true if this was a context failure event.  false for any other event type.
      */
     public boolean isError() {
-        return topic.equals("org/osgi/test/cases/blueprint/BlueprintContext/FAILED");
+        return topic.equals("org/osgi/test/cases/blueprint/BlueprintContainer/FAILED");
     }
 
     /**

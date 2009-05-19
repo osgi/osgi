@@ -1885,7 +1885,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         Hashtable props1 = new Hashtable();
         props1.put("service.interface.name", TestServiceOne.class.getName());
         props1.put("service.listener.type", "interface");
-        props1.put("osgi.service.blueprint.compname", "ServiceOneA");
+        props1.put("test.service.name", "ServiceOneA");
         // this is the initial bind operation at ModuleContext creation
         importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, props1));
         // this is followed by an UNBIND operation when the service goes away
@@ -1927,7 +1927,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         Hashtable props1 = new Hashtable();
         props1.put("service.interface.name", TestServiceOne.class.getName());
         props1.put("service.listener.type", "interface");
-        props1.put("osgi.service.blueprint.compname", "ServiceOneA");
+        props1.put("test.service.name", "ServiceOneA");
         // this is the initial bind operation at ModuleContext creation
         importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, props1));
         // this is followed by an UNBIND operation when the service goes away

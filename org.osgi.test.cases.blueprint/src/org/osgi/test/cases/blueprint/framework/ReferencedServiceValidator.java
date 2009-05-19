@@ -19,7 +19,7 @@ package org.osgi.test.cases.blueprint.framework;
 import org.osgi.framework.BundleContext;
 
 /**
- * Validate the referenced service metadata for a BlueprintContext.
+ * Validate the referenced service metadata for a BlueprintContainer.
  */
 public class ReferencedServiceValidator extends MetadataValidator {
     // the expected set of exported services for this bundle.

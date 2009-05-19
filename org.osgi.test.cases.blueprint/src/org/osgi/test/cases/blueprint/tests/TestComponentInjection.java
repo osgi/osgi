@@ -19,7 +19,7 @@ package org.osgi.test.cases.blueprint.tests;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
-import org.osgi.service.blueprint.context.BlueprintContext;
+import org.osgi.service.blueprint.container.BlueprintContainer;
 import org.osgi.service.blueprint.convert.ConversionService;
 
 import org.osgi.service.blueprint.reflect.BeanMetadata;

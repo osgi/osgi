@@ -386,12 +386,12 @@ public class EventSet {
         addEvent(new BlueprintEvent(type, props));
     }
 
-    public void addBlueprintContextEvent(String type) {
-        addEvent(new BlueprintContextEvent(type));
+    public void addBlueprintContainerEvent(String type) {
+        addEvent(new BlueprintContainerEvent(type));
     }
 
-    public void addBlueprintContextEvent(String type, Map props) {
-        addEvent(new BlueprintContextEvent(type, props));
+    public void addBlueprintContainerEvent(String type, Map props) {
+        addEvent(new BlueprintContainerEvent(type, props));
     }
 
     public void addBundleEvent(String type) {

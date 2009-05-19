@@ -5,7 +5,7 @@
        <argument value="ContextAware"/>
        <property name="bundle" ref="bundle"/>
        <property name="bundleContext" ref="bundleContext"/>
-       <property name="blueprintContext" ref="blueprintContext"/>
+       <property name="blueprintContainer" ref="blueprintContainer"/>
    </bean>
 </blueprint>
 

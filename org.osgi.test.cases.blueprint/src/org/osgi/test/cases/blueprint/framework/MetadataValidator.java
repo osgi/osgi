@@ -64,7 +64,7 @@ public class MetadataValidator extends Assert implements TestValidator, Metadata
     public void validate(BundleContext testContext) throws Exception {
         // this will retrieve the module context, raising an error if
         // it could not be retrieved.
-        blueprintMetadata.getBlueprintContext();
+        blueprintMetadata.getBlueprintContainer();
     }
 }
 

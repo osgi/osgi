@@ -40,9 +40,9 @@
            <entry key="test.case.property.long.array"><array value-type="long"><value>5</value></array></entry>
            <entry key="test.case.property.boolean.array"><array value-type="boolean"><value>true</value></array></entry>
            <entry key="test.case.property.float.array"><array value-type="float"><value>6.0</value></array></entry>
-           <entry key="test.case.property.double.array"><array value-type="float"><value>7.0</value></array></entry>
+           <entry key="test.case.property.double.array"><array value-type="double"><value>7.0</value></array></entry>
 
-           <entry key="test.case.property.java.lang.String.array"><array value-type="java.lang.String"><value>"abc"</value></array></entry>
+           <entry key="test.case.property.java.lang.String.array"><array value-type="java.lang.String"><value>abc</value></array></entry>
            <entry key="test.case.property.java.lang.Integer.array"><array value-type="java.lang.Integer"><value>11</value></array></entry>
            <entry key="test.case.property.java.lang.Short.array"><array value-type="java.lang.Short"><value>12</value></array></entry>
            <entry key="test.case.property.java.lang.Byte.array"><array value-type="java.lang.Byte"><value>13</value></array></entry>
@@ -52,7 +52,7 @@
            <entry key="test.case.property.java.lang.Float.array"><array value-type="java.lang.Float"><value>16.0</value></array></entry>
            <entry key="test.case.property.java.lang.Double.array"><array value-type="java.lang.Double"><value>17.0</value></array></entry>
 
-           <entry key="test.case.property.java.lang.String.Set"><set value-type="java.lang.String"><value>"abc"</value></set></entry>
+           <entry key="test.case.property.java.lang.String.Set"><set value-type="java.lang.String"><value>abc</value></set></entry>
            <entry key="test.case.property.java.lang.Integer.Set"><set value-type="java.lang.Integer"><value>11</value></set></entry>
            <entry key="test.case.property.java.lang.Short.Set"><set value-type="java.lang.Short"><value>12</value></set></entry>
            <entry key="test.case.property.java.lang.Byte.Set"><set value-type="java.lang.Byte"><value>13</value></set></entry>
@@ -62,7 +62,7 @@
            <entry key="test.case.property.java.lang.Float.Set"><set value-type="java.lang.Float"><value>16.0</value></set></entry>
            <entry key="test.case.property.java.lang.Double.Set"><set value-type="java.lang.Double"><value>17.0</value></set></entry>
 
-           <entry key="test.case.property.java.lang.String.List"><list value-type="java.lang.String"><value>"abc"</value></list></entry>
+           <entry key="test.case.property.java.lang.String.List"><list value-type="java.lang.String"><value>abc</value></list></entry>
            <entry key="test.case.property.java.lang.Integer.List"><list value-type="java.lang.Integer"><value>11</value></list></entry>
            <entry key="test.case.property.java.lang.Short.List"><list value-type="java.lang.Short"><value>12</value></list></entry>
            <entry key="test.case.property.java.lang.Byte.List"><list value-type="java.lang.Byte"><value>13</value></list></entry>

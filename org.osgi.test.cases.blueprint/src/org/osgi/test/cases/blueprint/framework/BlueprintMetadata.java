@@ -28,8 +28,8 @@ import junit.framework.AssertionFailedError;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.blueprint.context.BlueprintContext;
-import org.osgi.service.blueprint.context.NoSuchComponentException;
+import org.osgi.service.blueprint.container.BlueprintContainer;
+import org.osgi.service.blueprint.container.NoSuchComponentException;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.osgi.service.blueprint.reflect.BeanMetadata;
 import org.osgi.service.blueprint.reflect.BeanArgument;
@@ -44,7 +44,7 @@ import org.osgi.test.cases.blueprint.services.ComponentTestInfo;
 import org.osgi.test.cases.blueprint.services.ValueDescriptor;
 
 /**
- * A wrapper around the published BlueprintContext service for a managed
+ * A wrapper around the published BlueprintContainer service for a managed
  * bundle.  This is used by the different validators, initializers,
  * and terminators to perform metadata-related operations.
  */
@@ -56,7 +56,7 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
     // the resolved service reference to the target module context.
     protected ServiceReference contextRef;
     // the actual module context service
-    protected BlueprintContext targetBlueprintContext;
+    protected BlueprintContainer targetBlueprintContainer;
 
 
     /**
@@ -96,21 +96,21 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
      */
     public void validate(BundleContext testContext) throws Exception {
         // just get the context at this point
-        getBlueprintContext();
+        getBlueprintContainer();
     }
 
     /**
      * Retrieve the context for the target bundle.
      */
-    protected void getBlueprintContext() throws Exception {
-        ServiceReference[] refs = testContext.getServiceReferences("org.osgi.service.blueprint.context.BlueprintContext",
-            "(osgi.blueprint.context.symbolicname=" + targetBundle.getSymbolicName() + ")");
-        assertNotNull("No BlueprintContext located for bundle " + targetBundle.getSymbolicName(), refs);
-        assertEquals("Bundle mismatch for BlueprintContext instance.", targetBundle, refs[0].getBundle());
+    protected void getBlueprintContainer() throws Exception {
+        ServiceReference[] refs = testContext.getServiceReferences("org.osgi.service.blueprint.container.BlueprintContainer",
+            "(osgi.blueprint.container.symbolicname=" + targetBundle.getSymbolicName() + ")");
+        assertNotNull("No BlueprintContainer located for bundle " + targetBundle.getSymbolicName(), refs);
+        assertEquals("Bundle mismatch for BlueprintContainer instance.", targetBundle, refs[0].getBundle());
 
         // save the module context reference
         contextRef = refs[0];
-        targetBlueprintContext = (BlueprintContext)testContext.getService(contextRef);
+        targetBlueprintContainer = (BlueprintContainer)testContext.getService(contextRef);
     }
 
 
@@ -122,9 +122,9 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
      * @return The bundle published module context.
      * @exception Exception
      */
-    public BlueprintContext getTargetBlueprintContext() throws Exception {
-        getBlueprintContext();
-        return targetBlueprintContext;
+    public BlueprintContainer getTargetBlueprintContainer() throws Exception {
+        getBlueprintContainer();
+        return targetBlueprintContainer;
     }
 
 
@@ -136,11 +136,11 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
      */
     public Object getComponent(String componentName) throws Exception {
         // ensure we have a good context first
-        getBlueprintContext();
+        getBlueprintContainer();
         try {
             // get the object instance
-            Object component = targetBlueprintContext.getComponent(componentName);
-            assertNotNull("Component " + componentName + " not found in BlueprintContext for " + targetBundle.getSymbolicName(), component);
+            Object component = targetBlueprintContainer.getComponent(componentName);
+            assertNotNull("Component " + componentName + " not found in BlueprintContainer for " + targetBundle.getSymbolicName(), component);
             return component;
         } catch (NoSuchComponentException e) {
             fail("Component " + componentName + " not created for bundle " + targetBundle.getSymbolicName());
@@ -160,14 +160,14 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
      */
     public ComponentMetadata getComponentMetadata(TestComponentMetadata target) throws Exception {
         // ensure we have a good context first
-        getBlueprintContext();
+        getBlueprintContainer();
         try {
-            Iterator componentNames = targetBlueprintContext.getComponentNames().iterator();
+            Iterator componentNames = targetBlueprintContainer.getComponentNames().iterator();
             while (componentNames.hasNext()) {
                 String name = (String)componentNames.next();
 
                 // get the metadata instance for the next name and check for a match
-                ComponentMetadata component = targetBlueprintContext.getComponentMetadata(name);
+                ComponentMetadata component = targetBlueprintContainer.getComponentMetadata(name);
                 if (target.matches(component)) {
                     return component;
                 }
@@ -186,11 +186,11 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
      */
     public ComponentMetadata getComponentMetadata(String componentName) throws Exception {
         // ensure we have a good context first
-        getBlueprintContext();
+        getBlueprintContainer();
         try {
             // get the object instance
-            ComponentMetadata component = targetBlueprintContext.getComponentMetadata(componentName);
-            assertNotNull("Component " + componentName + " not found in BlueprintContext for " + targetBundle.getSymbolicName(), component);
+            ComponentMetadata component = targetBlueprintContainer.getComponentMetadata(componentName);
+            assertNotNull("Component " + componentName + " not found in BlueprintContainer for " + targetBundle.getSymbolicName(), component);
             return component;
         } catch (NoSuchComponentException e) {
             fail("Component " + componentName + " not created for bundle " + targetBundle.getSymbolicName());
@@ -355,7 +355,7 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
      */
     public void validateLifeCycle(String componentId, String className, String initMethod, String destroyMethod) throws Exception {
         // now validate the meta data is correct for the aliases.
-        BeanMetadata meta = (BeanMetadata)targetBlueprintContext.getComponentMetadata(componentId);
+        BeanMetadata meta = (BeanMetadata)targetBlueprintContainer.getComponentMetadata(componentId);
         assertEquals("Classname for component " + componentId, className, meta.getClassName());
         assertEquals("init-method for component " + componentId, initMethod, meta.getInitMethodName());
         assertEquals("destroy-method for component " + componentId, destroyMethod, meta.getDestroyMethodName());
@@ -372,7 +372,7 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
     public void validateArgumentMetadata(String componentId, TestArgument[] expected) throws Exception {
         try {
             // now validate the meta data is correct for the parameters
-            BeanMetadata meta = (BeanMetadata)targetBlueprintContext.getComponentMetadata(componentId);
+            BeanMetadata meta = (BeanMetadata)targetBlueprintContainer.getComponentMetadata(componentId);
             this.validateArgumentMetadata(meta, expected);
         } catch (Throwable e) {
             // just allowing this to go past will result
@@ -436,7 +436,7 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
      */
     public void validatePartialConstructorMetadata(String componentId, TestArgument[] expected) throws Exception {
         // now validate the meta data is correct for the parameters
-        BeanMetadata meta = (BeanMetadata)targetBlueprintContext.getComponentMetadata(componentId);
+        BeanMetadata meta = (BeanMetadata)targetBlueprintContainer.getComponentMetadata(componentId);
         validatePartialConstructorMetadata(meta, expected);
     }
 
@@ -493,7 +493,7 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
      */
     public void validateFactoryMetadata(String componentId, String factoryMethodName, String staticFactoryClassName, TestValue factoryTestComponentValue) throws Exception {
         // now validate the meta data is correct for the parameters
-        BeanMetadata meta = (BeanMetadata)targetBlueprintContext.getComponentMetadata(componentId);
+        BeanMetadata meta = (BeanMetadata)targetBlueprintContainer.getComponentMetadata(componentId);
         this.validateFactoryMetadata(meta, factoryMethodName, staticFactoryClassName, factoryTestComponentValue);
     }
 
@@ -536,7 +536,7 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
     public void validatePropertyMetadata(String componentId, TestProperty[] expected) throws Exception {
         // now validate the meta data is correct for the properties
         try {
-            validatePropertyMetadata((BeanMetadata)targetBlueprintContext.getComponentMetadata(componentId), expected);
+            validatePropertyMetadata((BeanMetadata)targetBlueprintContainer.getComponentMetadata(componentId), expected);
         } catch (Throwable e) {
             // just allowing this to go past will result
             // about which component and property we're doing this on.  So
@@ -610,7 +610,7 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
      * @return The Set of defined component names.
      */
     public Set getComponentNames() {
-        return targetBlueprintContext.getComponentNames();
+        return targetBlueprintContainer.getComponentNames();
     }
 
     /**
@@ -626,7 +626,7 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
      */
     public List getComponentDependencies(String componentId) throws Exception {
         // now validate the meta data is correct for the properties
-        BeanMetadata meta = (BeanMetadata)targetBlueprintContext.getComponentMetadata(componentId);
+        BeanMetadata meta = (BeanMetadata)targetBlueprintContainer.getComponentMetadata(componentId);
         return meta.getExplicitDependencies();
     }
 
@@ -659,10 +659,10 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
      * @exception Exception
      */
     public void cleanup(BundleContext context) throws Exception {
-        if (targetBlueprintContext != null) {
+        if (targetBlueprintContainer != null) {
             // this needs to release the acquired service.
             testContext.ungetService(contextRef);
-            targetBlueprintContext = null;
+            targetBlueprintContainer = null;
         }
         if (targetBundle != null) {
             System.out.println(">>>>>>>> Uninstalling bundle " + targetBundle);
@@ -680,7 +680,7 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
      * @exception Exception
      */
     public void validateExportedServices(ExportedService[] expected) throws Exception {
-        Collection exportedServices = targetBlueprintContext.getExportedServicesMetadata();
+        Collection exportedServices = targetBlueprintContainer.getExportedServicesMetadata();
 
         assertEquals("Mismatch on the number of exported services", expected.length, exportedServices.size());
         for (int i = 0; i < expected.length; i++) {
@@ -721,7 +721,7 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
      * @exception Exception
      */
     public void validateReferencedServices(ReferencedService[] expected) throws Exception {
-        Collection referencedServices = targetBlueprintContext.getReferencedServicesMetadata();
+        Collection referencedServices = targetBlueprintContainer.getReferencedServicesMetadata();
 
         assertEquals("Mismatch on the number of referenced services", expected.length, referencedServices.size());
         for (int i = 0; i < expected.length; i++) {

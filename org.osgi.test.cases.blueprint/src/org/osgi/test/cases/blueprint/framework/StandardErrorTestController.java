@@ -20,7 +20,7 @@ import org.osgi.framework.BundleContext;
 
 /**
  * Controller for a standard error test.  This is a single-phase test
- * that will validate that the BlueprintContext is not created.
+ * that will validate that the BlueprintContainer is not created.
  */
 public class StandardErrorTestController extends BaseTestController {
     // our stanard tests have just a single bundle use for

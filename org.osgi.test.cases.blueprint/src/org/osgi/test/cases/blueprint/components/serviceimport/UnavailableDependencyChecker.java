@@ -17,7 +17,7 @@
 package org.osgi.test.cases.blueprint.components.serviceimport;
 
 import org.osgi.test.cases.blueprint.services.AssertionService;
-import org.osgi.service.blueprint.context.ServiceUnavailableException;
+import org.osgi.service.blueprint.container.ServiceUnavailableException;
 
 
 /**

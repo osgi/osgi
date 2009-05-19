@@ -34,16 +34,16 @@ public class StandardErrorEventSet extends EventSet {
         // we always expect to see a started bundle event, even though
         // the managed bundle portion of this will give an error
         addBundleEvent("STARTED");
-        // no BlueprintContext service should be published for this bundle.  This is an error if
+        // no BlueprintContainer service should be published for this bundle.  This is an error if
         // one shows up
-        addFailureEvent(new ServiceTestEvent("REGISTERED", "org.osgi.service.blueprint.context.BlueprintContext"));
+        addFailureEvent(new ServiceTestEvent("REGISTERED", "org.osgi.service.blueprint.container.BlueprintContainer"));
         // we should be seeing a failure event published for this.
         // other events are not really determined.
         addBlueprintEvent("FAILURE");
-        addBlueprintContextEvent("FAILED");
+        addBlueprintContainerEvent("FAILED");
 
         // at the end of everything, there should not be a method context associated with this bundle
-        addValidator(new NoBlueprintContextValidator());
+        addValidator(new NoBlueprintContainerValidator());
         // the bundle should be in the ACTIVE state when everything settles down
         addValidator(new BundleStateValidator(Bundle.ACTIVE));
     }

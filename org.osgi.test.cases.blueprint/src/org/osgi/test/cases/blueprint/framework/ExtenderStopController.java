@@ -51,14 +51,14 @@ public class ExtenderStopController extends StandardTestController {
         // event is managed by stopping the extender bundle
 
         // we should see the module context unregistered during shutdown.
-        events.addServiceEvent("UNREGISTERING", "org.osgi.service.blueprint.context.BlueprintContext");
+        events.addServiceEvent("UNREGISTERING", "org.osgi.service.blueprint.container.BlueprintContainer");
         // now standard blueprint revents.
         events.addBlueprintEvent("DESTROYING");
         events.addBlueprintEvent("DESTROYED");
 
         // at the end of everything, there should no longer be a module context associated with the
         // component bundle.
-        events.addValidator(new NoBlueprintContextValidator());
+        events.addValidator(new NoBlueprintContainerValidator());
         // the bundle should still be in the started state when everything settles down
         events.addValidator(new BundleStateValidator(Bundle.ACTIVE));
         // this needs to perform some cleanup when everything is done,

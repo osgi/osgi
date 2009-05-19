@@ -140,7 +140,9 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
                 TestGoodService.class, TestGoodServiceSubclass.class, TestBadService.class },
             ServiceMetadata.AUTO_EXPORT_DISABLED, 2, metaServiceProps, null, null)));
         // we should see a service event here indicating this was registered
-        exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
+        Hashtable props2 = new Hashtable();
+        props2.put("osgi.service.blueprint.compname", "ServiceOne");
+        exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class, props2);
         // a very complex service event
         exportStartEvents.addServiceEvent("REGISTERED", new Class[] { TestServiceOne.class, TestServiceTwo.class,
             TestServiceTwoSubclass.class, TestServiceAllSubclass.class, TestGoodService.class,
@@ -284,7 +286,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // embedded elements, they're reuse the definition above
         importStartEvents.addValidator(new ArgumentMetadataValidator("ServiceOneConstructor", new TestArgument[] {
             new StringArgument("ServiceOneConstructor"),
-            new TestArgument(new TestComponentValue(service))
+            new TestArgument(new TestComponentValue(service), TestServiceOne.class)
         }));
 
 
@@ -1273,7 +1275,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         Hashtable props1 = new Hashtable();
         props1.put("service.interface.name", TestServiceOne.class.getName());
         props1.put("service.listener.type", "interface");
-        props1.put("osgi.service.blueprint.compname", "ServiceOneA");
+        props1.put("test.service.name", "ServiceOneA");
         // this is the initial bind operation at ModuleContext creation
         importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, props1));
         // this is followed by an UNBIND operation when the service goes away
@@ -1383,7 +1385,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         Hashtable props1 = new Hashtable();
         props1.put("service.interface.name", TestServiceOne.class.getName());
         props1.put("service.listener.type", "interface");
-        props1.put("osgi.service.blueprint.compname", "ServiceOneA");
+        props1.put("test.service.name", "ServiceOneA");
         // this is the bind operation that occurs after the service manager is nudged.
         importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, props1));
         // this is followed by an UNBIND operation when the service goes away again.
@@ -1422,7 +1424,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         Hashtable props1 = new Hashtable();
         props1.put("service.interface.name", TestServiceOne.class.getName());
         props1.put("service.listener.type", "interface");
-        props1.put("osgi.service.blueprint.compname", "ServiceOneA");
+        props1.put("test.service.name", "ServiceOneA");
         // this is the bind operation that occurs after the service manager is nudged.
         importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, props1));
         // this is followed by an UNBIND operation when the service goes away again.
@@ -1459,12 +1461,12 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         Hashtable props1 = new Hashtable();
         props1.put("service.interface.name", TestServiceOne.class.getName());
         props1.put("service.listener.type", "interface");
-        props1.put("osgi.service.blueprint.compname", "ServiceOneA");
+        props1.put("test.service.name", "ServiceOneA");
         // binding events for the second service should send these.
         Hashtable props2 = new Hashtable();
         props2.put("service.interface.name", TestServiceOne.class.getName());
         props2.put("service.listener.type", "interface");
-        props2.put("osgi.service.blueprint.compname", "ServiceOneB");
+        props2.put("test.service.name", "BadService");
         // this is the the initial bind operation.
         importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, props1));
         // According to the spec, if there is a service immediately available, then we won't see the
@@ -1473,7 +1475,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // we should, however, see a BIND event for the replacement service
         importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, props2));
         // this indicates successful completion of the test phase
-        importStartEvents.addAssertion("UnregisteredDependencyChecker", AssertionService.COMPONENT_INIT_METHOD);
+        importStartEvents.addAssertion("ReboundDependencyChecker", AssertionService.COMPONENT_INIT_METHOD);
 
 
         // now some expected termination stuff

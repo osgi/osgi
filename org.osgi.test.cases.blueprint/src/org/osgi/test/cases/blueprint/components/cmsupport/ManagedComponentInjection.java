@@ -18,7 +18,7 @@ package org.osgi.test.cases.blueprint.components.cmsupport;
 
 import java.util.Map;
 
-import org.osgi.service.blueprint.context.BlueprintContext;
+import org.osgi.service.blueprint.container.BlueprintContainer;
 import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 
@@ -99,10 +99,10 @@ public class ManagedComponentInjection extends BaseTestComponent {
 
     // destroy
     public void onDestroy(int reasonCode) {
-        if (reasonCode==BlueprintContext.CONFIGURATION_ADMIN_OBJECT_DELETED) {
+        if (reasonCode==BlueprintContainer.CONFIGURATION_ADMIN_OBJECT_DELETED) {
             AssertionService.sendPropertyNameEvent(this, AssertionService.METHOD_CALLED, "ManagedComponentInjection_onDestroy_ConfigDeleted");
         }
-        if (reasonCode==BlueprintContext.BUNDLE_STOPPING){
+        if (reasonCode==BlueprintContainer.BUNDLE_STOPPING){
             AssertionService.sendPropertyNameEvent(this, AssertionService.METHOD_CALLED, "ManagedComponentInjection_onDestroy_BundleStopping");
         }
 

@@ -27,7 +27,7 @@ import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
 
 /**
- * A single referenced service in the BlueprintContext metadata.
+ * A single referenced service in the BlueprintContainer metadata.
  */
 public class ReferencedServiceBase extends Assert implements TestComponentMetadata {
     // optional name of the component

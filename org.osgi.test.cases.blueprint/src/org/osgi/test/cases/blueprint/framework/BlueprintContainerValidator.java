@@ -18,20 +18,19 @@ package org.osgi.test.cases.blueprint.framework;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.Version;
+import org.osgi.test.cases.blueprint.services.TestUtil;
 
 import junit.framework.Assert;
 
 /**
- * Validate that there is no module context defined as a service
- * for this bundle.  This is used to validate stop() event cleanup,
- * as well as verifying that there is no module context published
- * when context creation errors occur.
+ * Validate that a module context exists.
  */
-public class NoBlueprintContextValidator extends Assert implements TestValidator, BundleAware {
+public class BlueprintContainerValidator extends Assert implements TestValidator, BundleAware {
     // the bundle we're validating for
     protected Bundle bundle;
 
-    NoBlueprintContextValidator() {
+    public BlueprintContainerValidator() {
     }
 
     /**
@@ -57,8 +56,16 @@ public class NoBlueprintContextValidator extends Assert implements TestValidator
      * @exception Exception
      */
     public void validate(BundleContext testContext) throws Exception {
-        ServiceReference[] refs = testContext.getServiceReferences("org.osgi.service.blueprint.context.BlueprintContext", "(osgi.blueprint.context.verson=" + bundle.getSymbolicName() + ")");
-        assertNull("Unexpected BlueprintContext located", refs);
+        ServiceReference[] refs = testContext.getServiceReferences("org.osgi.service.blueprint.container.BlueprintContainer", "(osgi.blueprint.container.symbolicName=" + bundle.getSymbolicName() + ")");
+        if (refs == null || refs[0].getBundle() != bundle) {
+            fail("No BlueprintContainer located for bundle " + bundle.getSymbolicName());
+        }
+
+        // now validate the bundle version
+        Version bundleVersion = (Version)refs[0].getProperty("osgi.blueprint.container.symbolicName");
+        assertNotNull("no osgi.blueprint.container.version property set", bundleVersion);
+
+        assertTrue("Incorrect osgi.blueprint.container.version ", TestUtil.validateBundleVersion(bundle, bundleVersion));
     }
 }
 

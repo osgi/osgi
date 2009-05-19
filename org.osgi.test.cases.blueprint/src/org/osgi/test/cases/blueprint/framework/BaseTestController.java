@@ -33,7 +33,7 @@ import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.Version;
-import org.osgi.service.blueprint.context.BlueprintContextListener;
+import org.osgi.service.blueprint.container.BlueprintContainerListener;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
@@ -42,7 +42,7 @@ import org.osgi.test.cases.blueprint.services.AssertionService;
 /**
  * A base class for the different types of test controller.
  */
-public class BaseTestController implements EventHandler, BlueprintContextListener, ServiceListener {
+public class BaseTestController implements EventHandler, BlueprintContainerListener, ServiceListener {
     // default timeout for the test.  For most tests, we're not dealing with
     // expected timeout situations, so a short timeout is acceptable.  This will
     // need to be set higher if we're testing actual timeout situations.
@@ -52,7 +52,7 @@ public class BaseTestController implements EventHandler, BlueprintContextListene
 
     static final String[] topics = new String[] {
         "org/osgi/test/cases/blueprint/*",
-        "org/osgi/service/blueprint/context/*",
+        "org/osgi/service/blueprint/container/*",
         "org/osgi/framework/FrameworkEvent/*",
         "org/osgi/framework/BundleEvent/*",
     };
@@ -96,7 +96,7 @@ public class BaseTestController implements EventHandler, BlueprintContextListene
     static public Bundle getExtenderBundle(Map props) {
         // if we've not been asked for this yet, extract it from the properties
         if (extenderBundle == null) {
-            extenderBundle = (Bundle)props.get(org.osgi.service.blueprint.context.EventConstants.EXTENDER_BUNDLE);
+            extenderBundle = (Bundle)props.get(org.osgi.service.blueprint.container.EventConstants.EXTENDER_BUNDLE);
         }
         return extenderBundle;
     }
@@ -143,7 +143,7 @@ public class BaseTestController implements EventHandler, BlueprintContextListene
         // we add an initializer to start our bundle when the test starts
         setupEvents.addInitializer(new TestBundleStarter(testBundle));
         // this should be the last event that will indicate successful completion
-        setupEvents.addServiceEvent("REGISTERED", "org.osgi.service.blueprint.context.BlueprintContext");
+        setupEvents.addServiceEvent("REGISTERED", "org.osgi.service.blueprint.container.BlueprintContainer");
         setupPhase.addEventSet(setupEvents);
 
         EventSet cleanupEvents = new EventSet(testContext, testBundle);
@@ -268,8 +268,8 @@ public class BaseTestController implements EventHandler, BlueprintContextListene
 
         String topic = event.getTopic();
         // one of our assertions
-        if (topic.startsWith("org/osgi/test/cases/blueprint/BlueprintContext")) {
-            processEvent(targetPhase, new BlueprintContextEvent(event));
+        if (topic.startsWith("org/osgi/test/cases/blueprint/BlueprintContainer")) {
+            processEvent(targetPhase, new BlueprintContainerEvent(event));
         }
         else if (topic.startsWith("org/osgi/test/cases/blueprint/")) {
             processEvent(targetPhase, new ComponentAssertion(event));
@@ -322,7 +322,7 @@ public class BaseTestController implements EventHandler, BlueprintContextListene
         Hashtable handlerProps = new Hashtable();
         handlerProps.put(EventConstants.EVENT_TOPIC, topics);
         this.eventAdminListener = testContext.registerService(EventHandler.class.getName(), this, handlerProps);
-        this.moduleContextListener = testContext.registerService(BlueprintContextListener.class.getName(), this, null);
+        this.moduleContextListener = testContext.registerService(BlueprintContainerListener.class.getName(), this, null);
         // there are some race conditions involved with service listeners that
         // preclude us using the EventAdmin service for snagging those events.  We'll need to listen for them directly.
         testContext.addServiceListener(this);
@@ -366,8 +366,8 @@ public class BaseTestController implements EventHandler, BlueprintContextListene
 
 
     /**
-     * Method implemented for the BlueprintContextListener interface. This
-     * transforms the BlueprintContextEvent information into a dummy Event
+     * Method implemented for the BlueprintContainerListener interface. This
+     * transforms the BlueprintContainerEvent information into a dummy Event
      * for processing.
      *
      * @param bundle
@@ -381,13 +381,13 @@ public class BaseTestController implements EventHandler, BlueprintContextListene
         props.put("bundle.version", Version.parseVersion((String)bundle.getHeaders().get(Constants.BUNDLE_VERSION)));
         props.put(EventConstants.BUNDLE, bundle);
         props.put(EventConstants.BUNDLE_ID, new Long(bundle.getBundleId()));
-        handleEvent(new Event("org/osgi/test/cases/blueprint/BlueprintContext/CREATED", props));
+        handleEvent(new Event("org/osgi/test/cases/blueprint/BlueprintContainer/CREATED", props));
     }
 
 
     /**
-     * Method implemented for the BlueprintContextListener interface. This
-     * transforms the BlueprintContextEvent information into a dummy Event
+     * Method implemented for the BlueprintContainerListener interface. This
+     * transforms the BlueprintContainerEvent information into a dummy Event
      * for processing.
      *
      * @param bundleSymbolicName
@@ -404,7 +404,7 @@ public class BaseTestController implements EventHandler, BlueprintContextListene
         if (rootCause != null) {
             props.put(EventConstants.EXCEPTION, rootCause);
         }
-        handleEvent(new Event("org/osgi/test/cases/blueprint/BlueprintContext/FAILED", props));
+        handleEvent(new Event("org/osgi/test/cases/blueprint/BlueprintContainer/FAILED", props));
     }
 
     /**
@@ -437,12 +437,12 @@ public class BaseTestController implements EventHandler, BlueprintContextListene
         props.put(EventConstants.BUNDLE, bundle);
         props.put(EventConstants.BUNDLE_ID, new Long(bundle.getBundleId()));
         props.put(Constants.OBJECTCLASS, ref.getProperty(Constants.OBJECTCLASS));
-        
+
         for (int i = 0; i < ref.getPropertyKeys().length; i++) {
             String key = ref.getPropertyKeys()[i];
             props.put(key, ref.getProperty(key));
         }
-        
+
         handleEvent(new Event(topic, props));
     }
 

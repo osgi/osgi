@@ -20,8 +20,8 @@ import java.util.Iterator;
 import java.util.Collection;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.service.blueprint.context.ComponentDefinitionException;
-import org.osgi.service.blueprint.context.BlueprintContext;
+import org.osgi.service.blueprint.container.ComponentDefinitionException;
+import org.osgi.service.blueprint.container.BlueprintContainer;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.osgi.service.blueprint.reflect.BeanMetadata;
 import org.osgi.service.blueprint.reflect.ServiceMetadata;
@@ -62,7 +62,7 @@ public class GetExportedServicesMetadataValidator extends MetadataValidator {
         // ensure we have everything initialized
         super.validate(testContext);
 
-        BlueprintContext context = blueprintMetadata.getTargetBlueprintContext();
+        BlueprintContainer context = blueprintMetadata.getTargetBlueprintContainer();
         // get the collection list
         Collection metadata = context.getExportedServicesMetadata();
         Iterator i = metadata.iterator();

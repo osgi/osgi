@@ -73,7 +73,7 @@ public class ServiceManager {
      * Explicitly register ourselves as a service.  This is done
      * via explicit call when we're being used outside of a blueprint
      * context.  When used in a blueprint context, that task is delegated
-     * to the blueprint BlueprintContext.
+     * to the blueprint BlueprintContainer.
      */
     public void register() {
         if (registration == null) {
@@ -85,7 +85,7 @@ public class ServiceManager {
      * Explicitly unregister ourselves as a service.  This is done
      * via explicit call when we're being used outside of a blueprint
      * context.  When used in a blueprint context, that task is delegated
-     * to the blueprint BlueprintContext.
+     * to the blueprint BlueprintContainer.
      */
     public void unregister() {
         if (registration != null) {

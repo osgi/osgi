@@ -121,7 +121,7 @@ public class ComplexServicePropertyValidator extends Assert implements TestValid
         assertEquals("Property test.case.property.float.array", 6.0, (double)((float[])ref.getProperty("test.case.property.float.array"))[0], 0.0);
         assertEquals("Property test.case.property.double.array", 7.0, ((double[])ref.getProperty("test.case.property.double.array"))[0], 0.0);
 
-        assertEquals("Property test.case.property.java.lang.String.array", "abc", ((Object[])ref.getProperty("test.case.property.java.lang.Integer.array"))[0]);
+        assertEquals("Property test.case.property.java.lang.String.array", "abc", ((Object[])ref.getProperty("test.case.property.java.lang.String.array"))[0]);
         assertEquals("Property test.case.property.java.lang.Integer.array", new Integer(11), ((Object[])ref.getProperty("test.case.property.java.lang.Integer.array"))[0]);
         assertEquals("Property test.case.property.java.lang.Short.array", new Short((short)12), ((Object[])ref.getProperty("test.case.property.java.lang.Short.array"))[0]);
         assertEquals("Property test.case.property.java.lang.Byte.array", new Byte((byte)13), ((Object[])ref.getProperty("test.case.property.java.lang.Byte.array"))[0]);
@@ -131,7 +131,7 @@ public class ComplexServicePropertyValidator extends Assert implements TestValid
         assertEquals("Property test.case.property.java.lang.Float.array", new Float(16.0), ((Object[])ref.getProperty("test.case.property.java.lang.Float.array"))[0]);
         assertEquals("Property test.case.property.java.lang.Double.array", new Double(17.0), ((Object[])ref.getProperty("test.case.property.java.lang.Double.array"))[0]);
 
-        assertEquals("Property test.case.property.java.lang.String.Set", "abc", ((Set)ref.getProperty("test.case.property.java.lang.Integer.Set")).toArray()[0]);
+        assertEquals("Property test.case.property.java.lang.String.Set", "abc", ((Set)ref.getProperty("test.case.property.java.lang.String.Set")).toArray()[0]);
         assertEquals("Property test.case.property.java.lang.Integer.Set", new Integer(11), ((Set)ref.getProperty("test.case.property.java.lang.Integer.Set")).toArray()[0]);
         assertEquals("Property test.case.property.java.lang.Short.Set", new Short((short)12), ((Set)ref.getProperty("test.case.property.java.lang.Short.Set")).toArray()[0]);
         assertEquals("Property test.case.property.java.lang.Byte.Set", new Byte((byte)13), ((Set)ref.getProperty("test.case.property.java.lang.Byte.Set")).toArray()[0]);
@@ -141,7 +141,7 @@ public class ComplexServicePropertyValidator extends Assert implements TestValid
         assertEquals("Property test.case.property.java.lang.Float.Set", new Float(16.0), ((Set)ref.getProperty("test.case.property.java.lang.Float.Set")).toArray()[0]);
         assertEquals("Property test.case.property.java.lang.Double.Set", new Double(17.0), ((Set)ref.getProperty("test.case.property.java.lang.Double.Set")).toArray()[0]);
 
-        assertEquals("Property test.case.property.java.lang.String.List", "abc", ((List)ref.getProperty("test.case.property.java.lang.Integer.List")).get(0));
+        assertEquals("Property test.case.property.java.lang.String.List", "abc", ((List)ref.getProperty("test.case.property.java.lang.String.List")).get(0));
         assertEquals("Property test.case.property.java.lang.Integer.List", new Integer(11), ((List)ref.getProperty("test.case.property.java.lang.Integer.List")).get(0));
         assertEquals("Property test.case.property.java.lang.Short.List", new Short((short)12), ((List)ref.getProperty("test.case.property.java.lang.Short.List")).get(0));
         assertEquals("Property test.case.property.java.lang.Byte.List", new Byte((byte)13), ((List)ref.getProperty("test.case.property.java.lang.Byte.List")).get(0));

@@ -71,7 +71,6 @@ public class ReferenceCollectionChecker extends DependencyDriver {
         injectedSet = l;
     }
 
-
     /**
      * Set the sort order.  This also tests secondarily tests the
      * ability to convert a List into an array of Strings.
@@ -100,7 +99,7 @@ public class ReferenceCollectionChecker extends DependencyDriver {
         validateCollection(expected, injectedList);
         // for lists, we also validate the iteration using the get method.
         for (int i = 0; i < injectedList.size(); i++) {
-            TestServiceOne service = (TestServiceOne)injectedList.get(i);
+            Object service = injectedList.get(i);
             if (locateMatchingService(service, expected) == null) {
                 AssertionService.fail(this, "List.get(" + i + ") returned unexpected service");
                 return;

@@ -20,7 +20,7 @@ import org.osgi.framework.BundleContext;
 
 /**
  * Validate the metadata for all of the exported services
- * defined in a BlueprintContext.
+ * defined in a BlueprintContainer.
  */
 public class ExportedServiceValidator extends MetadataValidator {
     // the expected set of exported services for this bundle.
