@@ -15,6 +15,7 @@
  */
 package org.osgi.test.cases.webcontainer;
 
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.JarURLConnection;
 import java.net.URL;
@@ -23,6 +24,8 @@ import java.util.Map;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.Constants;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
 import org.osgi.test.cases.webcontainer.util.Server;
@@ -46,7 +49,7 @@ public abstract class WebContainerTestBundleControl extends
     protected static final String WARSCHEMA = "webbundle:";
     protected static final String WEB_CONTEXT_PATH = Validator.WEB_CONTEXT_PATH;
     protected static final String WEB_JSP_EXTRACT_LOCATION = Validator.WEB_JSP_EXTRACT_LOCATION;
-    
+
     public void setUp() throws Exception {
         // TODO if war file already exists, let's remove it first.
         this.server = new Server();
@@ -55,7 +58,7 @@ public abstract class WebContainerTestBundleControl extends
         // capture a time before install
         this.beforeInstall = System.currentTimeMillis();
     }
-    
+
     protected void prepare(String wcp) throws Exception {
         this.warContextPath = wcp;
         this.timeUtil = new TimeUtil(this.warContextPath);
@@ -76,7 +79,7 @@ public abstract class WebContainerTestBundleControl extends
 
         return originalManifest;
     }
-    
+
     /*
      * return original manifest from the test war name
      */
@@ -85,8 +88,8 @@ public abstract class WebContainerTestBundleControl extends
     }
 
     /*
-     * return the warPath based on the warName, for example tw1.war path
-     * is /resources/tw1/tw1.war
+     * return the warPath based on the warName, for example tw1.war path is
+     * /resources/tw1/tw1.war
      */
     private String getWarPath(String warName) throws Exception {
         int i = warName.indexOf(".");
@@ -94,7 +97,7 @@ public abstract class WebContainerTestBundleControl extends
         if (warName.startsWith("wm")) {
             return "/resources/" + warName.substring(j, i) + "/" + warName;
         } else {
-          return "/resources/" + warName.substring(0, i) + "/" + warName;
+            return "/resources/" + warName.substring(0, i) + "/" + warName;
         }
     }
 
@@ -108,9 +111,14 @@ public abstract class WebContainerTestBundleControl extends
         }
     }
 
-    // TODO: fill in this method when the schema is defined in the RFC 66 spec
     protected String getWarURL(String name, Map options) {
-        return getWebServer() + name; // TODO hook in options: + "?" + generateQuery(options);
+        String query = generateQuery(options);
+        if (query != null && query.length() > 0) {
+            return WARSCHEMA + getWebServer() + name + "?"
+                    + generateQuery(options);
+        } else {
+            return WARSCHEMA + getWebServer() + name;
+        }
     }
 
     protected String getResponse(String path) throws Exception {
@@ -130,7 +138,7 @@ public abstract class WebContainerTestBundleControl extends
         }
         return response;
     }
-    
+
     protected boolean ableAccessPath(String path) throws Exception {
         try {
             getResponse(path);
@@ -143,42 +151,134 @@ public abstract class WebContainerTestBundleControl extends
     }
 
     protected void checkTW1HomeResponse(String response) throws Exception {
-        assertEquals(response, "<html><head><title>TestWar1</title></head><body>This is TestWar1.<P><A href=\"BasicTest\">/BasicTest</A><BR><A href=\"404.html\">404.html (static link)</A><BR><A href=\"ErrorTest?target=html\">404.html (through servlet.RequestDispatcher.forward())</A><BR><A href=\"ErrorTest\">404.jsp (through servlet.RequestDispatcher.forward())</A><BR><A href=\"aaa\">Broken Link (for call ErrorPage)</A><BR><A href=\"image.html\">image.html</A></P><BR></body></html>");
+        assertEquals(
+                response,
+                "<html><head><title>TestWar1</title></head><body>This is TestWar1.<P><A href=\"BasicTest\">/BasicTest</A><BR><A href=\"404.html\">404.html (static link)</A><BR><A href=\"ErrorTest?target=html\">404.html (through servlet.RequestDispatcher.forward())</A><BR><A href=\"ErrorTest\">404.jsp (through servlet.RequestDispatcher.forward())</A><BR><A href=\"aaa\">Broken Link (for call ErrorPage)</A><BR><A href=\"image.html\">image.html</A></P><BR></body></html>");
     }
-    
-    protected void checkTW3HomeResponse(String response) throws Exception {       
-        assertEquals(response, "<html><head><title>TestWar3</title></head><body>This is TestWar3.<P><A href=\"PostConstructPreDestroyServlet1\">PostConstructPreDestroyServlet1</A><BR><A href=\"PostConstructPreDestroyServlet2\">PostConstructPreDestroyServlet2</A><BR><A href=\"PostConstructPreDestroyServlet3\">PostConstructPreDestroyServlet3</A><BR><A href=\"ResourceServlet1\">ResourceServlet1</A><BR><A href=\"ResourceServlet2\">ResourceServlet2</A><BR><A href=\"ResourceServlet3\">ResourceServlet3</A><BR><A href=\"ResourceServlet4\">ResourceServlet4</A><BR><A href=\"ServletContextListenerServlet\">ServletContextListenerServlet</A><BR><A href=\"RequestListenerServlet\">RequestListenerServlet</A><BR><A href=\"HTTPSessionListenerServlet\">HTTPSessionListenerServlet</A><BR></P></body></html>");
+
+    protected void checkTW3HomeResponse(String response) throws Exception {
+        assertEquals(
+                response,
+                "<html><head><title>TestWar3</title></head><body>This is TestWar3.<P><A href=\"PostConstructPreDestroyServlet1\">PostConstructPreDestroyServlet1</A><BR><A href=\"PostConstructPreDestroyServlet2\">PostConstructPreDestroyServlet2</A><BR><A href=\"PostConstructPreDestroyServlet3\">PostConstructPreDestroyServlet3</A><BR><A href=\"ResourceServlet1\">ResourceServlet1</A><BR><A href=\"ResourceServlet2\">ResourceServlet2</A><BR><A href=\"ResourceServlet3\">ResourceServlet3</A><BR><A href=\"ResourceServlet4\">ResourceServlet4</A><BR><A href=\"ServletContextListenerServlet\">ServletContextListenerServlet</A><BR><A href=\"RequestListenerServlet\">RequestListenerServlet</A><BR><A href=\"HTTPSessionListenerServlet\">HTTPSessionListenerServlet</A><BR></P></body></html>");
     }
-    
-    protected void checkHomeResponse(String response, String warName) throws Exception {
+
+    protected void checkHomeResponse(String response, String warName)
+            throws Exception {
         log("verify content of response is correct");
-        if (warName.equalsIgnoreCase("tw1.war")) { 
-        		checkTW1HomeResponse(response);
-        } else if (warName.equalsIgnoreCase("tw2.war")) { 
+        if (warName.equalsIgnoreCase("tw1.war")) {
+            checkTW1HomeResponse(response);
+        } else if (warName.equalsIgnoreCase("tw2.war")) {
             checkTW2HomeResponse(response);
-        } else if (warName.equalsIgnoreCase("tw3.war")) { 
+        } else if (warName.equalsIgnoreCase("tw3.war")) {
             checkTW3HomeResponse(response);
-        } else if (warName.equalsIgnoreCase("tw4.war")) { 
+        } else if (warName.equalsIgnoreCase("tw4.war")) {
             checkTW4HomeResponse(response);
-        } else if (warName.equalsIgnoreCase("tw5.war")) { 
+        } else if (warName.equalsIgnoreCase("tw5.war")) {
             checkTW5HomeResponse(response);
         }
     }
-    
+
     protected void checkTW2HomeResponse(String response) throws Exception {
-        assertEquals(response, "<html><head><title>TestWar2</title></head><body>This is TestWar2.<P><A href=\"PostConstructPreDestroyServlet1\">PostConstructPreDestroyServlet1</A><BR><A href=\"PostConstructPreDestroyServlet2\">PostConstructPreDestroyServlet2</A><BR><A href=\"PostConstructPreDestroyServlet3\">PostConstructPreDestroyServlet3</A><BR><A href=\"ResourceServlet1\">ResourceServlet1</A><BR><A href=\"ResourceServlet2\">ResourceServlet2</A><BR><A href=\"ResourceServlet3\">ResourceServlet3</A><BR><A href=\"ResourceServlet4\">ResourceServlet4</A><BR><A href=\"PostConstructErrorServlet1\">PostConstructErrorServlet1</A><BR><A href=\"PostConstructErrorServlet2\">PostConstructErrorServlet2</A><BR><A href=\"PostConstructErrorServlet3\">PostConstructErrorServlet3</A><BR><A href=\"PreDestroyErrorServlet1\">PreDestroyErrorServlet1</A><BR><A href=\"PreDestroyErrorServlet2\">PreDestroyErrorServlet2</A><BR><A href=\"PreDestroyErrorServlet3\">PreDestroyErrorServlet3</A><BR><A href=\"ServletContextListenerServlet\">ServletContextListenerServlet</A><BR><A href=\"SecurityTestServlet\">SecurityTestServlet</A><BR><A href=\"RequestListenerServlet\">RequestListenerServlet</A><BR><A href=\"HTTPSessionListenerServlet\">HTTPSessionListenerServlet</A><BR></P></body></html>");
+        assertEquals(
+                response,
+                "<html><head><title>TestWar2</title></head><body>This is TestWar2.<P><A href=\"PostConstructPreDestroyServlet1\">PostConstructPreDestroyServlet1</A><BR><A href=\"PostConstructPreDestroyServlet2\">PostConstructPreDestroyServlet2</A><BR><A href=\"PostConstructPreDestroyServlet3\">PostConstructPreDestroyServlet3</A><BR><A href=\"ResourceServlet1\">ResourceServlet1</A><BR><A href=\"ResourceServlet2\">ResourceServlet2</A><BR><A href=\"ResourceServlet3\">ResourceServlet3</A><BR><A href=\"ResourceServlet4\">ResourceServlet4</A><BR><A href=\"PostConstructErrorServlet1\">PostConstructErrorServlet1</A><BR><A href=\"PostConstructErrorServlet2\">PostConstructErrorServlet2</A><BR><A href=\"PostConstructErrorServlet3\">PostConstructErrorServlet3</A><BR><A href=\"PreDestroyErrorServlet1\">PreDestroyErrorServlet1</A><BR><A href=\"PreDestroyErrorServlet2\">PreDestroyErrorServlet2</A><BR><A href=\"PreDestroyErrorServlet3\">PreDestroyErrorServlet3</A><BR><A href=\"ServletContextListenerServlet\">ServletContextListenerServlet</A><BR><A href=\"SecurityTestServlet\">SecurityTestServlet</A><BR><A href=\"RequestListenerServlet\">RequestListenerServlet</A><BR><A href=\"HTTPSessionListenerServlet\">HTTPSessionListenerServlet</A><BR></P></body></html>");
     }
-    
+
     protected void checkTW4HomeResponse(String response) throws Exception {
-        assertEquals(response, "<html><head><title>TestWar4</title></head><body>This is TestWar4.<P><a href=\"TestServlet1\">TestServlet1</a><br/><a href=\"TestServlet1/TestServlet2?tc=1&param1=value1&param2=abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz\">TestServlet2?tc=1</a><BR><br/><a href=\"TestServlet1/TestServlet2/TestServlet3\">TestServlet3</a><br/><a href=\"TestServlet1/TestServlet2/TestServlet3/TestServlet4?type=plain\">TestServlet4 plain</a><br/><a href=\"TestServlet1/TestServlet2/TestServlet3/TestServlet4?type=html\">TestServlet4 html</a><br/><a href=\"TestServlet1/TestServlet2/TestServlet3/TestServlet4?type=jpg\">TestServlet4 jpg</a><br/></P></body></html>");
+        assertEquals(
+                response,
+                "<html><head><title>TestWar4</title></head><body>This is TestWar4.<P><a href=\"TestServlet1\">TestServlet1</a><br/><a href=\"TestServlet1/TestServlet2?tc=1&param1=value1&param2=abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz\">TestServlet2?tc=1</a><BR><br/><a href=\"TestServlet1/TestServlet2/TestServlet3\">TestServlet3</a><br/><a href=\"TestServlet1/TestServlet2/TestServlet3/TestServlet4?type=plain\">TestServlet4 plain</a><br/><a href=\"TestServlet1/TestServlet2/TestServlet3/TestServlet4?type=html\">TestServlet4 html</a><br/><a href=\"TestServlet1/TestServlet2/TestServlet3/TestServlet4?type=jpg\">TestServlet4 jpg</a><br/></P></body></html>");
     }
-    
+
     protected void checkTW5HomeResponse(String response) throws Exception {
-        assertEquals(response, "<html><head><title>TestWar5</title></head><body>This is TestWar5.<P><A href=\"BundleTestServlet\">/BundleTestServlet</A><BR><A href=\"ClasspathTestServlet\">/ClasspathTestServlet</A><BR></P></body></html>");
+        assertEquals(
+                response,
+                "<html><head><title>TestWar5</title></head><body>This is TestWar5.<P><A href=\"BundleTestServlet\">/BundleTestServlet</A><BR><A href=\"ClasspathTestServlet\">/ClasspathTestServlet</A><BR></P></body></html>");
     }
-    
-    // TODO fill this in when the schema is defined in RFC 66
+
     private String generateQuery(Map options) {
-        return "";
+        String symbolicName = options.get(Constants.BUNDLE_SYMBOLICNAME) == null ? null
+                : (String) options.get(Constants.BUNDLE_SYMBOLICNAME);
+        String version = options.get(Constants.BUNDLE_VERSION) == null ? null
+                : (String) options.get(Constants.BUNDLE_VERSION);
+        String manifestVersion = options.get(Constants.BUNDLE_MANIFESTVERSION) == null ? null
+                : (String) options.get(Constants.BUNDLE_MANIFESTVERSION);
+        String[] importPackage = options.get(Constants.IMPORT_PACKAGE) == null ? null
+                : (String[]) options.get(Constants.IMPORT_PACKAGE);
+        String[] exportPackage = options.get(Constants.EXPORT_PACKAGE) == null ? null
+                : (String[]) options.get(Constants.EXPORT_PACKAGE);
+        String[] classpath = options.get(Constants.BUNDLE_CLASSPATH) == null ? null
+                : (String[]) options.get(Constants.BUNDLE_CLASSPATH);
+        String contextPath = options.get(WEB_CONTEXT_PATH) == null ? null
+                : (String) options.get(WEB_CONTEXT_PATH);
+        String jspExtractLoc = options.get(WEB_JSP_EXTRACT_LOCATION) == null ? null
+                : (String) options.get(WEB_JSP_EXTRACT_LOCATION);
+        String query = "";
+
+        if (symbolicName != null) {
+            query += "&" + Constants.BUNDLE_SYMBOLICNAME + "=" + symbolicName;
+        }
+        if (version != null) {
+            query += "&" + Constants.BUNDLE_VERSION + "=" + version;
+        }
+        if (manifestVersion != null) {
+            query += "&" + Constants.BUNDLE_MANIFESTVERSION + "=" + manifestVersion;
+        }
+        if (importPackage != null) {
+            query += "&" + Constants.IMPORT_PACKAGE + "="
+                    + getStringValue(importPackage);
+        }
+        if (exportPackage != null) {
+            query += "&" + Constants.EXPORT_PACKAGE + "="
+                    + getStringValue(exportPackage);
+        }
+        if (classpath != null) {
+            query += "&" + Constants.BUNDLE_CLASSPATH + "="
+                    + getStringValue(classpath);
+        }
+        if (contextPath != null) {
+            query += "&" + WEB_CONTEXT_PATH + "=" + contextPath;
+        }
+        if (jspExtractLoc != null) {
+            query += "&" + WEB_JSP_EXTRACT_LOCATION + "=" + jspExtractLoc;
+        }
+        if (query != null && query.startsWith("&")) {
+            query = query.substring(1);
+        }
+        return query;
+    }
+
+    private String getStringValue(String[] a) {
+        String value = "";
+        for (int i = 0; i < a.length; i++) {
+            value += a[i];
+            if (i < a.length - 1) {
+                value += ",";
+            }
+        }
+        return value;
+    }
+
+    // override the method in DefaultTestBundleControl
+    public Bundle installBundle(String bundleName, boolean start)
+            throws Exception {
+        try {
+            if (bundleName.indexOf(getWebServer()) < 0) {
+                bundleName = getWebServer() + bundleName;
+            }
+            URL url = new URL(bundleName);
+            InputStream in = url.openStream();
+
+            Bundle b = getContext().installBundle(bundleName, in);
+            if (start) {
+                b.start();
+            }
+            return b;
+        } catch (Exception e) {
+            log("Not able to install testbundle " + bundleName);
+            log("Nested " + e.getCause());
+            e.printStackTrace();
+            throw e;
+        }
     }
 }
