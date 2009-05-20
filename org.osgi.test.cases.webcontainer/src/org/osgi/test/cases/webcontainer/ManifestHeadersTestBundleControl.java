@@ -38,8 +38,9 @@ public abstract class ManifestHeadersTestBundleControl extends
     protected static final String[] CLASSPATH1 = {"WEB-INF/lib/org.apache.commons-logging-1.0.4.jar"}; 
     protected static final String[] CLASSPATH2 = {"WEB-INF/lib/org.apache.commons-logging-1.0.4.jar","WEB-INF/lib/org.osgi.test.cases.webcontainer.simple.jar"};
     protected static final String[] CLASSPATH3 = {"WEB-INF/classes/"};
-    protected static final String[] CLASSPATH4 = {"WEB-INF/lib//org.apache.commons-logging.jar"};
+    protected static final String[] CLASSPATH4 = {"WEB-INF/lib/org.apache.commons-logging.jar"};
     protected static final String[] CLASSPATH5 = {"WEB-INF/lib/org.apache.commons-logging-1.0.4.jar", "libs/utiljar"};
+    protected static final String[] CLASSPATH6 = {"WEB-INF/lib2/org.osgi.test.cases.webcontainer.simple.jar"};
 
     protected static final String[] IMPORTS1 = {"javax.servlet; version=2.5", "javax.servlet.http; version=2.5"}; 
     protected static final String[] IMPORTS2 = {"javax.servlet;version=2.5", "javax.servlet.http;version=2.5", "javax.servlet.jsp; version=2.1", "javax.servlet.jsp.tagext; version=2.1"}; 

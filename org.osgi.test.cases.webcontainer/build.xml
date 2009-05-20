@@ -83,7 +83,7 @@
 			<fileset dir="resources/tw5/WebContent/"/>
 			<classes dir="src/">
 				<include name="org/osgi/test/cases/webcontainer/tw5/**"/>
-				<!--<include name="org/osgi/test/cases/webcontainer/util/**"/>-->
+				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
 		</war>
 	</target>
@@ -138,7 +138,11 @@
 	
 	<!-- same as tw5.war file but with pre-specified manifest - wmtw5.war -->
 	<target name="build-wmwar5" depends="compile">
-		<echo>Building wmtw5.war file</echo>	
+		<echo>Building wmtw5.war file</echo>
+		<echo>copy commons-logging jar from repo to the lib dir</echo>
+		<copy file="../licensed/repo/org.apache.commons-logging/org.apache.commons-logging-1.0.4.jar" todir="resources/tw5/WebContent/WEB-INF/lib"/>		
+		<echo>copy simple jar to the lib dir</echo>
+		<copy file="generated/org.osgi.test.cases.webcontainer.simple.jar" todir="resources/tw5/WebContent/WEB-INF/lib"/>
 		<war destfile="resources/tw5/wmtw5.war" webxml="resources/tw5/WebContent/WEB-INF/web.xml" manifest="resources/tw5/WebContent/META-INF/MANIFEST.MF">
 			<fileset dir="resources/tw5/WebContent/"/>
 			<classes dir="src/">
@@ -150,7 +154,11 @@
 	
 	<!-- same as tw5.war file but with pre-specified manifest - wm2tw5.war -->
 	<target name="build-wm2war5" depends="compile">
-		<echo>Building wm2tw5.war file</echo>	
+		<echo>Building wm2tw5.war file</echo>
+		<echo>copy commons-logging jar from repo to the lib dir</echo>
+		<copy file="../licensed/repo/org.apache.commons-logging/org.apache.commons-logging-1.0.4.jar" todir="resources/tw5/WebContent/WEB-INF/lib"/>		
+		<echo>copy simple jar to the lib dir</echo>
+		<copy file="generated/org.osgi.test.cases.webcontainer.simple.jar" todir="resources/tw5/WebContent/WEB-INF/lib"/>
 		<war destfile="resources/tw5/wm2tw5.war" webxml="resources/tw5/WebContent/WEB-INF/web.xml" manifest="resources/tw5/manifest/MANIFEST2.MF">
 			<fileset dir="resources/tw5/WebContent/"/>
 			<classes dir="src/">
@@ -162,7 +170,12 @@
 					
 	<!-- same as tw5.war file but with pre-specified manifest - wm3tw5.war -->
 	<target name="build-wm3war5" depends="compile">
-		<echo>Building wm3tw5.war file</echo>	
+		<echo>Building wm3tw5.war file</echo>
+		<echo>copy commons-logging jar from repo to the lib dir</echo>
+		<copy file="../licensed/repo/org.apache.commons-logging/org.apache.commons-logging-1.0.4.jar" todir="resources/tw5/WebContent/WEB-INF/lib"/>		
+		<echo>copy simple jar to the lib dir</echo>
+		<copy file="generated/org.osgi.test.cases.webcontainer.simple.jar" todir="resources/tw5/WebContent/WEB-INF/lib"/>
+		<copy file="generated/org.osgi.test.cases.webcontainer.simple.jar" todir="resources/tw5/WebContent/WEB-INF/lib2"/>
 		<war destfile="resources/tw5/wm3tw5.war" webxml="resources/tw5/WebContent/WEB-INF/web.xml" manifest="resources/tw5/manifest/MANIFEST3.MF">
 			<fileset dir="resources/tw5/WebContent/"/>
 			<classes dir="src/">
