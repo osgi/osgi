@@ -264,6 +264,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         // there should be no wait event with this
         importStartEvents.addFailureEvent(new BlueprintEvent("WAITING"));
 
+        importStartEvents.removeEvent(new BlueprintEvent("CREATED"));
         // Ok, when the CREATED event is triggered, we register the first service.
         importStartEvents.addEvent(new BlueprintEvent("CREATED", null, new ServiceManagerRegister(serviceManager, "ServiceOneA")));
 
