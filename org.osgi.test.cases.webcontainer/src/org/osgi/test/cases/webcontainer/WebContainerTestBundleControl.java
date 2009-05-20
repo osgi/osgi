@@ -115,9 +115,11 @@ public abstract class WebContainerTestBundleControl extends
         String query = generateQuery(options);
         if (query != null && query.length() > 0) {
             return WARSCHEMA + getWebServer() + name + "?"
+            // return getWebServer() + name + "?"
                     + generateQuery(options);
         } else {
             return WARSCHEMA + getWebServer() + name;
+            // return  getWebServer() + name;
         }
     }
 

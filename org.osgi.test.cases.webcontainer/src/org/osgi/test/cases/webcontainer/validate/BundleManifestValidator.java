@@ -15,8 +15,10 @@
  */
 package org.osgi.test.cases.webcontainer.validate;
 
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.jar.Manifest;
@@ -42,6 +44,7 @@ public class BundleManifestValidator extends Assert implements Validator{
     Map deployOptions;
     private final String[] REQUIREDIMPORT = {"javax.servlet; version=2.5","javax.servlet.http; version=2.5", "javax.servlet.jsp; version=2.1", "javax.servlet.jsp.tagext; version=2.1"};
     private static final String WEBINFCLASSES = "WEB-INF/classes";
+    private static final String WEBINFLIB = "WEB-INF/lib";
     
     public BundleManifestValidator(Bundle b) {
         this.b = b;
@@ -198,26 +201,27 @@ public class BundleManifestValidator extends Assert implements Validator{
         // dClasspath - deployer specified classpath String array
         Object dClasspath = this.deployOptions == null ? null : this.deployOptions.get(Constants.BUNDLE_CLASSPATH);
 
-        if (mClasspath == null) {
-            // verify initializing the first path entry to "WEB-INF/classes" 
-            assertEquals(actualClasspath[0], WEBINFCLASSES);
-        } else if (!exist(WEBINFCLASSES, (String[])mClasspath, false)){
-            assertTrue(exist(WEBINFCLASSES, actualClasspath, false));
-        } else {
-            assertTrue(exist(WEBINFCLASSES, actualClasspath, false));
+        assertTrue("verify WEB-INF/classes exist in the actual classpath", exist(WEBINFCLASSES, actualClasspath, false));
+        
+        // verify WEB-INF/lib jars exist in the actual classpath
+        Enumeration e = this.b.findEntries(WEBINFLIB, "*.jar", false);
+        int count = 0;
+        while (e.hasMoreElements()) {
+            URL url = (URL) e.nextElement();
+            String jarPath = url.getFile();
+            // strip out the first / of the jarPath if jarPath is /WEB-INF/lib/xxx.jar
+            if (url.getFile().startsWith("/")) {
+                jarPath = url.getFile().substring(1);
+            } 
+            assertTrue("verify WEB-INF/lib jars exist in the actual classpath", exist(jarPath, actualClasspath, false));
+            count++;
         }
         
-        // verify each of the libraries from WEB-INF/lib is on the classpath
-        URL url = this.b.getEntry(WEBINFCLASSES);
-        //TODO: find out files from this lib dir and check if the files are added to classpath
-        
-        // verify deployer specified classpath is added on the classpath
-        if (dClasspath != null) {
-            String[] dcp = (String[])dClasspath;
-            for (int i = 0; i < dcp.length; i++) {
-                assertTrue(exist(dcp[i], actualClasspath, false));
-            }
-        }
+        // verify no other path gets added to the Bundle-Classpath
+        // per rfc 66, If a Bundle-Classpath header is specified in the source bundles manifest and it references jars or 
+        // directories outside of the WEB-INF this is considered an error and the URL handler must throw an 
+        // exception
+        assertEquals("verify no other path gets added to the Bundle-Classpath", actualClasspath.length, count + 1);
         
         // verify no dups on the classpath
         assertTrue(!containDuplicate(actualClasspath));
