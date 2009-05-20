@@ -206,8 +206,9 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // still work.  The export jar will export both the target "good" service
         // and secondary "bad" service.  We should resolve to the good service.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ServiceOne_import.jar",
+            getWebServer()+"www/ServiceOne_ranked_import.jar",
             getWebServer()+"www/ServiceOne_ranked_export.jar");
+        
         // we add different validation stuff to each jar.  We'll start with the
         // export jar
         MetadataEventSet exportStartEvents = controller.getStartEvents(1);
@@ -217,8 +218,10 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // We should see both of these registered
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, "ServiceOne", null, serviceProps));
         // also validate the metadata for the exported service
-        exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
-            ServiceMetadata.AUTO_EXPORT_DISABLED, 3, null, null, null)));
+        exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService[] {
+                new ExportedService("GoodServiceService", "ServiceOne", TestServiceOne.class, ServiceMetadata.AUTO_EXPORT_DISABLED, 3, null, null, null), 
+                new ExportedService("BadServiceService", null, TestServiceOne.class, ServiceMetadata.AUTO_EXPORT_ALL_CLASSES, 2, null, null, null)
+        }));
 
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class, serviceProps);
@@ -266,8 +269,10 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         metaServiceProps.put("serviceType", "Good");
         metaServiceProps.put("autoExport", "Disabled");
         // also validate the metadata for the exported service
-        exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
-            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, metaServiceProps, null, null)));
+        exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService [] {
+                new ExportedService("GoodServiceService", "ServiceOne", TestServiceOne.class, ServiceMetadata.AUTO_EXPORT_DISABLED, 0, metaServiceProps, null, null),
+                new ExportedService("BadServiceService", null, TestServiceOne.class, ServiceMetadata.AUTO_EXPORT_ALL_CLASSES, 2, null, null, null)
+        }));
 
 
         // we should see a service event here indicating this was registered

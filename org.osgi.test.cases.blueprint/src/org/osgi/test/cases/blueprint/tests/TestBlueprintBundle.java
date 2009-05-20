@@ -333,19 +333,19 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         // correct type.
         startEvents.addValidator(new ComponentTypeValidator("bundle", Bundle.class));
         startEvents.addValidator(new ComponentTypeValidator("bundleContext", BundleContext.class));
-        startEvents.addValidator(new ComponentTypeValidator("BlueprintContainer", BlueprintContainer.class));
+        startEvents.addValidator(new ComponentTypeValidator("blueprintContainer", BlueprintContainer.class));
         startEvents.addValidator(new ComponentTypeValidator("conversionService", ConversionService.class));
 
         // and finally, these should be listed in the set of component names
         startEvents.addValidator(new ComponentNamePresenceValidator("bundle"));
         startEvents.addValidator(new ComponentNamePresenceValidator("bundleContext"));
-        startEvents.addValidator(new ComponentNamePresenceValidator("BlueprintContainer"));
+        startEvents.addValidator(new ComponentNamePresenceValidator("blueprintContainer"));
         startEvents.addValidator(new ComponentNamePresenceValidator("conversionService"));
 
         // now verify that these have associated metadata
         startEvents.addValidator(new ComponentMetadataPresenceValidator("bundle", BeanMetadata.class));
         startEvents.addValidator(new ComponentMetadataPresenceValidator("bundleContext", BeanMetadata.class));
-        startEvents.addValidator(new ComponentMetadataPresenceValidator("BlueprintContainer", BeanMetadata.class));
+        startEvents.addValidator(new ComponentMetadataPresenceValidator("blueprintContainer", BeanMetadata.class));
         startEvents.addValidator(new ComponentMetadataPresenceValidator("conversionService", BeanMetadata.class));
 
         // if we receive the above events and no assertion failures, then everything has worked.
