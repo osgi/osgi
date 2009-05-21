@@ -43,12 +43,12 @@
 
 <!-- char -->
     <bean id="compWrapperCharacter" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
-        <property name="char" value="${char}"/>
+        <property name="character" value="${character}"/>
     </bean>
 
 <!-- int-->
     <bean id="compWrapperInteger" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
-        <property name="int" value="${int}"/>
+        <property name="integer" value="${integer}"/>
     </bean>
 
 <!-- short -->

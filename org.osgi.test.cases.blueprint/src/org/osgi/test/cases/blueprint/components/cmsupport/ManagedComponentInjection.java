@@ -16,6 +16,7 @@
 
 package org.osgi.test.cases.blueprint.components.cmsupport;
 
+import java.util.Iterator;
 import java.util.Map;
 
 import org.osgi.service.blueprint.container.BlueprintContainer;
@@ -87,7 +88,12 @@ public class ManagedComponentInjection extends BaseTestComponent {
     }
 
     // component-managed strategy
-    public void makeUpdate(Map properties){
+    public void makeUpdate(Map properties) {
+        Iterator it = properties.keySet().iterator();
+        while(it.hasNext()){
+            String key = (String) it.next();
+            setPropertyValue(key, properties.get(key));
+        }
         AssertionService.sendEvent(this, AssertionService.METHOD_CALLED);
     }
 

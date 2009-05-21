@@ -132,14 +132,14 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
         expectedProps = new Hashtable();
         expectedProps.put("str", "abc");
         expectedProps.put("str_empty", "");
-        expectedProps.put("str_boolean", "true");
-        expectedProps.put("str_byte", "3");
-        expectedProps.put("str_char", "4");
-        expectedProps.put("str_int", "5");
-        expectedProps.put("str_short", "6");
-        expectedProps.put("str_long", "7");
-        expectedProps.put("str_double", "8.0");
-        expectedProps.put("str_float", "9.0");
+        expectedProps.put("str_boolean", Boolean.TRUE);
+        expectedProps.put("str_byte", new Byte("3"));
+        expectedProps.put("str_char", new Character((char)4));
+        expectedProps.put("str_int", new Integer(5));
+        expectedProps.put("str_short", new Short((short)6));
+        expectedProps.put("str_long", new Long(7));
+        expectedProps.put("str_double", new Double(8.0));
+        expectedProps.put("str_float", new Float(9.0));
         startEventSet.addValidator(new ServiceRegistrationValidator(TestGoodServiceSubclass.class, "compGoodServiceSubclass", null, expectedProps));
 
         controller.run();
@@ -186,8 +186,8 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
         this.addPropertyValidator(startEventSet, "comp1", "string", "abc", String.class);
         this.addPropertyValidator(startEventSet, "comp1", "boolean", Boolean.TRUE, Boolean.class);
         this.addPropertyValidator(startEventSet, "comp1", "byte", new Byte((byte)3), Byte.class);
-        this.addPropertyValidator(startEventSet, "comp1", "char", new Character((char)4), Character.class);
-        this.addPropertyValidator(startEventSet, "comp1", "int", new Integer(5), Integer.class);
+        this.addPropertyValidator(startEventSet, "comp1", "character", new Character((char)4), Character.class);
+        this.addPropertyValidator(startEventSet, "comp1", "integer", new Integer(5), Integer.class);
         this.addPropertyValidator(startEventSet, "comp1", "short", new Short((short)6), Short.class);
         this.addPropertyValidator(startEventSet, "comp1", "long", new Long(7), Long.class);
         this.addPropertyValidator(startEventSet, "comp1", "double", new Double(8.0), Double.class);
@@ -197,8 +197,8 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
         this.addPropertyValidator(startEventSet, "comp2", "string", "abc", String.class);
         this.addPropertyValidator(startEventSet, "comp2", "boolean", Boolean.TRUE, Boolean.class);
         this.addPropertyValidator(startEventSet, "comp2", "byte", new Byte((byte)3), Byte.class);
-        this.addPropertyValidator(startEventSet, "comp2", "char", new Character((char)4), Character.class);
-        this.addPropertyValidator(startEventSet, "comp2", "int", new Integer(5), Integer.class);
+        this.addPropertyValidator(startEventSet, "comp2", "character", new Character((char)4), Character.class);
+        this.addPropertyValidator(startEventSet, "comp2", "integer", new Integer(5), Integer.class);
         this.addPropertyValidator(startEventSet, "comp2", "short", new Short((short)6), Short.class);
         this.addPropertyValidator(startEventSet, "comp2", "long", new Long(7), Long.class);
         this.addPropertyValidator(startEventSet, "comp2", "double", new Double(8.0), Double.class);
@@ -242,8 +242,8 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
         startEventSet.addAssertion("compStrategyComponent", AssertionService.METHOD_CALLED);
 
         //compStrategyContainer
-        this.addPropertyValidator(startEventSet, "compStrategyNone", "string", "xyz", String.class);
-        this.addPropertyValidator(startEventSet, "compStrategyNone", "boolean", Boolean.FALSE, Boolean.class);
+        this.addPropertyValidator(startEventSet, "compStrategyContainer", "string", "xyz", String.class);
+        this.addPropertyValidator(startEventSet, "compStrategyContainer", "boolean", Boolean.FALSE, Boolean.class);
 
         controller.run();
 
@@ -560,7 +560,7 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
         startEventSet.addPropertyAssertion("managedComp", AssertionService.METHOD_CALLED, "ManagedComponentInjection_onInit");
 
 
-        EventSet stopEventSet = controller.getStopEvents(1);
+        EventSet stopEventSet = controller.getStopEvents(0);
         // destroy method called
         stopEventSet.addPropertyAssertion("managedComp", AssertionService.METHOD_CALLED, "ManagedComponentInjection_onDestroy_BundleStopping");
 

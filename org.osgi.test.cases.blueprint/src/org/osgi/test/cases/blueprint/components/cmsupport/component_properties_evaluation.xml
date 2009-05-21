@@ -14,8 +14,8 @@
         <property name="string" value="def"/>
         <property name="boolean" value="false"/>
         <property name="byte" value="1"/>
-        <property name="char" value="2"/>
-        <property name="int" value="3"/>
+        <property name="character" value="2"/>
+        <property name="integer" value="3"/>
         <property name="short" value="4"/>
         <property name="long" value="5"/>
         <property name="double" value="6.0"/>

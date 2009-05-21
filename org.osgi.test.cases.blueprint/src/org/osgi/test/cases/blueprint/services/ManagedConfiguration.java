@@ -51,8 +51,11 @@ public class ManagedConfiguration implements ManagedConfigurationInterface {
             // create and update the properties.
             config = admin.getConfiguration(pid);
             config.update(dic);
+            // make sure the configuration is unbound by default
+            config.setBundleLocation(null);
         } catch (Exception e) {
             // just ignore errors for the test (which should not occur)
+            e.printStackTrace();
         }
     }
 
@@ -78,6 +81,7 @@ public class ManagedConfiguration implements ManagedConfigurationInterface {
             }
         } catch (Exception e) {
             // just ignore errors for the test (which should not occur)
+            e.printStackTrace();
         }
     }
 
@@ -93,6 +97,7 @@ public class ManagedConfiguration implements ManagedConfigurationInterface {
             config.update(dic);
         } catch (Exception e) {
             // just ignore errors for the test (which should not occur)
+            e.printStackTrace();
         }
     }
 
