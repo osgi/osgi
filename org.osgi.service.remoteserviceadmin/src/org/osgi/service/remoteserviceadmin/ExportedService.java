@@ -50,7 +50,7 @@ import org.osgi.framework.ServiceReference;
  * @ThreadSafe
  * @version $Revision$
  */
-public interface ServicePublication {
+public interface ExportedService {
 
 	/**
 	 * Mandatory ServiceRegistration property which contains a collection of
@@ -144,5 +144,12 @@ public interface ServicePublication {
 	 * @return the <code>ServiceReference</code> being published. Is never
 	 *         <code>null</code>.
 	 */
-	ServiceReference getReference();
+	ServiceReference getExportedService();
+
+	/**
+	 * Return the Service Endpoint Description for this exported service.
+	 * 
+	 * @return The Service Endpoint Description for this exported service.
+	 */
+	ServiceEndpointDescription getServiceEndpointDescription();
 }

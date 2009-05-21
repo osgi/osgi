@@ -35,7 +35,7 @@ public interface ServiceEndpointDescription {
 
 	/**
 	 * Returns the value of the property with key
-	 * {@link ServicePublication#SERVICE_INTERFACE_NAME}.
+	 * {@link ExportedService#SERVICE_INTERFACE_NAME}.
 	 * 
 	 * @return <code>Collection (&lt;String&gt;)</code> of service interface
 	 *         names provided by the advertised service endpoint. The collection
@@ -49,7 +49,7 @@ public interface ServiceEndpointDescription {
 	 * interface.
 	 * <p>
 	 * Value of the property with key
-	 * {@link ServicePublication#ENDPOINT_INTERFACE_NAME} is used by this
+	 * {@link ExportedService#ENDPOINT_INTERFACE_NAME} is used by this
 	 * operation.
 	 * 
 	 * @param interfaceName for which its non-Java endpoint interface name
@@ -64,7 +64,7 @@ public interface ServiceEndpointDescription {
 	 * Returns version of the given interface.
 	 * <p>
 	 * Value of the property with key
-	 * {@link ServicePublication#SERVICE_INTERFACE_VERSION} is used by this
+	 * {@link ExportedService#SERVICE_INTERFACE_VERSION} is used by this
 	 * operation.
 	 * 
 	 * @param interfaceName for which its version should be returned.
@@ -76,7 +76,7 @@ public interface ServiceEndpointDescription {
 
 	/**
 	 * Returns the value of the property with key
-	 * {@link ServicePublication#ENDPOINT_LOCATION}.
+	 * {@link ExportedService#ENDPOINT_LOCATION}.
 	 * 
 	 * @return The url of the service location, or <code>null</code> if it
 	 *         hasn't been provided.
@@ -85,34 +85,12 @@ public interface ServiceEndpointDescription {
 
 	/**
 	 * Returns the value of the property with key
-	 * {@link ServicePublication#ENDPOINT_ID}.
+	 * {@link ExportedService#ENDPOINT_ID}.
 	 * 
 	 * @return Unique id of service endpoint, or <code>null</code> if it hasn't
 	 *         been provided.
 	 */
 	String getEndpointID();
-
-	/**
-	 * Getter method for the property value of a given key.
-	 * 
-	 * @param key Name of the property
-	 * @return The property value, or <code>null</code> if none is found for the
-	 *         given key or if provided key is <code>null</code>.
-	 */
-	Object getProperty(String key);
-
-	/**
-	 * Returns all names of service endpoint properties.
-	 * 
-	 * @return a <code>Collection (&lt;String&gt;)</code> of property names
-	 *         available in the ServiceEndpointDescription. The collection is
-	 *         never <code>null</code> or empty but contains at least names of
-	 *         mandatory <code>ServicePublication</code> properties. Since
-	 *         <code>ServiceEndpointDescription</code> objects are immutable,
-	 *         the returned collection is also not going to be updated at a
-	 *         later point of time.
-	 */
-	Collection/* <String> */getPropertyKeys();
 
 	/**
 	 * Returns all service endpoint properties.

@@ -20,32 +20,35 @@ import java.util.Collection;
 import org.osgi.framework.ServiceReference;
 
 /**
- * The Remote Service Admin service. This service is registered by a
- * distribution provider with the {@link #REMOTE_INTENTS_SUPPORTED} and
- * {@link #REMOTE_CONFIGURATION_TYPES_SUPPORTED} service properties to denote
- * the intents and configuration types supported by this distribution provider.
+ * The Remote Service Admin service. This service may be registered by a
+ * distribution provider to provide an interface to the distribution provider.
+ * 
+ * <p>
+ * A distribution provider does not have to use this service interface but must
+ * register some service with the {@link #REMOTE_INTENTS_SUPPORTED} and
+ * {@link #REMOTE_CONFIGS_SUPPORTED} service properties to denote the intents
+ * and configuration types supported by the distribution provider.
  * 
  * @ThreadSafe
  * @version $Revision$
  */
 public interface RemoteServiceAdmin {
 	/**
-	 * Service property that lists the intents supported by this Remote Service
-	 * Admin.
+	 * Service property that lists the intents supported by a distribution
+	 * provider.
 	 * <p>
 	 * The value of this property is of type String, String[] or Collection of
 	 * String.
 	 */
-	static final String	REMOTE_INTENTS_SUPPORTED				= "remote.intents.supported";
-
+	static final String	REMOTE_INTENTS_SUPPORTED	= "remote.intents.supported";
 	/**
-	 * Service property that lists the configuration types supported by this
-	 * Remote Service Admin.
+	 * Service property that lists the configuration types supported by a
+	 * distribution provider.
 	 * <p>
 	 * The value of this property is of type String, String[] or Collection of
 	 * String.
 	 */
-	static final String	REMOTE_CONFIGURATION_TYPES_SUPPORTED	= "remote.configuration.types.supported";
+	static final String	REMOTE_CONFIGS_SUPPORTED	= "remote.configs.supported";
 
 	/**
 	 * Returns references to the imported services. The returned references are
