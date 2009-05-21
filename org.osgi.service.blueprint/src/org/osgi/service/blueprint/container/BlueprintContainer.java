@@ -64,7 +64,7 @@ public interface BlueprintContainer {
 	 * @return an immutable set (of Strings) containing the names of all of the components within the
 	 * context.
 	 */
-	Set getComponentNames();
+	Set getComponentIds();
 
 	/**
 	 * Get the component instance for a given named component. If the component has
@@ -83,7 +83,7 @@ public interface BlueprintContainer {
 	 * and may throw an exception if a cycle is detected. Implementations that can
 	 * support certain kinds of cycles are free to do so.
 	 *
-	 * @param name the name of the component for which the instance is to be
+	 * @param id the name of the component for which the instance is to be
 	 * retrieved.
 	 *
 	 * @return the component instance, the type of the returned object is
@@ -93,12 +93,12 @@ public interface BlueprintContainer {
 	 * @throws NoSuchComponentException if the name specified is not the
 	 * name of a component within the context.
 	 */
-	Object getComponent(String name);
+	Object getComponentInstance(String id);
 
 	/**
 	 * Get the component metadata for a given named component.
 	 *
-	 * @param name the name of the component for which the metadata is to be
+	 * @param id the name of the component for which the metadata is to be
 	 * retrieved.
 	 *
 	 * @return the component metadata for the component.
@@ -106,30 +106,20 @@ public interface BlueprintContainer {
 	 * @throws NoSuchComponentException if the name specified is not the
 	 * name of a component within the context.
 	 */
-	ComponentMetadata getComponentMetadata(String name);
+	ComponentMetadata getComponentMetadata(String id);
 
 	/**
-	 * Get the service reference metadata for every OSGi service referenced by
-	 * this context.
+	 * Returns all ComponentMetadata instances of the given type.  The supported
+	 * metadata types are ComponentMetadata (which returns the metadata for all defined
+     * component types), BeanMetadata, ServiceReferenceMetadata (which returns both
+     * ReferenceMetadata and RefCollectionMetadata instances), ReferenceMetadata,
+     * RefCollectionMetadata, and ServiceMetadata.  The collection will include all
+     * metadata instances of the requested type, including components that are declared
+     * as inline values.
 	 *
-	 * @return an immutable collection of ServiceComponentMetadata, with one entry for each referenced service.
+	 * @return an immutable collection of ComponentMetadata objects of the matching type.
 	 */
-	Collection /*<ServiceReferenceMetadata>*/ getReferencedServicesMetadata();
-
-	/**
-	 * Get the service export metadata for every service exported by this
-	 * context.
-	 *
-	 * @return an immutable collection of ServiceMetadata, with one entry for each service export.
-	 */
-	Collection /*<ServiceMetadata>*/ getExportedServicesMetadata();
-
-	/**
-	 * Get the metadata for all components defined locally within this context.
-	 *
-	 * @return an immutable collection of BeanMetadata, with one entry for each component.
-	 */
-	Collection /*<BeanMetadata>*/ getBeanComponentsMetadata();
+	/*<T extends ComponentMetadata>*/ Collection/* <T>*/  getMetadata(Class/*<T>*/ type);
 
 	/**
 	 * Get the bundle context of the bundle this blueprint context is associated

@@ -23,8 +23,7 @@ package org.osgi.service.blueprint.reflect;
  * Defines the <code>reference</code> element.
  *
  */
-public interface ReferenceMetadata extends ServiceReferenceMetadata,
-		Target {
+public interface ReferenceMetadata extends ServiceReferenceMetadata, Target {
 
 	/**
 	 * Timeout for service invocations when a matching backing service is
@@ -34,5 +33,4 @@ public interface ReferenceMetadata extends ServiceReferenceMetadata,
 	 * @return service invocation timeout in milliseconds
 	 */
 	long getTimeout();
-
 }
