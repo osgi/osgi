@@ -58,7 +58,7 @@ public class ComponentNamePresenceValidator extends MetadataValidator {
         super.validate(testContext);
 
         // get the named metadata (this will throw an assertion failure if not there)
-        Set names = blueprintMetadata.getComponentNames();
+        Set names = blueprintMetadata.getComponentIds();
         assertTrue("Missing component name for " + componentId, names.contains(componentId));
         try {
             // this is an immutability test for the collection.  This should throw an error

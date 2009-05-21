@@ -63,7 +63,7 @@ public class GetBeanMetadataValidator extends MetadataValidator {
 
         BlueprintContainer context = blueprintMetadata.getTargetBlueprintContainer();
         // get the collection list
-        Collection metadata = context.getBeanComponentsMetadata();
+        Collection metadata = context.getMetadata(BeanMetadata.class);
         Iterator i = metadata.iterator();
 
         while (i.hasNext()) {

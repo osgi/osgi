@@ -16,14 +16,15 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
-import java.util.Iterator;
 import java.util.Collection;
+import java.util.Iterator;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.service.blueprint.container.ComponentDefinitionException;
 import org.osgi.service.blueprint.container.BlueprintContainer;
-import org.osgi.service.blueprint.reflect.ComponentMetadata;
+import org.osgi.service.blueprint.container.ComponentDefinitionException;
 import org.osgi.service.blueprint.reflect.BeanMetadata;
+import org.osgi.service.blueprint.reflect.ComponentMetadata;
+import org.osgi.service.blueprint.reflect.ReferenceMetadata;
 import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
 
 /**
@@ -64,7 +65,7 @@ public class GetReferencedServicesMetadataValidator extends MetadataValidator {
 
         BlueprintContainer context = blueprintMetadata.getTargetBlueprintContainer();
         // get the collection list
-        Collection metadata = context.getReferencedServicesMetadata();
+        Collection metadata = context.getMetadata(ReferenceMetadata.class);
         Iterator i = metadata.iterator();
 
         while (i.hasNext()) {

@@ -22,26 +22,26 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import junit.framework.Assert;
-import junit.framework.AssertionFailedError;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.blueprint.container.BlueprintContainer;
 import org.osgi.service.blueprint.container.NoSuchComponentException;
-import org.osgi.service.blueprint.reflect.ComponentMetadata;
-import org.osgi.service.blueprint.reflect.BeanMetadata;
 import org.osgi.service.blueprint.reflect.BeanArgument;
+import org.osgi.service.blueprint.reflect.BeanMetadata;
 import org.osgi.service.blueprint.reflect.BeanProperty;
+import org.osgi.service.blueprint.reflect.ComponentMetadata;
+import org.osgi.service.blueprint.reflect.Metadata;
 import org.osgi.service.blueprint.reflect.RefMetadata;
+import org.osgi.service.blueprint.reflect.ReferenceMetadata;
 import org.osgi.service.blueprint.reflect.ServiceMetadata;
 import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
-import org.osgi.service.blueprint.reflect.Metadata;
 import org.osgi.service.blueprint.reflect.Target;
-
 import org.osgi.test.cases.blueprint.services.ComponentTestInfo;
 import org.osgi.test.cases.blueprint.services.ValueDescriptor;
+
+import junit.framework.Assert;
+import junit.framework.AssertionFailedError;
 
 /**
  * A wrapper around the published BlueprintContainer service for a managed
@@ -139,7 +139,7 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
         getBlueprintContainer();
         try {
             // get the object instance
-            Object component = targetBlueprintContainer.getComponent(componentName);
+            Object component = targetBlueprintContainer.getComponentInstance(componentName);
             assertNotNull("Component " + componentName + " not found in BlueprintContainer for " + targetBundle.getSymbolicName(), component);
             return component;
         } catch (NoSuchComponentException e) {
@@ -162,7 +162,7 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
         // ensure we have a good context first
         getBlueprintContainer();
         try {
-            Iterator componentNames = targetBlueprintContainer.getComponentNames().iterator();
+            Iterator componentNames = targetBlueprintContainer.getComponentIds().iterator();
             while (componentNames.hasNext()) {
                 String name = (String)componentNames.next();
 
@@ -609,8 +609,8 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
      *
      * @return The Set of defined component names.
      */
-    public Set getComponentNames() {
-        return targetBlueprintContainer.getComponentNames();
+    public Set getComponentIds() {
+        return targetBlueprintContainer.getComponentIds();
     }
 
     /**
@@ -680,7 +680,7 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
      * @exception Exception
      */
     public void validateExportedServices(ExportedService[] expected) throws Exception {
-        Collection exportedServices = targetBlueprintContainer.getExportedServicesMetadata();
+        Collection exportedServices = targetBlueprintContainer.getMetadata(ServiceMetadata.class);
 
         assertEquals("Mismatch on the number of exported services", expected.length, exportedServices.size());
         for (int i = 0; i < expected.length; i++) {
@@ -721,7 +721,7 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
      * @exception Exception
      */
     public void validateReferencedServices(ReferencedService[] expected) throws Exception {
-        Collection referencedServices = targetBlueprintContainer.getReferencedServicesMetadata();
+        Collection referencedServices = targetBlueprintContainer.getMetadata(ReferenceMetadata.class);
 
         assertEquals("Mismatch on the number of referenced services", expected.length, referencedServices.size());
         for (int i = 0; i < expected.length; i++) {

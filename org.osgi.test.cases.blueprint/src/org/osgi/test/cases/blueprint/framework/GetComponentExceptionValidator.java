@@ -61,7 +61,7 @@ public class GetComponentExceptionValidator extends MetadataValidator {
 
         BlueprintContainer context = blueprintMetadata.getTargetBlueprintContainer();
         try {
-            Object obj = context.getComponent(componentId);
+            Object obj = context.getComponentInstance(componentId);
             fail("Expected ComponentDefinitionException not thrown for component " + componentId);
         } catch (ComponentDefinitionException e) {
             // we expect to get this one....any other exception is an error

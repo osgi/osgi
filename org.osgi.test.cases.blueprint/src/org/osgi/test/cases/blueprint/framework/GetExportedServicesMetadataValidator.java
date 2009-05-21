@@ -64,7 +64,7 @@ public class GetExportedServicesMetadataValidator extends MetadataValidator {
 
         BlueprintContainer context = blueprintMetadata.getTargetBlueprintContainer();
         // get the collection list
-        Collection metadata = context.getExportedServicesMetadata();
+        Collection metadata = context.getMetadata(ServiceMetadata.class);
         Iterator i = metadata.iterator();
 
         while (i.hasNext()) {
