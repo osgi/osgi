@@ -1,0 +1,41 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: ${p}
+Bundle-Name: test.framework.lifecycle
+Bundle-Copyright: ${copyright}
+Bundle-Vendor: OSGi Alliance
+Bundle-Version: 4.2.0.${project.build}
+Bundle-DocUrl: http://membercvs.osgi.org/test/3
+Bundle-ContactAddress: speccomments@mail.osgi.org
+Bundle-Category: osgi,test
+Export-Package: ${p}.servicereferencegetter, \
+ ${p}.tbc,
+
+Private-Package						= \
+	org.osgi.test.support.*, \
+	${p}.servicereferencegetter, \
+	${p}.tbc.*
+
+Include-Resource					= \
+	lifecycle.tb1.jar, \
+	lifecycle.tb2a.jar, \
+	lifecycle.tb2b.jar, \
+	lifecycle.tb4.jar, \
+	lifecycle.tb5.jar, \
+	lifecycle.tb6a.jar, \
+	lifecycle.tb6b.jar, \
+	lifecycle.tb7.jar, \
+	lifecycle.tb8.jar, \
+	lifecycle.tb9.jar
+
+Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+
+-buildpath							= \
+    org.osgi.test.support;                  version=project , \
+	osgi;									version=4.2	, \
+	ee.minimum; version=1.2											, \
+	${junit}
+
+-runbundles							= 
+
+-runproperties = report=true
+	

@@ -19,12 +19,6 @@ public class StoppedBC implements BundleActivator {
 	 * Starts the bundle.
 	 */
 	public void start(BundleContext bc) {
-		ServiceReference ref;
-		TestBundleControl tbc;
-		ref = bc.getServiceReference(TestBundleControl.class.getName());
-		tbc = (TestBundleControl) bc.getService(ref);
-		tbc.setBundleContext(bc);
-		bc.ungetService(ref);
 	}
 
 	/**
