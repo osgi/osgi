@@ -21,11 +21,11 @@ import org.osgi.framework.Bundle;
  * A Blueprint Event.
  *
  * <p>
- * <code>BlueprintEvent</code> objects are delivered to all registered <code>BlueprintListener</code> 
+ * <code>BlueprintEvent</code> objects are delivered to all registered <code>BlueprintListener</code>
  * service objects. BlueprintEvents must be asynchronously delivered in chronological order
  * with respect to each listener.  In addition, when a listener is registered, the blueprint extender
  * will send to this listener the last event for each blueprint bundle managed by this extender.
- * 
+ *
  * <p>
  * A type code is used to identify the type of event. The following event types are defined:
  * <ul>
@@ -33,7 +33,7 @@ import org.osgi.framework.Bundle;
  * <li>{@link #CREATED}
  * <li>{@link #DESTROYING}
  * <li>{@link #DESTROYED}
- * <li>{@link #FAILED}
+ * <li>{@link #FAILURE}
  * <li>{@link #GRACE_PERIOD}
  * <li>{@link #WAITING}
  * </ul>
@@ -42,13 +42,13 @@ import org.osgi.framework.Bundle;
  * <h2>Blueprint Events and EventAdmin</h2>
  * In addition to calling the registered {@link BlueprintListener}s, the blueprint extender
  * must also send those events to the EventAdmin service, if it is available. <br/>
- * See {@link BlueprintEventConstants} for more informations.
+ * See {@link EventConstants} for more informations.
  *
  * @see BlueprintListener
- * @see BlueprintEventConstants
+ * @see EventConstants
  */
 public class BlueprintEvent {
-	
+
 	/**
 	 * The Blueprint extender has started creating a Blueprint Container for the bundle.
 	 */
@@ -71,7 +71,7 @@ public class BlueprintEvent {
 	 * The Blueprint Container creation for the bundle has failed.
 	 * If this event is sent after a timeout in the Grace Period, the {@link #getDependencies()}
 	 * method must return an array of missing mandatory dependencies.  The event must also contain
-	 * the cause of the failure as a <code>Throwable</code> through the {@link #getCause()} method.
+	 * the cause of the failure as a <code>Throwable</code> through the {@link #getException()} method.
 	 */
 	public static final int FAILURE = 5;
 	/**
@@ -84,14 +84,14 @@ public class BlueprintEvent {
 	 * The Blueprint Extender is waiting on the availability of a service to satisfy an
 	 * invocation on a referenced service.
 	 * The missing dependency must be made available through the {@link #getDependencies()}
-	 * method which will return an array containing one {@link Dependency} objects.
+	 * method which will return an array containing one filter object as a String.
 	 */
 	public static final int WAITING = 7;
 
-	
+
 	/**
 	 * Type of this event.
-	 * 
+	 *
 	 * @see #getType()
 	 */
 	private final int type;
@@ -120,25 +120,25 @@ public class BlueprintEvent {
 	 */
 	private final String[] dependencies;
 	/**
-	 * Cause of the failure. 
+	 * Cause of the failure.
 	 *
 	 * @see #getException()
 	 */
 	private final Throwable exception;
 
-	
+
 	public BlueprintEvent(int type, Bundle bundle, Bundle extenderBundle) {
 		this(type, bundle, extenderBundle, null, null);
 	}
-	
+
 	public BlueprintEvent(int type, Bundle bundle, Bundle extenderBundle, String[] dependencies) {
 		this(type, bundle, extenderBundle, dependencies, null);
 	}
-	
+
 	public BlueprintEvent(int type, Bundle bundle, Bundle extenderBundle, Throwable exception) {
 		this(type, bundle, extenderBundle, null, exception);
 	}
-	
+
 	public BlueprintEvent(int type, Bundle bundle, Bundle extenderBundle, String[] dependencies, Throwable exception) {
 		this.type = type;
 		this.timestamp = System.currentTimeMillis();
@@ -147,7 +147,7 @@ public class BlueprintEvent {
 		this.dependencies = dependencies;
 		this.exception = exception;
 	}
-	
+
 	/**
 	 * Return the type of this event.
 	 * <p>
@@ -161,19 +161,19 @@ public class BlueprintEvent {
 	 * <li>{@link #GRACE_PERIOD}
 	 * <li>{@link #WAITING}
 	 * </ul>
-	 * 
+	 *
 	 * @return The type of this event.
 	 */
 	public int getType() {
 		return type;
 	}
-	
+
 	/**
 	 * Return the time at which this event occured.
 	 *
 	 * @return The time at which this event occured.
 	 */
-	public long getTimetstamp() {
+	public long getTimestamp() {
 		return timestamp;
 	}
 
@@ -185,7 +185,7 @@ public class BlueprintEvent {
 	public Bundle getBundle() {
 		return bundle;
 	}
-	
+
 	/**
 	 * Return the Bundle of the blueprint extender.
 	 *
@@ -194,7 +194,7 @@ public class BlueprintEvent {
 	public Bundle getExtenderBundle() {
 		return extenderBundle;
 	}
-	
+
 	/**
 	 * Return the filters identifying the missing dependencies that caused this event.
 	 * <p>
@@ -207,14 +207,14 @@ public class BlueprintEvent {
 	public String[] getDependencies() {
 		return dependencies;
 	}
-	
+
 	/**
 	 * Return the cause for a {@link #FAILURE} event.
 	 *
 	 * @return The cause of the failure.  May be <code>null</code>.
-	 */ 
+	 */
 	public Throwable getException() {
 		return exception;
 	}
-	
+
 }
