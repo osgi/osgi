@@ -15,12 +15,18 @@
  */
 package org.osgi.service.blueprint.container;
 
-import org.osgi.framework.Bundle;
+/**
+ * Listener for <code>BlueprintEvent</code>s.
+ *
+ * @see BlueprintEvent
+ */
+public interface BlueprintListener {
 
-public interface BlueprintContainerListener {
-
-	void contextCreated(Bundle forBundle);
-
-	void contextCreationFailed(Bundle forBundle, Throwable rootCause);
+	/**
+ 	 * Receives notifications of a blueprint event.
+ 	 *
+ 	 * @param event The <code>BlueprintEvent</code>.
+ 	 */
+	void blueprintEvent(BlueprintEvent event);
 
 }

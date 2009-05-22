@@ -20,13 +20,74 @@ import org.osgi.framework.Version;
 
 /**
  * Event property names used in EventAdmin events published for a
- * module context.
+ * blueprint container.
  *
+ * Each type of event is sent to a different topic:<br/>
+ * &nbsp;&nbsp;<code>org/osgi/service/blueprint/container/&lt;event-type&gt;</code><br/>
+ * where <code>&lt;event-type&gt;</code> can have the values <code>CREATING</code>, <code>CREATED</code>,
+ * <code>DESTROYING</code>, <code>DESTROYED</code>, <code>FAILURE</code>, <code>GRACE_PERIOD</code> or
+ * <code>WAITING</code>. <br/>
+ * Such events have the following properties:<ul>
+ *   <li><code>type<code>
+ *   <li><code>event<code>
+ *   <li><code>timestamp<code>
+ *   <li><code>bundle<code>
+ *   <li><code>bundle.symbolicName<code>
+ *   <li><code>bundle.id<code>
+ *   <li><code>bundle.version<code>
+ *   <li><code>extender.bundle<code>
+ *   <li><code>extender.bundle.symbolicName<code>
+ *   <li><code>extender.bundle.id<code>
+ *   <li><code>extender.bundle.version<code>
+ *   <li><code>dependencies<code>
+ *   <li><code>cause<code>
+ * </ul>
  */
 public interface EventConstants {
+	
+	/**
+	 * The type of the event that has been issued.
+	 * This property is of type {@link java.lang.Integer} and can take one of the values defined in {@link BlueprintEvent}.
+	 */
+	public static final String TYPE = "type";
+	
+	/**
+ 	 * The <code>BlueprintEvent</code> that caused this event.
+ 	 * This property is of type {@link BlueprintEvent}.
+ 	 */
+	public static final String EVENT = "event";
+
+	/**
+ 	 * The type of the event that has been issued.
+	 * This property is of type {@link java.lang.Long}.
+ 	 */
+	public static final String TIMESTAMP = "timestamp";
+	
+	/**
+ 	 * The bundle property defining the blueprint bundle for which an event has been issued.
+	 * This property is of type {@link org.osgi.framework.Bundle}.
+ 	 *
+ 	 * @see Bundle
+ 	 */
+	public static final String BUNDLE = "bundle";
+
+	/**
+ 	 * The bundle id property defining the id of the blueprint bundle for which an event has been issued.
+	 * This property is of type {@link java.lang.Integer}.
+ 	 */
+	public static final String BUNDLE_ID = "bundle.id";
+
+	/**
+ 	 * The bundle symbolic name property defining the symbolic name of
+ 	 * the blueprint bundle for which an event has been issued.
+	 * This property is of type {@link java.lang.String}.
+ 	 */
+	public static final String BUNDLE_SYMBOLICNAME = "bundle.symbolicName";
+
 	/**
 	 * The extender bundle property defining the extender bundle processing the
-	 * module context for which an event has been issued.
+	 * blueprint container for which an event has been issued.
+	 * This property is of type {@link org.osgi.framework.Bundle}.
 	 *
 	 * @see Bundle
 	 */
@@ -34,16 +95,31 @@ public interface EventConstants {
 
 	/**
 	 * The extender bundle id property defining the id of the extender bundle
-	 * processing the module context for which an event has been issued.
+	 * processing the blueprint container for which an event has been issued.
+	 * This property is of type {@link java.lang.Integer}.
 	 */
-	public static final String EXTENDER_ID = "extender.bundle.id";
+	public static final String EXTENDER_BUNDLE_ID = "extender.bundle.id";
 
 	/**
 	 * The extender bundle symbolic name property defining the symbolic name of
-	 * the extender bundle processing the module context for which an event
+	 * the extender bundle processing the blueprint container for which an event
 	 * has been issued.
+	 * This property is of type {@link java.lang.String}.
 	 */
-	public static final String EXTENDER_SYMBOLICNAME = "extender.bundle.symbolicName";
+	public static final String EXTENDER_BUNDLE_SYMBOLICNAME = "extender.bundle.symbolicName";
+
+	/**
+ 	 * The dependencies property containing an array of filters describing the missing
+ 	 * mandatory dependencies for a FAILED, GRACE_PERIOD or WAITING event.
+	 * This property is an array of {@link java.lang.String}.
+ 	 */
+	public static final String DEPENDENCIES = "dependencies";
+
+	/**
+ 	 * The exception property containing the cause for a FAILED event.
+	 * This property is of type {@link java.lang.Throwable}.
+ 	 */
+	public static final String EXCEPTION = "exception";
 
 	/**
 	 * Topic prefix for all events issued by the Blueprint Service
@@ -51,33 +127,38 @@ public interface EventConstants {
 	public static final String TOPIC_BLUEPRINT_EVENTS = "org/osgi/service/blueprint";
 
 	/**
-	 * Topic for Blueprint Service CREATING events
+	 * Topic for Blueprint Container CREATING events
 	 */
 	public static final String TOPIC_CREATING = TOPIC_BLUEPRINT_EVENTS + "/container/CREATING";
 
 	/**
- 	 * Topic for Blueprint Service CREATED events
+ 	 * Topic for Blueprint Container CREATED events
  	 */
 	public static final String TOPIC_CREATED = TOPIC_BLUEPRINT_EVENTS + "/container/CREATED";
 
 	/**
- 	 * Topic for Blueprint Service DESTROYING events
+ 	 * Topic for Blueprint Container DESTROYING events
  	 */
 	public static final String TOPIC_DESTROYING = TOPIC_BLUEPRINT_EVENTS + "/container/DESTROYING";
 
 	/**
-	 * Topic for Blueprint Service DESTROYED events
+	 * Topic for Blueprint Container DESTROYED events
 	 */
 	public static final String TOPIC_DESTROYED = TOPIC_BLUEPRINT_EVENTS + "/container/DESTROYED";
 
 	/**
-	 * Topic for Blueprint Service WAITING events
-	 */
-	public static final String TOPIC_WAITING = TOPIC_BLUEPRINT_EVENTS + "/container/WAITING";
+ 	 * Topic for Blueprint Container FAILURE events
+ 	 */
+	public static final String TOPIC_FAILURE = TOPIC_BLUEPRINT_EVENTS + "/container/FAILURE";
 
 	/**
-	 * Topic for Blueprint Service FAILURE events
+ 	 * Topic for Blueprint Container GRACE_PERIOD events
+ 	 */
+	public static final String TOPIC_GRACE_PERIOD = TOPIC_BLUEPRINT_EVENTS + "/container/GRACE_PERIOD";
+
+	/**
+	 * Topic for Blueprint Container WAITING events
 	 */
-	public static final String TOPIC_FAILURE = TOPIC_BLUEPRINT_EVENTS + "/container/FAILURE";
+	public static final String TOPIC_WAITING = TOPIC_BLUEPRINT_EVENTS + "/container/WAITING";
 
 }
