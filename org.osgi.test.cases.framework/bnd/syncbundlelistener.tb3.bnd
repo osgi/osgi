@@ -1,0 +1,6 @@
+-nouses=true
+Bundle-Name:                             ${p}.syncbundlelistener.tb3
+Bundle-SymbolicName:                     ${p}.syncbundlelistener.tb3
+Bundle-Version: 1.3
+Bundle-Activator: ${p}.syncbundlelistener.tb3.Activator
+Private-Package:                         ${p}.syncbundlelistener.tb3
