@@ -1,7 +1,0 @@
--nouses=true
-Bundle-Name:                             ${p}.tb2
-Bundle-SymbolicName:                     ${p}.tb2
-Bundle-Version: 1.3
-Bundle-Activator: ${p}.tb2.AsyncListener
-Private-Package:                         ${p}.tb2
-Include-Resource: {OSGI-INF/permissions.perm=perms/syncbundlelistener.tb2.perm}

@@ -7,7 +7,6 @@ Private-Package						= org.osgi.test.support.*, \
 Include-Resource = \
 	syncbundlelistener.tb1a.jar, \
 	syncbundlelistener.tb1b.jar, \
-	syncbundlelistener.tb2.jar, \
 	syncbundlelistener.tb3.jar
 	
 Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
