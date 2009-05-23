@@ -1,0 +1,7 @@
+-nouses=true
+Bundle-Name:                             ${p}.syncbundlelistener.tb1a
+Bundle-SymbolicName:                     ${p}.syncbundlelistener.tb1a
+Bundle-Version: 1.3
+Bundle-Activator: ${p}.syncbundlelistener.tb1a.PermissionTester
+Private-Package:                         ${p}.syncbundlelistener.tb1a
+Include-Resource: {OSGI-INF/permissions.perm=perms/syncbundlelistener.tb1a.perm}

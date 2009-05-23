@@ -37,7 +37,9 @@ Include-Resource = \
 	permissions.register.jar, \
 	permissions.registerModify.jar, \
 	permissions.registerPlural.jar, \
-	permissions.setPermission.jar
+	permissions.setPermission.jar, \
+	syncbundlelistener.tb1a.jar, \
+	syncbundlelistener.tb1b.jar
 	
 Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
 
@@ -56,4 +58,3 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 	osgi.resolverMode=strict, \
 	org.osgi.framework.security=osgi, \
 	org.osgi.framework.trust.repositories=${build}/keystore
-	
