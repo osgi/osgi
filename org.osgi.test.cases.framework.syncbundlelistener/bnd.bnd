@@ -1,0 +1,28 @@
+Bundle-Version						: 4.2.0.${project.build}
+Bundle-Description					: Framework test cases.
+
+Private-Package						= org.osgi.test.support.*, \
+	org.osgi.test.cases.framework.junit.*
+	
+Include-Resource = \
+	syncbundlelistener.tb1a.jar, \
+	syncbundlelistener.tb1b.jar, \
+	syncbundlelistener.tb3.jar
+	
+Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+
+-buildpath							= \
+    org.osgi.test.support;                  version=project , \
+	org.osgi.framework;									version=project	, \
+	osgi;									version=latest	, \
+	ee.minimum; version=latest											, \
+	${junit}
+
+-runbundles							= \
+	
+
+-runproperties = report=true, \
+	osgi.compatibility.bootdelegation=false, \
+	osgi.resolverMode=strict, \
+	org.osgi.framework.security=osgi, \
+	org.osgi.framework.trust.repositories=${build}/keystore
