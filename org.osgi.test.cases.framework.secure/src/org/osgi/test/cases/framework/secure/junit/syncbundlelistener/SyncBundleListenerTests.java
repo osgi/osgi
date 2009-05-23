@@ -8,7 +8,6 @@ package org.osgi.test.cases.framework.secure.junit.syncbundlelistener;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
-import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
@@ -18,10 +17,6 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * @author Ericsson Telecom AB
  */
 public class SyncBundleListenerTests extends DefaultTestBundleControl {
-	
-	static final int	timeout	= 2000 * OSGiTestCaseProperties
-												.getScaling();
-	
 	/**
 	 * control that a security exception is thrown if we try to add a
 	 * synchronous bundle listener without adminPermission
@@ -52,13 +47,14 @@ public class SyncBundleListenerTests extends DefaultTestBundleControl {
 		}
 		catch (BundleException e) {
 			Throwable cause = e.getCause();
-			if (!(cause instanceof SecurityException)) {
-				fail("Was able to add SynchronousBundleListener", e);
+			if (cause instanceof SecurityException) {
+				return;
 			}
 		}
 		finally {
 			permissionBundle.uninstall();
 		}
+		fail("Was able to add SynchronousBundleListener");
 	}
 
 }
