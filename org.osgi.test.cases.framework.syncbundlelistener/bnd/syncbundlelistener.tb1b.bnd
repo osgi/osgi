@@ -1,7 +1,0 @@
--nouses=true
-Bundle-Name:                             ${p}.tb1b
-Bundle-SymbolicName:                     ${p}.tb1b
-Bundle-Version: 1.3
-Bundle-Activator: ${p}.tb1b.PermissionTester
-Private-Package:                         ${p}.tb1b
-Include-Resource: {OSGI-INF/permissions.perm=perms/syncbundlelistener.tb1b.perm}
