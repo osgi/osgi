@@ -11,6 +11,6 @@ package org.osgi.test.cases.framework.div.tb6;
  */
 public class BundleClass {
 	public BundleClass() {
-		System.out.println("Bundle class created");
+		// empty
 	}
 }

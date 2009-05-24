@@ -20,7 +20,7 @@ public class DoubleManifestTag implements BundleActivator {
 	 */
 	public void start(BundleContext bc) {
 		// Create a reference to tbc
-		new org.osgi.test.cases.framework.div.tbc.Activator();
+		new org.osgi.test.cases.framework.junit.div.DivTests();
 	}
 
 	/**

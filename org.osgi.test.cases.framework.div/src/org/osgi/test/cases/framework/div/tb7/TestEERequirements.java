@@ -6,12 +6,15 @@
  */
 package org.osgi.test.cases.framework.div.tb7;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 
 public class TestEERequirements implements BundleActivator {
 	public void stop(BundleContext bc) {
+		// empty
 	}
 
 	public void start(BundleContext context) {
+		// empty
 	}
 }

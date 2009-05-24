@@ -6,7 +6,8 @@
  */
 package org.osgi.test.cases.framework.div.tb5;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 
 /**
  * Bundle for the CheckManifest test.
@@ -18,13 +19,13 @@ public class CheckManifest implements BundleActivator {
 	 * Starts the bundle.
 	 */
 	public void start(BundleContext bc) {
-		System.out.println("TB5 start");
+		// empty
 	}
 
 	/**
 	 * Stops the bundle.
 	 */
 	public void stop(BundleContext bc) {
-		System.out.println("TB5 start");
+		// empty
 	}
 }

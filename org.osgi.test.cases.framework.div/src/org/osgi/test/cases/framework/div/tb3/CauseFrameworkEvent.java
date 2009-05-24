@@ -6,7 +6,9 @@
  */
 package org.osgi.test.cases.framework.div.tb3;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
 
 /**
  * Bundle for the CauseFrameworkEvent test.
@@ -14,13 +16,15 @@ import org.osgi.framework.*;
  * @author Ericsson Radio Systems AB
  */
 public class CauseFrameworkEvent implements BundleActivator {
+
 	/**
 	 * Starts the bundle.
 	 */
-	public void stop(BundleContext bc) throws BundleException {
-		throw new BundleException("Causing a FrameworkEvent in start()");
+	public void start(BundleContext context) throws Exception {
+		// empty
 	}
-
-	public void start(BundleContext context) {
+	
+	public void stop(BundleContext bc) throws Exception {
+		throw new BundleException("Causing a FrameworkEvent in stop()");
 	}
 }

@@ -1,0 +1,21 @@
+Bundle-Name: ${p}.tb2
+Bundle-Description: TB2 is part of the DIV test case. This bundle will
+ load a native code library.
+Bundle-Vendor: Ericsson Radio Systems AB
+Bundle-Version: 1.0
+Bundle-Activator: org.osgi.test.cases.div.tb2.NativeCode
+Comment: Windows NT should be WindowsNT, Linux processor must be x386
+Bundle-NativeCode: linux_x86/libNative.so; osname=Linux; processor=x86, \
+ qnx_x86/libNative.so; osname=QNX; processor=x86, \
+ qnx_ppc/libNative.so; osname=QNX; processor=PowerPC, \
+ qnx_armle/libNative.so; osname=QNX; processor=ARM, \
+ windows_x86/Native.dll; osname=Win32; processor=x86, \
+ solaris_sparc/libNative.so; osname=Solaris; processor=sparc, \
+ solaris_sparc/libNative.so; osname=SunOS; processor=sparc, \
+ windows_arm/Native.dll; osname="windows ce"; processor=arm
+Include-Resource = /=resources/div.tb2
+# could not rename this package without rebuilding native so/dll
+Private-Package:                         org.osgi.test.cases.div.tb2
+
+
+
