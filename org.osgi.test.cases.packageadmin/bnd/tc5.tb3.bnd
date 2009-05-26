@@ -1,0 +1,6 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.tc5.tb3
+Bundle-SymbolicName: ${p}.tc5.tb3;fragment-attachment="always"
+Bundle-Version: 1.0
+Bundle-Activator: ${p}.tc5.tb3.Activator
+Export-Package: ${p}.tc5.tb3

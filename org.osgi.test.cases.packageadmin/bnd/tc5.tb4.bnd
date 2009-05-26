@@ -1,0 +1,7 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.tc5.tb4
+Bundle-SymbolicName: ${p}.tc5.tb4
+Bundle-Version: 1.0
+Bundle-Activator: ${p}.tc5.tb4.Activator
+Export-Package: ${p}.tc5.tb4
+Require-Bundle: ${p}.tc5.tb1, ${p}.tc5.tb3

@@ -1,0 +1,6 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.tc5.tb5
+Bundle-SymbolicName: ${p}.tc5.tb5
+Bundle-Version: 1.0
+Fragment-Host: ${p}.tc5.tb3
+Private-Package: ${p}.tc5.tb5

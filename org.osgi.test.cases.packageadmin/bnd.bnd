@@ -18,7 +18,13 @@ Include-Resource = \
 	tc2.tb5.jar, \
 	tc3.tb1.jar, \
 	tc3.tb2.jar, \
-	tc3.tb3.jar
+	tc3.tb3.jar, \
+	tc5.tb1.jar, \
+	tc5.tb2.jar, \
+	tc5.tb3.jar, \
+	tc5.tb4.jar, \
+	tc5.tb5.jar, \
+	tc5.tb6.jar
 	
 Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
 
