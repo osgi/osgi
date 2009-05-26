@@ -10,7 +10,12 @@ Export-Package						= \
 Include-Resource = \
 	tc1.tb1.jar, \
 	tc1.tb2.jar, \
-	tc1.tb3.jar
+	tc1.tb3.jar, \
+	tc2.tb1.jar, \
+	tc2.tb2.jar, \
+	tc2.tb3.jar, \
+	tc2.tb4.jar, \
+	tc2.tb5.jar
 	
 Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
 
