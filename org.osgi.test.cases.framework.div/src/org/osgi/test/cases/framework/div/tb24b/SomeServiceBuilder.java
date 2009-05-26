@@ -39,13 +39,6 @@ import org.osgi.test.cases.framework.div.tb24a.SomeService;
 public class SomeServiceBuilder {
 
 	/**
-	 * Creates a new instance of SomeServiceBuilder
-	 */
-	public SomeServiceBuilder() {
-
-	}
-
-	/**
 	 * Creates a new service
 	 * 
 	 * @return The created service

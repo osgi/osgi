@@ -17,7 +17,6 @@ import java.util.Comparator;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Properties;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
@@ -38,15 +37,8 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * @author Ericsson Radio Systems AB
  */
 public class DivTests extends DefaultTestBundleControl {
-	private static final String	basePath	= "/org/osgi/test/cases/framework/div/";
-	private static final String	basePkg		= "org.osgi.test.cases.framework.div.";
-
-	// TODO delete
-	public static void log(String test, String result) {
-		if (result == null)
-			result = "";
-		log(test + " " + result);
-	}
+	public static final String	basePath	= "/org/osgi/test/cases/framework/div/";
+	public static final String	basePkg		= "org.osgi.test.cases.framework.div.";
 
 	/**
 	 * Logs the manifest headers.
@@ -115,8 +107,7 @@ public class DivTests extends DefaultTestBundleControl {
 			tb.stop();
 		}
 		catch (BundleException e) {
-			log("Exception in testing missing manifest headers", "" + e);
-			log("NestedException", "" + e.getNestedException());
+			fail("Exception in testing missing manifest headers", e);
 		}
 		finally {
 			tb.uninstall();
@@ -248,9 +239,8 @@ public class DivTests extends DefaultTestBundleControl {
 	}
 
 	// TODO can we get this to work?
-	void TODOtestEERequirement() throws Exception {
-		final Properties sysProps = System.getProperties();
-		final String ee = sysProps
+	public void testEERequirement() throws Exception {
+		final String ee = getContext()
 				.getProperty(Constants.FRAMEWORK_EXECUTIONENVIRONMENT);
 		log("EE: " + ee);
 		Bundle tb = getContext().installBundle(getWebServer() + "div.tb7a.jar");
@@ -258,7 +248,7 @@ public class DivTests extends DefaultTestBundleControl {
 			tb.start();
 		}
 		catch (BundleException e) {
-			//
+			fail("Required Execution Environment is available", e);
 		}
 		finally {
 			tb.uninstall();
@@ -267,9 +257,10 @@ public class DivTests extends DefaultTestBundleControl {
 		tb = getContext().installBundle(getWebServer() + "div.tb7b.jar");
 		try {
 			tb.start();
+			fail("Required Execution Environment is not available");
 		}
 		catch (BundleException e) {
-			//
+			// expected
 		}
 		finally {
 			tb.uninstall();

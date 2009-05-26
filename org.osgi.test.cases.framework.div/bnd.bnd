@@ -11,13 +11,17 @@ Include-Resource = \
 	div.tb2.jar, \
 	div.tb3.jar, \
 	div.tb5.jar, \
-	div.tb6.jar, \
+	extraclass/div.tb6.jar=div.tb6.jar, \
 	div.tb7a.jar, \
 	div.tb7b.jar, \
+	div.tb8.jar, \
+	div.tb9.jar, \
+	div.tb9a.jar, \
 	div.tb10.jar, \
 	div.tb11.jar, \
 	div.tb12.jar, \
 	div.tb13.jar, \
+	div.tb14.jar, \
 	div.tb15.jar, \
 	div.tb16.jar, \
 	div.tb17.jar, \
@@ -26,16 +30,11 @@ Include-Resource = \
 	div.tb20.jar, \
 	div.tb21.jar, \
 	div.tb22.jar, \
+	div.tb23.jar, \
 	div.tb24a.jar, \
 	div.tb24b.jar, \
-	div.tb24c.jar, \
-	extraclass/div.tb6.jar=div.tb6.jar
+	div.tb24c.jar
 
-#	div.tb8.jar, \
-#	div.tb9.jar, \
-#	div.tb9a.jar, \
-#	div.tb14.jar, \
-#	div.tb23.jar, \
 	
 Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
 
@@ -52,6 +51,7 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 -runproperties = report=true, \
 	osgi.compatibility.bootdelegation=false, \
 	osgi.resolverMode=strict, \
+	org.osgi.framework.executionenvironment = "AA/BB,OSGi/Minimum-1.0,OSGi/Minimum-1.1,OSGi/Minimum-1.2,JRE-1.1,J2SE-1.2,J2SE-1.3,J2SE-1.4,J2SE-1.5", \
 	${p}.tb12=abc, \
 	${p}.tb15=abc, \
 	${p}.tb16=xyz

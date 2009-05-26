@@ -35,11 +35,5 @@ package org.osgi.test.cases.framework.div.tb24a;
  */
 public class SomeService {
 
-	/**
-	 * Creates a new instance of SomeService
-	 */
-	public SomeService() {
-		
-	}
-	
+	// empty
 }

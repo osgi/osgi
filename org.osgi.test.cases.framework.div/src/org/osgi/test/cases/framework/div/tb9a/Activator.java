@@ -40,18 +40,18 @@ import org.osgi.framework.BundleContext;
 public class Activator implements BundleActivator {
 	/**
 	 * Starts Bundle.
-	 *  
+	 * 
 	 */
 	public void start(BundleContext bc) {
-
+		// empty
 	}
 
 	/**
 	 * Stops Bundle.
-	 *  
+	 * 
 	 */
 	public void stop(BundleContext bc) {
-
+		// empty
 	}
 
 }

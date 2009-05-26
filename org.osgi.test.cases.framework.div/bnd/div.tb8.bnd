@@ -1,5 +1,3 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
 Bundle-Name: %bundlename
 Bundle-SymbolicName: ${p}.tb8; fragment-attachment="always"
 Bundle-Description: %bundledescription
@@ -7,9 +5,8 @@ Bundle-Vendor: %bundlevendor
 Bundle-Version: 1.0
 Bundle-DocURL: %docurl
 Bundle-ContactAddress: %contactinfo
-Bundle-Activator: org.osgi.test.cases.framework.div.tb8.CheckManifestGetHeaders
+Bundle-Activator: ${p}.tb8.CheckManifestGetHeaders
 Bundle-Category: %bundlecategory
 Bundle-Copyright: %bundlecopyright
-$(IMPORT-PACKAGE)
-$(EXPORT-PACKAGE)
-$(PRIVATE-PACKAGE)
+Private-Package: ${p}.tb8
+Include-Resource = {OSGI-INF/l10n/bundle.properties = resources/div.tb8/bundle.properties}

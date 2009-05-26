@@ -27,10 +27,11 @@
 
 package org.osgi.test.cases.framework.div.tb8;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 
 /**
- *
+ * 
  * Bundle for manifest headers localization tests.
  * 
  * @author hmm@cesar.org.br
@@ -43,18 +44,16 @@ public class CheckManifestGetHeaders implements BundleActivator {
 	 * Starts Bundle.
 	 * 
 	 * */
-	public void start(BundleContext bc)
-    {
-        
-    }
-	
+	public void start(BundleContext bc) {
+		// empty
+	}
+
 	/**
 	 * Stops Bundle.
 	 * 
 	 * */
-    public void stop(BundleContext bc)
-    {
-    
-    }
+	public void stop(BundleContext bc) {
+		// empty
+	}
 
 }

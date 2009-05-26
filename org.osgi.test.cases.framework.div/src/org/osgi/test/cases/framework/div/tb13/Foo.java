@@ -28,17 +28,12 @@
 package org.osgi.test.cases.framework.div.tb13;
 
 /**
- *
+ * 
  * Class used by tests.
  * 
  * @version $Revision$
  */
 public class Foo {
 
-	/**
-	 * Creates a new instance of Foo
-	 */
-	public Foo() {
-	}
-
+	// empty
 }
