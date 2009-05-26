@@ -1,7 +1,0 @@
-Bundle-ManifestVersion: 2
-Bundle-Name: ${p}.tb1
-Bundle-SymbolicName: ${p}.tb1
-Bundle-Version: 1.0
-Bundle-Activator: ${p}.tb1.Activator
-Export-Package: ${p}.tb1; version=1.0
-Import-Package: org.osgi.framework

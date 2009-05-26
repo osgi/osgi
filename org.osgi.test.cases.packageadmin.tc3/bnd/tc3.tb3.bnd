@@ -1,7 +1,0 @@
-Bundle-ManifestVersion: 2
-Bundle-Name: ${p}.tb3
-Bundle-SymbolicName: ${p}.tb3
-Bundle-Version: 4.2
-Bundle-Activator: ${p}.tb3.TB3Activator
-Import-Package: org.osgi.framework, ${p}.tb1
-Export-Package: ${p}.tb3, ${p}.tb1; version=1.0.2

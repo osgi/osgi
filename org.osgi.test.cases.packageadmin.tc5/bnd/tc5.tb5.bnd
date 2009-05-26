@@ -1,5 +1,0 @@
-Bundle-ManifestVersion: 2
-Bundle-Name: ${p}.tb5
-Bundle-SymbolicName: ${p}.tb5
-Bundle-Version: 1.0
-Fragment-Host: ${p}.tb3
