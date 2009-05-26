@@ -16,10 +16,4 @@ Bundle-NativeCode: \
 Private-Package						= \
 	${p}.launch.tb2.*
 
-Include-Resource = \
-  libs/nativecode.1=libs/nativecode.1, \
-  libs/nativecode.2=libs/nativecode.2, \
-  libs/nativecode.3=libs/nativecode.3, \
-  libs/libnativecode.1=libs/libnativecode.1, \
-  libs/libnativecode.2=libs/libnativecode.2, \
-  libs/libnativecode.3=libs/libnativecode.3
+Include-Resource = libs=resources/launch.tb2
