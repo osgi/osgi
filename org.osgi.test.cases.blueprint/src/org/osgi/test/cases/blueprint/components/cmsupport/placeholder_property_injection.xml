@@ -22,15 +22,6 @@
         <property name="string" value="xyz${string_empty}"/>
     </bean>
 
-<!-- string null -->
-    <bean id="compStringNull" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
-        <property name="string" value="${string_null}"/>
-    </bean>
-
-    <bean id="compStringNullPart" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
-        <property name="string" value="xyz${string_null}xyz"/>
-    </bean>
-
 <!-- boolean -->
     <bean id="compWrapperBoolean" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="boolean" value="${boolean}"/>

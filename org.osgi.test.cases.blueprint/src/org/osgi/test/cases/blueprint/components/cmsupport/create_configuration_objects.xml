@@ -19,7 +19,6 @@
                         <props>
                             <prop key="str">abc</prop>
                             <prop key="str_empty"></prop>
-                            <!--<prop key="str_null"><null/></prop>-->
                             <prop key="str_boolean">true</prop>
                             <prop key="str_byte">3</prop>
                             <prop key="str_char">4</prop>
@@ -45,11 +44,6 @@
                                     <entry key="string_empty">
                                         <value type="java.lang.String"></value>
                                     </entry>
-                                    <!--
-                                    <entry key="string_null">
-                                        <null/>
-                                    </entry>
-                                    -->
                                     <entry key="boolean">
                                         <value type="java.lang.Boolean">true</value>
                                     </entry>

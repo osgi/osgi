@@ -61,8 +61,6 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
         this.addPropertyValidator(startEventSet, "compStringPart", "string", "abcxyz", String.class);
         this.addPropertyValidator(startEventSet, "compStringEmpty", "string", "", String.class);
         this.addPropertyValidator(startEventSet, "compStringEmptyPart", "string", "xyz", String.class);
-        this.addPropertyValidator(startEventSet, "compStringNull", "string", "", String.class);
-        this.addPropertyValidator(startEventSet, "compStringNullPart", "string", "xyzxyz", String.class);
 
         this.addPropertyValidator(startEventSet, "compWrapperBoolean", "boolean", Boolean.TRUE, Boolean.class);
         this.addPropertyValidator(startEventSet, "compWrapperByte", "byte", new Byte((byte)3), Byte.class);
