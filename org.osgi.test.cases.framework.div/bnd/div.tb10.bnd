@@ -1,8 +1,0 @@
-Bundle-Name: ${p}.tb10
-Bundle-SymbolicName: ${p}.tb10
-Bundle-Description: Test bundle
-Bundle-Vendor: OSGi
-Bundle-Version: 1.0.0
-Bundle-Activator: ${p}.tb10.Activator
-Private-Package: ${p}.tb10
-
