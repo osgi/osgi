@@ -4,7 +4,7 @@
  * This source code is owned by Ericsson Telecom AB, and is being distributed to OSGi
  * MEMBERS as MEMBER LICENSED MATERIALS under the terms of section 3.2 of the OSGi MEMBER AGREEMENT.
  */
-package org.osgi.test.cases.packageadmin.tc1.tbc;
+package org.osgi.test.cases.packageadmin.junit.tc1;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkEvent;
@@ -20,7 +20,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * 
  * @author Ericsson Telecom AB
  */
-public class TBC extends DefaultTestBundleControl {
+public class TC1 extends DefaultTestBundleControl {
 	private final String	TP1				= "org.osgi.test.cases.packageadmin.tc1.tb1";
 	private final String	TP2				= "org.osgi.test.cases.packageadmin.tc1.tb2";
 

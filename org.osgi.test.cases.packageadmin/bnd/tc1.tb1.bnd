@@ -1,6 +1,6 @@
 Bundle-ManifestVersion: 2
-Bundle-Name: ${p}.tb1
-Bundle-SymbolicName: ${p}.tb1
+Bundle-Name: ${p}.tc1.tb1
+Bundle-SymbolicName: ${p}.tc1.tb1
 Bundle-Version: 4.2
-Bundle-Activator: ${p}.tb1.TB1Activator
-Export-Package: ${p}.tb1
+Bundle-Activator: ${p}.tc1.tb1.TB1Activator
+Export-Package: ${p}.tc1.tb1

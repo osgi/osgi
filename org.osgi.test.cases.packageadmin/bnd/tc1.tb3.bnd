@@ -1,6 +1,6 @@
 Bundle-ManifestVersion: 2
-Bundle-Name: ${p}.tb3
-Bundle-SymbolicName: ${p}.tb3
+Bundle-Name: ${p}.tc1.tb3
+Bundle-SymbolicName: ${p}.tc1.tb3
 Bundle-Version: 4.2
-Bundle-Activator: ${p}.tb3.TB3Activator
-Export-Package: ${p}.tb3
+Bundle-Activator: ${p}.tc1.tb3.TB3Activator
+Export-Package: ${p}.tc1.tb3
