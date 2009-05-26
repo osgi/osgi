@@ -45,20 +45,6 @@ import org.osgi.service.blueprint.reflect.ComponentMetadata;
 public interface BlueprintContainer {
 
 	/**
-	 * reason code for destroy method callback of a managed service factory
-	 * created component, when the component is being disposed because the
-	 * corresponding configuration admin object was deleted.
-	 */
-	static final int CONFIGURATION_ADMIN_OBJECT_DELETED = 1;
-
-	/**
-	 * reason code for destroy method callback of a managed service factory
-	 * created component, when the component is being disposed because the
-	 * bundle is being stopped.
-	 */
-	static final int BUNDLE_STOPPING = 2;
-
-	/**
 	 * The set of component names recognized by the blueprint context.
 	 *
 	 * @return an immutable set (of Strings) containing the names of all of the components within the
