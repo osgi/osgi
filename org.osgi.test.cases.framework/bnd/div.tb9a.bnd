@@ -1,0 +1,13 @@
+Bundle-Name: %bundlename
+Bundle-SymbolicName: ${p}.div.tb9; fragment-attachment="always"
+Bundle-Description: %bundledescription
+Bundle-Vendor: %bundlevendor
+Bundle-Version: 0.2
+Bundle-DocURL: %docurl
+Bundle-ContactAddress: %contactinfo
+Bundle-Activator: ${p}.div.tb9a.Activator
+Bundle-Category: %bundlecategory
+Bundle-Copyright: %bundlecopyright
+Private-Package: ${p}.div.tb9a
+Include-Resource = {localization/bundlemanifest_fr_FR.properties = resources/div.tb9a/bundlemanifest_fr_FR.properties}, \
+                  {OSGI-INF/l10n/bundle_fr_FR.properties = resources/div.tb9a/bundle_fr_FR.properties}  

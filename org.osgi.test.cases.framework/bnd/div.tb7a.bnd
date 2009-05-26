@@ -1,0 +1,8 @@
+Bundle-Name: ${p}.div.tb7a
+Bundle-SymbolicName: ${p}.div.tb7a
+Bundle-Description: Bundle that has an EE requirement
+Bundle-Vendor: Gatespace AB
+Bundle-Version: 1.0
+Bundle-Activator: ${p}.div.tb7.TestEERequirements
+Bundle-RequiredExecutionEnvironment: div/tb7a,div/tb7b
+Private-Package: ${p}.div.tb7

@@ -1,0 +1,23 @@
+Bundle-Name: ${p}.div.tb15
+Bundle-SymbolicName: ${p}.div.tb15
+Bundle-Description: TB15 is part of the DIV test case. This bundle checks
+ if a bundle is not loaded if no native code clause matches and there's no
+ optional clause present.
+Bundle-Vendor: IBM
+Bundle-Version: 1.0
+Bundle-Activator: ${p}.div.tb15.NativeCodeFilterNoOptional
+Comment: Windowing systems where intentionally mixed up in order to make
+ selection filter matches fail
+Bundle-NativeCode: linux_x86/libNative.so; osname=Linux; processor=x86; selection-filter="(${p}.div.tb15=xyz)", \
+ qnx_x86/libNative.so; osname=QNX; processor=x86; selection-filter="(${p}.div.tb15=xyz)", \
+ qnx_ppc/libNative.so; osname=QNX; processor=PowerPC; selection-filter="(${p}.div.tb15=xyz)", \
+ qnx_armle/libNative.so; osname=QNX; processor=arm_le; selection-filter="(${p}.div.tb15=xyz)", \
+ windows_x86/Native.dll; osname=win32; processor=x86; selection-filter="(${p}.div.tb15=xyz)", \
+ solaris_sparc/libNative.so; osname=Solaris; processor=sparc; selection-filter="(${p}.div.tb15=xyz)", \
+ solaris_sparc/libNative.so; osname=SunOS; processor=sparc; selection-filter="(${p}.div.tb15=xyz)", \
+ windows_arm/Native.dll; osname="windows ce"; processor=arm_le; selection-filter="(${p}.div.tb15=xyz)", \
+ macosx_x86/libNative.jnilib; osname="mac os x"; processor=x86; selection-filter="(${p}.div.tb15=xyz)", \
+ macosx_x86/libNative.jnilib; osname="mac os x"; processor=ppc; selection-filter="(${p}.div.tb15=xyz)"
+Include-Resource = /=resources/div.tb2
+Private-Package:                         ${p}.div.tb15
+

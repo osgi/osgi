@@ -1,0 +1,23 @@
+Bundle-Name: ${p}.div.tb16
+Bundle-SymbolicName: ${p}.div.tb16
+Bundle-Description: TB16 is part of the DIV test case. This bundle checks
+ if a bundle is loaded when the selection filter is set. It also checks if
+ the new osname alias (win32) matches properly (OSGi R4).
+Bundle-Vendor: IBM
+Bundle-Version: 1.0
+Bundle-Activator: ${p}.div.tb16.NativeCodeFilterAlias
+Comment: Windowing systems should match properly
+Bundle-NativeCode: linux_x86/libNative.so; osname=Linux; processor=x86; selection-filter="(${p}.div.tb16=xyz)", \
+ qnx_x86/libNative.so; osname=QNX; processor=x86; selection-filter="(${p}.div.tb16=xyz)", \
+ qnx_ppc/libNative.so; osname=QNX; processor=PowerPC; selection-filter="(${p}.div.tb16=xyz)", \
+ qnx_armle/libNative.so; osname=QNX; processor=arm_le; selection-filter="(${p}.div.tb16=xyz)", \
+ windows_x86/Native.dll; osname=win32; processor=x86; selection-filter="(${p}.div.tb16=xyz)", \
+ solaris_sparc/libNative.so; osname=Solaris; processor=sparc; selection-filter="(${p}.div.tb16=xyz)", \
+ solaris_sparc/libNative.so; osname=SunOS; processor=sparc; selection-filter="(${p}.div.tb16=xyz)", \
+ windows_arm/Native.dll; osname="windows ce"; processor=arm_le; selection-filter="(${p}.div.tb16=xyz)", \
+ macosx_x86/libNative.jnilib; osname="mac os x"; processor=x86; selection-filter="(${p}.div.tb16=xyz)", \
+ macosx_x86/libNative.jnilib; osname="mac os x"; processor=ppc; selection-filter="(${p}.div.tb16=xyz)"
+Include-Resource = /=resources/div.tb2
+Private-Package:                         ${p}.div.tb16, org.osgi.test.cases.div.tb2
+
+

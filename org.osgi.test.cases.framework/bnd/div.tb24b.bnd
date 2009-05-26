@@ -1,0 +1,6 @@
+Bundle-Name: ${p}.div.tb24b
+Bundle-SymbolicName: ${p}.div.tb24b
+Bundle-Version: 4
+Import-Package: ${p}.div.tb24a;version="1.0.0",*
+Export-Package: ${p}.div.tb24b;version="1.0.0";-noimport:=true
+Private-Package: ${p}.div.tb24b

@@ -1,0 +1,12 @@
+Bundle-Name: ${p}.div.tb3
+Bundle-SymbolicName: ${p}.div.tb3
+Bundle-Description: Causes a framework event by throwing a BundleException in stop
+Bundle-Vendor: Ericsson Radio Systems AB
+Bundle-Version: 1.0
+Bundle-DocURL: http://www.ericsson.com
+Bundle-ContactAddress: info@ericsson.com
+Bundle-Activator: ${p}.div.tb3.CauseFrameworkEvent
+Private-Package: ${p}.div.tb3
+
+
+

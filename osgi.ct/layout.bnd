@@ -16,7 +16,6 @@ build.core.tests = \
     org.osgi.test.cases.startlevel, \
     org.osgi.test.cases.url
 # test case does not build w/o error
-#    org.osgi.test.cases.framework.div, \
 #    org.osgi.test.cases.framework.lifecycle, \
 
 build.cmpn.tests = \

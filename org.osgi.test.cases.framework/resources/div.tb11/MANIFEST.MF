@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.div.tb11
+Bundle-Description: Test bundle
+Bundle-Vendor: OSGi
+Bundle-Version: 1.0.0
+
