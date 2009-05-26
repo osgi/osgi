@@ -1,0 +1,29 @@
+Bundle-Version						: 4.2.0.${project.build}
+Bundle-Description					: PackageAdmin test cases.
+
+Private-Package						= org.osgi.test.support.*, \
+	${p}.tbc, ${p}.tbc.*
+
+Export-Package						= \
+
+Include-Resource = \
+	tc5.tb1.jar, \
+	tc5.tb2.jar, \
+	tc5.tb3.jar, \
+	tc5.tb4.jar, \
+	tc5.tb5.jar, \
+	tc5.tb6.jar
+	
+Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+
+-buildpath							= \
+    org.osgi.test.support;                  version=project , \
+	org.osgi.framework;									version=project	, \
+	osgi;									version=latest	, \
+	ee.minimum; version=latest											, \
+	${junit}
+
+-runbundles							= \
+
+-runproperties = report=true, \
+    osgi.console=23
