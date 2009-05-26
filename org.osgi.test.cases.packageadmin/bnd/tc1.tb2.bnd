@@ -1,0 +1,6 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.tb2
+Bundle-SymbolicName: ${p}.tb2
+Bundle-Version: 4.2
+Bundle-Activator: ${p}.tb2.TB2Activator
+Export-Package: ${p}.tb2
