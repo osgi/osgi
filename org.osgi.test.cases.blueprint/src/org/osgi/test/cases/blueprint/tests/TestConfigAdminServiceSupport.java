@@ -142,6 +142,11 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
         expectedProps.put("str_float", new Float(9.0));
         startEventSet.addValidator(new ServiceRegistrationValidator(TestGoodServiceSubclass.class, "compGoodServiceSubclass", null, expectedProps));
 
+        expectedProps = new Hashtable(expectedProps);
+        // this property come from explicitly specifying the entry in addition to referencing the pid
+        expectedProps.put("extra", "abc");
+        startEventSet.addValidator(new ServiceRegistrationValidator(TestGoodServiceSubclass.class, "compGoodServiceSubclassExplicit", null, expectedProps));
+
         controller.run();
     }
 
