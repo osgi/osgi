@@ -12,37 +12,21 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.util.Collections;
+import java.net.URL;
 import java.util.Comparator;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
-import java.util.Vector;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
-import org.osgi.framework.FrameworkListener;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.Version;
 import org.osgi.test.cases.framework.div.tb6.BundleClass;
-import org.osgi.test.cases.framework.junit.div.Bundle.GetEntry;
-import org.osgi.test.cases.framework.junit.div.Bundle.GetEntryPaths;
-import org.osgi.test.cases.framework.junit.div.Bundle.GetHeaders;
-import org.osgi.test.cases.framework.junit.div.Bundle.GetResource;
-import org.osgi.test.cases.framework.junit.div.Bundle.GetResources;
-import org.osgi.test.cases.framework.junit.div.Bundle.GetSymbolicName;
-import org.osgi.test.cases.framework.junit.div.Bundle.LoadClass;
-import org.osgi.test.cases.framework.junit.div.BundleContext.RegisterService;
-import org.osgi.test.cases.framework.junit.div.BundleException.GetCause;
-import org.osgi.test.cases.framework.junit.div.BundleException.InitCause;
-import org.osgi.test.cases.framework.junit.div.Version.CompareTo;
-import org.osgi.test.cases.framework.junit.div.Version.Equals;
-import org.osgi.test.cases.framework.junit.div.Version.GetMajor;
-import org.osgi.test.cases.framework.junit.div.Version.GetMicro;
-import org.osgi.test.cases.framework.junit.div.Version.GetMinor;
-import org.osgi.test.cases.framework.junit.div.Version.HashCode;
-import org.osgi.test.cases.framework.junit.div.Version.InstanceOf;
 import org.osgi.test.support.FrameworkEventCollector;
 import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
@@ -53,9 +37,9 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * 
  * @author Ericsson Radio Systems AB
  */
-// TODO remove FrameworkListener
-public class DivTests extends DefaultTestBundleControl implements
-		FrameworkListener {
+public class DivTests extends DefaultTestBundleControl {
+	private static final String	basePath	= "/org/osgi/test/cases/framework/div/";
+	private static final String	basePkg		= "org.osgi.test.cases.framework.div.";
 
 	// TODO delete
 	public static void log(String test, String result) {
@@ -73,8 +57,8 @@ public class DivTests extends DefaultTestBundleControl implements
 			tb.start();
 			Dictionary h = tb.getHeaders("");
 			assertEquals("numeric first char", h.get("5-"));
-			assertEquals("org.osgi.test.cases.framework.div.tb1.CheckManifest",
-					h.get("bundle-activator"));
+			assertEquals(basePkg + "tb1.CheckManifest", h
+					.get("bundle-activator"));
 			assertEquals("should contain the bundle category", h
 					.get("bundle-category"));
 			assertEquals("., foo/bar/dummy.jar", h.get("bundle-classpath"));
@@ -84,8 +68,7 @@ public class DivTests extends DefaultTestBundleControl implements
 			assertEquals("Contains the manifest checked by the test case.", h
 					.get("bundle-description"));
 			assertEquals("http://www.ericsson.com", h.get("bundle-docurl"));
-			assertEquals("org.osgi.test.cases.framework.div.tb1", h
-					.get("bundle-name"));
+			assertEquals(basePkg + "tb1", h.get("bundle-name"));
 			assertEquals("www.ericsson.se", h.get("bundle-updatelocation"));
 			assertEquals("Ericsson Radio Systems AB", h.get("bundle-vendor"));
 			assertEquals("Improper value for bundle manifest version 2", h
@@ -265,7 +248,7 @@ public class DivTests extends DefaultTestBundleControl implements
 	}
 
 	// TODO can we get this to work?
-	private void testEERequirement() throws Exception {
+	void TODOtestEERequirement() throws Exception {
 		final Properties sysProps = System.getProperties();
 		final String ee = sysProps
 				.getProperty(Constants.FRAMEWORK_EXECUTIONENVIRONMENT);
@@ -291,7 +274,7 @@ public class DivTests extends DefaultTestBundleControl implements
 		finally {
 			tb.uninstall();
 		}
-		
+
 	}
 
 	/**
@@ -304,28 +287,12 @@ public class DivTests extends DefaultTestBundleControl implements
 	 * @spec Bundle.uninstall()
 	 */
 	public void testNativeCodeFilterOptional() throws Exception {
-		Bundle tb;
-		String res;
+		Bundle tb = getContext().installBundle(getWebServer() + "div.tb12.jar");
 		try {
-			tb = getContext().installBundle(getWebServer() + "div.tb12.jar");
-			try {
-				tb.start();
-				log(".", "");
-				log("Testing Native code selection filter optional:",
-						"Started Ok.");
-			}
-			catch (BundleException be) {
-				log(
-						"Error: Selection filter should not match any native code clause ",
-						"" + be);
-			}
+			tb.start();
+		}
+		finally {
 			tb.uninstall();
-		}
-		catch (BundleException be) {
-			log("Bundle not installed:", "" + be);
-		}
-		catch (UnsatisfiedLinkError ule) {
-			log("Testing native code:", "" + ule);
 		}
 	}
 
@@ -339,26 +306,15 @@ public class DivTests extends DefaultTestBundleControl implements
 	 * @spec Bundle.uninstall()
 	 */
 	public void testNativeCodeFilterNoOptional() throws Exception {
-		Bundle tb;
-		String res;
+		Bundle tb = getContext().installBundle(getWebServer() + "div.tb15.jar");
 		try {
-			tb = getContext().installBundle(getWebServer() + "div.tb15.jar");
-			log("Error: Bundle should NOT be loaded", "");
-			try {
-				tb.start();
-			}
-			catch (BundleException be) {
-				log("Error starting bundle ", "" + be);
-			}
-			tb.uninstall();
+			tb.start();
 		}
 		catch (BundleException be) {
-			log(".", "");
-			log("Testing Native code selection filter no optional:",
-					"Not loaded Ok.");
+			// expected
 		}
-		catch (UnsatisfiedLinkError ule) {
-			log("Testing native code with no optional clause:", "" + ule);
+		finally {
+			tb.uninstall();
 		}
 	}
 
@@ -373,30 +329,12 @@ public class DivTests extends DefaultTestBundleControl implements
 	 * @spec Bundle.uninstall()
 	 */
 	public void testNativeCodeFilterAlias() throws Exception {
-		Bundle tb;
-		String res;
+		Bundle tb = getContext().installBundle(getWebServer() + "div.tb16.jar");
 		try {
-			Properties props = System.getProperties();
-			props.put("org.osgi.framework.windowing.system", "xyz");
-			System.setProperties(props);
-			tb = getContext().installBundle(getWebServer() + "div.tb16.jar");
-			try {
-				tb.start();
-				log(".", "");
-				log(
-						"Testing Native code selection filter with new osname alias:",
-						"Started Ok.");
-			}
-			catch (BundleException be) {
-				log("Error starting bundle with osname alias ", "" + be);
-			}
+			tb.start();
+		}
+		finally {
 			tb.uninstall();
-		}
-		catch (BundleException be) {
-			log("Bundle with osname alias not installed:", "" + be);
-		}
-		catch (UnsatisfiedLinkError ule) {
-			log("Testing native code with osname alias:", "" + ule);
 		}
 	}
 
@@ -409,33 +347,15 @@ public class DivTests extends DefaultTestBundleControl implements
 	 * @spec Bundle.uninstall()
 	 */
 	public void testNativeCodeFragment() throws Exception {
-		Bundle tb;
-		Bundle tbFragment;
-		String res;
+		Bundle tbFragment = getContext().installBundle(
+				getWebServer() + "div.tb18.jar");
+		Bundle tb = getContext().installBundle(getWebServer() + "div.tb17.jar");
 		try {
-			tbFragment = getContext().installBundle(
-					getWebServer() + "div.tb18.jar");
-			tb = getContext().installBundle(getWebServer() + "div.tb17.jar");
-			try {
-				tb.start();
-				log(".", "");
-				log("Testing Native code from a fragment bundle:",
-						"Started Ok.");
-			}
-			catch (BundleException be) {
-				log("Error loading native code from a fragment bundle ", ""
-						+ be);
-			}
+			tb.start();
+		}
+		finally {
 			tb.uninstall();
 			tbFragment.uninstall();
-		}
-		catch (BundleException be) {
-			log(
-					"Error loading bundle with native code from a fragment bundle ",
-					"" + be);
-		}
-		catch (UnsatisfiedLinkError ule) {
-			log("Testing native code from a fragment bundle:", "" + ule);
 		}
 	}
 
@@ -449,26 +369,16 @@ public class DivTests extends DefaultTestBundleControl implements
 	 * @spec Bundle.uninstall()
 	 */
 	public void testNativeCodeLanguage() throws Exception {
-		Bundle tb;
-		String res;
+		Bundle tb = getContext().installBundle(getWebServer() + "div.tb19.jar");
 		try {
-			tb = getContext().installBundle(getWebServer() + "div.tb19.jar");
-			log("Error: Bundle should NOT be loaded:",
-					"language should not match");
-			try {
-				tb.start();
-			}
-			catch (BundleException be) {
-				log("Error starting native code language bundle ", "" + be);
-			}
-			tb.uninstall();
+			tb.start();
+			fail("Error: Bundle should NOT be loaded: language should not match");
 		}
 		catch (BundleException be) {
-			log(".", "");
-			log("Testing Native code os language:", "Not loaded Ok.");
+			// expected
 		}
-		catch (UnsatisfiedLinkError ule) {
-			log("Testing native code os language:", "" + ule);
+		finally {
+			tb.uninstall();
 		}
 	}
 
@@ -484,27 +394,12 @@ public class DivTests extends DefaultTestBundleControl implements
 	 * @spec Bundle.uninstall()
 	 */
 	public void testNativeCodeLanguageSuccess() throws Exception {
-		Bundle tb;
-		String res;
+		Bundle tb = getContext().installBundle(getWebServer() + "div.tb20.jar");
 		try {
-			tb = getContext().installBundle(getWebServer() + "div.tb20.jar");
-			try {
-				tb.start();
-				log(".", "");
-				log("Testing Native code successful os language:",
-						"Started Ok.");
-			}
-			catch (BundleException be) {
-				log("Error starting positive native code language bundle ", ""
-						+ be);
-			}
+			tb.start();
+		}
+		finally {
 			tb.uninstall();
-		}
-		catch (BundleException be) {
-			log("Error loading positive native code language bundle:", "" + be);
-		}
-		catch (UnsatisfiedLinkError ule) {
-			log("Testing positive native code os language:", "" + ule);
 		}
 	}
 
@@ -518,25 +413,16 @@ public class DivTests extends DefaultTestBundleControl implements
 	 * @spec Bundle.uninstall()
 	 */
 	public void testNativeCodeVersion() throws Exception {
-		Bundle tb;
-		String res;
+		Bundle tb = getContext().installBundle(getWebServer() + "div.tb21.jar");
 		try {
-			tb = getContext().installBundle(getWebServer() + "div.tb21.jar");
-			log("Error: Bundle should NOT be loaded", "os version out of range");
-			try {
-				tb.start();
-			}
-			catch (BundleException be) {
-				log("Error starting native code version bundle", "" + be);
-			}
-			tb.uninstall();
+			tb.start();
+			fail("Error: Bundle should NOT be loaded: os version out of range");
 		}
 		catch (BundleException be) {
-			log(".", "");
-			log("Testing Native code osversion:", "Not loaded Ok.");
+			// expected
 		}
-		catch (UnsatisfiedLinkError ule) {
-			log("Testing native code os version:", "" + ule);
+		finally {
+			tb.uninstall();
 		}
 	}
 
@@ -549,350 +435,754 @@ public class DivTests extends DefaultTestBundleControl implements
 	 * @spec Bundle.uninstall()
 	 */
 	public void testNativeCodeVersionSuccess() throws Exception {
-		Bundle tb;
-		String res;
+		Bundle tb = getContext().installBundle(getWebServer() + "div.tb22.jar");
 		try {
-			tb = getContext().installBundle(getWebServer() + "div.tb22.jar");
-			try {
-				tb.start();
-				log(".", "");
-				log("Testing Native code successful osversion:", "Started Ok.");
-			}
-			catch (BundleException be) {
-				log("Error starting success native code version bundle", ""
-						+ be);
-			}
+			tb.start();
+		}
+		finally {
 			tb.uninstall();
-		}
-		catch (BundleException be) {
-			log("Error installing success native code osversion:", "" + be);
-		}
-		catch (UnsatisfiedLinkError ule) {
-			log("Testing success native code os version:", "" + ule);
-		}
-	}
-
-	private String reportProcessorOS() {
-		String os = getContext().getProperty("org.osgi.framework.os.name");
-		String proc = getContext().getProperty("org.osgi.framework.processor");
-		StringBuffer sb = new StringBuffer();
-		sb.append("Current osname=\"").append(os).append("\" processor=\"")
-				.append(proc);
-		sb
-				.append("\". For allowed constants see http://www.osgi.org/Specifications/Reference");
-		return sb.toString();
-	}
-
-	/**
-	 * The FrameworkEvent callback, used by the FrameworkListener test.
-	 */
-	boolean	synced;
-
-	public synchronized void frameworkEvent(FrameworkEvent fe) {
-		try {
-			switch (fe.getType()) {
-				case FrameworkEvent.ERROR :
-					log("Testing FrameworkEvent:", fe.getThrowable().getClass()
-							+ ".");
-					break;
-				case FrameworkEvent.STARTED :
-					log("Testing FrameworkEvent:", "Ok.");
-					break;
-			}
-		}
-		catch (Exception e) { /* Ignore */
-		}
-		synced = true;
-		notify();
-	}
-
-	/**
-	 * Tests double manifest tags.
-	 */
-	public void testDoubleManifestTags() throws Exception {
-		Bundle tb = null;
-		Dictionary h;
-		log(".", "");
-		log("Testing double Manifest tags.", "");
-		tb = getContext().installBundle(getWebServer() + "div.tb4.jar");
-		try {
-			h = tb.getHeaders();
-			log("", "The Import-Package header was " + h.get("Import-Package"));
-			tb.uninstall();
-		}
-		catch (Exception ex) {
-			log(
-					"got exception while uninstalling test bundle i test double manifest tags",
-					"FAIL");
-			ex.printStackTrace();
-		}
-		System.out.println("Uninstalled");
-	}
-
-	Enumeration sort(Enumeration e) {
-		Vector result = new Vector();
-		while (e.hasMoreElements()) {
-			String a = e.nextElement() + "";
-			result.addElement(a);
-		}
-		/* do a case insensitive sort */
-		Collections.sort(result, new Comparator() {
-			public int compare(Object o1, Object o2) {
-				String s1 = (String) o1;
-				String s2 = (String) o2;
-				s1 = s1.toLowerCase();
-				s2 = s2.toLowerCase();
-				return s1.compareTo(s2);
-			}
-		});
-		return result.elements();
-	}
-
-	String extractNestedMessages(BundleException be) {
-		String message = be.getMessage();
-		while (be.getNestedException() != null
-				&& be.getNestedException() instanceof BundleException) {
-			message += " ";
-			message += be.getNestedException().getMessage();
-			be = (BundleException) be.getNestedException();
-		}
-		if (be.getNestedException() != null) {
-			message += " ";
-			message += be.getNestedException().getMessage();
-		}
-		return message;
-	}
-
-	public void testBundleGetEntryPath() {
-		try {
-			new GetEntry(getContext(), getWebServer()).run();
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-			log(ex.getMessage(), "Fail");
-		}
-	}
-
-	public void testBundleGetEntryPaths() {
-		try {
-			new GetEntryPaths(getContext(), getWebServer()).run();
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-			log(ex.getMessage(), "Fail");
-		}
-	}
-
-	public void testBundleGetResource() {
-		try {
-			new GetResource(getContext(), getWebServer()).run();
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-			log(ex.getMessage(), "Fail");
-		}
-	}
-
-	public void testBundleGetResources() {
-		try {
-			new GetResources(getContext(), getWebServer()).run();
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-			log(ex.getMessage(), "Fail");
-		}
-	}
-
-	public void testBundleGetSymbolicName() {
-		try {
-			new GetSymbolicName(getContext(), getWebServer()).run();
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-			log(ex.getMessage(), "Fail");
-		}
-	}
-
-	public void testBundleGetBundleContext() {
-		// try {
-		// new GetBundleContext(getContext(), this, getWebServer()).run();
-		// }
-		// catch (Exception ex) {
-		// ex.printStackTrace();
-		// log(ex.getMessage(), "Fail");
-		// }
-	}
-
-	public void testBundleHashCode() {
-		try {
-			new HashCode(getContext(), getWebServer()).run();
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-			log(ex.getMessage(), "Fail");
-		}
-	}
-
-	public void testBundleLoadClass() {
-		try {
-			new LoadClass(getContext(), getWebServer()).run();
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-			log(ex.getMessage(), "Fail");
 		}
 	}
 
 	public void testBundleEventConstants() {
-		try {
-			new org.osgi.test.cases.framework.junit.div.BundleEvent.Constants(
-					getContext(), getWebServer()).run();
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-			log(ex.getMessage(), "Fail");
-		}
-	}
-
-	public void testBundleExceptionGetCause() {
-		try {
-			new GetCause(getContext(), getWebServer()).run();
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-			log(ex.getMessage(), "Fail");
-		}
-	}
-
-	public void testBundleExceptionInitCause() {
-		try {
-			new InitCause(getContext(), getWebServer()).run();
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-			log(ex.getMessage(), "Fail");
-		}
+		assertConstant(new Integer(0x00000001), "INSTALLED", BundleEvent.class);
+		assertConstant(new Integer(0x00000002), "STARTED", BundleEvent.class);
+		assertConstant(new Integer(0x00000004), "STOPPED", BundleEvent.class);
+		assertConstant(new Integer(0x00000008), "UPDATED", BundleEvent.class);
+		assertConstant(new Integer(0x00000010), "UNINSTALLED",
+				BundleEvent.class);
+		assertConstant(new Integer(0x00000020), "RESOLVED", BundleEvent.class);
+		assertConstant(new Integer(0x00000040), "UNRESOLVED", BundleEvent.class);
+		assertConstant(new Integer(0x00000080), "STARTING", BundleEvent.class);
+		assertConstant(new Integer(0x00000100), "STOPPING", BundleEvent.class);
+		assertConstant(new Integer(0x00000200), "LAZY_ACTIVATION",
+				BundleEvent.class);
 	}
 
 	public void testFrameworkEventConstants() {
+		assertConstant(new Integer(0x00000001), "STARTED", FrameworkEvent.class);
+		assertConstant(new Integer(0x00000002), "ERROR", FrameworkEvent.class);
+		assertConstant(new Integer(0x00000004), "PACKAGES_REFRESHED",
+				FrameworkEvent.class);
+		assertConstant(new Integer(0x00000008), "STARTLEVEL_CHANGED",
+				FrameworkEvent.class);
+		assertConstant(new Integer(0x00000010), "WARNING", FrameworkEvent.class);
+		assertConstant(new Integer(0x00000020), "INFO", FrameworkEvent.class);
+		assertConstant(new Integer(0x00000040), "STOPPED", FrameworkEvent.class);
+		assertConstant(new Integer(0x00000080), "STOPPED_UPDATE",
+				FrameworkEvent.class);
+		assertConstant(new Integer(0x00000100),
+				"STOPPED_BOOTCLASSPATH_MODIFIED", FrameworkEvent.class);
+		assertConstant(new Integer(0x00000200), "WAIT_TIMEDOUT",
+				FrameworkEvent.class);
+	}
+
+	public void testBundleGetEntry() throws Exception {
+		Bundle bundle = getContext().installBundle(
+				getWebServer() + "div.tb10.jar");
 		try {
-			new org.osgi.test.cases.framework.junit.div.FrameworkEvent.Constants(
-					getContext(), getWebServer()).run();
+
+			URL url = bundle.getEntry(basePath + "tb10/Foo.class");
+			assertNotNull(
+					"Testing the method invocation with an existing entry", url);
+
+			url = bundle.getEntry(basePath + "tb10/Nonexistent");
+			assertNull(
+					"Testing the method invocation with an nonexistent entries",
+					url);
+
+			bundle.uninstall();
+
+			try {
+				bundle.getEntry(basePath + "tb10/Nonexistent");
+				fail("Testing the method invocation with an uninstalled bundle");
+			}
+			catch (IllegalStateException ex) {
+				// This is an expected exception and can be ignored
+				bundle = null;
+			}
 		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-			log(ex.getMessage(), "Fail");
+		finally {
+			if (bundle != null) {
+				bundle.uninstall();
+			}
 		}
 	}
 
-	public void testVersionConstructors() {
+	public void testBundleGetEntryPaths() throws Exception {
+		String[] expectedEntryPaths = {
+				"org/osgi/test/cases/framework/div/tb10/Activator.class",
+				"org/osgi/test/cases/framework/div/tb10/Bar.class",
+				"org/osgi/test/cases/framework/div/tb10/Foo.class",
+				"org/osgi/test/cases/framework/div/tb10/TestService.class",
+				"org/osgi/test/cases/framework/div/tb10/TestServiceImpl.class"};
+
+		Bundle bundle = getContext().installBundle(
+				getWebServer() + "div.tb10.jar");
 		try {
-			new org.osgi.test.cases.framework.junit.div.Version.Constructors(
-					getContext(), getWebServer()).run();
+			Enumeration enumeration = bundle.getEntryPaths(basePath + "tb10");
+			assertNotNull("Check if some resource is returned", enumeration);
+
+			int count = 0;
+			while (enumeration.hasMoreElements()) {
+				String entryPath = (String) enumeration.nextElement();
+
+				for (int i = 0; i < expectedEntryPaths.length; i++) {
+					if (entryPath.equals(expectedEntryPaths[i])) {
+						count++;
+					}
+				}
+			}
+
+			assertEquals("Checking the returned entries",
+					expectedEntryPaths.length, count);
+
+			enumeration = bundle.getEntryPaths(basePath + "tb10/nonexistent");
+			assertNull(
+					"Testing the method invocation with nonexistent entries",
+					enumeration);
+
+			bundle.uninstall();
+
+			try {
+				bundle.getEntryPaths(basePath + "tb10/incorrect");
+				fail("Testing the method invocation with an uninstalled bundle");
+			}
+			catch (IllegalStateException ex) {
+				// Ignore this exception
+				bundle = null;
+			}
+
+		}
+		finally {
+			if (bundle != null) {
+				bundle.uninstall();
+			}
+		}
+	}
+
+	public void testBundleGetResource() throws Exception {
+		Bundle bundle = getContext().installBundle(
+				getWebServer() + "div.tb10.jar");
+		Bundle fragment = getContext().installBundle(
+				getWebServer() + "div.tb13.jar");
+
+		try {
+			URL url = bundle.getResource(basePath + "tb10/Foo.class");
+			assertNotNull(
+					"Testing the method invocation with an existing resource (using a absolute path)",
+					url);
+			url = bundle.getResource(basePath + "tb10/Nonexistent");
+			assertNull(
+					"Testing the method invocation with a nonexistent resource",
+					url);
+
+			url = fragment.getResource(basePath + "tb13/Foo.class");
+			assertNull(
+					"A fragment bundle cannot return a resource using the method getResource()",
+					url);
+
+			bundle.uninstall();
+
+			try {
+				bundle
+						.getResource("/org/osgi/test/cases/framework/div/tb10/Foo.class");
+				fail("Testing  the method invocation after uninstall the bundle");
+			}
+			catch (IllegalStateException ex) {
+				// This is an expected exception and can be ignored
+				bundle = null;
+			}
+
+		}
+		finally {
+			if (bundle != null) {
+				bundle.uninstall();
+			}
+			if (fragment != null) {
+				fragment.uninstall();
+			}
+		}
+	}
+
+	public void testBundleGetResources() throws Exception {
+		Bundle bundle = getContext().installBundle(
+				getWebServer() + "div.tb10.jar");
+		Bundle fragment = getContext().installBundle(
+				getWebServer() + "div.tb13.jar");
+
+		try {
+			Enumeration enumeration = bundle.getResources(basePath
+					+ "tb10/Foo.class");
+			assertNotNull(
+					"Testing the method invocation with an existing resource (using a absolute path)",
+					enumeration);
+			enumeration = bundle.getResources(basePath + "tb10/Nonexistent");
+			assertNull(
+					"Testing the method invocation with a nonexistent resource",
+					enumeration);
+
+			enumeration = fragment.getResources(basePath + "tb13/Foo.class");
+			assertNull(
+					"A fragment bundle cannot return a resource using the method getResource()",
+					enumeration);
+
+			bundle.uninstall();
+
+			try {
+				bundle.getResources(basePath + "tb10/Foo.class");
+				fail("Testing  the method invocation after uninstall the bundle");
+			}
+			catch (IllegalStateException ex) {
+				// This is an expected exception and can be ignored
+				bundle = null;
+			}
+
+		}
+		finally {
+			if (bundle != null) {
+				bundle.uninstall();
+			}
+			if (fragment != null) {
+				fragment.uninstall();
+			}
+		}
+	}
+
+	public void testBundleGetSymbolicName1() throws Exception {
+		Bundle bundle = getContext().installBundle(
+				getWebServer() + "div.tb10.jar");
+		try {
+			String bsn = bundle.getSymbolicName();
+			assertEquals(
+					"Testing the method getSymbolicName() with a symbolic name in the manifest",
+					basePkg + "tb10", bsn);
+
+			bundle.uninstall();
+			bsn = bundle.getSymbolicName();
+			bundle = null;
+			assertEquals(
+					"Testing the method getSymbolicName() with a symbolic name in the manifest",
+					basePkg + "tb10", bsn);
+
+		}
+		finally {
+			if (bundle != null) {
+				bundle.uninstall();
+			}
+		}
+	}
+
+	public void testBundleGetSymbolicName2() throws Exception {
+		Bundle bundle = getContext().installBundle(
+				getWebServer() + "div.tb11.jar");
+		try {
+			String bsn = bundle.getSymbolicName();
+			assertNull(
+					"Testing the method getSymbolicName() without a symbolic name in the manifest",
+					bsn);
+
+			bundle.uninstall();
+			bsn = bundle.getSymbolicName();
+			bundle = null;
+
+			assertNull(
+					"Testing the method getSymbolicName() after uninstall the bundle (without a symbolic name in the manifest)",
+					bsn);
+		}
+		finally {
+			if (bundle != null) {
+				bundle.uninstall();
+			}
+		}
+	}
+
+	public void testBundleGetBundleContext1() throws Exception {
+		Bundle bundle = getContext().installBundle(
+				getWebServer() + "div.tb10.jar");
+		try {
+			assertNull("BundleContext for installed bundle must be null",
+					bundle.getBundleContext());
+
+			bundle.start();
+			assertNotNull("BundleContext for started bundle must not be null",
+					bundle.getBundleContext());
+
+			assertEquals("Bundle id via BundleContext must equal original id",
+					bundle.getBundleId(), bundle.getBundleContext().getBundle()
+							.getBundleId());
+
+			bundle.stop();
+			assertNull("BundleContext for stopped bundle must be null", bundle
+					.getBundleContext());
+		}
+		finally {
+			bundle.uninstall();
+			assertNull("BundleContext for uninstalled bundle must be null",
+					bundle.getBundleContext());
+		}
+
+		bundle = getContext().getBundle(0);
+
+		assertNotNull("BundleContext for system bundle must not be null",
+				bundle.getBundleContext());
+
+		assertEquals("Bundle id via BundleContext must equal zero", 0L, bundle
+				.getBundleContext().getBundle().getBundleId());
+
+		assertEquals(
+				"BundleContext for test case should match context passed to activator",
+				getContext(), getContext().getBundle().getBundleContext());
+	}
+
+	public void testBundleGetBundleContext2() throws Exception {
+		Bundle host, fragment;
+
+		fragment = getContext().installBundle(getWebServer() + "div.tb18.jar");
+		host = getContext().installBundle(getWebServer() + "div.tb17.jar");
+
+		try {
+			host.start(); // resolve the bundles
+			assertNotNull("BundleContext for host bundle must not be null",
+					host.getBundleContext());
+			assertNull("BundleContext for fragment bundle must be null",
+					fragment.getBundleContext());
+
+			host.stop();
+			assertNull("BundleContext for stopped host bundle must be null",
+					host.getBundleContext());
+			assertNull("BundleContext for fragment bundle must be null",
+					fragment.getBundleContext());
+		}
+		finally {
+			fragment.uninstall();
+			host.uninstall();
+		}
+	}
+
+	public void testBundleLoadClass1() throws Exception {
+		Bundle bundle = getContext().installBundle(
+				getWebServer() + "div.tb10.jar");
+		try {
+			bundle.start();
+			Class clazz = null;
+			try {
+				clazz = bundle.loadClass(basePkg + "tb10.Foo");
+			}
+			catch (ClassNotFoundException ex) {
+				fail(
+						"Testing the method loadClass() with an installed bundle and a existing class",
+						ex);
+			}
+
+			ServiceReference sr = getContext().getServiceReference(
+					basePkg + "tb10.TestService");
+
+			Object service = getContext().getService(sr);
+			ClassLoader classLoader = (ClassLoader) service.getClass()
+					.getMethod("getClassLoader", null).invoke(service, null);
+			assertEquals(
+					"Expecting the ClassLoader of the class and the bundle to be the same",
+					clazz.getClassLoader(), classLoader);
+
+			try {
+				clazz = bundle
+						.loadClass(basePkg + "tb10.NonExistent");
+				fail("Testing the method loadClass() with an installed bundle and a nonexistent class");
+			}
+			catch (ClassNotFoundException ex) {
+				// This is an expected exception and can be ignored
+			}
+
+			bundle.uninstall();
+			try {
+				bundle.loadClass(basePkg + "tb10.Foo");
+				fail("Testing the method after uninstall the bundle");
+			}
+			catch (IllegalStateException ex) {
+				// This is an expected exception and can be ignored
+				bundle = null;
+			}
+		}
+		finally {
+			if (bundle != null) {
+				bundle.uninstall();
+			}
+		}
+	}
+
+	public void testBundleLoadClass2() throws Exception {
+		Bundle bundle = getContext().installBundle(
+				getWebServer() + "div.tb13.jar");
+		try {
+			try {
+				bundle.loadClass(basePkg + "tb13.Foo");
+				fail("Testing the method loadClass() with a fragment bundle");
+			}
+			catch (ClassNotFoundException ex) {
+				// expected
+			}
+
+			try {
+				bundle.loadClass(basePkg + "tb13.Nonexistent");
+				fail("Testing the method loadClass() with a fragment bundle");
+			}
+			catch (ClassNotFoundException ex) {
+				// expected
+			}
+		}
+		finally {
+			bundle.uninstall();
+		}
+	}
+	
+	/**
+	 * Tests service registration.
+	 */
+	public void testBundleContextRegisterService() throws Exception {
+		Bundle tb24a = getContext().installBundle(
+				getWebServer() + "div.tb24a.jar");
+		Bundle tb24b = getContext().installBundle(
+				getWebServer() + "div.tb24b.jar");
+		Bundle tb24c = getContext().installBundle(
+				getWebServer() + "div.tb24c.jar");
+
+		tb24a.start();
+		tb24b.start();
+
+		try {
+			tb24c.start();
+			tb24c.stop();
+		}
+		catch (BundleException ex) {
+			fail("A bundle can register a service when the package is shared");
+		}
+		finally {
+			tb24b.stop();
+			tb24a.stop();
+
+			tb24c.uninstall();
+			tb24b.uninstall();
+			tb24a.uninstall();
+		}
+	}
+
+	/**
+	 * Test the Version constructor with legal parameters
+	 * 
+	 * @spec Version.<init>(int,int,int)
+	 */
+	public void testVersionConstructors() {
+		new Version(0, 0, 0);
+
+		new Version(0, 0, 0, "a");
+
+		/**
+		 * Test the Version constructor with legal parameters
+		 * 
+		 * @spec Version.<init>(int,int,int)
+		 */
+
+		new Version("0.0.0");
+
+		/**
+		 * Test the Version constructor with illegal parameters
+		 * 
+		 * @spec Version.<init>(int,int,int)
+		 */
+		try {
+			new Version(-1, -1, -1);
+			fail("Version created with illegal constructors");
+		}
+		catch (IllegalArgumentException ex) {
+			// This is an expected exception and may be ignored
+		}
+
+		/**
+		 * Test the Version constructor with legal parameters
+		 * 
+		 * @spec Version.<init>(int,int,int)
+		 */
+		try {
+			new Version(null);
+			fail("Version created with illegal constructors");
 		}
 		catch (Exception ex) {
-			ex.printStackTrace();
-			log(ex.getMessage(), "Fail");
+			// This is an expected exception and may be ignored
+		}
+
+		/**
+		 * Test the Version constructor with legal parameters
+		 * 
+		 * @spec Version.<init>(int,int,int)
+		 */
+		try {
+			new Version("");
+			fail("Version created with illegal constructors");
+		}
+		catch (IllegalArgumentException ex) {
+			// This is an expected exception and may be ignored
 		}
 	}
 
 	public void testVersionEquals() {
-		try {
-			new Equals(getContext(), getWebServer()).run();
+		Version version1;
+		Version version2;
+
+		version1 = new Version(0, 0, 0);
+		version2 = new Version(0, 0, 0);
+
+		assertEquals("Testing the method equals() with the same versions",
+				version1, version2);
+
+		/**
+		 * Test the method equals() with the same versions
+		 * 
+		 * @spec Version.equals(Object)
+		 */
+
+		version1 = new Version(0, 0, 0, "a");
+		version2 = new Version(0, 0, 0, "a");
+
+		assertEquals("Testing the method equals() with the same versions",
+				version1, version2);
+
+		/**
+		 * Test the method equals() with different versions
+		 * 
+		 * @spec Version.equals(Object)
+		 */
+
+		version1 = new Version(0, 0, 0);
+		version2 = new Version(1, 0, 0);
+
+		if (version1.equals(version2)) {
+			fail("Testing the method equals() with different versions");
 		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-			log(ex.getMessage(), "Fail");
+
+		/**
+		 * Test the method equals() with different versions
+		 * 
+		 * @spec Version.equals(Object)
+		 */
+
+		version1 = new Version(0, 0, 0);
+		version2 = new Version(0, 1, 0);
+
+		if (version1.equals(version2)) {
+			fail("Testing the method equals() with different versions");
+		}
+
+		/**
+		 * Test the method equals() with different versions
+		 * 
+		 * @spec Version.equals(Object)
+		 */
+
+		version1 = new Version(0, 0, 0);
+		version2 = new Version(0, 0, 1);
+
+		if (version1.equals(version2)) {
+			fail("Testing the method equals() with different versions");
+		}
+
+		/**
+		 * Test the method equals() with different versions
+		 * 
+		 * @spec Version.equals(Object)
+		 */
+
+		version1 = new Version(0, 0, 0, "a");
+		version2 = new Version(0, 0, 0, "b");
+
+		if (version1.equals(version2)) {
+			fail("Testing the method equals() with different versions");
+		}
+
+		/**
+		 * Test the method equals() with different versions
+		 * 
+		 * @spec Version.equals(Object)
+		 */
+
+		version1 = new Version(0, 0, 0, "a");
+		version2 = new Version(1, 1, 1, "b");
+
+		if (version1.equals(version2)) {
+			fail("Testing the method equals() with different versions");
+		}
+	}
+
+	/**
+	 * Test the method hashCode() when the equals() returns true
+	 * 
+	 * @spec Version.hashCode();
+	 */
+	public void testVersionHashCode() throws Exception {
+		Version version1;
+		Version version2;
+
+		version1 = new Version(0, 0, 0);
+		version2 = new Version(0, 0, 0);
+
+		assertEquals(
+				"The method hashCode() has different return values when the method equals() returns true for two Version instances",
+				version1.hashCode(), version2.hashCode());
+		version1 = new Version(0, 0, 0);
+		version2 = new Version(1, 0, 0);
+
+		if (version1.hashCode() == version2.hashCode()) {
+			fail("The method hashCode() has the same return value when the method equals() returns false for two Version instances");
 		}
 	}
 
 	public void testVersionGetMajor() {
-		try {
-			new GetMajor(getContext(), getWebServer()).run();
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-			log(ex.getMessage(), "Fail");
-		}
+		Version version;
+
+		version = new Version(1, 2, 3);
+
+		assertEquals(
+				"Testing the method getMajor() using the constructor Version(int,int,int)",
+				1, version.getMajor());
+
+		version = new Version("1.2.3");
+
+		assertEquals(
+				"Testing the method getMajor() using the constructor Version(String)",
+				1, version.getMajor());
 	}
 
 	public void testVersionGetMinor() {
-		try {
-			new GetMinor(getContext(), getWebServer()).run();
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-			log(ex.getMessage(), "Fail");
-		}
+		Version version;
+
+		version = new Version(1, 2, 3);
+
+		assertEquals(
+				"Testing the method getMinor() using the constructor Version(int,int,int)",
+				2, version.getMinor());
+
+		version = new Version("1.2.3");
+
+		assertEquals(
+				"Testing the method getMinor() using the constructor Version(String)",
+				2, version.getMinor());
 	}
 
 	public void testVersionGetMicro() {
-		try {
-			new GetMicro(getContext(), getWebServer()).run();
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-			log(ex.getMessage(), "Fail");
-		}
+		Version version;
+
+		version = new Version(1, 2, 3);
+
+		assertEquals(
+				"Testing the method getMicro() using the constructor Version(int,int,int)",
+				3, version.getMicro());
+
+		version = new Version("1.2.3");
+
+		assertEquals(
+				"Testing the method getMicro() using the constructor Version(String)",
+				3, version.getMicro());
+	}
+
+	/**
+	 * Test the method getQualifier() using the constructor
+	 * Version(int,int,int,String)
+	 * 
+	 * @spec Version.getQualifier()
+	 */
+	public void testVersionGetQualifier() throws Exception {
+		Version version;
+
+		version = new Version(1, 1, 1, "a");
+
+		assertEquals(
+				"Testing the method getQualifier() using the constructor Version(int,int,int,String)",
+				"a", version.getQualifier());
+
+		version = new Version("1.1.1.a");
+
+		assertEquals(
+				"Testing the method getQualifier using the constructor Version(String)",
+				"a", version.getQualifier());
 	}
 
 	public void testVersionCompareTo() {
-		try {
-			new CompareTo(getContext(), getWebServer()).run();
+		/**
+		 * Test the method compareTo() with first version number less than
+		 * second version number
+		 * 
+		 * @spec Version.compareTo(Version);
+		 */
+		Version version1;
+		Version version2;
+
+		version1 = new Version(1, 1, 1);
+		version2 = new Version(2, 1, 1);
+
+		if (version1.compareTo(version2) >= 0) {
+			fail("Testing the method compareTo() with first version number less than second version number");
 		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-			log(ex.getMessage(), "Fail");
+
+		/**
+		 * Test the method compareTo() with first version number greater than
+		 * second version number
+		 * 
+		 * @spec Version.compareTo(Version);
+		 */
+
+		version1 = new Version(2, 1, 1);
+		version2 = new Version(1, 1, 1);
+
+		if (version1.compareTo(version2) <= 0) {
+			fail("Testing the method compareTo() with first version number greater than second version number");
+		}
+
+		/**
+		 * Test the method compareTo() with same version numbers
+		 * 
+		 * @spec Version.compareTo(Version);
+		 */
+
+		version1 = new Version(1, 1, 1);
+		version2 = new Version(1, 1, 1);
+
+		if (version1.compareTo(version2) != 0) {
+			fail("Testing the method compareTo() with same version numbers");
+		}
+
+		/**
+		 * Test the method compareTo() with an incorrect object
+		 * 
+		 * @spec Version.compareTo(Version);
+		 */
+		String incorrect;
+		Version version;
+
+		incorrect = "";
+		version = new Version(1, 1, 1);
+
+		try {
+			version.compareTo(incorrect);
+			fail("Testing the method compareTo() with an incorrect object");
+		}
+		catch (ClassCastException ex) {
+			// This is an expected exception and can be ignored
 		}
 	}
 
 	public void testVersionInstanceOf() {
-		try {
-			new InstanceOf(getContext(), getWebServer()).run();
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-			log(ex.getMessage(), "Fail");
-		}
+		Object version;
+
+		version = new Version(1, 1, 1);
+
+		assertTrue(
+				"The class Version does not implements Comparable interface",
+				version instanceof Comparable);
 	}
 
 	public void testVersionConstantsValues() {
-		try {
-			new org.osgi.test.cases.framework.junit.div.Version.Constants(
-					getContext(), getWebServer()).run();
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-			log(ex.getMessage(), "Fail");
-		}
-	}
-
-	/**
-	 * Tests localization of manifest headers.
-	 */
-	public void testBundleGetHeaders() {
-		try {
-			(new GetHeaders(getContext(), getWebServer())).run();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			log("Error.", e.getMessage());
-
-		}
-	}
-
-	/**
-	 * Tests service registration.
-	 */
-	public void testBundleContextRegisterService() {
-		try {
-			(new RegisterService(getContext(), getWebServer())).run();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			log("Error.", e.getMessage());
-
-		}
+		assertEquals("emptyVersion not equal to 0.0.0", new Version(0, 0, 0),
+				Version.emptyVersion);
 	}
 
 	public static void assertEquals(String message, Comparator comparator,
@@ -905,6 +1195,17 @@ public class DivTests extends DefaultTestBundleControl implements
 			assertEquals(message, 0, comparator.compare(expected.get(i), actual
 					.get(i)));
 		}
+	}
+
+	private String reportProcessorOS() {
+		String os = getContext().getProperty("org.osgi.framework.os.name");
+		String proc = getContext().getProperty("org.osgi.framework.processor");
+		StringBuffer sb = new StringBuffer();
+		sb.append("Current osname=\"").append(os).append("\" processor=\"")
+				.append(proc);
+		sb
+				.append("\". For allowed constants see http://www.osgi.org/Specifications/Reference");
+		return sb.toString();
 	}
 
 }

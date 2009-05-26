@@ -25,26 +25,39 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.framework.div.tb17;
+package org.osgi.test.cases.framework.div.tb12;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
+import org.osgi.test.cases.div.tb2.NativeCode;
 
 /**
- * Bundle for the NativeCode from a fragment bundle test. This host bundle contains a
- * fragment bundle that in his turn contains a native library. The bundle should be
- * able to load the native code library.
+ * Bundle for the NativeCode optional clause test. This bundle has an optional
+ * clause present to make sure it will be loaded even if no other native code
+ * clause matches. The clauses were built to intentionally NOT match in order to
+ * check if the bundle is loaded.
  * 
  * @author Jorge Mascena
  */
-public class NativeCode implements BundleActivator {
+public class NativeCodeFilterOptional implements BundleActivator {
 	/**
-	 * Starts the bundle. Excercises the native code. The bundle should load the
-	 * native library from its fragment bundle.
+	 * Starts the bundle. Excercises the native code. The
+	 * <CODE>org.osgi.test.cases.div.tb2.NativeCode.test()</CODE> call
+	 * should throw a BundleException since no native code clause should match.
 	 *  
 	 * @param bc the context where the bundle is executed.
 	 */
 	public void start(BundleContext bc) throws BundleException {
-		org.osgi.test.cases.div.tb2.NativeCode.test();
+		try {
+			NativeCode.test();
+		}
+		catch (UnsatisfiedLinkError e) {
+			// there should be no match
+			return;
+		}
+		// if started ok, then there was a match
+		throw new BundleException("No native code clause should match");
 	}
 
 	/**
@@ -53,5 +66,6 @@ public class NativeCode implements BundleActivator {
 	 * @param bc the context where the bundle is executed.
 	 */
 	public void stop(BundleContext bc) {
+		// empty
 	}
 }

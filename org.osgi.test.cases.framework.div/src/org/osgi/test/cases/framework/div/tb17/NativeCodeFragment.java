@@ -25,51 +25,37 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.framework.junit.div.BundleEvent;
+package org.osgi.test.cases.framework.div.tb17;
 
+import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleEvent;
+import org.osgi.framework.BundleException;
+import org.osgi.test.cases.div.tb2.NativeCode;
 
 /**
+ * Bundle for the NativeCode from a fragment bundle test. This host bundle contains a
+ * fragment bundle that in his turn contains a native library. The bundle should be
+ * able to load the native code library.
  * 
- * Test the constants of the class org.osgi.framework.BundleEvent.
- * 
- * @version $Revision$
+ * @author Jorge Mascena
  */
-public class Constants {
-
-	private BundleContext	context;
-	private String			tcHome;
+public class NativeCodeFragment implements BundleActivator {
+	/**
+	 * Starts the bundle. Excercises the native code. The bundle should load the
+	 * native library from its fragment bundle.
+	 *  
+	 * @param bc the context where the bundle is executed.
+	 */
+	public void start(BundleContext bc) throws BundleException {
+		NativeCode.test();
+	}
 
 	/**
-	 * Creates a new Constants
+	 * Stops the bundle.
 	 * 
-	 * @param _context the bundle context
-	 * @param _link the link with test director
-	 * @param _tcHome the test case home
+	 * @param bc the context where the bundle is executed.
 	 */
-	public Constants(BundleContext _context, String _tcHome) {
-		context = _context;
-		tcHome = _tcHome;
-	}
-
-	/**
-	 * Run the tests
-	 */
-	public void run() throws Exception {
-		testConstantValues0001();
-	}
-
-	/**
-	 * Test the constant values
-	 */
-	public void testConstantValues0001() throws Exception {
-		if (BundleEvent.RESOLVED != 0x00000020) {
-			throw new ConstantsTestException("Testing constant values");
-		}
-
-		if (BundleEvent.UNRESOLVED != 0x00000040) {
-			throw new ConstantsTestException("Testing constant values");
-		}
+	public void stop(BundleContext bc) {
+		// empty
 	}
 }

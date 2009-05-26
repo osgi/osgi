@@ -34,11 +34,5 @@ package org.osgi.test.cases.framework.div.tb10;
  * @version $Revision$
  */
 public class Bar {
-
-	/**
-	 * Creates a new instance of Bar
-	 */
-	public Bar() {
-	}
-
+	// empty
 }

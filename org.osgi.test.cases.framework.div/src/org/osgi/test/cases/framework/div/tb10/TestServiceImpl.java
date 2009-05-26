@@ -36,12 +36,6 @@ package org.osgi.test.cases.framework.div.tb10;
 public class TestServiceImpl implements TestService {
 
 	/**
-	 * Creates a new TestServiceImpl
-	 */
-	public TestServiceImpl() {
-	}
-
-	/**
 	 * Return the service classloader
 	 */
 	public ClassLoader getClassLoader() {

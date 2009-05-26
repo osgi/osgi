@@ -1,11 +1,8 @@
-Manifest-Version: 1.0
 Bundle-Name: ${p}.tb24a
 Bundle-SymbolicName: ${p}.tb24a
 Bundle-Version: 4
-Bundle-ManifestVersion: 2
-$(IMPORT-PACKAGE)
-Export-Package: ${p}.tb24a;version="1.0.0"
-$(PRIVATE-PACKAGE)
+Export-Package: ${p}.tb24a;version="1.0.0";-noimport:=true
+Private-Package: ${p}.tb24a
 
 
 

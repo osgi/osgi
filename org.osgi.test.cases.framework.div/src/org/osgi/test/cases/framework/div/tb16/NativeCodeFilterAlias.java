@@ -25,74 +25,39 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.framework.junit.div.BundleContext;
+package org.osgi.test.cases.framework.div.tb16;
 
-import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
+import org.osgi.test.cases.div.tb2.NativeCode;
 
 /**
+ * Bundle for the NativeCode selection filter test. This bundle has no optional
+ * clause present so the bundle should NOT be loaded if no other native code
+ * clause matches. The clauses were built to match in order to
+ * check if the bundle is properly loaded for the specified windowing systems.
  * 
- * This class tests the method
- * org.osgi.framework.BundleContext.registerService().
- * 
- * @version $Revision$
+ * @author Jorge Mascena
  */
-public class RegisterService {
-
-	private BundleContext	context;
-	private String			tcHome;
+public class NativeCodeFilterAlias implements BundleActivator {
+	/**
+	 * Starts the bundle. Excercises the native code. The bundle should not be
+	 * loaded since no native code clause matches and no optional clause is
+	 * present.
+	 *  
+	 * @param bc the context where the bundle is executed.
+	 */
+	public void start(BundleContext bc) throws BundleException {
+		NativeCode.test();
+	}
 
 	/**
-	 * Creates a new RegisterService instance
+	 * Stops the bundle.
 	 * 
-	 * @param _context the bundle context
-	 * @param _link the link with test director
-	 * @param _tcHome the test case home
+	 * @param bc the context where the bundle is executed.
 	 */
-	public RegisterService(BundleContext _context, String _tcHome) {
-		context = _context;
-		tcHome = _tcHome;
+	public void stop(BundleContext bc) {
+		// empty
 	}
-
-	/**
-	 * Run the tests
-	 */
-	public void run() throws Exception {
-		testRegisterService001();
-	}
-
-	/**
-	 * Test the behavior of the method registerService() when the service class
-	 * is imported from a shared package.
-	 * 
-	 * @spec BundleContext.registerService(String,Object,Dictionary)
-	 */
-	public void testRegisterService001() throws Exception {
-		Bundle tb24a;
-		Bundle tb24b;
-		Bundle tb24c;
-		
-		tb24a = context.installBundle(tcHome+"tb24a.jar");
-		tb24b = context.installBundle(tcHome+"tb24b.jar");
-		tb24c = context.installBundle(tcHome+"tb24c.jar");
-		
-		tb24a.start();
-		tb24b.start();
-		
-		try {
-			tb24c.start();
-			tb24c.stop();
-		} catch (BundleException ex) {
-			throw new BundleTestException("A bundle can register a service when the package is shared");
-		} finally {
-			tb24b.stop();
-			tb24a.stop();
-			
-			tb24c.uninstall();
-			tb24b.uninstall();
-			tb24a.uninstall();
-		}
-	}
-
 }

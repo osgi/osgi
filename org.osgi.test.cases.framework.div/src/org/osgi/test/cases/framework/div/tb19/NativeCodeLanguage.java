@@ -25,24 +25,28 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.framework.div.tb20;
+package org.osgi.test.cases.framework.div.tb19;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
+import org.osgi.test.cases.div.tb2.NativeCode;
 
 /**
- * Bundle for native code os language test. This bundle references all valid languages
- * in the native code clauses, so it should be successfully loaded.
+ * Bundle for native code os version test. This bundle references invalid languages
+ * in the native code clauses, so it should not be loaded since there's no match.
  * 
  * @author Jorge Mascena
  */
-public class NativeCode implements BundleActivator {
+public class NativeCodeLanguage implements BundleActivator {
 	/**
-	 * Starts the bundle. Exercises the native code.
+	 * Starts the bundle. This method should not be invoked since the bundle is not
+	 * supposed to be loaded.
 	 *  
 	 * @param bc the context where the bundle is executed.
 	 */
 	public void start(BundleContext bc) throws BundleException {
-		org.osgi.test.cases.div.tb2.NativeCode.test();
+		NativeCode.test();
 	}
 
 	/**
@@ -51,5 +55,6 @@ public class NativeCode implements BundleActivator {
 	 * @param bc the context where the bundle is executed.
 	 */
 	public void stop(BundleContext bc) {
+		// empty
 	}
 }

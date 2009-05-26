@@ -25,11 +25,13 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.framework.junit.div.Bundle;
+package org.osgi.test.cases.framework.junit.div;
 
-import java.util.*;
+import java.util.Dictionary;
+import java.util.Locale;
 
-import org.osgi.framework.*;
+import org.osgi.framework.Bundle;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * Test the method Bundle.getHeaders() and Bundle.getHeaders(Locale).
@@ -38,10 +40,8 @@ import org.osgi.framework.*;
  * 
  * @version $Revision$
  */
-public class GetHeaders {
+public class ManifestLocalizationTests extends DefaultTestBundleControl {
 
-	private BundleContext	_context;
-	private String			_tcHome;
 	private String[]		manifestHeadersKeys							= {
 			"Bundle-Name", "Bundle-Description", "Bundle-Vendor",
 			"Bundle-Version", "Bundle-DocURL", "Bundle-ContactAddress",
@@ -154,47 +154,26 @@ public class GetHeaders {
 			"docurl", "contactinfo", "bundlecategory", "bundlecopyright"};
 
 	/**
-	 * Creates a new GetHeaders
-	 * 
-	 * @param context content bundle context for this test, tcHome string with
-	 *        test bundle home for this test
-	 */
-	public GetHeaders(BundleContext context, String tcHome) {
-		_context = context;
-		_tcHome = tcHome;
-
-	}
-
-	/**
 	 * Run tests of this class
 	 */
-	public void run() throws Exception {
-		Locale defaultLocale = Locale.getDefault();
-		testGetHeaders001();
-		testGetHeaders002();
-		testGetHeaders003();
-		testGetHeaders004();
-		testGetHeaders005();
-		testGetHeaders006();
-		testGetHeaders007();
-		testGetHeaders008();
-		testGetHeaders009();
-		testGetHeaders010();
-		testGetHeaders011();
-		testGetHeaders012();
-		testGetHeaders013();
-		Locale.setDefault(defaultLocale);
+	private Locale			defaultLocale;
+	protected void setUp() throws Exception {
+		defaultLocale = Locale.getDefault();
 	}
 
+	protected void tearDown() throws Exception {
+		Locale.setDefault(defaultLocale);
+	}
+	
 	/**
 	 * Tests manifest headers localization for a bundle that does not have
 	 * locale file.
 	 * 
 	 * @spec Bundle.getHeaders()
 	 */
-	void testGetHeaders001() throws Exception {
+	public void testGetHeaders001() throws Exception {
 
-		Bundle tb1 = _context.installBundle(_tcHome + "tb1.jar");
+		Bundle tb1 = getContext().installBundle(getWebServer() + "div.tb1.jar");
 		tb1.start();
 		Dictionary h = tb1.getHeaders();
 
@@ -220,9 +199,9 @@ public class GetHeaders {
 	 * 
 	 * @spec Bundle.getHeaders()
 	 */
-	void testGetHeaders002() throws Exception {
+	public void testGetHeaders002() throws Exception {
 
-		Bundle tb8 = _context.installBundle(_tcHome + "tb8.jar");
+		Bundle tb8 = getContext().installBundle(getWebServer() + "div.tb8.jar");
 		tb8.start();
 		Dictionary h = tb8.getHeaders();
 
@@ -258,10 +237,10 @@ public class GetHeaders {
 	 * 
 	 * @spec Bundle.getHeaders()
 	 */
-	void testGetHeaders003() throws Exception {
+	public void testGetHeaders003() throws Exception {
 		// specify default locale
 		Locale.setDefault(new Locale("en", "US"));
-		Bundle tb9 = _context.installBundle(_tcHome + "tb9.jar");
+		Bundle tb9 = getContext().installBundle(getWebServer() + "div.tb9.jar");
 		tb9.start();
 		Dictionary h = tb9.getHeaders();
 
@@ -328,9 +307,9 @@ public class GetHeaders {
 	 * 
 	 * @spec Bundle.getHeaders()
 	 */
-	void testGetHeaders004() throws Exception {
+	public void testGetHeaders004() throws Exception {
 		Locale.setDefault(new Locale("pt", "BR"));
-		Bundle tb9 = _context.installBundle(_tcHome + "tb9.jar");
+		Bundle tb9 = getContext().installBundle(getWebServer() + "div.tb9.jar");
 		tb9.start();
 		Dictionary h = tb9.getHeaders();
 
@@ -353,9 +332,9 @@ public class GetHeaders {
 	 * 
 	 * @spec Bundle.getHeaders(String)
 	 */
-	void testGetHeaders005() throws Exception {
+	public void testGetHeaders005() throws Exception {
 		Locale.setDefault(new Locale("en", "US"));
-		Bundle tb1 = _context.installBundle(_tcHome + "tb1.jar");
+		Bundle tb1 = getContext().installBundle(getWebServer() + "div.tb1.jar");
 		tb1.start();
 
 		Dictionary h = tb1.getHeaders("en_US");
@@ -380,9 +359,9 @@ public class GetHeaders {
 	 * 
 	 * @spec Bundle.getHeaders(String)
 	 */
-	void testGetHeaders006() throws Exception {
+	public void testGetHeaders006() throws Exception {
 		Locale.setDefault(new Locale("en", "US"));
-		Bundle tb8 = _context.installBundle(_tcHome + "tb8.jar");
+		Bundle tb8 = getContext().installBundle(getWebServer() + "div.tb8.jar");
 		tb8.start();
 		Dictionary h = tb8.getHeaders("en_US");
 
@@ -405,8 +384,8 @@ public class GetHeaders {
 	 * 
 	 * @spec Bundle.getHeaders(String)
 	 */
-	void testGetHeaders007() throws Exception {
-		Bundle tb9 = _context.installBundle(_tcHome + "tb9.jar");
+	public void testGetHeaders007() throws Exception {
+		Bundle tb9 = getContext().installBundle(getWebServer() + "div.tb9.jar");
 		tb9.start();
 		Dictionary h = tb9.getHeaders("en");
 
@@ -430,9 +409,9 @@ public class GetHeaders {
 	 * 
 	 * @spec Bundle.getHeaders(String)
 	 */
-	void testGetHeaders008() throws Exception {
+	public void testGetHeaders008() throws Exception {
 		Locale.setDefault(new Locale("en", "US"));
-		Bundle tb9 = _context.installBundle(_tcHome + "tb9.jar");
+		Bundle tb9 = getContext().installBundle(getWebServer() + "div.tb9.jar");
 		tb9.start();
 		Dictionary h = tb9.getHeaders("pt_BR");
 
@@ -456,9 +435,9 @@ public class GetHeaders {
 	 * 
 	 * @spec Bundle.getHeaders(String)
 	 */
-	void testGetHeaders009() throws Exception {
+	public void testGetHeaders009() throws Exception {
 		Locale.setDefault(new Locale("pt", "BR"));
-		Bundle tb9 = _context.installBundle(_tcHome + "tb9.jar");
+		Bundle tb9 = getContext().installBundle(getWebServer() + "div.tb9.jar");
 		tb9.start();
 		Dictionary h = tb9.getHeaders("en");
 
@@ -496,13 +475,14 @@ public class GetHeaders {
 	 * 
 	 * @spec Bundle.getHeaders(String)
 	 */
-	void testGetHeaders010() throws Exception {
+	public void testGetHeaders010() throws Exception {
 		
 		Locale.setDefault(new Locale("pt", "BR"));
 		// install host bundle
-		Bundle tb9 = _context.installBundle(_tcHome + "tb9.jar");
+		Bundle tb9 = getContext().installBundle(getWebServer() + "div.tb9.jar");
 		// install fragment bundle
-		Bundle tb14 = _context.installBundle(_tcHome + "tb14.jar");
+		Bundle tb14 = getContext().installBundle(
+				getWebServer() + "div.tb14.jar");
 		
 		// Start the bundles to force them to resolve.
 		tb9.start();
@@ -551,11 +531,12 @@ public class GetHeaders {
 	 * 
 	 * @spec Bundle.getHeaders(String)
 	 */
-	void testGetHeaders011() throws Exception {
+	public void testGetHeaders011() throws Exception {
 
 		Locale.setDefault(new Locale("en", "US"));
-		Bundle tb14 = _context.installBundle(_tcHome + "tb14.jar");
-		Bundle tb9 = _context.installBundle(_tcHome + "tb9.jar");
+		Bundle tb14 = getContext().installBundle(
+				getWebServer() + "div.tb14.jar");
+		Bundle tb9 = getContext().installBundle(getWebServer() + "div.tb9.jar");
 		tb9.start();
 		// When searching for a localization file of a host bundle,
 		// it must first look in the bundle and then look in the currently
@@ -582,13 +563,14 @@ public class GetHeaders {
 	 * 
 	 * @spec Bundle.getHeaders(String)
 	 */
-	void testGetHeaders012() throws Exception {
+	public void testGetHeaders012() throws Exception {
 
 		Locale.setDefault(new Locale("en", "US"));
 		// install fragment bundle
-		Bundle tb14 = _context.installBundle(_tcHome + "tb14.jar");
+		Bundle tb14 = getContext().installBundle(
+				getWebServer() + "div.tb14.jar");
 		// install host bundle
-		Bundle tb9 = _context.installBundle(_tcHome + "tb9.jar");
+		Bundle tb9 = getContext().installBundle(getWebServer() + "div.tb9.jar");
 
 		// When searching for a localization file of a fragment bundle,
 		// it must first look in the fragment’s host bundle (with the lowest
@@ -618,14 +600,17 @@ public class GetHeaders {
 	 * 
 	 * @spec Bundle.getHeaders(String)
 	 */
-	void testGetHeaders013() throws Exception {
+	public void testGetHeaders013() throws Exception {
 		// default locale should exist in any of the following
 		// bundles locale file
 		Locale.setDefault(new Locale("fr", "CA"));
-		Bundle tb14 = _context.installBundle(_tcHome + "tb14.jar");
-		Bundle tb23 = _context.installBundle(_tcHome + "tb23.jar");
-		Bundle tb9 = _context.installBundle(_tcHome + "tb9.jar");
-		Bundle tb9a = _context.installBundle(_tcHome + "tb9a.jar");
+		Bundle tb14 = getContext().installBundle(
+				getWebServer() + "div.tb14.jar");
+		Bundle tb23 = getContext().installBundle(
+				getWebServer() + "div.tb23.jar");
+		Bundle tb9 = getContext().installBundle(getWebServer() + "div.tb9.jar");
+		Bundle tb9a = getContext().installBundle(
+				getWebServer() + "div.tb9a.jar");
 		tb9.start();
 		tb9a.start();
 		// If a fragment is attached to more than one host, the search

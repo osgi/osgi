@@ -25,30 +25,37 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.framework.junit.div.BundleEvent;
+package org.osgi.test.cases.framework.div.tb21;
+
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
+import org.osgi.test.cases.div.tb2.NativeCode;
 
 /**
+ * Bundle for native code os version test. This bundle should not be
+ * loaded since the version ranges in the native code clauses should
+ * not match any valid os version.
  * 
- * Exception thrown when the constants test fail
- * 
- * @version $Revision$
+ * @author Jorge Mascena
  */
-public class ConstantsTestException extends Exception {
-
+public class NativeCodeVersion implements BundleActivator {
 	/**
-	 * Creates a new ConstantsTestException
+	 * Starts the bundle. This method should not be invoked since the
+	 * version range in the native code clauses should not match.
+	 *  
+	 * @param bc the context where the bundle is executed.
 	 */
-	public ConstantsTestException() {
-		super();
+	public void start(BundleContext bc) throws BundleException {
+		NativeCode.test();
 	}
 
 	/**
-	 * Creates a new ConstantsTestException with the specified message
+	 * Stops the bundle.
 	 * 
-	 * @param _message the message
+	 * @param bc the context where the bundle is executed.
 	 */
-	public ConstantsTestException(String _message) {
-		super(_message);
+	public void stop(BundleContext bc) {
+		// empty
 	}
-
 }

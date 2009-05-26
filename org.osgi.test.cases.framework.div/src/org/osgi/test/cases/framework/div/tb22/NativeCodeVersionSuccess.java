@@ -25,74 +25,35 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.framework.junit.div.BundleException;
+package org.osgi.test.cases.framework.div.tb22;
 
+import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
+import org.osgi.test.cases.div.tb2.NativeCode;
 
 /**
+ * Bundle for native code os version test. This bundle references all valid versions
+ * in the native code clauses, so it should be successfully loaded.
  * 
- * This class tests the method org.osgi.framework.BundleException.getCause().
- * 
- * @version $Revision$
+ * @author Jorge Mascena
  */
-public class GetCause {
-
-	private BundleContext	context;
-	private String			tcHome;
+public class NativeCodeVersionSuccess implements BundleActivator {
+	/**
+	 * Starts the bundle. Exercises the native code.
+	 *  
+	 * @param bc the context where the bundle is executed.
+	 */
+	public void start(BundleContext bc) throws BundleException {
+		NativeCode.test();
+	}
 
 	/**
-	 * Creates a new GetCause
+	 * Stops the bundle.
 	 * 
-	 * @param _context the bundle context
-	 * @param _link the link with test director
-	 * @param _tcHome the test case home
+	 * @param bc the context where the bundle is executed.
 	 */
-	public GetCause(BundleContext _context, String _tcHome) {
-		context = _context;
-		tcHome = _tcHome;
+	public void stop(BundleContext bc) {
+		// empty
 	}
-
-	/**
-	 * Run the tests
-	 */
-	public void run() throws Exception {
-		testGetCause0001();
-		testGetCause0002();
-	}
-
-	/**
-	 * Test the method getCause() with a cause
-	 * 
-	 * @spec BundleException.getCause()
-	 */
-	public void testGetCause0001() throws Exception {
-		BundleException bundleException;
-		Exception exception;
-
-		exception = new Exception();
-		bundleException = new BundleException("", exception);
-
-		if (bundleException.getCause() != exception) {
-			throw new BundleExceptionTestException(
-					"Testing the method getCause() with a cause");
-		}
-	}
-
-	/**
-	 * Test the method getCause() without a cause
-	 * 
-	 * @spec BundleException.getCause()
-	 */
-	public void testGetCause0002() throws Exception {
-		BundleException bundleException;
-
-		bundleException = new BundleException("");
-
-		if (bundleException.getCause() != null) {
-			throw new BundleExceptionTestException(
-					"Testing the method getCause() without a cause");
-		}
-	}
-
 }

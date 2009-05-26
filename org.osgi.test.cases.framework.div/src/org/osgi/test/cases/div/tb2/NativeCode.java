@@ -6,7 +6,9 @@
  */
 package org.osgi.test.cases.div.tb2; // could not rename this package without rebuilding native so/dll
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
 
 /**
  * Bundle for the NativeCode test.
@@ -40,17 +42,18 @@ public class NativeCode implements BundleActivator {
 		test();
 	}
 
-	public static void test() throws BundleException {
+	public static void test() {
 		NativeCode n = new NativeCode();
-		if (initOk) {
-			n.count(10000000);
+		if (!initOk) {
+			throw new UnsatisfiedLinkError("Native code not initialized.");
 		}
-		else
-			throw new BundleException("Native code not initialized.");
+		n.count(10000000);
 	}
+
 	/**
 	 * Stops the bundle.
 	 */
 	public void stop(BundleContext bc) {
+		// empty
 	}
 }

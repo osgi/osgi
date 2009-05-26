@@ -25,72 +25,38 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.framework.junit.div.Version;
+package org.osgi.test.cases.framework.div.tb15;
 
+import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.Version;
-import org.osgi.test.cases.framework.junit.div.Bundle.BundleTestException;
+import org.osgi.framework.BundleException;
 
 /**
- * Test the method org.osgi.framework.Version.getMajor().
+ * Bundle for the NativeCode optional clause test. This bundle has no optional
+ * clause present so the bundle should NOT be loaded if no other native code
+ * clause matches. The clauses were built to intentionally NOT match in order to
+ * check if the bundle is not loaded.
  * 
- * @version $Revision$
+ * @author Jorge Mascena
  */
-public class GetMajor {
-
-	private BundleContext	context;
-	private String			tcHome;
+public class NativeCodeFilterNoOptional implements BundleActivator {
+	/**
+	 * Starts the bundle. Excercises the native code. The bundle should not be
+	 * loaded since no native code clause matches and no optional clause is
+	 * present.
+	 *  
+	 * @param bc the context where the bundle is executed.
+	 */
+	public void start(BundleContext bc) throws BundleException {
+		throw new BundleException("Bundle should not be resolved");
+	}
 
 	/**
-	 * Creates a new GetMajor
+	 * Stops the bundle.
 	 * 
-	 * @param _context the bundle context
-	 * @param _link the link with test director
-	 * @param _tcHome the test case home path
+	 * @param bc the context where the bundle is executed.
 	 */
-	public GetMajor(BundleContext _context, String _tcHome) {
-		context = _context;
-		tcHome = _tcHome;
+	public void stop(BundleContext bc) {
+		// empty
 	}
-
-	/**
-	 * Run the tests for the method GetMajor
-	 */
-	public void run() throws Exception {
-		testGetMajor0001();
-		testGetMajor0002();
-	}
-
-	/**
-	 * Test the method getMajor() using the constructor Version(int,int,int)
-	 * 
-	 * @spec Version.getMajor()
-	 */
-	public void testGetMajor0001() throws Exception {
-		Version version;
-
-		version = new Version(1, 1, 1);
-
-		if (version.getMajor() != 1) {
-			throw new BundleTestException(
-					"Testing the method getMajor() using the constructor Version(int,int,int)");
-		}
-	}
-
-	/**
-	 * Test the method getMajor() using the constructor Version(String)
-	 * 
-	 * @spec Version.getMajor()
-	 */
-	public void testGetMajor0002() throws Exception {
-		Version version;
-
-		version = new Version("1.1.1");
-
-		if (version.getMajor() != 1) {
-			throw new BundleTestException(
-					"Testing the method getMajor() using the constructor Version(String)");
-		}
-	}
-
 }

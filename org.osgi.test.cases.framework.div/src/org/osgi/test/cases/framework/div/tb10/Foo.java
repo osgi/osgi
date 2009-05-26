@@ -34,11 +34,5 @@ package org.osgi.test.cases.framework.div.tb10;
  * @version $Revision$
  */
 public class Foo {
-
-	/**
-	 * Creates a new instance of Foo
-	 */
-	public Foo() {
-	}
-
+	// empty
 }
