@@ -21,6 +21,6 @@ import java.util.Properties;
 public class DefaultConfigTwo extends Properties {
     public DefaultConfigTwo() {
         super();
-        this.setProperty("str", "def");
+        this.setProperty("str_2", "def");
     }
 }

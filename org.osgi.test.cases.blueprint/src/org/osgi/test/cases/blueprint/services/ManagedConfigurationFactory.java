@@ -28,8 +28,6 @@ public class ManagedConfigurationFactory implements ManagedConfigurationInterfac
     private String factoryPid;
     // the list of configurations we manage.
     private List/*<Dictionary>*/ dicList;
-    // the retrieved Configuration instance
-    private List/*<Configuration>*/ configList;
 
     public ManagedConfigurationFactory(String factoryPid, List dicList) {
         this.factoryPid = factoryPid;
@@ -54,10 +52,12 @@ public class ManagedConfigurationFactory implements ManagedConfigurationInterfac
                 Configuration config = admin.createFactoryConfiguration(this.factoryPid);
                 // create a config for this props set
                 config.update(props);
-                configList.add(config);
+                // make sure the configuration is unbound by default
+                config.setBundleLocation(null);
             }
         } catch (Exception e) {
             // just ignore errors for the test (which should not occur)
+            e.printStackTrace();
         }
     }
 
@@ -71,9 +71,7 @@ public class ManagedConfigurationFactory implements ManagedConfigurationInterfac
      */
     public void remove(ConfigurationAdmin admin) {
         try {
-            // remove any reference we might have cached.
-            this.dicList = null;
-            String spec = '(' + Constants.SERVICE_PID + '=' + this.factoryPid + ')'; //?
+            String spec = '(' + ConfigurationAdmin.SERVICE_FACTORYPID + '=' + this.factoryPid + ')'; 
             // delete any configs that match this pid.
             Configuration[] configs = admin.listConfigurations(spec);
             if (configs != null) {
@@ -83,6 +81,7 @@ public class ManagedConfigurationFactory implements ManagedConfigurationInterfac
             }
         } catch (Exception e) {
             // just ignore errors for the test (which should not occur)
+            e.printStackTrace();
         }
     }
 
@@ -96,9 +95,12 @@ public class ManagedConfigurationFactory implements ManagedConfigurationInterfac
         try {
             Configuration config = admin.createFactoryConfiguration(this.factoryPid);
             config.update(newProps);
+            // make sure the configuration is unbound by default
+            config.setBundleLocation(null);
             dicList.add(newProps);
         } catch (Exception e) {
             // just ignore errors for the test (which should not occur)
+            e.printStackTrace();
         }
     }
 
@@ -110,7 +112,7 @@ public class ManagedConfigurationFactory implements ManagedConfigurationInterfac
      */
     public void update(ConfigurationAdmin admin, Dictionary newProps) {
         try {
-            String spec = '(' + Constants.SERVICE_PID + '=' + this.factoryPid + ')';
+            String spec = '(' + ConfigurationAdmin.SERVICE_FACTORYPID + '=' + this.factoryPid + ')';
             // all configs that match this factory pid.
             Configuration[] configs = admin.listConfigurations(spec);
             if (configs != null) {
@@ -120,6 +122,7 @@ public class ManagedConfigurationFactory implements ManagedConfigurationInterfac
             }
         } catch (Exception e) {
             // just ignore errors for the test (which should not occur)
+            e.printStackTrace();
         }
     }
 

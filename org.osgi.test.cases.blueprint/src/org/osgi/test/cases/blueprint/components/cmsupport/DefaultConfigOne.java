@@ -21,6 +21,6 @@ import java.util.HashMap;
 public class DefaultConfigOne extends HashMap {
     public DefaultConfigOne(){
         super();
-        this.put("str", new String("def"));
+        this.put("str_1", new String("def"));
     }
 }

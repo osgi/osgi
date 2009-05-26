@@ -7,6 +7,7 @@
         interface="org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection">
         <bpcm:managed-component class="org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection">
             <bpcm:managed-properties persistent-id="" update-strategy="component-managed" update-method="makeUpdate"/>
+            <argument value="managedComp"/>
         </bpcm:managed-component>
     </bpcm:managed-service-factory>
 
