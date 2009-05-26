@@ -11,7 +11,7 @@
        <property name="serviceManager">
            <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
        </property>
-       <property name="set">
+       <property name="genericSet">
            <ref-set interface="org.osgi.test.cases.blueprint.services.TestServiceOne" availability="optional"/>
        </property>
    </bean>

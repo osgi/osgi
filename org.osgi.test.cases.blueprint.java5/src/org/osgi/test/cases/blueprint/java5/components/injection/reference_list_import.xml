@@ -11,7 +11,7 @@
        <property name="serviceManager">
            <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
        </property>
-       <property name="list">
+       <property name="genericList">
            <ref-list interface="org.osgi.test.cases.blueprint.services.TestServiceOne" availability="optional"/>
        </property>
    </bean>

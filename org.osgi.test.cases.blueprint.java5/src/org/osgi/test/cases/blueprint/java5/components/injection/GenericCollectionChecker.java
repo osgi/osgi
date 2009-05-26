@@ -65,7 +65,7 @@ public class GenericCollectionChecker extends DependencyDriver {
      *
      * @param l
      */
-    public void setList(List<ServiceReference> l) {
+    public void setGenericList(List<ServiceReference> l) {
         injectedList = l;
     }
 
@@ -74,7 +74,7 @@ public class GenericCollectionChecker extends DependencyDriver {
      *
      * @param l
      */
-    public void setSet(Set<ServiceReference> l) {
+    public void setGenericSet(Set<ServiceReference> l) {
         injectedSet = l;
     }
 
@@ -83,7 +83,7 @@ public class GenericCollectionChecker extends DependencyDriver {
      *
      * @param l
      */
-    public void setCollection(Collection<ServiceReference> l) {
+    public void setGenericCollection(Collection<ServiceReference> l) {
         injectedCollection = l;
     }
 
