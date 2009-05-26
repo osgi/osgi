@@ -4,10 +4,7 @@ build.tests                 = ${uniq; ${build.core.tests}, ${build.cmpn.tests}, 
 build.core.tests = \
     org.osgi.test.cases.framework, \
     org.osgi.test.cases.framework.secure, \
-    org.osgi.test.cases.packageadmin.tc1, \
-    org.osgi.test.cases.packageadmin.tc2, \
-    org.osgi.test.cases.packageadmin.tc3, \
-    org.osgi.test.cases.packageadmin.tc5, \
+    org.osgi.test.cases.packageadmin, \
     org.osgi.test.cases.permissionadmin.conditional, \
     org.osgi.test.cases.permissionadmin.main, \
     org.osgi.test.cases.permissionadmin.nosecurity, \
