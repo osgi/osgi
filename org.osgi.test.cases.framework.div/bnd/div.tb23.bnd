@@ -1,0 +1,14 @@
+Bundle-Name: %bundlename
+Bundle-Description: %bundledescription
+Bundle-Vendor: %bundlevendor
+Bundle-Version: 1.0.1
+Bundle-DocURL: %docurl
+Bundle-ContactAddress: %contactinfo
+Bundle-Category: %bundlecategory
+Bundle-Copyright: %bundlecopyright
+Fragment-Host: ${p}.tb9
+Bundle-SymbolicName: ${p}.tb23
+Include-Resource = {localization/bundlemanifest_es_ES.properties = resources/div.tb23/bundlemanifest_es_ES.properties}, \
+                   {OSGI-INF/l10n/bundle_es_ES.properties = resources/div.tb23/bundle_es_ES.properties}  
+-resourceonly:                           true
+                   

@@ -1,0 +1,12 @@
+Bundle-Name: %bundlename
+Bundle-SymbolicName: ${p}.tb8; fragment-attachment="always"
+Bundle-Description: %bundledescription
+Bundle-Vendor: %bundlevendor
+Bundle-Version: 1.0
+Bundle-DocURL: %docurl
+Bundle-ContactAddress: %contactinfo
+Bundle-Activator: ${p}.tb8.CheckManifestGetHeaders
+Bundle-Category: %bundlecategory
+Bundle-Copyright: %bundlecopyright
+Private-Package: ${p}.tb8
+Include-Resource = {OSGI-INF/l10n/bundle.properties = resources/div.tb8/bundle.properties}

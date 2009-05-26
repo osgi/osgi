@@ -1,0 +1,5 @@
+Bundle-Name: ${p}.tb24c
+Bundle-SymbolicName: ${p}.tb24c
+Bundle-Version: 4
+Import-Package: ${p}.tb24b;version="1.0.0",*
+Private-Package: ${p}.tb24c

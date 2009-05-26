@@ -1,0 +1,5 @@
+-nouses=true
+-nomanifest=true
+-failok=true
+Include-Resource = META-INF/MANIFEST.MF=resources/div.tb6/MANIFEST.MF
+Private-Package:                         ${p}.tb6

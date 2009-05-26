@@ -1,0 +1,9 @@
+Bundle-Name: ${p}.tb24a
+Bundle-SymbolicName: ${p}.tb24a
+Bundle-Version: 4
+Export-Package: ${p}.tb24a;version="1.0.0";-noimport:=true
+Private-Package: ${p}.tb24a
+
+
+
+

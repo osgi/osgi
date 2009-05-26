@@ -1,0 +1,17 @@
+Bundle-Name: %bundlename
+Bundle-Description: %bundledescription
+Bundle-Vendor: %bundlevendor
+Bundle-Version: 1.0.1
+Bundle-DocURL: %docurl
+Bundle-ContactAddress: %contactinfo
+Bundle-Category: %bundlecategory
+Bundle-Copyright: %bundlecopyright
+Bundle-Localization: localization/bundlemanifest
+Fragment-Host: ${p}.tb9
+Bundle-SymbolicName: ${p}.tb14
+Include-Resource = {localization/bundlemanifest_pt.properties = resources/div.tb14/bundlemanifest_pt.properties}, \
+                   {localization/bundlemanifest_pt_BR.properties = resources/div.tb14/bundlemanifest_pt_BR.properties}, \
+                   {OSGI-INF/l10n/bundle_pt.properties = resources/div.tb14/bundle_pt.properties}, \
+                   {OSGI-INF/l10n/bundle_pt_BR.properties = resources/div.tb14/bundle_pt_BR.properties}
+-resourceonly:                           true
+
