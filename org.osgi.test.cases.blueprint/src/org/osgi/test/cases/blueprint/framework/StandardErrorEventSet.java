@@ -40,7 +40,6 @@ public class StandardErrorEventSet extends EventSet {
         // we should be seeing a failure event published for this.
         // other events are not really determined.
         addBlueprintEvent("FAILURE");
-        addBlueprintContainerEvent("FAILED");
 
         // at the end of everything, there should not be a method context associated with this bundle
         addValidator(new NoBlueprintContainerValidator());

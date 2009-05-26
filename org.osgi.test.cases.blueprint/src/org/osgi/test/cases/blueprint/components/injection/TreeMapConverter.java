@@ -19,19 +19,19 @@ package org.osgi.test.cases.blueprint.components.injection;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.osgi.service.blueprint.convert.Converter;
+import org.osgi.service.blueprint.container.Converter;
 
 public class TreeMapConverter implements Converter {
-    public Object convert(Object source) throws Exception {
-        if (source instanceof Map) {
+    public Object convert(Object source, Class toType) throws Exception {
+        if (source instanceof Map && toType == TreeMap.class) {
             return new TreeMap((Map)source);
         }
         // we're supposed to throw an exception if we can't convert
         throw new Exception("Unconvertable object type");
     }
 
-    public Class getTargetClass() {
-        return TreeMap.class;
+    public boolean canConvert(Object value, Class toType) {
+        return toType == TreeMap.class && value instanceof Map;
     }
 }
 

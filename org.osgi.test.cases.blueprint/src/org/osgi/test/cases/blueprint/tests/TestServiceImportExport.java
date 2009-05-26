@@ -208,7 +208,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         StandardTestController controller = new StandardTestController(getContext(),
             getWebServer()+"www/ServiceOne_ranked_import.jar",
             getWebServer()+"www/ServiceOne_ranked_export.jar");
-        
+
         // we add different validation stuff to each jar.  We'll start with the
         // export jar
         MetadataEventSet exportStartEvents = controller.getStartEvents(1);
@@ -219,7 +219,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, "ServiceOne", null, serviceProps));
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService[] {
-                new ExportedService("GoodServiceService", "ServiceOne", TestServiceOne.class, ServiceMetadata.AUTO_EXPORT_DISABLED, 3, null, null, null), 
+                new ExportedService("GoodServiceService", "ServiceOne", TestServiceOne.class, ServiceMetadata.AUTO_EXPORT_DISABLED, 3, null, null, null),
                 new ExportedService("BadServiceService", null, TestServiceOne.class, ServiceMetadata.AUTO_EXPORT_ALL_CLASSES, 2, null, null, null)
         }));
 
@@ -906,7 +906,8 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
         // look for a blueprint event that can trigger the service manager to register
         // the dependent service
-        importStartEvents.addEvent(new BlueprintEvent("WAITING", null, new ServiceManagerRegister(serviceManager)));
+        importStartEvents.addBlueprintContainerEvent("GRACE_PERIOD");
+        importStartEvents.addEvent(new BlueprintAdminEvent("GRACE_PERIOD", null, new ServiceManagerRegister(serviceManager)));
         // these will be triggered by the satisfied wait
         importStartEvents.addAssertion("ServiceOneConstructor", AssertionService.SERVICE_SUCCESS);
         importStartEvents.addAssertion("ServiceOneProperty", AssertionService.SERVICE_SUCCESS);
@@ -1300,7 +1301,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
 	/**
 	 * This tests the behavior of manadatory services unregistering after module completion.
-     * This variation tests replacing the service with another suitable service.
+         * This variation tests replacing the service with another suitable service.
 	 */
 	public void testReplacementServiceDependency() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
@@ -1328,7 +1329,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
 	/**
 	 * This tests the behavior of manadatory services unregistering after module completion.
-     * This service proxy will need to wait for a replacement to be registered.
+         * This service proxy will need to wait for a replacement to be registered.
 	 */
 	public void testWaitingServiceDependency() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
@@ -1356,7 +1357,8 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // metadata issues have been well tested elsewhere.  We're going to focus on the service dynamics.
 
         // Ok, when the WAITING event is triggered, we register the second service.
-        importStartEvents.addEvent(new BlueprintEvent("WAITING", null, new ServiceManagerRegister(serviceManager, "ServiceOneB")));
+        importStartEvents.addBlueprintContainerEvent("WAITING");
+        importStartEvents.addEvent(new BlueprintAdminEvent("WAITING", null, new ServiceManagerRegister(serviceManager, "ServiceOneB")));
 
         // the test component will handle all of the validation checking for this
         // this indicates successful completion of the test phase

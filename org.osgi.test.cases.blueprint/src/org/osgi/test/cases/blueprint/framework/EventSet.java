@@ -378,12 +378,27 @@ public class EventSet {
         addEvent(new ComponentAssertion(componentId, type, property));
     }
 
+    /**
+     * Add both types of blueprint event to the event set.
+     *
+     * @param type
+     */
     public void addBlueprintEvent(String type) {
-        addEvent(new BlueprintEvent(type));
+        addBlueprintContainerEvent(type);
+        addBlueprintAdminEvent(type);
     }
 
     public void addBlueprintEvent(String type, Map props) {
-        addEvent(new BlueprintEvent(type, props));
+        addBlueprintContainerEvent(type, props);
+        addBlueprintAdminEvent(type, props);
+    }
+
+    public void addBlueprintAdminEvent(String type) {
+        addEvent(new BlueprintAdminEvent(type));
+    }
+
+    public void addBlueprintAdminEvent(String type, Map props) {
+        addEvent(new BlueprintAdminEvent(type, props));
     }
 
     public void addBlueprintContainerEvent(String type) {

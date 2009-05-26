@@ -20,7 +20,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
 import org.osgi.service.blueprint.container.BlueprintContainer;
-import org.osgi.service.blueprint.convert.ConversionService;
+import org.osgi.service.blueprint.container.Converter;
 import org.osgi.service.blueprint.reflect.BeanMetadata;
 
 import org.osgi.test.cases.blueprint.components.comp1.SimpleTestComponent;
@@ -334,7 +334,7 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         startEvents.addValidator(new ComponentTypeValidator("bundle", Bundle.class));
         startEvents.addValidator(new ComponentTypeValidator("bundleContext", BundleContext.class));
         startEvents.addValidator(new ComponentTypeValidator("blueprintContainer", BlueprintContainer.class));
-        startEvents.addValidator(new ComponentTypeValidator("conversionService", ConversionService.class));
+        startEvents.addValidator(new ComponentTypeValidator("blueprintConverter", Converter.class));
 
         // and finally, these should be listed in the set of component names
         startEvents.addValidator(new ComponentNamePresenceValidator("bundle"));

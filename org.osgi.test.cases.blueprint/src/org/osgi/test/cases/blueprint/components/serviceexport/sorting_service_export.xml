@@ -34,11 +34,11 @@
     </bean>
 
     <bean id="ServiceManager" class="org.osgi.test.cases.blueprint.services.ServiceManager">
-        <argument ref="bundleContext"/>
+        <argument ref="blueprintBundleContext"/>
         <argument>
             <list>
                 <bean class="org.osgi.test.cases.blueprint.services.ManagedService">
-                    <property name="bundleContext" ref="bundleContext"/>
+                    <property name="bundleContext" ref="blueprintBundleContext"/>
                     <property name="name">
                         <idref component="ServiceOneD"/>
                     </property>
@@ -52,7 +52,7 @@
                     <property name="ranking" value="1"/>
                 </bean>
                 <bean class="org.osgi.test.cases.blueprint.services.ManagedService">
-                    <property name="bundleContext" ref="bundleContext"/>
+                    <property name="bundleContext" ref="blueprintBundleContext"/>
                     <property name="name">
                         <idref component="ServiceOneB"/>
                     </property>
@@ -66,7 +66,7 @@
                     <property name="ranking" value="3"/>
                 </bean>
                 <bean class="org.osgi.test.cases.blueprint.services.ManagedService">
-                    <property name="bundleContext" ref="bundleContext"/>
+                    <property name="bundleContext" ref="blueprintBundleContext"/>
                     <property name="name">
                         <idref component="ServiceOneA"/>
                     </property>
@@ -80,7 +80,7 @@
                     <property name="ranking" value="4"/>
                 </bean>
                 <bean class="org.osgi.test.cases.blueprint.services.ManagedService">
-                    <property name="bundleContext" ref="bundleContext"/>
+                    <property name="bundleContext" ref="blueprintBundleContext"/>
                     <property name="name">
                         <idref component="ServiceOneE"/>
                     </property>
@@ -94,7 +94,7 @@
                     <property name="ranking" value="0"/>
                 </bean>
                 <bean class="org.osgi.test.cases.blueprint.services.ManagedService">
-                    <property name="bundleContext" ref="bundleContext"/>
+                    <property name="bundleContext" ref="blueprintBundleContext"/>
                     <property name="name">
                         <idref component="ServiceOneC"/>
                     </property>

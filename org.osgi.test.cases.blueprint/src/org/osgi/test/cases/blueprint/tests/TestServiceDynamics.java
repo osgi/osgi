@@ -16,7 +16,8 @@
 
 package org.osgi.test.cases.blueprint.tests;
 
-import org.osgi.test.cases.blueprint.framework.BlueprintEvent;
+import org.osgi.test.cases.blueprint.framework.BlueprintAdminEvent;
+import org.osgi.test.cases.blueprint.framework.BlueprintContainerEvent;
 import org.osgi.test.cases.blueprint.framework.ClassLoadInitiator;
 import org.osgi.test.cases.blueprint.framework.ComponentAssertion;
 import org.osgi.test.cases.blueprint.framework.EventSet;
@@ -80,10 +81,10 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
 
         // a CREATED event is part of our standard set.  We need to remove
         // that one and attach a new one with a listener
-        importStartEvents.removeEvent(new BlueprintEvent("CREATED"));
+        importStartEvents.removeEvent(new BlueprintAdminEvent("CREATED"));
 
         // Ok, when the CREATED event is triggered, we unregister the first service.
-        importStartEvents.addEvent(new BlueprintEvent("CREATED", null, new ServiceManagerUnregister(serviceManager, "ServiceOneA")));
+        importStartEvents.addEvent(new BlueprintAdminEvent("CREATED", null, new ServiceManagerUnregister(serviceManager, "ServiceOneA")));
 
         // when our expect service unregisters, then add a replacement service
         importStartEvents.addEvent(new ServiceTestEvent("UNREGISTERING", new Class[] { TestServiceDynamicsInterface.class }, null,
@@ -131,10 +132,10 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
 
         // a CREATED event is part of our standard set.  We need to remove
         // that one and attach a new one with a listener
-        importStartEvents.removeEvent(new BlueprintEvent("CREATED"));
+        importStartEvents.removeEvent(new BlueprintAdminEvent("CREATED"));
 
         // Ok, when the CREATED event is triggered, we unregister the first service.
-        importStartEvents.addEvent(new BlueprintEvent("CREATED", null, new ServiceManagerUnregister(serviceManager, "ServiceOneA")));
+        importStartEvents.addEvent(new BlueprintAdminEvent("CREATED", null, new ServiceManagerUnregister(serviceManager, "ServiceOneA")));
 
         // when our expect service unregisters, add a replacement service
         importStartEvents.addEvent(new ServiceTestEvent("UNREGISTERING", new Class[] { TestServiceDynamicsInterface.class }, null,
@@ -182,10 +183,10 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
 
         // a CREATED event is part of our standard set.  We need to remove
         // that one and attach a new one with a listener
-        importStartEvents.removeEvent(new BlueprintEvent("CREATED"));
+        importStartEvents.removeEvent(new BlueprintAdminEvent("CREATED"));
 
         // Ok, when the CREATED event is triggered, we unregister the first service.
-        importStartEvents.addEvent(new BlueprintEvent("CREATED", null, new ServiceManagerUnregister(serviceManager, "ServiceOneA")));
+        importStartEvents.addEvent(new BlueprintAdminEvent("CREATED", null, new ServiceManagerUnregister(serviceManager, "ServiceOneA")));
 
         // when our expect service unregisters, add a replacement service
         importStartEvents.addEvent(new ServiceTestEvent("UNREGISTERING", new Class[] { TestServiceDynamicsInterface.class }, null,
@@ -262,11 +263,12 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
 
         // there should be no wait event with this
-        importStartEvents.addFailureEvent(new BlueprintEvent("WAITING"));
+        importStartEvents.addFailureEvent(new BlueprintAdminEvent("WAITING"));
+        importStartEvents.addFailureEvent(new BlueprintContainerEvent("WAITING"));
 
-        importStartEvents.removeEvent(new BlueprintEvent("CREATED"));
+        importStartEvents.removeEvent(new BlueprintAdminEvent("CREATED"));
         // Ok, when the CREATED event is triggered, we register the first service.
-        importStartEvents.addEvent(new BlueprintEvent("CREATED", null, new ServiceManagerRegister(serviceManager, "ServiceOneA")));
+        importStartEvents.addEvent(new BlueprintAdminEvent("CREATED", null, new ServiceManagerRegister(serviceManager, "ServiceOneA")));
 
         // then we should see this REGISTERED at the end.
         importStartEvents.addServiceEvent("REGISTERED", TestServiceDynamicsInterface.class);
@@ -296,7 +298,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         // we should see one of these before the failures
         startEvents.addEvent(new ServiceBlueprintEvent("WAITING", new Class[] { TestServiceOne.class }));
         // remove the current failure event....we want a more specific one to test the properties getting set.
-        startEvents.removeEvent(new BlueprintEvent("FAILURE"));
+        startEvents.removeEvent(new BlueprintAdminEvent("FAILURE"));
         // this failure event will verify the information about the failing dependency is set.
         startEvents.addEvent(new ServiceBlueprintEvent("FAILURE", new Class[] { TestServiceOne.class }));
         controller.run();
@@ -433,7 +435,9 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         MetadataEventSet startEvents = controller.getStartEvents(0);
 
         // Ok, when the WAITING event is triggered, we register the first service.
-        startEvents.addEvent(new BlueprintEvent("WAITING", null, new ServiceManagerRegister(serviceManager, "ServiceOneA")));
+        // we expect one of these to both handlers, but only one triggers the action
+        startEvents.addBlueprintContainerEvent("WAITING");
+        startEvents.addEvent(new BlueprintAdminEvent("WAITING", null, new ServiceManagerRegister(serviceManager, "ServiceOneA")));
 
         // then we should see this REGISTERED again at the end.
         startEvents.addServiceEvent("REGISTERED", TestServiceDynamicsInterface.class);

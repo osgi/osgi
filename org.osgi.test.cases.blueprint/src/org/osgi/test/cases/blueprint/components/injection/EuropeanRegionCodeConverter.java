@@ -16,27 +16,25 @@
 
 package org.osgi.test.cases.blueprint.components.injection;
 
-import org.osgi.service.blueprint.convert.Converter;
+import org.osgi.service.blueprint.container.Converter;
 import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 
 public class EuropeanRegionCodeConverter extends BaseTestComponent implements Converter {
-    private Class targetClass = EuropeanRegionCode.class;
 
     public EuropeanRegionCodeConverter(String compId) {
         super(compId);
     }
-
-    public Object convert(Object source) throws RuntimeException {
+    public Object convert(Object source, Class toType) throws Exception {
         AssertionService.sendEvent(this, AssertionService.METHOD_CALLED);
-        if (source instanceof String) {
+        if (source instanceof String && toType == EuropeanRegionCode.class) {
             return new EuropeanRegionCode((String)source);
         }
-        return null;
-
+        // we're supposed to throw an exception if we can't convert
+        throw new Exception("Unconvertable object type");
     }
 
-    public Class getTargetClass() {
-        return targetClass;
+    public boolean canConvert(Object value, Class toType) {
+        return toType == EuropeanRegionCode.class && value instanceof String;
     }
 }

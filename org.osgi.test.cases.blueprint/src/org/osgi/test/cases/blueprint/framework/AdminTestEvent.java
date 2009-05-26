@@ -27,8 +27,7 @@ import junit.framework.AssertionFailedError;
  * The base class for all events that are received using the
  * EventAdmin service.
  */
-public abstract class AdminTestEvent extends TestEvent implements org.osgi.service.event.EventConstants,
-        org.osgi.service.blueprint.container.EventConstants {
+public abstract class AdminTestEvent extends TestEvent implements org.osgi.service.blueprint.container.EventConstants {
     // the type of the assertion (also the EventAdmin topic used broadcast the event)
     protected String topic;
     // Any additional properties associated with the event

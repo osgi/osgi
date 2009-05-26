@@ -16,20 +16,18 @@
 
 package org.osgi.test.cases.blueprint.components.injection;
 
-import org.osgi.service.blueprint.convert.Converter;
+import org.osgi.service.blueprint.container.Converter;
 
 public class RegionCodeConverter implements Converter {
-    private Class targetClass = RegionCode.class;
-
-    public Object convert(Object source) throws Exception {
-        if (source instanceof String){
+    public Object convert(Object source, Class toType) throws Exception {
+        if (source instanceof String && toType == RegionCode.class) {
             return new RegionCode((String)source);
         }
         // we're supposed to throw an exception if we can't convert
         throw new Exception("Unconvertable object type");
     }
 
-    public Class getTargetClass() {
-        return targetClass;
+    public boolean canConvert(Object value, Class toType) {
+        return toType == RegionCode.class && value instanceof String;
     }
 }

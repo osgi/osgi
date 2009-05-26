@@ -27,14 +27,14 @@ import org.osgi.test.cases.blueprint.services.TestUtil;
  * An event that is broadcast by the blueprint extender using the
  * EventAdmin service.
  */
-public class BlueprintEvent extends AdminTestEvent {
+public class BlueprintAdminEvent extends AdminTestEvent {
     /**
      * Create an event for a given topic type.
      *
      * @param topic
      *               The assertion type.
      */
-    public BlueprintEvent(String topic) {
+    public BlueprintAdminEvent(String topic) {
         this(topic, null, null);
     }
 
@@ -46,7 +46,7 @@ public class BlueprintEvent extends AdminTestEvent {
      * @param props  An expected set of properties that will be associated with the
      *               event.
      */
-    public BlueprintEvent(String topic, Map props) {
+    public BlueprintAdminEvent(String topic, Map props) {
         this(topic, props, null);
     }
 
@@ -60,7 +60,7 @@ public class BlueprintEvent extends AdminTestEvent {
      *                 event.
      * @param listener A listener that will be triggered with this event is received.
      */
-    public BlueprintEvent(String topic, Map props, TestEventListener listener) {
+    public BlueprintAdminEvent(String topic, Map props, TestEventListener listener) {
         super("org/osgi/service/blueprint/container/" + topic, props, listener);
     }
 
@@ -72,7 +72,7 @@ public class BlueprintEvent extends AdminTestEvent {
      *
      * @param event  The received event.
      */
-    public BlueprintEvent(Event event) {
+    public BlueprintAdminEvent(Event event) {
         super(event);
     }
 
@@ -84,11 +84,11 @@ public class BlueprintEvent extends AdminTestEvent {
      * @return True if these assertions match on the required properties.
      */
     public boolean matches(TestEvent o) {
-        if (!(o instanceof BlueprintEvent)) {
+        if (!(o instanceof BlueprintAdminEvent)) {
             return false;
         }
 
-        BlueprintEvent other = (BlueprintEvent)o;
+        BlueprintAdminEvent other = (BlueprintAdminEvent)o;
 
         // fail immediately on a mismatch on id or type
         if (bundle != other.bundle || !topic.equals(other.topic)) {
@@ -110,10 +110,10 @@ public class BlueprintEvent extends AdminTestEvent {
      */
     public String toString() {
         if (props != null) {
-            return "BlueprintEvent " + topic + " for bundle " + bundle.getSymbolicName() + " with properties: " + TestUtil.formatProperties(props);
+            return "BlueprintAdminEvent " + topic + " for bundle " + bundle.getSymbolicName() + " with properties: " + TestUtil.formatProperties(props);
         }
         else {
-            return "BlueprintEvent " + topic + " for bundle " + bundle.getSymbolicName();
+            return "BlueprintAdminEvent " + topic + " for bundle " + bundle.getSymbolicName();
         }
     }
 
@@ -140,11 +140,11 @@ public class BlueprintEvent extends AdminTestEvent {
      */
     public TestEvent validate(TestEvent received) {
         // this should be true, since we matched, but don't assume
-        if (!(received instanceof BlueprintEvent)) {
+        if (!(received instanceof BlueprintAdminEvent)) {
             return null;
         }
 
-        BlueprintEvent other = (BlueprintEvent)received;
+        BlueprintAdminEvent other = (BlueprintAdminEvent)received;
 
         // this is a little circular, but it's probably the best solution for getting
         // a reference to the extender bundle.  The first time we process an event from
@@ -184,13 +184,13 @@ public class BlueprintEvent extends AdminTestEvent {
                 other.getProperty(EXTENDER_BUNDLE), cause);
         }
 
-        if (!TestUtil.validateBundleId(extenderBundle, (Long)other.getProperty(EXTENDER_ID))) {
+        if (!TestUtil.validateBundleId(extenderBundle, (Long)other.getProperty(EXTENDER_BUNDLE_ID))) {
             return new AssertionFailure("Mismatched extender bundle id on blueprint event other=" +
-                other.getProperty(EXTENDER_ID), cause);
+                other.getProperty(EXTENDER_BUNDLE_ID), cause);
         }
-        if (!TestUtil.validateBundleSymbolicName(extenderBundle, (String)other.getProperty(EXTENDER_SYMBOLICNAME))) {
+        if (!TestUtil.validateBundleSymbolicName(extenderBundle, (String)other.getProperty(EXTENDER_BUNDLE_SYMBOLICNAME))) {
             return new AssertionFailure("Mismatched extender bundle symbolic name on blueprint event other=" +
-                other.getProperty(EXTENDER_SYMBOLICNAME), cause);
+                other.getProperty(EXTENDER_BUNDLE_SYMBOLICNAME), cause);
         }
 
         // allow the superclass to validate this (which includes calling potential

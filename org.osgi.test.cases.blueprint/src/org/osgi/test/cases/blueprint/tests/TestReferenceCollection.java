@@ -24,7 +24,8 @@ import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
 import org.osgi.service.blueprint.reflect.RefCollectionMetadata;
 
 import org.osgi.test.cases.blueprint.framework.BindingListener;
-import org.osgi.test.cases.blueprint.framework.BlueprintEvent;
+import org.osgi.test.cases.blueprint.framework.BlueprintAdminEvent;
+import org.osgi.test.cases.blueprint.framework.BlueprintContainerEvent;
 import org.osgi.test.cases.blueprint.framework.ComponentAssertion;
 import org.osgi.test.cases.blueprint.framework.ComponentMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.ComponentNamePresenceValidator;
@@ -1897,7 +1898,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
 
         // there should be no wait event with this
-        importStartEvents.addFailureEvent(new BlueprintEvent("WAITING"));
+        importStartEvents.addFailureEvent(new BlueprintAdminEvent("WAITING"));
+        importStartEvents.addFailureEvent(new BlueprintContainerEvent("WAITING"));
 
         // now some expected termination stuff
         EventSet importStopEvents = controller.getStopEvents(0);
@@ -1939,7 +1941,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
 
         // there should be no wait event with this
-        importStartEvents.addFailureEvent(new BlueprintEvent("WAITING"));
+        importStartEvents.addFailureEvent(new BlueprintAdminEvent("WAITING"));
+        importStartEvents.addFailureEvent(new BlueprintContainerEvent("WAITING"));
 
         // now some expected termination stuff
         EventSet importStopEvents = controller.getStopEvents(0);

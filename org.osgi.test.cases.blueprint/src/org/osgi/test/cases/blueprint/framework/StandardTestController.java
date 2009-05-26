@@ -126,7 +126,6 @@ public class StandardTestController extends BaseTestController {
         // now standard blueprint revents.
         events.addBlueprintEvent("CREATING");
         events.addBlueprintEvent("CREATED");
-        events.addBlueprintContainerEvent("CREATED");
         events.addServiceEvent("REGISTERED", "org.osgi.service.blueprint.container.BlueprintContainer");
 
         // this needs to be the first validator of the set, since

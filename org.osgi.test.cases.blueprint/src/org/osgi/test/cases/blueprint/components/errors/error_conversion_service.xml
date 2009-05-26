@@ -7,7 +7,7 @@
 
     <bean id="ConversionInjection" class="org.osgi.test.cases.blueprint.components.injection.ConversionServiceComponent">
 		<argument value="ConversionInjection"/>
-		<argument ref="conversionService"/>
+		<argument ref="blueprintConverter"/>
         <!-- this will be converted using the converter service -->
         <property name="conversion" value="BAD"/>
 	</bean>

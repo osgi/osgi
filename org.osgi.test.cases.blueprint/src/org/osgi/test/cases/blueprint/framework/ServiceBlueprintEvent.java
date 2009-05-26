@@ -29,7 +29,7 @@ import org.osgi.test.cases.blueprint.services.TestUtil;
  * or service timeout failure.  We expect to see additional
  * properties set for this event.
  */
-public class ServiceBlueprintEvent extends BlueprintEvent {
+public class ServiceBlueprintEvent extends BlueprintAdminEvent {
     // the set of interfaces we expect to see as a property
     protected Class[] interfaces;
 
@@ -89,7 +89,7 @@ public class ServiceBlueprintEvent extends BlueprintEvent {
             return error;
         }
 
-        BlueprintEvent other = (BlueprintEvent)received;
+        BlueprintAdminEvent other = (BlueprintAdminEvent)received;
 
         Object interfacesProp = other.getProperty(EventConstants.SERVICE_OBJECTCLASS);
         if (interfacesProp == null || !(interfacesProp instanceof String[]) ) {

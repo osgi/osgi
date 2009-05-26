@@ -12,8 +12,8 @@
    <!-- We pull in the bundle, the bundle context, as well as the service reference -->
    <bean id="ServiceReferenceChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.NullServiceReferenceInjection">
        <argument value="ServiceReferenceChecker"/>
-       <argument ref="bundleContext"/>
-       <argument ref="bundle"/>
+       <argument ref="blueprintBundleContext"/>
+       <argument ref="blueprintBundle"/>
        <property name="reference" ref="ServiceOne"/>
    </bean>
 </blueprint>

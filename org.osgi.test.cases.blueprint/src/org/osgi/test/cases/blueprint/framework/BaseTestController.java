@@ -33,7 +33,8 @@ import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.Version;
-import org.osgi.service.blueprint.container.BlueprintContainerListener;
+import org.osgi.service.blueprint.container.BlueprintEvent;
+import org.osgi.service.blueprint.container.BlueprintListener;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
@@ -42,7 +43,7 @@ import org.osgi.test.cases.blueprint.services.AssertionService;
 /**
  * A base class for the different types of test controller.
  */
-public class BaseTestController implements EventHandler, BlueprintContainerListener, ServiceListener {
+public class BaseTestController implements EventHandler, BlueprintListener, ServiceListener {
     // default timeout for the test.  For most tests, we're not dealing with
     // expected timeout situations, so a short timeout is acceptable.  This will
     // need to be set higher if we're testing actual timeout situations.
@@ -276,7 +277,7 @@ public class BaseTestController implements EventHandler, BlueprintContainerListe
         }
         // one of our assertions
         else if (topic.startsWith("org/osgi/service/blueprint/container")) {
-            processEvent(targetPhase, new BlueprintEvent(event));
+            processEvent(targetPhase, new BlueprintAdminEvent(event));
         }
         else if (topic.startsWith("org/osgi/framework/FrameworkEvent/")) {
             processEvent(targetPhase, new FrameworkTestEvent(event));
@@ -322,7 +323,7 @@ public class BaseTestController implements EventHandler, BlueprintContainerListe
         Hashtable handlerProps = new Hashtable();
         handlerProps.put(EventConstants.EVENT_TOPIC, topics);
         this.eventAdminListener = testContext.registerService(EventHandler.class.getName(), this, handlerProps);
-        this.moduleContextListener = testContext.registerService(BlueprintContainerListener.class.getName(), this, null);
+        this.moduleContextListener = testContext.registerService(BlueprintListener.class.getName(), this, null);
         // there are some race conditions involved with service listeners that
         // preclude us using the EventAdmin service for snagging those events.  We'll need to listen for them directly.
         testContext.addServiceListener(this);
@@ -366,46 +367,57 @@ public class BaseTestController implements EventHandler, BlueprintContainerListe
 
 
     /**
-     * Method implemented for the BlueprintContainerListener interface. This
-     * transforms the BlueprintContainerEvent information into a dummy Event
+     * Method implemented for the BlueprintListener interface. This
+     * transforms the BlueprintEvent information into a dummy Event
      * for processing.
      *
      * @param bundle
      *                The bundle creating the context
      * @param version The bundle version information.
      */
-    public void contextCreated(Bundle bundle) {
-        // just turn this into a special event typed.
-        Dictionary props = new Hashtable();
-        props.put(EventConstants.BUNDLE_SYMBOLICNAME, bundle.getSymbolicName());
-        props.put("bundle.version", Version.parseVersion((String)bundle.getHeaders().get(Constants.BUNDLE_VERSION)));
-        props.put(EventConstants.BUNDLE, bundle);
-        props.put(EventConstants.BUNDLE_ID, new Long(bundle.getBundleId()));
-        handleEvent(new Event("org/osgi/test/cases/blueprint/BlueprintContainer/CREATED", props));
-    }
-
-
-    /**
-     * Method implemented for the BlueprintContainerListener interface. This
-     * transforms the BlueprintContainerEvent information into a dummy Event
-     * for processing.
-     *
-     * @param bundleSymbolicName
-     *                The symbolic name for the context bundle.
-     * @param version The bundle version information.
-     */
-    public void contextCreationFailed(Bundle bundle, Throwable rootCause) {
-        // just turn this into a special event typed.
-        Dictionary props = new Hashtable();
-        props.put(EventConstants.BUNDLE_SYMBOLICNAME, bundle.getSymbolicName());
-        props.put("bundle.version", Version.parseVersion((String)bundle.getHeaders().get(Constants.BUNDLE_VERSION)));
-        props.put(EventConstants.BUNDLE, bundle);
-        props.put(EventConstants.BUNDLE_ID, new Long(bundle.getBundleId()));
-        if (rootCause != null) {
-            props.put(EventConstants.EXCEPTION, rootCause);
+    public void blueprintEvent(BlueprintEvent e) {
+        // transform the type into a string topic name
+        String topic = "UNKNOWN";
+        switch (e.getType()) {
+            case BlueprintEvent.CREATING:
+                topic = "CREATING";
+                break;
+            case BlueprintEvent.CREATED:
+                topic = "CREATED";
+                break;
+            case BlueprintEvent.DESTROYING:
+                topic = "DESTROYING";
+                break;
+            case BlueprintEvent.DESTROYED:
+                topic = "DESTROYED";
+                break;
+            case BlueprintEvent.FAILURE:
+                topic = "FAILURE";
+                break;
+            case BlueprintEvent.GRACE_PERIOD:
+                topic = "GRACE_PERIOD";
+                break;
+            case BlueprintEvent.WAITING:
+                topic = "WAITING";
+                break;
         }
-        handleEvent(new Event("org/osgi/test/cases/blueprint/BlueprintContainer/FAILED", props));
+
+        // strip off the bundle information
+        Bundle bundle = e.getBundle();
+        // just turn this into a special event typed.
+        Dictionary props = new Hashtable();
+        props.put(EventConstants.BUNDLE_SYMBOLICNAME, bundle.getSymbolicName());
+        props.put("bundle.version", Version.parseVersion((String)bundle.getHeaders().get(Constants.BUNDLE_VERSION)));
+        props.put(EventConstants.BUNDLE, bundle);
+        props.put(EventConstants.BUNDLE_ID, new Long(bundle.getBundleId()));
+        // also attach the event information
+        props.put(EventConstants.EVENT, e);
+        if (e.getException() != null) {
+            props.put(EventConstants.EXCEPTION, e.getException());
+        }
+        handleEvent(new Event("org/osgi/test/cases/blueprint/BlueprintContainer/" + topic, props));
     }
+
 
     /**
      * Event handler for a ServiceEvent listener.  This

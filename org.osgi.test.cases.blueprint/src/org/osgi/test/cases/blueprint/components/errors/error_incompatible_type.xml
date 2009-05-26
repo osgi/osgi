@@ -3,6 +3,6 @@
 
    <!-- Attempting to inject a Bundle value into an Integer -->
    <bean id="BadInteger" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
-       <property name="integer" ref="bundle"/>
+       <property name="integer" ref="blueprintBundle"/>
    </bean>
 </blueprint>

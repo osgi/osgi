@@ -105,10 +105,10 @@ public class ManagedComponentInjection extends BaseTestComponent {
 
     // destroy
     public void onDestroy(int reasonCode) {
-        if (reasonCode==BlueprintContainer.CONFIGURATION_ADMIN_OBJECT_DELETED) {
+        if (reasonCode==1) {
             AssertionService.sendPropertyNameEvent(this, AssertionService.METHOD_CALLED, "ManagedComponentInjection_onDestroy_ConfigDeleted");
         }
-        if (reasonCode==BlueprintContainer.BUNDLE_STOPPING){
+        if (reasonCode==2){
             AssertionService.sendPropertyNameEvent(this, AssertionService.METHOD_CALLED, "ManagedComponentInjection_onDestroy_BundleStopping");
         }
 

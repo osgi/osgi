@@ -19,19 +19,19 @@ package org.osgi.test.cases.blueprint.components.injection;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import org.osgi.service.blueprint.convert.Converter;
+import org.osgi.service.blueprint.container.Converter;
 
 public class LinkedListConverter implements Converter {
-    public Object convert(Object source) throws Exception {
-        if (source instanceof Collection) {
+    public Object convert(Object source, Class toType) throws Exception {
+        if (source instanceof Collection && toType == LinkedList.class) {
             return new LinkedList((Collection)source);
         }
         // we're supposed to throw an exception if we can't convert
         throw new Exception("Unconvertable object type");
     }
 
-    public Class getTargetClass() {
-        return LinkedList.class;
+    public boolean canConvert(Object value, Class toType) {
+        return toType == LinkedList.class && value instanceof Collection;
     }
 }
 

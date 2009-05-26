@@ -3,8 +3,8 @@
 
    <bean id="ContextAware" class="org.osgi.test.cases.blueprint.components.comp1.BlueprintContainerAwareComponent" init-method="init">
        <argument value="ContextAware"/>
-       <property name="bundle" ref="bundle"/>
-       <property name="bundleContext" ref="bundleContext"/>
+       <property name="bundle" ref="blueprintBundle"/>
+       <property name="bundleContext" ref="blueprintBundleContext"/>
        <property name="blueprintContainer" ref="blueprintContainer"/>
    </bean>
 </blueprint>

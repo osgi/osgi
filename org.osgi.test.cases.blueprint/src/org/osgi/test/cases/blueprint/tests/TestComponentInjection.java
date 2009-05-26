@@ -20,7 +20,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
 import org.osgi.service.blueprint.container.BlueprintContainer;
-import org.osgi.service.blueprint.convert.ConversionService;
+import org.osgi.service.blueprint.container.Converter;
 
 import org.osgi.service.blueprint.reflect.BeanMetadata;
 import org.osgi.service.blueprint.reflect.BeanMetadata;
@@ -280,22 +280,22 @@ public class TestComponentInjection extends DefaultTestBundleControl {
             getWebServer()+"www/default_component_override.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
         // first creation of the override components
-        startEvents.addAssertion("bundle", AssertionService.COMPONENT_CREATED);
-        startEvents.addAssertion("bundleContext", AssertionService.COMPONENT_CREATED);
-        startEvents.addAssertion("moduleContext", AssertionService.COMPONENT_CREATED);
-        startEvents.addAssertion("conversionService", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("blueprintBundle", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("blueprintBundleContext", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("blueprintContainer", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("blueprintConverter", AssertionService.COMPONENT_CREATED);
 
         // and the injection targets
         startEvents.addAssertion("bundleUser", AssertionService.COMPONENT_CREATED);
         startEvents.addAssertion("bundleContextUser", AssertionService.COMPONENT_CREATED);
-        startEvents.addAssertion("moduleContextUser", AssertionService.COMPONENT_CREATED);
-        startEvents.addAssertion("conversionServiceUser", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("blueprintContainerUser", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("converterUser", AssertionService.COMPONENT_CREATED);
 
         // these should all be our local components
-        startEvents.addValidator(new ComponentTypeValidator("bundle", ComponentInjection.class));
-        startEvents.addValidator(new ComponentTypeValidator("bundleContext", ComponentInjection.class));
-        startEvents.addValidator(new ComponentTypeValidator("moduleContext", ComponentInjection.class));
-        startEvents.addValidator(new ComponentTypeValidator("conversionService", ComponentInjection.class));
+        startEvents.addValidator(new ComponentTypeValidator("blueprintBundle", ComponentInjection.class));
+        startEvents.addValidator(new ComponentTypeValidator("blueprintBundleContext", ComponentInjection.class));
+        startEvents.addValidator(new ComponentTypeValidator("blueprintContainer", ComponentInjection.class));
+        startEvents.addValidator(new ComponentTypeValidator("blueprintConverter", ComponentInjection.class));
 
         controller.run();
     }

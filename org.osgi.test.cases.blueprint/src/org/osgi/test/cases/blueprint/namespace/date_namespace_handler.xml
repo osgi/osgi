@@ -3,7 +3,7 @@
 
     <bean id="dateNamespaceHandler"
             class="org.osgi.test.cases.blueprint.namespace.DateNamespaceHandler">
-        <argument ref="bundleContext"/>
+        <argument ref="blueprintBundleContext"/>
     </bean>
 
     <service ref="dateNamespaceHandler"

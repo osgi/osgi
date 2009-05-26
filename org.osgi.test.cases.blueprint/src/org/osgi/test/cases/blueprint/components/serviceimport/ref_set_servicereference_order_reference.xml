@@ -14,7 +14,7 @@
         <property name="set">
             <ref-set interface="org.osgi.test.cases.blueprint.services.TestServiceOne" ordering-basis="service-reference" member-type="service-reference"/>
         </property>
-        <property name="bundleContext" ref="bundleContext"/>
+        <property name="bundleContext" ref="blueprintBundleContext"/>
         <property name="useReferences" value="true"/>
         <property name="sortOrder">
             <list>

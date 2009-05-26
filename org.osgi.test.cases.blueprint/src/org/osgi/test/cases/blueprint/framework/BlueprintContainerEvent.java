@@ -116,7 +116,8 @@ public class BlueprintContainerEvent extends AdminTestEvent {
      * @return true if this was a context failure event.  false for any other event type.
      */
     public boolean isError() {
-        return topic.equals("org/osgi/test/cases/blueprint/BlueprintContainer/FAILED");
+        return topic.equals("org/osgi/test/cases/blueprint/BlueprintContainer/FAILURE") ||
+            topic.equals("org/osgi/test/cases/blueprint/BlueprintContainer/UNKNOWN");
     }
 
     /**

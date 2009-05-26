@@ -16,17 +16,17 @@
 
 package org.osgi.test.cases.blueprint.components.injection;
 
-import org.osgi.service.blueprint.convert.ConversionService;
+import org.osgi.service.blueprint.container.Converter;
 
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 
 public class ConversionServiceComponent extends BaseTestComponent {
     // our conversion service, injected into the constructor
-    protected ConversionService conversionService;
+    protected Converter blueprintConverter;
 
-    public ConversionServiceComponent(String componentId, ConversionService conversionService) {
+    public ConversionServiceComponent(String componentId, Converter blueprintConverter) {
         super(componentId);
-        this.conversionService = conversionService;
+        this.blueprintConverter = blueprintConverter;
     }
 
     /**
@@ -39,7 +39,7 @@ public class ConversionServiceComponent extends BaseTestComponent {
      */
     public void setConversion(String value) throws Exception {
         // convert this to a boolean for assignment.
-        setPropertyValue("conversion", conversionService.convert(value, Boolean.class), Boolean.class);
+        setPropertyValue("conversion", blueprintConverter.convert(value, Boolean.class), Boolean.class);
     }
 }
 

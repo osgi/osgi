@@ -3,7 +3,7 @@
 
     <bean id="testNamespaceHandler"
             class="org.osgi.test.cases.blueprint.namespace.TestNamespaceHandler">
-        <argument ref="bundleContext"/>
+        <argument ref="blueprintBundleContext"/>
     </bean>
 
     <service ref="testNamespaceHandler"

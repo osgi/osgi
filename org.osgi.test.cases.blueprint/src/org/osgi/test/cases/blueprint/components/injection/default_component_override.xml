@@ -3,28 +3,28 @@
     default-lazy-init="false">
 
     <!-- a few leaf nodes for others to reference.  These are just named components -->
-   <bean id="bundle" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
+   <bean id="blueprintBundle" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
        init-method="init" destroy-method="destroy">
-       <argument value="bundle"/>
+       <argument value="blueprintBundle"/>
    </bean>
-   <bean id="bundleContext" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
+   <bean id="blueprintBundleContext" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
        init-method="init" destroy-method="destroy">
-       <argument value="bundleContext"/>
+       <argument value="blueprintBundleContext"/>
    </bean>
-   <bean id="moduleContext" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
+   <bean id="blueprintContainer" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
        init-method="init" destroy-method="destroy">
-       <argument value="moduleContext"/>
+       <argument value="blueprintContainer"/>
    </bean>
-   <bean id="conversionService" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
+   <bean id="blueprintConverter" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
        init-method="init" destroy-method="destroy">
-       <argument value="conversionService"/>
+       <argument value="blueprintConverter"/>
    </bean>
 
    <bean id="bundleUser" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
        init-method="init" destroy-method="destroy">
        <argument value="bundleUser"/>
        <property name="componentOne">
-           <ref component="bundle" />
+           <ref component="blueprintBundle" />
        </property>
    </bean>
 
@@ -32,23 +32,23 @@
        init-method="init" destroy-method="destroy">
        <argument value="bundleContextUser"/>
        <property name="componentOne">
-           <ref component="bundleContext" />
+           <ref component="blueprintBundleContext" />
        </property>
    </bean>
 
-   <bean id="moduleContextUser" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
+   <bean id="blueprintContainerUser" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
        init-method="init" destroy-method="destroy">
-       <argument value="moduleContextUser"/>
+       <argument value="blueprintContainerUser"/>
        <property name="componentOne">
-           <ref component="moduleContext" />
+           <ref component="blueprintContainer" />
        </property>
    </bean>
 
-   <bean id="conversionServiceUser" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
+   <bean id="converterUser" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
        init-method="init" destroy-method="destroy">
-       <argument value="conversionServiceUser"/>
+       <argument value="converterUser"/>
        <property name="componentOne">
-           <ref component="conversionService" />
+           <ref component="blueprintConverter" />
        </property>
    </bean>
 </blueprint>

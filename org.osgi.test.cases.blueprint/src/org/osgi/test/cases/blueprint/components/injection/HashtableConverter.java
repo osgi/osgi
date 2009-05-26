@@ -19,19 +19,19 @@ package org.osgi.test.cases.blueprint.components.injection;
 import java.util.Map;
 import java.util.Hashtable;
 
-import org.osgi.service.blueprint.convert.Converter;
+import org.osgi.service.blueprint.container.Converter;
 
 public class HashtableConverter implements Converter {
-    public Object convert(Object source) throws Exception {
-        if (source instanceof Map) {
+    public Object convert(Object source, Class toType) throws Exception {
+        if (source instanceof Map && toType == Hashtable.class) {
             return new Hashtable((Map)source);
         }
         // we're supposed to throw an exception if we can't convert
         throw new Exception("Unconvertable object type");
     }
 
-    public Class getTargetClass() {
-        return Hashtable.class;
+    public boolean canConvert(Object value, Class toType) {
+        return toType == Hashtable.class && value instanceof Map;
     }
 }
 
