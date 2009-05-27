@@ -76,7 +76,6 @@ public abstract class WebContainerTestBundleControl extends
         JarURLConnection conn = (JarURLConnection) url.openConnection();
         JarFile jarfile = conn.getJarFile();
         Manifest originalManifest = jarfile.getManifest();
-
         return originalManifest;
     }
 
@@ -114,12 +113,12 @@ public abstract class WebContainerTestBundleControl extends
     protected String getWarURL(String name, Map options) {
         String query = generateQuery(options);
         if (query != null && query.length() > 0) {
-            return WARSCHEMA + getWebServer() + name + "?"
-            // return getWebServer() + name + "?"
-                    + generateQuery(options);
+            //return WARSCHEMA + getWebServer() + name + "?"
+            return getWebServer() + name;
+            //        + generateQuery(options);
         } else {
-            return WARSCHEMA + getWebServer() + name;
-            // return  getWebServer() + name;
+            //return WARSCHEMA + getWebServer() + name;
+            return  getWebServer() + name;
         }
     }
 

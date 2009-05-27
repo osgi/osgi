@@ -15,13 +15,16 @@
  */
 package org.osgi.test.cases.webcontainer.validate;
 
-import java.io.InputStream;
 import java.net.URL;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
+import java.util.jar.Attributes;
 import java.util.jar.Manifest;
+import java.util.jar.Attributes.Name;
 
 import junit.framework.Assert;
 
@@ -82,6 +85,7 @@ public class BundleManifestValidator extends Assert implements Validator{
         validateExportPackage();
         validateWebContextPath();
         validateJSPExtractLocation();
+        validateOthersPreserved();
     }
     
     
@@ -374,6 +378,36 @@ public class BundleManifestValidator extends Assert implements Validator{
         
         // TODO verify the extract location exists and has the right content.
         // TODO what if a user specifies a non-unique jsp extract location?
+    }
+    
+    /*
+     * validate other values specified by the original manifest is preserved, 
+     * after the war manifest processing by the url handler
+     */
+    public void validateOthersPreserved() throws Exception {
+        // original manifest attribute
+        Attributes attributes = this.manifest.getMainAttributes();
+
+        Set keyset = (Set)attributes.keySet();
+        Iterator it = keyset.iterator();
+        while(it.hasNext()) {
+            Name key = (Name)it.next();
+            if (key.toString().equals(Constants.BUNDLE_VERSION) ||
+                    key.toString().equals(Constants.BUNDLE_SYMBOLICNAME) ||
+                    key.toString().equals(Constants.BUNDLE_MANIFESTVERSION) ||
+                    key.toString().equals(Constants.BUNDLE_CLASSPATH) ||
+                    key.toString().equals(Constants.IMPORT_PACKAGE) ||
+                    key.toString().equals(Constants.EXPORT_PACKAGE) ||
+                    key.toString().equals(WEB_CONTEXT_PATH) ||
+                    key.toString().equals(WEB_JSP_EXTRACT_LOCATION)) {
+                continue;
+            } else {
+                // compare the other attribute with what is in the dictionary from the bundle.getHeaders()
+                log("from original manifest " + key + ": " + attributes.get(key));
+                log("from bundle headers " + key + ": " + this.dictionary.get(key.toString()));
+               assertEquals("checking if other attributes from original manifest is preserved", attributes.get(key), this.dictionary.get(key.toString()));
+            }           
+        }
     }
     
     // check if a particular classpath exist in the classpath c String array

@@ -15,6 +15,8 @@
  */
 package org.osgi.test.cases.webcontainer.junit;
 
+import java.io.File;
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.jar.Manifest;
 

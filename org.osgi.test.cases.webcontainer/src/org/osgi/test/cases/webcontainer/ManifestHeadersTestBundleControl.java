@@ -93,7 +93,7 @@ public abstract class ManifestHeadersTestBundleControl extends
     }
 
     /*
-     * generalVersionTest to be used by non-error test
+     * generalHeadersTest to be used by non-error test
      */
     protected Bundle generalHeadersTest(Map options, String warName, boolean start)
             throws Exception {
