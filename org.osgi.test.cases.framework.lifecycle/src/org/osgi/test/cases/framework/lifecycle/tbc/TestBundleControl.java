@@ -30,7 +30,6 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  */
 public class TestBundleControl extends DefaultTestBundleControl implements
 		BundleListener, ServiceListener {
-	PermissionAdmin				permissionAdmin	= null;
 	BundleContext				_otherContext;
 	Vector						_eventQueue		= new Vector(16);
 
@@ -340,27 +339,28 @@ public class TestBundleControl extends DefaultTestBundleControl implements
 	/**
 	 * Test the permissions in the framework
 	 */
-//	synchronized public void testPermissions() throws Exception {
-//		Bundle tb;
-//		Bundle tbPerm;
-//		tb = installBundle("lifecycle.tb5.jar", false);
-//		tbPerm = installBundle("lifecycle.tb10.jar");
-//		tb.start();
-//		tbPerm.start();
-//		ServiceReference serviceRef = getContext().getServiceReference(ServiceReferenceGetter.class
-//				.getName());
-//		if (serviceRef != null) {
-//			ServiceReferenceGetter serviceReferenceGetter = (ServiceReferenceGetter) getContext()
-//					.getService(serviceRef);
-//			serviceReferenceGetter.setServiceReference(getContext()
-//					.getServiceReference(PermissionAdmin.class.getName()));
-//		}
-//		wait(5000);
-//		tbPerm.uninstall();
-//		if ((tb.getState() & Bundle.UNINSTALLED) == 0) {
-//			tb.uninstall();
-//		}
-//	}
+	synchronized public void testPermissions() throws Throwable {
+		Bundle tb;
+		Bundle tbPerm;
+		tb = installBundle("lifecycle.tb5.jar", false);
+		tbPerm = installBundle("lifecycle.tb10.jar", false);
+		setPermissions(tb, tbPerm);
+		try {
+			tb.start();
+			tbPerm.start();
+			ServiceReferenceGetter serviceReferenceGetter = (ServiceReferenceGetter) getService(ServiceReferenceGetter.class);
+			serviceReferenceGetter.setServiceReference(getContext().getServiceReference(PermissionAdmin.class.getName()));
+			Throwable result = ((TestResult)serviceReferenceGetter).get();
+			if (result != null)
+				throw result;
+		} finally {
+			tbPerm.uninstall();
+			if ((tb.getState() & Bundle.UNINSTALLED) == 0) {
+				tb.uninstall();
+			}
+			unsetPermissions(tb, tbPerm);
+		}
+	}
 
 	synchronized void syncService(String test, int event) {
 		if (_eventQueue.size() == 0)
@@ -415,46 +415,45 @@ public class TestBundleControl extends DefaultTestBundleControl implements
 		}
 	}
 
-//	void setPermissions() {
-//		//get the permission admin service
-//		serviceRef = getContext().getServiceReference(PermissionAdmin.class
-//				.getName());
-//		if (serviceRef != null)
-//			permissionAdmin = (PermissionAdmin) getContext().getService(serviceRef);
-//		if (permissionAdmin != null) {
-//			PermissionInfo[] permInfoArrayLocation = {
-//					new PermissionInfo(AllPermission.class.getName(), null, null)
-//			};
-//			permissionAdmin
-//					.setPermissions((getContext().getBundle()).getLocation(),
-//							permInfoArrayLocation);
-//			permissionAdmin.setPermissions(_tcHome + "tb10.jar",
-//					permInfoArrayLocation);
-//			//set permissions for all bundle 5&8
-//			PermissionInfo[] permInfoArrayService = {
-//					new PermissionInfo(ServicePermission.class.getName(),
-//							"org.*", "get,register"),
-//					new PermissionInfo(PackagePermission.class.getName(), "*",
-//							"EXPORT,IMPORT")};
-//			permissionAdmin.setPermissions(_tcHome + "tb5.jar",
-//					permInfoArrayService);
-//			permissionAdmin.setPermissions(_tcHome + "tb8.jar",
-//					permInfoArrayService);
-//			//set permissions for tb10
-//			PermissionInfo[] permInfoArrayTB10 = {
-//					new PermissionInfo(ServicePermission.class.getName(),
-//							"org.osgi.test.*", "get"),
-//					new PermissionInfo(ServicePermission.class.getName(),
-//							"org.osgi.framework.*", "get,register"),
-//					new PermissionInfo(
-//							ServicePermission.class.getName(),
-//							"org.osgi.test.cases.framework.lifecycle.servicereferencegetter.*",
-//							"get,register"),
-//					new PermissionInfo(PackagePermission.class.getName(), "*",
-//							"EXPORT,IMPORT")};
-//			permissionAdmin.setPermissions(_tcHome + "tb10.jar",
-//					permInfoArrayTB10);
-//		}
-//	}
+	void setPermissions(Bundle tb5, Bundle tb10) {
+		//get the permission admin service
+		PermissionAdmin permissionAdmin = (PermissionAdmin) getService(PermissionAdmin.class);
+		if (permissionAdmin == null)
+			return;
+		//set permissions for all bundle 5
+		PermissionInfo[] permInfoArrayService = {
+				new PermissionInfo(ServicePermission.class.getName(),
+						"org.*", "get,register"),
+				new PermissionInfo(PackagePermission.class.getName(), "*",
+						"EXPORT,IMPORT")};
+		permissionAdmin.setPermissions(tb5.getLocation(),
+				permInfoArrayService);
 
+		//set permissions for tb10
+		PermissionInfo[] permInfoArrayTB10 = {
+				new PermissionInfo(ServicePermission.class.getName(),
+						"org.osgi.test.*", "get"),
+				new PermissionInfo(ServicePermission.class.getName(),
+						"org.osgi.framework.*", "get,register"),
+				new PermissionInfo(
+						ServicePermission.class.getName(),
+						"org.osgi.test.cases.framework.lifecycle.servicereferencegetter.*",
+						"get,register"),
+				new PermissionInfo(
+						ServicePermission.class.getName(),
+						"org.osgi.test.cases.framework.lifecycle.tbc.TestResult",
+						"get,register"),
+				new PermissionInfo(PackagePermission.class.getName(), "*",
+						"EXPORT,IMPORT")};
+		permissionAdmin.setPermissions(tb10.getLocation(),
+				permInfoArrayTB10);
+	}
+
+	void unsetPermissions(Bundle tb5, Bundle tb10) {
+		PermissionAdmin permissionAdmin = (PermissionAdmin) getService(PermissionAdmin.class);
+		if (permissionAdmin == null)
+			return;
+		permissionAdmin.setPermissions(tb5.getLocation(), null);
+		permissionAdmin.setPermissions(tb10.getLocation(), null);
+	}
 }

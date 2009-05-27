@@ -6,25 +6,27 @@
  */
 package org.osgi.test.cases.framework.lifecycle.tb10;
 
+import junit.framework.Assert;
+import junit.framework.AssertionFailedError;
+import junit.framework.TestCase;
+
 import org.osgi.framework.*;
 import org.osgi.service.permissionadmin.*;
 import org.osgi.test.cases.framework.lifecycle.servicereferencegetter.*;
 import org.osgi.test.cases.framework.lifecycle.tb5.*;
-import org.osgi.test.cases.logproxy.*;
+import org.osgi.test.cases.framework.lifecycle.tbc.TestResult;
 
 /**
  * Testing permissions in the framework
  * 
  * @author Ericsson Telecom AB
  */
-public class TestPermission extends Thread implements ServiceReferenceGetter,
-		BundleActivator {
-	ServiceReference	_linkRef;
+public class TestPermission implements ServiceReferenceGetter, TestResult, BundleActivator {
 	ServiceReference	_permServiceRef	= null;
 	boolean				refSet			= false;
-	LogProxy			_link;
 	BundleContext		bc;
-	boolean				_continue		= true;
+	Throwable			_result 		= null;
+	boolean				_resultSet		= false;
 
 	/**
 	 * Starts the bundle.
@@ -32,7 +34,7 @@ public class TestPermission extends Thread implements ServiceReferenceGetter,
 	TestPermission(BundleContext context) {
 		bc = context;
 		try {
-			bc.registerService(ServiceReferenceGetter.class.getName(), this,
+			bc.registerService(new String[] {TestResult.class.getName(), ServiceReferenceGetter.class.getName()}, this,
 					null);
 		}
 		catch (Exception e) {
@@ -40,292 +42,172 @@ public class TestPermission extends Thread implements ServiceReferenceGetter,
 		}
 	}
 
-	//dummy functions
-	public void start(BundleContext context) {
-	};
-
-	public void stop(BundleContext context) {
-	};
-
-	public synchronized void run() {
+	public synchronized void doTest() {
 		//get the log service
 		try {
-			_linkRef = bc.getServiceReference(LogProxy.class.getName());
-			if (_linkRef != null) {
-				System.out.println("We got a link reference:" + _linkRef);
-				_link = (LogProxy) bc.getService(_linkRef);
-				if (_link != null) {
-					//Wait for the service reference to be set
-					while (refSet == false)
-						wait(1000);
-					testBundlePermissions();
-					testBundleContextPermissions();
-				}
-				else
-					System.out.println("Didn't get a link");
-			}
-			else {
-				System.out.println("Didn't get a service ref");
+			Assert.assertNotNull("Cannot test without security manager", System.getSecurityManager());
+			//Wait for the service reference to be set
+			while (refSet == false)
+				wait(1000);
+			testBundlePermissions();
+			testBundleContextPermissions();
+		}
+		catch (Throwable t) {
+			_result = t;
+		}
+		_resultSet = true;
+		notifyAll();
+	}
+
+	public synchronized Throwable get() {
+		while (!_resultSet) {
+			try {
+				wait(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
-		catch (Exception e) {
-			System.out.println("exception in start of test permission");
-			e.printStackTrace();
-		}
-		quit();
+		return _result;
 	}
 
 	/**
 	 * get the reference to the permission admin service, which we don't have
 	 * permission to get ourselves
 	 */
-	public void setServiceReference(ServiceReference serviceReference) {
+	public synchronized void setServiceReference(ServiceReference serviceReference) {
 		_permServiceRef = serviceReference;
 		refSet = true;
+		notifyAll();
 	}
 
 	void testBundlePermissions() {
 		Bundle bundle = (bc.getServiceReference(EventTest.class.getName()))
 				.getBundle();
-		SecurityManager sm = System.getSecurityManager();
 		//stop
 		try {
 			bundle.stop();
-			if (sm == null)
-				_link
-						.log(
-								"Got security exception in stop(), as expected or no security manager present",
-								"OK");
-			else
-				_link.log("Didn't get security exception in stop()", "FAIL");
+			Assert.fail("Didn't get security exception in stop(): FAIL");
 		}
 		catch (SecurityException se) {
-			_link
-					.log(
-							"Got security exception in stop(), as expected or no security manager present",
-							"OK");
+			// do nothing; PASS.
 		}
 		catch (Exception e) {
-			_link.log("Unexpected exception in stop()", "FAIL");
-			e.printStackTrace();
+			fail("Unexpected exception in stop(): FAIL ", e);
 		}
 		//update
 		try {
 			bundle.update();
-			if (sm == null)
-				_link
-						.log(
-								"Got security exception in update(), as expected or no security manager present",
-								"OK");
-			else
-				_link.log("Didn't get security exception in update()", "FAIL");
+			Assert.fail("Didn't get security exception in update(): FAIL");
 		}
 		catch (SecurityException se) {
-			_link
-					.log(
-							"Got security exception in update(), as expected or no security manager present",
-							"OK");
+			// do nothing; PASS.
 		}
 		catch (Exception e) {
-			_link.log("Unexpected exception in update()", "FAIL");
-			e.printStackTrace();
+			fail("Unexpected exception in update(): FAIL ", e);
 		}
 		//start
 		try {
 			bundle.start();
-			if (sm == null)
-				_link
-						.log(
-								"Got security exception in start(), as expected or no security manager present",
-								"OK");
-			else
-				_link.log("Didn't get security exception in start()", "FAIL");
+			Assert.fail("Didn't get security exception in start(): FAIL");
 		}
 		catch (SecurityException se) {
-			_link
-					.log(
-							"Got security exception in start(), as expected or no security manager present",
-							"OK");
+			// do nothing; PASS
 		}
 		catch (Exception e) {
-			_link.log("Unexpected exception in start()", "FAIL");
-			e.printStackTrace();
+			fail("Unexpected exception in start(): FAIL ", e);
 		}
 		//uninstall
 		try {
 			bundle.uninstall();
-			if (sm == null)
-				_link
-						.log(
-								"Got security exception in uninstall(), as expected or no security manager present",
-								"OK");
-			else
-				_link.log("Didn't get security exception in uninstall()",
-						"FAIL");
+			Assert.fail("Didn't get security exception in uninstall(): FAIL");
 		}
 		catch (SecurityException se) {
-			_link
-					.log(
-							"Got security exception in uninstall(), as expected or no security manager present",
-							"OK");
+			// do nothing; PASS
 		}
 		catch (Exception e) {
-			_link.log("Unexpected exception in uninstall()", "FAIL");
-			e.printStackTrace();
+			fail("Unexpected exception in uninstall(): FAIL ", e);
 		}
 		//getHeaders
 		try {
 			bundle.getHeaders();
-			if (sm == null)
-				_link
-						.log(
-								"Got security exception in getHeaders(), as expected or no security manager present",
-								"OK");
-			else
-				_link.log("Didn't get security exception in getHeaders()",
-						"FAIL");
+			Assert.fail("Didn't get security exception in getHeaders(): FAIL");
 		}
 		catch (SecurityException se) {
-			_link
-					.log(
-							"Got security exception in getHeaders(), as expected or no security manager present",
-							"OK");
+			// do nothing; PASS
 		}
 		catch (Exception e) {
-			_link.log("Unexpected exception in getHeaders()", "FAIL");
-			e.printStackTrace();
+			fail("Unexpected exception in getHeaders(): FAIL ", e);
 		}
 		//getLocation
 		try {
 			bundle.getLocation();
-			if (sm == null)
-				_link
-						.log(
-								"Got security exception in getLocation(), as expected or no security manager present",
-								"OK");
-			else
-				_link.log("Didn't get security exception in getLocation()",
-						"FAIL");
+			Assert.fail("Didn't get security exception in getLocation(): FAIL");
 		}
 		catch (SecurityException se) {
-			_link
-					.log(
-							"Got security exception in getLocation(), as expected or no security manager present",
-							"OK");
+			// do nothing; PASS
 		}
 		catch (Exception e) {
-			_link.log("Unexpected exception in getLocation()", "FAIL");
-			e.printStackTrace();
+			fail("Unexpected exception in getLocation(): FAIL ", e);
 		}
 	}
 
 	void testBundleContextPermissions() {
-		SecurityManager sm = System.getSecurityManager();
 		//registerService
 		try {
 			bc.registerService(BundleActivator.class.getName(), this, null);
-			_link.log("Were able to register service BundleActivator", "OK");
 		}
 		catch (Exception e) {
-			_link.log("Exception in testBundleContextPermissions", "FAIL");
-			e.printStackTrace();
+			fail("Exception in testBundleContextPermissions: FAIL", e);
 		}
 		try {
 			bc.registerService(TestPermission.class.getName(), this, null);
-			if (sm == null)
-				_link
-						.log(
-								"Got security exception when regestering service without permission or no security manager present",
-								"OK");
-			else
-				_link
-						.log(
-								"Were able to register service without having permissions",
-								"FAIL");
+			Assert.fail("Were able to register service without having permissions: FAIL");
 		}
 		catch (SecurityException se) {
-			_link
-					.log(
-							"Got security exception when regestering service without permission or no security manager present",
-							"OK");
+			// do nothing; PASS.
 		}
 		catch (Exception e) {
-			_link.log("Exception in testBundleContextPermissions", "FAIL");
-			e.printStackTrace();
+			fail("Exception in testBundleContextPermissions: FAIL", e);
 		}
 		//getReference
 		try {
 			ServiceReference permissionServiceRef = bc
 					.getServiceReference(PermissionAdmin.class.getName());
 			if (permissionServiceRef != null) {
-				if (sm == null)
-					_link
-							.log(
-									"Unable to get service reference to a service to which we lacked permission or no security manager present",
-									"OK");
-				else
-					_link
-							.log(
-									"Were able to get service refernce to permission admin without permission",
-									"FAIL");
-			}
-			else {
-				_link
-						.log(
-								"Unable to get service reference to a service to which we lacked permission or no security manager present",
-								"OK");
+				Assert.fail("Were able to get service refernce to permission admin without permission: FAIL");
 			}
 		}
 		catch (Exception e) {
-			_link.log("Exception in testBundleContextPermissions", "FAIL");
-			e.printStackTrace();
+			fail("Exception in testBundleContextPermissions: FAIL", e);
 		}
 		//getService
 		//We got the service refernce earlier when tb10 had allPermissions
 		try {
-			if (_permServiceRef != null) {
-				bc.getService(_permServiceRef);
-				if (sm == null)
-					_link
-							.log(
-									"Got security exception when getting service without having permission or no security manager present",
-									"OK");
-				else
-					_link
-							.log(
-									"Were able to get permission admin without permission",
-									"FAIL");
-			}
-			else {
-				if (sm == null)
-					_link
-							.log(
-									"Got security exception when getting service without having permission or no security manager present",
-									"OK");
-				else
-					_link
-							.log(
-									"Didn't have a service reference to permission admin",
-									"FAIL");
-			}
+			Assert.assertNotNull("ServiceReference is null!", _permServiceRef);
+			bc.getService(_permServiceRef);
+			Assert.fail("Were able to get permission admin without permission: FAIL");
 		}
 		catch (SecurityException se) {
-			_link
-					.log(
-							"Got security exception when getting service without having permission or no security manager present",
-							"OK");
+			// do nothing; PASS
 		}
 		catch (Exception e) {
-			_link.log("Exception in testBundleContextPermissions", "FAIL");
-			e.printStackTrace();
+			fail("Exception in testBundleContextPermissions: FAIL", e);
 		}
 	}
 
-	void quit() {
-		if (_continue) {
-			bc.ungetService(_linkRef);
-			_linkRef = null;
-			_continue = false;
-		}
+	public static void fail(String message, Throwable t) {
+		AssertionFailedError e = new AssertionFailedError(message + ": "
+				+ t.getMessage());
+		e.initCause(t);
+		throw e;
+	}
+
+	public void start(BundleContext context) throws Exception {
+		// do nothing
+	}
+
+	public void stop(BundleContext context) throws Exception {
+		// do nothing
+		
 	}
 }

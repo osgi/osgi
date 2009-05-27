@@ -15,21 +15,26 @@ import org.osgi.framework.*;
  */
 public class BundleActivatorImpl implements BundleActivator {
 	BundleContext	bc;
-	TestPermission	tb;
+	TestPermission	tp;
 
 	/**
 	 * Starts the bundle.
 	 */
 	public void start(BundleContext context) {
 		bc = context;
-		tb = new TestPermission(bc);
-		tb.start();
+		tp = new TestPermission(bc);
+		Thread testThread = new Thread(new Runnable(){
+
+			public void run() {
+				tp.doTest();
+			}}, "TestPermissions");
+		testThread.start();
 	}
 
 	/**
 	 * Stops the bundle. Waits indefinitely.
 	 */
 	public void stop(BundleContext bc) {
-		tb.quit();
+
 	}
 }

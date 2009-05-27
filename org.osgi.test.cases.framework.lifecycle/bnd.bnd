@@ -25,7 +25,8 @@ Include-Resource					= \
 	lifecycle.tb6b.jar, \
 	lifecycle.tb7.jar, \
 	lifecycle.tb8.jar, \
-	lifecycle.tb9.jar
+	lifecycle.tb9.jar, \
+	lifecycle.tb10.jar
 
 Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
 
@@ -37,5 +38,5 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 
 -runbundles							= 
 
--runproperties = report=true
-	
+-runproperties = report=true, \
+	org.osgi.framework.security=osgi
