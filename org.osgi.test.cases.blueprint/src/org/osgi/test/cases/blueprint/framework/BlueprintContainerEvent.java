@@ -96,6 +96,42 @@ public class BlueprintContainerEvent extends AdminTestEvent {
         return true;
     }
 
+
+    /**
+     * Do any event-specific validation of a received event.  If the
+     * event is not good, then a TestEvent instance that can be added
+     * to the failure list should be returned.  A validation failure will
+     * terminate processing of this event.
+     *
+     * @param received The received event.
+     *
+     * @return A TestEvent instance used to raise a deferred failure or null if
+     *         this was ok.
+     */
+    public TestEvent validate(TestEvent received) {
+        // this should be true, since we matched, but don't assume
+        if (!(received instanceof BlueprintContainerEvent)) {
+            return null;
+        }
+        // just a few things we validate here...
+        BlueprintContainerEvent other = (BlueprintContainerEvent)received;
+
+        if (topic.equals("org/osgi/test/cases/blueprint/BlueprintContainer/UNKNOWN")) {
+            return new AssertionFailure("Unknown event BlueprintEvent type received");
+        }
+
+        // if we have exception information, then keep this even if we replace it with another error.
+        Throwable cause = (Throwable)other.props.get(EXCEPTION);
+        // if this is a failure event, then the exception property is required
+        if (isError() && cause == null) {
+            return new AssertionFailure("Missing exception cause on a failure event: " + other.toString());
+        }
+
+        // allow the superclass to validate this (which includes calling potential
+        // listeners
+        return super.validate(received);
+    }
+
     /**
      * Format this event into a string value.
      *

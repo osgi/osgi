@@ -415,6 +415,9 @@ public class BaseTestController implements EventHandler, BlueprintListener, Serv
         if (e.getException() != null) {
             props.put(EventConstants.EXCEPTION, e.getException());
         }
+        if (e.getDependencies() != null) {
+            props.put(org.osgi.service.blueprint.container.EventConstants.DEPENDENCIES, e.getDependencies());
+        }
         handleEvent(new Event("org/osgi/test/cases/blueprint/BlueprintContainer/" + topic, props));
     }
 
