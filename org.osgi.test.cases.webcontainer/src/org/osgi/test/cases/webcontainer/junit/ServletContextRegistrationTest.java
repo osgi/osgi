@@ -263,7 +263,7 @@ public class ServletContextRegistrationTest extends
         assertFalse("Bundle not started yet - should not be able to access "
                 + cp, super.ableAccessPath(cp));
         
-        srs = getContext().getServiceReferences(ServletContext.class.getName(), "(" + WEB_CONTEXT_PATH + "=" + (String)b.getHeaders().get(WEB_CONTEXT_PATH));
+        srs = getContext().getServiceReferences(ServletContext.class.getName(), "(" + OSGI_WEB_SYMBOLICNAME + "=" + (String)b.getHeaders().get(Constants.BUNDLE_SYMBOLICNAME));
         assertNull("srs should be null as the bundle has been stopped", srs);
 
         if (start) {
