@@ -6,7 +6,8 @@
  */
 package org.osgi.test.cases.framework.lifecycle.tb9;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 
 /**
  * Bundle for the HangInStop test.
@@ -18,6 +19,7 @@ public class HangInStop implements BundleActivator {
 	 * Starts the bundle.
 	 */
 	public void start(BundleContext bc) {
+		// empty
 	}
 
 	/**

@@ -1,19 +1,16 @@
-Manifest-Version: 1.0
 Bundle-SymbolicName: ${p}
-Bundle-Name: test.framework.lifecycle
+Bundle-Name: ${p}
 Bundle-Copyright: ${copyright}
 Bundle-Vendor: OSGi Alliance
 Bundle-Version: 4.2.0.${project.build}
 Bundle-DocUrl: http://membercvs.osgi.org/test/3
 Bundle-ContactAddress: speccomments@mail.osgi.org
 Bundle-Category: osgi,test
-Export-Package: ${p}.servicereferencegetter, \
- ${p}.tbc,
+Export-Package: ${p}.servicereferencegetter
 
 Private-Package						= \
 	org.osgi.test.support.*, \
-	${p}.servicereferencegetter, \
-	${p}.tbc.*
+	org.osgi.test.cases.framework.junit.*
 
 Include-Resource					= \
 	lifecycle.tb1.jar, \
@@ -39,4 +36,7 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 -runbundles							= 
 
 -runproperties = report=true, \
-	org.osgi.framework.security=osgi
+	osgi.compatibility.bootdelegation=false, \
+	osgi.resolverMode=strict, \
+	org.osgi.framework.security=osgi, \
+	org.osgi.framework.trust.repositories=${build}/keystore

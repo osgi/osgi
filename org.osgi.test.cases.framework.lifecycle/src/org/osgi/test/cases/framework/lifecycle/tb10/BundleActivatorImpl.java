@@ -6,7 +6,8 @@
  */
 package org.osgi.test.cases.framework.lifecycle.tb10;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 
 /**
  * Testing permissions in the framework
@@ -34,7 +35,7 @@ public class BundleActivatorImpl implements BundleActivator {
 	/**
 	 * Stops the bundle. Waits indefinitely.
 	 */
-	public void stop(BundleContext bc) {
-
+	public void stop(BundleContext context) {
+		// empty
 	}
 }

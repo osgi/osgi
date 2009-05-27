@@ -4,18 +4,31 @@
  * This source code is owned by Ericsson Radio Systems AB, and is being distributed to OSGi
  * MEMBERS as MEMBER LICENSED MATERIALS under the terms of section 3.2 of the OSGi MEMBER AGREEMENT.
  */
-package org.osgi.test.cases.framework.lifecycle.tbc;
+package org.osgi.test.cases.framework.junit.lifecycle;
 
-import java.io.*;
-import java.lang.reflect.*;
-import java.net.*;
-import java.security.AllPermission;
-import java.util.*;
-import org.osgi.framework.*;
-import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
-import org.osgi.service.condpermadmin.ConditionalPermissionUpdate;
-import org.osgi.service.permissionadmin.*;
-import org.osgi.test.cases.framework.lifecycle.servicereferencegetter.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Hashtable;
+import java.util.Vector;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleEvent;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.BundleListener;
+import org.osgi.framework.PackagePermission;
+import org.osgi.framework.ServiceEvent;
+import org.osgi.framework.ServiceListener;
+import org.osgi.framework.ServicePermission;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.permissionadmin.PermissionAdmin;
+import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.framework.lifecycle.servicereferencegetter.ServiceReferenceGetter;
+import org.osgi.test.cases.framework.lifecycle.servicereferencegetter.TestResult;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
@@ -30,34 +43,40 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  */
 public class TestBundleControl extends DefaultTestBundleControl implements
 		BundleListener, ServiceListener {
-	BundleContext				_otherContext;
-	Vector						_eventQueue		= new Vector(16);
-
+	private Vector			_eventQueue	= new Vector(16);
 
 	/**
 	 * Tests normal Install/Uninstall/start/stop of a bundle.
 	 */
 	public void testNormalInstallStartStopUninstall() throws Exception {
 		Bundle tb = installBundle("lifecycle.tb1.jar", false);
-		assertTrue("Wring bundle state: " + tb.getState(), tb.getState() == Bundle.INSTALLED || tb.getState() == Bundle.RESOLVED);
+		assertTrue("Wring bundle state: " + tb.getState(),
+				tb.getState() == Bundle.INSTALLED
+						|| tb.getState() == Bundle.RESOLVED);
 		try {
 			tb.start();
-		} catch(BundleException e) {
+		}
+		catch (BundleException e) {
 			fail("Failed to start " + tb.getSymbolicName(), e);
 		}
-		assertEquals("Wrong state for " + tb.getSymbolicName(), Bundle.ACTIVE, tb.getState());
+		assertEquals("Wrong state for " + tb.getSymbolicName(), Bundle.ACTIVE,
+				tb.getState());
 		try {
 			tb.stop();
-		} catch (BundleException e) {
+		}
+		catch (BundleException e) {
 			fail("Failed to stop " + tb.getSymbolicName(), e);
 		}
-		assertEquals("Wrong state for " + tb.getSymbolicName(), Bundle.RESOLVED, tb.getState());
+		assertEquals("Wrong state for " + tb.getSymbolicName(),
+				Bundle.RESOLVED, tb.getState());
 		try {
 			tb.uninstall();
-		} catch (BundleException e) {
+		}
+		catch (BundleException e) {
 			fail("Failed to uninstall " + tb.getSymbolicName(), e);
 		}
-		assertEquals("Wrong state for " + tb.getSymbolicName(), Bundle.UNINSTALLED, tb.getState());
+		assertEquals("Wrong state for " + tb.getSymbolicName(),
+				Bundle.UNINSTALLED, tb.getState());
 	}
 
 	/**
@@ -71,11 +90,13 @@ public class TestBundleControl extends DefaultTestBundleControl implements
 			fail("Testing start with exception: No exception thrown, Error!");
 		}
 		catch (BundleException be) {
-			assertEquals("Wrong state for " + tb2a.getSymbolicName(), Bundle.RESOLVED, tb2a.getState());
+			assertEquals("Wrong state for " + tb2a.getSymbolicName(),
+					Bundle.RESOLVED, tb2a.getState());
 		}
 		try {
 			tb2a.uninstall();
-		} catch (BundleException e) {
+		}
+		catch (BundleException e) {
 			fail("Failed to uninstall " + tb2a.getSymbolicName(), e);
 		}
 		tb2a = null;
@@ -83,20 +104,24 @@ public class TestBundleControl extends DefaultTestBundleControl implements
 		tb2b = installBundle("lifecycle.tb2b.jar", false);
 		try {
 			tb2b.start();
-		} catch (BundleException e) {
+		}
+		catch (BundleException e) {
 			fail("Failed to start " + tb2b.getSymbolicName(), e);
 		}
-		assertEquals("Wrong state for " + tb2b.getSymbolicName(), Bundle.ACTIVE, tb2b.getState());
+		assertEquals("Wrong state for " + tb2b.getSymbolicName(),
+				Bundle.ACTIVE, tb2b.getState());
 		try {
 			tb2b.stop();
 			fail("Testing stop with exception: No exception thrown, Error!");
 		}
 		catch (BundleException be) {
-			assertEquals("Wrong state for " + tb2b.getSymbolicName(), Bundle.RESOLVED, tb2b.getState());
+			assertEquals("Wrong state for " + tb2b.getSymbolicName(),
+					Bundle.RESOLVED, tb2b.getState());
 		}
 		try {
 			tb2b.uninstall();
-		} catch (BundleException e) {
+		}
+		catch (BundleException e) {
 			fail("Failed to uninstall " + tb2b.getSymbolicName(), e);
 		}
 		tb2b = null;
@@ -106,10 +131,8 @@ public class TestBundleControl extends DefaultTestBundleControl implements
 	 * Tests unavailable URL.
 	 */
 	public void testUnavailableURL() throws Exception {
-		Bundle tb3;
-		String res;
 		try {
-			tb3 = getContext().installBundle("NoSuchBundle.jar");
+			getContext().installBundle("NoSuchBundle.jar");
 			fail("No exception thrown, Error!");
 		}
 		catch (BundleException be) {
@@ -121,19 +144,19 @@ public class TestBundleControl extends DefaultTestBundleControl implements
 	 * Tests halfway broken inputstream during install.
 	 */
 	public void testBrokenStream() throws Exception {
-		Bundle tb4;
-		String res = null;
 		byte b[] = new byte[500];
 		try {
 			URL url = getContext().getBundle().getEntry("lifecycle.tb4.jar");
 			assertNotNull("lifecycle.tb4.jar is null", url);
 			InputStream in = url.openStream();
 			// Read 500 bytes of the file
-			for (int i = 0; i < 500; i += in.read(b, i, 500 - i));
+			for (int i = 0; i < 500; i += in.read(b, i, 500 - i)) {
+				// empty
+			}
 			// Now, make an InputStream from those first 500 bytes.
 			ByteArrayInputStream bin = new ByteArrayInputStream(b);
 			try {
-				tb4 = getContext().installBundle(url.toExternalForm(), bin);
+				getContext().installBundle(url.toExternalForm(), bin);
 				fail("No exception thrown, Error!");
 			}
 			catch (BundleException be) {
@@ -149,10 +172,12 @@ public class TestBundleControl extends DefaultTestBundleControl implements
 	 * Used by the Event test below to receive bundle events.
 	 */
 	public synchronized void bundleChanged(BundleEvent be) {
-		// TODO should really test for RESOLVED/UNRESOLVED.  Filtering for now until ...
+		// TODO should really test for RESOLVED/UNRESOLVED. Filtering for now
+		// until ...
 		if ((be.getType() & (BundleEvent.RESOLVED | BundleEvent.UNRESOLVED)) != 0)
 			return;
-		System.out.println("In " + _eventQueue.size() + " event : " + event(be.getType()));
+		System.out.println("In " + _eventQueue.size() + " event : "
+				+ event(be.getType()));
 		_eventQueue.add(be);
 		notify();
 	}
@@ -188,8 +213,9 @@ public class TestBundleControl extends DefaultTestBundleControl implements
 				called[0] = true;
 			}
 		};
-		getContext().addServiceListener(sl,
-				"(objectClass=org.osgi.test.cases.framework.lifecycle.tb5.EventTest)");
+		getContext()
+				.addServiceListener(sl,
+						"(objectClass=org.osgi.test.cases.framework.lifecycle.tb5.EventTest)");
 		tb = installBundle("lifecycle.tb5.jar", false);
 		tb.start();
 		tb.stop();
@@ -217,11 +243,13 @@ public class TestBundleControl extends DefaultTestBundleControl implements
 		Hashtable props;
 		boolean found;
 		clazzes = new String[] {TestBundleControl.class.getName(),
-				DefaultTestBundleControl.class.getName(), ServiceListener.class.getName()};
+				DefaultTestBundleControl.class.getName(),
+				ServiceListener.class.getName()};
 		props = new Hashtable();
 		props.put("PropertyX", "TBC");
 		sr = getContext().registerService(clazzes, this, props);
-		refs = getContext().getServiceReferences(DefaultTestBundleControl.class.getName(), null);
+		refs = getContext().getServiceReferences(
+				DefaultTestBundleControl.class.getName(), null);
 		assertNotNull("No service references found", refs);
 		found = false;
 		for (int i = 0; i < refs.length; i++)
@@ -290,50 +318,55 @@ public class TestBundleControl extends DefaultTestBundleControl implements
 	 * Tries to use a stopped BundleContext.
 	 */
 	public void testStoppedBundleContext() throws Exception {
-		Bundle tb;
-		ServiceReference ref;
-		String res;
-		tb = installBundle("lifecycle.tb8.jar", false);
-		tb.start();
-		BundleContext otherContext = tb.getBundleContext();
-		tb.stop();
-		// By now, this bc should be illegal to use.
+		Bundle tb = installBundle("lifecycle.tb8.jar", false);
 		try {
-			ref = otherContext.getServiceReference(TestBundleControl.class.getName());
-			fail("BundleContext is still usable, ERROR!");
+			tb.start();
+			BundleContext otherContext = tb.getBundleContext();
+			tb.stop();
+			// By now, this bc should be illegal to use.
+			try {
+				otherContext.getServiceReference(TestBundleControl.class
+						.getName());
+				fail("BundleContext is still usable, ERROR!");
 
+			}
+			catch (IllegalStateException ise) {
+				// do nothing; pass
+			}
+			tb.start();
+			// The context should not become reusable after we restart the
+			// bundle!
+			try {
+				otherContext.getServiceReference(TestBundleControl.class
+						.getName());
+				fail("BundleContext is still usable, ERROR!");
+			}
+			catch (IllegalStateException ise2) {
+				// expected
+			}
 		}
-		catch (IllegalStateException ise) {
-			// do nothing; pass
+		finally {
+			tb.stop();
+			tb.uninstall();
 		}
-		tb.start();
-		// The context should not become reusable after we restart the
-		// bundle!
-		try {
-			ref = otherContext.getServiceReference(TestBundleControl.class.getName());
-			fail("BundleContext is still usable, ERROR!");
-		}
-		catch (IllegalStateException ise2) {
-			res = "BundleContext was not usable, Ok.";
-		}
-		tb.stop();
-		tb.uninstall();
 	}
 
 	/**
 	 * Tests that getLocation returns the correct location.
 	 */
 	public void testGetLocation() throws Exception {
-		Bundle tb;
-		String res;
 		// Use the same bundle as the "hang in stop" test, we won't start (or
 		// stop) it anyway.
 		URL url = getContext().getBundle().getEntry("lifecycle.tb9.jar");
 		assertNotNull(url);
 		String loc = url.toExternalForm();
-		tb = getContext().installBundle(loc);
-		assertEquals("Unexpected Location", loc, tb.getLocation());
-		tb.uninstall();
+		Bundle tb = getContext().installBundle(loc);
+		try {
+			assertEquals("Unexpected Location", loc, tb.getLocation());
+		}
+		finally {
+			tb.uninstall();
+		}
 	}
 
 	/**
@@ -349,11 +382,13 @@ public class TestBundleControl extends DefaultTestBundleControl implements
 			tb.start();
 			tbPerm.start();
 			ServiceReferenceGetter serviceReferenceGetter = (ServiceReferenceGetter) getService(ServiceReferenceGetter.class);
-			serviceReferenceGetter.setServiceReference(getContext().getServiceReference(PermissionAdmin.class.getName()));
-			Throwable result = ((TestResult)serviceReferenceGetter).get();
+			serviceReferenceGetter.setServiceReference(getContext()
+					.getServiceReference(PermissionAdmin.class.getName()));
+			Throwable result = ((TestResult) serviceReferenceGetter).get();
 			if (result != null)
 				throw result;
-		} finally {
+		}
+		finally {
 			tbPerm.uninstall();
 			if ((tb.getState() & Bundle.UNINSTALLED) == 0) {
 				tb.uninstall();
@@ -362,16 +397,17 @@ public class TestBundleControl extends DefaultTestBundleControl implements
 		}
 	}
 
-	synchronized void syncService(String test, int event) {
+	private synchronized void syncService(String test, int event) {
 		if (_eventQueue.size() == 0)
 			fail(test + ": Time out on event receive " + event);
 		ServiceEvent se = (ServiceEvent) _eventQueue.remove(0);
-		String service = (String) se.getServiceReference().getProperty("Service-Name");
+		String service = (String) se.getServiceReference().getProperty(
+				"Service-Name");
 		assertEquals("Wrong event type", event, se.getType());
 		assertEquals("Wrong service", test, service);
 	}
 
-	synchronized void syncBundle(String test, int event) {
+	private synchronized void syncBundle(String test, int event) {
 		try {
 			if (_eventQueue.size() == 0) {
 				System.out.println("Waiting for event");
@@ -381,14 +417,15 @@ public class TestBundleControl extends DefaultTestBundleControl implements
 				fail(test + ": Time out on event receive " + event(event));
 			else {
 				BundleEvent be = (BundleEvent) _eventQueue.remove(0);
-				assertEquals(test + ": invalid event", event(event), event(be.getType()));
+				assertEquals(test + ": invalid event", event(event), event(be
+						.getType()));
 			}
 		}
 		catch (InterruptedException x) {/* cannot happen */
 		}
 	}
 
-	String event(int event) {
+	private String event(int event) {
 		switch (event) {
 			case 0 :
 				return "(NONE)";
@@ -402,34 +439,33 @@ public class TestBundleControl extends DefaultTestBundleControl implements
 				return "STOPPED(" + BundleEvent.STOPPED + ")";
 			case BundleEvent.UNINSTALLED :
 				return "UNINSTALLED(" + BundleEvent.UNINSTALLED + ")";
-			case BundleEvent.RESOLVED:
+			case BundleEvent.RESOLVED :
 				return "RESOLVED(" + BundleEvent.RESOLVED + ")";
-			case BundleEvent.UNRESOLVED:
+			case BundleEvent.UNRESOLVED :
 				return "UNRESOLVED(" + BundleEvent.UNRESOLVED + ")";
-			case BundleEvent.STARTING:
+			case BundleEvent.STARTING :
 				return "STARTING(" + BundleEvent.STARTING + ")";
-			case BundleEvent.STOPPING:
+			case BundleEvent.STOPPING :
 				return "STOPPING(" + BundleEvent.STOPPING + ")";
 			default :
 				return "UNKNOWN(" + event + ")";
 		}
 	}
 
-	void setPermissions(Bundle tb5, Bundle tb10) {
-		//get the permission admin service
+	private void setPermissions(Bundle tb5, Bundle tb10) {
+		// get the permission admin service
 		PermissionAdmin permissionAdmin = (PermissionAdmin) getService(PermissionAdmin.class);
 		if (permissionAdmin == null)
 			return;
-		//set permissions for all bundle 5
+		// set permissions for all bundle 5
 		PermissionInfo[] permInfoArrayService = {
-				new PermissionInfo(ServicePermission.class.getName(),
-						"org.*", "get,register"),
+				new PermissionInfo(ServicePermission.class.getName(), "org.*",
+						"get,register"),
 				new PermissionInfo(PackagePermission.class.getName(), "*",
 						"EXPORT,IMPORT")};
-		permissionAdmin.setPermissions(tb5.getLocation(),
-				permInfoArrayService);
+		permissionAdmin.setPermissions(tb5.getLocation(), permInfoArrayService);
 
-		//set permissions for tb10
+		// set permissions for tb10
 		PermissionInfo[] permInfoArrayTB10 = {
 				new PermissionInfo(ServicePermission.class.getName(),
 						"org.osgi.test.*", "get"),
@@ -439,17 +475,12 @@ public class TestBundleControl extends DefaultTestBundleControl implements
 						ServicePermission.class.getName(),
 						"org.osgi.test.cases.framework.lifecycle.servicereferencegetter.*",
 						"get,register"),
-				new PermissionInfo(
-						ServicePermission.class.getName(),
-						"org.osgi.test.cases.framework.lifecycle.tbc.TestResult",
-						"get,register"),
 				new PermissionInfo(PackagePermission.class.getName(), "*",
 						"EXPORT,IMPORT")};
-		permissionAdmin.setPermissions(tb10.getLocation(),
-				permInfoArrayTB10);
+		permissionAdmin.setPermissions(tb10.getLocation(), permInfoArrayTB10);
 	}
 
-	void unsetPermissions(Bundle tb5, Bundle tb10) {
+	private void unsetPermissions(Bundle tb5, Bundle tb10) {
 		PermissionAdmin permissionAdmin = (PermissionAdmin) getService(PermissionAdmin.class);
 		if (permissionAdmin == null)
 			return;

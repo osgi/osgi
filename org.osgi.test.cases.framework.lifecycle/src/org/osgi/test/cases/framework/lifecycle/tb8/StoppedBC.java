@@ -6,8 +6,8 @@
  */
 package org.osgi.test.cases.framework.lifecycle.tb8;
 
-import org.osgi.framework.*;
-import org.osgi.test.cases.framework.lifecycle.tbc.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 
 /**
  * Bundle for the stopped bundle test.
@@ -19,11 +19,13 @@ public class StoppedBC implements BundleActivator {
 	 * Starts the bundle.
 	 */
 	public void start(BundleContext bc) {
+		// empty
 	}
 
 	/**
 	 * Stops the bundle.
 	 */
 	public void stop(BundleContext bc) {
+		// empty
 	}
 }

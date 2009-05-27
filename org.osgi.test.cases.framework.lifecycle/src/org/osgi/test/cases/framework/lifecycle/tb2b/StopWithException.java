@@ -6,7 +6,9 @@
  */
 package org.osgi.test.cases.framework.lifecycle.tb2b;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
 
 /**
  * Bundle for the StopWithException test.
@@ -18,6 +20,7 @@ public class StopWithException implements BundleActivator {
 	 * Starts the bundle.
 	 */
 	public void start(BundleContext bc) {
+		// empty
 	}
 
 	/**

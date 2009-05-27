@@ -6,7 +6,9 @@
  */
 package org.osgi.test.cases.framework.lifecycle.tb2a;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
 
 /**
  * Bundle for the StartWithException test.
@@ -25,5 +27,6 @@ public class StartWithException implements BundleActivator {
 	 * Stops the bundle.
 	 */
 	public void stop(BundleContext bc) {
+		// empty
 	}
 }

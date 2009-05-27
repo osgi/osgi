@@ -6,7 +6,8 @@
  */
 package org.osgi.test.cases.framework.lifecycle.tb6b;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 
 /**
  * Bundle for the normal update test.
@@ -18,11 +19,13 @@ public class NormalUpdate implements BundleActivator {
 	 * Starts the bundle.
 	 */
 	public void start(BundleContext bc) {
+		// empty
 	}
 
 	/**
 	 * Stops the bundle.
 	 */
 	public void stop(BundleContext bc) {
+		// empty
 	}
 }

@@ -1,5 +1,5 @@
 Bundle-SymbolicName: ${p}.tb6b
-Bundle-Name: ${p}.tb6a
+Bundle-Name: ${p}.tb6b
 Bundle-Version: 4.2.0.${project.build}
 Bundle-Activator: ${p}.tb6b.NormalUpdate
 Bundle-Vendor: IBM

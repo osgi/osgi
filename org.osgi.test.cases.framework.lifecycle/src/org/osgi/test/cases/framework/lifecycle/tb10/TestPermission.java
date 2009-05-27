@@ -8,13 +8,15 @@ package org.osgi.test.cases.framework.lifecycle.tb10;
 
 import junit.framework.Assert;
 import junit.framework.AssertionFailedError;
-import junit.framework.TestCase;
 
-import org.osgi.framework.*;
-import org.osgi.service.permissionadmin.*;
-import org.osgi.test.cases.framework.lifecycle.servicereferencegetter.*;
-import org.osgi.test.cases.framework.lifecycle.tb5.*;
-import org.osgi.test.cases.framework.lifecycle.tbc.TestResult;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.permissionadmin.PermissionAdmin;
+import org.osgi.test.cases.framework.lifecycle.servicereferencegetter.ServiceReferenceGetter;
+import org.osgi.test.cases.framework.lifecycle.servicereferencegetter.TestResult;
+import org.osgi.test.cases.framework.lifecycle.tb5.EventTest;
 
 /**
  * Testing permissions in the framework

@@ -6,8 +6,11 @@
  */
 package org.osgi.test.cases.framework.lifecycle.tb5;
 
-import java.util.*;
-import org.osgi.framework.*;
+import java.util.Hashtable;
+
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 
 /**
  * Bundle for the event test.
