@@ -9,7 +9,8 @@ Private-Package						= org.osgi.test.support.*, \
 	${p}.junit.*, \
 	${p}.junit.annotation.*, \
 	${p}.util.*, \
-	${p}.validate.*
+	${p}.validate.*, \
+	${p}.handler.*
 
 Include-Resource					= \
 	resources/tw1/tw1.war, \
@@ -24,7 +25,8 @@ Include-Resource					= \
 	resources/tw5/wmtw5.war, \
 	resources/tw5/wm2tw5.war, \
 	resources/tw5/wm3tw5.war, \
-	util.jar
+	util.jar, \
+	eventHandler.jar
 	
 Import-Package = \
 	javax.servlet, \
@@ -46,11 +48,14 @@ Export-Package =\
 	org.osgi.test.support;					version=project, \
 	org.osgi.service.log;					version=project, \
 	${junit}, \
+	org.osgi.service.event;                 version=project , \
 	org.apache.commons-logging;version=1.0.4
 
 -runbundles						= \
 	org.osgi.impl.bundle.servlet;		version=2.1, \
-	org.osgi.impl.service.log; 			version=project
+	org.osgi.impl.service.log; 			version=project, \
+	org.eclipse.equinox.event; 			version=latest, \
+	osgi; version=latest
 # TODO add the ri bundle here
 	
 -runproperties = report=true, \
