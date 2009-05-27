@@ -310,14 +310,7 @@ Include-Resource					= \
  	www/factory_nested_interfaces.jar=factory_nested_interfaces.jar, \
  	www/factory_service_lifecycle.jar=factory_service_lifecycle.jar, \
  	www/factory_service_properties_evaluation.jar=factory_service_properties_evaluation.jar, \
- 	www/factory_service_properties_auto_update.jar=factory_service_properties_auto_update.jar, \
- 	www/date_namespace_handler.jar=date_namespace_handler.jar, \
- 	www/test_namespace_handler.jar=test_namespace_handler.jar, \
- 	www/component_copy.jar=component_copy.jar, \
- 	www/decorate_namespace.jar=decorate_namespace.jar, \
- 	www/error_decorate.jar=error_decorate.jar, \
- 	www/error_parse.jar=error_parse.jar, \
- 	www/date_namespace_checker.jar=date_namespace_checker.jar
+ 	www/factory_service_properties_auto_update.jar=factory_service_properties_auto_update.jar
 
 Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
 

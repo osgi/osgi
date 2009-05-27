@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
-    xmlns:t1="http://www.osgi.org/schema/blueprint/test/test1/v1.0.0"
-    xmlns:t2="http://www.osgi.org/schema/blueprint/test/test2/v1.0.0">
-
-    <!-- Throw an exception from a parse method call -->
-    <raise-error/>
-</blueprint>
-

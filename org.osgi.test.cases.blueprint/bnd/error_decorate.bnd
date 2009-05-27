@@ -1,7 +1,0 @@
-Bundle-SymbolicName:                     ${p}.error_decorate
-Bundle-Version:                          4.2
-Import-Package:                          ${p}.components.namespace, ${p}.services
--resourceonly: true
-Include-Resource					= \
-	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/namespace/error_decorate.xml
-
