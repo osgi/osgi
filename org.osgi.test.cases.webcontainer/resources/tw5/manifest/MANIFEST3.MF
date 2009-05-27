@@ -6,4 +6,4 @@ Bundle-SymbolicName: org.osgi.test.cases.webcontainer.wm3tw5
 Bundle-Name: org.osgi.test.cases.webcontainer.wm3tw5
 Bundle-Description: OSGi Web Container RFC 66 Compliance Test test war 5 with manifest Bundle-Classpath pre-specified
 Web-ContextPath: /wmtw5
-Bundle-ClassPath: .,WEB-INF/classes/,WEB-INF/lib/org.apache.commons-logging-1.0.4.jar,WEB-INF/lib/org.osgi.test.cases.webcontainer.simple.jar
+Bundle-ClassPath: WEB-INF/classes/,WEB-INF/lib/org.apache.commons-logging-1.0.4.jar,WEB-INF/lib/org.osgi.test.cases.webcontainer.simple.jar
