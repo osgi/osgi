@@ -38,6 +38,9 @@ public class ServletContextRegistrationTest extends
         WebContainerTestBundleControl {
 
     Bundle b;
+    private final static String OSGI_WEB_SYMBOLICNAME = "osgi.web.symbolicname";
+    private final static String OSGI_WEB_VERSION = "osgi.web.version";
+    private final static String OSGI_WEB_CONTEXTROOT = "osgi.web.contextroot";
     
     public void setUp() throws Exception {
         super.setUp();
@@ -221,23 +224,23 @@ public class ServletContextRegistrationTest extends
         sr = getContext().getServiceReference(ServletContext.class.getName());
         assertNotNull(sr);
         sc = (ServletContext)getContext().getService(sr);
-        assertEquals("check if servlet context path is correct", sc.getContextPath(), (String)b.getHeaders().get(WEB_CONTEXT_PATH));
+        assertEquals("check if servlet context path is correct", sc.getContextPath(), sr.getProperty(OSGI_WEB_CONTEXTROOT));
         
         // get the service reference by Bundle-SymbolicName and Bundle-Version
-        ServiceReference[] srs = getContext().getServiceReferences(ServletContext.class.getName(), "(" + Constants.BUNDLE_SYMBOLICNAME + "=" + (String)b.getHeaders().get(Constants.BUNDLE_SYMBOLICNAME));
+        ServiceReference[] srs = getContext().getServiceReferences(ServletContext.class.getName(), "(" + OSGI_WEB_SYMBOLICNAME + "=" + (String)b.getHeaders().get(Constants.BUNDLE_SYMBOLICNAME));
         assertNotNull(srs);
         for (int i = 0; i < srs.length; i ++) {
             // assume bundle-version is required which is not clear in rfc 66 currently
-            String bv1 = (String)srs[i].getProperty(Constants.BUNDLE_VERSION);
-            String bv2 = (String)b.getHeaders().get(Constants.BUNDLE_SYMBOLICNAME);
+            String bv1 = (String)srs[i].getProperty(OSGI_WEB_VERSION);
+            String bv2 = (String)b.getHeaders().get(Constants.BUNDLE_VERSION);
             if (bv1.equals(bv2)) {
                 sr = srs[i];
             }
         }
-        assertEquals((ServletContext)getContext().getService(srs[0]), sc);
+        assertEquals((ServletContext)getContext().getService(sr), sc);
         
         // get the service reference by context-path
-        srs = getContext().getServiceReferences(ServletContext.class.getName(), "(" + WEB_CONTEXT_PATH + "=" + (String)b.getHeaders().get(WEB_CONTEXT_PATH));
+        srs = getContext().getServiceReferences(ServletContext.class.getName(), "(" + OSGI_WEB_CONTEXTROOT + "=" + (String)b.getHeaders().get(WEB_CONTEXT_PATH));
         assertNotNull(srs);
         assertEquals((ServletContext)getContext().getService(srs[0]), sc);
         
