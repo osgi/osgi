@@ -23,7 +23,9 @@ import org.osgi.framework.Version;
  * blueprint container.
  *
  * Each type of event is sent to a different topic:<br/>
- * &nbsp;&nbsp;<code>org/osgi/service/blueprint/container/&lt;event-type&gt;</code><br/>
+ * <pre>
+ *   org/osgi/service/blueprint/container/&lt;event-type&gt;
+ * </pre>
  * where <code>&lt;event-type&gt;</code> can have the values <code>CREATING</code>, <code>CREATED</code>,
  * <code>DESTROYING</code>, <code>DESTROYED</code>, <code>FAILURE</code>, <code>GRACE_PERIOD</code> or
  * <code>WAITING</code>. <br/>
