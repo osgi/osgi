@@ -1,7 +1,7 @@
 Bundle-Name: ${p}.div.tb19
 Bundle-SymbolicName: ${p}.div.tb19
-Bundle-Description: TB19 is part of the DIV test case. This bundle will
- try to load a native code library given the os language, but should fail
+Bundle-Description: TB19 is part of the DIV test case. This bundle will \
+ try to load a native code library given the os language, but should fail \
  since the language should not match.
 Bundle-Vendor: IBM
 Bundle-Version: 1.0

@@ -1,5 +1,5 @@
 Bundle-Name: ${p}.div.tb2
-Bundle-Description: TB2 is part of the DIV test case. This bundle will
+Bundle-Description: TB2 is part of the DIV test case. This bundle will \
  load a native code library.
 Bundle-Vendor: Ericsson Radio Systems AB
 Bundle-Version: 1.0

@@ -1,8 +1,8 @@
 Bundle-Name: ${p}.div.tb21
 Bundle-SymbolicName: ${p}.div.tb21
-Bundle-Description: TB21 is part of the DIV test case. This bundle will
- try to load a native code library given the osversion. The version numbers
- are specified with a very high major version number so the native library
+Bundle-Description: TB21 is part of the DIV test case. This bundle will \
+ try to load a native code library given the osversion. The version numbers \
+ are specified with a very high major version number so the native library \
  does not load.
 Bundle-Vendor: IBM
 Bundle-Version: 1.0

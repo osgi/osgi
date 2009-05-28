@@ -1,6 +1,6 @@
 Bundle-Name: ${p}.div.tb22
 Bundle-SymbolicName: ${p}.div.tb22
-Bundle-Description: TB22 is part of the DIV test case. This bundle will
+Bundle-Description: TB22 is part of the DIV test case. This bundle will \
  successfully load a native code library given the osversion.
 Bundle-Vendor: IBM
 Bundle-Version: 1.0

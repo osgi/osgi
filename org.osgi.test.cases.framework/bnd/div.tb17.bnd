@@ -1,7 +1,7 @@
 Bundle-Name: ${p}.div.tb17
 Bundle-SymbolicName: ${p}.div.tb17; fragment-attachment:=always
-Bundle-Description: TB17 is part of the DIV test case. This bundle contains
- a fragment bundle that contains a native code library. The bundle should be
+Bundle-Description: TB17 is part of the DIV test case. This bundle contains \
+ a fragment bundle that contains a native code library. The bundle should be \
  able to load the native library.
 Bundle-Vendor: IBM
 Bundle-Version: 1.0

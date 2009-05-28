@@ -1,6 +1,6 @@
 Bundle-Name: ${p}.div.tb18
 Bundle-SymbolicName: ${p}.div.tb18
-Bundle-Description: TB18 is part of the DIV test case. This bundle is a fragment bundle
+Bundle-Description: TB18 is part of the DIV test case. This bundle is a fragment bundle \
  that contains a native code library to be loaded by its host bundle.
 Bundle-Vendor: IBM
 Bundle-Version: 1.0.1

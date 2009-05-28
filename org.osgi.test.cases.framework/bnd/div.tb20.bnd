@@ -1,6 +1,6 @@
 Bundle-Name: ${p}.div.tb20
 Bundle-SymbolicName: ${p}.div.tb20
-Bundle-Description: TB20 is part of the DIV test case. This bundle will
+Bundle-Description: TB20 is part of the DIV test case. This bundle will \
  successfuly load a native code library given the os language.
 Bundle-Vendor: IBM
 Bundle-Version: 1.0

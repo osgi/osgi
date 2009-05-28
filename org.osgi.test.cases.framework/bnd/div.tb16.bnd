@@ -1,7 +1,7 @@
 Bundle-Name: ${p}.div.tb16
 Bundle-SymbolicName: ${p}.div.tb16
-Bundle-Description: TB16 is part of the DIV test case. This bundle checks
- if a bundle is loaded when the selection filter is set. It also checks if
+Bundle-Description: TB16 is part of the DIV test case. This bundle checks \
+ if a bundle is loaded when the selection filter is set. It also checks if \
  the new osname alias (win32) matches properly (OSGi R4).
 Bundle-Vendor: IBM
 Bundle-Version: 1.0
