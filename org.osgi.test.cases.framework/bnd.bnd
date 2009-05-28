@@ -154,8 +154,6 @@ Include-Resource = \
 	dynpkgimport.tb3.jar, \
 	dynpkgimport.tlx.jar, \
 	filter.tb1.jar, \
-	launch.tb1.jar, \
-	launch.tb2.jar, \
 	fragments.tb1a.jar, \
 	fragments.tb1b.jar, \
 	fragments.tb1c.jar, \
