@@ -40,7 +40,7 @@
                 <bean class="org.osgi.test.cases.blueprint.services.ManagedService">
                     <property name="bundleContext" ref="blueprintBundleContext"/>
                     <property name="name">
-                        <idrefcomponent-id="ServiceOneD"/>
+                        <idref component-id="ServiceOneD"/>
                     </property>
                     <property name="service" ref="ServiceOneD"/>
                     <property name="interfaces">
@@ -54,7 +54,7 @@
                 <bean class="org.osgi.test.cases.blueprint.services.ManagedService">
                     <property name="bundleContext" ref="blueprintBundleContext"/>
                     <property name="name">
-                        <idrefcomponent-id="ServiceOneB"/>
+                        <idref component-id="ServiceOneB"/>
                     </property>
                     <property name="service" ref="ServiceOneB"/>
                     <property name="interfaces">
@@ -68,7 +68,7 @@
                 <bean class="org.osgi.test.cases.blueprint.services.ManagedService">
                     <property name="bundleContext" ref="blueprintBundleContext"/>
                     <property name="name">
-                        <idrefcomponent-id="ServiceOneA"/>
+                        <idref component-id="ServiceOneA"/>
                     </property>
                     <property name="service" ref="ServiceOneA"/>
                     <property name="interfaces">
@@ -82,7 +82,7 @@
                 <bean class="org.osgi.test.cases.blueprint.services.ManagedService">
                     <property name="bundleContext" ref="blueprintBundleContext"/>
                     <property name="name">
-                        <idrefcomponent-id="ServiceOneE"/>
+                        <idref component-id="ServiceOneE"/>
                     </property>
                     <property name="service" ref="ServiceOneE"/>
                     <property name="interfaces">
@@ -96,7 +96,7 @@
                 <bean class="org.osgi.test.cases.blueprint.services.ManagedService">
                     <property name="bundleContext" ref="blueprintBundleContext"/>
                     <property name="name">
-                        <idrefcomponent-id="ServiceOneC"/>
+                        <idref component-id="ServiceOneC"/>
                     </property>
                     <property name="service" ref="ServiceOneC"/>
                     <property name="interfaces">

@@ -13,7 +13,7 @@
    <bean id="ServiceOneConstructor" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceChecker">
        <argument value="ServiceOneConstructor"/>
        <argument type="org.osgi.test.cases.blueprint.services.TestServiceOne">
-           <refcomponent-id="ServiceOne"/>
+           <ref component-id="ServiceOne"/>
        </argument>
    </bean>
 
