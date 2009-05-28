@@ -32,6 +32,7 @@ import org.osgi.test.cases.blueprint.framework.ServiceComponentExistValidator;
 import org.osgi.test.cases.blueprint.framework.ServiceExistValidator;
 import org.osgi.test.cases.blueprint.framework.ServiceRegistrationValidator;
 import org.osgi.test.cases.blueprint.framework.ServiceTestEvent;
+import org.osgi.test.cases.blueprint.framework.StandardErrorTestController;
 import org.osgi.test.cases.blueprint.framework.StandardTestController;
 import org.osgi.test.cases.blueprint.framework.ThreePhaseTestController;
 import org.osgi.test.cases.blueprint.services.AssertionService;
@@ -84,6 +85,30 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
         this.addPropertyValidator(startEventSet, "compString1", "string", "abc", String.class);
         this.addPropertyValidator(startEventSet, "compString2", "string", "abc", String.class);
 
+        controller.run();
+    }
+
+    /**
+     * multiple placeholders using default prefix
+     */
+    public void testDefaultPrefixConflict() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_default_prefix_conflict");
+        // this insures we don't have errors resulting from missing stuff
+        controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
+        controller.run();
+    }
+
+    /**
+     * multiple placeholders using same explicit prefix
+     */
+    public void testExplicitPrefixConflict() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_explicit_prefix_conflict");
+        // this insures we don't have errors resulting from missing stuff
+        controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
         controller.run();
     }
 

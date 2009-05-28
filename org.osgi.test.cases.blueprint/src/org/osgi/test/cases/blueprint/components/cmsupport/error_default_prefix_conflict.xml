@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:bpcm="http://www.osgi.org/xmlns/blueprint-cm/v1.0.0">
+
+    <description>
+        This should be an error because we have two property-placeholder elements using the same
+        default placeholder.
+    </description>
+
+    <bpcm:property-placeholder persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config1" />
+
+    <bpcm:property-placeholder persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config2"/>
+
+    <bean id="compString1" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="string" value="${str}"/>
+    </bean>
+
+    <bean id="compString2" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="string" value="#{string}"/>
+    </bean>
+
+</blueprint>
+
