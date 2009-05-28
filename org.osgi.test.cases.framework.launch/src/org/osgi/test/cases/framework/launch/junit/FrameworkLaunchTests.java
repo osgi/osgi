@@ -21,15 +21,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.security.CodeSource;
-import java.security.Permission;
-import java.security.PermissionCollection;
-import java.security.Policy;
-import java.security.ProtectionDomain;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -39,17 +32,19 @@ import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
-import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 import org.osgi.service.packageadmin.ExportedPackage;
 import org.osgi.service.packageadmin.PackageAdmin;
-import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.startlevel.StartLevel;
 import org.osgi.test.support.OSGiTestCase;
 
 public class FrameworkLaunchTests extends OSGiTestCase {
 	private static final String STORAGEROOT = "org.osgi.framework.launch.test.storageroot";
 	private static final String FRAMEWORK_FACTORY = "/META-INF/services/org.osgi.framework.launch.FrameworkFactory";
-
+	private static final String PACKAGE_ADMIN = "org.osgi.service.packageadmin.PackageAdmin";
+	private static final String STARTLEVEL = "org.osgi.service.startlevel.StartLevel";
+	private static final String PERMISSION_ADMIN = "org.osgi.service.permissionadmin.PermissionAdmin";
+	private static final String CONDPERM_ADMIN = "org.osgi.service.condpermadmin.ConditionalPermissionAdmin";
+	
 	private String frameworkFactoryClassName;
 	private String rootStorageArea;
 	private FrameworkFactory frameworkFactory;
@@ -287,9 +282,9 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		assertEquals("Not back at previous state after update", previousState, framework.getState());
 	}
 
-	private Object getService(Framework framework, Class serviceClass) {
+	private Object getService(Framework framework, String serviceClass) {
 		BundleContext context = framework.getBundleContext();
-		ServiceReference ref = context.getServiceReference(serviceClass.getName());
+		ServiceReference ref = context.getServiceReference(serviceClass);
 		return ref == null ? null : context.getService(ref);
 	}
 
@@ -378,7 +373,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		configuration.put(Constants.FRAMEWORK_BEGINNING_STARTLEVEL, "25");
 		Framework framework = createFramework(configuration);
 		startFramework(framework);
-		StartLevel sl = (StartLevel) getService(framework, StartLevel.class);
+		StartLevel sl = (StartLevel) getService(framework, STARTLEVEL);
 		if (sl == null) {
 			stopFramework(framework);
 			return; // cannot test without start level
@@ -390,10 +385,10 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 	public void testSystemServices() {
 		Framework framework = createFramework(getConfiguration(getName()));
 		startFramework(framework);
-		boolean hasPackageAdmin = getService(framework, PackageAdmin.class) != null;
-		boolean hasStartLevel = getService(framework, StartLevel.class) != null;
-		boolean hasPermissionAdmin = getService(framework, PermissionAdmin.class) != null;
-		boolean hasCondPermAdmin = getService(framework, ConditionalPermissionAdmin.class) != null;
+		boolean hasPackageAdmin = getService(framework, PACKAGE_ADMIN) != null;
+		boolean hasStartLevel = getService(framework, STARTLEVEL) != null;
+		boolean hasPermissionAdmin = getService(framework, PERMISSION_ADMIN) != null;
+		boolean hasCondPermAdmin = getService(framework, CONDPERM_ADMIN) != null;
 		stopFramework(framework);
 		if (!(hasPackageAdmin | hasStartLevel | hasPermissionAdmin | hasCondPermAdmin))
 			return; // nothing to test; no system services available
@@ -401,13 +396,13 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		// check that the available system services are available when framework is initialized
 		initFramework(framework);
 		if (hasPackageAdmin)
-			assertNotNull("PackageAdmin", getService(framework, PackageAdmin.class));
+			assertNotNull("PackageAdmin", getService(framework, PACKAGE_ADMIN));
 		if (hasStartLevel)
-			assertNotNull("StartLevel", getService(framework, StartLevel.class));
+			assertNotNull("StartLevel", getService(framework, STARTLEVEL));
 		if (hasPackageAdmin)
-			assertNotNull("PermissionAdmin", getService(framework, PermissionAdmin.class));
+			assertNotNull("PermissionAdmin", getService(framework, PERMISSION_ADMIN));
 		if (hasPackageAdmin)
-			assertNotNull("ConditionalPermissionAdmin", getService(framework, ConditionalPermissionAdmin.class));
+			assertNotNull("ConditionalPermissionAdmin", getService(framework, CONDPERM_ADMIN));
 		stopFramework(framework);
 	}
 
@@ -455,7 +450,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 
 		initFramework(framework);
 		ExportedPackage ep1 = null, ep2 = null;
-		PackageAdmin pa = (PackageAdmin) getService(framework, PackageAdmin.class);
+		PackageAdmin pa = (PackageAdmin) getService(framework, PACKAGE_ADMIN);
 		if (pa != null) {
 			ep1 = pa.getExportedPackage(pkg1);
 			assertNotNull("pkg1 is null", ep1);
@@ -519,47 +514,4 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 				.getType());
 		stopFramework(framework);
 	}
-
-    static class AllPolicy extends Policy {
-        static PermissionCollection all = new AllPermissionCollection();
-
-        public PermissionCollection getPermissions(ProtectionDomain domain) {
-        	// causes recursive permission check (StackOverflowError)
-        	// System.out.println("Returning all permission for " + domain == null ? null : domain.getCodeSource());
-        	return all;
-        }
-        public PermissionCollection getPermissions(CodeSource codesource) {
-            System.out.println("Returning all permission for " + codesource);
-            return all;
-        }
-
-        public boolean implies(ProtectionDomain domain, Permission permission) {
-        	// causes recursive permission check (StackOverflowError)
-        	// System.out.println("Granting permission for " + domain == null ? null : domain.getCodeSource());
-        	return true;
-        }
-
-        public void refresh() {
-        }
-    }
-
-    static class AllPermissionCollection extends PermissionCollection {
-        private static final long serialVersionUID = 1L;
-        private static Vector     list             = new Vector();
-
-        {
-            setReadOnly();
-        }
-
-        public void add(Permission permission) {
-        }
-
-        public Enumeration elements() {
-            return list.elements();
-        }
-
-        public boolean implies(Permission permission) {
-            return true;
-        }
-    }
 }
