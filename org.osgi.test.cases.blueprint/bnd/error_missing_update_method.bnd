@@ -1,0 +1,6 @@
+Bundle-SymbolicName:                     ${p}.error_missing_update_method
+Bundle-Version:                          4.2
+Import-Package:                          ${p}.components.cmsupport, ${p}.services
+-resourceonly: true
+Include-Resource					= \
+	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/cmsupport/error_missing_update_method.xml

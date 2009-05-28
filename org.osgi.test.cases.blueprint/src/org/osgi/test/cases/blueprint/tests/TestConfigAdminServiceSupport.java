@@ -364,6 +364,30 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
 
     }
 
+    /**
+     * invalid pid on the managed-properties tag
+     */
+    public void testComponentMissingUpdateMethod() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_missing_update_method.jar");
+        // this insures we don't have errors resulting from missing stuff
+        controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
+        controller.run();
+    }
+
+    /**
+     * invalid pid on the managed-properties tag
+     */
+    public void testComponentBadUpdateMethod() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_bad_update_method.jar");
+        // this insures we don't have errors resulting from missing stuff
+        controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
+        controller.run();
+    }
+
 
     //section 5.7.5
     public void testDirectAccessManagedService() throws Exception {
@@ -521,6 +545,18 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
 
         controller.run();
 
+    }
+
+    /**
+     * tests an unknown class name on the managed-component tag
+     */
+    public void testManagedComponentNoClass() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_managed_component_no_class.jar");
+        // this insures we don't have errors resulting from missing stuff
+        controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
+        controller.run();
     }
 
     public void testFactoryComponentPropertiesAutoUpdate_ContainerManaged() throws Exception {

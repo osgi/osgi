@@ -315,6 +315,9 @@ Include-Resource					= \
  	www/error_placeholder_bad_pid.jar=error_placeholder_bad_pid.jar, \
  	www/error_service_properties_bad_pid.jar=error_service_properties_bad_pid.jar, \
  	www/error_managed_properties_bad_pid.jar=error_managed_properties_bad_pid.jar, \
+ 	www/error_managed_component_no_class.jar=error_managed_component_no_class.jar, \
+ 	www/error_missing_update_method.jar=error_missing_update_method.jar, \
+ 	www/error_bad_update_method.jar=error_bad_update_method.jar, \
  	www/error_default_prefix_conflict.jar=error_default_prefix_conflict.jar, \
  	www/error_explicit_prefix_conflict.jar=error_explicit_prefix_conflict.jar
 
