@@ -83,6 +83,16 @@
                     </argument>
                 </bean>
 
+                <!-- config4 -->
+                <bean class="org.osgi.test.cases.blueprint.services.ManagedConfiguration">
+                    <argument value="org.osgi.test.cases.blueprint.components.cmsupport.config4"/>
+                    <argument>
+                        <props>
+                            <prop key="configId">config4</prop>
+                        </props>
+                    </argument>
+                </bean>
+
             </list>
         </argument>
     </bean>

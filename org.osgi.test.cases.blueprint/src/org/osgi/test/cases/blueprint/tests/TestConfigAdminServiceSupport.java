@@ -75,6 +75,18 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
         controller.run();
     }
 
+    /**
+     * invalid pid on the property placeholder
+     */
+    public void testBadPlaceholderPid() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_placeholder_bad_pid.jar");
+        // this insures we don't have errors resulting from missing stuff
+        controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
+        controller.run();
+    }
+
     public void testPlaceholderPrefixAndSuffix() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
                 getWebServer()+"www/placeholder_prefix_and_suffix.jar");
@@ -94,7 +106,7 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
     public void testDefaultPrefixConflict() throws Exception {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
-            getWebServer()+"www/error_default_prefix_conflict");
+            getWebServer()+"www/error_default_prefix_conflict.jar");
         // this insures we don't have errors resulting from missing stuff
         controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
         controller.run();
@@ -106,7 +118,7 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
     public void testExplicitPrefixConflict() throws Exception {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
-            getWebServer()+"www/error_explicit_prefix_conflict");
+            getWebServer()+"www/error_explicit_prefix_conflict.jar");
         // this insures we don't have errors resulting from missing stuff
         controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
         controller.run();
@@ -132,7 +144,7 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
     public void testMissingPlaceholderDefault() throws Exception {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
-            getWebServer()+"www/error_missing_placeholder_default");
+            getWebServer()+"www/error_missing_placeholder_default.jar");
         // this insures we don't have errors resulting from missing stuff
         controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
         controller.run();
@@ -178,8 +190,15 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
         startEventSet.addValidator(new ServiceRegistrationValidator(TestGoodServiceSubclass.class, "compGoodServiceSubclass", null, expectedProps));
 
         expectedProps = new Hashtable(expectedProps);
-        // this property come from explicitly specifying the entry in addition to referencing the pid
+        // this property comes from explicitly specifying the entry in addition to referencing the pid
         expectedProps.put("extra", "abc");
+        startEventSet.addValidator(new ServiceRegistrationValidator(TestGoodServiceSubclass.class, "compGoodServiceSubclass", null, expectedProps));
+
+        expectedProps = new Hashtable(expectedProps);
+        // this property come a second config-admin property set
+        expectedProps.put("configId", "config4");
+        // we don't use the explicit one
+        expectedProps.remove("extra");
         startEventSet.addValidator(new ServiceRegistrationValidator(TestGoodServiceSubclass.class, "compGoodServiceSubclass", null, expectedProps));
 
         controller.run();
@@ -206,12 +225,26 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
                 new AdminPropertiesUpdater(getContext(), "org.osgi.test.cases.blueprint.services.ConfigurationManager", "org.osgi.test.cases.blueprint.components.cmsupport.config1", updatedProps)
         ));
 
+        // the update above will result in a service MODIFIED event...we'll wait until that occurs before
+        // running the validators
+        startEventSet.addServiceEvent("MODIFIED", TestGoodServiceSubclass.class);
+
         // Validate the service property is changed to "xyz"
-        // IIUC, we need not do anything to ensure the value has been updated here,
-        // because the TestPhase won't validate any result until all expected event received and processed.
         startEventSet.addValidator(new ServiceRegistrationValidator(TestGoodService.class, "compGoodService", null, initialProps));
         startEventSet.addValidator(new ServiceRegistrationValidator(TestGoodServiceSubclass.class, "compGoodServiceSubclass", null, updatedProps));
 
+        controller.run();
+    }
+
+    /**
+     * invalid pid on the cm-properties tag
+     */
+    public void testBadCmPropertiesPid() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_service_properties_bad_pid.jar");
+        // this insures we don't have errors resulting from missing stuff
+        controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
         controller.run();
     }
 
@@ -246,6 +279,18 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
 
         controller.run();
 
+    }
+
+    /**
+     * invalid pid on the managed-properties tag
+     */
+    public void testBadManagedPropertiesPid() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_managed_properties_bad_pid.jar");
+        // this insures we don't have errors resulting from missing stuff
+        controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
+        controller.run();
     }
 
     public void testComponentPropertiesAutoUpdate() throws Exception {

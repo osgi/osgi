@@ -312,6 +312,9 @@ Include-Resource					= \
  	www/factory_service_properties_evaluation.jar=factory_service_properties_evaluation.jar, \
  	www/factory_service_properties_auto_update.jar=factory_service_properties_auto_update.jar, \
  	www/error_missing_placeholder_default.jar=error_missing_placeholder_default.jar, \
+ 	www/error_placeholder_bad_pid.jar=error_placeholder_bad_pid.jar, \
+ 	www/error_service_properties_bad_pid.jar=error_service_properties_bad_pid.jar, \
+ 	www/error_managed_properties_bad_pid.jar=error_managed_properties_bad_pid.jar, \
  	www/error_default_prefix_conflict.jar=error_default_prefix_conflict.jar, \
  	www/error_explicit_prefix_conflict.jar=error_explicit_prefix_conflict.jar
 

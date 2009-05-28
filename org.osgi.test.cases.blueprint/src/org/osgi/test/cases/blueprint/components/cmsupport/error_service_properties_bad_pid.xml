@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:bpcm="http://www.osgi.org/xmlns/blueprint-cm/v1.0.0">
+
+    <description> Bad pid on a cm-properties tag test </description>
+
+
+    <!-- publish all the properties -->
+    <bean id="compGoodServiceSubclass" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
+        <argument value="compGoodServiceSubclass"/>
+    </bean>
+
+    <service id="srvGoodServiceSubclass" ref="compGoodServiceSubclass" interface="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
+        <service-properties>
+            <bpcm:cm-properties persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config1.XXXXXX"/>
+        </service-properties>
+    </service>
+
+</blueprint>
+
