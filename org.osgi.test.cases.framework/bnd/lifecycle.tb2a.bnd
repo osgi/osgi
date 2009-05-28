@@ -1,0 +1,12 @@
+Bundle-SymbolicName: ${p}.lifecycle.tb2a
+Bundle-Name: ${p}.lifecycle.tb2a
+Bundle-Version: 4.2.0.${project.build}
+Bundle-Activator: ${p}.lifecycle.tb2a.StartWithException
+Bundle-Vendor: IBM
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+Bundle-Copyright: ${copyright}
+
+Private-Package						= \
+	${p}.lifecycle.tb2a.*

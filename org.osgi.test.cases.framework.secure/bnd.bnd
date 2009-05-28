@@ -5,7 +5,8 @@ Private-Package						= org.osgi.test.support.*, \
 	${p}.junit.*
 	
 Export-Package						= \
-	${p}.permissions.util;version=1.0.0
+	${p}.permissions.util;version=1.0.0, \
+	${p}.lifecycle.servicereferencegetter
 
 Include-Resource = \
 	classloading.tb1.jar, \
@@ -29,6 +30,8 @@ Include-Resource = \
 	fragments.tb17b.jar, \
 	fragments.tb18.jar, \
 	fragments.tb19.jar, \
+	lifecycle.tb5.jar, \
+	lifecycle.tb10.jar, \
 	permissions.exporter1.jar, \
 	permissions.exporter2.jar, \
 	permissions.get.jar, \

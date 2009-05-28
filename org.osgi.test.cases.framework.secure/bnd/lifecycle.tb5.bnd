@@ -1,0 +1,15 @@
+Bundle-SymbolicName: ${p}.lifecycle.tb5
+Bundle-Name: ${p}.lifecycle.tb5
+Bundle-Version: 4.2.0.${project.build}
+Bundle-Activator: ${p}.lifecycle.tb5.EventTest
+Bundle-Vendor: IBM
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+Bundle-Copyright: ${copyright}
+Export-Package: ${p}.lifecycle.tb5
+
+Private-Package						= \
+	${p}.lifecycle.tb5.*
+Include-Resource =	{OSGI-INF/permissions.perm=perms/lifecycle.tb5.perm}
+	

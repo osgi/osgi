@@ -1,0 +1,12 @@
+Bundle-SymbolicName: ${p}.lifecycle.tb6a
+Bundle-Name: ${p}.lifecycle.tb6a
+Bundle-Version: 4.2.0.${project.build}
+Bundle-Activator: ${p}.lifecycle.tb6a.NormalUpdate
+Bundle-Vendor: IBM
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+Bundle-Copyright: ${copyright}
+
+Private-Package						= \
+	${p}.lifecycle.tb6a.*

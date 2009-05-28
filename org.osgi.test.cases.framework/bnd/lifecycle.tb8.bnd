@@ -1,0 +1,12 @@
+Bundle-SymbolicName: ${p}.lifecycle.tb8
+Bundle-Name: ${p}.lifecycle.tb8
+Bundle-Version: 4.2.0.${project.build}
+Bundle-Activator: ${p}.lifecycle.tb8.StoppedBC
+Bundle-Vendor: IBM
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+Bundle-Copyright: ${copyright}
+
+Private-Package						= \
+	${p}.lifecycle.tb8.*

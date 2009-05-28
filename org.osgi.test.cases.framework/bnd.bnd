@@ -6,7 +6,8 @@ Private-Package						= org.osgi.test.support.*, \
 	
 Export-Package						= \
 	${p}.classpath.exported, \
-	${p}.dynpkgimport.exported
+	${p}.dynpkgimport.exported, \
+	${p}.lifecycle.servicereferencegetter
 
 Bundle-ClassPath: .,div.tb6.jar
 
@@ -191,6 +192,16 @@ Include-Resource = \
 	fragments.tb12.jar, \
 	fragments.tb13.jar, \
 	fragments.tb15.jar, \
+	lifecycle.tb1.jar, \
+	lifecycle.tb2a.jar, \
+	lifecycle.tb2b.jar, \
+	lifecycle.tb4.jar, \
+	lifecycle.tb5.jar, \
+	lifecycle.tb6a.jar, \
+	lifecycle.tb6b.jar, \
+	lifecycle.tb7.jar, \
+	lifecycle.tb8.jar, \
+	lifecycle.tb9.jar, \
 	resources.tb1.jar, \
 	syncbundlelistener.tb3.jar
 	
