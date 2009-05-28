@@ -571,6 +571,7 @@
 
     <xsd:complexType name="Tcomparator">
         <xsd:group ref="targetComponent" />
+        <xsd:attribute name="ref" type="Tidref" />
     </xsd:complexType>
 
     <!-- service -->
@@ -784,7 +785,7 @@
               ]]>
             </xsd:documentation>
         </xsd:annotation>
-        <xsd:attribute name="component" type="Tidref" use="required" />
+        <xsd:attribute name="component-id" type="Tidref" use="required" />
     </xsd:complexType>
 
     <xsd:complexType name="Tvalue" mixed="true">
