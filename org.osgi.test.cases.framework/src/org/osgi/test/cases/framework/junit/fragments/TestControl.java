@@ -303,6 +303,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 * @spec Bundle.installBundle(String)
 	 */
+	// TODO remove per bug 1308
 	public void testFragmentHostHeader02() throws Exception {
 		// Install and start host bundle version 1.0
 		Bundle tb3a = getContext().installBundle(getWebServer() + "fragments.tb3a.jar");
@@ -310,7 +311,7 @@ public class TestControl extends DefaultTestBundleControl implements
 		// Install and start host bundle version 2.0
 		Bundle tb3c = getContext().installBundle(getWebServer() + "fragments.tb3c.jar");
 
-		// Install fragment bundle with multiple-hosts=false
+		// Install fragment bundle
 		Bundle tb3d = getContext().installBundle(getWebServer() + "fragments.tb3d.jar");
 		PackageAdmin pa = (PackageAdmin) getService(PackageAdmin.class);
 		pa.resolveBundles(new Bundle[] {tb3d});
