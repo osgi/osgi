@@ -18,7 +18,7 @@
        <property name="componentMap">
            <map>
                <entry key-ref="leaf1" value-ref="leaf2">
-                   <key><ref component="leaf1"/></key>
+                   <key><refcomponent-id="leaf1"/></key>
                </entry>
            </map>
        </property>

@@ -5,12 +5,12 @@
         This is a reusable config for validating different service registrations.
     </description>
 
-    <reference id="bad" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" 
+    <reference id="bad" interface="org.osgi.test.cases.blueprint.services.TestServiceOne"
                filter="(serviceType=Bad)"/>
-               
-    <reference id="good" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" 
+
+    <reference id="good" interface="org.osgi.test.cases.blueprint.services.TestServiceOne"
                filter="(osgi.service.blueprint.compname=ServiceOne)"/>
-        
+
     <!-- single shared instance of the imported service -->
     <reference id="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
         <description>Testing descriptions also</description>
@@ -20,7 +20,7 @@
    <bean id="ServiceOneConstructor" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceChecker">
        <argument value="ServiceOneConstructor"/>
        <argument type="org.osgi.test.cases.blueprint.services.TestServiceOne">
-           <ref component="ServiceOne"/>
+           <refcomponent-id="ServiceOne"/>
        </argument>
    </bean>
 

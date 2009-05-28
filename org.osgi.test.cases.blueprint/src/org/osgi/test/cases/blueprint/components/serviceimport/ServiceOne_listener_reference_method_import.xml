@@ -16,7 +16,7 @@
              <value>org.osgi.test.cases.blueprint.services.TestServiceTwo</value>
         </interfaces>
         <listener bind-method="bindReference" unbind-method="unbindReference">
-            <ref component="ServiceOneListener"/>
+            <refcomponent-id="ServiceOneListener"/>
         </listener>
     </reference>
 

@@ -54,7 +54,7 @@
        <argument value="twoleaf"/>
        <argument ref="leaf1"/>
        <property name="componentOne">
-           <ref component="leaf2" />
+           <refcomponent-id="leaf2" />
        </property>
    </bean>
 
@@ -72,8 +72,8 @@
        <argument value="twolist"/>
        <property name="componentList">
            <list>
-               <ref component="twoleaf"/>
-               <ref component="twocomp"/>
+               <refcomponent-id="twoleaf"/>
+               <refcomponent-id="twocomp"/>
            </list>
        </property>
    </bean>
@@ -84,8 +84,8 @@
        <argument value="twoset"/>
        <property name="componentSet">
            <set>
-               <ref component="twoleaf"/>
-               <ref component="twocomp"/>
+               <refcomponent-id="twoleaf"/>
+               <refcomponent-id="twocomp"/>
            </set>
        </property>
    </bean>
@@ -98,9 +98,9 @@
            <map>
                <entry>
                    <key>
-                       <ref component="leaf1"/>
+                       <refcomponent-id="leaf1"/>
                    </key>
-                   <ref component="twoleaf"/>
+                   <refcomponent-id="twoleaf"/>
                </entry>
                <entry key-ref="leaf2" value-ref="twocomp"/>
            </map>
@@ -195,9 +195,9 @@
        <argument value="1"/>
        <property name="references">
            <set>
-               <ref component="singleton1"/>
-               <ref component="singleton1"/>
-               <ref component="singleton1"/>
+               <refcomponent-id="singleton1"/>
+               <refcomponent-id="singleton1"/>
+               <refcomponent-id="singleton1"/>
            </set>
        </property>
    </bean>
@@ -209,9 +209,9 @@
        <argument value="1"/>
        <property name="references">
            <set>
-               <ref component="singleton2"/>
-               <ref component="singleton2"/>
-               <ref component="singleton2"/>
+               <refcomponent-id="singleton2"/>
+               <refcomponent-id="singleton2"/>
+               <refcomponent-id="singleton2"/>
            </set>
        </property>
    </bean>
@@ -223,9 +223,9 @@
        <argument value="1"/>
        <property name="references">
            <set>
-               <ref component="singleton3"/>
-               <ref component="singleton3"/>
-               <ref component="singleton3"/>
+               <refcomponent-id="singleton3"/>
+               <refcomponent-id="singleton3"/>
+               <refcomponent-id="singleton3"/>
            </set>
        </property>
    </bean>
@@ -237,9 +237,9 @@
        <argument value="3"/>
        <property name="listReferences">
            <list>
-               <ref component="prototype4"/>
-               <ref component="prototype4"/>
-               <ref component="prototype4"/>
+               <refcomponent-id="prototype4"/>
+               <refcomponent-id="prototype4"/>
+               <refcomponent-id="prototype4"/>
            </list>
        </property>
    </bean>
@@ -251,9 +251,9 @@
        <argument value="3"/>
        <property name="references">
            <set>
-               <ref component="prototype1"/>
-               <ref component="prototype1"/>
-               <ref component="prototype1"/>
+               <refcomponent-id="prototype1"/>
+               <refcomponent-id="prototype1"/>
+               <refcomponent-id="prototype1"/>
            </set>
        </property>
    </bean>
@@ -265,9 +265,9 @@
        <argument value="3"/>
        <property name="references">
            <set>
-               <ref component="prototype2"/>
-               <ref component="prototype2"/>
-               <ref component="prototype2"/>
+               <refcomponent-id="prototype2"/>
+               <refcomponent-id="prototype2"/>
+               <refcomponent-id="prototype2"/>
            </set>
        </property>
    </bean>

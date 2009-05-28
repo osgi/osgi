@@ -2,7 +2,7 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
 	<type-converters>
-             <ref component="customBooleanConverter"/>
+             <refcomponent-id="customBooleanConverter"/>
 	</type-converters>
 
     <reference id="customBooleanConverter" interface="org.osgi.service.blueprint.convert.Converter"/>

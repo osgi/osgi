@@ -24,7 +24,7 @@
        init-method="init" destroy-method="destroy">
        <argument value="bundleUser"/>
        <property name="componentOne">
-           <ref component="blueprintBundle" />
+           <refcomponent-id="blueprintBundle" />
        </property>
    </bean>
 
@@ -32,7 +32,7 @@
        init-method="init" destroy-method="destroy">
        <argument value="bundleContextUser"/>
        <property name="componentOne">
-           <ref component="blueprintBundleContext" />
+           <refcomponent-id="blueprintBundleContext" />
        </property>
    </bean>
 
@@ -40,7 +40,7 @@
        init-method="init" destroy-method="destroy">
        <argument value="blueprintContainerUser"/>
        <property name="componentOne">
-           <ref component="blueprintContainer" />
+           <refcomponent-id="blueprintContainer" />
        </property>
    </bean>
 
@@ -48,7 +48,7 @@
        init-method="init" destroy-method="destroy">
        <argument value="converterUser"/>
        <property name="componentOne">
-           <ref component="blueprintConverter" />
+           <refcomponent-id="blueprintConverter" />
        </property>
    </bean>
 </blueprint>

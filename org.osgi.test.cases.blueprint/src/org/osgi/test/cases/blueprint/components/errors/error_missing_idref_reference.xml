@@ -5,7 +5,7 @@
    <!-- the lazyleaf does not exist -->
    <bean id="comp1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
        <argument>
-           <idref component="NotGoingToFindThis"/>
+           <idrefcomponent-id="NotGoingToFindThis"/>
        </argument>
    </bean>
 </blueprint>
