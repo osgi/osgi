@@ -21,6 +21,9 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Properties;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.ServiceReference;
+
 import org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection;
 import org.osgi.test.cases.blueprint.framework.AdminPropertiesAdder;
 import org.osgi.test.cases.blueprint.framework.AdminPropertiesRemover;
@@ -74,6 +77,33 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
 
         controller.run();
     }
+
+
+    /**
+     * test error conditions when config admin service is not available
+     */
+    public void testMissingConfigAdminService() throws Exception {
+        ServiceReference configAdminService = getContext().getServiceReference("org.osgi.service.cm.ConfigurationAdmin");
+        Bundle adminBundle = configAdminService.getBundle();
+        // stop the config admin service before attempting to run the same test as above...this should
+        // fail this time.
+        adminBundle.stop();
+
+        try {
+            // this should just be the standard error set
+            StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+                getWebServer()+"www/placeholder_property_injection.jar");
+            // this insures we don't have errors resulting from missing stuff
+            controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
+            controller.run();
+        } finally {
+            // restart this service before continuing with the tests
+            adminBundle.start();
+        }
+    }
+
+
+
 
     /**
      * invalid pid on the property placeholder
