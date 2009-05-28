@@ -46,5 +46,25 @@ public interface TestServiceOne extends Comparable {
      */
     public String getServiceName();
 
+
+    /**
+     * This is used for situations where set semantics get applied
+     * to service instances.  This ensures the equals() method of the
+     * service is proxied.
+     *
+     * @param other  The other object for comparison
+     *
+     * @return true if the objects are equal, false otherwise.
+     */
+    public boolean equals(Object other);
+
+
+    /**
+     * Override of the hashCode() method to also force proxying
+     * of this method.
+     *
+     * @return
+     */
+    public int hashCode();
 }
 
