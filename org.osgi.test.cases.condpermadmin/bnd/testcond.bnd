@@ -1,0 +1,13 @@
+Bundle-Name: ${p}.testcond
+Bundle-SymbolicName: ${p}.testcond
+Bundle-Version: 4.2.0.${project.build}
+Bundle-Vendor: IBM
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+Bundle-Copyright: ${copyright}
+Fragment-Host: system.bundle; extension:=framework
+Export-Package:	${p}.testcond
+Import-Package: !*
+
+-failok: true
