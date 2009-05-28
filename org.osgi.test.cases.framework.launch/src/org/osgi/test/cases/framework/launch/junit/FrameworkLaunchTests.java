@@ -504,43 +504,6 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		stopFramework(framework);
 	}
 
-	public void testSecurity() {
-		SecurityManager previousSM = System.getSecurityManager();
-		if (previousSM != null) {
-			// need to remove security manager to test this
-			System.setSecurityManager(null);
-		}
-		Policy previous = Policy.getPolicy();
-		Policy.setPolicy(new AllPolicy());
-		try {
-			Map configuration = getConfiguration(getName());
-			configuration.put(Constants.FRAMEWORK_SECURITY, "osgi");
-			Framework framework = createFramework(configuration);
-			initFramework(framework);
-			assertNotNull("Null SecurityManager", System.getSecurityManager());
-			stopFramework(framework);
-			assertNull("SecurityManager is not null", System
-					.getSecurityManager());
-
-			System.setSecurityManager(new SecurityManager());
-			try {
-				framework.start();
-				fail("Expected an exception when starting with a SecurityManager already set");
-			}
-			catch (Exception e) {
-				// expected
-			}
-			finally {
-				System.setSecurityManager(null);
-			}
-		}
-		finally {
-			if (previousSM != null)
-				System.setSecurityManager(previousSM);
-			Policy.setPolicy(previous);
-		}
-	}
-
 	public void testWaitForStop() {
 		Framework framework = createFramework(getConfiguration(getName()));
 		startFramework(framework);

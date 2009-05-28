@@ -4,9 +4,7 @@ Bundle-Description					: Framework test cases.
 Private-Package						= org.osgi.test.support.*, \
 	${p}.junit
 	
-Include-Resource = \
-    launch.tb1.jar, \
-    launch.tb2.jar 
+Include-Resource = 
 	
 Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
 
