@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.permissionadmin.conditional;
+package org.osgi.test.cases.condpermadmin;
 
 import java.io.FilePermission;
 import java.net.SocketPermission;
@@ -29,10 +29,10 @@ import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
 import org.osgi.service.condpermadmin.ConditionalPermissionUpdate;
 import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.test.cases.permissionadmin.conditional.tbc.ConditionalDomTBCService;
-import org.osgi.test.cases.permissionadmin.conditional.tbc.ConditionalPermTBCService;
-import org.osgi.test.cases.permissionadmin.conditional.tbc.ConditionalTBCService;
-import org.osgi.test.cases.permissionadmin.conditional.testcond.TestPostPonedCondition;
+import org.osgi.test.cases.condpermadmin.tbc.ConditionalDomTBCService;
+import org.osgi.test.cases.condpermadmin.tbc.ConditionalPermTBCService;
+import org.osgi.test.cases.condpermadmin.tbc.ConditionalTBCService;
+import org.osgi.test.cases.condpermadmin.testcond.TestPostPonedCondition;
 
 
 public class ConditionalPermissionOrderTests extends AbstractPermissionAdminTests {
@@ -47,8 +47,8 @@ public class ConditionalPermissionOrderTests extends AbstractPermissionAdminTest
 	private static final PermissionInfo[] SERVICE_INFOS = new PermissionInfo[] {new PermissionInfo(ServicePermission.class.getName(), "*", "get,register")}; //$NON-NLS-1$ //$NON-NLS-2$
 	
 	private static final ConditionInfo[] ALLLOCATION_CONDS = new ConditionInfo[] {new ConditionInfo("org.osgi.service.condpermadmin.BundleLocationCondition", new String[] {"*"})}; //$NON-NLS-1$ //$NON-NLS-2$
-	private static final ConditionInfo POST_MUT_SAT = new ConditionInfo("org.osgi.test.cases.permissionadmin.conditional.testcond.TestPostPonedCondition", new String[] {"POST_MUT_SAT", "true", "true", "true"}); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-	private static final ConditionInfo POST_MUT_UNSAT = new ConditionInfo("org.osgi.test.cases.permissionadmin.conditional.testcond.TestPostPonedCondition", new String[] {"POST_MUT_UNSAT", "true", "true", "false"}); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+	private static final ConditionInfo POST_MUT_SAT = new ConditionInfo("org.osgi.test.cases.condpermadmin.testcond.TestPostPonedCondition", new String[] {"POST_MUT_SAT", "true", "true", "true"}); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+	private static final ConditionInfo POST_MUT_UNSAT = new ConditionInfo("org.osgi.test.cases.condpermadmin.testcond.TestPostPonedCondition", new String[] {"POST_MUT_UNSAT", "true", "true", "false"}); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 
 	private Bundle tb1;
 	private Bundle tb2;

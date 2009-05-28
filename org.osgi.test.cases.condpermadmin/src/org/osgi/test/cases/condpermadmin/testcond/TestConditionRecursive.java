@@ -1,5 +1,5 @@
 
-package org.osgi.test.cases.permissionadmin.conditional.testcond;
+package org.osgi.test.cases.condpermadmin.testcond;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

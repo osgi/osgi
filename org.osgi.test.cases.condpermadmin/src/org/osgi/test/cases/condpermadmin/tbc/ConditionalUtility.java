@@ -1,4 +1,4 @@
-package org.osgi.test.cases.permissionadmin.conditional.tbc;
+package org.osgi.test.cases.condpermadmin.tbc;
 
 
 import java.lang.reflect.Constructor;
@@ -15,7 +15,7 @@ import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
 
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.service.permissionadmin.PermissionAdmin;
-import org.osgi.test.cases.permissionadmin.conditional.testcond.TestCondition;
+import org.osgi.test.cases.condpermadmin.testcond.TestCondition;
 
 
 public class ConditionalUtility {

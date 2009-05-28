@@ -25,15 +25,9 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.permissionadmin.conditional.tbc;
+package org.osgi.test.cases.condpermadmin.tbc;
 
-import java.security.Permission;
 
-public interface ConditionalTBCService {
-	
-	public void checkPermission(Permission permission) throws SecurityException;
-	
-  public void checkStack(Permission permission) throws SecurityException;
-  
-  public void checkStack2(Permission permission) throws SecurityException;
+public interface ConditionalPermTBCService extends ConditionalTBCService{
+
 }

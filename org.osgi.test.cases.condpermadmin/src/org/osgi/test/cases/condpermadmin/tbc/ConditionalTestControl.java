@@ -24,10 +24,10 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-package org.osgi.test.cases.permissionadmin.conditional.tbc;
+package org.osgi.test.cases.condpermadmin.tbc;
 
-import org.osgi.test.cases.permissionadmin.conditional.testcond.TestCondition;
-import org.osgi.test.cases.permissionadmin.conditional.testcond.TestConditionRecursive;
+import org.osgi.test.cases.condpermadmin.testcond.TestCondition;
+import org.osgi.test.cases.condpermadmin.testcond.TestConditionRecursive;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 

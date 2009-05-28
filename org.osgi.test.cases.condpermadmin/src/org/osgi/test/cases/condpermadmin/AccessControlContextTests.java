@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.permissionadmin.conditional;
+package org.osgi.test.cases.condpermadmin;
 
 import java.io.FilePermission;
 import java.security.AccessControlContext;

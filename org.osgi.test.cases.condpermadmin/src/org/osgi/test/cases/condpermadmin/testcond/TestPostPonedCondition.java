@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.permissionadmin.conditional.testcond;
+package org.osgi.test.cases.condpermadmin.testcond;
 
 import java.util.Dictionary;
 import java.util.HashMap;

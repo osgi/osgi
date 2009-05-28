@@ -25,7 +25,7 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.permissionadmin.conditional.tb1;
+package org.osgi.test.cases.condpermadmin.tb2;
 
 import java.security.AccessController;
 import java.security.Permission;
@@ -33,23 +33,20 @@ import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 
 import org.osgi.framework.*;
-import org.osgi.test.cases.permissionadmin.conditional.tbc.ConditionalDomTBCService;
-import org.osgi.test.cases.permissionadmin.conditional.tbc.ConditionalPermTBCService;
-import org.osgi.test.cases.permissionadmin.conditional.tbc.ConditionalTBCService;
+import org.osgi.test.cases.condpermadmin.tbc.ConditionalDomTBCService;
+import org.osgi.test.cases.condpermadmin.tbc.ConditionalPermTBCService;
 
 
-public class Activator implements BundleActivator, ConditionalTBCService {
+public class Activator implements BundleActivator, ConditionalPermTBCService {
 	
-  private BundleContext context;
-  private ServiceRegistration reg;
+	private BundleContext context;
 
   public void start(BundleContext context) throws Exception {
     this.context = context;
-		reg = context.registerService(ConditionalTBCService.class.getName(),this,null);
+		context.registerService(ConditionalPermTBCService.class.getName(),this,null);
 	}
 	
 	public void stop(BundleContext context) throws Exception {
-    reg.unregister();
 	}
   
   public void checkPermission(final Permission permission) 
@@ -68,16 +65,13 @@ public class Activator implements BundleActivator, ConditionalTBCService {
   }
 
   public void checkStack(Permission permission) throws SecurityException {
-    ServiceReference ref = context.getServiceReference(ConditionalPermTBCService.class.getName());
-    ConditionalPermTBCService service = (ConditionalPermTBCService) context.getService(ref);
+    ServiceReference ref = context.getServiceReference(ConditionalDomTBCService.class.getName());
+    ConditionalDomTBCService service = (ConditionalDomTBCService) context.getService(ref);
     service.checkStack(permission);
     context.ungetService(ref);
   }
- 
+
   public void checkStack2(Permission permission) throws SecurityException {
-	    ServiceReference ref = context.getServiceReference(ConditionalDomTBCService.class.getName());
-	    ConditionalDomTBCService service = (ConditionalDomTBCService) context.getService(ref);
-	    service.checkStack(permission);
-	    context.ungetService(ref);
+	  checkStack(permission);
   }
 }

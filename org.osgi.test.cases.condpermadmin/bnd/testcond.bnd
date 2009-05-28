@@ -7,7 +7,7 @@ Bundle-ContactAddress: info@mail.osgi.org
 Bundle-Category: osgi,test
 Bundle-Copyright: ${copyright}
 Fragment-Host: system.bundle; extension:=framework
-Export-Package:	${p}.testcond
+Export-Package:	${p}.testcond;-noimport:=true
 Import-Package: !*
 
 -failok: true
