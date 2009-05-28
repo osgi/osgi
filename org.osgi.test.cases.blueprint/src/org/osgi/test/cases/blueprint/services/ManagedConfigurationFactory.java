@@ -71,7 +71,7 @@ public class ManagedConfigurationFactory implements ManagedConfigurationInterfac
      */
     public void remove(ConfigurationAdmin admin) {
         try {
-            String spec = '(' + ConfigurationAdmin.SERVICE_FACTORYPID + '=' + this.factoryPid + ')'; 
+            String spec = '(' + ConfigurationAdmin.SERVICE_FACTORYPID + '=' + this.factoryPid + ')';
             // delete any configs that match this pid.
             Configuration[] configs = admin.listConfigurations(spec);
             if (configs != null) {
@@ -79,6 +79,9 @@ public class ManagedConfigurationFactory implements ManagedConfigurationInterfac
                     configs[i].delete();
                 }
             }
+            // since we're dealing with asynchronous events here, sleep for a little bit
+            // to allow everything to update.
+            sleep();
         } catch (Exception e) {
             // just ignore errors for the test (which should not occur)
             e.printStackTrace();
@@ -98,6 +101,9 @@ public class ManagedConfigurationFactory implements ManagedConfigurationInterfac
             // make sure the configuration is unbound by default
             config.setBundleLocation(null);
             dicList.add(newProps);
+            // since we're dealing with asynchronous events here, sleep for a little bit
+            // to allow everything to update.
+            sleep();
         } catch (Exception e) {
             // just ignore errors for the test (which should not occur)
             e.printStackTrace();
@@ -120,6 +126,9 @@ public class ManagedConfigurationFactory implements ManagedConfigurationInterfac
                 configs[0].update(newProps);
                 // configs[0] should have stay in the configList
             }
+            // since we're dealing with asynchronous events here, sleep for a little bit
+            // to allow everything to update.
+            sleep();
         } catch (Exception e) {
             // just ignore errors for the test (which should not occur)
             e.printStackTrace();
@@ -127,6 +136,12 @@ public class ManagedConfigurationFactory implements ManagedConfigurationInterfac
     }
 
 
-
+    public void sleep() {
+        try {
+            // tenth a second should be sufficiently long, likely longer than is needed.
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+        }
+    }
 }
 

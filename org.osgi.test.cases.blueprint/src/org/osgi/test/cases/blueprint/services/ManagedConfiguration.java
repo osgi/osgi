@@ -79,6 +79,9 @@ public class ManagedConfiguration implements ManagedConfigurationInterface {
                     configs[i].delete();
                 }
             }
+            // since we're dealing with asynchronous events here, sleep for a little bit
+            // to allow everything to update.
+            sleep();
         } catch (Exception e) {
             // just ignore errors for the test (which should not occur)
             e.printStackTrace();
@@ -95,6 +98,9 @@ public class ManagedConfiguration implements ManagedConfigurationInterface {
         try {
             dic = newProps;
             config.update(dic);
+            // since we're dealing with asynchronous events here, sleep for a little bit
+            // to allow everything to update.
+            sleep();
         } catch (Exception e) {
             // just ignore errors for the test (which should not occur)
             e.printStackTrace();
@@ -113,7 +119,13 @@ public class ManagedConfiguration implements ManagedConfigurationInterface {
     }
 
 
-
+    public void sleep() {
+        try {
+            // tenth a second should be sufficiently long, likely longer than is needed.
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+        }
+    }
 }
 
 
