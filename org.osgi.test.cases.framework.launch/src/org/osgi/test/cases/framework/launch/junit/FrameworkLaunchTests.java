@@ -412,7 +412,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 	}
 
 	public void testStorageArea() throws BundleException, IOException {
-		String testBundleLocation = "/filter.tb1.jar";
+		String testBundleLocation = "/launch.tb1.jar";
 		// install a bundle into a framework
 		Framework framework = createFramework(getConfiguration(getName()));
 		initFramework(framework);
