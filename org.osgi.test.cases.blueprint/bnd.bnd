@@ -311,6 +311,7 @@ Include-Resource					= \
  	www/factory_service_lifecycle.jar=factory_service_lifecycle.jar, \
  	www/factory_service_properties_evaluation.jar=factory_service_properties_evaluation.jar, \
  	www/factory_service_properties_auto_update.jar=factory_service_properties_auto_update.jar, \
+ 	www/error_missing_placeholder_default.jar=error_missing_placeholder_default.jar, \
  	www/error_default_prefix_conflict.jar=error_default_prefix_conflict.jar, \
  	www/error_explicit_prefix_conflict.jar=error_explicit_prefix_conflict.jar
 

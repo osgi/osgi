@@ -126,6 +126,18 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
         controller.run();
     }
 
+    /**
+     * missing placeholder config value should force an error
+     */
+    public void testMissingPlaceholderDefault() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_missing_placeholder_default");
+        // this insures we don't have errors resulting from missing stuff
+        controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
+        controller.run();
+    }
+
     public void testPlaceholderDeclarationScope() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
                 getWebServer()+"www/placeholder_declaration_scope.jar");
