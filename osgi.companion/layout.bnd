@@ -23,13 +23,10 @@ cmpn.specs = \
 	 info.dmtree, \
 	 org.osgi.application, \
 	 org.osgi.service.application, \
-	 org.osgi.service.blueprint, \
 	 org.osgi.service.cm, \
 	 org.osgi.service.component, \
 	 org.osgi.service.deploymentadmin, \
 	 org.osgi.service.device, \
-	 org.osgi.service.discovery, \
-	 org.osgi.service.distribution, \
 	 org.osgi.service.event, \
 	 org.osgi.service.http, \
 	 org.osgi.service.io, \
