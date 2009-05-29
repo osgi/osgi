@@ -558,4 +558,34 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 			assertFalse("Unexpected class", vmClass.equals(testClass));
 		stopFramework(framework);
 	}
+
+	public void testParentClassLoader() throws BundleException, IOException {
+		Map configuration = getConfiguration(getName());
+		configuration.put(Constants.FRAMEWORK_BOOTDELEGATION, "*");
+		doTestParentClassLoader(configuration, null, Bundle.class.getName(), true);
+		doTestParentClassLoader(configuration, Constants.FRAMEWORK_BUNDLE_PARENT_BOOT, Bundle.class.getName(), true);
+		doTestParentClassLoader(configuration, Constants.FRAMEWORK_BUNDLE_PARENT_EXT, Bundle.class.getName(), true);
+		// here we assume the framework jar was placed on the app class loader.
+		doTestParentClassLoader(configuration, Constants.FRAMEWORK_BUNDLE_PARENT_APP, Bundle.class.getName(), false);
+		doTestParentClassLoader(configuration, Constants.FRAMEWORK_BUNDLE_PARENT_FRAMEWORK, Bundle.class.getName(), false);
+	}
+
+	private void doTestParentClassLoader(Map configuration, String parentType, String className, boolean fail) throws BundleException, IOException {
+		if (parentType != null)
+			configuration.put(Constants.FRAMEWORK_BUNDLE_PARENT, parentType);
+		else
+			configuration.remove(Constants.FRAMEWORK_BUNDLE_PARENT);
+		Framework framework = createFramework(configuration);
+		startFramework(framework);
+		Bundle testBundle = installBundle(framework, "/launch.tb3.jar");
+		try {
+			 testBundle.loadClass(className);
+			 if (fail)
+				 fail("Should not be able to load class: " + className);
+		} catch (ClassNotFoundException e) {
+			if (!fail)
+				fail("Unexpected CNFE", e);
+		}
+		stopFramework(framework);
+	}
 }
