@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.remoteserviceadmin;
+package org.osgi.service.remoteservices;
 
 /**
  * Interface of trackers for discovered remote services.
@@ -34,8 +34,8 @@ package org.osgi.service.remoteserviceadmin;
 public interface ImportServiceHandler {
 
 	/**
-	 * Optional ServiceRegistration property which contains service interfaces
-	 * this ImportServiceHandler is interested in.
+	 * TODO fix name Optional ServiceRegistration property which contains
+	 * service interfaces this ImportServiceHandler is interested in.
 	 * <p>
 	 * Value of this property is of type
 	 * <code>Collection (&lt;String&gt;)</code>. May be <code>null</code> or
@@ -44,12 +44,12 @@ public interface ImportServiceHandler {
 	public static final String	INTERFACE_MATCH_CRITERIA	= "osgi.remote.discovery.interest.interfaces";
 
 	/**
-	 * Optional ServiceRegistration property which contains filters for services
-	 * this ImportServiceHandler is interested in.
+	 * TODO fix name Optional ServiceRegistration property which contains
+	 * filters for services this ImportServiceHandler is interested in.
 	 * <p>
 	 * Note that these filters need to take into account service publication
 	 * properties which are not necessarily the same as properties under which a
-	 * service is registered. See {@link ExportedService} for some standard
+	 * service is registered. See {@link ExportedEndpointDescription} for some standard
 	 * properties used to publish service metadata.
 	 * <p>
 	 * The following sample filter will make <code>Discovery</code> notify the
@@ -78,8 +78,11 @@ public interface ImportServiceHandler {
 	 * 
 	 * @param notification the <code>ImportServiceHandler</code> object. Is
 	 *        never <code>null</code>.
+	 * @return <code>true</code> if the handler processes the notification or
+	 *         <code>false</code> if the handler chooses not to process the
+	 *         notification.
 	 */
-	void importService(RemoteServiceNotification notification);
+	boolean importService(RemoteServiceNotification notification);
 
 	/**
 	 * Receives notification that information known to <code>Discovery</code>

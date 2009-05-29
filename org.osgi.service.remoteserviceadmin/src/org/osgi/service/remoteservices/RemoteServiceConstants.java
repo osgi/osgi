@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.service.remoteserviceadmin;
+package org.osgi.service.remoteservices;
 
 import java.util.Collection;
 
@@ -32,7 +32,7 @@ import org.osgi.framework.ServiceReference;
  * @ThreadSafe
  * @version $Revision$
  */
-public interface RemoteServiceAdmin {
+public interface RemoteServiceConstants {
 	/**
 	 * Service property that lists the intents supported by a distribution
 	 * provider.
@@ -51,36 +51,10 @@ public interface RemoteServiceAdmin {
 	static final String	REMOTE_CONFIGS_SUPPORTED	= "remote.configs.supported";
 
 	/**
-	 * Returns references to the imported services. The returned references are
-	 * to services which are local proxies to remote services that have been
-	 * imported.
-	 * 
-	 * @return A collection of Service References to the imported services. An
-	 *         empty collection is returned if this Remote Service Admin has not
-	 *         imported any services.
+	 * The service.id of the distribution provide. ExportedEndpointDescriptions
+	 * and imported service must be registered with this service property to
+	 * identify the distribution provide which is managing the exported and
+	 * imported services.
 	 */
-	Collection /* <ServiceReference> */getImportedServices();
-
-	/**
-	 * Returns references to the services which have been exported. The returned
-	 * references are to local services which have been made remotely available.
-	 * 
-	 * @return A collection of Service References to the exported services. An
-	 *         empty collection is returned if this Remote Service Admin has not
-	 *         exported any services.
-	 */
-	Collection /* <ServiceReference> */getExportedServices();
-
-	/**
-	 * Return the Service Endpoint Description for the specified exported
-	 * service.
-	 * 
-	 * @param exported A Service Reference to a service exported by this Remote
-	 *        Service Admin.
-	 * @return The Service Endpoint Description for the specified exported
-	 *         service or <code>null</code> if the specified service is not
-	 *         exported by this Remote Service Admin.
-	 */
-	ServiceEndpointDescription getServiceEndpointDescription(
-			ServiceReference exported);
+	static final String	DISTRIBUTION_PROVIDER_ID	= "distribution.provider.id";
 }

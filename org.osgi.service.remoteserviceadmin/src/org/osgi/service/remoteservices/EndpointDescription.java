@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.remoteserviceadmin;
+package org.osgi.service.remoteservices;
 
 import java.net.URI;
 import java.util.Collection;
@@ -31,66 +31,43 @@ import java.util.Map;
  * @Immutable
  * @version $Revision$
  */
-public interface ServiceEndpointDescription {
+public interface EndpointDescription {
 
 	/**
-	 * Returns the value of the property with key
-	 * {@link ExportedService#SERVICE_INTERFACE_NAME}.
+	 * Contains a collection of fully qualified interface names offered by this
+	 * endpoint.
 	 * 
 	 * @return <code>Collection (&lt;String&gt;)</code> of service interface
 	 *         names provided by the advertised service endpoint. The collection
 	 *         is never <code>null</code> or empty but contains at least one
 	 *         service interface.
 	 */
-	Collection /* <String> */getProvidedInterfaces();
+	Collection /* <InterfaceDescription> */getInterfaceDescriptions();
 
 	/**
-	 * Returns non-Java endpoint interface name associated with the given
-	 * interface.
-	 * <p>
-	 * Value of the property with key
-	 * {@link ExportedService#ENDPOINT_INTERFACE_NAME} is used by this
-	 * operation.
+	 * Returns the URI of the service location of this endpoint.
 	 * 
-	 * @param interfaceName for which its non-Java endpoint interface name
-	 *        should be returned.
-	 * @return non-Java endpoint interface name, or <code>null</code> if it
-	 *         hasn't been provided or if given interface name is
-	 *         <code>null</code>.
-	 */
-	String getEndpointInterfaceName(String interfaceName);
-
-	/**
-	 * Returns version of the given interface.
-	 * <p>
-	 * Value of the property with key
-	 * {@link ExportedService#SERVICE_INTERFACE_VERSION} is used by this
-	 * operation.
-	 * 
-	 * @param interfaceName for which its version should be returned.
-	 * @return Version of given service interface, or <code>null</code> if it
-	 *         hasn't been provided or if given interface name is
-	 *         <code>null</code>.
-	 */
-	String getVersion(String interfaceName);
-
-	/**
-	 * Returns the value of the property with key
-	 * {@link ExportedService#ENDPOINT_LOCATION}.
-	 * 
-	 * @return The url of the service location, or <code>null</code> if it
+	 * @return The URI of the service location, or <code>null</code> if it
 	 *         hasn't been provided.
 	 */
-	URI getLocation();
+	URI getURI();
 
 	/**
-	 * Returns the value of the property with key
-	 * {@link ExportedService#ENDPOINT_ID}.
+	 * Returns the universally unique id for the service represented by this
+	 * endpoint.
 	 * 
 	 * @return Unique id of service endpoint, or <code>null</code> if it hasn't
 	 *         been provided.
 	 */
-	String getEndpointID();
+	String getServiceUUID();
+	
+	/**
+	 * Returns the configuration
+	 * 
+	 * @return
+	 * @see RemoteServiceConstants#REMOTE_CONFIGS_SUPPORTED
+	 */
+	String getConfigurationType();
 
 	/**
 	 * Returns all service endpoint properties.

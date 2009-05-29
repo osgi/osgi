@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.remoteserviceadmin;
+package org.osgi.service.remoteservices;
 
 import java.util.Collection;
 
@@ -35,7 +35,7 @@ public interface RemoteServiceNotification {
 	 * @return metadata of the service <code>Discovery</code> notifies about. Is
 	 *         never <code>null</code>.
 	 */
-	ServiceEndpointDescription getServiceEndpointDescription();
+	EndpointDescription getEndpointDescription();
 
 	/**
 	 * Returns interface name criteria of the {@link ImportServiceHandler}
