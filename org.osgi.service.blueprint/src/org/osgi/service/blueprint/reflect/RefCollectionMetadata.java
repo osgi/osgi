@@ -24,25 +24,14 @@ package org.osgi.service.blueprint.reflect;
 public interface RefCollectionMetadata extends ServiceReferenceMetadata {
 
 	/**
-	 * Create ordering based on comparison of service objects.
+	 * Use the service objects to compare or include in the collection
 	 */
-	public static final int ORDERING_BASIS_SERVICE= 1;
-
+	public static final int USE_SERVICE_OBJECT = 1;
+	
 	/**
-	 * Create ordering based on comparison of service reference objects.
-	 */
-	public static final int ORDERING_BASIS_SERVICE_REFERENCE = 2;
-
-	/**
-	 * Collection contains service instances
-	 *
-	 */
-	public static final int MEMBER_TYPE_SERVICE_INSTANCE = 1;
-
-	/**
-	 * Collection contains service references
-	 */
-	public static final int MEMBER_TYPE_SERVICE_REFERENCE = 2;
+ 	 * Use the service references to compare or include in the collection
+ 	 */
+	public static final int USE_SERVICE_REFERENCE = 2;
 
 	/**
 	 * The type of collection to be created.
@@ -72,14 +61,20 @@ public interface RefCollectionMetadata extends ServiceReferenceMetadata {
 	 *
 	 * Defined in the <code>ordering-basis</code> attribute.
 	 *
-	 * @return one of ORDERING_BASIS_SERVICES and ORDERING_BASIS_SERVICE_REFERENCE
+	 * @return one of USE_SERVICE_OBJECT and USE_SERVICE_REFERENCE
+	 * @see #USE_SERVICE_OBJECT
+	 * @see #USE_SERVICE_REFERENCE
 	 */
 	int getOrderingBasis();
 
 	/**
-	 * Whether the collection will contain service instances, or service
+	 * Whether the collection will contain service objects, or service
 	 * references
 	 * Defined in the <code>member-type</code> attribute.
+	 *
+	 * @return one of USE_SERVICE_OBJECT and USE_SERVICE_REFERENCE
+	 * @see #USE_SERVICE_OBJECT
+	 * @see #USE_SERVICE_REFERENCE
 	 */
 	int getMemberType();
 }

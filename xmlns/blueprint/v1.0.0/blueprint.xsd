@@ -52,7 +52,7 @@
           the Tcomponent type.  This type defines an id attributre
           that is used create references between different components.
           Component elements can also be inlined within other component
-          definitions.  The id attribute is not valid when inliine.
+          definitions.  The id attribute is not valid when inlined.
           ]]>
             </xsd:documentation>
         </xsd:annotation>
@@ -88,18 +88,23 @@
                 maxOccurs="1" />
             <!-- top-level components -->
             <xsd:choice minOccurs="0" maxOccurs="unbounded">
-                <xsd:group ref="allComponents" />
+                <xsd:element name="service" type="Tservice" />
+                <xsd:element name="ref-list" type="Tref-collection" />
+                <xsd:element name="ref-set" type="Tref-collection" />
+                <xsd:element name="bean" type="Tbean" />
+                <xsd:element name="reference" type="Treference" />
+                <xsd:any namespace="##other" processContents="strict" minOccurs="0" maxOccurs="unbounded" />
             </xsd:choice>
         </xsd:sequence>
 
         <!-- Defaults-->
-        <xsd:attribute name="default-lazy-init" default="false" type="Tlazy-init">
+        <xsd:attribute name="default-initialization" default="eager" type="Tinitialization">
             <xsd:annotation>
                 <xsd:documentation>
                   <![CDATA[
-                  Specifies the default lazy-init setting that will be defined
+                  Specifies the default initialization setting that will be defined
                   for <bean> components.  If not specified, the global
-                  default is "false".  Individual <bean> components may
+                  default is "eager".  Individual <bean> components may
                   override the default
                   ]]>
                 </xsd:documentation>
@@ -147,7 +152,10 @@
             </xsd:documentation>
         </xsd:annotation>
         <xsd:choice minOccurs="0" maxOccurs="unbounded">
-            <xsd:group ref="targetComponent" />
+            <xsd:element name="bean" type="Tbean" />
+            <xsd:element name="reference" type="Treference" />
+            <xsd:element name="ref" type="Tref" />
+            <xsd:any namespace="##other" processContents="strict" minOccurs="0" maxOccurs="unbounded" />
         </xsd:choice>
     </xsd:complexType>
 
@@ -168,8 +176,8 @@
             </xsd:documentation>
         </xsd:annotation>
         <xsd:choice>
-            <xsd:element name="bean" type="Tbean" />
-            <xsd:element name="reference" type="Treference" />
+            <xsd:element name="bean" type="Tinlined-bean" />
+            <xsd:element name="reference" type="Tinlined-reference" />
             <xsd:element name="ref" type="Tref" />
             <xsd:any namespace="##other" processContents="strict" minOccurs="0" maxOccurs="unbounded" />
         </xsd:choice>
@@ -186,9 +194,9 @@
             </xsd:documentation>
         </xsd:annotation>
         <xsd:choice>
-            <xsd:element name="service" type="Tservice" />
-            <xsd:element name="ref-list" type="Tref-collection" />
-            <xsd:element name="ref-set" type="Tref-collection" />
+            <xsd:element name="service" type="Tinlined-service" />
+            <xsd:element name="ref-list" type="Tinlined-ref-collection" />
+            <xsd:element name="ref-set" type="Tinlined-ref-collection" />
             <xsd:group ref="targetComponent" />
         </xsd:choice>
     </xsd:group>
@@ -218,7 +226,7 @@
         <xsd:annotation>
             <xsd:documentation>
               <![CDATA[
-              The type defintion for a <bean> component.
+              The type definition for a <bean> component.
               This definition is also used by the <bpcm:managed-component>
               element used in the blueprint-cm schema.  The <bean> attributes
               provide the characteristics for how to create a bean instance.
@@ -235,25 +243,17 @@
                 <xsd:attribute name="init-method" type="TnullableMethod" />
                 <xsd:attribute name="destroy-method" type="TnullableMethod" />
                 <xsd:attribute name="factory-method" type="Tmethod" />
-                <xsd:attribute name="factory-component" type="Tidref" />
+                <xsd:attribute name="factory-ref" type="Tidref" />
 
-                <xsd:attribute name="scope">
-                    <xsd:simpleType>
-                        <xsd:restriction base="xsd:NMTOKEN">
-                            <xsd:enumeration value="singleton" />
-                            <xsd:enumeration value="prototype" />
-                            <xsd:enumeration value="bundle" />
-                        </xsd:restriction>
-                    </xsd:simpleType>
-                </xsd:attribute>
+                <xsd:attribute name="scope" type="Tscope" />
 
-                <xsd:attribute name="lazy-init" type="Tlazy-init">
+                <xsd:attribute name="initialization" type="Tinitialization">
                     <xsd:annotation>
                         <xsd:documentation>
                           <![CDATA[
-                          The lazy-init attribute for this <bean>.  This can either
-                          be "eager" ("false") or "lazy" ("true").  If not specified, it
-                          defaults to default-lazy-init attribute of the enclosing
+                          The initialization attribute for this <bean>.  This can either
+                          be "eager" or "lazy".  If not specified, it
+                          defaults to default-initialization attribute of the enclosing
                           <blueprint> element.  The default, default is "eager"
                           ]]>
                         </xsd:documentation>
@@ -261,6 +261,33 @@
                 </xsd:attribute>
                 <xsd:anyAttribute namespace="##other" processContents="lax" />
             </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="Tinlined-bean">
+        <xsd:annotation>
+            <xsd:documentation>
+              <![CDATA[
+              The Tinlined-bean type is used for inlined (i.e. non top level)
+              <bean> elements.  Those elements have some restrictions on
+              the attributes that can be used to define them.
+              ]]>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:restriction base="Tbean">
+                <xsd:group ref="beanElements" />
+                <xsd:attribute name="id" use="prohibited"/>
+                <xsd:attribute name="class" type="Tclass" />
+                <xsd:attribute name="depends-on" type="TdependsOn" />
+                <xsd:attribute name="init-method" type="TnullableMethod" />
+                <xsd:attribute name="destroy-method" use="prohibited"/>
+                <xsd:attribute name="factory-method" type="Tmethod" />
+                <xsd:attribute name="factory-ref" type="Tidref" />
+                <xsd:attribute name="scope" fixed="prototype" type="Tscope"/>
+                <xsd:attribute name="lazy-init" use="prohibited"/>
+                <xsd:anyAttribute namespace="##other" processContents="lax" />
+            </xsd:restriction>
         </xsd:complexContent>
     </xsd:complexType>
 
@@ -347,8 +374,37 @@
         </xsd:annotation>
         <xsd:complexContent>
             <xsd:extension base="TserviceReference">
+                <xsd:sequence>
+                    <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax" />
+                </xsd:sequence>
                 <xsd:attribute name="timeout" use="optional" type="Ttimeout" />
             </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="Tinlined-reference">
+        <xsd:annotation>
+            <xsd:documentation>
+              <![CDATA[
+              The Tinlined-reference type is used for inlined (i.e. non top level)
+              <reference> elements.
+              ]]>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:restriction base="Treference">
+                <xsd:sequence>
+                    <xsd:group ref="serviceReferenceElements"/>
+                    <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax" />
+                </xsd:sequence>
+                <xsd:attribute name="id" use="prohibited"/>
+                <xsd:attribute name="interface" type="Tclass" use="optional"/>
+                <xsd:attribute name="filter" type="xsd:normalizedString" use="optional"/>
+                <xsd:attribute name="component-name" type="Tidref" use="optional"/>
+                <xsd:attribute name="availability" type="Tavailability" use="optional"/>
+                <xsd:attribute name="timeout" type="Ttimeout" use="optional"/>
+                <xsd:anyAttribute namespace="##other" processContents="lax" />
+            </xsd:restriction>
         </xsd:complexContent>
     </xsd:complexType>
 
@@ -378,9 +434,11 @@
                             </xsd:documentation>
                         </xsd:annotation>
                     </xsd:element>
+                    <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded"
+                        processContents="lax" />
                 </xsd:sequence>
 
-                <xsd:attribute name="comparator-ref" type="xsd:token" use="optional">
+                <xsd:attribute name="comparator-ref" type="Tidref" use="optional">
                     <xsd:annotation>
                         <xsd:documentation>
                           <![CDATA[
@@ -391,7 +449,7 @@
                     </xsd:annotation>
                 </xsd:attribute>
 
-                <xsd:attribute name="member-type" use="optional">
+                <xsd:attribute name="member-type" type="Tservice-use" use="optional">
                     <xsd:annotation>
                         <xsd:documentation>
                           <![CDATA[
@@ -403,15 +461,9 @@
                           ]]>
                         </xsd:documentation>
                     </xsd:annotation>
-                    <xsd:simpleType>
-                        <xsd:restriction base="xsd:NMTOKEN">
-                            <xsd:enumeration value="service-instance" />
-                            <xsd:enumeration value="service-reference" />
-                        </xsd:restriction>
-                    </xsd:simpleType>
                 </xsd:attribute>
 
-                <xsd:attribute name="ordering-basis" use="optional">
+                <xsd:attribute name="ordering-basis" type="Tservice-use" use="optional">
                     <xsd:annotation>
                         <xsd:documentation>
                           <![CDATA[
@@ -423,15 +475,38 @@
                           ]]>
                         </xsd:documentation>
                     </xsd:annotation>
-                    <xsd:simpleType>
-                        <xsd:restriction base="xsd:NMTOKEN">
-                            <xsd:enumeration value="service" />
-                            <xsd:enumeration value="service-reference" />
-                        </xsd:restriction>
-                    </xsd:simpleType>
                 </xsd:attribute>
 
             </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="Tinlined-ref-collection">
+        <xsd:annotation>
+            <xsd:documentation>
+              <![CDATA[
+              The Tinlined-ref-collection type is used for inlined (i.e. non top level)
+              <ref-list> and <ref-set> elements.
+              ]]>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:restriction base="Tref-collection">
+                <xsd:sequence>
+                    <xsd:group ref="serviceReferenceElements"/>
+                    <xsd:element name="comparator" type="Tcomparator" minOccurs="0" maxOccurs="1"/>
+                    <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax" />
+                </xsd:sequence>
+                <xsd:attribute name="id" use="prohibited"/>
+                <xsd:attribute name="interface" type="Tclass" use="optional"/>
+                <xsd:attribute name="filter" type="xsd:normalizedString" use="optional"/>
+                <xsd:attribute name="component-name" type="Tidref" use="optional"/>
+                <xsd:attribute name="availability" type="Tavailability" use="optional"/>
+                <xsd:attribute name="comparator-ref" type="Tidref" use="optional"/>
+                <xsd:attribute name="member-type" use="optional" type="Tservice-use"/>
+                <xsd:attribute name="ordering-basis" use="optional" type="Tservice-use"/>
+                <xsd:anyAttribute namespace="##other" processContents="lax" />
+            </xsd:restriction>
         </xsd:complexContent>
     </xsd:complexType>
 
@@ -449,35 +524,7 @@
         <xsd:complexContent>
             <xsd:extension base="Tcomponent">
                 <xsd:sequence>
-                    <xsd:element name="description" type="Tdescription" minOccurs="0" />
-                    <xsd:element name="interfaces" minOccurs="0" maxOccurs="1" type="Tinterfaces">
-                        <xsd:annotation>
-                            <xsd:documentation>
-                          <![CDATA[
-                          The definition of the required interfaces that the obtained services
-                          must implement.   There is also a shortcut attribute defined for
-                          the typical case of just a single interface class.
-                          ]]>
-                            </xsd:documentation>
-                        </xsd:annotation>
-                    </xsd:element>
-
-                    <!-- listener -->
-                    <xsd:element name="listener" type="TReferenceListener" minOccurs="0"
-                        maxOccurs="unbounded">
-                        <xsd:annotation>
-                            <xsd:documentation>
-                              <![CDATA[
-                              A definition of a listener that will watch for bind/unbind events
-                              associated with the service reference.  The targetted listener can
-                              be a <ref> to a <bean> or <reference> element, or an inline
-                              <bean> or <reference>.
-                              ]]>
-                            </xsd:documentation>
-                        </xsd:annotation>
-                    </xsd:element>
-                    <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded"
-                        processContents="lax" />
+                    <xsd:group ref="serviceReferenceElements"/>
                 </xsd:sequence>
 
                 <xsd:attribute name="interface" use="optional" type="Tclass" />
@@ -522,7 +569,39 @@
         </xsd:complexContent>
     </xsd:complexType>
 
-    <xsd:complexType name="TReferenceListener">
+    <xsd:group name="serviceReferenceElements">
+        <xsd:sequence>
+            <xsd:element name="description" type="Tdescription" minOccurs="0" />
+            <xsd:element name="interfaces" minOccurs="0" maxOccurs="1" type="Tinterfaces">
+                <xsd:annotation>
+                    <xsd:documentation>
+                  <![CDATA[
+                  The definition of the required interfaces that the obtained services
+                  must implement.   There is also a shortcut attribute defined for
+                  the typical case of just a single interface class.
+                  ]]>
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+
+            <!-- listener -->
+            <xsd:element name="listener" type="TreferenceListener" minOccurs="0"
+                maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>
+                      <![CDATA[
+                      A definition of a listener that will watch for bind/unbind events
+                      associated with the service reference.  The targetted listener can
+                      be a <ref> to a <bean> or <reference> element, or an inline
+                      <bean> or <reference>.
+                      ]]>
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:group>
+
+    <xsd:complexType name="TreferenceListener">
         <xsd:annotation>
             <xsd:documentation>
               <![CDATA[
@@ -535,22 +614,25 @@
             </xsd:documentation>
         </xsd:annotation>
         <xsd:group ref="targetComponent" />
-        <xsd:attribute name="ref" type="xsd:token" use="optional" />
+        <xsd:attribute name="ref" type="xsd:NMTOKEN" use="optional" />
         <xsd:attribute name="bind-method" type="Tmethod" use="required" />
         <xsd:attribute name="unbind-method" type="Tmethod" use="required" />
     </xsd:complexType>
 
-    <xsd:simpleType name="Tlazy-init">
+    <xsd:simpleType name="Tinitialization">
         <xsd:annotation>
             <xsd:documentation>
               <![CDATA[
-              Tlazy-init defines a lazy-init type.  This is used in this
-              schema by the <blueprint> default-lazy-init attribute and the
-              <bean> lazy-init attribute.
+              Tinitializationt defines the initialization type for beans.  This is used in this
+              schema by the <blueprint> default-initialization attribute and the
+              <bean> initialization attribute.
               ]]>
             </xsd:documentation>
         </xsd:annotation>
-        <xsd:restriction base="xsd:boolean" />
+        <xsd:restriction base="xsd:NMTOKEN">
+            <xsd:enumeration value="eager"/>
+            <xsd:enumeration value="lazy"/>
+        </xsd:restriction>
     </xsd:simpleType>
 
     <xsd:simpleType name="Tavailability">
@@ -563,7 +645,7 @@
               ]]>
             </xsd:documentation>
         </xsd:annotation>
-        <xsd:restriction base="xsd:token">
+        <xsd:restriction base="xsd:NMTOKEN">
             <xsd:enumeration value="mandatory" />
             <xsd:enumeration value="optional" />
         </xsd:restriction>
@@ -626,6 +708,32 @@
         </xsd:complexContent>
     </xsd:complexType>
 
+    <xsd:complexType name="Tinlined-service">
+        <xsd:annotation>
+            <xsd:documentation>
+              <![CDATA[
+              The Tinlined-service type is used for inlined (i.e. non top level)
+              <service> elements.
+              ]]>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:restriction base="Tservice">
+                <xsd:sequence>
+                    <xsd:group ref="serviceElements" />
+                    <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax" />
+                </xsd:sequence>
+                <xsd:attribute name="id" use="prohibited"/>
+                <xsd:attribute name="interface" type="Tclass" use="optional" />
+                <xsd:attribute name="ref" type="Tidref" use="optional" />
+                <xsd:attribute name="depends-on" type="TdependsOn" use="optional"/>
+                <xsd:attribute name="auto-export" type="TautoExportModes" default="disabled" />
+                <xsd:attribute name="ranking" type="xsd:int" default="0"/>
+                <xsd:anyAttribute namespace="##other" processContents="lax" />
+            </xsd:restriction>
+        </xsd:complexContent>
+    </xsd:complexType>
+
     <xsd:group name="serviceElements">
         <xsd:annotation>
             <xsd:documentation>
@@ -685,7 +793,7 @@
                       ]]>
                     </xsd:documentation>
                 </xsd:annotation>
-                <xsd:element name="bean" type="Tbean" />
+                <xsd:element name="bean" type="Tinlined-bean" />
                 <xsd:element name="ref" type="Tref" />
             </xsd:choice>
         </xsd:sequence>
@@ -1021,7 +1129,7 @@
               ]]>
             </xsd:documentation>
         </xsd:annotation>
-        <xsd:restriction base="xsd:token">
+        <xsd:restriction base="xsd:NMTOKEN">
             <xsd:pattern value="[\i-[:]][\c-[:]]*" />
             <xsd:pattern value="" />
         </xsd:restriction>
@@ -1061,7 +1169,7 @@
               ]]>
             </xsd:documentation>
         </xsd:annotation>
-        <xsd:restriction base="xsd:token">
+        <xsd:restriction base="xsd:NMTOKEN">
             <xsd:enumeration value="disabled" />
             <xsd:enumeration value="interfaces" />
             <xsd:enumeration value="class-hierarchy" />
@@ -1090,7 +1198,27 @@
               ]]>
             </xsd:documentation>
         </xsd:annotation>
-        <xsd:restriction base="xsd:normalizedString" />
+        <xsd:restriction>
+            <xsd:simpleType>
+                <xsd:list itemType="Tidref"/>
+            </xsd:simpleType>
+            <xsd:minLength value="1"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="Tscope">
+        <xsd:restriction base="xsd:NMTOKEN">
+            <xsd:enumeration value="singleton" />
+            <xsd:enumeration value="prototype" />
+            <xsd:enumeration value="bundle" />
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="Tservice-use">
+        <xsd:restriction base="xsd:NMTOKEN">
+            <xsd:enumeration value="service-object" />
+            <xsd:enumeration value="service-reference" />
+        </xsd:restriction>
     </xsd:simpleType>
 
 </xsd:schema>
