@@ -228,7 +228,7 @@ public class TestControl extends DefaultTestBundleControl {
 			Object[] actualEvents = resultsListener.getResults(3);
 			compareEvents(expectedEvents, actualEvents);
 
-			// now load a class from it before the start-level is met.  This should result in no STARTED event
+			// now load a class from it before the start-level is met.  This should result in no events
 			tblazy2.loadClass("org.osgi.test.cases.framework.activationpolicy.tblazy2.ATest");
 			expectedEvents = new Object[0];
 			actualEvents = resultsListener.getResults(0);
@@ -246,43 +246,57 @@ public class TestControl extends DefaultTestBundleControl {
 			actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 
-			// we expect a LAZY_ACTIVATION, STOPPING, STOPPED event to be sent here because we met the start-level,
-			// but no STARTED event because the trigger for start happened before we the start-level was met
-			expectedEvents = new Object[3];
-			expectedEvents[0] = new BundleEvent(BundleEvent.LAZY_ACTIVATION, tblazy2);
-			expectedEvents[1] = new BundleEvent(BundleEvent.STOPPING, tblazy2);
-			expectedEvents[2] = new BundleEvent(BundleEvent.STOPPED, tblazy2);
-			actualEvents = resultsListener.getResults(3);
-			compareEvents(expectedEvents, actualEvents);
+            // Given that the start-level was met, then depending on the framework implementation we should
+            // see either:
+            //   * LAZY_ACTIVATION, STARTING, STARTED, STOPPING, STOPPED events or
+            //   * LAZY_ACTIVATION, STOPPING, STOPPED events
+			// The difference comes from whether the framework treats the trigger as a one-time trigger or not.
+			actualEvents = resultsListener.getResults(5);
+            // This is the case if the trigger is a one-time event.
+            if (actualEvents.length == 5)
+            {
+                expectedEvents = new Object[5];
+                expectedEvents[0] = new BundleEvent(BundleEvent.LAZY_ACTIVATION, tblazy2);
+                expectedEvents[1] = new BundleEvent(BundleEvent.STARTING, tblazy2);
+                expectedEvents[2] = new BundleEvent(BundleEvent.STARTED, tblazy2);
+                expectedEvents[3] = new BundleEvent(BundleEvent.STOPPING, tblazy2);
+                expectedEvents[4] = new BundleEvent(BundleEvent.STOPPED, tblazy2);
+                compareEvents(expectedEvents, actualEvents);
+            }
+            // This is the case if the trigger is NOT a one-time event.
+            else
+            {
+                expectedEvents = new Object[3];
+                expectedEvents[0] = new BundleEvent(BundleEvent.LAZY_ACTIVATION, tblazy2);
+                expectedEvents[1] = new BundleEvent(BundleEvent.STOPPING, tblazy2);
+                expectedEvents[2] = new BundleEvent(BundleEvent.STOPPED, tblazy2);
+                compareEvents(expectedEvents, actualEvents);
 
-			// now load a class while start-level is met.
-			startLevel.setStartLevel(startLevel.getStartLevel() + 15);
-			expectedFrameworkEvents = new Object[1];
-			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
-			actualFrameworkEvents = startlevelListener.getResults(1);
-			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
+                // now load a class while start-level is met.
+                startLevel.setStartLevel(startLevel.getStartLevel() + 15);
+                expectedFrameworkEvents = new Object[1];
+                expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
+                actualFrameworkEvents = startlevelListener.getResults(1);
+                compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 
-			tblazy2.loadClass("org.osgi.test.cases.framework.activationpolicy.tblazy2.ATest");
-			// Check for the proper events, STARTED should be fired here because the start-level was met
-			expectedEvents = new Object[3];
-			expectedEvents[0] = new BundleEvent(BundleEvent.LAZY_ACTIVATION, tblazy2);
-			expectedEvents[1] = new BundleEvent(BundleEvent.STARTING, tblazy2);
-			expectedEvents[2] = new BundleEvent(BundleEvent.STARTED, tblazy2);
-			actualEvents = resultsListener.getResults(3);
-			compareEvents(expectedEvents, actualEvents);
+                tblazy2.loadClass("org.osgi.test.cases.framework.activationpolicy.tblazy2.ATest");
 
-			startLevel.setStartLevel(startLevel.getStartLevel() - 15);
-			expectedFrameworkEvents = new Object[1];
-			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
-			actualFrameworkEvents = startlevelListener.getResults(1);
-			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
+                startLevel.setStartLevel(startLevel.getStartLevel() - 15);
+                expectedFrameworkEvents = new Object[1];
+                expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
+                actualFrameworkEvents = startlevelListener.getResults(1);
+                compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 
-			// make sure the bundle was stopped
-			expectedEvents = new Object[2];
-			expectedEvents[0] = new BundleEvent(BundleEvent.STOPPING, tblazy2);
-			expectedEvents[1] = new BundleEvent(BundleEvent.STOPPED, tblazy2);
-			actualEvents = resultsListener.getResults(2);
-			compareEvents(expectedEvents, actualEvents);
+                // Check for the proper events, STARTED should be fired here because the start-level was met
+                expectedEvents = new Object[5];
+                expectedEvents[0] = new BundleEvent(BundleEvent.LAZY_ACTIVATION, tblazy2);
+                expectedEvents[1] = new BundleEvent(BundleEvent.STARTING, tblazy2);
+                expectedEvents[2] = new BundleEvent(BundleEvent.STARTED, tblazy2);
+                expectedEvents[3] = new BundleEvent(BundleEvent.STOPPING, tblazy2);
+                expectedEvents[4] = new BundleEvent(BundleEvent.STOPPED, tblazy2);
+                actualEvents = resultsListener.getResults(5);
+                compareEvents(expectedEvents, actualEvents);
+            }
 		} finally {
 			getContext().removeBundleListener(resultsListener);
 			uninstallBundle(tblazy2);
