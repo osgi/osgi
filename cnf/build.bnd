@@ -85,6 +85,6 @@ Bundle-License			= ... TODO
 -removeheader			= Include-Resource
 
 -runpath							= \
-	org.eclipse.osgi;		version=3.5; 	framework=org.eclipse.osgi.launch.Equinox, \
+	org.eclipse.osgi;		version=3.5, \
 	com.springsource.junit; version=3.8;    export="junit.framework;version=3.8"
 
