@@ -158,12 +158,6 @@
        <argument value="singleton2"/>
    </bean>
 
-   <!-- singleton3 is bundle scope, but since it is not specified as a service, this acts as singleton. -->
-   <bean id="singleton3" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" scope="bundle"
-       init-method="init" destroy-method="destroy">
-       <argument value="singleton3"/>
-   </bean>
-
    <!-- prototype1 will have prototype scope, which means a new component will be instantiated for each request -->
    <bean id="prototype1" class="org.osgi.test.cases.blueprint.components.injection.PrototypeComponentInjection" scope="prototype"
        init-method="init" destroy-method="destroy">
@@ -212,20 +206,6 @@
                <ref component-id="singleton2"/>
                <ref component-id="singleton2"/>
                <ref component-id="singleton2"/>
-           </set>
-       </property>
-   </bean>
-
-   <!-- Three singletons in a set should reduce to one element -->
-   <bean id="threeSingleton3" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent"
-       init-method="init" destroy-method="destroy">
-       <argument value="threeSingleton3"/>
-       <argument value="1"/>
-       <property name="references">
-           <set>
-               <ref component-id="singleton3"/>
-               <ref component-id="singleton3"/>
-               <ref component-id="singleton3"/>
            </set>
        </property>
    </bean>

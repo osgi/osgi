@@ -176,19 +176,11 @@ public class TestComponentInjection extends DefaultTestBundleControl {
             new BeanComponent("singleton2", ComponentInjection.class, null, "init", "destroy",
             new TestArgument[] { new StringArgument("singleton2") } , null,
             null, false, BeanMetadata.SCOPE_SINGLETON)));
-        startEvents.addAssertion("singleton3", AssertionService.COMPONENT_CREATED);
-
-        // singleton3 is bundle scope, but since it is not exported as a service, should behave like a singleton
-        startEvents.addValidator(new ComponentMetadataValidator(
-            new BeanComponent("singleton3", ComponentInjection.class, null, "init", "destroy",
-            new TestArgument[] { new StringArgument("singleton3") } , null,
-            null, false, BeanMetadata.SCOPE_BUNDLE)));
 
         // now add a failure event for each of these.  This will catch multiple creations.  The
         // first create event will be processed, and any additional ones will be flagged as a failure
         startEvents.addFailureEvent(new ComponentAssertion("singleton1", AssertionService.COMPONENT_CREATED));
         startEvents.addFailureEvent(new ComponentAssertion("singleton2", AssertionService.COMPONENT_CREATED));
-        startEvents.addFailureEvent(new ComponentAssertion("singleton3", AssertionService.COMPONENT_CREATED));
 
         // we expect to see 6 (and only 6) instantiations of the prototype components
         startEvents.addAssertion("prototype1", AssertionService.COMPONENT_CREATED);
@@ -250,9 +242,7 @@ public class TestComponentInjection extends DefaultTestBundleControl {
 
         // now request some of the singletons (including the one declared with bundle scope).
         middleEvents.addInitializer(new LazyComponentStarter("singleton1"));
-        middleEvents.addInitializer(new LazyComponentStarter("singleton3"));
         middleEvents.addFailureEvent(new ComponentAssertion("singleton1", AssertionService.COMPONENT_CREATED));
-        middleEvents.addFailureEvent(new ComponentAssertion("singleton3", AssertionService.COMPONENT_CREATED));
 
         // stop events should proceed as normal, but verify that none of the prototype events get destroy-methods called, and
         // add a couple checks that the
@@ -261,7 +251,6 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         // our singletons should be destroyed
         stopEvents.addAssertion("singleton1", AssertionService.COMPONENT_DESTROY_METHOD);
         stopEvents.addAssertion("singleton2", AssertionService.COMPONENT_DESTROY_METHOD);
-        stopEvents.addAssertion("singleton3", AssertionService.COMPONENT_DESTROY_METHOD);
 
         // but we should not see destroy events for the prototypes
         stopEvents.addFailureEvent(new ComponentAssertion("prototype1", AssertionService.COMPONENT_DESTROY_METHOD));

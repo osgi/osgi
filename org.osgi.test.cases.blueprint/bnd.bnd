@@ -180,7 +180,6 @@ Include-Resource					= \
  	www/Service_auto_hierarchy_export.jar=Service_auto_hierarchy_export.jar, \
  	www/Service_auto_all_export.jar=Service_auto_all_export.jar, \
  	www/ServiceOneBad_export.jar=ServiceOneBad_export.jar, \
- 	www/ServiceOne_bundle_export.jar=ServiceOne_bundle_export.jar, \
  	www/ServiceOne_listener_export.jar=ServiceOne_listener_export.jar, \
  	www/circular_listener_export.jar=circular_listener_export.jar, \
  	www/ServiceOne_multiple_listener_export.jar=ServiceOne_multiple_listener_export.jar, \

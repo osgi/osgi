@@ -832,58 +832,6 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
 
 	/**
-	 * A test of bundle scope.  A single service with bundle scope will be requested from
-     * three different bundles with two references each.  We should see 3 instances of the
-     * component created.
-	 */
-	public void testBundleScopeExport() throws Exception {
-        // NB:  We're going to load the import jar first, since starting that
-        // one first might result in a dependency wait in the second.  This should
-        // still work.
-        StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ServiceOne_bundle_import1.jar",
-            getWebServer()+"www/ServiceOne_bundle_export.jar");
-
-        // add two different bundle that will request the same service
-        controller.addBundle(getWebServer()+"www/ServiceOne_bundle_import2.jar");
-        controller.addBundle(getWebServer()+"www/ServiceOne_bundle_import3.jar");
-        // we add different validation stuff to each jar.  We'll start with the
-        // export jar
-        MetadataEventSet exportStartEvents = controller.getStartEvents(1);
-        // the is the component creation.  We should see this 3 times.
-        exportStartEvents.addAssertion("ServiceOne", AssertionService.COMPONENT_CREATED);
-        exportStartEvents.addAssertion("ServiceOne", AssertionService.COMPONENT_CREATED);
-        exportStartEvents.addAssertion("ServiceOne", AssertionService.COMPONENT_CREATED);
-        // this one will catch getting more than 3 created.
-        exportStartEvents.addFailureEvent(new ComponentAssertion("ServiceOne", AssertionService.COMPONENT_CREATED));
-        // validate that the service has been registered
-        exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, "ServiceOne"));
-        // also validate the metadata for the exported service
-        exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("GoodServiceService", "ServiceOne", TestServiceOne.class,
-            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
-        // we should see a service event here indicating this was registered
-        exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
-
-        // We'll not check for anything specific on the imports.  Anything bad that goes wrong will generate
-        // a terminating event.
-
-        // now some expected termination stuff
-        EventSet exportStopEvents = controller.getStopEvents(1);
-        // With prototype scope, the destroy should still run (I believe).  We should see
-        // a destroy event for each bundle that releases the service.
-        exportStopEvents.addAssertion("ServiceOne", AssertionService.COMPONENT_DESTROY_METHOD);
-        exportStopEvents.addAssertion("ServiceOne", AssertionService.COMPONENT_DESTROY_METHOD);
-        exportStopEvents.addAssertion("ServiceOne", AssertionService.COMPONENT_DESTROY_METHOD);
-        // we should see a service event here indicating this is being deregistered
-        exportStopEvents.addServiceEvent("UNREGISTERING", TestServiceOne.class);
-        // and there should not be a registration active anymore
-        exportStopEvents.addValidator(new ServiceUnregistrationValidator(TestServiceOne.class, null));
-
-        controller.run();
-    }
-
-
-	/**
 	 * Test that the dependency wait event message is sent out and that
      * satisfying the wait condition will allow things to proceed to
      * completion.
