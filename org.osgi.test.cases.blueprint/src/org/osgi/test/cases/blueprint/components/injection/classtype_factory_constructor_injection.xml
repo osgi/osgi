@@ -7,81 +7,81 @@
     </bean>
 
 <!-- URL: 3 cases -->
-	<bean id="compURL" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compURL" factory-method="makeInstance" factory-ref="compFactory">
 		<argument value="http://www.osgi.org" type="java.net.URL"/>
 	</bean>
 
-    <bean id="compURLNull" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compURLNull" factory-method="makeInstance" factory-ref="compFactory">
 		<argument type="java.net.URL"><null/></argument>
 	</bean>
 
-	<bean id="compURL_EleValue" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compURL_EleValue" factory-method="makeInstance" factory-ref="compFactory">
 		<argument><value type="java.net.URL">http://www.osgi.org</value></argument>
 	</bean>
 
 <!-- Date: 5 cases -->
 <!-- TODO Temporarily disabled...bugzilla 1145
-	<bean id="compDate" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compDate" factory-method="makeInstance" factory-ref="compFactory">
 		<argument value="6/1/1999" type="java.util.Date"/>
 	</bean>
 
-    <bean id="compDate2" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compDate2" factory-method="makeInstance" factory-ref="compFactory">
 		<argument value="2000-12-31 23:59:59" type="java.util.Date"/>
 	</bean>
 
-    <bean id="compDate3" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compDate3" factory-method="makeInstance" factory-ref="compFactory">
 		<argument value="January 1, 1970, 00:00:00 GMT" type="java.util.Date"/>
 	</bean>
 
-    <bean id="compDateNull" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compDateNull" factory-method="makeInstance" factory-ref="compFactory">
 		<argument type="java.util.Date"><null/></argument>
 	</bean>
 
-	<bean id="compDate_EleValue" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compDate_EleValue" factory-method="makeInstance" factory-ref="compFactory">
 		<argument><value type="java.util.Date">1970-1-1</value></argument>
 	</bean>
     -->
 
 <!-- Locale:5 cases -->
-	<bean id="compLocale" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compLocale" factory-method="makeInstance" factory-ref="compFactory">
 		<argument value="en" type="java.util.Locale"/>
 	</bean>
 
-	<bean id="compLocale2" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compLocale2" factory-method="makeInstance" factory-ref="compFactory">
 		<argument value="zh_CN" type="java.util.Locale"/>
 	</bean>
 
-	<bean id="compLocale3" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compLocale3" factory-method="makeInstance" factory-ref="compFactory">
 		<argument value="en_US_WIN" type="java.util.Locale"/>
 	</bean>
 
-    <bean id="compLocaleNull" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compLocaleNull" factory-method="makeInstance" factory-ref="compFactory">
 		<argument type="java.util.Locale"><null/></argument>
 	</bean>
 
-	<bean id="compLocale_EleValue" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compLocale_EleValue" factory-method="makeInstance" factory-ref="compFactory">
 		<argument><value type="java.util.Locale">en_US</value></argument>
 	</bean>
 
 <!-- Class:3 cases -->
-	<bean id="compClass" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compClass" factory-method="makeInstance" factory-ref="compFactory">
 		<argument value="java.lang.String" type="java.lang.Class"/>
 	</bean>
 
-    <bean id="compClassNull" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compClassNull" factory-method="makeInstance" factory-ref="compFactory">
 		<argument type="java.lang.Class"><null/></argument>
 	</bean>
 
-	<bean id="compClass_EleValue" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compClass_EleValue" factory-method="makeInstance" factory-ref="compFactory">
 		<argument><value type="java.lang.Class">org.osgi.test.cases.blueprint.components.injection.ConstructorInjection</value></argument>
 	</bean>
 
 <!-- Properties: 4 cases -->
-	<bean id="compProperties" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compProperties" factory-method="makeInstance" factory-ref="compFactory">
 		<argument value="Name=Rex" type="java.util.Properties"/>
 	</bean>
 
-	<bean id="compProperties_EleValue" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compProperties_EleValue" factory-method="makeInstance" factory-ref="compFactory">
 		<argument type="java.util.Properties">
 			<value>
 				Name= Rex
@@ -99,11 +99,11 @@
 		</argument>
 	</bean>
 
-	<bean id="compPropertiesEmpty" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compPropertiesEmpty" factory-method="makeInstance" factory-ref="compFactory">
 		<argument type="java.util.Properties"><value>  </value></argument>
 	</bean>
 
-    <bean id="compPropertiesNull" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compPropertiesNull" factory-method="makeInstance" factory-ref="compFactory">
 		<argument type="java.util.Properties"><null/></argument>
 	</bean>
 

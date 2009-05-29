@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
-    default-lazy-init="true">
+    default-initialization="lazy">
 
     <description>
         This is an adjunct configurtion file for the component injection tests.  This set of
@@ -9,7 +9,7 @@
     </description>
 
     <!-- a few leaf nodes for others to reference.  These are just named components -->
-   <bean id="leaf1a" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="false"
+   <bean id="leaf1a" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" initialization="eager"
        init-method="init" destroy-method="destroy">
        <argument value="leaf1a"/>
    </bean>
@@ -19,7 +19,7 @@
        <argument value="lazyleaf1a"/>
    </bean>
    <!-- the component referencing lazyleaf1.  This is not lazy-inited -->
-   <bean id="comp1a" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="false"
+   <bean id="comp1a" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" initialization="eager"
        init-method="init" destroy-method="destroy">
        <argument value="comp1a"/>
        <argument ref="lazyleaf1a"/>

@@ -5,7 +5,7 @@
     </description>
 
     <!-- the node this service export maps into. -->
-   <bean id="BadServiceOne" class="org.osgi.test.cases.blueprint.services.TestBadService" lazy-init="true"
+   <bean id="BadServiceOne" class="org.osgi.test.cases.blueprint.services.TestBadService" initialization="lazy"
        init-method="init" destroy-method="destroy">
        <argument value="ServiceOne"/>
    </bean>

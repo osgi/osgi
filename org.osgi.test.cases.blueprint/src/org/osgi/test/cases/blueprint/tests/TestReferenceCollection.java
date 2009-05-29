@@ -99,8 +99,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferenceCollection("TestCollection",
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
             new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind") }, List.class, null,
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_INSTANCE)));
+            RefCollectionMetadata.USE_SERVICE_OBJECT,
+            RefCollectionMetadata.USE_SERVICE_OBJECT)));
 
         // this validates the ModuleContext.getComponent() result
         importStartEvents.addValidator(new ReferenceListValidator("TestCollection"));
@@ -157,8 +157,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferenceCollection("TestCollection",
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
             new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind") }, List.class, null,
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_REFERENCE)));
+            RefCollectionMetadata.USE_SERVICE_OBJECT,
+            RefCollectionMetadata.USE_SERVICE_REFERENCE)));
 
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
@@ -224,8 +224,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             new ReferenceCollection(null,
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
             new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind") }, List.class, null,
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_INSTANCE)), "list")));
+            RefCollectionMetadata.USE_SERVICE_OBJECT,
+            RefCollectionMetadata.USE_SERVICE_OBJECT)), "list")));
 
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
@@ -284,8 +284,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             new ReferenceCollection(null,
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
             new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind") }, List.class, null,
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_REFERENCE)), "list")));
+            RefCollectionMetadata.USE_SERVICE_OBJECT,
+            RefCollectionMetadata.USE_SERVICE_REFERENCE)), "list")));
 
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
@@ -345,8 +345,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             new ReferenceCollection(null,
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
             new BindingListener[] { new BindingListener("NullReferenceChecker", "bind", "unbind") }, List.class, null,
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_REFERENCE)), "list")));
+            RefCollectionMetadata.USE_SERVICE_OBJECT,
+            RefCollectionMetadata.USE_SERVICE_REFERENCE)), "list")));
 
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
@@ -622,8 +622,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferenceCollection("TestCollection",
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
             new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind") }, Set.class, null,
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_INSTANCE)));
+            RefCollectionMetadata.USE_SERVICE_OBJECT,
+            RefCollectionMetadata.USE_SERVICE_OBJECT)));
 
         // this validates the ModuleContext.getComponent() result
         importStartEvents.addValidator(new ReferenceSetValidator("TestCollection"));
@@ -680,8 +680,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferenceCollection("TestCollection",
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
             new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind") }, Set.class, null,
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_REFERENCE)));
+            RefCollectionMetadata.USE_SERVICE_OBJECT,
+            RefCollectionMetadata.USE_SERVICE_REFERENCE)));
 
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
@@ -748,8 +748,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             new ReferenceCollection(null,
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
             new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind") }, Set.class, null,
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_INSTANCE)), "set")));
+            RefCollectionMetadata.USE_SERVICE_OBJECT,
+            RefCollectionMetadata.USE_SERVICE_OBJECT)), "set")));
 
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
@@ -809,8 +809,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             new ReferenceCollection(null,
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
             new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind") }, Set.class, null,
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_REFERENCE)), "set")));
+            RefCollectionMetadata.USE_SERVICE_OBJECT,
+            RefCollectionMetadata.USE_SERVICE_REFERENCE)), "set")));
 
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
@@ -869,8 +869,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             new ReferenceCollection(null,
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
             new BindingListener[] { new BindingListener("NullReferenceChecker", "bind", "unbind") }, Set.class, null,
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_REFERENCE)), "set")));
+            RefCollectionMetadata.USE_SERVICE_OBJECT,
+            RefCollectionMetadata.USE_SERVICE_REFERENCE)), "set")));
 
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
@@ -1076,8 +1076,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, Set.class,
             new TestRefValue("NameComparator"),
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_INSTANCE)), "set")));
+            RefCollectionMetadata.USE_SERVICE_OBJECT,
+            RefCollectionMetadata.USE_SERVICE_OBJECT)), "set")));
 
         controller.run();
     }
@@ -1111,8 +1111,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, Set.class,
             new TestRefValue("InvertedNameComparator"),
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_INSTANCE)), "set")));
+            RefCollectionMetadata.USE_SERVICE_OBJECT,
+            RefCollectionMetadata.USE_SERVICE_OBJECT)), "set")));
 
         controller.run();
     }
@@ -1143,8 +1143,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, Set.class,
             new TestRefValue("ServiceReferenceComparator"),
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE_REFERENCE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_INSTANCE)), "set")));
+            RefCollectionMetadata.USE_SERVICE_REFERENCE,
+            RefCollectionMetadata.USE_SERVICE_OBJECT)), "set")));
 
         controller.run();
     }
@@ -1176,8 +1176,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, Set.class,
             null,
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_INSTANCE)), "set")));
+            RefCollectionMetadata.USE_SERVICE_OBJECT,
+            RefCollectionMetadata.USE_SERVICE_OBJECT)), "set")));
 
         controller.run();
     }
@@ -1208,8 +1208,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, Set.class,
             null,
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE_REFERENCE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_INSTANCE)), "set")));
+            RefCollectionMetadata.USE_SERVICE_REFERENCE,
+            RefCollectionMetadata.USE_SERVICE_OBJECT)), "set")));
     }
 
 
@@ -1239,8 +1239,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, Set.class,
             new TestRefValue("NameComparator"),
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_REFERENCE)), "set")));
+            RefCollectionMetadata.USE_SERVICE_OBJECT,
+            RefCollectionMetadata.USE_SERVICE_REFERENCE)), "set")));
 
         controller.run();
     }
@@ -1271,8 +1271,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, Set.class,
             new TestRefValue("InvertedNameComparator"),
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_REFERENCE)), "set")));
+            RefCollectionMetadata.USE_SERVICE_OBJECT,
+            RefCollectionMetadata.USE_SERVICE_REFERENCE)), "set")));
 
         controller.run();
     }
@@ -1303,8 +1303,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, Set.class,
             new TestRefValue("ServiceReferenceComparator"),
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE_REFERENCE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_REFERENCE)), "set")));
+            RefCollectionMetadata.USE_SERVICE_REFERENCE,
+            RefCollectionMetadata.USE_SERVICE_REFERENCE)), "set")));
 
         controller.run();
     }
@@ -1336,8 +1336,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, Set.class,
             null,
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_REFERENCE)), "set")));
+            RefCollectionMetadata.USE_SERVICE_OBJECT,
+            RefCollectionMetadata.USE_SERVICE_REFERENCE)), "set")));
 
         controller.run();
     }
@@ -1368,8 +1368,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, Set.class,
             null,
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE_REFERENCE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_REFERENCE)), "set")));
+            RefCollectionMetadata.USE_SERVICE_REFERENCE,
+            RefCollectionMetadata.USE_SERVICE_REFERENCE)), "set")));
     }
 
 
@@ -1399,8 +1399,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, List.class,
             new TestRefValue("NameComparator"),
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_INSTANCE)), "list")));
+            RefCollectionMetadata.USE_SERVICE_OBJECT,
+            RefCollectionMetadata.USE_SERVICE_OBJECT)), "list")));
 
         controller.run();
     }
@@ -1434,8 +1434,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, List.class,
             new TestRefValue("NameComparator"),
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_INSTANCE)), "list")));
+            RefCollectionMetadata.USE_SERVICE_OBJECT,
+            RefCollectionMetadata.USE_SERVICE_OBJECT)), "list")));
 
         controller.run();
     }
@@ -1466,8 +1466,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, List.class,
             new TestRefValue("InvertedNameComparator"),
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_INSTANCE)), "list")));
+            RefCollectionMetadata.USE_SERVICE_OBJECT,
+            RefCollectionMetadata.USE_SERVICE_OBJECT)), "list")));
 
         controller.run();
     }
@@ -1498,8 +1498,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, List.class,
             new TestRefValue("ServiceReferenceComparator"),
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE_REFERENCE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_INSTANCE)), "list")));
+            RefCollectionMetadata.USE_SERVICE_REFERENCE,
+            RefCollectionMetadata.USE_SERVICE_OBJECT)), "list")));
 
         controller.run();
     }
@@ -1531,8 +1531,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, List.class,
             null,
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_INSTANCE)), "list")));
+            RefCollectionMetadata.USE_SERVICE_OBJECT,
+            RefCollectionMetadata.USE_SERVICE_OBJECT)), "list")));
 
         controller.run();
     }
@@ -1563,8 +1563,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, List.class,
             null,
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE_REFERENCE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_INSTANCE)), "list")));
+            RefCollectionMetadata.USE_SERVICE_REFERENCE,
+            RefCollectionMetadata.USE_SERVICE_OBJECT)), "list")));
     }
 
 
@@ -1594,8 +1594,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, List.class,
             new TestRefValue("NameComparator"),
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_REFERENCE)), "list")));
+            RefCollectionMetadata.USE_SERVICE_OBJECT,
+            RefCollectionMetadata.USE_SERVICE_REFERENCE)), "list")));
 
         controller.run();
     }
@@ -1626,8 +1626,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, List.class,
             new TestRefValue("InvertedNameComparator"),
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_REFERENCE)), "list")));
+            RefCollectionMetadata.USE_SERVICE_OBJECT,
+            RefCollectionMetadata.USE_SERVICE_REFERENCE)), "list")));
 
         controller.run();
     }
@@ -1658,8 +1658,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, List.class,
             new TestRefValue("ServiceReferenceComparator"),
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE_REFERENCE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_REFERENCE)), "list")));
+            RefCollectionMetadata.USE_SERVICE_REFERENCE,
+            RefCollectionMetadata.USE_SERVICE_REFERENCE)), "list")));
 
         controller.run();
     }
@@ -1691,8 +1691,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, List.class,
             null,
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_REFERENCE)), "list")));
+            RefCollectionMetadata.USE_SERVICE_OBJECT,
+            RefCollectionMetadata.USE_SERVICE_REFERENCE)), "list")));
 
         controller.run();
     }
@@ -1723,8 +1723,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
             TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
             null, List.class,
             null,
-            RefCollectionMetadata.ORDERING_BASIS_SERVICE_REFERENCE,
-            RefCollectionMetadata.MEMBER_TYPE_SERVICE_REFERENCE)), "list")));
+            RefCollectionMetadata.USE_SERVICE_REFERENCE,
+            RefCollectionMetadata.USE_SERVICE_REFERENCE)), "list")));
     }
 
 

@@ -11,102 +11,102 @@
     </bean>
 
 <!-- String -->
-	<bean id="compInnerStringTyped" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerStringTyped" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="innerComponent">
-			<bean factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-ref="innerCompFactory">
 				<property name="string"><value type="java.lang.String">ABC</value></property>
 			</bean>
 		</property>
 	</bean>
 
-	<bean id="compInnerString" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerString" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="innerComponent">
-			<bean factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-ref="innerCompFactory">
 				<property name="string" value="XYZ"/>
 			</bean>
 		</property>
 	</bean>
 
 <!-- Boolean -->
-	<bean id="compInnerPrimitiveBoolean" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerPrimitiveBoolean" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="innerComponent">
-			<bean factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-ref="innerCompFactory">
        			<property name="primBoolean" value="true"/>
 			</bean>
 		</property>
 	</bean>
 
-	<bean id="compInnerWrapperedBoolean" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerWrapperedBoolean" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="innerComponent">
-			<bean factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-ref="innerCompFactory">
        			<property name="boolean" value="false"/>
 			</bean>
 		</property>
 	</bean>
 
 <!-- Byte -->
-	<bean id="compInnerPrimitiveByte" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerPrimitiveByte" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="innerComponent">
-			<bean factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-ref="innerCompFactory">
        			<property name="primByte" value="-128"/>
 			</bean>
 		</property>
 	</bean>
 
-	<bean id="compInnerWrapperedByte" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerWrapperedByte" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="innerComponent">
-			<bean factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-ref="innerCompFactory">
        			<property name="byte" value="127"/>
 			</bean>
 		</property>
 	</bean>
 
 <!-- Double -->
-	<bean id="compInnerPrimitiveDouble" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerPrimitiveDouble" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="innerComponent">
-			<bean factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-ref="innerCompFactory">
        			<property name="primDouble" value="4.9e-324"/>
 			</bean>
 		</property>
 	</bean>
 
-	<bean id="compInnerWrapperedDouble" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerWrapperedDouble" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="innerComponent">
-			<bean factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-ref="innerCompFactory">
        			<property name="double" value="1.7976931348623157E308"/>
 			</bean>
 		</property>
 	</bean>
 
 <!-- Float -->
-	<bean id="compInnerPrimitiveFloat" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerPrimitiveFloat" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="innerComponent">
-			<bean factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-ref="innerCompFactory">
        			<property name="primFloat" value="1.4E-45"/>
 			</bean>
 		</property>
 	</bean>
 
-	<bean id="compInnerWrapperedFloat" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerWrapperedFloat" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="innerComponent">
-			<bean factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-ref="innerCompFactory">
        			<property name="float" value="3.4028235E38"/>
 			</bean>
 		</property>
 	</bean>
 
 <!-- Integer -->
-	<bean id="compInnerPrimitiveInteger" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerPrimitiveInteger" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="innerComponent">
-			<bean factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-ref="innerCompFactory">
        			<property name="primInteger" value="-2147483648"/>
 			</bean>
 		</property>
 	</bean>
 
-	<bean id="compInnerWrapperedInteger" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerWrapperedInteger" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="innerComponent">
-			<bean factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-ref="innerCompFactory">
        			<property name="integer" value="2147483647"/>
 			</bean>
 		</property>
@@ -114,34 +114,34 @@
 
 
 <!-- Character -->
-	<bean id="compInnerPrimitiveCharacter" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerPrimitiveCharacter" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="innerComponent">
-			<bean factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-ref="innerCompFactory">
        			<property name="primCharacter" value="a"/>
 			</bean>
 		</property>
 	</bean>
 
-	<bean id="compInnerWrapperedCharacter" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerWrapperedCharacter" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="innerComponent">
-			<bean factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-ref="innerCompFactory">
        			<property name="character" value="A"/>
 			</bean>
 		</property>
 	</bean>
 
 <!-- Short -->
-	<bean id="compInnerPrimitiveShort" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerPrimitiveShort" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="innerComponent">
-			<bean factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-ref="innerCompFactory">
        			<property name="primShort" value="-32768"/>
 			</bean>
 		</property>
 	</bean>
 
-	<bean id="compInnerWrapperedShort" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerWrapperedShort" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="innerComponent">
-			<bean factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-ref="innerCompFactory">
        			<property name="short" value="32767"/>
 			</bean>
 		</property>
@@ -149,17 +149,17 @@
 
 
 <!-- Long -->
-	<bean id="compInnerPrimitiveLong" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerPrimitiveLong" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="innerComponent">
-			<bean factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-ref="innerCompFactory">
        			<property name="primLong" value="-9223372036854775808"/>
 			</bean>
 		</property>
 	</bean>
 
-	<bean id="compInnerWrapperedLong" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compInnerWrapperedLong" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="innerComponent">
-			<bean factory-method="makeInstance" factory-component="innerCompFactory">
+			<bean factory-method="makeInstance" factory-ref="innerCompFactory">
        			<property name="long" value="9223372036854775807"/>
 			</bean>
 		</property>

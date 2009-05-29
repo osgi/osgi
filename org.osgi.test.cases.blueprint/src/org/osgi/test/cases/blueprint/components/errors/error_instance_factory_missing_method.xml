@@ -5,7 +5,7 @@
       <!-- collaborators and configuration for this component go here -->
     </bean>
 
-   <bean factory-component="compFactory" factory-method="createSimpleNotHere">
+   <bean factory-ref="compFactory" factory-method="createSimpleNotHere">
      <!-- collaborators and configuration for this component go here -->
    </bean>
 </blueprint>

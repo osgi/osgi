@@ -11,7 +11,7 @@
 
 
     <!-- NB:  this also tests the ability for a collection to be a top-level component -->
-    <ref-set id="TestCollection" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" availability="optional" member-type="service-instance">
+    <ref-set id="TestCollection" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" availability="optional" member-type="service-object">
         <listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
     </ref-set>
 

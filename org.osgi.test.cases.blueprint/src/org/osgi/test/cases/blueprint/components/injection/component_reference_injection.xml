@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
-    default-lazy-init="false">
+    default-initialization="eager">
 
     <!-- a few leaf nodes for others to reference.  These are just named components -->
    <bean id="leaf1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
@@ -20,7 +20,7 @@
        <argument value="leaf4"/>
    </bean>
    <!-- lazyleaf1 will be lazy inited, but will be referenced from the start, so this will start normally -->
-   <bean id="lazyleaf1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="true"
+   <bean id="lazyleaf1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" initialization="lazy"
        init-method="init" destroy-method="destroy">
        <argument value="lazyleaf1"/>
    </bean>
@@ -31,18 +31,18 @@
        <argument ref="lazyleaf1"/>
    </bean>
    <!-- lazyleaf2 will be lazy inited and will not be started until requested from the module context -->
-   <bean id="lazyleaf2" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="true"
+   <bean id="lazyleaf2" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" initialization="lazy"
        init-method="init" destroy-method="destroy">
        <argument value="lazyleaf2"/>
    </bean>
    <!-- lazyleaf3 will be lazy inited and will not be started until the referencing component is requested. -->
-   <bean id="lazyleaf3" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="true"
+   <bean id="lazyleaf3" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" initialization="lazy"
        init-method="init" destroy-method="destroy">
        <argument value="lazyleaf3"/>
    </bean>
    <!-- lazycomp1 will be lazy inited and will not be started until the requested from the module context -->
    <!-- it alsl contains a reference to another lazy-inited leaf node, so this will cascade -->
-   <bean id="lazycomp1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" lazy-init="true"
+   <bean id="lazycomp1" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" initialization="lazy"
        init-method="init" destroy-method="destroy">
        <argument value="lazycomp1"/>
        <argument ref="lazyleaf3"/>
@@ -129,13 +129,13 @@
        init-method="init" destroy-method="destroy">
        <argument value="dependsleaf2"/>
    </bean>
-   <bean id="dependsleaf3" class="org.osgi.test.cases.blueprint.components.injection.DependentComponent" lazy-init="true"
+   <bean id="dependsleaf3" class="org.osgi.test.cases.blueprint.components.injection.DependentComponent" initialization="lazy"
        init-method="init" destroy-method="destroy">
        <argument value="dependsleaf3"/>
    </bean>
 
    <!-- component using a multiple depends-on relationship -->
-   <bean id="dependsOnTwo" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" depends-on="dependsleaf2,dependsleaf3"
+   <bean id="dependsOnTwo" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection" depends-on="dependsleaf2 dependsleaf3"
        init-method="init" destroy-method="destroy">
        <argument value="dependsOnTwo"/>
        <property name="dependsOn">
@@ -165,7 +165,7 @@
    </bean>
 
    <!-- prototype2 tests prototype scope and lazy-init in combination. -->
-   <bean id="prototype2" class="org.osgi.test.cases.blueprint.components.injection.PrototypeComponentInjection" scope="prototype" lazy-init="true"
+   <bean id="prototype2" class="org.osgi.test.cases.blueprint.components.injection.PrototypeComponentInjection" scope="prototype" initialization="lazy"
        init-method="init" destroy-method="destroy">
        <argument value="prototype2"/>
    </bean>

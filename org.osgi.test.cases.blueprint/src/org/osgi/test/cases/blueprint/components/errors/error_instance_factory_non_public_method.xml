@@ -5,7 +5,7 @@
       <!-- collaborators and configuration for this component go here -->
     </bean>
 
-   <bean factory-component="compFactory" factory-method="nonPublicMethod">
+   <bean factory-ref="compFactory" factory-method="nonPublicMethod">
      <!-- collaborators and configuration for this component go here -->
    </bean>
 </blueprint>

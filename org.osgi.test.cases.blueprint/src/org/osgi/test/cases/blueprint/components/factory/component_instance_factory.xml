@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
-    <bean id="comp1" factory-component="compFactory" factory-method="createSimple">
+    <bean id="comp1" factory-ref="compFactory" factory-method="createSimple">
      <!-- uses no argument method -->
     </bean>
 
-    <bean id="comp2_id" factory-component="compFactory" factory-method="createSimple">
+    <bean id="comp2_id" factory-ref="compFactory" factory-method="createSimple">
         <!-- uses single argument constructor.  Will have wrong component name if not called -->
         <argument value="comp2_id"/>
     </bean>

@@ -16,7 +16,7 @@
         <property name="bundleContext" ref="blueprintBundleContext"/>
         <property name="useReferences" value="true"/>
         <property name="list">
-            <ref-list interface="org.osgi.test.cases.blueprint.services.TestServiceOne" ordering-basis="service" member-type="service-reference">
+            <ref-list interface="org.osgi.test.cases.blueprint.services.TestServiceOne" ordering-basis="service-object" member-type="service-reference">
                 <comparator ref="NameComparator"/>
                 </comparator>
             </ref-list>

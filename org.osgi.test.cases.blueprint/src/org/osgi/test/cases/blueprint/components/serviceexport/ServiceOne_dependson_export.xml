@@ -13,18 +13,18 @@
    </bean>
 
     <!-- two lazy-inited components used for a depends on relationship -->
-   <bean id="Depends1" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass" lazy-init="true"
+   <bean id="Depends1" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass" initialization="lazy"
         init-method="init" destroy-method="destroy">
        <argument value="Depends1"/>
    </bean>
 
     <!-- two lazy-inited components used for a depends on relationship -->
-   <bean id="Depends2" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass" lazy-init="true"
+   <bean id="Depends2" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass" initialization="lazy"
         init-method="init" destroy-method="destroy">
        <argument value="Depends2"/>
    </bean>
 
    <!-- simple export using a reference and just one interface. The depends-on attribute is the real test -->
-   <service id="GoodServiceService" ref="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" depends-on="Depends1,Depends2"/>
+   <service id="GoodServiceService" ref="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" depends-on="Depends1 Depends2"/>
 </blueprint>
 

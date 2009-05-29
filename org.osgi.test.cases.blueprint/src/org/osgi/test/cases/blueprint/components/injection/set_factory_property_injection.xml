@@ -5,19 +5,19 @@
       <!-- collaborators and configuration for this component go here -->
     </bean>
 
-    <bean id="compEmptySet" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compEmptySet" factory-method="makeInstance" factory-ref="compFactory">
         <property name="set">
             <set></set>
         </property>
     </bean>
 
-    <bean id="compNullSet" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compNullSet" factory-method="makeInstance" factory-ref="compFactory">
         <property name="set">
             <null/>
         </property>
     </bean>
 
-    <bean id="compStringItems" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compStringItems" factory-method="makeInstance" factory-ref="compFactory">
         <property name="set">
             <set>
                 <value>abc</value>
@@ -26,7 +26,7 @@
         </property>
     </bean>
 
-    <bean id="compDupItems" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compDupItems" factory-method="makeInstance" factory-ref="compFactory">
         <property name="set">
             <set>
                 <value>abc</value>
@@ -35,7 +35,7 @@
         </property>
     </bean>
 
-    <bean id="compBooleanItems" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compBooleanItems" factory-method="makeInstance" factory-ref="compFactory">
         <property name="set">
             <set>
                 <value type="java.lang.Boolean">true</value>
@@ -44,7 +44,7 @@
         </property>
     </bean>
 
-    <bean id="compMixedItems" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compMixedItems" factory-method="makeInstance" factory-ref="compFactory">
         <property name="set">
             <set>
                 <value type="java.lang.String">abc</value>
@@ -64,7 +64,7 @@
         </property>
     </bean>
 
-    <bean id="compTypedItems" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compTypedItems" factory-method="makeInstance" factory-ref="compFactory">
         <property name="set">
             <set value-type="java.lang.Double">
                 <value>0.0</value>
@@ -73,7 +73,7 @@
         </property>
     </bean>
 
-    <bean id="compTypeOverride" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compTypeOverride" factory-method="makeInstance" factory-ref="compFactory">
         <property name="set">
             <set value-type="java.lang.Double">
                 <value>0.0</value>
@@ -83,7 +83,7 @@
         </property>
     </bean>
 
-    <bean id="compNestedSet" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compNestedSet" factory-method="makeInstance" factory-ref="compFactory">
         <property name="set">
             <set>
                 <set>
@@ -94,7 +94,7 @@
         </property>
     </bean>
 
-    <bean id="compNestedList" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compNestedList" factory-method="makeInstance" factory-ref="compFactory">
         <property name="set">
             <set>
                 <list>
@@ -105,7 +105,7 @@
         </property>
     </bean>
 
-    <bean id="compNestedMap" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compNestedMap" factory-method="makeInstance" factory-ref="compFactory">
         <property name="set">
             <set>
                 <map>
@@ -116,7 +116,7 @@
         </property>
     </bean>
 
-    <bean id="compNestedProps" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compNestedProps" factory-method="makeInstance" factory-ref="compFactory">
         <property name="set">
             <set>
                 <props>

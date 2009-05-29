@@ -15,7 +15,7 @@
 		</argument>
 	</bean>
 
-    <bean id="compInnerLazyOuter" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection" lazy-init="true">
+    <bean id="compInnerLazyOuter" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection" initialization="lazy">
 		<argument value="compInnerLazyOuter"/>
 		<argument>
 			<bean class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">

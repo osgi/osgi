@@ -16,7 +16,7 @@
            <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
        </property>
        <property name="set">
-           <ref-set interface="org.osgi.test.cases.blueprint.services.TestServiceOne" availability="optional" member-type="service-instance">
+           <ref-set interface="org.osgi.test.cases.blueprint.services.TestServiceOne" availability="optional" member-type="service-object">
                <interfaces>
                     <value>org.osgi.test.cases.blueprint.services.TestServiceOne</value>
                </interfaces>

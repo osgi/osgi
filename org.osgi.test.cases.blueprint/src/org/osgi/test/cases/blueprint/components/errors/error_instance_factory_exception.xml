@@ -4,7 +4,7 @@
     <bean id="Factory" class="org.osgi.test.cases.blueprint.components.errors.InstanceFactoryException">
         <argument value="InstanceFactoryException"/>
     </bean>
-    <bean factory-component="Factory" factory-method="createInstance">
+    <bean factory-ref="Factory" factory-method="createInstance">
         <argument value="InstanceException"/>
     </bean>
 </blueprint>

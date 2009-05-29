@@ -8,81 +8,81 @@
 
 
 <!-- URL: 3 cases -->
-	<bean id="compURL" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compURL" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="url" value="http://www.osgi.org"/>
 	</bean>
 
-    <bean id="compURLNull" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compURLNull" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="url"><null/></property>
 	</bean>
 
-	<bean id="compURL_EleValue" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compURL_EleValue" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="url"><value>http://www.osgi.org</value></property>
 	</bean>
 
 <!-- Date: 5 cases -->
 <!-- TODO Temporarily disabled...bugzilla 1145
-	<bean id="compDate" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compDate" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="date" value="6/1/1999"/>
 	</bean>
 
-    <bean id="compDate2" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compDate2" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="date" value="2000-12-31 23:59:59"/>
 	</bean>
 
-    <bean id="compDate3" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compDate3" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="date" value="January 1, 1970, 00:00:00 GMT"/>
 	</bean>
 
-    <bean id="compDateNull" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compDateNull" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="date"><null/></property>
 	</bean>
 
-	<bean id="compDate_EleValue" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compDate_EleValue" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="date"><value type="java.util.Date">1970-1-1</value></property>
 	</bean>
     -->
 
 <!-- Locale:5 cases -->
-	<bean id="compLocale" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compLocale" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="locale" value="en"/>
 	</bean>
 
-	<bean id="compLocale2" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compLocale2" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="locale" value="zh_CN"/>
 	</bean>
 
-	<bean id="compLocale3" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compLocale3" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="locale" value="en_US_WIN"/>
 	</bean>
 
-    <bean id="compLocaleNull" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compLocaleNull" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="locale"><null/></property>
 	</bean>
 
-	<bean id="compLocale_EleValue" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compLocale_EleValue" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="locale"><value>en_US</value></property>
 	</bean>
 
 <!-- Class:3 cases -->
-	<bean id="compClass" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compClass" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="class" value="java.lang.String"/>
 	</bean>
 
-    <bean id="compClassNull" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compClassNull" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="class"><null/></property>
 	</bean>
 
-	<bean id="compClass_EleValue" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compClass_EleValue" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="class"><value>org.osgi.test.cases.blueprint.components.injection.PropertyInjection</value></property>
 	</bean>
 
 <!-- Properties: 4 cases -->
-	<bean id="compProperties" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compProperties" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="properties" value="Name=Rex"/>
 	</bean>
 
-	<bean id="compProperties_EleValue" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compProperties_EleValue" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="properties">
 			<value>
 				Name= Rex
@@ -100,11 +100,11 @@
 		</property>
 	</bean>
 
-	<bean id="compPropertiesEmpty" factory-method="makeInstance" factory-component="compFactory">
+	<bean id="compPropertiesEmpty" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="properties"><value>  </value></property>
 	</bean>
 
-    <bean id="compPropertiesNull" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compPropertiesNull" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="properties"><null/></property>
 	</bean>
 

@@ -12,7 +12,7 @@
             <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
         </property>
         <property name="set">
-            <ref-set interface="org.osgi.test.cases.blueprint.services.TestServiceOne" ordering-basis="service" member-type="service-reference"/>
+            <ref-set interface="org.osgi.test.cases.blueprint.services.TestServiceOne" ordering-basis="service-object" member-type="service-reference"/>
         </property>
         <property name="bundleContext" ref="blueprintBundleContext"/>
         <property name="useReferences" value="true"/>

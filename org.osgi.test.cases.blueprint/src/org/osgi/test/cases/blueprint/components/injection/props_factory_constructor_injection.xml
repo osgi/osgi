@@ -5,19 +5,19 @@
       <!-- collaborators and configuration for this component go here -->
     </bean>
 
-    <bean id="compEmptyProps" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compEmptyProps" factory-method="makeInstance" factory-ref="compFactory">
         <argument>
             <props></props>
         </argument>
     </bean>
 
-    <bean id="compNullProps" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compNullProps" factory-method="makeInstance" factory-ref="compFactory">
         <argument type="java.util.Properties">
             <null/>
         </argument>
     </bean>
 
-    <bean id="compStringItems" factory-method="makeInstance" factory-component="compFactory">
+    <bean id="compStringItems" factory-method="makeInstance" factory-ref="compFactory">
         <argument>
             <props>
                 <prop key="administrator">administrator@example.org</prop>

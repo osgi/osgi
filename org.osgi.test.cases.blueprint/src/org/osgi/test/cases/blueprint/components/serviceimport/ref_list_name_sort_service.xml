@@ -15,7 +15,7 @@
         </property>
         <property name="bundleContext" ref="bundleContext"/>
         <property name="list">
-            <ref-list interface="org.osgi.test.cases.blueprint.services.TestServiceOne" ordering-basis="service">
+            <ref-list interface="org.osgi.test.cases.blueprint.services.TestServiceOne" ordering-basis="service-object">
                 <comparator>
                     <ref component-id="NameComparator"/>
                 </comparator>
