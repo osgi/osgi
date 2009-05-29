@@ -148,6 +148,7 @@ public abstract class ManifestHeadersTestBundleControl extends
         try {
             String response = super.getResponse(cp);
             super.checkHomeResponse(response, warName);
+            super.checkDynamicPageResponse(response, warName);
         } catch (Exception e) {
             fail("should not be getting an exception here " + e.getMessage());
         }

@@ -74,13 +74,7 @@ public class MCResourceAnnotationTest extends WebContainerTestBundleControl {
         String response = super.getResponse(request);
 
         // check if content of response is correct
-        log("verify content of response is correct");
-        assertTrue(response.indexOf("ResourceServlet2") > 0);
-        assertTrue(response.indexOf(ConstantsUtil.NULL + " "
-                + ConstantsUtil.NULL) > 0);
-        assertTrue(response.indexOf(ConstantsUtil.NULL + " + "
-                + ConstantsUtil.NULL + " = " + ConstantsUtil.NULL + " that is "
-                + ConstantsUtil.NULL) > 0);
+        checkTW3ResourceServlet2Response(response);
     }
 
     /*

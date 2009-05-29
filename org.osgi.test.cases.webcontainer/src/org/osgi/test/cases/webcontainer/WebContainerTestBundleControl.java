@@ -151,38 +151,41 @@ public abstract class WebContainerTestBundleControl extends
         }
     }
 
+    /*
+     * check static content index.html is correct to make sure war is deployed correctly
+     */
+    protected void checkHomeResponse(String response, String warName)
+            throws Exception {
+        log("verify content of index.html response is correct");
+        if (warName.indexOf("tw1.war") > -1) {
+            checkTW1HomeResponse(response);
+        } else if (warName.indexOf("tw2.war") > -1) {
+            checkTW2HomeResponse(response);
+        } else if (warName.indexOf("tw3.war") > -1) {
+            checkTW3HomeResponse(response);
+        } else if (warName.indexOf("tw4.war") > -1) {
+            checkTW4HomeResponse(response);
+        } else if (warName.indexOf("tw5.war") > -1) {
+            checkTW5HomeResponse(response);
+        }
+    }
+
     protected void checkTW1HomeResponse(String response) throws Exception {
         assertEquals(
                 response,
                 "<html><head><title>TestWar1</title></head><body>This is TestWar1.<P><A href=\"BasicTest\">/BasicTest</A><BR><A href=\"404.html\">404.html (static link)</A><BR><A href=\"ErrorTest?target=html\">404.html (through servlet.RequestDispatcher.forward())</A><BR><A href=\"ErrorTest\">404.jsp (through servlet.RequestDispatcher.forward())</A><BR><A href=\"aaa\">Broken Link (for call ErrorPage)</A><BR><A href=\"image.html\">image.html</A></P><BR></body></html>");
+    }
+    
+    protected void checkTW2HomeResponse(String response) throws Exception {
+        assertEquals(
+                response,
+                "<html><head><title>TestWar2</title></head><body>This is TestWar2.<P><A href=\"PostConstructPreDestroyServlet1\">PostConstructPreDestroyServlet1</A><BR><A href=\"PostConstructPreDestroyServlet2\">PostConstructPreDestroyServlet2</A><BR><A href=\"PostConstructPreDestroyServlet3\">PostConstructPreDestroyServlet3</A><BR><A href=\"ResourceServlet1\">ResourceServlet1</A><BR><A href=\"ResourceServlet2\">ResourceServlet2</A><BR><A href=\"ResourceServlet3\">ResourceServlet3</A><BR><A href=\"ResourceServlet4\">ResourceServlet4</A><BR><A href=\"PostConstructErrorServlet1\">PostConstructErrorServlet1</A><BR><A href=\"PostConstructErrorServlet2\">PostConstructErrorServlet2</A><BR><A href=\"PostConstructErrorServlet3\">PostConstructErrorServlet3</A><BR><A href=\"PreDestroyErrorServlet1\">PreDestroyErrorServlet1</A><BR><A href=\"PreDestroyErrorServlet2\">PreDestroyErrorServlet2</A><BR><A href=\"PreDestroyErrorServlet3\">PreDestroyErrorServlet3</A><BR><A href=\"ServletContextListenerServlet\">ServletContextListenerServlet</A><BR><A href=\"SecurityTestServlet\">SecurityTestServlet</A><BR><A href=\"RequestListenerServlet\">RequestListenerServlet</A><BR><A href=\"HTTPSessionListenerServlet\">HTTPSessionListenerServlet</A><BR></P></body></html>");
     }
 
     protected void checkTW3HomeResponse(String response) throws Exception {
         assertEquals(
                 response,
                 "<html><head><title>TestWar3</title></head><body>This is TestWar3.<P><A href=\"PostConstructPreDestroyServlet1\">PostConstructPreDestroyServlet1</A><BR><A href=\"PostConstructPreDestroyServlet2\">PostConstructPreDestroyServlet2</A><BR><A href=\"PostConstructPreDestroyServlet3\">PostConstructPreDestroyServlet3</A><BR><A href=\"ResourceServlet1\">ResourceServlet1</A><BR><A href=\"ResourceServlet2\">ResourceServlet2</A><BR><A href=\"ResourceServlet3\">ResourceServlet3</A><BR><A href=\"ResourceServlet4\">ResourceServlet4</A><BR><A href=\"ServletContextListenerServlet\">ServletContextListenerServlet</A><BR><A href=\"RequestListenerServlet\">RequestListenerServlet</A><BR><A href=\"HTTPSessionListenerServlet\">HTTPSessionListenerServlet</A><BR></P></body></html>");
-    }
-
-    protected void checkHomeResponse(String response, String warName)
-            throws Exception {
-        log("verify content of response is correct");
-        if (warName.equalsIgnoreCase("tw1.war")) {
-            checkTW1HomeResponse(response);
-        } else if (warName.equalsIgnoreCase("tw2.war")) {
-            checkTW2HomeResponse(response);
-        } else if (warName.equalsIgnoreCase("tw3.war")) {
-            checkTW3HomeResponse(response);
-        } else if (warName.equalsIgnoreCase("tw4.war")) {
-            checkTW4HomeResponse(response);
-        } else if (warName.equalsIgnoreCase("tw5.war")) {
-            checkTW5HomeResponse(response);
-        }
-    }
-
-    protected void checkTW2HomeResponse(String response) throws Exception {
-        assertEquals(
-                response,
-                "<html><head><title>TestWar2</title></head><body>This is TestWar2.<P><A href=\"PostConstructPreDestroyServlet1\">PostConstructPreDestroyServlet1</A><BR><A href=\"PostConstructPreDestroyServlet2\">PostConstructPreDestroyServlet2</A><BR><A href=\"PostConstructPreDestroyServlet3\">PostConstructPreDestroyServlet3</A><BR><A href=\"ResourceServlet1\">ResourceServlet1</A><BR><A href=\"ResourceServlet2\">ResourceServlet2</A><BR><A href=\"ResourceServlet3\">ResourceServlet3</A><BR><A href=\"ResourceServlet4\">ResourceServlet4</A><BR><A href=\"PostConstructErrorServlet1\">PostConstructErrorServlet1</A><BR><A href=\"PostConstructErrorServlet2\">PostConstructErrorServlet2</A><BR><A href=\"PostConstructErrorServlet3\">PostConstructErrorServlet3</A><BR><A href=\"PreDestroyErrorServlet1\">PreDestroyErrorServlet1</A><BR><A href=\"PreDestroyErrorServlet2\">PreDestroyErrorServlet2</A><BR><A href=\"PreDestroyErrorServlet3\">PreDestroyErrorServlet3</A><BR><A href=\"ServletContextListenerServlet\">ServletContextListenerServlet</A><BR><A href=\"SecurityTestServlet\">SecurityTestServlet</A><BR><A href=\"RequestListenerServlet\">RequestListenerServlet</A><BR><A href=\"HTTPSessionListenerServlet\">HTTPSessionListenerServlet</A><BR></P></body></html>");
     }
 
     protected void checkTW4HomeResponse(String response) throws Exception {
@@ -195,6 +198,74 @@ public abstract class WebContainerTestBundleControl extends
         assertEquals(
                 response,
                 "<html><head><title>TestWar5</title></head><body>This is TestWar5.<P><A href=\"BundleTestServlet\">/BundleTestServlet</A><BR><A href=\"ClasspathTestServlet\">/ClasspathTestServlet</A><BR></P></body></html>");
+    }
+    
+    /* 
+     * check one dynamic page is correct to make sure classes are loaded correctly
+     */
+    protected void checkDynamicPageResponse(String response, String warName) 
+        throws Exception {
+        log("verify content of one dynamic page response of each war file is correct");
+        if (warName.indexOf("tw1.war") > -1) {
+            checkTW1BasicTestServletResponse(response);
+        } else if (warName.indexOf("tw2.war") > -1) {
+            checkTW2ResourceServlet2Response(response);
+        } else if (warName.indexOf("tw3.war") > -1) {
+            checkTW3ResourceServlet2Response(response);
+        } else if (warName.indexOf("tw4.war") > -1) {
+            checkTW4TestServletResponse(response);
+        } else if (warName.indexOf("tw5.war") > -1) {
+            checkTW5ClassPathTestServletResponse(response);
+        }
+    }
+    
+    /*
+     * check the response of BasicTestServlet of tw1
+     */
+    protected void checkTW1BasicTestServletResponse(String response) throws Exception {
+        log("verify content of BasicTestServlet response from tw1 is correct");
+        assertEquals(response, ConstantsUtil.BASICTESTWAR1);
+    }
+    
+    /*
+     * check the response of ResourceServlet2 of tw2
+     */
+    protected void checkTW2ResourceServlet2Response(String response) throws Exception {
+        // check if content of response is correct
+        log("verify content of ResourceServlet2 response from tw2 is correct");
+        assertTrue(response.indexOf("ResourceServlet2") > 0);
+        assertTrue(response.indexOf("Welcome String from env-entry!") > 0);
+        assertTrue(response.indexOf("5 + 5 = 10 that is true") > 0);
+        assertEquals(response.indexOf("null"), -1);    
+    }
+    
+    /*
+     * check the response of ResourceServlet2 of tw3
+     */
+    protected void checkTW3ResourceServlet2Response(String response) throws Exception {
+        // check if content of response is correct
+        log("verify content of ResourceServlet2 response from tw3 is correct");
+        assertTrue(response.indexOf("ResourceServlet2") > 0);
+        assertTrue(response.indexOf(ConstantsUtil.NULL + " "
+                + ConstantsUtil.NULL) > 0);
+        assertTrue(response.indexOf(ConstantsUtil.NULL + " + "
+                + ConstantsUtil.NULL + " = " + ConstantsUtil.NULL + " that is "
+                + ConstantsUtil.NULL) > 0); 
+    }
+    
+    /*
+     * check the response of TestServlet1 of tw4
+     */
+    protected void checkTW4TestServletResponse(String response) throws Exception {
+        assertEquals(response, "");
+    }
+    
+    /*
+     * check the response of ClasspathTestServlet of tw5
+     */
+    protected void checkTW5ClassPathTestServletResponse(String response) throws Exception {
+        assertEquals("checking response content", response,"<html><head><title>ClasspathTestServlet</title></head><body>" 
+                + ConstantsUtil.ABLEGETLOG + "<br/>" +  ConstantsUtil.ABLEGETSIMPLEHELLO + "<br/></body></html>");
     }
 
     private String generateQuery(Map options) {

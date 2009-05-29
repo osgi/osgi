@@ -71,11 +71,7 @@ public class ResourceAnnotationTest extends WebContainerTestBundleControl {
         final String request = this.warContextPath + "/ResourceServlet2";
         String response = super.getResponse(request);
         // check if content of response is correct
-        log("verify content of response is correct");
-        assertTrue(response.indexOf("ResourceServlet2") > 0);
-        assertTrue(response.indexOf("Welcome String from env-entry!") > 0);
-        assertTrue(response.indexOf("5 + 5 = 10 that is true") > 0);
-        assertEquals(response.indexOf("null"), -1);
+        checkTW2ResourceServlet2Response(response);
     }
 
     /*
