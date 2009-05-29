@@ -48,7 +48,14 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 	private String frameworkFactoryClassName;
 	private String rootStorageArea;
 	private FrameworkFactory frameworkFactory;
-	
+
+	private static class BootClassLoader extends ClassLoader {
+		protected BootClassLoader() {
+			super(null);
+		}
+	}
+	private static ClassLoader bootClassLoader = new BootClassLoader();
+
 	protected void setUp() throws Exception {
 		super.setUp();
 		frameworkFactoryClassName = getFrameworkFactoryClassName();
@@ -512,6 +519,43 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		assertNotNull("Wait for stop event is null", event);
 		assertEquals("Wrong event type", FrameworkEvent.WAIT_TIMEDOUT, event
 				.getType());
+		stopFramework(framework);
+	}
+
+	public void testBootDelegation() throws BundleException, IOException {
+		Class vmClass = null;
+		try {
+			vmClass = bootClassLoader.loadClass("javax.security.auth.x500.X500Principal");
+		} catch (ClassNotFoundException e) {
+			fail("Unexpected CNFE", e);
+		}
+		Map configuration = getConfiguration(getName());
+		doTestBootDelegation(vmClass, configuration, "javax.security.auth.x500", true);
+		doTestBootDelegation(vmClass, configuration, "javax.security.auth.*", true);
+		doTestBootDelegation(vmClass, configuration, "javax.security.*", true);
+		doTestBootDelegation(vmClass, configuration, "*", true);
+		doTestBootDelegation(vmClass, configuration, null, false);
+		doTestBootDelegation(vmClass, configuration, "junk.*", false);
+	}
+
+	private void doTestBootDelegation(Class vmClass, Map configuration, String bootDelegation, boolean fromBoot) throws BundleException, IOException {
+		if (bootDelegation != null)
+			configuration.put(Constants.FRAMEWORK_BOOTDELEGATION, bootDelegation);
+		else
+			configuration.remove(Constants.FRAMEWORK_BOOTDELEGATION);
+		Framework framework = createFramework(configuration);
+		startFramework(framework);
+		Bundle testBundle = installBundle(framework, "/launch.tb3.jar");
+		Class testClass = null;
+		try {
+			 testClass = testBundle.loadClass("javax.security.auth.x500.X500Principal");
+		} catch (ClassNotFoundException e) {
+			fail("Unexpected CNFE", e);
+		}
+		if (fromBoot)
+			assertEquals("Unexpected class", vmClass, testClass);
+		else
+			assertFalse("Unexpected class", vmClass.equals(testClass));
 		stopFramework(framework);
 	}
 }

@@ -6,7 +6,8 @@ Private-Package						= org.osgi.test.support.*, \
 	
 Include-Resource = \
     launch.tb1.jar, \
-    launch.tb2.jar 
+    launch.tb2.jar, \
+    launch.tb3.jar
 	
 Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
 
