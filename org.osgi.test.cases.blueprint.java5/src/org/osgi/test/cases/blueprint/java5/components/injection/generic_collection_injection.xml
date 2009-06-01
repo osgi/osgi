@@ -17,7 +17,7 @@
                 <value>def</value>
             </list>
         </property>
-        <property name="class">
+        <property name="classList">
             <list>
                 <value>java.lang.String</value>
                 <value>org.osgi.test.cases.blueprint.java5.components.injection.GenericListInjection</value>
