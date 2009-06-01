@@ -52,7 +52,7 @@ public class GenericListInjection extends BaseTestComponent {
         setPropertyValue("string", arg1, List.class);
     }
 
-    public void setClass(List<Class> arg1) {
+    public void setClassList(List<Class> arg1) {
         setPropertyValue("classList", arg1, List.class);
     }
 }
