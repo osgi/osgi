@@ -155,6 +155,8 @@ public class GetEntryResourceTests extends OSGiTestCase {
 
 	protected void tearDown() throws Exception {
 		testBundle.uninstall();
+		if (testFragment != null)
+			testFragment.uninstall();
 	}
 
 	private URL newURL(URL base, String path) {
