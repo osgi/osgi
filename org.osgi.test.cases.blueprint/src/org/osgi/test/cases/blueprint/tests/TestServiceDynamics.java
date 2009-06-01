@@ -30,6 +30,7 @@ import org.osgi.test.cases.blueprint.framework.ServiceRequestInitiator;
 import org.osgi.test.cases.blueprint.framework.ServiceTestEvent;
 import org.osgi.test.cases.blueprint.framework.StandardErrorTestController;
 import org.osgi.test.cases.blueprint.framework.StandardTestController;
+import org.osgi.test.cases.blueprint.framework.ThreePhaseTestController;
 import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.services.ComponentTestInfo;
 import org.osgi.test.cases.blueprint.services.ManagedService;
@@ -307,60 +308,6 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
 
 	/**
 	 * A lazy activation test.  The started bundle should register a single service, then
-     * register two additional ones when triggered by a class load.
-	 */
-	public void testClassLoadingActivation() throws Exception {
-        // This uses a special test controller.  The active portions of the test
-        // are performed in the middle phase.
-        LazyActivationTestController controller = new LazyActivationTestController(getContext(),
-            getWebServer()+"www/lazy_activation.jar");
-
-        // We're mostly going to tag things we don't expect to see happening, though there are a
-        // few positive things we expect to see.
-        MetadataEventSet startEvents = controller.getStartEvents(0);
-        // we should see a single registration of TestServiceOne
-        startEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
-        // either of these getting registered will be a failure
-        startEvents.addFailureEvent(new ServiceTestEvent("REGISTERED", TestServiceTwo.class));
-        startEvents.addFailureEvent(new ServiceTestEvent("REGISTERED", new Class[] { TestServiceOne.class, TestServiceTwo.class,
-            TestServiceAllSubclass.class, ComponentTestInfo.class }));
-        // none of these component should be instantiated
-        startEvents.addFailureEvent(new ComponentAssertion("ServiceOne", AssertionService.COMPONENT_INIT_METHOD));
-        startEvents.addFailureEvent(new ComponentAssertion("ServiceTwo", AssertionService.COMPONENT_INIT_METHOD));
-        startEvents.addFailureEvent(new ComponentAssertion("ServiceThree", AssertionService.COMPONENT_INIT_METHOD));
-
-        // now for the middle events.  We'll request a class to be loaded from the bundle, which
-        // should trigger the ModuleContext to be created.
-        MetadataEventSet middleEvents = controller.getMiddleEvents(0);
-
-        // this will load a class from the started bundle, which will kick off bundle
-        // activation processing.
-        middleEvents.addInitializer(new ClassLoadInitiator());
-
-        // all of the components should now be instantiated
-        middleEvents.addAssertion("ServiceOne", AssertionService.COMPONENT_INIT_METHOD);
-        middleEvents.addAssertion("ServiceTwo", AssertionService.COMPONENT_INIT_METHOD);
-        middleEvents.addAssertion("ServiceThree", AssertionService.COMPONENT_INIT_METHOD);
-
-        // we should see these registered now.
-        middleEvents.addServiceEvent("REGISTERED", TestServiceTwo.class);
-        middleEvents.addServiceEvent("REGISTERED", new Class[] { TestServiceOne.class, TestServiceTwo.class,
-            TestServiceAllSubclass.class, ComponentTestInfo.class });
-
-        // now some expected termination stuff
-        EventSet stopEvents = controller.getStopEvents(0);
-        // normal shutdown processing
-        stopEvents.addServiceEvent("UNREGISTERING", TestServiceOne.class);
-        stopEvents.addServiceEvent("UNREGISTERING", TestServiceTwo.class);
-        stopEvents.addServiceEvent("UNREGISTERING", new Class[] { TestServiceOne.class, TestServiceTwo.class,
-            TestServiceAllSubclass.class, ComponentTestInfo.class });
-
-        controller.run();
-    }
-
-
-	/**
-	 * A lazy activation test.  The started bundle should register a single service, then
      * register two additional ones when triggered by a service request for the first.
 	 */
 	public void testServiceRequestActivation() throws Exception {
@@ -374,14 +321,8 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         MetadataEventSet startEvents = controller.getStartEvents(0);
         // we should see a single registration of TestServiceOne
         startEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
-        // either of these getting registered will be a failure
-        startEvents.addFailureEvent(new ServiceTestEvent("REGISTERED", TestServiceTwo.class));
-        startEvents.addFailureEvent(new ServiceTestEvent("REGISTERED", new Class[] { TestServiceOne.class, TestServiceTwo.class,
-            TestServiceAllSubclass.class, ComponentTestInfo.class }));
         // none of these component should be instantiated
         startEvents.addFailureEvent(new ComponentAssertion("ServiceOne", AssertionService.COMPONENT_INIT_METHOD));
-        startEvents.addFailureEvent(new ComponentAssertion("ServiceTwo", AssertionService.COMPONENT_INIT_METHOD));
-        startEvents.addFailureEvent(new ComponentAssertion("ServiceThree", AssertionService.COMPONENT_INIT_METHOD));
 
         // now for the middle events.  We'll request a class to be loaded from the bundle, which
         // should trigger the ModuleContext to be created.
@@ -392,22 +333,48 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
 
         // all of the components should now be instantiated
         middleEvents.addAssertion("ServiceOne", AssertionService.COMPONENT_INIT_METHOD);
-        middleEvents.addAssertion("ServiceTwo", AssertionService.COMPONENT_INIT_METHOD);
-        middleEvents.addAssertion("ServiceThree", AssertionService.COMPONENT_INIT_METHOD);
-
-        // we should see these registered now.
-        middleEvents.addServiceEvent("REGISTERED", TestServiceTwo.class);
-        middleEvents.addServiceEvent("REGISTERED", new Class[] { TestServiceOne.class, TestServiceTwo.class,
-            TestServiceAllSubclass.class, ComponentTestInfo.class });
 
         // now some expected termination stuff
         EventSet stopEvents = controller.getStopEvents(0);
         // normal shutdown processing
         stopEvents.addServiceEvent("UNREGISTERING", TestServiceOne.class);
-        stopEvents.addServiceEvent("UNREGISTERING", TestServiceTwo.class);
-        stopEvents.addServiceEvent("UNREGISTERING", new Class[] { TestServiceOne.class, TestServiceTwo.class,
-            TestServiceAllSubclass.class, ComponentTestInfo.class });
+        controller.run();
+    }
 
+
+	/**
+	 * A lazy initialization test.  This is the same as the lazy activation test, and should
+     * display essentially the same behavior.  The service will be registered, but will not
+     * create any components until the first service request.
+	 */
+	public void testServiceRequestInitialization() throws Exception {
+        // This uses a special test controller.  The active portions of the test
+        // are performed in the middle phase.
+        ThreePhaseTestController controller = new ThreePhaseTestController(getContext(),
+            getWebServer()+"www/lazy_activation.jar");
+
+        // We're mostly going to tag things we don't expect to see happening, though there are a
+        // few positive things we expect to see.
+        MetadataEventSet startEvents = controller.getStartEvents(0);
+        // we should see a single registration of TestServiceOne
+        startEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
+        // none of these component should be instantiated
+        startEvents.addFailureEvent(new ComponentAssertion("ServiceOne", AssertionService.COMPONENT_INIT_METHOD));
+
+        // now for the middle events.  We'll request a class to be loaded from the bundle, which
+        // should trigger the ModuleContext to be created.
+        MetadataEventSet middleEvents = controller.getMiddleEvents(0);
+
+        // this will request the registered service, which should kick start the activation process.
+        middleEvents.addInitializer(new ServiceRequestInitiator(getContext(), TestServiceOne.class, null));
+
+        // all of the components should now be instantiated
+        middleEvents.addAssertion("ServiceOne", AssertionService.COMPONENT_INIT_METHOD);
+
+        // now some expected termination stuff
+        EventSet stopEvents = controller.getStopEvents(0);
+        // normal shutdown processing
+        stopEvents.addServiceEvent("UNREGISTERING", TestServiceOne.class);
         controller.run();
     }
 

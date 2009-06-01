@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" default-initialization="lazy">
 
     <description>
         This is just a simple exported service using a single interface.
@@ -10,31 +10,7 @@
        <argument value="ServiceOne"/>
    </bean>
 
-   <!-- the node is the one that is with a service that uses listeners.  Should only be registered after activation. -->
-   <bean id="ServiceTwo" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass" init-method="init">
-       <argument value="ServiceTwo"/>
-   </bean>
-
-   <!-- the node is the one that is with a service that uses auto-export.  Should only be registered after activation. -->
-   <bean id="ServiceThree" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass" init-method="init">
-       <argument value="ServiceThree"/>
-   </bean>
-
-   <bean id="ServiceTwoListener" class="org.osgi.test.cases.blueprint.components.serviceexport.ServiceTwoRegistrationListener">
-       <argument value="ServiceTwoListener"/>
-   </bean>
-
    <!-- This service will be registered before activation because it's just a simple interface registration -->
    <service id="ServiceOneService" ref="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne"/>
-
-   <!-- This service will not be registered before activation because it uses a listener -->
-   <service id="ServiceTwoService" ref="ServiceTwo" interface="org.osgi.test.cases.blueprint.services.TestServiceTwo">
-       <registration-listener ref="ServiceTwoListener"
-           registration-method="registered"
-           unregistration-method="unregistered"/>
-   </service>
-
-   <!-- This service will not be registered before activation because uses auto-export -->
-   <service id="ServiceThreeService" ref="ServiceThree" auto-export="interfaces"/>
 </blueprint>
 
