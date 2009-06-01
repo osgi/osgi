@@ -38,13 +38,15 @@ import org.osgi.service.startlevel.StartLevel;
 import org.osgi.test.support.OSGiTestCase;
 
 public class FrameworkLaunchTests extends OSGiTestCase {
-	private static final String STORAGEROOT = "org.osgi.framework.launch.test.storageroot";
+	private static final String STORAGEROOT = "org.osgi.test.cases.framework.launch.storageroot";
 	private static final String FRAMEWORK_FACTORY = "/META-INF/services/org.osgi.framework.launch.FrameworkFactory";
 	private static final String PACKAGE_ADMIN = "org.osgi.service.packageadmin.PackageAdmin";
 	private static final String STARTLEVEL = "org.osgi.service.startlevel.StartLevel";
 	private static final String PERMISSION_ADMIN = "org.osgi.service.permissionadmin.PermissionAdmin";
 	private static final String CONDPERM_ADMIN = "org.osgi.service.condpermadmin.ConditionalPermissionAdmin";
-	
+
+	private static final String TEST_TRUST_REPO = "org.osgi.test.cases.framework.launch.trust.repository";
+
 	private String frameworkFactoryClassName;
 	private String rootStorageArea;
 	private FrameworkFactory frameworkFactory;
@@ -587,5 +589,33 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 				fail("Unexpected CNFE", e);
 		}
 		stopFramework(framework);
+	}
+
+	public void testTrustRepositories() throws BundleException, IOException {
+		BundleContext context = getBundleContextWithoutFail();
+		String testRepo = context != null ? context.getProperty(TEST_TRUST_REPO) : System.getProperty(TEST_TRUST_REPO);
+		if (testRepo == null)
+			fail("Must set property to test: \"" + TEST_TRUST_REPO + "\"");
+		Map configuration = getConfiguration(getName());
+		doTestTrustRepository(configuration, null, false);
+		doTestTrustRepository(configuration, testRepo, true);
+	}
+
+
+	private void doTestTrustRepository(Map configuration, String testRepo, boolean trusted) throws BundleException, IOException {
+		if (testRepo != null)
+			configuration.put(Constants.FRAMEWORK_TRUST_REPOSITORIES, testRepo);
+		else
+			configuration.remove(Constants.FRAMEWORK_TRUST_REPOSITORIES);
+		Framework framework = createFramework(configuration);
+		startFramework(framework);
+		Bundle testBundle = installBundle(framework, "/launch.tb3.jar");
+		Map signers = testBundle.getSignerCertificates(Bundle.SIGNERS_ALL);
+		assertEquals("Expecting 1 signer", 1, signers.size());
+		Map trustedSigners = testBundle.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
+		if (trusted)
+			assertEquals("Expecting 1 signer", 1, trustedSigners.size());
+		else
+			assertEquals("Expecting 0 signers", 0, trustedSigners.size());
 	}
 }
