@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+    <bean id="compInnerOne" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
+		<argument value="compInnerOne"/>
+		<argument>
+			<bean class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection" initialization="lazy">
+				<argument value="compInnerOne_1"/>
+			</bean>
+		</argument>
+	</bean>
+</blueprint>
+

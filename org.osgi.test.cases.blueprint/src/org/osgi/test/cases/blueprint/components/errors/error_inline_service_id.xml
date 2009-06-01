@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+        This defines an inline service componet with an id
+    </description>
+
+    <!-- the node this service export maps into. -->
+   <bean id="ServiceRegistrationChecker" class="org.osgi.test.cases.blueprint.components.serviceexport.ServiceRegistrationChecker">
+       <argument value="ServiceRegistrationChecker"/>
+       <argument>
+           <map>
+               <entry key="component.name" value="ServiceRegistrationChecker"/>
+               <entry key="component.version" value="1"/>
+           </map>
+       </argument>
+       <property name="registration">
+           <service id="xyz" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
+               <description>Testing descriptions also</description>
+               <bean class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
+                   <argument value="ServiceOne"/>
+               </bean>
+           </service>
+       </property>
+   </bean>
+</blueprint>
+

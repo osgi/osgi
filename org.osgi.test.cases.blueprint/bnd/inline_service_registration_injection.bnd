@@ -1,0 +1,7 @@
+Bundle-SymbolicName:                     ${p}.inline_service_registration_injection
+Bundle-Version:                          4.2
+Import-Package:                          ${p}.components.serviceexport, ${p}.services
+-resourceonly: true
+Include-Resource					= \
+	OSGI-INF/blueprint/config2.xml=src/org/osgi/test/cases/blueprint/components/serviceexport/inline_service_registration_injection.xml
+

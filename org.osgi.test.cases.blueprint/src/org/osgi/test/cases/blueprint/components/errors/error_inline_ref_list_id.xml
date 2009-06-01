@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    default-availability="optional">
+
+    <description>
+        This is a checker for an inline ref-list with an id specified
+    </description>
+
+    <bean id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceOneListener">
+        <argument value="ServiceOneListener"/>
+    </bean>
+
+    <!-- This gets both a ServiceManager and a reference collection injected -->
+   <bean id="NullReferenceChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.NullReferenceSet" init-method="init">
+       <argument value="NullReferenceChecker"/>
+       <property name="serviceManager">
+           <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
+       </property>
+       <property name="list">
+           <ref-list id="xyz" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
+               <listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
+           </ref-list>
+       </property>
+   </bean>
+</blueprint>
+

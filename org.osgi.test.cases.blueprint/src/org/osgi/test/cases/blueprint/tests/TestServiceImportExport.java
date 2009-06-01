@@ -752,10 +752,10 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
-	/**
-	 * Test injecting a ServiceRegistration object into a reference.
-	 */
-	public void testRegistrationInjection() throws Exception {
+    /**
+     * Test injecting a ServiceRegistration object into a reference.
+     */
+    public void testRegistrationInjection() throws Exception {
         // NB:  Only one jar for this test.
         StandardTestController controller = new StandardTestController(getContext(),
             getWebServer()+"www/Service_registration_injection.jar");
@@ -773,6 +773,44 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, "ServiceOne", null, props));
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
+            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
+        // we should see a service event here indicating this was registered
+        exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
+        // this should be modified, and have the new service properties available.
+        exportStartEvents.addServiceEvent("MODIFIED", TestServiceOne.class);
+
+        // now some expected termination stuff
+        EventSet exportStopEvents = controller.getStopEvents();
+        // we should see a service event here indicating this is being deregistered
+        exportStopEvents.addServiceEvent("UNREGISTERING", TestServiceOne.class);
+        // and there should not be a registration active anymore
+        exportStopEvents.addValidator(new ServiceUnregistrationValidator(TestServiceOne.class, null));
+
+        controller.run();
+    }
+
+
+    /**
+     * Test injecting an inline ServiceRegistration object into a reference.
+     */
+    public void testInlineRegistrationInjection() throws Exception {
+        // NB:  Only one jar for this test.
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/inline_service_registration_injection.jar");
+        // we add different validation stuff to each jar.  We'll start with the
+        // export jar
+        MetadataEventSet exportStartEvents = controller.getStartEvents();
+        // this is the registration injection.
+        exportStartEvents.addAssertion("ServiceRegistrationChecker", AssertionService.SERVICE_SUCCESS);
+        // validate that the service has been registered
+        // this will be run after all of the events have settled down, so this shoulbe
+        // reflect the modified properties.
+        Hashtable props = new Hashtable();
+        props.put("component.name", "ServiceRegistrationChecker");
+        props.put("component.version", "1");
+        exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, null, null, props));
+        // also validate the metadata for the exported service
+        exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService(null, null, TestServiceOne.class,
             ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class);

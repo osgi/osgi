@@ -186,6 +186,7 @@ public class ExportedService extends Assert implements TestComponentMetadata {
     public void validate(BlueprintMetadata blueprintMetadata, ComponentMetadata componentMeta) throws Exception {
         assertTrue("Component type mismatch", componentMeta instanceof ServiceMetadata);
         ServiceMetadata meta = (ServiceMetadata)componentMeta;
+        assertEquals(serviceId, meta.getId());
         assertEquals(exportMode, meta.getAutoExportMode());
         assertEquals(serviceRanking, meta.getRanking());
         assertEquals(dependencies, meta.getExplicitDependencies());

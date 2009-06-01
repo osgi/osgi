@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+        This has an invalid id on an inline reference element
+    </description>
+
+   <bean id="ServiceOneProperty" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceChecker">
+       <argument value="ServiceOneProperty"/>
+       <property name="one">
+           <reference id="xyz" interface="org.osgi.test.cases.blueprint.services.TestServiceOne"/>
+       </property>
+   </bean>
+</blueprint>
+

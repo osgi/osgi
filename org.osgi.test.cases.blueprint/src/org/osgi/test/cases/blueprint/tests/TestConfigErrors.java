@@ -991,4 +991,77 @@ public class TestConfigErrors extends DefaultTestBundleControl {
             getWebServer()+"www/error_ambiguous_static_factory_constructor.jar");
         controller.run();
     }
+
+    /**
+     * id specified on inner bean
+     */
+    public void testInnerBeanId() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_inner_bean_id.jar");
+        controller.run();
+    }
+
+    /**
+     * initialization specified on inner bean
+     */
+    public void testInnerBeanInitialization() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_inner_bean_lazy.jar");
+        controller.run();
+    }
+
+    /**
+     * destroy-method specified on inner bean
+     */
+    public void testInnerBeanDestroy() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_inner_bean_destroy.jar");
+        controller.run();
+    }
+
+    /**
+     * id attribute on an inline service
+     */
+    public void testInlineServiceId() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_inline_service_id.jar");
+        controller.run();
+    }
+
+    /**
+     * id attribute on an inline reference
+     */
+    public void testInlineReferenceId() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_inline_reference_id.jar");
+        controller.addSetupBundle(getWebServer()+"www/ServiceOne_export.jar");
+        controller.run();
+    }
+
+    /**
+     * id attribute on an inline ref-set reference
+     */
+    public void testInlineRefSetId() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_inline_ref_set_id.jar");
+        controller.addSetupBundle(getWebServer()+"www/ServiceOne_export.jar");
+        controller.run();
+    }
+
+    /**
+     * id attribute on an inline ref-list reference
+     */
+    public void testInlineRefListId() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_inline_ref_list_id.jar");
+        controller.addSetupBundle(getWebServer()+"www/ServiceOne_export.jar");
+        controller.run();
+    }
 }
