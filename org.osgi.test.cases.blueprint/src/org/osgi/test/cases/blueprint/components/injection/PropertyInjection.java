@@ -115,7 +115,7 @@ public class PropertyInjection extends BaseTestComponent {
         setPropertyValue("short", value, Short.class);
     }
 
-    public void setClass(Class value) {
+    public void setClassProp(Class value) {
         setPropertyValue("class", value, Class.class);
     }
 

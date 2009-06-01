@@ -954,7 +954,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
         // create a ServiceManager instance with a single managed service.  This
         // will not be started initially.
-        ServiceManager serviceManager = new ServiceManager(getContext(),
+        ServiceManager serviceManager = new ServiceManagerImpl(getContext(),
             new ManagedService("ServiceOne", new TestGoodService("ServiceOne"), TestServiceOne.class, getContext(), null, false));
 
         // now the importing side.  The key event is the blueprint WAITING event.  We'll use that
@@ -1397,7 +1397,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
         // create a ServiceManager instance with two instances of an injected service.
         // we will register both, and the test will unregister the first.
-        ServiceManager serviceManager = new ServiceManager(getContext(),
+        ServiceManager serviceManager = new ServiceManagerImpl(getContext(),
             new ManagedService[] {
                 // this one is registered from the start
                 new ManagedService("ServiceOneA", new TestGoodService("ServiceOneA"), TestServiceOne.class, getContext(), null, true),

@@ -24,7 +24,7 @@
         <argument value="4"/>
     </bean>
 
-    <bean id="ServiceManager" class="org.osgi.test.cases.blueprint.services.ServiceManager">
+    <bean id="ServiceManager" class="org.osgi.test.cases.blueprint.services.ServiceManagerImpl">
         <argument ref="blueprintBundleContext"/>
         <argument>
             <list>

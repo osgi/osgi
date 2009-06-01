@@ -60,15 +60,15 @@
 
 <!-- Class:3 cases -->
 	<bean id="compClass" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
-		<property name="class" value="java.lang.String"/>
+		<property name="classProp" value="java.lang.String"/>
 	</bean>
 
     <bean id="compClassNull" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
-		<property name="class"><null/></property>
+		<property name="classProp"><null/></property>
 	</bean>
 
 	<bean id="compClass_EleValue" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
-		<property name="class"><value>org.osgi.test.cases.blueprint.components.injection.PropertyInjection</value></property>
+		<property name="classProp"><value>org.osgi.test.cases.blueprint.components.injection.PropertyInjection</value></property>
 	</bean>
 
 <!-- Properties: 4 cases -->

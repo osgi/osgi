@@ -126,7 +126,7 @@ public class ArrayInjection extends BaseTestComponent {
         setPropertyValue("short", new ObjectArrayValueDescriptor("short", arg1));
     }
 
-    public void setClass(Class[] arg1) {
+    public void setClassArray(Class[] arg1) {
         setPropertyValue("class", new ObjectArrayValueDescriptor("class", arg1));
     }
 

@@ -37,6 +37,7 @@ import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.services.ComponentTestInfo;
 import org.osgi.test.cases.blueprint.services.ManagedService;
 import org.osgi.test.cases.blueprint.services.ServiceManager;
+import org.osgi.test.cases.blueprint.services.ServiceManagerImpl;
 import org.osgi.test.cases.blueprint.services.TestGoodService;
 import org.osgi.test.cases.blueprint.services.TestServiceAllSubclass;
 import org.osgi.test.cases.blueprint.services.TestServiceDynamicsInterface;
@@ -66,7 +67,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
 
         // create a ServiceManager instance with two instancex of an injected service.
         // we will unregister one, and register the second as a replacement.
-        ServiceManager serviceManager = new ServiceManager(getContext(),
+        ServiceManager serviceManager = new ServiceManagerImpl(getContext(),
             new ManagedService[] {
                 // this one is registered from the start
                 new ManagedService("ServiceOneA", new TestGoodService("ServiceOneA"), TestServiceOne.class, getContext(), null, true),
@@ -117,7 +118,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
 
         // create a ServiceManager instance with two instancex of an injected service.
         // we will unregister one, and register the second as a replacement.
-        ServiceManager serviceManager = new ServiceManager(getContext(),
+        ServiceManager serviceManager = new ServiceManagerImpl(getContext(),
             new ManagedService[] {
                 // this one is registered from the start
                 new ManagedService("ServiceOneA", new TestGoodService("ServiceOneA"), TestServiceOne.class, getContext(), null, true),
@@ -168,7 +169,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
 
         // create a ServiceManager instance with two instances of an injected service.
         // we will unregister one, and register the second as a replacement.
-        ServiceManager serviceManager = new ServiceManager(getContext(),
+        ServiceManager serviceManager = new ServiceManagerImpl(getContext(),
             new ManagedService[] {
                 // this one is registered from the start
                 new ManagedService("ServiceOneA", new TestGoodService("ServiceOneA"), TestServiceOne.class, getContext(), null, true),
@@ -219,7 +220,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
 
         // create a ServiceManager instance with one instance of an injected service.
         // We will register this when we receive then WAITING event from the blueprint service.
-        ServiceManager serviceManager = new ServiceManager(getContext(),
+        ServiceManager serviceManager = new ServiceManagerImpl(getContext(),
             new ManagedService[] {
                 // this one is registered from the start
                 new ManagedService("ServiceOneA", new TestGoodService("ServiceOneA"), TestServiceOne.class, getContext(), null, false),
@@ -256,7 +257,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
 
         // create a ServiceManager instance with one instance of an injected service.
         // We will register this when we receive then CREATED event from the blueprint service.
-        ServiceManager serviceManager = new ServiceManager(getContext(),
+        ServiceManager serviceManager = new ServiceManagerImpl(getContext(),
             new ManagedService[] {
                 // this one is registered from the start
                 new ManagedService("ServiceOneA", new TestGoodService("ServiceOneA"), TestServiceOne.class, getContext(), null, false),
@@ -394,7 +395,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
 
         // create a ServiceManager instance with one instance of an injected service.
         // We will register this when we receive then WAITING event from the blueprint service.
-        ServiceManager serviceManager = new ServiceManager(getContext(),
+        ServiceManager serviceManager = new ServiceManagerImpl(getContext(),
             new ManagedService[] {
                 // this one is registered from the start
                 new ManagedService("ServiceOneA", new TestGoodService("ServiceOneA"), TestServiceOne.class, getContext(), null, true),

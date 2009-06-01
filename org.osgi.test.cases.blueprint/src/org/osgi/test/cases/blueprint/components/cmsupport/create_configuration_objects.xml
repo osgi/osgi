@@ -8,7 +8,7 @@
     <!-- reference configuration admin service  -->
     <reference id="adminService" interface="org.osgi.service.cm.ConfigurationAdmin"/>
 
-    <bean id="compConfigurationManager" class="org.osgi.test.cases.blueprint.services.ConfigurationManager" destroy-method="removeAllConfigs">
+    <bean id="compConfigurationManager" class="org.osgi.test.cases.blueprint.services.ConfigurationManagerImpl" destroy-method="removeAllConfigs">
         <argument ref="adminService"/>
         <argument>
             <list>

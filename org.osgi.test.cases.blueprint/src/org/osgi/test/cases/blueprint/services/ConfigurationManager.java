@@ -24,36 +24,12 @@ import java.util.Set;
 
 import org.osgi.service.cm.ConfigurationAdmin;
 
-public class ConfigurationManager {
-
-    // configuration admin service
-    protected ConfigurationAdmin admin;
-    // configurations to create in this bundle
-    protected Map managedConfigs = new HashMap();
-
-
-    public ConfigurationManager(ConfigurationAdmin admin) {
-        this.admin = admin;
-    }
-
-    public ConfigurationManager(ConfigurationAdmin admin, ManagedConfigurationInterface config) {
-        this(admin);
-        this.addConfig(config);
-    }
-
-    public ConfigurationManager(ConfigurationAdmin admin, List configlist) {
-        this(admin);
-        this.addConfigs(configlist);
-    }
+public interface ConfigurationManager {
 
     // getter
-    public ManagedConfigurationInterface getConfig(String id){
-        return (ManagedConfigurationInterface)this.managedConfigs.get(id);
-    }
+    public ManagedConfigurationInterface getConfig(String id);
 
-    public ConfigurationAdmin getConfigurationAdmin(){
-        return this.admin;
-    }
+    public ConfigurationAdmin getConfigurationAdmin();
 
     /**
      * Add a configuration.
@@ -61,13 +37,7 @@ public class ConfigurationManager {
      * @param config
      *            The configuration.
      */
-    public void addConfig(ManagedConfigurationInterface config) {
-        // Id could be either the pid or the factory-pid
-        // when id = pid, the config represents a ManagedConfiguration that one-one maps to a configuration object
-        // when id = factory-pid, the config represents a ManagedConfigurationFactory that contains many configuration objects
-        this.managedConfigs.put(config.getId(), config);
-        config.create(this.admin);
-    }
+    public void addConfig(ManagedConfigurationInterface config);
 
     /**
      * Add a List of configurations.
@@ -75,23 +45,10 @@ public class ConfigurationManager {
      * @param managedConfigs
      *            The List of configurations.
      */
-    public void addConfigs(List configlist) {
-        for (int i = 0; i < configlist.size(); i++) {
-            this.addConfig((ManagedConfigurationInterface) configlist.get(i));
-        }
-    }
+    public void addConfigs(List configlist);
 
     /**
      * Remove all the configurations.
      */
-    public void removeAllConfigs(){
-        Iterator i = this.managedConfigs.values().iterator();
-        while (i.hasNext()){
-            ManagedConfigurationInterface config = (ManagedConfigurationInterface)i.next();
-            config.remove(this.admin);
-        }
-        this.managedConfigs.clear();
-    }
-
-
+    public void removeAllConfigs();
 }

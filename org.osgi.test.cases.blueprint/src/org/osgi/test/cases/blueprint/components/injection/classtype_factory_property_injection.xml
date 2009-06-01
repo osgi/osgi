@@ -66,15 +66,15 @@
 
 <!-- Class:3 cases -->
 	<bean id="compClass" factory-method="makeInstance" factory-ref="compFactory">
-		<property name="class" value="java.lang.String"/>
+		<property name="classProp" value="java.lang.String"/>
 	</bean>
 
     <bean id="compClassNull" factory-method="makeInstance" factory-ref="compFactory">
-		<property name="class"><null/></property>
+		<property name="classProp"><null/></property>
 	</bean>
 
 	<bean id="compClass_EleValue" factory-method="makeInstance" factory-ref="compFactory">
-		<property name="class"><value>org.osgi.test.cases.blueprint.components.injection.PropertyInjection</value></property>
+		<property name="classProp"><value>org.osgi.test.cases.blueprint.components.injection.PropertyInjection</value></property>
 	</bean>
 
 <!-- Properties: 4 cases -->

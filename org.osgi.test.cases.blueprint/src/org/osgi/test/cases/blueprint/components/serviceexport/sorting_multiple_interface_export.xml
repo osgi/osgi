@@ -43,7 +43,7 @@
         <argument value="43"/>
     </bean>
 
-    <bean id="ServiceManager" class="org.osgi.test.cases.blueprint.services.ServiceManager">
+    <bean id="ServiceManager" class="org.osgi.test.cases.blueprint.services.ServiceManagerImpl">
         <argument ref="blueprintBundleContext"/>
         <argument>
             <list>
