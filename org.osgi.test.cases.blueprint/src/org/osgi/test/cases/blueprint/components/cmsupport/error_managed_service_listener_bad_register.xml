@@ -11,7 +11,7 @@
         factory-pid="org.osgi.test.cases.blueprint.components.cmsupport.configfactory1"
         interface="org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection">
         <registration-listener ref="ManagedComponentListener"
-            registration-method="registered"
+            registration-method="registeredXXXXX"
             unregistration-method="unregistered"/>
         <bpcm:managed-component class="org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection">
             <bpcm:managed-properties persistent-id=""/>

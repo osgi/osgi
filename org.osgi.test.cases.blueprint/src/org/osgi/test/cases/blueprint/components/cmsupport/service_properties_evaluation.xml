@@ -38,7 +38,7 @@
     <service id="srvGoodServiceSubclassMultiple" ref="compGoodServiceSubclass" interface="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
         <service-properties>
             <bpcm:cm-properties persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config1"/>
-            <bpcm:cm-properties persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config2"/>
+            <bpcm:cm-properties persistent-id="org.osgi.test.cases.blueprint.components.cmsupport.config4"/>
         </service-properties>
     </service>
 

@@ -12,7 +12,7 @@
         interface="org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection">
         <registration-listener ref="ManagedComponentListener"
             registration-method="registered"
-            unregistration-method="unregistered"/>
+            unregistration-method="unregisteredXXXXX"/>
         <bpcm:managed-component class="org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection">
             <bpcm:managed-properties persistent-id=""/>
         </bpcm:managed-component>

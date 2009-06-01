@@ -10,5 +10,4 @@
         </service-properties>
         <bpcm:managed-component class="org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection"/>
     </bpcm:managed-service-factory>
-
 </blueprint>

@@ -10,9 +10,7 @@
     <bpcm:managed-service-factory id="srvFactory1"
         factory-pid="org.osgi.test.cases.blueprint.components.cmsupport.configfactory1"
         interface="org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection">
-        <registration-listener ref="ManagedComponentListener"
-            registration-method="registered"
-            unregistration-method="unregistered"/>
+        <registration-listener ref="ManagedComponentListener"/>
         <bpcm:managed-component class="org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection">
             <bpcm:managed-properties persistent-id=""/>
         </bpcm:managed-component>

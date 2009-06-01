@@ -29,6 +29,7 @@ import org.osgi.test.cases.blueprint.framework.AdminPropertiesAdder;
 import org.osgi.test.cases.blueprint.framework.AdminPropertiesRemover;
 import org.osgi.test.cases.blueprint.framework.AdminPropertiesUpdater;
 import org.osgi.test.cases.blueprint.framework.BlueprintAdminEvent;
+import org.osgi.test.cases.blueprint.framework.ComponentAssertion;
 import org.osgi.test.cases.blueprint.framework.EventSet;
 import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
 import org.osgi.test.cases.blueprint.framework.ServiceComponentExistValidator;
@@ -538,25 +539,32 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
         v.addValue("boolean", new Boolean("true"), Boolean.class);
         startEventSet.addValidator(v);
 
+        // and create a second set of properties to validate the listener call backs
+        Hashtable props1 = new Hashtable();
+        props1.put("string", "abc");
+        props1.put("boolean", new Boolean("true"));
+
+        startEventSet.addEvent(new ComponentAssertion("ManagedComponentListener", AssertionService.SERVICE_REGISTERED, props1));
+
         v = new ServiceComponentExistValidator("org.osgi.test.cases.blueprint.components.cmsupport.ManagedComponentInjection");
         v.addValue("string", "bcd", String.class);
         v.addValue("boolean", new Boolean("false"), Boolean.class);
         startEventSet.addValidator(v);
 
+        // and create a second set of properties to validate the listener call backs
+        Hashtable props2 = new Hashtable();
+        props2.put("string", "bcd");
+        props2.put("boolean", new Boolean("false"));
+
+        startEventSet.addEvent(new ComponentAssertion("ManagedComponentListener", AssertionService.SERVICE_REGISTERED, props2));
+
+        // now some expected termination stuff
+        EventSet stopEventSet = controller.getStopEvents();
+        stopEventSet.addEvent(new ComponentAssertion("ManagedComponentListener", AssertionService.SERVICE_UNREGISTERED, props1));
+        stopEventSet.addEvent(new ComponentAssertion("ManagedComponentListener", AssertionService.SERVICE_UNREGISTERED, props2));
+
         controller.run();
 
-    }
-
-    /**
-     * tests an unknown class name on the managed-component tag
-     */
-    public void testManagedComponentNoClass() throws Exception {
-        // this should just be the standard error set
-        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
-            getWebServer()+"www/error_managed_component_no_class.jar");
-        // this insures we don't have errors resulting from missing stuff
-        controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
-        controller.run();
     }
 
     public void testFactoryComponentPropertiesAutoUpdate_ContainerManaged() throws Exception {
@@ -717,6 +725,66 @@ public class TestConfigAdminServiceSupport extends DefaultTestBundleControl {
 
         controller.run();
 
+    }
+
+    /**
+     * tests a bad component name on a managed-service-factory listener
+     */
+    public void testManagedServiceListenerBadComponent() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_managed_service_listener_bad_component.jar");
+        // this insures we don't have errors resulting from missing stuff
+        controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
+        controller.run();
+    }
+
+    /**
+     * tests a bad register method name on a managed-service-factory listener
+     */
+    public void testManagedServiceListenerBadRegister() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_managed_service_listener_bad_register.jar");
+        // this insures we don't have errors resulting from missing stuff
+        controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
+        controller.run();
+    }
+
+    /**
+     * tests a bad unregister method name on a managed-service-factory listener
+     */
+    public void testManagedServiceListenerBadUnregister() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_managed_service_listener_bad_unregister.jar");
+        // this insures we don't have errors resulting from missing stuff
+        controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
+        controller.run();
+    }
+
+    /**
+     * tests an omitted component name on a managed-service-factory listener
+     */
+    public void testManagedServiceListenerNoComponent() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_managed_service_listener_no_component.jar");
+        // this insures we don't have errors resulting from missing stuff
+        controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
+        controller.run();
+    }
+
+    /**
+     * tests omitted method names on a managed-service-factory listener
+     */
+    public void testManagedServiceListenerNoMethods() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_managed_service_listener_no_methods.jar");
+        // this insures we don't have errors resulting from missing stuff
+        controller.addSetupBundle(getWebServer()+"www/create_configuration_objects.jar");
+        controller.run();
     }
 
 }
