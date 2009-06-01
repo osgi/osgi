@@ -23,7 +23,6 @@ import org.osgi.framework.ServiceException;
  */
 public class ServiceUnavailableException extends ServiceException {
 
-	private final Class serviceType;
 	private final String filter;
 
 
@@ -31,17 +30,13 @@ public class ServiceUnavailableException extends ServiceException {
      * Creates a <code>ServiceUnavaiableException</code> with the specified message.
      *
      * @param message The associated message.
-     * @param serviceType
-     *                The class of the target service.
      * @param filterExpression
      *                The filter expression used for the service lookup.
      */
 	public ServiceUnavailableException(
            String message,
-           Class serviceType,
            String filterExpression) {
 		super(message, UNREGISTERED);
-		this.serviceType = serviceType;
 		this.filter = filterExpression;
 	}
 
@@ -51,28 +46,16 @@ public class ServiceUnavailableException extends ServiceException {
 	 * exception cause.
 	 *
 	 * @param message The associated message.
-     * @param serviceType
-     *                The class of the target service.
      * @param filterExpression
      *                The filter expression used for the service lookup.
 	 * @param cause The cause of this exception.
 	 */
 	public ServiceUnavailableException(
            String message,
-           Class serviceType,
            String filterExpression,
            Throwable cause) {
 		super(message, UNREGISTERED, cause);
-		this.serviceType = serviceType;
 		this.filter = filterExpression;
-	}
-
-	/**
-	 * The type of the service that would have needed to be available in
-	 * order for the invocation to proceed.
-	 */
-	public Class getServiceType() {
-		return this.serviceType;
 	}
 
 	/**
