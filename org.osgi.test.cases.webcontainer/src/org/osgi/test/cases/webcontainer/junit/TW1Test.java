@@ -100,21 +100,10 @@ public class TW1Test extends WebContainerTestBundleControl {
 
     public void testBasic005() throws Exception {
         final String request = this.warContextPath + "/ErrorTest";
-        final URL url = Dispatcher.createURL(request, this.server);
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try {
-            assertEquals(conn.getResponseCode(), 200);
-            log(conn.getContentType());
-            assertTrue(conn.getContentType().indexOf("text/html") > -1);
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
-            // check if content of response is correct
-            assertEquals(response, ConstantsUtil.ERROR404JSP);
-        } finally {
-            conn.disconnect();
-        }
+        String response = super.getResponse(request);
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertTrue(response.indexOf(ConstantsUtil.ERROR404JSP) > -1);
     }
 
     public void testBasic006() throws Exception {
@@ -157,5 +146,16 @@ public class TW1Test extends WebContainerTestBundleControl {
         } finally {
             conn.disconnect();
         }
+    }
+    
+    public void testBasic009() throws Exception {
+        final String request = this.warContextPath + "/welcome.jsp?email=eeg@osgi.org&message=Welcome%20String%20from%20env-entry!";
+        String response = super.getResponse(request);
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertTrue(response.indexOf(ConstantsUtil.EMAIL + "-"
+                + ConstantsUtil.EMAILVALUE) > 0);
+        assertTrue(response.indexOf(ConstantsUtil.WELCOMESTRING + "-"
+                + ConstantsUtil.WELCOMESTRINGVALUE) > 0);
     }
 }

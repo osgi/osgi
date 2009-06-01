@@ -202,6 +202,8 @@
 			<fileset dir="${target}" />
 			<fileset dir="resources" includes="**/*.war" />
 			<fileset dir="resources" includes="**/*.jar" />
+			<fileset dir="resources" includes="**/tw5/WebContent/WEB-INF/**/*.jar" />
+			<fileset dir="resources/tw5/WebContent/WEB-INF/lib2" />
 		</delete>
 	</target>
 

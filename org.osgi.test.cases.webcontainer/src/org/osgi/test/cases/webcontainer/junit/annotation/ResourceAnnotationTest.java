@@ -18,6 +18,7 @@ package org.osgi.test.cases.webcontainer.junit.annotation;
 
 import org.osgi.framework.Bundle;
 import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
+import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 
 /**
  * @version $Rev$ $Date$
@@ -104,8 +105,8 @@ public class ResourceAnnotationTest extends WebContainerTestBundleControl {
         // check if content of response is correct
         log("verify content of response is correct");
         assertTrue(response.indexOf("ResourceServlet4") > 0);
-        assertTrue(response.indexOf("Welcome String from env-entry!") > 0);
-        assertTrue(response.indexOf("5 + 5 = 10 that is true") > 0);
+        assertTrue(response.indexOf(ConstantsUtil.WELCOMESTRINGVALUE) > 0);
+        assertTrue(response.indexOf(ConstantsUtil.WELCOMESTATEMENTVALUE) > 0);
         assertEquals(response.indexOf("null"), -1);
     }
 
