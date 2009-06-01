@@ -200,6 +200,7 @@ Include-Resource = \
 	lifecycle.tb8.jar, \
 	lifecycle.tb9.jar, \
 	resources.tb1.jar, \
+	resources.tb2.jar, \
 	syncbundlelistener.tb3.jar
 	
 Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}

@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) OSGi Alliance (2009). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.osgi.test.cases.framework.junit.resources;
 
 import java.io.BufferedReader;
@@ -15,9 +30,12 @@ import org.osgi.test.support.OSGiTestCase;
 
 public class GetEntryResourceTests extends OSGiTestCase {
 	Bundle testBundle;
+	Bundle testFragment;
 
 	protected void setUp() throws Exception {
 		super.setUp();
+		if (getName().startsWith("testFragment"))
+			testFragment = install("resources.tb2.jar");
 		testBundle = install("resources.tb1.jar");
 	}
 
@@ -63,22 +81,30 @@ public class GetEntryResourceTests extends OSGiTestCase {
 	}
 
 	public void testFindEntries01() {
-		assertFindEntries(testBundle, "resources", null, false, 4);
-		assertFindEntries(testBundle, "resources", "*", false, 4);
-		assertFindEntries(testBundle, "resources", null, true, 14);
-		assertFindEntries(testBundle, "resources", "*", true, 14);
-		assertFindEntries(testBundle, "resources", "*.xml", true, 5);
-		assertFindEntries(testBundle, "resources", "data*.xml", true, 5);
-		assertFindEntries(testBundle, "resources", "*.xml", false, 1);
-		assertFindEntries(testBundle, "resources", "data*.xml", false, 1);
-		assertFindEntries(testBundle, "resources", "data.txt", false, 1);
-		assertFindEntries(testBundle, "resources", "data*", true, 10);
-		assertFindEntries(testBundle, "resources", "*d*ta*.*", true, 10);
-		assertFindEntries(testBundle, "resources", "doesNotExist", true, 0);
-		assertFindEntries(testBundle, "resources", "doesNotExist", false, 0);
-		assertFindEntries(testBundle, "resources", "does*Not*Exist", true, 0);
-		assertFindEntries(testBundle, "resources", "dir*", false, 2);
-		assertFindEntries(testBundle, "resources", "dir*", true, 4);
+		doTestFindEntries(1);
+	}
+
+	public void testFragmentFindEntries01() {
+		doTestFindEntries(2);
+	}
+
+	private void doTestFindEntries(int factor) {
+		assertFindEntries(testBundle, "resources", null, false, 4 * factor);
+		assertFindEntries(testBundle, "resources", "*", false, 4 * factor);
+		assertFindEntries(testBundle, "resources", null, true, 14 * factor);
+		assertFindEntries(testBundle, "resources", "*", true, 14 * factor);
+		assertFindEntries(testBundle, "resources", "*.xml", true, 5 * factor);
+		assertFindEntries(testBundle, "resources", "data*.xml", true, 5 * factor);
+		assertFindEntries(testBundle, "resources", "*.xml", false, 1 * factor);
+		assertFindEntries(testBundle, "resources", "data*.xml", false, 1 * factor);
+		assertFindEntries(testBundle, "resources", "data.txt", false, 1 * factor);
+		assertFindEntries(testBundle, "resources", "data*", true, 10 * factor);
+		assertFindEntries(testBundle, "resources", "*d*ta*.*", true, 10 * factor);
+		assertFindEntries(testBundle, "resources", "doesNotExist", true, 0 * factor);
+		assertFindEntries(testBundle, "resources", "doesNotExist", false, 0 * factor);
+		assertFindEntries(testBundle, "resources", "does*Not*Exist", true, 0 * factor);
+		assertFindEntries(testBundle, "resources", "dir*", false, 2 * factor);
+		assertFindEntries(testBundle, "resources", "dir*", true, 4 * factor);
 	}
 
 	public void testGetEntryPaths01() {
