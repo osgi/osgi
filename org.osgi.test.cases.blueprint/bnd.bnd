@@ -172,6 +172,7 @@ Include-Resource					= \
  	www/conversion_injection_override.jar=conversion_injection_override.jar, \
  	www/array_injection.jar=array_injection.jar, \
  	www/ServiceOne_export.jar=ServiceOne_export.jar, \
+ 	www/ServiceOne_prototype_export.jar=ServiceOne_prototype_export.jar, \
  	www/ServiceTwoSubclass_export.jar=ServiceTwoSubclass_export.jar, \
  	www/ServiceTwoSubclass_import.jar=ServiceTwoSubclass_import.jar, \
  	www/circular_ref_one.jar=circular_ref_one.jar, \
