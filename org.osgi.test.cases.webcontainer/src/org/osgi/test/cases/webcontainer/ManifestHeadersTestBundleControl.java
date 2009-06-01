@@ -146,9 +146,9 @@ public abstract class ManifestHeadersTestBundleControl extends
         assertEquals("Bundle status should be Active", b.getState(),
                 Bundle.ACTIVE);
         try {
-            String response = super.getResponse(cp);
-            super.checkHomeResponse(response, warName);
-            super.checkDynamicPageResponse(response, warName);
+            // validate able to get Response of the home page and some dynamic page 
+            // correctly for the installed web app bundle
+            checkPageContents(cp, warName);
         } catch (Exception e) {
             fail("should not be getting an exception here " + e.getMessage());
         }

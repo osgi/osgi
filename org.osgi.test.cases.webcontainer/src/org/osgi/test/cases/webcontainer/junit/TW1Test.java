@@ -148,14 +148,7 @@ public class TW1Test extends WebContainerTestBundleControl {
         }
     }
     
-    public void testBasic009() throws Exception {
-        final String request = this.warContextPath + "/welcome.jsp?email=eeg@osgi.org&message=Welcome%20String%20from%20env-entry!";
-        String response = super.getResponse(request);
-        // check if content of response is correct
-        log("verify content of response is correct");
-        assertTrue(response.indexOf(ConstantsUtil.EMAIL + "-"
-                + ConstantsUtil.EMAILVALUE) > 0);
-        assertTrue(response.indexOf(ConstantsUtil.WELCOMESTRING + "-"
-                + ConstantsUtil.WELCOMESTRINGVALUE) > 0);
+    public void testWelcomeJSP() throws Exception {
+        super.checkWelcomeJSP(this.warContextPath);
     }
 }

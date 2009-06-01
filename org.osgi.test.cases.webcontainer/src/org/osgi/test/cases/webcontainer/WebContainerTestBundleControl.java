@@ -140,6 +140,45 @@ public abstract class WebContainerTestBundleControl extends
         return response;
     }
 
+    protected void checkPageContents(String contextPath, String warName) throws Exception {
+        // check the correctness of the static home page
+        String response = getResponse(contextPath);
+        checkHomeResponse(response, warName);
+        
+        // check the correctness of a dynamic page
+        String path = contextPath;
+        if (warName.indexOf("tw1.war") > -1) {
+            path += "/BasicTestServlet";
+        } else if (warName.indexOf("tw2.war") > -1) {
+            path += "/ResourceServlet2";
+        } else if (warName.indexOf("tw3.war") > -1) {
+            path += "/ResourceServlet2";
+        } else if (warName.indexOf("tw4.war") > -1) {
+            path += "/TestServlet1";
+        } else if (warName.indexOf("tw5.war") > -1) {
+            path += "/ClasspathTestServlet";
+        }
+        
+        response = getResponse(path);
+        checkDynamicPageResponse(response, warName);
+        
+        // additional test for tw1.war to make sure jsps are processed correctly
+        if (warName.indexOf("tw1.war") > -1) {
+            checkWelcomeJSP(contextPath);
+        }
+    }
+    
+    protected void checkWelcomeJSP(String contextPath) throws Exception {
+        final String request = contextPath + "/welcome.jsp?email=eeg@osgi.org&message=Welcome%20String%20from%20env-entry!";
+        String response = getResponse(request);
+        // check if content of response is correct
+        log("verify content of response is correct");
+        assertTrue(response.indexOf(ConstantsUtil.EMAIL + "-"
+                + ConstantsUtil.EMAILVALUE) > 0);
+        assertTrue(response.indexOf(ConstantsUtil.WELCOMESTRING + "-"
+                + ConstantsUtil.WELCOMESTRINGVALUE) > 0);
+    }
+    
     protected boolean ableAccessPath(String path) throws Exception {
         try {
             getResponse(path);
