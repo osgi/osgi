@@ -618,4 +618,22 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		else
 			assertEquals("Expecting 0 signers", 0, trustedSigners.size());
 	}
+
+	public void testExecPermission() throws BundleException, IOException {
+		File testOutputFile = new File(rootStorageArea, getName() + File.separator + "execPermissions.out");
+		Map configuration = getConfiguration(getName());
+		String osName = System.getProperty("os.name");
+		if (osName.toLowerCase().indexOf("windows") >= 0)
+			configuration.put(Constants.FRAMEWORK_EXECPERMISSION, "copy ${abspath} " + testOutputFile.getAbsolutePath());
+		else
+			configuration.put(Constants.FRAMEWORK_EXECPERMISSION, "cp ${abspath} " + testOutputFile.getAbsolutePath());
+		configuration.put(Constants.FRAMEWORK_LIBRARY_EXTENSIONS, ".1, .test");
+		configuration.put("nativecodetest", "1");
+		Framework framework = createFramework(configuration);
+		startFramework(framework);
+		Bundle testBundle = installBundle(framework, "/launch.tb2.jar");
+		testBundle.start();
+		stopFramework(framework);
+		assertTrue("File does not exist: " + testOutputFile.getAbsolutePath(), testOutputFile.exists());
+	}
 }
