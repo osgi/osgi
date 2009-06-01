@@ -23,8 +23,17 @@ import org.osgi.framework.Bundle;
  * <p>
  * <code>BlueprintEvent</code> objects are delivered to all registered <code>BlueprintListener</code>
  * service objects. BlueprintEvents must be asynchronously delivered in chronological order
- * with respect to each listener.  In addition, when a listener is registered, the blueprint extender
- * will send to this listener the last event for each blueprint bundle managed by this extender.
+ * with respect to each listener.
+ *
+ * <p>
+ * In addition, when a listener is registered, the blueprint extender
+ * will synchronously send to this listener the last event for each blueprint bundle managed
+ * by this extender.  This replay of events is designed so that the new listener can
+ * be informed of the state of each managed bundle.  Events sent during this replay will
+ * have the {@link #replay} flag set. The blueprint extender must ensure that this replay phase
+ * does not interfere with new events so that the chronological order of all events received
+ * by the listener is preserved. If the last event for a given blueprint bundle is DESTROYED,
+ * the extender must not send it during this replay phase.
  *
  * <p>
  * A type code is used to identify the type of event. The following event types are defined:
@@ -77,7 +86,8 @@ public class BlueprintEvent {
 	/**
 	 * The Blueprint Container has entered the Grace Period.
 	 * The list of missing dependencies must be made available through the {@link #getDependencies()}
- 	 * method.
+ 	 * method.  During the grace period, a GRACE_PERIOD event is sent each time the set of
+	 * unsatisfied dependencies changes.
 	 */
 	public static final int GRACE_PERIOD = 6;
 	/**
@@ -125,6 +135,12 @@ public class BlueprintEvent {
 	 * @see #getException()
 	 */
 	private final Throwable exception;
+	/**
+ 	 * Indicate if this event is a replay event or not.
+	 *
+	 * @see #isReplay()
+	 */
+	private final boolean replay;
 
 
 	public BlueprintEvent(int type, Bundle bundle, Bundle extenderBundle) {
@@ -146,6 +162,25 @@ public class BlueprintEvent {
 		this.extenderBundle = extenderBundle;
 		this.dependencies = dependencies;
 		this.exception = exception;
+		this.replay = false;
+	}
+
+	/**
+ 	 * Create a new blueprint event from the given blueprint event.
+ 	 * The timestamp property will be copied from the original event and only the
+ 	 * replay property will be overriden with the given value.
+ 	 *
+	 * @param event the original event to copy
+	 * @param replay if the copied event should be used as a replay event
+	 */
+	public BlueprintEvent(BlueprintEvent event, boolean replay) {
+		this.type = event.type;
+		this.timestamp = event.timestamp;
+		this.bundle = event.bundle;
+		this.extenderBundle = event.extenderBundle;
+		this.dependencies = event.dependencies;
+		this.exception = event.exception;
+		this.replay = replay;
 	}
 
 	/**
@@ -215,6 +250,15 @@ public class BlueprintEvent {
 	 */
 	public Throwable getException() {
 		return exception;
+	}
+
+	/**
+ 	 * Return the fact that this event is a replay event or not.
+	 *
+	 * @return a boolean indicating if this event is a replay event.
+	 */
+	public boolean isReplay() {
+		return replay;
 	}
 
 }
