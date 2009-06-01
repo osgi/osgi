@@ -81,13 +81,28 @@ public class StandardTestController extends BaseTestController {
      * @exception Exception
      */
     public void addBundle(String bundleName) throws Exception {
+        addBundle(bundleName, 0);
+    }
+
+
+    /**
+     * Add a bundle to this test phase.  This installs the bundle and
+     * tracks it.
+     *
+     * @param bundleName The fully qualified bundle name.
+     * @param startOptions
+     *                   The bundle startup options
+     *
+     * @exception Exception
+     */
+    public void addBundle(String bundleName, int startOptions) throws Exception {
         // first install this
         Bundle testBundle = installBundle(bundleName);
         // add this to our managed list.
         BlueprintMetadata blueprintMetadata = new BlueprintMetadata(testContext, testBundle);
         bundleList.put(bundleName, blueprintMetadata);
         // add the bundle to the appropriate processing lists
-        addBundle(testBundle, blueprintMetadata);
+        addBundle(testBundle, startOptions, blueprintMetadata);
     }
 
 
@@ -98,11 +113,11 @@ public class StandardTestController extends BaseTestController {
      * @param blueprintMetadata
      *               The associated module metadata.
      */
-    public void addBundle(Bundle bundle, BlueprintMetadata blueprintMetadata) {
+    public void addBundle(Bundle bundle, int startOptions, BlueprintMetadata blueprintMetadata) {
         // A standard start/stop cycle test has a common set of events we look for
         // in each phase.  Add the events to each list
         EventSet startEvents = new MetadataEventSet(blueprintMetadata, testContext, bundle);
-        addStartEvents(bundle, blueprintMetadata, startEvents);
+        addStartEvents(bundle, startOptions, blueprintMetadata, startEvents);
         startPhase.addEventSet(startEvents);
 
         EventSet endEvents = new MetadataEventSet(blueprintMetadata, testContext, bundle);
@@ -114,13 +129,15 @@ public class StandardTestController extends BaseTestController {
      * Add a standard set of bundle start events for this event type.
      *
      * @param bundle The bundle the event set is tracking.
+     * @param startOptions
+     *               The bundle start options.
      * @param blueprintMetadata
      *               The BlueprintMetadata context for this event set.
      * @param events The created event set.
      */
-    public void addStartEvents(Bundle bundle, BlueprintMetadata blueprintMetadata, EventSet events) {
+    public void addStartEvents(Bundle bundle, int startOptions, BlueprintMetadata blueprintMetadata, EventSet events) {
         // we add an initializer to start our bundle when the test starts
-        events.addInitializer(new TestBundleStarter(bundle));
+        events.addInitializer(new TestBundleStarter(bundle, 0, startOptions));
         // we always expect to see a started bundle event
         events.addBundleEvent("STARTED");
         // now standard blueprint revents.

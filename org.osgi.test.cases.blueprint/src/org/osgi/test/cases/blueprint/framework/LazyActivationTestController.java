@@ -37,11 +37,15 @@ public class LazyActivationTestController extends ThreePhaseTestController {
      * Add a standard set of bundle start events for this event type.
      *
      * @param bundle The bundle the event set is tracking.
-     * @param blueprintMetadata                                              1
+     * @param startOptions
+     *               The bundle start options (ignored for this test controller,
+     *               since we're tuned to lazy activation).
+     * @param blueprintMetadata
+     *               1
      *               The BlueprintMetadata context for this event set.
      * @param events The created event set.
      */
-    public void addStartEvents(Bundle bundle, BlueprintMetadata blueprintMetadata, EventSet events) {
+    public void addStartEvents(Bundle bundle, int startOptions, BlueprintMetadata blueprintMetadata, EventSet events) {
         // this will kick the STARTING process, but the bundle will not fully initialize
         // until we do something to force classloading
         events.addInitializer(new TestBundleStarter(bundle, 0, Bundle.START_ACTIVATION_POLICY | Bundle.START_TRANSIENT));

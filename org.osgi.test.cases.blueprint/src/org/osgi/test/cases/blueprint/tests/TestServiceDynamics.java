@@ -16,6 +16,8 @@
 
 package org.osgi.test.cases.blueprint.tests;
 
+import org.osgi.framework.Bundle;
+
 import org.osgi.test.cases.blueprint.framework.BlueprintAdminEvent;
 import org.osgi.test.cases.blueprint.framework.BlueprintContainerEvent;
 import org.osgi.test.cases.blueprint.framework.ClassLoadInitiator;
@@ -422,6 +424,33 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         // add a cleanup processor for the exported services.
         stopEvents.addTerminator(new ServiceManagerUnregister(serviceManager));
 
+        controller.run();
+    }
+
+
+	/**
+	 * A lazy initialization test with eager beans.  Even though the bundle is activated with
+     * lazy activation, this should proceed to fully activated state because it contains an
+     * eager bean definition.
+	 */
+	public void testEagerServiceRequestInitialization() throws Exception {
+        // This uses a special test controller.  The active portions of the test
+        // are performed in the middle phase.
+        StandardTestController controller = new StandardTestController(getContext());
+        controller.addBundle(getWebServer()+"www/lazy_activation.jar", Bundle.START_ACTIVATION_POLICY | Bundle.START_TRANSIENT);
+
+        // We're mostly going to tag things we don't expect to see happening, though there are a
+        // few positive things we expect to see.
+        MetadataEventSet startEvents = controller.getStartEvents(0);
+        // we should see a single registration of TestServiceOne
+        startEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
+        // all of the components should now be instantiated
+        startEvents.addAssertion("ServiceOne", AssertionService.COMPONENT_INIT_METHOD);
+
+        // now some expected termination stuff
+        EventSet stopEvents = controller.getStopEvents(0);
+        // normal shutdown processing
+        stopEvents.addServiceEvent("UNREGISTERING", TestServiceOne.class);
         controller.run();
     }
 }

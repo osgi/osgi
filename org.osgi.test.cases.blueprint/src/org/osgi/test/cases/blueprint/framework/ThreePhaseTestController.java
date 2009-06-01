@@ -49,12 +49,14 @@ public class ThreePhaseTestController extends StandardTestController {
      * Add a bundle/metadata combo to the target test controller.
      *
      * @param bundle The installed bundle.
+     * @param startOptions
+     *               The bundle start options
      * @param blueprintMetadata
      *               The associated module metadata.
      */
-    public void addBundle(Bundle bundle, BlueprintMetadata blueprintMetadata) {
+    public void addBundle(Bundle bundle, int startOptions, BlueprintMetadata blueprintMetadata) {
         // add the standard events, then our additions
-        super.addBundle(bundle, blueprintMetadata);
+        super.addBundle(bundle, startOptions, blueprintMetadata);
 
         // The middle event set has no standard set of items to add.  This is filled
         // in by the test creater.
