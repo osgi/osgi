@@ -17,6 +17,6 @@ Bundle-NativeCode: linux_x86/libNative.so; osname=Linux; processor=x86; language
  windows_arm/Native.dll; osname="windows ce"; processor=arm_le; language=zz \
  macosx_x86/libNative.jnilib; osname="mac os x"; processor=x86; language=zz, \
  macosx_x86/libNative.jnilib; osname="mac os x"; processor=ppc; language=zz
-Include-Resource = /=resources/div.tb2
+Include-Resource = resources/div.tb2
 Private-Package:                         ${p}.div.tb19, org.osgi.test.cases.div.tb2
 

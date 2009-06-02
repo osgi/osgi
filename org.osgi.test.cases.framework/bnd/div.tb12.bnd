@@ -19,5 +19,5 @@ Bundle-NativeCode: linux_x86/libNative.so; osname=Linux; processor=x86; selectio
  macosx_x86/libNative.jnilib; osname="mac os x"; processor=x86; selection-filter="(${p}.div.tb12=xyz)", \
  macosx_x86/libNative.jnilib; osname="mac os x"; processor=ppc; selection-filter="(${p}.div.tb12=xyz)", \
  *
-Include-Resource = /=resources/div.tb2
+Include-Resource = resources/div.tb2
 Private-Package:                         ${p}.div.tb12, org.osgi.test.cases.div.tb2
