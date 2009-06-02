@@ -28,41 +28,33 @@
 package org.osgi.test.cases.permissionadmin.main.tbc;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import org.osgi.framework.*;
 import org.osgi.service.permissionadmin.*;
-import org.osgi.test.cases.util.*;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 public class PermissionControl extends DefaultTestBundleControl {
 	PermissionAdmin		permissionAdmin;
 	PermissionInfo[]	defaultPermissions;
 
-	/*
-	 * public String[] getMethods() { return new String[] { "testPermissionInfo" }; }
-	 */
-	public boolean checkPrerequisites() {
-		return serviceAvailable(PermissionAdmin.class) && securityNeeded(true);
-	}
-
-	public void prepare() throws Exception {
-		/* Get the PermissionAdmin service */
-		permissionAdmin = (PermissionAdmin) getRegistry().getService(
-				PermissionAdmin.class);
+    public void setUp() throws Exception {
+    	assertTrue("Must have a security manager", System.getSecurityManager() != null);
+		assertTrue(serviceAvailable(PermissionAdmin.class)); 
+		permissionAdmin = (PermissionAdmin) getService(PermissionAdmin.class);
 		/* Give this bundle all permissions */
 		permissionAdmin.setPermissions(
 				(getContext().getBundle()).getLocation(),
 				new PermissionInfo[] {new PermissionInfo(
 						"java.security.AllPermission", "", "")});
-	}
+    }
 
-	public void unprepare() throws Exception {
-    permissionAdmin.setPermissions(getContext().getBundle().getLocation(), null);
-  }
 
-	public void setState() throws Exception {
-	}
-
-	public void clearState() throws Exception {
-	}
+    public void tearDown() {  
+    	permissionAdmin.setPermissions(getContext().getBundle().getLocation(), null);
+    	ungetAllServices();
+    }
 
 	/** *** Test methods **** */
 	public void testBasicPermissionInfo() throws Exception {
@@ -267,15 +259,62 @@ public class PermissionControl extends DefaultTestBundleControl {
 	/**	
 	 */
 	public void testImplicitPermissions() throws Throwable {
-		PermissionInfo[] permInfoArrayDefault = {new PermissionInfo(
+		PermissionInfo[] invokePerm = {new PermissionInfo(
 				"java.security.AllPermission", "", "")};
-		invokeWithPermissions("implicitPermissionsTest", permInfoArrayDefault);
+		invokeWithPermissions("implicitPermissionsTest", invokePerm, false);
+		invokePerm = new PermissionInfo[0];
+		invokeWithPermissions("implicitPermissionsTest", invokePerm, true);
 	}
 
 	public void implicitPermissionsTest() throws Exception {
-		getContext().getDataFile("nicke.txt");
+		getContext().getBundle().getBundleContext().getDataFile("nicke.txt");
 	}
 
+	public void invokeWithPermissions(String methodName, PermissionInfo[] perms, boolean fail)
+			throws Throwable {
+		/* Install and start the context sharing bundle */
+		Bundle contextBundle = installBundle("contextsharer.jar", true);
+		String contextBundleLocation = contextBundle.getLocation();
+
+		/* Get the context sharing service */
+		ServiceReference sr = getContext().getServiceReference(
+				ContextSharer.class.getName());
+		ContextSharer cs = (ContextSharer) (getContext().getService(sr));
+
+		/* Get the PermissionAdmin service */
+		ServiceReference paRef = getContext().getServiceReference(
+				PermissionAdmin.class.getName());
+		PermissionAdmin pa = (PermissionAdmin) getContext().getService(paRef);
+
+		/* Set the permissions for the context sharing bundle */
+		pa.setPermissions(contextBundleLocation, perms);
+
+		/*
+		 * Make the context sharer invoke the specified method on this object
+		 * and thereby calling the method with its permissions
+		 */
+		Method m = this.getClass().getDeclaredMethod(methodName, new Class[0]);
+		try {
+			cs.invoke(this, m);
+			if (fail) {
+				fail("Expecting a security exception");
+			}
+		} catch (InvocationTargetException e) {
+			if (e.getTargetException() instanceof SecurityException) {
+				if (!fail) {
+					fail("Unexpected security exception", e.getTargetException());
+				}
+			}
+			else {
+				throw e.getTargetException();
+			}
+		}
+		/* Delete the permissions for the context sharing bundle */
+		pa.setPermissions(contextBundleLocation, null);
+
+		/* Uninstall the context sharing bundle */
+		contextBundle.uninstall();
+	}
 	/** *** Helper methods **** */
 	/**
 	 * Creates a PermissionInfo with a bad encoded string and checks that it
@@ -307,11 +346,4 @@ public class PermissionControl extends DefaultTestBundleControl {
 		}
 	}
 
-	/**
-	 * Returns <code>true</code> if there is a SecurityManager installed,
-	 * returns <code>false</code> otherwise.
-	 */
-	private boolean securityManagerExists() {
-		return (System.getSecurityManager() != null);
-	}
 }

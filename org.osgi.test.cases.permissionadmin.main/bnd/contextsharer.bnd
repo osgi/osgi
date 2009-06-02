@@ -1,0 +1,12 @@
+Bundle-SymbolicName: ${p}.contextsharer
+Bundle-Name: ${p}.contextsharer
+Bundle-Version: 4.2.0.${project.build}
+Bundle-Activator: ${p}.contextsharer.ContextSharerImpl
+Bundle-Vendor: OSGi
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+Bundle-Copyright: ${copyright}
+
+Private-Package						= \
+	${p}.contextsharer.*
