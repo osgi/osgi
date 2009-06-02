@@ -23,7 +23,6 @@ import javax.naming.spi.InitialContextFactoryBuilder;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
-import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogReaderService;
@@ -47,7 +46,7 @@ public class JNDITest extends WebContainerTestBundleControl {
         log("install war file: tw5.war at context path " + this.warContextPath);
         this.b = installBundle(super.getWarURL("tw5.war", this.options), true);
 
-        // verify event admin service is installed
+        // verify JNDI in OSGi service is installed
         log("verify JNDI in OSGi service is installed.  The tests in this class require JNDI in OSGi being installed.");
         log("check if there is any JNDI service provider that is registered as an OSGi service under  the javax.naming.spi.InitialContextFactory interface");
         ServiceReference sr = getContext().getServiceReference(
