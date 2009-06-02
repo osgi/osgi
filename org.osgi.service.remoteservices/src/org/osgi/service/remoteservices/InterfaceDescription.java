@@ -13,47 +13,51 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package org.osgi.service.remoteservices;
 
 import org.osgi.framework.Version;
 
 /**
+ * A description of an interface offered by an endpoint. A single endpoint could
+ * offer multiple interfaces, in which case multiple
+ * <code>InterfaceDescription</code> objects will be referenced from the
+ * {@link EndpointDescription} class. Besides the name and version of the Java
+ * interface, also the associated middleware-specific interface name is
+ * provided.
  * 
- * TODO Add Javadoc comment for this type.
- * 
+ * @Immutable
  * @version $Revision$
+ * @see EndpointDescription
  */
 public interface InterfaceDescription {
 
 	/**
 	 * The fully qualified Java interface name of this interface.
 	 * 
-	 * @return
+	 * @return The fully qualified Java interface name.
 	 */
 	String getInterfaceName();
 
 	/**
-	 * The version of the Java interface of this interface. * In case no version
+	 * The version of the Java interface of this interface. In case no version
 	 * has been provided for an interface, Discovery may use the String-value of
 	 * <code>org.osgi.framework.Version.emptyVersion</code> constant.
 	 * 
 	 * 
-	 * @return
+	 * @return the version of the Java interface name.
 	 */
 	Version getVersion();
 
 	/**
 	 * The (non-Java) endpoint interface name is usually a communication
-	 * protocol specific interface, for instance a web service interface name.
-	 * Though this information is usually contained in accompanying properties
-	 * e.g. a wsdl file, Discovery usually doesn't read and interprets such
-	 * service meta-data. Providing this information explicitly, might allow
-	 * external non-Java applications find services based on this endpoint
-	 * interface.
+	 * protocol specific interface, for instance a web service name or IDL
+	 * interface name. Though this information is usually contained in
+	 * accompanying properties e.g. a wsdl file, Discovery usually doesn't read
+	 * and interprets such service meta-data. Providing this information
+	 * explicitly, might allow external non-Java applications find services
+	 * based on this endpoint interface.
 	 * 
-	 * @return
+	 * @return The endpoint-specific interface name.
 	 */
 	String getEndpointInterfaceName();
 

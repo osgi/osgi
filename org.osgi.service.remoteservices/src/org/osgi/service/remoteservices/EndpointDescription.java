@@ -26,21 +26,20 @@ import java.util.Map;
  * its endpoint. It provides an API to conveniently access the most important
  * properties of the service.
  * <p>
- * <code>ServiceEndpointDescription</code> objects are immutable.
+ * <code>EndpointDescription</code> objects are immutable.
  * 
  * @Immutable
  * @version $Revision$
  */
 public interface EndpointDescription {
-
 	/**
-	 * Contains a collection of fully qualified interface names offered by this
-	 * endpoint.
+	 * Returns a collection if {@link InterfaceDescription} objects offered by
+	 * this endpoint.
 	 * 
-	 * @return <code>Collection (&lt;String&gt;)</code> of service interface
-	 *         names provided by the advertised service endpoint. The collection
-	 *         is never <code>null</code> or empty but contains at least one
-	 *         service interface.
+	 * @return <code>Collection (&lt;InterfaceDescription&gt;)</code> objects
+	 *         offered by this endpoint. The collection is never
+	 *         <code>null</code> or empty. It contains at least one service
+	 *         entry.
 	 */
 	Collection /* <InterfaceDescription> */getInterfaceDescriptions();
 
@@ -54,31 +53,32 @@ public interface EndpointDescription {
 
 	/**
 	 * Returns the universally unique id for the service represented by this
-	 * endpoint.
+	 * endpoint. If the same service is available over multiple endpoints, all
+	 * endpoints share the same UUID.
 	 * 
-	 * @return Unique id of service endpoint, or <code>null</code> if it hasn't
-	 *         been provided.
+	 * @return Unique id of service, or <code>null</code> if it hasn't been
+	 *         provided.
 	 */
 	String getServiceUUID();
-	
+
 	/**
-	 * Returns the configuration
+	 * Returns the configuration type used to describe the endpoint.
 	 * 
-	 * @return
-	 * @see RemoteServiceConstants#REMOTE_CONFIGS_SUPPORTED
+	 * @return The configuration type.
+	 * @see RemoteServiceConstants#SERVICE_EXPORTED_CONFIGS
+	 * @see RemoteServiceConstants#SERVICE_IMPORTED_CONFIGS
+	 * @see DistributionProviderConstants#REMOTE_CONFIGS_SUPPORTED
 	 */
 	String getConfigurationType();
 
 	/**
-	 * Returns all service endpoint properties.
+	 * Returns all service endpoint properties. This map will include the
+	 * original service properties, potentially augmented by properties added by
+	 * the Distribution Provider to complete the metadata required on the
+	 * consuming side for the Configuration Type.
 	 * 
-	 * @return all properties of the service as a
-	 *         <code>Map (&lt;String, Object&gt;)</code>. The map is never
-	 *         <code>null</code> or empty but contains at least mandatory
-	 *         <code>ServicePublication</code> properties. Since
-	 *         <code>ServiceEndpointDescription</code> objects are immutable,
-	 *         the returned map is also not going to be updated at a later point
-	 *         of time.
+	 * @return An immutable Map(&lt;String, Object&gt;) containing all the
+	 *         properties. Never returns <code>null</code>.
 	 */
 	Map/* <String, Object> */getProperties();
 }

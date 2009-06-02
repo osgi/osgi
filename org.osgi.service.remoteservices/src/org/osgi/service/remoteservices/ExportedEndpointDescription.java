@@ -19,50 +19,34 @@ package org.osgi.service.remoteservices;
 import org.osgi.framework.ServiceReference;
 
 /**
- * Register a service implementing the <code>ServicePublication</code> interface
- * in order to publish metadata of a particular service (endpoint) via
- * Discovery. Metadata which has to be published is given in form of properties
- * at registration.
+ * Register a service implementing the <code>ExportedEndpointDescription</code>
+ * interface in order to publish metadata of a particular service (endpoint).
  * <p>
- * In order to update published service metadata, update the properties
- * registered with the <code>ServicePublication</code> service. Depending on
- * Discovery's implementation and underlying protocol it may result in an update
- * or new re-publication of the service.
+ * @@@ davidb: how do we do this now that these properties are no service properties
+ * any more?
+ * In order to update published service metadata, update the
+ * properties registered with the <code>ExportedEndpointDescription</code> service.
+ * Depending on Discovery's implementation and underlying protocol it may result
+ * in an update or new re-publication of the service.
  * <p>
  * In order to unpublish the previously published service metadata, unregister
- * the <code>ServicePublication</code> service.
- * <p>
- * Please note that providing the {@link #PROVIDED_INTERFACES} property is
- * mandatory when a <code>ServicePublication</code> service is registered. Note
- * also that a Discovery implementation may require provision of additional
- * properties, e.g. some of the standard properties defined below, or may make
- * special use of them in case they are provided. For example an SLP-based
- * Discovery might use the value provided with the {@link #ENDPOINT_URI}
- * property for construction of a SLP-URL used to publish the service.
- * <p>
- * Also important is that it's not guaranteed that after registering a
- * <code>ServicePublication</code> object its service metadata is actually
- * published. Beside the fact that at least one Discovery service has to be
- * present, the provided properties have to be valid, e.g. shouldn't contain
- * case variants of the same key name, and the actual publication via Discovery
- * mechanisms has to succeed.
+ * the <code>ExportedEndpointDescription</code> service.
  * 
  * @ThreadSafe
  * @version $Revision$
  */
 public interface ExportedEndpointDescription extends EndpointDescription {
-
 	/**
 	 * Mandatory ServiceRegistration property which contains a collection of
-	 * full qualified interface names offered by the advertised service
+	 * fully qualified interface names offered by the advertised service
 	 * endpoint.
 	 * <p>
-	 * Value of this property is of type
-	 * <code>Collection (&lt;String&gt;)</code>.
+	 * The value of this property is of type String, String[] or Collection of
+	 * String.
 	 * 
 	 * @see EndpointDescription#getInterfaceDescriptions()
 	 */
-	static final String	PROVIDED_INTERFACES	= "provided.interfaces";
+	static final String PROVIDED_INTERFACES = "provided.interfaces";
 
 	/**
 	 * Optional property of the published service identifying its location.
@@ -74,7 +58,7 @@ public interface ExportedEndpointDescription extends EndpointDescription {
 	 * 
 	 * @see EndpointDescription#getURI()
 	 */
-	static final String	ENDPOINT_URI		= "endpoint.uri";
+	static final String ENDPOINT_URI = "endpoint.uri";
 
 	/**
 	 * Returns the <code>ServiceReference</code> this publication metadata is
@@ -84,5 +68,4 @@ public interface ExportedEndpointDescription extends EndpointDescription {
 	 *         <code>null</code>.
 	 */
 	ServiceReference getLocalServiceReference();
-
 }
