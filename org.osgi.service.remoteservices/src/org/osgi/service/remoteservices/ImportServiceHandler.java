@@ -13,20 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.osgi.service.remoteservices;
 
 /**
- * Interface of trackers for discovered remote services.
+ * Interface of handlers for remote service metadata.
  * <p>
  * When a service implementing this interface is registered with the framework,
- * then <code>Discovery</code> will notify it about remote services matching one
- * of the provided criteria and will keep notifying it on changes of information
- * known to Discovery regarding this services.
- * 
- * <code>Discovery</code> may deliver notifications on discovered services to a
- * <code>ImportServiceHandler</code> out of order and may concurrently call
- * and/or reenter a <code>ImportServiceHandler</code>.
+ * it should be called back about remote services matching one of the provided
+ * criteria. Updates regarding the remote service should also be provided
+ * through the appropriate callbacks.
+ * <p>
+ * Notifications on discovered services may be delivered to a
+ * <code>ImportServiceHandler</code> out of order and may be concurrent.
  * 
  * @ThreadSafe
  * @version $Revision$
@@ -34,34 +32,35 @@ package org.osgi.service.remoteservices;
 public interface ImportServiceHandler {
 
 	/**
-	 * TODO fix name Optional ServiceRegistration property which contains
-	 * service interfaces this ImportServiceHandler is interested in.
+	 * Optional service property which contains service interfaces this
+	 * ImportServiceHandler is interested in.
 	 * <p>
-	 * Value of this property is of type
-	 * <code>Collection (&lt;String&gt;)</code>. May be <code>null</code> or
-	 * empty.
+	 * The value of this property is of type String, String[] or Collection of
+	 * String.
 	 */
-	public static final String	INTERFACE_MATCH_CRITERIA	= "osgi.remote.discovery.interest.interfaces";
+	public static final String MATCH_INTERFACES = "match.interfaces";
 
 	/**
-	 * TODO fix name Optional ServiceRegistration property which contains
-	 * filters for services this ImportServiceHandler is interested in.
+	 * Optional service properties which contains the filters of services the
+	 * <code>ImportServiceHandler<code> is interested in.  	 
 	 * <p>
 	 * Note that these filters need to take into account service publication
 	 * properties which are not necessarily the same as properties under which a
-	 * service is registered. See {@link ExportedEndpointDescription} for some standard
-	 * properties used to publish service metadata.
+	 * service is registered. See {@link ExportedEndpointDescription} for some
+	 * standard properties used to publish service metadata.
 	 * <p>
+	 * ### davidb: how do we do this now that we don't put this as a property on the exported 
+	 * service any more? Should we maybe add ExportedEndpointDescription.PROVIDED_INTERFACES_VERSION? ###
 	 * The following sample filter will make <code>Discovery</code> notify the
 	 * <code>ImportServiceHandler</code> about services providing interface
 	 * 'my.company.foo' of version '1.0.1.3':
-	 * <code>"(&amp;(service.interface=my.company.foo)(service.interface.version=my.company.foo|1.0.1.3))"</code>.
+	 * <code>"(&amp;(service.interface=my.company.foo)(service.interface.version=my.company.foo|1.0.1.3))"</code>
+	 * .
 	 * <p>
-	 * Value of this property is of type
-	 * <code>Collection (&lt;String&gt;)</code>. May be <code>null</code>. or
-	 * empty
+	 * The value of this property is of type String, String[] or Collection of
+	 * String.
 	 */
-	public static final String	FILTER_MATCH_CRITERIA		= "osgi.remote.discovery.interest.filters";
+	public static final String MATCH_FILTERS = "match.filters";
 
 	/**
 	 * Receives notification that information known to <code>Discovery</code>
@@ -76,8 +75,9 @@ public interface ImportServiceHandler {
 	 * about each of them. This can be done either by a single notification
 	 * callback or by multiple subsequent ones.
 	 * 
-	 * @param notification the <code>ImportServiceHandler</code> object. Is
-	 *        never <code>null</code>.
+	 * @param notification
+	 *            the <code>ImportServiceHandler</code> object. Is never
+	 *            <code>null</code>.
 	 * @return <code>true</code> if the handler processes the notification or
 	 *         <code>false</code> if the handler chooses not to process the
 	 *         notification.
@@ -97,10 +97,14 @@ public interface ImportServiceHandler {
 	 * about each of them. This can be done either by a single notification
 	 * callback or by multiple subsequent ones.
 	 * 
-	 * @param notification the <code>ImportServiceHandler</code> object. Is
-	 *        never <code>null</code>.
+	 * @param notification
+	 *            the <code>ImportServiceHandler</code> object. Is never
+	 *            <code>null</code>.
+	 * @return <code>true</code> if the handler processes the notification or
+	 *         <code>false</code> if the handler chooses not to process the
+	 *         notification.
 	 */
-	void modifyService(RemoteServiceNotification notification);
+	boolean modifyService(RemoteServiceNotification notification);
 
 	/**
 	 * Receives notification that information known to <code>Discovery</code>
@@ -115,8 +119,12 @@ public interface ImportServiceHandler {
 	 * about each of them. This can be done either by a single notification
 	 * callback or by multiple subsequent ones.
 	 * 
-	 * @param notification the <code>ImportServiceHandler</code> object. Is
-	 *        never <code>null</code>.
+	 * @param notification
+	 *            the <code>ImportServiceHandler</code> object. Is never
+	 *            <code>null</code>.
+	 * @return <code>true</code> if the handler processes the notification or
+	 *         <code>false</code> if the handler chooses not to process the
+	 *         notification.
 	 */
-	void unimportService(RemoteServiceNotification notification);
+	boolean unimportService(RemoteServiceNotification notification);
 }

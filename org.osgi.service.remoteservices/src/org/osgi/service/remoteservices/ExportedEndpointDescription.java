@@ -22,8 +22,8 @@ import org.osgi.framework.ServiceReference;
  * Register a service implementing the <code>ExportedEndpointDescription</code>
  * interface in order to publish metadata of a particular service (endpoint).
  * <p>
- * @@@ davidb: how do we do this now that these properties are no service properties
- * any more?
+ * ### davidb: how do we do this now that these properties are no service properties
+ * any more? ###
  * In order to update published service metadata, update the
  * properties registered with the <code>ExportedEndpointDescription</code> service.
  * Depending on Discovery's implementation and underlying protocol it may result

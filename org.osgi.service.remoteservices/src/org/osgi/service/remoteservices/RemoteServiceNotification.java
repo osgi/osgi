@@ -19,9 +19,7 @@ package org.osgi.service.remoteservices;
 import java.util.Collection;
 
 /**
- * Interface for notification on discovered remote services.
- * <p>
- * <code>RemoteServiceNotification</code> objects are immutable.
+ * Interface for notification on metadata of remote services.
  * 
  * @Immutable
  * @version $Revision$
@@ -29,18 +27,18 @@ import java.util.Collection;
 public interface RemoteServiceNotification {
 
 	/**
-	 * Returns information currently known to <code>Discovery</code> regarding
-	 * the service endpoint.
+	 * Returns the metadata of the remote service in the form of an
+	 * <code>EndpointDescription</code>.
 	 * 
-	 * @return metadata of the service <code>Discovery</code> notifies about. Is
-	 *         never <code>null</code>.
+	 * @return the {@link EndpointDescription} associated with this
+	 *         notification.
 	 */
 	EndpointDescription getEndpointDescription();
 
 	/**
 	 * Returns interface name criteria of the {@link ImportServiceHandler}
 	 * object matching with the interfaces of the
-	 * <code>ServiceEndpointDescription</code> and thus caused the notification.
+	 * <code>EndpointDescription</code> and thus caused the notification.
 	 * 
 	 * @return <code>Collection (&lt;String&gt;)</code> of matching interface
 	 *         name criteria of the <code>ImportServiceHandler</code> object
@@ -50,9 +48,9 @@ public interface RemoteServiceNotification {
 	Collection/* <String> */getMatchedInterfaces();
 
 	/**
-	 * Returns filters of the <code>ImportServiceHandler</code> object matching
-	 * with the properties of the <code>ServiceEndpointDescription</code> and
-	 * thus caused the notification.
+	 * Returns filters of the {@link ImportServiceHandler} object matching with
+	 * the properties of the <code>EndpointDescription</code> and thus caused
+	 * the notification.
 	 * 
 	 * @return <code>Collection (&lt;String&gt;)</code> of matching filters of
 	 *         the <code>ImportServiceHandler</code> object being notified, or
