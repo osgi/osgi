@@ -81,7 +81,10 @@ public class TransactionManagerFactory {
             }
         }
 
-        _tm = (TransactionManager) _context.getService(_tmRef);
+        if (_tmRef != null) {
+            _tm = (TransactionManager) _context.getService(_tmRef);
+        }
+       
         return _tm;
     }
 
