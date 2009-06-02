@@ -46,10 +46,10 @@ public class ConstantsUtil {
 
     // tw5 related
     public static final String OSGIBUNDLECONTEXT = "osgi-bundlecontext";
-    public static final String TESTLOGMSG = "test log ERROR by BundleContextTestServlet";
-    public static final String TESTLOGMSG2 = "test log WARNING by BundleContextTestServlet";
-    public static final String TESTLOGMSG3 = "test log INFO by BundleContextTestServlet";
-    public static final String TESTLOGMSG4 = "test log DEBUG by BundleContextTestServlet";
+    public static final String TESTLOGMSG = "test log ERROR";
+    public static final String TESTLOGMSG2 = "test log WARNING";
+    public static final String TESTLOGMSG3 = "test log INFO";
+    public static final String TESTLOGMSG4 = "test log DEBUG";
     public static final String ABLEGETLOG = "able to get the log from LogFactory";
     public static final String ABLEGETSIMPLEHELLO = "able to get the simple hello from org.osgi.test.cases.webcontainer.simple.jar";
     // tw1 related

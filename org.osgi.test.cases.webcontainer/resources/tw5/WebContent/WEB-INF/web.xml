@@ -3,7 +3,7 @@
 	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	id="WebApp_ID" version="2.5">
-	<display-name>TestWar1</display-name>
+	<display-name>TestWar5</display-name>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.htm</welcome-file>
@@ -33,5 +33,16 @@
 	<servlet-mapping>
 		<servlet-name>ClasspathTestServlet</servlet-name>
 		<url-pattern>/ClasspathTestServlet</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<description></description>
+		<display-name>JNDITestServlet</display-name>
+		<servlet-name>JNDITestServlet</servlet-name>
+		<servlet-class>
+			org.osgi.test.cases.webcontainer.tw5.servlet.JNDITestServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>JNDITestServlet</servlet-name>
+		<url-pattern>/JNDITestServlet</url-pattern>
 	</servlet-mapping>
 </web-app>

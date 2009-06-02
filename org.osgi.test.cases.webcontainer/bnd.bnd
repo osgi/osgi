@@ -57,6 +57,7 @@ Export-Package =\
 	org.eclipse.equinox.event; 			version=latest, \
 	osgi; version=latest
 # TODO add the ri bundle here
+# TODO add rfc142 impl bundle here if user wants to run some simple rfc 66 + rfc 142 tests
 	
 -runproperties = report=true, \
 	org.osgi.service.webcontainer.hostname=127.0.0.1, \

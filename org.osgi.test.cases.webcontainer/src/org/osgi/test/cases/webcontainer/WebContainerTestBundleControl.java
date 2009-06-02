@@ -236,7 +236,7 @@ public abstract class WebContainerTestBundleControl extends
     protected void checkTW5HomeResponse(String response) throws Exception {
         assertEquals(
                 response,
-                "<html><head><title>TestWar5</title></head><body>This is TestWar5.<P><A href=\"BundleTestServlet\">/BundleTestServlet</A><BR><A href=\"ClasspathTestServlet\">/ClasspathTestServlet</A><BR></P></body></html>");
+                "<html><head><title>TestWar5</title></head><body>This is TestWar5.<P><A href=\"BundleTestServlet\">/BundleTestServlet</A><BR><A href=\"ClasspathTestServlet\">/ClasspathTestServlet</A><BR><A href=\"JNDITestServlet\">/JNDITestServlet</A><BR></P></body></html>");
     }
     
     /* 
