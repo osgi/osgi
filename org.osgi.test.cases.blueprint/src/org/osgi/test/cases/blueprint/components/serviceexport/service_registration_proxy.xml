@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+        This defines a component that uses a ServiceRegistration for a service exported by the same context.
+    </description>
+
+    <!-- the node this service export maps into. -->
+    <bean id="ServiceTwoLocal" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
+       <argument value="ServiceTwoLocal"/>
+   </bean>
+
+    <reference id="refDependency" interface="org.osgi.test.cases.blueprint.services.TestServiceOne"/>
+
+    <!-- simple export using a reference and just one interface. -->
+    <service id="ServiceTwoService" ref="ServiceTwoLocal" interface="org.osgi.test.cases.blueprint.services.TestServiceTwo" depends-on="refDependency">
+        <description>Testing descriptions also</description>
+    </service>
+
+    <!-- the node this service export maps into. -->
+   <bean id="ServiceRegistrationChecker" class="org.osgi.test.cases.blueprint.components.serviceexport.ServiceRegistrationDependencyChecker" init-method="init">
+       <argument value="ServiceRegistrationChecker"/>
+       <property name="serviceManager">
+           <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
+       </property>
+       <property name="registration" ref="ServiceTwoService" />
+   </bean>
+</blueprint>
+

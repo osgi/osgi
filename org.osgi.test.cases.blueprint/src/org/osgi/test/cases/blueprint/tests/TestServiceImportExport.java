@@ -38,13 +38,13 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
      * Just a simple export/import test.  This will perform fairly full
      * metadata validation on both ends.
      */
-     public void testSingleInterfaceExport() throws Exception {
+    public void testSingleInterfaceExport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ServiceOne_import.jar",
-            getWebServer()+"www/ServiceOne_export.jar");
+                getWebServer()+"www/ServiceOne_import.jar",
+                getWebServer()+"www/ServiceOne_export.jar");
         // we add different validation stuff to each jar.  We'll start with the
         // export jar
         MetadataEventSet exportStartEvents = controller.getStartEvents(1);
@@ -59,7 +59,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
-            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
+                ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
 
@@ -68,7 +68,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
         // also validate the metadata for the imported service (this one only has a single import, so easy to locate)
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferencedService("ServiceOne", TestServiceOne.class,
-            ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, null, ReferencedService.DEFAULT_TIMEOUT)));
+                ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, null, ReferencedService.DEFAULT_TIMEOUT)));
         importStartEvents.addAssertion("ServiceOneConstructor", AssertionService.SERVICE_SUCCESS);
         importStartEvents.addAssertion("ServiceOneProperty", AssertionService.SERVICE_SUCCESS);
         // validate that the component is the correct type
@@ -79,7 +79,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // do some validation of the import metadata
         importStartEvents.addValidator(new ArgumentMetadataValidator("ServiceOneConstructor", new TestArgument[] {
             new StringArgument("ServiceOneConstructor"),
-            new ReferenceArgument("ServiceOne", TestServiceOne.class)
+                    new ReferenceArgument("ServiceOne", TestServiceOne.class)
         }));
 
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceOneProperty", new TestProperty[] {
@@ -107,8 +107,8 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ServiceOne_import.jar",
-            getWebServer()+"www/ServiceOne_prototype_export.jar");
+                getWebServer()+"www/ServiceOne_import.jar",
+                getWebServer()+"www/ServiceOne_prototype_export.jar");
         // we add different validation stuff to each jar.  We'll start with the
         // export jar
         MetadataEventSet exportStartEvents = controller.getStartEvents(1);
@@ -124,12 +124,12 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
-            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
+                ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
         // we should see a service event here indicating this was registered.  When this occurs, we'll
         // make a request from this bundle context.  This will trigger a second prototype to be created, and
         // also force the prototype bean to be immediately destroyed.
         exportStartEvents.addEvent(new ServiceTestEvent("REGISTERED", new Class[] {TestServiceOne.class}, null,
-            new ServiceRequestInitiator(getContext(), TestServiceOne.class, null)));
+                new ServiceRequestInitiator(getContext(), TestServiceOne.class, null)));
         // The dynamically request service instance is immediately returned, so we should see
         // a destroy call for the backing prototype component instance.
         exportStartEvents.addAssertion("ServiceOne", AssertionService.COMPONENT_DESTROY_METHOD);
@@ -139,7 +139,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
         // also validate the metadata for the imported service (this one only has a single import, so easy to locate)
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferencedService("ServiceOne", TestServiceOne.class,
-            ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, null, ReferencedService.DEFAULT_TIMEOUT)));
+                ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, null, ReferencedService.DEFAULT_TIMEOUT)));
         importStartEvents.addAssertion("ServiceOneConstructor", AssertionService.SERVICE_SUCCESS);
         importStartEvents.addAssertion("ServiceOneProperty", AssertionService.SERVICE_SUCCESS);
         // validate that the component is the correct type
@@ -150,7 +150,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // do some validation of the import metadata
         importStartEvents.addValidator(new ArgumentMetadataValidator("ServiceOneConstructor", new TestArgument[] {
             new StringArgument("ServiceOneConstructor"),
-            new ReferenceArgument("ServiceOne", TestServiceOne.class)
+                    new ReferenceArgument("ServiceOne", TestServiceOne.class)
         }));
 
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceOneProperty", new TestProperty[] {
@@ -170,19 +170,19 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
-	/**
-	 * This is referencing a single service that is qualified by component name.
+    /**
+     * This is referencing a single service that is qualified by component name.
      * There will be a second service registred for the same interface, but using a
      * different component.  We should pick up the correct service.
-	 */
-	public void testComponentQualifier() throws Exception {
+     */
+    public void testComponentQualifier() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.  The export jar will export both the target "good" service
         // and secondary "bad" service.  We should resolve to the good service.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ServiceOne_compid_import.jar",
-            getWebServer()+"www/ServiceOneBad_export.jar");
+                getWebServer()+"www/ServiceOne_compid_import.jar",
+                getWebServer()+"www/ServiceOneBad_export.jar");
         // we add different validation stuff to each jar.  We'll start with the
         // export jar
         MetadataEventSet exportStartEvents = controller.getStartEvents(1);
@@ -195,29 +195,29 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         serviceProps.put("serviceType", "Bad");
         serviceProps.put("autoExport", "All");
         exportStartEvents.addValidator(new ServiceRegistrationValidator(
-            new Class[] { TestServiceOne.class, TestServiceTwo.class, TestServiceTwoSubclass.class, TestServiceAllSubclass.class,
-                TestGoodService.class, TestGoodServiceSubclass.class, TestBadService.class, BaseTestComponent.class, ComponentTestInfo.class },
-           "BadService", null, serviceProps));
+                new Class[] { TestServiceOne.class, TestServiceTwo.class, TestServiceTwoSubclass.class, TestServiceAllSubclass.class,
+                    TestGoodService.class, TestGoodServiceSubclass.class, TestBadService.class, BaseTestComponent.class, ComponentTestInfo.class},
+                "BadService", null, serviceProps));
         // also validate the metadata for the exported service
         TestPropsValue metaServiceProps = new TestPropsValue();
         metaServiceProps.put("serviceType", "Bad");
         metaServiceProps.put("autoExport", "All");
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
-            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
+                ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
 
         // This is the metadata for the bad service, which specifies quite a few things, including a lazy-init on the component.
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("BadServiceService", null,
-            new Class[] { TestServiceOne.class, TestServiceTwo.class, TestServiceTwoSubclass.class, TestServiceAllSubclass.class,
-                TestGoodService.class, TestGoodServiceSubclass.class, TestBadService.class },
-            ServiceMetadata.AUTO_EXPORT_DISABLED, 2, metaServiceProps, null, null)));
+                new Class[] { TestServiceOne.class, TestServiceTwo.class, TestServiceTwoSubclass.class, TestServiceAllSubclass.class,
+                    TestGoodService.class, TestGoodServiceSubclass.class, TestBadService.class},
+                ServiceMetadata.AUTO_EXPORT_DISABLED, 2, metaServiceProps, null, null)));
         // we should see a service event here indicating this was registered
         Hashtable props2 = new Hashtable();
         props2.put("osgi.service.blueprint.compname", "ServiceOne");
         exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class, props2);
         // a very complex service event
         exportStartEvents.addServiceEvent("REGISTERED", new Class[] { TestServiceOne.class, TestServiceTwo.class,
-            TestServiceTwoSubclass.class, TestServiceAllSubclass.class, TestGoodService.class,
-            TestGoodServiceSubclass.class, TestBadService.class, BaseTestComponent.class, ComponentTestInfo.class }, serviceProps);
+                    TestServiceTwoSubclass.class, TestServiceAllSubclass.class, TestGoodService.class,
+                    TestGoodServiceSubclass.class, TestBadService.class, BaseTestComponent.class, ComponentTestInfo.class}, serviceProps);
 
         // now the importing side.  We've got a couple of service injections to validate, plus the injection
         // results
@@ -225,7 +225,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
         // we reuse this to validate multiple entities
         ReferencedService service = new ReferencedService(null, TestServiceOne.class,
-            ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, null, ReferencedService.DEFAULT_TIMEOUT);
+                ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, null, ReferencedService.DEFAULT_TIMEOUT);
 
         // also validate the metadata for the imported service (this one only has a single import, so easy to locate)
         importStartEvents.addValidator(new ReferencedServiceValidator(service));
@@ -234,7 +234,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // embedded elements, they're reuse the definition above
         importStartEvents.addValidator(new ArgumentMetadataValidator("ServiceOneConstructor", new TestArgument[] {
             new StringArgument("ServiceOneConstructor"),
-            new TestArgument(new TestComponentValue(service))
+                    new TestArgument(new TestComponentValue(service))
         }));
 
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceOneProperty", new TestProperty[] {
@@ -251,34 +251,34 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // we should see a service event here indicating this is being deregistered
         exportStopEvents.addServiceEvent("UNREGISTERING", TestServiceOne.class);
         exportStopEvents.addServiceEvent("UNREGISTERING", new Class[] { TestServiceOne.class, TestServiceTwo.class,
-            TestServiceTwoSubclass.class, TestServiceAllSubclass.class, TestGoodService.class,
-            TestGoodServiceSubclass.class, TestBadService.class }, serviceProps);
+                    TestServiceTwoSubclass.class, TestServiceAllSubclass.class, TestGoodService.class,
+                    TestGoodServiceSubclass.class, TestBadService.class}, serviceProps);
         // and there should not be a registration active anymore
         exportStopEvents.addValidator(new ServiceUnregistrationValidator(TestServiceOne.class, "(osgi.service.blueprint.compname=ServiceOne)"));
         // and make sure all of the bad ones are unregistered also
         exportStopEvents.addValidator(new ServiceUnregistrationValidator(
-            new Class[] { TestServiceOne.class, TestServiceTwo.class, TestServiceTwoSubclass.class, TestServiceAllSubclass.class,
-                TestGoodService.class, TestGoodServiceSubclass.class, TestBadService.class, BaseTestComponent.class, ComponentTestInfo.class },
-            "(osgi.service.blueprint.compname=BadService)"));
+                new Class[] { TestServiceOne.class, TestServiceTwo.class, TestServiceTwoSubclass.class, TestServiceAllSubclass.class,
+                    TestGoodService.class, TestGoodServiceSubclass.class, TestBadService.class, BaseTestComponent.class, ComponentTestInfo.class},
+                "(osgi.service.blueprint.compname=BadService)"));
 
         controller.run();
     }
 
 
-	/**
-	 * This is testing the using of the ranking qualifier for service matching.  Our good
+    /**
+     * This is testing the using of the ranking qualifier for service matching.  Our good
      * service will have a higher ranking than the "bad" service, so it should be resolved.
      * This is a lot like the component qualifier test, so we'll scale back the amount of
      * validity checking on this one (particuarly the processing of the "bad" service).
-	 */
-	public void testRankingQualifier() throws Exception {
+     */
+    public void testRankingQualifier() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.  The export jar will export both the target "good" service
         // and secondary "bad" service.  We should resolve to the good service.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ServiceOne_ranked_import.jar",
-            getWebServer()+"www/ServiceOne_ranked_export.jar");
+                getWebServer()+"www/ServiceOne_ranked_import.jar",
+                getWebServer()+"www/ServiceOne_ranked_export.jar");
 
         // we add different validation stuff to each jar.  We'll start with the
         // export jar
@@ -290,8 +290,8 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, "ServiceOne", null, serviceProps));
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService[] {
-                new ExportedService("GoodServiceService", "ServiceOne", TestServiceOne.class, ServiceMetadata.AUTO_EXPORT_DISABLED, 3, null, null, null),
-                new ExportedService("BadServiceService", null, TestServiceOne.class, ServiceMetadata.AUTO_EXPORT_ALL_CLASSES, 2, null, null, null)
+            new ExportedService("GoodServiceService", "ServiceOne", TestServiceOne.class, ServiceMetadata.AUTO_EXPORT_DISABLED, 3, null, null, null),
+                    new ExportedService("BadServiceService", null, TestServiceOne.class, ServiceMetadata.AUTO_EXPORT_ALL_CLASSES, 2, null, null, null)
         }));
 
         // we should see a service event here indicating this was registered
@@ -314,19 +314,19 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
-	/**
-	 * This is testing the use of a service filter to resolve service references.  Both our
+    /**
+     * This is testing the use of a service filter to resolve service references.  Both our
      * bad service and good service export similarly named properties with different values.
      * The service imports use a filter to narrow the service resolution to the good filter.
-	 */
-	public void testServicePropertyQualifier() throws Exception {
+     */
+    public void testServicePropertyQualifier() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.  The export jar will export both the target "good" service
         // and secondary "bad" service.  We should resolve to the good service.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ServiceOne_filtered_import.jar",
-            getWebServer()+"www/ServiceOne_property_export.jar");
+                getWebServer()+"www/ServiceOne_filtered_import.jar",
+                getWebServer()+"www/ServiceOne_property_export.jar");
         // we add different validation stuff to each jar.  We'll start with the
         // export jar
         MetadataEventSet exportStartEvents = controller.getStartEvents(1);
@@ -341,8 +341,8 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         metaServiceProps.put("autoExport", "Disabled");
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService [] {
-                new ExportedService("GoodServiceService", "ServiceOne", TestServiceOne.class, ServiceMetadata.AUTO_EXPORT_DISABLED, 0, metaServiceProps, null, null),
-                new ExportedService("BadServiceService", null, TestServiceOne.class, ServiceMetadata.AUTO_EXPORT_ALL_CLASSES, 2, null, null, null)
+            new ExportedService("GoodServiceService", "ServiceOne", TestServiceOne.class, ServiceMetadata.AUTO_EXPORT_DISABLED, 0, metaServiceProps, null, null),
+                    new ExportedService("BadServiceService", null, TestServiceOne.class, ServiceMetadata.AUTO_EXPORT_ALL_CLASSES, 2, null, null, null)
         }));
 
 
@@ -356,21 +356,21 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         importStartEvents.addAssertion("ServiceOneProperty", AssertionService.SERVICE_SUCCESS);
 
         ReferencedService service = new ReferencedService(null, TestServiceOne.class,
-            ServiceReferenceMetadata.AVAILABILITY_MANDATORY, "(serviceType=Good)", null, ReferencedService.DEFAULT_TIMEOUT);
+                ServiceReferenceMetadata.AVAILABILITY_MANDATORY, "(serviceType=Good)", null, ReferencedService.DEFAULT_TIMEOUT);
 
         // do some validation of the import metadata of the injected parameter.  Since these are
         // embedded elements, they're reuse the definition above
         importStartEvents.addValidator(new ArgumentMetadataValidator("ServiceOneConstructor", new TestArgument[] {
             new StringArgument("ServiceOneConstructor"),
-            new TestArgument(new TestComponentValue(service), TestServiceOne.class)
+                    new TestArgument(new TestComponentValue(service), TestServiceOne.class)
         }));
 
 
         service = new ReferencedService(null, TestServiceOne.class,
-            ServiceReferenceMetadata.AVAILABILITY_MANDATORY, "(!(serviceType=Bad))", null, ReferencedService.DEFAULT_TIMEOUT);
+                ServiceReferenceMetadata.AVAILABILITY_MANDATORY, "(!(serviceType=Bad))", null, ReferencedService.DEFAULT_TIMEOUT);
 
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceOneProperty",
-            new TestProperty(new TestComponentValue(service), "one")));
+                new TestProperty(new TestComponentValue(service), "one")));
 
         // now some expected termination stuff
         EventSet exportStopEvents = controller.getStopEvents(1);
@@ -389,10 +389,10 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
      *
      * @exception Exception
      */
-	public void testComplexServiceProperty() throws Exception {
+    public void testComplexServiceProperty() throws Exception {
         // we're only interested in the export here and validating the types
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ServiceOne_complex_property_export.jar");
+                getWebServer()+"www/ServiceOne_complex_property_export.jar");
         // we add different validation stuff to each jar.  We'll start with the
         // export jar
         MetadataEventSet exportStartEvents = controller.getStartEvents();
@@ -406,18 +406,18 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
-	/**
-	 * This tests the use of the "depends-on" attribute to ensure that dependent components are
+    /**
+     * This tests the use of the "depends-on" attribute to ensure that dependent components are
      * available.
-	 */
-	public void testDependsOnQualifier() throws Exception {
+     */
+    public void testDependsOnQualifier() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.  The export jar will export both the target "good" service
         // and secondary "bad" service.  We should resolve to the good service.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ServiceOne_import.jar",
-            getWebServer()+"www/ServiceOne_dependson_export.jar");
+                getWebServer()+"www/ServiceOne_import.jar",
+                getWebServer()+"www/ServiceOne_dependson_export.jar");
         // we add different validation stuff to each jar.  We'll start with the
         // export jar
         MetadataEventSet exportStartEvents = controller.getStartEvents(1);
@@ -425,7 +425,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, "ServiceOne"));
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("GoodServiceService", "ServiceOne", TestServiceOne.class,
-            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, new String[] { "Depends1", "Depends2"}, null)));
+                ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, new String[] { "Depends1", "Depends2"}, null)));
 
         // these are lazy-inited components, but we should see them get created
         // because of the depends-on attribute
@@ -452,30 +452,30 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
-	/**
-	 * This tests the use of multiple interfaces on both the import and export.
-	 */
-	public void testMultipleInterface() throws Exception {
+    /**
+     * This tests the use of multiple interfaces on both the import and export.
+     */
+    public void testMultipleInterface() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.  The export jar will export both the target "good" service
         // and secondary "bad" service.  We should resolve to the good service.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ServiceOne_multiple_import.jar",
-            getWebServer()+"www/ServiceOne_multiple_export.jar");
+                getWebServer()+"www/ServiceOne_multiple_import.jar",
+                getWebServer()+"www/ServiceOne_multiple_export.jar");
         // we add different validation stuff to each jar.  We'll start with the
         // export jar
         MetadataEventSet exportStartEvents = controller.getStartEvents(1);
         // Check the registration of both of these classes.  Note, the validation
         // requests each of these interface individually, but the properties should be the same for all.
-        exportStartEvents.addValidator(new ServiceRegistrationValidator(new Class[] { TestServiceOne.class, TestServiceTwo.class }, "ServiceOne"));
+        exportStartEvents.addValidator(new ServiceRegistrationValidator(new Class[] { TestServiceOne.class, TestServiceTwo.class}, "ServiceOne"));
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne",
-            new Class[] { TestServiceOne.class, TestServiceTwo.class },
-            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
+                new Class[] { TestServiceOne.class, TestServiceTwo.class},
+                ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
 
         // we should see a service event here indicating this was registered
-        exportStartEvents.addServiceEvent("REGISTERED", new Class[] { TestServiceOne.class, TestServiceTwo.class });
+        exportStartEvents.addServiceEvent("REGISTERED", new Class[] { TestServiceOne.class, TestServiceTwo.class});
 
         // now the importing side.  We've got a couple of service injections to validate, plus the injection
         // results
@@ -488,7 +488,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         importStartEvents.addAssertion("ServiceOneChecker", AssertionService.SERVICE_SUCCESS);
         importStartEvents.addAssertion("ServiceTwoChecker", AssertionService.SERVICE_SUCCESS);
         // validate each of the imported references
-        importStartEvents.addValidator(new ReferenceComponentValidator("ServiceOneMultiple", new Class[]  { TestServiceOne.class, TestServiceTwo.class } ));
+        importStartEvents.addValidator(new ReferenceComponentValidator("ServiceOneMultiple", new Class[]  { TestServiceOne.class, TestServiceTwo.class} ));
         importStartEvents.addValidator(new ReferenceComponentValidator("ServiceOne", TestServiceOne.class));
         importStartEvents.addValidator(new ReferenceComponentValidator("ServiceTwo", TestServiceTwo.class));
         // validate this is in the reference export list
@@ -499,40 +499,40 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // now some expected termination stuff
         EventSet exportStopEvents = controller.getStopEvents(1);
         // we should see a service event here indicating this is being deregistered
-        exportStopEvents.addServiceEvent("UNREGISTERING", new Class[] { TestServiceOne.class, TestServiceTwo.class });
+        exportStopEvents.addServiceEvent("UNREGISTERING", new Class[] { TestServiceOne.class, TestServiceTwo.class});
         // and there should not be a registration active anymore
-        exportStopEvents.addValidator(new ServiceUnregistrationValidator(new Class[] { TestServiceOne.class, TestServiceTwo.class },
-            "(osgi.service.blueprint.compname=ServiceOne)"));
+        exportStopEvents.addValidator(new ServiceUnregistrationValidator(new Class[] { TestServiceOne.class, TestServiceTwo.class},
+                "(osgi.service.blueprint.compname=ServiceOne)"));
 
         controller.run();
     }
 
 
-	/**
-	 * This tests the use of an imported registraton listener.
-	 */
-	public void testRegistrationListenerImport() throws Exception {
+    /**
+     * This tests the use of an imported registraton listener.
+     */
+    public void testRegistrationListenerImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.  The export jar will export both the target "good" service
         // and secondary "bad" service.  We should resolve to the good service.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ServiceOne_multiple_import.jar",
-            getWebServer()+"www/ServiceOne_service_listener.jar",
-            getWebServer()+"www/registration_listener_export.jar");
+                getWebServer()+"www/ServiceOne_multiple_import.jar",
+                getWebServer()+"www/ServiceOne_service_listener.jar",
+                getWebServer()+"www/registration_listener_export.jar");
         // we add different validation stuff to each jar.  We'll start with the
         // export jar
         MetadataEventSet exportStartEvents = controller.getStartEvents(1);
         // Check the registration of both of these classes.  Note, the validation
         // requests each of these interface individually, but the properties should be the same for all.
-        exportStartEvents.addValidator(new ServiceRegistrationValidator(new Class[] { TestServiceOne.class, TestServiceTwo.class }, "ServiceOne"));
+        exportStartEvents.addValidator(new ServiceRegistrationValidator(new Class[] { TestServiceOne.class, TestServiceTwo.class}, "ServiceOne"));
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne",
-            new Class[] { TestServiceOne.class, TestServiceTwo.class },
-            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
+                new Class[] { TestServiceOne.class, TestServiceTwo.class},
+                ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
 
         // we should see a service event here indicating this was registered
-        exportStartEvents.addServiceEvent("REGISTERED", new Class[] { TestServiceOne.class, TestServiceTwo.class });
+        exportStartEvents.addServiceEvent("REGISTERED", new Class[] { TestServiceOne.class, TestServiceTwo.class});
 
         // now the importing side.  We've got a couple of service injections to validate, plus the injection
         // results
@@ -545,7 +545,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         importStartEvents.addAssertion("ServiceOneChecker", AssertionService.SERVICE_SUCCESS);
         importStartEvents.addAssertion("ServiceTwoChecker", AssertionService.SERVICE_SUCCESS);
         // validate each of the imported references
-        importStartEvents.addValidator(new ReferenceComponentValidator("ServiceOneMultiple", new Class[]  { TestServiceOne.class, TestServiceTwo.class } ));
+        importStartEvents.addValidator(new ReferenceComponentValidator("ServiceOneMultiple", new Class[]  { TestServiceOne.class, TestServiceTwo.class} ));
         importStartEvents.addValidator(new ReferenceComponentValidator("ServiceOne", TestServiceOne.class));
         importStartEvents.addValidator(new ReferenceComponentValidator("ServiceTwo", TestServiceTwo.class));
         // validate this is in the reference export list
@@ -556,26 +556,26 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // now some expected termination stuff
         EventSet exportStopEvents = controller.getStopEvents(1);
         // we should see a service event here indicating this is being deregistered
-        exportStopEvents.addServiceEvent("UNREGISTERING", new Class[] { TestServiceOne.class, TestServiceTwo.class });
+        exportStopEvents.addServiceEvent("UNREGISTERING", new Class[] { TestServiceOne.class, TestServiceTwo.class});
         // and there should not be a registration active anymore
-        exportStopEvents.addValidator(new ServiceUnregistrationValidator(new Class[] { TestServiceOne.class, TestServiceTwo.class },
-            "(osgi.service.blueprint.compname=ServiceOne)"));
+        exportStopEvents.addValidator(new ServiceUnregistrationValidator(new Class[] { TestServiceOne.class, TestServiceTwo.class},
+                "(osgi.service.blueprint.compname=ServiceOne)"));
 
         controller.run();
     }
 
 
-	/**
-	 * This tests the use of concrete class implementations as the exported interface.
-	 */
-	public void testConcreteInterface() throws Exception {
+    /**
+     * This tests the use of concrete class implementations as the exported interface.
+     */
+    public void testConcreteInterface() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.  The export jar will export both the target "good" service
         // and secondary "bad" service.  We should resolve to the good service.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/Service_concrete_import.jar",
-            getWebServer()+"www/Service_concrete_export.jar");
+                getWebServer()+"www/Service_concrete_import.jar",
+                getWebServer()+"www/Service_concrete_export.jar");
         // we add different validation stuff to each jar.  We'll start with the
         // export jar
         MetadataEventSet exportStartEvents = controller.getStartEvents(1);
@@ -584,8 +584,8 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestGoodService.class, "ServiceOne"));
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne",
-            TestGoodService.class,
-            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
+                TestGoodService.class,
+                ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
 
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", TestGoodService.class);
@@ -603,43 +603,43 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStopEvents.addServiceEvent("UNREGISTERING", TestGoodService.class);
         // and there should not be a registration active anymore
         exportStopEvents.addValidator(new ServiceUnregistrationValidator(TestGoodService.class,
-            "(osgi.service.blueprint.compname=ServiceOne)"));
+                "(osgi.service.blueprint.compname=ServiceOne)"));
 
         controller.run();
     }
 
 
-	/**
-	 * This tests the auto export of implemented interfaces.
-	 */
-	public void testAutoInterface() throws Exception {
+    /**
+     * This tests the auto export of implemented interfaces.
+     */
+    public void testAutoInterface() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.  The export jar will export both the target "good" service
         // and secondary "bad" service.  We should resolve to the good service.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/Service_auto_interface_import.jar",
-            getWebServer()+"www/Service_auto_interface_export.jar");
+                getWebServer()+"www/Service_auto_interface_import.jar",
+                getWebServer()+"www/Service_auto_interface_export.jar");
         // we add different validation stuff to each jar.  We'll start with the
         // export jar
         MetadataEventSet exportStartEvents = controller.getStartEvents(1);
         // Verify all of these interfaces are registered as services for the named component.
         // requests each of these interface individually, but the properties should be the same for all.
         exportStartEvents.addValidator(new ServiceRegistrationValidator(
-            new Class[] { TestServiceOne.class, TestServiceTwo.class, TestServiceAllSubclass.class, ComponentTestInfo.class },
-            "ServiceInterfaces"));
+                new Class[] { TestServiceOne.class, TestServiceTwo.class, TestServiceAllSubclass.class, ComponentTestInfo.class},
+                "ServiceInterfaces"));
         // this is a belt-and-braces check to make sure only the interface classes were published
         exportStartEvents.addValidator(new ServiceUnregistrationValidator(
-            new Class[] { TestGoodService.class, TestGoodServiceSubclass.class, BaseTestComponent.class },
-            null));
+                new Class[] { TestGoodService.class, TestGoodServiceSubclass.class, BaseTestComponent.class},
+                null));
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceInterfacesService", "ServiceInterfaces",
-            new Class[] { TestServiceOne.class, TestServiceTwo.class, TestServiceAllSubclass.class, ComponentTestInfo.class },
-            ServiceMetadata.AUTO_EXPORT_INTERFACES, 0, null, null, null)));
+                new Class[] { TestServiceOne.class, TestServiceTwo.class, TestServiceAllSubclass.class, ComponentTestInfo.class},
+                ServiceMetadata.AUTO_EXPORT_INTERFACES, 0, null, null, null)));
 
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", new Class[] { TestServiceOne.class, TestServiceTwo.class,
-            TestServiceAllSubclass.class, ComponentTestInfo.class });
+                    TestServiceAllSubclass.class, ComponentTestInfo.class});
 
         // now the importing side.  We've got a couple of service injections to validate, plus the injection
         // results
@@ -653,47 +653,47 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         EventSet exportStopEvents = controller.getStopEvents(1);
         // we should see a service event here indicating this is being deregistered
         exportStopEvents.addServiceEvent("UNREGISTERING", new Class[] { TestServiceOne.class,
-            TestServiceTwo.class, TestServiceAllSubclass.class, ComponentTestInfo.class });
+                    TestServiceTwo.class, TestServiceAllSubclass.class, ComponentTestInfo.class});
         // and there should not be a registration active anymore
         exportStopEvents.addValidator(new ServiceUnregistrationValidator(
-            new Class[] { TestServiceOne.class, TestServiceTwo.class, TestServiceAllSubclass.class, ComponentTestInfo.class },
-            "(osgi.service.blueprint.compname=ServiceInterfaces)"));
+                new Class[] { TestServiceOne.class, TestServiceTwo.class, TestServiceAllSubclass.class, ComponentTestInfo.class},
+                "(osgi.service.blueprint.compname=ServiceInterfaces)"));
 
         controller.run();
     }
 
 
-	/**
-	 * This tests the auto export of concreate class hierarchy
-	 */
-	public void testAutoHierarchy() throws Exception {
+    /**
+     * This tests the auto export of concreate class hierarchy
+     */
+    public void testAutoHierarchy() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.  The export jar will export both the target "good" service
         // and secondary "bad" service.  We should resolve to the good service.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/Service_auto_hierarchy_import.jar",
-            getWebServer()+"www/Service_auto_hierarchy_export.jar");
+                getWebServer()+"www/Service_auto_hierarchy_import.jar",
+                getWebServer()+"www/Service_auto_hierarchy_export.jar");
         // we add different validation stuff to each jar.  We'll start with the
         // export jar
         MetadataEventSet exportStartEvents = controller.getStartEvents(1);
         // Verify all of these classes are registered as services for the named component.
         // requests each of these interface individually, but the properties should be the same for all.
         exportStartEvents.addValidator(new ServiceRegistrationValidator(
-            new Class[] { TestGoodService.class, TestGoodServiceSubclass.class, BaseTestComponent.class },
-            "ServiceClasses"));
+                new Class[] { TestGoodService.class, TestGoodServiceSubclass.class, BaseTestComponent.class},
+                "ServiceClasses"));
         // this is a belt-and-braces check to make sure only the hierarchy classes were published
         exportStartEvents.addValidator(new ServiceUnregistrationValidator(
-            new Class[] { TestServiceOne.class, TestServiceTwo.class, TestServiceAllSubclass.class, ComponentTestInfo.class },
-            null));
+                new Class[] { TestServiceOne.class, TestServiceTwo.class, TestServiceAllSubclass.class, ComponentTestInfo.class},
+                null));
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceClassesService", "ServiceClasses",
-            new Class[] { TestGoodService.class, TestGoodServiceSubclass.class, BaseTestComponent.class },
-            ServiceMetadata.AUTO_EXPORT_CLASS_HIERARCHY, 0, null, null, null)));
+                new Class[] { TestGoodService.class, TestGoodServiceSubclass.class, BaseTestComponent.class},
+                ServiceMetadata.AUTO_EXPORT_CLASS_HIERARCHY, 0, null, null, null)));
 
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", new Class[] { TestGoodService.class, TestGoodServiceSubclass.class,
-            BaseTestComponent.class });
+                    BaseTestComponent.class});
 
         // now the importing side.  We've got a couple of service injections to validate, plus the injection
         // results
@@ -706,46 +706,46 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         EventSet exportStopEvents = controller.getStopEvents(1);
         // we should see a service event here indicating this is being deregistered
         exportStopEvents.addServiceEvent("UNREGISTERING", new Class[] { TestGoodService.class, TestGoodServiceSubclass.class,
-            BaseTestComponent.class });
+                    BaseTestComponent.class});
         // and there should not be a registration active anymore
         exportStopEvents.addValidator(new ServiceUnregistrationValidator(
-            new Class[] { TestGoodService.class, TestGoodServiceSubclass.class, BaseTestComponent.class  },
-            "(osgi.service.blueprint.compname=ServiceClasses)"));
+                new Class[] { TestGoodService.class, TestGoodServiceSubclass.class, BaseTestComponent.class},
+                "(osgi.service.blueprint.compname=ServiceClasses)"));
 
         controller.run();
     }
 
 
-	/**
-	 * This tests the auto export of all interface and hierarchy classes
-	 */
-	public void testAutoAll() throws Exception {
+    /**
+     * This tests the auto export of all interface and hierarchy classes
+     */
+    public void testAutoAll() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.  The export jar will export both the target "good" service
         // and secondary "bad" service.  We should resolve to the good service.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/Service_auto_all_import.jar",
-            getWebServer()+"www/Service_auto_all_export.jar");
+                getWebServer()+"www/Service_auto_all_import.jar",
+                getWebServer()+"www/Service_auto_all_export.jar");
         // we add different validation stuff to each jar.  We'll start with the
         // export jar
         MetadataEventSet exportStartEvents = controller.getStartEvents(1);
         // Verify all of these classes are registered as services for the named component.
         // requests each of these interface individually, but the properties should be the same for all.
         exportStartEvents.addValidator(new ServiceRegistrationValidator(
-            new Class[] { TestGoodService.class, TestGoodServiceSubclass.class, BaseTestComponent.class,
-            TestServiceOne.class, TestServiceTwo.class, TestServiceAllSubclass.class, ComponentTestInfo.class },
-            "ServiceAll"));
+                new Class[] { TestGoodService.class, TestGoodServiceSubclass.class, BaseTestComponent.class,
+                    TestServiceOne.class, TestServiceTwo.class, TestServiceAllSubclass.class, ComponentTestInfo.class},
+                "ServiceAll"));
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceAllService", "ServiceAll",
-            new Class[] { TestGoodService.class, TestGoodServiceSubclass.class, BaseTestComponent.class,
-            TestServiceOne.class, TestServiceTwo.class, TestServiceAllSubclass.class, ComponentTestInfo.class },
-            ServiceMetadata.AUTO_EXPORT_ALL_CLASSES, 0, null, null, null)));
+                new Class[] { TestGoodService.class, TestGoodServiceSubclass.class, BaseTestComponent.class,
+                    TestServiceOne.class, TestServiceTwo.class, TestServiceAllSubclass.class, ComponentTestInfo.class},
+                ServiceMetadata.AUTO_EXPORT_ALL_CLASSES, 0, null, null, null)));
 
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED",
-            new Class[] { TestGoodService.class, TestGoodServiceSubclass.class, BaseTestComponent.class,
-            TestServiceOne.class, TestServiceTwo.class, TestServiceAllSubclass.class, ComponentTestInfo.class });
+                new Class[] { TestGoodService.class, TestGoodServiceSubclass.class, BaseTestComponent.class,
+                    TestServiceOne.class, TestServiceTwo.class, TestServiceAllSubclass.class, ComponentTestInfo.class});
 
         // now the importing side.  We've got a couple of service injections to validate, plus the injection
         // results
@@ -762,28 +762,28 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         EventSet exportStopEvents = controller.getStopEvents(1);
         // we should see a service event here indicating this is being deregistered
         exportStopEvents.addServiceEvent("UNREGISTERING",
-            new Class[] { TestGoodService.class, TestGoodServiceSubclass.class, BaseTestComponent.class,
-            TestServiceOne.class, TestServiceTwo.class, TestServiceAllSubclass.class, ComponentTestInfo.class });
+                new Class[] { TestGoodService.class, TestGoodServiceSubclass.class, BaseTestComponent.class,
+                    TestServiceOne.class, TestServiceTwo.class, TestServiceAllSubclass.class, ComponentTestInfo.class});
         // and there should not be a registration active anymore
         exportStopEvents.addValidator(new ServiceUnregistrationValidator(
-            new Class[] { TestGoodService.class, TestGoodServiceSubclass.class, BaseTestComponent.class,
-            TestServiceOne.class, TestServiceTwo.class, TestServiceAllSubclass.class, ComponentTestInfo.class },
-            "(osgi.service.blueprint.compname=ServiceAll)"));
+                new Class[] { TestGoodService.class, TestGoodServiceSubclass.class, BaseTestComponent.class,
+                    TestServiceOne.class, TestServiceTwo.class, TestServiceAllSubclass.class, ComponentTestInfo.class},
+                "(osgi.service.blueprint.compname=ServiceAll)"));
 
         controller.run();
     }
 
 
-	/*
-	 * Test accessing a service using an exported ServiceFactory instance.
-	 */
-	public void testFactoryExport() throws Exception {
+    /*
+     * Test accessing a service using an exported ServiceFactory instance.
+     */
+    public void testFactoryExport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ServiceOne_import.jar",
-            getWebServer()+"www/ServiceOne_factory_export.jar");
+                getWebServer()+"www/ServiceOne_import.jar",
+                getWebServer()+"www/ServiceOne_factory_export.jar");
         // we add different validation stuff to each jar.  We'll start with the
         // export jar
         MetadataEventSet exportStartEvents = controller.getStartEvents(1);
@@ -795,7 +795,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, "ServiceOneFactory"));
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneFactoryService", "ServiceOneFactory", TestServiceOne.class,
-            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
+                ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
 
@@ -804,7 +804,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
         // also validate the metadata for the imported service (this one only has a single import, so easy to locate)
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferencedService("ServiceOne", TestServiceOne.class,
-            ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, null, ReferencedService.DEFAULT_TIMEOUT)));
+                ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, null, ReferencedService.DEFAULT_TIMEOUT)));
         importStartEvents.addAssertion("ServiceOneConstructor", AssertionService.SERVICE_SUCCESS);
         importStartEvents.addAssertion("ServiceOneProperty", AssertionService.SERVICE_SUCCESS);
 
@@ -829,7 +829,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     public void testRegistrationInjection() throws Exception {
         // NB:  Only one jar for this test.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/Service_registration_injection.jar");
+                getWebServer()+"www/Service_registration_injection.jar");
         // we add different validation stuff to each jar.  We'll start with the
         // export jar
         MetadataEventSet exportStartEvents = controller.getStartEvents();
@@ -844,7 +844,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, "ServiceOne", null, props));
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
-            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
+                ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
         // this should be modified, and have the new service properties available.
@@ -867,7 +867,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     public void testInlineRegistrationInjection() throws Exception {
         // NB:  Only one jar for this test.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/inline_service_registration_injection.jar");
+                getWebServer()+"www/inline_service_registration_injection.jar");
         // we add different validation stuff to each jar.  We'll start with the
         // export jar
         MetadataEventSet exportStartEvents = controller.getStartEvents();
@@ -882,7 +882,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, null, null, props));
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService(null, null, TestServiceOne.class,
-            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
+                ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
         // this should be modified, and have the new service properties available.
@@ -899,17 +899,17 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
-	/**
-	 * Similar to the single import/export test, but the importing component
+    /**
+     * Similar to the single import/export test, but the importing component
      * receives the ServiceReference object, not the service
-	 */
-	public void testServiceReferenceInjection() throws Exception {
+     */
+    public void testServiceReferenceInjection() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/Service_reference_injection.jar",
-            getWebServer()+"www/ServiceOne_export.jar");
+                getWebServer()+"www/Service_reference_injection.jar",
+                getWebServer()+"www/ServiceOne_export.jar");
         // the exporting side has been widely tested and this test does nothing new,
         // adding anything to that so we can skip
 
@@ -921,16 +921,16 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
-	/**
-	 * Similar to the single import/export test, but the importing component
+    /**
+     * Similar to the single import/export test, but the importing component
      * receives the ServiceReference object.  However, since the service will not
      * be available, a null value will be injected.
-	 */
-	public void testServiceReferenceNullInjection() throws Exception {
+     */
+    public void testServiceReferenceNullInjection() throws Exception {
         // NB:  This only has a single jar because we're not dependent upon a service
         // being there.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/Service_reference_null_injection.jar");
+                getWebServer()+"www/Service_reference_null_injection.jar");
 
         // now the importing side.  We've got a couple of service injections to validate, plus the injection
         // results
@@ -940,22 +940,22 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
-	/**
-	 * Test that the dependency wait event message is sent out and that
+    /**
+     * Test that the dependency wait event message is sent out and that
      * satisfying the wait condition will allow things to proceed to
      * completion.
-	 */
-	public void testDependencyWait() throws Exception {
+     */
+    public void testDependencyWait() throws Exception {
         // We're only going to load one jar for this test.  The unstatisfied
         // dependency will be handled by a service that's registered when
         // the WAITING blueprint event is received.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ServiceOne_import.jar");
+                getWebServer()+"www/ServiceOne_import.jar");
 
         // create a ServiceManager instance with a single managed service.  This
         // will not be started initially.
         ServiceManager serviceManager = new ServiceManagerImpl(getContext(),
-            new ManagedService("ServiceOne", new TestGoodService("ServiceOne"), TestServiceOne.class, getContext(), null, false));
+                new ManagedService("ServiceOne", new TestGoodService("ServiceOne"), TestServiceOne.class, getContext(), null, false));
 
         // now the importing side.  The key event is the blueprint WAITING event.  We'll use that
         // to trigger the ServiceManager to register the required service
@@ -977,15 +977,15 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         controller.run();
     }
 
-	/*
-	 * Just a simple export/import with a registration listener.  This should see
+    /*
+     * Just a simple export/import with a registration listener.  This should see
      * the initial service registration and the final service unregistration
-	 */
-	public void testListenerExport() throws Exception {
+     */
+    public void testListenerExport() throws Exception {
         // We only do the export and then shut this back down again.  That will
         // cause the events of interests to be fired.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ServiceOne_listener_export.jar");
+                getWebServer()+"www/ServiceOne_listener_export.jar");
         // We're really only interesting the listener events, but we'll take a look
         // at the metadata as well
         MetadataEventSet exportStartEvents = controller.getStartEvents();
@@ -1000,7 +1000,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
             new TestRegistrationListener("ServiceOneListener", "registered", "unregistered")
         };
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
-            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, listeners)));
+                ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, listeners)));
 
         // now some expected termination stuff
         EventSet exportStopEvents = controller.getStopEvents();
@@ -1009,15 +1009,15 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         controller.run();
     }
 
-	/**
-	 * A test to verify that an exported component can service as a listener to its
+    /**
+     * A test to verify that an exported component can service as a listener to its
      * own service registration/unregistration.
-	 */
-	public void testCircularListenerExport() throws Exception {
+     */
+    public void testCircularListenerExport() throws Exception {
         // We only do the export and then shut this back down again.  That will
         // cause the events of interests to be fired.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/circular_listener_export.jar");
+                getWebServer()+"www/circular_listener_export.jar");
         // We're really only interesting the listener events, but we'll take a look
         // at the metadata as well
         MetadataEventSet exportStartEvents = controller.getStartEvents();
@@ -1032,7 +1032,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
             new TestRegistrationListener("ServiceOneListener", "registered", "unregistered")
         };
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOneListener", TestServiceOne.class,
-            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, listeners)));
+                ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, listeners)));
 
         // now some expected termination stuff
         EventSet exportStopEvents = controller.getStopEvents();
@@ -1041,16 +1041,16 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         controller.run();
     }
 
-	/**
-	 * Just a export a service with multiple registration listeners.
+    /**
+     * Just a export a service with multiple registration listeners.
      * The service exports multiple interfaces, and has one listener for each
      * interface.
-	 */
-	public void testMultipleListenerExport() throws Exception {
+     */
+    public void testMultipleListenerExport() throws Exception {
         // We only do the export and then shut this back down again.  That will
         // cause the events of interests to be fired.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ServiceOne_multiple_listener_export.jar");
+                getWebServer()+"www/ServiceOne_multiple_listener_export.jar");
         // We're really only interesting the listener events, but we'll take a look
         // at the metadata as well
         MetadataEventSet exportStartEvents = controller.getStartEvents();
@@ -1069,10 +1069,10 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // we're expecting some listener metadata on the export.
         TestRegistrationListener[] listeners = new TestRegistrationListener[] {
             new TestRegistrationListener("ServiceOneListener", "registered", "unregistered"),
-            new TestRegistrationListener("ServiceTwoListener", "registered", "unregistered")
+                    new TestRegistrationListener("ServiceTwoListener", "registered", "unregistered")
         };
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
-            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, listeners)));
+                ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, listeners)));
 
         // now some expected termination stuff
         EventSet exportStopEvents = controller.getStopEvents();
@@ -1082,16 +1082,16 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         controller.run();
     }
 
-	/**
-	 * Just a export a service with a single registration listener that implements
+    /**
+     * Just a export a service with a single registration listener that implements
      * multiple matching registration/unregistration methods.  These will match
      * the different interfaces exported for the service.
-	 */
-	public void testMultipleListenerMethodExport() throws Exception {
+     */
+    public void testMultipleListenerMethodExport() throws Exception {
         // We only do the export and then shut this back down again.  That will
         // cause the events of interests to be fired.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ServiceOne_multiple_listener_method_export.jar");
+                getWebServer()+"www/ServiceOne_multiple_listener_method_export.jar");
         // We're really only interesting the listener events, but we'll take a look
         // at the metadata as well
         MetadataEventSet exportStartEvents = controller.getStartEvents();
@@ -1114,7 +1114,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
             new TestRegistrationListener(null, "registered", "unregistered"),
         };
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
-            ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, listeners)));
+                ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, listeners)));
 
         // now some expected termination stuff
         EventSet exportStopEvents = controller.getStopEvents();
@@ -1125,18 +1125,18 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
-	/**
-	 * A service listener test.  This should only see calls on startup and shutdown.
+    /**
+     * A service listener test.  This should only see calls on startup and shutdown.
      * This is the same as the test above, but the listener is an imported service
-	 */
-	public void testServiceImportedListenerImport() throws Exception {
+     */
+    public void testServiceImportedListenerImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ServiceOne_service_listener_import.jar",
-            getWebServer()+"www/ServiceOne_export.jar",
-            getWebServer()+"www/reference_listener_export.jar");
+                getWebServer()+"www/ServiceOne_service_listener_import.jar",
+                getWebServer()+"www/ServiceOne_export.jar",
+                getWebServer()+"www/reference_listener_export.jar");
         // The export jar has been well covered already in other tests.  We'll just focus
         // on the import listener details.
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1146,7 +1146,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         };
         // validate the metadata for the imported service (this one only has a single import, so easy to locate)
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferencedService("ServiceOne", TestServiceOne.class,
-            ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, listeners, ReferencedService.DEFAULT_TIMEOUT)));
+                ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, listeners, ReferencedService.DEFAULT_TIMEOUT)));
         // the first property comes from the called method signature, the
         // second should be passed to the registration listener.
         Hashtable props = new Hashtable();
@@ -1162,17 +1162,17 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
-	/*
-	 * A service listener test.  Similar to the above, but the listener also has the service
+    /*
+     * A service listener test.  Similar to the above, but the listener also has the service
      * injected, thus creating a circular reference.  The spec guarantees this will work.
-	 */
-	public void testCircularServiceListenerImport() throws Exception {
+     */
+    public void testCircularServiceListenerImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/circular_listener_import.jar",
-            getWebServer()+"www/ServiceOne_export.jar");
+                getWebServer()+"www/circular_listener_import.jar",
+                getWebServer()+"www/ServiceOne_export.jar");
         // The export jar has been well covered already in other tests.  We'll just focus
         // on the import listener details.
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1182,7 +1182,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         };
         // validate the metadata for the imported service (this one only has a single import, so easy to locate)
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferencedService("ServiceOne", TestServiceOne.class,
-            ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, listeners, ReferencedService.DEFAULT_TIMEOUT)));
+                ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, listeners, ReferencedService.DEFAULT_TIMEOUT)));
         // the first property comes from the called method signature, the
         // second should be passed to the registration listener.
         Hashtable props = new Hashtable();
@@ -1198,16 +1198,16 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
-	/*
-	 * A service listener test.  This should only see calls on startup and shutdown.
-	 */
-	public void testServiceMultipleListenerImport() throws Exception {
+    /*
+     * A service listener test.  This should only see calls on startup and shutdown.
+     */
+    public void testServiceMultipleListenerImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ServiceOne_multiple_listener_import.jar",
-            getWebServer()+"www/ServiceOne_multiple_export.jar");
+                getWebServer()+"www/ServiceOne_multiple_listener_import.jar",
+                getWebServer()+"www/ServiceOne_multiple_export.jar");
         // The export jar has been well covered already in other tests.  We'll just focus
         // on the import listener details.
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1215,11 +1215,11 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         BindingListener[] listeners = new BindingListener[] {
             new BindingListener("ServiceOneListener", "bind", "unbind"),
             // this is done with an inner component
-            new BindingListener(new TestComponentValue(new BeanComponent(null, ServiceTwoListener.class, null, null)), "bind", "unbind"),
+                    new BindingListener(new TestComponentValue(new BeanComponent(null, ServiceTwoListener.class, null, null)), "bind", "unbind"),
         };
         // validate the metadata for the imported service (this one only has a single import, so easy to locate)
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferencedService("ServiceOne", TestServiceOne.class,
-            ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, listeners, ReferencedService.DEFAULT_TIMEOUT)));
+                ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, listeners, ReferencedService.DEFAULT_TIMEOUT)));
         // the first property comes from the called method signature, the
         // second should be passed to the registration listener.
         Hashtable props1 = new Hashtable();
@@ -1242,16 +1242,16 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
-	/*
-	 * A service listener test.  This should only see calls on startup and shutdown.
-	 */
-	public void testServiceMultipleListenerMethodImport() throws Exception {
+    /*
+     * A service listener test.  This should only see calls on startup and shutdown.
+     */
+    public void testServiceMultipleListenerMethodImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ServiceOne_multiple_listener_method_import.jar",
-            getWebServer()+"www/ServiceOne_multiple_export.jar");
+                getWebServer()+"www/ServiceOne_multiple_listener_method_import.jar",
+                getWebServer()+"www/ServiceOne_multiple_export.jar");
         // The export jar has been well covered already in other tests.  We'll just focus
         // on the import listener details.
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1261,7 +1261,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         };
         // validate the metadata for the imported service (this one only has a single import, so easy to locate)
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferencedService("ServiceOne", TestServiceOne.class,
-            ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, listeners, ReferencedService.DEFAULT_TIMEOUT)));
+                ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, listeners, ReferencedService.DEFAULT_TIMEOUT)));
         // the first property comes from the called method signature, the
         // second should be passed to the registration listener.
         Hashtable props1 = new Hashtable();
@@ -1284,16 +1284,16 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
-	/*
-	 * A service listener test.  This uses the ServiceReference signature form.
-	 */
-	public void testServiceListenerReferenceMethodImport() throws Exception {
+    /*
+     * A service listener test.  This uses the ServiceReference signature form.
+     */
+    public void testServiceListenerReferenceMethodImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ServiceOne_listener_reference_method_import.jar",
-            getWebServer()+"www/ServiceOne_multiple_export.jar");
+                getWebServer()+"www/ServiceOne_listener_reference_method_import.jar",
+                getWebServer()+"www/ServiceOne_multiple_export.jar");
         // The export jar has been well covered already in other tests.  We'll just focus
         // on the import listener details.
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1303,7 +1303,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         };
         // validate the metadata for the imported service (this one only has a single import, so easy to locate)
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferencedService("ServiceOne", TestServiceOne.class,
-            ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, listeners, ReferencedService.DEFAULT_TIMEOUT)));
+                ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, listeners, ReferencedService.DEFAULT_TIMEOUT)));
         // the first property comes from the called method signature, the
         // second should be passed to the registration listener.
         Hashtable props1 = new Hashtable();
@@ -1318,16 +1318,16 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
-	/*
-	 * This tests the behavior of unregistered manadatory services and
-	 */
-	public void testUnregisteredServiceDependency() throws Exception {
+    /*
+     * This tests the behavior of unregistered manadatory services and
+     */
+    public void testUnregisteredServiceDependency() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/unregistered_dependency_import.jar",
-            getWebServer()+"www/managed_one_service_export.jar");
+                getWebServer()+"www/unregistered_dependency_import.jar",
+                getWebServer()+"www/managed_one_service_export.jar");
         // The export jar has been well covered already in other tests.  We'll just focus
         // on the import listener details.
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1356,16 +1356,16 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
-	/**
-	 * This tests the behavior of manadatory services unregistering after module completion.
+    /**
+     * This tests the behavior of manadatory services unregistering after module completion.
      * This variation tests replacing the service with another suitable service.
-	 */
-	public void testReplacementServiceDependency() throws Exception {
+     */
+    public void testReplacementServiceDependency() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/replacement_dependency_import.jar");
+                getWebServer()+"www/replacement_dependency_import.jar");
 
         controller.addSetupBundle(getWebServer()+"www/managed_replacement_dependency_export.jar");
 
@@ -1384,26 +1384,26 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
-	/**
-	 * This tests the behavior of manadatory services unregistering after module completion.
+    /**
+     * This tests the behavior of manadatory services unregistering after module completion.
      * This service proxy will need to wait for a replacement to be registered.
-	 */
-	public void testWaitingServiceDependency() throws Exception {
+     */
+    public void testWaitingServiceDependency() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/replacement_dependency_import.jar");
+                getWebServer()+"www/replacement_dependency_import.jar");
 
         // create a ServiceManager instance with two instances of an injected service.
         // we will register both, and the test will unregister the first.
         ServiceManager serviceManager = new ServiceManagerImpl(getContext(),
-            new ManagedService[] {
-                // this one is registered from the start
-                new ManagedService("ServiceOneA", new TestGoodService("ServiceOneA"), TestServiceOne.class, getContext(), null, true),
-                // this one gets registered as a replacement
-                new ManagedService("ServiceOneB", new TestGoodService("ServiceOneB"), TestServiceOne.class, getContext(), null, false)
-            });
+                new ManagedService[] {
+            // this one is registered from the start
+            new ManagedService("ServiceOneA", new TestGoodService("ServiceOneA"), TestServiceOne.class, getContext(), null, true),
+            // this one gets registered as a replacement
+                    new ManagedService("ServiceOneB", new TestGoodService("ServiceOneB"), TestServiceOne.class, getContext(), null, false)
+        });
 
         // make this registered
         serviceManager.register();
@@ -1429,16 +1429,16 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
-	/*
-	 * This tests the behavior of optional availability services and listener events.
-	 */
-	public void testUnavailableServiceDependency() throws Exception {
+    /*
+     * This tests the behavior of optional availability services and listener events.
+     */
+    public void testUnavailableServiceDependency() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/unavailable_dependency_import.jar",
-            getWebServer()+"www/managed_one_unavailable_service_export.jar");
+                getWebServer()+"www/unavailable_dependency_import.jar",
+                getWebServer()+"www/managed_one_unavailable_service_export.jar");
         // The export jar has been well covered already in other tests.  We'll just focus
         // on the import listener details.
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1466,18 +1466,18 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
-	/**
-	 * This tests the behavior of optional availability services and listener events.
+    /**
+     * This tests the behavior of optional availability services and listener events.
      * This is the same ad testUnavailableServiceDependency(), but the availability and
      * timeout options are specified using the components default-* attributes.
-	 */
-	public void testUnavailableServiceDefaultDependency() throws Exception {
+     */
+    public void testUnavailableServiceDefaultDependency() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/unavailable_dependency_default_import.jar",
-            getWebServer()+"www/managed_one_unavailable_service_export.jar");
+                getWebServer()+"www/unavailable_dependency_default_import.jar",
+                getWebServer()+"www/managed_one_unavailable_service_export.jar");
         // The export jar has been well covered already in other tests.  We'll just focus
         // on the import listener details.
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1505,16 +1505,16 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
-	/*
-	 * This tests the behavior of a service rebind to an alternative service.
-	 */
-	public void testServiceRebind() throws Exception {
+    /*
+     * This tests the behavior of a service rebind to an alternative service.
+     */
+    public void testServiceRebind() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/rebound_dependency_import.jar",
-            getWebServer()+"www/managed_two_service_export.jar");
+                getWebServer()+"www/rebound_dependency_import.jar",
+                getWebServer()+"www/managed_two_service_export.jar");
         // The export jar has been well covered already in other tests.  We'll just focus
         // on the import listener details.
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1547,6 +1547,26 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // the final UNBIND operation on module context shutdown.  This needs to be for the replacement
         // service, since that is the one currently bound.
         importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, props2));
+        controller.run();
+    }
+
+
+    /*
+     * This tests the damping behavior of ServiceRegistration proxies
+     */
+    public void testServiceRegistrationProxy() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/service_registration_proxy.jar",
+                getWebServer()+"www/managed_one_service_export.jar");
+        // The export jar has been well covered already in other tests.  We'll just focus
+        // on the import listener details.
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+        // metadata issues have been well tested elsewhere.  We're going to focus on the service dynamics.
+        // this indicates successful completion of the test phase
+        importStartEvents.addAssertion("ServiceRegistrationChecker", AssertionService.COMPONENT_INIT_METHOD);
         controller.run();
     }
 }

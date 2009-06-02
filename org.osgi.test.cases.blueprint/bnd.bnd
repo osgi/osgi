@@ -203,6 +203,7 @@ Include-Resource					= \
  	www/Service_auto_all_import.jar=Service_auto_all_import.jar, \
  	www/ServiceOne_factory_export.jar=ServiceOne_factory_export.jar, \
  	www/Service_registration_injection.jar=Service_registration_injection.jar, \
+ 	www/service_registration_proxy.jar=service_registration_proxy.jar, \
  	www/inline_service_registration_injection.jar=inline_service_registration_injection.jar, \
  	www/Service_reference_injection.jar=Service_reference_injection.jar, \
  	www/Service_reference_null_injection.jar=Service_reference_null_injection.jar, \
