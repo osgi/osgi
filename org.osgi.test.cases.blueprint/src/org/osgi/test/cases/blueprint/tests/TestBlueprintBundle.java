@@ -37,12 +37,12 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * @version $Revision$
  */
 public class TestBlueprintBundle extends DefaultTestBundleControl {
-	/*
-	 * Tests a simple managed bundle with a single component, no explicit header specified.
-	 */
-	public void testStartComponentDefault() throws Exception {
+    /**
+     * Tests a simple managed bundle with a single component, no explicit header specified.
+     */
+    public void testStartComponentDefault() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/comp1_no_header.jar");
+                getWebServer()+"www/comp1_no_header.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
         startEvents.addAssertion("comp1", AssertionService.COMPONENT_CREATED);
         startEvents.validateComponent("comp1", SimpleTestComponent.class);
@@ -52,30 +52,31 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
 
         // and the validate the component metadata
         startEvents.addValidator(new ComponentMetadataValidator(
-            new BeanComponent("comp1", SimpleTestComponent.class, new TestArgument[0], null)));
+                new BeanComponent("comp1", SimpleTestComponent.class, new TestArgument[0], null)));
 
         controller.run();
     }
 
-	/*
-	 * Single control file, referenced by an explicit header using "*.xml" in the path.
-	 */
-	public void testStartComponentWildcard() throws Exception {
+    /**
+     * Single control file, referenced by an explicit header using "*.xml" in the path.
+     */
+    public void testStartComponentWildcard() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/comp1_wildcard_header.jar");
+                getWebServer()+"www/comp1_wildcard_header.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
         startEvents.addAssertion("comp1", AssertionService.COMPONENT_CREATED);
         startEvents.validateComponent("comp1", SimpleTestComponent.class);
         controller.run();
 
     }
-	/*
-	 * Tests no explicit header specified, multiple control files in the OSGI-INF directory,
+
+    /**
+     * Tests no explicit header specified, multiple control files in the OSGI-INF directory,
      * each configuring a component
-	 */
-	public void testStartComponentMultiple() throws Exception {
+     */
+    public void testStartComponentMultiple() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/comp1a_no_header.jar");
+                getWebServer()+"www/comp1a_no_header.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
         startEvents.addAssertion("comp1", AssertionService.COMPONENT_CREATED);
         startEvents.addAssertion("comp2", AssertionService.COMPONENT_CREATED);
@@ -88,22 +89,23 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
 
         // and the meta data for both components
         startEvents.addValidator(new ComponentMetadataValidator(
-            new BeanComponent("comp1", SimpleTestComponent.class, new TestArgument[] {
-            new StringArgument("comp1") } , null)));
+                new BeanComponent("comp1", SimpleTestComponent.class, new TestArgument[] {
+            new StringArgument("comp1")} , null)));
 
         startEvents.addValidator(new ComponentMetadataValidator(
-            new BeanComponent("comp2", SimpleTestComponent.class, new TestArgument[] {
-            new StringArgument("comp2") } , null)));
+                new BeanComponent("comp2", SimpleTestComponent.class, new TestArgument[] {
+            new StringArgument("comp2")} , null)));
         controller.run();
     }
 
-	/*
-	 * Tests an explicitly specified config file on the header with more than two files
+
+    /**
+     * Tests an explicitly specified config file on the header with more than two files
      * in the OSGI-INF/blueprint directory.  Only one file should be picked up
-	 */
-	public void testStartComponentExplicit() throws Exception {
+     */
+    public void testStartComponentExplicit() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/comp1_explicit_config.jar");
+                getWebServer()+"www/comp1_explicit_config.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
         startEvents.addAssertion("comp1", AssertionService.COMPONENT_CREATED);
         startEvents.validateComponent("comp1", SimpleTestComponent.class);
@@ -112,13 +114,14 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         controller.run();
     }
 
-	/*
-	 * Tests two explicitly specified config files on the header with attributes or directives
+
+    /**
+     * Tests two explicitly specified config files on the header with attributes or directives
      * included in the syntax.  The attributes should be ignored.
-	 */
-	public void testStartComponentAttributes() throws Exception {
+     */
+    public void testStartComponentAttributes() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/comp1_attributes.jar");
+                getWebServer()+"www/comp1_attributes.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
         startEvents.addAssertion("comp1", AssertionService.COMPONENT_CREATED);
         startEvents.addAssertion("comp2", AssertionService.COMPONENT_CREATED);
@@ -127,15 +130,16 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         controller.run();
     }
 
-	/*
-	 * Tests two explicitly specified config files on the header with attributes or directives
+
+    /**
+     * Tests two explicitly specified config files on the header with attributes or directives
      * included in the syntax.  The multiple paths are part of the same syntactic unit as the
      * directives and attributes rather than being separated by commans.  Both files should be processed
      * and the attributes ignored. .
-	 */
-	public void testStartComponentAttributes2() throws Exception {
+     */
+    public void testStartComponentAttributes2() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/comp1_attributes2.jar");
+                getWebServer()+"www/comp1_attributes2.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
         startEvents.addAssertion("comp1", AssertionService.COMPONENT_CREATED);
         startEvents.addAssertion("comp2", AssertionService.COMPONENT_CREATED);
@@ -144,13 +148,14 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         controller.run();
     }
 
-	/*
-	 * Tests an explicitly specified config file on the header located in a directory other
+
+    /**
+     * Tests an explicitly specified config file on the header located in a directory other
      * than OSGI-INF/blueprint directory.  Only one file should be picked up
-	 */
-	public void testStartComponentDifferentDir() throws Exception {
+     */
+    public void testStartComponentDifferentDir() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/comp1_different_dir.jar");
+                getWebServer()+"www/comp1_different_dir.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
         startEvents.addAssertion("comp1", AssertionService.COMPONENT_CREATED);
         startEvents.validateComponent("comp1", SimpleTestComponent.class);
@@ -159,30 +164,35 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         controller.run();
     }
 
-	/*
-	 * Tests a simple managed bundle with a single component, no component id specified.
-	 */
-	public void testNoNameDefault() throws Exception {
+
+    /**
+     * Tests a simple managed bundle with a single component, no component id specified.
+     */
+    public void testNoNameDefault() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/comp1_no_name.jar");
+                getWebServer()+"www/comp1_no_name.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
         startEvents.addAssertion("comp1", AssertionService.COMPONENT_CREATED);
 
         // and the validate the component metadata.  The wildcard indicates
         // we're looking for the nearest match
         startEvents.addValidator(new ComponentMetadataValidator(
-            new BeanComponent("*", SimpleTestComponent.class, new TestArgument[] {
-            new StringArgument("comp1") } , null)));
+                new BeanComponent("*", SimpleTestComponent.class, new TestArgument[] {
+            new StringArgument("comp1")} , null)));
+
+        // validate that the correct anonymous compoents were created
+        startEvents.addValidator(new AnonymousComponentValidator(BeanMetadata.class));
 
         controller.run();
     }
 
-	/*
+
+    /**
      * Tests a bundle with a number of different init/destroy combinations
-	 */
-	public void testInitDestroy() throws Exception {
+     */
+    public void testInitDestroy() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/comp1_init_destroy.jar");
+                getWebServer()+"www/comp1_init_destroy.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
         // this creates several components with different init/destroy combos.
         startEvents.addAssertion("comp1", AssertionService.COMPONENT_CREATED);
@@ -194,16 +204,16 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
 
         // validate the metadata for all components
         startEvents.addValidator(new ComponentMetadataValidator(
-            new BeanComponent("comp1", SimpleTestComponent.class, "init", null,
-            new TestArgument[] { new StringArgument("comp1") } , null)));
+                new BeanComponent("comp1", SimpleTestComponent.class, "init", null,
+                new TestArgument[] { new StringArgument("comp1")} , null)));
 
         startEvents.addValidator(new ComponentMetadataValidator(
-            new BeanComponent("comp2", SimpleTestComponent.class, null, "destroy",
-            new TestArgument[] { new StringArgument("comp2") } , null)));
+                new BeanComponent("comp2", SimpleTestComponent.class, null, "destroy",
+                new TestArgument[] { new StringArgument("comp2")} , null)));
 
         startEvents.addValidator(new ComponentMetadataValidator(
-            new BeanComponent("comp3", SimpleTestComponent.class, "init", "destroy",
-            new TestArgument[] { new StringArgument("comp3") } , null)));
+                new BeanComponent("comp3", SimpleTestComponent.class, "init", "destroy",
+                new TestArgument[] { new StringArgument("comp3")} , null)));
 
         // stop events occur at the end
         EventSet stopEvents = controller.getStopEvents();
@@ -213,26 +223,27 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         controller.run();
     }
 
-	/*
-	 * Tests a static factory with different name/id combinations.
-	 */
-	public void testStaticFactory() throws Exception {
+
+    /**
+     * Tests a static factory with different name/id combinations.
+     */
+    public void testStaticFactory() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/static_factory.jar");
+                getWebServer()+"www/static_factory.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
         // check all the component creation events
         startEvents.addAssertion("static-comp1", AssertionService.COMPONENT_CREATED);
         startEvents.addAssertion("comp2_id", AssertionService.COMPONENT_CREATED);
 
         BeanComponent comp2_id =
-            new BeanComponent("comp2_id", SimpleStaticFactory.class, "createSimple",
-            new TestArgument[] { new StringArgument("comp2_id") } , null);
+                new BeanComponent("comp2_id", SimpleStaticFactory.class, "createSimple",
+                new TestArgument[] { new StringArgument("comp2_id")} , null);
 
         startEvents.addValidator(new ComponentMetadataValidator(comp2_id));
 
         BeanComponent comp1 =
-            new BeanComponent("comp1", SimpleStaticFactory.class, "createSimple",
-            new TestArgument[0], null);
+                new BeanComponent("comp1", SimpleStaticFactory.class, "createSimple",
+                new TestArgument[0], null);
 
         // validate the metadata for all components
         startEvents.addValidator(new ComponentMetadataValidator(comp1));
@@ -244,28 +255,29 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         controller.run();
     }
 
-	/*
-	 * Tests an instance factory derived from a component of the same ModuleContext.
-	 */
-	public void testComponentFactory() throws Exception {
+
+    /**
+     * Tests an instance factory derived from a component of the same ModuleContext.
+     */
+    public void testComponentFactory() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/component_instance_factory.jar");
+                getWebServer()+"www/component_instance_factory.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
         // check all the component creation events
         startEvents.addAssertion("instance-comp1", AssertionService.COMPONENT_CREATED);
         startEvents.addAssertion("comp2_id", AssertionService.COMPONENT_CREATED);
 
         BeanComponent comp1 =
-            new BeanComponent("comp1", "createSimple",
-            new TestArgument[0], null);
+                new BeanComponent("comp1", "createSimple",
+                new TestArgument[0], null);
         comp1.setFactoryComponent(new TestRefValue("compFactory"));
 
         // validate the metadata for all components
         startEvents.addValidator(new ComponentMetadataValidator(comp1));
 
         BeanComponent comp2_id =
-            new BeanComponent("comp2_id", "createSimple",
-            new TestArgument[] { new StringArgument("comp2_id") } , null);
+                new BeanComponent("comp2_id", "createSimple",
+                new TestArgument[] { new StringArgument("comp2_id")} , null);
         comp2_id.setFactoryComponent(new TestRefValue("compFactory"));
 
         startEvents.addValidator(new ComponentMetadataValidator(comp2_id));
@@ -277,12 +289,13 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         controller.run();
     }
 
-	/*
-	 * Tests an instance factory derived from a service refeference.
-	 */
-	public void testServiceFactory() throws Exception {
+
+    /**
+     * Tests an instance factory derived from a service refeference.
+     */
+    public void testServiceFactory() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/service_instance_factory.jar");
+                getWebServer()+"www/service_instance_factory.jar");
 
         TestService factoryService = new TestService(getContext(), new SimpleInstanceFactory(), "org.osgi.test.cases.blueprint.components.factory.SimpleInstanceFactory", null);
         MetadataEventSet startEvents = controller.getStartEvents();
@@ -293,16 +306,16 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         startEvents.addAssertion("comp2_id", AssertionService.COMPONENT_CREATED);
 
         BeanComponent comp1 =
-            new BeanComponent("comp1", "createSimple",
-            new TestArgument[0], null);
+                new BeanComponent("comp1", "createSimple",
+                new TestArgument[0], null);
         comp1.setFactoryComponent(new TestRefValue("compFactory"));
 
         // validate the metadata for all components
         startEvents.addValidator(new ComponentMetadataValidator(comp1));
 
         BeanComponent comp2_id =
-            new BeanComponent("comp2_id", "createSimple",
-            new TestArgument[] { new StringArgument("comp2_id") } , null);
+                new BeanComponent("comp2_id", "createSimple",
+                new TestArgument[] { new StringArgument("comp2_id")} , null);
         comp2_id.setFactoryComponent(new TestRefValue("compFactory"));
 
         // make sure this was created with the correct class
@@ -316,12 +329,13 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         controller.run();
     }
 
-	/*
-	 * Tests injection of the ModuleContext into a component
-	 */
-	public void testModuleContextAware() throws Exception {
+
+    /**
+     * Tests injection of the ModuleContext into a component
+     */
+    public void testModuleContextAware() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/module_context_aware.jar");
+                getWebServer()+"www/module_context_aware.jar");
 
         MetadataEventSet startEvents = controller.getStartEvents();
         // check all the component creation events
