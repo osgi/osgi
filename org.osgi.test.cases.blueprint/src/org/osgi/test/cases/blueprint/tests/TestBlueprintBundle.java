@@ -166,6 +166,22 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
 
 
     /**
+     * Tests an explicitly specified config file on the header located in a directory other
+     * than OSGI-INF/blueprint directory.  Only the directory name is specified.
+     */
+    public void testStartComponentDirOnly() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/comp1_dir_only.jar");
+        MetadataEventSet startEvents = controller.getStartEvents();
+        startEvents.addAssertion("comp1", AssertionService.COMPONENT_CREATED);
+        startEvents.validateComponent("comp1", SimpleTestComponent.class);
+        // if we see comp2 instantiated, this is an error
+        startEvents.addFailureEvent(new ComponentAssertion("comp2", AssertionService.COMPONENT_CREATED));
+        controller.run();
+    }
+
+
+    /**
      * Tests a simple managed bundle with a single component, no component id specified.
      */
     public void testNoNameDefault() throws Exception {

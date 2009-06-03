@@ -10,6 +10,7 @@ Include-Resource					= \
 	www/comp1_wildcard_header.jar=comp1_wildcard_header.jar , \
 	www/comp1_explicit_config.jar=comp1_explicit_config.jar , \
 	www/comp1_different_dir.jar=comp1_different_dir.jar , \
+	www/comp1_dir_only.jar=comp1_dir_only.jar , \
 	www/error_no_config_file.jar=error_no_config_file.jar , \
 	www/error_missing_config_file.jar=error_missing_config_file.jar , \
 	www/comp1_attributes.jar=comp1_attributes.jar , \
