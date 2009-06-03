@@ -26,6 +26,16 @@ package org.osgi.service.blueprint.reflect;
 public interface ComponentMetadata extends NonNullMetadata {
 
 	/**
+	 * The component will be eagerly instanciated
+	 */
+	static final int INITIALIZATION_EAGER = 1;
+
+	/**
+ 	 * The component will be lazily instanciated
+ 	 */
+	static final int INITIALIZATION_LAZY = 2;
+
+	/**
 	 * The id of the component.
 	 *
 	 * ### renamed to getId
@@ -33,4 +43,18 @@ public interface ComponentMetadata extends NonNullMetadata {
 	 * defined inner component.
 	 */
 	String getId();
+
+	/**
+ 	 * Is this component to be lazily instantiated?
+ 	 *
+ 	 * This is the <code>initialization</code> attribute or the
+ 	 * <code>default-initialization</code> in the <code>blueprint</code> element
+ 	 * if not set.
+ 	 *
+ 	 * @return the initialization method
+ 	 * @see #INITIALIZATION_EAGER
+ 	 * @see #INITIALIZATION_LAZY
+ 	 */
+	int getInitialization();
+
 }

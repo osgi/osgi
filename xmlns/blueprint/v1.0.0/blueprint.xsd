@@ -58,6 +58,19 @@
         </xsd:annotation>
 
         <xsd:attribute name="id" type="xsd:ID" />
+
+        <xsd:attribute name="initialization" type="Tinitialization">
+            <xsd:annotation>
+                <xsd:documentation>
+                  <![CDATA[
+                  The initialization attribute for this component.  This can either
+                  be "eager" or "lazy".  If not specified, it
+                  defaults to default-initialization attribute of the enclosing
+                  <blueprint> element.  The default, default is "eager"
+                  ]]>
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
     </xsd:complexType>
 
     <xsd:element name="blueprint" type="Tblueprint">
@@ -244,21 +257,7 @@
                 <xsd:attribute name="destroy-method" type="TnullableMethod" />
                 <xsd:attribute name="factory-method" type="Tmethod" />
                 <xsd:attribute name="factory-ref" type="Tidref" />
-
                 <xsd:attribute name="scope" type="Tscope" />
-
-                <xsd:attribute name="initialization" type="Tinitialization">
-                    <xsd:annotation>
-                        <xsd:documentation>
-                          <![CDATA[
-                          The initialization attribute for this <bean>.  This can either
-                          be "eager" or "lazy".  If not specified, it
-                          defaults to default-initialization attribute of the enclosing
-                          <blueprint> element.  The default, default is "eager"
-                          ]]>
-                        </xsd:documentation>
-                    </xsd:annotation>
-                </xsd:attribute>
                 <xsd:anyAttribute namespace="##other" processContents="lax" />
             </xsd:extension>
         </xsd:complexContent>
@@ -623,9 +622,9 @@
         <xsd:annotation>
             <xsd:documentation>
               <![CDATA[
-              Tinitializationt defines the initialization type for beans.  This is used in this
+              Tinitializationt defines the initialization type for components.  This is used in this
               schema by the <blueprint> default-initialization attribute and the
-              <bean> initialization attribute.
+              initialization attribute.
               ]]>
             </xsd:documentation>
         </xsd:annotation>

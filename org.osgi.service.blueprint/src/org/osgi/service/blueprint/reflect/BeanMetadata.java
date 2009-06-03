@@ -28,16 +28,6 @@ public interface BeanMetadata extends Target, ComponentMetadata {
 	static final String SCOPE_PROTOTYPE = "prototype";
 	
 	/**
-	 * The bean will be eagerly instanciated
-	 */
-	static final int INITIALIZATION_EAGER = 1;
-
-	/**
- 	 * The bean will be lazily instanciated
- 	 */
-	static final int INITIALIZATION_LAZY = 2;
-
-	/**
 	 * The name of the class type specified for this component.
 	 *
 	 * This is the <code>class</code> attribute.
@@ -89,19 +79,6 @@ public interface BeanMetadata extends Target, ComponentMetadata {
 	 *
 	 */
 	List /* <BeanProperty> */getProperties();
-
-	/**
-	 * Is this component to be lazily instantiated?
-	 *
-	 * This is the <code>initialization</code> attribute or the
-	 * <code>default-initialization</code> in the <code>blueprint</code> element
-	 * if not set.
-	 *
-	 * @return the initialization method
-	 * @see #INITIALIZATION_EAGER
-	 * @see #INITIALIZATION_LAZY
-	 */
-	int getInitialization();
 
 	/**
 	 * Provides the name of the optional factory method.
