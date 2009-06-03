@@ -24,6 +24,7 @@ import org.osgi.service.blueprint.container.Converter;
 import org.osgi.service.blueprint.reflect.BeanMetadata;
 
 import org.osgi.test.cases.blueprint.components.comp1.SimpleTestComponent;
+import org.osgi.test.cases.blueprint.components.comp1.AltSimpleTestComponent;
 import org.osgi.test.cases.blueprint.components.factory.SimpleInstanceFactory;
 import org.osgi.test.cases.blueprint.components.staticfactory.SimpleStaticFactory;
 import org.osgi.test.cases.blueprint.framework.*;
@@ -93,7 +94,7 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
             new StringArgument("comp1")} , null)));
 
         startEvents.addValidator(new ComponentMetadataValidator(
-                new BeanComponent("comp2", SimpleTestComponent.class, new TestArgument[] {
+                new BeanComponent("comp2", AltSimpleTestComponent.class, new TestArgument[] {
             new StringArgument("comp2")} , null)));
         controller.run();
     }
@@ -379,6 +380,39 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         startEvents.addValidator(new ComponentMetadataPresenceValidator("conversionService", BeanMetadata.class));
 
         // if we receive the above events and no assertion failures, then everything has worked.
+        controller.run();
+    }
+
+
+    /**
+     * Tests that component ids are case insensitive
+     */
+    public void testComponentIdCase() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/comp1_id.jar");
+        MetadataEventSet startEvents = controller.getStartEvents();
+        // all lowercase version
+        startEvents.addAssertion("comp1_id", AssertionService.COMPONENT_CREATED);
+        startEvents.validateComponent("comp1_id", SimpleTestComponent.class);
+        // mixed case version
+        startEvents.addAssertion("Comp1_ID", AssertionService.COMPONENT_CREATED);
+        startEvents.validateComponent("Comp1_ID", AltSimpleTestComponent.class);
+        // make sure the name is in the component list
+        startEvents.addValidator(new ComponentNamePresenceValidator("comp1_id"));
+        startEvents.addValidator(new GetBeanMetadataValidator("comp1_id"));
+        // validate both versions
+        startEvents.addValidator(new ComponentNamePresenceValidator("Comp1_ID"));
+        startEvents.addValidator(new GetBeanMetadataValidator("Comp1_ID"));
+
+        // and the validate the component metadata
+        startEvents.addValidator(new ComponentMetadataValidator(
+                new BeanComponent("comp1_id", SimpleTestComponent.class,
+                new TestArgument[] {new StringArgument("comp1_id")}, null)));
+
+        startEvents.addValidator(new ComponentMetadataValidator(
+                new BeanComponent("Comp1_ID", SimpleTestComponent.class,
+                new TestArgument[] {new StringArgument("Comp1_ID")}, null)));
+
         controller.run();
     }
 }

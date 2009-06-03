@@ -15,6 +15,7 @@ Include-Resource					= \
 	www/error_missing_config_file.jar=error_missing_config_file.jar , \
 	www/comp1_attributes.jar=comp1_attributes.jar , \
 	www/comp1_attributes2.jar=comp1_attributes2.jar, \
+	www/comp1_id.jar=comp1_id.jar, \
 	www/error_duplicate_name.jar=error_duplicate_name.jar, \
 	www/error_missing_component_class.jar=error_missing_component_class.jar, \
 	www/error_no_component_class.jar=error_no_component_class.jar, \

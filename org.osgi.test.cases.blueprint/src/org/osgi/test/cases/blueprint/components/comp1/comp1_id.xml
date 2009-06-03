@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
+  <description>
+    Test of component id case insensitivity
+  </description>
+
    <bean id="comp1_id" class="org.osgi.test.cases.blueprint.components.comp1.SimpleTestComponent">
-     <!-- collaborators and configuration for this component go here -->
+     <argument value="comp1_id"/>
+   </bean>
+   <bean id="Comp1_ID" class="org.osgi.test.cases.blueprint.components.comp1.AltSimpleTestComponent">
+     <argument value="Comp1_ID"/>
    </bean>
 </blueprint>
 
