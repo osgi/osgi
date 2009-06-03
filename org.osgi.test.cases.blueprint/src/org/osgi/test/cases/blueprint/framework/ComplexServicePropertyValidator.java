@@ -94,6 +94,8 @@ public class ComplexServicePropertyValidator extends Assert implements TestValid
 
 
     protected void validateProperties(ServiceReference ref) {
+        assertEquals("Property osgi.service.blueprint.compname", "ServiceOne", ref.getProperty("osgi.service.blueprint.compname"));
+        assertEquals("Property service.ranking", new Integer(0), ref.getProperty("service.ranking"));
         assertEquals("Property test.case.property.int", new Integer(1), ref.getProperty("test.case.property.int"));
         assertEquals("Property test.case.property.short", new Short((short)2), ref.getProperty("test.case.property.short"));
         assertEquals("Property test.case.property.byte", new Byte((byte)3), ref.getProperty("test.case.property.byte"));
