@@ -242,7 +242,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // all services are unregistered at this point, so we should not see any listener calls
         // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
         // is an error.
-        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
+        importStopEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
 
         controller.run();
     }
@@ -314,7 +314,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // all services are unregistered at this point, so we should not see any listener calls
         // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
         // is an error.
-        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
+        importStopEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
 
         controller.run();
     }
@@ -387,7 +387,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // all services are unregistered at this point, so we should not see any listener calls
         // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
         // is an error.
-        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
+        importStopEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
 
         controller.run();
     }
@@ -450,7 +450,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // all services are unregistered at this point, so we should not see any listener calls
         // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
         // is an error.
-        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
+        importStopEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
 
         controller.run();
     }
@@ -514,7 +514,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // all services are unregistered at this point, so we should not see any listener calls
         // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
         // is an error.
-        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
+        importStopEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
 
         controller.run();
     }
@@ -583,7 +583,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // all services are unregistered at this point, so we should not see any listener calls
         // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
         // is an error.
-        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
+        importStopEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
 
         controller.run();
     }
@@ -646,7 +646,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // all services are unregistered at this point, so we should not see any listener calls
         // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
         // is an error.
-        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
+        importStopEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
 
         controller.run();
     }
@@ -834,7 +834,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // all services are unregistered at this point, so we should not see any listener calls
         // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
         // is an error.
-        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
+        importStopEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
 
         controller.run();
     }
@@ -907,7 +907,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // all services are unregistered at this point, so we should not see any listener calls
         // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
         // is an error.
-        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
+        importStopEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
 
         controller.run();
     }
@@ -979,7 +979,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // all services are unregistered at this point, so we should not see any listener calls
         // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
         // is an error.
-        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
+        importStopEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
 
         controller.run();
     }
@@ -1042,7 +1042,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // all services are unregistered at this point, so we should not see any listener calls
         // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
         // is an error.
-        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
+        importStopEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
 
         controller.run();
     }
@@ -1106,7 +1106,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // all services are unregistered at this point, so we should not see any listener calls
         // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
         // is an error.
-        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
+        importStopEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
 
         controller.run();
     }
@@ -1169,7 +1169,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // all services are unregistered at this point, so we should not see any listener calls
         // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
         // is an error.
-        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
+        importStopEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
 
         controller.run();
     }
@@ -1964,7 +1964,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // all services are unregistered at this point, so we should not see any listener calls
         // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
         // is an error.
-        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
+        importStopEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
         controller.run();
     }
 
@@ -2008,7 +2008,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // all services are unregistered at this point, so we should not see any listener calls
         // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
         // is an error.
-        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
+        importStopEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
 
         controller.run();
     }
