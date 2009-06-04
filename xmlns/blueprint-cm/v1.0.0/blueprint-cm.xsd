@@ -101,8 +101,8 @@
     <xsd:complexType name="TmanagedComponent">
         <xsd:group ref="bp:beanElements"/>
         <xsd:attribute name="class" type="bp:Tclass"/>
-        <xsd:attribute name="init-method" type="bp:TnullableMethod"/>
-        <xsd:attribute name="destroy-method" type="bp:TnullableMethod"/>
+        <xsd:attribute name="init-method" type="bp:Tmethod"/>
+        <xsd:attribute name="destroy-method" type="bp:Tmethod"/>
         <xsd:attribute name="factory-method" type="bp:Tmethod"/>
         <xsd:attribute name="factory-component" type="bp:Tidref"/>
         <xsd:anyAttribute namespace="##other" processContents="lax"/>
