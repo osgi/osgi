@@ -279,8 +279,8 @@
             <xsd:extension base="Tcomponent">
                 <xsd:group ref="beanElements" />
                 <xsd:attribute name="class" type="Tclass" />
-                <xsd:attribute name="init-method" type="TMethod" />
-                <xsd:attribute name="destroy-method" type="TMethod" />
+                <xsd:attribute name="init-method" type="Tmethod" />
+                <xsd:attribute name="destroy-method" type="Tmethod" />
                 <xsd:attribute name="factory-method" type="Tmethod" />
                 <xsd:attribute name="factory-ref" type="Tidref" />
                 <xsd:attribute name="scope" type="Tscope" />
@@ -304,7 +304,7 @@
                 <xsd:group ref="beanElements" />
                 <xsd:attribute name="id" use="prohibited"/>
                 <xsd:attribute name="class" type="Tclass" />
-                <xsd:attribute name="init-method" type="TMethod" />
+                <xsd:attribute name="init-method" type="Tmethod" />
                 <xsd:attribute name="destroy-method" use="prohibited"/>
                 <xsd:attribute name="factory-method" type="Tmethod" />
                 <xsd:attribute name="factory-ref" type="Tidref" />
