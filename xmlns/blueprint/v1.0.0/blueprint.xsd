@@ -71,6 +71,22 @@
                 </xsd:documentation>
             </xsd:annotation>
         </xsd:attribute>
+
+        <xsd:attribute name="depends-on" type="TdependsOn" use="optional">
+            <xsd:annotation>
+                <xsd:documentation>
+                  <![CDATA[
+                  depends-on identifies (by name) other components that this component
+                  depends on.  The component only be activated after the
+                  depends-on components are successfully activated.  Also, if there
+                  are <reference>, <ref-list>, <ref-set> elements with unstatisfied
+                  manadatory references, then the depends-on relationship will also
+                  be used to determine whether this service is registered or
+                  unregistered.
+                  ]]>
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
     </xsd:complexType>
 
     <xsd:element name="blueprint" type="Tblueprint">
@@ -146,6 +162,17 @@
                   <reference>, <ref-set>, and <ref-list> components.  The
                   normal default is "mandatory", and can be changed by individual
                   service reference components.
+                  ]]>
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="compliance" type="Tcompliance" default="strict">
+            <xsd:annotation>
+                <xsd:documentation>
+                  <![CDATA[
+                  Specifies the whether the blueprint definition must be interpreted
+                  using strict specification compliance, or whether additional extensions
+                  can be enabled.
                   ]]>
                 </xsd:documentation>
             </xsd:annotation>
@@ -252,9 +279,8 @@
             <xsd:extension base="Tcomponent">
                 <xsd:group ref="beanElements" />
                 <xsd:attribute name="class" type="Tclass" />
-                <xsd:attribute name="depends-on" type="TdependsOn" />
-                <xsd:attribute name="init-method" type="TnullableMethod" />
-                <xsd:attribute name="destroy-method" type="TnullableMethod" />
+                <xsd:attribute name="init-method" type="TMethod" />
+                <xsd:attribute name="destroy-method" type="TMethod" />
                 <xsd:attribute name="factory-method" type="Tmethod" />
                 <xsd:attribute name="factory-ref" type="Tidref" />
                 <xsd:attribute name="scope" type="Tscope" />
@@ -278,8 +304,7 @@
                 <xsd:group ref="beanElements" />
                 <xsd:attribute name="id" use="prohibited"/>
                 <xsd:attribute name="class" type="Tclass" />
-                <xsd:attribute name="depends-on" type="TdependsOn" />
-                <xsd:attribute name="init-method" type="TnullableMethod" />
+                <xsd:attribute name="init-method" type="TMethod" />
                 <xsd:attribute name="destroy-method" use="prohibited"/>
                 <xsd:attribute name="factory-method" type="Tmethod" />
                 <xsd:attribute name="factory-ref" type="Tidref" />
@@ -402,6 +427,7 @@
                 <xsd:attribute name="component-name" type="Tidref" use="optional"/>
                 <xsd:attribute name="availability" type="Tavailability" use="optional"/>
                 <xsd:attribute name="timeout" type="Ttimeout" use="optional"/>
+                <xsd:attribute name="depends-on" type="TdependsOn" use="optional"/>
                 <xsd:anyAttribute namespace="##other" processContents="lax" />
             </xsd:restriction>
         </xsd:complexContent>
@@ -504,6 +530,7 @@
                 <xsd:attribute name="comparator-ref" type="Tidref" use="optional"/>
                 <xsd:attribute name="member-type" use="optional" type="Tservice-use"/>
                 <xsd:attribute name="ordering-basis" use="optional" type="Tservice-use"/>
+                <xsd:attribute name="depends-on" type="TdependsOn" use="optional"/>
                 <xsd:anyAttribute namespace="##other" processContents="lax" />
             </xsd:restriction>
         </xsd:complexContent>
@@ -614,8 +641,8 @@
         </xsd:annotation>
         <xsd:group ref="targetComponent" />
         <xsd:attribute name="ref" type="xsd:NMTOKEN" use="optional" />
-        <xsd:attribute name="bind-method" type="Tmethod" use="required" />
-        <xsd:attribute name="unbind-method" type="Tmethod" use="required" />
+        <xsd:attribute name="bind-method" type="Tmethod" use="optional" />
+        <xsd:attribute name="unbind-method" type="Tmethod" use="optional" />
     </xsd:complexType>
 
     <xsd:simpleType name="Tinitialization">
@@ -638,7 +665,7 @@
         <xsd:annotation>
             <xsd:documentation>
               <![CDATA[
-              Tlazy-init defines an availability attribute type.  This is used in this
+              Tavailability defines an availability attribute type.  This is used in this
               schema by the <blueprint> default-availability attribute and the
               <reference>, <ref-set>, and <ref-list> availability attribute.
               ]]>
@@ -647,6 +674,21 @@
         <xsd:restriction base="xsd:NMTOKEN">
             <xsd:enumeration value="mandatory" />
             <xsd:enumeration value="optional" />
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="Tcompliance">
+        <xsd:annotation>
+            <xsd:documentation>
+              <![CDATA[
+              Tcompliance defines a compliance attribute type.  This is used in this
+              schema by the <blueprint> compliance atribute.
+              ]]>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:NMTOKEN">
+            <xsd:enumeration value="strict"/>
+            <xsd:enumeration value="loose" />
         </xsd:restriction>
     </xsd:simpleType>
 
@@ -676,21 +718,6 @@
                 </xsd:sequence>
                 <xsd:attribute name="interface" type="Tclass" use="optional" />
                 <xsd:attribute name="ref" type="Tidref" use="optional" />
-                <xsd:attribute name="depends-on" type="TdependsOn" use="optional">
-                    <xsd:annotation>
-                        <xsd:documentation>
-                          <![CDATA[
-                          depends-on identifies (by name) other components that this service
-                          depends on.  The service will only be registered after the
-                          depends-on services are successfully completed.  Also, if there
-                          are <reference>, <ref-list>, <ref-set> elements with unstatisfied
-                          manadatory references, then the depends-on relationship will also
-                          be used to determine whether this service is registered or
-                          unregistered.
-                          ]]>
-                        </xsd:documentation>
-                    </xsd:annotation>
-                </xsd:attribute>
                 <xsd:attribute name="auto-export" type="TautoExportModes" default="disabled" />
                 <xsd:attribute name="ranking" type="xsd:int" default="0">
                     <xsd:annotation>
@@ -817,8 +844,8 @@
         <xsd:group ref="targetComponent" />
         <xsd:attribute name="ref" type="Tidref" use="optional" />
         <!--  ### why are there both required? -->
-        <xsd:attribute name="registration-method" type="Tmethod" use="required" />
-        <xsd:attribute name="unregistration-method" type="Tmethod" use="required" />
+        <xsd:attribute name="registration-method" type="Tmethod" use="optional" />
+        <xsd:attribute name="unregistration-method" type="Tmethod" use="optional" />
     </xsd:complexType>
 
     <!--
@@ -1116,22 +1143,6 @@
             </xsd:documentation>
         </xsd:annotation>
         <xsd:restriction base="xsd:NCName" />
-    </xsd:simpleType>
-
-    <xsd:simpleType name="TnullableMethod">
-        <xsd:annotation>
-            <xsd:documentation>
-              <![CDATA[
-              Tmethod is a base type that should be used for all attributes that
-              refer to java method names.  This version also allows "" to be
-              specified to specify that no name should be used.
-              ]]>
-            </xsd:documentation>
-        </xsd:annotation>
-        <xsd:restriction base="xsd:NMTOKEN">
-            <xsd:pattern value="[\i-[:]][\c-[:]]*" />
-            <xsd:pattern value="" />
-        </xsd:restriction>
     </xsd:simpleType>
 
     <!-- Should be used for all attributes and elements that refer to method names -->
