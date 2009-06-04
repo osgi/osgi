@@ -26,7 +26,7 @@ public interface BeanMetadata extends Target, ComponentMetadata {
 
 	static final String SCOPE_SINGLETON = "singleton";
 	static final String SCOPE_PROTOTYPE = "prototype";
-	
+
 	/**
 	 * The name of the class type specified for this component.
 	 *
@@ -126,13 +126,4 @@ public interface BeanMetadata extends Target, ComponentMetadata {
 	 */
 
 	Class /* <?> */getRuntimeClass();
-
-    /**
-     * The names of any components listed in a "depends-on" attribute for this
-     * component.
-     *
-     * @return an immutable List of component names for components that we have explicitly
-     * declared a dependency on, or an empty set if none.
-     */
-    List/*<String>*/ getExplicitDependencies();
 }

@@ -27,7 +27,7 @@ public interface RefCollectionMetadata extends ServiceReferenceMetadata {
 	 * Use the service objects to compare or include in the collection
 	 */
 	public static final int USE_SERVICE_OBJECT = 1;
-	
+
 	/**
  	 * Use the service references to compare or include in the collection
  	 */

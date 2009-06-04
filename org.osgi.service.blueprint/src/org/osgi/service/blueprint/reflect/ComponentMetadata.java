@@ -15,6 +15,7 @@
  */
 package org.osgi.service.blueprint.reflect;
 
+import java.util.List;
 
 /**
  * Base class for all components.
@@ -57,4 +58,12 @@ public interface ComponentMetadata extends NonNullMetadata {
  	 */
 	int getInitialization();
 
+    /**
+     * The names of any components listed in a "depends-on" attribute for this
+     * component.
+     *
+     * @return an immutable List of component names for components that we have explicitly
+     * declared a dependency on, or an empty set if none.
+     */
+    List/*<String>*/ getDependsOn();
 }
