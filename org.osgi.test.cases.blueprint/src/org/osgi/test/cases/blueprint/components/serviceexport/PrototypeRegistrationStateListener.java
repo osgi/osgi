@@ -24,14 +24,14 @@ import org.osgi.test.cases.blueprint.services.TestServiceOne;
 
 
 /**
- * A base class for validating the state of the ServiceRegistraton proxy
- * during registration listener calls.
+ * A listener class for validating register listener calls involving prototype
+ * scope services
  */
-public class RegistrationStateListener extends ServiceOneRegistrationListener {
+public class PrototypeRegistrationStateListener extends ServiceOneRegistrationListener {
     // our injected service registration proxy
     protected ServiceRegistration registration;
 
-    public RegistrationStateListener(String componentId) {
+    public PrototypeRegistrationStateListener(String componentId) {
         super(componentId);
     }
 
@@ -41,6 +41,7 @@ public class RegistrationStateListener extends ServiceOneRegistrationListener {
 
     public void registered(TestServiceOne service, Map serviceProperties) {
         AssertionService.assertNull(this, "Null service instance expected for a prototype component", service);
+
         // this should be valid
         if (registration != null) {
             AssertionService.assertNotNull(this, "Null service reference from ServiceRegistration proxy", registration.getReference());

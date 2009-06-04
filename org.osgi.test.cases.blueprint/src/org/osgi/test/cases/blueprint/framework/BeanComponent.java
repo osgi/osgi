@@ -180,7 +180,7 @@ public class BeanComponent extends Assert implements TestComponentMetadata {
             for (int i = 0; i < dependsOn.length; i++) {
                 test.add(dependsOn[i]);
             }
-            assertEquals("Depends on definition", test, meta.getExplicitDependencies());
+            assertEquals("Depends on definition", test, meta.getDependsOn());
         }
 
         assertEquals("Component initialization attribute", initialization, meta.getInitialization());

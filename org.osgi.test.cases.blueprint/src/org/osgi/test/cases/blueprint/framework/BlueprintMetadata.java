@@ -627,7 +627,7 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
     public List getComponentDependencies(String componentId) throws Exception {
         // now validate the meta data is correct for the properties
         BeanMetadata meta = (BeanMetadata)targetBlueprintContainer.getComponentMetadata(componentId);
-        return meta.getExplicitDependencies();
+        return meta.getDependsOn();
     }
 
 

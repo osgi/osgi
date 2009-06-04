@@ -189,7 +189,7 @@ public class ExportedService extends Assert implements TestComponentMetadata {
         assertEquals(serviceId, meta.getId());
         assertEquals(exportMode, meta.getAutoExportMode());
         assertEquals(serviceRanking, meta.getRanking());
-        assertEquals(dependencies, meta.getExplicitDependencies());
+        assertEquals(dependencies, meta.getDependsOn());
         // given listeners to validate?
         if (listeners != null) {
             Collection metaListeners = meta.getRegistrationListeners();

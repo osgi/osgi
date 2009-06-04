@@ -11,7 +11,18 @@
        <argument value="ServiceOneFactory"/>
    </bean>
 
+   <bean id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceexport.FactoryRegistrationStateListener">
+       <argument value="ServiceOneListener"/>
+       <!-- Another circular depdendency.  This allows us to check the service registration state
+            during the listener calls -->
+       <property name="registration" ref="ServiceOneFactoryService"/>
+   </bean>
+
    <!-- simple export using a reference and just one interface. -->
-   <service id="ServiceOneFactoryService" ref="ServiceOneFactory" interface="org.osgi.test.cases.blueprint.services.TestServiceOne"/>
+    <service id="ServiceOneFactoryService" ref="ServiceOneFactory" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
+        <registration-listener ref="ServiceOneListener"
+            registration-method="registered"
+            unregistration-method="unregistered"/>
+    </service>
 </blueprint>
 

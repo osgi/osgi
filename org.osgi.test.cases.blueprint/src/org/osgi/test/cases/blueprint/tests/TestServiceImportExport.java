@@ -798,6 +798,8 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
                 ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
+        // this will be the registration event
+        exportStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_REGISTERED));
 
         // now the importing side.  We've got a couple of service injections to validate, plus the injection
         // results
@@ -818,6 +820,9 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStopEvents.addServiceEvent("UNREGISTERING", TestServiceOne.class);
         // and there should not be a registration active anymore
         exportStopEvents.addValidator(new ServiceUnregistrationValidator(TestServiceOne.class, null));
+
+        // and the listener event as well
+        exportStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNREGISTERED));
 
         controller.run();
     }
@@ -1008,6 +1013,134 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
         controller.run();
     }
+
+
+    /*
+     * Listener test, but only the registered method is specified in the config.
+     */
+    public void testListenerRegisteredExport() throws Exception {
+        // We only do the export and then shut this back down again.  That will
+        // cause the events of interests to be fired.
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/ServiceOne_listener_registered_export.jar");
+        // We're really only interesting the listener events, but we'll take a look
+        // at the metadata as well
+        MetadataEventSet exportStartEvents = controller.getStartEvents();
+        Hashtable props = new Hashtable();
+        // the first property comes from the called method signature, the
+        // second should be passed to the registration listener.
+        props.put("service.interface.name", TestServiceOne.class.getName());
+        props.put("service.component.name", "ServiceOneService");
+        exportStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_REGISTERED, props));
+        // we're expecting some listener metadata on the export.
+        TestRegistrationListener[] listeners = new TestRegistrationListener[] {
+            new TestRegistrationListener("ServiceOneListener", "registered", "unregistered")
+        };
+        exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
+                ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, listeners)));
+
+
+        controller.run();
+    }
+
+
+    /*
+     * Listener test, but only the unregistered method is specified in the config.
+     */
+    public void testListenerUnregisteredExport() throws Exception {
+        // We only do the export and then shut this back down again.  That will
+        // cause the events of interests to be fired.
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/ServiceOne_listener_unregistered_export.jar");
+        // We're really only interesting the listener events, but we'll take a look
+        // at the metadata as well
+        MetadataEventSet exportStartEvents = controller.getStartEvents();
+        Hashtable props = new Hashtable();
+        // the first property comes from the called method signature, the
+        // second should be passed to the registration listener.
+        props.put("service.interface.name", TestServiceOne.class.getName());
+        props.put("service.component.name", "ServiceOneService");
+        // no registered event
+        // we're expecting some listener metadata on the export.
+        TestRegistrationListener[] listeners = new TestRegistrationListener[] {
+            new TestRegistrationListener("ServiceOneListener", "registered", "unregistered")
+        };
+        exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
+                ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, listeners)));
+
+        // now some expected termination stuff
+        EventSet exportStopEvents = controller.getStopEvents();
+        exportStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNREGISTERED, props));
+
+        controller.run();
+    }
+
+
+    /*
+     * Just a simple export/import with a registration listener with a prototype instance component.
+     * The service listeners should be passed null on the registration/unregistration events.
+     */
+    public void testPrototypeListenerExport() throws Exception {
+        // We only do the export and then shut this back down again.  That will
+        // cause the events of interests to be fired.
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/ServiceOne_listener_export.jar");
+        // We're really only interesting the listener events, but we'll take a look
+        // at the metadata as well
+        MetadataEventSet exportStartEvents = controller.getStartEvents();
+        Hashtable props = new Hashtable();
+        // the first property comes from the called method signature, the
+        // second should be passed to the registration listener.
+        props.put("service.interface.name", TestServiceOne.class.getName());
+        props.put("service.component.name", "ServiceOneService");
+        exportStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_REGISTERED, props));
+        // we're expecting some listener metadata on the export.
+        TestRegistrationListener[] listeners = new TestRegistrationListener[] {
+            new TestRegistrationListener("ServiceOneListener", "registered", "unregistered")
+        };
+        exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService", "ServiceOne", TestServiceOne.class,
+                ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, listeners)));
+
+        // now some expected termination stuff
+        EventSet exportStopEvents = controller.getStopEvents();
+        exportStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNREGISTERED, props));
+
+        controller.run();
+    }
+
+
+    /*
+     * Just a simple export/import with a registration listener with an inline instance component.
+     * The service listeners should be passed null on the registration/unregistration events.
+     */
+    public void testInlineListenerExport() throws Exception {
+        // We only do the export and then shut this back down again.  That will
+        // cause the events of interests to be fired.
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/ServiceOne_listener_export.jar");
+        // We're really only interesting the listener events, but we'll take a look
+        // at the metadata as well
+        MetadataEventSet exportStartEvents = controller.getStartEvents();
+        Hashtable props = new Hashtable();
+        // the first property comes from the called method signature, the
+        // second should be passed to the registration listener.
+        props.put("service.interface.name", TestServiceOne.class.getName());
+        props.put("service.component.name", "ServiceOneService");
+        exportStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_REGISTERED, props));
+        // we're expecting some listener metadata on the export.
+        TestRegistrationListener[] listeners = new TestRegistrationListener[] {
+            new TestRegistrationListener("ServiceOneListener", "registered", "unregistered")
+        };
+        exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService(null, "ServiceOne", TestServiceOne.class,
+                ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, listeners)));
+
+        // now some expected termination stuff
+        EventSet exportStopEvents = controller.getStopEvents();
+        exportStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNREGISTERED, props));
+
+        controller.run();
+    }
+
 
     /**
      * A test to verify that an exported component can service as a listener to its
