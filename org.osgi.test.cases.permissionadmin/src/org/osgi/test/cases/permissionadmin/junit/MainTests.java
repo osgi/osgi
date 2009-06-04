@@ -25,9 +25,9 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-package org.osgi.test.cases.permissionadmin.main;
+package org.osgi.test.cases.permissionadmin.junit;
 
-import java.io.*;
+import java.io.FilePermission;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -35,7 +35,7 @@ import org.osgi.framework.*;
 import org.osgi.service.permissionadmin.*;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
-public class PermissionControl extends DefaultTestBundleControl {
+public class MainTests extends DefaultTestBundleControl {
 	PermissionAdmin		permissionAdmin;
 	PermissionInfo[]	defaultPermissions;
 

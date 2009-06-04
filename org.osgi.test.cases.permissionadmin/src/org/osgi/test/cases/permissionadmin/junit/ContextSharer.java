@@ -1,4 +1,4 @@
-package org.osgi.test.cases.permissionadmin.main;
+package org.osgi.test.cases.permissionadmin.junit;
 
 import java.lang.reflect.Method;
 
