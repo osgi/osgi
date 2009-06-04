@@ -303,13 +303,14 @@
             <xsd:restriction base="Tbean">
                 <xsd:group ref="beanElements" />
                 <xsd:attribute name="id" use="prohibited"/>
+                <xsd:attribute name="depends-on" type="TdependsOn" use="optional"/>
+                <xsd:attribute name="initialization" use="prohibited"/>
                 <xsd:attribute name="class" type="Tclass" />
                 <xsd:attribute name="init-method" type="Tmethod" />
                 <xsd:attribute name="destroy-method" use="prohibited"/>
                 <xsd:attribute name="factory-method" type="Tmethod" />
                 <xsd:attribute name="factory-ref" type="Tidref" />
                 <xsd:attribute name="scope" fixed="prototype" type="Tscope"/>
-                <xsd:attribute name="lazy-init" use="prohibited"/>
                 <xsd:anyAttribute namespace="##other" processContents="lax" />
             </xsd:restriction>
         </xsd:complexContent>
@@ -422,12 +423,13 @@
                     <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax" />
                 </xsd:sequence>
                 <xsd:attribute name="id" use="prohibited"/>
+                <xsd:attribute name="depends-on" type="TdependsOn" use="optional"/>
+                <xsd:attribute name="initialization" use="prohibited"/>
                 <xsd:attribute name="interface" type="Tclass" use="optional"/>
                 <xsd:attribute name="filter" type="xsd:normalizedString" use="optional"/>
                 <xsd:attribute name="component-name" type="Tidref" use="optional"/>
                 <xsd:attribute name="availability" type="Tavailability" use="optional"/>
                 <xsd:attribute name="timeout" type="Ttimeout" use="optional"/>
-                <xsd:attribute name="depends-on" type="TdependsOn" use="optional"/>
                 <xsd:anyAttribute namespace="##other" processContents="lax" />
             </xsd:restriction>
         </xsd:complexContent>
@@ -750,9 +752,10 @@
                     <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax" />
                 </xsd:sequence>
                 <xsd:attribute name="id" use="prohibited"/>
+                <xsd:attribute name="depends-on" type="TdependsOn" use="optional"/>
+                <xsd:attribute name="initialization" use="prohibited"/>
                 <xsd:attribute name="interface" type="Tclass" use="optional" />
                 <xsd:attribute name="ref" type="Tidref" use="optional" />
-                <xsd:attribute name="depends-on" type="TdependsOn" use="optional"/>
                 <xsd:attribute name="auto-export" type="TautoExportModes" default="disabled" />
                 <xsd:attribute name="ranking" type="xsd:int" default="0"/>
                 <xsd:anyAttribute namespace="##other" processContents="lax" />
