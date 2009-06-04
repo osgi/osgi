@@ -25,40 +25,37 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-package org.osgi.test.cases.permissionadmin.security.tbc;
+package org.osgi.test.cases.permissionadmin.tb4;
 
+import junit.framework.Assert;
+
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.permissionadmin.PermissionAdmin;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
-public class PermissionPermissionsControl extends DefaultTestBundleControl {
-	PermissionAdmin	permissionAdmin;
+public class PermissionPermissionsControl implements BundleActivator {
 
-	public void setUp() throws Exception {
-		/* Get the PermissionAdmin service */
-		permissionAdmin = (PermissionAdmin) getService(PermissionAdmin.class);
-		if ( permissionAdmin == null )
-			fail("No Permission Admin");
-	}
-
-	public void testSecurity() throws Exception {
+	public void start(BundleContext context) throws Exception {
+		ServiceReference ref = context.getServiceReference(PermissionAdmin.class.getName());
+		PermissionAdmin	permissionAdmin = (PermissionAdmin) (ref == null ? null : context.getService(ref));
+		Assert.assertNotNull("No Permission Admin", permissionAdmin);
 		try {
 			System.out.println(System.getSecurityManager());
-			assertNotNull(System.getSecurityManager());
+			Assert.assertNotNull(System.getSecurityManager());
 			permissionAdmin.setDefaultPermissions(null);
-			fail("Were able to set default permissions without "
+			Assert.fail("Were able to set default permissions without "
 					+ "admin permission");
 		}
 		catch (SecurityException e) {
-			pass("Correctly got SecurityException when setting default "
-					+ "permissions without admin permission");
+			// Do nothing; PASS
 		}
 		try {
 			permissionAdmin.setPermissions("fake.jar", null);
-			fail("Were able to set permissions without " + "admin permission");
+			Assert.fail("Were able to set permissions without " + "admin permission");
 		}
 		catch (SecurityException e) {
-			pass("Correctly got SecurityException when setting "
-					+ "permissions without admin permission");
+			// Do nothing; PASS
 		}
 		/*
 		 * trace("Will try to write to a file"); File f =
@@ -67,5 +64,9 @@ public class PermissionPermissionsControl extends DefaultTestBundleControl {
 		 * o.close(); trace("Succeeded writing to the file!"); try {
 		 * Thread.sleep(30000); } catch(InterruptedException e) {}
 		 */
+	}
+
+	public void stop(BundleContext context) throws Exception {
+		// Do nothing.
 	}
 }

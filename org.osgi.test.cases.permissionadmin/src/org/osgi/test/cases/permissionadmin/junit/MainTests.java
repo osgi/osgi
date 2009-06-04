@@ -266,6 +266,15 @@ public class MainTests extends DefaultTestBundleControl {
 		invokeWithPermissions("implicitPermissionsTest", invokePerm, true);
 	}
 
+	public void testNoPermissions() throws Throwable {
+		Bundle tb4 = installBundle("tb4.jar", false);
+		try {
+			tb4.start();
+		} catch (BundleException e) {
+			fail("Unexpected Exception", e.getCause());
+		}
+	}
+
 	public void implicitPermissionsTest() throws Exception {
 		getContext().getBundle().getBundleContext().getDataFile("nicke.txt");
 	}

@@ -24,4 +24,5 @@ Private-Package						= ${p}.junit, \
 Test-Cases: ${classes;extending;*TestCase}
 
 Include-Resource		: \
-	contextsharer.jar
+	contextsharer.jar, \
+	tb4.jar
