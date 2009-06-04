@@ -4,9 +4,9 @@ Bundle-Vendor: OSGi Alliance
 Bundle-DocURL: http://www.osgi.org/
 Bundle-ContactAddress: info@mail.osgi.org
 Bundle-Category: osgi,test
-Export-Package: ${p}.tbc
+Export-Package: ${p}.junit
 
-Private-Package						= ${p}.tbc, \
+Private-Package						= ${p}.junit, \
     org.osgi.test.support.*
 
 
