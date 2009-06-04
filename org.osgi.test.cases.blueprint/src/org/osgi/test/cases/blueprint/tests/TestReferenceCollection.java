@@ -52,15 +52,15 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * @version $Revision$
  */
 public class TestReferenceCollection extends DefaultTestBundleControl {
-	/**
-	 * Import a list of services and validate against an expected set.
-	 */
-	public void testStaticListCollectionImport() throws Exception {
+    /**
+     * Import a list of services and validate against an expected set.
+     */
+    public void testStaticListCollectionImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/static_reference_list_import.jar");
+                getWebServer()+"www/static_reference_list_import.jar");
 
         // this installs and starts the bundle containing the reference services first to
         // ensure the timing of the initial service listener calls.
@@ -69,8 +69,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
 
-        // The collection should be initialized with two services.  There should not
-        // be any bind or unbind events broadcast for these.
+        // The collection should be initialized with two services.  There should
+        // be a BIND event broadcast for both at startup
         Hashtable propsA = new Hashtable();
         propsA.put("service.interface.name", TestServiceOne.class.getName());
         propsA.put("service.listener.type", "interface");
@@ -81,26 +81,26 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         propsC.put("service.listener.type", "interface");
         propsC.put("test.service.name", "ServiceOneC");
 
-        // We should not get these, so consider them failures.
-        importStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsA));
-        importStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsC));
+        // We should see both of these initially
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsA));
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsC));
 
         // validate the metadata for the imported service manager, since it is directly used
         importStartEvents.addValidator(new PropertyMetadataValidator("ReferenceChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferencedService(null, ServiceManager.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY,
-            null, null, ReferencedService.DEFAULT_TIMEOUT)), "serviceManager")));
+                new TestProperty(new TestComponentValue(
+                new ReferencedService(null, ServiceManager.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY,
+                null, null, ReferencedService.DEFAULT_TIMEOUT)), "serviceManager")));
 
         // and one for the reference to the service, which should just be a component reference
         importStartEvents.addValidator(new PropertyMetadataValidator("ReferenceChecker",
-            new TestProperty(new TestRefValue("TestCollection"), "list")));
+                new TestProperty(new TestRefValue("TestCollection"), "list")));
 
         // and the collection metadata
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferenceCollection("TestCollection",
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
-            new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind") }, List.class, null,
-            RefCollectionMetadata.USE_SERVICE_OBJECT,
-            RefCollectionMetadata.USE_SERVICE_OBJECT)));
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+                new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind")}, List.class, null,
+                RefCollectionMetadata.USE_SERVICE_OBJECT,
+                RefCollectionMetadata.USE_SERVICE_OBJECT)));
 
         // this validates the ModuleContext.getComponent() result
         importStartEvents.addValidator(new ReferenceListValidator("TestCollection"));
@@ -115,24 +115,24 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // all of our validation here is on the importing side
         EventSet importStopEvents = controller.getStopEvents(0);
 
-        // We should not get these, so consider them failures.
-        importStopEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsA));
-        importStopEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsC));
+        // We should get these at the end
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsA));
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsC));
 
         controller.run();
     }
 
 
-	/**
-	 * Import a list of ServiceReferences and validate against an expected set.
-	 */
-	public void testStaticListCollectionReferenceImport() throws Exception {
+    /**
+     * Import a list of ServiceReferences and validate against an expected set.
+     */
+    public void testStaticListCollectionReferenceImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/static_reference_list_ref_import.jar",
-            getWebServer()+"www/managed_service_export.jar");
+                getWebServer()+"www/static_reference_list_ref_import.jar",
+                getWebServer()+"www/managed_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -149,16 +149,16 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         propsC.put("service.listener.type", "interface");
         propsC.put("test.service.name", "ServiceOneC");
 
-        // We should not get these, so consider them failures.
-        importStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsA));
-        importStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsC));
+        // We should get one of these for each event.
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsA));
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsC));
 
         // and the collection metadata...this is a service reference member type
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferenceCollection("TestCollection",
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
-            new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind") }, List.class, null,
-            RefCollectionMetadata.USE_SERVICE_OBJECT,
-            RefCollectionMetadata.USE_SERVICE_REFERENCE)));
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+                new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind")}, List.class, null,
+                RefCollectionMetadata.USE_SERVICE_OBJECT,
+                RefCollectionMetadata.USE_SERVICE_REFERENCE)));
 
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
@@ -168,25 +168,25 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // all of our validation here is on the importing side
         EventSet importStopEvents = controller.getStopEvents(0);
 
-        // We should not get these, so consider them failures.
-        importStopEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsA));
-        importStopEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsC));
+        // and the listener calls on shutdown
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsA));
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsC));
 
         controller.run();
     }
 
-	/**
-	 * Import a list of services and validate against an expected set.
+    /**
+     * Import a list of services and validate against an expected set.
      * This will also unregister the services, validate the collection
      * has been emptied, then register and check again.
-	 */
-	public void testListCollectionImport() throws Exception {
+     */
+    public void testListCollectionImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/null_reference_list_import.jar",
-            getWebServer()+"www/managed_service_export.jar");
+                getWebServer()+"www/null_reference_list_import.jar",
+                getWebServer()+"www/managed_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -208,6 +208,10 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         propsC.put("service.listener.type", "interface");
         propsC.put("test.service.name", "ServiceOneC");
 
+        // we get an initial set of bind events for the starting services
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsA));
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsC));
+
         // the first step taken in the test is complete the registration of the
         // rest of the managed services.  This will result in an extra bind event
         importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsB));
@@ -220,33 +224,41 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
         // validate the reference list when used as a property.
         importStartEvents.addValidator(new PropertyMetadataValidator("NullReferenceChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
-            new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind") }, List.class, null,
-            RefCollectionMetadata.USE_SERVICE_OBJECT,
-            RefCollectionMetadata.USE_SERVICE_OBJECT)), "list")));
+                new TestProperty(new TestComponentValue(
+                new ReferenceCollection(null,
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+                new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind")}, List.class, null,
+                RefCollectionMetadata.USE_SERVICE_OBJECT,
+                RefCollectionMetadata.USE_SERVICE_OBJECT)), "list")));
 
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
         // fail the test.
         importStartEvents.addAssertion("NullReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
 
+        // all of our validation here is on the importing side
+        EventSet importStopEvents = controller.getStopEvents(0);
+
+        // all services are unregistered at this point, so we should not see any listener calls
+        // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
+        // is an error.
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
+
         controller.run();
     }
 
-	/**
-	 * Import a list of ServiceReferences and validate against an expected set.
+    /**
+     * Import a list of ServiceReferences and validate against an expected set.
      * This will also unregister the services, validate the collection
      * has been emptied, then register and check again.
-	 */
-	public void testListCollectionReferenceImport() throws Exception {
+     */
+    public void testListCollectionReferenceImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/null_reference_list_ref_import.jar",
-            getWebServer()+"www/managed_service_export.jar");
+                getWebServer()+"www/null_reference_list_ref_import.jar",
+                getWebServer()+"www/managed_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -268,6 +280,10 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         propsC.put("service.listener.type", "interface");
         propsC.put("test.service.name", "ServiceOneC");
 
+        // we get an initial set of bind events for the starting services
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsA));
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsC));
+
         // the first step taken in the test is complete the registration of the
         // rest of the managed services.  This will result in an extra bind event
         importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsB));
@@ -280,33 +296,41 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
         // validate the reference list when used as a property.
         importStartEvents.addValidator(new PropertyMetadataValidator("NullReferenceChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
-            new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind") }, List.class, null,
-            RefCollectionMetadata.USE_SERVICE_OBJECT,
-            RefCollectionMetadata.USE_SERVICE_REFERENCE)), "list")));
+                new TestProperty(new TestComponentValue(
+                new ReferenceCollection(null,
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+                new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind")}, List.class, null,
+                RefCollectionMetadata.USE_SERVICE_OBJECT,
+                RefCollectionMetadata.USE_SERVICE_REFERENCE)), "list")));
 
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
         // fail the test.
         importStartEvents.addAssertion("NullReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
 
+        // all of our validation here is on the importing side
+        EventSet importStopEvents = controller.getStopEvents(0);
+
+        // all services are unregistered at this point, so we should not see any listener calls
+        // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
+        // is an error.
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
+
         controller.run();
     }
 
-	/**
-	 * Similar to the basic list import test, but the listener is the same
+    /**
+     * Similar to the basic list import test, but the listener is the same
      * component the reference list is injected into, thus creating a
      * circular reference situation.
-	 */
-	public void testCircularListCollectionImport() throws Exception {
+     */
+    public void testCircularListCollectionImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/circular_reference_list_import.jar",
-            getWebServer()+"www/managed_service_export.jar");
+                getWebServer()+"www/circular_reference_list_import.jar",
+                getWebServer()+"www/managed_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -327,6 +351,10 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         propsC.put("service.interface.name", TestServiceOne.class.getName());
         propsC.put("service.listener.type", "interface");
         propsC.put("test.service.name", "ServiceOneC");
+
+        // we get an initial set of bind events for the starting services
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsA));
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsC));
 
         // the first step taken in the test is complete the registration of the
         // rest of the managed services.  This will result in an extra bind event
@@ -341,35 +369,43 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // validate the reference list when used as a property.  This one is similar to previous
         // ones, but is special because of the circular reference relationship with the listener
         importStartEvents.addValidator(new PropertyMetadataValidator("NullReferenceChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
-            new BindingListener[] { new BindingListener("NullReferenceChecker", "bind", "unbind") }, List.class, null,
-            RefCollectionMetadata.USE_SERVICE_OBJECT,
-            RefCollectionMetadata.USE_SERVICE_REFERENCE)), "list")));
+                new TestProperty(new TestComponentValue(
+                new ReferenceCollection(null,
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+                new BindingListener[] { new BindingListener("NullReferenceChecker", "bind", "unbind")}, List.class, null,
+                RefCollectionMetadata.USE_SERVICE_OBJECT,
+                RefCollectionMetadata.USE_SERVICE_REFERENCE)), "list")));
 
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
         // fail the test.
         importStartEvents.addAssertion("NullReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
 
+        // all of our validation here is on the importing side
+        EventSet importStopEvents = controller.getStopEvents(0);
+
+        // all services are unregistered at this point, so we should not see any listener calls
+        // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
+        // is an error.
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
+
         controller.run();
     }
 
 
-	/**
-	 * Import a list of services and validate against an expected set.
+    /**
+     * Import a list of services and validate against an expected set.
      * The initial list will be empty, with optional availability.  Then it
      * will register all of the services and validate the result against the expected
      * service set.
-	 */
-	public void testEmptyListCollectionImport() throws Exception {
+     */
+    public void testEmptyListCollectionImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/null_reference_list_import.jar",
-            getWebServer()+"www/managed_null_service_export.jar");
+                getWebServer()+"www/null_reference_list_import.jar",
+                getWebServer()+"www/managed_null_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -408,24 +444,32 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // fail the test.
         importStartEvents.addAssertion("NullReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
 
+        // all of our validation here is on the importing side
+        EventSet importStopEvents = controller.getStopEvents(0);
+
+        // all services are unregistered at this point, so we should not see any listener calls
+        // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
+        // is an error.
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
+
         controller.run();
     }
 
 
-	/**
-	 * Import a list of services and validate against an expected set.
+    /**
+     * Import a list of services and validate against an expected set.
      * The initial list will be empty, with optional availability.  Then it
      * will register all of the services and validate the result against the expected
      * service set.  This is the same as testEmptyListCollectionImport(), but the
      * availability is specified using default-availability.
-	 */
-	public void testEmptyListCollectionDefaultImport() throws Exception {
+     */
+    public void testEmptyListCollectionDefaultImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/null_reference_list_default_import.jar",
-            getWebServer()+"www/managed_null_service_export.jar");
+                getWebServer()+"www/null_reference_list_default_import.jar",
+                getWebServer()+"www/managed_null_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -464,12 +508,20 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // fail the test.
         importStartEvents.addAssertion("NullReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
 
+        // all of our validation here is on the importing side
+        EventSet importStopEvents = controller.getStopEvents(0);
+
+        // all services are unregistered at this point, so we should not see any listener calls
+        // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
+        // is an error.
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
+
         controller.run();
     }
 
 
-	/**
-	 * Import a list of services and validate against an expected set.
+    /**
+     * Import a list of services and validate against an expected set.
      * The initial list will be empty, with optional availability.  Then it
      * will register all of the services and validate the result against the expected
      * service set.  This is the same as testEmptyListCollectionImport(), but the
@@ -477,15 +529,15 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
      *
      * This is identical to the test above, but the attached listener is provided
      * by an imported service.
-	 */
-	public void testEmptyListCollectionServiceListener() throws Exception {
+     */
+    public void testEmptyListCollectionServiceListener() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/list_reference_listener_import.jar",
-            getWebServer()+"www/managed_null_service_export.jar",
-            getWebServer()+"www/reference_listener_export.jar");
+                getWebServer()+"www/list_reference_listener_import.jar",
+                getWebServer()+"www/managed_null_service_export.jar",
+                getWebServer()+"www/reference_listener_export.jar");
 
 
         // all of our validation here is on the importing side
@@ -525,23 +577,31 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // fail the test.
         importStartEvents.addAssertion("NullReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
 
+        // all of our validation here is on the importing side
+        EventSet importStopEvents = controller.getStopEvents(0);
+
+        // all services are unregistered at this point, so we should not see any listener calls
+        // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
+        // is an error.
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
+
         controller.run();
     }
 
 
-	/**
-	 * Import a list of ServiceReferences and validate against an expected set.
+    /**
+     * Import a list of ServiceReferences and validate against an expected set.
      * The initial list will be empty, with optional availability.  Then it
      * will register all of the services and validate the result against the expected
      * service set.
-	 */
-	public void testEmptyListCollectionReferenceImport() throws Exception {
+     */
+    public void testEmptyListCollectionReferenceImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/null_reference_list_ref_import.jar",
-            getWebServer()+"www/managed_null_service_export.jar");
+                getWebServer()+"www/null_reference_list_ref_import.jar",
+                getWebServer()+"www/managed_null_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -580,20 +640,28 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // fail the test.
         importStartEvents.addAssertion("NullReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
 
+        // all of our validation here is on the importing side
+        EventSet importStopEvents = controller.getStopEvents(0);
+
+        // all services are unregistered at this point, so we should not see any listener calls
+        // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
+        // is an error.
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
+
         controller.run();
     }
 
 
-	/**
-	 * Import a set of services and validate against an expected set.
-	 */
-	public void testStaticSetCollectionImport() throws Exception {
+    /**
+     * Import a set of services and validate against an expected set.
+     */
+    public void testStaticSetCollectionImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/static_reference_set_import.jar",
-            getWebServer()+"www/managed_service_export.jar");
+                getWebServer()+"www/static_reference_set_import.jar",
+                getWebServer()+"www/managed_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -610,20 +678,20 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         propsC.put("service.listener.type", "interface");
         propsC.put("test.service.name", "ServiceOneC");
 
-        // We should not get these, so consider them failures.
+        // We get these at startup from the initial set
         importStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsA));
         importStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsC));
 
         // and one for the reference to the service, which should just be a component reference
         importStartEvents.addValidator(new PropertyMetadataValidator("ReferenceChecker",
-            new TestProperty(new TestRefValue("TestCollection"), "set")));
+                new TestProperty(new TestRefValue("TestCollection"), "set")));
 
         // and the collection metadata
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferenceCollection("TestCollection",
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
-            new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind") }, Set.class, null,
-            RefCollectionMetadata.USE_SERVICE_OBJECT,
-            RefCollectionMetadata.USE_SERVICE_OBJECT)));
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+                new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind")}, Set.class, null,
+                RefCollectionMetadata.USE_SERVICE_OBJECT,
+                RefCollectionMetadata.USE_SERVICE_OBJECT)));
 
         // this validates the ModuleContext.getComponent() result
         importStartEvents.addValidator(new ReferenceSetValidator("TestCollection"));
@@ -638,24 +706,24 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // all of our validation here is on the importing side
         EventSet importStopEvents = controller.getStopEvents(0);
 
-        // We should not get these, so consider them failures.
-        importStopEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsA));
-        importStopEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsC));
+        // And these hapen at completion
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsA));
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsC));
 
         controller.run();
     }
 
 
-	/**
-	 * Import a set of ServiceReferences and validate against an expected set.
-	 */
-	public void testStaticSetCollectionReferenceImport() throws Exception {
+    /**
+     * Import a set of ServiceReferences and validate against an expected set.
+     */
+    public void testStaticSetCollectionReferenceImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/static_reference_set_ref_import.jar",
-            getWebServer()+"www/managed_service_export.jar");
+                getWebServer()+"www/static_reference_set_ref_import.jar",
+                getWebServer()+"www/managed_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -672,16 +740,16 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         propsC.put("service.listener.type", "interface");
         propsC.put("test.service.name", "ServiceOneC");
 
-        // We should not get these, so consider them failures.
-        importStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsA));
-        importStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsC));
+        // These happen at startup
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsA));
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsC));
 
         // and the collection metadata...this is a service reference member type
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferenceCollection("TestCollection",
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
-            new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind") }, Set.class, null,
-            RefCollectionMetadata.USE_SERVICE_OBJECT,
-            RefCollectionMetadata.USE_SERVICE_REFERENCE)));
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+                new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind")}, Set.class, null,
+                RefCollectionMetadata.USE_SERVICE_OBJECT,
+                RefCollectionMetadata.USE_SERVICE_REFERENCE)));
 
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
@@ -691,26 +759,26 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // all of our validation here is on the importing side
         EventSet importStopEvents = controller.getStopEvents(0);
 
-        // We should not get these, so consider them failures.
-        importStopEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsA));
-        importStopEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsC));
+        // And these get emptied out at completion
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsA));
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsC));
 
         controller.run();
     }
 
 
-	/**
-	 * Import a Set of services and validate against an expected set.
+    /**
+     * Import a Set of services and validate against an expected set.
      * This will also unregister the services, validate the collection
      * has been emptied, then register and check again.
-	 */
-	public void testSetCollectionImport() throws Exception {
+     */
+    public void testSetCollectionImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/null_reference_set_import.jar",
-            getWebServer()+"www/managed_service_export.jar");
+                getWebServer()+"www/null_reference_set_import.jar",
+                getWebServer()+"www/managed_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -731,6 +799,10 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         propsC.put("service.interface.name", TestServiceOne.class.getName());
         propsC.put("service.listener.type", "interface");
         propsC.put("test.service.name", "ServiceOneC");
+
+        // These happen at startup
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsA));
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsC));
 
         // the first step taken in the test is complete the registration of the
         // rest of the managed services.  This will result in an extra bind event
@@ -744,34 +816,42 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
         // validate the reference list when used as a property.
         importStartEvents.addValidator(new PropertyMetadataValidator("NullReferenceChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
-            new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind") }, Set.class, null,
-            RefCollectionMetadata.USE_SERVICE_OBJECT,
-            RefCollectionMetadata.USE_SERVICE_OBJECT)), "set")));
+                new TestProperty(new TestComponentValue(
+                new ReferenceCollection(null,
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+                new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind")}, Set.class, null,
+                RefCollectionMetadata.USE_SERVICE_OBJECT,
+                RefCollectionMetadata.USE_SERVICE_OBJECT)), "set")));
 
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
         // fail the test.
         importStartEvents.addAssertion("NullReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
 
+        // all of our validation here is on the importing side
+        EventSet importStopEvents = controller.getStopEvents(0);
+
+        // all services are unregistered at this point, so we should not see any listener calls
+        // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
+        // is an error.
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
+
         controller.run();
     }
 
 
-	/**
-	 * Import a Set of ServiceReferences and validate against an expected set.
+    /**
+     * Import a Set of ServiceReferences and validate against an expected set.
      * This will also unregister the services, validate the collection
      * has been emptied, then register and check again.
-	 */
-	public void testSetCollectionReferenceImport() throws Exception {
+     */
+    public void testSetCollectionReferenceImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/null_reference_set_ref_import.jar",
-            getWebServer()+"www/managed_service_export.jar");
+                getWebServer()+"www/null_reference_set_ref_import.jar",
+                getWebServer()+"www/managed_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -792,6 +872,10 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         propsC.put("service.interface.name", TestServiceOne.class.getName());
         propsC.put("service.listener.type", "interface");
         propsC.put("test.service.name", "ServiceOneC");
+
+        // These happen at startup
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsA));
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsC));
 
         // the first step taken in the test is complete the registration of the
         // rest of the managed services.  This will result in an extra bind event
@@ -805,32 +889,40 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
         // validate the reference list when used as a property.
         importStartEvents.addValidator(new PropertyMetadataValidator("NullReferenceChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
-            new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind") }, Set.class, null,
-            RefCollectionMetadata.USE_SERVICE_OBJECT,
-            RefCollectionMetadata.USE_SERVICE_REFERENCE)), "set")));
+                new TestProperty(new TestComponentValue(
+                new ReferenceCollection(null,
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+                new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind")}, Set.class, null,
+                RefCollectionMetadata.USE_SERVICE_OBJECT,
+                RefCollectionMetadata.USE_SERVICE_REFERENCE)), "set")));
 
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
         // fail the test.
         importStartEvents.addAssertion("NullReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
 
+        // all of our validation here is on the importing side
+        EventSet importStopEvents = controller.getStopEvents(0);
+
+        // all services are unregistered at this point, so we should not see any listener calls
+        // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
+        // is an error.
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
+
         controller.run();
     }
 
 
-	/**
-	 * Import a Set of services with a circular reference involved with the collection listener.
-	 */
-	public void testCircularSetCollectionImport() throws Exception {
+    /**
+     * Import a Set of services with a circular reference involved with the collection listener.
+     */
+    public void testCircularSetCollectionImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/circular_reference_set_import.jar",
-            getWebServer()+"www/managed_service_export.jar");
+                getWebServer()+"www/circular_reference_set_import.jar",
+                getWebServer()+"www/managed_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -851,6 +943,10 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         propsC.put("service.interface.name", TestServiceOne.class.getName());
         propsC.put("service.listener.type", "interface");
         propsC.put("test.service.name", "ServiceOneC");
+
+        // These happen at startup
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsA));
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsC));
 
         // the first step taken in the test is to complete the registration of the
         // rest of the managed services.  This will result in an extra bind event
@@ -865,35 +961,43 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // validate the reference list when used as a property.  This one is similar to previous
         // ones, but is special because of the circular reference relationship with the listener
         importStartEvents.addValidator(new PropertyMetadataValidator("NullReferenceChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
-            new BindingListener[] { new BindingListener("NullReferenceChecker", "bind", "unbind") }, Set.class, null,
-            RefCollectionMetadata.USE_SERVICE_OBJECT,
-            RefCollectionMetadata.USE_SERVICE_REFERENCE)), "set")));
+                new TestProperty(new TestComponentValue(
+                new ReferenceCollection(null,
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null,
+                new BindingListener[] { new BindingListener("NullReferenceChecker", "bind", "unbind")}, Set.class, null,
+                RefCollectionMetadata.USE_SERVICE_OBJECT,
+                RefCollectionMetadata.USE_SERVICE_REFERENCE)), "set")));
 
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
         // fail the test.
         importStartEvents.addAssertion("NullReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
 
+        // all of our validation here is on the importing side
+        EventSet importStopEvents = controller.getStopEvents(0);
+
+        // all services are unregistered at this point, so we should not see any listener calls
+        // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
+        // is an error.
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
+
         controller.run();
     }
 
 
-	/**
-	 * Import a Set of services and validate against an expected set.
+    /**
+     * Import a Set of services and validate against an expected set.
      * The initial list will be empty, with optional availability.  Then it
      * will register all of the services and validate the result against the expected
      * service set.
-	 */
-	public void testEmptySetCollectionImport() throws Exception {
+     */
+    public void testEmptySetCollectionImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/null_reference_set_import.jar",
-            getWebServer()+"www/managed_null_service_export.jar");
+                getWebServer()+"www/null_reference_set_import.jar",
+                getWebServer()+"www/managed_null_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -932,24 +1036,32 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // fail the test.
         importStartEvents.addAssertion("NullReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
 
+        // all of our validation here is on the importing side
+        EventSet importStopEvents = controller.getStopEvents(0);
+
+        // all services are unregistered at this point, so we should not see any listener calls
+        // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
+        // is an error.
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
+
         controller.run();
     }
 
 
-	/**
-	 * Import a Set of services and validate against an expected set.
+    /**
+     * Import a Set of services and validate against an expected set.
      * The initial list will be empty, with optional availability.  Then it
      * will register all of the services and validate the result against the expected
      * service set.  This is the same as testEmptySetCollectionImport(), but the
      * availabilty option is specified using default-availability.
-	 */
-	public void testEmptySetCollectionDefaultImport() throws Exception {
+     */
+    public void testEmptySetCollectionDefaultImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/null_reference_set_default_import.jar",
-            getWebServer()+"www/managed_null_service_export.jar");
+                getWebServer()+"www/null_reference_set_default_import.jar",
+                getWebServer()+"www/managed_null_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -988,23 +1100,31 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // fail the test.
         importStartEvents.addAssertion("NullReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
 
+        // all of our validation here is on the importing side
+        EventSet importStopEvents = controller.getStopEvents(0);
+
+        // all services are unregistered at this point, so we should not see any listener calls
+        // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
+        // is an error.
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
+
         controller.run();
     }
 
 
-	/**
-	 * Import a Set of ServiceReferences and validate against an expected set.
+    /**
+     * Import a Set of ServiceReferences and validate against an expected set.
      * The initial list will be empty, with optional availability.  Then it
      * will register all of the services and validate the result against the expected
      * service set.
-	 */
-	public void testEmptySetCollectionReferenceImport() throws Exception {
+     */
+    public void testEmptySetCollectionReferenceImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/null_reference_set_ref_import.jar",
-            getWebServer()+"www/managed_null_service_export.jar");
+                getWebServer()+"www/null_reference_set_ref_import.jar",
+                getWebServer()+"www/managed_null_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1043,19 +1163,27 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // fail the test.
         importStartEvents.addAssertion("NullReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
 
+        // all of our validation here is on the importing side
+        EventSet importStopEvents = controller.getStopEvents(0);
+
+        // all services are unregistered at this point, so we should not see any listener calls
+        // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
+        // is an error.
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
+
         controller.run();
     }
 
 
-	/**
-	 * A number of sort/Iterator tests, including some service dynamics elements.
-	 */
-	public void testRefSetNameSort() throws Exception {
+    /**
+     * A number of sort/Iterator tests, including some service dynamics elements.
+     */
+    public void testRefSetNameSort() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ref_set_name_sort.jar");
+                getWebServer()+"www/ref_set_name_sort.jar");
 
         // this installs and starts the bundle containing the reference services first to
         // ensure the timing of the initial service listener calls.
@@ -1071,27 +1199,27 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
         // validate the metadata for the different collection types/comparator combinations
         importStartEvents.addValidator(new PropertyMetadataValidator("ComparatorChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
-            null, Set.class,
-            new TestRefValue("NameComparator"),
-            RefCollectionMetadata.USE_SERVICE_OBJECT,
-            RefCollectionMetadata.USE_SERVICE_OBJECT)), "set")));
+                new TestProperty(new TestComponentValue(
+                new ReferenceCollection(null,
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
+                null, Set.class,
+                new TestRefValue("NameComparator"),
+                RefCollectionMetadata.USE_SERVICE_OBJECT,
+                RefCollectionMetadata.USE_SERVICE_OBJECT)), "set")));
 
         controller.run();
     }
 
 
-	/**
-	 * A number of sort/Iterator tests, including some service dynamics elements.
-	 */
-	public void testRefSetInvertedNameSort() throws Exception {
+    /**
+     * A number of sort/Iterator tests, including some service dynamics elements.
+     */
+    public void testRefSetInvertedNameSort() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ref_set_inverted_name_sort.jar");
+                getWebServer()+"www/ref_set_inverted_name_sort.jar");
 
         // this installs and starts the bundle containing the reference services first to
         // ensure the timing of the initial service listener calls.
@@ -1106,28 +1234,28 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addAssertion("InvertedComparatorChecker", AssertionService.COMPONENT_INIT_METHOD);
 
         importStartEvents.addValidator(new PropertyMetadataValidator("InvertedComparatorChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
-            null, Set.class,
-            new TestRefValue("InvertedNameComparator"),
-            RefCollectionMetadata.USE_SERVICE_OBJECT,
-            RefCollectionMetadata.USE_SERVICE_OBJECT)), "set")));
+                new TestProperty(new TestComponentValue(
+                new ReferenceCollection(null,
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
+                null, Set.class,
+                new TestRefValue("InvertedNameComparator"),
+                RefCollectionMetadata.USE_SERVICE_OBJECT,
+                RefCollectionMetadata.USE_SERVICE_OBJECT)), "set")));
 
         controller.run();
     }
 
 
-	/**
-	 * A number of sort/Iterator tests, including some service dynamics elements.
-	 */
-	public void testRefSetReferenceComparatorSort() throws Exception {
+    /**
+     * A number of sort/Iterator tests, including some service dynamics elements.
+     */
+    public void testRefSetReferenceComparatorSort() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ref_set_reference_comparator.jar",
-            getWebServer()+"www/sorting_service_export.jar");
+                getWebServer()+"www/ref_set_reference_comparator.jar",
+                getWebServer()+"www/sorting_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1138,28 +1266,28 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addAssertion("ServiceReferenceComparatorChecker", AssertionService.COMPONENT_INIT_METHOD);
 
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceComparatorChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
-            null, Set.class,
-            new TestRefValue("ServiceReferenceComparator"),
-            RefCollectionMetadata.USE_SERVICE_REFERENCE,
-            RefCollectionMetadata.USE_SERVICE_OBJECT)), "set")));
+                new TestProperty(new TestComponentValue(
+                new ReferenceCollection(null,
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
+                null, Set.class,
+                new TestRefValue("ServiceReferenceComparator"),
+                RefCollectionMetadata.USE_SERVICE_REFERENCE,
+                RefCollectionMetadata.USE_SERVICE_OBJECT)), "set")));
 
         controller.run();
     }
 
 
-	/**
-	 * A number of sort/Iterator tests, including some service dynamics elements.
-	 */
-	public void testRefSetServiceOrderSort() throws Exception {
+    /**
+     * A number of sort/Iterator tests, including some service dynamics elements.
+     */
+    public void testRefSetServiceOrderSort() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ref_set_service_order.jar",
-            getWebServer()+"www/sorting_service_export.jar");
+                getWebServer()+"www/ref_set_service_order.jar",
+                getWebServer()+"www/sorting_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1171,28 +1299,28 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
 
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceOrderChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
-            null, Set.class,
-            null,
-            RefCollectionMetadata.USE_SERVICE_OBJECT,
-            RefCollectionMetadata.USE_SERVICE_OBJECT)), "set")));
+                new TestProperty(new TestComponentValue(
+                new ReferenceCollection(null,
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
+                null, Set.class,
+                null,
+                RefCollectionMetadata.USE_SERVICE_OBJECT,
+                RefCollectionMetadata.USE_SERVICE_OBJECT)), "set")));
 
         controller.run();
     }
 
 
-	/**
-	 * A number of sort/Iterator tests, including some service dynamics elements.
-	 */
-	public void testRefSetServiceReferenceOrderSort() throws Exception {
+    /**
+     * A number of sort/Iterator tests, including some service dynamics elements.
+     */
+    public void testRefSetServiceReferenceOrderSort() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ref_set_servicereference_order.jar",
-            getWebServer()+"www/sorting_service_export.jar");
+                getWebServer()+"www/ref_set_servicereference_order.jar",
+                getWebServer()+"www/sorting_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1203,26 +1331,26 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addAssertion("ServiceReferenceOrderChecker", AssertionService.COMPONENT_INIT_METHOD);
 
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceOrderChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
-            null, Set.class,
-            null,
-            RefCollectionMetadata.USE_SERVICE_REFERENCE,
-            RefCollectionMetadata.USE_SERVICE_OBJECT)), "set")));
+                new TestProperty(new TestComponentValue(
+                new ReferenceCollection(null,
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
+                null, Set.class,
+                null,
+                RefCollectionMetadata.USE_SERVICE_REFERENCE,
+                RefCollectionMetadata.USE_SERVICE_OBJECT)), "set")));
     }
 
 
-	/**
-	 * A number of sort/Iterator tests, including some service dynamics elements.
-	 */
-	public void testRefSetNameReferenceSort() throws Exception {
+    /**
+     * A number of sort/Iterator tests, including some service dynamics elements.
+     */
+    public void testRefSetNameReferenceSort() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ref_set_name_sort_reference.jar",
-            getWebServer()+"www/sorting_service_export.jar");
+                getWebServer()+"www/ref_set_name_sort_reference.jar",
+                getWebServer()+"www/sorting_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1234,28 +1362,28 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
         // validate the metadata for the different collection types/comparator combinations
         importStartEvents.addValidator(new PropertyMetadataValidator("ComparatorChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
-            null, Set.class,
-            new TestRefValue("NameComparator"),
-            RefCollectionMetadata.USE_SERVICE_OBJECT,
-            RefCollectionMetadata.USE_SERVICE_REFERENCE)), "set")));
+                new TestProperty(new TestComponentValue(
+                new ReferenceCollection(null,
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
+                null, Set.class,
+                new TestRefValue("NameComparator"),
+                RefCollectionMetadata.USE_SERVICE_OBJECT,
+                RefCollectionMetadata.USE_SERVICE_REFERENCE)), "set")));
 
         controller.run();
     }
 
 
-	/**
-	 * A number of sort/Iterator tests, including some service dynamics elements.
-	 */
-	public void testRefSetInvertedNameReferenceSort() throws Exception {
+    /**
+     * A number of sort/Iterator tests, including some service dynamics elements.
+     */
+    public void testRefSetInvertedNameReferenceSort() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ref_set_inverted_name_sort_reference.jar",
-            getWebServer()+"www/sorting_service_export.jar");
+                getWebServer()+"www/ref_set_inverted_name_sort_reference.jar",
+                getWebServer()+"www/sorting_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1266,28 +1394,28 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addAssertion("InvertedComparatorChecker", AssertionService.COMPONENT_INIT_METHOD);
 
         importStartEvents.addValidator(new PropertyMetadataValidator("InvertedComparatorChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
-            null, Set.class,
-            new TestRefValue("InvertedNameComparator"),
-            RefCollectionMetadata.USE_SERVICE_OBJECT,
-            RefCollectionMetadata.USE_SERVICE_REFERENCE)), "set")));
+                new TestProperty(new TestComponentValue(
+                new ReferenceCollection(null,
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
+                null, Set.class,
+                new TestRefValue("InvertedNameComparator"),
+                RefCollectionMetadata.USE_SERVICE_OBJECT,
+                RefCollectionMetadata.USE_SERVICE_REFERENCE)), "set")));
 
         controller.run();
     }
 
 
-	/**
-	 * A number of sort/Iterator tests, including some service dynamics elements.
-	 */
-	public void testRefSetReferenceComparatorReferenceSort() throws Exception {
+    /**
+     * A number of sort/Iterator tests, including some service dynamics elements.
+     */
+    public void testRefSetReferenceComparatorReferenceSort() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ref_set_reference_comparator_reference.jar",
-            getWebServer()+"www/sorting_service_export.jar");
+                getWebServer()+"www/ref_set_reference_comparator_reference.jar",
+                getWebServer()+"www/sorting_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1298,28 +1426,28 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addAssertion("ServiceReferenceComparatorChecker", AssertionService.COMPONENT_INIT_METHOD);
 
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceComparatorChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
-            null, Set.class,
-            new TestRefValue("ServiceReferenceComparator"),
-            RefCollectionMetadata.USE_SERVICE_REFERENCE,
-            RefCollectionMetadata.USE_SERVICE_REFERENCE)), "set")));
+                new TestProperty(new TestComponentValue(
+                new ReferenceCollection(null,
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
+                null, Set.class,
+                new TestRefValue("ServiceReferenceComparator"),
+                RefCollectionMetadata.USE_SERVICE_REFERENCE,
+                RefCollectionMetadata.USE_SERVICE_REFERENCE)), "set")));
 
         controller.run();
     }
 
 
-	/**
-	 * A number of sort/Iterator tests, including some service dynamics elements.
-	 */
-	public void testRefSetServiceOrderReferenceSort() throws Exception {
+    /**
+     * A number of sort/Iterator tests, including some service dynamics elements.
+     */
+    public void testRefSetServiceOrderReferenceSort() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ref_set_service_order_reference.jar",
-            getWebServer()+"www/sorting_service_export.jar");
+                getWebServer()+"www/ref_set_service_order_reference.jar",
+                getWebServer()+"www/sorting_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1331,28 +1459,28 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
 
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceOrderChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
-            null, Set.class,
-            null,
-            RefCollectionMetadata.USE_SERVICE_OBJECT,
-            RefCollectionMetadata.USE_SERVICE_REFERENCE)), "set")));
+                new TestProperty(new TestComponentValue(
+                new ReferenceCollection(null,
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
+                null, Set.class,
+                null,
+                RefCollectionMetadata.USE_SERVICE_OBJECT,
+                RefCollectionMetadata.USE_SERVICE_REFERENCE)), "set")));
 
         controller.run();
     }
 
 
-	/**
-	 * A number of sort/Iterator tests, including some service dynamics elements.
-	 */
-	public void testRefSetServiceReferenceOrderReferenceSort() throws Exception {
+    /**
+     * A number of sort/Iterator tests, including some service dynamics elements.
+     */
+    public void testRefSetServiceReferenceOrderReferenceSort() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ref_set_servicereference_order_reference.jar",
-            getWebServer()+"www/sorting_service_export.jar");
+                getWebServer()+"www/ref_set_servicereference_order_reference.jar",
+                getWebServer()+"www/sorting_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1363,26 +1491,26 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addAssertion("ServiceReferenceOrderChecker", AssertionService.COMPONENT_INIT_METHOD);
 
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceOrderChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
-            null, Set.class,
-            null,
-            RefCollectionMetadata.USE_SERVICE_REFERENCE,
-            RefCollectionMetadata.USE_SERVICE_REFERENCE)), "set")));
+                new TestProperty(new TestComponentValue(
+                new ReferenceCollection(null,
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
+                null, Set.class,
+                null,
+                RefCollectionMetadata.USE_SERVICE_REFERENCE,
+                RefCollectionMetadata.USE_SERVICE_REFERENCE)), "set")));
     }
 
 
-	/**
-	 * A number of sort/Iterator tests, including some service dynamics elements.
-	 */
-	public void testRefListNameSort() throws Exception {
+    /**
+     * A number of sort/Iterator tests, including some service dynamics elements.
+     */
+    public void testRefListNameSort() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ref_list_name_sort.jar",
-            getWebServer()+"www/sorting_service_export.jar");
+                getWebServer()+"www/ref_list_name_sort.jar",
+                getWebServer()+"www/sorting_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1394,30 +1522,30 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
         // validate the metadata for the different collection types/comparator combinations
         importStartEvents.addValidator(new PropertyMetadataValidator("ComparatorChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
-            null, List.class,
-            new TestRefValue("NameComparator"),
-            RefCollectionMetadata.USE_SERVICE_OBJECT,
-            RefCollectionMetadata.USE_SERVICE_OBJECT)), "list")));
+                new TestProperty(new TestComponentValue(
+                new ReferenceCollection(null,
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
+                null, List.class,
+                new TestRefValue("NameComparator"),
+                RefCollectionMetadata.USE_SERVICE_OBJECT,
+                RefCollectionMetadata.USE_SERVICE_OBJECT)), "list")));
 
         controller.run();
     }
 
 
-	/**
-	 * A number of sort/Iterator tests, including some service dynamics elements.  The
+    /**
+     * A number of sort/Iterator tests, including some service dynamics elements.  The
      * sorting comparator is imported as a service.
-	 */
-	public void testRefListNameSortService() throws Exception {
+     */
+    public void testRefListNameSortService() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ref_list_name_sort.jar",
-            getWebServer()+"www/sorting_service_export.jar",
-            getWebServer()+"www/name_comparator_service.jar");
+                getWebServer()+"www/ref_list_name_sort.jar",
+                getWebServer()+"www/sorting_service_export.jar",
+                getWebServer()+"www/name_comparator_service.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1429,28 +1557,28 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
         // validate the metadata for the different collection types/comparator combinations
         importStartEvents.addValidator(new PropertyMetadataValidator("ComparatorChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
-            null, List.class,
-            new TestRefValue("NameComparator"),
-            RefCollectionMetadata.USE_SERVICE_OBJECT,
-            RefCollectionMetadata.USE_SERVICE_OBJECT)), "list")));
+                new TestProperty(new TestComponentValue(
+                new ReferenceCollection(null,
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
+                null, List.class,
+                new TestRefValue("NameComparator"),
+                RefCollectionMetadata.USE_SERVICE_OBJECT,
+                RefCollectionMetadata.USE_SERVICE_OBJECT)), "list")));
 
         controller.run();
     }
 
 
-	/**
-	 * A number of sort/Iterator tests, including some service dynamics elements.
-	 */
-	public void testRefListInvertedNameSort() throws Exception {
+    /**
+     * A number of sort/Iterator tests, including some service dynamics elements.
+     */
+    public void testRefListInvertedNameSort() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ref_list_inverted_name_sort.jar",
-            getWebServer()+"www/sorting_service_export.jar");
+                getWebServer()+"www/ref_list_inverted_name_sort.jar",
+                getWebServer()+"www/sorting_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1461,28 +1589,28 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addAssertion("InvertedComparatorChecker", AssertionService.COMPONENT_INIT_METHOD);
 
         importStartEvents.addValidator(new PropertyMetadataValidator("InvertedComparatorChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
-            null, List.class,
-            new TestRefValue("InvertedNameComparator"),
-            RefCollectionMetadata.USE_SERVICE_OBJECT,
-            RefCollectionMetadata.USE_SERVICE_OBJECT)), "list")));
+                new TestProperty(new TestComponentValue(
+                new ReferenceCollection(null,
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
+                null, List.class,
+                new TestRefValue("InvertedNameComparator"),
+                RefCollectionMetadata.USE_SERVICE_OBJECT,
+                RefCollectionMetadata.USE_SERVICE_OBJECT)), "list")));
 
         controller.run();
     }
 
 
-	/**
-	 * A number of sort/Iterator tests, including some service dynamics elements.
-	 */
-	public void testRefListReferenceComparatorSort() throws Exception {
+    /**
+     * A number of sort/Iterator tests, including some service dynamics elements.
+     */
+    public void testRefListReferenceComparatorSort() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ref_list_reference_comparator.jar",
-            getWebServer()+"www/sorting_service_export.jar");
+                getWebServer()+"www/ref_list_reference_comparator.jar",
+                getWebServer()+"www/sorting_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1493,28 +1621,28 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addAssertion("ServiceReferenceComparatorChecker", AssertionService.COMPONENT_INIT_METHOD);
 
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceComparatorChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
-            null, List.class,
-            new TestRefValue("ServiceReferenceComparator"),
-            RefCollectionMetadata.USE_SERVICE_REFERENCE,
-            RefCollectionMetadata.USE_SERVICE_OBJECT)), "list")));
+                new TestProperty(new TestComponentValue(
+                new ReferenceCollection(null,
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
+                null, List.class,
+                new TestRefValue("ServiceReferenceComparator"),
+                RefCollectionMetadata.USE_SERVICE_REFERENCE,
+                RefCollectionMetadata.USE_SERVICE_OBJECT)), "list")));
 
         controller.run();
     }
 
 
-	/**
-	 * A number of sort/Iterator tests, including some service dynamics elements.
-	 */
-	public void testRefListServiceOrderSort() throws Exception {
+    /**
+     * A number of sort/Iterator tests, including some service dynamics elements.
+     */
+    public void testRefListServiceOrderSort() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ref_list_service_order.jar",
-            getWebServer()+"www/sorting_service_export.jar");
+                getWebServer()+"www/ref_list_service_order.jar",
+                getWebServer()+"www/sorting_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1526,28 +1654,28 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
 
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceOrderChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
-            null, List.class,
-            null,
-            RefCollectionMetadata.USE_SERVICE_OBJECT,
-            RefCollectionMetadata.USE_SERVICE_OBJECT)), "list")));
+                new TestProperty(new TestComponentValue(
+                new ReferenceCollection(null,
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
+                null, List.class,
+                null,
+                RefCollectionMetadata.USE_SERVICE_OBJECT,
+                RefCollectionMetadata.USE_SERVICE_OBJECT)), "list")));
 
         controller.run();
     }
 
 
-	/**
-	 * A number of sort/Iterator tests, including some service dynamics elements.
-	 */
-	public void testRefListServiceReferenceOrderSort() throws Exception {
+    /**
+     * A number of sort/Iterator tests, including some service dynamics elements.
+     */
+    public void testRefListServiceReferenceOrderSort() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ref_list_servicereference_order.jar",
-            getWebServer()+"www/sorting_service_export.jar");
+                getWebServer()+"www/ref_list_servicereference_order.jar",
+                getWebServer()+"www/sorting_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1558,26 +1686,26 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addAssertion("ServiceReferenceOrderChecker", AssertionService.COMPONENT_INIT_METHOD);
 
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceOrderChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
-            null, List.class,
-            null,
-            RefCollectionMetadata.USE_SERVICE_REFERENCE,
-            RefCollectionMetadata.USE_SERVICE_OBJECT)), "list")));
+                new TestProperty(new TestComponentValue(
+                new ReferenceCollection(null,
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
+                null, List.class,
+                null,
+                RefCollectionMetadata.USE_SERVICE_REFERENCE,
+                RefCollectionMetadata.USE_SERVICE_OBJECT)), "list")));
     }
 
 
-	/**
-	 * A number of sort/Iterator tests, including some service dynamics elements.
-	 */
-	public void testRefListNameReferenceSort() throws Exception {
+    /**
+     * A number of sort/Iterator tests, including some service dynamics elements.
+     */
+    public void testRefListNameReferenceSort() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ref_list_name_sort_reference.jar",
-            getWebServer()+"www/sorting_service_export.jar");
+                getWebServer()+"www/ref_list_name_sort_reference.jar",
+                getWebServer()+"www/sorting_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1589,28 +1717,28 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
         // validate the metadata for the different collection types/comparator combinations
         importStartEvents.addValidator(new PropertyMetadataValidator("ComparatorChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
-            null, List.class,
-            new TestRefValue("NameComparator"),
-            RefCollectionMetadata.USE_SERVICE_OBJECT,
-            RefCollectionMetadata.USE_SERVICE_REFERENCE)), "list")));
+                new TestProperty(new TestComponentValue(
+                new ReferenceCollection(null,
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
+                null, List.class,
+                new TestRefValue("NameComparator"),
+                RefCollectionMetadata.USE_SERVICE_OBJECT,
+                RefCollectionMetadata.USE_SERVICE_REFERENCE)), "list")));
 
         controller.run();
     }
 
 
-	/**
-	 * A number of sort/Iterator tests, including some service dynamics elements.
-	 */
-	public void testRefListInvertedNameReferenceSort() throws Exception {
+    /**
+     * A number of sort/Iterator tests, including some service dynamics elements.
+     */
+    public void testRefListInvertedNameReferenceSort() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ref_list_inverted_name_sort_reference.jar",
-            getWebServer()+"www/sorting_service_export.jar");
+                getWebServer()+"www/ref_list_inverted_name_sort_reference.jar",
+                getWebServer()+"www/sorting_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1621,28 +1749,28 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addAssertion("InvertedComparatorChecker", AssertionService.COMPONENT_INIT_METHOD);
 
         importStartEvents.addValidator(new PropertyMetadataValidator("InvertedComparatorChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
-            null, List.class,
-            new TestRefValue("InvertedNameComparator"),
-            RefCollectionMetadata.USE_SERVICE_OBJECT,
-            RefCollectionMetadata.USE_SERVICE_REFERENCE)), "list")));
+                new TestProperty(new TestComponentValue(
+                new ReferenceCollection(null,
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
+                null, List.class,
+                new TestRefValue("InvertedNameComparator"),
+                RefCollectionMetadata.USE_SERVICE_OBJECT,
+                RefCollectionMetadata.USE_SERVICE_REFERENCE)), "list")));
 
         controller.run();
     }
 
 
-	/**
-	 * A number of sort/Iterator tests, including some service dynamics elements.
-	 */
-	public void testRefListReferenceComparatorReferenceSort() throws Exception {
+    /**
+     * A number of sort/Iterator tests, including some service dynamics elements.
+     */
+    public void testRefListReferenceComparatorReferenceSort() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ref_list_reference_comparator_reference.jar",
-            getWebServer()+"www/sorting_service_export.jar");
+                getWebServer()+"www/ref_list_reference_comparator_reference.jar",
+                getWebServer()+"www/sorting_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1653,28 +1781,28 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addAssertion("ServiceReferenceComparatorChecker", AssertionService.COMPONENT_INIT_METHOD);
 
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceComparatorChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
-            null, List.class,
-            new TestRefValue("ServiceReferenceComparator"),
-            RefCollectionMetadata.USE_SERVICE_REFERENCE,
-            RefCollectionMetadata.USE_SERVICE_REFERENCE)), "list")));
+                new TestProperty(new TestComponentValue(
+                new ReferenceCollection(null,
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
+                null, List.class,
+                new TestRefValue("ServiceReferenceComparator"),
+                RefCollectionMetadata.USE_SERVICE_REFERENCE,
+                RefCollectionMetadata.USE_SERVICE_REFERENCE)), "list")));
 
         controller.run();
     }
 
 
-	/**
-	 * A number of sort/Iterator tests, including some service dynamics elements.
-	 */
-	public void testRefListServiceOrderReferenceSort() throws Exception {
+    /**
+     * A number of sort/Iterator tests, including some service dynamics elements.
+     */
+    public void testRefListServiceOrderReferenceSort() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ref_list_service_order_reference.jar",
-            getWebServer()+"www/sorting_service_export.jar");
+                getWebServer()+"www/ref_list_service_order_reference.jar",
+                getWebServer()+"www/sorting_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1686,28 +1814,28 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
 
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceOrderChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
-            null, List.class,
-            null,
-            RefCollectionMetadata.USE_SERVICE_OBJECT,
-            RefCollectionMetadata.USE_SERVICE_REFERENCE)), "list")));
+                new TestProperty(new TestComponentValue(
+                new ReferenceCollection(null,
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
+                null, List.class,
+                null,
+                RefCollectionMetadata.USE_SERVICE_OBJECT,
+                RefCollectionMetadata.USE_SERVICE_REFERENCE)), "list")));
 
         controller.run();
     }
 
 
-	/**
-	 * A number of sort/Iterator tests, including some service dynamics elements.
-	 */
-	public void testRefListServiceReferenceOrderReferenceSort() throws Exception {
+    /**
+     * A number of sort/Iterator tests, including some service dynamics elements.
+     */
+    public void testRefListServiceReferenceOrderReferenceSort() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/ref_list_servicereference_order_reference.jar",
-            getWebServer()+"www/sorting_service_export.jar");
+                getWebServer()+"www/ref_list_servicereference_order_reference.jar",
+                getWebServer()+"www/sorting_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1718,26 +1846,26 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addAssertion("ServiceReferenceOrderChecker", AssertionService.COMPONENT_INIT_METHOD);
 
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceReferenceOrderChecker",
-            new TestProperty(new TestComponentValue(
-            new ReferenceCollection(null,
-            TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
-            null, List.class,
-            null,
-            RefCollectionMetadata.USE_SERVICE_REFERENCE,
-            RefCollectionMetadata.USE_SERVICE_REFERENCE)), "list")));
+                new TestProperty(new TestComponentValue(
+                new ReferenceCollection(null,
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null,
+                null, List.class,
+                null,
+                RefCollectionMetadata.USE_SERVICE_REFERENCE,
+                RefCollectionMetadata.USE_SERVICE_REFERENCE)), "list")));
     }
 
 
-	/**
-	 * Tests set semantics of ref-set
-	 */
-	public void testSetSemantics() throws Exception {
+    /**
+     * Tests set semantics of ref-set
+     */
+    public void testSetSemantics() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/set_semantics_import.jar",
-            getWebServer()+"www/set_semantics_export.jar");
+                getWebServer()+"www/set_semantics_import.jar",
+                getWebServer()+"www/set_semantics_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1751,16 +1879,16 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
     }
 
 
-	/**
-	 * A test for ref collection import using multple specified interfaces.
-	 */
-	public void testReferenceCollectionMultipleInterface() throws Exception {
+    /**
+     * A test for ref collection import using multple specified interfaces.
+     */
+    public void testReferenceCollectionMultipleInterface() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/reference_collection_multiple_interface_import.jar",
-            getWebServer()+"www/sorting_multiple_interface_export.jar");
+                getWebServer()+"www/reference_collection_multiple_interface_import.jar",
+                getWebServer()+"www/sorting_multiple_interface_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1774,16 +1902,16 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
     }
 
 
-	/**
-	 * A test for ServiceReference ref collection import using multple specified interfaces.
-	 */
-	public void testServiceReferenceCollectionMultipleInterface() throws Exception {
+    /**
+     * A test for ServiceReference ref collection import using multple specified interfaces.
+     */
+    public void testServiceReferenceCollectionMultipleInterface() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/reference_collection_multiple_interface_ref_import.jar",
-            getWebServer()+"www/sorting_multiple_interface_export.jar");
+                getWebServer()+"www/reference_collection_multiple_interface_ref_import.jar",
+                getWebServer()+"www/sorting_multiple_interface_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -1797,22 +1925,24 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
     }
 
 
-	/**
-	 * This tests the state of references in the reference collections during
+    /**
+     * This tests the state of references in the reference collections during
      * bind/unbind listener calls for both Set and List.
-	 */
-	public void testBindUnbindSetImport() throws Exception {
+     */
+    public void testBindUnbindSetImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/collection_bind_unbind_set_state.jar",
-            getWebServer()+"www/managed_one_service_export.jar");
+                getWebServer()+"www/collection_bind_unbind_set_state.jar",
+                getWebServer()+"www/managed_one_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
 
         // We're only seeing one service, so we don't need the property bundle.
+        // this is the initial bind event
+        importStartEvents.addAssertion("BindUnbindSetChecker", AssertionService.SERVICE_UNBIND);
 
         // ok, we'll unbind, then bind, then unbind again.  We should see two events, one from
         // each checker component
@@ -1827,26 +1957,36 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // have been any errors, these get signalled as assertion failures and will
         // fail the test.
         importStartEvents.addAssertion("BindUnbindSetChecker", AssertionService.COMPONENT_INIT_METHOD);
+
+        // all of our validation here is on the importing side
+        EventSet importStopEvents = controller.getStopEvents(0);
+
+        // all services are unregistered at this point, so we should not see any listener calls
+        // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
+        // is an error.
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
         controller.run();
     }
 
 
-	/**
-	 * This tests the state of references in the reference collections during
+    /**
+     * This tests the state of references in the reference collections during
      * bind/unbind listener calls for both Set and List.
-	 */
-	public void testBindUnbindListImport() throws Exception {
+     */
+    public void testBindUnbindListImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/collection_bind_unbind_list_state.jar",
-            getWebServer()+"www/managed_one_service_export.jar");
+                getWebServer()+"www/collection_bind_unbind_list_state.jar",
+                getWebServer()+"www/managed_one_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
 
         // We're only seeing one service, so we don't need the property bundle.
+        // this is the initial bind event
+        importStartEvents.addAssertion("BindUnbindSetChecker", AssertionService.SERVICE_UNBIND);
 
         // ok, we'll unbind, then bind, then unbind again.  We should see two events, one from
         // each checker component
@@ -1862,16 +2002,24 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // fail the test.
         importStartEvents.addAssertion("BindUnbindListChecker", AssertionService.COMPONENT_INIT_METHOD);
 
+        // all of our validation here is on the importing side
+        EventSet importStopEvents = controller.getStopEvents(0);
+
+        // all services are unregistered at this point, so we should not see any listener calls
+        // at shutdown.  We can get away with a generic event here, since an UNBIND for any of the services
+        // is an error.
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND));
+
         controller.run();
     }
 
 
-	/*
-	 * This tests the behavior of unregistered manadatory services and
-	 */
-	public void testUnregisteredListServiceDependency() throws Exception {
+    /*
+     * This tests the behavior of unregistered manadatory services and
+     */
+    public void testUnregisteredListServiceDependency() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/unregistered_list_dependency.jar");
+                getWebServer()+"www/unregistered_list_dependency.jar");
         // this is added as a setup bundle because we want to ensure we don't see any
         // waiting events.  This gets the first bundle established before we initialize.
         controller.addSetupBundle(getWebServer()+"www/managed_one_service_export.jar");
@@ -1887,7 +2035,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         props1.put("service.interface.name", TestServiceOne.class.getName());
         props1.put("service.listener.type", "interface");
         props1.put("test.service.name", "ServiceOneA");
-        // this is the initial bind operation at ModuleContext creation
+
+        // this is the initial bind operation at BlueprintContainer creation
         importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, props1));
         // this is followed by an UNBIND operation when the service goes away
         importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, props1));
@@ -1895,7 +2044,6 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, props1));
         // this indicates successful completion of the test phase
         importStartEvents.addAssertion("UnregisteredDependencyChecker", AssertionService.COMPONENT_INIT_METHOD);
-
 
         // there should be no wait event with this
         importStartEvents.addFailureEvent(new BlueprintAdminEvent("WAITING"));
@@ -1909,12 +2057,12 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
     }
 
 
-	/*
-	 * This tests the behavior of unregistered manadatory services and
-	 */
-	public void testUnregisteredSetServiceDependency() throws Exception {
+    /*
+     * This tests the behavior of unregistered manadatory services and
+     */
+    public void testUnregisteredSetServiceDependency() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/unregistered_set_dependency.jar");
+                getWebServer()+"www/unregistered_set_dependency.jar");
         // this is added as a setup bundle because we want to ensure we don't see any
         // waiting events.  This gets the first bundle established before we initialize.
         controller.addSetupBundle(getWebServer()+"www/managed_one_service_export.jar");
@@ -1930,7 +2078,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         props1.put("service.interface.name", TestServiceOne.class.getName());
         props1.put("service.listener.type", "interface");
         props1.put("test.service.name", "ServiceOneA");
-        // this is the initial bind operation at ModuleContext creation
+        // this is the initial bind operation at container creation
         importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, props1));
         // this is followed by an UNBIND operation when the service goes away
         importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, props1));
