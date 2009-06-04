@@ -19,10 +19,14 @@ Private-Package						= ${p}.junit, \
 -runbundles						= 
 
 -runproperties					= report=true, \
-	org.osgi.framework.security=osgi
+	org.osgi.framework.security=osgi, \
+	org.osgi.framework.trust.repositories=${build}/keystore
 
 Test-Cases: ${classes;extending;*TestCase}
 
 Include-Resource		: \
 	contextsharer.jar, \
+	tb1.jar, \
+	tb2.jar, \
+	tb3.jar, \
 	tb4.jar
