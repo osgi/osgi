@@ -3,7 +3,7 @@ package org.osgi.test.cases.permissionadmin.main.contextsharer;
 import java.lang.reflect.*;
 import java.util.*;
 import org.osgi.framework.*;
-import org.osgi.test.cases.permissionadmin.main.tbc.ContextSharer;
+import org.osgi.test.cases.permissionadmin.main.ContextSharer;
 
 public class ContextSharerImpl implements ContextSharer, BundleActivator {
 	BundleContext		bc;
