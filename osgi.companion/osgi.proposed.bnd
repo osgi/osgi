@@ -8,5 +8,4 @@ Import-Package					: *; resolution:=optional
 
 Export-Package 					: ${proposed.packages}
 
-Include-Resource 				: legal/about.html, \
-  								  legal/LICENSE
+Include-Resource 				: ${proposed.resources}

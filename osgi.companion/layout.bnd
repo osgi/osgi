@@ -3,8 +3,8 @@
 
 specs 						= ${uniq; ${core.specs}, ${cmpn.specs}, ${mobile.specs}, ${enterprise.specs}, ${proposed.specs}}
 spec.packages		 		= ${uniq; ${core.packages}, ${cmpn.packages}, ${mobile.packages}, ${enterprise.packages}, ${proposed.packages}}
+spec.resources				= ${uniq; ${core.resources}, ${cmpn.resources}, ${mobile.resources}, ${enterprise.resources}, ${proposed.resources}}
 javadoc.packages		 	= ${uniq; ${core.packages}, ${cmpn.packages}, ${mobile.packages}}
-
 
 ees 						= \
  ee.minimum, \
@@ -18,6 +18,8 @@ core.specs = org.osgi.framework, \
  org.osgi.service.url
 
 core.packages = ${replace;$(core.specs);^.*$;$0.*}
+
+core.resources = legal/about.html, legal/LICENSE
 
 cmpn.specs = \
 	 info.dmtree, \
@@ -52,6 +54,12 @@ cmpn.specs = \
 
 cmpn.packages = ${replace;$(cmpn.specs);^.*$;$0.*}
 
+cmpn.resources = legal/about.html, \
+  				legal/LICENSE, \
+  				xmlns/app=../xmlns/app, \
+  				xmlns/metatype=../xmlns/metatype, \
+  				xmlns/scr=../xmlns/scr
+
 enterprise.specs = \
 	 org.osgi.jmx, \
 	 org.osgi.service.blueprint, \
@@ -60,6 +68,12 @@ enterprise.specs = \
 	 org.osgi.service.jdbc
 
 enterprise.packages = ${replace;$(enterprise.specs);^.*$;$0.*}
+
+enterprise.resources = legal/about.html, \
+  						legal/LICENSE, \
+  						xmlns/blueprint=../xmlns/blueprint, \
+  						xmlns/blueprint-cm=../xmlns/blueprint-cm, \
+  						xmlns/sd=../xmlns/sd
 
 mobile.specs = \
 	 info.dmtree, \
@@ -81,11 +95,21 @@ mobile.specs = \
 	 org.osgi.util.xml
 
 mobile.packages = ${replace;$(mobile.specs);^.*$;$0.*}
+
+mobile.resources = legal/about.html, \
+  					legal/LICENSE, \
+  					xmlns/app=../xmlns/app, \
+  					xmlns/dd=../xmlns/dd, \
+  					xmlns/metatype=../xmlns/metatype, \
+  					xmlns/scr=../xmlns/scr, \
+  					ddf=../ddf/mobile
  
 proposed.specs = \
 	 org.osgi.multiplexer, \
 	 org.osgi.service.framework, \
 	 org.osgi.service.obr
 
-
 proposed.packages = ${replace;$(proposed.specs);^.*$;$0.*}
+
+proposed.resources = legal/about.html, \
+  					legal/LICENSE
