@@ -48,7 +48,7 @@
 
           The Tcomponent type is the base type for top-level
           Blueprint components.  The <bean> <reference>, <service>,
-          <ref-set>, and <ref-list> elements are all derived from
+          and <ref-list> elements are all derived from
           the Tcomponent type.  This type defines an id attributre
           that is used create references between different components.
           Component elements can also be inlined within other component
@@ -79,7 +79,7 @@
                   depends-on identifies (by name) other components that this component
                   depends on.  The component only be activated after the
                   depends-on components are successfully activated.  Also, if there
-                  are <reference>, <ref-list>, <ref-set> elements with unstatisfied
+                  are <reference> or <ref-list> elements with unstatisfied
                   manadatory references, then the depends-on relationship will also
                   be used to determine whether this service is registered or
                   unregistered.
@@ -102,7 +102,7 @@
           the file does not need to specify a type converter section.
 
           Following the type converters are the component definitions.
-          Components are <bean>, <service>, <reference>, <ref-set>, and
+          Components are <bean>, <service>, <reference>, and
           <ref-list> elements that identify the bundle components that will
           be managed by the blueprint service.
           ]]>
@@ -118,8 +118,7 @@
             <!-- top-level components -->
             <xsd:choice minOccurs="0" maxOccurs="unbounded">
                 <xsd:element name="service" type="Tservice" />
-                <xsd:element name="ref-list" type="Tref-collection" />
-                <xsd:element name="ref-set" type="Tref-collection" />
+                <xsd:element name="ref-list" type="Tref-list" />
                 <xsd:element name="bean" type="Tbean" />
                 <xsd:element name="reference" type="Treference" />
                 <xsd:any namespace="##other" processContents="strict" minOccurs="0" maxOccurs="unbounded" />
@@ -159,7 +158,7 @@
                 <xsd:documentation>
                   <![CDATA[
                   Specifies the default availability value to be used for
-                  <reference>, <ref-set>, and <ref-list> components.  The
+                  <reference>, and <ref-list> components.  The
                   normal default is "mandatory", and can be changed by individual
                   service reference components.
                   ]]>
@@ -229,14 +228,13 @@
               <![CDATA[
               allComponents is used in contexts where all component element
               types are value.  The set of component elements contains
-              <bean>, <service>, <reference>, <ref-set>, and <ref-list>.
+              <bean>, <service>, <reference>, and <ref-list>.
               ]]>
             </xsd:documentation>
         </xsd:annotation>
         <xsd:choice>
             <xsd:element name="service" type="Tinlined-service" />
-            <xsd:element name="ref-list" type="Tinlined-ref-collection" />
-            <xsd:element name="ref-set" type="Tinlined-ref-collection" />
+            <xsd:element name="ref-list" type="Tinlined-ref-list" />
             <xsd:group ref="targetComponent" />
         </xsd:choice>
     </xsd:group>
@@ -435,47 +433,20 @@
         </xsd:complexContent>
     </xsd:complexType>
 
-    <!-- ref-set, ref-list -->
-    <xsd:complexType name="Tref-collection">
+    <!-- ref-list -->
+    <xsd:complexType name="Tref-list">
         <xsd:annotation>
             <xsd:documentation>
               <![CDATA[
-              The Tref-collection builds in the characteristics of the
-              TserviceReference type to define characteristics of the <ref-set>
-              and <ref-list> elements.  This adds in the characteristics that
-              only apply to collections of references (e.g., sorting).
+              The Tref-list builds in the characteristics of the
+              TserviceReference type to define characteristics of the
+              <ref-list>.  This adds in the characteristics that
+              only apply to collections of references (e.g., memberType).
               ]]>
             </xsd:documentation>
         </xsd:annotation>
         <xsd:complexContent>
             <xsd:extension base="TserviceReference">
-                <xsd:sequence>
-                    <xsd:element name="comparator" type="Tcomparator" minOccurs="0"
-                        maxOccurs="1">
-                        <xsd:annotation>
-                            <xsd:documentation>
-                               <![CDATA[
-                               The <comparator> element defines a comparator instance that will
-                               be used to sort the constructed reference collection.
-                               ]]>
-                            </xsd:documentation>
-                        </xsd:annotation>
-                    </xsd:element>
-                    <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded"
-                        processContents="lax" />
-                </xsd:sequence>
-
-                <xsd:attribute name="comparator-ref" type="Tidref" use="optional">
-                    <xsd:annotation>
-                        <xsd:documentation>
-                          <![CDATA[
-                          A shortcut alternative to using a <comparator> element when the
-                          comparator target is a top-level <bean> or <service> element.
-                          ]]>
-                        </xsd:documentation>
-                    </xsd:annotation>
-                </xsd:attribute>
-
                 <xsd:attribute name="member-type" type="Tservice-use" use="optional">
                     <xsd:annotation>
                         <xsd:documentation>
@@ -489,39 +460,23 @@
                         </xsd:documentation>
                     </xsd:annotation>
                 </xsd:attribute>
-
-                <xsd:attribute name="ordering-basis" type="Tservice-use" use="optional">
-                    <xsd:annotation>
-                        <xsd:documentation>
-                          <![CDATA[
-                          Indicates how collection sorting is handled.  An ordering
-                          basis of "service" indicates sorting is handled using the service
-                          instance.  "service-reference" indicates sorting is accomplished using
-                          the ServiceReference objects for the contained services.  The default
-                          value is an implicit "none", indicating no sorting should be performed.
-                          ]]>
-                        </xsd:documentation>
-                    </xsd:annotation>
-                </xsd:attribute>
-
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
 
-    <xsd:complexType name="Tinlined-ref-collection">
+    <xsd:complexType name="Tinlined-ref-list">
         <xsd:annotation>
             <xsd:documentation>
               <![CDATA[
-              The Tinlined-ref-collection type is used for inlined (i.e. non top level)
-              <ref-list> and <ref-set> elements.
+              The Tinlined-ref-list type is used for inlined (i.e. non top level)
+              <ref-list> elements.
               ]]>
             </xsd:documentation>
         </xsd:annotation>
         <xsd:complexContent>
-            <xsd:restriction base="Tref-collection">
+            <xsd:restriction base="Tref-list">
                 <xsd:sequence>
                     <xsd:group ref="serviceReferenceElements"/>
-                    <xsd:element name="comparator" type="Tcomparator" minOccurs="0" maxOccurs="1"/>
                     <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax" />
                 </xsd:sequence>
                 <xsd:attribute name="id" use="prohibited"/>
@@ -529,9 +484,7 @@
                 <xsd:attribute name="filter" type="xsd:normalizedString" use="optional"/>
                 <xsd:attribute name="component-name" type="Tidref" use="optional"/>
                 <xsd:attribute name="availability" type="Tavailability" use="optional"/>
-                <xsd:attribute name="comparator-ref" type="Tidref" use="optional"/>
                 <xsd:attribute name="member-type" use="optional" type="Tservice-use"/>
-                <xsd:attribute name="ordering-basis" use="optional" type="Tservice-use"/>
                 <xsd:attribute name="depends-on" type="TdependsOn" use="optional"/>
                 <xsd:anyAttribute namespace="##other" processContents="lax" />
             </xsd:restriction>
@@ -543,8 +496,8 @@
         <xsd:annotation>
             <xsd:documentation>
               <![CDATA[
-              TserviceReference is the base element type used for <reference>,
-              <ref-set>, and <ref-list> elements.  This type defines all of the
+              TserviceReference is the base element type used for <reference>
+              and <ref-list> elements.  This type defines all of the
               characteristics common to both sorts of references.
               ]]>
             </xsd:documentation>
@@ -634,7 +587,7 @@
             <xsd:documentation>
               <![CDATA[
               TReferenceListener defines a reference listener that is attached
-              to a <reference>, <ref-set>, or <ref-list> element.  The listener
+              to a <reference> or <ref-list> element.  The listener
               object can be specified as a <ref> or as an inline <bean> or
               <reference> component.  Listener events are mapped to the indicated
               bind or unbind methods.
@@ -669,7 +622,7 @@
               <![CDATA[
               Tavailability defines an availability attribute type.  This is used in this
               schema by the <blueprint> default-availability attribute and the
-              <reference>, <ref-set>, and <ref-list> availability attribute.
+              <reference> and <ref-list> availability attribute.
               ]]>
             </xsd:documentation>
         </xsd:annotation>
@@ -693,11 +646,6 @@
             <xsd:enumeration value="loose" />
         </xsd:restriction>
     </xsd:simpleType>
-
-    <xsd:complexType name="Tcomparator">
-        <xsd:group ref="targetComponent" />
-        <xsd:attribute name="ref" type="Tidref" />
-    </xsd:complexType>
 
     <!-- service -->
 
@@ -1100,7 +1048,7 @@
             <xsd:documentation>
               <![CDATA[
               The type definition for the <interfaces> element used for <service>,
-              <reference>, <ref-set>, and <ref-list>;
+              <reference> and <ref-list>;
               ]]>
             </xsd:documentation>
         </xsd:annotation>
