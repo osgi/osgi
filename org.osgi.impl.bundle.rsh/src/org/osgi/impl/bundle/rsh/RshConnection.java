@@ -245,7 +245,8 @@ public class RshConnection extends URLConnection {
 
 	/** Proxied to the shadowed HTTP url connection */
 	public void setRequestProperty(java.lang.String p, java.lang.String v) {
-		urlConnection.setRequestProperty(p, v);
+		if (urlConnection != null)
+			urlConnection.setRequestProperty(p, v);
 	}
 
 	/** Proxied to the shadowed HTTP url connection */
