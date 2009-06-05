@@ -18,6 +18,7 @@ package org.osgi.test.cases.blueprint.tests;
 
 import java.util.Hashtable;
 
+import org.osgi.service.blueprint.reflect.BeanMetadata;
 import org.osgi.service.blueprint.reflect.ServiceMetadata;
 import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
 import org.osgi.test.cases.blueprint.components.serviceimport.ServiceTwoListener;
@@ -196,7 +197,8 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         serviceProps.put("autoExport", "All");
         exportStartEvents.addValidator(new ServiceRegistrationValidator(
                 new Class[] { TestServiceOne.class, TestServiceTwo.class, TestServiceTwoSubclass.class, TestServiceAllSubclass.class,
-                    TestGoodService.class, TestGoodServiceSubclass.class, TestBadService.class, BaseTestComponent.class, ComponentTestInfo.class},
+                    TestGoodService.class, TestGoodServiceSubclass.class, TestBadService.class, BaseTestComponent.class,
+                    ComponentTestInfo.class, Comparable.class},
                 "BadService", null, serviceProps));
         // also validate the metadata for the exported service
         TestPropsValue metaServiceProps = new TestPropsValue();
@@ -227,8 +229,9 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         ReferencedService service = new ReferencedService(null, TestServiceOne.class,
                 ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, null, ReferencedService.DEFAULT_TIMEOUT);
 
-        // also validate the metadata for the imported service (this one only has a single import, so easy to locate)
-        importStartEvents.addValidator(new ReferencedServiceValidator(service));
+        // also validate the metadata for the imported service.  We're importing the same service twice using
+        // an inline <reference>, so this should show up twice in the metadata
+        importStartEvents.addValidator(new ReferencedServiceValidator(new ReferencedService[] { service, service }));
 
         // do some validation of the import metadata of the injected parameter.  Since these are
         // embedded elements, they're reuse the definition above
@@ -1349,6 +1352,8 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
             new BindingListener("ServiceOneListener", "bind", "unbind"),
             // this is done with an inner component
                     new BindingListener(new TestComponentValue(new BeanComponent(null, ServiceTwoListener.class, null, null)), "bind", "unbind"),
+                    new BindingListener(new TestComponentValue(new BeanComponent(null, ServiceTwoListener.class, null, null, null, null, null,
+                    null, BeanMetadata.INITIALIZATION_EAGER, BeanMetadata.SCOPE_PROTOTYPE)), "bind", "unbind"),
         };
         // validate the metadata for the imported service (this one only has a single import, so easy to locate)
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferencedService("ServiceOne", TestServiceOne.class,

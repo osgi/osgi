@@ -134,12 +134,6 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
         expected = new Character[2];
         expected[0] = new Character('a');
         expected[1] = new Character('b');
-        this.addConstructorValidator(startEvents, "compCharArray", expected, expected.getClass());
-
-        // Wrapped char array
-        expected = new Character[2];
-        expected[0] = new Character('a');
-        expected[1] = new Character('b');
         this.addConstructorValidator(startEvents, "compWrappedCharArray", expected, expected.getClass());
 
         // Primitive short array
@@ -207,7 +201,7 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
         expected = new Class[2];
         expected[0] = String.class;
         expected[1] = Boolean.class;
-        this.addConstructorValidator(startEvents, "compURLArray", expected, expected.getClass());
+        this.addConstructorValidator(startEvents, "compClassArray", expected, expected.getClass());
 
         // Locale array
         expected = new Locale[2];

@@ -314,7 +314,7 @@
 	</bean>
 
 	<!-- Injection of nested array -->
-	<bean id="compNestedArray" factory-method="makeInstance"
+	<bean id="compNestedArray"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
 		<argument>
 			<array value-type="java.lang.Object">

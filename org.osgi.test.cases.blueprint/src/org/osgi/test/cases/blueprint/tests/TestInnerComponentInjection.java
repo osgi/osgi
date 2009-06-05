@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.osgi.service.blueprint.reflect.BeanMetadata;
+
 import org.osgi.test.cases.blueprint.components.injection.ConstructorInjection;
 import org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory;
 import org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection;
@@ -72,20 +74,6 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         startEvents.addAssertion("compInnerTwo_2", AssertionService.COMPONENT_CREATED);
 
         TestComponentValue testComponentValue = new TestComponentValue(new BeanComponent(InnerComponentInjection.class,null,null,null));
-        //Ignore ID
-        startEvents.addValidator(new ArgumentMetadataValidator(
-                "compInnerIgnoreID",
-                new TestArgument[] {
-                    new StringArgument("compInnerIgnoreID"),
-                    new TestArgument(testComponentValue) }
-        ));
-        //Ignore scope
-        startEvents.addValidator(new ArgumentMetadataValidator(
-                "compInnerIgnoreScope",
-                new TestArgument[] {
-                    new StringArgument("compInnerIgnoreScope"),
-                    new TestArgument(testComponentValue) }
-        ));
 
         controller.run();
     }
@@ -169,10 +157,16 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         // metadata test
         TestComponentValue testComponentValue = new TestComponentValue(
                 new BeanComponent(
+                        null,
                         innerComponentClass,
                         factoryMethodName,
+                        null,
+                        null,
                         new TestArgument[] { new StringArgument(innerArgTargetType, innerArgSource, innerArgValueType) },
-                        null
+                        null,
+ 						null,
+ 						BeanMetadata.INITIALIZATION_EAGER,
+ 						BeanMetadata.SCOPE_PROTOTYPE
                 )
         );
         startEvents.addValidator(
@@ -398,10 +392,16 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
             String innerProName, Class innerProType, String innerProSource ) {
         TestComponentValue testComponentValue = new TestComponentValue(
                 new BeanComponent(
+                        null,
                         innerComponentSpecifiedClass,
                         factoryMethodName,
                         null,
-                        new TestProperty[] { new StringProperty(innerProName, innerProType, innerProSource) }
+                        null,
+                        null,
+                        new TestProperty[] { new StringProperty(innerProName, innerProType, innerProSource) },
+ 						null,
+ 						BeanMetadata.INITIALIZATION_EAGER,
+ 						BeanMetadata.SCOPE_PROTOTYPE
                 )
         );
         startEvents.addValidator(
@@ -488,10 +488,16 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
             Class innerArgTargetType, Class innerArgValueType, String innerArgSource){
         return new TestComponentValue(
                 new BeanComponent(
+                        null,
                         innerComponentClass,
                         factoryMethodName,
+                        null,
+                        null,
                         new TestArgument[] { new StringArgument(innerArgTargetType, innerArgSource, innerArgValueType) },
-                        null
+                        null,
+                        null,
+ 						BeanMetadata.INITIALIZATION_EAGER,
+ 						BeanMetadata.SCOPE_PROTOTYPE
                 )
         );
     }
@@ -532,10 +538,16 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         TestComponentValue testComponentValue3 = this.makeTestComponentValue(ConstructorInjection.class, null, null, null, "compInner3");
         TestComponentValue testComponentValue4 = new TestComponentValue(
                 new BeanComponent(
+                        null,
                         PropertyInjection.class,
                         null,
                         null,
-                        new TestProperty[] { new StringProperty("string", null, "compInner4") }
+                        null,
+                        null,
+                        new TestProperty[] { new StringProperty("string", null, "compInner4") },
+                     	null,
+ 						BeanMetadata.INITIALIZATION_EAGER,
+ 						BeanMetadata.SCOPE_PROTOTYPE
                 )
         );
         startEvents.addValidator(
@@ -568,18 +580,30 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         TestComponentValue compInnerEntryValue1 = this.makeTestComponentValue(ConstructorInjection.class, null, null, null, "compInnerEntryValue1");
         TestComponentValue compInnerEntryKey2 = new TestComponentValue(
         new BeanComponent(
+                null,
                 PropertyInjection.class,
                 null,
                 null,
-                new TestProperty[] { new StringProperty("string", null, "compInnerEntryKey2") }
+                null,
+                null,
+                new TestProperty[] { new StringProperty("string", null, "compInnerEntryKey2") },
+                null,
+ 				BeanMetadata.INITIALIZATION_EAGER,
+ 				BeanMetadata.SCOPE_PROTOTYPE
                 )
         );
         TestComponentValue compInnerEntryValue2 =  new TestComponentValue(
                 new BeanComponent(
+                        null,
                         PropertyInjection.class,
                         null,
                         null,
-                        new TestProperty[] { new StringProperty("string", null, "compInnerEntryValue2") }
+                        null,
+                        null,
+                        new TestProperty[] { new StringProperty("string", null, "compInnerEntryValue2") },
+                        null,
+                        BeanMetadata.INITIALIZATION_EAGER,
+                        BeanMetadata.SCOPE_PROTOTYPE
                         )
                 );
 

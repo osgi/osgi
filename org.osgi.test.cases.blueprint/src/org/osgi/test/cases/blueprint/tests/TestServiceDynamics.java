@@ -300,7 +300,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         // now we chain a few events to actions to allow us to track the dynamics.
         EventSet startEvents = controller.getTestEvents();
         // we should see one of these before the failures
-        startEvents.addEvent(new ServiceBlueprintEvent("WAITING", new Class[] { TestServiceOne.class }));
+        startEvents.addEvent(new ServiceBlueprintEvent("GRACE_PERIOD", new Class[] { TestServiceOne.class }));
         // remove the current failure event....we want a more specific one to test the properties getting set.
         startEvents.removeEvent(new BlueprintAdminEvent("FAILURE"));
         // this failure event will verify the information about the failing dependency is set.

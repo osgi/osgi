@@ -175,10 +175,10 @@ public class TestClasstypeInjection extends DefaultTestBundleControl {
         this.addPropertyValidator(startEvents, "compLocale_EleValue", "locale", new Locale("en", "US"), Locale.class);
 
         // "Class" tests
-        this.addPropertyValidator(startEvents, "compClass", "class", String.class, Class.class);
-        this.addPropertyValidator(startEvents, "compClassNull", "class", Class.class);
+        this.addPropertyValidator(startEvents, "compClass", "classProp", String.class, Class.class);
+        this.addPropertyValidator(startEvents, "compClassNull", "classProp", Class.class);
         // this case is different from the ConstructorInjection
-        this.addPropertyValidator(startEvents, "compClass_EleValue", "class", PropertyInjection.class, Class.class);
+        this.addPropertyValidator(startEvents, "compClass_EleValue", "classProp", PropertyInjection.class, Class.class);
 
         // "Properties" tests
         Properties properties = new Properties();

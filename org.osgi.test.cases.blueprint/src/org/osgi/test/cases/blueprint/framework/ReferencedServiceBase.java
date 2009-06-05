@@ -73,7 +73,7 @@ public class ReferencedServiceBase extends Assert implements TestComponentMetada
         // convert this into a set
         this.serviceInterfaces = new HashSet();
         for (int i = 0; i < interfaces.length; i++) {
-            serviceInterfaces.add(interfaces[i]);
+            serviceInterfaces.add(interfaces[i].getName());
         }
     }
 
@@ -93,7 +93,7 @@ public class ReferencedServiceBase extends Assert implements TestComponentMetada
         ServiceReferenceMetadata meta = (ServiceReferenceMetadata)componentMeta;
 
         // match on the interfaces first
-        if (!serviceInterfaces.equals(meta.getInterfaceNames())) {
+        if (!serviceInterfaces.equals(new HashSet(meta.getInterfaceNames()))) {
             return false;
         }
 

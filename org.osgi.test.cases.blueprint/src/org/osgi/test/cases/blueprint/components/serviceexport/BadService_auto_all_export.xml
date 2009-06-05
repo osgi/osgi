@@ -13,7 +13,7 @@
           <entry key="autoExport" value="All"/>
       </service-properties>
        <!-- the node this service export maps into. -->
-      <bean class="org.osgi.test.cases.blueprint.services.TestBadService" init-method="init" destroy-method="destroy">
+      <bean class="org.osgi.test.cases.blueprint.services.TestBadService" init-method="init">
           <argument value="ServiceOne"/>
       </bean>
    </service>

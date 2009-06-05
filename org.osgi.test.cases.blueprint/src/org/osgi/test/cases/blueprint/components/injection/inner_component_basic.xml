@@ -38,22 +38,4 @@
 		</argument>
 	</bean>
 
-<!-- ignores -->
-    <bean id="compInnerIgnoreID" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-		<argument value="compInnerIgnoreID"/>
-		<argument>
-			<bean id="compInnerIgnoreID_1" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-			</bean>
-		</argument>
-	</bean>
-
-    <bean id="compInnerIgnoreScope" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-		<argument value="compInnerIgnoreScope"/>
-		<argument>
-			<bean scope="singleton" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
-			</bean>
-		</argument>
-	</bean>
-
-
 </blueprint>

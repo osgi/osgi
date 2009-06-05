@@ -362,22 +362,22 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
 
         // This is a bonus part of the test.  Check that the default component exist and are of the
         // correct type.
-        startEvents.addValidator(new ComponentTypeValidator("bundle", Bundle.class));
-        startEvents.addValidator(new ComponentTypeValidator("bundleContext", BundleContext.class));
+        startEvents.addValidator(new ComponentTypeValidator("blueprintBundle", Bundle.class));
+        startEvents.addValidator(new ComponentTypeValidator("blueprintBundleContext", BundleContext.class));
         startEvents.addValidator(new ComponentTypeValidator("blueprintContainer", BlueprintContainer.class));
         startEvents.addValidator(new ComponentTypeValidator("blueprintConverter", Converter.class));
 
         // and finally, these should be listed in the set of component names
-        startEvents.addValidator(new ComponentNamePresenceValidator("bundle"));
-        startEvents.addValidator(new ComponentNamePresenceValidator("bundleContext"));
+        startEvents.addValidator(new ComponentNamePresenceValidator("blueprintBundle"));
+        startEvents.addValidator(new ComponentNamePresenceValidator("blueprintBundleContext"));
         startEvents.addValidator(new ComponentNamePresenceValidator("blueprintContainer"));
-        startEvents.addValidator(new ComponentNamePresenceValidator("conversionService"));
+        startEvents.addValidator(new ComponentNamePresenceValidator("blueprintConverter"));
 
         // now verify that these have associated metadata
-        startEvents.addValidator(new ComponentMetadataPresenceValidator("bundle", BeanMetadata.class));
-        startEvents.addValidator(new ComponentMetadataPresenceValidator("bundleContext", BeanMetadata.class));
+        startEvents.addValidator(new ComponentMetadataPresenceValidator("blueprintBundle", BeanMetadata.class));
+        startEvents.addValidator(new ComponentMetadataPresenceValidator("blueprintBundleContext", BeanMetadata.class));
         startEvents.addValidator(new ComponentMetadataPresenceValidator("blueprintContainer", BeanMetadata.class));
-        startEvents.addValidator(new ComponentMetadataPresenceValidator("conversionService", BeanMetadata.class));
+        startEvents.addValidator(new ComponentMetadataPresenceValidator("blueprintConverter", BeanMetadata.class));
 
         // if we receive the above events and no assertion failures, then everything has worked.
         controller.run();

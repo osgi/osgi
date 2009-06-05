@@ -21,7 +21,7 @@
        <argument value="UnavailableDependencyChecker"/>
        <property name="one" ref="ServiceOne"/>
        <property name="serviceManager">
-           <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
+           <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager" availability="mandatory"/>
        </property>
    </bean>
 </blueprint>

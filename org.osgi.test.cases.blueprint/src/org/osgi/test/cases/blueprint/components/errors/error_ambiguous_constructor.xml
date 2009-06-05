@@ -6,7 +6,7 @@
     </description>
 
    <bean id="compOneArg" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <argumentvalue="compOneArg"/>
+       <argument value="compOneArg"/>
    </bean>
 </blueprint>
 

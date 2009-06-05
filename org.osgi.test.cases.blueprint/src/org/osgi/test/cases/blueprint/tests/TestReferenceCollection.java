@@ -353,8 +353,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         propsC.put("test.service.name", "ServiceOneC");
 
         // we get an initial set of bind events for the starting services
-        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsA));
-        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsC));
+        importStartEvents.addEvent(new ComponentAssertion("NullReferenceChecker", AssertionService.SERVICE_BIND, propsA));
+        importStartEvents.addEvent(new ComponentAssertion("NullReferenceChecker", AssertionService.SERVICE_BIND, propsC));
 
         // the first step taken in the test is complete the registration of the
         // rest of the managed services.  This will result in an extra bind event
@@ -679,8 +679,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         propsC.put("test.service.name", "ServiceOneC");
 
         // We get these at startup from the initial set
-        importStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsA));
-        importStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsC));
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsA));
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsC));
 
         // and one for the reference to the service, which should just be a component reference
         importStartEvents.addValidator(new PropertyMetadataValidator("ReferenceChecker",
@@ -945,8 +945,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         propsC.put("test.service.name", "ServiceOneC");
 
         // These happen at startup
-        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsA));
-        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsC));
+        importStartEvents.addEvent(new ComponentAssertion("NullReferenceChecker", AssertionService.SERVICE_BIND, propsA));
+        importStartEvents.addEvent(new ComponentAssertion("NullReferenceChecker", AssertionService.SERVICE_BIND, propsC));
 
         // the first step taken in the test is to complete the registration of the
         // rest of the managed services.  This will result in an extra bind event
@@ -1942,7 +1942,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
         // We're only seeing one service, so we don't need the property bundle.
         // this is the initial bind event
-        importStartEvents.addAssertion("BindUnbindSetChecker", AssertionService.SERVICE_UNBIND);
+        importStartEvents.addAssertion("BindUnbindSetChecker", AssertionService.SERVICE_BIND);
 
         // ok, we'll unbind, then bind, then unbind again.  We should see two events, one from
         // each checker component
@@ -1986,7 +1986,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
         // We're only seeing one service, so we don't need the property bundle.
         // this is the initial bind event
-        importStartEvents.addAssertion("BindUnbindSetChecker", AssertionService.SERVICE_UNBIND);
+        importStartEvents.addAssertion("BindUnbindSetChecker", AssertionService.SERVICE_BIND);
 
         // ok, we'll unbind, then bind, then unbind again.  We should see two events, one from
         // each checker component

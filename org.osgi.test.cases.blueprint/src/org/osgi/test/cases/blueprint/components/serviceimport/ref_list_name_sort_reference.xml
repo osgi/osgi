@@ -18,7 +18,6 @@
         <property name="list">
             <ref-list interface="org.osgi.test.cases.blueprint.services.TestServiceOne" ordering-basis="service-object" member-type="service-reference">
                 <comparator ref="NameComparator"/>
-                </comparator>
             </ref-list>
         </property>
         <property name="sortOrder">

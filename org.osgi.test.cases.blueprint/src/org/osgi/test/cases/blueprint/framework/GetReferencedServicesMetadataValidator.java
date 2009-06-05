@@ -65,7 +65,7 @@ public class GetReferencedServicesMetadataValidator extends MetadataValidator {
 
         BlueprintContainer context = blueprintMetadata.getTargetBlueprintContainer();
         // get the collection list
-        Collection metadata = context.getMetadata(ReferenceMetadata.class);
+        Collection metadata = context.getMetadata(ServiceReferenceMetadata.class);
         Iterator i = metadata.iterator();
 
         while (i.hasNext()) {
@@ -75,7 +75,7 @@ public class GetReferencedServicesMetadataValidator extends MetadataValidator {
                 try {
                     // this is an immutability test for the collection.  This should throw an error
                     i.remove();
-                    fail("Immutable getReferencedServicesMetadata() test failure for component " + componentId);
+                    fail("Immutable getMetadata() test failure for component " + componentId);
                 } catch (Throwable e) {
                 }
                 return;

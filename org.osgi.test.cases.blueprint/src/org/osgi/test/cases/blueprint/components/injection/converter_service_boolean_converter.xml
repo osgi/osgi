@@ -5,7 +5,7 @@
              <ref component-id="customBooleanConverter"/>
 	</type-converters>
 
-    <reference id="customBooleanConverter" interface="org.osgi.service.blueprint.convert.Converter"/>
+    <reference id="customBooleanConverter" interface="org.osgi.service.blueprint.container.Converter"/>
 
 <!--Constructor-->
 	<bean id="compCustomBoolean_cnst" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
