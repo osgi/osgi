@@ -86,14 +86,15 @@
         <xsd:complexContent>
             <xsd:extension base="bp:Tcomponent">
                 <xsd:sequence>
-                    <xsd:group ref="bp:serviceElements"/>
+                    <xsd:group ref="bp:baseServiceElements"/>
                     <xsd:element name="managed-component" type="TmanagedComponent" minOccurs="1" maxOccurs="1"/>
                 </xsd:sequence>
-                <xsd:attribute name="factory-pid" type="xsd:string" use="required"/>
-                <xsd:attribute name="interface" type="bp:Tclass" use="optional"/>
-                <xsd:attribute name="auto-export" type="bp:TautoExportModes" default="disabled"/>
+                <xsd:attribute name="interface" type="bp:Tclass" use="optional" />
+                <xsd:attribute name="ref" type="bp:Tidref" use="optional" />
+                <xsd:attribute name="auto-export" type="bp:TautoExportModes" default="disabled" />
                 <xsd:attribute name="ranking" type="xsd:int" default="0"/>
-                <xsd:anyAttribute namespace="##other" processContents="lax"/>
+                <xsd:attribute name="factory-pid" type="xsd:string" use="required"/>
+                <xsd:anyAttribute namespace="##other" processContents="strict"/>
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
@@ -105,7 +106,7 @@
         <xsd:attribute name="destroy-method" type="bp:Tmethod"/>
         <xsd:attribute name="factory-method" type="bp:Tmethod"/>
         <xsd:attribute name="factory-component" type="bp:Tidref"/>
-        <xsd:anyAttribute namespace="##other" processContents="lax"/>
+        <xsd:anyAttribute namespace="##other" processContents="strict"/>
     </xsd:complexType>
 
 

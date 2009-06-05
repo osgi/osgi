@@ -121,7 +121,7 @@
                 <xsd:element name="ref-list" type="Tref-list" />
                 <xsd:element name="bean" type="Tbean" />
                 <xsd:element name="reference" type="Treference" />
-                <xsd:any namespace="##other" processContents="strict" minOccurs="0" maxOccurs="unbounded" />
+                <xsd:any namespace="##other" processContents="strict"/>
             </xsd:choice>
         </xsd:sequence>
 
@@ -176,7 +176,7 @@
                 </xsd:documentation>
             </xsd:annotation>
         </xsd:attribute>
-        <xsd:anyAttribute namespace="##other" processContents="lax" />
+        <xsd:anyAttribute namespace="##other" processContents="strict" />
     </xsd:complexType>
 
     <xsd:complexType name="Ttype-converters">
@@ -194,7 +194,7 @@
             <xsd:element name="bean" type="Tbean" />
             <xsd:element name="reference" type="Treference" />
             <xsd:element name="ref" type="Tref" />
-            <xsd:any namespace="##other" processContents="strict" minOccurs="0" maxOccurs="unbounded" />
+            <xsd:any namespace="##other" processContents="strict"/>
         </xsd:choice>
     </xsd:complexType>
 
@@ -218,7 +218,7 @@
             <xsd:element name="bean" type="Tinlined-bean" />
             <xsd:element name="reference" type="Tinlined-reference" />
             <xsd:element name="ref" type="Tref" />
-            <xsd:any namespace="##other" processContents="strict" minOccurs="0" maxOccurs="unbounded" />
+            <xsd:any namespace="##other" processContents="strict"/>
         </xsd:choice>
     </xsd:group>
 
@@ -254,8 +254,7 @@
             <xsd:choice minOccurs="0" maxOccurs="unbounded">
                 <xsd:element name="argument" type="Targument" />
                 <xsd:element name="property" type="Tproperty" />
-                <xsd:any namespace="##other" processContents="strict" minOccurs="0"
-                    maxOccurs="unbounded" />
+                <xsd:any namespace="##other" processContents="strict"/>
             </xsd:choice>
         </xsd:sequence>
     </xsd:group>
@@ -282,7 +281,7 @@
                 <xsd:attribute name="factory-method" type="Tmethod" />
                 <xsd:attribute name="factory-ref" type="Tidref" />
                 <xsd:attribute name="scope" type="Tscope" />
-                <xsd:anyAttribute namespace="##other" processContents="lax" />
+                <xsd:anyAttribute namespace="##other" processContents="strict" />
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
@@ -309,7 +308,7 @@
                 <xsd:attribute name="factory-method" type="Tmethod" />
                 <xsd:attribute name="factory-ref" type="Tidref" />
                 <xsd:attribute name="scope" fixed="prototype" type="Tscope"/>
-                <xsd:anyAttribute namespace="##other" processContents="lax" />
+                <xsd:anyAttribute namespace="##other" processContents="strict" />
             </xsd:restriction>
         </xsd:complexContent>
     </xsd:complexType>
@@ -337,7 +336,7 @@
         </xsd:annotation>
         <xsd:sequence>
             <xsd:element name="description" type="Tdescription" minOccurs="0" />
-            <xsd:group ref="value" />
+            <xsd:group ref="value" minOccurs="0"/>
         </xsd:sequence>
         <xsd:attribute name="index" type="xsd:nonNegativeInteger" />
         <xsd:attribute name="type" type="Tclass" />
@@ -362,7 +361,7 @@
         </xsd:annotation>
         <xsd:sequence>
             <xsd:element name="description" type="Tdescription" minOccurs="0" />
-            <xsd:group ref="value" />
+            <xsd:group ref="value" minOccurs="0"/>
         </xsd:sequence>
         <xsd:attribute name="name" type="Tmethod" use="required" />
         <xsd:attribute name="ref" type="Tidref" />
@@ -398,7 +397,7 @@
         <xsd:complexContent>
             <xsd:extension base="TserviceReference">
                 <xsd:sequence>
-                    <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax" />
+                    <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="strict" />
                 </xsd:sequence>
                 <xsd:attribute name="timeout" use="optional" type="Ttimeout" />
             </xsd:extension>
@@ -418,7 +417,7 @@
             <xsd:restriction base="Treference">
                 <xsd:sequence>
                     <xsd:group ref="serviceReferenceElements"/>
-                    <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax" />
+                    <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="strict" />
                 </xsd:sequence>
                 <xsd:attribute name="id" use="prohibited"/>
                 <xsd:attribute name="depends-on" type="TdependsOn" use="optional"/>
@@ -428,7 +427,7 @@
                 <xsd:attribute name="component-name" type="Tidref" use="optional"/>
                 <xsd:attribute name="availability" type="Tavailability" use="optional"/>
                 <xsd:attribute name="timeout" type="Ttimeout" use="optional"/>
-                <xsd:anyAttribute namespace="##other" processContents="lax" />
+                <xsd:anyAttribute namespace="##other" processContents="strict" />
             </xsd:restriction>
         </xsd:complexContent>
     </xsd:complexType>
@@ -447,6 +446,9 @@
         </xsd:annotation>
         <xsd:complexContent>
             <xsd:extension base="TserviceReference">
+                <xsd:sequence>
+                    <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="strict" />
+                </xsd:sequence>
                 <xsd:attribute name="member-type" type="Tservice-use" use="optional">
                     <xsd:annotation>
                         <xsd:documentation>
@@ -477,16 +479,17 @@
             <xsd:restriction base="Tref-list">
                 <xsd:sequence>
                     <xsd:group ref="serviceReferenceElements"/>
-                    <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax" />
+                    <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="strict" />
                 </xsd:sequence>
                 <xsd:attribute name="id" use="prohibited"/>
+                <xsd:attribute name="depends-on" type="TdependsOn" use="optional"/>
+                <xsd:attribute name="initialization" use="prohibited"/>
                 <xsd:attribute name="interface" type="Tclass" use="optional"/>
                 <xsd:attribute name="filter" type="xsd:normalizedString" use="optional"/>
                 <xsd:attribute name="component-name" type="Tidref" use="optional"/>
                 <xsd:attribute name="availability" type="Tavailability" use="optional"/>
                 <xsd:attribute name="member-type" use="optional" type="Tservice-use"/>
-                <xsd:attribute name="depends-on" type="TdependsOn" use="optional"/>
-                <xsd:anyAttribute namespace="##other" processContents="lax" />
+                <xsd:anyAttribute namespace="##other" processContents="strict" />
             </xsd:restriction>
         </xsd:complexContent>
     </xsd:complexType>
@@ -545,7 +548,7 @@
                         </xsd:documentation>
                     </xsd:annotation>
                 </xsd:attribute>
-                <xsd:anyAttribute namespace="##other" processContents="lax" />
+                <xsd:anyAttribute namespace="##other" processContents="strict" />
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
@@ -594,7 +597,9 @@
               ]]>
             </xsd:documentation>
         </xsd:annotation>
-        <xsd:group ref="targetComponent" />
+        <xsd:sequence>
+            <xsd:group ref="targetComponent" minOccurs="0"/>
+        </xsd:sequence>
         <xsd:attribute name="ref" type="xsd:NMTOKEN" use="optional" />
         <xsd:attribute name="bind-method" type="Tmethod" use="optional" />
         <xsd:attribute name="unbind-method" type="Tmethod" use="optional" />
@@ -663,8 +668,6 @@
             <xsd:extension base="Tcomponent">
                 <xsd:sequence>
                     <xsd:group ref="serviceElements" />
-                    <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded"
-                        processContents="lax" />
                 </xsd:sequence>
                 <xsd:attribute name="interface" type="Tclass" use="optional" />
                 <xsd:attribute name="ref" type="Tidref" use="optional" />
@@ -679,7 +682,7 @@
                         </xsd:documentation>
                     </xsd:annotation>
                 </xsd:attribute>
-                <xsd:anyAttribute namespace="##other" processContents="lax" />
+                <xsd:anyAttribute namespace="##other" processContents="strict" />
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
@@ -697,7 +700,6 @@
             <xsd:restriction base="Tservice">
                 <xsd:sequence>
                     <xsd:group ref="serviceElements" />
-                    <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax" />
                 </xsd:sequence>
                 <xsd:attribute name="id" use="prohibited"/>
                 <xsd:attribute name="depends-on" type="TdependsOn" use="optional"/>
@@ -706,21 +708,12 @@
                 <xsd:attribute name="ref" type="Tidref" use="optional" />
                 <xsd:attribute name="auto-export" type="TautoExportModes" default="disabled" />
                 <xsd:attribute name="ranking" type="xsd:int" default="0"/>
-                <xsd:anyAttribute namespace="##other" processContents="lax" />
+                <xsd:anyAttribute namespace="##other" processContents="strict" />
             </xsd:restriction>
         </xsd:complexContent>
     </xsd:complexType>
 
-    <xsd:group name="serviceElements">
-        <xsd:annotation>
-            <xsd:documentation>
-              <![CDATA[
-              A set of service elements that is shared by the <service> element
-              in this schema and the <managed-service-factory> element in the
-              blueprint-cm schema.
-              ]]>
-            </xsd:documentation>
-        </xsd:annotation>
+    <xsd:group name="baseServiceElements">
         <xsd:sequence>
             <xsd:element name="description" type="Tdescription" minOccurs="0" />
             <xsd:element name="interfaces" type="Tinterfaces" minOccurs="0">
@@ -761,7 +754,22 @@
                     </xsd:documentation>
                 </xsd:annotation>
             </xsd:element>
-            <xsd:group ref="targetComponent">
+       </xsd:sequence>
+   </xsd:group>
+
+    <xsd:group name="serviceElements">
+        <xsd:annotation>
+            <xsd:documentation>
+              <![CDATA[
+              A set of service elements that is shared by the <service> element
+              in this schema and the <managed-service-factory> element in the
+              blueprint-cm schema.
+              ]]>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:group ref="baseServiceElements"/>
+            <xsd:group ref="targetComponent" minOccurs="0">
                 <xsd:annotation>
                     <xsd:documentation>
                       <![CDATA[
@@ -790,7 +798,9 @@
               ]]>
             </xsd:documentation>
         </xsd:annotation>
-        <xsd:group ref="targetComponent" />
+        <xsd:sequence>
+            <xsd:group ref="targetComponent" minOccurs="0"/>
+        </xsd:sequence>
         <xsd:attribute name="ref" type="Tidref" use="optional" />
         <!--  ### why are there both required? -->
         <xsd:attribute name="registration-method" type="Tmethod" use="optional" />
@@ -828,7 +838,6 @@
               ]]>
             </xsd:documentation>
         </xsd:annotation>
-        <xsd:choice minOccurs="0" maxOccurs="unbounded" />
     </xsd:complexType>
 
     <xsd:group name="nonNullValue">
@@ -845,18 +854,16 @@
               ]]>
             </xsd:documentation>
         </xsd:annotation>
-        <xsd:sequence>
-            <xsd:group ref="allComponents" />
-            <xsd:choice minOccurs="0" maxOccurs="1">
-                <xsd:element name="idref" type="Tref" />
-                <xsd:element name="value" type="Tvalue" />
-                <xsd:element name="list" type="Tcollection" />
-                <xsd:element name="set" type="Tcollection" />
-                <xsd:element name="map" type="Tmap" />
-                <xsd:element name="array" type="Tcollection" />
-                <xsd:element name="props" type="Tprops" />
-            </xsd:choice>
-        </xsd:sequence>
+        <xsd:choice>
+            <xsd:group ref="allComponents"/>
+            <xsd:element name="idref" type="Tref" />
+            <xsd:element name="value" type="Tvalue" />
+            <xsd:element name="list" type="Tcollection" />
+            <xsd:element name="set" type="Tcollection" />
+            <xsd:element name="map" type="Tmap" />
+            <xsd:element name="array" type="Tcollection" />
+            <xsd:element name="props" type="Tprops" />
+        </xsd:choice>
     </xsd:group>
 
     <xsd:complexType name="Tref">
@@ -983,7 +990,7 @@
         </xsd:annotation>
         <xsd:sequence>
             <xsd:element name="key" type="Tkey" minOccurs="0" />
-            <xsd:group ref="value" />
+            <xsd:group ref="value" minOccurs="0"/>
         </xsd:sequence>
         <xsd:attribute name="key" type="TstringValue" />
         <xsd:attribute name="key-ref" type="Tidref" />
@@ -1023,7 +1030,7 @@
             </xsd:documentation>
         </xsd:annotation>
         <xsd:sequence>
-            <xsd:group ref="value" />
+            <xsd:group ref="value" minOccurs="0"/>
         </xsd:sequence>
         <xsd:attribute name="key" type="TstringValue" use="required" />
         <xsd:attribute name="value" type="TstringValue" use="optional" />
