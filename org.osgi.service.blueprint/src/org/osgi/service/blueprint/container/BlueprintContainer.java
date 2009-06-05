@@ -98,8 +98,8 @@ public interface BlueprintContainer {
 	 * Returns all ComponentMetadata instances of the given type.  The supported
 	 * metadata types are ComponentMetadata (which returns the metadata for all defined
      * component types), BeanMetadata, ServiceReferenceMetadata (which returns both
-     * ReferenceMetadata and RefCollectionMetadata instances), ReferenceMetadata,
-     * RefCollectionMetadata, and ServiceMetadata.  The collection will include all
+     * ReferenceMetadata and RefListMetadata instances), ReferenceMetadata,
+     * RefListMetadata, and ServiceMetadata.  The collection will include all
      * metadata instances of the requested type, including components that are declared
      * as inline values.
 	 *

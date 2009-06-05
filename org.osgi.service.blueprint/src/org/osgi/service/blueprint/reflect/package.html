@@ -13,23 +13,23 @@ Import-Package: org.osgi.service.blueprint.reflect; version=&quot;[1.0,2.0)&quot
 
 <pre>
 	Configuration Element			Corresponding Reflection Type(s)
-	component						LocalComponentMetadata, ComponentValue
-	reference						UnaryServiceReferenceComponentMetadata
-	ref-set,ref-list				CollectionBasedServiceReferenceComponentMetadata
-	service							ServiceExportComponentMetadata
-	constructor-arg					ConstructorInjectionMetadata, ParameterSpecification
-	property						PropertyInjectionMetadata
-	listener						BindingListenerMetadata
+	bean             			BeanMetadata
+	reference		                ReferenceMetadata
+	ref-list				RefListMetadata
+	service					ServiceMetadata
+	argument        			BeanArgumentMetadata
+	property				BeanPropertyMetadata
+	listener				ListenerMetadata
 	registration-listener			RegistrationListenerMetadata
-	array<							ArrayValue
-	ref								ReferenceValue
-	id-ref							ReferenceNameValue
-	list							ListValue
-	map								MapValue
-	null							NullValue
-	props							PropertiesValue
-	set								SetValue
-	value							TypedStringValue
+	array<					CollectionMetadata
+	ref					RefMetadata
+	id-ref					IdrefMetadata
+	list					CollectionMetadata
+	map					MapMetadata
+	null					NullMetadata
+	props					PropsMetadata
+	set					CollectionMetadata
+	value					ValueMetadata
 <//pre>
 </BODY>
 

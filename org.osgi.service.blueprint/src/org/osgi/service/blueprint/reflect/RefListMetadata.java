@@ -21,7 +21,7 @@ package org.osgi.service.blueprint.reflect;
  * <code>ref-set</code> element.
  *
  */
-public interface RefCollectionMetadata extends ServiceReferenceMetadata {
+public interface RefListMetadata extends ServiceReferenceMetadata {
 
 	/**
 	 * Use the service objects to compare or include in the collection
@@ -32,40 +32,6 @@ public interface RefCollectionMetadata extends ServiceReferenceMetadata {
  	 * Use the service references to compare or include in the collection
  	 */
 	public static final int USE_SERVICE_REFERENCE = 2;
-
-	/**
-	 * The type of collection to be created.
-	 *
-	 * This is implied by the element name: <code>ref-list</code> or <code>ref-set</code>.
-	 *
-	 * @return Class object for the specified collection type (List, Set).
-	 */
-	Class/* <?> */getCollectionType();
-
-	/**
-	 * The comparator specified for ordering the collection, or <code>null</code> if no
-	 * comparator was specified.
-	 *
-	 * Defined in the <code>comparator</code> child element or <code>comparator-ref</code>
-	 * attribute.
-	 *
-	 * @return if a comparator was specified then a Value object identifying the
-	 *         comparator (a ComponentValue, ReferenceValue, or
-	 *         ReferenceNameValue) is returned. If no comparator was specified
-	 *         then null will be returned.
-	 */
-	Target getComparator();
-
-	/**
-	 * The basis on which to perform ordering, if specified.
-	 *
-	 * Defined in the <code>ordering-basis</code> attribute.
-	 *
-	 * @return one of USE_SERVICE_OBJECT and USE_SERVICE_REFERENCE
-	 * @see #USE_SERVICE_OBJECT
-	 * @see #USE_SERVICE_REFERENCE
-	 */
-	int getOrderingBasis();
 
 	/**
 	 * Whether the collection will contain service objects, or service
