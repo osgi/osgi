@@ -59,9 +59,8 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
      * that depends on an injected service.
 	 */
 	public void testComponentDirectDependency() throws Exception {
-        // We're only going to load one jar for this test.  The unstatisfied
-        // dependency will be handled by a service that's registered when
-        // the WAITING blueprint event is received.
+        // We're only going to load one jar for this test.  The services
+        // we're dependent upon are handled by a driver created service manager.
         StandardTestController controller = new StandardTestController(getContext(),
             getWebServer()+"www/injected_component.jar");
 
@@ -111,8 +110,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
 	 */
 	public void testComponentDependsOnDependency() throws Exception {
         // We're only going to load one jar for this test.  The unstatisfied
-        // dependency will be handled by a service that's registered when
-        // the WAITING blueprint event is received.
+        // dependency will be handled by a ServiceManager instance.
         StandardTestController controller = new StandardTestController(getContext(),
             getWebServer()+"www/component_dependson.jar");
 
@@ -162,8 +160,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
 	 */
 	public void testServiceDependsOnDependency() throws Exception {
         // We're only going to load one jar for this test.  The unstatisfied
-        // dependency will be handled by a service that's registered when
-        // the WAITING blueprint event is received.
+        // dependency will be handled by a ServiceManager instance that we create here.
         StandardTestController controller = new StandardTestController(getContext(),
             getWebServer()+"www/service_dependson.jar");
 
@@ -214,12 +211,12 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
 	public void testComponentWaitingDependency() throws Exception {
         // We're only going to load one jar for this test.  The unstatisfied
         // dependency will be handled by a service that's registered when
-        // the WAITING blueprint event is received.
+        // the GRACE_PERIOD blueprint event is received.
         StandardTestController controller = new StandardTestController(getContext(),
             getWebServer()+"www/injected_component.jar");
 
         // create a ServiceManager instance with one instance of an injected service.
-        // We will register this when we receive then WAITING event from the blueprint service.
+        // We will register this when we receive then GRACE_PERIOD event from the blueprint service.
         ServiceManager serviceManager = new ServiceManagerImpl(getContext(),
             new ManagedService[] {
                 // this one is registered from the start
@@ -229,8 +226,8 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         // now we chain a few events to actions to allow us to track the dynamics.
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
 
-        // Ok, when the WAITING event is triggered, we register the first service.
-        importStartEvents.addEvent(new ServiceBlueprintEvent("WAITING", new Class[] { TestServiceOne.class },
+        // Ok, when the GRACE_PERIOD event is triggered, we register the first service.
+        importStartEvents.addEvent(new ServiceBlueprintEvent("GRACE_PERIOD", new Class[] { TestServiceOne.class },
             null, new ServiceManagerRegister(serviceManager, "ServiceOneA")));
 
         // then we should see this REGISTERED again at the end.
@@ -250,8 +247,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
 	 */
 	public void testComponentNowaitDependency() throws Exception {
         // We're only going to load one jar for this test.  The unstatisfied
-        // dependency will be handled by a service that's registered when
-        // the WAITING blueprint event is received.
+        // dependency will be handled by a locally created ServiceManager.
         StandardTestController controller = new StandardTestController(getContext(),
             getWebServer()+"www/nowait_injected_component.jar");
 
@@ -267,8 +263,8 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
 
         // there should be no wait event with this
-        importStartEvents.addFailureEvent(new BlueprintAdminEvent("WAITING"));
-        importStartEvents.addFailureEvent(new BlueprintContainerEvent("WAITING"));
+        importStartEvents.addFailureEvent(new BlueprintAdminEvent("GRACE_PERIOD"));
+        importStartEvents.addFailureEvent(new BlueprintContainerEvent("GRACE_PERIOD"));
 
         importStartEvents.removeEvent(new BlueprintAdminEvent("CREATED"));
         // Ok, when the CREATED event is triggered, we register the first service.
@@ -291,7 +287,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
 	 */
 	public void testComponentTimeoutDependency() throws Exception {
         // this is testing a dependency wait time out.  This will be an error test, but
-        // we also look for a WAITING event.
+        // we also look for a GRACE_PERIOD event.
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
             getWebServer()+"www/timeout_injected_component.jar");
         // use a little longer timeout here to give the extender time to time this out.
@@ -389,12 +385,12 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
 	public void testLazyComponentWaitingDependency() throws Exception {
         // We're only going to load one jar for this test.  The unstatisfied
         // dependency will be handled by a service that's registered when
-        // the WAITING blueprint event is received.
+        // the GRACE_PERIOD blueprint event is received.
         LazyActivationTestController controller = new LazyActivationTestController(getContext(),
             getWebServer()+"www/lazy_injected_component.jar");
 
         // create a ServiceManager instance with one instance of an injected service.
-        // We will register this when we receive then WAITING event from the blueprint service.
+        // We will register this when we receive then GRACE_PERIOD event from the blueprint service.
         ServiceManager serviceManager = new ServiceManagerImpl(getContext(),
             new ManagedService[] {
                 // this one is registered from the start
@@ -404,10 +400,10 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         // now we chain a few events to actions to allow us to track the dynamics.
         MetadataEventSet startEvents = controller.getStartEvents(0);
 
-        // Ok, when the WAITING event is triggered, we register the first service.
+        // Ok, when the GRACE_PERIOD event is triggered, we register the first service.
         // we expect one of these to both handlers, but only one triggers the action
-        startEvents.addBlueprintContainerEvent("WAITING");
-        startEvents.addEvent(new BlueprintAdminEvent("WAITING", null, new ServiceManagerRegister(serviceManager, "ServiceOneA")));
+        startEvents.addBlueprintContainerEvent("GRACE_PERIOD");
+        startEvents.addEvent(new BlueprintAdminEvent("GRACE_PERIOD", null, new ServiceManagerRegister(serviceManager, "ServiceOneA")));
 
         // then we should see this REGISTERED again at the end.
         startEvents.addServiceEvent("REGISTERED", TestServiceDynamicsInterface.class);

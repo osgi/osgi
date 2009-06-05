@@ -572,16 +572,14 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
      * This tests the use of concrete class implementations as the exported interface.
      */
     public void testConcreteInterface() throws Exception {
-        // NB:  We're going to load the import jar first, since starting that
-        // one first might result in a dependency wait in the second.  This should
-        // still work.  The export jar will export both the target "good" service
-        // and secondary "bad" service.  We should resolve to the good service.
+        // NB:  We're only going to test the export portion of this by using a bundle.
+        // A concrete class import is not permitted, so we need to validate these
+        // results using just the OSGi APIs.
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/Service_concrete_import.jar",
                 getWebServer()+"www/Service_concrete_export.jar");
         // we add different validation stuff to each jar.  We'll start with the
         // export jar
-        MetadataEventSet exportStartEvents = controller.getStartEvents(1);
+        MetadataEventSet exportStartEvents = controller.getStartEvents(0);
         // Check the registration of both of these classes.  Note, the validation
         // requests each of these interface individually, but the properties should be the same for all.
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestGoodService.class, "ServiceOne"));
@@ -593,15 +591,8 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", TestGoodService.class);
 
-        // now the importing side.  We've got a couple of service injections to validate, plus the injection
-        // results
-        MetadataEventSet importStartEvents = controller.getStartEvents(0);
-        // just a single checker service this time.
-        // We expect two of these events.
-        importStartEvents.addAssertion("ServiceOneChecker", AssertionService.SERVICE_SUCCESS);
-
         // now some expected termination stuff
-        EventSet exportStopEvents = controller.getStopEvents(1);
+        EventSet exportStopEvents = controller.getStopEvents(0);
         // we should see a service event here indicating this is being deregistered
         exportStopEvents.addServiceEvent("UNREGISTERING", TestGoodService.class);
         // and there should not be a registration active anymore
@@ -670,16 +661,14 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
      * This tests the auto export of concreate class hierarchy
      */
     public void testAutoHierarchy() throws Exception {
-        // NB:  We're going to load the import jar first, since starting that
-        // one first might result in a dependency wait in the second.  This should
-        // still work.  The export jar will export both the target "good" service
-        // and secondary "bad" service.  We should resolve to the good service.
+        // NB:  exporting the hiearchy of concrete classes exports classes we can't
+        // actually import using a blueprint bundle.  So we'll just test the export
+        // via OSGi service registry interactions rather than a blueprint bundle.
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/Service_auto_hierarchy_import.jar",
                 getWebServer()+"www/Service_auto_hierarchy_export.jar");
         // we add different validation stuff to each jar.  We'll start with the
         // export jar
-        MetadataEventSet exportStartEvents = controller.getStartEvents(1);
+        MetadataEventSet exportStartEvents = controller.getStartEvents(0);
         // Verify all of these classes are registered as services for the named component.
         // requests each of these interface individually, but the properties should be the same for all.
         exportStartEvents.addValidator(new ServiceRegistrationValidator(
@@ -698,15 +687,8 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStartEvents.addServiceEvent("REGISTERED", new Class[] { TestGoodService.class, TestGoodServiceSubclass.class,
                     BaseTestComponent.class});
 
-        // now the importing side.  We've got a couple of service injections to validate, plus the injection
-        // results
-        MetadataEventSet importStartEvents = controller.getStartEvents(0);
-        // this imports 2 services and checks them, so we should get 2 interface events.
-        importStartEvents.addAssertion("ServiceHierarchy", AssertionService.SERVICE_SUCCESS);
-        importStartEvents.addAssertion("ServiceHierarchy", AssertionService.SERVICE_SUCCESS);
-
         // now some expected termination stuff
-        EventSet exportStopEvents = controller.getStopEvents(1);
+        EventSet exportStopEvents = controller.getStopEvents(0);
         // we should see a service event here indicating this is being deregistered
         exportStopEvents.addServiceEvent("UNREGISTERING", new Class[] { TestGoodService.class, TestGoodServiceSubclass.class,
                     BaseTestComponent.class});
@@ -720,15 +702,33 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
 
     /**
+     * This tests the importing of concrete classes, which is considered an error
+     */
+    public void testConcreteClassImport() throws Exception {
+        // NB:  exporting the hiearchy of concrete classes exports classes we can't
+        // actually import using a blueprint bundle.  So we'll just export thhould
+        // still work.  The export jar will export both the target "good" service
+        // and secondary "bad" service.  We should resolve to the good service.
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+                getWebServer()+"www/Service_auto_hierarchy_import.jar");
+        // add a setup bundle that exports the services we're interested in
+        controller.addSetupBundle(getWebServer()+"www/Service_auto_hierarchy_export.jar");
+
+        // this import should fail because we're using concrete classes rather than
+        // interfaces on the <reference> tags.  This is a normal error test
+        controller.run();
+    }
+
+
+    /**
      * This tests the auto export of all interface and hierarchy classes
      */
     public void testAutoAll() throws Exception {
-        // NB:  We're going to load the import jar first, since starting that
-        // one first might result in a dependency wait in the second.  This should
-        // still work.  The export jar will export both the target "good" service
-        // and secondary "bad" service.  We should resolve to the good service.
+        // NB:  We're only going to load the jar that imports the interfaces because
+        // concrete classes are not permitted for a a blueprint import.  The export of
+        // the hierarchy classes will be handled by the validators.
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/Service_auto_all_import.jar",
+                getWebServer()+"www/Service_auto_interfaces_import.jar",
                 getWebServer()+"www/Service_auto_all_export.jar");
         // we add different validation stuff to each jar.  We'll start with the
         // export jar
@@ -753,10 +753,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // now the importing side.  We've got a couple of service injections to validate, plus the injection
         // results
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
-        // this imports 2 services and checks them, so we should get 2 interface events.
-        importStartEvents.addAssertion("ServiceHierarchy", AssertionService.SERVICE_SUCCESS);
-        importStartEvents.addAssertion("ServiceHierarchy", AssertionService.SERVICE_SUCCESS);
-        // and 3 more from the other service.
+        // we only see the service events from the interface imports
         importStartEvents.addAssertion("ServiceInterfaces", AssertionService.SERVICE_SUCCESS);
         importStartEvents.addAssertion("ServiceInterfaces", AssertionService.SERVICE_SUCCESS);
         importStartEvents.addAssertion("ServiceInterfaces", AssertionService.SERVICE_SUCCESS);

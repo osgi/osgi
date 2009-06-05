@@ -94,7 +94,7 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
             new StringArgument("comp1")} , null)));
 
         startEvents.addValidator(new ComponentMetadataValidator(
-                new BeanComponent("comp2", AltSimpleTestComponent.class, new TestArgument[] {
+                new BeanComponent("comp2", SimpleTestComponent.class, new TestArgument[] {
             new StringArgument("comp2")} , null)));
         controller.run();
     }
@@ -410,7 +410,7 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
                 new TestArgument[] {new StringArgument("comp1_id")}, null)));
 
         startEvents.addValidator(new ComponentMetadataValidator(
-                new BeanComponent("Comp1_ID", SimpleTestComponent.class,
+                new BeanComponent("Comp1_ID", AltSimpleTestComponent.class,
                 new TestArgument[] {new StringArgument("Comp1_ID")}, null)));
 
         controller.run();
