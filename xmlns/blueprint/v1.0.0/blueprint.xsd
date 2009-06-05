@@ -813,18 +813,16 @@
                     </xsd:documentation>
                 </xsd:annotation>
             </xsd:element>
-            <xsd:choice minOccurs="0" maxOccurs="1">
+            <xsd:group ref="targetComponent">
                 <xsd:annotation>
                     <xsd:documentation>
                       <![CDATA[
-                      These are the two types of elements that can be bound as a service.
-                      This will be either a <ref> to a <bean> component or an inline <bean> component.
+                      A service definition can use any of the target types as an inline element
+                      as well.
                       ]]>
                     </xsd:documentation>
                 </xsd:annotation>
-                <xsd:element name="bean" type="Tinlined-bean" />
-                <xsd:element name="ref" type="Tref" />
-            </xsd:choice>
+            </xsd:group>
         </xsd:sequence>
     </xsd:group>
 
