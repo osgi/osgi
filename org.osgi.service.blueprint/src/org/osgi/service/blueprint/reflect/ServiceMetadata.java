@@ -50,7 +50,7 @@ public interface ServiceMetadata extends ComponentMetadata, Target {
 
 	/**
 	 * The component that is to be exported as a service. Value must refer to a component and
-	 * therefore be either a RefMetadata or BeanMetadata.
+	 * therefore be either a RefMetadata, BeanMetadata, or ReferenceMetadata.
 	 *
 	 * Defined in the <code>registration-method</code> attribute.
 	 *
