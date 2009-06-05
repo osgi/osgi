@@ -1,7 +1,0 @@
-Bundle-SymbolicName:                     ${p}.error_set_bad_value_ref
-Bundle-Version:                          4.2
-Import-Package:                          ${p}.components.injection, ${p}.services
--resourceonly: true
-Include-Resource					= \
-	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/errors/error_set_bad_value_ref.xml
-
