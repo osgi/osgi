@@ -1,0 +1,19 @@
+#
+# We are referring to a jar that takes some time to load and
+# see if start is done after load
+#
+-sources:								false
+-resourceonly:                           true
+Include-Resource: \
+ x-type-delay-ref.ipa;literal='true', \
+ load-status;literal='delay-ref.ipa', \
+ simple-prov.jar;literal=director:simple-prov.jar, \
+ delay-prov.jar;literal=director:delay-prov.jar, \
+ provisioning.start.bundle;literal='simple-prov.jar'
+
+InitialProvisioning-Entries: \
+ x-type-delay-ref.ipa;type=text, \
+ load-status;type=text', \
+ simple-prov.jar;extra=type=bundle-url, \
+ delay-prov.jar;extra='type=bundle-url, \
+ provisioning.start.bundle;type=text

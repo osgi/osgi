@@ -14,6 +14,10 @@ Include-Resource: \
 	ipa/simple.ipa=simple.ipa, \
 	ipa/spid.ipa=spid.ipa, \
 	ipa/unicode.ipa=unicode.ipa, \
+	ipa/x-mime-case-ref.ipa=x-mime-case-ref.ipa, \
+	ipa/x-type-case-ref.ipa=x-type-case-ref.ipa, \
+	ipa/x-type-delay-ref.ipa=x-type-delay-ref.ipa, \
+	ipa/x-type-unicode.ipa=x-type-unicode.ipa, \
 	www/case-ref-prov.jar=case-ref-prov.jar, \
 	www/delay-prov.jar=delay-prov.jar, \
 	www/local-prov.jar=local-prov.jar, \

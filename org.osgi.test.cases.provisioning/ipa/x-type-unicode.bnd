@@ -1,0 +1,11 @@
+-sources:								false
+-resourceonly:                           true
+Include-Resource: \
+ x-type-unicode.ipa;literal='true', \
+ load-status;literal='unicode.ipa', \
+ unicode.string;literal='v\u00D0\u00D9v'
+
+InitialProvisioning-Entries: \
+ x-type-unicode.ipa;type=text, \
+ load-status;type=text, \
+ unicode.string;type=text

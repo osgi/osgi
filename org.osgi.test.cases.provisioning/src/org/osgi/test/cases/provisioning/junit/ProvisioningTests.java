@@ -324,12 +324,24 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 	 * 
 	 * @spec unicode
 	 */
-	public void testUnicode() throws Exception {
-		loadFromResource( "unicode.ipa" );
+	public void testUnicode1() throws Exception {
+		doTestUnicode( "unicode.ipa" );
+	}
+
+	public void testUnicode2() throws Exception {
+		doTestUnicode( "x-type-unicode.ipa" );
+	}
+
+	public void testUnicode3() throws Exception {
+//		doTestUnicode( "x-mime-unicode.ipa" );
+	}
+
+	private void doTestUnicode(String ipa) throws Exception {
+		loadFromResource(ipa);
 		assertEquals( "Must have loaded the unicode ipa", "unicode.ipa", get("load-status"));
 		assertEquals( "See if it has proper UNICODE characters", "v\u00d0\u00d9v", get( "unicode.string"));
 	}
-	
+
 	/**
 	 *  Check the dictionary manipulations. Mainly the fact that the
 	 *  dictionary should not be mutable.
@@ -555,8 +567,20 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 	 * 
 	 * @spec ProvisioningService.getInformation()
 	 */
-	public void testDelayReference() throws Exception {
-		loadFromResource( "delay-ref.ipa" );
+	public void testDelayReference1() throws Exception {
+		doTestDelayReference("delay-ref.ipa");
+	}
+
+	public void testDelayReference2() throws Exception {
+		doTestDelayReference("x-type-delay-ref.ipa");
+	}
+
+	public void testDelayReference3() throws Exception {
+		//doTestDelayReference("x-mime-delay-ref.ipa");
+	}
+
+	private void doTestDelayReference(String ipa) throws Exception {
+		loadFromResource(ipa);
 		Bundle bundle = waitForBundle(); // this is simple-prov.jar
 		assertNotNull( "Check if simple-prov.jar is started", bundle );
 		
@@ -667,12 +691,24 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 	 * @spec ProvisioningService.getInformation()
 	 * @spec ProvisioningService.addInformation(Dictionary)
 	 */
-	public void testCaseReference() throws Exception {
-		loadFromResource( "case-ref.ipa" );
+	public void testCaseReference1() throws Exception {
+		doTestCaseReference( "case-ref.ipa" );
+	}
+
+	public void testCaseReference2() throws Exception {
+		doTestCaseReference( "x-type-case-ref.ipa" );
+	}
+
+	public void testCaseReference3() throws Exception {
+//		doTestCaseReference( "x-mime-case-ref.ipa" );
+	}
+
+	private void doTestCaseReference(String ipa) throws Exception {
+		loadFromResource(ipa);
 		Bundle bundle = waitForBundle();
 		assertNotNull( "Bundle with unusual case should be installed", bundle );
 	}
-	
+
 
 	/********************************************************************************/
 	/* UTILITIES

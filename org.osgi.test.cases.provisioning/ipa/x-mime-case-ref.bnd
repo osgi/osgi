@@ -1,0 +1,17 @@
+#
+# Should get the test-1.jar bundle from the remote system
+# but we use an unusual case for the type
+#
+-sources:								false
+-resourceonly:                          true
+Include-Resource: \
+ x-mime-case-ref.ipa;literal='true', \
+ load-status;literal='case-ref.ipa', \
+ case-ref-prov.jar;literal=director:case-ref-prov.jar, \
+ provisioning.start.bundle;literal='case-ref-prov.jar'
+
+InitialProvisioning-Entries: \
+ x-mime-case-ref.ipa;mime="text/plain;charset=utf-8", \
+ load-status;mime="text/plain;charset=utf-8", \
+ case-ref-prov.jar;mime="text/X-OSGI-BUNDLE-URL", \
+ provisioning.start.bundle;mime="text/plain;charset=utf-8"
