@@ -36,6 +36,7 @@ Include-Resource: \
 	org.osgi.impl.service.http; version=project, \
 	org.eclipse.equinox.ip; version=latest, \
 	org.eclipse.equinox.util; version=latest, \
+	org.osgi.impl.bundle.rsh;		version=project, \
 	osgi; version=latest
 
 -runproperties = report=true, \
