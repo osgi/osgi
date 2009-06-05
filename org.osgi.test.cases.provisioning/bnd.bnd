@@ -26,16 +26,17 @@ Include-Resource: \
     org.osgi.test.support;                  version=project , \
 	org.osgi.service.provisioning;			version=project	, \
 	org.osgi.impl.bundle.servlet;		version=2.1, \
-	osgi;									version=4.1		, \
+	osgi;									version=4.2		, \
 	ee.j2se; version=1.4												, \
 	${junit}
 
 -runbundles						= \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.bundle.servlet;		version=2.1, \
-	org.osgi.impl.service.http; version=latest, \
-	org.osgi.impl.service.provisioning; version=project, \
-	org.osgi.impl.bundle.rsh;		version=latest
+	org.osgi.impl.service.http; version=project, \
+	org.eclipse.equinox.ip; version=latest, \
+	org.eclipse.equinox.util; version=latest, \
+	osgi; version=latest
 
 -runproperties = report=true, \
 	org.osgi.service.http.hostname=127.0.0.1, \
