@@ -16,7 +16,7 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
-import org.osgi.service.blueprint.reflect.RefCollectionMetadata;
+import org.osgi.service.blueprint.reflect.RefListMetadata;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
 
@@ -24,9 +24,6 @@ import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
  * A single referenced service in the BlueprintContainer metadata.
  */
 public class ReferenceCollection extends ReferencedServiceBase {
-    protected Class collectionType;
-    protected TestValue comparator;
-    protected int orderingBasis;
     protected int memberType;
 
     /**
@@ -39,9 +36,8 @@ public class ReferenceCollection extends ReferencedServiceBase {
      * @param filter    The declared filter string for the reference.
      * @param listeners An expected set of listener metadata.
      */
-    public ReferenceCollection(String name, Class interfaceClass, int availability, String filter, BindingListener[] listeners,
-            Class collectionType, TestValue comparator, int orderingBasis, int memberType) {
-        this(name, new Class[] { interfaceClass }, availability, filter, listeners, collectionType, comparator, orderingBasis, memberType);
+    public ReferenceCollection(String name, Class interfaceClass, int availability, String filter, BindingListener[] listeners, int memberType) {
+        this(name, new Class[] { interfaceClass }, availability, filter, listeners, memberType);
     }
 
     /**
@@ -53,12 +49,8 @@ public class ReferenceCollection extends ReferencedServiceBase {
      * @param filter     The declared filter string for the reference.
      * @param listeners  An expected set of listener metadata.
      */
-    public ReferenceCollection(String name, Class[] interfaces, int availability, String filter, BindingListener[] listeners,
-             Class collectionType, TestValue comparator, int orderingBasis, int memberType) {
+    public ReferenceCollection(String name, Class[] interfaces, int availability, String filter, BindingListener[] listeners, int memberType) {
         super(name, interfaces, availability, filter, listeners);
-        this.collectionType = collectionType;
-        this.comparator = comparator;
-        this.orderingBasis = orderingBasis;
         this.memberType = memberType;
     }
 
@@ -71,15 +63,11 @@ public class ReferenceCollection extends ReferencedServiceBase {
      * @exception Exception
      */
     public void validate(BlueprintMetadata blueprintMetadata, ServiceReferenceMetadata metadata) throws Exception {
-        assertTrue("Mismatch on service reference type", metadata instanceof RefCollectionMetadata);
+        assertTrue("Mismatch on service reference type", metadata instanceof RefListMetadata);
         // do the base validation
         super.validate(blueprintMetadata, metadata);
-        RefCollectionMetadata meta = (RefCollectionMetadata)metadata;
-        assertEquals(collectionType, meta.getCollectionType());
-        if (comparator != null) {
-            comparator.validate(blueprintMetadata, meta.getComparator());
-        }
-        assertEquals(orderingBasis, meta.getOrderingBasis());
+        RefListMetadata meta = (RefListMetadata)metadata;
+        assertEquals(memberType, meta.getMemberType());
     }
 
     /**
@@ -92,12 +80,12 @@ public class ReferenceCollection extends ReferencedServiceBase {
      */
     public boolean matches(ComponentMetadata componentMeta) {
         // we only handle service reference component references.
-        if (!(componentMeta instanceof RefCollectionMetadata)) {
+        if (!(componentMeta instanceof RefListMetadata)) {
             return false;
         }
 
-        RefCollectionMetadata meta = (RefCollectionMetadata)componentMeta;
-        if (collectionType != meta.getCollectionType()) {
+        RefListMetadata meta = (RefListMetadata)componentMeta;
+        if (memberType != meta.getMemberType()) {
             return false;
         }
 

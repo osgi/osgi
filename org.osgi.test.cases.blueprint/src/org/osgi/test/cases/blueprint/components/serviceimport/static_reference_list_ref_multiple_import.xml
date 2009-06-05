@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+        This is a checker for basic reference list validation.
+    </description>
+
+    <bean id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceOneListener">
+        <argument value="ServiceOneListener"/>
+    </bean>
+
+
+    <!-- NB:  this also tests the ability for a collection to be a top-level component -->
+    <ref-list id="TestCollection" availability="optional" member-type="service-reference">
+        <interfaces>
+            <value>org.osgi.test.cases.blueprint.services.TestServiceOne</value>
+            <value>org.osgi.test.cases.blueprint.services.TestServiceTwo</value>
+        </interfaces>
+        <listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
+    </ref-list>
+
+    <!-- This gets both a ServiceManager and a reference collection injected -->
+   <bean id="ReferenceChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.StaticReferenceList" init-method="init">
+       <argument value="ReferenceChecker"/>
+       <property name="serviceManager">
+           <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
+       </property>
+       <property name="list" ref="TestCollection" />
+       <property name="useReferences" value="true" />
+   </bean>
+</blueprint>
+
