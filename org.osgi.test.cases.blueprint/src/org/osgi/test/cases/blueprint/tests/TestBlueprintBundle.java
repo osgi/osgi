@@ -58,18 +58,6 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         controller.run();
     }
 
-    /**
-     * Single control file, referenced by an explicit header using "*.xml" in the path.
-     */
-    public void testStartComponentWildcard() throws Exception {
-        StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/comp1_wildcard_header.jar");
-        MetadataEventSet startEvents = controller.getStartEvents();
-        startEvents.addAssertion("comp1", AssertionService.COMPONENT_CREATED);
-        startEvents.validateComponent("comp1", SimpleTestComponent.class);
-        controller.run();
-
-    }
 
     /**
      * Tests no explicit header specified, multiple control files in the OSGI-INF directory,
