@@ -1064,4 +1064,15 @@ public class TestConfigErrors extends DefaultTestBundleControl {
         controller.addSetupBundle(getWebServer()+"www/ServiceOne_export.jar");
         controller.run();
     }
+
+    /**
+     * bad component name in a depends-on construct
+     */
+    public void testReferenceBadDependsOn() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_reference_bad_dependson.jar");
+        controller.addSetupBundle(getWebServer()+"www/ServiceOne_export.jar");
+        controller.run();
+    }
 }

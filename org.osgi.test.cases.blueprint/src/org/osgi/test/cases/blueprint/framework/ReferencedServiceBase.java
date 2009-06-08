@@ -15,6 +15,8 @@
  */
 
 package org.osgi.test.cases.blueprint.framework;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -40,6 +42,8 @@ public class ReferencedServiceBase extends Assert implements TestComponentMetada
     protected String filter;
     // the list of binding listeners
     protected BindingListener[] listeners;
+    // the set of explicit dependencies
+    protected List dependencies;
 
 
     /**
@@ -52,8 +56,8 @@ public class ReferencedServiceBase extends Assert implements TestComponentMetada
      * @param filter    The declared filter string for the reference.
      * @param listeners An expected set of listener metadata.
      */
-    public ReferencedServiceBase(String name, Class interfaceClass, int availability, String filter, BindingListener[] listeners) {
-        this(name, new Class[] { interfaceClass }, availability, filter, listeners);
+    public ReferencedServiceBase(String name, Class interfaceClass, int availability, String filter, String[] deps, BindingListener[] listeners) {
+        this(name, new Class[] { interfaceClass }, availability, filter, deps, listeners);
     }
 
     /**
@@ -65,7 +69,7 @@ public class ReferencedServiceBase extends Assert implements TestComponentMetada
      * @param filter     The declared filter string for the reference.
      * @param listeners  An expected set of listener metadata.
      */
-    public ReferencedServiceBase(String name, Class[] interfaces, int availability, String filter, BindingListener[] listeners) {
+    public ReferencedServiceBase(String name, Class[] interfaces, int availability, String filter, String[] deps, BindingListener[] listeners) {
         this.name = name;
         this.serviceAvailability = availability;
         this.filter = filter;
@@ -75,7 +79,16 @@ public class ReferencedServiceBase extends Assert implements TestComponentMetada
         for (int i = 0; i < interfaces.length; i++) {
             serviceInterfaces.add(interfaces[i].getName());
         }
+
+        dependencies = new ArrayList();
+        // handle the dependency tracking
+        if (deps != null) {
+            for (int i = 0; i < deps.length; i++) {
+                dependencies.add(deps[i]);
+            }
+        }
     }
+
 
     /**
      * Determine if this descriptor matches the basic attributes of
@@ -122,6 +135,7 @@ public class ReferencedServiceBase extends Assert implements TestComponentMetada
     public void validate(BlueprintMetadata blueprintMetadata, ComponentMetadata componentMeta) throws Exception {
         assertTrue("Component type mismatch", componentMeta instanceof ServiceReferenceMetadata);
         ServiceReferenceMetadata meta = (ServiceReferenceMetadata)componentMeta;
+        assertEquals(dependencies, meta.getDependsOn());
         // if we have a name to compare, they must be equal
         if (name != null) {
             assertEquals(name, getId());

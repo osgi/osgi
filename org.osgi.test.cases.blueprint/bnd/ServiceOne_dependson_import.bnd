@@ -1,0 +1,7 @@
+Bundle-SymbolicName:                     ${p}.ServiceOne_dependson_import
+Bundle-Version:                          4.2
+Import-Package:                          ${p}.components.serviceimport, ${p}.services, ${p}.components.injection
+-resourceonly: true
+Include-Resource					= \
+	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/serviceimport/ServiceOne_dependson_import.xml
+

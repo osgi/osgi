@@ -36,8 +36,8 @@ public class ReferenceCollection extends ReferencedServiceBase {
      * @param filter    The declared filter string for the reference.
      * @param listeners An expected set of listener metadata.
      */
-    public ReferenceCollection(String name, Class interfaceClass, int availability, String filter, BindingListener[] listeners, int memberType) {
-        this(name, new Class[] { interfaceClass }, availability, filter, listeners, memberType);
+    public ReferenceCollection(String name, Class interfaceClass, int availability, String filter, String[] deps, BindingListener[] listeners, int memberType) {
+        this(name, new Class[] { interfaceClass }, availability, filter, deps, listeners, memberType);
     }
 
     /**
@@ -49,8 +49,8 @@ public class ReferenceCollection extends ReferencedServiceBase {
      * @param filter     The declared filter string for the reference.
      * @param listeners  An expected set of listener metadata.
      */
-    public ReferenceCollection(String name, Class[] interfaces, int availability, String filter, BindingListener[] listeners, int memberType) {
-        super(name, interfaces, availability, filter, listeners);
+    public ReferenceCollection(String name, Class[] interfaces, int availability, String filter, String[] deps, BindingListener[] listeners, int memberType) {
+        super(name, interfaces, availability, filter, deps, listeners);
         this.memberType = memberType;
     }
 
