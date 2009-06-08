@@ -42,6 +42,16 @@ public class ComponentAssertion extends AdminTestEvent {
     protected Throwable traceback;
 
     /**
+     * Create an assertion with must an assertion type
+     *
+     * @param topic
+     *               The assertion type.
+     */
+    public ComponentAssertion(String componentId, String topic) {
+        this(componentId, topic, null, null);
+    }
+
+    /**
      * Create an assertion from a component identifier and
      * a cause.  This is generally used for created expected
      * assertions.
@@ -51,8 +61,8 @@ public class ComponentAssertion extends AdminTestEvent {
      * @param topic
      *               The assertion type.
      */
-    public ComponentAssertion(String componentId, String topic) {
-        this(componentId, topic, null, null);
+    public ComponentAssertion(String topic) {
+        this(null, topic, null, null);
     }
 
     /**
@@ -109,6 +119,7 @@ public class ComponentAssertion extends AdminTestEvent {
         this.traceback = null;
     }
 
+
     /**
      * Create a component assertion from a received EventAdmin
      * Event.  This is used for comparisons with expected
@@ -119,8 +130,12 @@ public class ComponentAssertion extends AdminTestEvent {
     public ComponentAssertion(Event event) {
         super(event);
         ComponentTestInfo component = (ComponentTestInfo)event.getProperty(AssertionService.COMPONENT);
-        componentProps = component.getComponentProperties();
-        componentId = (String)componentProps.get(ComponentTestInfo.COMPONENT_ID);
+        // we have some assertion events that are not associated with a component,
+        // so handle this gracefully
+        if (component != null) {
+            componentProps = component.getComponentProperties();
+            componentId = (String)componentProps.get(ComponentTestInfo.COMPONENT_ID);
+        }
         message = (String)event.getProperty(AssertionService.ASSERTION_MESSAGE);
         propertyName = (String)event.getProperty(AssertionService.PROPERTY_NAME);
         traceback = (Throwable)event.getProperty(AssertionService.TRACEBACK);
@@ -139,10 +154,21 @@ public class ComponentAssertion extends AdminTestEvent {
         }
 
         ComponentAssertion other = (ComponentAssertion)o;
-
-        // fail immediately on a mismatch on id or type
-        if (!(componentId.equals(other.componentId) && topic.equals(other.topic))) {
-            return false;
+        if (componentId != null) {
+            // if there's no component id associated with the other event, this is a mismatch
+            if (other.componentId == null) {
+                return false;
+            }
+            // fail immediately on a mismatch on id or type
+            if (!(componentId.equals(other.componentId) && topic.equals(other.topic))) {
+                return false;
+            }
+        }
+        // a component-less assertion...if the comparison one has an id, this fails
+        else {
+            if (other.componentId != null) {
+                return false;
+            }
         }
 
         // if this assertion has a property name, then the type expects on too.  Compare on that property.

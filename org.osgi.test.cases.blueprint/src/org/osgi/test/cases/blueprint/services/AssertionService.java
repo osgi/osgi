@@ -214,6 +214,18 @@ public class AssertionService
         sendEvent(topic, props);
     }
 
+
+    /**
+     * Broadcast a test event to the admin service.
+     *
+     * @param topic      The specific topic type.
+     */
+    static public void sendEvent(String topic) {
+        // just send with an empty properties bundle
+        sendEvent(topic, new Hashtable());
+    }
+
+
     /**
      * Broadcast a test event to the admin service.
      *

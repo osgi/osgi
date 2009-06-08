@@ -21,29 +21,36 @@ import org.osgi.framework.BundleContext;
 
 
 /**
- * An event set for processing all standard events we expect to
- * see from an "error" test case.  An error test is one that
- * starts a bundle and processes the error events.  No Module context
- * artifacts should exist at the end of this test.
+ * An event set for processing all standard events for bundles that
+ * should not be handled by the installed blueprint extender.
  */
-public class StandardErrorEventSet extends EventSet {
-    public StandardErrorEventSet(BundleContext testBundle, Bundle bundle) {
+public class StandardNonBlueprintEventSet extends EventSet {
+    public StandardNonBlueprintEventSet(BundleContext testBundle, Bundle bundle) {
         super(testBundle, bundle);
         // we add an initializer to start our bundle when the test starts
         addInitializer(new TestBundleStarter(bundle));
+        // end this a little short of the error timeout
+        addInitializer(new TimedEventTrigger(8000));
         // we always expect to see a started bundle event, even though
         // the managed bundle portion of this will give an error
         addBundleEvent("STARTED");
         // no BlueprintContainer service should be published for this bundle.  This is an error if
         // one shows up
         addFailureEvent(new ServiceTestEvent("REGISTERED", "org.osgi.service.blueprint.container.BlueprintContainer"));
-        // we should be seeing a failure event published for this.
-        // other events are not really determined.
-        addBlueprintEvent("FAILURE");
-
-        // neither of these should get published
+        // any of these lifecycle events for this bundle are a failure, these bundles should just be ignored
         addFailureEvent(new BlueprintContainerEvent("CREATED"));
+        addFailureEvent(new BlueprintContainerEvent("CREATING"));
+        addFailureEvent(new BlueprintContainerEvent("DESTROYING"));
+        addFailureEvent(new BlueprintContainerEvent("DESTROYED"));
+        addFailureEvent(new BlueprintContainerEvent("FAILURE"));
+        addFailureEvent(new BlueprintContainerEvent("GRACE_PERIOD"));
+
         addFailureEvent(new BlueprintAdminEvent("CREATED"));
+        addFailureEvent(new BlueprintAdminEvent("CREATING"));
+        addFailureEvent(new BlueprintAdminEvent("DESTROYING"));
+        addFailureEvent(new BlueprintAdminEvent("DESTROYED"));
+        addFailureEvent(new BlueprintAdminEvent("FAILURE"));
+        addFailureEvent(new BlueprintAdminEvent("GRACE_PERIOD"));
 
         // at the end of everything, there should not be a method context associated with this bundle
         addValidator(new NoBlueprintContainerValidator());

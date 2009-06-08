@@ -403,4 +403,41 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
 
         controller.run();
     }
+
+
+    /**
+     * Tests the extender reaction to a bundle getting started that contains no blueprint configuration
+     */
+    public void testNonBlueprintBundle() throws Exception {
+        NonBlueprintTestController controller = new NonBlueprintTestController(getContext(),
+                getWebServer()+"www/comp1_no_config.jar");
+        // nothing should happen, which is all handled by the controller
+        controller.run();
+    }
+
+
+    /**
+     * Tests the extender reaction to a bundle that has an explicit configuration directory
+     * specified, but the dir contains no files.
+     */
+    public void testNonBlueprintBundleEmptyDir() throws Exception {
+        NonBlueprintTestController controller = new NonBlueprintTestController(getContext(),
+                getWebServer()+"www/comp1_dir_no_config.jar");
+        // nothing should happen, which is all handled by the controller
+        controller.run();
+    }
+
+
+    /**
+     * Tests the extender reaction to a bundle that imports a different version of the extender.
+     */
+    public void testIncompatibleVersion() throws Exception {
+        NonBlueprintTestController controller = new NonBlueprintTestController(getContext(),
+                getWebServer()+"www/comp1_dir_no_config.jar");
+        // this exports a different version of the blueprint service, which is
+        // imported by the target bundle to create a version incompatibility.
+        controller.addSetupBundle(getWebServer()+"www/blueprint_version_two");
+        // nothing should happen, which is all handled by the controller
+        controller.run();
+    }
 }
