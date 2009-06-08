@@ -15,8 +15,10 @@
  */
 
 package org.osgi.test.cases.blueprint.framework;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 import org.osgi.framework.Bundle;
 import org.osgi.service.event.Event;
@@ -31,6 +33,10 @@ public class TestEvent implements BundleAware {
     protected TestEventListener listener;
     // a potential bundle (which is injected when we're attached to an event set)
     protected Bundle bundle;
+    // a flag indicating this event has been received
+    protected boolean received = false;
+    // A list of other events that should be received prior to this event.
+    protected List dependencies;
 
     TestEvent() {
         this(null);
@@ -124,6 +130,8 @@ public class TestEvent implements BundleAware {
      * @param received The actual received event.
      */
     public void eventReceived(TestEvent received) {
+        // mark that this event has been received
+        this.received = true;
         // send this along
         if (listener != null) {
             listener.eventReceived(this, received);
@@ -142,6 +150,16 @@ public class TestEvent implements BundleAware {
         if (listener != null) {
             listener.eventNotReceived(this);
         }
+    }
+
+
+    /**
+     * Check if an event has been received yet.
+     *
+     * @return
+     */
+    public boolean wasReceived() {
+        return received;
     }
 
 
@@ -195,11 +213,36 @@ public class TestEvent implements BundleAware {
      *         this was ok.
      */
     public TestEvent validate(TestEvent received) {
+        if (dependencies != null) {
+            // check each of the dependencies to make sure it was received prior to this
+            // event
+            for (int i = 0; i < dependencies.size(); i++) {
+                TestEvent event = (TestEvent)dependencies.get(i);
+                if (!event.wasReceived()) {
+                    return new AssertionFailure("Event " + received.toString() + " should have been preceded by event " + event.toString());
+                }
+            }
+        }
+
+
         // if we have an attached listener, give it an opportunity to validate
         // this event information.  Otherwise, we give it a pass.
         if (listener != null) {
             return listener.validateEvent(this, received);
         }
         return null;
+    }
+
+
+    /**
+     * Add a dependency to our ordering validation list
+     *
+     * @param dep    The dependent event
+     */
+    public void addDependency(TestEvent dep) {
+        if (dependencies == null) {
+            dependencies = new ArrayList();
+        }
+        dependencies.add(dep);
     }
 }
