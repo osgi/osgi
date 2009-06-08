@@ -1,0 +1,13 @@
+#
+# This ipa is used to check if we get a Service Platform
+# identifier
+# 
+-sources:								false
+-resourceonly:                           true
+Include-Resource: \
+ x-type-spid.ipa;literal='true', \
+ load-status;literal='x-type-spid.ipa'
+
+InitialProvisioning-Entries: \
+ x-type-spid.ipa;type=text, \
+ load-status;type=text

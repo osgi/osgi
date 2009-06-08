@@ -6,7 +6,7 @@
 -resourceonly:                          true
 Include-Resource: \
  x-type-case-ref.ipa;literal='true', \
- load-status;literal='case-ref.ipa', \
+ load-status;literal='x-type-case-ref.ipa', \
  case-ref-prov.jar;literal=director:case-ref-prov.jar, \
  provisioning.start.bundle;literal='case-ref-prov.jar'
 

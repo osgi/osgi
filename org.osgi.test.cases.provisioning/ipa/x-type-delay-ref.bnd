@@ -6,7 +6,7 @@
 -resourceonly:                           true
 Include-Resource: \
  x-type-delay-ref.ipa;literal='true', \
- load-status;literal='delay-ref.ipa', \
+ load-status;literal='x-type-delay-ref.ipa', \
  simple-prov.jar;literal=director:simple-prov.jar, \
  delay-prov.jar;literal=director:delay-prov.jar, \
  provisioning.start.bundle;literal='simple-prov.jar'

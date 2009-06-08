@@ -1,0 +1,14 @@
+#
+# Simple reference to simple.ipa on the director
+#
+-sources:								false
+-resourceonly:                           true
+Include-Resource: \
+ x-type-ipa-ref.ipa;literal='true', \
+ load-status;literal='x-type-ipa-ref.ipa', \
+ provisioning.reference;literal='director:simple.ipa'
+
+InitialProvisioning-Entries: \
+ x-type-ipa-ref.ipa;type=text, \
+ load-status;type=text, \
+ provisioning.reference;type=text

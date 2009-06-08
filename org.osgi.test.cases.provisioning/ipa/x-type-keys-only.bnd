@@ -1,0 +1,15 @@
+-sources:								false
+-resourceonly:                           true
+Include-Resource: \
+ x-type-keys-only.ipa;literal='true', \
+ load-status;literal='x-type-keys-only.ipa', \
+ some.key.1;literal='some.value.111', \
+ some.key.2;literal='some.value.22', \
+ some.key.4;literal='some.value.4'
+
+InitialProvisioning-Entries: \
+ x-type-keys-only.ipa;type=text,
+ load-status;type=text,
+ some.key.1;type=text,
+ some.key.2;type=text,
+ some.key.4;type=text

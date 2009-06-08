@@ -1,0 +1,29 @@
+#
+# All bundles and texts are contained in the
+# the file
+#
+-sources:								false
+-resourceonly:                           true
+Include-Resource: \
+ x-type-simple.ipa;literal='true', \
+ load-status;literal='x-type-simple.ipa', \
+ test-0-prov.jar=test-0-prov.jar, \
+ test-1-prov.jar=test-1-prov.jar, \
+ test-2-prov.jar;literal='http://NON_EXISTENT_HOST/NON_EXISTENT_FILE', \
+ provisioning.start.bundle;literal='test-0-prov.jar', \
+ text-1;literal='TEST1', \
+ text-2;literal='TEST2', \
+ /text-3;literal='TEST3', \
+ osgi.cert=osgi.cert
+
+InitialProvisioning-Entries: \
+ x-type-simple.ipa;type=text, \
+ load-status;type=text, \
+ test-0-prov.jar;type=bundle, \
+ test-1-prov.jar;type=bundle, \
+ test-2-prov.jar;type=bundle, \
+ provisioning.start.bundle;type=text, \
+ text-1;type=text, \
+ text-2;type=text, \
+ /text-3;type=text, \
+ osgi.cert;type=binary

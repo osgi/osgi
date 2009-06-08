@@ -14,9 +14,14 @@ Include-Resource: \
 	ipa/simple.ipa=simple.ipa, \
 	ipa/spid.ipa=spid.ipa, \
 	ipa/unicode.ipa=unicode.ipa, \
-	ipa/x-mime-case-ref.ipa=x-mime-case-ref.ipa, \
 	ipa/x-type-case-ref.ipa=x-type-case-ref.ipa, \
 	ipa/x-type-delay-ref.ipa=x-type-delay-ref.ipa, \
+	ipa/x-type-ipa-ref-start.ipa=x-type-ipa-ref-start.ipa, \
+	ipa/x-type-ipa-ref.ipa=x-type-ipa-ref.ipa, \
+	ipa/x-type-keys-only.ipa=x-type-keys-only.ipa, \
+	ipa/x-type-ref.ipa=x-type-ref.ipa, \
+	ipa/x-type-simple.ipa=x-type-simple.ipa, \
+	ipa/x-type-spid.ipa=x-type-spid.ipa, \
 	ipa/x-type-unicode.ipa=x-type-unicode.ipa, \
 	www/case-ref-prov.jar=case-ref-prov.jar, \
 	www/delay-prov.jar=delay-prov.jar, \

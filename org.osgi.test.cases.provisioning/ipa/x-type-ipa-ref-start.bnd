@@ -1,0 +1,20 @@
+#
+# Will install + start a bundle + get a reference which also starts
+# the agent.
+#
+-sources:								false
+-resourceonly:                           true
+Include-Resource: \
+ x-type-ipa-ref-start.ipa;literal='true', \
+ load-status;literal='x-type-ipa-ref-start.ipa', \
+ local-prov.jar=local-prov.jar, \
+ provisioning.reference;literal='director:simple.ipa', \
+ provisioning.start.bundle;literal='local-prov.jar'
+
+InitialProvisioning-Entries: \
+ x-type-ipa-ref-start.ipa;type=text, \
+ load-status;type=text, \
+ local-prov.jar=type=bundle, \
+ provisioning.reference;type=text, \
+ provisioning.start.bundle;type=text
+   

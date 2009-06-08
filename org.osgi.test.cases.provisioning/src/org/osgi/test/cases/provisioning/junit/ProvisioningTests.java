@@ -332,13 +332,9 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 		doTestUnicode( "x-type-unicode.ipa" );
 	}
 
-	public void testUnicode3() throws Exception {
-//		doTestUnicode( "x-mime-unicode.ipa" );
-	}
-
 	private void doTestUnicode(String ipa) throws Exception {
 		loadFromResource(ipa);
-		assertEquals( "Must have loaded the unicode ipa", "unicode.ipa", get("load-status"));
+		assertEquals( "Must have loaded the unicode ipa", ipa, get("load-status"));
 		assertEquals( "See if it has proper UNICODE characters", "v\u00d0\u00d9v", get( "unicode.string"));
 	}
 
@@ -486,15 +482,23 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 	 * @spec ProvisioningService.getInformation()
 	 */
 	
-	public void testStartAndRef() throws Exception {
-		loadFromResource( "ipa-ref-start.ipa" );	// refers to simple.ipa
+	public void testStartAndRef1() throws Exception {
+		doTestStartAndRef( "ipa-ref-start.ipa" );	// refers to simple.ipa
+	}
+	
+	public void testStartAndRef2() throws Exception {
+		doTestStartAndRef( "x-type-ipa-ref-start.ipa" );	// refers to simple.ipa
+	}
+
+	private void doTestStartAndRef(String ipa) throws Exception {
+		loadFromResource( ipa );	// refers to simple.ipa
 		waitFor( "simple.ipa" );					// so sync until that the 2nd file is loaded
 		
 		Bundle local = findBundle("local-prov.jar");
 		Bundle test0 = findBundle("test-0-prov.jar");
 		
 		assertEquals("Must have loaded simple.ipa", "simple.ipa", get("load-status") );
-		assertEquals("Must have also loaded ipa-ref-start.ipa", "true", get("ipa-ref-start.ipa"));
+		assertEquals("Must have also loaded ipa-ref-start.ipa", "true", get(ipa));
 		assertNotNull("Started local-prov.jar from ipa-ref-start.ipa", local );
 		assertNotNull("Started test-0-prov.jar from simple.ipa", test0 );
 		
@@ -502,8 +506,7 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 		waitForBundleState("Installed remote bundle must be started", test0, Bundle.ACTIVE );
 		assertEquals( "Check provisioning.start.bundle property", "test-0-prov.jar", get("provisioning.start.bundle"));
 	}
-	
-	
+
 	void waitForBundleState(String string, Bundle bundle, int active) {
 		long deadline = System.currentTimeMillis() + 15000;
 		while (bundle.getState() != active ) try {
@@ -524,35 +527,50 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 	 * @spec ProvisioningService.getInformation()
 	 */
 	
-	public void testSPID() throws IOException {
+	public void testSPID1() throws IOException {
+		doTestSPID("spid.ipa");
+	}
+
+	public void testSPID2() throws IOException {
+		doTestSPID("x-type-spid.ipa");
+	}
+
+	private void doTestSPID(String ipa) throws IOException {
 		assertNotNull( "26.2 The PROVISIONING_SPID key must contain the Service Platform Identifier", get("provisioning.spid"));
 		
 		query = null;
-		loadFromURL( new URL("spid-test:spid.ipa"), "spid.ipa" );
+		loadFromURL( new URL("spid-test:" + ipa), ipa );
 		
-		assertEquals("We should have loaded spid.ipa", "spid.ipa", get("load-status") );
+		assertEquals("We should have loaded spid.ipa", ipa, get("load-status") );
 		assertNotNull( "26.7.3 No query part found in URL to server", query );
 		assertTrue( "26.7.3 service_platform_id not found in query part of URL", query.indexOf( "service_platform_id") >= 0 );
 	}
-	
+
 	/**
 	 * Test if our own parameters are maintained when we give a URL
 	 * where the Provisioning Service will add a SPID.
 	 * 
 	 * @spec ProvisioningService.getInformation()
 	 */
-	public void testSPIDWithQuery() throws IOException {
+	public void testSPIDWithQuery1() throws IOException {
+		doTestSPIDWithQuery("spid.ipa");
+	}
+
+	public void testSPIDWithQuery2() throws IOException {
+		doTestSPIDWithQuery("x-type-spid.ipa");
+	}
+
+	private void doTestSPIDWithQuery(String ipa) throws IOException {
 		query = null;
-		loadFromURL( new URL("spid-test:spid.ipa?foo=bar&abc=1"), "spid.ipa" ); 
+		loadFromURL( new URL("spid-test:" + ipa + "?foo=bar&abc=1"), ipa ); 
 		
-		assertEquals("We should have loaded spid.ipa", "spid.ipa", get("load-status") );
+		assertEquals("We should have loaded spid.ipa", ipa, get("load-status") );
 		assertNotNull( "26.7.3 Query part must be set by provisioning service via spid-test: URL", query );
 		assertTrue( "26.7.3 URL Encoding: Must contain a service_platform_id", query.indexOf( "service_platform_id") >= 0 );
 		assertTrue( "26.7.3 The provisioning service should also keep our parameters", query.indexOf( "foo=bar") >= 0 );
 		assertTrue( "26.7.3 The provisioning service should also keep our parameters", query.indexOf( "abc=1") >= 0 );
 	}
-	
-	
+
 	
 	
 	/**
@@ -575,10 +593,6 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 		doTestDelayReference("x-type-delay-ref.ipa");
 	}
 
-	public void testDelayReference3() throws Exception {
-		//doTestDelayReference("x-mime-delay-ref.ipa");
-	}
-
 	private void doTestDelayReference(String ipa) throws Exception {
 		loadFromResource(ipa);
 		Bundle bundle = waitForBundle(); // this is simple-prov.jar
@@ -597,15 +611,22 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 	 * @spec ProvisioningService.getInformation()
 	 * @spec ProvisioningService.addInformation(Dictionary)
 	 */	
-	public void testIPAReference() throws Exception {
+	public void testIPAReference1() throws Exception {
+		doTestIPAReference( "ipa-ref.ipa" );
+	}
+
+	public void testIPAReference2() throws Exception {
+		doTestIPAReference( "x-type-ipa-ref.ipa" );
+	}
+
+	public void doTestIPAReference(String ipa) throws Exception {
 		int count = getCount();
-		loadFromResource( "ipa-ref.ipa" );
+		loadFromResource( ipa );
 		doURL();
-		assertNotNull("Check if ipa-ref,ipa was loaded", get("ipa-ref.ipa"));
+		assertNotNull("Check if ipa-ref,ipa was loaded", get(ipa));
 		assertNotNull("Check if simple.ipa was loaded", get("simple.ipa"));
 		assertEquals( "One addInformation and 2 iterations", count + 3, getCount() );
 	}
-	
 	
 	/**
 	 * Test if it is possible to load a provisioning jar
@@ -616,32 +637,51 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 	 * @spec ProvisioningService.getInformation()
 	 * @spec ProvisioningService.addInformation(Dictionary)
 	 */
-	public void testFileLoad() throws Exception {
-		loadFromResource( "simple.ipa" );
+	public void testFileLoad1() throws Exception {
+		doTestFileLoad( "simple.ipa" );
+	}
+
+	public void testFileLoad2() throws Exception {
+		doTestFileLoad( "x-type-simple.ipa" );
+	}
+
+	public void doTestFileLoad(String ipa) throws Exception {
+		loadFromResource( ipa );
 		doURL();
 	}
-	
 	/**
 	 * Test a download from the http server
 	 * @spec ProvisioningService.addInformation(String)
 	 */
-	public void testHttpLoad()throws Exception {
+	public void testHttpLoad1() throws Exception {
 		loadFromURL(new URL(getHttpServer() + "test/ipa/simple.ipa"),
 				"simple.ipa");
 		doURL( );
 	}
 	
+	public void testHttpLoad2() throws Exception {
+		loadFromURL(new URL(getHttpServer() + "test/ipa/x-type-simple.ipa"),
+				"x-type-simple.ipa");
+		doURL( );
+	}
 	
 	/**
 	 * Test a file that only references a JAR by a URL
 	 * @spec ProvisioningService.getInformation()
 	 * @spec ProvisioningService.addInformation(Dictionary)
 	 */
-	public void testFileWithReference() throws Exception {
-		loadFromResource( "ref.ipa" );
+	public void testFileWithReference1() throws Exception {
+		doTestFileWithReference( "ref.ipa" );
+	}
+
+	public void testFileWithReference2() throws Exception {
+		doTestFileWithReference( "x-type-ref.ipa" );
+	}
+
+	private void doTestFileWithReference(String ipa) throws Exception {
+		loadFromResource(ipa);
 		doURL();
 	}
-	
 	void doURL() throws Exception {		
 		Bundle test0 = waitForBundle();
 		
@@ -697,10 +737,6 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 
 	public void testCaseReference2() throws Exception {
 		doTestCaseReference( "x-type-case-ref.ipa" );
-	}
-
-	public void testCaseReference3() throws Exception {
-//		doTestCaseReference( "x-mime-case-ref.ipa" );
 	}
 
 	private void doTestCaseReference(String ipa) throws Exception {
