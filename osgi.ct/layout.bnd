@@ -4,12 +4,11 @@ build.tests                 = ${uniq; ${build.core.tests}, ${build.cmpn.tests}, 
 build.core.tests = \
     org.osgi.test.cases.framework, \
     org.osgi.test.cases.framework.secure, \
+    org.osgi.test.cases.framework.launch, \
+    org.osgi.test.cases.framework.launch.secure, \
     org.osgi.test.cases.packageadmin, \
     org.osgi.test.cases.condpermadmin, \
-    org.osgi.test.cases.permissionadmin.main, \
-    org.osgi.test.cases.permissionadmin.nosecurity, \
-    org.osgi.test.cases.permissionadmin.security, \
-    org.osgi.test.cases.permissionadmin.signature, \
+    org.osgi.test.cases.permissionadmin, \
     org.osgi.test.cases.startlevel, \
     org.osgi.test.cases.url
 
