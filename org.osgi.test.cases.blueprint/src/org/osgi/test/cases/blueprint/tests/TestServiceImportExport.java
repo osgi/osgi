@@ -139,7 +139,8 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         importStartEvents.addAssertion("dependsleaf1", AssertionService.COMPONENT_INIT_METHOD);
         // also validate the metadata for the imported service (this one only has a single import, so easy to locate)
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferencedService("ServiceOne", TestServiceOne.class,
-                ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, new String[] { "dependsleaf1" }, null, ReferencedService.DEFAULT_TIMEOUT)));
+                ServiceReferenceMetadata.AVAILABILITY_MANDATORY, null, new String[] { "dependsleaf2", "dependsleaf1" }, null,
+                ReferencedService.DEFAULT_TIMEOUT)));
         importStartEvents.addAssertion("ServiceOneConstructor", AssertionService.SERVICE_SUCCESS);
         importStartEvents.addAssertion("ServiceOneProperty", AssertionService.SERVICE_SUCCESS);
         // validate that the component is the correct type
@@ -159,14 +160,16 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
         // now some expected termination stuff
         EventSet exportStopEvents = controller.getStopEvents(1);
-        importStartEvents.addAssertion("dependsleaf1", AssertionService.COMPONENT_DESTROY_METHOD);
-        importStartEvents.addAssertion("dependsleaf2", AssertionService.COMPONENT_DESTROY_METHOD);
         // the is the component creation
         exportStopEvents.addAssertion("ServiceOne", AssertionService.COMPONENT_DESTROY_METHOD);
         // we should see a service event here indicating this is being deregistered
         exportStopEvents.addServiceEvent("UNREGISTERING", TestServiceOne.class);
         // and there should not be a registration active anymore
         exportStopEvents.addValidator(new ServiceUnregistrationValidator(TestServiceOne.class, null));
+
+        EventSet importStopEvents = controller.getStopEvents(0);
+        importStopEvents.addAssertion("dependsleaf1", AssertionService.COMPONENT_DESTROY_METHOD);
+        importStopEvents.addAssertion("dependsleaf2", AssertionService.COMPONENT_DESTROY_METHOD);
 
         controller.run();
     }
