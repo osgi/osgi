@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" default-initialization="lszy">
+
+    <description>
+        This is just a simple exported service using a single interface.  However,
+        everything is defined as lazy, so nothing should get activated until a request
+        is made for the service.  We'll even do that indirectly through another lazy bean,
+    </description>
+
+    <!-- two lazy-inited components used for a depends on relationship -->
+   <bean id="Depends1" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass" initialization="lazy"
+        init-method="init" destroy-method="destroy">
+       <argument value="Depends1"/>
+   </bean>
+
+    <!-- two lazy-inited components used for a depends on relationship -->
+   <bean id="Depends2" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass" initialization="lazy"
+        init-method="init" destroy-method="destroy">
+       <argument value="Depends2"/>
+   </bean>
+
+    <bean id="integerServiceProp" class="org.osgi.test.cases.blueprint.components.staticfactory.TypeStaticFactory" factory-method="createinteger">
+        <argument type="java.lang.String" value="999"/>
+    </bean>
+
+    <!-- the node this service export maps into. -->
+    <bean id="ServiceOne" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass"
+        init-method="init" destroy-method="destroy">
+        <argument value="ServiceOne"/>
+    </bean>
+
+    <bean id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceexport.RegistrationListener"
+        init-method="init" destroy-method="destroy">
+        <argument value="ServiceOneListener"/>
+    </bean>
+
+    <!-- simple export using a reference and just one interface. -->
+    <service id="ServiceOneService" ref="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne"
+        depends-on="Depends1 Depends2">
+        <service-properties>
+            <entry key="service.property.integer" value-ref="integerServiceProp" />
+        </service-properties>
+        <registration-listener ref="ServiceOneListener"
+            registration-method="registered"
+            unregistration-method="unregistered"/>
+    </service>
+
+    <!-- This is the trigger for the entire dependency tree.  Nothing should happen with this bundle until this
+         componet is requested -->
+   <bean id="Trigger" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass" initialization="lazy"
+        init-method="init" destroy-method="destroy" depends-on="ServiceOneService">
+       <argument value="Trigger"/>
+   </bean>
+</blueprint>
+

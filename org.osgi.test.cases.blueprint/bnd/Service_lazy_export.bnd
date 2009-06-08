@@ -1,0 +1,7 @@
+Bundle-SymbolicName:                     ${p}.ServiceOne_lazy_export
+Bundle-Version:                          4.2
+Import-Package:                          ${p}.components.serviceexport, ${p}.services, ${p}.components.staticfactory
+-resourceonly: true
+Include-Resource					= \
+	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/serviceexport/ServiceOne_lazy_export.xml
+
