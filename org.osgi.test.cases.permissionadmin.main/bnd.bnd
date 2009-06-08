@@ -1,0 +1,27 @@
+Bundle-SymbolicName: ${p}
+Bundle-Version: 4.2.0.${project.build}
+Bundle-Vendor: OSGi Alliance
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+Export-Package: ${p}.tbc
+
+Private-Package						= ${p}.tbc, \
+    org.osgi.test.support.*
+
+
+-buildpath							= \
+    org.osgi.test.support;                  version=project , \
+	osgi;									version=4.2		, \
+	ee.minimum												, \
+	${junit}
+
+-runbundles						= 
+
+-runproperties					= report=true, \
+	org.osgi.framework.security=osgi
+
+Test-Cases: ${classes;extending;*TestCase}
+
+Include-Resource		: \
+	contextsharer.jar

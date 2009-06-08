@@ -1,0 +1,14 @@
+Bundle-SymbolicName: ${p}.tb2
+Bundle-Name: ${p}.tb2
+Bundle-Version: 4.2.0.${project.build}
+Bundle-Activator: ${p}.tb2.Activator
+Bundle-Vendor: IBM
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+Bundle-Copyright: ${copyright}
+
+Private-Package						= \
+	${p}.tb2.*
+
+#-sign					: test; password:=testtest
