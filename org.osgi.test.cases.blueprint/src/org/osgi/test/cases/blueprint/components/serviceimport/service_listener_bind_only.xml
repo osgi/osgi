@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+        This imports a service reference with an attached listener.  The listener is also an imported service.
+    </description>
+
+    <bean id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceOneListener"
+       init-method="init" destroy-method="destroy">
+        <argument value="ServiceOneListener"/>
+    </bean>
+
+    <!-- single shared instance of the imported service -->
+    <reference id="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
+        <listener bind-method="bind" ref="ServiceOneListener"/>
+    </reference>
+
+   <bean id="ServiceOneProperty" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceChecker">
+       <argument value="ServiceOneProperty"/>
+       <property name="one" ref="ServiceOne"/>
+   </bean>
+</blueprint>
+
