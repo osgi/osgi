@@ -33,15 +33,21 @@ public class ReferencedService extends ReferencedServiceBase implements TestComp
     /**
      * Create a ReferenceService descriptor from a single interface.
      *
+     * @param name      The registered name of the component (if any).
      * @param interfaceClass
      *                  A single interface class used for the reference.
      * @param availability
      *                  The availability setting.
+     * @param initialization
+     *                  The lazy/eager initialization setting.
      * @param filter    The declared filter string for the reference.
+     * @param deps
      * @param listeners An expected set of listener metadata.
+     * @param timeout
      */
-    public ReferencedService(String name, Class interfaceClass, int availability, String filter, String[] deps, BindingListener[] listeners, long timeout) {
-        this(name, new Class[] { interfaceClass }, availability, filter, deps, listeners, timeout);
+    public ReferencedService(String name, Class interfaceClass, int availability, int initialization, String filter,
+            String[] deps, BindingListener[] listeners, long timeout) {
+        this(name, new Class[] { interfaceClass }, availability, initialization, filter, deps, listeners, timeout);
     }
 
     /**
@@ -52,13 +58,16 @@ public class ReferencedService extends ReferencedServiceBase implements TestComp
      * @param interfaces The set of interfaces to access.
      * @param availability
      *                   The availability setting.
+     * @param initialization
+     *                  The lazy/eager initialization setting.
      * @param filter     The declared filter string for the reference.
      * @param deps       The collection if explicit depends-on relationships.
      * @param listeners  An expected set of listener metadata.
      * @param timeout    The service call timeout interval for damped services.
      */
-    public ReferencedService(String name, Class[] interfaces, int availability, String filter, String[] deps, BindingListener[] listeners, long timeout) {
-        super(name, interfaces, availability, filter, deps, listeners);
+    public ReferencedService(String name, Class[] interfaces, int availability, int initialization,
+            String filter, String[] deps, BindingListener[] listeners, long timeout) {
+        super(name, interfaces, availability, initialization, filter, deps, listeners);
         this.timeout = timeout;
     }
 

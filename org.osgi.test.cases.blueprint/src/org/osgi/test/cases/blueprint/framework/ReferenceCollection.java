@@ -29,28 +29,40 @@ public class ReferenceCollection extends ReferencedServiceBase {
     /**
      * Create a ReferenceService descriptor from a single interface.
      *
+     * @param name       The registered component id for the collection.
      * @param interfaceClass
-     *                  A single interface class used for the reference.
+     *                   A single interface class used for the reference.
      * @param availability
-     *                  The availability setting.
-     * @param filter    The declared filter string for the reference.
-     * @param listeners An expected set of listener metadata.
+     *                   The availability setting.
+     * @param initialization
+     *                   The initialization setting for the collection.
+     * @param filter     The declared filter string for the reference.
+     * @param deps       Explicit dependencies for the collection.
+     * @param listeners  An expected set of listener metadata.
+     * @param memberType The collection member type
      */
-    public ReferenceCollection(String name, Class interfaceClass, int availability, String filter, String[] deps, BindingListener[] listeners, int memberType) {
-        this(name, new Class[] { interfaceClass }, availability, filter, deps, listeners, memberType);
+    public ReferenceCollection(String name, Class interfaceClass, int availability, int initialization,
+            String filter, String[] deps, BindingListener[] listeners, int memberType) {
+        this(name, new Class[] { interfaceClass }, availability, initialization, filter, deps, listeners, memberType);
     }
 
     /**
      * Create a ReferenceService descriptor.
      *
+     * @param name       The registered component id for the collection.
      * @param interfaces The set of interfaces to access.
      * @param availability
      *                   The availability setting.
+     * @param initialization
+     *                   The initialization setting for the collection.
      * @param filter     The declared filter string for the reference.
+     * @param deps       Explicit dependencies for the collection.
      * @param listeners  An expected set of listener metadata.
+     * @param memberType The collection member type
      */
-    public ReferenceCollection(String name, Class[] interfaces, int availability, String filter, String[] deps, BindingListener[] listeners, int memberType) {
-        super(name, interfaces, availability, filter, deps, listeners);
+    public ReferenceCollection(String name, Class[] interfaces, int availability, int initialization,
+            String filter, String[] deps, BindingListener[] listeners, int memberType) {
+        super(name, interfaces, availability, initialization, filter, deps, listeners);
         this.memberType = memberType;
     }
 
