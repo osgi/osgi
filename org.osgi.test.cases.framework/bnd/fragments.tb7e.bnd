@@ -4,7 +4,7 @@ Bundle-SymbolicName: ${p}.fragments.tb7e
 Bundle-Version: 1.0
 Private-Package: ${p}.fragments.tb7e
 Fragment-Host: ${p}.fragments.tb7c
-Export-Package: testresources;version="2.0"
+Export-Package: testresources;version="2.0";-noimport:=true
 
 Include-Resource: \
 	testresources/resource.txt = resources/fragments.tb7e/resource.txt

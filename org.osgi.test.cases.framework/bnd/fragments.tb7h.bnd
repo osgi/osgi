@@ -4,3 +4,4 @@ Bundle-SymbolicName: ${p}.fragments.tb7h
 Bundle-Version: 1.0
 Bundle-Activator: ${p}.fragments.tb7h.Activator
 Private-Package: ${p}.fragments.tb7h
+Import-Package: testresources;version="2.0",*
