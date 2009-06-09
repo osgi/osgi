@@ -70,6 +70,7 @@ copyright.html = Copyright &copy; OSGi Alliance (2000, ${tstamp;yyyy}). All Righ
 
 osgi.release				= 4
 osgi.version				= 4.2.0
+#-versionpolicy				= "[${version;==;${@}},${version;+;${@}})"
 
 osgi.release.version		= ${osgi.version}.${project.build}
 core.release.version		= ${osgi.release.version}
