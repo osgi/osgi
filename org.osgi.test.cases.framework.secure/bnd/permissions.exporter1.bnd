@@ -11,6 +11,8 @@ Private-Package	= \
 	
 Export-Package = \
 	${p}.permissions.sharedPkg;version=1.0.0
+Import-Package = \
+	${p}.permissions.sharedPkg;version=1.0.0,*
 	
 -sign: test
 	

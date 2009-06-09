@@ -5,7 +5,7 @@ Private-Package						= org.osgi.test.support.*, \
 	${p}.junit.*
 	
 Export-Package						= \
-	${p}.permissions.util;version=1.0.0, \
+	${p}.permissions.util, \
 	${p}.lifecycle.servicereferencegetter
 
 Include-Resource = \
