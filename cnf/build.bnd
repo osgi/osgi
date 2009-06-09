@@ -73,7 +73,8 @@ osgi.version				= 4.2.0
 -versionpolicy				= "[${version;==;${@}},${version;+;${@}})"
 
 osgi.release.version		= ${osgi.version}.${project.build}
-core.release.version		= ${osgi.release.version}
+# Increment micro version of core since core is complete and we need to leave 4.2.0 stable
+core.release.version		= ${version;==+=;${osgi.release.version}}
 cmpn.release.version		= ${osgi.release.version}
 mobile.release.version		= ${osgi.release.version}
 enterprise.release.version	= ${osgi.release.version}
