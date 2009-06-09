@@ -1,10 +1,13 @@
 Bundle-Version					= 1.0.0.${project.build}
 Bundle-Activator				= ${p}.Activator
 
-Bundle-RequiredExecutionEnvironment= J2SE-1.4
+Bundle-RequiredExecutionEnvironment = J2SE-1.4
 
 Private-Package 					= ${p}.*
+Export-Package					= org.osgi.service.application;-split-package:=first
 
 -buildpath						= \
+	org.osgi.service.application;	version=project, \
 	ee.j2se;					version=1.4, \
-	osgi;						version=4.0.1
+	osgi.core;					version=4.0.1, \
+	osgi.cmpn;					version=4.0.1

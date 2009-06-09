@@ -4,10 +4,10 @@ Private-Package						= org.osgi.test.support.*, \
 	${p}.*
 
 -buildpath							= \
-	org.osgi.util.cdma;					version=project	, \
-	org.osgi.test.support;					version=project	, \
-	osgi;									version=4.0.1		, \
-	ee.minimum												, \
+	org.osgi.util.cdma;					version=project, \
+	org.osgi.test.support;				version=project, \
+	osgi.core;							version=4.0.1, \
+	ee.minimum;							version=1.1, \
 	${junit}
 
 -runbundles						= \

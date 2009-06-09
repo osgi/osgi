@@ -11,5 +11,6 @@ Export-Package					= org.osgi.service.http;-split-package:=first
 -buildpath						= \
     org.osgi.service.http;				version=project, \
 	ee.j2se;							version=1.4, \
-	osgi;								version=4.0, \
+	osgi.core;							version=4.0, \
+	osgi.cmpn;							version=4.0, \
 	org.osgi.impl.bundle.servlet;		version=2.1

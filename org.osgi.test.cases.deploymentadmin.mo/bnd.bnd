@@ -43,33 +43,35 @@ Include-Resource					= \
 Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
 
 -buildpath=\
+	org.osgi.service.deploymentadmin; version=project, \
     org.osgi.test.support; version=project , \
-		osgi;	version=4.2, \
-		ee.foundation; version=1.1, \
-		${junit}
+	osgi.core;		version=4.2, \
+	osgi.mobile;	version=4.0, \
+	ee.foundation; 	version=1.1, \
+	${junit}
 		
 -runbundles							= \
 	org.osgi.impl.service.log; version=latest, \
 	org.apache.felix.configadmin;  version=latest, \
 	org.eclipse.equinox.event;  version=latest, \
-	org.osgi.impl.bundle.jaxp;  version=project, \
+	org.osgi.impl.bundle.jaxp;  version=latest, \
 	org.osgi.impl.service.deploymentadmin; version=project, \
-	org.osgi.impl.service.dmt; version=project, \
-	osgi; version=latest
+	org.osgi.impl.service.dmt; version=latest, \
+	osgi.mobile; version=latest
 
 -runproperties= \
 	report=true, \
+	org.osgi.framework.security=osgi, \
+	org.osgi.framework.trust.repositories=${build}/keystore, \
 	org.osgi.test.cases.deploymentadmin.mo.timeout=7000, \
 	org.osgi.test.cases.deploymentadmin.mo.usercancel=false, \
 	org.osgi.test.cases.deploymentadmin.mo.status_node_progress=true, \
 	org.osgi.test.cases.deploymentadmin.mo.streaming=true, \
-	org.osgi.framework.security=osgi, \
-	org.osgi.framework.trust.repositories=${build}/keystore, \
+	org.osgi.test.cases.deploymentadmin.short_timeout=3500, \
+	org.osgi.test.cases.deploymentadmin.timeout=180000, \
 	org.osgi.impl.service.deploymentadmin.keystore.file=${build}/keystore, \
 	org.osgi.impl.service.deploymentadmin.userprompt=false, \
 	org.osgi.impl.service.deploymentadmin.deliveredarea=${target-dir}, \
-	org.osgi.test.cases.deploymentadmin.timeout=180000, \
-	org.osgi.test.cases.deploymentadmin.short_timeout=3500, \
 	org.osgi.vendor.deploymentadmin=org.osgi.impl.service.deploymentadmin.perm, \
 	org.osgi.vendor.dmtree.DigestDelegate=org.osgi.impl.service.dmt.export.Digest, \
 	info.dmtree.osgi.root=./OSGi/

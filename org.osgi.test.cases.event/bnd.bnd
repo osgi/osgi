@@ -16,13 +16,14 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
     org.osgi.service.event;                 version=project , \
-	osgi;									version=latest	, \
+	osgi.core;									version=4.0	, \
+	osgi.cmpn;									version=4.0	, \
 	ee.foundation											, \
 	${junit}
 
 -runbundles							= \
 	org.eclipse.equinox.event; version=latest, \
-	osgi; version=latest
+	org.osgi.impl.service.log; version=latest
 	
 
 

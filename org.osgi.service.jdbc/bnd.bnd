@@ -2,5 +2,5 @@
 nodeploy=true
 
 -buildpath = \
-	osgi;					version=4.0, \
+	osgi.core;				version=4.2, \
 	ee.j2se;				version=1.4

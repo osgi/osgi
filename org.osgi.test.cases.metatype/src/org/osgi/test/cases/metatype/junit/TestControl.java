@@ -169,6 +169,7 @@ public class TestControl extends DefaultTestBundleControl {
 
 		// Test the methods with default locale
 		ocd = mti.getObjectClassDefinition("com.acme.foo", null);
+		assertNotNull(ocd);
 		assertEquals("ObjectClassDefinition.getID()", "ocd1", ocd.getID());
 		assertEquals("ObjectClassDefinition.getName()", "Person(default)", ocd
 				.getName());
@@ -236,10 +237,13 @@ public class TestControl extends DefaultTestBundleControl {
 		String[] expectedOptions;
 
 		mti = mts.getMetaTypeInformation(bundle);
+		assertNotNull(mti);
 
 		// Get an object for tests
 		ocd = mti.getObjectClassDefinition("com.acme.foo", "du");
+		assertNotNull(ocd);
 		attributes = ocd.getAttributeDefinitions(ObjectClassDefinition.ALL);
+		assertNotNull(attributes);
 
 		// Find the attribute 'sex' and run some tests
 		found = false;

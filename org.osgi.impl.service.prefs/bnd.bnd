@@ -5,7 +5,7 @@ Bundle-Version				= 1.1.0.${project.build}
 
 Export-Service				= org.osgi.service.prefs.PreferencesService
 
-Private-Package 			= org.osgi.impl.service.prefs.*
+Private-Package 			= ${p}.*
 Export-Package				= org.osgi.service.prefs;-split-package:=first
 
 -buildpath = \

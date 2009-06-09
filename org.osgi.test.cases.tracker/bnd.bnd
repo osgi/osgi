@@ -1,18 +1,18 @@
 Bundle-Version						= 4.0.0.${project.build}
-Private-Package						= ${p}.junit, org.osgi.test.support.*
+Private-Package						= ${p}.junit, \
+	org.osgi.test.support.*
 Export-Package						= ${p}.service
 
 -buildpath							= \
 	org.osgi.util.tracker;					version=project, \
 	org.osgi.test.support;					version=project, \
-	osgi;									version=4.0		, \
-	ee.minimum												, \
-	com.springsource.junit; version=3.8.2
+	osgi.core;								version=4.0		, \
+	ee.minimum;								version=1.2	, \
+	${junit}
 
--runproperties						= report=true, org.osgi.framework.security=osgi
--sign								= test; password:=testtest
-
-Test-Cases: ${classes;extending;*TestCase}
+-runproperties						= report=true
+	
+Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
 
 Include-Resource				= \
 	tb1.jar, \

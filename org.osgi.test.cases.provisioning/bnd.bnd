@@ -1,5 +1,6 @@
 Bundle-Version: 4.2.0.${project.build}
 Bundle-Activator: ${p}.junit.Activator
+Bundle-RequiredExecutionEnvironment = J2SE-1.4
 
 Private-Package						= org.osgi.test.support.*, \
 	${p}.junit
@@ -34,19 +35,20 @@ Include-Resource: \
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
 	org.osgi.service.provisioning;			version=project	, \
-	org.osgi.impl.bundle.servlet;		version=2.1, \
-	osgi;									version=4.2		, \
-	ee.j2se; version=1.4												, \
+	org.osgi.impl.bundle.servlet;			version=2.1, \
+	osgi.core;								version=4.0		, \
+	osgi.cmpn;								version=4.2		, \
+	ee.j2se; 								version=1.4		, \
 	${junit}
 
 -runbundles						= \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.bundle.servlet;		version=2.1, \
-	org.osgi.impl.service.http; version=project, \
+	org.osgi.impl.service.http; version=latest, \
 	org.eclipse.equinox.ip; version=latest, \
 	org.eclipse.equinox.util; version=latest, \
 	org.osgi.impl.bundle.rsh;		version=project, \
-	osgi; version=latest
+	osgi.cmpn; version=latest
 
 -runproperties = report=true, \
 	org.osgi.service.http.hostname=127.0.0.1, \

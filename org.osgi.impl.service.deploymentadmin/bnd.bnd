@@ -2,7 +2,7 @@ Bundle-Version					= 1.1.0.${project.build}
 Bundle-Vendor					= Nokia
 Bundle-Activator				= $(p).Activator
 
-Bundle-RequiredExecutionEnvironment= J2SE-1.4
+Bundle-RequiredExecutionEnvironment = J2SE-1.4
 
 Private-Package				= \
 	${p}, \
@@ -10,11 +10,12 @@ Private-Package				= \
  	org.osgi.impl.service.dwnl, \
  	org.osgi.impl.service.dwnlimpl
 
-Export-Package 					= ${p}.perm, org.osgi.service.deploymentadmin;-split-package:=merge-first
+Export-Package 					= ${p}.perm, org.osgi.service.deploymentadmin.*;-split-package:=first
 Import-Package					= info.dmtree; resolution:=optional, *
 
 -buildpath						= \
     org.osgi.service.deploymentadmin;				version= project, \
 	ee.j2se;										version= 1.4, \
-	osgi;											version= 4.0.1, \
-	org.eclipse.osgi;								version= 3.4
+	osgi.core;										version= 4.0.1, \
+	osgi.mobile;									version= 4.0, \
+	org.eclipse.osgi;								version= 3.5

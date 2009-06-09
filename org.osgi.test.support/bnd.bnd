@@ -3,6 +3,6 @@ Bundle-Version: 				1.0.0
 Export-Package:  				org.osgi.test.*
 
 -buildpath:   \
- 	osgi;							version=latest, \
+ 	osgi.core;						version=4.0, \
  	ee.minimum;						version=1.2, \
  	${junit}

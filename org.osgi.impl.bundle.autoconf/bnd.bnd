@@ -3,7 +3,9 @@ Private-Package 				= ${p}
 Service-Component				= OSGI-INF/services.xml
 Bundle-Vendor					= Nokia
 Include-Resource				= OSGI-INF=src/OSGI-INF
+Bundle-RequiredExecutionEnvironment = J2SE-1.4
 
 -buildpath						= \
 	ee.j2se;					version=1.4, \
-	osgi;						version=4.0.1
+	osgi.core;					version=4.0.1, \
+	osgi.mobile;				version=4.2

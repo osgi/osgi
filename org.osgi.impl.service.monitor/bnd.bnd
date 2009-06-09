@@ -18,4 +18,5 @@ Export-Package					= org.osgi.service.monitor;-split-package:=first
 -buildpath						= \
     org.osgi.service.monitor;			version=project, \
 	ee.foundation;						version=1.1, \
-	osgi;								version=4.0.1
+	osgi.core;							version=4.0.1, \
+	osgi.mobile;						version=4.0

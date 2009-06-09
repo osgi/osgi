@@ -17,7 +17,8 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
     org.osgi.service.monitor;               version=project , \
-	osgi;									version=latest	, \
+	osgi.core;								version=4.0.1	, \
+	osgi.mobile;							version=4.0	, \
 	ee.foundation;                          version=1.1     , \
 	${junit}
 
@@ -27,7 +28,7 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 	org.osgi.impl.service.dmt; version=latest, \
 	org.osgi.impl.service.monitor; version=project, \
 	org.osgi.impl.service.log; version=latest, \
-	osgi; version=latest
+	osgi.mobile; version=latest
 
 
 

@@ -11,4 +11,4 @@ Bundle-Copyright: ${copyright}
 Private-Package						= \
 	${p}.tb4.*
 
-Include-Resource		: {OSGI-INF/permissions.perm=perms/tbc.perm}
+Include-Resource		: {OSGI-INF/permissions.perm=perms/tb4.perm}

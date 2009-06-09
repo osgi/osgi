@@ -1,7 +1,7 @@
 Bundle-Version					= 2.0.0.${project.build}
 Bundle-Activator				= ${p}.Activator
 Import-Service					= org.osgi.service.log.LogService
-Bundle-RequiredExecutionEnvironment= J2SE-1.4
+Bundle-RequiredExecutionEnvironment = J2SE-1.4
 
 Private-Package					= ${p}.*
 Export-Package					= org.osgi.service.device;-split-package:=first
@@ -9,4 +9,4 @@ Export-Package					= org.osgi.service.device;-split-package:=first
 -buildpath						= \
     org.osgi.service.device;	version=project, \
 	ee.j2se;					version=1.4, \
-	osgi;						version=4.0
+	osgi;						version=3.0

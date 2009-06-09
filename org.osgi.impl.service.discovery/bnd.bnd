@@ -1,14 +1,13 @@
 Bundle-Version					= 1.0.0.${project.build}
 Bundle-Activator				= ${p}.Activator
-
+Bundle-RequiredExecutionEnvironment = J2SE-1.4
 
 Private-Package					= ${p}.*
-Export-Package					= org.osgi.service.discovery
+Export-Package					= org.osgi.service.discovery;-split-package:=first
 
 -buildpath						= \
  	org.osgi.service.discovery;	version=project, \
     ch.ethz.iks.slp; 			version=1.0, \
-    org.eclipse.osgi;			version=3.5.0, \
 	ee.j2se;					version=1.4, \
-	org.osgi.impl.service.log;	version=1.0, \
-	osgi;						version=3.5
+	osgi.core;					version=4.2, \
+	osgi.cmpn;					version=4.2, \

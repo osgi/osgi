@@ -1,11 +1,12 @@
-Bundle-Version: 3.0.0.${project.build}
+Bundle-Version: 4.2.0.${project.build}
 
 Private-Package						= ${p}.*
 
 -buildpath							= \
 	org.osgi.service.template;					version=project	, \
-	osgi;									version=4.0		, \
-	ee.minimum												, \
+	osgi.core;									version=4.2		, \
+	osgi.cmpn;									version=4.2		, \
+	ee.minimum;									version=1.2		, \
 	${junit}
 
 -runbundles						= \

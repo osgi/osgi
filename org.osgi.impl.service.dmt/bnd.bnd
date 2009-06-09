@@ -8,12 +8,13 @@ Import-Service					= \
 	org.osgi.service.log.LogService, \
 	org.osgi.service.cm.ConfigurationAdmin
 
-Bundle-RequiredExecutionEnvironment= J2SE-1.4
+Bundle-RequiredExecutionEnvironment = J2SE-1.4
 
-Export-Package 					= ${p}.export
+Export-Package 					= ${p}.export,info.dmtree.*;-split-package:=first
 Private-Package					= ${p}, ${p}.plugins
 
 -buildpath						= \
     info.dmtree;				version=project, \
 	ee.j2se;					version=1.4, \
-	osgi;						version=4.0.1
+	osgi.core;					version=4.0.1, \
+	osgi.cmpn;					version=4.0.1
