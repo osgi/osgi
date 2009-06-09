@@ -1,5 +1,5 @@
 Bundle-Description				: \
-	OSGi Service Platform Release ${version;=;${proposed.release.version}} version ${proposed.release.version}, \
+	OSGi Service Platform Release ${version;=;${proposed.release.version}} Version ${version;==;${proposed.release.version}}, \
 	Proposed Interfaces and Classes for use in compiling bundles.
 
 Bundle-Version					: ${proposed.release.version}

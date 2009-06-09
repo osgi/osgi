@@ -1,5 +1,5 @@
 Bundle-Description				: \
-	OSGi Service Platform Release ${version;=;${cmpn.release.version}} version ${cmpn.release.version}, \
+	OSGi Service Platform Release ${version;=;${cmpn.release.version}} Version ${version;==;${cmpn.release.version}}, \
 	Compendium Interfaces and Classes for use in compiling bundles.
 
 Bundle-Version					: ${cmpn.release.version}
@@ -9,4 +9,3 @@ Import-Package					: *; resolution:=optional
 Export-Package 					: ${cmpn.packages}
 
 Include-Resource 				: ${cmpn.resources}
-  								  

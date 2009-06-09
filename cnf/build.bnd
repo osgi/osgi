@@ -82,7 +82,6 @@ proposed.release.version	= ${osgi.release.version}
 # Documentation
 Bundle-Copyright       	= ${copyright}
 Bundle-Vendor			= OSGi Alliance
-Bundle-License			= ... TODO
 -removeheader			= Include-Resource
 
 -runpath							= \

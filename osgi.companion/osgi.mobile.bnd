@@ -1,11 +1,11 @@
 Bundle-Description				: \
-	OSGi Service Platform Release ${version;=;${osgi.release.version}} version ${mobile.release.version}, \
+	OSGi Service Platform Release ${version;=;${osgi.release.version}} Version ${version;==;${mobile.release.version}}, \
 	Mobile Interfaces and Classes for use in compiling bundles.
 
 Bundle-Version					: ${mobile.release.version}
-Bundle-SymbolicName				: osgi.mobile
-Import-Package					: *; resolution:=optional
 DynamicImport-Package			: *
+Import-Package					: *; resolution:=optional
 
 Export-Package					: ${mobile.packages}
+
 Include-Resource 				: ${mobile.resources}

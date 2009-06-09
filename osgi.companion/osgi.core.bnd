@@ -1,10 +1,11 @@
 Bundle-Description			: \
-	OSGi Service Platform Release ${version;=;${core.release.version}} version ${core.release.version}, \
+	OSGi Service Platform Release ${version;=;${core.release.version}} Version ${version;==;${core.release.version}}, \
 	Core Interfaces and Classes for use in compiling bundles.
 
-Bundle-Version				: ${core.release.version}
-DynamicImport-Package		: *
-Import-Package				: *; resolution:=optional
+Bundle-Version					: ${core.release.version}
+DynamicImport-Package			: *
+Import-Package					: *; resolution:=optional
 
-Export-Package 				: ${core.packages}
-Include-Resource			: ${core.resources}
+Export-Package 					: ${core.packages}
+
+Include-Resource				: ${core.resources}

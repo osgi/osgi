@@ -19,7 +19,7 @@ core.specs = org.osgi.framework, \
 
 core.packages = ${replace;$(core.specs);^.*$;$0.*}
 
-core.resources = legal/about.html, legal/LICENSE
+core.resources = {legal/about.html}, legal/LICENSE
 
 cmpn.specs = \
 	 info.dmtree, \
@@ -54,7 +54,7 @@ cmpn.specs = \
 
 cmpn.packages = ${replace;$(cmpn.specs);^.*$;$0.*}
 
-cmpn.resources = legal/about.html, \
+cmpn.resources = {legal/about.html}, \
   				legal/LICENSE, \
   				xmlns/app=../xmlns/app, \
   				xmlns/metatype=../xmlns/metatype, \
@@ -69,7 +69,7 @@ enterprise.specs = \
 
 enterprise.packages = ${replace;$(enterprise.specs);^.*$;$0.*}
 
-enterprise.resources = legal/about.html, \
+enterprise.resources = {legal/about.html}, \
   						legal/LICENSE, \
   						xmlns/blueprint=../xmlns/blueprint, \
   						xmlns/blueprint-cm=../xmlns/blueprint-cm, \
@@ -96,7 +96,7 @@ mobile.specs = \
 
 mobile.packages = ${replace;$(mobile.specs);^.*$;$0.*}
 
-mobile.resources = legal/about.html, \
+mobile.resources = {legal/about.html}, \
   					legal/LICENSE, \
   					xmlns/app=../xmlns/app, \
   					xmlns/dd=../xmlns/dd, \
@@ -111,5 +111,5 @@ proposed.specs = \
 
 proposed.packages = ${replace;$(proposed.specs);^.*$;$0.*}
 
-proposed.resources = legal/about.html, \
+proposed.resources = {legal/about.html}, \
   					legal/LICENSE
