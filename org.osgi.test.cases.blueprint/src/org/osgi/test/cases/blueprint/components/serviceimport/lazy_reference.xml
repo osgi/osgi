@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" default-initialization="lazy">
+
+    <description>
+        This for unregistration of dependencies and listers actions.
+    </description>
+
+    <!-- two lazy-inited components used for a depends on relationship -->
+   <bean id="Depends1" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass" initialization="lazy"
+        init-method="init" destroy-method="destroy">
+       <argument value="Depends1"/>
+   </bean>
+
+    <!-- two lazy-inited components used for a depends on relationship -->
+   <bean id="Depends2" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass" initialization="lazy"
+        init-method="init" destroy-method="destroy">
+       <argument value="Depends2"/>
+   </bean>
+
+   <!-- a lazy initialized service listener for the reference -->
+    <bean id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceOneListener"
+        init-method="init" destroy-method="destroy">
+        <argument value="ServiceOneListener"/>
+    </bean>
+
+
+    <!-- single of the imported service.  Since this is lazy, none of the listeners or dependencies will activate
+         until this is activated.  -->
+    <reference id="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" depends-on="Depends1 Depends2">
+        <listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
+    </reference>
+
+    <!-- This gets both a ServiceManager and a reference collection injected -->
+   <bean id="ReboundDependencyChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.ReboundDependencyChecker"
+        init-method="init" destroy-method="destroy">
+       <argument value="ReboundDependencyChecker"/>
+       <property name="one" ref="ServiceOne"/>
+       <property name="serviceManager">
+           <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
+       </property>
+   </bean>
+</blueprint>
+

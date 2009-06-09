@@ -1845,6 +1845,8 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
         // ok, now we'll request the trigger component, and that should fire off a whole sequence of events
         MetadataEventSet exportMiddleEvents = controller.getMiddleEvents();
+        // this will start the initialization cascade
+        exportMiddleEvents.addInitializer(new LazyComponentStarter("Trigger"));
 
         // these all get created now
         exportMiddleEvents.addEvent(new ComponentAssertion("Trigger", AssertionService.COMPONENT_CREATED));
@@ -1873,11 +1875,11 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         TestRegistrationListener[] listeners = new TestRegistrationListener[] {
             new TestRegistrationListener("ServiceOneListener", "registered", "unregistered")
         };
-        exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService",
+        exportMiddleEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService",
                 ServiceMetadata.INITIALIZATION_LAZY, "ServiceOne", TestServiceOne.class,
                 ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, new String[] { "Depends1", "Depends2" }, listeners)));
         // we should see a service event here indicating this was registered
-        exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
+        exportMiddleEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
 
         // now some expected termination stuff
         EventSet exportStopEvents = controller.getStopEvents();
@@ -1893,6 +1895,85 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // and there should not be a registration active anymore
         exportStopEvents.addValidator(new ServiceUnregistrationValidator(TestServiceOne.class, null));
 
+        controller.run();
+    }
+
+
+    /*
+     * This tests depends-on and lazy initialization behavior of a <reference> element
+     */
+    public void testLazyReference() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.
+        ThreePhaseTestController controller = new ThreePhaseTestController(getContext(),
+                getWebServer()+"www/lazy_reference.jar",
+                getWebServer()+"www/managed_two_service_export.jar");
+        // The export jar has been well covered already in other tests.  We'll just focus
+        // on the import listener details.
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+
+        // There will all sorts of events that will signal a failure if we see them
+        importStartEvents.addFailureEvent(new ComponentAssertion("ReboundDependencyChecker", AssertionService.COMPONENT_CREATED));
+        importStartEvents.addFailureEvent(new ComponentAssertion("Depends1", AssertionService.COMPONENT_CREATED));
+        importStartEvents.addFailureEvent(new ComponentAssertion("Depends2", AssertionService.COMPONENT_CREATED));
+        importStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.COMPONENT_CREATED));
+
+        MetadataEventSet importMiddleEvents = controller.getMiddleEvents(0);
+        // this will start the initialization cascade
+        importMiddleEvents.addInitializer(new LazyComponentStarter("ReboundDependencyChecker"));
+
+        // these all get created now
+        importMiddleEvents.addEvent(new ComponentAssertion("ReboundDependencyChecker", AssertionService.COMPONENT_CREATED));
+        importMiddleEvents.addEvent(new ComponentAssertion("Depends1", AssertionService.COMPONENT_CREATED));
+        importMiddleEvents.addEvent(new ComponentAssertion("Depends2", AssertionService.COMPONENT_CREATED));
+        importMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.COMPONENT_CREATED));
+
+        // and initialized
+        importMiddleEvents.addEvent(new ComponentAssertion("Depends1", AssertionService.COMPONENT_INIT_METHOD));
+        importMiddleEvents.addEvent(new ComponentAssertion("Depends2", AssertionService.COMPONENT_INIT_METHOD));
+        importMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.COMPONENT_INIT_METHOD));
+        // the first property comes from the called method signature, the
+        // second should be passed to the registration listener.
+        Hashtable props1 = new Hashtable();
+        props1.put("service.interface.name", TestServiceOne.class.getName());
+        props1.put("service.listener.type", "interface");
+        props1.put("test.service.name", "ServiceOneA");
+        // binding events for the second service should send these.
+        Hashtable props2 = new Hashtable();
+        props2.put("service.interface.name", TestServiceOne.class.getName());
+        props2.put("service.listener.type", "interface");
+        props2.put("test.service.name", "BadService");
+        // this is the the initial bind operation.
+        importMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, props1));
+        // According to the spec, if there is a service immediately available, then we won't see the
+        // UNBIND happening.  So this would be a failure if this shows up
+        importMiddleEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, props1));
+        // we should, however, see a BIND event for the replacement service
+        importMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, props2));
+        // this indicates successful completion of the test phase
+        importMiddleEvents.addAssertion("ReboundDependencyChecker", AssertionService.COMPONENT_INIT_METHOD);
+
+        // we're expecting some listener metadata on the import.
+        BindingListener[] listeners = new BindingListener[] {
+            new BindingListener("ServiceOneListener", "bind", "unbind"),
+        };
+
+        // also validate the metadata for the imported service (this one only has a single import, so easy to locate)
+        importMiddleEvents.addValidator(new ComponentMetadataValidator(new ReferencedService("ServiceOne", TestServiceOne.class,
+                ServiceReferenceMetadata.AVAILABILITY_MANDATORY, ServiceReferenceMetadata.INITIALIZATION_LAZY,
+                null, new String[] { "Depends1", "Depends2" }, listeners, ReferencedService.DEFAULT_TIMEOUT)));
+
+        // now some expected termination stuff
+        EventSet importStopEvents = controller.getStopEvents(0);
+        // the final UNBIND operation on module context shutdown.  This needs to be for the replacement
+        // service, since that is the one currently bound.
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, props2));
+
+        importStopEvents.addEvent(new ComponentAssertion("ReboundDependencyChecker", AssertionService.COMPONENT_DESTROY_METHOD));
+        importStopEvents.addEvent(new ComponentAssertion("Depends1", AssertionService.COMPONENT_DESTROY_METHOD));
+        importStopEvents.addEvent(new ComponentAssertion("Depends2", AssertionService.COMPONENT_DESTROY_METHOD));
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.COMPONENT_DESTROY_METHOD));
         controller.run();
     }
 }

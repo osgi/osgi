@@ -186,6 +186,102 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
 
     /**
+     * Test lazy initialization of a reference list.  The listeners and dependencies should all have delayed
+     * initialization until the collection is requested
+     */
+    public void testLazyReferenceList() throws Exception {
+        ThreePhaseTestController controller = new ThreePhaseTestController(getContext(),
+                getWebServer()+"www/lazy_ref_list.jar");
+
+        // this installs and starts the bundle containing the reference services first to
+        // ensure the timing of the initial service listener calls.
+        controller.addSetupBundle(getWebServer()+"www/managed_service_export.jar");
+
+        // all of our validation here is on the importing side
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+
+        // There will all sorts of events that will signal a failure if we see them
+        importStartEvents.addFailureEvent(new ComponentAssertion("ReferenceChecker", AssertionService.COMPONENT_CREATED));
+        importStartEvents.addFailureEvent(new ComponentAssertion("dependsleaf1", AssertionService.COMPONENT_CREATED));
+        importStartEvents.addFailureEvent(new ComponentAssertion("dependsleaf2", AssertionService.COMPONENT_CREATED));
+        importStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.COMPONENT_CREATED));
+
+        MetadataEventSet importMiddleEvents = controller.getMiddleEvents(0);
+        // this will start the initialization cascade
+        importMiddleEvents.addInitializer(new LazyComponentStarter("ReferenceChecker"));
+
+        // The collection should be initialized with two services.  There should
+        // be a BIND event broadcast for both at startup
+        Hashtable propsA = new Hashtable();
+        propsA.put("service.interface.name", TestServiceOne.class.getName());
+        propsA.put("service.listener.type", "interface");
+        propsA.put("test.service.name", "ServiceOneA");
+
+        Hashtable propsC = new Hashtable();
+        propsC.put("service.interface.name", TestServiceOne.class.getName());
+        propsC.put("service.listener.type", "interface");
+        propsC.put("test.service.name", "ServiceOneC");
+
+        // we should see both the construction and INIT of this.  It's difficult to test the ordering,
+        // but we should see the events from this lazy bean.
+        importMiddleEvents.addAssertion("dependsleaf2", AssertionService.COMPONENT_CREATED);
+        importMiddleEvents.addAssertion("dependsleaf2", AssertionService.COMPONENT_INIT_METHOD);
+        importMiddleEvents.addAssertion("dependsleaf1", AssertionService.COMPONENT_CREATED);
+        importMiddleEvents.addAssertion("dependsleaf1", AssertionService.COMPONENT_INIT_METHOD);
+        importMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.COMPONENT_CREATED));
+        importMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.COMPONENT_INIT_METHOD));
+        importMiddleEvents.addEvent(new ComponentAssertion("ReferenceChecker", AssertionService.COMPONENT_CREATED));
+
+        // We should see both of these initially
+        importMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsA));
+        importMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsC));
+
+        // validate the metadata for the imported service manager, since it is directly used
+        importMiddleEvents.addValidator(new PropertyMetadataValidator("ReferenceChecker",
+                new TestProperty(new TestComponentValue(
+                new ReferencedService(null, ServiceManager.class,
+                ServiceReferenceMetadata.AVAILABILITY_MANDATORY, ServiceReferenceMetadata.INITIALIZATION_LAZY,
+                null, null, null, ReferencedService.DEFAULT_TIMEOUT)), "serviceManager")));
+
+        // and one for the reference to the service, which should just be a component reference
+        importMiddleEvents.addValidator(new PropertyMetadataValidator("ReferenceChecker",
+                new TestProperty(new TestRefValue("TestCollection"), "list")));
+
+        // and the collection metadata
+        importMiddleEvents.addValidator(new ComponentMetadataValidator(new ReferenceCollection("TestCollection",
+                TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL,
+                ServiceReferenceMetadata.INITIALIZATION_LAZY, null,
+                new String[] { "dependsleaf1", "dependsleaf2" },
+                new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind")},
+                RefListMetadata.USE_SERVICE_OBJECT)));
+
+        // this validates the ModuleContext.getComponent() result
+        importMiddleEvents.addValidator(new ReferenceListValidator("TestCollection"));
+        importMiddleEvents.addValidator(new ComponentNamePresenceValidator("TestCollection"));
+        importMiddleEvents.addValidator(new GetReferencedServicesMetadataValidator("TestCollection"));
+
+        // this event signals completion of all of the checking work.  If there
+        // have been any errors, these get signalled as assertion failures and will
+        // fail the test.
+        importMiddleEvents.addAssertion("ReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
+
+        // all of our validation here is on the importing side
+        EventSet importStopEvents = controller.getStopEvents(0);
+
+        // We should get these at the end
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsA));
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsC));
+
+        importStopEvents.addAssertion("dependsleaf1", AssertionService.COMPONENT_DESTROY_METHOD);
+        importStopEvents.addAssertion("dependsleaf2", AssertionService.COMPONENT_DESTROY_METHOD);
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.COMPONENT_DESTROY_METHOD));
+        importStopEvents.addEvent(new ComponentAssertion("ReferenceChecker", AssertionService.COMPONENT_DESTROY_METHOD));
+
+        controller.run();
+    }
+
+
+    /**
      * Import a list of services and validate against an expected set.  The services will implement
      * multiple interfaces
      */
