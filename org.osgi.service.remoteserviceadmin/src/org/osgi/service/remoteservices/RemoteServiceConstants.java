@@ -23,7 +23,7 @@ public class RemoteServiceConstants {
 	 * @see RemoteServiceConstants#SERVICE_EXPORTED_CONFIGS
 	 * @see RemoteServiceConstants#SERVICE_IMPORTED_CONFIGS
 	 */
-	 String REMOTE_CONFIGS_SUPPORTED = "remote.configs.supported";
+	 public final static String REMOTE_CONFIGS_SUPPORTED = "remote.configs.supported";
 
 	/**
 	 * Service property that lists the intents supported by the distribution
@@ -36,7 +36,7 @@ public class RemoteServiceConstants {
 	 * @see RemoteServiceConstants#SERVICE_EXPORTED_INTENTS
 	 * @see RemoteServiceConstants#SERVICE_EXPORTED_INTENTS_EXTRA
 	 */
-	 String REMOTE_INTENTS_SUPPORTED = "remote.intents.supported";
+	 public final static String REMOTE_INTENTS_SUPPORTED = "remote.intents.supported";
 
 	
 	/**
@@ -51,7 +51,7 @@ public class RemoteServiceConstants {
 	 * The value of this property is of type String, String[] or Collection of
 	 * String.
 	 */
-	 String SERVICE_EXPORTED_INTERFACES = "service.exported.interfaces";
+	 public final static String SERVICE_EXPORTED_INTERFACES = "service.exported.interfaces";
 
 	/**
 	 * A list of intents that the distribution provider must implement to
@@ -62,7 +62,7 @@ public class RemoteServiceConstants {
 	 * The value of this property is of type String, String[] or Collection of
 	 * String.
 	 */
-	 String SERVICE_EXPORTED_INTENTS = "service.exported.intents";
+	 public final static String SERVICE_EXPORTED_INTENTS = "service.exported.intents";
 
 	/**
 	 * Extra intents configured in addition to the the intents specified in
@@ -76,7 +76,7 @@ public class RemoteServiceConstants {
 	 * The value of this property is of type String, String[] or Collection of
 	 * String.
 	 */
-	 String SERVICE_EXPORTED_INTENTS_EXTRA = "service.exported.intents.extra";
+	 public final static String SERVICE_EXPORTED_INTENTS_EXTRA = "service.exported.intents.extra";
 
 	/**
 	 * A list of configuration types that should be used to export the service.
@@ -90,7 +90,7 @@ public class RemoteServiceConstants {
 	 * The value of this property is of type String, String[] or Collection of
 	 * String.
 	 */
-	 String SERVICE_EXPORTED_CONFIGS = "service.exported.configs";
+	 public final static String SERVICE_EXPORTED_CONFIGS = "service.exported.configs";
 
 	/**
 	 * Must be set by a distribution provider to true when it registers the
@@ -99,7 +99,7 @@ public class RemoteServiceConstants {
 	 * <p>
 	 * The value of this property is of type String or Boolean.
 	 */
-	 String SERVICE_IMPORTED = "service.imported";
+	 public final static String SERVICE_IMPORTED = "service.imported";
 
 	/**
 	 * The configuration information used to import this services, as described
@@ -126,7 +126,7 @@ public class RemoteServiceConstants {
 	 * The value of this property is of type String, String[] or Collection of
 	 * String.
 	 */
-	 String SERVICE_INTENTS = "service.intents";
+	 public final static String SERVICE_INTENTS = "service.intents";
 
 	/**
 	 * The <code>service.id</code> of the Distribution Provider.
@@ -139,11 +139,11 @@ public class RemoteServiceConstants {
 	 * <p>
 	 * The value of this property is of type <code>Long</code>.
 	 */
-	 String DISTRIBUTION_PROVIDER_ID = "distribution.provider.id";
+	 public final static String DISTRIBUTION_PROVIDER_ID = "distribution.provider.id";
 
-	 String SERVICE_EXPORTED_PREFIX = "service.exported.";
+	 public final static String SERVICE_EXPORTED_PREFIX = "service.exported.";
 	
 	
 	
-	 String FRAMEWORK_UUID = "framework.uuid";
+	 public final static String FRAMEWORK_UUID = "framework.uuid";
 }
