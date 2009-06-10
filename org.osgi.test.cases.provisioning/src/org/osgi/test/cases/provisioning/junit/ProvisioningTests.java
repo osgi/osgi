@@ -678,6 +678,10 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 		doTestFileWithReference( "x-type-ref.ipa" );
 	}
 
+	public void testFileWithReference3() throws Exception {
+		doTestFileWithReference( "x-ext-ref.ipa" );
+	}
+
 	private void doTestFileWithReference(String ipa) throws Exception {
 		loadFromResource(ipa);
 		doURL();
@@ -691,6 +695,8 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 		assertNotNull( "We should have installed test-0-prov.jar", test0 );
 		assertEquals( "The name must be 'test-0-prov.jar'", test0.getLocation(), "test-0-prov.jar" );
 		Bundle test1 = findBundle( "test-1-prov.jar");
+		if (test1 == null)
+			test1 = findBundle("test-1-prov.url");
 		assertNotNull( "Testing install of  bundle test-1-prov", test1 );
 		assertTrue( "Bundle test-1-prov.jar should not be uninstalled", test1.getState() != Bundle.UNINSTALLED );		
 		assertTrue( "Bundle test-1-prov.jar should not be starting", test1.getState() != Bundle.STARTING );
@@ -699,9 +705,14 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 		
 		Bundle test2 = findBundle( "test-2-prov.jar" );
 		assertNull( "test-2-prov.jar should not be loaded", test2 );
-		
-		assertTrue( "The ipa file contained the text-1 key and is String", "TEST1".equals(get( "text-1") )); 
-		assertTrue( "The ipa file contained the text-2 key and is String", "TEST2".equals(get( "text-2") )); 
+		Object text1 = get( "text-1");
+		if (text1 == null)
+			text1 = get( "text-1.txt");
+		assertTrue( "The ipa file contained the text-1 key and is String", "TEST1".equals(text1)); 
+		Object text2 = get( "text-2");
+		if (text2 == null)
+			text2 = get( "text-2.txt");
+		assertTrue( "The ipa file contained the text-2 key and is String", "TEST2".equals(text2)); 
 		
 		//assertNull( "26.2 The name must not start with slash", get( "/text-3")); 
 		

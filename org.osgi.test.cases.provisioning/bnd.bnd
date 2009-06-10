@@ -24,6 +24,7 @@ Include-Resource: \
 	ipa/x-type-simple.ipa=x-type-simple.ipa, \
 	ipa/x-type-spid.ipa=x-type-spid.ipa, \
 	ipa/x-type-unicode.ipa=x-type-unicode.ipa, \
+	ipa/x-ext-ref.ipa=x-ext-ref.ipa, \
 	www/case-ref-prov.jar=case-ref-prov.jar, \
 	www/delay-prov.jar=delay-prov.jar, \
 	www/local-prov.jar=local-prov.jar, \
@@ -35,10 +36,10 @@ Include-Resource: \
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
 	org.osgi.service.provisioning;			version=project	, \
-	org.osgi.impl.bundle.servlet;			version=2.1, \
+	org.osgi.impl.bundle.servlet;		version=2.1, \
 	osgi.core;								version=4.0		, \
 	osgi.cmpn;								version=4.2		, \
-	ee.j2se; 								version=1.4		, \
+	ee.j2se; version=1.4												, \
 	${junit}
 
 -runbundles						= \

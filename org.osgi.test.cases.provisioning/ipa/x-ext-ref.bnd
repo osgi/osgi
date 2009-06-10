@@ -1,0 +1,28 @@
+#
+# Should get the test-1.jar bundle from the remote system
+# 
+-sources:								false
+-resourceonly:                           true
+Include-Resource: \
+ x-ext-ref.ipa;literal='true', \
+ load-status;literal='x-ext-ref.ipa', \
+ test-0-prov.jar=test-0-prov.jar, \
+ test-1-prov.url;literal=director:test-1-prov.jar, \
+ test-2-prov.jar;literal='http://NON_EXISTENT_HOST/NON_EXISTENT_FILE', \
+ provisioning.start.bundle;literal='test-0-prov.jar', \
+ text-1.txt;literal='TEST1', \
+ text-2.txt;literal='TEST2', \
+ /text-3.txt;literal='TEST3', \
+ osgi.cert=osgi.cert
+
+InitialProvisioning-Entries: \
+ x-ext-ref.ipa;type=text, \
+ load-status;type=text, \
+ test-0-prov.jar, \
+ test-1-prov.url, \
+ test-2-prov.jar, \
+ provisioning.start.bundle;type=text, \
+ text-1.txt, \
+ text-2.txt, \
+ /text-3.txt, \
+ osgi.cert
