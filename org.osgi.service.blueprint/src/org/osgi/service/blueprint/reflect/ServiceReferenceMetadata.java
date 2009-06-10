@@ -46,13 +46,13 @@ public interface ServiceReferenceMetadata extends ComponentMetadata {
 	int getAvailability();
 
 	/**
-	 * The interface types that the matching service must support
+	 * The interface type that the matching service must support
 	 *
-	 * Defined in the <code>interface</code> attribute or <code>interfaces</code> element.
+	 * Defined in the <code>interface</code> attribute.
 	 *
-	 * @return an immutable list of type names
+	 * @return the String name of the requested service interface
 	 */
-	List/*<String>*/ getInterfaceNames();
+	String getInterfaceName();
 
 	/**
 	 * The value of the component-name attribute, if specified. This specifies
