@@ -106,37 +106,37 @@ public interface ProvisioningService {
 	 * used in conjunction with the RSH protocol.
 	 */
 	public final static String	PROVISIONING_RSH_SECRET		= "provisioning.rsh.secret";
-	
+
 	/**
-	 * MIME type to be used in the InitialProvisioning-Entries header or stored
-	 * in the extra field of a <code>ZipEntry</code> object for String data.
+	 * MIME type to be stored in the extra field of a <code>ZipEntry</code>
+	 * object for String data.
 	 */
 	public final static String	MIME_STRING					= "text/plain;charset=utf-8";
-	
+
 	/**
-	 * MIME type to be used in the InitialProvisioning-Entries header or stored
-	 * stored in the extra field of a <code>ZipEntry</code> object for
-	 * <code>byte[]</code> data.
+	 * MIME type to be stored stored in the extra field of a
+	 * <code>ZipEntry</code> object for <code>byte[]</code> data.
 	 */
 	public final static String	MIME_BYTE_ARRAY				= "application/octet-stream";
-	
+
 	/**
-	 * MIME type to be used in the InitialProvisioning-Entries header or stored
-	 * stored in the extra field of a <code>ZipEntry</code> object for an
-	 * installable bundle file. Zip entries of this type will be installed in
-	 * the framework, but not started. The entry will also not be put into the
-	 * information dictionary.
+	 * MIME type to be stored in the extra field of a <code>ZipEntry</code>
+	 * object for an installable bundle file. Zip entries of this type will be
+	 * installed in the framework, but not started. The entry will also not be
+	 * put into the information dictionary.
 	 */
 	public final static String	MIME_BUNDLE					= "application/vnd.osgi.bundle";
 
 	/**
-	 * Alternative MIME type to be used in the InitialProvisioning-Entries header or stored
-	 * stored in the extra field of a <code>ZipEntry</code> object for an
-	 * installable bundle file. Zip entries of this type will be installed in
-	 * the framework, but not started. The entry will also not be put into the
-	 * information dictionary. This alternative entry is only for backward compatibility,
-	 * new applications are recommended to use <code>MIME_BUNDLE</code>, which is an official
+	 * Alternative MIME type to be stored in the extra field of a
+	 * <code>ZipEntry</code> object for an installable bundle file. Zip entries
+	 * of this type will be installed in the framework, but not started. The
+	 * entry will also not be put into the information dictionary. This
+	 * alternative entry is only for backward compatibility, new applications
+	 * are recommended to use <code>MIME_BUNDLE</code>, which is an official
 	 * IANA MIME type.
+	 * 
+	 * @since 1.2
 	 */
 	public final static String	MIME_BUNDLE_ALT				= "application/x-osgi-bundle";
 
@@ -149,8 +149,10 @@ public interface ProvisioningService {
 	public final static String	MIME_BUNDLE_URL				= "text/x-osgi-bundle-url";
 
 	/**
-	 * Name of the header that specifies the (MIME) type information for the ZIP file
+	 * Name of the header that specifies the type information for the ZIP file
 	 * entries.
+	 * 
+	 * @since 1.2
 	 */	
 	public final static String INITIALPROVISIONING_ENTRIES = "InitialProvisioning-Entries";
 	
