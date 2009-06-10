@@ -1,0 +1,3 @@
+org.osgi.service.remoteservices
+org.osgi.service.remoteservices.admin
+org.osgi.service.remoteservices.registry
