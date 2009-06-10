@@ -1879,6 +1879,53 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
+    /**
+     * This tests the behavior of a service rebind when an alternative service
+     * with a higher ranking becomes available
+     */
+    public void testServiceRankingRebind() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/rebound_dependency_ranking_import.jar",
+                getWebServer()+"www/managed_two_service_ranking_export.jar");
+        // The export jar has been well covered already in other tests.  We'll just focus
+        // on the import listener details.
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+        // metadata issues have been well tested elsewhere.  We're going to focus on the service dynamics.
+
+        // the first property comes from the called method signature, the
+        // second should be passed to the registration listener.
+        Hashtable props1 = new Hashtable();
+        props1.put("service.interface.name", TestServiceOne.class.getName());
+        props1.put("service.listener.type", "interface");
+        props1.put("test.service.name", "ServiceOneA");
+        // binding events for the second service should send these.
+        Hashtable props2 = new Hashtable();
+        props2.put("service.interface.name", TestServiceOne.class.getName());
+        props2.put("service.listener.type", "interface");
+        props2.put("test.service.name", "BadService");
+        // this is the the initial bind operation.
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, props1));
+        // According to the spec, if there is a service immediately available, then we won't see the
+        // UNBIND happening.  So this would be a failure if this shows up
+        importStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, props1));
+        // we should, however, see a BIND event for the replacement service
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, props2));
+        // this indicates successful completion of the test phase
+        importStartEvents.addAssertion("ReboundDependencyChecker", AssertionService.COMPONENT_INIT_METHOD);
+
+
+        // now some expected termination stuff
+        EventSet importStopEvents = controller.getStopEvents(0);
+        // the final UNBIND operation on module context shutdown.  This needs to be for the replacement
+        // service, since that is the one currently bound.
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, props2));
+        controller.run();
+    }
+
+
     /*
      * This tests the damping behavior of ServiceRegistration proxies
      */

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+        This tests rebind situations when higher ranked service alternatives become available.
+    </description>
+
+    <bean id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceOneListener">
+        <argument value="ServiceOneListener"/>
+    </bean>
+
+
+    <!-- single shared instance of the imported service.  The original backing service will go away, but a
+         replacement should be immediately available.  The 0 timeout verifies it doesn't go way.  -->
+    <reference id="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" timeout="0">
+        <listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
+    </reference>
+
+    <!-- This gets both a ServiceManager and a reference collection injected -->
+   <bean id="ReboundDependencyChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.ReboundRankingDependencyChecker" init-method="init">
+       <argument value="ReboundDependencyChecker"/>
+       <property name="one" ref="ServiceOne"/>
+       <property name="serviceManager">
+           <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
+       </property>
+   </bean>
+</blueprint>
+

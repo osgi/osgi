@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+        This creates a ServiceManager instance with two services of different rankings.
+        Initially, the lower ranked service is the only one registered
+    </description>
+
+    <!-- define a series of components for service export -->
+    <bean id="ServiceOneA" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
+        <argument value="ServiceOneA"/>
+        <argument value="4"/>
+    </bean>
+
+    <bean id="BadService" class="org.osgi.test.cases.blueprint.services.TestBadService">
+        <argument value="BadService"/>
+        <argument value="5"/>
+    </bean>
+
+    <bean id="ServiceManager" class="org.osgi.test.cases.blueprint.services.ServiceManagerImpl">
+        <argument ref="blueprintBundleContext"/>
+        <argument>
+            <list>
+                <bean class="org.osgi.test.cases.blueprint.services.ManagedService">
+                    <property name="bundleContext" ref="blueprintBundleContext"/>
+                    <property name="name">
+                        <idref component-id="ServiceOneA"/>
+                    </property>
+                    <property name="service" ref="ServiceOneA"/>
+                    <property name="interfaces">
+                        <set>
+                            <value>org.osgi.test.cases.blueprint.services.TestServiceOne</value>
+                        </set>
+                    </property>
+                    <property name="start" value="true"/>
+                    <property name="rannking" value="1"/>
+                </bean>
+                <bean class="org.osgi.test.cases.blueprint.services.ManagedService">
+                    <property name="bundleContext" ref="blueprintBundleContext"/>
+                    <property name="name">
+                        <idref component-id="BadService"/>
+                    </property>
+                    <property name="service" ref="BadService"/>
+                    <property name="interfaces">
+                        <set>
+                            <value>org.osgi.test.cases.blueprint.services.TestServiceOne</value>
+                        </set>
+                    </property>
+                    <property name="start" value="false"/>
+                    <property name="rannking" value="1"/>
+                </bean>
+            </list>
+        </argument>
+    </bean>
+
+   <!-- simple the service manager service when finished.  Note that the ServiceManager component
+        might register services for this bundle before it is registered itself.  For cross-bundle dependency
+        purposes, we're depending on this                                                                     -->
+   <service id="ServiceManagerService" ref="ServiceManager" interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
+</blueprint>
+

@@ -1,0 +1,7 @@
+Bundle-SymbolicName:                     ${p}.rebound_dependency_ranking_import
+Bundle-Version:                          4.2
+Import-Package:                          ${p}.components.serviceimport, ${p}.services
+-resourceonly: true
+Include-Resource					= \
+	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/serviceimport/rebound_dependency_ranking_import.xml
+
