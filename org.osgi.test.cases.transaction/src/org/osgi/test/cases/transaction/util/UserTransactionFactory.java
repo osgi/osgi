@@ -16,7 +16,6 @@
 
 package org.osgi.test.cases.transaction.util;
 
-import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 
 import org.osgi.framework.BundleContext;
@@ -55,7 +54,7 @@ public class UserTransactionFactory {
             while (!done) {
                 // get UserTransaction from Service Reference
                 _userTxServiceRef = _context
-                        .getServiceReference(TransactionManager.class.getName());
+                        .getServiceReference(UserTransaction.class.getName());
 
                 // check if we are able to get a valid _tmRef. If not, wait a
                 // second
