@@ -5,34 +5,9 @@
         This is a reusable config for validating different service registrations.
     </description>
 
-
-    <!-- service request using multiple interfaces -->
-    <reference id="ServiceOneMultiple">
-        <interfaces>
-             <value>org.osgi.test.cases.blueprint.services.TestServiceOne</value>
-             <value>org.osgi.test.cases.blueprint.services.TestServiceTwo</value>
-        </interfaces>
-    </reference>
-
-
     <!-- now one of each using just one of the exported set.  This should map to the same signature -->
-    <reference id="ServiceOne">
-        <interfaces>
-             <value>org.osgi.test.cases.blueprint.services.TestServiceOne</value>
-        </interfaces>
-    </reference>
-
-    <reference id="ServiceTwo">
-        <interfaces>
-             <value>org.osgi.test.cases.blueprint.services.TestServiceTwo</value>
-        </interfaces>
-    </reference>
-
-   <bean id="ServiceOneMultipleChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceChecker">
-       <argument value="ServiceOneMultipleChecker"/>
-       <property name="one" ref="ServiceOneMultiple"/>
-       <property name="two" ref="ServiceOneMultiple"/>
-   </bean>
+    <reference id="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne"\>
+    <reference id="ServiceTwo" interface="org.osgi.test.cases.blueprint.services.TestServiceTwo"\>
 
    <bean id="ServiceOneChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceChecker">
        <argument value="ServiceOneChecker"/>

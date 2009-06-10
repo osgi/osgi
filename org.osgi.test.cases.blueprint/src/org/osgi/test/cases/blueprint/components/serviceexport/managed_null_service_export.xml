@@ -29,7 +29,7 @@
     <bean id="ServiceManager" class="org.osgi.test.cases.blueprint.services.ServiceManagerImpl">
         <argument ref="blueprintBundleContext"/>
         <argument>
-            <list>
+            <array type="org.osgi.test.cases.blueprint.services.ManagedService">
                 <bean class="org.osgi.test.cases.blueprint.services.ManagedService">
                     <property name="bundleContext" ref="blueprintBundleContext"/>
                     <property name="name">
@@ -69,7 +69,7 @@
                     </property>
                     <property name="start" value="false"/>
                 </bean>
-            </list>
+            </array>
         </argument>
     </bean>
 

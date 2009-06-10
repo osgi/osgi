@@ -64,10 +64,6 @@ public class ServiceManagerImpl implements ServiceManager {
         this(context, new ManagedService[] { service });
     }
 
-    public ServiceManagerImpl(BundleContext context, List services) {
-        this(context);
-        addServices(services);
-    }
 
     /**
      * Explicitly register ourselves as a service.  This is done

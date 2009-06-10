@@ -20,7 +20,7 @@
     <bean id="ServiceManager" class="org.osgi.test.cases.blueprint.services.ServiceManagerImpl">
         <argument ref="blueprintBundleContext"/>
         <argument>
-            <list>
+            <array type="org.osgi.test.cases.blueprint.services.ManagedService">
                 <bean class="org.osgi.test.cases.blueprint.services.ManagedService">
                     <property name="bundleContext" ref="blueprintBundleContext"/>
                     <property name="name">
@@ -33,7 +33,7 @@
                         </set>
                     </property>
                     <property name="start" value="true"/>
-                    <property name="rannking" value="1"/>
+                    <property name="ranking" value="1"/>
                 </bean>
                 <bean class="org.osgi.test.cases.blueprint.services.ManagedService">
                     <property name="bundleContext" ref="blueprintBundleContext"/>
@@ -47,9 +47,9 @@
                         </set>
                     </property>
                     <property name="start" value="false"/>
-                    <property name="rannking" value="1"/>
+                    <property name="ranking" value="1"/>
                 </bean>
-            </list>
+            </array>
         </argument>
     </bean>
 

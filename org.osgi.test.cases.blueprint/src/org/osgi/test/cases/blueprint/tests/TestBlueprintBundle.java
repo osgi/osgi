@@ -436,7 +436,7 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
                 getWebServer()+"www/comp1_dir_no_config.jar");
         // this exports a different version of the blueprint service, which is
         // imported by the target bundle to create a version incompatibility.
-        controller.addSetupBundle(getWebServer()+"www/blueprint_version_two");
+        controller.addSetupBundle(getWebServer()+"www/blueprint_version_two.jar");
         // nothing should happen, which is all handled by the controller
         controller.run();
     }

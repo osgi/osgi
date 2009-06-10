@@ -9,12 +9,14 @@
         <argument value="ServiceOneTwoListener"/>
     </bean>
 
-    <!-- single shared instance of the imported service -->
-    <reference id="ServiceOne">
-        <interfaces>
-             <value>org.osgi.test.cases.blueprint.services.TestServiceOne</value>
-             <value>org.osgi.test.cases.blueprint.services.TestServiceTwo</value>
-        </interfaces>
+    <!-- two references sharing one listener -->
+    <reference id="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
+        <listener bind-method="bind" unbind-method="unbind">
+            <ref component-id="ServiceOneTwoListener"/>
+        </listener>
+    </reference>
+
+    <reference id="ServiceTwo" interface="org.osgi.test.cases.blueprint.services.TestServiceTwo">
         <listener bind-method="bind" unbind-method="unbind">
             <ref component-id="ServiceOneTwoListener"/>
         </listener>
@@ -23,6 +25,7 @@
    <bean id="ServiceOneProperty" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceChecker">
        <argument value="ServiceOneProperty"/>
        <property name="one" ref="ServiceOne"/>
+       <property name="two" ref="ServiceTwo"/>
    </bean>
 </blueprint>
 

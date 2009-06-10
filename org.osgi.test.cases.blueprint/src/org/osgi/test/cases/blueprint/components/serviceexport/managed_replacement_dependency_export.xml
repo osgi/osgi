@@ -21,7 +21,7 @@
     <bean id="ServiceManager" class="org.osgi.test.cases.blueprint.services.ServiceManagerImpl">
         <argument ref="blueprintBundleContext"/>
         <argument>
-            <list>
+            <array type="org.osgi.test.cases.blueprint.services.ManagedService">
                 <bean class="org.osgi.test.cases.blueprint.services.ManagedService">
                     <property name="bundleContext" ref="blueprintBundleContext"/>
                     <property name="name">
@@ -50,7 +50,7 @@
                          the state on to detect the bind change                               -->
                     <property name="start" value="true"/>
                 </bean>
-            </list>
+            </array>
         </argument>
     </bean>
 
