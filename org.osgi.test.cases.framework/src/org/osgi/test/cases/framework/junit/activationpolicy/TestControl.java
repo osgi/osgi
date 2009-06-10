@@ -253,14 +253,13 @@ public class TestControl extends DefaultTestBundleControl {
 			// The difference comes from whether the framework treats the trigger as a one-time trigger or not.
 			actualEvents = resultsListener.getResults(5);
             // This is the case if the trigger is a one-time event.
-            if (actualEvents.length == 5)
+            if (actualEvents.length == 4)
             {
-                expectedEvents = new Object[5];
-                expectedEvents[0] = new BundleEvent(BundleEvent.LAZY_ACTIVATION, tblazy2);
-                expectedEvents[1] = new BundleEvent(BundleEvent.STARTING, tblazy2);
-                expectedEvents[2] = new BundleEvent(BundleEvent.STARTED, tblazy2);
-                expectedEvents[3] = new BundleEvent(BundleEvent.STOPPING, tblazy2);
-                expectedEvents[4] = new BundleEvent(BundleEvent.STOPPED, tblazy2);
+                expectedEvents = new Object[4];
+                expectedEvents[0] = new BundleEvent(BundleEvent.STARTING, tblazy2);
+                expectedEvents[1] = new BundleEvent(BundleEvent.STARTED, tblazy2);
+                expectedEvents[2] = new BundleEvent(BundleEvent.STOPPING, tblazy2);
+                expectedEvents[3] = new BundleEvent(BundleEvent.STOPPED, tblazy2);
                 compareEvents(expectedEvents, actualEvents);
             }
             // This is the case if the trigger is NOT a one-time event.
