@@ -10,11 +10,7 @@
     </bean>
 
     <!-- single shared instance of the imported service -->
-    <reference id="ServiceOne">
-        <interfaces>
-             <value>org.osgi.test.cases.blueprint.services.TestServiceOne</value>
-             <value>org.osgi.test.cases.blueprint.services.TestServiceTwo</value>
-        </interfaces>
+    <reference id="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
         <listener bind-method="bindReference" unbind-method="unbindReference">
             <ref component-id="ServiceOneListener"/>
         </listener>

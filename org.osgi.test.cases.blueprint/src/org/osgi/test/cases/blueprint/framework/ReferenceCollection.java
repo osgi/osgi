@@ -24,27 +24,8 @@ import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
  * A single referenced service in the BlueprintContainer metadata.
  */
 public class ReferenceCollection extends ReferencedServiceBase {
+    // the collection member type specifier
     protected int memberType;
-
-    /**
-     * Create a ReferenceService descriptor from a single interface.
-     *
-     * @param name       The registered component id for the collection.
-     * @param interfaceClass
-     *                   A single interface class used for the reference.
-     * @param availability
-     *                   The availability setting.
-     * @param initialization
-     *                   The initialization setting for the collection.
-     * @param filter     The declared filter string for the reference.
-     * @param deps       Explicit dependencies for the collection.
-     * @param listeners  An expected set of listener metadata.
-     * @param memberType The collection member type
-     */
-    public ReferenceCollection(String name, Class interfaceClass, int availability, int initialization,
-            String filter, String[] deps, BindingListener[] listeners, int memberType) {
-        this(name, new Class[] { interfaceClass }, availability, initialization, filter, deps, listeners, memberType);
-    }
 
     /**
      * Create a ReferenceService descriptor.
@@ -60,9 +41,9 @@ public class ReferenceCollection extends ReferencedServiceBase {
      * @param listeners  An expected set of listener metadata.
      * @param memberType The collection member type
      */
-    public ReferenceCollection(String name, Class[] interfaces, int availability, int initialization,
+    public ReferenceCollection(String name, Class interfaceClass, int availability, int initialization,
             String filter, String[] deps, BindingListener[] listeners, int memberType) {
-        super(name, interfaces, availability, initialization, filter, deps, listeners);
+        super(name, interfaceClass, availability, initialization, filter, deps, listeners);
         this.memberType = memberType;
     }
 

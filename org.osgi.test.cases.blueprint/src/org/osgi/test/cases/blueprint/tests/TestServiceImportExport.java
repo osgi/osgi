@@ -1009,47 +1009,6 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
 
     /**
-     * Similar to the single import/export test, but the importing component
-     * receives the ServiceReference object, not the service
-     */
-    public void testServiceReferenceInjection() throws Exception {
-        // NB:  We're going to load the import jar first, since starting that
-        // one first might result in a dependency wait in the second.  This should
-        // still work.
-        StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/Service_reference_injection.jar",
-                getWebServer()+"www/ServiceOne_export.jar");
-        // the exporting side has been widely tested and this test does nothing new,
-        // adding anything to that so we can skip
-
-        // now the importing side.  We've got a couple of service injections to validate, plus the injection
-        // results
-        MetadataEventSet importStartEvents = controller.getStartEvents(0);
-        importStartEvents.addAssertion("ServiceReferenceChecker", AssertionService.SERVICE_SUCCESS);
-        controller.run();
-    }
-
-
-    /**
-     * Similar to the single import/export test, but the importing component
-     * receives the ServiceReference object.  However, since the service will not
-     * be available, a null value will be injected.
-     */
-    public void testServiceReferenceNullInjection() throws Exception {
-        // NB:  This only has a single jar because we're not dependent upon a service
-        // being there.
-        StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/Service_reference_null_injection.jar");
-
-        // now the importing side.  We've got a couple of service injections to validate, plus the injection
-        // results
-        MetadataEventSet importStartEvents = controller.getStartEvents();
-        importStartEvents.addAssertion("ServiceReferenceChecker", AssertionService.SERVICE_SUCCESS);
-        controller.run();
-    }
-
-
-    /**
      * Test that the dependency wait event message is sent out and that
      * satisfying the wait condition will allow things to proceed to
      * completion.

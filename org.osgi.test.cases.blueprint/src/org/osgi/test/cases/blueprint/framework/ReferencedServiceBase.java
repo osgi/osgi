@@ -35,7 +35,7 @@ public class ReferencedServiceBase extends Assert implements TestComponentMetada
     // optional name of the component
     protected String name;
     // the set of exported interfaces
-    protected Set serviceInterfaces;
+    protected String serviceInterface;
     // the expected service availability.
     protected int serviceAvailability;
     // the service initialization style
@@ -47,21 +47,6 @@ public class ReferencedServiceBase extends Assert implements TestComponentMetada
     // the set of explicit dependencies
     protected List dependencies;
 
-
-    /**
-     * Create a ReferenceService descriptor from a single interface.
-     *
-     * @param interfaceClass
-     *                  A single interface class used for the reference.
-     * @param availability
-     *                  The availability setting.
-     * @param filter    The declared filter string for the reference.
-     * @param listeners An expected set of listener metadata.
-     */
-    public ReferencedServiceBase(String name, Class interfaceClass, int availability, int initialization, String filter, String[] deps, BindingListener[] listeners) {
-        this(name, new Class[] { interfaceClass }, availability, initialization, filter, deps, listeners);
-    }
-
     /**
      * Create a ReferenceService descriptor.
      *
@@ -71,17 +56,14 @@ public class ReferencedServiceBase extends Assert implements TestComponentMetada
      * @param filter     The declared filter string for the reference.
      * @param listeners  An expected set of listener metadata.
      */
-    public ReferencedServiceBase(String name, Class[] interfaces, int availability, int initialization, String filter, String[] deps, BindingListener[] listeners) {
+    public ReferencedServiceBase(String name, Class interfaceClass, int availability, int initialization, String filter, String[] deps, BindingListener[] listeners) {
         this.name = name;
         this.serviceAvailability = availability;
         this.initialization = initialization;
         this.filter = filter;
         this.listeners = listeners;
         // convert this into a set
-        this.serviceInterfaces = new HashSet();
-        for (int i = 0; i < interfaces.length; i++) {
-            serviceInterfaces.add(interfaces[i].getName());
-        }
+        this.serviceInterface = interfaceClass.getName();
 
         dependencies = new ArrayList();
         // handle the dependency tracking
@@ -109,7 +91,7 @@ public class ReferencedServiceBase extends Assert implements TestComponentMetada
         ServiceReferenceMetadata meta = (ServiceReferenceMetadata)componentMeta;
 
         // match on the interfaces first
-        if (!serviceInterfaces.equals(new HashSet(meta.getInterfaceNames()))) {
+        if (!serviceInterface.equals(meta.getInterfaceName())) {
             return false;
         }
 

@@ -282,76 +282,6 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
 
     /**
-     * Import a list of services and validate against an expected set.  The services will implement
-     * multiple interfaces
-     */
-    public void testStaticListCollectionMultipleImport() throws Exception {
-        StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/static_reference_list_multiple_import.jar");
-
-        // this installs and starts the bundle containing the reference services first to
-        // ensure the timing of the initial service listener calls.
-        controller.addSetupBundle(getWebServer()+"www/managed_service_multiple_export.jar");
-
-        // all of our validation here is on the importing side
-        MetadataEventSet importStartEvents = controller.getStartEvents(0);
-
-        // The collection should be initialized with two services.  There should
-        // be a BIND event broadcast for both at startup
-        Hashtable propsA = new Hashtable();
-        propsA.put("service.interface.name", TestServiceOne.class.getName());
-        propsA.put("service.listener.type", "interface");
-        propsA.put("test.service.name", "ServiceOneA");
-
-        Hashtable propsC = new Hashtable();
-        propsC.put("service.interface.name", TestServiceOne.class.getName());
-        propsC.put("service.listener.type", "interface");
-        propsC.put("test.service.name", "ServiceOneC");
-
-        // We should see both of these initially
-        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsA));
-        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsC));
-
-        // validate the metadata for the imported service manager, since it is directly used
-        importStartEvents.addValidator(new PropertyMetadataValidator("ReferenceChecker",
-                new TestProperty(new TestComponentValue(
-                new ReferencedService(null, ServiceManager.class,
-                ServiceReferenceMetadata.AVAILABILITY_MANDATORY, ServiceReferenceMetadata.INITIALIZATION_LAZY,
-                null, null, null, ReferencedService.DEFAULT_TIMEOUT)), "serviceManager")));
-
-        // and one for the reference to the service, which should just be a component reference
-        importStartEvents.addValidator(new PropertyMetadataValidator("ReferenceChecker",
-                new TestProperty(new TestRefValue("TestCollection"), "list")));
-
-        // and the collection metadata
-        importStartEvents.addValidator(new ComponentMetadataValidator(new ReferenceCollection("TestCollection",
-                new Class[] { TestServiceOne.class, TestServiceTwo.class}, ServiceReferenceMetadata.INITIALIZATION_EAGER,
-                ServiceReferenceMetadata.AVAILABILITY_OPTIONAL, null, null,
-                new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind")},
-                RefListMetadata.USE_SERVICE_OBJECT)));
-
-        // this validates the ModuleContext.getComponent() result
-        importStartEvents.addValidator(new ReferenceListValidator("TestCollection"));
-        importStartEvents.addValidator(new ComponentNamePresenceValidator("TestCollection"));
-        importStartEvents.addValidator(new GetReferencedServicesMetadataValidator("TestCollection"));
-
-        // this event signals completion of all of the checking work.  If there
-        // have been any errors, these get signalled as assertion failures and will
-        // fail the test.
-        importStartEvents.addAssertion("ReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
-
-        // all of our validation here is on the importing side
-        EventSet importStopEvents = controller.getStopEvents(0);
-
-        // We should get these at the end
-        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsA));
-        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsC));
-
-        controller.run();
-    }
-
-
-    /**
      * Import a list of ServiceReferences and validate against an expected set.
      */
     public void testStaticListCollectionReferenceImport() throws Exception {
@@ -384,61 +314,6 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // and the collection metadata...this is a service reference member type
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferenceCollection("TestCollection",
                 TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL,
-                ServiceReferenceMetadata.INITIALIZATION_EAGER, null, null,
-                new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind")},
-                RefListMetadata.USE_SERVICE_REFERENCE)));
-
-        // this event signals completion of all of the checking work.  If there
-        // have been any errors, these get signalled as assertion failures and will
-        // fail the test.
-        importStartEvents.addAssertion("ReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
-
-        // all of our validation here is on the importing side
-        EventSet importStopEvents = controller.getStopEvents(0);
-
-        // and the listener calls on shutdown
-        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsA));
-        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsC));
-
-        controller.run();
-    }
-
-
-    /**
-     * Import a list of ServiceReferences and validate against an expected set.  This uses multiple
-     * interfaces on the list
-     */
-    public void testStaticListCollectionReferenceMultipleImport() throws Exception {
-        // NB:  We're going to load the import jar first, since starting that
-        // one first might result in a dependency wait in the second.  This should
-        // still work.
-        StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/static_reference_list_ref_multiple_import.jar",
-                getWebServer()+"www/managed_service_multiple_export.jar");
-
-        // all of our validation here is on the importing side
-        MetadataEventSet importStartEvents = controller.getStartEvents(0);
-
-        // The collection should be initialized with two services.  There should not
-        // be any bind or unbind events broadcast for these.
-        Hashtable propsA = new Hashtable();
-        propsA.put("service.interface.name", TestServiceOne.class.getName());
-        propsA.put("service.listener.type", "interface");
-        propsA.put("test.service.name", "ServiceOneA");
-
-        Hashtable propsC = new Hashtable();
-        propsC.put("service.interface.name", TestServiceOne.class.getName());
-        propsC.put("service.listener.type", "interface");
-        propsC.put("test.service.name", "ServiceOneC");
-
-        // We should get one of these for each event.
-        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsA));
-        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsC));
-
-        // and the collection metadata...this is a service reference member type
-        importStartEvents.addValidator(new ComponentMetadataValidator(new ReferenceCollection("TestCollection",
-                new Class[] { TestServiceOne.class, TestServiceTwo.class },
-                ServiceReferenceMetadata.AVAILABILITY_OPTIONAL,
                 ServiceReferenceMetadata.INITIALIZATION_EAGER, null, null,
                 new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind")},
                 RefListMetadata.USE_SERVICE_REFERENCE)));
