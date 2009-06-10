@@ -18,7 +18,6 @@ package org.osgi.test.cases.blueprint.services;
 
 import java.util.Map;
 
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.test.cases.blueprint.services.TestServiceOne;
 
 

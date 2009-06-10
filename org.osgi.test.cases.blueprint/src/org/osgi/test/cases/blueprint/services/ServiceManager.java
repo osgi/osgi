@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
 
 /**
  * An interface for a ServiceManager service to be made available

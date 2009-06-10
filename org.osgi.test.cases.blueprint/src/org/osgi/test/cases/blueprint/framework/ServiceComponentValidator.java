@@ -39,6 +39,15 @@ public class ServiceComponentValidator extends MetadataValidator {
         assertNotNull("Null ServiceRegistration component found for " + componentId, componentObject);
         assertTrue("Invalid ServiceRegistration component found for " + componentId + " Found " + componentObject.getClass().getName(),
            componentObject instanceof ServiceRegistration);
+        try {
+            // this should be a proxy, which will not allow this operation
+            ((ServiceRegistration)componentObject).unregister();
+            fail("ServiceReference proxy did not throw an exception");
+        } catch (UnsupportedOperationException e) {
+            // expected
+        } catch (Throwable e) {
+            fail("ServiceReference proxy did not threw wrong exception :" + e.toString());
+        }
     }
 }
 

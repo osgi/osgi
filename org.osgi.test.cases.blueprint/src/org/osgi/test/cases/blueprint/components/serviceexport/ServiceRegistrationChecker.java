@@ -49,6 +49,15 @@ public class ServiceRegistrationChecker extends BaseTestComponent {
         // copy all of the existing properties
         setProperties.putAll(TestUtil.getProperties(ref));
         reg.setProperties(setProperties);
+        try {
+            // this should be a proxy, which will not allow this operation
+            reg.unregister();
+            AssertionService.fail(this, "ServiceReference proxy did not throw an exception");
+        } catch (UnsupportedOperationException e) {
+            // expected
+        } catch (Throwable e) {
+            AssertionService.fail(this, "ServiceReference proxy did not threw wrong exception :" + e.toString());
+        }
     }
 }
 
