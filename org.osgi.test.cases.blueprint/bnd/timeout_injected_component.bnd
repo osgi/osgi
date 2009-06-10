@@ -4,5 +4,5 @@ Bundle-Version:                          4.2
 Import-Package:                          ${p}.components.servicedynamics, ${p}.services
 -resourceonly: true
 Include-Resource					= \
-	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/servicedynamics/injected_component.xml
+	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/servicedynamics/timeout_injected_component.xml
 

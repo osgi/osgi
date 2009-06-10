@@ -16,23 +16,11 @@
 
 package org.osgi.test.cases.blueprint.tests;
 
-import org.osgi.framework.Bundle;
+import java.util.Properties;
 
-import org.osgi.test.cases.blueprint.framework.BlueprintAdminEvent;
-import org.osgi.test.cases.blueprint.framework.BlueprintContainerEvent;
-import org.osgi.test.cases.blueprint.framework.ClassLoadInitiator;
-import org.osgi.test.cases.blueprint.framework.ComponentAssertion;
-import org.osgi.test.cases.blueprint.framework.EventSet;
-import org.osgi.test.cases.blueprint.framework.LazyActivationTestController;
-import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
-import org.osgi.test.cases.blueprint.framework.ServiceBlueprintEvent;
-import org.osgi.test.cases.blueprint.framework.ServiceManagerRegister;
-import org.osgi.test.cases.blueprint.framework.ServiceManagerUnregister;
-import org.osgi.test.cases.blueprint.framework.ServiceRequestInitiator;
-import org.osgi.test.cases.blueprint.framework.ServiceTestEvent;
-import org.osgi.test.cases.blueprint.framework.StandardErrorTestController;
-import org.osgi.test.cases.blueprint.framework.StandardTestController;
-import org.osgi.test.cases.blueprint.framework.ThreePhaseTestController;
+import org.osgi.framework.Bundle;
+import org.osgi.service.blueprint.container.EventConstants;
+import org.osgi.test.cases.blueprint.framework.*;
 import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.services.ComponentTestInfo;
 import org.osgi.test.cases.blueprint.services.ManagedService;
@@ -64,7 +52,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         StandardTestController controller = new StandardTestController(getContext(),
             getWebServer()+"www/injected_component.jar");
 
-        // create a ServiceManager instance with two instancex of an injected service.
+        // create a ServiceManager instance with two instance of an injected service.
         // we will unregister one, and register the second as a replacement.
         ServiceManager serviceManager = new ServiceManagerImpl(getContext(),
             new ManagedService[] {
@@ -87,7 +75,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         importStartEvents.removeEvent(new BlueprintAdminEvent("CREATED"));
 
         // Ok, when the CREATED event is triggered, we unregister the first service.
-        importStartEvents.addEvent(new BlueprintAdminEvent("CREATED", null, new ServiceManagerUnregister(serviceManager, "ServiceOneA")));
+        importStartEvents.addEvent(new BlueprintAdminEvent("CREATED", null, null, new ServiceManagerUnregister(serviceManager, "ServiceOneA")));
 
         // when our expect service unregisters, then add a replacement service
         importStartEvents.addEvent(new ServiceTestEvent("UNREGISTERING", new Class[] { TestServiceDynamicsInterface.class }, null,
@@ -137,7 +125,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         importStartEvents.removeEvent(new BlueprintAdminEvent("CREATED"));
 
         // Ok, when the CREATED event is triggered, we unregister the first service.
-        importStartEvents.addEvent(new BlueprintAdminEvent("CREATED", null, new ServiceManagerUnregister(serviceManager, "ServiceOneA")));
+        importStartEvents.addEvent(new BlueprintAdminEvent("CREATED", null, null, new ServiceManagerUnregister(serviceManager, "ServiceOneA")));
 
         // when our expect service unregisters, add a replacement service
         importStartEvents.addEvent(new ServiceTestEvent("UNREGISTERING", new Class[] { TestServiceDynamicsInterface.class }, null,
@@ -187,7 +175,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         importStartEvents.removeEvent(new BlueprintAdminEvent("CREATED"));
 
         // Ok, when the CREATED event is triggered, we unregister the first service.
-        importStartEvents.addEvent(new BlueprintAdminEvent("CREATED", null, new ServiceManagerUnregister(serviceManager, "ServiceOneA")));
+        importStartEvents.addEvent(new BlueprintAdminEvent("CREATED", null, null, new ServiceManagerUnregister(serviceManager, "ServiceOneA")));
 
         // when our expect service unregisters, add a replacement service
         importStartEvents.addEvent(new ServiceTestEvent("UNREGISTERING", new Class[] { TestServiceDynamicsInterface.class }, null,
@@ -226,9 +214,17 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         // now we chain a few events to actions to allow us to track the dynamics.
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
 
+        // we need a property bundle to validate the filter used to request this
+        Properties filterProps = new Properties();
+        filterProps.put(org.osgi.service.event.EventConstants.SERVICE_OBJECTCLASS, new String[] { TestServiceOne.class.getName() });
+
         // Ok, when the GRACE_PERIOD event is triggered, we register the first service.
-        importStartEvents.addEvent(new ServiceBlueprintEvent("GRACE_PERIOD", new Class[] { TestServiceOne.class },
-            null, new ServiceManagerRegister(serviceManager, "ServiceOneA")));
+        importStartEvents.addEvent(new BlueprintAdminEvent("GRACE_PERIOD",
+            null, new Properties[] { filterProps },
+            new ServiceManagerRegister(serviceManager, "ServiceOneA")));
+         // and also process the original container event, but without the listener trigger
+        importStartEvents.addEvent(new BlueprintContainerEvent("GRACE_PERIOD",
+            null, new Properties[] { filterProps }, null));
 
         // then we should see this REGISTERED again at the end.
         importStartEvents.addServiceEvent("REGISTERED", TestServiceDynamicsInterface.class);
@@ -268,7 +264,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
 
         importStartEvents.removeEvent(new BlueprintAdminEvent("CREATED"));
         // Ok, when the CREATED event is triggered, we register the first service.
-        importStartEvents.addEvent(new BlueprintAdminEvent("CREATED", null, new ServiceManagerRegister(serviceManager, "ServiceOneA")));
+        importStartEvents.addEvent(new BlueprintAdminEvent("CREATED", null, null, new ServiceManagerRegister(serviceManager, "ServiceOneA")));
 
         // then we should see this REGISTERED at the end.
         importStartEvents.addServiceEvent("REGISTERED", TestServiceDynamicsInterface.class);
@@ -296,11 +292,21 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         // now we chain a few events to actions to allow us to track the dynamics.
         EventSet startEvents = controller.getTestEvents();
         // we should see one of these before the failures
-        startEvents.addEvent(new ServiceBlueprintEvent("GRACE_PERIOD", new Class[] { TestServiceOne.class }));
+
+        // we need a property bundle to validate the filter used to request this
+        Properties filterProps = new Properties();
+        filterProps.put(org.osgi.service.event.EventConstants.SERVICE_OBJECTCLASS, new String[] { TestServiceOne.class.getName() });
+        filterProps.put("osgi.service.blueprint.compname", "XYZ");
+        filterProps.put("someproperty", "abc");
+
+        startEvents.addEvent(new BlueprintContainerEvent("GRACE_PERIOD", null, new Properties[] { filterProps }, null));
+        startEvents.addEvent(new BlueprintAdminEvent("GRACE_PERIOD", null, new Properties[] { filterProps }, null));
+
         // remove the current failure event....we want a more specific one to test the properties getting set.
         startEvents.removeEvent(new BlueprintAdminEvent("FAILURE"));
         // this failure event will verify the information about the failing dependency is set.
-        startEvents.addEvent(new ServiceBlueprintEvent("FAILURE", new Class[] { TestServiceOne.class }));
+        startEvents.addEvent(new BlueprintContainerEvent("FAILURE", null, new Properties[] { filterProps }, null));
+        startEvents.addEvent(new BlueprintAdminEvent("FAILURE", null, new Properties[] { filterProps }, null));
         controller.run();
     }
 
@@ -402,8 +408,13 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
 
         // Ok, when the GRACE_PERIOD event is triggered, we register the first service.
         // we expect one of these to both handlers, but only one triggers the action
-        startEvents.addBlueprintContainerEvent("GRACE_PERIOD");
-        startEvents.addEvent(new BlueprintAdminEvent("GRACE_PERIOD", null, new ServiceManagerRegister(serviceManager, "ServiceOneA")));
+
+        // we need a property bundle to validate the filter used to request this
+        Properties filterProps = new Properties();
+        filterProps.put(org.osgi.service.event.EventConstants.SERVICE_OBJECTCLASS, new String[] { TestServiceOne.class.getName() });
+
+        startEvents.addEvent(new BlueprintContainerEvent("GRACE_PERIOD", null, new Properties[] { filterProps }, null));
+        startEvents.addEvent(new BlueprintAdminEvent("GRACE_PERIOD", null, new Properties[] { filterProps }, new ServiceManagerRegister(serviceManager, "ServiceOneA")));
 
         // then we should see this REGISTERED again at the end.
         startEvents.addServiceEvent("REGISTERED", TestServiceDynamicsInterface.class);

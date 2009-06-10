@@ -17,6 +17,7 @@
 package org.osgi.test.cases.blueprint.tests;
 
 import java.util.Hashtable;
+import java.util.Properties;
 
 import org.osgi.service.blueprint.reflect.BeanMetadata;
 import org.osgi.service.blueprint.reflect.ServiceMetadata;
@@ -1071,8 +1072,11 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
         // look for a blueprint event that can trigger the service manager to register
         // the dependent service
-        importStartEvents.addBlueprintContainerEvent("GRACE_PERIOD");
-        importStartEvents.addEvent(new BlueprintAdminEvent("GRACE_PERIOD", null, new ServiceManagerRegister(serviceManager)));
+        Properties filterProps = new Properties();
+        filterProps.put(org.osgi.service.event.EventConstants.SERVICE_OBJECTCLASS, new String[] { TestServiceOne.class.getName() });
+
+        importStartEvents.addEvent(new BlueprintContainerEvent("GRACE_PERIOD", null, new Properties[] { filterProps }, null));
+        importStartEvents.addEvent(new BlueprintAdminEvent("GRACE_PERIOD", null, new Properties[] { filterProps }, new ServiceManagerRegister(serviceManager)));
         // these will be triggered by the satisfied wait
         importStartEvents.addAssertion("ServiceOneConstructor", AssertionService.SERVICE_SUCCESS);
         importStartEvents.addAssertion("ServiceOneProperty", AssertionService.SERVICE_SUCCESS);
@@ -1735,8 +1739,11 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // metadata issues have been well tested elsewhere.  We're going to focus on the service dynamics.
 
         // Ok, when the WAITING event is triggered, we register the second service.
-        importStartEvents.addBlueprintContainerEvent("WAITING");
-        importStartEvents.addEvent(new BlueprintAdminEvent("WAITING", null, new ServiceManagerRegister(serviceManager, "ServiceOneB")));
+        Properties filterProps = new Properties();
+        filterProps.put(org.osgi.service.event.EventConstants.SERVICE_OBJECTCLASS, new String[] { TestServiceOne.class.getName() });
+
+        importStartEvents.addEvent(new BlueprintContainerEvent("WAITING", null, new Properties[] { filterProps }, null ));
+        importStartEvents.addEvent(new BlueprintAdminEvent("WAITING", null, new Properties[] { filterProps }, new ServiceManagerRegister(serviceManager, "ServiceOneB")));
 
         // the test component will handle all of the validation checking for this
         // this indicates successful completion of the test phase

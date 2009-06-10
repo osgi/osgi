@@ -16,9 +16,12 @@
 
 package org.osgi.test.cases.blueprint.framework;
 import java.util.Map;
+import java.util.Properties;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
+import org.osgi.framework.Filter;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.Version;
 import org.osgi.service.blueprint.container.BlueprintEvent;
 import org.osgi.service.event.Event;
@@ -29,6 +32,9 @@ import org.osgi.test.cases.blueprint.services.TestUtil;
  * EventAdmin service.
  */
 public class BlueprintAdminEvent extends AdminTestEvent {
+    // an optional set of dependency filters we match on
+    protected Properties[] dependencies = null;
+
     /**
      * Create an event for a given topic type.
      *
@@ -36,7 +42,7 @@ public class BlueprintAdminEvent extends AdminTestEvent {
      *               The assertion type.
      */
     public BlueprintAdminEvent(String topic) {
-        this(topic, null, null);
+        this(topic, null, null, null);
     }
 
     /**
@@ -48,7 +54,7 @@ public class BlueprintAdminEvent extends AdminTestEvent {
      *               event.
      */
     public BlueprintAdminEvent(String topic, Map props) {
-        this(topic, props, null);
+        this(topic, props, null, null);
     }
 
 
@@ -59,10 +65,13 @@ public class BlueprintAdminEvent extends AdminTestEvent {
      *                 The assertion type.
      * @param props    An expected set of properties that will be associated with the
      *                 event.
+     * @param dependencies
+     *                 A set of service filter strings we expect on the event.
      * @param listener A listener that will be triggered with this event is received.
      */
-    public BlueprintAdminEvent(String topic, Map props, TestEventListener listener) {
+    public BlueprintAdminEvent(String topic, Map props, Properties[] dependencies, TestEventListener listener) {
         super("org/osgi/service/blueprint/container/" + topic, props, listener);
+        this.dependencies = dependencies;
     }
 
 
@@ -181,6 +190,35 @@ public class BlueprintAdminEvent extends AdminTestEvent {
             return new AssertionFailure("Mismatched bundle symbolic name on blueprint admin event other=" + other.getProperty(BUNDLE_SYMBOLICNAME), cause);
         }
 
+        // do we expect dependencies to be included on this event?  If so, we need to do some filter
+        // matching
+        if (dependencies != null) {
+            String[] filterStrings = (String[])props.get(org.osgi.service.blueprint.container.EventConstants.DEPENDENCIES);
+            if (filterStrings == null) {
+                return new AssertionFailure("Missing dependencies on a Blueprint event: " + other.toString());
+            }
+
+            if (filterStrings.length != dependencies.length) {
+                return new AssertionFailure("Incorrect number of dependency strings from Blueprint event: " + other.toString());
+            }
+
+            // now convert the string filters into ones we can match against
+            Filter[] filters = new Filter[filterStrings.length];
+            for (int i = 0; i < filterStrings.length; i++) {
+                try {
+                    filters[i] = bundle.getBundleContext().createFilter(filterStrings[i]);
+                } catch (InvalidSyntaxException e) {
+                    return new AssertionFailure("Invalid filter string for Blueprint event: " + filterStrings[i], e);
+                }
+            }
+
+            for (int i = 0; i < dependencies.length; i++) {
+                if (!matchFilter(filters, dependencies[i])) {
+                    return new AssertionFailure("Unmatched filter string for Blueprint event: " + filterStrings[i]);
+                }
+            }
+        }
+
         if (bundle != (Bundle)other.getProperty(BUNDLE)) {
             return new AssertionFailure("Mismatched bundle on blueprint admin event other=" + other.getProperty(BUNDLE), cause);
         }
@@ -203,5 +241,22 @@ public class BlueprintAdminEvent extends AdminTestEvent {
         // allow the superclass to validate this (which includes calling potential
         // listeners
         return super.validate(received);
+    }
+
+    /**
+     * Look for a match between a filter and a set of properties.
+     *
+     * @param filters The received list of filters.
+     * @param props   The matching property set we're expecting to find.
+     *
+     * @return true if this is a match, false for non matches.
+     */
+    protected boolean matchFilter(Filter[] filters, Properties props) {
+        for (int i = 0; i < filters.length; i++) {
+            if (filters[i].match(props)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

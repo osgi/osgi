@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+        This tests indirect service dependencies on export.
+    </description>
+
+   <!-- This component does nothing other than get created and have a service injected as a property -->
+   <bean id="ServiceOneImporter" class="org.osgi.test.cases.blueprint.components.servicedynamics.DependencyService">
+       <argument value="ServiceOneImporter"/>
+       <property name="one">
+           <reference interface="org.osgi.test.cases.blueprint.services.TestServiceOne"
+              component-name="XYZ" filter="(someproperty=abc)"/>
+       </property>
+   </bean>
+
+   <!-- This service registration should come and go as the dependent service does -->
+   <service id="ServiceOneExporter" ref="ServiceOneImporter" interface="org.osgi.test.cases.blueprint.services.TestServiceDynamicsInterface"/>
+</blueprint>
+
