@@ -709,14 +709,15 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				1, length);
 
 		ConfigurationAdmin cm = (ConfigurationAdmin) trackerCM.getService();
-		Configuration config;
+		Configuration config1;
+		Configuration config2;
 		Hashtable props;
 
 		// create a new configuration
-		config = cm.createFactoryConfiguration(EVENT_CLASS);
+		config1 = cm.createFactoryConfiguration(EVENT_CLASS);
 		props = new Hashtable(2);
 		props.put("instance", "1");
-		config.update(props);
+		config1.update(props);
 		Thread.sleep(SLEEP * 2); // let it finish update, CM + SCR
 
 		// verify the result
@@ -726,17 +727,19 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				service, trackerConsumerEvent.getService());
 
 		// create second configuration
-		config = cm.createFactoryConfiguration(EVENT_CLASS);
+		config2 = cm.createFactoryConfiguration(EVENT_CLASS);
 		props = new Hashtable(2);
 		props.put("instance", "2");
-		config.update(props);
+		config2.update(props);
 		Thread.sleep(SLEEP * 2); // let it finish update, CM + SCR
 
 		// verify the result
 		length = trackerConsumerEvent.getServices().length;
 		assertEquals("For each configuration should be a service instance", 2,
 				length);
-
+		
+		config1.delete();
+		config2.delete();
 	}
 
 	public void testComponentEnableAndDisable() throws Exception {
