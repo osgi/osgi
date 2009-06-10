@@ -16,6 +16,8 @@
 
 package org.osgi.test.cases.blueprint.tests;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import org.osgi.framework.Bundle;
@@ -459,6 +461,60 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         EventSet stopEvents = controller.getStopEvents(0);
         // normal shutdown processing
         stopEvents.addServiceEvent("UNREGISTERING", TestServiceOne.class);
+        controller.run();
+    }
+
+
+	/**
+	 * Somewhat complicated test.  The source for the service being exported
+     * is a <reference> element.  This will essentially republish a service
+     * instance using a different set of properties.  We'll then register and
+     * unregister the dependent service watching for the the equivalent deregistration
+     * of the service instance
+	 */
+	public void testServiceReferenceExport() throws Exception {
+        // We're only going to load one jar for this test.  The services
+        // we're dependent upon are handled by a driver created service manager.
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/ServiceOne_reference_export.jar");
+
+        // create a ServiceManager instance with one instance of the sevice.  We'll flip
+        // this on and off
+        ServiceManager serviceManager = new ServiceManagerImpl(getContext(),
+            new ManagedService[] {
+                // this one is registered from the start
+                new ManagedService("ServiceOneA", new TestGoodService("ServiceOneA"), TestServiceOne.class, getContext(), null, true),
+            });
+
+        // now we chain a few events to actions to allow us to track the dynamics.
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+
+        Map props = new HashMap();
+        props.put("serviceType", "Good");
+        props.put("autoExport", "Disabled");
+
+        // we need to add one of these at the head of the queue to catch the initial registration.
+        // We need to consume this event so that additional triggered events don't interfere.
+        importStartEvents.addEvent(new ServiceTestEvent("REGISTERED", TestServiceOne.class, props));
+
+        // a CREATED event is part of our standard set.  We need to remove
+        // that one and attach a new one with a listener
+        importStartEvents.removeEvent(new BlueprintAdminEvent("CREATED"));
+
+        // Ok, when the CREATED event is triggered, we unregister the first service.
+        importStartEvents.addEvent(new BlueprintAdminEvent("CREATED", null, null, new ServiceManagerUnregister(serviceManager, "ServiceOneA")));
+
+        // when our expect service unregisters, then reregister the original
+        importStartEvents.addEvent(new ServiceTestEvent("UNREGISTERING", new Class[] { TestServiceOne.class }, props,
+            new ServiceManagerRegister(serviceManager, "ServiceOneA")));
+        // then we should see this REGISTERED again at the end.
+        importStartEvents.addEvent(new ServiceTestEvent("REGISTERED", TestServiceOne.class, props));
+
+        // now some expected termination stuff
+        EventSet importStopEvents = controller.getStopEvents(0);
+        // add a cleanup processor for the exported services.
+        importStopEvents.addTerminator(new ServiceManagerUnregister(serviceManager));
+
         controller.run();
     }
 }
