@@ -1840,7 +1840,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
     /**
      * This tests the behavior of a service rebind when an alternative service
-     * with a higher ranking becomes available
+     * with a higher ranking becomes available.  This should NOT rebind the service
      */
     public void testServiceRankingRebind() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
@@ -1870,17 +1870,16 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // According to the spec, if there is a service immediately available, then we won't see the
         // UNBIND happening.  So this would be a failure if this shows up
         importStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, props1));
-        // we should, however, see a BIND event for the replacement service
-        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, props2));
+        // we should also not see a BIND event for the replacement service...we stay with the original
+        importStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, props2));
         // this indicates successful completion of the test phase
         importStartEvents.addAssertion("ReboundDependencyChecker", AssertionService.COMPONENT_INIT_METHOD);
 
 
         // now some expected termination stuff
         EventSet importStopEvents = controller.getStopEvents(0);
-        // the final UNBIND operation on module context shutdown.  This needs to be for the replacement
-        // service, since that is the one currently bound.
-        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, props2));
+        // the final UNBIND operation on module context shutdown.  This needs to be for the original service
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, props1));
         controller.run();
     }
 

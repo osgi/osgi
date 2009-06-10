@@ -47,9 +47,9 @@ public class ReboundRankingDependencyChecker extends DependencyDriver {
         // this will register a service with a higher ranking than the original, which
         // should cause a rebind.
         serviceManager.registerService("BadService");
-        // verify the service call.  This should now return a false result because
-        // the service changed.
-        AssertionService.assertFalse(this, "Bad service injected", serviceOne.testOne());
+        // verify the service call.  This should still return true...the alternate
+        // service should not be used, even though it has a higher ranking.
+        AssertionService.assertTrue(this, "Bad service injected", serviceOne.testOne());
         // this sends out a completion message
         super.init();
     }
