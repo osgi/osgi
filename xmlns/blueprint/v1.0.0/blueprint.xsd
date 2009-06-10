@@ -422,7 +422,7 @@
                 <xsd:attribute name="id" use="prohibited"/>
                 <xsd:attribute name="depends-on" type="TdependsOn" use="optional"/>
                 <xsd:attribute name="initialization" use="prohibited"/>
-                <xsd:attribute name="interface" type="Tclass" use="optional"/>
+                <xsd:attribute name="interface" type="Tclass" use="required"/>
                 <xsd:attribute name="filter" type="xsd:normalizedString" use="optional"/>
                 <xsd:attribute name="component-name" type="Tidref" use="optional"/>
                 <xsd:attribute name="availability" type="Tavailability" use="optional"/>
@@ -484,7 +484,7 @@
                 <xsd:attribute name="id" use="prohibited"/>
                 <xsd:attribute name="depends-on" type="TdependsOn" use="optional"/>
                 <xsd:attribute name="initialization" use="prohibited"/>
-                <xsd:attribute name="interface" type="Tclass" use="optional"/>
+                <xsd:attribute name="interface" type="Tclass" use="required"/>
                 <xsd:attribute name="filter" type="xsd:normalizedString" use="optional"/>
                 <xsd:attribute name="component-name" type="Tidref" use="optional"/>
                 <xsd:attribute name="availability" type="Tavailability" use="optional"/>
@@ -511,7 +511,7 @@
                     <xsd:group ref="serviceReferenceElements"/>
                 </xsd:sequence>
 
-                <xsd:attribute name="interface" use="optional" type="Tclass" />
+                <xsd:attribute name="interface" use="required" type="Tclass" />
                 <xsd:attribute name="filter" use="optional" type="xsd:normalizedString">
                     <xsd:annotation>
                         <xsd:documentation>
@@ -556,18 +556,6 @@
     <xsd:group name="serviceReferenceElements">
         <xsd:sequence>
             <xsd:element name="description" type="Tdescription" minOccurs="0" />
-            <xsd:element name="interfaces" minOccurs="0" maxOccurs="1" type="Tinterfaces">
-                <xsd:annotation>
-                    <xsd:documentation>
-                  <![CDATA[
-                  The definition of the required interfaces that the obtained services
-                  must implement.   There is also a shortcut attribute defined for
-                  the typical case of just a single interface class.
-                  ]]>
-                    </xsd:documentation>
-                </xsd:annotation>
-            </xsd:element>
-
             <!-- listener -->
             <xsd:element name="listener" type="TreferenceListener" minOccurs="0"
                 maxOccurs="unbounded">
@@ -1054,8 +1042,7 @@
         <xsd:annotation>
             <xsd:documentation>
               <![CDATA[
-              The type definition for the <interfaces> element used for <service>,
-              <reference> and <ref-list>;
+              The type definition for the <interfaces> element used for <service>
               ]]>
             </xsd:documentation>
         </xsd:annotation>
