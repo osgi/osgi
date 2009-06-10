@@ -81,7 +81,7 @@ public class RemoteServiceConstants {
 	/**
 	 * A list of configuration types that should be used to export the service.
 	 * Each of the configuration types should be synonymous, that is, describing
-	 * the an endpoint for the same service using different technologies. A
+	 * an endpoint for the same service using different technologies. A
 	 * distribution provider should distribute such a service with one of the
 	 * given types it recognizes. Each type has an associated specification that
 	 * describes how the configuration data for the exported service is
@@ -91,6 +91,13 @@ public class RemoteServiceConstants {
 	 * String.
 	 */
 	 public final static String SERVICE_EXPORTED_CONFIGS = "service.exported.configs";
+	 
+	 /**
+	  * The configuration type name that was used to construct the endpoint. This is 
+	  * one of the {@link #SERVICE_EXPORTED_CONFIGS} or a default variation from the 
+	  * Distribution Provider.
+	  */
+	 public final static String SERVICE_IMPORTED_CONFIG = "service.imported.config";
 
 	/**
 	 * Must be set by a distribution provider to true when it registers the
