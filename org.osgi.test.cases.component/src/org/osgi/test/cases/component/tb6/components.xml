@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components>
+
+	<!-- This component has not set activate/deactivate methods and old XML Schema -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.0.0"
+	      name="org.osgi.test.cases.component.tb6.notsetNS100"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb6.ActDeactComponent"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	</component>
+	
+	<!-- This component has not set activate/deactivate methods and new XML Schema -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.1.0"
+	      name="org.osgi.test.cases.component.tb6.notsetNS110"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb6.ActDeactComponent"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	</component>
+	
+	<!-- This component has set activate/deactivate methods and old XML Schema -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.0.0"
+	      name="org.osgi.test.cases.component.tb6.NoArgsNS100"
+	      activate="act"
+	      deactivate="deact"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb6.NoArgsNS100"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	</component>
+	
+	<!-- This component has set activate/deactivate methods and new XML Schema -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.1.0"
+	      name="org.osgi.test.cases.component.tb6.NoArgsNS110"
+	      activate="act"
+	      deactivate="deact"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb6.NoArgsNS110"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	</component>
+	
+	<!-- This component has set activate/deactivate methods and old XML Schema -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.0.0"
+	      name="org.osgi.test.cases.component.tb6.CcNS100"
+	      activate="actCc"
+	      deactivate="deactCc"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb6.ActDeactComponent"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	</component>
+	
+	<!-- This component has set activate/deactivate methods and new XML Schema -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.1.0"
+	      name="org.osgi.test.cases.component.tb6.CcNS110"
+	      activate="actCc"
+	      deactivate="deactCc"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb6.ActDeactComponent"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	</component>
+	
+	<!-- This component has set activate/deactivate methods and old XML Schema -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.0.0"
+	      name="org.osgi.test.cases.component.tb6.BcNS100"
+	      activate="actBc"
+	      deactivate="deactBc"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb6.BcNS100"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	</component>
+	
+	<!-- This component has set activate/deactivate methods and new XML Schema -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.1.0"
+	      name="org.osgi.test.cases.component.tb6.BcNS110"
+	      activate="actBc"
+	      deactivate="deactBc"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb6.BcNS110"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	</component>
+	
+	<!-- This component has set activate/deactivate methods and old XML Schema -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.0.0"
+	      name="org.osgi.test.cases.component.tb6.MapNS100"
+	      activate="actMap"
+	      deactivate="deactMap"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb6.ActDeactComponent"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	</component>
+	
+	<!-- This component has set activate/deactivate methods and new XML Schema -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.1.0"
+	      name="org.osgi.test.cases.component.tb6.MapNS110"
+	      activate="actMap"
+	      deactivate="deactMap"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb6.ActDeactComponent"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	</component>
+	
+	<!-- This component has set activate/deactivate methods and old XML Schema -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.0.0"
+	      name="org.osgi.test.cases.component.tb6.CcBcMapNS100"
+	      activate="actCcBcMap"
+	      deactivate="deactCcBcMap"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb6.ActDeactComponent"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	</component>
+	
+	<!-- This component has set activate/deactivate methods and new XML Schema -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.1.0"
+	      name="org.osgi.test.cases.component.tb6.CcBcMapNS110"
+	      activate="actCcBcMap"
+	      deactivate="deactCcBcMap"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb6.ActDeactComponent"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	</component>
+	
+	<!-- This component has set activate/deactivate methods and new XML Schema -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.1.0"
+	      name="org.osgi.test.cases.component.tb6.IntNS110"
+	      activate="activate"
+	      deactivate="deactInt"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb6.ActDeactComponent"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	</component>
+	
+	<!-- This component has set activate/deactivate methods and new XML Schema -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.1.0"
+	      name="org.osgi.test.cases.component.tb6.CcBcMapIntNS110"
+	      activate="activate"
+	      deactivate="deactCcBcMapInt"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb6.ActDeactComponent"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+		<reference
+			name="org.osgi.test.cases.component.tb6.ContExp"
+	        interface="org.osgi.test.cases.component.tb6.ContExp"/>
+	</component>
+
+
+
+	<!-- This component provides ComponentContext -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.0.0"
+	      name="org.osgi.test.cases.component.tb6.ContExp"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb6.ContExp"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.tb6.ContExp"/>
+		</service>
+	</component>
+	
+</components>

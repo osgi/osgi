@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components>
+
+	<!-- This component provides ComponentEnabler service which other components use -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.0.0"
+	      name="org.osgi.test.cases.component.tb7.EnablerProvider"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb7.EnablerProvider"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.ComponentEnabler"/>
+		</service>
+	</component>
+
+	<!-- bind/unbind with ServiceReference; old XML Schema -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.0.0"
+	      name="org.osgi.test.cases.component.tb7.SrNS100"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb7.BindUnbind"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          bind="bindSr"
+	          interface="org.osgi.test.cases.component.service.ComponentEnabler"
+	          name="componentenabler"
+	          unbind="unbindSr"/>
+	</component>
+	
+	<!-- bind/unbind with ServiceReference; new XML Schema -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.1.0"
+	      name="org.osgi.test.cases.component.tb7.SrNS110"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb7.BindUnbind"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+		<reference
+	          bind="bindSr"
+	          interface="org.osgi.test.cases.component.service.ComponentEnabler"
+	          name="componentenabler"
+	          unbind="unbindSr"/>
+	</component>
+	
+	<!-- bind/unbind with ComponentEnabler; old XML Schema -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.0.0"
+	      name="org.osgi.test.cases.component.tb7.CeNS100"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb7.BindUnbind"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          bind="bindCe"
+	          interface="org.osgi.test.cases.component.service.ComponentEnabler"
+	          name="componentenabler"
+	          unbind="unbindCe"/>
+	</component>
+	
+	<!-- bind/unbind with ComponentEnabler; new XML Schema -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.1.0"
+	      name="org.osgi.test.cases.component.tb7.CeNS110"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb7.BindUnbind"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+		<reference
+	          bind="bindCe"
+	          interface="org.osgi.test.cases.component.service.ComponentEnabler"
+	          name="componentenabler"
+	          unbind="unbindCe"/>
+	</component>
+	
+	<!-- bind/unbind with ComponentEnabler, Map; old XML Schema -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.0.0"
+	      name="org.osgi.test.cases.component.tb7.CeMapNS100"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb7.BindUnbind"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          bind="bindCeMap"
+	          interface="org.osgi.test.cases.component.service.ComponentEnabler"
+	          name="componentenabler"
+	          unbind="unbindCeMap"/>
+	</component>
+	
+	<!-- bind/unbind with ComponentEnabler, Map; new XML Schema -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.1.0"
+	      name="org.osgi.test.cases.component.tb7.CeMapNS110"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb7.BindUnbind"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+		<reference
+	          bind="bindCeMap"
+	          interface="org.osgi.test.cases.component.service.ComponentEnabler"
+	          name="componentenabler"
+	          unbind="unbindCeMap"/>
+	</component>
+	
+</components>

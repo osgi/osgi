@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components>
+
+	<component
+			xmlns="http://www.osgi.org/xmlns/scr/v1.0.0"
+			name="org.osgi.test.cases.component.tb10.Component1"
+			immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb10.Component1"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+			<provide interface="org.osgi.test.cases.component.tb10.Component1"/>
+		</service>
+	</component>
+
+	<component
+			xmlns="http://www.osgi.org/xmlns/scr/v1.0.0"
+			name="org.osgi.test.cases.component.tb10.Component2"
+			immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb10.Component2"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+			<provide interface="org.osgi.test.cases.component.tb10.Component2"/>
+		</service>
+ 		<reference
+			interface="org.osgi.test.cases.component.tb10.Component1"
+			name="c1"/>
+	</component>
+
+	<component
+			xmlns="http://www.osgi.org/xmlns/scr/v1.0.0"
+			name="org.osgi.test.cases.component.tb10.Component3"
+			immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb10.Component3"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+ 		<reference
+			interface="org.osgi.test.cases.component.tb10.Component1"
+			name="c1"/>
+		<reference
+			interface="org.osgi.test.cases.component.tb10.Component2"
+			name="c2"/>
+	</component>
+
+</components>

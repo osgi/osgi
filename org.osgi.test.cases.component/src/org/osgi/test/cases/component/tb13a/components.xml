@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components>
+
+	<!-- This component provides service that is used in the latter components -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.0.0"
+	      name="org.osgi.test.cases.component.tb13.provider"
+	      immediate="true">
+	   <implementation
+	      class="org.osgi.test.cases.component.tb13a.ModifyRegistrator"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	</component>
+
+	<!-- This component has not set modified method, NS 1.1.0 -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.1.0"
+	      name="org.osgi.test.cases.component.tb13.notsetNS110"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb13a.ModifyRegistrator"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>	
+		<reference
+			interface="org.osgi.test.cases.component.service.BaseService"
+			name="ref"
+			target="(component.name=org.osgi.test.cases.component.tb13.provider)"/>
+	</component>
+
+	<!-- modified="mod", NS 1.1.0 -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.1.0"
+	      name="org.osgi.test.cases.component.tb13.NoArgs110"
+	      modified="mod"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb13a.ModifyRegistrator"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>	
+		<reference
+			interface="org.osgi.test.cases.component.service.BaseService"
+			name="ref"
+			target="(component.name=org.osgi.test.cases.component.tb13.provider)"/>
+	</component>
+
+	<!-- modified="modCc", NS 1.1.0 -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.1.0"
+	      name="org.osgi.test.cases.component.tb13.CcNS110"
+	      modified="modCc"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb13a.ModifyRegistrator"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>	
+		<reference
+			interface="org.osgi.test.cases.component.service.BaseService"
+			name="ref"
+			target="(component.name=org.osgi.test.cases.component.tb13.provider)"/>
+	</component>
+
+	<!-- modified="modBc", NS 1.1.0 -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.1.0"
+	      name="org.osgi.test.cases.component.tb13.BcNS110"
+	      modified="modBc"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb13a.ModifyRegistrator"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>	
+		<reference
+			interface="org.osgi.test.cases.component.service.BaseService"
+			name="ref"
+			target="(component.name=org.osgi.test.cases.component.tb13.provider)"/>
+	</component>
+
+	<!-- modified="modMap", NS 1.1.0 -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.1.0"
+	      name="org.osgi.test.cases.component.tb13.MapNS110"
+	      modified="modMap"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb13a.ModifyRegistrator"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>	
+		<reference
+			interface="org.osgi.test.cases.component.service.BaseService"
+			name="ref"
+			target="(component.name=org.osgi.test.cases.component.tb13.provider)"/>
+	</component>
+
+	<!-- modified="modCcBcMap", NS 1.1.0 -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.1.0"
+	      name="org.osgi.test.cases.component.tb13.CcBcMapNS110"
+	      modified="modCcBcMap"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb13a.ModifyRegistrator"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>	
+		<reference
+			interface="org.osgi.test.cases.component.service.BaseService"
+			name="ref"
+			target="(component.name=org.osgi.test.cases.component.tb13.provider)"/>
+	</component>
+
+	<!-- modified="noSuchMethod", NS 1.1.0 -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.1.0"
+	      name="org.osgi.test.cases.component.tb13.NotExistNS110"
+	      modified="noSuchMethod"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb13a.ModifyRegistrator"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>	
+		<reference
+			interface="org.osgi.test.cases.component.service.BaseService"
+			name="ref"
+			target="(component.name=org.osgi.test.cases.component.tb13.provider)"/>
+	</component>
+	
+	<!-- modified="throwException", NS 1.1.0 -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.1.0"
+	      name="org.osgi.test.cases.component.tb13.ThrowExNS110"
+	      modified="throwException"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb13a.ModifyRegistrator"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>	
+		<reference
+			interface="org.osgi.test.cases.component.service.BaseService"
+			name="ref"
+			target="(component.name=org.osgi.test.cases.component.tb13.provider)"/>
+	</component>
+</components>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components>
+
+	<component
+			xmlns="http://www.osgi.org/xmlns/scr/v1.0.0"
+			name="org.osgi.test.cases.component.tb11.Exposer"
+			immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb11.TargetProperties"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+			<provide interface="org.osgi.test.cases.component.tb11.TargetProperties"/>
+		</service>
+	</component>
+
+	<component
+			xmlns="http://www.osgi.org/xmlns/scr/v1.0.0"
+			name="org.osgi.test.cases.component.tb11.C1"
+			immediate="true"
+			enabled="false">
+		<implementation
+			class="org.osgi.test.cases.component.tb11.TargetProperties"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+		<property
+			name="serial.num"
+			value="10"/>
+	</component>
+
+	<component
+			xmlns="http://www.osgi.org/xmlns/scr/v1.0.0"
+			name="org.osgi.test.cases.component.tb11.C2"
+			immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb11.TargetProperties"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+ 		<reference
+			interface="org.osgi.test.cases.component.tb11.TargetProperties"
+			name="ref"/>
+		<property
+			name="ref.target"
+			value="(serial.num=10)"/>
+	</component>
+
+</components>

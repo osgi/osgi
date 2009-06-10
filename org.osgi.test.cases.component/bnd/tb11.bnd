@@ -1,0 +1,3 @@
+Bundle-Version: 1
+Private-Package: ${p}.tb11.*
+Service-Component: org/osgi/test/cases/component/tb11/components.xml

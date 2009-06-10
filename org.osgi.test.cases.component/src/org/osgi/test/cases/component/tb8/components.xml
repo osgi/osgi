@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components>
+
+	<!-- This component provides ComponentContextExposer service which other components use -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.0.0"
+	      name="org.osgi.test.cases.component.tb8.ContExp"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb8.ContExp"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.ComponentContextExposer"/>
+		</service>
+	</component>
+
+	<!-- Component name not set; old XML Schema -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.0.0"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb8.OptionalNames"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	</component>
+
+	<!-- Component name not set; new XML Schema -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.1.0"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb8.OptionalNames2"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	</component>
+
+	<!-- Reference name not set; old XML Schema -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.0.0"
+		name="org.osgi.test.cases.component.tb8.OptRef100"
+		immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb8.OptionalNames"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+		<reference
+			interface="org.osgi.test.cases.component.service.ComponentContextExposer"/>
+	</component>
+
+	<!-- Reference name not set; new XML Schema -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.1.0"
+		name="org.osgi.test.cases.component.tb8.OptRef110"
+		immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb8.OptionalNames"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+		<reference
+	          interface="org.osgi.test.cases.component.service.ComponentContextExposer"/>
+	</component>
+</components>

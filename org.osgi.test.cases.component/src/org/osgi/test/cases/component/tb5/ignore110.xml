@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This component has ignore confuguration policy, and new XML Schema -->
+
+<component
+      xmlns="http://www.osgi.org/xmlns/scr/v1.1.0"
+      name="org.osgi.test.cases.component.tb5.ignoreNS110"
+      configuration-policy="ignore"
+      immediate="true">
+   <implementation
+         class="org.osgi.test.cases.component.tb5.ConfigurationPolicyComp"/>
+   <service>
+		<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+	</service>
+</component>

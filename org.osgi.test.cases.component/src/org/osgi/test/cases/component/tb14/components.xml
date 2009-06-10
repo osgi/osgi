@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components>
+
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.0.0"
+		name="org.osgi.test.cases.component.tb14.component"
+		immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb14.Comp"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+		<property name=".prop1" value="1"/>
+		<property name=".prop2" value="2"/>
+		<property name=".prop3" value="3"/>
+	</component>
+
+</components>

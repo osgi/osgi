@@ -1,0 +1,10 @@
+Bundle-Version: 1
+Private-Package: ${p}.tb5.*
+Service-Component: org/osgi/test/cases/component/tb5/optional100.xml, \
+  org/osgi/test/cases/component/tb5/optional110.xml, \
+  org/osgi/test/cases/component/tb5/require100.xml, \
+  org/osgi/test/cases/component/tb5/require110.xml, \
+  org/osgi/test/cases/component/tb5/ignore100.xml, \
+  org/osgi/test/cases/component/tb5/ignore110.xml, \
+  org/osgi/test/cases/component/tb5/notset100.xml, \
+  org/osgi/test/cases/component/tb5/notset110.xml

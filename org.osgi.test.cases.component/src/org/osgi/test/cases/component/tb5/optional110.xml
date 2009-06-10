@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This component has optional confuguration policy, and new XML Schema -->
+
+<component
+      xmlns="http://www.osgi.org/xmlns/scr/v1.1.0"
+      name="org.osgi.test.cases.component.tb5.optionalNS110"
+      configuration-policy="optional"
+      immediate="true">
+   <implementation
+         class="org.osgi.test.cases.component.tb5.ConfigurationPolicyComp"/>
+   <service>
+		<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+	</service>
+</component>

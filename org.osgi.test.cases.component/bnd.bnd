@@ -10,7 +10,18 @@ Include-Resource					= \
 	tb1.jar, \
 	tb2.jar, \
 	tb3.jar, \
-	tb4.jar
+	tb4.jar, \
+	tb5.jar, \
+	tb6.jar, \
+	tb7.jar, \
+	tb8.jar, \
+	tb9.jar, \
+	tb10.jar, \
+	tb11.jar, \
+	tb12.jar, \
+	tb13.jar, \
+	tb13a.jar, \
+	tb14.jar
 	
 Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
 

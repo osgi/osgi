@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<scr:component name="org.osgi.test.cases.component.tb9.WildcardComponent2"
+	immediate="true"
+	xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
+	<implementation class="org.osgi.test.cases.component.tb9.WildcardTester"/>
+	<service>
+		<provide interface="org.osgi.test.cases.component.tb9.Wildcard2"/>
+	</service>
+</scr:component>
