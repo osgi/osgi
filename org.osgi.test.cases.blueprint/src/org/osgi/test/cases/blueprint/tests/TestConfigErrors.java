@@ -1072,4 +1072,16 @@ public class TestConfigErrors extends DefaultTestBundleControl {
             getWebServer()+"www/error_registration_listener_ref_list_target.jar");
         controller.run();
     }
+
+
+    /**
+     * attempting to import a concrete class as a service reference
+     */
+    public void testConcreteClassImport() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/GoodService_import.jar");
+        controller.addSetupBundle(getWebServer()+"www/GoodService_export.jar");
+        controller.run();
+    }
 }

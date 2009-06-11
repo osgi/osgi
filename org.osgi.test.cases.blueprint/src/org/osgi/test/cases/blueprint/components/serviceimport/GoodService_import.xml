@@ -5,14 +5,7 @@
         This is a reusable config for validating different service registrations.
     </description>
 
-    <!-- we import this both as a property and constructor arg -->
-   <bean id="GoodServiceConstructor" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceChecker">
-       <argument value="GoodServiceConstructor"/>
-       <argument type="org.osgi.test.cases.blueprint.services.TestGoodService">
-           <reference interface="org.osgi.test.cases.blueprint.services.TestGoodService"/>
-       </argument>
-   </bean>
-
+   <!-- this should be an error because import is a non-interface classs -->
    <bean id="GoodServiceProperty" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceChecker">
        <argument value="GoodServiceProperty"/>
        <property name="good">
