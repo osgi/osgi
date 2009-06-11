@@ -124,6 +124,14 @@ public class ListIteratorChecker extends ReferenceCollectionChecker {
         service = (TestServiceOne)i.next();
         // this call should also succeed.
         AssertionService.assertTrue(this, "Unexpected service test result", service.testOne());
+        // one last test.  A remove operation should throw an exception
+        try {
+            i.remove();
+            AssertionService.fail(this, "Iterator.remove() did not throw exception");
+        } catch (UnsupportedOperationException e) {
+            // expect to reach here
+        }
+
         super.init();
     }
 }
