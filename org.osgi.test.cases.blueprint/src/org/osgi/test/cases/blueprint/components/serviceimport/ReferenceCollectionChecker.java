@@ -39,8 +39,6 @@ import org.osgi.test.cases.blueprint.services.TestServiceOne;
 public class ReferenceCollectionChecker extends DependencyDriver {
     // the injected set of references.
     protected List injectedList;
-    // the injected set of references.
-    protected Set injectedSet;
     // indicates where this is a list of instances or references.
     protected boolean usesReferences = false;
     // our bundle context (used for requesting service instances)
@@ -60,25 +58,6 @@ public class ReferenceCollectionChecker extends DependencyDriver {
      */
     public void setList(List l) {
         injectedList = l;
-    }
-
-    /**
-     * Set the injected reference list.
-     *
-     * @param l
-     */
-    public void setSet(Set l) {
-        injectedSet = l;
-    }
-
-    /**
-     * Set the sort order.  This also tests secondarily tests the
-     * ability to convert a List into an array of Strings.
-     *
-     * @param order  The injected order.
-     */
-    public void setSortOrder(String[] order) {
-        sortOrder = order;
     }
 
     public void setUseReferences(boolean b) {
@@ -107,15 +86,6 @@ public class ReferenceCollectionChecker extends DependencyDriver {
         }
     }
 
-    /**
-     * Validate the injected set collection against
-     * expected criteria.
-     *
-     * @param expected The expected set.
-     */
-    protected void validateSet(ManagedService[] expected) {
-        validateCollection(expected, injectedSet);
-    }
 
     /**
      * Validate a collection of service instances.
@@ -169,26 +139,6 @@ public class ReferenceCollectionChecker extends DependencyDriver {
             }
             return null;
         }
-    }
-
-
-    /**
-     * Validate the sorting order for items returned from a
-     * reference collection iterator.  The list of names is the
-     * set of service names we expect to see, in the expected order.
-     * Failures will be returned for mismatches in count and ordering.
-     *
-     * @param i      The iterator supplying the objects.  This might be positioned
-     *               past the first item for some service dynamics tests.
-     * @param names  The array of names we expect, in the indicated order.
-     */
-    protected void validateSortOrder(Iterator i, String[] names) {
-        int counter = 0;
-        while (i.hasNext()) {
-            AssertionService.assertTrue(this, "Mismatch on iteration size", counter < names.length);
-            checkServiceName(i.next(), names[counter++]);
-        }
-        AssertionService.assertEquals(this, "Truncated iteration sequence", names.length, counter);
     }
 
 

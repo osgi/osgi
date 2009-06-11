@@ -225,6 +225,7 @@ Include-Resource					= \
  	www/circular_reference_list_import.jar=circular_reference_list_import.jar, \
  	www/collection_bind_unbind_list_state.jar=collection_bind_unbind_list_state.jar, \
  	www/static_reference_list_import.jar=static_reference_list_import.jar, \
+ 	www/ref_list_iterator.jar=ref_list_iterator.jar, \
  	www/ref_list_dependson.jar=ref_list_dependson.jar, \
  	www/static_reference_list_ref_import.jar=static_reference_list_ref_import.jar, \
  	www/managed_service_export.jar=managed_service_export.jar, \

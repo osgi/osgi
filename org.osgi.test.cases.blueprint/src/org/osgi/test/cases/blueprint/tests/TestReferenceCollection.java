@@ -812,7 +812,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
     /**
      * This tests the state of references in the reference collections during
-     * bind/unbind listener calls for both Set and List.
+     * bind/unbind listener calls for <ref-lists>
      */
     public void testBindUnbindListImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
@@ -894,6 +894,29 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         EventSet importStopEvents = controller.getStopEvents(0);
         // the final UNBIND operation
         importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, props1));
+        controller.run();
+    }
+
+
+    /**
+     * Test the iterator and proxy semantics for a <ref-list>
+     */
+    public void testRefListIterator() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/ref_list_iterator.jar");
+
+        // this installs and starts the bundle containing the reference services first to
+        // ensure the timing of the initial service listener calls.
+        controller.addSetupBundle(getWebServer()+"www/managed_service_export.jar");
+
+        // all of our validation here is on the importing side
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+
+        // this event signals completion of all of the checking work.  If there
+        // have been any errors, these get signalled as assertion failures and will
+        // fail the test.
+        importStartEvents.addAssertion("ReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
+
         controller.run();
     }
 }

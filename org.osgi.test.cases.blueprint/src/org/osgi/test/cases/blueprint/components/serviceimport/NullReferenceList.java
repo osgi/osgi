@@ -49,7 +49,7 @@ public class NullReferenceList extends ReferenceCollectionChecker {
         serviceManager.unregisterServices();
         // this should be back to an empty list
         validateList(new ManagedService[0]);
-        // send out the initialized message to indicate we've ocmpleted.
+        // send out the initialized message to indicate we've completed.
         super.init();
     }
 }
