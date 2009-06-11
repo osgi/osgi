@@ -1,0 +1,7 @@
+Bundle-SymbolicName:                     ${p}.error_registration_listener_ref_list_target
+Bundle-Version:                          4.2
+Import-Package:                          ${p}.components.serviceexport, ${p}.services, ${p}.components.serviceimport
+-resourceonly: true
+Include-Resource					= \
+	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/errors/error_registration_listener_ref_list_target.xml
+

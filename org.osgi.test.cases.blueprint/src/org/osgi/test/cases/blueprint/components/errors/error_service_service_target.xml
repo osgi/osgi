@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+        This is just a simple exported service using a single interface.
+    </description>
+
+   <!-- simple export using a reference and just one interface. -->
+   <service id="BadService" ref="ServiceOneService" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
+       <description>Testing descriptions also</description>
+   </service>
+</blueprint>
+

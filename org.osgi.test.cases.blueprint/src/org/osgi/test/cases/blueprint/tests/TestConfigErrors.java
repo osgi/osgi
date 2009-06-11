@@ -995,4 +995,81 @@ public class TestConfigErrors extends DefaultTestBundleControl {
         controller.addSetupBundle(getWebServer()+"www/managed_service_export.jar");
         controller.run();
     }
+
+
+    /**
+     * test a wild card specification on a Blueprint-Bundle header is an error
+     */
+    public void testBlueprintBundleWildcard() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_config_wildcard.jar");
+        controller.run();
+    }
+
+
+    /**
+     * test a <service> element as the target of a service export
+     */
+    public void testServiceServiceTarget() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_service_service_target.jar");
+        controller.run();
+    }
+
+
+    /**
+     * test a <ref-list> element as the target of a service export
+     */
+    public void testServiceRefListTarget() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_service_ref_list_target.jar");
+        controller.run();
+    }
+
+
+    /**
+     * test a <service> element as the target of a listener element
+     */
+    public void testListenerServiceTarget() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_listener_service_target.jar");
+        controller.run();
+    }
+
+
+    /**
+     * test a <ref-list> element as the target of a listener element
+     */
+    public void testListenerRefListTarget() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_listener_ref_list_target.jar");
+        controller.run();
+    }
+
+
+    /**
+     * test a <service> element as the target of a registration listener element
+     */
+    public void testRegistrationListenerServiceTarget() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_registration_listener_service_target.jar");
+        controller.run();
+    }
+
+
+    /**
+     * test a <ref-list> element as the target of a registration-listener element
+     */
+    public void testRegistrationListenerRefListTarget() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_registration_listener_ref_list_target.jar");
+        controller.run();
+    }
 }

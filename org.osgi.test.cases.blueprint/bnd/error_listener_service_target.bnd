@@ -1,0 +1,8 @@
+Bundle-SymbolicName:                     ${p}.error_listener_service_target
+Bundle-Version:                          4.2
+Import-Package:                          ${p}.components.serviceexport, ${p}.services, ${p}.components.serviceimport
+-resourceonly: true
+Include-Resource					= \
+	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/errors/error_listener_service_target.xml, \
+	OSGI-INF/blueprint/config2.xml=src/org/osgi/test/cases/blueprint/components/serviceexport/ServiceOne_export.xml
+
