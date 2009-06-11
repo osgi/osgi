@@ -92,13 +92,6 @@ public class RemoteServiceConstants {
 	 */
 	 public final static String SERVICE_EXPORTED_CONFIGS = "service.exported.configs";
 	 
-	 /**
-	  * The configuration type name that was used to construct the endpoint. This is 
-	  * one of the {@link #SERVICE_EXPORTED_CONFIGS} or a default variation from the 
-	  * Distribution Provider.
-	  */
-	 public final static String SERVICE_IMPORTED_CONFIG = "service.imported.config";
-
 	/**
 	 * Must be set by a distribution provider to true when it registers the
 	 * end-point proxy as an imported service. Can be used by a bundle to
