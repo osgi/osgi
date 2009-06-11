@@ -1,8 +1,7 @@
 package org.osgi.service.remoteservices.admin;
 
-import java.util.*;
-
 import org.osgi.framework.*;
+import org.osgi.service.remoteservices.*;
 
 /**
  * An Export Registration associates a service to a local
@@ -28,7 +27,7 @@ public interface ExportRegistration {
 	 * 
 	 * @return the local Endpoint Description
 	 */
-	List/*<EndpointDescription>*/ getEndpointDescription();
+	EndpointDescription getEndpointDescription();
 	
 	/**
 	 * Delete the local endpoint and disconnect any remote distribution providers. After this method

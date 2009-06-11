@@ -31,7 +31,7 @@ public interface RemoteServiceAdmin {
 	 *         the Service Reference or
 	 *         <code>null</code if the service could not be exported
 	 */
-	ExportRegistration exportService(ServiceReference ref);
+	List/*<ExportRegistration>*/ exportService(ServiceReference ref);
 
 	/**
 	 * Export a service to a given endpoint. The Remote Service Admin must
@@ -43,17 +43,19 @@ public interface RemoteServiceAdmin {
 	 * 
 	 * @param ref
 	 *            The Service Reference to export
-	 * @param endpoint
-	 *            A description of a local endpoint that can be implemented by
+	 * @param properties
+	 *            The properties to create a local endpoint that can be implemented by
 	 *            this Remote Service Admin. If this is null, the endpoint will
 	 *            be determined by the properties on the service, see
-	 *            {@link #exportService(ServiceReference)}
+	 *            {@link #exportService(ServiceReference)}. The properties are
+	 *            the same as given for an exported service. They are overlaid 
+	 *            over any properties the service defines.
 	 * @return An Export Registration that combines the Endpoint Description and
 	 *         the Service Reference or
 	 *         <code>null</code if the service could not be exported
 	 */
-	ExportRegistration exportService(ServiceReference ref,
-			EndpointDescription endpoint);
+	List/*<ExportRegistration>*/ exportService(ServiceReference ref,
+			Map/*<String,Object>*/ properties);
 
 	/**
 	 * Import a service from an endpoint. The Remote Service Admin must use the
