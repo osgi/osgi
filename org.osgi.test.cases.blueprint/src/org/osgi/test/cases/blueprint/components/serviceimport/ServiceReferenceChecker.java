@@ -43,24 +43,36 @@ public class ServiceReferenceChecker extends BaseTestComponent {
     public ServiceReferenceChecker(String componentId, TestGoodService service) {
         super(componentId);
         AssertionService.assertNotNull(this, "Null TestGoodService service object injected", service);
+        // signal we're about to call the service so the event timing can be pegged for
+        // factory requests
+        AssertionService.sendEvent(this, AssertionService.SERVICE_REQUEST);
         checkService(service.testGood());
     }
 
     public ServiceReferenceChecker(String componentId, TestServiceTwoSubclass service) {
         super(componentId);
         AssertionService.assertNotNull(this, "Null TestServiceTwoSubclass service object injected", service);
+        // signal we're about to call the service so the event timing can be pegged for
+        // factory requests
+        AssertionService.sendEvent(this, AssertionService.SERVICE_REQUEST);
         checkService(service.testTwoSubclass());
     }
 
     public ServiceReferenceChecker(String componentId, TestServiceOne service) {
         super(componentId);
         AssertionService.assertNotNull(this, "Null TestServiceOne service object injected", service);
+        // signal we're about to call the service so the event timing can be pegged for
+        // factory requests
+        AssertionService.sendEvent(this, AssertionService.SERVICE_REQUEST);
         checkService(service.testOne());
     }
 
     public ServiceReferenceChecker(String componentId, TestServiceTwo service) {
         super(componentId);
         AssertionService.assertNotNull(this, "Null TestServiceTwo service object injected", service);
+        // signal we're about to call the service so the event timing can be pegged for
+        // factory requests
+        AssertionService.sendEvent(this, AssertionService.SERVICE_REQUEST);
         checkService(service.testTwo());
     }
 
@@ -71,6 +83,9 @@ public class ServiceReferenceChecker extends BaseTestComponent {
      */
     public void setGood(TestGoodService service) {
         AssertionService.assertNotNull(this, "Null TestGoodService service object injected", service);
+        // signal we're about to call the service so the event timing can be pegged for
+        // factory requests
+        AssertionService.sendEvent(this, AssertionService.SERVICE_REQUEST);
         checkService(service.testGood());
     }
 
@@ -81,6 +96,9 @@ public class ServiceReferenceChecker extends BaseTestComponent {
      */
     public void setGoodSubclass(TestGoodServiceSubclass service) {
         AssertionService.assertNotNull(this, "Null TestGoodServiceSubclass service object injected", service);
+        // signal we're about to call the service so the event timing can be pegged for
+        // factory requests
+        AssertionService.sendEvent(this, AssertionService.SERVICE_REQUEST);
         checkService(service.testGoodSubclass());
     }
 
@@ -91,6 +109,9 @@ public class ServiceReferenceChecker extends BaseTestComponent {
      */
     public void setOne(TestServiceOne service) {
         AssertionService.assertNotNull(this, "Null TestServiceOne service object injected", service);
+        // signal we're about to call the service so the event timing can be pegged for
+        // factory requests
+        AssertionService.sendEvent(this, AssertionService.SERVICE_REQUEST);
         checkService(service.testOne());
     }
 
@@ -101,6 +122,9 @@ public class ServiceReferenceChecker extends BaseTestComponent {
      */
     public void setTwo(TestServiceTwo service) {
         AssertionService.assertNotNull(this, "Null TestServiceTwo service object injected", service);
+        // signal we're about to call the service so the event timing can be pegged for
+        // factory requests
+        AssertionService.sendEvent(this, AssertionService.SERVICE_REQUEST);
         checkService(service.testTwo());
     }
 
@@ -111,6 +135,9 @@ public class ServiceReferenceChecker extends BaseTestComponent {
      */
     public void setAllSubclass(TestServiceAllSubclass service) {
         AssertionService.assertNotNull(this, "Null TestServiceAllSubclass service object injected", service);
+        // signal we're about to call the service so the event timing can be pegged for
+        // factory requests
+        AssertionService.sendEvent(this, AssertionService.SERVICE_REQUEST);
         checkService(service.testAllSubclass());
     }
 
@@ -121,6 +148,9 @@ public class ServiceReferenceChecker extends BaseTestComponent {
      */
     public void setTwoSubclass(TestServiceTwoSubclass service) {
         AssertionService.assertNotNull(this, "Null TestServiceTwoSubclass service object injected", service);
+        // signal we're about to call the service so the event timing can be pegged for
+        // factory requests
+        AssertionService.sendEvent(this, AssertionService.SERVICE_REQUEST);
         checkService(service.testTwoSubclass());
     }
 

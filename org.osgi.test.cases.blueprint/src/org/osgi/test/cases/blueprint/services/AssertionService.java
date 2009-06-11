@@ -37,6 +37,7 @@ public class AssertionService
     public static final String METHOD_CALLED = "METHOD_CALLED";
     public static final String MODULE_CONTEXT_INJECTED = "MODULE_CONTEXT_INJECTED";
     public static final String GENERAL_EVENT = "GENERAL_EVENT";
+    public static final String SERVICE_REQUEST = "SERVICE_REQUEST";
     public static final String SERVICE_SUCCESS = "SERVICE_SUCCESS";
     public static final String SERVICE_FAILURE = "SERVICE_FAILURE";
     public static final String SERVICE_FACTORY_GET = "SERVICE_FACTORY_GET";

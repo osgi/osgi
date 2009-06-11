@@ -871,11 +871,21 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/ServiceOne_import.jar",
+                getWebServer()+"www/ServiceOne_property_import.jar",
                 getWebServer()+"www/ServiceOne_factory_export.jar");
         // we add different validation stuff to each jar.  We'll start with the
         // export jar
         MetadataEventSet exportStartEvents = controller.getStartEvents(1);
+
+        // we make this request, but need to associate it with the FACTORY_GET event to impose ordering.
+        TestEvent request = new ComponentAssertion("ServiceOneProperty", AssertionService.SERVICE_REQUEST);
+        // add this to the list, then create the linked event
+        exportStartEvents.addEvent(request);
+        // this is the unget of the service instance
+        TestEvent factoryGet = new ComponentAssertion("ServiceOneFactory", AssertionService.SERVICE_FACTORY_GET);
+        // this enforces an event ordering between these two
+        factoryGet.addDependency(request);
+        exportStartEvents.addEvent(factoryGet);
         // the is the factory component creation
         exportStartEvents.addAssertion("ServiceOneFactory", AssertionService.COMPONENT_CREATED);
         // this the service instance getting created as a result of the factory getting called
@@ -898,7 +908,6 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferencedService("ServiceOne", TestServiceOne.class,
                 ServiceReferenceMetadata.AVAILABILITY_MANDATORY, ServiceReferenceMetadata.INITIALIZATION_EAGER,
                 null, null, null, ReferencedService.DEFAULT_TIMEOUT)));
-        importStartEvents.addAssertion("ServiceOneConstructor", AssertionService.SERVICE_SUCCESS);
         importStartEvents.addAssertion("ServiceOneProperty", AssertionService.SERVICE_SUCCESS);
 
         // now some expected termination stuff

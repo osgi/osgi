@@ -198,6 +198,7 @@ Include-Resource					= \
  	www/ServiceOne_multiple_listener_export.jar=ServiceOne_multiple_listener_export.jar, \
  	www/ServiceOne_multiple_listener_method_export.jar=ServiceOne_multiple_listener_method_export.jar, \
  	www/ServiceOne_import.jar=ServiceOne_import.jar, \
+ 	www/ServiceOne_property_import.jar=ServiceOne_property_import.jar, \
  	www/ServiceOne_dependson_import.jar=ServiceOne_dependson_import.jar, \
  	www/ServiceOne_compid_import.jar=ServiceOne_compid_import.jar, \
  	www/ServiceOne_filtered_import.jar=ServiceOne_filtered_import.jar, \
