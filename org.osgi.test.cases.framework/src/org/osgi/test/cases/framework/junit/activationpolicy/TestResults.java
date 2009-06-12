@@ -35,7 +35,7 @@ public class TestResults {
 		notifyAll();
 	}
 	synchronized public Object[] getResults(int expectedResultsNumber) {
-		while (events.size() < expectedResultsNumber) {
+		while (events.size() < expectedResultsNumber || (expectedResultsNumber == 0 && !isSynchronous())) {
 			int currentSize = events.size();
 			try {
 				wait(5000);
@@ -48,5 +48,9 @@ public class TestResults {
 		Object[] result = events.toArray();
 		events.clear();
 		return result;
+	}
+
+	protected boolean isSynchronous() {
+		return false;
 	}
 }

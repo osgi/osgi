@@ -54,4 +54,8 @@ public class SyncEventListenerTestResults extends EventListenerTestResults imple
 		contexts.clear();
 		return results;
 	}
+
+	protected boolean isSynchronous() {
+		return true;
+	}
 }
