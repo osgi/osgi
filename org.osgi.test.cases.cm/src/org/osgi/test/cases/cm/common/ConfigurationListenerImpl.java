@@ -47,7 +47,7 @@ public class ConfigurationListenerImpl implements ConfigurationListener {
 	private ServiceReference[]	references;
 	private Synchronizer		synchronizer;
 	private int					eventCount;
-	public static final String	RFC_0103_PID_PREFIX	= "RFC0103_";
+	public static final String	LISTENER_PID_SUFFIX	= "RFC0103";
 
 	/**
 	 * Creates <code>ConfigurationListenerImpl</code> to be used in the test
@@ -86,10 +86,10 @@ public class ConfigurationListenerImpl implements ConfigurationListener {
 	 * @see org.osgi.service.cm.ConfigurationListener#configurationEvent(org.osgi.service.cm.ConfigurationEvent)
 	 */
 	public void configurationEvent(ConfigurationEvent event) {
-		if ((event.getPid() != null && event.getPid().startsWith(
-				RFC_0103_PID_PREFIX))
+		if ((event.getPid() != null && event.getPid().endsWith(
+				LISTENER_PID_SUFFIX))
 				|| (event.getFactoryPid() != null && event.getFactoryPid()
-						.startsWith(RFC_0103_PID_PREFIX))) {
+						.endsWith(LISTENER_PID_SUFFIX))) {
 			synchronized (this) {
 				factoryPids[eventCount] = event.getFactoryPid();
 				pids[eventCount] = event.getPid();

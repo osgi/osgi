@@ -25,7 +25,8 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 
 -runbundles							= \
 	org.osgi.impl.service.log; version=latest, \
-	org.apache.felix.configadmin; version=latest
+	org.apache.felix.configadmin; version=latest, \
+	osgi.cmpn; version=latest
 	
 -runproperties = report=true, \
 	org.osgi.framework.security=osgi, \

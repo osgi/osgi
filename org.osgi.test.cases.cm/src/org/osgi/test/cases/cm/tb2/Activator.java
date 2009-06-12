@@ -35,6 +35,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.test.cases.cm.common.ConfigurationListenerImpl;
+import org.osgi.test.cases.cm.tbc.CMControl;
 
 /**
  * <p>
@@ -67,15 +68,17 @@ public class Activator implements BundleActivator {
 			ConfigurationAdmin cm = (ConfigurationAdmin) context
 					.getService(serviceReference);
 			Configuration config = cm
-					.getConfiguration(ConfigurationListenerImpl.RFC_0103_PID_PREFIX
-							+ "tb2pid");
+					.getConfiguration(CMControl.PACKAGE
+					+ ".tb2pid."
+					+ ConfigurationListenerImpl.LISTENER_PID_SUFFIX);
 			Hashtable props = new Hashtable();
 			props.put("key", "value1");
 			config.update(props);
 			config.delete();
 			config = cm
-					.createFactoryConfiguration(ConfigurationListenerImpl.RFC_0103_PID_PREFIX
-							+ "tb2factorypid");
+					.createFactoryConfiguration(CMControl.PACKAGE
+					+ ".tb2factorypid."
+					+ ConfigurationListenerImpl.LISTENER_PID_SUFFIX);
 			config.update(props);
 			config.delete();
 		}

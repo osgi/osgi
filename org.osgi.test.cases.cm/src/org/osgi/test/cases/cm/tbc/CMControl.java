@@ -56,22 +56,12 @@ import org.osgi.test.support.compatibility.Semaphore;
 
 public class CMControl extends DefaultTestBundleControl {
 	private ConfigurationAdmin	cm;
-	private Hashtable			confProps;
-	/* Two constants that are lacking in the spec */
-	public static final String	SERVICE_FACTORY_PID	= "service.factoryPid";
 	private static final long	SIGNAL_WAITING_TIME	= 25000;
 
-	// public static final String SERVICE_BUNDLE_LOCATION =
-	// "service.bundleLocation";
-
 	protected void setUp() throws Exception {
-		assertTrue(serviceAvailable(ConfigurationAdmin.class));
 		cm = (ConfigurationAdmin) getService(ConfigurationAdmin.class);
 		// populate the created configurations so that
 		// listConfigurations can return these configurations
-		confProps = new Hashtable();
-		confProps.put("prop1", "val1");
-		confProps.put("prop2", "val2");
 		cleanCM();
 	}
 
@@ -95,7 +85,7 @@ public class CMControl extends DefaultTestBundleControl {
 	 * @spec Configuration.setBundleLocation(String)
 	 */
 	public void testDeletedConfiguration() throws Exception {
-		String pid = getPackage();
+		String pid = createPid();
 		Configuration conf = null;
 		/* Get a brand new configuration and delete it. */
 		conf = cm.getConfiguration(pid);
@@ -151,7 +141,7 @@ public class CMControl extends DefaultTestBundleControl {
 	 * @throws Exception
 	 */
 	public void testGetConfiguration() throws Exception {
-		String pid = getPackage();
+		String pid = createPid();
 		String thisLocation = getLocation();
 		Configuration conf = null;
 		/* Get a brand new configuration */
@@ -197,9 +187,9 @@ public class CMControl extends DefaultTestBundleControl {
 	 * @throws Exception
 	 */
 	public void testGetConfigurationWithLocation() throws Exception {
-		String pid1 = getPackage() + ".1";
-		String pid2 = getPackage() + ".2";
-		String pid3 = getPackage() + ".2";
+		String pid1 = createPid("1");
+		String pid2 = createPid("2");
+		String pid3 = createPid("3");
 		String thisLocation = getLocation();
 		String neverlandLocation = "http://neverneverland/";
 		Configuration conf = null;
@@ -236,7 +226,7 @@ public class CMControl extends DefaultTestBundleControl {
 	 * @throws Exception
 	 */
 	public void testUpdate() throws Exception {
-		String pid = "pidX";
+		String pid = createPid();
 		Configuration conf = cm.getConfiguration(pid);
 		Hashtable newprops = new Hashtable();
 		newprops.put("somekey", "somevalue");
@@ -285,8 +275,9 @@ public class CMControl extends DefaultTestBundleControl {
 	 * @throws Exception
 	 */
 	public void testEquals() throws Exception {
-		Configuration conf1 = cm.getConfiguration("pidA");
-		Configuration conf2 = cm.getConfiguration("pidA");
+		String pid = createPid();
+		Configuration conf1 = cm.getConfiguration(pid);
+		Configuration conf2 = cm.getConfiguration(pid);
 		assertEquals("Equal configurations", conf1, conf2);
 		assertTrue("Equal configurations", equals(conf1, conf2));
 	}
@@ -302,8 +293,11 @@ public class CMControl extends DefaultTestBundleControl {
 	 */
 	public void testListConfigurations() throws Exception {
 		/* Create configurations */
-		Configuration[] configs = {cm.getConfiguration("pid1")};
-		Configuration[] updatedConfigs = {cm.getConfiguration("pid2")};
+		String pid1 = createPid("pid1");
+		String pid2 = createPid("pid2");
+		Configuration[] configs = {cm.getConfiguration(pid1)};
+		Configuration[] updatedConfigs = {cm
+				.getConfiguration(pid2)};
 		try {
 			/*
 			 * Update properties on some of configurations (to make them
@@ -318,7 +312,8 @@ public class CMControl extends DefaultTestBundleControl {
 			 * List all configurations and make sure that only the active
 			 * configurations are returned
 			 */
-			Configuration[] confs = cm.listConfigurations("(service.pid=pid2)");
+			Configuration[] confs = cm.listConfigurations("(service.pid="
+					+ createPid() + "*)");
 			if (confs == null) {
 				fail("No configurations returned");
 			}
@@ -341,7 +336,8 @@ public class CMControl extends DefaultTestBundleControl {
 			}
 		}
 		/* List all configurations and make sure they are all gone */
-		Configuration[] leftConfs = cm.listConfigurations("(|(service.pid=pid1)(service.pid=pid2))");
+		Configuration[] leftConfs = cm.listConfigurations("(|(service.pid="
+				+ pid1 + ")(service.pid=" + pid2 + "))");
 		assertNull("Left configurations", leftConfs);
 	}
 
@@ -356,7 +352,7 @@ public class CMControl extends DefaultTestBundleControl {
 	 * @spec Configuration.getBundleLocation()
 	 */
 	public void testManagedServiceRegistration() throws Exception {
-		String pid = "somepid";
+		String pid = createPid("somepid");
 		Semaphore semaphore = new Semaphore();
 		/* Set up the configuration */
 		Configuration conf = cm.getConfiguration(pid);
@@ -379,7 +375,7 @@ public class CMControl extends DefaultTestBundleControl {
 		assertEqualProperties("Properties equal?", props, ms.getProperties());
 		trace((String) ms.getProperties().get("service.pid"));
 		// trace((String) ms.getProperties().get("service.bundleLocation"));
-		trace((String) conf.getBundleLocation());
+		trace(conf.getBundleLocation());
 		/* OUTSIDE_OF_SPEC */
 		// assertNotSame("Properties same?", props, ms.getProperties());
 	}
@@ -400,7 +396,7 @@ public class CMControl extends DefaultTestBundleControl {
 	 * @throws Exception
 	 */
 	public void testManagedProperties() throws Exception {
-		String pid = "somepid";
+		String pid = createPid("somepid");
 		/* Set up the configuration */
 		Configuration conf = cm.getConfiguration(pid);
 		/* Put all legal types in the properties and update */
@@ -498,13 +494,13 @@ public class CMControl extends DefaultTestBundleControl {
 		/* TODO: Add more illegal types (inside collections etc) */
 	}
 
-	public void testUpdatedProperties() throws Exception {
-		/* Put all legal types in the properties and update */
-		/* Get the properties again */
-		/* Check if the properties are equals */
-		/* Check if the properties have preserved the case */
-		/* Check if the properties are case independent */
-	}
+	// public void testUpdatedProperties() throws Exception {
+	// /* Put all legal types in the properties and update */
+	// /* Get the properties again */
+	// /* Check if the properties are equals */
+	// /* Check if the properties have preserved the case */
+	// /* Check if the properties are case independent */
+	// }
 
 	/**
 	 * Test created Factory configuration without location.
@@ -555,7 +551,7 @@ public class CMControl extends DefaultTestBundleControl {
 	private void commonTestCreateFactoryConfiguration(boolean withLocation,
 			String location) throws Exception {
 		final int NUMBER_OF_CONFIGS = 3;
-		String factorypid = "somefactorypid";
+		String factorypid = createPid("somefactorypid");
 		List pids = new ArrayList();
 		List configs = new ArrayList();
 		pids.add(factorypid);
@@ -596,7 +592,7 @@ public class CMControl extends DefaultTestBundleControl {
 	 */
 	public void testManagedServiceFactory() throws Exception {
 		final int NUMBER_OF_CONFIGS = 3;
-		String factorypid = "somefactorypid";
+		String factorypid = createPid("somefactorypid");
 		Hashtable configs = new Hashtable();
 		/* Create some factory configurations */
 		for (int i = 0; i < NUMBER_OF_CONFIGS; i++) {
@@ -614,7 +610,7 @@ public class CMControl extends DefaultTestBundleControl {
 					"testprop", semaphore);
 			Hashtable properties = new Hashtable();
 			properties.put(Constants.SERVICE_PID, factorypid);
-			properties.put(SERVICE_FACTORY_PID, factorypid);
+			properties.put(ConfigurationAdmin.SERVICE_FACTORYPID, factorypid);
 			registerService(ManagedServiceFactory.class.getName(), msf, properties);
 			for (int i = 0; i < NUMBER_OF_CONFIGS; i++) {
 				trace("Wait for signal #" + i);
@@ -649,8 +645,7 @@ public class CMControl extends DefaultTestBundleControl {
 	 */
 	public void testUpdateConfigEvent() throws Exception {
 		ConfigurationListenerImpl cl = null;
-		String pid = ConfigurationListenerImpl.RFC_0103_PID_PREFIX
-				+ "updateConfigEvent";
+		String pid = createPid(ConfigurationListenerImpl.LISTENER_PID_SUFFIX);
 		Synchronizer synchronizer = new Synchronizer();
 		/* Set up the configuration */
 		Configuration conf = cm.getConfiguration(pid);
@@ -703,8 +698,7 @@ public class CMControl extends DefaultTestBundleControl {
 	 */
 	public void testUpdateConfigFactoryEvent() throws Exception {
 		ConfigurationListenerImpl cl = null;
-		String factorypid = ConfigurationListenerImpl.RFC_0103_PID_PREFIX
-				+ "updateFactoryEvent";
+		String factorypid = createPid(ConfigurationListenerImpl.LISTENER_PID_SUFFIX);
 		Synchronizer synchronizer = new Synchronizer();
 		/* Set up the configuration */
 		Configuration conf = cm.createFactoryConfiguration(factorypid);
@@ -764,8 +758,7 @@ public class CMControl extends DefaultTestBundleControl {
 	 */
 	public void testDeleteConfigEvent() throws Exception {
 		ConfigurationListenerImpl cl = null;
-		String pid = ConfigurationListenerImpl.RFC_0103_PID_PREFIX
-				+ "deleteConfigEvent";
+		String pid = createPid(ConfigurationListenerImpl.LISTENER_PID_SUFFIX);
 		Synchronizer synchronizer = new Synchronizer();
 		/* Set up the configuration */
 		Configuration conf = cm.getConfiguration(pid);
@@ -829,8 +822,7 @@ public class CMControl extends DefaultTestBundleControl {
 	 */
 	public void testDeleteConfigFactoryEvent() throws Exception {
 		ConfigurationListenerImpl cl = null;
-		String factorypid = ConfigurationListenerImpl.RFC_0103_PID_PREFIX
-				+ "deleteFactoryEvent";
+		String factorypid = createPid(ConfigurationListenerImpl.LISTENER_PID_SUFFIX);
 		Synchronizer synchronizer = new Synchronizer();
 		/* Set up the configuration */
 		Configuration conf = cm.createFactoryConfiguration(factorypid);
@@ -880,8 +872,7 @@ public class CMControl extends DefaultTestBundleControl {
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 */
 	public void testConfigListenerPermission() throws Exception {
-		Bundle tb;
-		tb = getContext().installBundle(getWebServer() + "tb1.jar");
+		Bundle tb = getContext().installBundle(getWebServer() + "tb1.jar");
 		String message = "registering config listener without permission";
 		try {
 			tb.start();
@@ -913,12 +904,11 @@ public class CMControl extends DefaultTestBundleControl {
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 */
 	public void testConfigEventFromDifferentBundle() throws Exception {
-		Bundle tb = null;
-		ConfigurationListenerImpl cl = null;
 		trace("Create and register a new ConfigurationListener");
 		Synchronizer synchronizer = new Synchronizer();
-		cl = createConfigurationListener(synchronizer, 4);
-		tb = getContext().installBundle(getWebServer() + "tb2.jar");
+		ConfigurationListenerImpl cl = createConfigurationListener(
+				synchronizer, 4);
+		Bundle tb = getContext().installBundle(getWebServer() + "tb2.jar");
 		tb.start();
 		trace("Wait until the ConfigurationListener has gotten the update");
 
@@ -926,7 +916,8 @@ public class CMControl extends DefaultTestBundleControl {
 			assertTrue("Update done", synchronizer
 					.waitForSignal(SIGNAL_WAITING_TIME));
 			assertEquals("Config event pid match",
-					ConfigurationListenerImpl.RFC_0103_PID_PREFIX + "tb2pid",
+					PACKAGE + ".tb2pid."
+					+ ConfigurationListenerImpl.LISTENER_PID_SUFFIX,
 					cl.getPid(1));
 			assertEquals("Config event type match",
 					ConfigurationEvent.CM_UPDATED, cl.getType(1));
@@ -935,7 +926,8 @@ public class CMControl extends DefaultTestBundleControl {
 			assertTrue("Update done", synchronizer
 					.waitForSignal(SIGNAL_WAITING_TIME, 2));
 			assertEquals("Config event pid match",
-					ConfigurationListenerImpl.RFC_0103_PID_PREFIX + "tb2pid",
+					PACKAGE + ".tb2pid."
+					+ ConfigurationListenerImpl.LISTENER_PID_SUFFIX,
 					cl.getPid(2));
 			assertEquals("Config event type match",
 					ConfigurationEvent.CM_DELETED, cl.getType(2));
@@ -944,16 +936,20 @@ public class CMControl extends DefaultTestBundleControl {
 			assertTrue("Update done", synchronizer
 					.waitForSignal(SIGNAL_WAITING_TIME, 3));
 			assertEquals("Config event facotory pid match",
-					ConfigurationListenerImpl.RFC_0103_PID_PREFIX
-							+ "tb2factorypid", cl.getFactoryPid(3));
+					PACKAGE
+					+ ".tb2factorypid."
+					+ ConfigurationListenerImpl.LISTENER_PID_SUFFIX, cl
+					.getFactoryPid(3));
 			assertEquals("Config event type match",
 					ConfigurationEvent.CM_UPDATED, cl.getType(3));
 
 			assertTrue("Update done", synchronizer
 					.waitForSignal(SIGNAL_WAITING_TIME, 4));
 			assertEquals("Config event factory pid match",
-					ConfigurationListenerImpl.RFC_0103_PID_PREFIX
-							+ "tb2factorypid", cl.getFactoryPid(4));
+					PACKAGE
+					+ ".tb2factorypid."
+					+ ConfigurationListenerImpl.LISTENER_PID_SUFFIX, cl
+					.getFactoryPid(4));
 			assertEquals("Config event type match",
 					ConfigurationEvent.CM_DELETED, cl.getType(4));
 
@@ -978,8 +974,7 @@ public class CMControl extends DefaultTestBundleControl {
 	public void testConfigurationPluginService() throws Exception {
 		ConfigurationListenerImpl cl = null;
 		NotVisitablePlugin plugin = null;
-		String pid = ConfigurationListenerImpl.RFC_0103_PID_PREFIX
-				+ "configPluginService";
+		String pid = createPid(ConfigurationListenerImpl.LISTENER_PID_SUFFIX);
 		/* Set up the configuration */
 		Configuration conf = cm.getConfiguration(pid);
 		Hashtable props = new Hashtable();
@@ -1017,8 +1012,7 @@ public class CMControl extends DefaultTestBundleControl {
 	public void testConfigurationPluginServiceFactory() throws Exception {
 		ConfigurationListenerImpl cl = null;
 		NotVisitablePlugin plugin = null;
-		String factorypid = ConfigurationListenerImpl.RFC_0103_PID_PREFIX
-				+ "configPluginServiceFatory";
+		String factorypid = createPid(ConfigurationListenerImpl.LISTENER_PID_SUFFIX);
 		/* Set up the configuration */
 		Configuration conf = cm.createFactoryConfiguration(factorypid);
 		Hashtable props = new Hashtable();
@@ -1142,19 +1136,28 @@ public class CMControl extends DefaultTestBundleControl {
 		return result;
 	}
 
-	private String getPackage() {
-		return "org.osgi.test.cases.cm.tbc";
-	}
+	public final static String	PACKAGE	= "org.osgi.test.cases.cm.tbc";
 
 	private String getLocation() {
 		return getContext().getBundle().getLocation();
 	}
 
 	private String getFilter() {
-		return "(|(service.pid=" + getPackage() + ".factory.*)"
-				+ "(service.factoryPid=" + getPackage() + ".factory.*))";
+		return "(|(service.pid=" + PACKAGE + ".*)" + "(service.factoryPid="
+				+ PACKAGE + ".*))";
 	}
 
+	private String createPid() {
+		return createPid(null);
+	}
+	private String createPid(String suffix) {
+		String root = PACKAGE + "." + getName();
+		if (suffix == null) {
+			return root;
+		}
+		return root + "." + suffix;
+	}
+	
 	/**
 	 * Removes any configurations made by this bundle.
 	 */

@@ -28,17 +28,18 @@
 package org.osgi.test.cases.cm.tbc;
 
 import java.util.Dictionary;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedServiceFactory;
 import org.osgi.test.support.compatibility.Semaphore;
 
 public class ManagedServiceFactoryImpl implements ManagedServiceFactory {
-	String		name;
-	String		propertyName;
-	Hashtable	services	= new Hashtable();
-	Semaphore	semaphore;
+	private final String	name;
+	private final String	propertyName;
+	private final Map		services	= new HashMap();
+	private final Semaphore	semaphore;
 
 	public ManagedServiceFactoryImpl(String name, String propertyName,
 			Semaphore semaphore) {
@@ -51,10 +52,10 @@ public class ManagedServiceFactoryImpl implements ManagedServiceFactory {
 		return name;
 	}
 
-	public void updated(String pid, Dictionary properties)
+	public synchronized void updated(String pid, Dictionary properties)
 			throws ConfigurationException {
 		try {
-			System.out.println("+++ updating " + pid);
+			CMControl.log("+++ updating " + pid);
 			String data = "somedata";
 			/*
 			 * String data = (String) properties.get(propertyName);
@@ -75,19 +76,19 @@ public class ManagedServiceFactoryImpl implements ManagedServiceFactory {
 		catch (Throwable e) {
 			e.printStackTrace();
 		}
-		System.out.println("--- done updating " + pid);
+		CMControl.log("--- done updating " + pid);
 	}
 
-	public void deleted(java.lang.String pid) {
+	public synchronized void deleted(java.lang.String pid) {
 		services.remove(pid);
 	}
 
-	public int getNumberOfServices() {
+	public synchronized int getNumberOfServices() {
 		return services.size();
 	}
 
 	class SomeService {
-		String	configData;
+		private String	configData;
 
 		public void setConfigData(String configData) {
 			this.configData = configData;

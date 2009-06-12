@@ -33,19 +33,19 @@ import org.osgi.service.cm.ManagedService;
 import org.osgi.test.support.compatibility.Semaphore;
 
 public class ManagedServiceImpl implements ManagedService {
-	Dictionary	properties;
-	Semaphore	semaphore;
+	private Dictionary		properties;
+	private final Semaphore	semaphore;
 
 	public ManagedServiceImpl(Semaphore semaphore) {
 		this.semaphore = semaphore;
 	}
 
-	public Dictionary getProperties() {
+	public synchronized Dictionary getProperties() {
 		return properties;
 	}
 
-	public void updated(Dictionary properties) {
-		this.properties = properties;
+	public synchronized void updated(Dictionary p) {
+		properties = p;
 		semaphore.signal();
 	}
 }
