@@ -60,6 +60,27 @@ public class TestControl extends DefaultTestBundleControl {
 		}
 	}
 	
+	public void compareEventsUnordered(Object[] expectedEvents, Object[] actualEvents) {
+		assertEquals("number of results", expectedEvents.length, actualEvents.length);
+		for (int i = 0; i < expectedEvents.length; i++) {
+            boolean found = false;
+            for (int j = 0; !found && (j < actualEvents.length); j++) {
+                if (expectedEvents[i] instanceof BundleEvent) {
+                    BundleEvent expected = (BundleEvent) expectedEvents[i];
+                    BundleEvent actual = (BundleEvent) actualEvents[j];
+                    found = (expected.getBundle().equals(actual.getBundle())
+                        && (expected.getType() == actual.getType()));
+                } else if (expectedEvents[i] instanceof FrameworkEvent) {
+                    FrameworkEvent expected = (FrameworkEvent) expectedEvents[i];
+                    FrameworkEvent actual = (FrameworkEvent) actualEvents[j];
+                    found = (expected.getSource().equals(actual.getSource())
+                        && (expected.getType() == actual.getType()));
+                }
+            }
+            assertTrue("Did not find expected event: " + expectedEvents[i], found);
+		}
+	}
+
 	/*
 	 * Tests a simple lazy policy with no includes or excludes directives
 	 */
@@ -764,7 +785,7 @@ public class TestControl extends DefaultTestBundleControl {
 			expectedEvents[0] = new BundleEvent(BundleEvent.STARTED, tblazy5);
 			expectedEvents[1] = new BundleEvent(BundleEvent.STARTED, tblazy6);
 			Object[] actualEvents = resultsListener.getResults(2);
-			compareEvents(expectedEvents, actualEvents);
+			compareEventsUnordered(expectedEvents, actualEvents);
 		} finally {
 			getContext().removeBundleListener(resultsListener);
 			uninstallBundle(tblazy5);
