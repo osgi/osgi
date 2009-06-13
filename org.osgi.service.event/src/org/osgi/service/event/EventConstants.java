@@ -75,7 +75,7 @@ public interface EventConstants {
 	/**
 	 * The Distinguished Names of the signers of the bundle relevant to the
 	 * event. The type of the value for this event property is
-	 * <code>Collection</code> of <code>String</code>.
+	 * <code>String</code> or <code>Collection</code> of <code>String</code>.
 	 */
 	public static final String	BUNDLE_SIGNER		= "bundle.signer";
 
