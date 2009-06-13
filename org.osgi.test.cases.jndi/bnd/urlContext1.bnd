@@ -1,0 +1,5 @@
+Bundle-Name:                             ${p}.urlContext1
+Bundle-Version:                          4.2
+Private-Package =                        ${p}.urlContext1
+Bundle-Activator:						 ${p}.urlContext1.URLContext1Activator
+Bundle-ActivationPolicy:                 lazy

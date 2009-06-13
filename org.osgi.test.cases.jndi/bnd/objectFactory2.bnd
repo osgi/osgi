@@ -1,0 +1,5 @@
+Bundle-Name:                             ${p}.objectFactory2
+Bundle-Version:                          4.2.0.${project.build}
+Bundle-Activator:						 ${p}.objectFactory2.ObjectFactory2Activator
+Private-Package =						 ${p}.objectFactory2
+Bundle-ActivationPolicy:                 lazy
