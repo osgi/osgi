@@ -357,8 +357,8 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
         // now validate the meta data is correct for the aliases.
         BeanMetadata meta = (BeanMetadata)targetBlueprintContainer.getComponentMetadata(componentId);
         assertEquals("Classname for component " + componentId, className, meta.getClassName());
-        assertEquals("init-method for component " + componentId, initMethod, meta.getInitMethodName());
-        assertEquals("destroy-method for component " + componentId, destroyMethod, meta.getDestroyMethodName());
+        assertEquals("init-method for component " + componentId, initMethod, meta.getInitMethod());
+        assertEquals("destroy-method for component " + componentId, destroyMethod, meta.getDestroyMethod());
     }
 
     /**
@@ -508,7 +508,7 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
      */
     public void validateFactoryMetadata(BeanMetadata meta, String factoryMethodName, String staticFactoryClassName, TestValue factoryTestComponentValue) throws Exception {
         // validate factory method name
-        assertEquals("Factory method for component " + meta.getId(), factoryMethodName, meta.getFactoryMethodName());
+        assertEquals("Factory method for component " + meta.getId(), factoryMethodName, meta.getFactoryMethod());
 
         // validate class name
         assertEquals("Component " + meta.getId() + " class name mismatch", staticFactoryClassName, meta.getClassName());

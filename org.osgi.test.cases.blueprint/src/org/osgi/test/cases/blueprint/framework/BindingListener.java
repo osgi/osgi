@@ -18,7 +18,7 @@ package org.osgi.test.cases.blueprint.framework;
 
 import junit.framework.Assert;
 
-import org.osgi.service.blueprint.reflect.Listener;
+import org.osgi.service.blueprint.reflect.ReferenceListener;
 import org.osgi.service.blueprint.reflect.Metadata;
 
 /**
@@ -50,7 +50,7 @@ public class BindingListener extends Assert {
      *
      * @return True if this appears to be the validation target, false otherwise.
      */
-    public boolean matches(Listener meta) {
+    public boolean matches(ReferenceListener meta) {
         // the value type does the matching
         return listener.equals(meta.getListenerComponent());
     }
@@ -63,9 +63,9 @@ public class BindingListener extends Assert {
      *
      * @exception Exception
      */
-    public void validate(BlueprintMetadata blueprintMetadata, Listener meta) throws Exception {
-        assertEquals(bindName, meta.getBindMethodName());
-        assertEquals(unbindName, meta.getUnbindMethodName());
+    public void validate(BlueprintMetadata blueprintMetadata, ReferenceListener meta) throws Exception {
+        assertEquals(bindName, meta.getBindMethod());
+        assertEquals(unbindName, meta.getUnbindMethod());
         listener.validate(blueprintMetadata, meta.getListenerComponent());
     }
 

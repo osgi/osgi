@@ -14,7 +14,7 @@
        <argument value="NullReferenceChecker"/>
        <property name="list">
            <ref-list interface="org.osgi.test.cases.blueprint.services.TestServiceOneXXXX" availability="optional" member-type="service-object">
-               <listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
+               <reference-listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
            </ref-list>
        </property>
    </bean>

@@ -27,7 +27,7 @@
     <!-- single of the imported service.  Since this is lazy, none of the listeners or dependencies will activate
          until this is activated.  -->
     <reference id="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" depends-on="Depends1 Depends2">
-        <listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
+        <reference-listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
     </reference>
 
     <!-- This gets both a ServiceManager and a reference collection injected -->

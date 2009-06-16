@@ -16,7 +16,7 @@
        </property>
        <property name="set">
            <ref-set availability="optional" member-type="service-object">
-               <listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
+               <reference-listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
            </ref-set>
        </property>
    </bean>

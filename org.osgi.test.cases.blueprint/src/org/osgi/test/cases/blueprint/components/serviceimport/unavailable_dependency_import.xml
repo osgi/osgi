@@ -12,7 +12,7 @@
 
     <!-- single shared instance of the imported service.  The original backing service will not exist, but is optional. -->
     <reference id="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" availability="optional" timeout="1000">
-        <listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
+        <reference-listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
     </reference>
 
     <!-- This gets both a ServiceManager and a reference collection injected -->

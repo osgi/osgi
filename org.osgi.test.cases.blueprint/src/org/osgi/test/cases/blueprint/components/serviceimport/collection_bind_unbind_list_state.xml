@@ -13,7 +13,7 @@
       </property>
       <property name="list">
           <ref-list interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
-              <listener bind-method="bind" unbind-method="unbind" ref="BindUnbindListChecker"/>
+              <reference-listener bind-method="bind" unbind-method="unbind" ref="BindUnbindListChecker"/>
           </ref-list>
       </property>
   </bean>

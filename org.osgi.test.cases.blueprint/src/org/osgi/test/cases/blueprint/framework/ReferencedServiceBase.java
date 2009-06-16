@@ -24,7 +24,7 @@ import java.util.Set;
 
 import junit.framework.Assert;
 
-import org.osgi.service.blueprint.reflect.Listener;
+import org.osgi.service.blueprint.reflect.ReferenceListener;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
 
@@ -129,11 +129,11 @@ public class ReferencedServiceBase extends Assert implements TestComponentMetada
         assertEquals("Initialization setting mismatch", initialization, meta.getInitialization());
         // we might have a listener list also
         if (listeners != null) {
-            Collection bindingListeners = meta.getServiceListeners();
+            Collection bindingListeners = meta.getReferenceListeners();
             assertEquals("Mismatch on binding listener list", listeners.length, bindingListeners.size());
             for (int i = 0; i < listeners.length; i++) {
                 BindingListener s = listeners[i];
-                Listener l = locateBindingListener(bindingListeners, s);
+                ReferenceListener l = locateBindingListener(bindingListeners, s);
                 assertNotNull("Missing binding listener (" + s + ") for component " + name, l);
                 // do additional validation on the listener definition.
                 s.validate(blueprintMetadata, l);
@@ -150,10 +150,10 @@ public class ReferencedServiceBase extends Assert implements TestComponentMetada
      *
      * @return The matching services metadata, or null if no match was found.
      */
-    protected Listener locateBindingListener(Collection listeners, BindingListener listener) {
+    protected ReferenceListener locateBindingListener(Collection listeners, BindingListener listener) {
         Iterator i = listeners.iterator();
         while (i.hasNext()) {
-            Listener meta = (Listener)i.next();
+            ReferenceListener meta = (ReferenceListener)i.next();
             if (listener.matches(meta)) {
                 return meta;
             }

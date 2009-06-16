@@ -163,7 +163,7 @@ public class BeanComponent extends Assert implements TestComponentMetadata {
         }
 
         // this is either instantiatied via a factory or directly
-        assertEquals("Component " + meta.getId() + " factory method mismatch ", factoryMethod, meta.getFactoryMethodName());
+        assertEquals("Component " + meta.getId() + " factory method mismatch ", factoryMethod, meta.getFactoryMethod());
         // and a potential factory component
         if (factoryComponent != null) {
             Target factory = meta.getFactoryComponent();
@@ -172,8 +172,8 @@ public class BeanComponent extends Assert implements TestComponentMetadata {
             factoryComponent.validate(blueprintMetadata, factory);
         }
 
-        assertEquals("Component " + meta.getId() + " init-method mismatch", initMethodName, meta.getInitMethodName());
-        assertEquals("Component " + meta.getId() + " destroy-method mismatch", destroyMethodName, meta.getDestroyMethodName());
+        assertEquals("Component " + meta.getId() + " init-method mismatch", initMethodName, meta.getInitMethod());
+        assertEquals("Component " + meta.getId() + " destroy-method mismatch", destroyMethodName, meta.getDestroyMethod());
 
         if (dependsOn != null) {
             List test = new ArrayList();

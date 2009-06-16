@@ -19,7 +19,7 @@
        <property name="list">
            <ref-list interface="org.osgi.test.cases.blueprint.services.TestServiceOne" member-type="service-object">
                <description>Testing descriptions also</description>
-               <listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
+               <reference-listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
            </ref-list>
        </property>
    </bean>

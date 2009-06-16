@@ -81,11 +81,11 @@ public class TestRegistrationListener extends Assert {
             }
         }
 
-        if (registrationName != null && !registrationName.equals(meta.getRegistrationMethodName())) {
+        if (registrationName != null && !registrationName.equals(meta.getRegistrationMethod())) {
             return false;
         }
 
-        if (unregistrationName != null && !unregistrationName.equals(meta.getUnregistrationMethodName())) {
+        if (unregistrationName != null && !unregistrationName.equals(meta.getUnregistrationMethod())) {
             return false;
         }
 

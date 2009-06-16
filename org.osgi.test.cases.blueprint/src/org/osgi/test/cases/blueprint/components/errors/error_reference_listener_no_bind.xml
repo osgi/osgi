@@ -11,7 +11,7 @@
 
     <!-- single shared instance of the imported service -->
     <reference id="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
-        <listener bind-method="bindXXXX" unbind-method="unbind" ref="ServiceOneListener"/>
+        <reference-listener bind-method="bindXXXX" unbind-method="unbind" ref="ServiceOneListener"/>
     </reference>
 
    <bean id="ServiceOneProperty" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceChecker">

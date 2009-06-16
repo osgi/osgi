@@ -10,7 +10,7 @@
 
     <!-- single shared instance of the imported service -->
     <reference id="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceTwo" availability="optional">
-        <listener bind-method="bind" unbind-method="unbind" ref="CollectionTarget"/>
+        <reference-listener bind-method="bind" unbind-method="unbind" ref="CollectionTarget"/>
     </reference>
 </blueprint>
 

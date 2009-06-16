@@ -11,13 +11,13 @@
 
     <!-- two references sharing one listener -->
     <reference id="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
-        <listener bind-method="bind" unbind-method="unbind">
+        <reference-listener bind-method="bind" unbind-method="unbind">
             <ref component-id="ServiceOneTwoListener"/>
         </listener>
     </reference>
 
     <reference id="ServiceTwo" interface="org.osgi.test.cases.blueprint.services.TestServiceTwo">
-        <listener bind-method="bind" unbind-method="unbind">
+        <reference-listener bind-method="bind" unbind-method="unbind">
             <ref component-id="ServiceOneTwoListener"/>
         </listener>
     </reference>
