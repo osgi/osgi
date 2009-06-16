@@ -27,7 +27,7 @@ public class EuropeanRegionCodeConverter extends BaseTestComponent implements Co
     }
     public Object convert(Object source, Class toType) throws Exception {
         AssertionService.sendEvent(this, AssertionService.METHOD_CALLED);
-        if (source instanceof String && toType == EuropeanRegionCode.class) {
+        if (source instanceof String && (RegionCode.class.isAssignableFrom(toType) && toType.isAssignableFrom(AsianRegionCode.class))) {
             return new EuropeanRegionCode((String)source);
         }
         // we're supposed to throw an exception if we can't convert
@@ -35,6 +35,6 @@ public class EuropeanRegionCodeConverter extends BaseTestComponent implements Co
     }
 
     public boolean canConvert(Object value, Class toType) {
-        return toType == EuropeanRegionCode.class && value instanceof String;
+        return (RegionCode.class.isAssignableFrom(toType) && toType.isAssignableFrom(EuropeanRegionCode.class)) && value instanceof String;
     }
 }
