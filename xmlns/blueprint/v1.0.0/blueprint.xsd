@@ -339,7 +339,7 @@
             <xsd:group ref="value" minOccurs="0"/>
         </xsd:sequence>
         <xsd:attribute name="index" type="xsd:nonNegativeInteger" />
-        <xsd:attribute name="type" type="Tclass" />
+        <xsd:attribute name="type" type="Ttype" />
         <xsd:attribute name="ref" type="Tidref" />
         <xsd:attribute name="value" type="TstringValue" />
     </xsd:complexType>
@@ -878,7 +878,7 @@
               ]]>
             </xsd:documentation>
         </xsd:annotation>
-        <xsd:attribute name="type" type="Tclass" use="optional" />
+        <xsd:attribute name="type" type="Ttype" use="optional" />
     </xsd:complexType>
 
     <!-- Collection Values -->
@@ -892,7 +892,7 @@
               ]]>
             </xsd:documentation>
         </xsd:annotation>
-        <xsd:attribute name="value-type" type="Tclass" />
+        <xsd:attribute name="value-type" type="Ttype" />
     </xsd:complexType>
 
 
@@ -957,7 +957,7 @@
                 <xsd:sequence>
                     <xsd:element name="entry" type="TmapEntry" minOccurs="0" maxOccurs="unbounded" />
                 </xsd:sequence>
-                <xsd:attribute name="key-type" type="Tclass" />
+                <xsd:attribute name="key-type" type="Ttype" />
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
@@ -1069,11 +1069,25 @@
             <xsd:documentation>
               <![CDATA[
               Tclass is a base type that should be used for all attributes that
-              refer to java class names or java types.
+              refer to java class names.
               ]]>
             </xsd:documentation>
         </xsd:annotation>
         <xsd:restriction base="xsd:NCName" />
+    </xsd:simpleType>
+
+    <xsd:simpleType name="Ttype">
+        <xsd:annotation>
+            <xsd:documentation>
+                <![CDATA[
+                Ttype is a base type that refer to java types such as classes or
+                arrays.
+                ]]>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:token">
+            <xsd:pattern value="[\i-[:]][\c-[:]]*(\[\])*" />
+        </xsd:restriction>
     </xsd:simpleType>
 
     <xsd:simpleType name="Tmethod">
