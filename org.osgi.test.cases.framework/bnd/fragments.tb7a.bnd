@@ -4,3 +4,4 @@ Bundle-SymbolicName: ${p}.fragments.tb7a
 Bundle-Version: 1.0
 Bundle-Activator: ${p}.fragments.tb7a.Activator
 Private-Package: ${p}.fragments.tb7a
+Import-Package: ${p}.fragments.tb7c;version="[1.0,2.0)",*
