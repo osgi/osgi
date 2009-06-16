@@ -38,7 +38,9 @@ public class ServiceListener extends BaseTestComponent {
 
     protected void bind(Class serviceInterface, Map serviceProperties) {
         Hashtable props = new Hashtable();
-        props.putAll(serviceProperties);
+        if (serviceProperties != null) {
+            props.putAll(serviceProperties);
+        }
         props.put("service.interface.name", serviceInterface.getName());
         props.put("service.listener.type", "interface");
         AssertionService.sendEvent(this, AssertionService.SERVICE_BIND, props);
@@ -46,7 +48,9 @@ public class ServiceListener extends BaseTestComponent {
 
     protected void unbind(Class serviceInterface, Map serviceProperties) {
         Hashtable props = new Hashtable();
-        props.putAll(serviceProperties);
+        if (serviceProperties != null) {
+            props.putAll(serviceProperties);
+        }
         props.put("service.interface.name", serviceInterface.getName());
         props.put("service.listener.type", "interface");
         AssertionService.sendEvent(this, AssertionService.SERVICE_UNBIND, props);

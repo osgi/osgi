@@ -1604,6 +1604,38 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
 
     /*
+     * A service listener test.  This uses the method signature that doesn't take a Map instance
+     */
+    public void testServiceListenerNoMapMethodImport() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/ServiceOne_listener_nomap_method_import.jar",
+                getWebServer()+"www/ServiceOne_multiple_export.jar");
+        // The export jar has been well covered already in other tests.  We'll just focus
+        // on the import listener details.
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+        // we're expecting some listener metadata on the import.
+        BindingListener[] listeners = new BindingListener[] {
+            new BindingListener("ServiceOneListener", "bindNoMap", "unbindNoMap"),
+        };
+        // validate the metadata for the imported service (this one only has a single import, so easy to locate)
+        importStartEvents.addValidator(new ComponentMetadataValidator(new ReferencedService("ServiceOne", TestServiceOne.class,
+                ServiceReferenceMetadata.AVAILABILITY_MANDATORY, ServiceReferenceMetadata.INITIALIZATION_EAGER,
+                null, null, listeners, ReferencedService.DEFAULT_TIMEOUT)));
+        // this should be an empty set, since we're calling the no map signature
+        Hashtable props1 = new Hashtable();
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, props1));
+
+        // now some expected termination stuff
+        EventSet importStopEvents = controller.getStopEvents(0);
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, props1));
+        controller.run();
+    }
+
+
+    /*
      * This tests the behavior of unregistered manadatory services and
      */
     public void testUnregisteredServiceDependency() throws Exception {

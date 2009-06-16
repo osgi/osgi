@@ -1,8 +1,8 @@
-Bundle-SymbolicName:                     ${p}.error_config_wildcard
+Bundle-SymbolicName:                     ${p}.config_wildcard
 Bundle-Version:                          4.2
 Import-Package:                          ${p}.components.comp1, ${p}.services
 Bundle-Blueprint: config/*.xml
 -resourceonly: true
 Include-Resource					= \
-	config/comp1_named.NOTCONFIG=src/org/osgi/test/cases/blueprint/components/comp1/comp1_named.xml
+	config/comp1_named.NOTCONFIG=src/org/osgi/test/cases/blueprint/components/comp1/comp1.xml
 

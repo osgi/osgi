@@ -998,12 +998,12 @@ public class TestConfigErrors extends DefaultTestBundleControl {
 
 
     /**
-     * test a wild card specification on a Blueprint-Bundle header is an error
+     * test a wild card specification with no matching files is an error
      */
-    public void testBlueprintBundleWildcard() throws Exception {
+    public void testBlueprintBundleWildcardNoMatch() throws Exception {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
-            getWebServer()+"www/error_config_wildcard.jar");
+            getWebServer()+"www/error_wildcard_no_match.jar");
         controller.run();
     }
 

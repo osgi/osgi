@@ -60,6 +60,27 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
 
 
     /**
+     * Tests wildcarding of configuration files on the header.
+     */
+    public void testWildcardHeader() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/config_wildcard.jar");
+        MetadataEventSet startEvents = controller.getStartEvents();
+        startEvents.addAssertion("comp1", AssertionService.COMPONENT_CREATED);
+        startEvents.validateComponent("comp1", SimpleTestComponent.class);
+        // make sure the name is in the component list
+        startEvents.addValidator(new ComponentNamePresenceValidator("comp1"));
+        startEvents.addValidator(new GetBeanMetadataValidator("comp1"));
+
+        // and the validate the component metadata
+        startEvents.addValidator(new ComponentMetadataValidator(
+                new BeanComponent("comp1", SimpleTestComponent.class, new TestArgument[0], null)));
+
+        controller.run();
+    }
+
+
+    /**
      * Tests no explicit header specified, multiple control files in the OSGI-INF directory,
      * each configuring a component
      */
@@ -423,6 +444,18 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
     public void testNonBlueprintBundleEmptyDir() throws Exception {
         NonBlueprintTestController controller = new NonBlueprintTestController(getContext(),
                 getWebServer()+"www/comp1_dir_no_config.jar");
+        // nothing should happen, which is all handled by the controller
+        controller.run();
+    }
+
+
+    /**
+     * Tests the extender handling of an empty Blueprint-Bundle header.  This should not
+     * be activated even though there are files in the default location.
+     */
+    public void testEmptyBlueprintBundleHeader() throws Exception {
+        NonBlueprintTestController controller = new NonBlueprintTestController(getContext(),
+                getWebServer()+"www/comp1_empty_header.jar");
         // nothing should happen, which is all handled by the controller
         controller.run();
     }
