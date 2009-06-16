@@ -2,4 +2,3 @@ Bundle-Name:                             ${p}.initialContextFactory2
 Bundle-Version:                          4.2.0.${project.build}
 Bundle-Activator:						 ${p}.initialContextFactory2.InitialContextFactory2Activator
 Private-Package =						 ${p}.initialContextFactory2
-Bundle-ActivationPolicy:                 lazy
