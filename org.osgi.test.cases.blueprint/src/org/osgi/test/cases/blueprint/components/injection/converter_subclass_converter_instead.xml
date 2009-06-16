@@ -2,7 +2,9 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
 	<type-converters>
-		<bean id="asianRegionCodeConverter" class="org.osgi.test.cases.blueprint.components.injection.AsianRegionCodeConverter"/>
+		<bean id="asianRegionCodeConverter" class="org.osgi.test.cases.blueprint.components.injection.AsianRegionCodeConverter">
+     		<argument value="asianRegionCodeConverter"/>
+     	</bean>
 	</type-converters>
 
 <!-- Constructor -->

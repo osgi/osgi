@@ -3,7 +3,9 @@
 
 	<type-converters>
 		<bean id="regionCodeConverter" class="org.osgi.test.cases.blueprint.components.injection.RegionCodeConverter"/>
-		<bean id="asianRegionCodeConverter" class="org.osgi.test.cases.blueprint.components.injection.AsianRegionCodeConverter"/>
+		<bean id="asianRegionCodeConverter" class="org.osgi.test.cases.blueprint.components.injection.AsianRegionCodeConverter">
+    		<argument value="asianRegionCodeConverter"/>
+    	</bean>
 	</type-converters>
 
 	<bean id="comp_cnst" class="org.osgi.test.cases.blueprint.components.injection.RegionCodeInjection">
