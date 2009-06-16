@@ -19,7 +19,7 @@ package org.osgi.service.blueprint.reflect;
  * Metadata for a listener interested in service bind and unbind events for a service
  * reference.
  */
-public interface Listener {
+public interface ReferenceListener {
 
 	/**
 	 * The component instance that will receive bind and unbind
@@ -39,7 +39,7 @@ public interface Listener {
 	 *
 	 * @return the bind callback method name.
 	 */
-	String getBindMethodName();
+	String getBindMethod();
 
 	/**
 	 * The name of the method to invoke on the listener component when
@@ -47,5 +47,5 @@ public interface Listener {
 	 *
 	 * @return the unbind callback method name.
 	 */
-	String getUnbindMethodName();
+	String getUnbindMethod();
 }

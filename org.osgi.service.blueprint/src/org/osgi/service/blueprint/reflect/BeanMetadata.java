@@ -46,7 +46,7 @@ public interface BeanMetadata extends Target, ComponentMetadata {
 	 * @return the method name of the specified init method, or null if no init
 	 *         method was specified.
 	 */
-	String getInitMethodName();
+	String getInitMethod();
 
 	/**
 	 * The name of the destroy method specified for this component, if any.
@@ -56,7 +56,7 @@ public interface BeanMetadata extends Target, ComponentMetadata {
 	 * @return the method name of the specified destroy method, or null if no
 	 *         destroy method was specified.
 	 */
-	String getDestroyMethodName();
+	String getDestroyMethod();
 
 	/**
 	 * The arguments for the factory method or constructor.
@@ -87,7 +87,7 @@ public interface BeanMetadata extends Target, ComponentMetadata {
 	 *
 	 * @return The name of the factory method or <code>null</code>.
 	 */
-	String getFactoryMethodName();
+	String getFactoryMethod();
 
 	/**
 	 * The component instance on which to invoke the factory method (if

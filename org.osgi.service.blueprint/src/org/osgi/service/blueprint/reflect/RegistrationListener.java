@@ -41,7 +41,7 @@ public interface RegistrationListener {
 	 *
 	 * @return the registration callback method name.
 	 */
-	String getRegistrationMethodName();
+	String getRegistrationMethod();
 
 	/**
 	 * The name of the method to invoke on the listener component when
@@ -51,6 +51,6 @@ public interface RegistrationListener {
 	 *
 	 * @return the unregistration callback method name.
 	 */
-	String getUnregistrationMethodName();
+	String getUnregistrationMethod();
 
 }
