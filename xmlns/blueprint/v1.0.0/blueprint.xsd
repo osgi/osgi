@@ -557,7 +557,7 @@
         <xsd:sequence>
             <xsd:element name="description" type="Tdescription" minOccurs="0" />
             <!-- listener -->
-            <xsd:element name="listener" type="TreferenceListener" minOccurs="0"
+            <xsd:element name="reference-listener" type="TreferenceListener" minOccurs="0"
                 maxOccurs="unbounded">
                 <xsd:annotation>
                     <xsd:documentation>
