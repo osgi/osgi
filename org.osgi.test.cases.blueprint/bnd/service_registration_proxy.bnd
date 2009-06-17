@@ -1,4 +1,4 @@
-Bundle-SymbolicName:                     ${p}.Service_registration_proxy
+Bundle-SymbolicName:                     ${p}.service_registration_proxy
 Bundle-Version:                          4.2
 Import-Package:                          ${p}.components.serviceexport, ${p}.services
 -resourceonly: true

@@ -1,4 +1,4 @@
-Bundle-SymbolicName:                     ${p}.instance_factory_no_component
+Bundle-SymbolicName:                     ${p}.error_instance_factory_no_component
 Bundle-Version:                          4.2
 Import-Package:                          ${p}.components.factory, ${p}.services
 -resourceonly: true

@@ -1,4 +1,3 @@
-Bundle-SymbolicName:                     ${p}.timeout_injected_component
 Bundle-SymbolicName:                     ${p}.timeout_injected_component;blueprint.timeout:=5000;blueprint.wait-for-dependencies:=true
 Bundle-Version:                          4.2
 Import-Package:                          ${p}.components.servicedynamics, ${p}.services

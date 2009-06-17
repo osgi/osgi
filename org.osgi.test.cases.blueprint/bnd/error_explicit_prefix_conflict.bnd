@@ -1,4 +1,4 @@
-Bundle-SymbolicName:                     ${p}.error_explict_prefix_conflict
+Bundle-SymbolicName:                     ${p}.error_explicit_prefix_conflict
 Bundle-Version:                          4.2
 Import-Package:                          ${p}.components.cmsupport, ${p}.services, ${p}.components.injection
 -resourceonly: true

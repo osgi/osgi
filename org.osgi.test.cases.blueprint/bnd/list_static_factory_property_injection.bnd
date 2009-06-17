@@ -1,4 +1,4 @@
-Bundle-SymbolicName:                     ${p}.static_factory_list_property_injection
+Bundle-SymbolicName:                     ${p}.list_static_factory_property_injection
 Bundle-Version:                          4.2
 Import-Package:                          ${p}.components.injection, ${p}.services
 -resourceonly: true

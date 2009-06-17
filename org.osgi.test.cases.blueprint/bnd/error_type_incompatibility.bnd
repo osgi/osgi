@@ -1,4 +1,4 @@
-Bundle-SymbolicName:                     ${p}.comp1_no_header
+Bundle-SymbolicName:                     ${p}.error_type_incompatibility
 Bundle-Version:                          4.2
 Import-Package:                          ${p}.components.comp1, ${p}.services, org.osgi.service.blueprint.context;version=2.0.0
 -resourceonly: true

@@ -1,4 +1,4 @@
-Bundle-SymbolicName:                     ${p}.circular_ref2
+Bundle-SymbolicName:                     ${p}.circular_ref_two
 Bundle-Version:                          4.2
 Import-Package:                          ${p}.components.serviceexport, ${p}.components.serviceimport, ${p}.services
 -resourceonly: true

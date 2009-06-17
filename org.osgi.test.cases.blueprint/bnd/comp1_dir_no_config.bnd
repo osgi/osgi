@@ -1,4 +1,4 @@
-Bundle-SymbolicName:                     ${p}.comp1_no_config
+Bundle-SymbolicName:                     ${p}.comp1_dir_no_config
 Bundle-Version:                          4.2
 Import-Package:                          ${p}.components.comp1, ${p}.services
 Bundle-Blueprint: config/

@@ -1,4 +1,4 @@
-Bundle-SymbolicName:                     ${p}.ServiceOne_lazy_export
+Bundle-SymbolicName:                     ${p}.Service_lazy_export
 Bundle-Version:                          4.2
 Import-Package:                          ${p}.components.serviceexport, ${p}.services, ${p}.components.staticfactory
 -resourceonly: true
