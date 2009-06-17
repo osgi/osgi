@@ -39,7 +39,8 @@ public interface CollectionMetadata extends NonNullMetadata {
      * The value-type specified for the array
      *
      * The <code>value-type</code> attribute.
-     * ### Shouldnt this also support getRuntimeValueType()?
+     * 
+     * ### I think this should be valueType
      */
 	String getValueTypeName();
 
