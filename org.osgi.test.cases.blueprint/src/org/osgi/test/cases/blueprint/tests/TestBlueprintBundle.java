@@ -54,6 +54,7 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         // and the validate the component metadata
         startEvents.addValidator(new ComponentMetadataValidator(
                 new BeanComponent("comp1", SimpleTestComponent.class, new TestArgument[0], null)));
+        startEvents.addValidator(new GetComplianceValidator(BlueprintContainer.COMPLIANCE_STRICT));
 
         controller.run();
     }
@@ -96,6 +97,7 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         // validate both names too
         startEvents.addValidator(new ComponentNamePresenceValidator("comp1"));
         startEvents.addValidator(new ComponentNamePresenceValidator("comp2"));
+        startEvents.addValidator(new GetComplianceValidator(BlueprintContainer.COMPLIANCE_LOOSE));
 
         // and the meta data for both components
         startEvents.addValidator(new ComponentMetadataValidator(
@@ -208,6 +210,8 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
 
         // validate that the correct anonymous compoents were created
         startEvents.addValidator(new AnonymousComponentValidator(BeanMetadata.class));
+        // this is just testing the default here
+        startEvents.addValidator(new GetComplianceValidator(BlueprintContainer.COMPLIANCE_STRICT));
 
         controller.run();
     }
@@ -421,6 +425,8 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         startEvents.addValidator(new ComponentMetadataValidator(
                 new BeanComponent("Comp1_ID", AltSimpleTestComponent.class,
                 new TestArgument[] {new StringArgument("Comp1_ID")}, null)));
+
+        startEvents.addValidator(new GetComplianceValidator(BlueprintContainer.COMPLIANCE_LOOSE));
 
         controller.run();
     }
