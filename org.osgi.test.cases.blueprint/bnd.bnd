@@ -317,7 +317,11 @@ Include-Resource					= \
  	www/error_missing_update_method.jar=error_missing_update_method.jar, \
  	www/error_bad_update_method.jar=error_bad_update_method.jar, \
  	www/error_default_prefix_conflict.jar=error_default_prefix_conflict.jar, \
- 	www/error_explicit_prefix_conflict.jar=error_explicit_prefix_conflict.jar
+ 	www/error_explicit_prefix_conflict.jar=error_explicit_prefix_conflict.jar, \
+ 	www/comp1_no_config.jar=comp1_no_config.jar, \
+ 	www/comp1_dir_no_config.jar=comp1_dir_no_config.jar, \
+ 	www/comp1_different_version.jar=comp1_different_version.jar, \
+ 	www/Service_lazy_export.jar=Service_lazy_export.jar
 
 Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
 
