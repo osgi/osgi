@@ -32,8 +32,7 @@ public interface ValueMetadata extends NonNullMetadata {
 
 	/**
 	 * The name of the type to which this value should be coerced. May be null.
-	 * ### and the last *Name case
 	 * Defined in the <code>type</code> attribute.
 	 */
-	String getTypeName();
+	String getType();
 }

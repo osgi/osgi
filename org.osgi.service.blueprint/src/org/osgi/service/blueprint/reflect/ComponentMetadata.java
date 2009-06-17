@@ -39,7 +39,6 @@ public interface ComponentMetadata extends NonNullMetadata {
 	/**
 	 * The id of the component.
 	 *
-	 * ### renamed to getId
 	 * @return component id. The component id can be <code>null</code> if this is an anonymously
 	 * defined inner component.
 	 */

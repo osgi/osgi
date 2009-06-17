@@ -143,18 +143,70 @@ public class BlueprintEvent {
 	private final boolean replay;
 
 
+	/**
+	 * Create a simple BlueprintEvent object.
+	 *
+	 * @param type   The type of the event.
+	 * @param bundle The managed bundle this event is originating from.
+	 * @param extenderBundle
+	 *               The bundle of the blueprint extender that is generating
+	 *               the event.
+	 */
 	public BlueprintEvent(int type, Bundle bundle, Bundle extenderBundle) {
 		this(type, bundle, extenderBundle, null, null);
 	}
 
+
+	/**
+	 * Create a BlueprintEvent object associated with a
+	 * set of dependencies.
+	 *
+	 * @param type   The type of the event.
+	 * @param bundle The managed bundle this event is originating from.
+	 * @param extenderBundle
+	 *               The bundle of the blueprint extender that is generating
+	 *               the event.
+	 * @param dependencies
+	 *               An array of String filters for each dependency associated
+	 *               with this event.
+	 */
 	public BlueprintEvent(int type, Bundle bundle, Bundle extenderBundle, String[] dependencies) {
 		this(type, bundle, extenderBundle, dependencies, null);
 	}
 
+
+	/**
+	 * Create a BlueprintEvent object associated with a
+	 * failure cause.
+	 *
+	 * @param type      The type of the event.
+	 * @param bundle    The managed bundle this event is originating from.
+	 * @param extenderBundle
+	 *                  The bundle of the blueprint extender that is generating
+	 *                  the event.
+	 * @param exception A Throwable object describing the root cause of the
+	 *                  event.
+	 */
 	public BlueprintEvent(int type, Bundle bundle, Bundle extenderBundle, Throwable exception) {
 		this(type, bundle, extenderBundle, null, exception);
 	}
 
+
+	/**
+	 * Create a BlueprintEvent object associated with a
+	 * failure cause and related to a set of dependencies.
+	 *
+	 * @param type      The type of the event.
+	 * @param bundle    The managed bundle this event is originating from.
+	 * @param extenderBundle
+	 *                  The bundle of the blueprint extender that is generating
+	 *                  the event.
+	 * @param dependencies
+	 *               An array of String filters for each dependency associated
+	 *               with this event.
+	 * @param exception A Throwable object describing the root cause of the
+	 *                  event.
+	 */
 	public BlueprintEvent(int type, Bundle bundle, Bundle extenderBundle, String[] dependencies, Throwable exception) {
 		this.type = type;
 		this.timestamp = System.currentTimeMillis();

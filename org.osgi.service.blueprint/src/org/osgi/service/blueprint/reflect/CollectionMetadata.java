@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * Metadata for a collection based value. Members of the array are instances of Metadata.
- * The Collection metadata can constrain (### convert) to a specific type.
+ * The Collection metadata can constrain to a specific type.
  */
 
 public interface CollectionMetadata extends NonNullMetadata {
@@ -39,10 +39,8 @@ public interface CollectionMetadata extends NonNullMetadata {
      * The value-type specified for the array
      *
      * The <code>value-type</code> attribute.
-     * 
-     * ### I think this should be valueType
      */
-	String getValueTypeName();
+	String getValueType();
 
     /**
      * The of Metadata objects that describe the value.

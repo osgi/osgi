@@ -22,7 +22,9 @@ import org.osgi.framework.ServiceException;
  * a backing service is not available.
  */
 public class ServiceUnavailableException extends ServiceException {
-
+	/**
+	 * The filter string associated with the exception.
+	 */
 	private final String filter;
 
 
@@ -33,9 +35,7 @@ public class ServiceUnavailableException extends ServiceException {
      * @param filterExpression
      *                The filter expression used for the service lookup.
      */
-	public ServiceUnavailableException(
-           String message,
-           String filterExpression) {
+	public ServiceUnavailableException(String message, String filterExpression) {
 		super(message, UNREGISTERED);
 		this.filter = filterExpression;
 	}
@@ -50,17 +50,16 @@ public class ServiceUnavailableException extends ServiceException {
      *                The filter expression used for the service lookup.
 	 * @param cause The cause of this exception.
 	 */
-	public ServiceUnavailableException(
-           String message,
-           String filterExpression,
-           Throwable cause) {
+	public ServiceUnavailableException(String message, String filterExpression,	Throwable cause) {
 		super(message, UNREGISTERED, cause);
 		this.filter = filterExpression;
 	}
 
 	/**
-	 * The filter expression that a service would have needed to satisfy in order
+	 * Returns the filter expression that a service would have needed to satisfy in order
 	 * for the invocation to proceed.
+	 *
+	 * @return The failing filter expression.
 	 */
 	public String getFilter() {
 		return this.filter;
