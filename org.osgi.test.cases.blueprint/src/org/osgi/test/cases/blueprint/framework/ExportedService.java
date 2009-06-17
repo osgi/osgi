@@ -148,7 +148,7 @@ public class ExportedService extends Assert implements TestComponentMetadata {
         }
 
         // match on the interfaces first
-        if (!serviceInterfaces.equals(meta.getInterfaceNames())) {
+        if (!serviceInterfaces.equals(meta.getInterfaces())) {
             return false;
         }
 

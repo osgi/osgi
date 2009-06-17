@@ -98,8 +98,8 @@ public class TestMapValue extends TestValue {
         List mapEntries = meta.getEntries();
         // validate the size first
         assertEquals("Map value size mismatch", entries.size(), mapEntries.size());
-        assertEquals("Map default value type mismatch", valueType, meta.getValueTypeName());
-        assertEquals("Map default key type mismatch", keyType, meta.getKeyTypeName());
+        assertEquals("Map default value type mismatch", valueType, meta.getValueType());
+        assertEquals("Map default key type mismatch", keyType, meta.getKeyType());
         // now validate each of the entries
         for (int i = 0; i < entries.size(); i++) {
             MapValueEntry e = (MapValueEntry)entries.get(i);

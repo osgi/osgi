@@ -64,7 +64,7 @@ public class TestCollectionValue extends TestValue {
         List list = meta.getValues();
         // validate the size first
         assertEquals("Collection value size mismatch", entries.length, list.size());
-        assertEquals("Collection value default type mismatch", typeName, meta.getValueTypeName());
+        assertEquals("Collection value default type mismatch", typeName, meta.getValueType());
         // now validate each of the entries
         for (int i = 0; i < entries.length; i++) {
             // nulls appear as NullValue items, so everything should match

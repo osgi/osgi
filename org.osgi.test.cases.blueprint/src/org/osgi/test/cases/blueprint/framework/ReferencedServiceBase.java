@@ -91,7 +91,7 @@ public class ReferencedServiceBase extends Assert implements TestComponentMetada
         ServiceReferenceMetadata meta = (ServiceReferenceMetadata)componentMeta;
 
         // match on the interfaces first
-        if (!serviceInterface.equals(meta.getInterfaceName())) {
+        if (!serviceInterface.equals(meta.getInterface())) {
             return false;
         }
 

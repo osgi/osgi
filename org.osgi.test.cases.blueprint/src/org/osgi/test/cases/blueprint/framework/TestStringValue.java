@@ -61,7 +61,7 @@ public class TestStringValue extends TestValue {
      */
     public void validate(BlueprintMetadata blueprintMetadata, Metadata v) throws Exception {
         super.validate(blueprintMetadata, v);
-        assertEquals("String conversion type mismatch", targetTypeName, ((ValueMetadata)v).getTypeName());
+        assertEquals("String conversion type mismatch", targetTypeName, ((ValueMetadata)v).getType());
         // if we have a value to test on.  sometimes, the value is two complex
         // to specify directly.
         if (value != null) {
@@ -87,12 +87,12 @@ public class TestStringValue extends TestValue {
         // if no type was explicitly specified,
         if (targetTypeName == null) {
             // then this must also be null
-            if (((ValueMetadata)v).getTypeName() != null) {
+            if (((ValueMetadata)v).getType() != null) {
                 return false;
             }
         }
         // must match on the type name
-        else if (!targetTypeName.equals(((ValueMetadata)v).getTypeName())) {
+        else if (!targetTypeName.equals(((ValueMetadata)v).getType())) {
             return false;
         }
 
