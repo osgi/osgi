@@ -25,16 +25,27 @@ public class EuropeanRegionCodeConverter extends BaseTestComponent implements Co
     public EuropeanRegionCodeConverter(String compId) {
         super(compId);
     }
-    public Object convert(Object source, Class toType) throws Exception {
+    public Object convert(Object source, Object toType) throws Exception {
+        if (!(toType instanceof Class)) {
+            return null;
+        }
+
+        Class toClass = (Class)toType;
         AssertionService.sendEvent(this, AssertionService.METHOD_CALLED);
-        if (source instanceof String && (RegionCode.class.isAssignableFrom(toType) && toType.isAssignableFrom(EuropeanRegionCode.class))) {
+        if (source instanceof String && (RegionCode.class.isAssignableFrom(toClass) && toClass.isAssignableFrom(EuropeanRegionCode.class))) {
             return new EuropeanRegionCode((String)source);
         }
         // we're supposed to throw an exception if we can't convert
         throw new Exception("Unconvertable object type");
     }
 
-    public boolean canConvert(Object value, Class toType) {
-        return (RegionCode.class.isAssignableFrom(toType) && toType.isAssignableFrom(EuropeanRegionCode.class)) && value instanceof String;
+    public boolean canConvert(Object value, Object toType) {
+        if (!(toType instanceof Class)) {
+            return false;
+        }
+
+        Class toClass = (Class)toType;
+
+        return (RegionCode.class.isAssignableFrom(toClass) && toClass.isAssignableFrom(EuropeanRegionCode.class)) && value instanceof String;
     }
 }

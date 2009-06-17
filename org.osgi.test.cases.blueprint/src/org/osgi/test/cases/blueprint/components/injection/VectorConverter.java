@@ -22,7 +22,7 @@ import java.util.Vector;
 import org.osgi.service.blueprint.container.Converter;
 
 public class VectorConverter implements Converter {
-    public Object convert(Object source, Class toType) throws Exception {
+    public Object convert(Object source, Object toType) throws Exception {
         if (source instanceof Collection && toType == Vector.class) {
             return new Vector((Collection)source);
         }
@@ -30,7 +30,7 @@ public class VectorConverter implements Converter {
         throw new Exception("Unconvertable object type");
     }
 
-    public boolean canConvert(Object value, Class toType) {
+    public boolean canConvert(Object value, Object toType) {
         return toType == Vector.class && value instanceof Collection;
     }
 }

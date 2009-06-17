@@ -22,7 +22,7 @@ import java.util.HashMap;
 import org.osgi.service.blueprint.container.Converter;
 
 public class HashMapConverter implements Converter {
-    public Object convert(Object source, Class toType) throws Exception {
+    public Object convert(Object source, Object toType) throws Exception {
         if (source instanceof Map && toType == HashMap.class) {
             return new HashMap((Map)source);
         }
@@ -30,7 +30,7 @@ public class HashMapConverter implements Converter {
         throw new Exception("Unconvertable object type");
     }
 
-    public boolean canConvert(Object value, Class toType) {
+    public boolean canConvert(Object value, Object toType) {
         return toType == HashMap.class && value instanceof Map;
     }
 }

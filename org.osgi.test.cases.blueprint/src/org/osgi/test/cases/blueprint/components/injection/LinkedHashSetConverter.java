@@ -22,7 +22,7 @@ import java.util.LinkedHashSet;
 import org.osgi.service.blueprint.container.Converter;
 
 public class LinkedHashSetConverter implements Converter {
-    public Object convert(Object source, Class toType) throws Exception {
+    public Object convert(Object source, Object toType) throws Exception {
         if (source instanceof Collection && toType == LinkedHashSet.class) {
             return new LinkedHashSet((Collection)source);
         }
@@ -30,7 +30,7 @@ public class LinkedHashSetConverter implements Converter {
         throw new Exception("Unconvertable object type");
     }
 
-    public boolean canConvert(Object value, Class toType) {
+    public boolean canConvert(Object value, Object toType) {
         return toType == LinkedHashSet.class && value instanceof Collection;
     }
 }

@@ -23,7 +23,7 @@ import org.osgi.service.blueprint.container.Converter;
 
 public class HashSetConverter implements Converter {
 
-    public Object convert(Object source, Class toType) throws Exception {
+    public Object convert(Object source, Object toType) throws Exception {
         if (source instanceof Collection && toType == HashSet.class) {
             return new HashSet((Collection)source);
         }
@@ -31,7 +31,7 @@ public class HashSetConverter implements Converter {
         throw new Exception("Unconvertable object type");
     }
 
-    public boolean canConvert(Object value, Class toType) {
+    public boolean canConvert(Object value, Object toType) {
         return toType == HashSet.class && value instanceof Collection;
     }
 }

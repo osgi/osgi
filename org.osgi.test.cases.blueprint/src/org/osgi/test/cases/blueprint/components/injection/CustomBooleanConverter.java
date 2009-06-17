@@ -20,7 +20,7 @@ import org.osgi.service.blueprint.container.Converter;
 
 public class CustomBooleanConverter implements Converter {
 
-    public Object convert(Object source, Class toType) throws Exception {
+    public Object convert(Object source, Object toType) throws Exception {
         if (source instanceof String && toType == Boolean.class) {
             String strValue = (String)source;
             if (strValue.equals("T")) {
@@ -36,7 +36,7 @@ public class CustomBooleanConverter implements Converter {
         throw new Exception("Unconvertable object type");
     }
 
-    public boolean canConvert(Object value, Class toType) {
+    public boolean canConvert(Object value, Object toType) {
         return toType == Boolean.class && value instanceof String;
     }
 }
