@@ -116,7 +116,7 @@ public class PropertyInjection extends BaseTestComponent {
     }
 
     public void setClassProp(Class value) {
-        setPropertyValue("class", value, Class.class);
+        setPropertyValue("classProp", value, Class.class);
     }
 
     public void setLocale(Locale value) {

@@ -14,7 +14,9 @@ should test if the instance was created via the type converter but not the Strin
 
     <bean id="compEuropean_cnst" class="org.osgi.test.cases.blueprint.components.injection.RegionCodeInjection">
 		<argument value="compEuropean_cnst"/>
-		<argument type="org.osgi.test.cases.blueprint.components.injection.EuropeanRegionCode" value="UK+32"/>
+ 		<argument>
+ 		    <value type="org.osgi.test.cases.blueprint.components.injection.EuropeanRegionCode">UK+32</value>
+ 		</argument>
 	</bean>
 
 

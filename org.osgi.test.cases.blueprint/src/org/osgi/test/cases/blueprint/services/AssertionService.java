@@ -41,7 +41,7 @@ public class AssertionService
     public static final String SERVICE_SUCCESS = "SERVICE_SUCCESS";
     public static final String SERVICE_FAILURE = "SERVICE_FAILURE";
     public static final String SERVICE_FACTORY_GET = "SERVICE_FACTORY_GET";
-    public static final String SERVICE_FACTORY_UNGET = "SERVICE_FACTORY_GET";
+    public static final String SERVICE_FACTORY_UNGET = "SERVICE_FACTORY_UNGET";
     public static final String SERVICE_BIND = "SERVICE_BIND";
     public static final String SERVICE_UNBIND = "SERVICE_UNBIND";
     public static final String SERVICE_REGISTERED = "SERVICE_REGISTERED";

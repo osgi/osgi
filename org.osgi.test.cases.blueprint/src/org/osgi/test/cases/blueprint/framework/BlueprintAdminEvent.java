@@ -193,7 +193,7 @@ public class BlueprintAdminEvent extends AdminTestEvent {
         // do we expect dependencies to be included on this event?  If so, we need to do some filter
         // matching
         if (dependencies != null) {
-            String[] filterStrings = (String[])props.get(org.osgi.service.blueprint.container.EventConstants.DEPENDENCIES);
+            String[] filterStrings = (String[])other.getProperty(org.osgi.service.blueprint.container.EventConstants.DEPENDENCIES);
             if (filterStrings == null) {
                 return new AssertionFailure("Missing dependencies on a Blueprint event: " + other.toString());
             }

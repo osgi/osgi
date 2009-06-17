@@ -816,7 +816,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // concrete classes are not permitted for a a blueprint import.  The export of
         // the hierarchy classes will be handled by the validators.
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/Service_auto_interfaces_import.jar",
+                getWebServer()+"www/Service_auto_interface_import.jar",
                 getWebServer()+"www/Service_auto_all_export.jar");
         // we add different validation stuff to each jar.  We'll start with the
         // export jar
@@ -1100,7 +1100,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_REGISTERED, props));
         // we're expecting some listener metadata on the export.
         TestRegistrationListener[] listeners = new TestRegistrationListener[] {
-            new TestRegistrationListener("ServiceOneListener", "registered", "unregistered")
+            new TestRegistrationListener("ServiceOneListener", "registered", null)
         };
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService",
                 ServiceMetadata.INITIALIZATION_EAGER, "ServiceOne", TestServiceOne.class,
@@ -1130,7 +1130,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // no registered event
         // we're expecting some listener metadata on the export.
         TestRegistrationListener[] listeners = new TestRegistrationListener[] {
-            new TestRegistrationListener("ServiceOneListener", "registered", "unregistered")
+            new TestRegistrationListener("ServiceOneListener", null, "unregistered")
         };
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService",
                 ServiceMetadata.INITIALIZATION_EAGER, "ServiceOne", TestServiceOne.class,
@@ -1411,7 +1411,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/service_listener_bind_only.jar",
+                getWebServer()+"www/service_listener_unbind_only.jar",
                 getWebServer()+"www/ServiceOne_export.jar");
         // The export jar has been well covered already in other tests.  We'll just focus
         // on the import listener details.

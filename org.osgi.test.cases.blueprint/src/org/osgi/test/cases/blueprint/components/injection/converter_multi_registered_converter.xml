@@ -15,7 +15,9 @@
 
     <bean id="compAsia_cnst" class="org.osgi.test.cases.blueprint.components.injection.RegionCodeInjection">
 		<argument value="compAsia_cnst"/>
-		<argument type="org.osgi.test.cases.blueprint.components.injection.AsianRegionCode" value="CN+86"/>
+ 		<argument type="org.osgi.test.cases.blueprint.components.injection.RegionCode">
+ 		    <value type="org.osgi.test.cases.blueprint.components.injection.AsianRegionCode">CN+86</value>
+ 		</argument>
 	</bean>
 
 </blueprint>

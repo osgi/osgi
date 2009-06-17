@@ -218,7 +218,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
 
         // we need a property bundle to validate the filter used to request this
         Properties filterProps = new Properties();
-        filterProps.put(org.osgi.service.event.EventConstants.SERVICE_OBJECTCLASS, new String[] { TestServiceOne.class.getName() });
+        filterProps.put(org.osgi.framework.Constants.OBJECTCLASS, new String[] { TestServiceOne.class.getName() });
 
         // Ok, when the GRACE_PERIOD event is triggered, we register the first service.
         importStartEvents.addEvent(new BlueprintAdminEvent("GRACE_PERIOD",
@@ -297,7 +297,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
 
         // we need a property bundle to validate the filter used to request this
         Properties filterProps = new Properties();
-        filterProps.put(org.osgi.service.event.EventConstants.SERVICE_OBJECTCLASS, new String[] { TestServiceOne.class.getName() });
+        filterProps.put(org.osgi.framework.Constants.OBJECTCLASS, new String[] { TestServiceOne.class.getName() });
         filterProps.put("osgi.service.blueprint.compname", "XYZ");
         filterProps.put("someproperty", "abc");
 
@@ -413,7 +413,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
 
         // we need a property bundle to validate the filter used to request this
         Properties filterProps = new Properties();
-        filterProps.put(org.osgi.service.event.EventConstants.SERVICE_OBJECTCLASS, new String[] { TestServiceOne.class.getName() });
+        filterProps.put(org.osgi.framework.Constants.OBJECTCLASS, new String[] { TestServiceOne.class.getName() });
 
         startEvents.addEvent(new BlueprintContainerEvent("GRACE_PERIOD", null, new Properties[] { filterProps }, null));
         startEvents.addEvent(new BlueprintAdminEvent("GRACE_PERIOD", null, new Properties[] { filterProps }, new ServiceManagerRegister(serviceManager, "ServiceOneA")));

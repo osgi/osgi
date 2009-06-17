@@ -22,31 +22,31 @@ public class TypeStaticFactory {
     // make this non-instantiable
     private TypeStaticFactory() {}
 
-    public Integer createInteger(String v) {
+    static public Integer createInteger(String v) {
         // broadcast a factory method event
         AssertionService.sendEvent(AssertionService.FACTORY_CALLED);
         return new Integer(v);
     }
 
-    public Long createLong(String v) {
+    static public Long createLong(String v) {
         // broadcast a factory method event
         AssertionService.sendEvent(AssertionService.FACTORY_CALLED);
         return new Long(v);
     }
 
-    public Double createDouble(String v) {
+    static public Double createDouble(String v) {
         // broadcast a factory method event
         AssertionService.sendEvent(AssertionService.FACTORY_CALLED);
         return new Double(v);
     }
 
-    public Float createFloat(String v) {
+    static public Float createFloat(String v) {
         // broadcast a factory method event
         AssertionService.sendEvent(AssertionService.FACTORY_CALLED);
         return new Float(v);
     }
 
-    public Short createShort(String v) {
+    static public Short createShort(String v) {
         // broadcast a factory method event
         AssertionService.sendEvent(AssertionService.FACTORY_CALLED);
         return new Short(v);

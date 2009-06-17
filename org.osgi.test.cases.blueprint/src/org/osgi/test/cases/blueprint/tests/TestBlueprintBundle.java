@@ -472,7 +472,7 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
      */
     public void testIncompatibleVersion() throws Exception {
         NonBlueprintTestController controller = new NonBlueprintTestController(getContext(),
-                getWebServer()+"www/comp1_dir_no_config.jar");
+                getWebServer()+"www/comp1_different_version.jar");
         // this exports a different version of the blueprint service, which is
         // imported by the target bundle to create a version incompatibility.
         controller.addSetupBundle(getWebServer()+"www/blueprint_version_two.jar");

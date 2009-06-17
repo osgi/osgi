@@ -25,12 +25,12 @@ public class InstanceFactoryException extends BaseTestComponent {
     }
 
     public Object createInstance() {
-        AssertionService.sendEvent(InstanceFactoryException.class, AssertionService.FACTORY_CALLED);
+        AssertionService.sendEvent(this, AssertionService.FACTORY_CALLED);
         throw new NullPointerException("Intentional exception from component " + componentId);
     }
 
     public Object createInstance(String componentId) {
-        AssertionService.sendEvent(InstanceFactoryException.class, AssertionService.FACTORY_CALLED);
+        AssertionService.sendEvent(this, AssertionService.FACTORY_CALLED);
         throw new NullPointerException("Intentional exception from component " + componentId);
     }
 }

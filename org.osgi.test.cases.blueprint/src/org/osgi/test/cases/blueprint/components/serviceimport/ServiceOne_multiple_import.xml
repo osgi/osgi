@@ -6,8 +6,8 @@
     </description>
 
     <!-- now one of each using just one of the exported set.  This should map to the same signature -->
-    <reference id="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne"\>
-    <reference id="ServiceTwo" interface="org.osgi.test.cases.blueprint.services.TestServiceTwo"\>
+    <reference id="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne"/>
+    <reference id="ServiceTwo" interface="org.osgi.test.cases.blueprint.services.TestServiceTwo"/>
 
    <bean id="ServiceOneChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceChecker">
        <argument value="ServiceOneChecker"/>

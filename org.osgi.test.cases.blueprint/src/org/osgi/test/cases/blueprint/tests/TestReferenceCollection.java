@@ -827,7 +827,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
         // We're only seeing one service, so we don't need the property bundle.
         // this is the initial bind event
-        importStartEvents.addAssertion("BindUnbindSetChecker", AssertionService.SERVICE_BIND);
+        importStartEvents.addAssertion("BindUnbindListChecker", AssertionService.SERVICE_BIND);
 
         // ok, we'll unbind, then bind, then unbind again.  We should see two events, one from
         // each checker component

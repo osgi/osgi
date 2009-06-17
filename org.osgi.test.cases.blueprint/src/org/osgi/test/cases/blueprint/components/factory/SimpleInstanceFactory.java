@@ -32,22 +32,22 @@ public class SimpleInstanceFactory extends BaseTestComponent {
     }
 
     public Object createSimple() {
-        AssertionService.sendEvent(SimpleInstanceFactory.class, AssertionService.FACTORY_CALLED);
+        AssertionService.sendEvent(this, AssertionService.FACTORY_CALLED);
         return new SimpleTestComponent("instance-comp1");
     }
 
     public Object createSimple(String id) {
-        AssertionService.sendEvent(SimpleInstanceFactory.class, AssertionService.FACTORY_CALLED);
+        AssertionService.sendEvent(this, AssertionService.FACTORY_CALLED);
         return new SimpleTestComponent(id);
     }
 
     public AltSimpleTestComponent createAlt(String id) {
-        AssertionService.sendEvent(SimpleInstanceFactory.class, AssertionService.FACTORY_CALLED);
+        AssertionService.sendEvent(this, AssertionService.FACTORY_CALLED);
         return new AltSimpleTestComponent(id);
     }
 
     protected Object nonPublicMethod(String id) {
-        AssertionService.sendEvent(SimpleInstanceFactory.class, AssertionService.FACTORY_CALLED);
+        AssertionService.sendEvent(this, AssertionService.FACTORY_CALLED);
         return new SimpleTestComponent(id);
     }
 }

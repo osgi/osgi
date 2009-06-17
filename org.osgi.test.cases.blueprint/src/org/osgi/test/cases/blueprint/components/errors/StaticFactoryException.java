@@ -23,12 +23,12 @@ public class StaticFactoryException {
     private StaticFactoryException() {}
 
     public static Object createInstance() {
-        AssertionService.sendEvent(StaticFactoryException.class, AssertionService.STATIC_FACTORY_CALLED);
+        AssertionService.sendEvent(AssertionService.STATIC_FACTORY_CALLED);
         throw new NullPointerException("Intentional exception from component StaticFactorException.createInstance()");
     }
 
     public static Object createInstance(String componentId) {
-        AssertionService.sendEvent(StaticFactoryException.class, AssertionService.STATIC_FACTORY_CALLED);
+        AssertionService.sendEvent(AssertionService.STATIC_FACTORY_CALLED);
         throw new NullPointerException("Intentional exception from component StaticFactorException.createInstance()");
     }
 }

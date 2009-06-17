@@ -107,7 +107,7 @@ public class ExportedService extends Assert implements TestComponentMetadata {
         // convert this into a set
         this.serviceInterfaces = new ArrayList();
         for (int i = 0; i < interfaces.length; i++) {
-            serviceInterfaces.add(interfaces[i]);
+            serviceInterfaces.add(interfaces[i].getName());
         }
 
         dependencies = new ArrayList();
@@ -205,7 +205,7 @@ public class ExportedService extends Assert implements TestComponentMetadata {
             Iterator i = metaListeners.iterator();
             while (i.hasNext()) {
                 RegistrationListener metaListener = (RegistrationListener)i.next();
-                assertNotNull(locateListener(metaListener, listeners));
+                assertNotNull("Could not locate registration listener on compnent " + meta.getId(), locateListener(metaListener, listeners));
             }
         }
 

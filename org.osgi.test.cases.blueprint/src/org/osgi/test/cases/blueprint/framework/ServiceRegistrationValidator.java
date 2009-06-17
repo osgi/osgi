@@ -216,7 +216,7 @@ public class ServiceRegistrationValidator extends Assert implements TestValidato
      */
     protected void validateService(BundleContext testContext, String interfaceName) throws Exception {
         ServiceReference[] refs = testContext.getServiceReferences(interfaceName, filter);
-        assertNotNull("No " + interfaceName + " service located for bundle " + bundle.getSymbolicName(), refs);
+        assertNotNull("No " + interfaceName + " service located for bundle " + bundle.getSymbolicName() + " with filter " + filter, refs);
         // We might have services registered from multiple bundles, so scan this list
         // looking for one from the target bundle and validate that information.
         for (int i = 0; i < refs.length; i++) {

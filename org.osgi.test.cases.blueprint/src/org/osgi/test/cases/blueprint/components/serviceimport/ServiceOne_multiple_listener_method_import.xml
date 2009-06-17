@@ -13,13 +13,13 @@
     <reference id="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
         <reference-listener bind-method="bind" unbind-method="unbind">
             <ref component-id="ServiceOneTwoListener"/>
-        </listener>
+        </reference-listener>
     </reference>
 
     <reference id="ServiceTwo" interface="org.osgi.test.cases.blueprint.services.TestServiceTwo">
         <reference-listener bind-method="bind" unbind-method="unbind">
             <ref component-id="ServiceOneTwoListener"/>
-        </listener>
+        </reference-listener>
     </reference>
 
    <bean id="ServiceOneProperty" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceChecker">

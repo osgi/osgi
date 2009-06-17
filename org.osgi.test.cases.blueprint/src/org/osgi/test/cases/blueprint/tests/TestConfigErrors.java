@@ -863,16 +863,6 @@ public class TestConfigErrors extends DefaultTestBundleControl {
     }
 
     /**
-     * Missing components in a set value-ref element
-     */
-    public void testSetBadValueRef() throws Exception {
-        // this should just be the standard error set
-        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
-            getWebServer()+"www/error_set_bad_value_ref.jar");
-        controller.run();
-    }
-
-    /**
      * type converter doesn't implement correct interface
      */
     public void testConverterWrongType() throws Exception {

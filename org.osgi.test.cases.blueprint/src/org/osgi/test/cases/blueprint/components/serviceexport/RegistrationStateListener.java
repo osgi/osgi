@@ -40,7 +40,7 @@ public class RegistrationStateListener extends ServiceOneRegistrationListener {
     }
 
     public void registered(TestServiceOne service, Map serviceProperties) {
-        AssertionService.assertNull(this, "Null service instance expected for a prototype component", service);
+        AssertionService.assertNotNull(this, "Non null service instance expected for a singleton component", service);
         // this should be valid
         if (registration != null) {
             AssertionService.assertNotNull(this, "Null service reference from ServiceRegistration proxy", registration.getReference());
@@ -49,7 +49,7 @@ public class RegistrationStateListener extends ServiceOneRegistrationListener {
     }
 
     public void unregistered(TestServiceOne service, Map serviceProperties) {
-        AssertionService.assertNull(this, "Null service instance expected for a prototype component", service);
+        AssertionService.assertNotNull(this, "Non null service instance expected for a singleton component", service);
         // this should be valid
         if (registration != null) {
             AssertionService.assertNotNull(this, "Null service reference from ServiceRegistration proxy", registration.getReference());
