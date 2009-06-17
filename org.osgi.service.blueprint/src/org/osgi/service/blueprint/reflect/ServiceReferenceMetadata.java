@@ -49,7 +49,7 @@ public interface ServiceReferenceMetadata extends ComponentMetadata {
 	 * The interface type that the matching service must support
 	 *
 	 * Defined in the <code>interface</code> attribute.
-	 *
+	 * ### Another *Name case ..
 	 * @return the String name of the requested service interface
 	 */
 	String getInterfaceName();
