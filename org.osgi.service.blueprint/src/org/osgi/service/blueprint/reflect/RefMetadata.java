@@ -21,7 +21,7 @@ package org.osgi.service.blueprint.reflect;
 public interface RefMetadata extends Target, NonNullMetadata {
 	/**
 	 * The name of the referenced component.
-	 * Defined in the <code>component</code> attribute.
+	 * Defined in the <code>component-id</code> attribute.
 	 *
 	 */
 	String getComponentId();
