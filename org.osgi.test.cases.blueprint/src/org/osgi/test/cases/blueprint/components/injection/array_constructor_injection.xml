@@ -22,7 +22,7 @@
 	<!-- Single Item Array -->
 	<bean id="compSinglePrimIntItem"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-		<argument>
+		<argument type="int[]">
 			<array value-type="int">
 				<value>1</value>
 			</array>
@@ -40,10 +40,21 @@
 		</argument>
 	</bean>
 
+	<!-- Primitive int array -->
+	<bean id="compImplicitPrimIntArray"
+		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		<argument type="int[]">
+			<array>
+				<value>1</value>
+				<value>2</value>
+			</array>
+		</argument>
+	</bean>
+
 	<!-- Wrapped int array -->
 	<bean id="compWrappedIntArray"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-		<argument>
+		<argument type="java.lang.Integer[]">
 			<array value-type="java.lang.Integer">
 				<value>1</value>
 				<value>2</value>

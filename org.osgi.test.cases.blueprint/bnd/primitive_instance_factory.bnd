@@ -1,0 +1,7 @@
+Bundle-SymbolicName:                     ${p}.primitive_instance_factory
+Bundle-Version:                          4.2
+Import-Package:                          ${p}.components.factory, ${p}.services
+-resourceonly: true
+Include-Resource					= \
+	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/factory/primitive_instance_factory.xml
+

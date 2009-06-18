@@ -14,71 +14,78 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.blueprint.components.staticfactory;
+package org.osgi.test.cases.blueprint.components.factory;
 
 import org.osgi.test.cases.blueprint.services.AssertionService;
+import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 
-public class TypeStaticFactory {
-    // make this non-instantiable
-    private TypeStaticFactory() {}
+public class TypeInstanceFactory extends BaseTestComponent {
 
-    static public Integer createInteger(String v) {
+    public TypeInstanceFactory() {
+        super("type-instance-factory");
+    }
+
+    public TypeInstanceFactory(String componentId) {
+        super(componentId);
+    }
+
+    public Integer createInteger(String v) {
         // broadcast a factory method event
-        AssertionService.sendEvent(AssertionService.FACTORY_CALLED);
+        AssertionService.sendEvent(this, AssertionService.FACTORY_CALLED);
         return new Integer(v);
     }
 
-    static public Long createLong(String v) {
+    public Long createLong(String v) {
         // broadcast a factory method event
-        AssertionService.sendEvent(AssertionService.FACTORY_CALLED);
+        AssertionService.sendEvent(this, AssertionService.FACTORY_CALLED);
         return new Long(v);
     }
 
-    static public Double createDouble(String v) {
+    public Double createDouble(String v) {
         // broadcast a factory method event
-        AssertionService.sendEvent(AssertionService.FACTORY_CALLED);
+        AssertionService.sendEvent(this, AssertionService.FACTORY_CALLED);
         return new Double(v);
     }
 
-    static public Float createFloat(String v) {
+    public Float createFloat(String v) {
         // broadcast a factory method event
-        AssertionService.sendEvent(AssertionService.FACTORY_CALLED);
+        AssertionService.sendEvent(this, AssertionService.FACTORY_CALLED);
         return new Float(v);
     }
 
-    static public Short createShort(String v) {
+    public Short createShort(String v) {
         // broadcast a factory method event
-        AssertionService.sendEvent(AssertionService.FACTORY_CALLED);
+        AssertionService.sendEvent(this, AssertionService.FACTORY_CALLED);
         return new Short(v);
     }
 
-    static public int createPrimInt(String v) {
+    public int createPrimInt(String v) {
         // broadcast a factory method event
-        AssertionService.sendEvent(AssertionService.FACTORY_CALLED);
+        AssertionService.sendEvent(this, AssertionService.FACTORY_CALLED);
         return new Integer(v).intValue();
     }
 
-    static public long createPrimLong(String v) {
+    public long createPrimLong(String v) {
         // broadcast a factory method event
-        AssertionService.sendEvent(AssertionService.FACTORY_CALLED);
+        AssertionService.sendEvent(this, AssertionService.FACTORY_CALLED);
         return new Long(v).longValue();
     }
 
-    static public double createPrimDouble(String v) {
+    public double createPrimDouble(String v) {
         // broadcast a factory method event
-        AssertionService.sendEvent(AssertionService.FACTORY_CALLED);
+        AssertionService.sendEvent(this, AssertionService.FACTORY_CALLED);
         return new Double(v).doubleValue();
     }
 
-    static public float createPrimFloat(String v) {
+    public float createPrimFloat(String v) {
         // broadcast a factory method event
-        AssertionService.sendEvent(AssertionService.FACTORY_CALLED);
+        AssertionService.sendEvent(this, AssertionService.FACTORY_CALLED);
         return new Float(v).floatValue();
     }
 
-    static public short createPrimShort(String v) {
+    public short createPrimShort(String v) {
         // broadcast a factory method event
-        AssertionService.sendEvent(AssertionService.FACTORY_CALLED);
+        AssertionService.sendEvent(this, AssertionService.FACTORY_CALLED);
         return new Short(v).shortValue();
     }
 }

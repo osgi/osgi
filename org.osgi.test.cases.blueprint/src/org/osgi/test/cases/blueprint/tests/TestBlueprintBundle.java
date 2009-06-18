@@ -26,7 +26,9 @@ import org.osgi.service.blueprint.reflect.BeanMetadata;
 import org.osgi.test.cases.blueprint.components.comp1.SimpleTestComponent;
 import org.osgi.test.cases.blueprint.components.comp1.AltSimpleTestComponent;
 import org.osgi.test.cases.blueprint.components.factory.SimpleInstanceFactory;
+import org.osgi.test.cases.blueprint.components.factory.TypeInstanceFactory;
 import org.osgi.test.cases.blueprint.components.staticfactory.SimpleStaticFactory;
+import org.osgi.test.cases.blueprint.components.staticfactory.TypeStaticFactory;
 import org.osgi.test.cases.blueprint.framework.*;
 import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
@@ -287,6 +289,28 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
 
 
     /**
+     * Tests a static factory that returns primitive type values
+     */
+    public void testPrimitiveStaticFactory() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/primitive_static_factory.jar");
+        MetadataEventSet startEvents = controller.getStartEvents();
+
+        // there are no creation events here because no component objects get created, metadata
+        // has been validated elsewhere, since there's nothing special about it here, we'll
+        // just validate the created values.
+
+        startEvents.addValidator(new ComponentValueValidator("staticInt", new Integer(1)));
+        startEvents.addValidator(new ComponentValueValidator("staticLong", new Long(2)));
+        startEvents.addValidator(new ComponentValueValidator("staticShort", new Short((short)3)));
+        startEvents.addValidator(new ComponentValueValidator("staticDouble", new Double(4.0)));
+        startEvents.addValidator(new ComponentValueValidator("staticFloat", new Float(5.0)));
+
+        controller.run();
+    }
+
+
+    /**
      * Tests an instance factory derived from a component of the same ModuleContext.
      */
     public void testComponentFactory() throws Exception {
@@ -356,6 +380,28 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         EventSet stopEvents = controller.getStopEvents();
         // this deregisters the service on completion.
         stopEvents.addTerminator(factoryService);
+        controller.run();
+    }
+
+
+    /**
+     * Tests a static factory that returns primitive type values
+     */
+    public void testPrimitiveInstanceFactory() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/primitive_instance_factory.jar");
+        MetadataEventSet startEvents = controller.getStartEvents();
+
+        // there are no creation events here because no component objects get created, metadata
+        // has been validated elsewhere, since there's nothing special about it here, we'll
+        // just validate the created values.
+
+        startEvents.addValidator(new ComponentValueValidator("instanceInt", new Integer(1)));
+        startEvents.addValidator(new ComponentValueValidator("instanceLong", new Long(2)));
+        startEvents.addValidator(new ComponentValueValidator("instanceShort", new Short((short)3)));
+        startEvents.addValidator(new ComponentValueValidator("instanceDouble", new Double(4.0)));
+        startEvents.addValidator(new ComponentValueValidator("instanceFloat", new Float(5.0)));
+
         controller.run();
     }
 

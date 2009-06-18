@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+        tests the ability for static factories to return primitive type values
+    </description>
+
+    <bean id="staticInt" class="org.osgi.test.cases.blueprint.components.staticfactory.TypeStaticFactory" factory-method="createPrimInt">
+        <argument value="1"/>
+    </bean>
+
+    <bean id="staticLong" class="org.osgi.test.cases.blueprint.components.staticfactory.TypeStaticFactory" factory-method="createPrimLong">
+        <argument value="1"/>
+    </bean>
+
+    <bean id="staticShort" class="org.osgi.test.cases.blueprint.components.staticfactory.TypeStaticFactory" factory-method="createPrimShort">
+        <argument value="3"/>
+    </bean>
+
+    <bean id="staticDouble" class="org.osgi.test.cases.blueprint.components.staticfactory.TypeStaticFactory" factory-method="createPrimDouble">
+        <argument value="4"/>
+    </bean>
+
+    <bean id="staticFloat" class="org.osgi.test.cases.blueprint.components.staticfactory.TypeStaticFactory" factory-method="createPrimFloat">
+        <argument value="5"/>
+    </bean>
+</blueprint>
+

@@ -81,6 +81,9 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
         expectedIntArr[0] = 1;
         expectedIntArr[1] = 2;
         this.addConstructorValidator(startEvents, "compPrimIntArray", expectedIntArr, expectedIntArr.getClass());
+        // Primitive int array created via implicit convertion
+        this.addConstructorValidator(startEvents, "compImplicitPrimIntArray", expectedIntArr, expectedIntArr.getClass());
+
 
         // Wrapped int array
         expected = new Integer[2];
