@@ -549,4 +549,36 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
         addPropertyTests(controller);
         controller.run();
     }
+
+    /*
+     * Tests boxing/unboxing behavior of primitive type values
+     */
+    public void testPropertyBoxing() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/primitive_unboxing_injection.jar");
+
+        MetadataEventSet startEvents = controller.getStartEvents();
+
+        addPropertyValidator(startEvents, "primBoolean", "primBoolean", "true", Boolean.TRUE, Boolean.TYPE, Boolean.class);
+        addPropertyValidator(startEvents, "wrapperedBoolean", "boolean","false", Boolean.FALSE, Boolean.class, Boolean.TYPE);
+
+        addPropertyValidator(startEvents, "primByte", "primByte", "1", new Byte((byte)1), Byte.TYPE, Byte.class);
+        addPropertyValidator(startEvents, "wrapperedByte", "byte","2", new Byte((byte)2), Byte.class, Byte.TYPE);
+
+        addPropertyValidator(startEvents, "primShort", "primShort", "1", new Short((short)1), Short.TYPE, Short.class);
+        addPropertyValidator(startEvents, "wrapperedShort", "short","2", new Short((short)2), Short.class, Short.TYPE);
+
+        addPropertyValidator(startEvents, "primDouble", "primDouble", "1", new Double(1.0), Double.TYPE, Double.class);
+        addPropertyValidator(startEvents, "wrapperedDouble", "double","2", new Double(2.0), Double.class, Double.TYPE);
+
+        addPropertyValidator(startEvents, "primFloat", "primFloat", "1", new Float(1.0), Float.TYPE, Float.class);
+        addPropertyValidator(startEvents, "wrapperedFloat", "float","2", new Float(2.0), Float.class, Float.TYPE);
+
+        addPropertyValidator(startEvents, "primInteger", "primInteger", "1", new Integer(1), Integer.TYPE, Integer.class);
+        addPropertyValidator(startEvents, "wrapperedInteger", "integer","2", new Integer(2), Integer.class, Integer.TYPE);
+
+        addPropertyValidator(startEvents, "primCharacter", "primCharacter", "1", new Character('1'), Character.TYPE, Character.class);
+        addPropertyValidator(startEvents, "wrapperedCharacter", "character","2", new Character('2'), Character.class, Character.TYPE);
+        controller.run();
+    }
 }

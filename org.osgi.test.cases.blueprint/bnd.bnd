@@ -166,6 +166,7 @@ Include-Resource					= \
  	www/primitive_property_injection.jar=primitive_property_injection.jar, \
  	www/primitive_static_factory_property_injection.jar=primitive_static_factory_property_injection.jar, \
  	www/primitive_factory_property_injection.jar=primitive_factory_property_injection.jar, \
+ 	www/primitive_unboxing_injection.jar=primitive_unboxing_injection.jar, \
  	www/converter_called.jar=converter_called.jar, \
  	www/converter_custom_boolean_converter.jar=converter_custom_boolean_converter.jar, \
  	www/converter_custom_service_converter.jar=converter_service_boolean_converter.jar, \
