@@ -5,7 +5,7 @@
         This imports a service reference with a multiple attached listeners
     </description>
 
-    <bean id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceListener">
+    <bean id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceOneListener">
         <argument value="ServiceOneListener"/>
     </bean>
 
