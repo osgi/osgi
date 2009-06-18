@@ -2,7 +2,7 @@ Bundle-SymbolicName:                     ${p}.comp1_empty_header
 Bundle-Version:                          4.2
 Import-Package:                          ${p}.components.comp1, ${p}.services
 -resourceonly: true
-Blueprint-Bundle:
+Bundle-Blueprint: <<EMPTY>>
 Include-Resource					= \
 	OSGI-INF/blueprint/comp1_named.xml=src/org/osgi/test/cases/blueprint/components/comp1/comp1_named.xml, \
 	OSGI-INF/blueprint/comp2_named.xml=src/org/osgi/test/cases/blueprint/components/comp1/comp2_named.xml

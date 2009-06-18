@@ -19,7 +19,7 @@
        <argument value="Depends2"/>
    </bean>
 
-    <bean id="integerServiceProp" class="org.osgi.test.cases.blueprint.components.staticfactory.TypeStaticFactory" factory-method="createinteger">
+    <bean id="integerServiceProp" class="org.osgi.test.cases.blueprint.components.staticfactory.TypeStaticFactory" factory-method="createInteger">
         <argument type="java.lang.String" value="999"/>
     </bean>
 
