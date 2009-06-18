@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" default-initialization="lszy">
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" default-initialization="lazy">
 
     <description>
         This is just a simple exported service using a single interface.  However,
@@ -38,7 +38,9 @@
     <service id="ServiceOneService" ref="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne"
         depends-on="Depends1 Depends2">
         <service-properties>
-            <entry key="service.property.integer" value-ref="integerServiceProp" />
+            <entry key="service.property.integer">
+                <ref component-id="integerServiceProp"/>
+            </entry>
         </service-properties>
         <registration-listener ref="ServiceOneListener"
             registration-method="registered"
