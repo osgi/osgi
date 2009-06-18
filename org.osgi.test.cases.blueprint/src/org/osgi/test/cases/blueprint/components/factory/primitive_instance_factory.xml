@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
-    <bean id="typeFactory" class="org.osgi.test.cases.blueprint.components.factory.TypeInstanceFactory"/>
-
     <description>
         tests the ability for static factories to return primitive type values
     </description>
+
+    <bean id="typeFactory" class="org.osgi.test.cases.blueprint.components.factory.TypeInstanceFactory"/>
 
     <bean id="instanceInt" factory-ref="typeFactory" factory-method="createPrimInt">
         <argument value="1"/>
     </bean>
 
     <bean id="instanceLong" factory-ref="typeFactory" factory-method="createPrimLong">
-        <argument value="1"/>
+        <argument value="2"/>
     </bean>
 
     <bean id="instanceShort" factory-ref="typeFactory" factory-method="createPrimShort">

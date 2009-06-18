@@ -66,68 +66,68 @@ public class ConstructorInjectionInstanceFactory extends BaseTestComponent {
         return new ConstructorInjection(componentId, arg2, arg3);
     }
 
-    public Object makeInstance(boolean arg2) {
-        return new ConstructorInjection(arg2);
+    public Object makePrimInstance(boolean arg2) {
+        return new PrimitiveConstructorInjection(arg2);
     }
 
-    public Object makeInstance(byte arg2) {
-        return new ConstructorInjection(arg2);
+    public Object makePrimInstance(byte arg2) {
+        return new PrimitiveConstructorInjection(arg2);
     }
 
-    public Object makeInstance(char arg2) {
-        return new ConstructorInjection(arg2);
+    public Object makePrimInstance(char arg2) {
+        return new PrimitiveConstructorInjection(arg2);
     }
 
-    public Object makeInstance(double arg2) {
-        return new ConstructorInjection(arg2);
+    public Object makePrimInstance(double arg2) {
+        return new PrimitiveConstructorInjection(arg2);
     }
 
-    public Object makeInstance(float arg2) {
-        return new ConstructorInjection(arg2);
+    public Object makePrimInstance(float arg2) {
+        return new PrimitiveConstructorInjection(arg2);
     }
 
-    public Object makeInstance(int arg2) {
-        return new ConstructorInjection(arg2);
+    public Object makePrimInstance(int arg2) {
+        return new PrimitiveConstructorInjection(arg2);
     }
 
-    public Object makeInstance(long arg2) {
-        return new ConstructorInjection(arg2);
+    public Object makePrimInstance(long arg2) {
+        return new PrimitiveConstructorInjection(arg2);
     }
 
-    public Object makeInstance(short arg2) {
-        return new ConstructorInjection(arg2);
+    public Object makePrimInstance(short arg2) {
+        return new PrimitiveConstructorInjection(arg2);
     }
 
-    public Object makeInstance(Boolean arg2) {
-        return new ConstructorInjection(arg2);
+    public Object makeWrapperInstance(Boolean arg2) {
+        return new WrapperConstructorInjection(arg2);
     }
 
-    public Object makeInstance(Byte arg2) {
-        return new ConstructorInjection(arg2);
+    public Object makeWrapperInstance(Byte arg2) {
+        return new WrapperConstructorInjection(arg2);
     }
 
-    public Object makeInstance(Character arg2) {
-        return new ConstructorInjection(arg2);
+    public Object makeWrapperInstance(Character arg2) {
+        return new WrapperConstructorInjection(arg2);
     }
 
-    public Object makeInstance(Double arg2) {
-        return new ConstructorInjection(arg2);
+    public Object makeWrapperInstance(Double arg2) {
+        return new WrapperConstructorInjection(arg2);
     }
 
-    public Object makeInstance(Float arg2) {
-        return new ConstructorInjection(arg2);
+    public Object makeWrapperInstance(Float arg2) {
+        return new WrapperConstructorInjection(arg2);
     }
 
-    public Object makeInstance(Integer arg2) {
-        return new ConstructorInjection(arg2);
+    public Object makeWrapperInstance(Integer arg2) {
+        return new WrapperConstructorInjection(arg2);
     }
 
-    public Object makeInstance(Long arg2) {
-        return new ConstructorInjection(arg2);
+    public Object makeWrapperInstance(Long arg2) {
+        return new WrapperConstructorInjection(arg2);
     }
 
-    public Object makeInstance(Short arg2) {
-        return new ConstructorInjection(arg2);
+    public Object makeWrapperInstance(Short arg2) {
+        return new WrapperConstructorInjection(arg2);
     }
 
     public Object makeInstance(Class arg2) {
@@ -240,68 +240,68 @@ public class ConstructorInjectionInstanceFactory extends BaseTestComponent {
         return new ConstructorInjection(arg1);
     }
 
-    public Object makeInstance(int[] arg1) {
-        return new ConstructorInjection(arg1);
+    public Object makePrimInstance(int[] arg1) {
+        return new PrimitiveArrayConstructorInjection(arg1);
     }
 
-    public Object makeInstance(Integer[] arg1) {
-        return new ConstructorInjection(arg1);
+    public Object makeWrapperInstance(Integer[] arg1) {
+        return new WrapperArrayConstructorInjection(arg1);
     }
 
-    public Object makeInstance(boolean[] arg1) {
-        return new ConstructorInjection(arg1);
+    public Object makePrimInstance(boolean[] arg1) {
+        return new PrimitiveArrayConstructorInjection(arg1);
     }
 
-    public Object makeInstance(Boolean[] arg1) {
-        return new ConstructorInjection(arg1);
+    public Object makeWrapperInstance(Boolean[] arg1) {
+        return new WrapperArrayConstructorInjection(arg1);
     }
 
-    public Object makeInstance(byte[] arg1) {
-        return new ConstructorInjection(arg1);
+    public Object makePrimInstance(byte[] arg1) {
+        return new PrimitiveArrayConstructorInjection(arg1);
     }
 
-    public Object makeInstance(Byte[] arg1) {
-        return new ConstructorInjection(arg1);
+    public Object makeWrapperInstance(Byte[] arg1) {
+        return new WrapperArrayConstructorInjection(arg1);
     }
 
-    public Object makeInstance(char[] arg1) {
-        return new ConstructorInjection(arg1);
+    public Object makePrimInstance(char[] arg1) {
+        return new PrimitiveArrayConstructorInjection(arg1);
     }
 
-    public Object makeInstance(Character[] arg1) {
-        return new ConstructorInjection(arg1);
+    public Object makeWrapperInstance(Character[] arg1) {
+        return new WrapperArrayConstructorInjection(arg1);
     }
 
-    public Object makeInstance(short[] arg1) {
-        return new ConstructorInjection(arg1);
+    public Object makePrimInstance(short[] arg1) {
+        return new PrimitiveArrayConstructorInjection(arg1);
     }
 
-    public Object makeInstance(Short[] arg1) {
-        return new ConstructorInjection(arg1);
+    public Object makeWrapperInstance(Short[] arg1) {
+        return new WrapperArrayConstructorInjection(arg1);
     }
 
-    public Object makeInstance(long[] arg1) {
-        return new ConstructorInjection(arg1);
+    public Object makePrimInstance(long[] arg1) {
+        return new PrimitiveArrayConstructorInjection(arg1);
     }
 
-    public Object makeInstance(Long[] arg1) {
-        return new ConstructorInjection(arg1);
+    public Object makeWrapperInstance(Long[] arg1) {
+        return new WrapperArrayConstructorInjection(arg1);
     }
 
-    public Object makeInstance(double[] arg1) {
-        return new ConstructorInjection(arg1);
+    public Object makePrimInstance(double[] arg1) {
+        return new PrimitiveArrayConstructorInjection(arg1);
     }
 
-    public Object makeInstance(Double[] arg1) {
-        return new ConstructorInjection(arg1);
+    public Object makeWrapperInstance(Double[] arg1) {
+        return new WrapperArrayConstructorInjection(arg1);
     }
 
-    public Object makeInstance(float[] arg1) {
-        return new ConstructorInjection(arg1);
+    public Object makePrimInstance(float[] arg1) {
+        return new PrimitiveArrayConstructorInjection(arg1);
     }
 
-    public Object makeInstance(Float[] arg1) {
-        return new ConstructorInjection(arg1);
+    public Object makeWrapperInstance(Float[] arg1) {
+        return new WrapperArrayConstructorInjection(arg1);
     }
 
     public Object makeInstance(Date[] arg1) {

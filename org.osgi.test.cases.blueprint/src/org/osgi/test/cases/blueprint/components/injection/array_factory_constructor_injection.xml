@@ -36,7 +36,7 @@
 	</bean>
 
 	<!-- Injection of a primitive int array -->
-	<bean id="compPrimIntArray" factory-method="makeInstance"
+	<bean id="compPrimIntArray" factory-method="makePrimInstance"
 		factory-ref="compFactory">
 		<argument>
 			<array value-type="int">
@@ -47,7 +47,7 @@
 	</bean>
 
 	<!-- Injection of a wrapped int array -->
-	<bean id="compWrappedIntArray" factory-method="makeInstance"
+	<bean id="compWrappedIntArray" factory-method="makeWrapperInstance"
 		factory-ref="compFactory">
 		<argument>
 			<array value-type="java.lang.Integer">
@@ -58,7 +58,7 @@
 	</bean>
 
 	<!-- Injection of a primitive boolean array -->
-	<bean id="compPrimBoolArray" factory-method="makeInstance"
+	<bean id="compPrimBoolArray" factory-method="makePrimInstance"
 		factory-ref="compFactory">
 		<argument>
 			<array value-type="boolean">
@@ -69,7 +69,7 @@
 	</bean>
 
 	<!-- Injection of a wrapped boolean array -->
-	<bean id="compWrappedBooleanArray" factory-method="makeInstance"
+	<bean id="compWrappedBooleanArray" factory-method="makeWrapperInstance"
 		factory-ref="compFactory">
 		<argument>
 			<array value-type="java.lang.Boolean">
@@ -80,7 +80,7 @@
 	</bean>
 
 	<!-- Injection of a primitive byte items -->
-	<bean id="compPrimByteArray" factory-method="makeInstance"
+	<bean id="compPrimByteArray" factory-method="makePrimInstance"
 		factory-ref="compFactory">
 		<argument>
 			<array value-type="byte">
@@ -91,7 +91,7 @@
 	</bean>
 
 	<!-- Injection of a wrapped byte array -->
-	<bean id="compWrappedByteArray" factory-method="makeInstance"
+	<bean id="compWrappedByteArray" factory-method="makeWrapperInstance"
 		factory-ref="compFactory">
 		<argument>
 			<array value-type="java.lang.Byte">
@@ -102,7 +102,7 @@
 	</bean>
 
 	<!-- Injection of a primitive char array -->
-	<bean id="compPrimCharArray" factory-method="makeInstance"
+	<bean id="compPrimCharArray" factory-method="makePrimInstance"
 		factory-ref="compFactory">
 		<argument>
 			<array value-type="char">
@@ -113,7 +113,7 @@
 	</bean>
 
 	<!-- Injection of a wrapped char array -->
-	<bean id="compWrappedCharArray" factory-method="makeInstance"
+	<bean id="compWrappedCharArray" factory-method="makeWrapperInstance"
 		factory-ref="compFactory">
 		<argument>
 			<array value-type="java.lang.Character">
@@ -124,7 +124,7 @@
 	</bean>
 
 	<!-- Injection of a primitive short array -->
-	<bean id="compPrimShortArray" factory-method="makeInstance"
+	<bean id="compPrimShortArray" factory-method="makePrimInstance"
 		factory-ref="compFactory">
 		<argument>
 			<array value-type="short">
@@ -135,7 +135,7 @@
 	</bean>
 
 	<!-- Injection of a wrapped short array -->
-	<bean id="compWrappedShortArray" factory-method="makeInstance"
+	<bean id="compWrappedShortArray" factory-method="makeWrapperInstance"
 		factory-ref="compFactory">
 		<argument>
 			<array value-type="java.lang.Short">
@@ -146,7 +146,7 @@
 	</bean>
 
 	<!-- Injection of a primitive long array -->
-	<bean id="compPrimLongArray" factory-method="makeInstance"
+	<bean id="compPrimLongArray" factory-method="makePrimInstance"
 		factory-ref="compFactory">
 		<argument>
 			<array value-type="long">
@@ -157,7 +157,7 @@
 	</bean>
 
 	<!-- Injection of a wrapped long array -->
-	<bean id="compWrappedLongArray" factory-method="makeInstance"
+	<bean id="compWrappedLongArray" factory-method="makeWrapperInstance"
 		factory-ref="compFactory">
 		<argument>
 			<array value-type="java.lang.Long">
@@ -168,7 +168,7 @@
 	</bean>
 
 	<!-- Injection of a primitive double array -->
-	<bean id="compPrimDoubleArray" factory-method="makeInstance"
+	<bean id="compPrimDoubleArray" factory-method="makePrimInstance"
 		factory-ref="compFactory">
 		<argument>
 			<array value-type="double">
@@ -179,7 +179,7 @@
 	</bean>
 
 	<!-- Injection of a wrapped double array -->
-	<bean id="compWrappedDoubleArray" factory-method="makeInstance"
+	<bean id="compWrappedDoubleArray" factory-method="makeWrapperInstance"
 		factory-ref="compFactory">
 		<argument>
 			<array value-type="java.lang.Double">
@@ -190,7 +190,7 @@
 	</bean>
 
 	<!-- Injection of a primitive float array -->
-	<bean id="compPrimFloatArray" factory-method="makeInstance"
+	<bean id="compPrimFloatArray" factory-method="makePrimInstance"
 		factory-ref="compFactory">
 		<argument>
 			<array value-type="float">
@@ -201,7 +201,7 @@
 	</bean>
 
 	<!-- Injection of a wrapped float array -->
-	<bean id="compWrappedFloatArray" factory-method="makeInstance"
+	<bean id="compWrappedFloatArray" factory-method="makeWrapperInstance"
 		factory-ref="compFactory">
 		<argument>
 			<array value-type="java.lang.Float">

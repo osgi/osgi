@@ -10,7 +10,7 @@
     </bean>
 
     <bean id="staticLong" class="org.osgi.test.cases.blueprint.components.staticfactory.TypeStaticFactory" factory-method="createPrimLong">
-        <argument value="1"/>
+        <argument value="2"/>
     </bean>
 
     <bean id="staticShort" class="org.osgi.test.cases.blueprint.components.staticfactory.TypeStaticFactory" factory-method="createPrimShort">

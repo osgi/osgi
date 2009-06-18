@@ -58,306 +58,306 @@
         </argument>
     </bean>
 
-    <bean id="compPrimBooleanYes" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimBooleanYes" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument type="boolean">
             <value>yes</value>
         </argument>
     </bean>
-    <bean id="compPrimBooleanNo" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimBooleanNo" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument>
             <value type="boolean">no</value>
         </argument>
     </bean>
-    <bean id="compPrimBooleanTrue" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimBooleanTrue" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="true" type="boolean"/>
     </bean>
-    <bean id="compPrimBooleanFalse" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimBooleanFalse" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="false" type="boolean"/>
     </bean>
-    <bean id="compPrimBooleanOn" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimBooleanOn" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument type="boolean">
             <value type="boolean">on</value>
         </argument>
     </bean>
-    <bean id="compPrimBooleanOff" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimBooleanOff" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="off" type="boolean"/>
     </bean>
-    <bean id="compWrapperedBooleanYes" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedBooleanYes" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="yes" type="java.lang.Boolean"/>
     </bean>
-    <bean id="compWrapperedBooleanNo" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedBooleanNo" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument type="java.lang.Boolean" value="no"/>
     </bean>
-    <bean id="compWrapperedBooleanTrue" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedBooleanTrue" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="true" type="java.lang.Boolean"/>
     </bean>
-    <bean id="compWrapperedBooleanFalse" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedBooleanFalse" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="false" type="java.lang.Boolean"/>
     </bean>
-    <bean id="compWrapperedBooleanOn" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedBooleanOn" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="on" type="java.lang.Boolean"/>
     </bean>
-    <bean id="compWrapperedBooleanOff" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedBooleanOff" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="off" type="java.lang.Boolean"/>
     </bean>
-    <bean id="compWrapperedBooleanNull" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedBooleanNull" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument type="java.lang.Boolean">
             <null/>
         </argument>
     </bean>
-    <bean id="compPrimByteZero" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimByteZero" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="0" type="byte"/>
     </bean>
-    <bean id="compPrimByteMax" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimByteMax" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="127" type="byte"/>
     </bean>
-    <bean id="compPrimByteMin" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimByteMin" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="-128" type="byte"/>
     </bean>
-    <bean id="compWrapperedByteZero" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedByteZero" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="0" type="java.lang.Byte"/>
     </bean>
-    <bean id="compWrapperedByteMax" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedByteMax" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="127" type="java.lang.Byte"/>
     </bean>
-    <bean id="compWrapperedByteMin" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedByteMin" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="-128" type="java.lang.Byte"/>
     </bean>
-    <bean id="compWrapperedByteNull" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedByteNull" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument type="java.lang.Byte">
             <null/>
         </argument>
     </bean>
-    <bean id="compPrimDoubleZero" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimDoubleZero" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="0" type="double"/>
     </bean>
-    <bean id="compPrimDoubleMinusZero" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimDoubleMinusZero" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="-0.0" type="double"/>
     </bean>
-    <bean id="compPrimDoubleDSuffix" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimDoubleDSuffix" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="1.1D " type="double"/>
     </bean>
-    <bean id="compPrimDoubledSuffix" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimDoubledSuffix" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value=" 1.1d" type="double"/>
     </bean>
-    <bean id="compPrimDoubleFSuffix" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimDoubleFSuffix" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value=" 1.1F " type="double"/>
     </bean>
-    <bean id="compPrimDoublefSuffix" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimDoublefSuffix" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="1.1e1f" type="double"/>
     </bean>
-    <bean id="compPrimDoubleMax" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimDoubleMax" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="1.7976931348623157E308" type="double"/>
     </bean>
-    <bean id="compPrimDoubleMin" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimDoubleMin" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value=" 4.9e-324 " type="double"/>
     </bean>
-    <bean id="compPrimDoubleNaN" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimDoubleNaN" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="NaN" type="double"/>
     </bean>
-    <bean id="compPrimDoubleInfinity" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimDoubleInfinity" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="Infinity" type="double"/>
     </bean>
-    <bean id="compPrimDoubleNegInfinity" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimDoubleNegInfinity" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="-Infinity" type="double"/>
     </bean>
-    <bean id="compWrapperedDoubleZero" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedDoubleZero" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="0" type="java.lang.Double"/>
     </bean>
-    <bean id="compWrapperedDoubleMinusZero" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedDoubleMinusZero" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="-0" type="java.lang.Double"/>
     </bean>
-    <bean id="compWrapperedDoubleDSuffix" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedDoubleDSuffix" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="1.1D " type="java.lang.Double"/>
     </bean>
-    <bean id="compWrapperedDoubledSuffix" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedDoubledSuffix" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value=" 1.1d" type="java.lang.Double"/>
     </bean>
-    <bean id="compWrapperedDoubleFSuffix" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedDoubleFSuffix" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value=" 1.1F " type="java.lang.Double"/>
     </bean>
-    <bean id="compWrapperedDoublefSuffix" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedDoublefSuffix" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="1.1e1f" type="java.lang.Double"/>
     </bean>
-    <bean id="compWrapperedDoubleMax" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedDoubleMax" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="1.7976931348623157E308" type="java.lang.Double"/>
     </bean>
-    <bean id="compWrapperedDoubleMin" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedDoubleMin" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value=" 4.9e-324 " type="java.lang.Double"/>
     </bean>
-    <bean id="compWrapperedDoubleNaN" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedDoubleNaN" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="NaN" type="java.lang.Double"/>
     </bean>
-    <bean id="compWrapperedDoubleInfinity" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedDoubleInfinity" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="Infinity" type="java.lang.Double"/>
     </bean>
-    <bean id="compWrapperedDoubleNegInfinity" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedDoubleNegInfinity" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="-Infinity" type="java.lang.Double"/>
     </bean>
-    <bean id="compWrapperedDoubleNull" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedDoubleNull" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument type="java.lang.Double">
             <null/>
         </argument>
     </bean>
-    <bean id="compPrimFloatZero" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimFloatZero" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="0" type="float"/>
     </bean>
-    <bean id="compPrimFloatMinusZero" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimFloatMinusZero" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="-0" type="float"/>
     </bean>
-    <bean id="compPrimFloatDSuffix" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimFloatDSuffix" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="1.1D " type="float"/>
     </bean>
-    <bean id="compPrimFloatdSuffix" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimFloatdSuffix" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value=" 1.1d" type="float"/>
     </bean>
-    <bean id="compPrimFloatFSuffix" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimFloatFSuffix" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value=" 1.1F " type="float"/>
     </bean>
-    <bean id="compPrimFloatfSuffix" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimFloatfSuffix" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="1.1e1f" type="float"/>
     </bean>
-    <bean id="compPrimFloatMax" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimFloatMax" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="3.4028235E38" type="float"/>
     </bean>
-    <bean id="compPrimFloatMin" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimFloatMin" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value=" 1.4E-45 " type="float"/>
     </bean>
-    <bean id="compPrimFloatNaN" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimFloatNaN" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="NaN" type="float"/>
     </bean>
-    <bean id="compPrimFloatInfinity" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimFloatInfinity" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="Infinity" type="float"/>
     </bean>
-    <bean id="compPrimFloatNegInfinity" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimFloatNegInfinity" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="-Infinity" type="float"/>
     </bean>
-    <bean id="compWrapperedFloatZero" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedFloatZero" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="0" type="java.lang.Float"/>
     </bean>
-    <bean id="compWrapperedFloatMinusZero" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedFloatMinusZero" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="-0" type="java.lang.Float"/>
     </bean>
-    <bean id="compWrapperedFloatDSuffix" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedFloatDSuffix" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="1.1D " type="java.lang.Float"/>
     </bean>
-    <bean id="compWrapperedFloatdSuffix" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedFloatdSuffix" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value=" 1.1d" type="java.lang.Float"/>
     </bean>
-    <bean id="compWrapperedFloatFSuffix" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedFloatFSuffix" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value=" 1.1F " type="java.lang.Float"/>
     </bean>
-    <bean id="compWrapperedFloatfSuffix" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedFloatfSuffix" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="1.1e1f" type="java.lang.Float"/>
     </bean>
-    <bean id="compWrapperedFloatMax" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedFloatMax" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="3.4028235E38" type="java.lang.Float"/>
     </bean>
-    <bean id="compWrapperedFloatMin" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedFloatMin" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value=" 1.4E-45 " type="java.lang.Float"/>
     </bean>
-    <bean id="compWrapperedFloatNaN" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedFloatNaN" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="NaN" type="java.lang.Float"/>
     </bean>
-    <bean id="compWrapperedFloatInfinity" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedFloatInfinity" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="Infinity" type="java.lang.Float"/>
     </bean>
-    <bean id="compWrapperedFloatNegInfinity" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedFloatNegInfinity" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="-Infinity" type="java.lang.Float"/>
     </bean>
-    <bean id="compWrapperedFloatNull" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedFloatNull" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument type="java.lang.Float">
             <null/>
         </argument>
     </bean>
-    <bean id="compPrimIntegerZero" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimIntegerZero" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="0" type="int"/>
     </bean>
-    <bean id="compPrimIntegerMax" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimIntegerMax" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="2147483647" type="int"/>
     </bean>
-    <bean id="compPrimIntegerMin" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimIntegerMin" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="-2147483648" type="int"/>
     </bean>
-    <bean id="compWrapperedIntegerZero" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedIntegerZero" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="0" type="java.lang.Integer"/>
     </bean>
-    <bean id="compWrapperedIntegerMax" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedIntegerMax" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="2147483647" type="java.lang.Integer"/>
     </bean>
-    <bean id="compWrapperedIntegerMin" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedIntegerMin" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="-2147483648" type="java.lang.Integer"/>
     </bean>
-    <bean id="compWrapperedIntegerNull" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedIntegerNull" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument type="java.lang.Integer">
             <null/>
         </argument>
     </bean>
-    <bean id="compPrimCharacterZero" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimCharacterZero" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="\u0000" type="char"/>
     </bean>
-    <bean id="compPrimCharacterMax" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimCharacterMax" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="\uffff" type="char"/>
     </bean>
-    <bean id="compPrimCharacterA" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimCharacterA" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="A" type="char"/>
     </bean>
-    <bean id="compWrapperedCharacterZero" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedCharacterZero" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="\u0000" type="java.lang.Character"/>
     </bean>
-    <bean id="compWrapperedCharacterMax" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedCharacterMax" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="\uffff" type="java.lang.Character"/>
     </bean>
-    <bean id="compWrapperedCharacterA" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedCharacterA" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="A" type="java.lang.Character"/>
     </bean>
-    <bean id="compWrapperedCharacterNull" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedCharacterNull" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument type="java.lang.Character">
             <null/>
         </argument>
     </bean>
-    <bean id="compPrimShortZero" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimShortZero" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="0" type="short"/>
     </bean>
-    <bean id="compPrimShortMax" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimShortMax" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="32767" type="short"/>
     </bean>
-    <bean id="compPrimShortMin" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimShortMin" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="-32768" type="short"/>
     </bean>
-    <bean id="compWrapperedShortZero" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedShortZero" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="0" type="java.lang.Short"/>
     </bean>
-    <bean id="compWrapperedShortMax" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedShortMax" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="32767" type="java.lang.Short"/>
     </bean>
-    <bean id="compWrapperedShortMin" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedShortMin" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="-32768" type="java.lang.Short"/>
     </bean>
-    <bean id="compWrapperedShortNull" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedShortNull" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument type="java.lang.Short">
             <null/>
         </argument>
     </bean>
-    <bean id="compPrimLongZero" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimLongZero" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="0" type="long"/>
     </bean>
-    <bean id="compPrimLongMax" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimLongMax" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="9223372036854775807" type="long"/>
     </bean>
-    <bean id="compPrimLongMin" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compPrimLongMin" factory-ref="compFactory" factory-method="makePrimInstance">
         <argument value="-9223372036854775808" type="long"/>
     </bean>
-    <bean id="compWrapperedLongZero" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedLongZero" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="0" type="java.lang.Long"/>
     </bean>
-    <bean id="compWrapperedLongMax" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedLongMax" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="9223372036854775807" type="java.lang.Long"/>
     </bean>
-    <bean id="compWrapperedLongMin" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedLongMin" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument value="-9223372036854775808" type="java.lang.Long"/>
     </bean>
-    <bean id="compWrapperedLongNull" factory-ref="compFactory" factory-method="makeInstance">
+    <bean id="compWrapperedLongNull" factory-ref="compFactory" factory-method="makeWrapperInstance">
         <argument type="java.lang.Long">
             <null/>
         </argument>

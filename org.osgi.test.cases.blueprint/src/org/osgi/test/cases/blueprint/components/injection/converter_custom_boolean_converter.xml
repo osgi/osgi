@@ -8,7 +8,7 @@
     <bean id="customBooleanConverter" class="org.osgi.test.cases.blueprint.components.injection.CustomBooleanConverter"/>
 
 <!--Constructor-->
-	<bean id="compCustomBoolean_cnst" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+	<bean id="compCustomBoolean_cnst" class="org.osgi.test.cases.blueprint.components.injection.WrapperConstructorInjection">
 		<argument type="java.lang.Boolean" value="T"/>
 	</bean>
 

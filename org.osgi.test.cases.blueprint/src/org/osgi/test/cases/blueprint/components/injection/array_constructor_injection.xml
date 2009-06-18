@@ -21,7 +21,7 @@
 
 	<!-- Single Item Array -->
 	<bean id="compSinglePrimIntItem"
-		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		class="org.osgi.test.cases.blueprint.components.injection.PrimitiveArrayConstructorInjection">
 		<argument type="int[]">
 			<array value-type="int">
 				<value>1</value>
@@ -31,7 +31,7 @@
 
 	<!-- Primitive int array -->
 	<bean id="compPrimIntArray"
-		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		class="org.osgi.test.cases.blueprint.components.injection.PrimitiveArrayConstructorInjection">
 		<argument>
 			<array value-type="int">
 				<value>1</value>
@@ -42,7 +42,7 @@
 
 	<!-- Primitive int array -->
 	<bean id="compImplicitPrimIntArray"
-		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		class="org.osgi.test.cases.blueprint.components.injection.PrimitiveArrayConstructorInjection">
 		<argument type="int[]">
 			<array>
 				<value>1</value>
@@ -64,7 +64,7 @@
 
 	<!-- Primitive boolean array -->
 	<bean id="compPrimBoolArray"
-		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		class="org.osgi.test.cases.blueprint.components.injection.PrimitiveArrayConstructorInjection">
 		<argument>
 			<array value-type="boolean">
 				<value>true</value>
@@ -75,7 +75,7 @@
 
 	<!-- Wrapped boolean array -->
 	<bean id="compWrappedBoolArray"
-		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		class="org.osgi.test.cases.blueprint.components.injection.WrapperArrayConstructorInjection">
 		<argument>
 			<array value-type="java.lang.Boolean">
 				<value>true</value>
@@ -97,7 +97,7 @@
 
 	<!-- Primitive byte array -->
 	<bean id="compPrimByteArray"
-		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		class="org.osgi.test.cases.blueprint.components.injection.PrimitiveArrayConstructorInjection">
 		<argument>
 			<array value-type="byte">
 				<value>1</value>
@@ -108,7 +108,7 @@
 
 	<!-- Wrapped byte array -->
 	<bean id="compWrappedByteArray"
-		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		class="org.osgi.test.cases.blueprint.components.injection.WrapperArrayConstructorInjection">
 		<argument>
 			<array value-type="java.lang.Byte">
 				<value>1</value>
@@ -119,7 +119,7 @@
 
 	<!-- Primitive char array -->
 	<bean id="compCharArray"
-		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		class="org.osgi.test.cases.blueprint.components.injection.PrimitiveArrayConstructorInjection">
 		<argument>
 			<array value-type="char">
 				<value>a</value>
@@ -130,7 +130,7 @@
 
 	<!-- Wrapped char array -->
 	<bean id="compWrappedCharArray"
-		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		class="org.osgi.test.cases.blueprint.components.injection.WrapperArrayConstructorInjection">
 		<argument>
 			<array value-type="java.lang.Character">
 				<value>a</value>
@@ -141,7 +141,7 @@
 
 	<!-- Primitive short array -->
 	<bean id="compPrimShortArray"
-		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		class="org.osgi.test.cases.blueprint.components.injection.PrimitiveArrayConstructorInjection">
 		<argument>
 			<array value-type="short">
 				<value>3</value>
@@ -152,7 +152,7 @@
 
 	<!-- Wrapped short array -->
 	<bean id="compWrappedShortArray"
-		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		class="org.osgi.test.cases.blueprint.components.injection.WrapperArrayConstructorInjection">
 		<argument>
 			<array value-type="java.lang.Short">
 				<value>3</value>
@@ -163,7 +163,7 @@
 
 	<!-- Primitive long array -->
 	<bean id="compPrimLongArray"
-		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		class="org.osgi.test.cases.blueprint.components.injection.PrimitiveArrayConstructorInjection">
 		<argument>
 			<array value-type="long">
 				<value>3</value>
@@ -174,7 +174,7 @@
 
 	<!-- Wrapped long array -->
 	<bean id="compWrappedLongArray"
-		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		class="org.osgi.test.cases.blueprint.components.injection.WrapperArrayConstructorInjection">
 		<argument>
 			<array value-type="java.lang.Long">
 				<value>3</value>
@@ -185,7 +185,7 @@
 
 	<!-- Primitive double array -->
 	<bean id="compPrimDoubleArray"
-		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		class="org.osgi.test.cases.blueprint.components.injection.PrimitiveArrayConstructorInjection">
 		<argument>
 			<array value-type="double">
 				<value>3</value>
@@ -196,7 +196,7 @@
 
 	<!-- Wrapped double array -->
 	<bean id="compWrappedDoubleArray"
-		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		class="org.osgi.test.cases.blueprint.components.injection.WrapperArrayConstructorInjection">
 		<argument>
 			<array value-type="java.lang.Double">
 				<value>3</value>
@@ -207,7 +207,7 @@
 
 	<!-- Primitive float array -->
 	<bean id="compPrimFloatArray"
-		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		class="org.osgi.test.cases.blueprint.components.injection.PrimitiveArrayConstructorInjection">
 		<argument>
 			<array value-type="float">
 				<value>3</value>
@@ -218,7 +218,7 @@
 
 	<!-- Wrapped float array -->
 	<bean id="compWrappedFloatArray"
-		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		class="org.osgi.test.cases.blueprint.components.injection.WrapperArrayConstructorInjection">
 		<argument>
 			<array value-type="java.lang.Float">
 				<value>3</value>

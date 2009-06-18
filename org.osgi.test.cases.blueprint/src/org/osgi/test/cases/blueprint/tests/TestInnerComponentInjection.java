@@ -27,6 +27,8 @@ import java.util.Set;
 import org.osgi.service.blueprint.reflect.BeanMetadata;
 
 import org.osgi.test.cases.blueprint.components.injection.ConstructorInjection;
+import org.osgi.test.cases.blueprint.components.injection.PrimitiveConstructorInjection;
+import org.osgi.test.cases.blueprint.components.injection.WrapperConstructorInjection;
 import org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory;
 import org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection;
 import org.osgi.test.cases.blueprint.components.injection.InnerComponentInjectionStaticFactory;
@@ -93,57 +95,57 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         startEvents.validateComponentArgument(componentId, "arg1", value, type);
     }
 
-    private void addConstructorValueTestItems(MetadataEventSet startEvents, Class innerComponentExpectedClass) throws Exception {
-        ConstructorInjection ci;
+    private void addConstructorValueTestItems(MetadataEventSet startEvents) throws Exception {
+        Object ci;
         //string
         ci = new ConstructorInjection("STR2");
-        this.addConstructorValueValidator(startEvents, "compInnerStringBothTyped", ci, innerComponentExpectedClass);
+        this.addConstructorValueValidator(startEvents, "compInnerStringBothTyped", ci, ConstructorInjection.class);
         ci = new ConstructorInjection("STR3");
-        this.addConstructorValueValidator(startEvents, "compInnerStringValueTyped", ci, innerComponentExpectedClass);
+        this.addConstructorValueValidator(startEvents, "compInnerStringValueTyped", ci, ConstructorInjection.class);
         ci = new ConstructorInjection("STR4");
-        this.addConstructorValueValidator(startEvents, "compInnerStringArgTyped", ci, innerComponentExpectedClass);
+        this.addConstructorValueValidator(startEvents, "compInnerStringArgTyped", ci, ConstructorInjection.class);
         ci = new ConstructorInjection("STR5");
-        this.addConstructorValueValidator(startEvents, "compInnerString", ci, innerComponentExpectedClass);
+        this.addConstructorValueValidator(startEvents, "compInnerString", ci, ConstructorInjection.class);
         //boolean
-        ci = new ConstructorInjection(true);
-        this.addConstructorValueValidator(startEvents, "compInnerPrimitiveBoolean", ci, innerComponentExpectedClass);
-        ci = new ConstructorInjection(new Boolean(false));
-        this.addConstructorValueValidator(startEvents, "compInnerWrapperedBoolean", ci, innerComponentExpectedClass);
+        ci = new PrimitiveConstructorInjection(true);
+        this.addConstructorValueValidator(startEvents, "compInnerPrimitiveBoolean", ci, PrimitiveConstructorInjection.class);
+        ci = new WrapperConstructorInjection(new Boolean(false));
+        this.addConstructorValueValidator(startEvents, "compInnerWrapperedBoolean", ci, WrapperConstructorInjection.class);
         //byte
-        ci = new ConstructorInjection((byte)-128);
-        this.addConstructorValueValidator(startEvents, "compInnerPrimitiveByte", ci, innerComponentExpectedClass);
-        ci = new ConstructorInjection(new Byte("127"));
-        this.addConstructorValueValidator(startEvents, "compInnerWrapperedByte", ci, innerComponentExpectedClass);
+        ci = new PrimitiveConstructorInjection((byte)-128);
+        this.addConstructorValueValidator(startEvents, "compInnerPrimitiveByte", ci, PrimitiveConstructorInjection.class);
+        ci = new WrapperConstructorInjection(new Byte("127"));
+        this.addConstructorValueValidator(startEvents, "compInnerWrapperedByte", ci, WrapperConstructorInjection.class);
         //double
-        ci = new ConstructorInjection(new Double("4.9e-324").doubleValue());
-        this.addConstructorValueValidator(startEvents, "compInnerPrimitiveDouble", ci, innerComponentExpectedClass);
-        ci = new ConstructorInjection(new Double("1.7976931348623157E308"));
-        this.addConstructorValueValidator(startEvents, "compInnerWrapperedDouble", ci, innerComponentExpectedClass);
+        ci = new PrimitiveConstructorInjection(new Double("4.9e-324").doubleValue());
+        this.addConstructorValueValidator(startEvents, "compInnerPrimitiveDouble", ci, PrimitiveConstructorInjection.class);
+        ci = new WrapperConstructorInjection(new Double("1.7976931348623157E308"));
+        this.addConstructorValueValidator(startEvents, "compInnerWrapperedDouble", ci, WrapperConstructorInjection.class);
         //float
-        ci = new ConstructorInjection(new Float("1.4E-45").floatValue());
-        this.addConstructorValueValidator(startEvents, "compInnerPrimitiveFloat", ci, innerComponentExpectedClass);
-        ci = new ConstructorInjection(new Float("3.4028235E38"));
-        this.addConstructorValueValidator(startEvents, "compInnerWrapperedFloat", ci, innerComponentExpectedClass);
+        ci = new PrimitiveConstructorInjection(new Float("1.4E-45").floatValue());
+        this.addConstructorValueValidator(startEvents, "compInnerPrimitiveFloat", ci, PrimitiveConstructorInjection.class);
+        ci = new WrapperConstructorInjection(new Float("3.4028235E38"));
+        this.addConstructorValueValidator(startEvents, "compInnerWrapperedFloat", ci, WrapperConstructorInjection.class);
         //int
-        ci = new ConstructorInjection(-2147483648);
-        this.addConstructorValueValidator(startEvents, "compInnerPrimitiveInteger", ci, innerComponentExpectedClass);
-        ci = new ConstructorInjection(new Integer("2147483647"));
-        this.addConstructorValueValidator(startEvents, "compInnerWrapperedInteger", ci, innerComponentExpectedClass);
+        ci = new PrimitiveConstructorInjection(-2147483648);
+        this.addConstructorValueValidator(startEvents, "compInnerPrimitiveInteger", ci, PrimitiveConstructorInjection.class);
+        ci = new WrapperConstructorInjection(new Integer("2147483647"));
+        this.addConstructorValueValidator(startEvents, "compInnerWrapperedInteger", ci, WrapperConstructorInjection.class);
         //char
-        ci = new ConstructorInjection('a');
-        this.addConstructorValueValidator(startEvents, "compInnerPrimitiveCharacter", ci, innerComponentExpectedClass);
-        ci = new ConstructorInjection(new Character('A'));
-        this.addConstructorValueValidator(startEvents, "compInnerWrapperedCharacter", ci, innerComponentExpectedClass);
+        ci = new PrimitiveConstructorInjection('a');
+        this.addConstructorValueValidator(startEvents, "compInnerPrimitiveCharacter", ci, PrimitiveConstructorInjection.class);
+        ci = new WrapperConstructorInjection(new Character('A'));
+        this.addConstructorValueValidator(startEvents, "compInnerWrapperedCharacter", ci, WrapperConstructorInjection.class);
         //short
-        ci = new ConstructorInjection((short)-32768);
-        this.addConstructorValueValidator(startEvents, "compInnerPrimitiveShort", ci, innerComponentExpectedClass);
-        ci = new ConstructorInjection(new Short("32767"));
-        this.addConstructorValueValidator(startEvents, "compInnerWrapperedShort", ci, innerComponentExpectedClass);
+        ci = new PrimitiveConstructorInjection((short)-32768);
+        this.addConstructorValueValidator(startEvents, "compInnerPrimitiveShort", ci, PrimitiveConstructorInjection.class);
+        ci = new WrapperConstructorInjection(new Short("32767"));
+        this.addConstructorValueValidator(startEvents, "compInnerWrapperedShort", ci, WrapperConstructorInjection.class);
         //long
-        ci = new ConstructorInjection(new Long("-9223372036854775808").longValue());
-        this.addConstructorValueValidator(startEvents, "compInnerPrimitiveLong", ci, innerComponentExpectedClass);
-        ci = new ConstructorInjection(new Long("9223372036854775807"));
-        this.addConstructorValueValidator(startEvents, "compInnerWrapperedLong", ci, innerComponentExpectedClass);
+        ci = new PrimitiveConstructorInjection(new Long("-9223372036854775808").longValue());
+        this.addConstructorValueValidator(startEvents, "compInnerPrimitiveLong", ci, PrimitiveConstructorInjection.class);
+        ci = new WrapperConstructorInjection(new Long("9223372036854775807"));
+        this.addConstructorValueValidator(startEvents, "compInnerWrapperedLong", ci, WrapperConstructorInjection.class);
     }
 
     /**
@@ -178,72 +180,36 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
     }
 
 
-    private void addConstructorMetadataTestItems(MetadataEventSet startEvents, Class innerComponentExpectedClass, String factoryMethodName) throws Exception {
+    private void addConstructorMetadataTestItems(MetadataEventSet startEvents, String factoryMethodName) throws Exception {
         // string
-        this.addArgumentMetadataValidator(startEvents, "compInnerStringBothTyped", innerComponentExpectedClass, factoryMethodName, String.class, String.class, "STR2");
-        this.addArgumentMetadataValidator(startEvents, "compInnerStringValueTyped", innerComponentExpectedClass, factoryMethodName, null, String.class, "STR3");
-        this.addArgumentMetadataValidator(startEvents, "compInnerStringArgTyped", innerComponentExpectedClass, factoryMethodName, String.class, null, "STR4");
-        this.addArgumentMetadataValidator(startEvents, "compInnerString", innerComponentExpectedClass, factoryMethodName, String.class, null, "STR5");
+        this.addArgumentMetadataValidator(startEvents, "compInnerStringBothTyped", ConstructorInjection.class, factoryMethodName, String.class, String.class, "STR2");
+        this.addArgumentMetadataValidator(startEvents, "compInnerStringValueTyped", ConstructorInjection.class, factoryMethodName, null, String.class, "STR3");
+        this.addArgumentMetadataValidator(startEvents, "compInnerStringArgTyped", ConstructorInjection.class, factoryMethodName, String.class, null, "STR4");
+        this.addArgumentMetadataValidator(startEvents, "compInnerString", ConstructorInjection.class, factoryMethodName, String.class, null, "STR5");
         //boolean
-        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveBoolean", innerComponentExpectedClass, factoryMethodName, Boolean.TYPE, null, "true");
-        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedBoolean", innerComponentExpectedClass, factoryMethodName, Boolean.class, null, "false");
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveBoolean", PrimitiveConstructorInjection.class, factoryMethodName, Boolean.TYPE, null, "true");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedBoolean", WrapperConstructorInjection.class, factoryMethodName, Boolean.class, null, "false");
         //byte
-        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveByte", innerComponentExpectedClass, factoryMethodName, Byte.TYPE, null, "-128");
-        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedByte", innerComponentExpectedClass, factoryMethodName, Byte.class, null, "127");
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveByte", PrimitiveConstructorInjection.class, factoryMethodName, Byte.TYPE, null, "-128");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedByte", WrapperConstructorInjection.class, factoryMethodName, Byte.class, null, "127");
         //double
-        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveDouble", innerComponentExpectedClass, factoryMethodName, Double.TYPE, null, "4.9e-324");
-        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedDouble", innerComponentExpectedClass, factoryMethodName, Double.class, null, "1.7976931348623157E308");
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveDouble", PrimitiveConstructorInjection.class, factoryMethodName, Double.TYPE, null, "4.9e-324");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedDouble", WrapperConstructorInjection.class, factoryMethodName, Double.class, null, "1.7976931348623157E308");
         //float
-        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveFloat", innerComponentExpectedClass, factoryMethodName, Float.TYPE, null, "1.4E-45");
-        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedFloat", innerComponentExpectedClass, factoryMethodName, Float.class, null, "3.4028235E38");
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveFloat", PrimitiveConstructorInjection.class, factoryMethodName, Float.TYPE, null, "1.4E-45");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedFloat", WrapperConstructorInjection.class, factoryMethodName, Float.class, null, "3.4028235E38");
         //int
-        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveInteger", innerComponentExpectedClass, factoryMethodName, Integer.TYPE, null, "-2147483648");
-        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedInteger", innerComponentExpectedClass, factoryMethodName, Integer.class, null, "2147483647");
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveInteger", PrimitiveConstructorInjection.class, factoryMethodName, Integer.TYPE, null, "-2147483648");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedInteger", WrapperConstructorInjection.class, factoryMethodName, Integer.class, null, "2147483647");
         //char
-        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveCharacter", innerComponentExpectedClass, factoryMethodName, Character.TYPE, null, "a");
-        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedCharacter", innerComponentExpectedClass, factoryMethodName, Character.class, null, "A");
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveCharacter", PrimitiveConstructorInjection.class, factoryMethodName, Character.TYPE, null, "a");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedCharacter", WrapperConstructorInjection.class, factoryMethodName, Character.class, null, "A");
         //short
-        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveShort", innerComponentExpectedClass, factoryMethodName, Short.TYPE, null, "-32768");
-        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedShort", innerComponentExpectedClass, factoryMethodName, Short.class, null, "32767");
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveShort", PrimitiveConstructorInjection.class, factoryMethodName, Short.TYPE, null, "-32768");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedShort", WrapperConstructorInjection.class, factoryMethodName, Short.class, null, "32767");
         //long
-        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveLong", innerComponentExpectedClass, factoryMethodName, Long.TYPE, null, "-9223372036854775808");
-        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedLong", innerComponentExpectedClass, factoryMethodName, Long.class, null, "9223372036854775807");
-    }
-
-    private void addFactoryMetadataValidator(MetadataEventSet startEvents, String componentId, String factoryMethodName, String staticFactoryClassName, TestValue factoryTestComponentValue) throws Exception{
-        startEvents.addValidator(
-                new FactoryMetadataValidator(
-                        componentId,
-                        factoryMethodName,
-                        staticFactoryClassName,
-                        factoryTestComponentValue
-                )
-        );
-    }
-
-    private void addFactoryMetadataTestItems(MetadataEventSet startEvents, String staticFactoryClassName, TestValue factoryTestComponentValue)throws Exception{
-        this.addFactoryMetadataValidator(startEvents, "compInnerStringBothTyped", "makeInstance", staticFactoryClassName, factoryTestComponentValue);
-        this.addFactoryMetadataValidator(startEvents, "compInnerStringValueTyped", "makeInstance", staticFactoryClassName, factoryTestComponentValue);
-        this.addFactoryMetadataValidator(startEvents, "compInnerStringArgTyped", "makeInstance", staticFactoryClassName, factoryTestComponentValue);
-        this.addFactoryMetadataValidator(startEvents, "compInnerString", "makeInstance", staticFactoryClassName, factoryTestComponentValue);
-
-        this.addFactoryMetadataValidator(startEvents, "compInnerPrimitiveBoolean", "makeInstance", staticFactoryClassName, factoryTestComponentValue);
-        this.addFactoryMetadataValidator(startEvents, "compInnerWrapperedBoolean", "makeInstance", staticFactoryClassName, factoryTestComponentValue);
-        this.addFactoryMetadataValidator(startEvents, "compInnerPrimitiveByte", "makeInstance", staticFactoryClassName, factoryTestComponentValue);
-        this.addFactoryMetadataValidator(startEvents, "compInnerWrapperedByte", "makeInstance", staticFactoryClassName, factoryTestComponentValue);
-        this.addFactoryMetadataValidator(startEvents, "compInnerPrimitiveDouble", "makeInstance", staticFactoryClassName, factoryTestComponentValue);
-        this.addFactoryMetadataValidator(startEvents, "compInnerWrapperedDouble", "makeInstance", staticFactoryClassName, factoryTestComponentValue);
-        this.addFactoryMetadataValidator(startEvents, "compInnerPrimitiveFloat", "makeInstance", staticFactoryClassName, factoryTestComponentValue);
-        this.addFactoryMetadataValidator(startEvents, "compInnerWrapperedFloat", "makeInstance", staticFactoryClassName, factoryTestComponentValue);
-        this.addFactoryMetadataValidator(startEvents, "compInnerPrimitiveInteger", "makeInstance", staticFactoryClassName, factoryTestComponentValue);
-        this.addFactoryMetadataValidator(startEvents, "compInnerWrapperedInteger", "makeInstance", staticFactoryClassName, factoryTestComponentValue);
-        this.addFactoryMetadataValidator(startEvents, "compInnerPrimitiveCharacter", "makeInstance", staticFactoryClassName, factoryTestComponentValue);
-        this.addFactoryMetadataValidator(startEvents, "compInnerWrapperedCharacter", "makeInstance", staticFactoryClassName, factoryTestComponentValue);
-        this.addFactoryMetadataValidator(startEvents, "compInnerPrimitiveShort", "makeInstance", staticFactoryClassName, factoryTestComponentValue);
-        this.addFactoryMetadataValidator(startEvents, "compInnerWrapperedShort", "makeInstance", staticFactoryClassName, factoryTestComponentValue);
-        this.addFactoryMetadataValidator(startEvents, "compInnerPrimitiveLong", "makeInstance", staticFactoryClassName, factoryTestComponentValue);
-        this.addFactoryMetadataValidator(startEvents, "compInnerWrapperedLong", "makeInstance", staticFactoryClassName, factoryTestComponentValue);
-
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveLong", PrimitiveConstructorInjection.class, factoryMethodName, Long.TYPE, null, "-9223372036854775808");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedLong", WrapperConstructorInjection.class, factoryMethodName, Long.class, null, "9223372036854775807");
     }
 
     public void testConstructorInjection() throws Exception {
@@ -252,10 +218,37 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         MetadataEventSet startEvents = controller.getStartEvents();
 
         // value test
-        this.addConstructorValueTestItems(startEvents, ConstructorInjection.class);
+        this.addConstructorValueTestItems(startEvents);
 
-        // parameter metadata test
-        this.addConstructorMetadataTestItems(startEvents, ConstructorInjection.class, null);
+        // string
+        this.addArgumentMetadataValidator(startEvents, "compInnerStringBothTyped", ConstructorInjection.class, null, String.class, String.class, "STR2");
+        this.addArgumentMetadataValidator(startEvents, "compInnerStringValueTyped", ConstructorInjection.class, null, null, String.class, "STR3");
+        this.addArgumentMetadataValidator(startEvents, "compInnerStringArgTyped", ConstructorInjection.class, null, String.class, null, "STR4");
+        this.addArgumentMetadataValidator(startEvents, "compInnerString", ConstructorInjection.class, null, String.class, null, "STR5");
+        //boolean
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveBoolean", PrimitiveConstructorInjection.class, null, Boolean.TYPE, null, "true");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedBoolean", WrapperConstructorInjection.class, null, Boolean.class, null, "false");
+        //byte
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveByte", PrimitiveConstructorInjection.class, null, Byte.TYPE, null, "-128");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedByte", WrapperConstructorInjection.class, null, Byte.class, null, "127");
+        //double
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveDouble", PrimitiveConstructorInjection.class, null, Double.TYPE, null, "4.9e-324");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedDouble", WrapperConstructorInjection.class, null, Double.class, null, "1.7976931348623157E308");
+        //float
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveFloat", PrimitiveConstructorInjection.class, null, Float.TYPE, null, "1.4E-45");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedFloat", WrapperConstructorInjection.class, null, Float.class, null, "3.4028235E38");
+        //int
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveInteger", PrimitiveConstructorInjection.class, null, Integer.TYPE, null, "-2147483648");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedInteger", WrapperConstructorInjection.class, null, Integer.class, null, "2147483647");
+        //char
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveCharacter", PrimitiveConstructorInjection.class, null, Character.TYPE, null, "a");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedCharacter", WrapperConstructorInjection.class, null, Character.class, null, "A");
+        //short
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveShort", PrimitiveConstructorInjection.class, null, Short.TYPE, null, "-32768");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedShort", WrapperConstructorInjection.class, null, Short.class, null, "32767");
+        //long
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveLong", PrimitiveConstructorInjection.class, null, Long.TYPE, null, "-9223372036854775808");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedLong", WrapperConstructorInjection.class, null, Long.class, null, "9223372036854775807");
 
         controller.run();
     }
@@ -266,14 +259,38 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         MetadataEventSet startEvents = controller.getStartEvents();
 
         // value test
-        this.addConstructorValueTestItems(startEvents, ConstructorInjection.class);
-
-        // factory metadata test
-        this.addFactoryMetadataTestItems(startEvents, null, null);
+        this.addConstructorValueTestItems(startEvents);
 
         // parameter metadata test
-        // TODO: bugzilla 1230, Mismatch in constructor parameter size expected:<1> but was:<0>
-        this.addConstructorMetadataTestItems(startEvents, null, "makeInstance");
+        // string
+        this.addArgumentMetadataValidator(startEvents, "compInnerStringBothTyped", null, "makeInstance", String.class, String.class, "STR2");
+        this.addArgumentMetadataValidator(startEvents, "compInnerStringValueTyped", null, "makeInstance", null, String.class, "STR3");
+        this.addArgumentMetadataValidator(startEvents, "compInnerStringArgTyped", null, "makeInstance", String.class, null, "STR4");
+        this.addArgumentMetadataValidator(startEvents, "compInnerString", null, "makeInstance", String.class, null, "STR5");
+        //boolean
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveBoolean", null, "makePrimInstance", Boolean.TYPE, null, "true");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedBoolean", null, "makeWrapperInstance", Boolean.class, null, "false");
+        //byte
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveByte", null, "makePrimInstance", Byte.TYPE, null, "-128");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedByte", null, "makeWrapperInstance", Byte.class, null, "127");
+        //double
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveDouble", null, "makePrimInstance", Double.TYPE, null, "4.9e-324");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedDouble", null, "makeWrapperInstance", Double.class, null, "1.7976931348623157E308");
+        //float
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveFloat", null, "makePrimInstance", Float.TYPE, null, "1.4E-45");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedFloat", null, "makeWrapperInstance", Float.class, null, "3.4028235E38");
+        //int
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveInteger", null, "makePrimInstance", Integer.TYPE, null, "-2147483648");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedInteger", null, "makeWrapperInstance", Integer.class, null, "2147483647");
+        //char
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveCharacter", null, "makePrimInstance", Character.TYPE, null, "a");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedCharacter", null, "makeWrapperInstance", Character.class, null, "A");
+        //short
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveShort", null, "makePrimInstance", Short.TYPE, null, "-32768");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedShort", null, "makeWrapperInstance", Short.class, null, "32767");
+        //long
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveLong", null, "makePrimInstance", Long.TYPE, null, "-9223372036854775808");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedLong", null, "makeWrapperInstance", Long.class, null, "9223372036854775807");
 
         controller.run();
     }
@@ -284,15 +301,37 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         MetadataEventSet startEvents = controller.getStartEvents();
 
         // value test
-        this.addConstructorValueTestItems(startEvents, ConstructorInjection.class);
-
-        // factory metadata test
-        // TODO: bugzilla 1231, comp created by StaticFactory, has constructorInjMetadata, but no methodInjMetaData?
-        this.addFactoryMetadataTestItems(startEvents,InnerComponentInjectionStaticFactory.class.getName(), null);
+        this.addConstructorValueTestItems(startEvents);
 
         // parameter metadata test
-        // TODO: BeanComponent, wait bugzilla 1230 1231
-        this.addConstructorMetadataTestItems(startEvents, ConstructorInjectionStaticFactory.class, "makeInstance");
+        this.addArgumentMetadataValidator(startEvents, "compInnerStringBothTyped", ConstructorInjectionStaticFactory.class, "makeInstance", String.class, String.class, "STR2");
+        this.addArgumentMetadataValidator(startEvents, "compInnerStringValueTyped", ConstructorInjectionStaticFactory.class, "makeInstance", null, String.class, "STR3");
+        this.addArgumentMetadataValidator(startEvents, "compInnerStringArgTyped", ConstructorInjectionStaticFactory.class, "makeInstance", String.class, null, "STR4");
+        this.addArgumentMetadataValidator(startEvents, "compInnerString", ConstructorInjectionStaticFactory.class, "makeInstance", String.class, null, "STR5");
+        //boolean
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveBoolean", ConstructorInjectionStaticFactory.class, "makePrimInstance", Boolean.TYPE, null, "true");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedBoolean", ConstructorInjectionStaticFactory.class, "makeWrapperInstance", Boolean.class, null, "false");
+        //byte
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveByte", ConstructorInjectionStaticFactory.class, "makePrimInstance", Byte.TYPE, null, "-128");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedByte", ConstructorInjectionStaticFactory.class, "makeWrapperInstance", Byte.class, null, "127");
+        //double
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveDouble", ConstructorInjectionStaticFactory.class, "makePrimInstance", Double.TYPE, null, "4.9e-324");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedDouble", ConstructorInjectionStaticFactory.class, "makeWrapperInstance", Double.class, null, "1.7976931348623157E308");
+        //float
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveFloat", ConstructorInjectionStaticFactory.class, "makePrimInstance", Float.TYPE, null, "1.4E-45");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedFloat", ConstructorInjectionStaticFactory.class, "makeWrapperInstance", Float.class, null, "3.4028235E38");
+        //int
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveInteger", ConstructorInjectionStaticFactory.class, "makePrimInstance", Integer.TYPE, null, "-2147483648");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedInteger", ConstructorInjectionStaticFactory.class, "makeWrapperInstance", Integer.class, null, "2147483647");
+        //char
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveCharacter", ConstructorInjectionStaticFactory.class, "makePrimInstance", Character.TYPE, null, "a");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedCharacter", ConstructorInjectionStaticFactory.class, "makeWrapperInstance", Character.class, null, "A");
+        //short
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveShort", ConstructorInjectionStaticFactory.class, "makePrimInstance", Short.TYPE, null, "-32768");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedShort", ConstructorInjectionStaticFactory.class, "makeWrapperInstance", Short.class, null, "32767");
+        //long
+        this.addArgumentMetadataValidator(startEvents, "compInnerPrimitiveLong", ConstructorInjectionStaticFactory.class, "makePrimInstance", Long.TYPE, null, "-9223372036854775808");
+        this.addArgumentMetadataValidator(startEvents, "compInnerWrapperedLong", ConstructorInjectionStaticFactory.class, "makeWrapperInstance", Long.class, null, "9223372036854775807");
 
         controller.run();
     }
