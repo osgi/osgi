@@ -1,5 +1,9 @@
 package org.osgi.service.remoteservices.admin;
 
+import java.util.*;
+
+import org.osgi.framework.*;
+
 /**
  * A Remote Service Admin Listener is notified asynchronously of any export or
  * import registrations and unregistrations.
@@ -47,4 +51,6 @@ public interface RemoteServiceAdminListener {
 	 *            The associated import registration
 	 */
 	void removeImport(ImportRegistration reg);
+	
+	
 }

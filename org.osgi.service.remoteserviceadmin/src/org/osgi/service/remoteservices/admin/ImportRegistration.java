@@ -35,6 +35,6 @@ public interface ImportRegistration {
 	 * 
 	 * This method has no effect when the service is already unregistered or in the process off.
 	 */
-	void unregister();
+	void close();
 
 }

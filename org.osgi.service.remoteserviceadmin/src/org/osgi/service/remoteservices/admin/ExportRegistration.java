@@ -35,5 +35,10 @@ public interface ExportRegistration {
 	 * 
 	 * This method has no effect when the endpoint is already destroyed or being destroyed.
 	 */
-	void unregister();
+	void close();
+	
+	/**
+	 * 
+	 */
+	Throwable getException();
 }

@@ -88,7 +88,7 @@ public interface EndpointDescription {
 	 * value than then this endpoint corresponds to an endpoint created on the
 	 * local framework.
 	 */
-	public static final Object ENDPOINT_LOCAL = "endpoint.local";
+	public static final String ENDPOINT_LOCAL = "endpoint.local";
 	
 	/**
 	 * An Interface Description holds the triplet of the fully qualified name
@@ -142,10 +142,9 @@ public interface EndpointDescription {
 	public List /* <Interface> */getInterfaceDescriptions();
 
 	/**
-	 * Returns the URI of the service location of this endpoint. ### what is
-	 * this URI? The tag line is clear from the name, but what does it do, what
-	 * is the intent?
+	 * Returns the URI of the service location of this endpoint. 
 	 * 
+	 *
 	 * @return The URI of the service location, or <code>null</code> if it
 	 *         hasn't been provided.
 	 */

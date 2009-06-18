@@ -2,6 +2,7 @@ package org.osgi.service.remoteservices.registry;
 
 import java.util.*;
 
+import org.osgi.framework.*;
 import org.osgi.service.remoteservices.*;
 
 /**
@@ -59,8 +60,9 @@ public interface EndpointRegistry {
 	 *            The filter to use to limit the return set of
 	 *            EndpointDescription objects, or null if all are requested.
 	 * @return A list of EndpointDescription objects
+	 * @throws InvalidSyntaxException 
 	 */
-	List/* <EndpointDescription> */list(String filter);
+	List/* <EndpointDescription> */list(String filter) throws InvalidSyntaxException;
 
 	/**
 	 * Register an endpoint with this registry.
