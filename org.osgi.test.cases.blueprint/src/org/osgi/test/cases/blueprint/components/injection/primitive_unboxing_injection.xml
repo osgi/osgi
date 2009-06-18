@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+        Tests of the boxing/unboxing behavior of primitives and wrappered values.  Each form will
+        be injected into a property of the opposite form
+    </description>
+
+   <bean id="primBoolean" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+       <property name="primBoolean">
+           <value type="java.lang.Boolean">true</value>
+       </property>
+   </bean>
+   <bean id="wrapperedBoolean" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+       <property name="boolean">
+           <value type="boolean">false</value>
+       </property>
+   </bean>
+
+   <bean id="primByte" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+       <property name="primByte">
+           <value type="java.lang.Byte">1</value>
+       </property>
+   </bean>
+   <bean id="wrapperedByte" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+       <property name="byte">
+           <value type="byte">2</value>
+       </property>
+   </bean>
+
+   <bean id="primShort" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+       <property name="primShort">
+           <value type="java.lang.Short">1</value>
+       </property>
+   </bean>
+   <bean id="wrapperedShort" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+       <property name="short">
+           <value type="short">2</value>
+       </property>
+   </bean>
+
+   <bean id="primLong" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+       <property name="primLong">
+           <value type="java.lang.Long">1</value>
+       </property>
+   </bean>
+   <bean id="wrapperedLong" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+       <property name="long">
+           <value type="long">2</value>
+       </property>
+   </bean>
+
+   <bean id="primDouble" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+       <property name="primDouble">
+           <value type="java.lang.Double">1</value>
+       </property>
+   </bean>
+   <bean id="wrapperedDouble" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+       <property name="double">
+           <value type="double">2</value>
+       </property>
+   </bean>
+
+   <bean id="primFloat" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+       <property name="primFloat">
+           <value type="java.lang.Float">1</value>
+       </property>
+   </bean>
+   <bean id="wrapperedFloat" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+       <property name="float">
+           <value type="float">2</value>
+       </property>
+   </bean>
+
+   <bean id="primInteger" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+       <property name="primInteger">
+           <value type="java.lang.Integer">1</value>
+       </property>
+   </bean>
+   <bean id="wrapperedInteger" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+       <property name="integer">
+           <value type="int">2</value>
+       </property>
+   </bean>
+
+   <bean id="primCharacter" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+       <property name="primCharacter">
+           <value type="java.lang.Character">1</value>
+       </property>
+   </bean>
+   <bean id="wrapperedCharacter" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+       <property name="character">
+           <value type="char">2</value>
+       </property>
+   </bean>
+</blueprint>
+
