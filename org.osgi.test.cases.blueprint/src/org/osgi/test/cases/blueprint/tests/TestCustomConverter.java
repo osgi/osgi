@@ -81,7 +81,7 @@ public class TestCustomConverter extends DefaultTestBundleControl {
         startEvents.validateComponentArgument("compAsia_cnst", "arg2", new AsianRegionCode("CN+86"), AsianRegionCode.class);
         startEvents.addValidator(new ArgumentMetadataValidator("compAsia_cnst", new TestArgument[] {
                 new StringArgument("compAsia_cnst"),
-                new StringArgument(AsianRegionCode.class, "CN+86") }));
+                new TestArgument(new TestStringValue(AsianRegionCode.class, "CN+86"), RegionCode.class) }));
 
         controller.run();
     }

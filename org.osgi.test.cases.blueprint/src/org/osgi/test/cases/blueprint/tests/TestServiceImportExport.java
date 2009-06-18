@@ -1031,7 +1031,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // look for a blueprint event that can trigger the service manager to register
         // the dependent service
         Properties filterProps = new Properties();
-        filterProps.put(org.osgi.service.event.EventConstants.SERVICE_OBJECTCLASS, new String[] { TestServiceOne.class.getName() });
+        filterProps.put(org.osgi.framework.Constants.OBJECTCLASS, new String[] { TestServiceOne.class.getName() });
 
         importStartEvents.addEvent(new BlueprintContainerEvent("GRACE_PERIOD", null, new Properties[] { filterProps }, null));
         importStartEvents.addEvent(new BlueprintAdminEvent("GRACE_PERIOD", null, new Properties[] { filterProps }, new ServiceManagerRegister(serviceManager)));
@@ -1732,7 +1732,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
         // Ok, when the WAITING event is triggered, we register the second service.
         Properties filterProps = new Properties();
-        filterProps.put(org.osgi.service.event.EventConstants.SERVICE_OBJECTCLASS, new String[] { TestServiceOne.class.getName() });
+        filterProps.put(org.osgi.framework.Constants.OBJECTCLASS, new String[] { TestServiceOne.class.getName() });
 
         importStartEvents.addEvent(new BlueprintContainerEvent("WAITING", null, new Properties[] { filterProps }, null ));
         importStartEvents.addEvent(new BlueprintAdminEvent("WAITING", null, new Properties[] { filterProps }, new ServiceManagerRegister(serviceManager, "ServiceOneB")));
