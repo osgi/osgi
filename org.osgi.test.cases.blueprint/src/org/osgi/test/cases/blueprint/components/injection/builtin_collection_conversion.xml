@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+        This tests the builtin conversions between set, list, and array with different combinations
+        of concrete and abstract collection classes.  All conversions are done using builtin
+        conversions (no type converters)
+    </description>
+
+    <bean id="setToCollection" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="collection">
+            <set>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="setToList" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="list">
+            <set>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="setToSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="set">
+            <set>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="setToSortedSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="sortedSet">
+            <set>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="setToStack" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="stack">
+            <set>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="setToHashSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="hashSet">
+            <set>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="setToLinkedHashSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="linkedHashSet">
+            <set>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="setToTreeSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="treeSet">
+            <set>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="setToArrayList" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="arrayList">
+            <set>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="setToLinkedList" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="linkedList">
+            <set>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="setToVector" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="vector">
+            <set>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="listToCollection" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="collection">
+            <list>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="listToList" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="list">
+            <list>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="listToSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="set">
+            <list>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="listToSortedSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="sortedSet">
+            <list>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="listToStack" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="stack">
+            <list>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="listToHashSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="hashSet">
+            <list>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="listTolinkedHashSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="linkedHashSet">
+            <list>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="listToTreeSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="treeSet">
+            <list>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="listToSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="set">
+            <list>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="listToArrayList" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="arrayList">
+            <list>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="listToLinkedList" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="linkedList">
+            <list>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="listToVector" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="vector">
+            <list>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="arrayToCollection" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="collection">
+            <array>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="arrayToList" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="list">
+            <array>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="arrayToSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="set">
+            <array>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="arrayToSortedSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="sortedSet">
+            <array>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="arrayToStack" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="stack">
+            <array>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="arrayToHashSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="hashSet">
+            <array>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="arrayTolinkedHashSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="linkedHashSet">
+            <array>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="arrayToTreeSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="treeSet">
+            <array>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="arrayToSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="set">
+            <array>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="arrayToArrayList" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="arrayList">
+            <array>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="arrayToLinkedList" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="linkedList">
+            <array>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="arrayToVector" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="vector">
+            <array>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </array>
+        </property>
+    </bean>
+
+</blueprint>
+
+

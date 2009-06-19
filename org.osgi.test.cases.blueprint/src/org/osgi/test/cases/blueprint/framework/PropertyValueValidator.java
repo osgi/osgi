@@ -56,6 +56,24 @@ public class PropertyValueValidator extends MetadataValidator {
         this.value = new ValueDescriptor(propertyName, value, clz);
     }
 
+    /**
+     * Create a property validator.
+     *
+     * @param componentId
+     *               The target componet id.
+     * @param propertyName
+     *               The name of the property value.
+     * @param value  The expected property value.
+     * @param clz    The expected class of the value.
+     * @param implementation
+     *               The expected concrete class for the type.
+     */
+    public PropertyValueValidator(String componentId, String propertyName, Object value, Class clz, Class implementation) {
+        this.componentId = componentId;
+        // add the validator appropriate for this
+        this.value = new ValueDescriptor(propertyName, value, clz, implementation);
+    }
+
 
     /**
      * Create a property validator.

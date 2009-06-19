@@ -34,6 +34,13 @@ public class ValueDescriptor extends Assert {
      // object will be a Wrapper instance and the class will be the primitive
      // type (e.g.,
      protected Class clz;
+     // a specific implementation class we expect this value to be.  This
+     // determination is made by checking the object value.  This occurs
+     // in situations such as the collections where we're injecting to a
+     // property defined using an interface, but the spec also sets
+     // implementation class requirements.
+     protected Class implementationClass;
+
 
      /**
       * Create a component value from a name and value object.
@@ -42,13 +49,18 @@ public class ValueDescriptor extends Assert {
       * @param value  The object value.
       */
      public ValueDescriptor(String name, Object value) {
-         this(name, value, null);
+         this(name, value, null, null);
      }
 
      public ValueDescriptor(String name, Object value, Class clz) {
+         this(name, value, clz, null);
+     }
+
+     public ValueDescriptor(String name, Object value, Class clz, Class implementationClass) {
          this.name = name;
          this.value = value;
          this.clz = clz;
+         this.implementationClass = implementationClass;
          // if we have a a real value, then snag some additional
          // information about this.
          if (value != null) {
@@ -73,7 +85,7 @@ public class ValueDescriptor extends Assert {
          }
 
          ValueDescriptor other = (ValueDescriptor)o;
-         
+
          if (!compareObjects(value, other.value)) {
              return false;
          }
@@ -84,6 +96,13 @@ public class ValueDescriptor extends Assert {
          if (clz != other.clz) {
              return false;
          }
+
+         // if we have a value and there's a provided implementationClass,
+         // perform an instance of check.
+         if (implementationClass != null && other.value != null) {
+             return implementationClass.isInstance(other.value);
+         }
+
          return true;
      }
 
@@ -111,7 +130,7 @@ public class ValueDescriptor extends Assert {
      public String toString() {
          return "Name=" + name + ", Value=" + value + ", Class=" + clz;
      }
-     
+
      private static boolean compareObjects(Object obj1, Object obj2) {
          // if one is null, the must both be null.
          if (obj1 == null) {
@@ -132,16 +151,16 @@ public class ValueDescriptor extends Assert {
              return obj1.equals(obj2);
          }
      }
-     
+
      private static boolean compareArrays(Object array1, Object array2) {
          int size1 = Array.getLength(array1);
          int size2 = Array.getLength(array2);
          if (size1 != size2) {
-             return false;            
+             return false;
          }
          for (int i = 0; i < size1; i++) {
              Object obj1 = Array.get(array1, i);
-             Object obj2 = Array.get(array2, i);             
+             Object obj2 = Array.get(array2, i);
              if (!compareObjects(obj2, obj2)) {
                  return false;
              }

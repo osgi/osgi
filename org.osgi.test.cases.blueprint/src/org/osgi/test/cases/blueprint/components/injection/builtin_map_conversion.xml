@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <component id="mapToHashMap" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="hashMap">
+            <map>
+                <entry key="abc" value="1"/>
+                <entry key="def" value="2"/>
+            </map>
+        </property>
+    </component>
+
+    <component id="mapToTreeMap" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="treeMap">
+            <map>
+                <entry key="abc" value="1"/>
+                <entry key="def" value="2"/>
+            </map>
+        </property>
+    </component>
+
+    <component id="mapToHashtable" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="hashtable">
+            <map>
+                <entry key="abc" value="1"/>
+                <entry key="def" value="2"/>
+            </map>
+        </property>
+    </component>
+
+    <component id="mapToDictionary" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="dictionary">
+            <map>
+                <entry key="abc" value="1"/>
+                <entry key="def" value="2"/>
+            </map>
+        </property>
+    </component>
+
+    <component id="mapToSortedMap" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="sortedMap">
+            <map>
+                <entry key="abc" value="1"/>
+                <entry key="def" value="2"/>
+            </map>
+        </property>
+    </component>
+
+    <component id="mapToConcurrentMap" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="concurrentMap">
+            <map>
+                <entry key="abc" value="1"/>
+                <entry key="def" value="2"/>
+            </map>
+        </property>
+    </component>
+
+</components>
+

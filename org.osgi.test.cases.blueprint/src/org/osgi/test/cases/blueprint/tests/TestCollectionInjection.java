@@ -17,10 +17,15 @@
 package org.osgi.test.cases.blueprint.tests;
 
 import java.net.URL;
+import java.util.Collection;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Vector;
 import java.util.HashMap;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.TreeSet;
@@ -29,11 +34,14 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.Stack;
 
 import org.osgi.test.cases.blueprint.framework.ArgumentMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.MapValueEntry;
 import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
 import org.osgi.test.cases.blueprint.framework.PropertyMetadataValidator;
+import org.osgi.test.cases.blueprint.framework.PropertyValueValidator;
 import org.osgi.test.cases.blueprint.framework.StandardTestController;
 import org.osgi.test.cases.blueprint.framework.TestListValue;
 import org.osgi.test.cases.blueprint.framework.TestMapValue;
@@ -473,6 +481,12 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
     }
 
 
+    private void addPropertyValidator(MetadataEventSet startEvents, String compName, String propertyName, Object propertyValue, Class type, Class implementation) {
+        startEvents.addValidator(new PropertyValueValidator(compName, propertyName, propertyValue, type, implementation));
+    }
+
+
+
 	public void testListProperty() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
             getWebServer()+"www/list_property_injection.jar");
@@ -673,6 +687,22 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected.add("def");
         addPropertyValidator(startEvents, "treeSet", "treeSet", expected, TreeSet.class);
         addPropertyValidator(startEvents, "treeSetFromList", "treeSet", expected, TreeSet.class);
+
+        controller.run();
+    }
+
+	public void testConvertedMap() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/converted_map_injection.jar");
+        MetadataEventSet startEvents = controller.getStartEvents();
+
+        // simple list of strings
+        Map expected = new HashMap();
+        expected.put("abc", "1");
+        expected.put("def", "2");
+        addPropertyValidator(startEvents, "hashMap", "hashMap", expected, HashMap.class);
+        addPropertyValidator(startEvents, "treeMap", "treeMap", expected, TreeMap.class);
+        addPropertyValidator(startEvents, "hashtable", "hashtable", expected, Hashtable.class);
 
         controller.run();
     }
@@ -2887,4 +2917,118 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
     }
 
 
+    /**
+     * Test the defined set of collection-to-collection
+     * conversion operations.
+     *
+     * @exception Exception
+     */
+	public void testBuiltinCollectionConversion() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/builtin_collection_conversion.jar");
+        MetadataEventSet startEvents = controller.getStartEvents();
+
+        // this is the result when a set class is the target
+        Collection expectedSet = new HashSet();
+        expectedSet.add("abc");
+        expectedSet.add("def");
+
+        addPropertyValidator(startEvents, "setToHashSet", "hashSet", expectedSet, HashSet.class);
+        addPropertyValidator(startEvents, "listToHashSet", "hashSet", expectedSet, HashSet.class);
+        addPropertyValidator(startEvents, "arrayToHashSet", "hashSet", expectedSet, HashSet.class);
+
+        // generic set conversion
+        addPropertyValidator(startEvents, "setToSet", "set", expectedSet, Set.class, LinkedHashSet.class);
+        addPropertyValidator(startEvents, "listToSet", "set", expectedSet, Set.class, LinkedHashSet.class);
+        addPropertyValidator(startEvents, "arrayToSet", "set", expectedSet, Set.class, LinkedHashSet.class);
+
+        // since Collection and Set are compatible, this should not be converted into the
+        // default collection implementation.
+        addPropertyValidator(startEvents, "setToCollection", "collection", expectedSet, Collection.class, LinkedHashSet.class);
+
+        // <list> will remain the same, and <array> will be converted into an array list
+        Collection expectedList = new ArrayList();
+        expectedList.add("abc");
+        expectedList.add("def");
+        expectedList.add("def");
+
+        // this is the result expected when the source is a set...the dup has been removed
+        Collection expectedSetList = new ArrayList();
+        expectedSetList.add("abc");
+        expectedSetList.add("def");
+
+        addPropertyValidator(startEvents, "listToCollection", "collection", expectedList, Collection.class, ArrayList.class);
+        addPropertyValidator(startEvents, "arrayToCollection", "collection", expectedList, Collection.class, ArrayList.class);
+
+        // these should all end up being the same type
+        addPropertyValidator(startEvents, "setToSortedSet", "sortedSet", expectedSet, SortedSet.class, TreeSet.class);
+        addPropertyValidator(startEvents, "listToSortedSet", "sortedSet", expectedSet, SortedSet.class, TreeSet.class);
+        addPropertyValidator(startEvents, "arrayToSortedSet", "sortedSet", expectedSet, SortedSet.class, TreeSet.class);
+
+        // these should all end up being the same type
+        addPropertyValidator(startEvents, "setToStack", "stack", expectedSetList, Stack.class);
+        addPropertyValidator(startEvents, "listToStack", "stack", expectedList, Stack.class);
+        addPropertyValidator(startEvents, "arrayToStack", "stack", expectedList, Stack.class);
+
+        addPropertyValidator(startEvents, "setToLinkedHashSet", "linkedHashSet", expectedSet, LinkedHashSet.class);
+        addPropertyValidator(startEvents, "listTolinkedHashSet", "linkedHashSet", expectedSet, LinkedHashSet.class);
+        addPropertyValidator(startEvents, "arrayTolinkedHashSet", "linkedHashSet", expectedSet, LinkedHashSet.class);
+
+        addPropertyValidator(startEvents, "setToTreeSet", "treeSet", expectedSet, TreeSet.class);
+        addPropertyValidator(startEvents, "listToTreeSet", "treeSet", expectedSet, TreeSet.class);
+        addPropertyValidator(startEvents, "arrayToTreeSet", "treeSet", expectedSet, TreeSet.class);
+
+        addPropertyValidator(startEvents, "listToArrayList", "arrayList", expectedList, ArrayList.class);
+        addPropertyValidator(startEvents, "setToArrayList", "arrayList", expectedSetList, ArrayList.class);
+        addPropertyValidator(startEvents, "arrayToArrayList", "arrayList", expectedList, ArrayList.class);
+
+        // generic list conversion
+        addPropertyValidator(startEvents, "setToList", "list", expectedSetList, List.class, ArrayList.class);
+        addPropertyValidator(startEvents, "listToList", "list", expectedList, List.class, ArrayList.class);
+        addPropertyValidator(startEvents, "arrayToList", "list", expectedList, List.class, ArrayList.class);
+
+        addPropertyValidator(startEvents, "listTolinkedList", "linkedList", expectedList, LinkedList.class);
+        addPropertyValidator(startEvents, "setTolinkedList", "linkedList", expectedSetList, LinkedList.class);
+        addPropertyValidator(startEvents, "arrayTolinkedList", "linkedList", expectedList, LinkedList.class);
+
+        // simple list of strings
+        expectedSetList = new Vector();
+        expectedSetList.add("abc");
+        expectedSetList.add("def");
+
+        expectedList = new Vector();
+        expectedList.add("abc");
+        expectedList.add("def");
+        expectedList.add("def");
+
+        addPropertyValidator(startEvents, "listToVector", "vector", expectedList, Vector.class);
+        addPropertyValidator(startEvents, "setToVector", "vector", expectedSetList, Vector.class);
+        addPropertyValidator(startEvents, "arrayToVector", "vector", expectedList, Vector.class);
+
+        controller.run();
+    }
+
+
+    /**
+     * Test the builtin map conversion options.
+     *
+     * @exception Exception
+     */
+	public void testBuiltinMapConversion() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/converted_map_injection.jar");
+        MetadataEventSet startEvents = controller.getStartEvents();
+
+        // simple hash map of strings
+        Map expected = new HashMap();
+        expected.put("abc", "1");
+        expected.put("def", "2");
+        addPropertyValidator(startEvents, "mapToHashMap", "hashMap", expected, HashMap.class);
+        addPropertyValidator(startEvents, "mapToTreeMap", "treeMap", expected, TreeMap.class);
+        addPropertyValidator(startEvents, "mapToHashtable", "hashtable", expected, Hashtable.class);
+        addPropertyValidator(startEvents, "mapToSortedMap", "sortedMap", expected, SortedMap.class, TreeMap.class);
+        addPropertyValidator(startEvents, "mapToDictionary", "dictionary", expected, Dictionary.class, Hashtable.class);
+
+        controller.run();
+    }
 }

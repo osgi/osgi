@@ -18,6 +18,11 @@ package org.osgi.test.cases.blueprint.components.injection;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Dictionary;
+import java.util.SortedSet;
+import java.util.SortedMap;
+import java.util.Stack;
 import java.util.LinkedList;
 import java.util.Vector;
 import java.util.Date;
@@ -166,6 +171,18 @@ public class PropertyInjection extends BaseTestComponent {
         }
     }
 
+    public void setCollection(Collection value) {
+        setPropertyValue("collection", value, Collection.class);
+    }
+
+    public void setSortedSet(SortedSet value) {
+        setPropertyValue("sortedSet", value, SortedSet.class);
+    }
+
+    public void setStack(Stack value) {
+        setPropertyValue("stack", value, Stack.class);
+    }
+
     public void setArrayList(ArrayList value) {
         setPropertyValue("arrayList", value, ArrayList.class);
     }
@@ -200,6 +217,14 @@ public class PropertyInjection extends BaseTestComponent {
 
     public void setTreeMap(TreeMap value) {
         setPropertyValue("treeMap", value, TreeMap.class);
+    }
+
+    public void setDictionary(Dictionary value) {
+        setPropertyValue("dictionary", value, Dictionary.class);
+    }
+
+    public void setSortedMap(SortedMap value) {
+        setPropertyValue("sortedMap", value, SortedMap.class);
     }
 
     // Start of insertion of array property

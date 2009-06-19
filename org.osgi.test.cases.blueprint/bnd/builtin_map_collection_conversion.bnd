@@ -1,0 +1,7 @@
+Bundle-SymbolicName:                     ${p}.builtin_map_collection_conversion
+Bundle-Version:                          4.2
+Import-Package:                          ${p}.components.injection, ${p}.services
+-resourceonly: true
+Include-Resource					= \
+	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/injection/builtin_map_conversion.xml
+
