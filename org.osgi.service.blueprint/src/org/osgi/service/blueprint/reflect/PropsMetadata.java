@@ -18,18 +18,19 @@ package org.osgi.service.blueprint.reflect;
 import java.util.List;
 
 /**
- * A java.util.Properties based value. The properties are defined as string to
- * string. This means that the actual value can be returned.
- *
+ * A </code>java.util.Properties</code> based value. The properties are
+ * defined as string to string. This means that the actual value can be
+ * returned.
+ * 
  * Defined in the <code>props</code> element.
- *
+ * 
  */
 public interface PropsMetadata extends NonNullMetadata {
 
 	/**
-	 * Defined in <code>prop</code> sub elements.
-	 *
-	 * @return list of <code.MapEntry</code> objects, never <code>null</code>
+	 * Defined in <code>prop</code> elements for an Object Value.
+	 * 
+	 * @return list of <code>MapEntry</code> objects, never <code>null</code>
 	 */
-	List/*<MapEntry>*/ getEntries();
+	List/* <MapEntry> */getEntries();
 }

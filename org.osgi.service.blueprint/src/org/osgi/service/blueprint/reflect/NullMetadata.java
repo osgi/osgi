@@ -21,7 +21,8 @@ package org.osgi.service.blueprint.reflect;
 public interface NullMetadata extends Metadata {
 
 	/**
-	 * Singleton instance of the NULL metadata.
+	 * Singleton instance of the <code>NULL</code> Metadata.
 	 */
-	static final NullMetadata NULL = new NullMetadata() {};
+	static final NullMetadata NULL = new NullMetadata() {
+	};
 }

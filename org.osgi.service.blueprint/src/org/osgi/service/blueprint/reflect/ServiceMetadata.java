@@ -18,91 +18,105 @@ package org.osgi.service.blueprint.reflect;
 import java.util.Collection;
 import java.util.List;
 
-
 /**
  * Metadata representing a service to be exported by a module context.
- *
+ * 
  */
 public interface ServiceMetadata extends ComponentMetadata, Target {
 
 	/**
-	 * Do not auto-detect types for advertised service intefaces
+	 * Do not auto-detect types for advertised service interfaces
+	 * 
+	 * @see #getAutoExport()
 	 */
 	public static final int AUTO_EXPORT_DISABLED = 1;
 
 	/**
 	 * Advertise all Java interfaces implemented by the exported component as
 	 * service interfaces.
+	 * 
+	 * @see #getAutoExport()
 	 */
-	public static final int AUTO_EXPORT_INTERFACES= 2;
+	public static final int AUTO_EXPORT_INTERFACES = 2;
 
 	/**
-	 * Advertise all Java classes in the hierarchy of the exported component's type
-	 * as service interfaces.
+	 * Advertise all Java classes in the hierarchy of the exported component's
+	 * type as service interfaces.
+	 * 
+	 * @see #getAutoExport()
 	 */
 	public static final int AUTO_EXPORT_CLASS_HIERARCHY = 3;
 
 	/**
-	 * Advertise all Java classes and interfaces in the exported component's type as
-	 * service interfaces.
+	 * Advertise all Java classes and interfaces in the exported component's
+	 * type as service interfaces.
+	 * 
+	 * @see #getAutoExport()
 	 */
 	public static final int AUTO_EXPORT_ALL_CLASSES = 4;
 
 	/**
-	 * The component that is to be exported as a service. Value must refer to a component and
-	 * therefore be either a RefMetadata, BeanMetadata, or ReferenceMetadata.
-	 *
+	 * The component that is to be exported as a service. Value must refer to a
+	 * component and therefore be either a {@link RefMetadata},
+	 * {@link BeanMetadata}, or {@link ReferenceMetadata}.
+	 * 
 	 * Defined in the <code>registration-method</code> attribute.
-	 *
+	 * 
 	 * @return the component to be exported as a service.
 	 */
 	Target getServiceComponent();
 
 	/**
-	 * The type names of the set of interface types that the service should be advertised
-	 * as supporting, as specified in the component declaration.
-	 *
-	 * Defined in the <code>interface</code> attribute or <code>interfaces</code> element.
-	 *
-	 * @return an immutable set of (String) type names, or an empty set if using auto-export
+	 * The type names of the set of interface types that the service should be
+	 * advertised as supporting, as specified in the component declaration.
+	 * 
+	 * Defined in the <code>interface</code> attribute or
+	 * <code>interfaces</code> element.
+	 * 
+	 * @return an immutable set of (<code>String</code>) type names, or an
+	 *         empty set if using auto-export
 	 */
-	List/*<String>*/ getInterfaces();
+	List/* <String> */getInterfaces();
 
 	/**
 	 * Return the auto-export mode specified.
-	 *
+	 * 
 	 * Defined in the <code>auto-export</code> attribute.
-	 *
-	 * @return One of AUTO_EXPORT_DISABLED, AUTO_EXPORT_INTERFACES, AUTO_EXPORT_CLASS_HIERARCHY, AUTO_EXPORT_ALL_CLASSES
+	 * 
+	 * @return One of {@link #AUTO_EXPORT_DISABLED},
+	 *         {@link #AUTO_EXPORT_INTERFACES},
+	 *         {@link #AUTO_EXPORT_CLASS_HIERARCHY},
+	 *         {@link #AUTO_EXPORT_ALL_CLASSES}
 	 */
 	int getAutoExport();
 
 	/**
 	 * The user declared properties to be advertised with the service.
-	 *
+	 * 
 	 * Defined in the <code>service-properties</code> element.
-	 *
-	 * @return Map containing the set of user declared service properties (may be
-	 * empty if no properties were specified).
+	 * 
+	 * @return <code>Map</code> containing the set of user declared service
+	 *         properties (may be empty if no properties were specified).
 	 */
-	List/*<MapEntry>*/ getServiceProperties();
+	List/* <MapEntry> */getServiceProperties();
 
 	/**
-	 * The ranking value to use when advertising the service
-	 *
+	 * The ranking value to use when advertising the service. If this value is
+	 * zero, no ranking service property must be registered.
+	 * 
 	 * Defined in the <code>ranking</code> attribute.
-	 *
+	 * 
 	 * @return service ranking
 	 */
 	int getRanking();
 
 	/**
-	 * The listeners that have registered to be notified when the exported service
-	 * is registered and unregistered with the framework.
-	 *
+	 * The listeners that have registered to be notified when the exported
+	 * service is registered and unregistered with the framework.
+	 * 
 	 * Defined in the <code>registration-listener</code> elements.
-	 *
+	 * 
 	 * @return an immutable collection of RegistrationListenerMetadata
 	 */
-	Collection /*<RegistrationListener>*/ getRegistrationListeners();
+	Collection /* <RegistrationListener> */getRegistrationListeners();
 }

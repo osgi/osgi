@@ -17,28 +17,31 @@ package org.osgi.service.blueprint.reflect;
 
 /**
  * Service reference that binds to a collection of matching services from the
- * OSGi service registry. This is the <code>ref-list</code> or
- * <code>ref-set</code> element.
- *
+ * OSGi service registry. This is the <code>ref-list</code> element.
+ * 
  */
 public interface RefListMetadata extends ServiceReferenceMetadata {
 
 	/**
 	 * Use the service objects to compare or include in the collection
+	 * 
+	 * @see #getMemberType
 	 */
 	public static final int USE_SERVICE_OBJECT = 1;
 
 	/**
- 	 * Use the service references to compare or include in the collection
- 	 */
+	 * Use the service references to compare or include in the collection
+	 * 
+	 * @see #getMemberType
+	 */
 	public static final int USE_SERVICE_REFERENCE = 2;
 
 	/**
 	 * Whether the collection will contain service objects, or service
-	 * references
-	 * Defined in the <code>member-type</code> attribute.
-	 *
-	 * @return one of USE_SERVICE_OBJECT and USE_SERVICE_REFERENCE
+	 * references Defined in the <code>member-type</code> attribute.
+	 * 
+	 * @return one of {@link #USE_SERVICE_OBJECT} and
+	 *         {@link #USE_SERVICE_REFERENCE}
 	 * @see #USE_SERVICE_OBJECT
 	 * @see #USE_SERVICE_REFERENCE
 	 */

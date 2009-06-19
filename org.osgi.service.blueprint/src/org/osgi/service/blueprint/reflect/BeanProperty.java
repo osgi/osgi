@@ -23,18 +23,18 @@ public interface BeanProperty {
 
 	/**
 	 * The name of the property to be injected, following JavaBeans conventions.
-	 *
+	 * 
 	 * Defined in the <code>name</code> attribute.
-	 *
+	 * 
 	 * @return the property name.
 	 */
 	String getName();
 
 	/**
 	 * The metadata for the value to inject the property with.
-	 *
+	 * 
 	 * Defined in the <code>value</code> attribute or inlined component.
-	 *
+	 * 
 	 * @return the metadata for the property value.
 	 */
 	Metadata getValue();

@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * Base class for all components.
- *
+ * 
  * @see BeanMetadata
  * @see ServiceReferenceMetadata
  * @see ServiceMetadata
@@ -32,37 +32,37 @@ public interface ComponentMetadata extends NonNullMetadata {
 	static final int INITIALIZATION_EAGER = 1;
 
 	/**
- 	 * The component will be lazily instanciated
- 	 */
+	 * The component will be lazily instanciated
+	 */
 	static final int INITIALIZATION_LAZY = 2;
 
 	/**
 	 * The id of the component.
-	 *
-	 * @return component id. The component id can be <code>null</code> if this is an anonymously
-	 * defined inner component.
+	 * 
+	 * @return component id. The component id can be <code>null</code> if this
+	 *         is an anonymously defined inner component.
 	 */
 	String getId();
 
 	/**
- 	 * Is this component to be lazily instantiated?
- 	 *
- 	 * This is the <code>initialization</code> attribute or the
- 	 * <code>default-initialization</code> in the <code>blueprint</code> element
- 	 * if not set.
- 	 *
- 	 * @return the initialization method
- 	 * @see #INITIALIZATION_EAGER
- 	 * @see #INITIALIZATION_LAZY
- 	 */
+	 * Is this component to be lazily instantiated?
+	 * 
+	 * This is the <code>initialization</code> attribute or the
+	 * <code>default-initialization</code> in the <code>blueprint</code>
+	 * element if not set.
+	 * 
+	 * @return the initialization method
+	 * @see #INITIALIZATION_EAGER
+	 * @see #INITIALIZATION_LAZY
+	 */
 	int getInitialization();
 
-    /**
-     * The names of any components listed in a "depends-on" attribute for this
-     * component.
-     *
-     * @return an immutable List of component names for components that we have explicitly
-     * declared a dependency on, or an empty set if none.
-     */
-    List/*<String>*/ getDependsOn();
+	/**
+	 * The names of any components listed in a "depends-on" attribute for this
+	 * component.
+	 * 
+	 * @return an immutable List of component names for components that we have
+	 *         explicitly declared a dependency on, or an empty set if none.
+	 */
+	List/* <String> */getDependsOn();
 }

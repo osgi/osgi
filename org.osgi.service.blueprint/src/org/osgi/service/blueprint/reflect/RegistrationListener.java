@@ -23,32 +23,32 @@ public interface RegistrationListener {
 
 	/**
 	 * The component instance that will receive registration and unregistration
-	 * events. The returned value must reference a TargetListenerComponent
-	 * either directly or indirectly.  The return type will be either
-     * a RefMetadata instance or an TargetListenerComponent instance.
-	 *
-	 * Defined in the <code>listener</code> child element.
-	 *
-	 * @return the listener component reference.
+	 * events. The returned value must reference a {@link Target} either
+	 * directly or indirectly. The return type will be either a
+	 * {@link RefMetadata} instance or an {@link Target} instance.
+	 * 
+	 * Defined in the <code>registration-listener</code> child element.
+	 * 
+	 * @return the registration listener component reference.
 	 */
 	Target getListenerComponent();
 
 	/**
-	 * The name of the method to invoke on the listener component when
-	 * the exported service is registered with the service registry.
-	 *
+	 * The name of the method to invoke on the listener component when the
+	 * exported service is registered with the service registry.
+	 * 
 	 * Defined in the <code>registration-method</code> attribute.
-	 *
+	 * 
 	 * @return the registration callback method name.
 	 */
 	String getRegistrationMethod();
 
 	/**
-	 * The name of the method to invoke on the listener component when
-	 * the exported service is unregistered from the service registry.
-	 *
+	 * The name of the method to invoke on the listener component when the
+	 * exported service is unregistered from the service registry.
+	 * 
 	 * Defined in the <code>unregistration-method</code> attribute.
-	 *
+	 * 
 	 * @return the unregistration callback method name.
 	 */
 	String getUnregistrationMethod();

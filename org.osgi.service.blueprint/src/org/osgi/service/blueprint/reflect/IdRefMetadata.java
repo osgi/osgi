@@ -18,13 +18,14 @@ package org.osgi.service.blueprint.reflect;
 /**
  * A value which represents the name of another component in the module context.
  * The name itself will be injected, not the component that the name refers to.
- *
+ * 
  */
 public interface IdRefMetadata extends NonNullMetadata {
 	/**
-	 * The name of the referenced component.
-	 * Defined in the <code>component-id</code> attribute.
-	 *
+	 * The name of the referenced component. Defined in the
+	 * <code>component-id</code> attribute.
+	 * 
+	 * @return The referred component id.
 	 */
 	String getComponentId();
 }
