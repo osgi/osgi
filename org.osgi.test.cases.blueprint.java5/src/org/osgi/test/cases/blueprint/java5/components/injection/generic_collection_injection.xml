@@ -74,5 +74,48 @@
             </map>
         </property>
     </bean>
+
+
+    <!--Combining a simple test for ConcurrentMap conversion in here -->
+    <bean id="mapToConcurrentMap" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericMapInjection">
+        <property name="concurrentMap">
+            <map>
+                <entry key="abc" value="1"/>
+                <entry key="def" value="2"/>
+            </map>
+        </property>
+    </bean>
+
+
+    <!--Combining simple tests for Queue conversion in here -->
+    <bean id="listToQueue" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericListInjection">
+        <property name="queue">
+            <list>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="setToQueue" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericListInjection">
+        <property name="queue">
+            <set>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="arrayToQueue" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericListInjection">
+        <property name="queue">
+            <array>
+                <value>abc</value>
+                <value>def</value>
+                <value>def</value>
+            </array>
+        </property>
+    </bean>
 </blueprint>
 

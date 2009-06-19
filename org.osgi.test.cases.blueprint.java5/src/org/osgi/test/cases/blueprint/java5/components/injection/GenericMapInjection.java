@@ -18,6 +18,8 @@ package org.osgi.test.cases.blueprint.java5.components.injection;
 
 import java.net.URL;
 import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 
@@ -50,6 +52,10 @@ public class GenericMapInjection extends BaseTestComponent {
 
     public void setMap2(Map<String, URL> arg1) {
         setPropertyValue("map2", arg1, Map.class);
+    }
+
+    public void setConcurrentMap(ConcurrentMap arg1) {
+        setPropertyValue("concurrentMap", arg1, ConcurrentMap.class);
     }
 }
 

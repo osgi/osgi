@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Properties;
 import java.util.List;
+import java.util.Queue;
 
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 
@@ -54,5 +55,9 @@ public class GenericListInjection extends BaseTestComponent {
 
     public void setClassList(List<Class> arg1) {
         setPropertyValue("classList", arg1, List.class);
+    }
+
+    public void setQueue(Queue arg1) {
+        setPropertyValue("queue", arg1, Queue.class);
     }
 }

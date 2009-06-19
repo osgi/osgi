@@ -17,7 +17,12 @@
 package org.osgi.test.cases.blueprint.java5.tests;
 
 import java.net.URL;
+import java.util.Collection;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -41,9 +46,19 @@ public class TestGenericCollectionInjection extends DefaultTestBundleControl {
         startEvents.validateComponentArgument(id, "arg1", value, type);
     }
 
-	public void testGenericCollectionInjection() throws Exception {
+
+    private void addPropertyValidator(MetadataEventSet startEvents, String compName, String propertyName, Object propertyValue, Class type) {
+        startEvents.validateComponentProperty(compName, propertyName, propertyValue, type);
+    }
+
+
+    private void addPropertyValidator(MetadataEventSet startEvents, String compName, String propertyName, Object propertyValue, Class type, Class implementation) {
+        startEvents.addValidator(new PropertyValueValidator(compName, propertyName, propertyValue, type, implementation));
+    }
+
+    public void testGenericCollectionInjection() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/generic_collection_injection.jar");
+                getWebServer()+"www/generic_collection_injection.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
 
         // There's nothing special about the metadata here, so we're really only interested in the fact
@@ -115,22 +130,47 @@ public class TestGenericCollectionInjection extends DefaultTestBundleControl {
             startEvents.validateComponentProperty("GenericMapProperty", "map2", expected, Map.class);
         }
 
+        {
+            Map expected = new HashMap();
+            expected.put("abc", "1");
+            expected.put("def", "2");
+            addPropertyValidator(startEvents, "mapToConcurrentMap", "concurrentMap", expected, ConcurrentMap.class, ConcurrentHashMap.class);
+        }
+
+        {
+            // <list> will remain the same, and <array> will be converted into an array list
+            Collection expectedList = new ArrayList();
+            expectedList.add("abc");
+            expectedList.add("def");
+            expectedList.add("def");
+
+            // this is the result expected when the source is a set...the dup has been removed
+            Collection expectedSetList = new ArrayList();
+            expectedList.add("abc");
+            expectedList.add("def");
+
+            // these should all end up being the same type
+            addPropertyValidator(startEvents, "setToQueue", "queue", expectedSetList, Queue.class, LinkedList.class);
+            addPropertyValidator(startEvents, "listToQueue", "queue", expectedList, Queue.class, LinkedList.class);
+            addPropertyValidator(startEvents, "arrayToQueue", "queue", expectedList, Queue.class, LinkedList.class);
+        }
+
         controller.run();
     }
 
 
-	/**
-	 * Import a list of ServiceReferences and validate against an expected set.
+    /**
+     * Import a list of ServiceReferences and validate against an expected set.
      * This will also unregister the services, validate the collection
      * has been emptied, then register and check again.
-	 */
-	public void testListCollectionReferenceImport() throws Exception {
+     */
+    public void testListCollectionReferenceImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/reference_list_import.jar",
-            getWebServer()+"www/managed_service_export.jar");
+                getWebServer()+"www/reference_list_import.jar",
+                getWebServer()+"www/managed_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -144,18 +184,18 @@ public class TestGenericCollectionInjection extends DefaultTestBundleControl {
     }
 
 
-	/**
-	 * Import a set of ServiceReferences and validate against an expected set.
+    /**
+     * Import a set of ServiceReferences and validate against an expected set.
      * This will also unregister the services, validate the collection
      * has been emptied, then register and check again.
-	 */
-	public void testSetCollectionReferenceImport() throws Exception {
+     */
+    public void testSetCollectionReferenceImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/reference_set_import.jar",
-            getWebServer()+"www/managed_service_export.jar");
+                getWebServer()+"www/reference_set_import.jar",
+                getWebServer()+"www/managed_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -169,18 +209,18 @@ public class TestGenericCollectionInjection extends DefaultTestBundleControl {
     }
 
 
-	/**
-	 * Import a collection of ServiceReferences and validate against an expected set.
+    /**
+     * Import a collection of ServiceReferences and validate against an expected set.
      * This will also unregister the services, validate the collection
      * has been emptied, then register and check again.
-	 */
-	public void testCollectionReferenceImport() throws Exception {
+     */
+    public void testCollectionReferenceImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/reference_collection_import.jar",
-            getWebServer()+"www/managed_service_export.jar");
+                getWebServer()+"www/reference_collection_import.jar",
+                getWebServer()+"www/managed_service_export.jar");
 
         // all of our validation here is on the importing side
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
@@ -194,12 +234,12 @@ public class TestGenericCollectionInjection extends DefaultTestBundleControl {
     }
 
 
-	/**
-	 * Test conversion of string values to Pattern instances.
-	 */
-	public void testPatternInjection() throws Exception {
+    /**
+     * Test conversion of string values to Pattern instances.
+     */
+    public void testPatternInjection() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/pattern_injection.jar");
+                getWebServer()+"www/pattern_injection.jar");
 
         // this one is self checking and will raise an assertion failure if something is wrong
         controller.run();
