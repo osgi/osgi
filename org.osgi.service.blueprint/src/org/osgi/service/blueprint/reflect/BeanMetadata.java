@@ -19,19 +19,28 @@ import java.util.List;
 
 /**
  * Metadata for a Bean Component.
- *
+ * 
  * This class describes a <code>bean</code> element.
  */
 public interface BeanMetadata extends Target, ComponentMetadata {
 
+	/**
+	 * Used when the <code>scope</code> is <code>singleton</code>. See
+	 * {@link #getScope()}
+	 */
+
 	static final String SCOPE_SINGLETON = "singleton";
+	/**
+	 * Used when the <code>scope</code> is <code>prototype</code> See
+	 * {@link #getScope()}
+	 */
 	static final String SCOPE_PROTOTYPE = "prototype";
 
 	/**
 	 * The name of the class type specified for this component.
-	 *
+	 * 
 	 * This is the <code>class</code> attribute.
-	 *
+	 * 
 	 * @return the name of the component class. If no class was specified in the
 	 *         component definition (because the a factory component is used
 	 *         instead) then this method will return null.
@@ -40,9 +49,9 @@ public interface BeanMetadata extends Target, ComponentMetadata {
 
 	/**
 	 * The name of the init method specified for this component, if any.
-	 *
+	 * 
 	 * This is the <code>init-method</code> attribute.
-	 *
+	 * 
 	 * @return the method name of the specified init method, or null if no init
 	 *         method was specified.
 	 */
@@ -50,9 +59,9 @@ public interface BeanMetadata extends Target, ComponentMetadata {
 
 	/**
 	 * The name of the destroy method specified for this component, if any.
-	 *
+	 * 
 	 * This is the <code>destroy-method</code> attribute.
-	 *
+	 * 
 	 * @return the method name of the specified destroy method, or null if no
 	 *         destroy method was specified.
 	 */
@@ -60,31 +69,32 @@ public interface BeanMetadata extends Target, ComponentMetadata {
 
 	/**
 	 * The arguments for the factory method or constructor.
+	 * 
+	 * Specified in all the child
+	 * <code>argument<code> elements. The return is a list of {@link BeanArgument} objects.
 	 *
-	 * Specified in all the child <code>argument<code> elements.
-	 *
-	 * @return The metadata for the factory method or constructor. Can be empty if no arguments are specified
+	 * @return The Metadata for the factory method or constructor. Can be empty if no arguments are specified
 	 */
 	List/* <BeanArgument> */getArguments();
 
 	/**
 	 * The property injection metadata for this component.
-	 *
+	 * 
 	 * Specified in all the child <code>property</code> elements.
-	 *
-	 * @return an immutable collection of BeanProperty, with one
-	 *         entry for each property to be injected. If no property injection
-	 *         was specified for this component then an empty collection will be
+	 * 
+	 * @return an immutable collection of {@link BeanProperty}, with one entry
+	 *         for each property to be injected. If no property injection was
+	 *         specified for this component then an empty collection will be
 	 *         returned.
-	 *
+	 * 
 	 */
 	List /* <BeanProperty> */getProperties();
 
 	/**
 	 * Provides the name of the optional factory method.
-	 *
+	 * 
 	 * This is the <code>factory-method</code> attribute.
-	 *
+	 * 
 	 * @return The name of the factory method or <code>null</code>.
 	 */
 	String getFactoryMethod();
@@ -92,9 +102,9 @@ public interface BeanMetadata extends Target, ComponentMetadata {
 	/**
 	 * The component instance on which to invoke the factory method (if
 	 * specified).
-	 *
+	 * 
 	 * The component is defined in the <code>factory-component</code>.
-	 *
+	 * 
 	 * @return when a factory method and factory component has been specified
 	 *         for this component, this operation returns the metadata
 	 *         specifying the component on which the factory method is to be
@@ -103,27 +113,17 @@ public interface BeanMetadata extends Target, ComponentMetadata {
 	 *         non-null factory method indicates that the factory method should
 	 *         be invoked as a static method on the component class itself. For
 	 *         a non-null return value, the Metadata object returned will be a
-	 *         RefMetadata or a TargetComponentMetadata instance.
+	 *         {@link Target} instance.
 	 */
 	Target getFactoryComponent();
 
 	/**
 	 * The specified scope for the component lifecycle.
-	 *
+	 * 
 	 * @return a String indicating the scope specified for the component.
-	 *
+	 * 
 	 * @see #SCOPE_SINGLETON
 	 * @see #SCOPE_PROTOTYPE
 	 */
 	String getScope();
-
-	/**
-	 * Provide an actual class, this overrides the class name if set. This is
-	 * useful for Namespace Handler services that do not want to force the
-	 * Blueprint bundle to import implementation classes.
-	 *
-	 * @return Return the class to use in runtime or <code>null</code>.
-	 */
-
-	Class /* <?> */getRuntimeClass();
 }
