@@ -234,10 +234,10 @@ public interface ConfigAdminManagerMBean {
 
 	/**
 	 * Answer the credentials of the configuration
-	 * <p>
+	 * <p/>
 	 * 
 	 * @see org.osgi.jmx.codec.OSGiProperties for the details of the TabularType
-	 *      <p>
+	 *      <p/>
 	 *      For each propery entry, the following row is returned
 	 *      <ul>
 	 *      <li>Property Key - the string key</li>
@@ -255,10 +255,10 @@ public interface ConfigAdminManagerMBean {
 
 	/**
 	 * Answer the credentials of the configuration
-	 * <p>
+	 * <p/>
 	 * 
 	 * @see org.osgi.jmx.codec.OSGiProperties for the details of the TabularType
-	 *      <p>
+	 *      <p/>
 	 *      For each propery entry, the following row is returned
 	 *      <ul>
 	 *      <li>Property Key - the string key</li>
@@ -306,10 +306,10 @@ public interface ConfigAdminManagerMBean {
 	/**
 	 * Update the configuration with the supplied properties For each propery
 	 * entry, the following row is supplied
-	 * <p>
+	 * <p/>
 	 * 
 	 * @see org.osgi.jmx.codec.OSGiProperties for the details of the TabularType
-	 *      <p>
+	 *      <p/>
 	 *      <ul>
 	 *      <li>Property Key - the string key</li>
 	 *      <li>Property Value - the stringified version of the property value</li>
@@ -328,10 +328,10 @@ public interface ConfigAdminManagerMBean {
 	/**
 	 * Update the configuration with the supplied properties For each propery
 	 * entry, the following row is supplied
-	 * <p>
+	 * <p/>
 	 * 
 	 * @see org.osgi.jmx.codec.OSGiProperties for the details of the TabularType
-	 *      <p>
+	 *      <p/>
 	 *      <ul>
 	 *      <li>Property Key - the string key</li>
 	 *      <li>Property Value - the stringified version of the property value</li>
