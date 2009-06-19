@@ -126,12 +126,12 @@ public class XmlDoclet extends Doclet {
 
 	void print(ConstructorDoc cnst) {
 		pw.println("    <method name='" + cnst.name() + "' fqn='"
-				+ cnst.qualifiedName() + "' qn='"
+				+ escape(cnst.qualifiedName()) + "' qn='"
 				+ cnst.containingClass().name() + "." + cnst.name()
-				+ flatten(cnst.signature()) + "' package='"
+				+ escape(flatten(cnst.signature())) + "' package='"
 				+ cnst.containingPackage().name() + "' modifiers='"
-				+ cnst.modifiers() + "' signature='" + cnst.signature()
-				+ "' flatSignature='" + flatten(cnst.signature())
+				+ cnst.modifiers() + "' signature='" + escape(cnst.signature())
+				+ "' flatSignature='" + escape(flatten(cnst.signature()))
 				+ "' isConstructor='true'>");
 		printMember(cnst);
 		pw.println("     </method>");
@@ -141,14 +141,14 @@ public class XmlDoclet extends Doclet {
 		pw.println("    <method name='" + cnst.name() + "' fqn='"
 				+ cnst.qualifiedName() + "' qn='"
 				+ cnst.containingClass().name() + "." + cnst.name()
-				+ flatten(cnst.signature()) + "' package='"
+				+ escape(flatten(cnst.signature())) + "' package='"
 				+ cnst.containingPackage().name() + "' modifiers='"
 				+ cnst.modifiers() + "' typeName='"
-				+ cnst.returnType().typeName() + "' qualifiedTypeName='"
-				+ cnst.returnType().qualifiedTypeName() + "' dimension='"
+				+ escape(cnst.returnType().typeName()) + "' qualifiedTypeName='"
+				+ escape(cnst.returnType().qualifiedTypeName()) + "' dimension='"
 				+ cnst.returnType().dimension() + "' signature='"
-				+ cnst.signature() + "' flatSignature='"
-				+ flatten(cnst.signature()) + "'>");
+				+ escape(cnst.signature()) + "' flatSignature='"
+				+ escape(flatten(cnst.signature())) + "'>");
 		printMember(cnst);
 		pw.println("     </method>");
 	}
@@ -174,9 +174,9 @@ public class XmlDoclet extends Doclet {
 				+ "' modifiers='"
 				+ cnst.modifiers()
 				+ "' typeName='"
-				+ cnst.type().typeName()
+				+ escape(cnst.type().typeName())
 				+ "' qualifiedTypeName='"
-				+ cnst.type().qualifiedTypeName()
+				+ escape(cnst.type().qualifiedTypeName())
 				+ (constantValueExpression != null ? "' constantValue='"
 						+ escape(constantValueExpression) : "") + "'>");
 		printComment(cnst);
@@ -199,8 +199,8 @@ public class XmlDoclet extends Doclet {
 	void print(Parameter param) {
 		pw.println("<parameter name='" + param.name() + "' dimension='"
 				+ param.type().dimension() + "' typeName='"
-				+ param.type().typeName() + "' fqn='"
-				+ param.type().qualifiedTypeName() + "'/>");
+				+ escape(param.type().typeName()) + "' fqn='"
+				+ escape(param.type().qualifiedTypeName()) + "'/>");
 	}
 
 	void printThrows(StringBuffer sb, ThrowsTag tag) {
