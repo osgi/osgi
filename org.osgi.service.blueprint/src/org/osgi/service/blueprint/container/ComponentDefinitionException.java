@@ -16,11 +16,11 @@
 package org.osgi.service.blueprint.container;
 
 /**
- * Exception thrown when a configuration-related error occurs during
- * creation of a module context.
+ * Exception thrown when a configuration-related error occurs during creation of
+ * a module context.
  */
 public class ComponentDefinitionException extends RuntimeException {
-
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Creates a <code>ComponentDefinitionException</code> with no message or
@@ -30,34 +30,36 @@ public class ComponentDefinitionException extends RuntimeException {
 		super();
 	}
 
-
 	/**
-	 * Creates a <code>ComponentDefinitionException</code> with the specified message
-	 *
-	 * @param msg The associated message.
+	 * Creates a <code>ComponentDefinitionException</code> with the specified
+	 * message
+	 * 
+	 * @param explanation
+	 *            The associated message.
 	 */
 	public ComponentDefinitionException(String explanation) {
 		super(explanation);
 	}
 
-
 	/**
-	 * Creates a <code>ComponentDefinitionException</code> with the specified message and
-	 * exception cause.
-	 *
-	 * @param msg The associated message.
-	 * @param cause The cause of this exception.
+	 * Creates a <code>ComponentDefinitionException</code> with the specified
+	 * message and exception cause.
+	 * 
+	 * @param explanation
+	 *            The associated message.
+	 * @param cause
+	 *            The cause of this exception.
 	 */
 	public ComponentDefinitionException(String explanation, Throwable cause) {
 		super(explanation, cause);
 	}
 
-
 	/**
-	 * Creates a <code>ComponentDefinitionException</code> with the
-	 * exception cause.
-	 *
-	 * @param cause The cause of this exception.
+	 * Creates a <code>ComponentDefinitionException</code> with the exception
+	 * cause.
+	 * 
+	 * @param cause
+	 *            The cause of this exception.
 	 */
 	public ComponentDefinitionException(Throwable cause) {
 		super(cause);

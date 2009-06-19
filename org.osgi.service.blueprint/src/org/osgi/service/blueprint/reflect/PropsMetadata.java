@@ -18,7 +18,7 @@ package org.osgi.service.blueprint.reflect;
 import java.util.List;
 
 /**
- * A </code>java.util.Properties</code> based value. The properties are
+ * A <code>java.util.Properties</code> based value. The properties are
  * defined as string to string. This means that the actual value can be
  * returned.
  * 

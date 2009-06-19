@@ -17,16 +17,17 @@ package org.osgi.service.blueprint.container;
 
 /**
  * Listener for <code>BlueprintEvent</code>s.
- *
+ * 
  * @see BlueprintEvent
  */
 public interface BlueprintListener {
 
 	/**
- 	 * Receives notifications of a blueprint event.
- 	 *
- 	 * @param event The <code>BlueprintEvent</code>.
- 	 */
+	 * Receives notifications of a Blueprint Event.
+	 * 
+	 * @param event
+	 *            The <code>BlueprintEvent</code>.
+	 */
 	void blueprintEvent(BlueprintEvent event);
 
 }
