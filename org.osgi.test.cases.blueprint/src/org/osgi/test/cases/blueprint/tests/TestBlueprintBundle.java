@@ -479,6 +479,38 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
 
 
     /**
+     * Tests that using "blueprint" to start a component id is just bad practice, not an error
+     */
+    public void testBlueprintId() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/comp1_blueprint_id.jar");
+        MetadataEventSet startEvents = controller.getStartEvents();
+        // all lowercase version
+        startEvents.addAssertion("blueprint", AssertionService.COMPONENT_CREATED);
+        startEvents.validateComponent("blueprint", SimpleTestComponent.class);
+        // mixed case version
+        startEvents.addAssertion("blueprintXXXXX", AssertionService.COMPONENT_CREATED);
+        startEvents.validateComponent("blueprintXXXXX", AltSimpleTestComponent.class);
+        // make sure the name is in the component list
+        startEvents.addValidator(new ComponentNamePresenceValidator("blueprint"));
+        startEvents.addValidator(new GetBeanMetadataValidator("blueprint"));
+        // validate both versions
+        startEvents.addValidator(new ComponentNamePresenceValidator("blueprintXXXXX"));
+        startEvents.addValidator(new GetBeanMetadataValidator("blueprintXXXXX"));
+
+        // and the validate the component metadata
+        startEvents.addValidator(new ComponentMetadataValidator(
+                new BeanComponent("blueprint", SimpleTestComponent.class,
+                new TestArgument[] {new StringArgument("blueprint")}, null)));
+
+        startEvents.addValidator(new ComponentMetadataValidator(
+                new BeanComponent("blueprintXXXXX", AltSimpleTestComponent.class,
+                new TestArgument[] {new StringArgument("blueprintXXXXX")}, null)));
+        controller.run();
+    }
+
+
+    /**
      * Tests the extender reaction to a bundle getting started that contains no blueprint configuration
      */
     public void testNonBlueprintBundle() throws Exception {

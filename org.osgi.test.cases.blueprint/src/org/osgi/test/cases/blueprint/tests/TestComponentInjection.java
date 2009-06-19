@@ -259,33 +259,4 @@ public class TestComponentInjection extends DefaultTestBundleControl {
 
         controller.run();
     }
-
-
-	/*
-	 * the override of the default components with user defined components.
-	 */
-	public void testDefaultComponentOverride() throws Exception {
-        ThreePhaseTestController controller = new ThreePhaseTestController(getContext(),
-            getWebServer()+"www/default_component_override.jar");
-        MetadataEventSet startEvents = controller.getStartEvents();
-        // first creation of the override components
-        startEvents.addAssertion("blueprintBundle", AssertionService.COMPONENT_CREATED);
-        startEvents.addAssertion("blueprintBundleContext", AssertionService.COMPONENT_CREATED);
-        startEvents.addAssertion("blueprintContainer", AssertionService.COMPONENT_CREATED);
-        startEvents.addAssertion("blueprintConverter", AssertionService.COMPONENT_CREATED);
-
-        // and the injection targets
-        startEvents.addAssertion("bundleUser", AssertionService.COMPONENT_CREATED);
-        startEvents.addAssertion("bundleContextUser", AssertionService.COMPONENT_CREATED);
-        startEvents.addAssertion("blueprintContainerUser", AssertionService.COMPONENT_CREATED);
-        startEvents.addAssertion("converterUser", AssertionService.COMPONENT_CREATED);
-
-        // these should all be our local components
-        startEvents.addValidator(new ComponentTypeValidator("blueprintBundle", ComponentInjection.class));
-        startEvents.addValidator(new ComponentTypeValidator("blueprintBundleContext", ComponentInjection.class));
-        startEvents.addValidator(new ComponentTypeValidator("blueprintContainer", ComponentInjection.class));
-        startEvents.addValidator(new ComponentTypeValidator("blueprintConverter", ComponentInjection.class));
-
-        controller.run();
-    }
 }

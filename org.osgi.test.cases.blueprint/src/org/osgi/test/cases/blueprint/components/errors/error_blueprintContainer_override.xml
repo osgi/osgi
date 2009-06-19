@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    default-initialization="eager">
+
+    <!-- this is an override of a component that is reserved -->
+   <bean id="blueprintBundleContainer" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
+       init-method="init" destroy-method="destroy">
+       <argument value="blueprintBundleContainer"/>
+   </bean>
+</blueprint>
+

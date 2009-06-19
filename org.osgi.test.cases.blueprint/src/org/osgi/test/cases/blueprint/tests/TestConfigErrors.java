@@ -1074,4 +1074,48 @@ public class TestConfigErrors extends DefaultTestBundleControl {
         controller.addSetupBundle(getWebServer()+"www/GoodService_export.jar");
         controller.run();
     }
+
+
+    /**
+     * tests that overriding the blueprintBundle internal component is an error
+     */
+    public void testBlueprintBundleOverride() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_blueprintBundle_override.jar");
+        controller.run();
+    }
+
+
+    /**
+     * tests that overriding the blueprintBundleContext internal component is an error
+     */
+    public void testBlueprintBundleContextOverride() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_blueprintBundleContext_override.jar");
+        controller.run();
+    }
+
+
+    /**
+     * tests that overriding the blueprintContainer internal component is an error
+     */
+    public void testBlueprintContainerOverride() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_blueprintContainer_override.jar");
+        controller.run();
+    }
+
+
+    /**
+     * tests that overriding the blueprintConverter internal component is an error
+     */
+    public void testBlueprintConverterOverride() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_blueprintContainer_override.jar");
+        controller.run();
+    }
 }

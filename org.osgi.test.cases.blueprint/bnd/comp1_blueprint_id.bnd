@@ -1,0 +1,7 @@
+Bundle-SymbolicName:                     ${p}.comp1_blueprint_id
+Bundle-Version:                          4.2
+Import-Package:                          ${p}.components.comp1, ${p}.services
+-resourceonly: true
+Include-Resource					= \
+	OSGI-INF/blueprint/comp1.xml=src/org/osgi/test/cases/blueprint/components/comp1/comp1_blueprint_id.xml
+

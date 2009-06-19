@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" compliance="loose">
+
+  <description>
+    Test of use of reserved prefix.  All internal components will begin with a "blueprint"
+    prefix, but this is not reserved.  Create a couple of components that could infringe
+    to verify this is not an error.
+  </description>
+
+   <bean id="blueprint" class="org.osgi.test.cases.blueprint.components.comp1.SimpleTestComponent">
+     <argument value="blueprint"/>
+   </bean>
+   <bean id="blueprintXXXXX" class="org.osgi.test.cases.blueprint.components.comp1.AltSimpleTestComponent">
+     <argument value="blueprintXXXXX"/>
+   </bean>
+</blueprint>
+
