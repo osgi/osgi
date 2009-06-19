@@ -27,11 +27,9 @@ import java.util.List;
 public interface PropsMetadata extends NonNullMetadata {
 
 	/**
-	 * This is the same as getValuesMetadata but more type safe.
-	 *
 	 * Defined in <code>prop</code> sub elements.
 	 *
-	 * @return
+	 * @return list of <code.MapEntry</code> objects, never <code>null</code>
 	 */
 	List/*<MapEntry>*/ getEntries();
 }
