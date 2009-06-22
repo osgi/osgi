@@ -3,9 +3,9 @@
     default-activation="eager">
 
     <!-- this is an override of a component that is reserved -->
-   <bean id="blueprintBundleConverter" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
+   <bean id="blueprintConverter" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection"
        init-method="init" destroy-method="destroy">
-       <argument value="blueprintBundleConverter"/>
+       <argument value="blueprintConverter"/>
    </bean>
 </blueprint>
 
