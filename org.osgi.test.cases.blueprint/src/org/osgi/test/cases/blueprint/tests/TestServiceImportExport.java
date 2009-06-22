@@ -1186,7 +1186,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // We only do the export and then shut this back down again.  That will
         // cause the events of interests to be fired.
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/ServiceOne_listener_export.jar");
+                getWebServer()+"www/ServiceOne_inline_listener_export.jar");
         // We're really only interesting the listener events, but we'll take a look
         // at the metadata as well
         MetadataEventSet exportStartEvents = controller.getStartEvents();
