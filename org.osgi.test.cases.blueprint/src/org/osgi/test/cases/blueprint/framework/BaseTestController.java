@@ -160,6 +160,41 @@ public class BaseTestController implements EventHandler, BlueprintListener, Serv
 
 
     /**
+     * Add a setup bundle that must be installed and
+     * initialialized before testing can begin.  This bundle will not be
+     * a managed bundle, so we don't look for a REGISTERED event.
+     *
+     * @param name   The name of the bundle to add.
+     */
+    public void addNonBlueprintSetupBundle(String bundleName) throws Exception {
+        // make sure we have these additional phases to work with
+        createSetupPhases();
+        // first install this
+        Bundle testBundle = installBundle(bundleName);
+        // This uses a plain set of events and actions.  Of primary importance is catching
+        // start failures and waiting for module context creating to complete.  This
+        // performs no metadata-type operations
+        // in each phase.  Add the events to each list
+        EventSet setupEvents = new EventSet(testContext, testBundle);
+        // we add an initializer to start our bundle when the test starts
+        setupEvents.addInitializer(new TestBundleStarter(testBundle));
+        // this should be the last event that will indicate successful completion
+        setupEvents.addBundleEvent("STARTED");
+        setupPhase.addEventSet(setupEvents);
+
+        EventSet cleanupEvents = new EventSet(testContext, testBundle);
+        // we start this test phase out by stopping the bundle.  Everything else flows
+        // from that.
+        cleanupEvents.addInitializer(new TestBundleStopper(testBundle));
+        cleanupEvents.addTerminator(new TestBundleUninstaller(testBundle));
+        // we always expect to see a stopped bundle event at the end.  We need at least one
+        // event to wake us up to kill the timeout
+        cleanupEvents.addBundleEvent("STOPPED");
+        cleanupPhase.addEventSet(cleanupEvents);
+    }
+
+
+    /**
      * Some tests require some additional setup/teardown
      * work.  This is frequently in the form of installed
      * blueprint bundles that must be fully initialized

@@ -84,13 +84,9 @@ public class TestArgument extends Assert {
         // validate any type name explicitly specified on the XML.  This could be null also,
         // if not explicitly specified (common, actually)
         assertEquals("Type parameter type mismatch", typeName, spec.getValueType());
-        // expecting an index position?
-
-        /** TODO:  Bugzilla 1155.  The RI is all over the charts with non-explicit index
-         * positions.  So if we're using -1 for a check value, then don't even bother validating. */
-        if (index != -1) {
-            assertEquals("Indexed parameter position mismatch", index, spec.getIndex());
-        }
+        // this should be sorted out now. This is either an explicitly specified
+        // position or -1.
+        assertEquals("Indexed parameter position mismatch", index, spec.getIndex());
         // validate the value type also
         parameterTestValue.validate(blueprintMetadata, spec.getValue());
     }
