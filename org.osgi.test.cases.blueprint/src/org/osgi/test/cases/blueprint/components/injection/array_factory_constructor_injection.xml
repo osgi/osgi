@@ -258,7 +258,7 @@
 	<!-- Injection of String values from props -->
 	<bean id="compNestedProps" factory-method="makeInstance"
 		factory-ref="compFactory">
-		<argument>
+		<argument type="java.util.Properties[]">
 			<array value-type="java.util.Properties">
 				<props>
 					<prop key="administrator">administrator@example.org
