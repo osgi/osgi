@@ -167,7 +167,7 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
                         new TestArgument[] { new StringArgument(innerArgTargetType, innerArgSource, innerArgValueType) },
                         null,
  						null,
- 						BeanMetadata.INITIALIZATION_LAZY,
+ 						BeanMetadata.ACTIVATION_LAZY,
  						BeanMetadata.SCOPE_PROTOTYPE
                 )
         );
@@ -439,7 +439,7 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
                         null,
                         new TestProperty[] { new StringProperty(innerProName, innerProType, innerProSource) },
  						null,
- 						BeanMetadata.INITIALIZATION_LAZY,
+ 						BeanMetadata.ACTIVATION_LAZY,
  						BeanMetadata.SCOPE_PROTOTYPE
                 )
         );
@@ -535,7 +535,7 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
                         new TestArgument[] { new StringArgument(innerArgTargetType, innerArgSource, innerArgValueType) },
                         null,
                         null,
- 						BeanMetadata.INITIALIZATION_LAZY,
+ 						BeanMetadata.ACTIVATION_LAZY,
  						BeanMetadata.SCOPE_PROTOTYPE
                 )
         );
@@ -585,7 +585,7 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
                         null,
                         new TestProperty[] { new StringProperty("string", null, "compInner4") },
                      	null,
- 						BeanMetadata.INITIALIZATION_LAZY,
+ 						BeanMetadata.ACTIVATION_LAZY,
  						BeanMetadata.SCOPE_PROTOTYPE
                 )
         );
@@ -627,7 +627,7 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
                 null,
                 new TestProperty[] { new StringProperty("string", null, "compInnerEntryKey2") },
                 null,
- 				BeanMetadata.INITIALIZATION_LAZY,
+ 				BeanMetadata.ACTIVATION_LAZY,
  				BeanMetadata.SCOPE_PROTOTYPE
                 )
         );
@@ -641,7 +641,7 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
                         null,
                         new TestProperty[] { new StringProperty("string", null, "compInnerEntryValue2") },
                         null,
-                        BeanMetadata.INITIALIZATION_LAZY,
+                        BeanMetadata.ACTIVATION_LAZY,
                         BeanMetadata.SCOPE_PROTOTYPE
                         )
                 );

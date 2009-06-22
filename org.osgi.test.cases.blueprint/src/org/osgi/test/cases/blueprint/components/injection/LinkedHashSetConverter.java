@@ -20,18 +20,19 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 
 import org.osgi.service.blueprint.container.Converter;
+import org.osgi.service.blueprint.container.CollapsedType;
 
 public class LinkedHashSetConverter implements Converter {
-    public Object convert(Object source, Object toType) throws Exception {
-        if (source instanceof Collection && toType == LinkedHashSet.class) {
+    public Object convert(Object source, CollapsedType toType) throws Exception {
+        if (source instanceof Collection && toType.getRawClass() == LinkedHashSet.class) {
             return new LinkedHashSet((Collection)source);
         }
         // we're supposed to throw an exception if we can't convert
         throw new Exception("Unconvertable object type");
     }
 
-    public boolean canConvert(Object value, Object toType) {
-        return toType == LinkedHashSet.class && value instanceof Collection;
+    public boolean canConvert(Object value, CollapsedType toType) {
+        return toType.getRawClass() == LinkedHashSet.class && value instanceof Collection;
     }
 }
 

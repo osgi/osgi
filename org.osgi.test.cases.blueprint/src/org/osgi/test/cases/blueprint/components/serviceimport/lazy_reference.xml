@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" default-initialization="lazy">
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" default-activation="lazy">
 
     <description>
         This for unregistration of dependencies and listers actions.
     </description>
 
     <!-- two lazy-inited components used for a depends on relationship -->
-   <bean id="Depends1" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass" initialization="lazy"
+   <bean id="Depends1" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass" activation="lazy"
         init-method="init" destroy-method="destroy">
        <argument value="Depends1"/>
    </bean>
 
     <!-- two lazy-inited components used for a depends on relationship -->
-   <bean id="Depends2" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass" initialization="lazy"
+   <bean id="Depends2" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass" activation="lazy"
         init-method="init" destroy-method="destroy">
        <argument value="Depends2"/>
    </bean>

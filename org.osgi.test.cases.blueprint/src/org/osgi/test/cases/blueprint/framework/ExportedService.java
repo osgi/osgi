@@ -39,8 +39,8 @@ import junit.framework.Assert;
 public class ExportedService extends Assert implements TestComponentMetadata {
     // the optional assigned service id
     protected String serviceId;
-    // the initialization mode
-    protected int initialization;
+    // the activation mode
+    protected int activation;
     // the expected export mode for the export.
     protected int exportMode;
     // the exported component name (can be null if we expect an anonymous component)
@@ -60,8 +60,8 @@ public class ExportedService extends Assert implements TestComponentMetadata {
      * Create an exported service definition.
      *
      * @param serviceId  The id specified on the service reference tag.
-     * @param initialization
-     *                   The eager/lazy initialization mode
+     * @param activation
+     *                   The eager/lazy activation mode
      * @param componentId
      *                   The id of the target component (can be null if this service
      *                   uses an inner component).
@@ -73,9 +73,9 @@ public class ExportedService extends Assert implements TestComponentMetadata {
      * @param deps       A set of explicit dependencies
      * @param listeners  Any optional registration listeners.
      */
-    public ExportedService(String serviceId, int initialization, String componentId, Class serviceInterface, int exportMode, int ranking, TestPropsValue props,
+    public ExportedService(String serviceId, int activation, String componentId, Class serviceInterface, int exportMode, int ranking, TestPropsValue props,
             String[] deps, TestRegistrationListener[] listeners) {
-        this(serviceId, initialization, componentId, new Class[] { serviceInterface }, exportMode, ranking, props, deps, listeners);
+        this(serviceId, activation, componentId, new Class[] { serviceInterface }, exportMode, ranking, props, deps, listeners);
     }
 
 
@@ -83,8 +83,8 @@ public class ExportedService extends Assert implements TestComponentMetadata {
      * Create an exported service definition.
      *
      * @param serviceId  The id specified on the service reference tag.
-     * @param initialization
-     *                   The eager/lazy initialization mode
+     * @param activation
+     *                   The eager/lazy activation mode
      * @param componentId
      *                   The id of the target component (can be null if this service
      *                   uses an inner component).
@@ -96,10 +96,10 @@ public class ExportedService extends Assert implements TestComponentMetadata {
      * @param deps       A set of explicit dependencies
      * @param listeners  Any optional registration listeners.
      */
-    public ExportedService(String serviceId, int initialization, String componentId, Class[] interfaces, int exportMode, int ranking, TestPropsValue props,
+    public ExportedService(String serviceId, int activation, String componentId, Class[] interfaces, int exportMode, int ranking, TestPropsValue props,
         String[] deps, TestRegistrationListener[] listeners) {
         this.serviceId = serviceId;
-        this.initialization = initialization;
+        this.activation = activation;
         this.componentId = componentId;
         this.exportMode = exportMode;
         this.serviceRanking = ranking;
@@ -194,7 +194,7 @@ public class ExportedService extends Assert implements TestComponentMetadata {
         assertTrue("Component type mismatch", componentMeta instanceof ServiceMetadata);
         ServiceMetadata meta = (ServiceMetadata)componentMeta;
         assertEquals(serviceId, meta.getId());
-        assertEquals(initialization, meta.getInitialization());
+        assertEquals(activation, meta.getActivation());
         assertEquals(exportMode, meta.getAutoExport());
         assertEquals(serviceRanking, meta.getRanking());
         assertEquals(dependencies, meta.getDependsOn());

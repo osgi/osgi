@@ -28,7 +28,7 @@ import org.osgi.test.cases.blueprint.services.TestServiceTwo;
 
 
 /**
- * Tests the behavior guarantees for <ref-list> iterators.
+ * Tests the behavior guarantees for <reference-list> iterators.
  */
 public class ListIteratorChecker extends ReferenceCollectionChecker {
 

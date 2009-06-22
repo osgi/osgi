@@ -11,21 +11,21 @@
 
     <!-- this is lazily initialized, but since the reference depends on it, it should still get created -->
     <bean id="dependsleaf1" class="org.osgi.test.cases.blueprint.components.injection.DependentComponent"
-        init-method="init" destroy-method="destroy" initialization="lazy">
+        init-method="init" destroy-method="destroy" activation="lazy">
         <argument value="dependsleaf1"/>
     </bean>
 
     <bean id="dependsleaf2" class="org.osgi.test.cases.blueprint.components.injection.DependentComponent"
-        init-method="init" destroy-method="destroy" initialization="lazy">
+        init-method="init" destroy-method="destroy" activation="lazy">
         <argument value="dependsleaf2"/>
     </bean>
 
 
     <!-- NB:  this also tests the ability for a collection to be a top-level component -->
-    <ref-list id="TestCollection" interface="org.osgi.test.cases.blueprint.services.TestServiceOne"
+    <reference-list id="TestCollection" interface="org.osgi.test.cases.blueprint.services.TestServiceOne"
         availability="optional" depends-on="dependsleaf1 dependsleaf2 XXXXXX">
         <reference-listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
-    </ref-list>
+    </reference-list>
 
     <!-- This gets both a ServiceManager and a reference collection injected -->
    <bean id="ReferenceChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.StaticReferenceList" init-method="init">

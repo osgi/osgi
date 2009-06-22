@@ -17,9 +17,9 @@
            <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
        </property>
        <property name="list">
-           <ref-list id="xyz" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
+           <reference-list id="xyz" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
                <reference-listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
-           </ref-list>
+           </reference-list>
        </property>
    </bean>
 </blueprint>

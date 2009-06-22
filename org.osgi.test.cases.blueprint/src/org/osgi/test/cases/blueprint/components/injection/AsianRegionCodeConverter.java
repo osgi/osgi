@@ -17,6 +17,7 @@
 package org.osgi.test.cases.blueprint.components.injection;
 
 import org.osgi.service.blueprint.container.Converter;
+import org.osgi.service.blueprint.container.CollapsedType;
 import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 
@@ -25,12 +26,8 @@ public class AsianRegionCodeConverter extends BaseTestComponent implements Conve
     public AsianRegionCodeConverter(String compId) {
         super(compId);
     }
-    public Object convert(Object source, Object toType) throws Exception {
-        if (!(toType instanceof Class)) {
-            return null;
-        }
-
-        Class toClass = (Class)toType;
+    public Object convert(Object source, CollapsedType toType) throws Exception {
+        Class toClass = (Class)toType.getRawClass();
         AssertionService.sendEvent(this, AssertionService.METHOD_CALLED);
         if (source instanceof String && (RegionCode.class.isAssignableFrom(toClass) && toClass.isAssignableFrom(AsianRegionCode.class))) {
             return new AsianRegionCode((String)source);
@@ -39,13 +36,8 @@ public class AsianRegionCodeConverter extends BaseTestComponent implements Conve
         throw new Exception("Unconvertable object type");
     }
 
-    public boolean canConvert(Object value, Object toType) {
-        if (!(toType instanceof Class)) {
-            return false;
-        }
-
-        Class toClass = (Class)toType;
-
+    public boolean canConvert(Object value, CollapsedType toType) {
+        Class toClass = (Class)toType.getRawClass();
         return (RegionCode.class.isAssignableFrom(toClass) && toClass.isAssignableFrom(AsianRegionCode.class)) && value instanceof String;
     }
 }

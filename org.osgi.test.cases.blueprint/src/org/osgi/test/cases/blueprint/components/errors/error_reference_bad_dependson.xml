@@ -8,12 +8,12 @@
 
     <!-- this is lazily initialized, but since the reference depends on it, it should still get created -->
     <bean id="dependsleaf1" class="org.osgi.test.cases.blueprint.components.injection.DependentComponent"
-        init-method="init" destroy-method="destroy" initialization="lazy">
+        init-method="init" destroy-method="destroy" activation="lazy">
         <argument value="dependsleaf1"/>
     </bean>
 
     <bean id="dependsleaf2" class="org.osgi.test.cases.blueprint.components.injection.DependentComponent"
-        init-method="init" destroy-method="destroy" initialization="lazy">
+        init-method="init" destroy-method="destroy" activation="lazy">
         <argument value="dependsleaf2"/>
     </bean>
 

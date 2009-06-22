@@ -13,13 +13,13 @@
    </bean>
 
     <!-- two lazy-inited components used for a depends on relationship -->
-   <bean id="Depends1" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass" initialization="lazy"
+   <bean id="Depends1" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass" activation="lazy"
         init-method="init" destroy-method="destroy">
        <argument value="Depends1"/>
    </bean>
 
     <!-- two lazy-inited components used for a depends on relationship -->
-   <bean id="Depends2" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass" initialization="lazy"
+   <bean id="Depends2" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass" activation="lazy"
         init-method="init" destroy-method="destroy">
        <argument value="Depends2"/>
    </bean>

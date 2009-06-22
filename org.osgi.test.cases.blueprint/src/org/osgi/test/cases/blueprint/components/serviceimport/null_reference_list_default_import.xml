@@ -17,10 +17,10 @@
            <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager" availability="mandatory"/>
        </property>
        <property name="list">
-           <ref-list interface="org.osgi.test.cases.blueprint.services.TestServiceOne" member-type="service-object">
+           <reference-list interface="org.osgi.test.cases.blueprint.services.TestServiceOne" member-type="service-object">
                <description>Testing descriptions also</description>
                <reference-listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
-           </ref-list>
+           </reference-list>
        </property>
    </bean>
 </blueprint>

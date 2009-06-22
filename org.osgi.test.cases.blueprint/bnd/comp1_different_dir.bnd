@@ -1,4 +1,4 @@
-Bundle-SymbolicName:                     ${p}.comp1_different_dir;blueprint.timeout:=60000;blueprint.wait-for-dependencies:=false
+Bundle-SymbolicName:                     ${p}.comp1_different_dir;blueprint.timeout:=60000;blueprint.graceperiod:=false
 Bundle-Version:                          4.2
 Import-Package:                          ${p}.components.comp1, ${p}.services
 -resourceonly: true

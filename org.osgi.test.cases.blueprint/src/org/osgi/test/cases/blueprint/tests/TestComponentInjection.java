@@ -64,7 +64,7 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         startEvents.addValidator(new ComponentMetadataValidator(
             new BeanComponent("lazyleaf1", ComponentInjection.class, null, "init", "destroy",
             new TestArgument[] { new StringArgument("lazyleaf1") } , null,
-            null, BeanMetadata.INITIALIZATION_LAZY, null)));
+            null, BeanMetadata.ACTIVATION_LAZY, null)));
 
         // first real test.  This will cause lazyleaf1 to get instantiated in order to be injected.  That's the real test.
         startEvents.addAssertion("comp1", AssertionService.COMPONENT_CREATED);
@@ -151,7 +151,7 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         startEvents.addValidator(new ComponentMetadataValidator(
             new BeanComponent("dependsOnOne", ComponentInjection.class, null, "init", "destroy",
             new TestArgument[] { new StringArgument("dependsOnOne") } , null,
-            new String[] { "dependsleaf1" }, BeanMetadata.INITIALIZATION_EAGER, null)));
+            new String[] { "dependsleaf1" }, BeanMetadata.ACTIVATION_EAGER, null)));
 
         startEvents.addAssertion("dependsleaf2", AssertionService.COMPONENT_CREATED);
         startEvents.addAssertion("dependsleaf3", AssertionService.COMPONENT_CREATED);
@@ -160,7 +160,7 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         startEvents.addValidator(new ComponentMetadataValidator(
             new BeanComponent("dependsOnTwo", ComponentInjection.class, null, "init", "destroy",
             new TestArgument[] { new StringArgument("dependsOnTwo") } , null,
-            new String[] { "dependsleaf2", "dependsleaf3" }, BeanMetadata.INITIALIZATION_EAGER, null)));
+            new String[] { "dependsleaf2", "dependsleaf3" }, BeanMetadata.ACTIVATION_EAGER, null)));
 
         // validate the depends on metadata
         startEvents.addValidator(new ComponentDependencyValidator("dependsOnOne", new String[] { "dependsleaf1" }));
@@ -175,7 +175,7 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         startEvents.addValidator(new ComponentMetadataValidator(
             new BeanComponent("singleton2", ComponentInjection.class, null, "init", "destroy",
             new TestArgument[] { new StringArgument("singleton2") } , null,
-            null, BeanMetadata.INITIALIZATION_EAGER, BeanMetadata.SCOPE_SINGLETON)));
+            null, BeanMetadata.ACTIVATION_EAGER, BeanMetadata.SCOPE_SINGLETON)));
 
         // now add a failure event for each of these.  This will catch multiple creations.  The
         // first create event will be processed, and any additional ones will be flagged as a failure
@@ -189,7 +189,7 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         startEvents.addValidator(new ComponentMetadataValidator(
             new BeanComponent("prototype1", PrototypeComponentInjection.class, null, "init", "destroy",
             new TestArgument[] { new StringArgument("prototype1") } , null,
-            null, BeanMetadata.INITIALIZATION_EAGER, BeanMetadata.SCOPE_PROTOTYPE)));
+            null, BeanMetadata.ACTIVATION_EAGER, BeanMetadata.SCOPE_PROTOTYPE)));
 
         startEvents.addAssertion("prototype1", AssertionService.COMPONENT_CREATED);
         startEvents.addAssertion("prototype1", AssertionService.COMPONENT_CREATED);

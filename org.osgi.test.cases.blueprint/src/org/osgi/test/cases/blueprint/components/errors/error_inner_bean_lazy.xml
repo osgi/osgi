@@ -3,7 +3,7 @@
     <bean id="compInnerOne" class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection">
 		<argument value="compInnerOne"/>
 		<argument>
-			<bean class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection" initialization="lazy">
+			<bean class="org.osgi.test.cases.blueprint.components.injection.InnerComponentInjection" activation="lazy">
 				<argument value="compInnerOne_1"/>
 			</bean>
 		</argument>

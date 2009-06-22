@@ -5,7 +5,7 @@
         This is just a simple exported service using a single interface.
     </description>
 
-    <ref-list id="CollectionTarget" interface="org.osgi.test.cases.blueprint.services.TestServiceTwo" availability="optional"/>
+    <reference-list id="CollectionTarget" interface="org.osgi.test.cases.blueprint.services.TestServiceTwo" availability="optional"/>
 
    <!-- simple export using a reference and just one interface. -->
    <service id="BadService" ref="CollectionTarget" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">

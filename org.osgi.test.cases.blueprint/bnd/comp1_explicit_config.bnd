@@ -1,4 +1,4 @@
-Bundle-SymbolicName:                     ${p}.comp1_explicit_config;blueprint.wait-for-dependencies:=true;blueprint.timeout:=60000
+Bundle-SymbolicName:                     ${p}.comp1_explicit_config;blueprint.graceperiod:=true;blueprint.timeout:=60000
 Bundle-Version:                          4.2
 Import-Package:                          ${p}.components.comp1, ${p}.services
 -resourceonly: true

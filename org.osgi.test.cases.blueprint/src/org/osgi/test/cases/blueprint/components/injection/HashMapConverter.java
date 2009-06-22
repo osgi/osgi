@@ -20,18 +20,19 @@ import java.util.Map;
 import java.util.HashMap;
 
 import org.osgi.service.blueprint.container.Converter;
+import org.osgi.service.blueprint.container.CollapsedType;
 
 public class HashMapConverter implements Converter {
-    public Object convert(Object source, Object toType) throws Exception {
-        if (source instanceof Map && toType == HashMap.class) {
+    public Object convert(Object source, CollapsedType toType) throws Exception {
+        if (source instanceof Map && toType.getRawClass() == HashMap.class) {
             return new HashMap((Map)source);
         }
         // we're supposed to throw an exception if we can't convert
         throw new Exception("Unconvertable object type");
     }
 
-    public boolean canConvert(Object value, Object toType) {
-        return toType == HashMap.class && value instanceof Map;
+    public boolean canConvert(Object value, CollapsedType toType) {
+        return toType.getRawClass() == HashMap.class && value instanceof Map;
     }
 }
 

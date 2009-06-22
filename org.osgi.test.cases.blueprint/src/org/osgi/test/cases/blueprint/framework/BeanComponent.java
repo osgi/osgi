@@ -44,8 +44,8 @@ public class BeanComponent extends Assert implements TestComponentMetadata {
     protected TestProperty[] props;
     // a potential list of dependsOn components to process
     protected String[] dependsOn;
-    // the initialization attribute
-    protected int initialization;
+    // the activation attribute
+    protected int activation;
     // the scope attribute
     protected String scope;
     // a factory component (optional)
@@ -56,29 +56,29 @@ public class BeanComponent extends Assert implements TestComponentMetadata {
 
     // indicated the component is created directly from class
     public BeanComponent(String name, Class classType, TestArgument[] parms, TestProperty[] props) {
-        this(name, classType, null, null, null, parms, props, null, BeanMetadata.INITIALIZATION_EAGER, BeanMetadata.SCOPE_SINGLETON);
+        this(name, classType, null, null, null, parms, props, null, BeanMetadata.ACTIVATION_EAGER, BeanMetadata.SCOPE_SINGLETON);
     }
 
     // indicated the component is created by instance factory
     public BeanComponent(String name, String factoryMethodName, TestArgument[] parms, TestProperty[] props) {
-        this(name, null, factoryMethodName, null, null, parms, props, null, BeanMetadata.INITIALIZATION_EAGER, BeanMetadata.SCOPE_SINGLETON);
+        this(name, null, factoryMethodName, null, null, parms, props, null, BeanMetadata.ACTIVATION_EAGER, BeanMetadata.SCOPE_SINGLETON);
     }
 
     // indicated the component is created by static factory
     public BeanComponent(String name, Class classType, String factoryMethodName, TestArgument[] parms, TestProperty[] props) {
-        this(name, classType, factoryMethodName, null, null, parms, props, null, BeanMetadata.INITIALIZATION_EAGER, BeanMetadata.SCOPE_SINGLETON);
+        this(name, classType, factoryMethodName, null, null, parms, props, null, BeanMetadata.ACTIVATION_EAGER, BeanMetadata.SCOPE_SINGLETON);
     }
 
     // indicated the component is inner component
     public BeanComponent(Class classType, String factoryMethodName, TestArgument[] parms, TestProperty[] props) {
-        this(null, classType, factoryMethodName, null, null, parms, props, null, BeanMetadata.INITIALIZATION_EAGER, BeanMetadata.SCOPE_SINGLETON);
+        this(null, classType, factoryMethodName, null, null, parms, props, null, BeanMetadata.ACTIVATION_EAGER, BeanMetadata.SCOPE_SINGLETON);
     }
 
     public BeanComponent(String name, Class classType, String initMethodName, String destroyMethodName, TestArgument[] parms, TestProperty[] props) {
-        this(name, classType, null, initMethodName, destroyMethodName, parms, props, null, BeanMetadata.INITIALIZATION_EAGER, BeanMetadata.SCOPE_SINGLETON);
+        this(name, classType, null, initMethodName, destroyMethodName, parms, props, null, BeanMetadata.ACTIVATION_EAGER, BeanMetadata.SCOPE_SINGLETON);
     }
 
-    public BeanComponent(String name, Class classType, String factoryMethodName, String initMethodName, String destroyMethodName, TestArgument[] parms, TestProperty[] props, String[] dependsOn, int initialization, String scope) {
+    public BeanComponent(String name, Class classType, String factoryMethodName, String initMethodName, String destroyMethodName, TestArgument[] parms, TestProperty[] props, String[] dependsOn, int activation, String scope) {
         this.name = name;
         if (classType != null) {
             this.className = classType.getName();
@@ -89,7 +89,7 @@ public class BeanComponent extends Assert implements TestComponentMetadata {
         this.parms = parms;
         this.props = props;
         this.dependsOn = dependsOn;
-        this.initialization = initialization;
+        this.activation = activation;
         this.scope = scope;
         // make sure we get the default set
         if (this.scope == null) {
@@ -183,7 +183,7 @@ public class BeanComponent extends Assert implements TestComponentMetadata {
             assertEquals("Depends on definition", test, meta.getDependsOn());
         }
 
-        assertEquals("Component initialization attribute", initialization, meta.getInitialization());
+        assertEquals("Component activation attribute", activation, meta.getActivation());
         assertEquals("Component scope", scope, meta.getScope());
     }
 

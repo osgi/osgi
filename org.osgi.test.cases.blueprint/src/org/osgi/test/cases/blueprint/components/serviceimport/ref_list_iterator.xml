@@ -6,9 +6,9 @@
     </description>
 
     <!-- NB:  this also tests the ability for a collection to be a top-level component -->
-    <ref-list id="TestCollection" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" availability="optional">
+    <reference-list id="TestCollection" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" availability="optional">
         <reference-listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
-    </ref-list>
+    </reference-list>
 
     <!-- This gets both a ServiceManager and a reference collection injected -->
    <bean id="ReferenceChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.ListIteratorChecker" init-method="init">

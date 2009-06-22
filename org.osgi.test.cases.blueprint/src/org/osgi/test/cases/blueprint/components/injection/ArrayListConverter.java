@@ -20,18 +20,19 @@ import java.util.Collection;
 import java.util.ArrayList;
 
 import org.osgi.service.blueprint.container.Converter;
+import org.osgi.service.blueprint.container.CollapsedType;
 
 public class ArrayListConverter implements Converter {
-    public Object convert(Object source, Object toType) throws Exception {
-        if (source instanceof Collection && toType == ArrayList.class) {
+    public Object convert(Object source, CollapsedType toType) throws Exception {
+        if (source instanceof Collection && toType.getRawClass() == ArrayList.class) {
             return new ArrayList((Collection)source);
         }
         // we're supposed to throw an exception if we can't convert
         throw new Exception("Unconvertable object type");
     }
 
-    public boolean canConvert(Object value, Object toType) {
-        return toType == ArrayList.class && value instanceof Collection;
+    public boolean canConvert(Object value, CollapsedType toType) {
+        return toType.getRawClass() == ArrayList.class && value instanceof Collection;
     }
 }
 

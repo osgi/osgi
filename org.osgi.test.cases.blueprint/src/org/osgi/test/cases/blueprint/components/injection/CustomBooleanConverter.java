@@ -17,11 +17,12 @@
 package org.osgi.test.cases.blueprint.components.injection;
 
 import org.osgi.service.blueprint.container.Converter;
+import org.osgi.service.blueprint.container.CollapsedType;
 
 public class CustomBooleanConverter implements Converter {
 
-    public Object convert(Object source, Object toType) throws Exception {
-        if (source instanceof String && toType == Boolean.class) {
+    public Object convert(Object source, CollapsedType toType) throws Exception {
+        if (source instanceof String && toType.getRawClass() == Boolean.class) {
             String strValue = (String)source;
             if (strValue.equals("T")) {
                 return new Boolean(true);
@@ -36,7 +37,7 @@ public class CustomBooleanConverter implements Converter {
         throw new Exception("Unconvertable object type");
     }
 
-    public boolean canConvert(Object value, Object toType) {
-        return toType == Boolean.class && value instanceof String;
+    public boolean canConvert(Object value, CollapsedType toType) {
+        return toType.getRawClass() == Boolean.class && value instanceof String;
     }
 }
