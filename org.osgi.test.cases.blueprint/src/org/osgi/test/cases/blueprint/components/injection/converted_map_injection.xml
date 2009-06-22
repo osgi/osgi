@@ -2,12 +2,12 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
 	<type-converters>
-		<bean class="org.osgi.test.cases.blueprint.beans.injection.HashMapConverter"/>
-		<bean class="org.osgi.test.cases.blueprint.beans.injection.HashtableConverter"/>
-		<bean class="org.osgi.test.cases.blueprint.beans.injection.TreeMapConverter"/>
+		<bean class="org.osgi.test.cases.blueprint.components.injection.HashMapConverter"/>
+		<bean class="org.osgi.test.cases.blueprint.components.injection.HashtableConverter"/>
+		<bean class="org.osgi.test.cases.blueprint.components.injection.TreeMapConverter"/>
 	</type-converters>
 
-    <bean id="hashMap" class="org.osgi.test.cases.blueprint.beans.injection.PropertyInjection">
+    <bean id="hashMap" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="hashMap">
             <map>
                 <entry key="abc" value="1"/>
@@ -16,7 +16,7 @@
         </property>
     </bean>
 
-    <bean id="treeMap" class="org.osgi.test.cases.blueprint.beans.injection.PropertyInjection">
+    <bean id="treeMap" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="treeMap">
             <map>
                 <entry key="abc" value="1"/>
@@ -25,7 +25,7 @@
         </property>
     </bean>
 
-    <bean id="hashtable" class="org.osgi.test.cases.blueprint.beans.injection.PropertyInjection">
+    <bean id="hashtable" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="hashtable">
             <map>
                 <entry key="abc" value="1"/>

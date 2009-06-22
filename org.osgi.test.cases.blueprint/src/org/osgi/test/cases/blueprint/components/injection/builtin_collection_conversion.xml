@@ -197,16 +197,6 @@
         </property>
     </bean>
 
-    <bean id="listToSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
-        <property name="set">
-            <list>
-                <value>abc</value>
-                <value>def</value>
-                <value>def</value>
-            </list>
-        </property>
-    </bean>
-
     <bean id="listToArrayList" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="arrayList">
             <list>
@@ -309,16 +299,6 @@
 
     <bean id="arrayToTreeSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="treeSet">
-            <array>
-                <value>abc</value>
-                <value>def</value>
-                <value>def</value>
-            </array>
-        </property>
-    </bean>
-
-    <bean id="arrayToSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
-        <property name="set">
             <array>
                 <value>abc</value>
                 <value>def</value>
