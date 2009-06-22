@@ -63,17 +63,17 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         MetadataEventSet startEvents = controller.getStartEvents();
 
         //inner component should be created
-        startEvents.addAssertion("compInnerOne", AssertionService.COMPONENT_CREATED);
-        startEvents.addAssertion("compInnerOne_1", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("compInnerOne", AssertionService.BEAN_CREATED);
+        startEvents.addAssertion("compInnerOne_1", AssertionService.BEAN_CREATED);
 
         //inner component should not be created
-        startEvents.addFailureEvent(new ComponentAssertion("compInnerLazyOuter", AssertionService.COMPONENT_CREATED));
-        startEvents.addFailureEvent(new ComponentAssertion("compInnerLazyOuter_1", AssertionService.COMPONENT_CREATED));
+        startEvents.addFailureEvent(new ComponentAssertion("compInnerLazyOuter", AssertionService.BEAN_CREATED));
+        startEvents.addFailureEvent(new ComponentAssertion("compInnerLazyOuter_1", AssertionService.BEAN_CREATED));
 
         //multi inner components
-        startEvents.addAssertion("compInnerTwo", AssertionService.COMPONENT_CREATED);
-        startEvents.addAssertion("compInnerTwo_1", AssertionService.COMPONENT_CREATED);
-        startEvents.addAssertion("compInnerTwo_2", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("compInnerTwo", AssertionService.BEAN_CREATED);
+        startEvents.addAssertion("compInnerTwo_1", AssertionService.BEAN_CREATED);
+        startEvents.addAssertion("compInnerTwo_2", AssertionService.BEAN_CREATED);
 
         TestComponentValue testComponentValue = new TestComponentValue(new BeanComponent(InnerComponentInjection.class,null,null,null));
 

@@ -28,14 +28,14 @@ public class AssertionService
 {
     public static final String ASSERTION_BASE = "org/osgi/test/cases/blueprint/";
     public static final String ASSERTION_FAILURE = "ASSERTION_FAILURE";
-    public static final String COMPONENT_CREATED = "COMPONENT_CREATED";
-    public static final String COMPONENT_INIT_METHOD = "COMPONENT_INIT_METHOD";
-    public static final String COMPONENT_DESTROY_METHOD = "COMPONENT_DESTORY_METHOD";
-    public static final String COMPONENT_PROPERTY_SET = "COMPONENT_PROPERTY_SET";
+    public static final String BEAN_CREATED = "BEAN_CREATED";
+    public static final String BEAN_INIT_METHOD = "BEAN_INIT_METHOD";
+    public static final String BEAN_DESTROY_METHOD = "BEAN_DESTROY_METHOD";
+    public static final String BEAN_PROPERTY_SET = "BEAN_PROPERTY_SET";
     public static final String FACTORY_CALLED = "FACTORY_CALLED";
     public static final String STATIC_FACTORY_CALLED = "STATIC_FACTORY_CALLED";
     public static final String METHOD_CALLED = "METHOD_CALLED";
-    public static final String MODULE_CONTEXT_INJECTED = "MODULE_CONTEXT_INJECTED";
+    public static final String BLUEPRINT_CONTAINER_INJECTED = "BLUEPRINT_CONTAINER_INJECTED";
     public static final String GENERAL_EVENT = "GENERAL_EVENT";
     public static final String SERVICE_REQUEST = "SERVICE_REQUEST";
     public static final String SERVICE_SUCCESS = "SERVICE_SUCCESS";
@@ -48,8 +48,8 @@ public class AssertionService
     public static final String SERVICE_UNREGISTERED = "SERVICE_UNREGISTERED";
 
     public static final String ASSERTION_MESSAGE = "ASSERTION_MESSAGE";
-    public static final String COMPONENT = "COMPONENT";
-    public static final String COMPONENT_PROPERTIES = "COMPONENT_PROPERTIES";
+    public static final String BEAN = "BEAN";
+    public static final String BEAN_PROPERTIES = "BEAN_PROPERTIES";
     public static final String PROPERTY_NAME = "PROPERTY_NAME";
     public static final String TRACEBACK = "TRACEBACK";
     public static final String EVENT_TYPE = "EVENT_TYPE";
@@ -204,13 +204,13 @@ public class AssertionService
         if (props == null) {
             props = new Hashtable();
         }
-        props.put(COMPONENT, component);
+        props.put(BEAN, component);
         // if this is a ComponentTestInfo object, then send along the component properties
         // in the event.  Note that the attached properties will be a snapshot of the
         // component state at the time the event is posted.  This will allow the test validation
         // code to see the full state of the information.
         if (component instanceof ComponentTestInfo) {
-            props.put(COMPONENT_PROPERTIES, ((ComponentTestInfo)component).getComponentProperties());
+            props.put(BEAN_PROPERTIES, ((ComponentTestInfo)component).getComponentProperties());
         }
         sendEvent(topic, props);
     }

@@ -64,7 +64,7 @@ public class ServiceComponentExistValidator extends MetadataValidator {
 
             // get the property"s" of the component
             Dictionary componentProps = comp.getComponentProperties();
-            Dictionary properties = (Dictionary) componentProps.get(ComponentTestInfo.COMPONENT_PROPERTIES); //the property"s"
+            Dictionary properties = (Dictionary) componentProps.get(ComponentTestInfo.BEAN_PROPERTIES); //the property"s"
 
             // try to find all expected value in the component
             if (properties!=null) {

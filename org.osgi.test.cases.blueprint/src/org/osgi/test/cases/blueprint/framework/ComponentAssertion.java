@@ -129,12 +129,12 @@ public class ComponentAssertion extends AdminTestEvent {
      */
     public ComponentAssertion(Event event) {
         super(event);
-        ComponentTestInfo component = (ComponentTestInfo)event.getProperty(AssertionService.COMPONENT);
+        ComponentTestInfo component = (ComponentTestInfo)event.getProperty(AssertionService.BEAN);
         // we have some assertion events that are not associated with a component,
         // so handle this gracefully
         if (component != null) {
             componentProps = component.getComponentProperties();
-            componentId = (String)componentProps.get(ComponentTestInfo.COMPONENT_ID);
+            componentId = (String)componentProps.get(ComponentTestInfo.BEAN_ID);
         }
         message = (String)event.getProperty(AssertionService.ASSERTION_MESSAGE);
         propertyName = (String)event.getProperty(AssertionService.PROPERTY_NAME);

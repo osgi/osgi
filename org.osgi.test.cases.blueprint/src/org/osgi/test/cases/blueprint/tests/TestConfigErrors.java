@@ -246,9 +246,9 @@ public class TestConfigErrors extends DefaultTestBundleControl {
         // all of the interesting bits happen during the shutdown phase
         EventSet stopEvents = controller.getStopEvents();
         // we still call this, and it will let us know it got there
-        stopEvents.addAssertion("DestroyException", AssertionService.COMPONENT_DESTROY_METHOD);
+        stopEvents.addAssertion("DestroyException", AssertionService.BEAN_DESTROY_METHOD);
         // this one will happen after the exception
-        stopEvents.addAssertion("GoodDestroy", AssertionService.COMPONENT_DESTROY_METHOD);
+        stopEvents.addAssertion("GoodDestroy", AssertionService.BEAN_DESTROY_METHOD);
         controller.run();
     }
 

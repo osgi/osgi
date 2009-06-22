@@ -43,14 +43,14 @@ public class BaseTestComponent implements ComponentTestInfo{
     protected BaseTestComponent(String componentId) {
         AssertionService.assertNotNull(this, componentId, "Component id null");
         this.componentId = componentId;
-        props.put(COMPONENT_ID, componentId);
+        props.put(BEAN_ID, componentId);
         props.put(INIT_CALLED, Boolean.FALSE);
         props.put(DESTROY_CALLED, Boolean.FALSE);
-        props.put(COMPONENT_INSTANCE, new Integer(creationId++));
+        props.put(BEAN_INSTANCE, new Integer(creationId++));
         // the arguments and properties are maintained in the snapshot tree
-        props.put(COMPONENT_ARGUMENTS, arguments);
-        props.put(COMPONENT_PROPERTIES, properties);
-        AssertionService.sendEvent(this, AssertionService.COMPONENT_CREATED);
+        props.put(BEAN_ARGUMENTS, arguments);
+        props.put(BEAN_PROPERTIES, properties);
+        AssertionService.sendEvent(this, AssertionService.BEAN_CREATED);
     }
 
     /**
@@ -71,7 +71,7 @@ public class BaseTestComponent implements ComponentTestInfo{
      * @return The unique component identifer.
      */
     public int getComponentInstance() {
-        Integer id = (Integer)props.get(COMPONENT_INSTANCE);
+        Integer id = (Integer)props.get(BEAN_INSTANCE);
         // we should always have one of these
         if (id == null) {
             return 0;
@@ -93,8 +93,8 @@ public class BaseTestComponent implements ComponentTestInfo{
         Dictionary copy = (Dictionary)props.clone();
         // we also snapshot the arguments and properties collections to get an
         // immutable version
-        copy.put(COMPONENT_ARGUMENTS, arguments.clone());
-        copy.put(COMPONENT_PROPERTIES, properties.clone());
+        copy.put(BEAN_ARGUMENTS, arguments.clone());
+        copy.put(BEAN_PROPERTIES, properties.clone());
         return copy;
     }
 
@@ -281,7 +281,7 @@ public class BaseTestComponent implements ComponentTestInfo{
      */
     public void init() {
         props.put(INIT_CALLED, Boolean.TRUE);
-        AssertionService.sendEvent(this, AssertionService.COMPONENT_INIT_METHOD);
+        AssertionService.sendEvent(this, AssertionService.BEAN_INIT_METHOD);
     }
 
 
@@ -290,7 +290,7 @@ public class BaseTestComponent implements ComponentTestInfo{
      */
     public void destroy() {
         props.put(DESTROY_CALLED, Boolean.TRUE);
-        AssertionService.sendEvent(this, AssertionService.COMPONENT_DESTROY_METHOD);
+        AssertionService.sendEvent(this, AssertionService.BEAN_DESTROY_METHOD);
     }
 
 

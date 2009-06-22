@@ -52,7 +52,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // export jar
         MetadataEventSet exportStartEvents = controller.getStartEvents(1);
         // the is the component creation
-        exportStartEvents.addAssertion("ServiceOne", AssertionService.COMPONENT_CREATED);
+        exportStartEvents.addAssertion("ServiceOne", AssertionService.BEAN_CREATED);
         // validate that the service has been registered
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, "ServiceOne"));
         // this will validate the getComponent() result and check this is also in getComponentNames();
@@ -94,7 +94,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // now some expected termination stuff
         EventSet exportStopEvents = controller.getStopEvents(1);
         // the is the component creation
-        exportStopEvents.addAssertion("ServiceOne", AssertionService.COMPONENT_DESTROY_METHOD);
+        exportStopEvents.addAssertion("ServiceOne", AssertionService.BEAN_DESTROY_METHOD);
         // we should see a service event here indicating this is being deregistered
         exportStopEvents.addServiceEvent("UNREGISTERING", TestServiceOne.class);
         // and there should not be a registration active anymore
@@ -118,7 +118,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // export jar
         MetadataEventSet exportStartEvents = controller.getStartEvents(1);
         // the is the component creation
-        exportStartEvents.addAssertion("ServiceOne", AssertionService.COMPONENT_CREATED);
+        exportStartEvents.addAssertion("ServiceOne", AssertionService.BEAN_CREATED);
         // validate that the service has been registered
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, "ServiceOne"));
         // this will validate the getComponent() result and check this is also in getComponentNames();
@@ -138,10 +138,10 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
         // we should see both the construction and INIT of this.  It's difficult to test the ordering,
         // but we should see the events from this lazy bean.
-        importStartEvents.addAssertion("dependsleaf2", AssertionService.COMPONENT_CREATED);
-        importStartEvents.addAssertion("dependsleaf2", AssertionService.COMPONENT_INIT_METHOD);
-        importStartEvents.addAssertion("dependsleaf1", AssertionService.COMPONENT_CREATED);
-        importStartEvents.addAssertion("dependsleaf1", AssertionService.COMPONENT_INIT_METHOD);
+        importStartEvents.addAssertion("dependsleaf2", AssertionService.BEAN_CREATED);
+        importStartEvents.addAssertion("dependsleaf2", AssertionService.BEAN_INIT_METHOD);
+        importStartEvents.addAssertion("dependsleaf1", AssertionService.BEAN_CREATED);
+        importStartEvents.addAssertion("dependsleaf1", AssertionService.BEAN_INIT_METHOD);
         // also validate the metadata for the imported service (this one only has a single import, so easy to locate)
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferencedService("ServiceOne", TestServiceOne.class,
                 ServiceReferenceMetadata.AVAILABILITY_MANDATORY, ServiceReferenceMetadata.ACTIVATION_EAGER,
@@ -167,15 +167,15 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // now some expected termination stuff
         EventSet exportStopEvents = controller.getStopEvents(1);
         // the is the component creation
-        exportStopEvents.addAssertion("ServiceOne", AssertionService.COMPONENT_DESTROY_METHOD);
+        exportStopEvents.addAssertion("ServiceOne", AssertionService.BEAN_DESTROY_METHOD);
         // we should see a service event here indicating this is being deregistered
         exportStopEvents.addServiceEvent("UNREGISTERING", TestServiceOne.class);
         // and there should not be a registration active anymore
         exportStopEvents.addValidator(new ServiceUnregistrationValidator(TestServiceOne.class, null));
 
         EventSet importStopEvents = controller.getStopEvents(0);
-        importStopEvents.addAssertion("dependsleaf1", AssertionService.COMPONENT_DESTROY_METHOD);
-        importStopEvents.addAssertion("dependsleaf2", AssertionService.COMPONENT_DESTROY_METHOD);
+        importStopEvents.addAssertion("dependsleaf1", AssertionService.BEAN_DESTROY_METHOD);
+        importStopEvents.addAssertion("dependsleaf2", AssertionService.BEAN_DESTROY_METHOD);
 
         controller.run();
     }
@@ -196,7 +196,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         MetadataEventSet exportStartEvents = controller.getStartEvents(1);
         // the is the component creation...we should see two of those.  One from the importing
         // bundle, and a second when we request the service from this bundle.
-        exportStartEvents.addAssertion("ServiceOne", AssertionService.COMPONENT_CREATED);
+        exportStartEvents.addAssertion("ServiceOne", AssertionService.BEAN_CREATED);
         // validate that the service has been registered
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, "ServiceOne"));
         // this will validate the getComponent() result and check this is also in getComponentNames();
@@ -215,7 +215,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
                 new ServiceRequestInitiator(getContext(), TestServiceOne.class, null)));
         // The dynamically request service instance is immediately returned, so we should see
         // a destroy call for the backing prototype component instance.
-        exportStartEvents.addAssertion("ServiceOne", AssertionService.COMPONENT_DESTROY_METHOD);
+        exportStartEvents.addAssertion("ServiceOne", AssertionService.BEAN_DESTROY_METHOD);
 
         // now the importing side.  We've got a couple of service injections to validate, plus the injection
         // results
@@ -244,7 +244,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // now some expected termination stuff
         EventSet exportStopEvents = controller.getStopEvents(1);
         // the is the component creation
-        exportStopEvents.addAssertion("ServiceOne", AssertionService.COMPONENT_DESTROY_METHOD);
+        exportStopEvents.addAssertion("ServiceOne", AssertionService.BEAN_DESTROY_METHOD);
         // we should see a service event here indicating this is being deregistered
         exportStopEvents.addServiceEvent("UNREGISTERING", TestServiceOne.class);
         // and there should not be a registration active anymore
@@ -271,7 +271,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // export jar
         MetadataEventSet exportStartEvents = controller.getStartEvents(1);
         // the is the component creation
-        exportStartEvents.addAssertion("ServiceOne", AssertionService.COMPONENT_CREATED);
+        exportStartEvents.addAssertion("ServiceOne", AssertionService.BEAN_CREATED);
         // We should see both of these registered
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, "ServiceOne"));
         // this should be registered under a lot of different interface names, and also has service properties
@@ -336,7 +336,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // now some expected termination stuff
         EventSet exportStopEvents = controller.getStopEvents(1);
         // the is the component creation
-        exportStopEvents.addAssertion("ServiceOne", AssertionService.COMPONENT_DESTROY_METHOD);
+        exportStopEvents.addAssertion("ServiceOne", AssertionService.BEAN_DESTROY_METHOD);
         // we should see a service event here indicating this is being deregistered
         exportStopEvents.addServiceEvent("UNREGISTERING", TestServiceOne.class);
         exportStopEvents.addServiceEvent("UNREGISTERING", new Class[] { TestServiceOne.class, TestServiceTwo.class,
@@ -525,8 +525,8 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
         // these are lazy-inited components, but we should see them get created
         // because of the depends-on attribute
-        exportStartEvents.addAssertion("Depends1", AssertionService.COMPONENT_CREATED);
-        exportStartEvents.addAssertion("Depends2", AssertionService.COMPONENT_CREATED);
+        exportStartEvents.addAssertion("Depends1", AssertionService.BEAN_CREATED);
+        exportStartEvents.addAssertion("Depends2", AssertionService.BEAN_CREATED);
 
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
@@ -887,9 +887,9 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         factoryGet.addDependency(request);
         exportStartEvents.addEvent(factoryGet);
         // the is the factory component creation
-        exportStartEvents.addAssertion("ServiceOneFactory", AssertionService.COMPONENT_CREATED);
+        exportStartEvents.addAssertion("ServiceOneFactory", AssertionService.BEAN_CREATED);
         // this the service instance getting created as a result of the factory getting called
-        exportStartEvents.addAssertion("ServiceOneFactory_0", AssertionService.COMPONENT_CREATED);
+        exportStartEvents.addAssertion("ServiceOneFactory_0", AssertionService.BEAN_CREATED);
         // validate that the service has been registered
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, "ServiceOneFactory"));
         // also validate the metadata for the exported service
@@ -915,7 +915,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // this is the unget of the service instance
         exportStopEvents.addAssertion("ServiceOneFactory", AssertionService.SERVICE_FACTORY_UNGET);
         // the is the factory shutdown
-        exportStopEvents.addAssertion("ServiceOneFactory", AssertionService.COMPONENT_DESTROY_METHOD);
+        exportStopEvents.addAssertion("ServiceOneFactory", AssertionService.BEAN_DESTROY_METHOD);
         // we should see a service event here indicating this is being deregistered
         exportStopEvents.addServiceEvent("UNREGISTERING", TestServiceOne.class);
         // and there should not be a registration active anymore
@@ -1663,7 +1663,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // And then rebound again by the driver code.
         importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, props1));
         // this indicates successful completion of the test phase
-        importStartEvents.addAssertion("UnregisteredDependencyChecker", AssertionService.COMPONENT_INIT_METHOD);
+        importStartEvents.addAssertion("UnregisteredDependencyChecker", AssertionService.BEAN_INIT_METHOD);
 
         // now some expected termination stuff
         EventSet importStopEvents = controller.getStopEvents(0);
@@ -1693,7 +1693,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
         // the test component will handle all of the validation checking for this
         // this indicates successful completion of the test phase
-        importStartEvents.addAssertion("DependencyChecker", AssertionService.COMPONENT_INIT_METHOD);
+        importStartEvents.addAssertion("DependencyChecker", AssertionService.BEAN_INIT_METHOD);
 
         // now some expected termination stuff
         EventSet importStopEvents = controller.getStopEvents(0);
@@ -1739,7 +1739,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
         // the test component will handle all of the validation checking for this
         // this indicates successful completion of the test phase
-        importStartEvents.addAssertion("DependencyChecker", AssertionService.COMPONENT_INIT_METHOD);
+        importStartEvents.addAssertion("DependencyChecker", AssertionService.BEAN_INIT_METHOD);
 
         // now some expected termination stuff
         EventSet importStopEvents = controller.getStopEvents(0);
@@ -1775,7 +1775,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // this is followed by an UNBIND operation when the service goes away again.
         importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, props1));
         // this indicates successful completion of the test phase
-        importStartEvents.addAssertion("UnavailableDependencyChecker", AssertionService.COMPONENT_INIT_METHOD);
+        importStartEvents.addAssertion("UnavailableDependencyChecker", AssertionService.BEAN_INIT_METHOD);
 
         // now some expected termination stuff
         EventSet importStopEvents = controller.getStopEvents(0);
@@ -1814,7 +1814,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // this is followed by an UNBIND operation when the service goes away again.
         importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, props1));
         // this indicates successful completion of the test phase
-        importStartEvents.addAssertion("UnavailableDependencyChecker", AssertionService.COMPONENT_INIT_METHOD);
+        importStartEvents.addAssertion("UnavailableDependencyChecker", AssertionService.BEAN_INIT_METHOD);
 
         // now some expected termination stuff
         EventSet importStopEvents = controller.getStopEvents(0);
@@ -1859,7 +1859,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // we should, however, see a BIND event for the replacement service
         importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, props2));
         // this indicates successful completion of the test phase
-        importStartEvents.addAssertion("ReboundDependencyChecker", AssertionService.COMPONENT_INIT_METHOD);
+        importStartEvents.addAssertion("ReboundDependencyChecker", AssertionService.BEAN_INIT_METHOD);
 
 
         // now some expected termination stuff
@@ -1906,7 +1906,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // we should also not see a BIND event for the replacement service...we stay with the original
         importStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, props2));
         // this indicates successful completion of the test phase
-        importStartEvents.addAssertion("ReboundDependencyChecker", AssertionService.COMPONENT_INIT_METHOD);
+        importStartEvents.addAssertion("ReboundDependencyChecker", AssertionService.BEAN_INIT_METHOD);
 
 
         // now some expected termination stuff
@@ -1932,7 +1932,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
         // metadata issues have been well tested elsewhere.  We're going to focus on the service dynamics.
         // this indicates successful completion of the test phase
-        importStartEvents.addAssertion("ServiceRegistrationChecker", AssertionService.COMPONENT_INIT_METHOD);
+        importStartEvents.addAssertion("ServiceRegistrationChecker", AssertionService.BEAN_INIT_METHOD);
         controller.run();
     }
 
@@ -1949,11 +1949,11 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // export jar
         MetadataEventSet exportStartEvents = controller.getStartEvents();
         // There will all sorts of events that will signal a failure if we see them
-        exportStartEvents.addFailureEvent(new ComponentAssertion("Trigger", AssertionService.COMPONENT_CREATED));
-        exportStartEvents.addFailureEvent(new ComponentAssertion("Depends1", AssertionService.COMPONENT_CREATED));
-        exportStartEvents.addFailureEvent(new ComponentAssertion("Depends2", AssertionService.COMPONENT_CREATED));
-        exportStartEvents.addFailureEvent(new ComponentAssertion("ServiceOne", AssertionService.COMPONENT_CREATED));
-        exportStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.COMPONENT_CREATED));
+        exportStartEvents.addFailureEvent(new ComponentAssertion("Trigger", AssertionService.BEAN_CREATED));
+        exportStartEvents.addFailureEvent(new ComponentAssertion("Depends1", AssertionService.BEAN_CREATED));
+        exportStartEvents.addFailureEvent(new ComponentAssertion("Depends2", AssertionService.BEAN_CREATED));
+        exportStartEvents.addFailureEvent(new ComponentAssertion("ServiceOne", AssertionService.BEAN_CREATED));
+        exportStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.BEAN_CREATED));
         // and there should not be a registered service for this yet
         exportStartEvents.addValidator(new ServiceUnregistrationValidator(TestServiceOne.class, null));
 
@@ -1963,18 +1963,18 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportMiddleEvents.addInitializer(new LazyComponentStarter("Trigger"));
 
         // these all get created now
-        exportMiddleEvents.addEvent(new ComponentAssertion("Trigger", AssertionService.COMPONENT_CREATED));
-        exportMiddleEvents.addEvent(new ComponentAssertion("Depends1", AssertionService.COMPONENT_CREATED));
-        exportMiddleEvents.addEvent(new ComponentAssertion("Depends2", AssertionService.COMPONENT_CREATED));
-        exportMiddleEvents.addEvent(new ComponentAssertion("ServiceOne", AssertionService.COMPONENT_CREATED));
-        exportMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.COMPONENT_CREATED));
+        exportMiddleEvents.addEvent(new ComponentAssertion("Trigger", AssertionService.BEAN_CREATED));
+        exportMiddleEvents.addEvent(new ComponentAssertion("Depends1", AssertionService.BEAN_CREATED));
+        exportMiddleEvents.addEvent(new ComponentAssertion("Depends2", AssertionService.BEAN_CREATED));
+        exportMiddleEvents.addEvent(new ComponentAssertion("ServiceOne", AssertionService.BEAN_CREATED));
+        exportMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.BEAN_CREATED));
 
         // and initialized
-        exportMiddleEvents.addEvent(new ComponentAssertion("Trigger", AssertionService.COMPONENT_INIT_METHOD));
-        exportMiddleEvents.addEvent(new ComponentAssertion("Depends1", AssertionService.COMPONENT_INIT_METHOD));
-        exportMiddleEvents.addEvent(new ComponentAssertion("Depends2", AssertionService.COMPONENT_INIT_METHOD));
-        exportMiddleEvents.addEvent(new ComponentAssertion("ServiceOne", AssertionService.COMPONENT_INIT_METHOD));
-        exportMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.COMPONENT_INIT_METHOD));
+        exportMiddleEvents.addEvent(new ComponentAssertion("Trigger", AssertionService.BEAN_INIT_METHOD));
+        exportMiddleEvents.addEvent(new ComponentAssertion("Depends1", AssertionService.BEAN_INIT_METHOD));
+        exportMiddleEvents.addEvent(new ComponentAssertion("Depends2", AssertionService.BEAN_INIT_METHOD));
+        exportMiddleEvents.addEvent(new ComponentAssertion("ServiceOne", AssertionService.BEAN_INIT_METHOD));
+        exportMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.BEAN_INIT_METHOD));
         // our listener should get called
         exportMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_REGISTERED));
 
@@ -1997,11 +1997,11 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
         // now some expected termination stuff
         EventSet exportStopEvents = controller.getStopEvents();
-        exportStopEvents.addEvent(new ComponentAssertion("Trigger", AssertionService.COMPONENT_DESTROY_METHOD));
-        exportStopEvents.addEvent(new ComponentAssertion("Depends1", AssertionService.COMPONENT_DESTROY_METHOD));
-        exportStopEvents.addEvent(new ComponentAssertion("Depends2", AssertionService.COMPONENT_DESTROY_METHOD));
-        exportStopEvents.addEvent(new ComponentAssertion("ServiceOne", AssertionService.COMPONENT_DESTROY_METHOD));
-        exportStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.COMPONENT_DESTROY_METHOD));
+        exportStopEvents.addEvent(new ComponentAssertion("Trigger", AssertionService.BEAN_DESTROY_METHOD));
+        exportStopEvents.addEvent(new ComponentAssertion("Depends1", AssertionService.BEAN_DESTROY_METHOD));
+        exportStopEvents.addEvent(new ComponentAssertion("Depends2", AssertionService.BEAN_DESTROY_METHOD));
+        exportStopEvents.addEvent(new ComponentAssertion("ServiceOne", AssertionService.BEAN_DESTROY_METHOD));
+        exportStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.BEAN_DESTROY_METHOD));
         // an event from our listener
         exportStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNREGISTERED));
         // we should see a service event here indicating this is being deregistered
@@ -2028,25 +2028,25 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
 
         // There will all sorts of events that will signal a failure if we see them
-        importStartEvents.addFailureEvent(new ComponentAssertion("ReboundDependencyChecker", AssertionService.COMPONENT_CREATED));
-        importStartEvents.addFailureEvent(new ComponentAssertion("Depends1", AssertionService.COMPONENT_CREATED));
-        importStartEvents.addFailureEvent(new ComponentAssertion("Depends2", AssertionService.COMPONENT_CREATED));
-        importStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.COMPONENT_CREATED));
+        importStartEvents.addFailureEvent(new ComponentAssertion("ReboundDependencyChecker", AssertionService.BEAN_CREATED));
+        importStartEvents.addFailureEvent(new ComponentAssertion("Depends1", AssertionService.BEAN_CREATED));
+        importStartEvents.addFailureEvent(new ComponentAssertion("Depends2", AssertionService.BEAN_CREATED));
+        importStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.BEAN_CREATED));
 
         MetadataEventSet importMiddleEvents = controller.getMiddleEvents(0);
         // this will start the initialization cascade
         importMiddleEvents.addInitializer(new LazyComponentStarter("ReboundDependencyChecker"));
 
         // these all get created now
-        importMiddleEvents.addEvent(new ComponentAssertion("ReboundDependencyChecker", AssertionService.COMPONENT_CREATED));
-        importMiddleEvents.addEvent(new ComponentAssertion("Depends1", AssertionService.COMPONENT_CREATED));
-        importMiddleEvents.addEvent(new ComponentAssertion("Depends2", AssertionService.COMPONENT_CREATED));
-        importMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.COMPONENT_CREATED));
+        importMiddleEvents.addEvent(new ComponentAssertion("ReboundDependencyChecker", AssertionService.BEAN_CREATED));
+        importMiddleEvents.addEvent(new ComponentAssertion("Depends1", AssertionService.BEAN_CREATED));
+        importMiddleEvents.addEvent(new ComponentAssertion("Depends2", AssertionService.BEAN_CREATED));
+        importMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.BEAN_CREATED));
 
         // and initialized
-        importMiddleEvents.addEvent(new ComponentAssertion("Depends1", AssertionService.COMPONENT_INIT_METHOD));
-        importMiddleEvents.addEvent(new ComponentAssertion("Depends2", AssertionService.COMPONENT_INIT_METHOD));
-        importMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.COMPONENT_INIT_METHOD));
+        importMiddleEvents.addEvent(new ComponentAssertion("Depends1", AssertionService.BEAN_INIT_METHOD));
+        importMiddleEvents.addEvent(new ComponentAssertion("Depends2", AssertionService.BEAN_INIT_METHOD));
+        importMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.BEAN_INIT_METHOD));
         // the first property comes from the called method signature, the
         // second should be passed to the registration listener.
         Hashtable props1 = new Hashtable();
@@ -2066,7 +2066,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // we should, however, see a BIND event for the replacement service
         importMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, props2));
         // this indicates successful completion of the test phase
-        importMiddleEvents.addAssertion("ReboundDependencyChecker", AssertionService.COMPONENT_INIT_METHOD);
+        importMiddleEvents.addAssertion("ReboundDependencyChecker", AssertionService.BEAN_INIT_METHOD);
 
         // we're expecting some listener metadata on the import.
         BindingListener[] listeners = new BindingListener[] {
@@ -2084,10 +2084,10 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // service, since that is the one currently bound.
         importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, props2));
 
-        importStopEvents.addEvent(new ComponentAssertion("ReboundDependencyChecker", AssertionService.COMPONENT_DESTROY_METHOD));
-        importStopEvents.addEvent(new ComponentAssertion("Depends1", AssertionService.COMPONENT_DESTROY_METHOD));
-        importStopEvents.addEvent(new ComponentAssertion("Depends2", AssertionService.COMPONENT_DESTROY_METHOD));
-        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.COMPONENT_DESTROY_METHOD));
+        importStopEvents.addEvent(new ComponentAssertion("ReboundDependencyChecker", AssertionService.BEAN_DESTROY_METHOD));
+        importStopEvents.addEvent(new ComponentAssertion("Depends1", AssertionService.BEAN_DESTROY_METHOD));
+        importStopEvents.addEvent(new ComponentAssertion("Depends2", AssertionService.BEAN_DESTROY_METHOD));
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.BEAN_DESTROY_METHOD));
         controller.run();
     }
 }

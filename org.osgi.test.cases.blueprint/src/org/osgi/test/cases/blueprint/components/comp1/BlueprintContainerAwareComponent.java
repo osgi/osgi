@@ -67,9 +67,9 @@ public class BlueprintContainerAwareComponent extends BaseTestComponent {
 	public void setBlueprintContainer(BlueprintContainer context) {
         // save this for the init method to check
         this.moduleContext = context;
-        AssertionService.assertNotNull(this, "null BlueprintContainer injectioned", context);
+        AssertionService.assertNotNull(this, "null BlueprintContainer injected", context);
         // send an event indicating this has occurred.
-        AssertionService.sendEvent(this, AssertionService.MODULE_CONTEXT_INJECTED);
+        AssertionService.sendEvent(this, AssertionService.BLUEPRINT_CONTAINER_INJECTED);
     }
 
 

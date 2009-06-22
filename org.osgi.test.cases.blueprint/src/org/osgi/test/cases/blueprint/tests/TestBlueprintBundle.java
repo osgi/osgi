@@ -48,7 +48,7 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         StandardTestController controller = new StandardTestController(getContext(),
                 getWebServer()+"www/comp1_no_header.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
-        startEvents.addAssertion("comp1", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("comp1", AssertionService.BEAN_CREATED);
         startEvents.validateComponent("comp1", SimpleTestComponent.class);
         // make sure the name is in the component list
         startEvents.addValidator(new ComponentNamePresenceValidator("comp1"));
@@ -70,7 +70,7 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         StandardTestController controller = new StandardTestController(getContext(),
                 getWebServer()+"www/config_wildcard.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
-        startEvents.addAssertion("comp1", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("comp1", AssertionService.BEAN_CREATED);
         startEvents.validateComponent("comp1", SimpleTestComponent.class);
         // make sure the name is in the component list
         startEvents.addValidator(new ComponentNamePresenceValidator("comp1"));
@@ -92,8 +92,8 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         StandardTestController controller = new StandardTestController(getContext(),
                 getWebServer()+"www/comp1a_no_header.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
-        startEvents.addAssertion("comp1", AssertionService.COMPONENT_CREATED);
-        startEvents.addAssertion("comp2", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("comp1", AssertionService.BEAN_CREATED);
+        startEvents.addAssertion("comp2", AssertionService.BEAN_CREATED);
         startEvents.validateComponent("comp1", SimpleTestComponent.class);
         startEvents.validateComponent("comp2", SimpleTestComponent.class);
 
@@ -122,10 +122,10 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         StandardTestController controller = new StandardTestController(getContext(),
                 getWebServer()+"www/comp1_explicit_config.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
-        startEvents.addAssertion("comp1", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("comp1", AssertionService.BEAN_CREATED);
         startEvents.validateComponent("comp1", SimpleTestComponent.class);
         // if we see comp2 instantiated, this is an error
-        startEvents.addFailureEvent(new ComponentAssertion("comp2", AssertionService.COMPONENT_CREATED));
+        startEvents.addFailureEvent(new ComponentAssertion("comp2", AssertionService.BEAN_CREATED));
         controller.run();
     }
 
@@ -138,8 +138,8 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         StandardTestController controller = new StandardTestController(getContext(),
                 getWebServer()+"www/comp1_attributes.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
-        startEvents.addAssertion("comp1", AssertionService.COMPONENT_CREATED);
-        startEvents.addAssertion("comp2", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("comp1", AssertionService.BEAN_CREATED);
+        startEvents.addAssertion("comp2", AssertionService.BEAN_CREATED);
         startEvents.validateComponent("comp1", SimpleTestComponent.class);
         startEvents.validateComponent("comp2", SimpleTestComponent.class);
         controller.run();
@@ -156,8 +156,8 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         StandardTestController controller = new StandardTestController(getContext(),
                 getWebServer()+"www/comp1_attributes2.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
-        startEvents.addAssertion("comp1", AssertionService.COMPONENT_CREATED);
-        startEvents.addAssertion("comp2", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("comp1", AssertionService.BEAN_CREATED);
+        startEvents.addAssertion("comp2", AssertionService.BEAN_CREATED);
         startEvents.validateComponent("comp1", SimpleTestComponent.class);
         startEvents.validateComponent("comp2", SimpleTestComponent.class);
         controller.run();
@@ -172,10 +172,10 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         StandardTestController controller = new StandardTestController(getContext(),
                 getWebServer()+"www/comp1_different_dir.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
-        startEvents.addAssertion("comp1", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("comp1", AssertionService.BEAN_CREATED);
         startEvents.validateComponent("comp1", SimpleTestComponent.class);
         // if we see comp2 instantiated, this is an error
-        startEvents.addFailureEvent(new ComponentAssertion("comp2", AssertionService.COMPONENT_CREATED));
+        startEvents.addFailureEvent(new ComponentAssertion("comp2", AssertionService.BEAN_CREATED));
         controller.run();
     }
 
@@ -188,10 +188,10 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         StandardTestController controller = new StandardTestController(getContext(),
                 getWebServer()+"www/comp1_dir_only.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
-        startEvents.addAssertion("comp1", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("comp1", AssertionService.BEAN_CREATED);
         startEvents.validateComponent("comp1", SimpleTestComponent.class);
         // if we see comp2 instantiated, this is an error
-        startEvents.addFailureEvent(new ComponentAssertion("comp2", AssertionService.COMPONENT_CREATED));
+        startEvents.addFailureEvent(new ComponentAssertion("comp2", AssertionService.BEAN_CREATED));
         controller.run();
     }
 
@@ -203,7 +203,7 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         StandardTestController controller = new StandardTestController(getContext(),
                 getWebServer()+"www/comp1_no_name.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
-        startEvents.addAssertion("comp1", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("comp1", AssertionService.BEAN_CREATED);
 
         // and the validate the component metadata.  The wildcard indicates
         // we're looking for the nearest match
@@ -228,12 +228,12 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
                 getWebServer()+"www/comp1_init_destroy.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
         // this creates several components with different init/destroy combos.
-        startEvents.addAssertion("comp1", AssertionService.COMPONENT_CREATED);
-        startEvents.addAssertion("comp1", AssertionService.COMPONENT_INIT_METHOD);
-        startEvents.addAssertion("comp2", AssertionService.COMPONENT_CREATED);
-        startEvents.addFailureEvent(new ComponentAssertion("comp2", AssertionService.COMPONENT_INIT_METHOD));
-        startEvents.addAssertion("comp3", AssertionService.COMPONENT_CREATED);
-        startEvents.addAssertion("comp3", AssertionService.COMPONENT_INIT_METHOD);
+        startEvents.addAssertion("comp1", AssertionService.BEAN_CREATED);
+        startEvents.addAssertion("comp1", AssertionService.BEAN_INIT_METHOD);
+        startEvents.addAssertion("comp2", AssertionService.BEAN_CREATED);
+        startEvents.addFailureEvent(new ComponentAssertion("comp2", AssertionService.BEAN_INIT_METHOD));
+        startEvents.addAssertion("comp3", AssertionService.BEAN_CREATED);
+        startEvents.addAssertion("comp3", AssertionService.BEAN_INIT_METHOD);
 
         // validate the metadata for all components
         startEvents.addValidator(new ComponentMetadataValidator(
@@ -250,9 +250,9 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
 
         // stop events occur at the end
         EventSet stopEvents = controller.getStopEvents();
-        stopEvents.addFailureEvent(new ComponentAssertion("comp1", AssertionService.COMPONENT_DESTROY_METHOD));
-        stopEvents.addAssertion("comp2", AssertionService.COMPONENT_DESTROY_METHOD);
-        stopEvents.addAssertion("comp3", AssertionService.COMPONENT_DESTROY_METHOD);
+        stopEvents.addFailureEvent(new ComponentAssertion("comp1", AssertionService.BEAN_DESTROY_METHOD));
+        stopEvents.addAssertion("comp2", AssertionService.BEAN_DESTROY_METHOD);
+        stopEvents.addAssertion("comp3", AssertionService.BEAN_DESTROY_METHOD);
         controller.run();
     }
 
@@ -265,8 +265,8 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
                 getWebServer()+"www/static_factory.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
         // check all the component creation events
-        startEvents.addAssertion("static-comp1", AssertionService.COMPONENT_CREATED);
-        startEvents.addAssertion("comp2_id", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("static-comp1", AssertionService.BEAN_CREATED);
+        startEvents.addAssertion("comp2_id", AssertionService.BEAN_CREATED);
 
         BeanComponent comp2_id =
                 new BeanComponent("comp2_id", SimpleStaticFactory.class, "createSimple",
@@ -319,8 +319,8 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
                 getWebServer()+"www/component_instance_factory.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
         // check all the component creation events
-        startEvents.addAssertion("instance-comp1", AssertionService.COMPONENT_CREATED);
-        startEvents.addAssertion("comp2_id", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("instance-comp1", AssertionService.BEAN_CREATED);
+        startEvents.addAssertion("comp2_id", AssertionService.BEAN_CREATED);
 
         BeanComponent comp1 =
                 new BeanComponent("comp1", "createSimple",
@@ -357,8 +357,8 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         // this gets our service started
         startEvents.addInitializer(factoryService);
         // check all the component creation events
-        startEvents.addAssertion("instance-comp1", AssertionService.COMPONENT_CREATED);
-        startEvents.addAssertion("comp2_id", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("instance-comp1", AssertionService.BEAN_CREATED);
+        startEvents.addAssertion("comp2_id", AssertionService.BEAN_CREATED);
 
         BeanComponent comp1 =
                 new BeanComponent("comp1", "createSimple",
@@ -416,9 +416,9 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
 
         MetadataEventSet startEvents = controller.getStartEvents();
         // check all the component creation events
-        startEvents.addAssertion("ContextAware", AssertionService.COMPONENT_CREATED);
-        startEvents.addAssertion("ContextAware", AssertionService.MODULE_CONTEXT_INJECTED);
-        startEvents.addAssertion("ContextAware", AssertionService.COMPONENT_INIT_METHOD);
+        startEvents.addAssertion("ContextAware", AssertionService.BEAN_CREATED);
+        startEvents.addAssertion("ContextAware", AssertionService.BLUEPRINT_CONTAINER_INJECTED);
+        startEvents.addAssertion("ContextAware", AssertionService.BEAN_INIT_METHOD);
 
         // This is a bonus part of the test.  Check that the default component exist and are of the
         // correct type.
@@ -452,10 +452,10 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
                 getWebServer()+"www/comp1_id.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
         // all lowercase version
-        startEvents.addAssertion("comp1_id", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("comp1_id", AssertionService.BEAN_CREATED);
         startEvents.validateComponent("comp1_id", SimpleTestComponent.class);
         // mixed case version
-        startEvents.addAssertion("Comp1_ID", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("Comp1_ID", AssertionService.BEAN_CREATED);
         startEvents.validateComponent("Comp1_ID", AltSimpleTestComponent.class);
         // make sure the name is in the component list
         startEvents.addValidator(new ComponentNamePresenceValidator("comp1_id"));
@@ -487,10 +487,10 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
                 getWebServer()+"www/comp1_blueprint_id.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
         // all lowercase version
-        startEvents.addAssertion("blueprint", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("blueprint", AssertionService.BEAN_CREATED);
         startEvents.validateComponent("blueprint", SimpleTestComponent.class);
         // mixed case version
-        startEvents.addAssertion("blueprintXXXXX", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("blueprintXXXXX", AssertionService.BEAN_CREATED);
         startEvents.validateComponent("blueprintXXXXX", AltSimpleTestComponent.class);
         // make sure the name is in the component list
         startEvents.addValidator(new ComponentNamePresenceValidator("blueprint"));

@@ -18,12 +18,12 @@ package org.osgi.test.cases.blueprint.services;
 import java.util.Dictionary;
 
 public interface ComponentTestInfo {
-    public static final String COMPONENT_ID = "component.id";
+    public static final String BEAN_ID = "component.id";
     public static final String INIT_CALLED = "component.init";
     public static final String DESTROY_CALLED = "component.destroy";
-    public static final String COMPONENT_INSTANCE = "component.instance";
-    public static final String COMPONENT_PROPERTIES = "component.properties";
-    public static final String COMPONENT_ARGUMENTS = "component.arguments";
+    public static final String BEAN_INSTANCE = "component.instance";
+    public static final String BEAN_PROPERTIES = "component.properties";
+    public static final String BEAN_ARGUMENTS = "component.arguments";
 
     /**
      * Return a component identifier string used for determining

@@ -56,7 +56,7 @@ public class TestPrimitiveInjection extends DefaultTestBundleControl {
         MetadataEventSet startEvents = controller.getStartEvents();
         // no argument constructor...just gets created
         // this uses the default component name
-        startEvents.addAssertion("comp1", AssertionService.COMPONENT_CREATED);
+        startEvents.addAssertion("comp1", AssertionService.BEAN_CREATED);
         // no argument validator
         startEvents.addValidator(new ArgumentMetadataValidator("compNoArg"));
 

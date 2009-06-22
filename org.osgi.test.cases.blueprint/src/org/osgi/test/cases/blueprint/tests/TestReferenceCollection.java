@@ -91,7 +91,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
         // fail the test.
-        importStartEvents.addAssertion("ReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
+        importStartEvents.addAssertion("ReferenceChecker", AssertionService.BEAN_INIT_METHOD);
 
         // all of our validation here is on the importing side
         EventSet importStopEvents = controller.getStopEvents(0);
@@ -133,10 +133,10 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
         // we should see both the construction and INIT of this.  It's difficult to test the ordering,
         // but we should see the events from this lazy bean.
-        importStartEvents.addAssertion("dependsleaf2", AssertionService.COMPONENT_CREATED);
-        importStartEvents.addAssertion("dependsleaf2", AssertionService.COMPONENT_INIT_METHOD);
-        importStartEvents.addAssertion("dependsleaf1", AssertionService.COMPONENT_CREATED);
-        importStartEvents.addAssertion("dependsleaf1", AssertionService.COMPONENT_INIT_METHOD);
+        importStartEvents.addAssertion("dependsleaf2", AssertionService.BEAN_CREATED);
+        importStartEvents.addAssertion("dependsleaf2", AssertionService.BEAN_INIT_METHOD);
+        importStartEvents.addAssertion("dependsleaf1", AssertionService.BEAN_CREATED);
+        importStartEvents.addAssertion("dependsleaf1", AssertionService.BEAN_INIT_METHOD);
 
         // We should see both of these initially
         importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsA));
@@ -169,7 +169,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
         // fail the test.
-        importStartEvents.addAssertion("ReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
+        importStartEvents.addAssertion("ReferenceChecker", AssertionService.BEAN_INIT_METHOD);
 
         // all of our validation here is on the importing side
         EventSet importStopEvents = controller.getStopEvents(0);
@@ -178,8 +178,8 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsA));
         importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsC));
 
-        importStopEvents.addAssertion("dependsleaf1", AssertionService.COMPONENT_DESTROY_METHOD);
-        importStopEvents.addAssertion("dependsleaf2", AssertionService.COMPONENT_DESTROY_METHOD);
+        importStopEvents.addAssertion("dependsleaf1", AssertionService.BEAN_DESTROY_METHOD);
+        importStopEvents.addAssertion("dependsleaf2", AssertionService.BEAN_DESTROY_METHOD);
 
         controller.run();
     }
@@ -201,10 +201,10 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
 
         // There will all sorts of events that will signal a failure if we see them
-        importStartEvents.addFailureEvent(new ComponentAssertion("ReferenceChecker", AssertionService.COMPONENT_CREATED));
-        importStartEvents.addFailureEvent(new ComponentAssertion("dependsleaf1", AssertionService.COMPONENT_CREATED));
-        importStartEvents.addFailureEvent(new ComponentAssertion("dependsleaf2", AssertionService.COMPONENT_CREATED));
-        importStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.COMPONENT_CREATED));
+        importStartEvents.addFailureEvent(new ComponentAssertion("ReferenceChecker", AssertionService.BEAN_CREATED));
+        importStartEvents.addFailureEvent(new ComponentAssertion("dependsleaf1", AssertionService.BEAN_CREATED));
+        importStartEvents.addFailureEvent(new ComponentAssertion("dependsleaf2", AssertionService.BEAN_CREATED));
+        importStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.BEAN_CREATED));
 
         MetadataEventSet importMiddleEvents = controller.getMiddleEvents(0);
         // this will start the initialization cascade
@@ -224,13 +224,13 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
 
         // we should see both the construction and INIT of this.  It's difficult to test the ordering,
         // but we should see the events from this lazy bean.
-        importMiddleEvents.addAssertion("dependsleaf2", AssertionService.COMPONENT_CREATED);
-        importMiddleEvents.addAssertion("dependsleaf2", AssertionService.COMPONENT_INIT_METHOD);
-        importMiddleEvents.addAssertion("dependsleaf1", AssertionService.COMPONENT_CREATED);
-        importMiddleEvents.addAssertion("dependsleaf1", AssertionService.COMPONENT_INIT_METHOD);
-        importMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.COMPONENT_CREATED));
-        importMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.COMPONENT_INIT_METHOD));
-        importMiddleEvents.addEvent(new ComponentAssertion("ReferenceChecker", AssertionService.COMPONENT_CREATED));
+        importMiddleEvents.addAssertion("dependsleaf2", AssertionService.BEAN_CREATED);
+        importMiddleEvents.addAssertion("dependsleaf2", AssertionService.BEAN_INIT_METHOD);
+        importMiddleEvents.addAssertion("dependsleaf1", AssertionService.BEAN_CREATED);
+        importMiddleEvents.addAssertion("dependsleaf1", AssertionService.BEAN_INIT_METHOD);
+        importMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.BEAN_CREATED));
+        importMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.BEAN_INIT_METHOD));
+        importMiddleEvents.addEvent(new ComponentAssertion("ReferenceChecker", AssertionService.BEAN_CREATED));
 
         // We should see both of these initially
         importMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsA));
@@ -263,7 +263,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
         // fail the test.
-        importMiddleEvents.addAssertion("ReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
+        importMiddleEvents.addAssertion("ReferenceChecker", AssertionService.BEAN_INIT_METHOD);
 
         // all of our validation here is on the importing side
         EventSet importStopEvents = controller.getStopEvents(0);
@@ -272,10 +272,10 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsA));
         importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsC));
 
-        importStopEvents.addAssertion("dependsleaf1", AssertionService.COMPONENT_DESTROY_METHOD);
-        importStopEvents.addAssertion("dependsleaf2", AssertionService.COMPONENT_DESTROY_METHOD);
-        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.COMPONENT_DESTROY_METHOD));
-        importStopEvents.addEvent(new ComponentAssertion("ReferenceChecker", AssertionService.COMPONENT_DESTROY_METHOD));
+        importStopEvents.addAssertion("dependsleaf1", AssertionService.BEAN_DESTROY_METHOD);
+        importStopEvents.addAssertion("dependsleaf2", AssertionService.BEAN_DESTROY_METHOD);
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.BEAN_DESTROY_METHOD));
+        importStopEvents.addEvent(new ComponentAssertion("ReferenceChecker", AssertionService.BEAN_DESTROY_METHOD));
 
         controller.run();
     }
@@ -321,7 +321,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
         // fail the test.
-        importStartEvents.addAssertion("ReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
+        importStartEvents.addAssertion("ReferenceChecker", AssertionService.BEAN_INIT_METHOD);
 
         // all of our validation here is on the importing side
         EventSet importStopEvents = controller.getStopEvents(0);
@@ -392,7 +392,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
         // fail the test.
-        importStartEvents.addAssertion("NullReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
+        importStartEvents.addAssertion("NullReferenceChecker", AssertionService.BEAN_INIT_METHOD);
 
         // all of our validation here is on the importing side
         EventSet importStopEvents = controller.getStopEvents(0);
@@ -464,7 +464,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
         // fail the test.
-        importStartEvents.addAssertion("NullReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
+        importStartEvents.addAssertion("NullReferenceChecker", AssertionService.BEAN_INIT_METHOD);
 
         // all of our validation here is on the importing side
         EventSet importStopEvents = controller.getStopEvents(0);
@@ -537,7 +537,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
         // fail the test.
-        importStartEvents.addAssertion("NullReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
+        importStartEvents.addAssertion("NullReferenceChecker", AssertionService.BEAN_INIT_METHOD);
 
         // all of our validation here is on the importing side
         EventSet importStopEvents = controller.getStopEvents(0);
@@ -600,7 +600,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
         // fail the test.
-        importStartEvents.addAssertion("NullReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
+        importStartEvents.addAssertion("NullReferenceChecker", AssertionService.BEAN_INIT_METHOD);
 
         // all of our validation here is on the importing side
         EventSet importStopEvents = controller.getStopEvents(0);
@@ -664,7 +664,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
         // fail the test.
-        importStartEvents.addAssertion("NullReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
+        importStartEvents.addAssertion("NullReferenceChecker", AssertionService.BEAN_INIT_METHOD);
 
         // all of our validation here is on the importing side
         EventSet importStopEvents = controller.getStopEvents(0);
@@ -733,7 +733,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
         // fail the test.
-        importStartEvents.addAssertion("NullReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
+        importStartEvents.addAssertion("NullReferenceChecker", AssertionService.BEAN_INIT_METHOD);
 
         // all of our validation here is on the importing side
         EventSet importStopEvents = controller.getStopEvents(0);
@@ -796,7 +796,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
         // fail the test.
-        importStartEvents.addAssertion("NullReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
+        importStartEvents.addAssertion("NullReferenceChecker", AssertionService.BEAN_INIT_METHOD);
 
         // all of our validation here is on the importing side
         EventSet importStopEvents = controller.getStopEvents(0);
@@ -841,7 +841,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
         // fail the test.
-        importStartEvents.addAssertion("BindUnbindListChecker", AssertionService.COMPONENT_INIT_METHOD);
+        importStartEvents.addAssertion("BindUnbindListChecker", AssertionService.BEAN_INIT_METHOD);
 
         // all of our validation here is on the importing side
         EventSet importStopEvents = controller.getStopEvents(0);
@@ -884,7 +884,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // And then rebound again by the driver code.
         importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, props1));
         // this indicates successful completion of the test phase
-        importStartEvents.addAssertion("UnregisteredDependencyChecker", AssertionService.COMPONENT_INIT_METHOD);
+        importStartEvents.addAssertion("UnregisteredDependencyChecker", AssertionService.BEAN_INIT_METHOD);
 
         // there should be no wait event with this
         importStartEvents.addFailureEvent(new BlueprintAdminEvent("WAITING"));
@@ -915,7 +915,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
         // fail the test.
-        importStartEvents.addAssertion("ReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
+        importStartEvents.addAssertion("ReferenceChecker", AssertionService.BEAN_INIT_METHOD);
 
         controller.run();
     }

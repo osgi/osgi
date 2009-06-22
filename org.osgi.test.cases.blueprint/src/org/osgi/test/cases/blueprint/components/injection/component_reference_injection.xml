@@ -251,5 +251,21 @@
            </set>
        </property>
    </bean>
+
+   <!-- Expecting 1 component instance -->
+   <bean id="inlinePrototype" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent"
+       init-method="init" destroy-method="destroy">
+       <argument value="inlinePrototype"/>
+       <argument value="1"/>
+       <property name="references">
+           <set>
+               <!-- prototype1 will have prototype scope, which means a new component will be instantiated for each request -->
+               <bean class="org.osgi.test.cases.blueprint.components.injection.PrototypeComponentInjection"
+                   init-method="init" destroy-method="destroy">
+                   <argument value="inlinePrototype1"/>
+               </bean>
+           </set>
+       </property>
+   </bean>
 </blueprint>
 

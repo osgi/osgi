@@ -280,7 +280,7 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
         if (propertyName == null) {
             fail("Null property name for component " + componentId);
         }
-        Dictionary properties = (Dictionary)getComponentProperty(componentId, ComponentTestInfo.COMPONENT_PROPERTIES);
+        Dictionary properties = (Dictionary)getComponentProperty(componentId, ComponentTestInfo.BEAN_PROPERTIES);
         // if unable to resolve this, return null
         if (properties == null) {
             return null;
@@ -301,7 +301,7 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
      * @exception Exception
      */
     public ValueDescriptor getComponentArgumentValue(String componentId, String argumentName) throws Exception {
-        Dictionary properties = (Dictionary)getComponentProperty(componentId, ComponentTestInfo.COMPONENT_ARGUMENTS);
+        Dictionary properties = (Dictionary)getComponentProperty(componentId, ComponentTestInfo.BEAN_ARGUMENTS);
         // if unable to resolve this, return null
         if (properties == null) {
             return null;

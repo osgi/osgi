@@ -329,7 +329,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         // we should see a single registration of TestServiceOne
         startEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
         // none of these component should be instantiated
-        startEvents.addFailureEvent(new ComponentAssertion("ServiceOne", AssertionService.COMPONENT_INIT_METHOD));
+        startEvents.addFailureEvent(new ComponentAssertion("ServiceOne", AssertionService.BEAN_INIT_METHOD));
 
         // now for the middle events.  We'll request a class to be loaded from the bundle, which
         // should trigger the ModuleContext to be created.
@@ -339,7 +339,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         middleEvents.addInitializer(new ServiceRequestInitiator(getContext(), TestServiceOne.class, null));
 
         // all of the components should now be instantiated
-        middleEvents.addAssertion("ServiceOne", AssertionService.COMPONENT_INIT_METHOD);
+        middleEvents.addAssertion("ServiceOne", AssertionService.BEAN_INIT_METHOD);
 
         // now some expected termination stuff
         EventSet stopEvents = controller.getStopEvents(0);
@@ -366,7 +366,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         // we should see a single registration of TestServiceOne
         startEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
         // none of these component should be instantiated
-        startEvents.addFailureEvent(new ComponentAssertion("ServiceOne", AssertionService.COMPONENT_INIT_METHOD));
+        startEvents.addFailureEvent(new ComponentAssertion("ServiceOne", AssertionService.BEAN_INIT_METHOD));
 
         // now for the middle events.  We'll request a class to be loaded from the bundle, which
         // should trigger the ModuleContext to be created.
@@ -376,7 +376,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         middleEvents.addInitializer(new ServiceRequestInitiator(getContext(), TestServiceOne.class, null));
 
         // all of the components should now be instantiated
-        middleEvents.addAssertion("ServiceOne", AssertionService.COMPONENT_INIT_METHOD);
+        middleEvents.addAssertion("ServiceOne", AssertionService.BEAN_INIT_METHOD);
 
         // now some expected termination stuff
         EventSet stopEvents = controller.getStopEvents(0);
@@ -455,7 +455,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         // we should see a single registration of TestServiceOne
         startEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
         // all of the components should now be instantiated
-        startEvents.addAssertion("ServiceOne", AssertionService.COMPONENT_INIT_METHOD);
+        startEvents.addAssertion("ServiceOne", AssertionService.BEAN_INIT_METHOD);
 
         // now some expected termination stuff
         EventSet stopEvents = controller.getStopEvents(0);

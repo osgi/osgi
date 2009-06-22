@@ -53,7 +53,7 @@ public class AltSimpleTestComponent extends BaseTestComponent {
      */
     public void altinit() {
         props.put(INIT_CALLED, Boolean.TRUE);
-        AssertionService.sendEvent(this, AssertionService.COMPONENT_INIT_METHOD);
+        AssertionService.sendEvent(this, AssertionService.BEAN_INIT_METHOD);
     }
 
 
@@ -62,7 +62,7 @@ public class AltSimpleTestComponent extends BaseTestComponent {
      */
     public void altdestroy() {
         props.put(DESTROY_CALLED, Boolean.TRUE);
-        AssertionService.sendEvent(this, AssertionService.COMPONENT_DESTROY_METHOD);
+        AssertionService.sendEvent(this, AssertionService.BEAN_DESTROY_METHOD);
     }
 }
 
