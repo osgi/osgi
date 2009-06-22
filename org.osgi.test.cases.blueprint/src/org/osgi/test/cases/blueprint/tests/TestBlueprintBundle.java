@@ -433,10 +433,10 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         startEvents.addValidator(new ComponentNamePresenceValidator("blueprintConverter"));
 
         // now verify that these have associated metadata
-        startEvents.addValidator(new ComponentMetadataPresenceValidator("blueprintBundle", BeanMetadata.class));
-        startEvents.addValidator(new ComponentMetadataPresenceValidator("blueprintBundleContext", BeanMetadata.class));
-        startEvents.addValidator(new ComponentMetadataPresenceValidator("blueprintContainer", BeanMetadata.class));
-        startEvents.addValidator(new ComponentMetadataPresenceValidator("blueprintConverter", BeanMetadata.class));
+        startEvents.addValidator(new ComponentMetadataAbsenceValidator("blueprintBundle"));
+        startEvents.addValidator(new ComponentMetadataAbsenceValidator("blueprintBundleContext"));
+        startEvents.addValidator(new ComponentMetadataAbsenceValidator("blueprintContainer"));
+        startEvents.addValidator(new ComponentMetadataAbsenceValidator("blueprintConverter"));
 
         // if we receive the above events and no assertion failures, then everything has worked.
         controller.run();
