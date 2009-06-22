@@ -18,6 +18,8 @@ package org.osgi.test.cases.blueprint.framework;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 
 import org.osgi.framework.BundleContext;
 
@@ -37,6 +39,13 @@ public class TestPhase {
     // our event set of interest;
     protected List events = new ArrayList();
 
+    // the list of events we weren't expecting to see
+    // make this synchronized so we can update on multiple event threads.
+    protected List failures = new ArrayList();
+
+    // our list of event sets that are still waiting for events.
+    protected Set pending = new HashSet();
+
     public TestPhase(BundleContext testContext, long timeout)
     {
         this.testContext = testContext;
@@ -48,9 +57,13 @@ public class TestPhase {
      *
      * @param eventSet The lists of sets to add.
      */
-    public TestPhase(List eventSet)
+    public TestPhase(List eventSets)
     {
-        this.events.addAll(eventSet);
+        for (int i = 0; i < eventSets.size(); i++) {
+            EventSet set = (EventSet)eventSets.get(i);
+            set.setTestPhase(this);
+            events.add(set);
+        }
     }
 
 
@@ -61,8 +74,10 @@ public class TestPhase {
      * @param eventSet The added event set.
      */
     public void addEventSet(EventSet eventSet) {
-        this.events.add(eventSet);
+        eventSet.setTestPhase(this);
+        events.add(eventSet);
     }
+
 
     /**
      * Retrieve an event set by index position.
@@ -73,6 +88,33 @@ public class TestPhase {
      */
     public EventSet getEventSet(int index) {
         return (EventSet)events.get(index);
+    }
+
+    /**
+     * Wake up the phase controller when a failure occurs.
+     *
+     * @param event  The event that caused the failure.  This will be
+     *               used to raise the failure condition.
+     */
+    public synchronized void handleFailure(TestEvent event) {
+        failures.add(event);
+        notify();
+    }
+
+    /**
+     * Process an event set indicating it has received all of
+     * its expected events.
+     *
+     * @param set    The completed event set.
+     */
+    public synchronized void handleCompletion(EventSet set) {
+        // remove this from the pending set.  If we've cleared
+        // all of these out, then wake up the main thread to process
+        // the results
+        pending.remove(set);
+        if (pending.isEmpty()) {
+            notify();
+        }
     }
 
 
@@ -122,17 +164,19 @@ public class TestPhase {
 
 
     /**
-     * Give each event set a chance to perform any test setup it requires.
-     * Typically, this involves starting some sort of bundle.
+     * Check the event results at the end of the test phase.
+     *
+     * @exception Exception
      */
     protected void checkEventResults() throws Exception {
         // we do this in multiple passes...first checking for failures,
         // then missing events, and finally validation failures
 
         // outright failures
-        for (int i = 0; i < events.size(); i ++) {
-            EventSet set = (EventSet)events.get(i);
-            set.checkUnexpected();
+        if (!failures.isEmpty()) {
+            // get the first unexpected event and have it raise the exception
+            TestEvent event = (TestEvent)failures.get(0);
+            event.failUnexpected();
         }
 
         // missing stuff
@@ -158,12 +202,26 @@ public class TestPhase {
      *
      * @param timeout The timeout value (in milliseconds).
      */
-    public synchronized void runTest() throws Exception {
+    public void runTest() throws Exception {
+        // add all event sets to the completion list
+        pending.addAll(events);
+
         // ok, so any startup processing needed by our event processors.
         startEventSets();
         // now wait for either a failure event or receipt of all expected events.
         try {
-            wait(timeout);
+            synchronized (this) {
+                // There's a race condition between the start phase and
+                // this point.  As soon as we run the initializers, we start
+                // fielding events.  It's entirely possible that we've received
+                // a failure or all of the expected events before we
+                // reach the point where we wait, so check the state before
+                // we wait.
+
+                if (!isComplete()) {
+                    wait(timeout);
+                }
+            }
         } catch (InterruptedException e) {
             // we timed out...there should be unsatisfied dependencies
             // in our list if that's the case, which will raise an assertion
@@ -182,40 +240,11 @@ public class TestPhase {
      *
      * @param event  The received TestEvent (already preprocessed).
      */
-	public synchronized void handleEvent(TestEvent event) {
+	public void handleEvent(TestEvent event) {
         for (int i = 0; i < events.size(); i ++) {
             EventSet set = (EventSet)events.get(i);
             set.handleEvent(testContext, event);
         }
-
-        // if nothing is in error state, and we're still waiting for
-        // some events, go listen for more events
-        if ( haveErrors() || isComplete()) {
-            // our expected results indicate everything is looking good,
-            // so wake up the main processor and have it move along to the next step.
-            notify();
-        }
-    }
-
-    /**
-     * Check to see if any of our event sets has received something
-     * it perceives as an error condition.  An error condition will
-     * terminate the phase wait, since the trigger error might prevent
-     * all of our expected events from being generated.
-     *
-     * @return true if we have any error conditions, false for "we're still good"
-     */
-    protected boolean haveErrors() {
-        // now see if everything is complete with this
-        for (int i = 0; i < events.size(); i ++) {
-            EventSet set = (EventSet)events.get(i);
-            // if this test set has received errors, then
-            // we can stop listening now.
-            if (set.hasErrors()) {
-                return true;
-            }
-        }
-        return false;    // no errors yet
     }
 
 
@@ -227,17 +256,9 @@ public class TestPhase {
      *         if we still have unstatisfied events.
      */
     protected boolean isComplete() {
-        // now see if everything is complete with this
-        for (int i = 0; i < events.size(); i ++) {
-            EventSet set = (EventSet)events.get(i);
-            // if this test set is still waiting for stuff,
-            // then we have to keep listening
-            if (!set.isComplete()) {
-                return false;
-            }
-        }
-
-        return true;   // all done
+        // the event sets notify us when they've received their last expected
+        // event.  We're done when the last event set is removed from this.
+        return pending.isEmpty();
     }
 
 

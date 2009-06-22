@@ -16,6 +16,7 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,6 +37,8 @@ public class EventSet {
     protected BundleContext testBundle;
     // the bundle we're interested in
     protected Bundle componentBundle;
+    // the TestPhase we're attached to
+    protected TestPhase phase;
     // the symbolic name of the bundle (used for some events)
     protected String bundleName;
 
@@ -43,8 +46,6 @@ public class EventSet {
     protected List expectedEvents = new LinkedList();
     // the list of events that are explicit failures if received
     protected List failureEvents = new LinkedList();
-    // the list of events we weren't expecting to see
-    protected List unexpectedEvents = new LinkedList();
     // post test validators
     protected List validators = new LinkedList();
     // pre-test setup stages
@@ -63,6 +64,16 @@ public class EventSet {
         this.componentBundle = bundle;
         this.bundleName = componentBundle.getSymbolicName();
     }
+
+    /**
+     * Associate an event with a test phase
+     *
+     * @param phase  The test phase we're running under.
+     */
+    public void setTestPhase(TestPhase phase) {
+        this.phase = phase;
+    }
+
 
     /**
      * Perform any test phase initialization steps.
@@ -121,25 +132,32 @@ public class EventSet {
             TestEvent bad = expected.validate(event);
             if (bad != null) {
                 // if we got something bad, add this to the unexpected failures list.
-                unexpectedEvents.add(bad);
+                phase.handleFailure(bad);
             }
             else {
                 // see if this event is intended to trigger any actions
                 expected.eventReceived(event);
+                // if that was our last expected event, let the test phase know
+                // we're done.
+                if (expectedEvents.isEmpty()) {
+                    phase.handleCompletion(this);
+                }
             }
         }
         else
         {
             expected = locateEvent(event, failureEvents);
             if (expected != null) {
-                unexpectedEvents.add(event);
+                // if we got something bad, add this to the unexpected failures list.
+                phase.handleFailure(expected);
             }
 
             // if this is a creation failure event that we weren't anticipating,
             // then handle this like an assertion failure
             else if (event.isError()) {
                 // this also gets added to the "didn't expect to see this pile"
-                unexpectedEvents.add(event);
+                // if we got something bad, add this to the unexpected failures list.
+                phase.handleFailure(event);
             }
         }
     }
@@ -179,29 +197,23 @@ public class EventSet {
      * @return The matched event or null if no match was found.
      */
     public TestEvent locateEvent(TestEvent target, List source) {
-        Iterator i = source.iterator();
-        while (i.hasNext()) {
-            TestEvent current = (TestEvent)i.next();
-            // the equal tests needs to be driven by the expected
-            if (current.matches(target)) {
-                // remove this element from the list and return the matched one
-                i.remove();
-                return current;
+        // we try not to block on these threads very much, so we're only
+        // going to block on the event lists while actually searching/updating
+        synchronized (source) {
+            Iterator i = source.iterator();
+            while (i.hasNext()) {
+                TestEvent current = (TestEvent)i.next();
+                // the equal tests needs to be driven by the expected
+                if (current.matches(target)) {
+                    // remove this element from the list and return the matched one
+                    i.remove();
+                    return current;
+                }
             }
+            return null;
         }
-        return null;
     }
 
-    /**
-     * Check if an event set has detected any errors in the monitored
-     * event set.
-     *
-     * @return True if we've received something that indicates a test failure,
-     *         false if we're still clean.
-     */
-    public boolean hasErrors() {
-        return !unexpectedEvents.isEmpty();
-    }
 
     /**
      * Check to see if this event set has received all of it's expected
@@ -212,29 +224,6 @@ public class EventSet {
      */
     public boolean isComplete() {
         return expectedEvents.isEmpty();
-    }
-
-
-    /**
-     * Check our current set of results.  This will raise any needed
-     * assertions, either because we've had test failures, or we've
-     * not received all of the events we've expected.  If all of that
-     * passes, then we run the end-of-phase validators to verify that
-     * the environment is in the state we expect to see.
-     *
-     * @param testContext
-     *               The current test context.
-     *
-     * @exception Exception
-     */
-    public void checkResults(BundleContext testContext) throws Exception {
-        // look at and report unexpected events first.  These might be
-        // the cause of any missing events.  This gives us a chance to report
-        // the root cause of the failure
-        checkUnexpected();
-        checkMissing();       // now report any non-received events
-        // now go validate any environmental conditions.
-        checkEnvironment(testContext);
     }
 
     /**
@@ -255,20 +244,6 @@ public class EventSet {
             // get the first missing event and have it raise the exception
             TestEvent event = (TestEvent)expectedEvents.get(0);
             event.failExpected();
-        }
-    }
-
-
-    /**
-     * Check to see if we had any unexpected events show up.  This is
-     * likely an error failure or perhaps some lifecycle event happened
-     * more than once.
-     */
-    public void checkUnexpected() {
-        if (!unexpectedEvents.isEmpty()) {
-            // get the first unexpected event and have it raise the exception
-            TestEvent event = (TestEvent)unexpectedEvents.get(0);
-            event.failUnexpected();
         }
     }
 
