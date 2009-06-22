@@ -346,7 +346,7 @@ public class BaseTestComponent implements ComponentTestInfo{
     }
 
     /**
-     * Override hashCode() because we overrided the equals()
+     * Override hashCode() because we overrode the equals()
      */
     public int hashCode() {
         int r = 17;
@@ -370,7 +370,5 @@ public class BaseTestComponent implements ComponentTestInfo{
         }
         return r;
     }
-
-
 }
 

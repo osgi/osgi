@@ -52,5 +52,13 @@ public class PrototypeComponentInjection extends ComponentInjection {
     public boolean equals(Object o) {
         return this == o;
     }
+
+
+    /**
+     * Override hashCode() because we overrode the equals()
+     */
+    public int hashCode() {
+        return System.identityHashCode(this);
+    }
 }
 
