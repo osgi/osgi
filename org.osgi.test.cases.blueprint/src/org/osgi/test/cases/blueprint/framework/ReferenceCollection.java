@@ -16,7 +16,7 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
-import org.osgi.service.blueprint.reflect.RefListMetadata;
+import org.osgi.service.blueprint.reflect.ReferenceListMetadata;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
 
@@ -56,10 +56,10 @@ public class ReferenceCollection extends ReferencedServiceBase {
      * @exception Exception
      */
     public void validate(BlueprintMetadata blueprintMetadata, ServiceReferenceMetadata metadata) throws Exception {
-        assertTrue("Mismatch on service reference type", metadata instanceof RefListMetadata);
+        assertTrue("Mismatch on service reference type", metadata instanceof ReferenceListMetadata);
         // do the base validation
         super.validate(blueprintMetadata, metadata);
-        RefListMetadata meta = (RefListMetadata)metadata;
+        ReferenceListMetadata meta = (ReferenceListMetadata)metadata;
         assertEquals(memberType, meta.getMemberType());
     }
 
@@ -73,11 +73,11 @@ public class ReferenceCollection extends ReferencedServiceBase {
      */
     public boolean matches(ComponentMetadata componentMeta) {
         // we only handle service reference component references.
-        if (!(componentMeta instanceof RefListMetadata)) {
+        if (!(componentMeta instanceof ReferenceListMetadata)) {
             return false;
         }
 
-        RefListMetadata meta = (RefListMetadata)componentMeta;
+        ReferenceListMetadata meta = (ReferenceListMetadata)componentMeta;
         if (memberType != meta.getMemberType()) {
             return false;
         }

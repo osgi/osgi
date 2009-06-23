@@ -20,7 +20,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
 
-import org.osgi.service.blueprint.reflect.RefListMetadata;
+import org.osgi.service.blueprint.reflect.ReferenceListMetadata;
 import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
 import org.osgi.test.cases.blueprint.framework.*;
 import org.osgi.test.cases.blueprint.services.AssertionService;
@@ -81,7 +81,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
                 TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL,
                 ServiceReferenceMetadata.ACTIVATION_EAGER, null, null,
                 new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind")},
-                RefListMetadata.USE_SERVICE_OBJECT)));
+                ReferenceListMetadata.USE_SERVICE_OBJECT)));
 
         // this validates the ModuleContext.getComponent() result
         importStartEvents.addValidator(new ReferenceListValidator("TestCollection"));
@@ -159,7 +159,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
                 ServiceReferenceMetadata.ACTIVATION_EAGER, null,
                 new String[] { "dependsleaf1", "dependsleaf2" },
                 new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind")},
-                RefListMetadata.USE_SERVICE_OBJECT)));
+                ReferenceListMetadata.USE_SERVICE_OBJECT)));
 
         // this validates the ModuleContext.getComponent() result
         importStartEvents.addValidator(new ReferenceListValidator("TestCollection"));
@@ -253,7 +253,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
                 ServiceReferenceMetadata.ACTIVATION_LAZY, null,
                 new String[] { "dependsleaf1", "dependsleaf2" },
                 new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind")},
-                RefListMetadata.USE_SERVICE_OBJECT)));
+                ReferenceListMetadata.USE_SERVICE_OBJECT)));
 
         // this validates the ModuleContext.getComponent() result
         importMiddleEvents.addValidator(new ReferenceListValidator("TestCollection"));
@@ -316,7 +316,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
                 TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL,
                 ServiceReferenceMetadata.ACTIVATION_EAGER, null, null,
                 new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind")},
-                RefListMetadata.USE_SERVICE_REFERENCE)));
+                ReferenceListMetadata.USE_SERVICE_REFERENCE)));
 
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
@@ -387,7 +387,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
                 TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL,
                 ServiceReferenceMetadata.ACTIVATION_LAZY, null, null,
                 new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind")},
-                RefListMetadata.USE_SERVICE_OBJECT)), "list")));
+                ReferenceListMetadata.USE_SERVICE_OBJECT)), "list")));
 
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
@@ -459,7 +459,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
                 TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL,
                 ServiceReferenceMetadata.ACTIVATION_LAZY, null, null,
                 new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind")},
-                RefListMetadata.USE_SERVICE_REFERENCE)), "list")));
+                ReferenceListMetadata.USE_SERVICE_REFERENCE)), "list")));
 
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
@@ -532,7 +532,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
                 TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL,
                 ServiceReferenceMetadata.ACTIVATION_LAZY, null, null,
                 new BindingListener[] { new BindingListener("NullReferenceChecker", "bind", "unbind")},
-                RefListMetadata.USE_SERVICE_REFERENCE)), "list")));
+                ReferenceListMetadata.USE_SERVICE_REFERENCE)), "list")));
 
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
