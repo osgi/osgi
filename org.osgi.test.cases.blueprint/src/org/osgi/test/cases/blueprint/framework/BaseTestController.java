@@ -275,11 +275,13 @@ public class BaseTestController implements EventHandler, BlueprintListener, Serv
             testPhases.add(cleanupPhase);
         }
 
+        int counter = 1;
         Iterator i = testPhases.iterator();
         // run each of the phases in the prescribed order.
         while (i.hasNext()) {
             // this also sets the active phase used for event dispatch.
             activeTestPhase = (TestPhase)i.next();
+            System.out.println(">>>>>>>>> Running test phase #" +(counter++));
             activeTestPhase.runTest();
         }
         // no more event processing
