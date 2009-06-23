@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" default-activation="eager">
+
+    <description>
+        This is just a simple exported service using a single interface.
+    </description>
+
+    <!-- the node is the one that is used for the registered service -->
+   <bean id="ServiceOne" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass" init-method="init">
+       <argument value="ServiceOne"/>
+   </bean>
+
+   <!-- This service will be registered before activation because it's just a simple interface registration -->
+   <service id="ServiceOneService" ref="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne"/>
+</blueprint>
+
