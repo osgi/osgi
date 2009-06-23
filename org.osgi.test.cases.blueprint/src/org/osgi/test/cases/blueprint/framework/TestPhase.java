@@ -98,6 +98,9 @@ public class TestPhase {
      */
     public synchronized void handleFailure(TestEvent event) {
         failures.add(event);
+        System.out.println("!!!!!!!!!");
+        System.out.println("!!!!!!!!! Test phase ended with failure: " + event);
+        System.out.println("!!!!!!!!!");
         notify();
     }
 
@@ -112,7 +115,11 @@ public class TestPhase {
         // all of these out, then wake up the main thread to process
         // the results
         pending.remove(set);
+        System.out.println("!!!!!!!!! handleCompletion() called for EventSet: " + set + " there are " + pending.size() + " still pending");
         if (pending.isEmpty()) {
+            System.out.println("!!!!!!!!!");
+            System.out.println("!!!!!!!!! Test phase normal completion");
+            System.out.println("!!!!!!!!!");
             notify();
         }
     }

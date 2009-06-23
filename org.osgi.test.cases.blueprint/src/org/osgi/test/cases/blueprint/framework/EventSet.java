@@ -137,11 +137,6 @@ public class EventSet {
             else {
                 // see if this event is intended to trigger any actions
                 expected.eventReceived(event);
-                // if that was our last expected event, let the test phase know
-                // we're done.
-                if (expectedEvents.isEmpty()) {
-                    phase.handleCompletion(this);
-                }
             }
         }
         else
@@ -159,6 +154,11 @@ public class EventSet {
                 // if we got something bad, add this to the unexpected failures list.
                 phase.handleFailure(event);
             }
+        }
+        // if that was our last expected event, let the test phase know
+        // we're done.
+        if (expectedEvents.isEmpty()) {
+            phase.handleCompletion(this);
         }
     }
 

@@ -17,7 +17,7 @@
        <service-properties>
            <!-- the following two properties will be overridden by container set values, so these must not show up -->
            <entry key="osgi.service.blueprint.compname"><value>"BAD"</value></entry>
-           <entry key="service"><value type="java.lang.Integer">666</value></entry>
+           <entry key="service.ranking"><value type="java.lang.Integer">666</value></entry>
            <entry key="test.case.property.int"><value type="int">1</value></entry>
            <entry key="test.case.property.short"><value type="short">2</value></entry>
            <entry key="test.case.property.byte"><value type="byte">3</value></entry>
