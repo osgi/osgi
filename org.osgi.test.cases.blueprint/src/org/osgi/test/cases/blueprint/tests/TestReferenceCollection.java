@@ -69,7 +69,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addValidator(new PropertyMetadataValidator("ReferenceChecker",
                 new TestProperty(new TestComponentValue(
                 new ReferencedService(null, ServiceManager.class,
-                ServiceReferenceMetadata.AVAILABILITY_MANDATORY, ServiceReferenceMetadata.ACTIVATION_LAZY,
+                ServiceReferenceMetadata.AVAILABILITY_MANDATORY, ServiceReferenceMetadata.ACTIVATION_EAGER,
                 null, null, null, ReferencedService.DEFAULT_TIMEOUT)), "serviceManager")));
 
         // and one for the reference to the service, which should just be a component reference
@@ -146,7 +146,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         importStartEvents.addValidator(new PropertyMetadataValidator("ReferenceChecker",
                 new TestProperty(new TestComponentValue(
                 new ReferencedService(null, ServiceManager.class,
-                ServiceReferenceMetadata.AVAILABILITY_MANDATORY, ServiceReferenceMetadata.ACTIVATION_LAZY,
+                ServiceReferenceMetadata.AVAILABILITY_MANDATORY, ServiceReferenceMetadata.ACTIVATION_EAGER,
                 null, null, null, ReferencedService.DEFAULT_TIMEOUT)), "serviceManager")));
 
         // and one for the reference to the service, which should just be a component reference
@@ -385,7 +385,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
                 new TestProperty(new TestComponentValue(
                 new ReferenceCollection(null,
                 TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL,
-                ServiceReferenceMetadata.ACTIVATION_LAZY, null, null,
+                ServiceReferenceMetadata.ACTIVATION_EAGER, null, null,
                 new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind")},
                 ReferenceListMetadata.USE_SERVICE_OBJECT)), "list")));
 
@@ -457,7 +457,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
                 new TestProperty(new TestComponentValue(
                 new ReferenceCollection(null,
                 TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL,
-                ServiceReferenceMetadata.ACTIVATION_LAZY, null, null,
+                ServiceReferenceMetadata.ACTIVATION_EAGER, null, null,
                 new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind")},
                 ReferenceListMetadata.USE_SERVICE_REFERENCE)), "list")));
 
@@ -530,7 +530,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
                 new TestProperty(new TestComponentValue(
                 new ReferenceCollection(null,
                 TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL,
-                ServiceReferenceMetadata.ACTIVATION_LAZY, null, null,
+                ServiceReferenceMetadata.ACTIVATION_EAGER, null, null,
                 new BindingListener[] { new BindingListener("NullReferenceChecker", "bind", "unbind")},
                 ReferenceListMetadata.USE_SERVICE_REFERENCE)), "list")));
 
