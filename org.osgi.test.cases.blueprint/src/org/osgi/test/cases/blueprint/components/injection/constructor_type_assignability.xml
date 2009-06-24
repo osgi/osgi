@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+    <description>
+        Tests the type assignability rules defined section 123.9.2 and how they apply to
+        constructor disambiguation.  These rules do not involve invoking type conversion rules
+        for constructor matching
+    </description>
+
+    <!-- A factory bean used for the instance factory variations -->
+    <bean id="factory" class="org.osgi.test.cases.blueprint.components.injection.TypeAssignability"/>
+
+    <!-- some beans to provide class instances without enabling type converters -->
+    <bean id="regionCode" class="org.osgi.test.cases.blueprint.components.injection.RegionCode" scope="prototype">
+        <argument value="RC+40"/>
+    </bean>
+
+    <bean id="asianRegionCode" class="org.osgi.test.cases.blueprint.components.injection.AsianRegionCode" scope="prototype">
+        <argument value="CN+86"/>
+    </bean>
+
+    <bean id="europeanRegionCode" class="org.osgi.test.cases.blueprint.components.injection.EuropeanRegionCode" scope="prototype">
+        <argument value="UK+32"/>
+    </bean>
+
+
+   <!-- A string argument should be the only match during the assignability phase, so this should
+        match the single String argument constructor -->
+   <bean id="stringArg" class="org.osgi.test.cases.blueprint.components.injection.TypeAssignability">
+       <argument value="XYZ"/>
+   </bean>
+
+   <bean id="stringArgStatic" class="org.osgi.test.cases.blueprint.components.injection.TypeAssignability" factory-method="makeStatic">
+       <argument value="XYZ"/>
+   </bean>
+
+   <bean id="stringArgInstance" factory-ref="factory" factory-method="makeInstance">
+       <argument value="XYZ"/>
+   </bean>
+
+
+   <!-- An int argument should be matchable by either an int value or an Integer value. -->
+   <bean id="intArg" class="org.osgi.test.cases.blueprint.components.injection.TypeAssignability">
+       <argument>
+           <value type="int">1</value>
+       </argument>
+   </bean>
+
+   <bean id="intArgStatic" class="org.osgi.test.cases.blueprint.components.injection.TypeAssignability" factory-method="makeStatic">
+       <argument>
+           <value type="int">1</value>
+       </argument>
+   </bean>
+
+   <bean id="intArgInstance" factory-ref="factory" factory-method="makeInstance">
+       <argument>
+           <value type="int">1</value>
+       </argument>
+   </bean>
+
+
+   <bean id="integerArg" class="org.osgi.test.cases.blueprint.components.injection.TypeAssignability">
+       <argument>
+           <value type="java.lang.Integer">1</value>
+       </argument>
+   </bean>
+
+   <bean id="integerArgStatic" class="org.osgi.test.cases.blueprint.components.injection.TypeAssignability" factory-method="makeStatic">
+       <argument>
+           <value type="java.lang.Integer">1</value>
+       </argument>
+   </bean>
+
+   <bean id="integerArgInstance" factory-ref="factory" factory-method="makeInstance">
+       <argument>
+           <value type="java.lang.Integer">1</value>
+       </argument>
+   </bean>
+
+   <!-- A RegionCode value can only match one signature -->
+   <bean id="regionCodeArg" class="org.osgi.test.cases.blueprint.components.injection.TypeAssignability">
+       <argument ref="regionCode"/>
+   </bean>
+
+   <bean id="regionCodeArgStatic" class="org.osgi.test.cases.blueprint.components.injection.TypeAssignability" factory-method="makeStatic">
+       <argument ref="regionCode"/>
+   </bean>
+
+   <bean id="regionCodeArgInstance" factory-ref="factory" factory-method="makeInstance">
+       <argument ref="regionCode"/>
+   </bean>
+
+
+   <!-- A EuropeanRegionCode value can only match the RegionCode signature -->
+   <bean id="europeanRegionCodeArg" class="org.osgi.test.cases.blueprint.components.injection.TypeAssignability">
+       <argument ref="europeanRegionCode"/>
+   </bean>
+
+   <bean id="europeanRegionCodeArgStatic" class="org.osgi.test.cases.blueprint.components.injection.TypeAssignability" factory-method="makeStatic">
+       <argument ref="europeanRegionCode"/>
+   </bean>
+
+   <bean id="europeanRegionCodeArgInstance" factory-ref="factory" factory-method="makeInstance">
+       <argument ref="europeanRegionCode"/>
+   </bean>
+
+
+   <!-- An AsianRegionCode value can match either the RegionCode or AsianRegioncode signature.  The type MUST be
+        specified explicitly.  We'll use both versions to ensure it ends up in the correct place. -->
+   <bean id="asianRegionCodeArg" class="org.osgi.test.cases.blueprint.components.injection.TypeAssignability">
+       <argument type="org.osgi.test.cases.blueprint.components.injection.AsianRegionCode" ref="asianRegionCode"/>
+   </bean>
+
+   <bean id="asianRegionCodeArgStatic" class="org.osgi.test.cases.blueprint.components.injection.TypeAssignability" factory-method="makeStatic">
+       <argument type="org.osgi.test.cases.blueprint.components.injection.AsianRegionCode" ref="asianRegionCode"/>
+   </bean>
+
+   <bean id="asianRegionCodeArgInstance" factory-ref="factory" factory-method="makeInstance">
+       <argument type="org.osgi.test.cases.blueprint.components.injection.AsianRegionCode" ref="asianRegionCode"/>
+   </bean>
+
+   <bean id="asianRegionCodeSuperArg" class="org.osgi.test.cases.blueprint.components.injection.TypeAssignability">
+       <argument type="org.osgi.test.cases.blueprint.components.injection.RegionCode" ref="asianRegionCode"/>
+   </bean>
+
+   <bean id="asianRegionCodeSuperArgStatic" class="org.osgi.test.cases.blueprint.components.injection.TypeAssignability" factory-method="makeStatic">
+       <argument type="org.osgi.test.cases.blueprint.components.injection.RegionCode" ref="asianRegionCode"/>
+   </bean>
+
+   <bean id="asianRegionCodeSuperArgInstance" factory-ref="factory" factory-method="makeInstance">
+       <argument type="org.osgi.test.cases.blueprint.components.injection.RegionCode" ref="asianRegionCode"/>
+   </bean>
+
+
+   <!-- Some primitive disambiguation tests.  We have both a boolean and a Boolean signature to deal with.
+        We'll also use both a boolean and a Boolean source.  This will require the target to be specified
+        explicitly, but all versions of this should end up in the correct location.  -->
+   <bean id="primToWrapperArg" class="org.osgi.test.cases.blueprint.components.injection.TypeAssignability">
+       <argument type="java.lang.Boolean">
+           <value type="boolean">true</value>
+       </argument>
+   </bean>
+
+   <bean id="primToWrapperArgStatic" class="org.osgi.test.cases.blueprint.components.injection.TypeAssignability" factory-method="makeStatic">
+       <argument type="java.lang.Boolean">
+           <value type="boolean">true</value>
+       </argument>
+   </bean>
+
+   <bean id="primToWrapperArgInstance" factory-ref="factory" factory-method="makeInstance">
+       <argument type="java.lang.Boolean">
+           <value type="boolean">true</value>
+       </argument>
+   </bean>
+
+   <bean id="wrapperToWrapperArg" class="org.osgi.test.cases.blueprint.components.injection.TypeAssignability">
+       <argument type="java.lang.Boolean">
+           <value type="java.lang.Boolean">true</value>
+       </argument>
+   </bean>
+
+   <bean id="wrapperToWrapperArgStatic" class="org.osgi.test.cases.blueprint.components.injection.TypeAssignability" factory-method="makeStatic">
+       <argument type="java.lang.Boolean">
+           <value type="java.lang.Boolean">true</value>
+       </argument>
+   </bean>
+
+   <bean id="wrapperToWrapperArgInstance" factory-ref="factory" factory-method="makeInstance">
+       <argument type="java.lang.Boolean">
+           <value type="java.lang.Boolean">true</value>
+       </argument>
+   </bean>
+
+   <bean id="wrapperToPrimArg" class="org.osgi.test.cases.blueprint.components.injection.TypeAssignability">
+       <argument type="boolean">
+           <value type="java.lang.Boolean">true</value>
+       </argument>
+   </bean>
+
+   <bean id="wrapperToPrimArgStatic" class="org.osgi.test.cases.blueprint.components.injection.TypeAssignability" factory-method="makeStatic">
+       <argument type="boolean">
+           <value type="java.lang.Boolean">true</value>
+       </argument>
+   </bean>
+
+   <bean id="wrapperToPrimArgInstance" factory-ref="factory" factory-method="makeInstance">
+       <argument type="boolean">
+           <value type="java.lang.Boolean">true</value>
+       </argument>
+   </bean>
+
+   <bean id="primToPrimArg" class="org.osgi.test.cases.blueprint.components.injection.TypeAssignability">
+       <argument type="boolean">
+           <value type="boolean">true</value>
+       </argument>
+   </bean>
+
+   <bean id="primToPrimArgStatic" class="org.osgi.test.cases.blueprint.components.injection.TypeAssignability" factory-method="makeStatic">
+       <argument type="boolean">
+           <value type="boolean">true</value>
+       </argument>
+   </bean>
+
+   <bean id="primToPrimArgInstance" factory-ref="factory" factory-method="makeInstance">
+       <argument type="boolean">
+           <value type="boolean">true</value>
+       </argument>
+   </bean>
+</blueprint>
+

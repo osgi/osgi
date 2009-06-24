@@ -16,25 +16,21 @@
 
 package org.osgi.test.cases.blueprint.components.injection;
 
-public class RegionCode {
-    protected String code;
+import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 
-    public RegionCode(String code){
-        this.code = code;
-    }
-
-    public String getCode(){
-        return this.code;
-    }
-
-    public boolean equals(Object o){
-        if (o == null ) return false;
-        if (o.getClass() != this.getClass()) return false; // this guarantee its subclass could never be equal with it.
-
-        return this.code.equals(((RegionCode)o).getCode());
-    }
-
-    public int hashCode() {
-        return code.hashCode();
+/**
+ * Small test class for testing constructor type compatibility
+ * rules for constructor disambiguation.  This will have
+ * constructor methods, static factory methods, and component
+ * factory methods with an assortment of signatures to
+ * test the disambiguation rules.  Many of these rules will
+ * require type conversion in order to derive the correct signature,
+ */
+public class TypeCompatibility extends BaseTestComponent {
+    /**
+     * Default constructor for using this as an instance factory.
+     */
+    public TypeCompatibility() {
+        super("typeCompatibility");
     }
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+    <description>
+        Tests the ambiguity arising from the assignability equivalance between primitive and wrapper
+        types.
+    </description>
+
+    <!-- A factory bean used for the instance factory variations -->
+    <bean id="factory" class="org.osgi.test.cases.blueprint.components.injection.TypeAssignability"/>
+
+    <bean id="primToWrapperArgInstance" factory-ref="factory" factory-method="makeInstance">
+       <argument>
+           <value type="boolean">true</value>
+       </argument>
+   </bean>
+</blueprint>
+

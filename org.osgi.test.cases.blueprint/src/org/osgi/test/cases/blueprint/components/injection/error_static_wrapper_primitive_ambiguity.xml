@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+    <description>
+        Tests the ambiguity arising from the assignability equivalance between primitive and wrapper
+        types.
+    </description>
+
+    <bean id="wrapperToPrimArgStatic" class="org.osgi.test.cases.blueprint.components.injection.TypeAssignability" factory-method="makeStatic">
+       <argument>
+           <value type="java.lang.Boolean">true</value>
+       </argument>
+    </bean>
+</blueprint>
+

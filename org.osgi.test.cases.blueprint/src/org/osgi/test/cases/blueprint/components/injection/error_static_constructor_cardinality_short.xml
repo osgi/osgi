@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+    <description>
+        Validates that an error is raised if the cardinality is short for a constructor.
+    </description>
+
+   <bean id="compArg" class="org.osgi.test.cases.blueprint.components.injection.ConstructorCardinality" factory-method="makeStatic">
+       <argument value="XYZ"/>
+   </bean>
+</blueprint>
+

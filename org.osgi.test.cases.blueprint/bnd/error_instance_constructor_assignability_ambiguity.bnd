@@ -1,0 +1,7 @@
+Bundle-SymbolicName:                     ${p}.error_instance_constructor_assignability_ambiguity
+Bundle-Version:                          4.2
+Import-Package:                          ${p}.components.injection, ${p}.services
+-resourceonly: true
+Include-Resource					= \
+	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/injection/error_instance_constructor_assignability_ambiguity.xml
+

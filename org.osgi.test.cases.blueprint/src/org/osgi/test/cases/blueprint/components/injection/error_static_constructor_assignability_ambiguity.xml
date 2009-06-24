@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+    <description>
+        Tests ambiguities resulting from assignability equivalence for constructor arguments
+        where the target type is not specified.
+    </description>
+
+    <bean id="asianRegionCode" class="org.osgi.test.cases.blueprint.components.injection.AsianRegionCode" scope="prototype">
+        <argument value="CN+86"/>
+    </bean>
+
+   <!-- An AsianRegionCode value can match either the RegionCode or AsianRegioncode signature.  The type MUST be
+        specified explicitly.  We'll use both versions to ensure it ends up in the correct place. -->
+    <bean id="asianRegionCodeArgStatic" class="org.osgi.test.cases.blueprint.components.injection.TypeAssignability" factory-method="makeStatic">
+       <argument ref="asianRegionCode"/>
+    </bean>
+</blueprint>
+
