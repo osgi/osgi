@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+    <description>
+        Tests the ambiguity arising from convertibility with map.
+    </description>
+
+
+    <!-- A factory bean used for the instance factory variations -->
+    <bean id="factory" class="org.osgi.test.cases.blueprint.components.injection.TypeCompatibility"/>
+
+    <bean id="collection" factory-ref="factory" factory-method="makeInstance">
+       <argument>
+           <map>
+               <entry key="abc" value="1"/>
+               <entry key="def" value="2"/>
+           </map>
+       </argument>
+   </bean>
+</blueprint>
+

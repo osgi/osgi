@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+    <description>
+        Tests the ambiguity arising from convertibility with map.
+    </description>
+
+    <bean id="collection" class="org.osgi.test.cases.blueprint.components.injection.TypeCompatibility" factory-method="makeStatic">
+       <argument>
+           <map>
+               <entry key="abc" value="1"/>
+               <entry key="def" value="2"/>
+           </map>
+       </argument>
+   </bean>
+</blueprint>
+

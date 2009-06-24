@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+    <description>
+        Tests the ambiguity arising from the a convertibility with collection.  A list value will be provided,
+        but there will be multiple possible conversions available.
+    </description>
+
+    <!-- A factory bean used for the instance factory variations -->
+    <bean id="factory" class="org.osgi.test.cases.blueprint.components.injection.TypeCompatibility"/>
+
+    <bean id="collection" factory-ref="factory" factory-method="makeInstance">
+       <argument>
+           <list>
+               <value>abc</value>
+               <value>def</value>
+           </list>
+       </argument>
+   </bean>
+</blueprint>
+

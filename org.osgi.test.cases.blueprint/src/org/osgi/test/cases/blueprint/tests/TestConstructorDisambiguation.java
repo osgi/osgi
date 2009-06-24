@@ -219,4 +219,79 @@ public class TestConstructorDisambiguation extends DefaultTestBundleControl {
                 getWebServer()+"www/error_static_constructor_assignability_ambiguity.jar");
         controller.run();
     }
+
+
+    /*
+     * Tests for ambiguities where there is a converison compatibility relationship between the source and multiple targets
+     */
+    public void testStringConversionAmbiguity() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+                getWebServer()+"www/error_converted_primitive_wrapper_ambiguity.jar");
+        controller.run();
+    }
+
+    public void testInstanceStringConversionAmbiguity() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+                getWebServer()+"www/error_instance_converted_primitive_wrapper_ambiguity.jar");
+        controller.run();
+    }
+
+    public void testStaticStringConversionAmbiguity() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+                getWebServer()+"www/error_static_converted_primitive_wrapper_ambiguity.jar");
+        controller.run();
+    }
+
+
+    /*
+     * Tests for ambiguities where there is a converison compatibility relationship between the source and multiple targets
+     */
+    public void testCollectionConversionAmbiguity() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+                getWebServer()+"www/error_converted_collection_ambiguity.jar");
+        controller.run();
+    }
+
+    public void testInstanceCollectionConversionAmbiguity() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+                getWebServer()+"www/error_instance_converted_collection_ambiguity.jar");
+        controller.run();
+    }
+
+    public void testStaticCollectionConversionAmbiguity() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+                getWebServer()+"www/error_static_converted_collection_ambiguity.jar");
+        controller.run();
+    }
+
+
+    /*
+     * Tests for ambiguities where there is a converison compatibility relationship between the source and multiple targets
+     */
+    public void testMapConversionAmbiguity() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+                getWebServer()+"www/error_converted_map_ambiguity.jar");
+        controller.run();
+    }
+
+    public void testInstanceMapConversionAmbiguity() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+                getWebServer()+"www/error_instance_converted_map_ambiguity.jar");
+        controller.run();
+    }
+
+    public void testStaticMapConversionAmbiguity() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+                getWebServer()+"www/error_static_converted_map_ambiguity.jar");
+        controller.run();
+    }
 }

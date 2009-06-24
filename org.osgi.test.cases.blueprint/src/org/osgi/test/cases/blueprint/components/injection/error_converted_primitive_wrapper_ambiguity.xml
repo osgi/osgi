@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+    <description>
+        Tests the ambiguity arising from the a convertibility equivalance between primitive and wrapper
+        types.
+    </description>
+
+   <bean id="primToWrapperArg" class="org.osgi.test.cases.blueprint.components.injection.TypeCompatibility">
+       <argument value="true"/>
+   </bean>
+</blueprint>
+
