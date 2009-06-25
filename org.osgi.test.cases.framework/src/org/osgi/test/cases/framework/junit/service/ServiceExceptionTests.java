@@ -31,11 +31,10 @@ import org.osgi.test.support.OSGiTestCase;
 public class ServiceExceptionTests extends OSGiTestCase {
 
 	public void testServiceException01() {
-		final String testMethodName = "testServiceException01"; //$NON-NLS-1$
 		// test a service factory which returns wrong object types
 		ServiceExceptionServiceFactory wrongObjectFactory = new ServiceExceptionServiceFactory("A String"); //$NON-NLS-1$
 		Hashtable props = new Hashtable();
-		props.put("name", testMethodName); //$NON-NLS-1$ 
+		props.put("name", getName()); //$NON-NLS-1$ 
 		ServiceRegistration reg = getContext().registerService(
 				Runnable.class.getName(), wrongObjectFactory, props);
 		ServiceExceptionFrameworkListener listener = new ServiceExceptionFrameworkListener(
@@ -46,7 +45,7 @@ public class ServiceExceptionTests extends OSGiTestCase {
 			try {
 				refs = getContext().getServiceReferences(
 						Runnable.class.getName(),
-						"(name=" + testMethodName + ")"); //$NON-NLS-1$ //$NON-NLS-2$
+						"(name=" + getName() + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 			} catch (InvalidSyntaxException e) {
 				fail("Unexpected syntax error", e); //$NON-NLS-1$
 			}
@@ -73,11 +72,10 @@ public class ServiceExceptionTests extends OSGiTestCase {
 	}
 
 	public void testServiceException02() {
-		final String testMethodName = "testServiceException02"; //$NON-NLS-1$
 		// test a service factory which returns null objects
 		ServiceExceptionServiceFactory nullObjectFactory = new ServiceExceptionServiceFactory(null);
 		Hashtable props = new Hashtable();
-		props.put("name", testMethodName); //$NON-NLS-1$ 
+		props.put("name", getName()); //$NON-NLS-1$ 
 		ServiceRegistration reg = getContext().registerService(
 				Runnable.class.getName(), nullObjectFactory, props);
 		ServiceExceptionFrameworkListener listener = new ServiceExceptionFrameworkListener(
@@ -88,7 +86,7 @@ public class ServiceExceptionTests extends OSGiTestCase {
 			try {
 				refs = getContext().getServiceReferences(
 						Runnable.class.getName(),
-						"(name=" + testMethodName + ")"); //$NON-NLS-1$ //$NON-NLS-2$
+						"(name=" + getName() + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 			} catch (InvalidSyntaxException e) {
 				fail("Unexpected syntax error", e); //$NON-NLS-1$
 			}
@@ -115,12 +113,11 @@ public class ServiceExceptionTests extends OSGiTestCase {
 	}
 
 	public void testServiceException03() {
-		final String testMethodName = "testServiceException03"; //$NON-NLS-1$
 		// test a service factory which throws a RuntimeException
-		RuntimeException cause = new RuntimeException(testMethodName);
+		RuntimeException cause = new RuntimeException(getName());
 		ServiceExceptionServiceFactory runtimeExceptionFactory = new ServiceExceptionServiceFactory(cause);
 		Hashtable props = new Hashtable();
-		props.put("name", testMethodName); //$NON-NLS-1$ 
+		props.put("name", getName()); //$NON-NLS-1$ 
 		ServiceRegistration reg = getContext().registerService(
 				Runnable.class.getName(), runtimeExceptionFactory, props);
 		ServiceExceptionFrameworkListener listener = new ServiceExceptionFrameworkListener(
@@ -132,7 +129,7 @@ public class ServiceExceptionTests extends OSGiTestCase {
 			try {
 				refs = getContext().getServiceReferences(
 						Runnable.class.getName(),
-						"(name=" + testMethodName + ")"); //$NON-NLS-1$ //$NON-NLS-2$
+						"(name=" + getName() + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 			} catch (InvalidSyntaxException e) {
 				fail("Unexpected syntax error", e); //$NON-NLS-1$
 			}
@@ -159,12 +156,11 @@ public class ServiceExceptionTests extends OSGiTestCase {
 	}
 
 	public void testServiceException04() {
-		final String testMethodName = "testServiceException04"; //$NON-NLS-1$
 		// test a service factory which throws an Error
-		Error cause = new Error(testMethodName);
+		Error cause = new Error(getName());
 		ServiceExceptionServiceFactory errorFactory = new ServiceExceptionServiceFactory(cause);
 		Hashtable props = new Hashtable();
-		props.put("name", testMethodName); //$NON-NLS-1$ 
+		props.put("name", getName()); //$NON-NLS-1$ 
 		ServiceRegistration reg = getContext().registerService(
 				Runnable.class.getName(), errorFactory, props);
 		ServiceExceptionFrameworkListener listener = new ServiceExceptionFrameworkListener(
@@ -176,7 +172,7 @@ public class ServiceExceptionTests extends OSGiTestCase {
 			try {
 				refs = getContext().getServiceReferences(
 						Runnable.class.getName(),
-						"(name=" + testMethodName + ")"); //$NON-NLS-1$ //$NON-NLS-2$
+						"(name=" + getName() + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 			} catch (InvalidSyntaxException e) {
 				fail("Unexpected syntax error", e); //$NON-NLS-1$
 			}

@@ -43,7 +43,6 @@ import org.osgi.test.support.OSGiTestCase;
 public class ServiceHookTests extends OSGiTestCase {
 
 	public void testFindHook01() {
-		final String testMethodName = "testFindHook01";
 		// test the FindHook is called and can remove a reference from the
 		// results
 		Runnable runIt = new Runnable() {
@@ -54,7 +53,7 @@ public class ServiceHookTests extends OSGiTestCase {
 		final BundleContext testContext = getContext();
 		// register services
 		Hashtable props = new Hashtable();
-		props.put("name", testMethodName);
+		props.put("name", getName());
 		props.put(Constants.SERVICE_DESCRIPTION, "service 1");
 		final ServiceRegistration reg1 = testContext.registerService(
 				Runnable.class.getName(), runIt, props);
@@ -88,7 +87,7 @@ public class ServiceHookTests extends OSGiTestCase {
 							assertEquals("wrong name in hook", Runnable.class
 									.getName(), name);
 							assertEquals(
-									"wrong filter in hook", "(name=" + testMethodName + ")", filter); //$NON-NLS-2$ //$NON-NLS-3$
+									"wrong filter in hook", "(name=" + getName() + ")", filter); //$NON-NLS-2$ //$NON-NLS-3$
 							assertEquals("wrong allservices in hook", false,
 									allServices);
 							assertEquals("wrong number of services in hook", 1,
@@ -152,7 +151,7 @@ public class ServiceHookTests extends OSGiTestCase {
 							assertEquals("wrong name in hook", Runnable.class
 									.getName(), name);
 							assertEquals(
-									"wrong filter in hook", "(name=" + testMethodName + ")", filter); //$NON-NLS-2$ //$NON-NLS-3$
+									"wrong filter in hook", "(name=" + getName() + ")", filter); //$NON-NLS-2$ //$NON-NLS-3$
 							assertEquals("wrong allservices in hook", false,
 									allServices);
 							assertEquals("wrong number of services in hook", 3,
@@ -213,7 +212,7 @@ public class ServiceHookTests extends OSGiTestCase {
 							assertEquals("wrong name in hook", Runnable.class
 									.getName(), name);
 							assertEquals(
-									"wrong filter in hook", "(name=" + testMethodName + ")", filter); //$NON-NLS-2$ //$NON-NLS-3$
+									"wrong filter in hook", "(name=" + getName() + ")", filter); //$NON-NLS-2$ //$NON-NLS-3$
 							assertEquals("wrong allservices in hook", false,
 									allServices);
 							assertEquals("wrong number of services in hook", 2,
@@ -256,7 +255,7 @@ public class ServiceHookTests extends OSGiTestCase {
 						}
 						// throw an exception from the hook to test that the
 						// next hooks are called.
-						throw new RuntimeException(testMethodName);
+						throw new RuntimeException(getName());
 					}
 				}, props);
 
@@ -277,7 +276,7 @@ public class ServiceHookTests extends OSGiTestCase {
 							assertEquals("wrong name in hook", Runnable.class
 									.getName(), name);
 							assertEquals(
-									"wrong filter in hook", "(name=" + testMethodName + ")", filter); //$NON-NLS-2$ //$NON-NLS-3$
+									"wrong filter in hook", "(name=" + getName() + ")", filter); //$NON-NLS-2$ //$NON-NLS-3$
 							assertEquals("wrong allservices in hook", false,
 									allServices);
 							assertEquals("wrong number of services in hook", 2,
@@ -329,7 +328,7 @@ public class ServiceHookTests extends OSGiTestCase {
 			ServiceReference[] refs = null;
 			try {
 				refs = testContext.getServiceReferences(Runnable.class
-						.getName(), "(name=" + testMethodName + ")"); //$NON-NLS-2$
+						.getName(), "(name=" + getName() + ")"); //$NON-NLS-2$
 			}
 			catch (InvalidSyntaxException e) {
 				fail("Unexpected syntax error", e);
@@ -372,7 +371,7 @@ public class ServiceHookTests extends OSGiTestCase {
 
 			try {
 				refs = testContext.getServiceReferences(Runnable.class
-						.getName(), "(name=" + testMethodName + ")"); //$NON-NLS-2$
+						.getName(), "(name=" + getName() + ")"); //$NON-NLS-2$
 			}
 			catch (InvalidSyntaxException e) {
 				fail("Unexpected syntax error", e);
@@ -410,7 +409,6 @@ public class ServiceHookTests extends OSGiTestCase {
 	}
 
 	public void testFindHook02() {
-		final String testMethodName = "testFindHook02";
 		Runnable runIt = new Runnable() {
 			public void run() {
 				// nothing
@@ -420,7 +418,7 @@ public class ServiceHookTests extends OSGiTestCase {
 
 		// register services
 		Hashtable props = new Hashtable();
-		props.put("name", testMethodName);
+		props.put("name", getName());
 		props.put(Constants.SERVICE_DESCRIPTION, "service 1");
 		final ServiceRegistration reg1 = testContext.registerService(
 				Runnable.class.getName(), runIt, props);
@@ -501,7 +499,7 @@ public class ServiceHookTests extends OSGiTestCase {
 			ServiceReference[] refs = null;
 			try {
 				refs = testContext.getServiceReferences(Runnable.class
-						.getName(), "(name=" + testMethodName + ")"); //$NON-NLS-2$
+						.getName(), "(name=" + getName() + ")"); //$NON-NLS-2$
 			}
 			catch (InvalidSyntaxException e) {
 				fail("Unexpected syntax error", e);
@@ -546,7 +544,6 @@ public class ServiceHookTests extends OSGiTestCase {
 	}
 
 	public void testEventHook01() {
-		final String testMethodName = "testEventHook01";
 		// test the EventHook is called and can remove a reference from the
 		// results
 		Runnable runIt = new Runnable() {
@@ -568,7 +565,7 @@ public class ServiceHookTests extends OSGiTestCase {
 			}
 		};
 
-		final String filterString = "(&(name=" + testMethodName + ")(objectClass=java.lang.Runnable))"; //$NON-NLS-2$
+		final String filterString = "(&(name=" + getName() + ")(objectClass=java.lang.Runnable))"; //$NON-NLS-2$
 		Filter tmpFilter = null;
 		try {
 			tmpFilter = testContext.createFilter(filterString);
@@ -665,7 +662,7 @@ public class ServiceHookTests extends OSGiTestCase {
 		};
 
 		Hashtable props = new Hashtable();
-		props.put("name", testMethodName);
+		props.put("name", getName());
 		// register event hook 1
 		props.put(Constants.SERVICE_DESCRIPTION, "event hook 1");
 		ServiceRegistration regHook = testContext.registerService(
@@ -752,7 +749,6 @@ public class ServiceHookTests extends OSGiTestCase {
 	}
 
 	public void testEventHook02() {
-		final String testMethodName = "testEventHook02";
 		Runnable runIt = new Runnable() {
 			public void run() {
 				// nothing
@@ -762,7 +758,7 @@ public class ServiceHookTests extends OSGiTestCase {
 
 		// register services
 		Hashtable props = new Hashtable();
-		props.put("name", testMethodName);
+		props.put("name", getName());
 		final AssertionFailedError[] factoryError = new AssertionFailedError[] {null};
 		final boolean[] factoryCalled = new boolean[] {false, false};
 		final boolean[] hookCalled = new boolean[] {false};
@@ -872,7 +868,6 @@ public class ServiceHookTests extends OSGiTestCase {
 	}
 
 	public void testListenerHook01() {
-		final String testMethodName = "testListenerHook01";
 		// test the ListenerHook is called
 		final BundleContext testContext = getContext();
 		final Collection added = new ArrayList();
@@ -893,7 +888,7 @@ public class ServiceHookTests extends OSGiTestCase {
 		};
 
 		Hashtable props = new Hashtable();
-		props.put("name", testMethodName);
+		props.put("name", getName());
 		// register listener hook 1
 		props.put(Constants.SERVICE_DESCRIPTION, "listener hook 1");
 		ServiceRegistration regHook = testContext.registerService(
@@ -1007,7 +1002,6 @@ public class ServiceHookTests extends OSGiTestCase {
 	}
 
 	public void testListenerHook02() {
-		final String testMethodName = "testListenerHook02";
 		// test the ListenerHook works with the FilteredServiceListener
 		// optimization in equinox
 		final BundleContext testContext = getContext();
@@ -1029,7 +1023,7 @@ public class ServiceHookTests extends OSGiTestCase {
 		};
 
 		Hashtable props = new Hashtable();
-		props.put("name", testMethodName);
+		props.put("name", getName());
 		// register listener hook 1
 		props.put(Constants.SERVICE_DESCRIPTION, "listener hook 1");
 		ServiceRegistration regHook = testContext.registerService(
@@ -1143,12 +1137,11 @@ public class ServiceHookTests extends OSGiTestCase {
 	}
 
 	public void testListenerHook03() {
-		final String testMethodName = "testListenerHook03";
 		final BundleContext testContext = getContext();
 
 		// register services
 		Hashtable props = new Hashtable();
-		props.put("name", testMethodName);
+		props.put("name", getName());
 		final AssertionFailedError[] factoryError = new AssertionFailedError[] {null};
 		final boolean[] factoryCalled = new boolean[] {false, false};
 		final boolean[] hookCalled = new boolean[] {false};

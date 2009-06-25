@@ -31,7 +31,6 @@ import org.osgi.test.support.OSGiTestCase;
 public class ServiceRegistryTests extends OSGiTestCase {
 
 	public void testServiceListener01() {
-		final String testMethodName = getName();
 		// simple ServiceListener test
 		Runnable runIt = new Runnable() {
 			public void run() {
@@ -61,7 +60,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 			getContext()
 					.addServiceListener(
 							testListener,
-							"(&(objectClass=java.lang.Runnable)(" + testMethodName
+							"(&(objectClass=java.lang.Runnable)(" + getName()
 							+ "=true))");  
 		} catch (InvalidSyntaxException e) {
 			fail("filter error", e); 
@@ -70,7 +69,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 		try {
 			// register service which matches
 			Hashtable props = new Hashtable();
-			props.put(testMethodName, Boolean.TRUE);
+			props.put(getName(), Boolean.TRUE);
 			reg = getContext().registerService(Runnable.class.getName(), runIt,
 					props);
 			assertTrue("Did not get ServiceEvent.REGISTERED", results[0]);
@@ -89,7 +88,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 			clearResults(results);
 
 			// change props to no longer match
-			props.put(testMethodName, Boolean.FALSE);
+			props.put(getName(), Boolean.FALSE);
 			reg.setProperties(props);
 			assertFalse("Did get ServiceEvent.REGISTERED", results[0]);
 			assertFalse("Did get ServiceEvent.MODIFIED", results[1]);
@@ -107,7 +106,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 			clearResults(results);
 
 			// change props back to match
-			props.put(testMethodName, Boolean.TRUE);
+			props.put(getName(), Boolean.TRUE);
 			reg.setProperties(props);
 			assertFalse("Did get ServiceEvent.REGISTERED", results[0]);
 			assertTrue("Did not get ServiceEvent.MODIFIED", results[1]);
@@ -131,7 +130,6 @@ public class ServiceRegistryTests extends OSGiTestCase {
 	}
 
 	public void testServiceListener02() {
-		final String testMethodName = getName();
 		// simple ServiceListener test
 		Runnable runIt = new Runnable() {
 			public void run() {
@@ -161,7 +159,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 			getContext()
 					.addServiceListener(
 							testListener,
-							"(&(objectClass=java.lang.Runnable)(" + testMethodName
+							"(&(objectClass=java.lang.Runnable)(" + getName()
 							+ "=true))");  
 		} catch (InvalidSyntaxException e) {
 			fail("filter error", e); 
@@ -170,7 +168,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 		try {
 			// register service which does not match
 			Hashtable props = new Hashtable();
-			props.put(testMethodName, Boolean.FALSE);
+			props.put(getName(), Boolean.FALSE);
 			reg = getContext().registerService(Runnable.class.getName(), runIt,
 					props);
 			assertFalse("Did get ServiceEvent.REGISTERED", results[0]);
@@ -189,7 +187,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 			clearResults(results);
 
 			// change props to match
-			props.put(testMethodName, Boolean.TRUE);
+			props.put(getName(), Boolean.TRUE);
 			reg.setProperties(props);
 			assertFalse("Did get ServiceEvent.REGISTERED", results[0]);
 			assertTrue("Did not get ServiceEvent.MODIFIED", results[1]);
@@ -207,7 +205,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 			clearResults(results);
 
 			// change props to no longer match
-			props.put(testMethodName, Boolean.FALSE);
+			props.put(getName(), Boolean.FALSE);
 			reg.setProperties(props);
 			assertFalse("Did get ServiceEvent.REGISTERED", results[0]);
 			assertFalse("Did get ServiceEvent.MODIFIED", results[1]);
@@ -231,7 +229,6 @@ public class ServiceRegistryTests extends OSGiTestCase {
 	}
 
 	public void testServiceOrdering01() {
-		final String testMethodName = getName();
 		// test that getServiceReference returns the proper service
 		Runnable runIt = new Runnable() {
 			public void run() {
@@ -239,7 +236,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 			}
 		};
 		Hashtable props = new Hashtable();
-		props.put("name", testMethodName);
+		props.put("name", getName());
 		props.put(Constants.SERVICE_DESCRIPTION, "min value"); 
 		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MIN_VALUE));
 		ServiceRegistration reg1 = getContext().registerService(
@@ -553,7 +550,6 @@ public class ServiceRegistryTests extends OSGiTestCase {
 		assertNull("Should have 0 references (=null)", reference);
 	}
 	public void testServiceReferenceCompare01() {
-		final String testMethodName = getName();
 		// test that getServiceReference returns the proper service
 		Runnable runIt = new Runnable() {
 			public void run() {
@@ -561,7 +557,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 			}
 		};
 		Hashtable props = new Hashtable();
-		props.put("name", testMethodName);
+		props.put("name", getName());
 		props.put(Constants.SERVICE_DESCRIPTION, "min value");
 		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MIN_VALUE));
 		ServiceRegistration reg1 = getContext().registerService(
