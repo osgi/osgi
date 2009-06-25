@@ -33,7 +33,7 @@ public interface Converter {
 	 * @return <code>true</code> if the conversion is possible,
 	 *         <code>false</code> otherwise.
 	 */
-	boolean canConvert(Object s, CollapsedType T);
+	boolean canConvert(Object s, ReifiedType T);
 
 	/**
 	 * Convert an object to an instance of the given class, using the built-in
@@ -49,6 +49,6 @@ public interface Converter {
 	 *             because callers should expect that not all source objects can
 	 *             be successfully converted.
 	 */
-	Object convert(Object s, CollapsedType T) throws Exception;
+	Object convert(Object s, ReifiedType T) throws Exception;
 
 }
