@@ -20,19 +20,22 @@
 
 package org.osgi.service.obr;
 
-
 /**
- * This service interface allows third parties to provide 
- * capabilities that are present on the system but not encoded in the bundle's 
- * manifests. For example, a capability provider could provide:
+ * This service interface allows third parties to provide capabilities that are
+ * present on the system but not encoded in the bundle's manifests. For example,
+ * a capability provider could provide:
  * <ol>
- * 	<li>A Set of certificates</li>
- * 	<li>Dimensions of the screen</li>
- * 	<li>Amount of memory</li>
- * 	<li>...</li>
+ * <li>A Set of certificates</li>
+ * <li>Dimensions of the screen</li>
+ * <li>Amount of memory</li>
+ * <li>...</li>
  * </ol>
- *
+ * 
  * @version $Revision$
+ * @deprecated This is proposed API. As a result, this API may never be
+ *             published or the final API may change substantially by the time
+ *             of final publication. You are cautioned against relying upon this
+ *             API.
  */
 public interface CapabilityProvider {
 	/**

@@ -24,22 +24,27 @@ import org.osgi.framework.BundleException;
 /**
  * A surrogate bundle is installed in a child framework, and is the child-facing
  * representation of the composite bundle in the parent framework.
- * <p>  
+ * <p>
  * A surrogate bundle does the following as specified by the composite manifest:
  * <ul>
  * <li>Exports packages to the child framework from the parent framework. These
  * packages are imported by the composite bundle installed in the parent
  * framework.</li>
- * <li>Imports packages from the child framework. These packages are exported
- * by the composite bundle installed in the parent framework.</li>
+ * <li>Imports packages from the child framework. These packages are exported by
+ * the composite bundle installed in the parent framework.</li>
  * <li>Registers services from the parent framework with the child framework.
- * These services are acquired by the composite bundle installed in the 
- * parent framework.</li>
- * <li>Acquires services from the child framework.  These services are 
- * registered by the composite bundle installed in the parent framework.</li>
+ * These services are acquired by the composite bundle installed in the parent
+ * framework.</li>
+ * <li>Acquires services from the child framework. These services are registered
+ * by the composite bundle installed in the parent framework.</li>
  * </ul>
  * <p>
+ * 
  * @see CompositeBundle
+ * @deprecated This is proposed API. As a result, this API may never be
+ *             published or the final API may change substantially by the time
+ *             of final publication. You are cautioned against relying upon this
+ *             API.
  */
 public interface SurrogateBundle extends Bundle {
 	/**

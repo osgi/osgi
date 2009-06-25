@@ -20,16 +20,20 @@
 
 package org.osgi.service.obr;
 
-import java.net.*;
-import java.util.*;
+import java.net.URL;
+import java.util.Map;
 
 /**
  * A resource is an abstraction of a downloadable thing, like a bundle.
  * 
- * Resources have capabilities and requirements. All a resource's 
- * requirements must be satisfied before it can be installed.
- *
+ * Resources have capabilities and requirements. All a resource's requirements
+ * must be satisfied before it can be installed.
+ * 
  * @version $Revision$
+ * @deprecated This is proposed API. As a result, this API may never be
+ *             published or the final API may change substantially by the time
+ *             of final publication. You are cautioned against relying upon this
+ *             API.
  */
 public interface Resource {
 	final String LICENSE_URL = "license";

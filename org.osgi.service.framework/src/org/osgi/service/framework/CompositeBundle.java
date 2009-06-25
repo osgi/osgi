@@ -87,8 +87,8 @@ import org.osgi.framework.launch.Framework;
  * bundle. The set of bundles installed into the child framework are the
  * component bundles which comprise the composite bundle.
  * <p>
- * The child framework's lifecycle is also tied to the lifecycle of its
- * parent framework. When the parent <code>Framework</code> enters the
+ * The child framework's lifecycle is also tied to the lifecycle of its parent
+ * framework. When the parent <code>Framework</code> enters the
  * {@link Bundle#STOPPING STOPPING} state, all active child frameworks of that
  * parent are shutdown using the {@link Framework#stop()} method. The parent
  * framework must not enter the {@link Bundle#RESOLVED} state until all the
@@ -101,6 +101,10 @@ import org.osgi.framework.launch.Framework;
  * @see SurrogateBundle
  * @ThreadSafe
  * @version $Revision$
+ * @deprecated This is proposed API. As a result, this API may never be
+ *             published or the final API may change substantially by the time
+ *             of final publication. You are cautioned against relying upon this
+ *             API.
  */
 public interface CompositeBundle extends Bundle {
 	/**

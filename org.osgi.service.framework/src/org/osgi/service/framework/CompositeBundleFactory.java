@@ -30,6 +30,10 @@ import org.osgi.framework.launch.Framework;
  * 
  * @ThreadSafe
  * @version $Revision$
+ * @deprecated This is proposed API. As a result, this API may never be
+ *             published or the final API may change substantially by the time
+ *             of final publication. You are cautioned against relying upon this
+ *             API.
  */
 // TODO javadoc needs review
 public interface CompositeBundleFactory {

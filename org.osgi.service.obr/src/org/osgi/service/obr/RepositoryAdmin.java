@@ -23,26 +23,28 @@ package org.osgi.service.obr;
 import java.net.URL;
 
 /**
- * Provides centralized access to the distributed
- * repository.
+ * Provides centralized access to the distributed repository.
  * 
- * A repository contains a set of <i>resources</i>. A resource
- * contains a number of fixed attributes (name, version, etc) 
- * and sets of:
+ * A repository contains a set of <i>resources</i>. A resource contains a number
+ * of fixed attributes (name, version, etc) and sets of:
  * <ol>
- * 	<li>Capabilities - Capabilities provide a named aspect: a bundle, a display, 
+ * <li>Capabilities - Capabilities provide a named aspect: a bundle, a display,
  * memory, etc.</li>
- *  <li>Requirements - A named filter expression. The filter must be satisfied
- *  by one or more Capabilties with the given name. These capabilities can come
- *  from other resources or from the platform. If multiple resources provide the
- *  requested capability, one is selected. (### what algorithm? ###)</li>
- *  <li>Requests - Requests are like requirements, except that a request can be
- *  fullfilled by 0..n resources. This feature can be used to link to resources
- *  that are compatible with the given resource and provide extra functionality. 
- *  For example, a bundle could request all its known fragments. The UI associated
- *  with the repository could list these as optional downloads.</li>
+ * <li>Requirements - A named filter expression. The filter must be satisfied by
+ * one or more Capabilties with the given name. These capabilities can come from
+ * other resources or from the platform. If multiple resources provide the
+ * requested capability, one is selected. (### what algorithm? ###)</li>
+ * <li>Requests - Requests are like requirements, except that a request can be
+ * fullfilled by 0..n resources. This feature can be used to link to resources
+ * that are compatible with the given resource and provide extra functionality.
+ * For example, a bundle could request all its known fragments. The UI
+ * associated with the repository could list these as optional downloads.</li>
  * 
  * @version $Revision$
+ * @deprecated This is proposed API. As a result, this API may never be
+ *             published or the final API may change substantially by the time
+ *             of final publication. You are cautioned against relying upon this
+ *             API.
  */
 public interface RepositoryAdmin {
 	/**
