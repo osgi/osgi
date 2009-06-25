@@ -315,7 +315,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 				.match(new DictionaryServiceReference(hash)));
 	}
 	
-	private static class SampleComparable implements Comparable {
+	public static class SampleComparable implements Comparable {
 		private int value = -1;
 
 		public SampleComparable(String value) {
@@ -331,7 +331,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		}
 	}
 
-	private static class SampleUnknown {
+	public static class SampleUnknown {
 		private int	value	= -1;
 
 		public SampleUnknown(String value) {
