@@ -41,6 +41,22 @@ import org.osgi.framework.hooks.service.ListenerHook;
 import org.osgi.test.support.OSGiTestCase;
 
 public class ServiceHookTests extends OSGiTestCase {
+	
+	private ServiceListener	dummysl;
+
+	protected void setUp() throws Exception {
+		dummysl = new ServiceListener() {
+			public void serviceChanged(ServiceEvent event) {
+				// do nothing
+			}
+		};
+		getContext().addServiceListener(dummysl,
+				"(reason=force one registered ServiceListener)");
+	}
+
+	protected void tearDown() {
+		getContext().removeServiceListener(dummysl);
+	}
 
 	public void testFindHook01() {
 		// test the FindHook is called and can remove a reference from the
