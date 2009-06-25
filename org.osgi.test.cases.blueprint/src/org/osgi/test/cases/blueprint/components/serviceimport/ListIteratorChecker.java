@@ -71,21 +71,12 @@ public class ListIteratorChecker extends ReferenceCollectionChecker {
         // This should return a proxy object, but calling a method on it
         // should give an error
         Iterator i = injectedList.iterator();
-        // test the list iterator in lock step with the iterator
-        ListIterator li = injectedList.listIterator();
         AssertionService.assertTrue(this, "Unexpected result from ref collection Iterator.hasNext()", i.hasNext());
-        AssertionService.assertTrue(this, "Unexpected result from ref collection ListIterator.hasNext()", li.hasNext());
-        AssertionService.assertFalse(this, "Unexpected result from ref collection ListIterator.hasPrevious()", li.hasPrevious());
-        AssertionService.assertEquals(this, "Unexpected result from ref collection ListIterator.nextIndex()", 0, li.nextIndex());
-        AssertionService.assertEquals(this, "Unexpected result from ref collection ListIterator.previousIndex()", -1, li.previousIndex());
         // unregister everything
         serviceManager.unregisterServices();
         // this should return an object without error
         TestServiceOne service = (TestServiceOne)i.next();
-        TestServiceOne service2 = (TestServiceOne)li.next();
 
-        // these should be the same proxy
-        AssertionService.assertSame(this, "Unexpected proxy object returned from sublist", service, service2);
         try {
             // if this call succeeds, this is a failure, and will be raised as such
             AssertionService.assertFalse(this, "Unexpected service test result", service.testOne());
@@ -95,7 +86,6 @@ public class ListIteratorChecker extends ReferenceCollectionChecker {
 
         // this iterator should now return false because everything has gone
         AssertionService.assertFalse(this, "Unexpected result from ref collection Iterator.hasNext()", i.hasNext());
-        AssertionService.assertFalse(this, "Unexpected result from ref collection ListIterator.hasNext()", li.hasNext());
 
         // now repeat the tests above against the empty list
         AssertionService.assertFalse(this, "Unexpected contains() result", injectedList.contains(firstService));
@@ -107,15 +97,9 @@ public class ListIteratorChecker extends ReferenceCollectionChecker {
 
         // get a fresh iterator
         i = injectedList.iterator();
-        // use the indexed form of listIterator now
-        li = injectedList.listIterator(0);
 
         // empty collection, this should also be false
         AssertionService.assertFalse(this, "Unexpected result from ref collection Iterator.hasNext()", i.hasNext());
-        AssertionService.assertFalse(this, "Unexpected result from ref collection ListIterator.hasNext()", li.hasNext());
-        AssertionService.assertFalse(this, "Unexpected result from ref collection ListIterator.hasPrevious()", li.hasPrevious());
-        AssertionService.assertEquals(this, "Unexpected result from ref collection ListIterator.nextIndex()", 0, li.nextIndex());
-        AssertionService.assertEquals(this, "Unexpected result from ref collection ListIterator.previousIndex()", -1, li.previousIndex());
         // register a single service instance
         serviceManager.registerService("ServiceOneA");
 
@@ -200,31 +184,6 @@ public class ListIteratorChecker extends ReferenceCollectionChecker {
         } catch (UnsupportedOperationException e) {
             // expect to reach here
         }
-        // now some immutability tests for the list iterator
-        li = injectedList.listIterator(0);
-
-        li.hasNext();
-
-        try {
-            li.remove();
-            AssertionService.fail(this, "ListIterator.remove() did not throw exception");
-        } catch (UnsupportedOperationException e) {
-            // expect to reach here
-        }
-
-        try {
-            li.add("ABC");
-            AssertionService.fail(this, "ListIterator.add() did not throw exception");
-        } catch (UnsupportedOperationException e) {
-            // expect to reach here
-        }
-
-        try {
-            li.set("ABC");
-            AssertionService.fail(this, "ListIterator.set() did not throw exception");
-        } catch (UnsupportedOperationException e) {
-            // expect to reach here
-        }
 
         // now immutablity tests for the rest of the list methods
 
@@ -294,6 +253,22 @@ public class ListIteratorChecker extends ReferenceCollectionChecker {
         try {
             injectedList.set(0, "ABC");
             AssertionService.fail(this, "List.set() did not throw exception");
+        } catch (UnsupportedOperationException e) {
+            // expect to reach here
+        }
+
+        // list iterators are also not supported
+        try {
+            ListIterator li = injectedList.listIterator();
+            AssertionService.fail(this, "List.listIterator() did not throw exception");
+        } catch (UnsupportedOperationException e) {
+            // expect to reach here
+        }
+
+        // list iterators are also not supported
+        try {
+            ListIterator li = injectedList.listIterator(0);
+            AssertionService.fail(this, "List.listIterator(int) did not throw exception");
         } catch (UnsupportedOperationException e) {
             // expect to reach here
         }

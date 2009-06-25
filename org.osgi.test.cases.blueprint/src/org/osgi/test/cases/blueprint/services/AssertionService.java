@@ -16,6 +16,7 @@
 
 package org.osgi.test.cases.blueprint.services;
 
+import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
@@ -273,6 +274,62 @@ public class AssertionService
 
 
     /**
+     * Asserts that two int[] objects are equal. If they are not, an
+     * assertion event is published is thrown with the given message. If
+     * <code>expected</code> and <code>actual</code> are <code>null</code>,
+     * they are considered equal.
+     *
+     * @param component
+     *                  The component object making the assertion
+     * @param message
+     *            the identifying message for the event (<code>null</code>
+     *            okay)
+     * @param expected
+     *            expected value
+     * @param actual
+     *            actual value
+     */
+    static public void assertArrayEquals(Object component, String message, int[] expected, int[] actual) {
+        if (expected == null && actual == null) {
+            return;
+        }
+        if (expected != null && expected.equals(actual)) {
+            return;
+        } else {
+            assertTrue(component, message, Arrays.equals(expected, actual));
+        }
+    }
+
+
+    /**
+     * Asserts that two Object[] objects are equal. If they are not, an
+     * assertion event is published is thrown with the given message. If
+     * <code>expected</code> and <code>actual</code> are <code>null</code>,
+     * they are considered equal.
+     *
+     * @param component
+     *                  The component object making the assertion
+     * @param message
+     *            the identifying message for the event (<code>null</code>
+     *            okay)
+     * @param expected
+     *            expected value
+     * @param actual
+     *            actual value
+     */
+    static public void assertArrayEquals(Object component, String message, Object[] expected, Object[] actual) {
+        if (expected == null && actual == null) {
+            return;
+        }
+        if (expected != null && expected.equals(actual)) {
+            return;
+        } else {
+            assertTrue(component, message, Arrays.equals(expected, actual));
+        }
+    }
+
+
+    /**
      * Asserts that two longs are equal. If they are not, an
      * {@link AssertionError} is thrown with the given message.
      *
@@ -289,6 +346,7 @@ public class AssertionService
     static public void assertEquals(Object component, String message, long expected, long actual) {
         assertEquals(component, message, new Long(expected), new Long(actual));
     }
+
 
 
     /**
