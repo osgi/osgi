@@ -89,7 +89,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		testFilter("  ( room =b*oo*m) ", props, ISTRUE);
 		testFilter("  ( room =*b*oo*m*) ", props, ISTRUE);
 		testFilter("  ( room =b*b*  *m*) ", props, ISFALSE);
-		testFilter("  (& (room =bedroom) (channel ~= 34))", props, ISTRUE);
+		testFilter("  (& (room =bedroom) (channel ~=34))", props, ISTRUE);
 		testFilter("  (&  (room =b*)  (room =*x) (channel=34))", props, ISFALSE);
 		testFilter("(| (room =bed*)(channel=222)) ", props, ISTRUE);
 		testFilter("(| (room =boom*)(channel=101)) ", props, ISTRUE);
@@ -97,27 +97,27 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		testFilter("  (status =\\(o*\\\\\\)\\*) ", props, ISTRUE);
 		testFilter("  (canRecord =true\\(x\\)) ", props, ISTRUE);
 		testFilter("(max Record Time <=140) ", props, ISTRUE);
-		testFilter("(shortValue >= 100) ", props, ISTRUE);
-		testFilter("(intValue <= 100001) ", props, ISTRUE);
-		testFilter("(longValue >= 10000000000) ", props, ISTRUE);
+		testFilter("(shortValue >=100) ", props, ISTRUE);
+		testFilter("(intValue <=100001) ", props, ISTRUE);
+		testFilter("(longValue >=10000000000) ", props, ISTRUE);
 		testFilter(
-				"  (  &  (  byteValue <= 100  )  (  byteValue >= 10  )  )  ",
+				"  (  &  (  byteValue <=100)  (  byteValue >=10)  )  ",
 				props, ISTRUE);
-		testFilter("(weirdValue = 100) ", props, ISFALSE);
-		testFilter("(bigIntValue = 4123456) ", props, ISTRUE);
-		testFilter("(bigDecValue = 4.123456) ", props, ISTRUE);
-		testFilter("(floatValue >= 1.0) ", props, ISTRUE);
-		testFilter("(doubleValue <= 2.011) ", props, ISTRUE);
-		testFilter("(charValue ~= a) ", props, ISTRUE);
-		testFilter("(booleanValue = false) ", props, ISTRUE);
-		testFilter("(primIntArrayValue = 1) ", props, ISTRUE);
-		testFilter("(primLongArrayValue = 2) ", props, ISTRUE);
-		testFilter("(primByteArrayValue = 3) ", props, ISTRUE);
-		testFilter("(primShortArrayValue = 1) ", props, ISTRUE);
-		testFilter("(primFloatArrayValue = 1.1) ", props, ISTRUE);
-		testFilter("(primDoubleArrayValue = 2.2) ", props, ISTRUE);
-		testFilter("(primCharArrayValue ~= D) ", props, ISTRUE);
-		testFilter("(primBooleanArrayValue = false) ", props, ISTRUE);
+		testFilter("(weirdValue =100) ", props, ISFALSE);
+		testFilter("(bigIntValue =4123456) ", props, ISTRUE);
+		testFilter("(bigDecValue =4.123456) ", props, ISTRUE);
+		testFilter("(floatValue >=1.0) ", props, ISTRUE);
+		testFilter("(doubleValue <=2.011) ", props, ISTRUE);
+		testFilter("(charValue ~=a) ", props, ISTRUE);
+		testFilter("(booleanValue =false) ", props, ISTRUE);
+		testFilter("(primIntArrayValue =1) ", props, ISTRUE);
+		testFilter("(primLongArrayValue =2) ", props, ISTRUE);
+		testFilter("(primByteArrayValue =3) ", props, ISTRUE);
+		testFilter("(primShortArrayValue =1) ", props, ISTRUE);
+		testFilter("(primFloatArrayValue =1.1) ", props, ISTRUE);
+		testFilter("(primDoubleArrayValue =2.2) ", props, ISTRUE);
+		testFilter("(primCharArrayValue ~=D) ", props, ISTRUE);
+		testFilter("(primBooleanArrayValue =false) ", props, ISTRUE);
 		testFilter(
 				"(& (| (room =d*m) (room =bed*) (room=abc)) (! (channel=999)))",
 				props, ISTRUE);
@@ -141,16 +141,16 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 
 	public void testScalarSubstring() {
 		Dictionary props = getProperties();
-		testFilter("(shortValue = 100*) ", props, ISFALSE);
-		testFilter("(intValue = 100*) ", props, ISFALSE);
-		testFilter("(longValue = 100*) ", props, ISFALSE);
-		testFilter("(  byteValue = 1*00  )", props, ISFALSE);
-		testFilter("(bigIntValue = 4*23456) ", props, ISFALSE);
-		testFilter("(bigDecValue = 4*123456) ", props, ISFALSE);
-		testFilter("(floatValue = 1*0) ", props, ISFALSE);
-		testFilter("(doubleValue = 2*011) ", props, ISFALSE);
-		testFilter("(charValue = a*) ", props, ISFALSE);
-		testFilter("(booleanValue = f*lse) ", props, ISFALSE);
+		testFilter("(shortValue =100*) ", props, ISFALSE);
+		testFilter("(intValue =100*) ", props, ISFALSE);
+		testFilter("(longValue =100*) ", props, ISFALSE);
+		testFilter("(  byteValue =1*00  )", props, ISFALSE);
+		testFilter("(bigIntValue =4*23456) ", props, ISFALSE);
+		testFilter("(bigDecValue =4*123456) ", props, ISFALSE);
+		testFilter("(floatValue =1*0) ", props, ISFALSE);
+		testFilter("(doubleValue =2*011) ", props, ISFALSE);
+		testFilter("(charValue =a*) ", props, ISFALSE);
+		testFilter("(booleanValue =f*lse) ", props, ISFALSE);
 	}
 
 	public void testNormalization() {
@@ -279,37 +279,37 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 				.match(new DictionaryServiceReference(hash))); 
 	}
 
-	public void testUnknown() {
+	public void testObject() {
 		Filter f1 = null;
-		Object unk42 = new SampleUnknown("42");
-		Object unk43 = new SampleUnknown("43");
+		Object obj42 = new SampleObject("42");
+		Object obj43 = new SampleObject("43");
 		Hashtable hash = new Hashtable();
 
 		try {
-			f1 = createFilter("(unknown=42)");
+			f1 = createFilter("(object=42)");
 		}
 		catch (InvalidSyntaxException e) {
 			fail("invalid syntax", e);
 		}
 
-		hash.put("unknown", unk42);
+		hash.put("object", obj42);
 		assertTrue("does not match filter", f1.match(hash));
 		assertTrue("does not match filter", f1
 				.match(new DictionaryServiceReference(hash)));
 
-		hash.put("unknown", unk43);
+		hash.put("object", obj43);
 		assertFalse("does match filter", f1.match(hash));
 		assertFalse("does match filter", f1
 				.match(new DictionaryServiceReference(hash)));
 
 		try {
-			f1 = createFilter("(unknown=4*2)");
+			f1 = createFilter("(object=4*2)");
 		}
 		catch (InvalidSyntaxException e) {
 			fail("invalid syntax", e);
 		}
 
-		hash.put("unknown", unk42);
+		hash.put("object", obj42);
 		assertFalse("does match filter", f1.match(hash));
 		assertFalse("does match filter", f1
 				.match(new DictionaryServiceReference(hash)));
@@ -331,15 +331,18 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		}
 	}
 
-	public static class SampleUnknown {
+	public static class SampleObject {
 		private int	value	= -1;
 
-		public SampleUnknown(String value) {
+		public SampleObject(String value) {
 			this.value = Integer.parseInt(value);
 		}
 
 		public boolean equals(Object o) {
-			return value == ((SampleUnknown) o).value;
+			if (o instanceof SampleObject) {
+				return value == ((SampleObject) o).value;
+			}
+			return false;
 		}
 
 		public String toString() {

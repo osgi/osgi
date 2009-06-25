@@ -6,7 +6,6 @@
  */
 package org.osgi.test.cases.framework.junit.filter;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.TreeSet;
@@ -229,8 +228,7 @@ public class FilterTests extends DefaultTestBundleControl {
 	 * Help function used to sort and log an array of service references.
 	 */
 	private void logRefList(String prefix, ServiceReference refs[],
-			String ids[])
-			throws IOException {
+			String ids[]) {
 		
 		if ( refs == null && ids.length ==0 )
 			return;
