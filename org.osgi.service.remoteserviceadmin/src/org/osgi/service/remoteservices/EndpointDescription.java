@@ -93,7 +93,7 @@ public interface EndpointDescription {
 	/**
 	 * An Interface Description holds the triplet of the fully qualified name
 	 * for the interface class, the version of the exported package that
-	 * provided the class for the interface, and a middleware specific name for
+	 * provided the class for the interface, and a middle-ware specific name for
 	 * the communications interface.
 	 * 
 	 * @version $Revision: 7190 $
@@ -113,20 +113,6 @@ public interface EndpointDescription {
 		 */
 		public Version getVersion();
 
-		/**
-		 * The (non-Java) endpoint interface name is usually a communication
-		 * protocol specific interface, for instance a web service interface
-		 * name. Though this information is usually contained in accompanying
-		 * properties e.g. a wsdl file, Discovery usually doesn't read and
-		 * interprets such service meta-data. Providing this information
-		 * explicitly, might allow external non-Java applications find services
-		 * based on this endpoint interface.
-		 * 
-		 * @return the non-java interface name
-		 * 
-		 * ### why is this then related to the Java interface? Isnt this part of the EndpointDescription?
-		 */
-		public String getEndpointInterfaceName();
 	}
 
 	/**
@@ -139,7 +125,7 @@ public interface EndpointDescription {
 	 *         collection is never <code>null</code> or empty but contains at
 	 *         least one service interface.
 	 */
-	public List /* <Interface> */getInterfaceDescriptions();
+	public List /* <InterfaceDescription> */getInterfaceDescriptions();
 
 	/**
 	 * Returns the URI of the service location of this endpoint. 

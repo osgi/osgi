@@ -21,7 +21,7 @@ public interface RemoteServiceAdminListener {
 	 * @param reg
 	 *            The associated import registration
 	 */
-	void addImport(ImportRegistration reg);
+	void addedImport(ImportRegistration reg);
 
 	/**
 	 * Add an export registration. The Remote Services Admin will call this
@@ -32,7 +32,7 @@ public interface RemoteServiceAdminListener {
 	 * @param reg
 	 *            The associated export registration
 	 */
-	void addExport(ExportRegistration reg);
+	void addedExport(ExportRegistration reg);
 
 	/**
 	 * Remove an export registration. The Remote Services Admin will call this
@@ -41,7 +41,7 @@ public interface RemoteServiceAdminListener {
 	 * @param reg
 	 *            The associated export registration
 	 */
-	void removeExport(ExportRegistration reg);
+	void removedExport(ExportRegistration reg);
 
 	/**
 	 * Remove an export registration. The Remote Services Admin will call this
@@ -50,7 +50,7 @@ public interface RemoteServiceAdminListener {
 	 * @param reg
 	 *            The associated import registration
 	 */
-	void removeImport(ImportRegistration reg);
+	void removedImport(ImportRegistration reg);
 	
 	
 }
