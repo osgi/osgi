@@ -20,11 +20,11 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import org.osgi.service.blueprint.container.Converter;
-import org.osgi.service.blueprint.container.CollapsedType;
+import org.osgi.service.blueprint.container.ReifiedType;
 
 public class HashSetConverter implements Converter {
 
-    public Object convert(Object source, CollapsedType toType) throws Exception {
+    public Object convert(Object source, ReifiedType toType) throws Exception {
         if (source instanceof Collection && toType.getRawClass() == HashSet.class) {
             return new HashSet((Collection)source);
         }
@@ -32,7 +32,7 @@ public class HashSetConverter implements Converter {
         throw new Exception("Unconvertable object type");
     }
 
-    public boolean canConvert(Object value, CollapsedType toType) {
+    public boolean canConvert(Object value, ReifiedType toType) {
         return toType.getRawClass() == HashSet.class && value instanceof Collection;
     }
 }

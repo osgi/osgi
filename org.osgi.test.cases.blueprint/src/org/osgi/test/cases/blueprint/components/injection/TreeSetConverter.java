@@ -20,10 +20,10 @@ import java.util.Collection;
 import java.util.TreeSet;
 
 import org.osgi.service.blueprint.container.Converter;
-import org.osgi.service.blueprint.container.CollapsedType;
+import org.osgi.service.blueprint.container.ReifiedType;
 
 public class TreeSetConverter implements Converter {
-    public Object convert(Object source, CollapsedType toType) throws Exception {
+    public Object convert(Object source, ReifiedType toType) throws Exception {
         if (source instanceof Collection && toType.getRawClass() == TreeSet.class) {
             return new TreeSet((Collection)source);
         }
@@ -31,7 +31,7 @@ public class TreeSetConverter implements Converter {
         throw new Exception("Unconvertable object type");
     }
 
-    public boolean canConvert(Object value, CollapsedType toType) {
+    public boolean canConvert(Object value, ReifiedType toType) {
         return toType.getRawClass() == TreeSet.class && value instanceof Collection;
     }
 }

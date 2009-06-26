@@ -17,7 +17,7 @@
 package org.osgi.test.cases.blueprint.components.injection;
 
 import org.osgi.service.blueprint.container.Converter;
-import org.osgi.service.blueprint.container.CollapsedType;
+import org.osgi.service.blueprint.container.ReifiedType;
 
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 
@@ -40,7 +40,7 @@ public class ConversionServiceComponent extends BaseTestComponent {
      */
     public void setConversion(String value) throws Exception {
         // convert this to a boolean for assignment.
-        setPropertyValue("conversion", blueprintConverter.convert(value, new CollapsedType(Boolean.class)), Boolean.class);
+        setPropertyValue("conversion", blueprintConverter.convert(value, new ReifiedType(Boolean.class)), Boolean.class);
     }
 }
 

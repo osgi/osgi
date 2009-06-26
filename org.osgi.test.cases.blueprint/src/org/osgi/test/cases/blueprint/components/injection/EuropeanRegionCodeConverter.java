@@ -17,7 +17,7 @@
 package org.osgi.test.cases.blueprint.components.injection;
 
 import org.osgi.service.blueprint.container.Converter;
-import org.osgi.service.blueprint.container.CollapsedType;
+import org.osgi.service.blueprint.container.ReifiedType;
 import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 
@@ -26,7 +26,7 @@ public class EuropeanRegionCodeConverter extends BaseTestComponent implements Co
     public EuropeanRegionCodeConverter(String compId) {
         super(compId);
     }
-    public Object convert(Object source, CollapsedType toType) throws Exception {
+    public Object convert(Object source, ReifiedType toType) throws Exception {
         Class toClass = (Class)toType.getRawClass();
         AssertionService.sendEvent(this, AssertionService.METHOD_CALLED);
         if (source instanceof String && (RegionCode.class.isAssignableFrom(toClass) && toClass.isAssignableFrom(EuropeanRegionCode.class))) {
@@ -36,7 +36,7 @@ public class EuropeanRegionCodeConverter extends BaseTestComponent implements Co
         throw new Exception("Unconvertable object type");
     }
 
-    public boolean canConvert(Object value, CollapsedType toType) {
+    public boolean canConvert(Object value, ReifiedType toType) {
         Class toClass = (Class)toType.getRawClass();
         return (RegionCode.class.isAssignableFrom(toClass) && toClass.isAssignableFrom(EuropeanRegionCode.class)) && value instanceof String;
     }

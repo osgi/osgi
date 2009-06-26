@@ -21,7 +21,7 @@ import org.osgi.framework.BundleContext;
 
 import org.osgi.service.blueprint.container.BlueprintContainer;
 import org.osgi.service.blueprint.container.Converter;
-import org.osgi.service.blueprint.container.CollapsedType;
+import org.osgi.service.blueprint.container.ReifiedType;
 import org.osgi.service.blueprint.reflect.BeanMetadata;
 
 import org.osgi.test.cases.blueprint.components.comp1.SimpleTestComponent;
