@@ -75,7 +75,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 
 	private String getFrameworkFactoryClassName() throws IOException {
 		BundleContext context = getBundleContextWithoutFail();
-		URL factoryService = context == null ? this.getClass().getResource(FRAMEWORK_FACTORY) : context.getBundle(0).getEntry(FRAMEWORK_FACTORY);
+        URL factoryService = context == null ? this.getClass().getResource(FRAMEWORK_FACTORY) : context.getBundle(0).getEntry(FRAMEWORK_FACTORY);
 		assertNotNull("Could not locate: " + FRAMEWORK_FACTORY, factoryService);
 		return getClassName(factoryService);
 
@@ -119,7 +119,9 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 	private Class loadFrameworkClass(String className)
 			throws ClassNotFoundException {
 		BundleContext context = getBundleContextWithoutFail();
-		return context == null ? Class.forName(className) : getContext().getBundle(0).loadClass(className);
+System.out.println("+++ LOAD " + className);
+System.out.println("+++ CLASS " + getContext().getBundle(0).loadClass(className));
+        return context == null ? Class.forName(className) : getContext().getBundle(0).loadClass(className);
 	}
 
 	private BundleContext getBundleContextWithoutFail() {
@@ -229,8 +231,11 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 	private void stopFramework(Framework framework) {
 		int previousState = framework.getState();
 		try {
-			framework.stop();
+System.out.println("+++ HERE1");
+            framework.stop();
+System.out.println("+++ HERE2");
 			FrameworkEvent event = framework.waitForStop(10000);
+System.out.println("+++ HERE3");
 			assertNotNull("FrameworkEvent is null", event);
 			assertEquals("Wrong event type", FrameworkEvent.STOPPED, event.getType());
 			assertNull("BundleContext is not null after stop", framework.getBundleContext());
@@ -323,13 +328,18 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 	}
 
 	public void testBasicCreate() {
+        System.out.println("+++ " + getName());
+        System.out.println("+++ " + getConfiguration(getName()));
 		createFramework(getConfiguration(getName()));
 	}
 
 	public void testInitStop() {
 		Framework framework = createFramework(getConfiguration(getName()));
-		initFramework(framework);
+System.out.println("+++ INIT");
+        initFramework(framework);
+System.out.println("+++ STOPPING");
 		stopFramework(framework);
+System.out.println("+++ STOPPED");
 	}
 
 	public void testStartStop() {
@@ -342,19 +352,26 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		Framework framework = createFramework(getConfiguration(getName()));
 		// first stop without init/start
 		stopFramework(framework);
-
+System.out.println("+++ RESTARTS 1");
 		// first start/stop
 		startFramework(framework);
+System.out.println("+++ RESTARTS 2");
 		stopFramework(framework);
+System.out.println("+++ RESTARTS 3");
 
 		// now init/stop
 		initFramework(framework);
+System.out.println("+++ RESTARTS 4");
 		stopFramework(framework);
+System.out.println("+++ RESTARTS 5");
 
 		// now init/start/stop
 		initFramework(framework);
+System.out.println("+++ RESTARTS 6");
 		startFramework(framework);
+System.out.println("+++ RESTARTS 7");
 		stopFramework(framework);
+System.out.println("+++ RESTARTS 8");
 	}
 
 	public void testUpdate() {
@@ -408,9 +425,9 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 			assertNotNull("PackageAdmin", getService(framework, PACKAGE_ADMIN));
 		if (hasStartLevel)
 			assertNotNull("StartLevel", getService(framework, STARTLEVEL));
-		if (hasPackageAdmin)
+		if (hasPermissionAdmin)
 			assertNotNull("PermissionAdmin", getService(framework, PERMISSION_ADMIN));
-		if (hasPackageAdmin)
+		if (hasCondPermAdmin)
 			assertNotNull("ConditionalPermissionAdmin", getService(framework, CONDPERM_ADMIN));
 		stopFramework(framework);
 	}
@@ -513,7 +530,9 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		startFramework(framework);
 		FrameworkEvent event = null;
 		try {
-			event = framework.waitForStop(1000);
+System.out.println("+++ WAITING FOR STOP");
+            event = framework.waitForStop(1000);
+System.out.println("+++ WAITED FOR STOP");
 		}
 		catch (InterruptedException e) {
 			fail("Unexpected interuption", e);
