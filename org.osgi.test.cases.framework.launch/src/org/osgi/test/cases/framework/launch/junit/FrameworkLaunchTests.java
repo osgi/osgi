@@ -119,8 +119,6 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 	private Class loadFrameworkClass(String className)
 			throws ClassNotFoundException {
 		BundleContext context = getBundleContextWithoutFail();
-System.out.println("+++ LOAD " + className);
-System.out.println("+++ CLASS " + getContext().getBundle(0).loadClass(className));
         return context == null ? Class.forName(className) : getContext().getBundle(0).loadClass(className);
 	}
 
@@ -231,11 +229,8 @@ System.out.println("+++ CLASS " + getContext().getBundle(0).loadClass(className)
 	private void stopFramework(Framework framework) {
 		int previousState = framework.getState();
 		try {
-System.out.println("+++ HERE1");
             framework.stop();
-System.out.println("+++ HERE2");
 			FrameworkEvent event = framework.waitForStop(10000);
-System.out.println("+++ HERE3");
 			assertNotNull("FrameworkEvent is null", event);
 			assertEquals("Wrong event type", FrameworkEvent.STOPPED, event.getType());
 			assertNull("BundleContext is not null after stop", framework.getBundleContext());
@@ -328,18 +323,13 @@ System.out.println("+++ HERE3");
 	}
 
 	public void testBasicCreate() {
-        System.out.println("+++ " + getName());
-        System.out.println("+++ " + getConfiguration(getName()));
 		createFramework(getConfiguration(getName()));
 	}
 
 	public void testInitStop() {
 		Framework framework = createFramework(getConfiguration(getName()));
-System.out.println("+++ INIT");
         initFramework(framework);
-System.out.println("+++ STOPPING");
 		stopFramework(framework);
-System.out.println("+++ STOPPED");
 	}
 
 	public void testStartStop() {
@@ -352,26 +342,18 @@ System.out.println("+++ STOPPED");
 		Framework framework = createFramework(getConfiguration(getName()));
 		// first stop without init/start
 		stopFramework(framework);
-System.out.println("+++ RESTARTS 1");
 		// first start/stop
 		startFramework(framework);
-System.out.println("+++ RESTARTS 2");
 		stopFramework(framework);
-System.out.println("+++ RESTARTS 3");
 
 		// now init/stop
 		initFramework(framework);
-System.out.println("+++ RESTARTS 4");
 		stopFramework(framework);
-System.out.println("+++ RESTARTS 5");
 
 		// now init/start/stop
 		initFramework(framework);
-System.out.println("+++ RESTARTS 6");
 		startFramework(framework);
-System.out.println("+++ RESTARTS 7");
 		stopFramework(framework);
-System.out.println("+++ RESTARTS 8");
 	}
 
 	public void testUpdate() {
@@ -530,9 +512,7 @@ System.out.println("+++ RESTARTS 8");
 		startFramework(framework);
 		FrameworkEvent event = null;
 		try {
-System.out.println("+++ WAITING FOR STOP");
             event = framework.waitForStop(1000);
-System.out.println("+++ WAITED FOR STOP");
 		}
 		catch (InterruptedException e) {
 			fail("Unexpected interuption", e);
