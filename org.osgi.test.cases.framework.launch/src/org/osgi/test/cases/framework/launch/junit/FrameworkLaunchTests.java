@@ -456,7 +456,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		configuration.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, pkg1 + ',' + pkg2);
 		Framework framework = createFramework(configuration);
 
-		initFramework(framework);
+		startFramework(framework);
 		ExportedPackage ep1 = null, ep2 = null;
 		PackageAdmin pa = (PackageAdmin) getService(framework, PACKAGE_ADMIN);
 		if (pa != null) {
