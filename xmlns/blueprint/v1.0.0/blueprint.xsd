@@ -293,7 +293,7 @@
                 <xsd:attribute name="activation" use="prohibited"/>
                 <xsd:attribute name="class" type="Tclass" />
                 <xsd:attribute name="init-method" type="Tmethod" />
-                <xsd:attribute name="destroy-method" type="Tmethod"/>
+                <xsd:attribute name="destroy-method" use="prohibited"/>
                 <xsd:attribute name="factory-method" type="Tmethod" />
                 <xsd:attribute name="factory-ref" type="Tidref" />
                 <xsd:attribute name="scope" fixed="prototype" type="Tscope"/>
