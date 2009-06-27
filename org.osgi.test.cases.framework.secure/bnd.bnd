@@ -32,6 +32,8 @@ Include-Resource = \
 	fragments.tb19.jar, \
 	lifecycle.tb5.jar, \
 	lifecycle.tb10.jar, \
+	permissions.admin1.jar, \
+	permissions.admin2.jar, \
 	permissions.exporter1.jar, \
 	permissions.exporter2.jar, \
 	permissions.get.jar, \

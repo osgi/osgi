@@ -1,0 +1,14 @@
+Bundle-SymbolicName: ${p}.permissions.admin1
+Bundle-Name: ${p}.permissions.admin1
+Bundle-Description: AdminPermission Test Bundle 1
+Bundle-Activator: ${p}.permissions.admin1.Activator
+Bundle-Version: 1.0
+Bundle-Category: osgi,test
+
+Private-Package	= \
+	${p}.permissions.admin1	
+Include-Resource: \
+	{OSGI-INF/permissions.perm=perms/permissions.admin1.perm}	
+	
+-sign: test
+	
