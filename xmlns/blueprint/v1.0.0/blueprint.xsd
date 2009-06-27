@@ -411,7 +411,7 @@
                 <xsd:attribute name="id" use="prohibited"/>
                 <xsd:attribute name="depends-on" type="TdependsOn" use="optional"/>
                 <xsd:attribute name="activation" use="prohibited"/>
-                <xsd:attribute name="interface" type="Tclass" use="required"/>
+                <xsd:attribute name="interface" type="Tclass" use="optional"/>
                 <xsd:attribute name="filter" type="xsd:normalizedString" use="optional"/>
                 <xsd:attribute name="component-name" type="Tidref" use="optional"/>
                 <xsd:attribute name="availability" type="Tavailability" use="optional"/>
@@ -473,7 +473,7 @@
                 <xsd:attribute name="id" use="prohibited"/>
                 <xsd:attribute name="depends-on" type="TdependsOn" use="optional"/>
                 <xsd:attribute name="activation" use="prohibited"/>
-                <xsd:attribute name="interface" type="Tclass" use="required"/>
+                <xsd:attribute name="interface" type="Tclass" use="optional"/>
                 <xsd:attribute name="filter" type="xsd:normalizedString" use="optional"/>
                 <xsd:attribute name="component-name" type="Tidref" use="optional"/>
                 <xsd:attribute name="availability" type="Tavailability" use="optional"/>
@@ -500,7 +500,7 @@
                     <xsd:group ref="serviceReferenceElements"/>
                 </xsd:sequence>
 
-                <xsd:attribute name="interface" use="required" type="Tclass" />
+                <xsd:attribute name="interface" use="optional" type="Tclass" />
                 <xsd:attribute name="filter" use="optional" type="xsd:normalizedString">
                     <xsd:annotation>
                         <xsd:documentation>
