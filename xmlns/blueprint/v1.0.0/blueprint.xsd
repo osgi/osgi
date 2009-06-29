@@ -72,7 +72,7 @@
             </xsd:annotation>
         </xsd:attribute>
 
-        <xsd:attribute name="depends-on" type="TdependsOn" use="optional">
+        <xsd:attribute name="depends-on" type="TdependsOn">
             <xsd:annotation>
                 <xsd:documentation>
                   <![CDATA[
@@ -286,13 +286,13 @@
             <xsd:restriction base="Tbean">
                 <xsd:group ref="beanElements" />
                 <xsd:attribute name="id" use="prohibited"/>
-                <xsd:attribute name="depends-on" />
+                <xsd:attribute name="depends-on" type="TdependsOn"/>
                 <xsd:attribute name="activation" use="prohibited" fixed="lazy"/>
-                <xsd:attribute name="class" />
-                <xsd:attribute name="init-method" />
+                <xsd:attribute name="class" type="Tclass"/>
+                <xsd:attribute name="init-method" type="Tmethod"/>
                 <xsd:attribute name="destroy-method" use="prohibited"/>
-                <xsd:attribute name="factory-method" />
-                <xsd:attribute name="factory-ref" />
+                <xsd:attribute name="factory-method" type="Tmethod"/>
+                <xsd:attribute name="factory-ref" type="Tidref"/>
                 <xsd:attribute name="scope" use="prohibited" fixed="prototype" />
                 <xsd:anyAttribute namespace="##other" processContents="strict" />
             </xsd:restriction>
@@ -385,7 +385,7 @@
                 <xsd:sequence>
                     <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="strict" />
                 </xsd:sequence>
-                <xsd:attribute name="timeout" use="optional" type="Ttimeout" />
+                <xsd:attribute name="timeout" type="Ttimeout" />
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
@@ -406,13 +406,13 @@
                     <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="strict" />
                 </xsd:sequence>
                 <xsd:attribute name="id" use="prohibited"/>
-                <xsd:attribute name="depends-on" />
+                <xsd:attribute name="depends-on" type="TdependsOn"/>
                 <xsd:attribute name="activation" use="prohibited" fixed="lazy"/>
-                <xsd:attribute name="interface" />
-                <xsd:attribute name="filter" />
-                <xsd:attribute name="component-name" />
-                <xsd:attribute name="availability" />
-                <xsd:attribute name="timeout" />
+                <xsd:attribute name="interface" type="Tclass"/>
+                <xsd:attribute name="filter" type="xsd:normalizedString"/>
+                <xsd:attribute name="component-name" type="Tidref"/>
+                <xsd:attribute name="availability" type="Tavailability"/>
+                <xsd:attribute name="timeout" type="Ttimeout"/>
                 <xsd:anyAttribute namespace="##other" processContents="strict" />
             </xsd:restriction>
         </xsd:complexContent>
@@ -435,7 +435,7 @@
                 <xsd:sequence>
                     <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="strict" />
                 </xsd:sequence>
-                <xsd:attribute name="member-type" type="Tservice-use" use="optional" default="service-object">
+                <xsd:attribute name="member-type" type="Tservice-use" default="service-object">
                     <xsd:annotation>
                         <xsd:documentation>
                           <![CDATA[
@@ -468,13 +468,13 @@
                     <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="strict" />
                 </xsd:sequence>
                 <xsd:attribute name="id" use="prohibited"/>
-                <xsd:attribute name="depends-on" />
+                <xsd:attribute name="depends-on" type="TdependsOn"/>
                 <xsd:attribute name="activation" use="prohibited" fixed="lazy" />
-                <xsd:attribute name="interface" />
-                <xsd:attribute name="filter" />
-                <xsd:attribute name="component-name" />
-                <xsd:attribute name="availability" />
-                <xsd:attribute name="member-type" />
+                <xsd:attribute name="interface" type="Tclass"/>
+                <xsd:attribute name="filter" type="xsd:normalizedString"/>
+                <xsd:attribute name="component-name" type="Tidref"/>
+                <xsd:attribute name="availability" type="Tavailability"/>
+                <xsd:attribute name="member-type" type="Tservice-use" default="service-object"/>
                 <xsd:anyAttribute namespace="##other" processContents="strict" />
             </xsd:restriction>
         </xsd:complexContent>
@@ -497,7 +497,7 @@
                     <xsd:group ref="serviceReferenceElements"/>
                 </xsd:sequence>
 
-                <xsd:attribute name="interface" use="optional" type="Tclass">
+                <xsd:attribute name="interface" type="Tclass">
                     <xsd:annotation>
                         <xsd:documentation>
                           <![CDATA[
@@ -508,7 +508,7 @@
                         </xsd:documentation>
                     </xsd:annotation>
                 </xsd:attribute>
-                <xsd:attribute name="filter" use="optional" type="xsd:normalizedString">
+                <xsd:attribute name="filter" type="xsd:normalizedString">
                     <xsd:annotation>
                         <xsd:documentation>
                           <![CDATA[
@@ -518,7 +518,7 @@
                         </xsd:documentation>
                     </xsd:annotation>
                 </xsd:attribute>
-                <xsd:attribute name="component-name" type="Tidref" use="optional">
+                <xsd:attribute name="component-name" type="Tidref">
                     <xsd:annotation>
                         <xsd:documentation>
                           <![CDATA[
@@ -528,7 +528,7 @@
                         </xsd:documentation>
                     </xsd:annotation>
                 </xsd:attribute>
-                <xsd:attribute name="availability" type="Tavailability" use="optional">
+                <xsd:attribute name="availability" type="Tavailability">
                     <xsd:annotation>
                         <xsd:documentation>
                           <![CDATA[
@@ -584,9 +584,9 @@
         <xsd:sequence>
             <xsd:group ref="targetComponent" minOccurs="0"/>
         </xsd:sequence>
-        <xsd:attribute name="ref" type="Tidref" use="optional" />
-        <xsd:attribute name="bind-method" type="Tmethod" use="optional" />
-        <xsd:attribute name="unbind-method" type="Tmethod" use="optional" />
+        <xsd:attribute name="ref" type="Tidref"/>
+        <xsd:attribute name="bind-method" type="Tmethod"/>
+        <xsd:attribute name="unbind-method" type="Tmethod"/>
     </xsd:complexType>
 
     <xsd:simpleType name="Tactivation">
@@ -638,7 +638,7 @@
                 <xsd:sequence>
                     <xsd:group ref="serviceElements" />
                 </xsd:sequence>
-                <xsd:attribute name="interface" type="Tclass" use="optional">
+                <xsd:attribute name="interface" type="Tclass">
                     <xsd:annotation>
                         <xsd:documentation>
                           <![CDATA[
@@ -647,7 +647,7 @@
                         </xsd:documentation>
                     </xsd:annotation>
                 </xsd:attribute>
-                <xsd:attribute name="ref" type="Tidref" use="optional">
+                <xsd:attribute name="ref" type="Tidref">
                     <xsd:annotation>
                         <xsd:documentation>
                           <![CDATA[
@@ -698,12 +698,12 @@
                     <xsd:group ref="serviceElements" />
                 </xsd:sequence>
                 <xsd:attribute name="id" use="prohibited"/>
-                <xsd:attribute name="depends-on"/>
+                <xsd:attribute name="depends-on" type="TdependsOn"/>
                 <xsd:attribute name="activation" use="prohibited" fixed="lazy"/>
-                <xsd:attribute name="interface"/>
-                <xsd:attribute name="ref"/>
-                <xsd:attribute name="auto-export"/>
-                <xsd:attribute name="ranking"/>
+                <xsd:attribute name="interface" type="Tclass"/>
+                <xsd:attribute name="ref" type="Tidref"/>
+                <xsd:attribute name="auto-export" type="TautoExportModes" default="disabled"/>
+                <xsd:attribute name="ranking" type="xsd:int" default="0"/>
                 <xsd:anyAttribute namespace="##other" processContents="strict" />
             </xsd:restriction>
         </xsd:complexContent>
@@ -797,9 +797,9 @@
         <xsd:sequence>
             <xsd:group ref="targetComponent" minOccurs="0"/>
         </xsd:sequence>
-        <xsd:attribute name="ref" type="Tidref" use="optional" />
-        <xsd:attribute name="registration-method" type="Tmethod" use="optional" />
-        <xsd:attribute name="unregistration-method" type="Tmethod" use="optional" />
+        <xsd:attribute name="ref" type="Tidref"/>
+        <xsd:attribute name="registration-method" type="Tmethod"/>
+        <xsd:attribute name="unregistration-method" type="Tmethod"/>
     </xsd:complexType>
 
     <!--
@@ -885,7 +885,7 @@
               ]]>
             </xsd:documentation>
         </xsd:annotation>
-        <xsd:attribute name="type" type="Ttype" use="optional" />
+        <xsd:attribute name="type" type="Ttype"/>
     </xsd:complexType>
 
     <!-- Collection Values -->
@@ -944,7 +944,7 @@
             </xsd:documentation>
         </xsd:annotation>
         <xsd:attribute name="key" type="TstringValue" use="required" />
-        <xsd:attribute name="value" type="TstringValue" use="optional" />
+        <xsd:attribute name="value" type="TstringValue"/>
     </xsd:complexType>
 
     <!-- 'map' element type -->
@@ -1028,7 +1028,7 @@
             <xsd:group ref="value" minOccurs="0"/>
         </xsd:sequence>
         <xsd:attribute name="key" type="TstringValue" use="required" />
-        <xsd:attribute name="value" type="TstringValue" use="optional" />
+        <xsd:attribute name="value" type="TstringValue"/>
     </xsd:complexType>
 
     <!-- General types -->
