@@ -18,6 +18,7 @@ package org.osgi.test.cases.blueprint.components.injection;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.SortedSet;
@@ -175,6 +176,14 @@ public class PropertyInjection extends BaseTestComponent {
         setPropertyValue("collection", value, Collection.class);
     }
 
+    public void setCollectionSubType(CollectionSubType value) {
+        setPropertyValue("collectionSubType", value, CollectionSubType.class);
+    }
+
+    public void setMapSubType(MapSubType value) {
+        setPropertyValue("mapSubType", value, MapSubType.class);
+    }
+
     public void setCollectionSubTypeImpl(CollectionSubTypeImpl value) {
         setPropertyValue("collectionSubTypeImpl", value, CollectionSubTypeImpl.class);
     }
@@ -185,6 +194,18 @@ public class PropertyInjection extends BaseTestComponent {
 
     public void setDictionarySubTypeImpl(DictionarySubTypeImpl value) {
         setPropertyValue("dictionarySubTypeImpl", value, DictionarySubTypeImpl.class);
+    }
+
+    public void setBadCollectionSubTypeImpl(BadCollectionSubTypeImpl value) {
+        setPropertyValue("badCollectionSubTypeImpl", value, CollectionSubTypeImpl.class);
+    }
+
+    public void setBadMapSubTypeImpl(BadMapSubTypeImpl value) {
+        setPropertyValue("badMapSubTypeImpl", value, MapSubTypeImpl.class);
+    }
+
+    public void setBadDictionarySubTypeImpl(BadDictionarySubTypeImpl value) {
+        setPropertyValue("badDictionarySubTypeImpl", value, DictionarySubTypeImpl.class);
     }
 
     public void setSortedSet(SortedSet value) {
@@ -364,6 +385,9 @@ public class PropertyInjection extends BaseTestComponent {
         setPropertyValue("regionCodeArray", v, RegionCode[].class);
     }
 
+    public void setBitSet(BitSet v) {
+        setPropertyValue("bitSet", v, BitSet.class);
+    }
 
     // End of insertion of array property
 

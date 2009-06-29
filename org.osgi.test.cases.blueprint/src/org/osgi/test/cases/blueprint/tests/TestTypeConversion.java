@@ -47,8 +47,8 @@ public class TestTypeConversion extends DefaultTestBundleControl {
      * Tests the blueprint converter service with variations non-generic based conversions.
      */
     public void testBlueprintConverter() throws Exception {
-        // this should just be the standard error set
-        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+        // this should just be the standard test set
+        StandardTestController controller = new StandardTestController(getContext(),
                 getWebServer()+"www/blueprintConverter_checker.jar");
 
         // validation is all done in the component code
@@ -130,6 +130,139 @@ public class TestTypeConversion extends DefaultTestBundleControl {
         startEvents.validateComponentProperty("primDoubleToInteger", "integer", new Integer(1), Integer.TYPE);
         startEvents.validateComponentProperty("primFloatToInteger", "integer", new Integer(1), Integer.TYPE);
 
+        controller.run();
+    }
+
+    /*
+     * Test an array target with a non-array or collection source.
+     */
+    public void testArrayTargetBadSource() throws Exception {
+        // this should just be the standard test set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+                getWebServer()+"www/error_array_target_bad_source.jar");
+
+        // validation is all done in the component code
+        controller.run();
+    }
+
+
+    /*
+     * Test an array target with a bad element conversion
+     */
+    public void testArrayTargetBadElement() throws Exception {
+        // this should just be the standard test set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+                getWebServer()+"www/error_array_target_bad_element.jar");
+
+        // validation is all done in the component code
+        controller.run();
+    }
+
+    /*
+     * Test a collection target with a non-array or collection source
+     */
+    public void testCollectionTargetBadSource() throws Exception {
+        // this should just be the standard test set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+                getWebServer()+"www/error_collection_target_bad_source.jar");
+
+        // validation is all done in the component code
+        controller.run();
+    }
+
+    /*
+     * Test a collection target with a custom interface only target type
+     */
+    public void testCollectionTargetInterfaceOnly() throws Exception {
+        // this should just be the standard test set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+                getWebServer()+"www/error_collection_target_interface_only.jar");
+
+        // validation is all done in the component code
+        controller.run();
+    }
+
+    /*
+     * Test a collection target with a custom target type without a no-arg constructor
+     */
+    public void testCollectionTargetBadSubType() throws Exception {
+        // this should just be the standard test set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+                getWebServer()+"www/error_collection_target_bad_subtype.jar");
+
+        // validation is all done in the component code
+        controller.run();
+    }
+
+    /*
+     * Test a map target with a non-map, non-dictionary source
+     */
+    public void testMapTargetBadSource() throws Exception {
+        // this should just be the standard test set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+                getWebServer()+"www/error_map_target_bad_source.jar");
+
+        // validation is all done in the component code
+        controller.run();
+    }
+
+    /*
+     * Test a map target with an interface only target type
+     */
+    public void testMapTargetInterfaceOnly() throws Exception {
+        // this should just be the standard test set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+                getWebServer()+"www/error_map_target_interface_only.jar");
+
+        // validation is all done in the component code
+        controller.run();
+    }
+
+    /*
+     * Test a map target with a target type without a no-arg constructor
+     */
+    public void testMapTargetBadSubType() throws Exception {
+        // this should just be the standard test set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+                getWebServer()+"www/error_map_target_bad_subtype.jar");
+
+        // validation is all done in the component code
+        controller.run();
+    }
+
+    /*
+     * Test a dictionary target with a target type without a no-arg constructor
+     */
+    public void testDictionaryTargetBadSubType() throws Exception {
+        // this should just be the standard test set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+                getWebServer()+"www/error_dictionary_target_bad_subtype.jar");
+
+        // validation is all done in the component code
+        controller.run();
+    }
+
+    /*
+     * Test non-String source object to terminate the conversion searches
+     */
+    public void testNonStringSource() throws Exception {
+        // this should just be the standard test set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+                getWebServer()+"www/error_non_string_source.jar");
+
+        // validation is all done in the component code
+        controller.run();
+    }
+
+    /*
+     * Test String, but no conversion strategy for the target
+     */
+    public void testStringSourceNoConstructor() throws Exception {
+        // this should just be the standard test set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+                getWebServer()+"www/error_string_source_no_constructor.jar");
+
+        // validation is all done in the component code
         controller.run();
     }
 }
