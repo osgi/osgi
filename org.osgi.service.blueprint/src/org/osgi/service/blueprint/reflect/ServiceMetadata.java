@@ -22,7 +22,7 @@ import java.util.List;
  * Metadata representing a service to be exported by a module context.
  * 
  */
-public interface ServiceMetadata extends ComponentMetadata, Target {
+public interface ServiceMetadata extends ComponentMetadata {
 
 	/**
 	 * Do not auto-detect types for advertised service interfaces
