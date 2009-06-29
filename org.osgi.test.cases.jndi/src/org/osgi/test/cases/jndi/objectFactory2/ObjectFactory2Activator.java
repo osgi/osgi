@@ -21,6 +21,7 @@ import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.test.cases.jndi.provider.CTObjectFactory;
 
@@ -37,13 +38,17 @@ public class ObjectFactory2Activator implements BundleActivator {
 		Hashtable props2 = new Hashtable();
 		
 		props1.put("osgi.jndi.serviceName", "CTObjectFactory");
+		props1.put(Constants.SERVICE_RANKING, new Integer(3));
 		props2.put("osgi.jndi.serviceName", "CTObjectFactory");
+		props2.put(Constants.SERVICE_RANKING, new Integer(2));
 		
-		Hashtable env = new Hashtable();
-		env.put("test", "This is the right objectFactory");
+		Hashtable env1 = new Hashtable();
+		env1.put("test1", "test1");
+		Hashtable env2 = new Hashtable();
+		env2.put("test2", "test2");
 		
-		CTObjectFactory of1 = new CTObjectFactory(env);
-		CTObjectFactory of2 = new CTObjectFactory();
+		CTObjectFactory of1 = new CTObjectFactory(env1);
+		CTObjectFactory of2 = new CTObjectFactory(env2);
 		
 		sr1 = context.registerService(CTObjectFactory.class.getName(), of1, props1);
 		sr2 = context.registerService(CTObjectFactory.class.getName(), of2, props2);

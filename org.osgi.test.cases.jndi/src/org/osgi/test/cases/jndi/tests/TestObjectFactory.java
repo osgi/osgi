@@ -123,7 +123,7 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 		InitialContext ctx = new InitialContext();
 		CTObjectFactory of = (CTObjectFactory) ctx.lookup("osgi:services/org.osgi.test.cases.jndi.provider.CTObjectFactory");
 		Hashtable ofEnv = of.getEnvironment();
-		if (!ofEnv.containsKey("test")) {
+		if (!ofEnv.containsKey("test1")) {
 			uninstallBundle(testBundle);
 			fail("The right context was not returned");
 		}

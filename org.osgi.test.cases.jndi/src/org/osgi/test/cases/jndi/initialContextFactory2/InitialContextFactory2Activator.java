@@ -23,6 +23,7 @@ import javax.naming.spi.InitialContextFactory;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.test.cases.jndi.provider.CTInitialContextFactory;
 
@@ -39,14 +40,18 @@ public class InitialContextFactory2Activator implements BundleActivator {
 		Hashtable props2 = new Hashtable();
 		String[] interfaces ={CTInitialContextFactory.class.getName(), InitialContextFactory.class.getName()};
 		
-		props1.put("osgi.jndi.serviceName", "CTInitialContextFactory");
+		props1.put("osgi.jndi.serviceName", "CTInitialContextFactory"); 
+		props1.put(Constants.SERVICE_RANKING, new Integer(3));
 		props2.put("osgi.jndi.serviceName", "CTInitialContextFactory");
+		props2.put(Constants.SERVICE_RANKING, new Integer(2));
 		
-		Hashtable env = new Hashtable();
-		env.put("test", "This is the right initialContextFactory");
+		Hashtable env1 = new Hashtable();
+		Hashtable env2 = new Hashtable();
+		env1.put("test1", "test1");
+		env2.put("test2", "test2");
 		
-		CTInitialContextFactory ctf1 = new CTInitialContextFactory(env);
-		CTInitialContextFactory ctf2 = new CTInitialContextFactory();
+		CTInitialContextFactory ctf1 = new CTInitialContextFactory(env1);
+		CTInitialContextFactory ctf2 = new CTInitialContextFactory(env2);
 		
 		sr1 = context.registerService(interfaces, ctf1, props1);
 		sr2 = context.registerService(interfaces, ctf2, props2);

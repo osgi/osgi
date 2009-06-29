@@ -128,7 +128,7 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		CTInitialContextFactory ctf = (CTInitialContextFactory) ctx.lookup("osgi:services/org.osgi.test.cases.jndi.provider.CTInitialContextFactory");
 		// Let's grab a context instance and check the environment
 		Hashtable ctxEnv = ctf.getInitialContext(null).getEnvironment();
-		if (!ctxEnv.containsKey("test")) {
+		if (!ctxEnv.containsKey("test1")) {
 			uninstallBundle(testBundle);
 			fail("The right context was not returned");
 		}
