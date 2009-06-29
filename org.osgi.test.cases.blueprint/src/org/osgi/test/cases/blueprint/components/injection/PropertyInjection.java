@@ -353,15 +353,15 @@ public class PropertyInjection extends BaseTestComponent {
     }
 
     public void setRegionCode(RegionCode v) {
-        setPropertyValue("regionCode", arr, RegionCode.class);
+        setPropertyValue("regionCode", v, RegionCode.class);
     }
 
     public void setAsianRegionCode(RegionCode v) {
-        setPropertyValue("asianRegionCode", arr, AsianRegionCode.class);
+        setPropertyValue("asianRegionCode", v, AsianRegionCode.class);
     }
 
     public void setRegionCodeArray(RegionCode[] v) {
-        setPropertyValue("regionCodeArray", arr, RegionCode[].class);
+        setPropertyValue("regionCodeArray", v, RegionCode[].class);
     }
 
 
