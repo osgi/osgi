@@ -577,7 +577,7 @@
         <xsd:sequence>
             <xsd:group ref="targetComponent" minOccurs="0"/>
         </xsd:sequence>
-        <xsd:attribute name="ref" type="xsd:NMTOKEN" use="optional" />
+        <xsd:attribute name="ref" type="Tidref" use="optional" />
         <xsd:attribute name="bind-method" type="Tmethod" use="optional" />
         <xsd:attribute name="unbind-method" type="Tmethod" use="optional" />
     </xsd:complexType>
@@ -764,7 +764,6 @@
             <xsd:group ref="targetComponent" minOccurs="0"/>
         </xsd:sequence>
         <xsd:attribute name="ref" type="Tidref" use="optional" />
-        <!--  ### why are there both required? -->
         <xsd:attribute name="registration-method" type="Tmethod" use="optional" />
         <xsd:attribute name="unregistration-method" type="Tmethod" use="optional" />
     </xsd:complexType>
