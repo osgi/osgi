@@ -993,7 +993,7 @@ public class TestConfigErrors extends DefaultTestBundleControl {
     public void testBlueprintBundleWildcardNoMatch() throws Exception {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
-            getWebServer()+"www/error_wildcard_no_match.jar");
+            getWebServer()+"www/wildcard_no_match.jar");
         controller.run();
     }
 

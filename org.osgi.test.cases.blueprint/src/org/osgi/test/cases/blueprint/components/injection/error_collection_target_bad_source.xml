@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+       Tests the situation of an array target and the source is not convertable to an array
+    </description>
+
+    <bean id="mapToIntArray" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="list">
+            <map>
+                <entry key="abc" value="123" />
+                <entry key="def" value="456" />
+            </map>
+        </property>
+    </bean>
+</blueprint>
+

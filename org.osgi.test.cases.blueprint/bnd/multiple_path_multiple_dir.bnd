@@ -1,0 +1,9 @@
+Bundle-SymbolicName:                     ${p}.multiple_path_multiple_dir
+Bundle-Version:                          4.2
+Import-Package:                          ${p}.components.comp1, ${p}.services
+-resourceonly: true
+Bundle-Blueprint: test1/;test2/
+Include-Resource					= \
+	test1/comp1_named.xml=src/org/osgi/test/cases/blueprint/components/comp1/comp1_named.xml, \
+	test2/comp2_named.xml=src/org/osgi/test/cases/blueprint/components/comp1/comp2_named.xml
+

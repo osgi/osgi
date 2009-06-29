@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+       Tests the where the source is not a string value and no match has been found.
+    </description>
+
+    <bean id="mapToIntArray" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="regionCode">
+            <props>
+                <prop key="abc">123</prop>
+                <prop key="def">456</prop>
+            </props>
+        </property>
+    </bean>
+</blueprint>
+

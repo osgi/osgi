@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+       Last gasp conversion effort.  The source is a string, does not have a builtin conversion, and
+       the target type does not have a single argument constructor that takes a string.
+    </description>
+
+    <bean id="mapToIntArray" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="bitSet" value="1111111"/>
+    </bean>
+</blueprint>
+

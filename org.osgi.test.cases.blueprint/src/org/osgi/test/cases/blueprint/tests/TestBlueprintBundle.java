@@ -145,6 +145,36 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
 
 
     /**
+     * Tests two explicitly directories using a single path section on the header
+     */
+    public void testSinglePathMultipleDir() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/single_path_multiple_dir.jar");
+        MetadataEventSet startEvents = controller.getStartEvents();
+        startEvents.addAssertion("comp1", AssertionService.BEAN_CREATED);
+        startEvents.addAssertion("comp2", AssertionService.BEAN_CREATED);
+        startEvents.validateComponent("comp1", SimpleTestComponent.class);
+        startEvents.validateComponent("comp2", SimpleTestComponent.class);
+        controller.run();
+    }
+
+
+    /**
+     * Tests two explicitly directories using separate paths on the header
+     */
+    public void testMultiplePathMultipleDir() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/multiple_path_multiple_dir.jar");
+        MetadataEventSet startEvents = controller.getStartEvents();
+        startEvents.addAssertion("comp1", AssertionService.BEAN_CREATED);
+        startEvents.addAssertion("comp2", AssertionService.BEAN_CREATED);
+        startEvents.validateComponent("comp1", SimpleTestComponent.class);
+        startEvents.validateComponent("comp2", SimpleTestComponent.class);
+        controller.run();
+    }
+
+
+    /**
      * Tests two explicitly specified config files on the header with attributes or directives
      * included in the syntax.  The multiple paths are part of the same syntactic unit as the
      * directives and attributes rather than being separated by commans.  Both files should be processed
@@ -524,6 +554,17 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         NonBlueprintTestController controller = new NonBlueprintTestController(getContext(),
                 getWebServer()+"www/comp1_dir_no_config.jar");
         // nothing should happen, which is all handled by the controller
+        controller.run();
+    }
+
+
+    /**
+     * test a wild card specification with no matching files is an unmanaged bundle
+     */
+    public void testBlueprintBundleWildcardNoMatch() throws Exception {
+        // this should just be the standard error set
+        NonBlueprintTestController controller = new NonBlueprintTestController(getContext(),
+            getWebServer()+"www/wildcard_no_match.jar");
         controller.run();
     }
 

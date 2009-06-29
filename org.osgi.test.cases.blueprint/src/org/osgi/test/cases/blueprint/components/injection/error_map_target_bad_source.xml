@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+       Tests the situation of a map target and the source is not a map or dictionary subtype
+    </description>
+
+    <bean id="mapToIntArray" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="map">
+            <list>
+                <value>CN+76</value>
+            </list>
+        </property>
+    </bean>
+</blueprint>
+
