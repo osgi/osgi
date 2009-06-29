@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+       Runs a full set of tests from the config files for the different type conversions
+       defined in the blueprint spec.  This mirrors the same tests used to test the
+       blueprintConverter.  These are not exhaustive tests for each item, which are
+       more completely covered in the tests for the specific type categories.
+    </description>
+
+    <!-- some type converters to include converter interactions with the conversions -->
+	<type-converters>
+		<bean id="asianRegionCodeConverter" class="org.osgi.test.cases.blueprint.components.injection.AsianRegionCodeConverter">
+            <argument value="asianRegionCodeConverter"/>
+    	</bean>
+		<!-- NOTE:  order is important here.  The asianRegionCodeConverter should be picked up for both RegionCode and
+		     AsianRegionCode conversions -->
+		<bean id="regionCodeConverter" class="org.osgi.test.cases.blueprint.components.injection.RegionCodeConverter"/>
+	</type-converters>
+
+    <!-- these are some values we'll inject via references to bypass <value> conversion optimizations where possible -->
+    <bean id="europeanRegionCode" class="org.osgi.test.cases.blueprint.components.injection.EuropeanRegionCode">
+        <argument value="UK+24"/>
+    </bean>
+
+    <bean id="IntegerOne" class="java.lang.Integer">
+        <argument value="1"/>
+    </bean>
+
+
+    <!-- Conversion step 1:  assignability test, which does not require explicit conversion -->
+    <bean id="assignableRegionCode" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="regionCode" ref="europeanRegionCode"/>
+    </bean>
+
+    <!-- some simple tests for wrapper/primitive requests -->
+    <bean id="wrapperToPrim" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="primInteger" ref="IntegerOne"/>
+    </bean>
+
+    <bean id="primToWrapper" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="integer">
+            <value type="int">1</value>
+        </property>
+    </bean>
+
+    <!-- Conversion step 2:  Try converters in declaration order.  We'll request a
+         RegionCode, which should be handled by the AsianRegionCode converter.  -->
+    <bean id="convertedRegionCode" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="regionCode" value="CN+90"/>
+    </bean>
+    <!-- a more specific type conversion -->
+    <bean id="convertedAsianRegionCode" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="asianRegionCode" value="CN+94"/>
+    </bean>
+
+    <!-- Conversion step 3:  The target is an array.  The source must be an
+         array or a Collection and the elements must be type convertable. -->
+
+    <!-- String array to an int array -->
+    <bean id="stringArrayToIntArray" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="primIntArray">
+            <array>
+                <value>1</value>
+                <value>2</value>
+            </array>
+        </property>
+    </bean>
+
+    <!-- an unboxing conversion -->
+    <bean id="integerArrayToIntArray" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="primIntArray">
+            <array value-type="java.lang.Integer">
+                <value>1</value>
+                <value>2</value>
+            </array>
+        </property>
+    </bean>
+
+    <!-- and a boxing example -->
+    <bean id="intArrayToIntegerArray" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="wrappedIntArray">
+            <array value-type="int">
+                <value>1</value>
+                <value>2</value>
+            </array>
+        </property>
+    </bean>
+
+    <!-- an array conversion requiring type converter involvement -->
+    <bean id="stringArrayToRegionCodeArray" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="regioncodeArray">
+            <array>
+                <value>CN+76</value>
+            </array>
+        </property>
+    </bean>
+
+    <!-- same set of tests using a list as a source -->
+
+    <!-- String array to an int array -->
+    <bean id="stringListToIntArray" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="primIntArray">
+            <list>
+                <value>1</value>
+                <value>2</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- an unboxing conversion -->
+    <bean id="integerListToIntArray" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="primIntArray">
+            <list value-type="java.lang.Integer">
+                <value>1</value>
+                <value>2</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- an list conversion requiring type converter involvement -->
+    <bean id="stringListToRegionCodeArray" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="regioncodeArray">
+            <list>
+                <value>CN+76</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- Conversion step 4:  The target implements collection.  The source must also be an array or collection. -->
+
+    <!-- list from a string array -->
+    <bean id="stringArrayToList" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="list">
+            <array>
+                <value>1</value>
+                <value>2</value>
+            </array>
+        </property>
+    </bean>
+
+    <!-- list from another list source...we'll use a concrete list target this time to force a conversion -->
+    <bean id="stringListToLinkedList" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="linkedList">
+            <list>
+                <value>1</value>
+                <value>2</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- array to a custom Collection subclass. -->
+    <bean id="stringArrayToCollectionSubTypeImpl" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="collectionSubTypeImpl">
+            <array>
+                <value>1</value>
+                <value>2</value>
+            </array>
+        </property>
+    </bean>
+
+
+    <!-- array of primitives to a list...these will be wrappered -->
+    <bean id="intArrayToList" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="list">
+            <array value-type="int">
+                <value>1</value>
+                <value>2</value>
+            </array>
+        </property>
+    </bean>
+
+
+    <!-- Conversion step 5:  The target implements Map or Dictionary.
+         The source must be a map or dictionary as well. -->
+
+
+    <!-- conversion between map types -->
+    <bean id="mapToTreeMap" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="treeMap">
+            <map>
+                <entry key="abc" value="123" />
+                <entry key="def" value="456" />
+            </map>
+        </property>
+    </bean>
+
+    <!-- convert from map to properties -->
+    <bean id="mapToProperties" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="properties">
+            <map>
+                <entry key="abc" value="123" />
+                <entry key="def" value="456" />
+            </map>
+        </property>
+    </bean>
+
+
+    <!-- convert from a Dictionary to Map -->
+    <bean id="dictionaryToMap" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="treeMap">
+            <props>
+                <prop key="abc">123</prop>
+                <prop key="def">456</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- convert from map to custom map subtype -->
+    <bean id="mapToMapSubType" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="mapSubTypeImpl">
+            <map>
+                <entry key="abc" value="123" />
+                <entry key="def" value="456" />
+            </map>
+        </property>
+    </bean>
+
+    <!-- convert from map to custom Dictionary subtype -->
+    <bean id="mapToDictionarySubType" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="dictionarySubTypeImpl">
+            <map>
+                <entry key="abc" value="123" />
+                <entry key="def" value="456" />
+            </map>
+        </property>
+    </bean>
+
+    <!-- Conversion step 6:  Conversion from wrapper to a primitive type; -->
+
+    <bean id="wrapperToInt" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="primInt">
+            <value type="java.lang.Integer">1</value>
+        </property>
+    </bean>
+
+    <bean id="wrapperToLong" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="primLong">
+            <value type="java.lang.Long">1</value>
+        </property>
+    </bean>
+
+    <bean id="wrapperToShort" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="primShort">
+            <value type="java.lang.Short">1</value>
+        </property>
+    </bean>
+
+    <bean id="wrapperToByte" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="primByte">
+            <value type="java.lang.Byte">1</value>
+        </property>
+    </bean>
+
+    <bean id="wrapperToChar" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="primCharacter">
+            <value type="java.lang.Character">A</value>
+        </property>
+    </bean>
+
+    <bean id="wrapperToBoolean" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="primBoolean">
+            <value type="java.lang.Boolean">true</value>
+        </property>
+    </bean>
+
+    <bean id="wrapperToDouble" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="primDouble">
+            <value type="java.lang.Double">1</value>
+        </property>
+    </bean>
+
+    <bean id="wrapperToFloat" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="primFloat">
+            <value type="java.lang.Float">1</value>
+        </property>
+    </bean>
+
+    <!-- Conversion step 7:  Conversion between Number types we'll just do
+         everything to Integer. Note that Boolean and Character are NOT Numbers -->
+
+    <bean id="longToInteger" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="integer">
+            <value type="java.lang.Long">1</value>
+        </property>
+    </bean>
+
+    <bean id="shortToInteger" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="integer">
+            <value type="java.lang.Short">1</value>
+        </property>
+    </bean>
+
+    <bean id="byteToInteger" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="integer">
+            <value type="java.lang.Byte">1</value>
+        </property>
+    </bean>
+
+    <bean id="doubleToInteger" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="integer">
+            <value type="java.lang.Double">1.67</value>
+        </property>
+    </bean>
+
+    <bean id="floatToInteger" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="integer">
+            <value type="java.lang.float">1.67</value>
+        </property>
+    </bean>
+
+    <!-- this is a combination of 6 and 7.  The primitive should be treated as the wrapper
+         equivalent, so this should convert -->
+
+    <bean id="primLongToInteger" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="integer">
+            <value type="long">1</value>
+        </property>
+    </bean>
+
+    <bean id="primShortToInteger" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="integer">
+            <value type="short">1</value>
+        </property>
+    </bean>
+
+    <bean id="primByteToInteger" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="integer">
+            <value type="byte">1</value>
+        </property>
+    </bean>
+
+    <bean id="primDoubleToInteger" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="integer">
+            <value type="double">1.67</value>
+        </property>
+    </bean>
+
+    <bean id="primFloatToInteger" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+        <property name="integer">
+            <value type="float">1.67</value>
+        </property>
+    </bean>
+
+    <!-- Conversion step 8:  If the source is a String, there are additional
+         defined conversions. These are thoroughly tested elsewhere, so we'll not
+         repeat them here -->
+</blueprint>
+

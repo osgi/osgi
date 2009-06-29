@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+       Runs a full set of tests for the blueprintConverter environment component.
+    </description>
+
+	<type-converters>
+		<bean id="asianRegionCodeConverter" class="org.osgi.test.cases.blueprint.components.injection.AsianRegionCodeConverter">
+            <argument value="asianRegionCodeConverter"/>
+    	</bean>
+		<!-- NOTE:  order is important here.  The asianRegionCodeConverter should be picked up for both RegionCode and
+		     AsianRegionCode conversions -->
+		<bean id="regionCodeConverter" class="org.osgi.test.cases.blueprint.components.injection.RegionCodeConverter"/>
+	</type-converters>
+
+    <bean id="ConversionInjection" class="org.osgi.test.cases.blueprint.components.injection.ConversionServiceChecker">
+		<argument value="ConversionInjection"/>
+		<argument ref="blueprintConverter"/>
+	</bean>
+</blueprint>
+

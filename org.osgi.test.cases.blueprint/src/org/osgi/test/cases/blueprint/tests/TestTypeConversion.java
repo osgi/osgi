@@ -1,0 +1,135 @@
+/*
+ * Copyright (c) IBM Corporation (2009). All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.osgi.test.cases.blueprint.tests;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.TreeMap;
+import java.util.Dictionary;
+import java.util.Properties;
+
+import org.osgi.service.blueprint.reflect.Target;
+import org.osgi.test.cases.blueprint.components.injection.AsianRegionCode;
+import org.osgi.test.cases.blueprint.components.injection.EuropeanRegionCode;
+import org.osgi.test.cases.blueprint.components.injection.RegionCode;
+import org.osgi.test.cases.blueprint.components.injection.CollectionSubTypeImpl;
+import org.osgi.test.cases.blueprint.components.injection.DictionarySubTypeImpl;
+import org.osgi.test.cases.blueprint.components.injection.MapSubTypeImpl;
+import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
+import org.osgi.test.cases.blueprint.framework.StandardErrorTestController;
+import org.osgi.test.cases.blueprint.framework.StandardTestController;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+/**
+ * This class contains tests specificcally for testing defined builtin type conversion.
+ *
+ * @version $Revision$
+ */
+public class TestTypeConversion extends DefaultTestBundleControl {
+    /*
+     * Tests the blueprint converter service with variations non-generic based conversions.
+     */
+    public void testBlueprintConverter() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+                getWebServer()+"www/blueprintConverter_checker.jar");
+
+        // validation is all done in the component code
+        controller.run();
+    }
+
+
+    /*
+     * Tests the same type conversions preformed from the config files (at least the non-error conversions)
+     */
+    public void testBuiltinTypeConversions() throws Exception {
+        // this should just be the standard error set
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/builtin_type_conversions.jar");
+
+        MetadataEventSet startEvents = controller.getStartEvents();
+
+        startEvents.validateComponentProperty("assignableRegionCode", "regionCode", new EuropeanRegionCode("CN+24"), RegionCode.class);
+        startEvents.validateComponentProperty("wrapperToPrim", "primInteger", new Integer(1), Integer.TYPE);
+        startEvents.validateComponentProperty("primToWrapper", "integer", new Integer(1), Integer.class);
+        startEvents.validateComponentProperty("convertedRegionCode", "regionCode", new AsianRegionCode("CN+90"), RegionCode.class);
+        startEvents.validateComponentProperty("convertedAsianRegionCode", "regionCode", new AsianRegionCode("CN+94"), AsianRegionCode.class);
+        startEvents.validateComponentProperty("stringArrayToIntArray", "primIntArray", new int[] {1, 2}, int[].class);
+        startEvents.validateComponentProperty("integerArrayToIntArray", "primIntArray", new int[] {1, 2}, int[].class);
+        startEvents.validateComponentProperty("intArrayToIntegerArray", "wrappedIntArray", new Integer[] {new Integer(1), new Integer(2)}, Integer[].class);
+        startEvents.validateComponentProperty("stringArrayToRegionCodeArray", "regionCodeArray", new RegionCode[] {new AsianRegionCode("CN+76") }, RegionCode[].class);
+        startEvents.validateComponentProperty("stringListToIntArray", "primIntArray", new int[] {1, 2}, int[].class);
+        startEvents.validateComponentProperty("integerListToIntArray", "primIntArray", new int[] {1, 2}, int[].class);
+        startEvents.validateComponentProperty("stringListToRegionCodeArray", "regionCodeArray", new RegionCode[] {new AsianRegionCode("CN+76") }, RegionCode[].class);
+
+        List target = new ArrayList();
+        target.add("1");
+        target.add("2");
+        startEvents.validateComponentProperty("stringArrayToList", "list", target, List.class);
+        startEvents.validateComponentProperty("stringArrayToLinkedList", "linkedList", target, LinkedList.class);
+        startEvents.validateComponentProperty("stringArrayToCollectionSubTypeImple", "collectionSubTypeImpl", target, CollectionSubTypeImpl.class);
+
+        target = new ArrayList();
+        target.add(new Integer(2));
+        target.add(new Integer(1));
+        startEvents.validateComponentProperty("intArrayToList", "list", target, List.class);
+
+        Map mapTarget = new HashMap();
+        mapTarget.put("abc", "123");
+        mapTarget.put("def", "456");
+
+        startEvents.validateComponentProperty("mapToTreeMap", "treeMap", mapTarget, TreeMap.class);
+
+        Properties propTarget = new Properties();
+        propTarget.put("abc", "123");
+        propTarget.put("def", "456");
+        startEvents.validateComponentProperty("mapToProperties", "properties", propTarget, Properties.class);
+        startEvents.validateComponentProperty("dictionaryToMap", "treeMap", mapTarget, TreeMap.class);
+        startEvents.validateComponentProperty("mapToMapSubTypeImpl", "mapSubTypeImpl", mapTarget, TreeMap.class);
+        startEvents.validateComponentProperty("mapToDictionarySubTypeImpl", "dictionarySubTypeImpl", propTarget, DictionarySubTypeImpl.class);
+
+        // wrapper to corresponding primitive
+
+        startEvents.validateComponentProperty("wrapperToInt", "primInt", new Integer(1), Integer.TYPE);
+        startEvents.validateComponentProperty("wrapperToLong", "primLong", new Long(1), Long.TYPE);
+        startEvents.validateComponentProperty("wrapperToShort", "primShort", new Short((short)1), Short.TYPE);
+        startEvents.validateComponentProperty("wrapperToByte", "primByte", new Byte((byte)1), Byte.TYPE);
+        startEvents.validateComponentProperty("wrapperToChar", "primCharacter", new Character('A'), Character.TYPE);
+        startEvents.validateComponentProperty("wrapperToBoolean", "primBoolean", Boolean.TRUE, Boolean.TYPE);
+        startEvents.validateComponentProperty("wrapperToDouble", "primDouble", new Double(1), Double.TYPE);
+        startEvents.validateComponentProperty("wrapperToFloat", "primFloat", new Float(1), Float.TYPE);
+
+        // Number-type conversions
+        startEvents.validateComponentProperty("longToInteger", "integer", new Integer(1), Integer.TYPE);
+        startEvents.validateComponentProperty("shortToInteger", "integer", new Integer(1), Integer.TYPE);
+        startEvents.validateComponentProperty("byteToInteger", "integer", new Integer(1), Integer.TYPE);
+        startEvents.validateComponentProperty("doubleToInteger", "integer", new Integer(1), Integer.TYPE);
+        startEvents.validateComponentProperty("floatToInteger", "integer", new Integer(1), Integer.TYPE);
+
+        // primitive number-type conversions
+        startEvents.validateComponentProperty("primLongToInteger", "integer", new Integer(1), Integer.TYPE);
+        startEvents.validateComponentProperty("primShortToInteger", "integer", new Integer(1), Integer.TYPE);
+        startEvents.validateComponentProperty("primByteToInteger", "integer", new Integer(1), Integer.TYPE);
+        startEvents.validateComponentProperty("primDoubleToInteger", "integer", new Integer(1), Integer.TYPE);
+        startEvents.validateComponentProperty("primFloatToInteger", "integer", new Integer(1), Integer.TYPE);
+
+        controller.run();
+    }
+}
