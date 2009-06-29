@@ -175,6 +175,18 @@ public class PropertyInjection extends BaseTestComponent {
         setPropertyValue("collection", value, Collection.class);
     }
 
+    public void setCollectionSubTypeImpl(CollectionSubTypeImpl value) {
+        setPropertyValue("collectionSubTypeImpl", value, CollectionSubTypeImpl.class);
+    }
+
+    public void setMapSubTypeImpl(MapSubTypeImpl value) {
+        setPropertyValue("mapSubTypeImpl", value, MapSubTypeImpl.class);
+    }
+
+    public void setDictionarySubTypeImpl(DictionarySubTypeImpl value) {
+        setPropertyValue("dictionarySubTypeImpl", value, DictionarySubTypeImpl.class);
+    }
+
     public void setSortedSet(SortedSet value) {
         setPropertyValue("sortedSet", value, SortedSet.class);
     }
@@ -339,6 +351,19 @@ public class PropertyInjection extends BaseTestComponent {
     public void setNestedArray(Object[] arr) {
         setPropertyValue("nestedArray", arr, Object[].class);
     }
+
+    public void setRegionCode(RegionCode v) {
+        setPropertyValue("regionCode", arr, RegionCode.class);
+    }
+
+    public void setAsianRegionCode(RegionCode v) {
+        setPropertyValue("asianRegionCode", arr, AsianRegionCode.class);
+    }
+
+    public void setRegionCodeArray(RegionCode[] v) {
+        setPropertyValue("regionCodeArray", arr, RegionCode[].class);
+    }
+
 
     // End of insertion of array property
 
