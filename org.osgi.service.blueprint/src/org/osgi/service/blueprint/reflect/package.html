@@ -8,7 +8,7 @@ For example:
 Import-Package: org.osgi.service.blueprint.reflect; version=&quot;[1.0,2.0)&quot;
 </pre>
 <p> This package provides a reflection-based view of the configuration information for a given
-	module context. The top-level mapping between configuration elements and reflection types is as follows:
+	Blueprint Container. The top-level mapping between configuration elements and reflection types is as follows:
 </p>
 
 <pre>
@@ -19,17 +19,17 @@ Import-Package: org.osgi.service.blueprint.reflect; version=&quot;[1.0,2.0)&quot
 	service					ServiceMetadata
 	argument        			BeanArgumentMetadata
 	property				BeanPropertyMetadata
-	listener				ListenerMetadata
+	reference-listener				ReferenceListenerMetadata
 	registration-listener			RegistrationListenerMetadata
 	array					CollectionMetadata
 	ref					RefMetadata
-	idref					IdrefMetadata
+	idref					IdRefMetadata
 	list					CollectionMetadata
 	map					MapMetadata
 	null					NullMetadata
 	props					PropsMetadata
 	set					CollectionMetadata
 	value					ValueMetadata
-<//pre>
+</pre>
 </BODY>
 

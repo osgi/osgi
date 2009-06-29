@@ -56,7 +56,7 @@ public interface BlueprintContainer {
 	 * Get the component instance for a given named component. If the component
 	 * has not yet been instantiated, calling this operation will cause the
 	 * component instance to be created and initialized. If the component has a
-	 * prototype scope then each call to getComponent will return a new
+	 * prototype scope then each call to getComponentInstance will return a new
 	 * component instance. If the component has a bundle scope then the
 	 * component instance returned will be the instance for the caller's bundle
 	 * (and that instance will be instantiated if it has not already been

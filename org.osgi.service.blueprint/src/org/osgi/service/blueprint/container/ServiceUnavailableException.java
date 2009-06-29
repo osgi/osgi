@@ -30,40 +30,40 @@ public class ServiceUnavailableException extends ServiceException {
 	private final String filter;
 
 	/**
-	 * Creates a Service Unavaiable Exception with the specified message.
+	 * Creates a Service Unavailable Exception with the specified message.
 	 * 
 	 * @param message
 	 *            The associated message.
-	 * @param filterExpression
-	 *            The filter expression used for the service lookup.
+	 * @param filter
+	 *            The filter used for the service lookup.
 	 */
-	public ServiceUnavailableException(String message, String filterExpression) {
+	public ServiceUnavailableException(String message, String filter) {
 		super(message, UNREGISTERED);
-		this.filter = filterExpression;
+		this.filter = filter;
 	}
 
 	/**
-	 * Creates a Service Unavaiable Exception with the specified message and
+	 * Creates a Service Unavailable Exception with the specified message and
 	 * exception cause.
 	 * 
 	 * @param message
 	 *            The associated message.
-	 * @param filterExpression
-	 *            The filter expression used for the service lookup.
+	 * @param filter
+	 *            The filter used for the service lookup.
 	 * @param cause
 	 *            The cause of this exception.
 	 */
-	public ServiceUnavailableException(String message, String filterExpression,
+	public ServiceUnavailableException(String message, String filter,
 			Throwable cause) {
 		super(message, UNREGISTERED, cause);
-		this.filter = filterExpression;
+		this.filter = filter;
 	}
 
 	/**
 	 * Returns the filter expression that a service would have needed to satisfy
 	 * in order for the invocation to proceed.
 	 * 
-	 * @return The failing filter expression.
+	 * @return The failing filter.
 	 */
 	public String getFilter() {
 		return this.filter;

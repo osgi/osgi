@@ -60,7 +60,7 @@ public interface ServiceReferenceMetadata extends ComponentMetadata {
 	/**
 	 * The value of the <code>component-name</code> attribute, if specified.
 	 * This specifies the name of a component that is registered in the service
-	 * registry. This will create an automatic filter (appended wit the filter
+	 * registry. This will create an automatic filter (appended with the filter
 	 * if set) to select this component based on its automatic <code>id</code>
 	 * attribute.
 	 * 

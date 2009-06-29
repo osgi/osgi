@@ -19,7 +19,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Metadata representing a service to be exported by a module context.
+ * Metadata representing a service to be exported by a Blueprint Container.
  * 
  */
 public interface ServiceMetadata extends ComponentMetadata {

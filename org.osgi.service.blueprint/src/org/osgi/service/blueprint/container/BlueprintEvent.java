@@ -28,8 +28,8 @@ import org.osgi.framework.Bundle;
  * 
  * <p>
  * In addition, when a listener is registered, the Blueprint extender will
- * synchronously send to this listener the last event for each Blueprint bundle
- * Blueprint by this extender. This replay of events is designed so that the new
+ * synchronously send to this listener the last event for each ready Blueprint bundle
+ * managed by this extender. This replay of events is designed so that the new
  * listener can be informed of the state of each Blueprint bundle. Events sent
  * during this replay will have the {@link #isReplay()} flag set. The Blueprint
  * extender must ensure that this replay phase does not interfere with new
@@ -58,6 +58,8 @@ import org.osgi.framework.Bundle;
  * 
  * @see BlueprintListener
  * @see EventConstants
+ *
+ * @Immutable
  */
 public class BlueprintEvent {
 
@@ -67,7 +69,7 @@ public class BlueprintEvent {
 	 */
 	public static final int CREATING = 1;
 	/**
-	 * The Blueprint extender has creating a Blueprint Container for the bundle.
+	 * The Blueprint extender has created a Blueprint Container for the bundle.
 	 * This event is sent after the Blueprint Container service has been
 	 * registered.
 	 */
@@ -312,7 +314,7 @@ public class BlueprintEvent {
 	 * @return The missing dependencies informations. May be <code>null</code>.
 	 */
 	public String[] getDependencies() {
-		return dependencies;
+		return dependencies != null ? (String[]) dependencies.clone() : null;
 	}
 
 	/**

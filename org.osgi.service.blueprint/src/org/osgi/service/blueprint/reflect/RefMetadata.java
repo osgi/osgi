@@ -16,11 +16,11 @@
 package org.osgi.service.blueprint.reflect;
 
 /**
- * A value which refers to another component in the module context by name.
+ * A value which refers by its id to another component in the Blueprint Container.
  */
 public interface RefMetadata extends Target, NonNullMetadata {
 	/**
-	 * The name of the referenced component. Defined in the
+	 * The id of the referenced component. Defined in the
 	 * <code>component-id</code> attribute.
 	 * 
 	 * @return The component id

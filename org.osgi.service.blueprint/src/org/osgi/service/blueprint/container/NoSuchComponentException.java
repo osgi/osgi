@@ -16,8 +16,8 @@
 package org.osgi.service.blueprint.container;
 
 /**
- * Thrown when an attempt is made to lookup a component by name and no such
- * named component exists in the blueprint container.
+ * Thrown when an attempt is made to lookup a component by id and no such
+ * component exists in the blueprint container.
  */
 public class NoSuchComponentException extends RuntimeException {
 	private static final long serialVersionUID = 1L;

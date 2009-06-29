@@ -49,7 +49,7 @@
           The Tcomponent type is the base type for top-level
           Blueprint components.  The <bean> <reference>, <service>,
           and <reference-list> elements are all derived from
-          the Tcomponent type.  This type defines an id attributre
+          the Tcomponent type.  This type defines an id attribute
           that is used create references between different components.
           Component elements can also be inlined within other component
           definitions.  The id attribute is not valid when inlined.
@@ -66,7 +66,7 @@
                   The activation attribute for this component.  This can either
                   be "eager" or "lazy".  If not specified, it
                   defaults to default-activation attribute of the enclosing
-                  <blueprint> element.  The default, default is "eager"
+                  <blueprint> element.  The default is "eager".
                   ]]>
                 </xsd:documentation>
             </xsd:annotation>
@@ -76,13 +76,12 @@
             <xsd:annotation>
                 <xsd:documentation>
                   <![CDATA[
-                  depends-on identifies (by name) other components that this component
+                  depends-on identifies (by id) other components that this component
                   depends on.  The component only be activated after the
                   depends-on components are successfully activated.  Also, if there
                   are <reference> or <reference-list> elements with unstatisfied
                   manadatory references, then the depends-on relationship will also
-                  be used to determine whether this service is registered or
-                  unregistered.
+                  be used to determine whether this service is enabled or not.
                   ]]>
                 </xsd:documentation>
             </xsd:annotation>
@@ -96,7 +95,7 @@
 
           The <blueprint> element is the root element for a blueprint
           configuration file.  A blueprint configuration has two sections.
-          The first section (contained within <type-converters> elements)
+          The first section (contained within the <type-converters> element)
           identifies components that are used for converting values into
           different target types.  The type converters are optional, so
           the file does not need to specify a type converter section.
@@ -131,9 +130,8 @@
                 <xsd:documentation>
                   <![CDATA[
                   Specifies the default activation setting that will be defined
-                  for <bean> components.  If not specified, the global
-                  default is "eager".  Individual <bean> components may
-                  override the default
+                  for components.  If not specified, the global default is "eager".
+                  Individual components may override the default value.
                   ]]>
                 </xsd:documentation>
             </xsd:annotation>
@@ -174,8 +172,7 @@
               <![CDATA[
               The type used for the <type-converters> element.  The
               <type-converters> section is a set of <bean>, <ref>, or
-              <reference> elements that identify the type convert components
-              that will ference components.
+              <reference> elements that identify the type converter components.
               ]]>
             </xsd:documentation>
         </xsd:annotation>
@@ -195,11 +192,11 @@
             <xsd:documentation>
               <![CDATA[
               A targetcomponent is one that can be a target for a
-              listener, registration-listener, or type-converter element.
+              listener, registration-listener or service elements.
               This is used in contexts where the requirement is a single
               provided object that will implement a particular interface.
               The provided object is obtained either from a <ref> element
-              or inline (<bean> or <reference>).
+              or an inlined <bean> or <reference>.
               ]]>
             </xsd:documentation>
         </xsd:annotation>
@@ -217,7 +214,7 @@
               <![CDATA[
               allComponents is used in contexts where all component element
               types are value.  The set of component elements contains
-              <bean>, <service>, <reference>, and <reference-list>.
+              <bean>, <service>, <reference>, <reference-list> and <ref>.
               ]]>
             </xsd:documentation>
         </xsd:annotation>
@@ -289,14 +286,14 @@
             <xsd:restriction base="Tbean">
                 <xsd:group ref="beanElements" />
                 <xsd:attribute name="id" use="prohibited"/>
-                <xsd:attribute name="depends-on" type="TdependsOn" use="optional"/>
-                <xsd:attribute name="activation" use="prohibited"/>
-                <xsd:attribute name="class" type="Tclass" />
-                <xsd:attribute name="init-method" type="Tmethod" />
+                <xsd:attribute name="depends-on" />
+                <xsd:attribute name="activation" use="prohibited" fixed="lazy"/>
+                <xsd:attribute name="class" />
+                <xsd:attribute name="init-method" />
                 <xsd:attribute name="destroy-method" use="prohibited"/>
-                <xsd:attribute name="factory-method" type="Tmethod" />
-                <xsd:attribute name="factory-ref" type="Tidref" />
-                <xsd:attribute name="scope" fixed="prototype" type="Tscope"/>
+                <xsd:attribute name="factory-method" />
+                <xsd:attribute name="factory-ref" />
+                <xsd:attribute name="scope" use="prohibited" fixed="prototype" />
                 <xsd:anyAttribute namespace="##other" processContents="strict" />
             </xsd:restriction>
         </xsd:complexContent>
@@ -409,13 +406,13 @@
                     <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="strict" />
                 </xsd:sequence>
                 <xsd:attribute name="id" use="prohibited"/>
-                <xsd:attribute name="depends-on" type="TdependsOn" use="optional"/>
-                <xsd:attribute name="activation" use="prohibited"/>
-                <xsd:attribute name="interface" type="Tclass" use="optional"/>
-                <xsd:attribute name="filter" type="xsd:normalizedString" use="optional"/>
-                <xsd:attribute name="component-name" type="Tidref" use="optional"/>
-                <xsd:attribute name="availability" type="Tavailability" use="optional"/>
-                <xsd:attribute name="timeout" type="Ttimeout" use="optional"/>
+                <xsd:attribute name="depends-on" />
+                <xsd:attribute name="activation" use="prohibited" fixed="lazy"/>
+                <xsd:attribute name="interface" />
+                <xsd:attribute name="filter" />
+                <xsd:attribute name="component-name" />
+                <xsd:attribute name="availability" />
+                <xsd:attribute name="timeout" />
                 <xsd:anyAttribute namespace="##other" processContents="strict" />
             </xsd:restriction>
         </xsd:complexContent>
@@ -438,12 +435,12 @@
                 <xsd:sequence>
                     <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="strict" />
                 </xsd:sequence>
-                <xsd:attribute name="member-type" type="Tservice-use" use="optional">
+                <xsd:attribute name="member-type" type="Tservice-use" use="optional" default="service-object">
                     <xsd:annotation>
                         <xsd:documentation>
                           <![CDATA[
                           Indicates the type of object that will be placed within the
-                          reference collection.  "service-instance" indicates the collection
+                          reference collection.  "service-object" indicates the collection
                           contains blueprint proxies for imported services.  "service-reference"
                           indicates the collection contains ServiceReferenc objects matching
                           the target service type.
@@ -471,13 +468,13 @@
                     <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="strict" />
                 </xsd:sequence>
                 <xsd:attribute name="id" use="prohibited"/>
-                <xsd:attribute name="depends-on" type="TdependsOn" use="optional"/>
-                <xsd:attribute name="activation" use="prohibited"/>
-                <xsd:attribute name="interface" type="Tclass" use="optional"/>
-                <xsd:attribute name="filter" type="xsd:normalizedString" use="optional"/>
-                <xsd:attribute name="component-name" type="Tidref" use="optional"/>
-                <xsd:attribute name="availability" type="Tavailability" use="optional"/>
-                <xsd:attribute name="member-type" use="optional" type="Tservice-use"/>
+                <xsd:attribute name="depends-on" />
+                <xsd:attribute name="activation" use="prohibited" fixed="lazy" />
+                <xsd:attribute name="interface" />
+                <xsd:attribute name="filter" />
+                <xsd:attribute name="component-name" />
+                <xsd:attribute name="availability" />
+                <xsd:attribute name="member-type" />
                 <xsd:anyAttribute namespace="##other" processContents="strict" />
             </xsd:restriction>
         </xsd:complexContent>
@@ -500,7 +497,17 @@
                     <xsd:group ref="serviceReferenceElements"/>
                 </xsd:sequence>
 
-                <xsd:attribute name="interface" use="optional" type="Tclass" />
+                <xsd:attribute name="interface" use="optional" type="Tclass">
+                    <xsd:annotation>
+                        <xsd:documentation>
+                          <![CDATA[
+                          The interface that the OSGi service must implement and that will be
+                          implemented by the proxy object.
+                          It is allowed to not specify this attribute.
+                          ]]>
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
                 <xsd:attribute name="filter" use="optional" type="xsd:normalizedString">
                     <xsd:annotation>
                         <xsd:documentation>
@@ -631,9 +638,36 @@
                 <xsd:sequence>
                     <xsd:group ref="serviceElements" />
                 </xsd:sequence>
-                <xsd:attribute name="interface" type="Tclass" use="optional" />
-                <xsd:attribute name="ref" type="Tidref" use="optional" />
-                <xsd:attribute name="auto-export" type="TautoExportModes" default="disabled" />
+                <xsd:attribute name="interface" type="Tclass" use="optional">
+                    <xsd:annotation>
+                        <xsd:documentation>
+                          <![CDATA[
+                          The interface that this OSGi service will provide.
+                          ]]>
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+                <xsd:attribute name="ref" type="Tidref" use="optional">
+                    <xsd:annotation>
+                        <xsd:documentation>
+                          <![CDATA[
+                          The ref attribute can be used to specify the component that provides
+                          the object exported as an OSGi service.
+                          ]]>
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+                <xsd:attribute name="auto-export" type="TautoExportModes" default="disabled">
+                    <xsd:annotation>
+                        <xsd:documentation>
+                          <![CDATA[
+                          If set to a value different from "disabled", the Blueprint Container
+                          will introspect the target to discover the set of interfaces or classes
+                          that the service will be registered under.
+                          ]]>
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
                 <xsd:attribute name="ranking" type="xsd:int" default="0">
                     <xsd:annotation>
                         <xsd:documentation>
@@ -664,12 +698,12 @@
                     <xsd:group ref="serviceElements" />
                 </xsd:sequence>
                 <xsd:attribute name="id" use="prohibited"/>
-                <xsd:attribute name="depends-on" type="TdependsOn" use="optional"/>
-                <xsd:attribute name="activation" use="prohibited"/>
-                <xsd:attribute name="interface" type="Tclass" use="optional" />
-                <xsd:attribute name="ref" type="Tidref" use="optional" />
-                <xsd:attribute name="auto-export" type="TautoExportModes" default="disabled" />
-                <xsd:attribute name="ranking" type="xsd:int" default="0"/>
+                <xsd:attribute name="depends-on"/>
+                <xsd:attribute name="activation" use="prohibited" fixed="lazy"/>
+                <xsd:attribute name="interface"/>
+                <xsd:attribute name="ref"/>
+                <xsd:attribute name="auto-export"/>
+                <xsd:attribute name="ranking"/>
                 <xsd:anyAttribute namespace="##other" processContents="strict" />
             </xsd:restriction>
         </xsd:complexContent>

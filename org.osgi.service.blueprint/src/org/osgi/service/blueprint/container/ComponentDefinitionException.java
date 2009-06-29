@@ -17,7 +17,7 @@ package org.osgi.service.blueprint.container;
 
 /**
  * Exception thrown when a configuration-related error occurs during creation of
- * a module context.
+ * a Blueprint Container.
  */
 public class ComponentDefinitionException extends RuntimeException {
 	private static final long serialVersionUID = 1L;

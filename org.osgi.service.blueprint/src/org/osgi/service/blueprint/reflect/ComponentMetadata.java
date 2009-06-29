@@ -61,7 +61,7 @@ public interface ComponentMetadata extends NonNullMetadata {
 	 * The names of any components listed in a "depends-on" attribute for this
 	 * component.
 	 *
-	 * @return an immutable List of component names for components that we have
+	 * @return an immutable List of component ids for components that we have
 	 *         explicitly declared a dependency on, or an empty set if none.
 	 */
 	List/* <String> */getDependsOn();

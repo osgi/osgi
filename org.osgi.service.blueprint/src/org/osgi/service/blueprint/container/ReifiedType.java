@@ -33,10 +33,8 @@ package org.osgi.service.blueprint.container;
  * <em>reify<em> the different Java 5 <code>Type</code> instances into the 
  * reified form. That is, a form where the raw Class is available with its optional type arguments as Reified Types.
  *
- * 
- *@Immutable
+ * @Immutable
  */
-
 public class ReifiedType {
 	final static ReifiedType ALL = new ReifiedType(Object.class);
 

@@ -18,7 +18,7 @@ package org.osgi.service.blueprint.reflect;
 import java.util.List;
 
 /**
- * Metadata for a collection based value. Members of the array are instances of
+ * Metadata for a collection based value. Members of the collection are instances of
  * Metadata. The Collection metadata can constrain to a specific type.
  */
 
