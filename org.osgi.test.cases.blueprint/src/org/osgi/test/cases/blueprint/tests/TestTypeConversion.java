@@ -107,7 +107,7 @@ public class TestTypeConversion extends DefaultTestBundleControl {
 
         // wrapper to corresponding primitive
 
-        startEvents.validateComponentProperty("wrapperToInt", "primInt", new Integer(1), Integer.TYPE);
+        startEvents.validateComponentProperty("wrapperToInt", "primInteger", new Integer(1), Integer.TYPE);
         startEvents.validateComponentProperty("wrapperToLong", "primLong", new Long(1), Long.TYPE);
         startEvents.validateComponentProperty("wrapperToShort", "primShort", new Short((short)1), Short.TYPE);
         startEvents.validateComponentProperty("wrapperToByte", "primByte", new Byte((byte)1), Byte.TYPE);

@@ -16,6 +16,7 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
+import java.util.Iterator;
 import java.util.Set;
 
 import org.osgi.framework.BundleContext;
@@ -62,9 +63,17 @@ public class AnonymousComponentValidator extends MetadataValidator {
         super.validate(testContext);
         // get the full set of ids.
         Set ids = blueprintMetadata.getComponentIds();
-        assertEquals("Incorrect ID set size", 1, ids.size());
+        assertEquals("Incorrect ID set size", 1 + 4, ids.size()); // Environment managers are available
         // get the single id
-        String id = (String)ids.toArray()[0];
+        String id = null;
+        for (Iterator it = ids.iterator(); it.hasNext();) {
+            String compId = it.next().toString();
+            if (!compId.startsWith("blueprint")) {
+                id = compId;
+                break;
+            }
+        }
+        assertNotNull("Unable to find component name", id);
 
         assertEquals("Invalid initial character for generated component name", '.', id.charAt(0));
         // now validate we can get everything using this id

@@ -2971,8 +2971,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addPropertyValidator(startEvents, "arrayToStack", "stack", expectedList, Stack.class);
 
         addPropertyValidator(startEvents, "setToLinkedHashSet", "linkedHashSet", expectedSet, LinkedHashSet.class);
-        addPropertyValidator(startEvents, "listTolinkedHashSet", "linkedHashSet", expectedSet, LinkedHashSet.class);
-        addPropertyValidator(startEvents, "arrayTolinkedHashSet", "linkedHashSet", expectedSet, LinkedHashSet.class);
+        addPropertyValidator(startEvents, "listToLinkedHashSet", "linkedHashSet", expectedSet, LinkedHashSet.class);
+        addPropertyValidator(startEvents, "arrayToLinkedHashSet", "linkedHashSet", expectedSet, LinkedHashSet.class);
 
         addPropertyValidator(startEvents, "setToTreeSet", "treeSet", expectedSet, TreeSet.class);
         addPropertyValidator(startEvents, "listToTreeSet", "treeSet", expectedSet, TreeSet.class);
@@ -2987,9 +2987,9 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         addPropertyValidator(startEvents, "listToList", "list", expectedList, List.class, ArrayList.class);
         addPropertyValidator(startEvents, "arrayToList", "list", expectedList, List.class, ArrayList.class);
 
-        addPropertyValidator(startEvents, "listTolinkedList", "linkedList", expectedList, LinkedList.class);
-        addPropertyValidator(startEvents, "setTolinkedList", "linkedList", expectedSetList, LinkedList.class);
-        addPropertyValidator(startEvents, "arrayTolinkedList", "linkedList", expectedList, LinkedList.class);
+        addPropertyValidator(startEvents, "listToLinkedList", "linkedList", expectedList, LinkedList.class);
+        addPropertyValidator(startEvents, "setToLinkedList", "linkedList", expectedSetList, LinkedList.class);
+        addPropertyValidator(startEvents, "arrayToLinkedList", "linkedList", expectedList, LinkedList.class);
 
         // simple list of strings
         expectedSetList = new Vector();

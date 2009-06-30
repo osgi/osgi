@@ -89,7 +89,7 @@
 
     <!-- an array conversion requiring type converter involvement -->
     <bean id="stringArrayToRegionCodeArray" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
-        <property name="regioncodeArray">
+        <property name="regionCodeArray">
             <array>
                 <value>CN+76</value>
             </array>
@@ -120,7 +120,7 @@
 
     <!-- an list conversion requiring type converter involvement -->
     <bean id="stringListToRegionCodeArray" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
-        <property name="regioncodeArray">
+        <property name="regionCodeArray">
             <list>
                 <value>CN+76</value>
             </list>
@@ -229,7 +229,7 @@
     <!-- Conversion step 6:  Conversion from wrapper to a primitive type; -->
 
     <bean id="wrapperToInt" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
-        <property name="primInt">
+        <property name="primInteger">
             <value type="java.lang.Integer">1</value>
         </property>
     </bean>

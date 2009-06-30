@@ -928,6 +928,72 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
+    /*
+     * Test accessing a service using a prototype scope exported ServiceFactory instance.
+     */
+    public void testPrototypeFactoryExport() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/ServiceOne_property_import.jar",
+                getWebServer()+"www/ServiceOne_prototype_factory_export.jar");
+        // we add different validation stuff to each jar.  We'll start with the
+        // export jar
+        MetadataEventSet exportStartEvents = controller.getStartEvents(1);
+
+        // we make this request, but need to associate it with the FACTORY_GET event to impose ordering.
+        TestEvent request = new ComponentAssertion("ServiceOneProperty", AssertionService.SERVICE_REQUEST);
+        // add this to the list, then create the linked event
+        exportStartEvents.addEvent(request);
+        // this is the unget of the service instance
+        TestEvent factoryGet = new ComponentAssertion("ServiceOneFactory", AssertionService.SERVICE_FACTORY_GET);
+        // this enforces an event ordering between these two
+        factoryGet.addDependency(request);
+        exportStartEvents.addEvent(factoryGet);
+        // the is the factory component creation
+        exportStartEvents.addAssertion("ServiceOneFactory", AssertionService.BEAN_CREATED);
+        // Even though the factory is prototype scope, only one instance is requested BECAUSE this
+        // implements ServiceFactory.  So seeing an additiona creation event here is an error.
+        exportStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneFactory", AssertionService.BEAN_CREATED));
+        // this the service instance getting created as a result of the factory getting called
+        exportStartEvents.addAssertion("ServiceOneFactory_0", AssertionService.BEAN_CREATED);
+        // validate that the service has been registered
+        exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, "ServiceOneFactory"));
+        // also validate the metadata for the exported service
+        exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneFactoryService",
+                ServiceMetadata.ACTIVATION_EAGER, "ServiceOneFactory", TestServiceOne.class,
+                ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
+        // we should see a service event here indicating this was registered
+        exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
+        // this will be the registration event
+        exportStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_REGISTERED));
+
+        // now the importing side.  We've got a couple of service injections to validate, plus the injection
+        // results
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+        // also validate the metadata for the imported service (this one only has a single import, so easy to locate)
+        importStartEvents.addValidator(new ComponentMetadataValidator(new ReferencedService("ServiceOne", TestServiceOne.class,
+                ServiceReferenceMetadata.AVAILABILITY_MANDATORY, ServiceReferenceMetadata.ACTIVATION_EAGER,
+                null, null, null, ReferencedService.DEFAULT_TIMEOUT)));
+        importStartEvents.addAssertion("ServiceOneProperty", AssertionService.SERVICE_SUCCESS);
+
+        // now some expected termination stuff
+        EventSet exportStopEvents = controller.getStopEvents(1);
+        // this is the unget of the service instance
+        exportStopEvents.addAssertion("ServiceOneFactory", AssertionService.SERVICE_FACTORY_UNGET);
+        // we should see a service event here indicating this is being deregistered
+        exportStopEvents.addServiceEvent("UNREGISTERING", TestServiceOne.class);
+        // and there should not be a registration active anymore
+        exportStopEvents.addValidator(new ServiceUnregistrationValidator(TestServiceOne.class, null));
+
+        // and the listener event as well
+        exportStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNREGISTERED));
+
+        controller.run();
+    }
+
+
     /**
      * Test injecting a ServiceRegistration object into a reference.
      */
@@ -1486,7 +1552,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
             new BindingListener("ServiceOneListener", "bind", "unbind"),
             // this is done with an inner component
             new BindingListener(new TestComponentValue(new BeanComponent(null, ServiceOneListener.class, null, null, null, null, null,
-            null, BeanMetadata.ACTIVATION_EAGER, BeanMetadata.SCOPE_PROTOTYPE)), "bind", "unbind"),
+            null, BeanMetadata.ACTIVATION_LAZY, BeanMetadata.SCOPE_PROTOTYPE)), "bind", "unbind"),
         };
         // validate the metadata for the imported service (this one only has a single import, so easy to locate)
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferencedService("ServiceOne", TestServiceOne.class,

@@ -264,6 +264,7 @@ Include-Resource					= \
  	www/Service_auto_hierarchy_import.jar=Service_auto_hierarchy_import.jar, \
  	www/Service_auto_all_import.jar=Service_auto_all_import.jar, \
  	www/ServiceOne_factory_export.jar=ServiceOne_factory_export.jar, \
+ 	www/ServiceOne_prototype_factory_export.jar=ServiceOne_prototype_factory_export.jar, \
  	www/Service_registration_injection.jar=Service_registration_injection.jar, \
  	www/service_registration_proxy.jar=service_registration_proxy.jar, \
  	www/inline_service_registration_injection.jar=inline_service_registration_injection.jar, \

@@ -177,7 +177,7 @@
         </property>
     </bean>
 
-    <bean id="listTolinkedHashSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <bean id="listToLinkedHashSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="linkedHashSet">
             <list>
                 <value>abc</value>
@@ -287,7 +287,7 @@
         </property>
     </bean>
 
-    <bean id="arrayTolinkedHashSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+    <bean id="arrayToLinkedHashSet" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="linkedHashSet">
             <array>
                 <value>abc</value>

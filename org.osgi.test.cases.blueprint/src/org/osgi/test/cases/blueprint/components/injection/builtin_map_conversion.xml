@@ -45,6 +45,7 @@
         </property>
     </bean>
 
+    <!-- ConcurrentMap does not exist in JDK 1.4
     <bean id="mapToConcurrentMap" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="concurrentMap">
             <map>
@@ -53,6 +54,7 @@
             </map>
         </property>
     </bean>
+    -->
 
 </blueprint>
 
