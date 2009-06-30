@@ -18,15 +18,14 @@ package org.osgi.service.blueprint.reflect;
 import java.util.List;
 
 /**
- * A map-based value. This represented as a collection of entries (as it is done
- * in the schema).
+ * A Map-based value. This represented as a Collection of {@link MapEntry}.
  * 
- * A map is defined in the <code>map</code> element.
+ * A Map is defined in the <code>map</code> element.
  * 
  */
 public interface MapMetadata extends NonNullMetadata {
 	/**
-	 * The key-type specified for map keys, or null if none given
+	 * The key-type specified for map keys, or <code>null</code> if none given
 	 * 
 	 * Defined in the <code>key-type</code> attribute.
 	 * 
@@ -35,7 +34,7 @@ public interface MapMetadata extends NonNullMetadata {
 	String getKeyType();
 
 	/**
-	 * The value-type specified for the array
+	 * The value-type specified for the value.
 	 * 
 	 * The <code>value-type</code> attribute.
 	 * 
@@ -44,7 +43,7 @@ public interface MapMetadata extends NonNullMetadata {
 	String getValueType();
 
 	/**
-	 * The of Metadata objects that describe the value.
+	 * The Metadata that describe the value.
 	 * 
 	 * @return A list of {@link MapEntry} objects describing the
 	 *         <code>Map<code> contents.

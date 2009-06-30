@@ -19,7 +19,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Metadata representing a service to be exported by a Blueprint Container.
+ * Metadata representing a service to registered by the Blueprint Container.
  * 
  */
 public interface ServiceMetadata extends ComponentMetadata {
@@ -32,15 +32,15 @@ public interface ServiceMetadata extends ComponentMetadata {
 	public static final int AUTO_EXPORT_DISABLED = 1;
 
 	/**
-	 * Advertise all Java interfaces implemented by the exported component as
-	 * service interfaces.
+	 * Advertise all Java interfaces implemented by the component instance type
+	 * as service interfaces.
 	 * 
 	 * @see #getAutoExport()
 	 */
 	public static final int AUTO_EXPORT_INTERFACES = 2;
 
 	/**
-	 * Advertise all Java classes in the hierarchy of the exported component's
+	 * Advertise all Java classes in the hierarchy of the component instance
 	 * type as service interfaces.
 	 * 
 	 * @see #getAutoExport()
@@ -48,8 +48,8 @@ public interface ServiceMetadata extends ComponentMetadata {
 	public static final int AUTO_EXPORT_CLASS_HIERARCHY = 3;
 
 	/**
-	 * Advertise all Java classes and interfaces in the exported component's
-	 * type as service interfaces.
+	 * Advertise all Java classes and interfaces in the component instance type
+	 * as service interfaces.
 	 * 
 	 * @see #getAutoExport()
 	 */
@@ -57,24 +57,23 @@ public interface ServiceMetadata extends ComponentMetadata {
 
 	/**
 	 * The component that is to be exported as a service. Value must refer to a
-	 * component and therefore be either a {@link RefMetadata},
-	 * {@link BeanMetadata}, or {@link ReferenceMetadata}.
+	 * component and therefore be a {@link Target}.
 	 * 
-	 * Defined in the <code>registration-method</code> attribute.
+	 * Defined inline or via the <code>ref</code> attribute.
 	 * 
 	 * @return the component to be exported as a service.
 	 */
 	Target getServiceComponent();
 
 	/**
-	 * The type names of the set of interface types that the service should be
-	 * advertised as supporting, as specified in the component declaration.
+	 * The type names of the set of interfaces that the service should be
+	 * advertised as supporting.
 	 * 
 	 * Defined in the <code>interface</code> attribute or
 	 * <code>interfaces</code> element.
 	 * 
-	 * @return an immutable set of (<code>String</code>) type names, or an
-	 *         empty set if using auto-export
+	 * @return an immutable set of (<code>String</code>) interface names, or an
+	 *         empty set if using <code>auto-export</code> or not set.
 	 */
 	List/* <String> */getInterfaces();
 
@@ -95,8 +94,7 @@ public interface ServiceMetadata extends ComponentMetadata {
 	 * 
 	 * Defined in the <code>service-properties</code> element.
 	 * 
-	 * @return <code>Map</code> containing the set of user declared service
-	 *         properties (may be empty if no properties were specified).
+	 * @return <code>List</code> containing {@link MapEntry} objects, can be empty.
 	 */
 	List/* <MapEntry> */getServiceProperties();
 
@@ -111,12 +109,12 @@ public interface ServiceMetadata extends ComponentMetadata {
 	int getRanking();
 
 	/**
-	 * The listeners that have registered to be notified when the exported
+	 * The registration listeners to be notified when the
 	 * service is registered and unregistered with the framework.
 	 * 
 	 * Defined in the <code>registration-listener</code> elements.
 	 * 
-	 * @return an immutable collection of RegistrationListenerMetadata
+	 * @return an immutable collection of {@link RegistrationListener}
 	 */
 	Collection /* <RegistrationListener> */getRegistrationListeners();
 }

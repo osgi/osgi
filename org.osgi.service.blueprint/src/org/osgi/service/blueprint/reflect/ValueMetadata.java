@@ -17,26 +17,26 @@ package org.osgi.service.blueprint.reflect;
 
 /**
  * A simple <code>String</code> value that will be type-converted if necessary
- * before injecting into a target.
+ * before injecting.
  * 
  * This class is representing the <code>value</code> element.
  * 
  */
 public interface ValueMetadata extends NonNullMetadata {
 	/**
-	 * The string value (unconverted) of this value).
+	 * The string value (unconverted) of this value.
 	 * 
-	 * Defined in the <code>value</code> attribute or text part.
+	 * Defined in the <code>value</code> attribute or text part of the <code>value</code> element.
 	 * 
 	 * @return The content of the <code>value</code>
 	 */
 	String getStringValue();
 
 	/**
-	 * The name of the type to which this value should be coerced. May be null.
+	 * The name of the type to which this value should be converted. May be <code>null</code>.
 	 * Defined in the <code>type</code> attribute.
 	 * 
-	 * @return Optional type name for this value
+	 * @return Optional class name for this value
 	 */
 	String getType();
 }

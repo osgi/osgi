@@ -16,36 +16,38 @@
 package org.osgi.service.blueprint.reflect;
 
 /**
- * Metadata for a listener interested in service registration and unregistration
- * events for an exported service.
+ * Metadata for a registration listener interested in service registration and
+ * unregistration events.
  */
 public interface RegistrationListener {
 
 	/**
 	 * The component instance that will receive registration and unregistration
 	 * events. The returned value must reference a {@link Target} either
-	 * directly or indirectly. The return type will be either a
-	 * {@link RefMetadata} instance or an {@link Target} instance.
+	 * directly or indirectly. The return type will be a {@link Target}
+	 * instance.
 	 * 
 	 * Defined in the <code>registration-listener</code> child element.
 	 * 
-	 * @return the registration listener component reference.
+	 * @return The registration listener target.
 	 */
 	Target getListenerComponent();
 
 	/**
-	 * The name of the method to invoke on the listener component when the
-	 * exported service is registered with the service registry.
+	 * The name of the method to invoke on the registration listener when the
+	 * associated service is registered with the service registry. This method
+	 * is also be called with the initial state when the listener is actuated.
 	 * 
 	 * Defined in the <code>registration-method</code> attribute.
 	 * 
-	 * @return the registration callback method name.
+	 * @return The registration callback method name.
 	 */
 	String getRegistrationMethod();
 
 	/**
 	 * The name of the method to invoke on the listener component when the
-	 * exported service is unregistered from the service registry.
+	 * exported service is unregistered from the service registry. This method
+	 * can also be called with the initial state when the listener is actuated.
 	 * 
 	 * Defined in the <code>unregistration-method</code> attribute.
 	 * 

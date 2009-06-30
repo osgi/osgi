@@ -43,7 +43,7 @@ public class NoSuchComponentException extends RuntimeException {
 	 * @return The id of the component associated with an unresolved
 	 *         request.
 	 */
-	public String getComponentName() {
+	public String getComponentId() {
 		return this.managerId;
 	}
 
@@ -53,7 +53,7 @@ public class NoSuchComponentException extends RuntimeException {
 	 * @return The descriptive message for the exception.
 	 */
 	public String getMessage() {
-		return "No component named '"
+		return "No manager with id '"
 				+ (this.managerId == null ? "<null>" : this.managerId)
 				+ "' could be found";
 	}

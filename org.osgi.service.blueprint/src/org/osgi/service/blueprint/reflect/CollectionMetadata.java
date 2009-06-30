@@ -18,8 +18,9 @@ package org.osgi.service.blueprint.reflect;
 import java.util.List;
 
 /**
- * Metadata for a collection based value. Members of the collection are instances of
- * Metadata. The Collection metadata can constrain to a specific type.
+ * Metadata for a collection based value. Members of the collection are
+ * instances of Metadata. This Metadata can constrain the members to a specific
+ * type.
  */
 
 public interface CollectionMetadata extends NonNullMetadata {
@@ -27,28 +28,28 @@ public interface CollectionMetadata extends NonNullMetadata {
 	/**
 	 * Provide the interface that this collection must implement.
 	 * 
-	 * This is used for Arrays (Object[]), Set, and List. This information is
-	 * encoded in the element name.
+	 * This is used for <code>Arrays (Object[])</code>, <code>Set</code>,
+	 * and <code>List</code>. This information is encoded in the element
+	 * name.
 	 * 
-	 * 
-	 * @return The interface class that the collection must implement.
+	 * @return The interface class that the collection must implement or
+	 *         <code>Object[]</code> for arrays.
 	 */
 	Class/* <?> */getCollectionClass();
 
 	/**
-	 * The value-type specified for the array
+	 * The value-type specified for the members of the collection or array.
 	 * 
 	 * The <code>value-type</code> attribute.
 	 * 
-	 * @return The value type for this metadata
+	 * @return The value type for this Collection Metadata
 	 */
 	String getValueType();
 
 	/**
-	 * The of Metadata objects that describe the value.
+	 * The of Metadata that describe the actual Collection or array.
 	 * 
-	 * @return A list of {@link Metadata} objects for the values of a
-	 *         collection.
+	 * @return A list of Metadata for the values of a collection or array.
 	 */
 	List /* <Metadata> */getValues();
 }

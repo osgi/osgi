@@ -16,7 +16,7 @@
 package org.osgi.service.blueprint.reflect;
 
 /**
- * Top level Metadata. This represents any possible value.
+ * Top level Metadata.
  * 
  */
 public interface Metadata {

@@ -18,38 +18,39 @@ package org.osgi.service.blueprint.reflect;
 import java.util.List;
 
 /**
- * Base class for all components.
+ * Base class for all managers.
  *
  * @see BeanMetadata
  * @see ServiceReferenceMetadata
  * @see ServiceMetadata
+ * @see Target
  */
 public interface ComponentMetadata extends NonNullMetadata {
 
 	/**
-	 * The component will be eagerly activate
+	 * The manager will be eagerly activate
 	 */
 	static final int ACTIVATION_EAGER = 1;
 
 	/**
- 	 * The component will be lazily activated
+ 	 * The manager will be lazily activated
  	 */
 	static final int ACTIVATION_LAZY = 2;
 
 	/**
-	 * The id of the component.
+	 * The id of the manager.
 	 *
-	 * @return component id. The component id can be <code>null</code> if this
-	 *         is an anonymously defined inner component.
+	 * @return manager id. The manager id can be <code>null</code> if this
+	 *         is an anonymously defined and/or inlined manager.
 	 */
 	String getId();
 
 	/**
- 	 * How should this component be activated?
+ 	 * Activation strategy for this manager.
  	 *
  	 * This is the <code>activation</code> attribute or the
  	 * <code>default-activation</code> in the <code>blueprint</code> element
- 	 * if not set.
+ 	 * if not set. If this is also not set, it is {@link #ACTIVATION_EAGER}.
  	 *
  	 * @return the activation method
  	 * @see #ACTIVATION_EAGER
@@ -58,11 +59,11 @@ public interface ComponentMetadata extends NonNullMetadata {
 	int getActivation();
 
 	/**
-	 * The names of any components listed in a "depends-on" attribute for this
-	 * component.
+	 * The id of any managers listed in a <code>depends-on</code> attribute for this
+	 * manager.
 	 *
-	 * @return an immutable List of component ids for components that we have
-	 *         explicitly declared a dependency on, or an empty set if none.
+	 * @return an immutable List of manager ids that are
+	 *         explicitly declared as a dependency, or an empty List if none.
 	 */
 	List/* <String> */getDependsOn();
 }

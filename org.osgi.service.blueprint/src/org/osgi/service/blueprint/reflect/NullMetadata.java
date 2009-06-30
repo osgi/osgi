@@ -16,7 +16,7 @@
 package org.osgi.service.blueprint.reflect;
 
 /**
- * A value specified to be null via the <null/> element.
+ * A value specified to be <code>null</code> via the &lt;null/&gt; element.
  */
 public interface NullMetadata extends Metadata {
 

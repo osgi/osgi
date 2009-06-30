@@ -16,36 +16,36 @@
 package org.osgi.service.blueprint.reflect;
 
 /**
- * Metadata used in a Bean Component to inject arguments in a method or
- * constructor. This metadata class describes the <code>argument</element>
+ * Metadata used in a Bean Manager to inject arguments in a method or
+ * constructor. This Metadata class describes the <code>argument</element>
  */
 public interface BeanArgument {
 
 	/**
-	 * The metadata for the value to inject into the parameter.
+	 * The Metadata for the value to inject into the argument.
 	 *
 	 * This is the <code>value</code> attribute.
 	 *
-	 * @return the metadata for the value
+	 * @return the Metadata for the value
 	 */
 	Metadata getValue();
 
 	/**
 	 * The type to convert the value into when invoking the constructor or
-	 * factory method. If no explicit type was specified on the component
-	 * definition then this method returns null.
+	 * factory method. If no explicit type was specified on the
+	 * definition then this method returns <code>null</code>.
 	 *
 	 * This is the <code>type</code> attribute.
 	 *
-	 * @return the explicitly specified type to convert the value into, or null
-	 *         if no type was specified in the component definition.
+	 * @return the explicitly specified type to convert the value into, or <code>null</code>
+	 *         if no type was specified in the definition.
 	 */
 	String getValueType();
 
 	/**
 	 * The (zero-based) index into the parameter list of the method or
-	 * constructor to be invoked for this parameter. This is determined either
-	 * by explicitly specifying the index attribute in the component
+	 * constructor to be invoked for this argument. This is determined either
+	 * by explicitly specifying the <code>index</code> attribute in the component
 	 * declaration.  If not explicitly set, this will return -1.
 	 *
 	 * This is the <code>index</code> attribute.

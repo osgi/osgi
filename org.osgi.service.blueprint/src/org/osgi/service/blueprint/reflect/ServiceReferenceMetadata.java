@@ -18,8 +18,7 @@ package org.osgi.service.blueprint.reflect;
 import java.util.*;
 
 /**
- * Metadata describing a reference to a service that is to be imported into the
- * module context from the OSGi service registry.
+ * Metadata describing a reference to am OSGi service.
  * 
  */
 public interface ServiceReferenceMetadata extends ComponentMetadata {
@@ -53,13 +52,13 @@ public interface ServiceReferenceMetadata extends ComponentMetadata {
 	 * 
 	 * Defined in the <code>interface</code> attribute.
 	 * 
-	 * @return the String name of the requested service interface
+	 * @return the name of the requested service interface or <code>null</code> when no interface name is defined.
 	 */
 	String getInterface();
 
 	/**
 	 * The value of the <code>component-name</code> attribute, if specified.
-	 * This specifies the name of a component that is registered in the service
+	 * This specifies the id of a component that is registered in the service
 	 * registry. This will create an automatic filter (appended with the filter
 	 * if set) to select this component based on its automatic <code>id</code>
 	 * attribute.
@@ -76,15 +75,14 @@ public interface ServiceReferenceMetadata extends ComponentMetadata {
 	 * 
 	 * Defined in the <code>filter</code> attribute.
 	 * 
-	 * @return filter expression
+	 * @return An OSGi filter expression
 	 */
 	String getFilter();
 
 	/**
-	 * The set of listeners registered to receive bind and unbind events for
-	 * backing services.
+	 * The set of registration listeners defined to receive bind and unbind events.
 	 * 
-	 * Defined in the <code>listener</code> elements.
+	 * Defined in the <code>registration-listener</code> element.
 	 * 
 	 * @return an immutable collection of {@link ReferenceListener} objects
 	 */

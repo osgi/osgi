@@ -17,7 +17,7 @@ package org.osgi.service.blueprint.reflect;
 
 /**
  * 
- * Service reference that will bind to a single matching service in the service
+ * A reference that will bind to a single matching service in the service
  * registry.
  * 
  * Defines the <code>reference</code> element.
@@ -26,8 +26,8 @@ package org.osgi.service.blueprint.reflect;
 public interface ReferenceMetadata extends ServiceReferenceMetadata, Target {
 
 	/**
-	 * Timeout for service invocations when a matching backing service is
-	 * unavailable. Defined in the <code>timeout</code> attribute.
+	 * Timeout for service invocations when a backing service is
+	 * is unavailable. Defined in the <code>timeout</code> attribute.
 	 * 
 	 * @return service invocation timeout in milliseconds
 	 */

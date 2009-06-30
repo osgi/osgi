@@ -19,8 +19,7 @@ import java.util.List;
 
 /**
  * A <code>java.util.Properties</code> based value. The properties are
- * defined as string to string. This means that the actual value can be
- * returned.
+ * defined as string to string.
  * 
  * Defined in the <code>props</code> element.
  * 
@@ -28,9 +27,9 @@ import java.util.List;
 public interface PropsMetadata extends NonNullMetadata {
 
 	/**
-	 * Defined in <code>prop</code> elements for an Object Value.
+	 * Defined in <code>prop</code> elements.
 	 * 
-	 * @return list of <code>MapEntry</code> objects, never <code>null</code>
+	 * @return List of <code>MapEntry</code> objects, never <code>null</code>
 	 */
 	List/* <MapEntry> */getEntries();
 }
