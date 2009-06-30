@@ -1,5 +1,4 @@
 <!-- $Revision: 5654 $ -->
-<BODY>
 <p>Blueprint Reflection Package Version 1.0.
 <p>Bundles wishing to use this package must list the package
 in the Import-Package header of the bundle's manifest.
@@ -8,28 +7,6 @@ For example:
 Import-Package: org.osgi.service.blueprint.reflect; version=&quot;[1.0,2.0)&quot;
 </pre>
 <p> This package provides a reflection-based view of the configuration information for a given
-	Blueprint Container. The top-level mapping between configuration elements and reflection types is as follows:
+	Blueprint Container.
 </p>
-
-<pre>
-	Configuration Element			Corresponding Reflection Type(s)
-	bean             			BeanMetadata
-	reference		                ReferenceMetadata
-	reference-list                          ReferenceListMetadata
-	service					ServiceMetadata
-	argument        			BeanArgumentMetadata
-	property				BeanPropertyMetadata
-	reference-listener				ReferenceListenerMetadata
-	registration-listener			RegistrationListenerMetadata
-	array					CollectionMetadata
-	ref					RefMetadata
-	idref					IdRefMetadata
-	list					CollectionMetadata
-	map					MapMetadata
-	null					NullMetadata
-	props					PropsMetadata
-	set					CollectionMetadata
-	value					ValueMetadata
-</pre>
-</BODY>
 
