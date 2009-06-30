@@ -43,15 +43,6 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
         startEvents.validateComponentArgument(id, "arg1", value, type);
     }
 
-    private void addFactoryConstructorValidator(MetadataEventSet startEvents, String id, Object value, Class type) {
-        startEvents.validateComponentArgument(id, "arg1", value, type);
-    }
-
-    private void addFactoryConstructorValidator(MetadataEventSet startEvents, String id, String factoryComponent,
-            Object value, Class type) {
-        startEvents.validateComponentArgument(id, "arg1", value, type);
-    }
-
     private void addPropertyValidator(MetadataEventSet startEvents, String compName, String propertyName,
             Object propertyValue, Class type) {
         startEvents.validateComponentProperty(compName, propertyName, propertyValue, type);
@@ -64,12 +55,12 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
         MetadataEventSet startEvents = controller.getStartEvents();
 
         // Empty array
-        Object[] expected = new Object[0];
+        Object[] expected = new String[0];
         this.addConstructorValidator(startEvents, "compEmptyArray", expected, expected.getClass());
 
         // Null array
-        expected = new Object[1];
-        this.addConstructorValidator(startEvents, "compNullArray", expected, Object[].class);
+        expected = new String[1];
+        this.addConstructorValidator(startEvents, "compNullArray", expected, expected.getClass());
 
         // Single item array
         int[] expectedIntArr = new int[1];
@@ -253,145 +244,145 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
         MetadataEventSet startEvents = controller.getStartEvents();
 
         // Empty array
-        Object[] expected = new Object[0];
-        this.addFactoryConstructorValidator(startEvents, "compEmptyArray", expected, expected.getClass());
+        Object[] expected = new String[0];
+        this.addConstructorValidator(startEvents, "compEmptyArray", expected, expected.getClass());
 
         // Null array
-        expected = new Object[1];
-        this.addFactoryConstructorValidator(startEvents, "compNullArray", expected, Object[].class);
+        expected = new String[1];
+        this.addConstructorValidator(startEvents, "compNullArray", expected, String[].class);
 
         // String array
         expected = new String[2];
         expected[0] = "abc";
         expected[1] = "def";
-        this.addFactoryConstructorValidator(startEvents, "compStringArray", expected, expected.getClass());
+        this.addConstructorValidator(startEvents, "compStringArray", expected, expected.getClass());
 
         // Primitive int array
         int[] expectedIntArr = new int[2];
         expectedIntArr[0] = 1;
         expectedIntArr[1] = 2;
-        this.addFactoryConstructorValidator(startEvents, "compPrimIntArray", expectedIntArr, expectedIntArr.getClass());
+        this.addConstructorValidator(startEvents, "compPrimIntArray", expectedIntArr, expectedIntArr.getClass());
 
         // Wrapped int array
         expected = new Integer[2];
         expected[0] = new Integer(1);
         expected[1] = new Integer(2);
-        this.addFactoryConstructorValidator(startEvents, "compWrappedIntArray", expected, expected.getClass());
+        this.addConstructorValidator(startEvents, "compWrappedIntArray", expected, expected.getClass());
 
         // Primitive boolean array
         boolean[] expectedBoolArr = new boolean[2];
         expectedBoolArr[0] = true;
         expectedBoolArr[1] = false;
-        this.addFactoryConstructorValidator(startEvents, "compPrimBoolArray", expectedBoolArr, expectedBoolArr
+        this.addConstructorValidator(startEvents, "compPrimBoolArray", expectedBoolArr, expectedBoolArr
                 .getClass());
 
         // Wrapped boolean array
         expected = new Boolean[2];
         expected[0] = Boolean.TRUE;
         expected[1] = Boolean.FALSE;
-        this.addFactoryConstructorValidator(startEvents, "compWrappedBooleanArray", expected, expected.getClass());
+        this.addConstructorValidator(startEvents, "compWrappedBooleanArray", expected, expected.getClass());
 
         // Primitive byte array
         byte[] expectedByteArr = new byte[2];
         expectedByteArr[0] = 1;
         expectedByteArr[1] = 2;
-        this.addFactoryConstructorValidator(startEvents, "compPrimByteArray", expectedByteArr, expectedByteArr
+        this.addConstructorValidator(startEvents, "compPrimByteArray", expectedByteArr, expectedByteArr
                 .getClass());
 
         // Wrapped byte array
         expected = new Byte[2];
         expected[0] = new Byte((byte) 1);
         expected[1] = new Byte((byte) 2);
-        this.addFactoryConstructorValidator(startEvents, "compWrappedByteArray", expected, expected.getClass());
+        this.addConstructorValidator(startEvents, "compWrappedByteArray", expected, expected.getClass());
 
         // Primitive char array
         char[] expectedCharArr = new char[2];
         expectedCharArr[0] = 'a';
         expectedCharArr[1] = 'b';
-        this.addFactoryConstructorValidator(startEvents, "compPrimCharArray", expectedCharArr, expectedCharArr
+        this.addConstructorValidator(startEvents, "compPrimCharArray", expectedCharArr, expectedCharArr
                 .getClass());
 
         // Wrapped char array
         expected = new Character[2];
         expected[0] = new Character('a');
         expected[1] = new Character('b');
-        this.addFactoryConstructorValidator(startEvents, "compWrappedCharArray", expected, expected.getClass());
+        this.addConstructorValidator(startEvents, "compWrappedCharArray", expected, expected.getClass());
 
         // Primitive short array
         short[] expectedShortArr = new short[2];
         expectedShortArr[0] = 3;
         expectedShortArr[1] = 4;
-        this.addFactoryConstructorValidator(startEvents, "compPrimShortArray", expectedShortArr, expectedShortArr
+        this.addConstructorValidator(startEvents, "compPrimShortArray", expectedShortArr, expectedShortArr
                 .getClass());
 
         // Wrapped short array
         expected = new Short[2];
         expected[0] = new Short((short) 3);
         expected[1] = new Short((short) 4);
-        this.addFactoryConstructorValidator(startEvents, "compWrappedShortArray", expected, expected.getClass());
+        this.addConstructorValidator(startEvents, "compWrappedShortArray", expected, expected.getClass());
 
         // Primitive long array
         long[] expectedLongArr = new long[2];
         expectedLongArr[0] = 3;
         expectedLongArr[1] = 4;
-        this.addFactoryConstructorValidator(startEvents, "compPrimLongArray", expectedLongArr, expectedLongArr
+        this.addConstructorValidator(startEvents, "compPrimLongArray", expectedLongArr, expectedLongArr
                 .getClass());
 
         // Wrapped long array
         expected = new Long[2];
         expected[0] = new Long(3);
         expected[1] = new Long(4);
-        this.addFactoryConstructorValidator(startEvents, "compWrappedLongArray", expected, expected.getClass());
+        this.addConstructorValidator(startEvents, "compWrappedLongArray", expected, expected.getClass());
 
         // Primitive double array
         double[] expectedDoubleArr = new double[2];
         expectedDoubleArr[0] = 3;
         expectedDoubleArr[1] = 4;
-        this.addFactoryConstructorValidator(startEvents, "compPrimDoubleArray", expectedDoubleArr, expectedDoubleArr
+        this.addConstructorValidator(startEvents, "compPrimDoubleArray", expectedDoubleArr, expectedDoubleArr
                 .getClass());
 
         // Wrapped double array
         expected = new Double[2];
         expected[0] = new Double(3);
         expected[1] = new Double(4);
-        this.addFactoryConstructorValidator(startEvents, "compWrappedDoubleArray", expected, expected.getClass());
+        this.addConstructorValidator(startEvents, "compWrappedDoubleArray", expected, expected.getClass());
 
         // Primitive float array
         float[] expectedFloatArr = new float[2];
         expectedFloatArr[0] = 3;
         expectedFloatArr[1] = 4;
-        this.addFactoryConstructorValidator(startEvents, "compPrimFloatArray", expectedFloatArr, expectedFloatArr
+        this.addConstructorValidator(startEvents, "compPrimFloatArray", expectedFloatArr, expectedFloatArr
                 .getClass());
 
         // Wrapped float array
         expected = new Float[2];
         expected[0] = new Float(3);
         expected[1] = new Float(4);
-        this.addFactoryConstructorValidator(startEvents, "compWrappedFloatArray", expected, expected.getClass());
+        this.addConstructorValidator(startEvents, "compWrappedFloatArray", expected, expected.getClass());
 
         // Date array
         expected = new Date[2];
         expected[0] = new GregorianCalendar(2009, 2, 19).getTime();
         expected[1] = new GregorianCalendar(2009, 2, 20).getTime();
-        this.addFactoryConstructorValidator(startEvents, "compDateArray", expected, expected.getClass());
+        this.addConstructorValidator(startEvents, "compDateArray", expected, expected.getClass());
 
         // URL array
         expected = new URL[2];
         expected[0] = new URL("http://www.osgi.org");
         expected[1] = new URL("http://www.gmail.com");
-        this.addFactoryConstructorValidator(startEvents, "compURLArray", expected, expected.getClass());
+        this.addConstructorValidator(startEvents, "compURLArray", expected, expected.getClass());
 
         // Class array
         expected = new Class[2];
         expected[0] = String.class;
         expected[1] = Boolean.class;
-        this.addFactoryConstructorValidator(startEvents, "compClassArray", expected, expected.getClass());
+        this.addConstructorValidator(startEvents, "compClassArray", expected, expected.getClass());
 
         // Locale array
         expected = new Locale[2];
         expected[0] = new Locale("en", "US");
         expected[1] = new Locale("zh", "CN");
-        this.addFactoryConstructorValidator(startEvents, "compLocaleArray", expected, expected.getClass());
+        this.addConstructorValidator(startEvents, "compLocaleArray", expected, expected.getClass());
 
         // Nested props
         Properties innerProps = new Properties();
@@ -399,7 +390,7 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
         innerProps.put("support", "support@example.org");
         expected = new Properties[1];
         expected[0] = innerProps;
-        this.addFactoryConstructorValidator(startEvents, "compNestedProps", expected, expected.getClass());
+        this.addConstructorValidator(startEvents, "compNestedProps", expected, expected.getClass());
 
         // Nested map
         Map innerMap = new HashMap();
@@ -407,7 +398,7 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
         innerMap.put("def", "2");
         expected = new Map[1];
         expected[0] = innerMap;
-        this.addFactoryConstructorValidator(startEvents, "compNestedMap", expected, expected.getClass());
+        this.addConstructorValidator(startEvents, "compNestedMap", expected, expected.getClass());
 
         // Nested set
         Set innerSet = new HashSet();
@@ -415,7 +406,7 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
         innerSet.add("support@example.org");
         expected = new Set[1];
         expected[0] = innerSet;
-        this.addFactoryConstructorValidator(startEvents, "compNestedSet", expected, expected.getClass());
+        this.addConstructorValidator(startEvents, "compNestedSet", expected, expected.getClass());
 
         // Nested list
         List innerList = new ArrayList();
@@ -423,15 +414,13 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
         innerList.add("support@example.org");
         expected = new List[1];
         expected[0] = innerList;
-        this.addFactoryConstructorValidator(startEvents, "compNestedList", expected, expected.getClass());
+        this.addConstructorValidator(startEvents, "compNestedList", expected, expected.getClass());
 
         // Nested array
-        String[] innerArr = new String[2];
-        innerArr[0] = "abc";
-        innerArr[1] = "def";
-        expected = new Object[1];
-        expected[0] = innerArr;
-        this.addFactoryConstructorValidator(startEvents, "compNestedArray", expected, expected.getClass());
+        String [][] nested = new String[1][2];
+        nested[0][0] = "abc";
+        nested[0][1] = "def";
+        this.addConstructorValidator(startEvents, "compNestedArray", nested, nested.getClass());
 
         controller.run();
     }
@@ -442,159 +431,157 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
         MetadataEventSet startEvents = controller.getStartEvents();
 
         // Empty array
-        Object[] expected = new Object[0];
-        this
-                .addFactoryConstructorValidator(startEvents, "compEmptyArray", "compFactory", expected, expected
-                        .getClass());
+        Object[] expected = new String[0];
+        this.addConstructorValidator(startEvents, "compEmptyArray", expected, expected.getClass());
 
         // Null array
-        expected = new Object[1];
-        this.addFactoryConstructorValidator(startEvents, "compNullArray", "compFactory", expected, Object[].class);
+        expected = new String[1];
+        this.addConstructorValidator(startEvents, "compNullArray", expected, String[].class);
 
         // String array
         expected = new String[2];
         expected[0] = "abc";
         expected[1] = "def";
-        this.addFactoryConstructorValidator(startEvents, "compStringArray", "compFactory", expected, expected
+        this.addConstructorValidator(startEvents, "compStringArray", expected, expected
                 .getClass());
 
         // Primitive int array
         int[] expectedIntArr = new int[2];
         expectedIntArr[0] = 1;
         expectedIntArr[1] = 2;
-        this.addFactoryConstructorValidator(startEvents, "compPrimIntArray", "compFactory", expectedIntArr,
+        this.addConstructorValidator(startEvents, "compPrimIntArray", expectedIntArr,
                 expectedIntArr.getClass());
 
         // Wrapped int array
         expected = new Integer[2];
         expected[0] = new Integer(1);
         expected[1] = new Integer(2);
-        this.addFactoryConstructorValidator(startEvents, "compWrappedIntArray", "compFactory", expected, expected
+        this.addConstructorValidator(startEvents, "compWrappedIntArray", expected, expected
                 .getClass());
 
         // Primitive boolean array
         boolean[] expectedBoolArr = new boolean[2];
         expectedBoolArr[0] = true;
         expectedBoolArr[1] = false;
-        this.addFactoryConstructorValidator(startEvents, "compPrimBoolArray", "compFactory", expectedBoolArr,
+        this.addConstructorValidator(startEvents, "compPrimBoolArray", expectedBoolArr,
                 expectedBoolArr.getClass());
 
         // Wrapped boolean array
         expected = new Boolean[2];
         expected[0] = Boolean.TRUE;
         expected[1] = Boolean.FALSE;
-        this.addFactoryConstructorValidator(startEvents, "compWrappedBooleanArray", "compFactory", expected, expected
+        this.addConstructorValidator(startEvents, "compWrappedBooleanArray", expected, expected
                 .getClass());
 
         // Primitive byte array
         byte[] expectedByteArr = new byte[2];
         expectedByteArr[0] = 1;
         expectedByteArr[1] = 2;
-        this.addFactoryConstructorValidator(startEvents, "compPrimByteArray", "compFactory", expectedByteArr,
+        this.addConstructorValidator(startEvents, "compPrimByteArray", expectedByteArr,
                 expectedByteArr.getClass());
 
         // Wrapped byte array
         expected = new Byte[2];
         expected[0] = new Byte((byte) 1);
         expected[1] = new Byte((byte) 2);
-        this.addFactoryConstructorValidator(startEvents, "compWrappedByteArray", "compFactory", expected, expected
+        this.addConstructorValidator(startEvents, "compWrappedByteArray", expected, expected
                 .getClass());
 
         // Primitive char array
         char[] expectedCharArr = new char[2];
         expectedCharArr[0] = 'a';
         expectedCharArr[1] = 'b';
-        this.addFactoryConstructorValidator(startEvents, "compPrimCharArray", "compFactory", expectedCharArr,
+        this.addConstructorValidator(startEvents, "compPrimCharArray", expectedCharArr,
                 expectedCharArr.getClass());
 
         // Wrapped char array
         expected = new Character[2];
         expected[0] = new Character('a');
         expected[1] = new Character('b');
-        this.addFactoryConstructorValidator(startEvents, "compWrappedCharArray", "compFactory", expected, expected
+        this.addConstructorValidator(startEvents, "compWrappedCharArray", expected, expected
                 .getClass());
 
         // Primitive short array
         short[] expectedShortArr = new short[2];
         expectedShortArr[0] = 3;
         expectedShortArr[1] = 4;
-        this.addFactoryConstructorValidator(startEvents, "compPrimShortArray", "compFactory", expectedShortArr,
+        this.addConstructorValidator(startEvents, "compPrimShortArray", expectedShortArr,
                 expectedShortArr.getClass());
 
         // Wrapped short array
         expected = new Short[2];
         expected[0] = new Short((short) 3);
         expected[1] = new Short((short) 4);
-        this.addFactoryConstructorValidator(startEvents, "compWrappedShortArray", "compFactory", expected, expected
+        this.addConstructorValidator(startEvents, "compWrappedShortArray", expected, expected
                 .getClass());
 
         // Primitive long array
         long[] expectedLongArr = new long[2];
         expectedLongArr[0] = 3;
         expectedLongArr[1] = 4;
-        this.addFactoryConstructorValidator(startEvents, "compPrimLongArray", "compFactory", expectedLongArr,
+        this.addConstructorValidator(startEvents, "compPrimLongArray", expectedLongArr,
                 expectedLongArr.getClass());
 
         // Wrapped long array
         expected = new Long[2];
         expected[0] = new Long(3);
         expected[1] = new Long(4);
-        this.addFactoryConstructorValidator(startEvents, "compWrappedLongArray", "compFactory", expected, expected
+        this.addConstructorValidator(startEvents, "compWrappedLongArray", expected, expected
                 .getClass());
 
         // Primitive double array
         double[] expectedDoubleArr = new double[2];
         expectedDoubleArr[0] = 3;
         expectedDoubleArr[1] = 4;
-        this.addFactoryConstructorValidator(startEvents, "compPrimDoubleArray", "compFactory", expectedDoubleArr,
+        this.addConstructorValidator(startEvents, "compPrimDoubleArray", expectedDoubleArr,
                 expectedDoubleArr.getClass());
 
         // Wrapped double array
         expected = new Double[2];
         expected[0] = new Double(3);
         expected[1] = new Double(4);
-        this.addFactoryConstructorValidator(startEvents, "compWrappedDoubleArray", "compFactory", expected, expected
+        this.addConstructorValidator(startEvents, "compWrappedDoubleArray", expected, expected
                 .getClass());
 
         // Primitive float array
         float[] expectedFloatArr = new float[2];
         expectedFloatArr[0] = 3;
         expectedFloatArr[1] = 4;
-        this.addFactoryConstructorValidator(startEvents, "compPrimFloatArray", "compFactory", expectedFloatArr,
+        this.addConstructorValidator(startEvents, "compPrimFloatArray", expectedFloatArr,
                 expectedFloatArr.getClass());
 
         // Wrapped float array
         expected = new Float[2];
         expected[0] = new Float(3);
         expected[1] = new Float(4);
-        this.addFactoryConstructorValidator(startEvents, "compWrappedFloatArray", "compFactory", expected, expected
+        this.addConstructorValidator(startEvents, "compWrappedFloatArray", expected, expected
                 .getClass());
 
         // Date array
         expected = new Date[2];
         expected[0] = new GregorianCalendar(2009, 2, 19).getTime();
         expected[1] = new GregorianCalendar(2009, 2, 20).getTime();
-        this.addFactoryConstructorValidator(startEvents, "compDateArray", "compFactory", expected, expected.getClass());
+        this.addConstructorValidator(startEvents, "compDateArray", expected, expected.getClass());
 
         // URL array
         expected = new URL[2];
         expected[0] = new URL("http://www.osgi.org");
         expected[1] = new URL("http://www.gmail.com");
-        this.addFactoryConstructorValidator(startEvents, "compURLArray", "compFactory", expected, expected.getClass());
+        this.addConstructorValidator(startEvents, "compURLArray", expected, expected.getClass());
 
         // Class array
         expected = new Class[2];
         expected[0] = String.class;
         expected[1] = Boolean.class;
         this
-                .addFactoryConstructorValidator(startEvents, "compClassArray", "compFactory", expected, expected
+                .addConstructorValidator(startEvents, "compClassArray", expected, expected
                         .getClass());
 
         // Locale array
         expected = new Locale[2];
         expected[0] = new Locale("en", "US");
         expected[1] = new Locale("zh", "CN");
-        this.addFactoryConstructorValidator(startEvents, "compLocaleArray", "compFactory", expected, expected
+        this.addConstructorValidator(startEvents, "compLocaleArray", expected, expected
                 .getClass());
 
         // Nested props
@@ -603,7 +590,7 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
         innerProps.put("support", "support@example.org");
         expected = new Properties[1];
         expected[0] = innerProps;
-        this.addFactoryConstructorValidator(startEvents, "compNestedProps", "compFactory", expected, expected
+        this.addConstructorValidator(startEvents, "compNestedProps", expected, expected
                 .getClass());
 
         // Nested map
@@ -612,7 +599,7 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
         innerMap.put("def", "2");
         expected = new Map[1];
         expected[0] = innerMap;
-        this.addFactoryConstructorValidator(startEvents, "compNestedMap", "compFactory", expected, expected.getClass());
+        this.addConstructorValidator(startEvents, "compNestedMap", expected, expected.getClass());
 
         // Nested set
         Set innerSet = new HashSet();
@@ -620,7 +607,7 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
         innerSet.add("support@example.org");
         expected = new Set[1];
         expected[0] = innerSet;
-        this.addFactoryConstructorValidator(startEvents, "compNestedSet", "compFactory", expected, expected.getClass());
+        this.addConstructorValidator(startEvents, "compNestedSet", expected, expected.getClass());
 
         // Nested list
         List innerList = new ArrayList();
@@ -629,18 +616,14 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
         expected = new List[1];
         expected[0] = innerList;
         this
-                .addFactoryConstructorValidator(startEvents, "compNestedList", "compFactory", expected, expected
+                .addConstructorValidator(startEvents, "compNestedList", expected, expected
                         .getClass());
 
         // Nested array
-        String[] innerArr = new String[2];
-        innerArr[0] = "abc";
-        innerArr[1] = "def";
-        expected = new Object[1];
-        expected[0] = innerArr;
-        this.addFactoryConstructorValidator(startEvents, "compNestedArray", "compFactory", expected, expected
-                .getClass());
-
+        String [][] nested = new String[1][2];
+        nested[0][0] = "abc";
+        nested[0][1] = "def";
+        this.addConstructorValidator(startEvents, "compNestedArray", nested, nested.getClass());
         controller.run();
     }
 
@@ -824,13 +807,10 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
         addPropertyValidator(startEvents, "compNestedList", "listArray", expected, expected.getClass());
 
         // Nested array
-        String[] innerArr = new String[2];
-        innerArr[0] = "abc";
-        innerArr[1] = "def";
-        expected = new Object[1];
-        expected[0] = innerArr;
-        addPropertyValidator(startEvents, "compNestedArray", "nestedArray", expected, expected.getClass());
-
+        String [][] nested = new String[1][2];
+        nested[0][0] = "abc";
+        nested[0][1] = "def";
+        this.addConstructorValidator(startEvents, "compNestedArray", nested, nested.getClass());
         controller.run();
     }
 

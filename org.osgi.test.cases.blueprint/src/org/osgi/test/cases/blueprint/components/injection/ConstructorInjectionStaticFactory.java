@@ -22,7 +22,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 public class ConstructorInjectionStaticFactory {
@@ -144,10 +143,6 @@ public class ConstructorInjectionStaticFactory {
         return new ConstructorInjection(arg2);
     }
 
-    static public Object makeInstance(Properties arg2) {
-        return new ConstructorInjection(arg2);
-    }
-
     static public Object makeInstance(Date arg2) {
         return new ConstructorInjection(arg2);
     }
@@ -230,11 +225,12 @@ public class ConstructorInjectionStaticFactory {
     }
 
     // Factory Injection of array
-    static public Object makeInstance(Object[] arg1) {
+
+    static public Object makeInstance(String[] arg1) {
         return new ConstructorInjection(arg1);
     }
 
-    static public Object makeInstance(String[] arg1) {
+    static public Object makeInstance(String[][] arg1) {
         return new ConstructorInjection(arg1);
     }
 
@@ -327,10 +323,6 @@ public class ConstructorInjectionStaticFactory {
     }
 
     static public Object makeInstance(Map[] arg1) {
-        return new ConstructorInjection(arg1);
-    }
-
-    static public Object makeInstance(Properties[] arg1) {
         return new ConstructorInjection(arg1);
     }
 }

@@ -22,7 +22,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
@@ -146,10 +145,6 @@ public class ConstructorInjectionInstanceFactory extends BaseTestComponent {
         return new ConstructorInjection(arg2);
     }
 
-    public Object makeInstance(Properties arg2) {
-        return new ConstructorInjection(arg2);
-    }
-
     public Object makeInstance(Date arg2) {
         return new ConstructorInjection(arg2);
     }
@@ -231,12 +226,11 @@ public class ConstructorInjectionInstanceFactory extends BaseTestComponent {
         return new WrapperedFloatInjection(arg1);
     }
 
-    // Factory Injection of array
-    public Object makeInstance(Object[] arg1) {
+    public Object makeInstance(String[] arg1) {
         return new ConstructorInjection(arg1);
     }
 
-    public Object makeInstance(String[] arg1) {
+    public Object makeInstance(String[][] arg1) {
         return new ConstructorInjection(arg1);
     }
 
@@ -329,10 +323,6 @@ public class ConstructorInjectionInstanceFactory extends BaseTestComponent {
     }
 
     public Object makeInstance(Map[] arg1) {
-        return new ConstructorInjection(arg1);
-    }
-
-    public Object makeInstance(Properties[] arg1) {
         return new ConstructorInjection(arg1);
     }
 }

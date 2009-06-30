@@ -655,16 +655,6 @@ public class TestConfigErrors extends DefaultTestBundleControl {
     }
 
     /**
-     * Missing interface spec on <reference>
-     */
-    public void testReferenceNoInterface() throws Exception {
-        // this should just be the standard error set
-        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
-            getWebServer()+"www/error_reference_no_interface.jar");
-        controller.run();
-    }
-
-    /**
      * Bad interface class name specified on <reference>
      */
     public void testReferenceBadInterface() throws Exception {
@@ -707,7 +697,7 @@ public class TestConfigErrors extends DefaultTestBundleControl {
     /**
      * Bad bind method signature
      */
-    public void testReferenceListenerBadbind() throws Exception {
+    public void testReferenceListenerBadBind() throws Exception {
         // this should just be the standard error set,
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
             getWebServer()+"www/error_reference_listener_bad_bind.jar");
@@ -983,17 +973,6 @@ public class TestConfigErrors extends DefaultTestBundleControl {
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
             getWebServer()+"www/error_ref_list_bad_dependson.jar");
         controller.addSetupBundle(getWebServer()+"www/managed_service_export.jar");
-        controller.run();
-    }
-
-
-    /**
-     * test a wild card specification with no matching files is an error
-     */
-    public void testBlueprintBundleWildcardNoMatch() throws Exception {
-        // this should just be the standard error set
-        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
-            getWebServer()+"www/wildcard_no_match.jar");
         controller.run();
     }
 

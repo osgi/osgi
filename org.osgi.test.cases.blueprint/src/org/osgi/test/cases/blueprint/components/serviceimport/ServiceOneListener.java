@@ -97,11 +97,11 @@ public class ServiceOneListener extends ServiceListener implements ServiceOneLis
         unbind(TestServiceOne.class, null);
     }
 
-    public void badBind(TestServiceOne service) {
+    public void badBind() {
         AssertionService.fail(this, "Bad bind call");
     }
 
-    public void badUnbind(TestServiceOne service) {
+    public void badUnbind() {
         AssertionService.fail(this, "Bad unbind call");
     }
 }

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
-    <bean id="compEmptyProps" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+    <bean id="compEmptyProps" class="org.osgi.test.cases.blueprint.components.injection.PropsConstructorInjection">
         <argument>
             <props></props>
         </argument>
     </bean>
 
-    <bean id="compNullProps" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+    <bean id="compNullProps" class="org.osgi.test.cases.blueprint.components.injection.PropsConstructorInjection">
         <argument type="java.util.Properties">
             <null/>
         </argument>
     </bean>
 
-    <bean id="compStringItems" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+    <bean id="compStringItems" class="org.osgi.test.cases.blueprint.components.injection.PropsConstructorInjection">
         <argument>
             <props>
                 <prop key="administrator">administrator@example.org</prop>

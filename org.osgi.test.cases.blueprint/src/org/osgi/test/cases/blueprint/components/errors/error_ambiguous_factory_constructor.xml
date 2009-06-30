@@ -9,8 +9,8 @@
         <!-- collaborators and configuration for this component go here -->
     </bean>
 
-    <bean id="compOneArg" factory-ref="compFactory" factory-method="makeInstance">
-        <argument value="compOneArg"/>
+    <bean id="compOneArg" factory-ref="compFactory" factory-method="makePrimInstance">
+        <argument value="1"/>
         <!-- just a component name -->
     </bean>
 </blueprint>

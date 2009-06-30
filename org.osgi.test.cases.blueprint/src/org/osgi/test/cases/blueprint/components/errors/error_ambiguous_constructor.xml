@@ -5,8 +5,8 @@
         constructors can handle a string conversion
     </description>
 
-   <bean id="compOneArg" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-       <argument value="compOneArg"/>
+   <bean id="compOneArg" class="org.osgi.test.cases.blueprint.components.injection.PrimitiveConstructorInjection">
+       <argument value="1"/>
    </bean>
 </blueprint>
 

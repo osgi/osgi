@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
-    <bean id="compFactory" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionInstanceFactory">
+    <bean id="compFactory" class="org.osgi.test.cases.blueprint.components.injection.PropsConstructorInjection">
       <!-- collaborators and configuration for this component go here -->
     </bean>
 

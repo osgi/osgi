@@ -5,15 +5,15 @@
 	<bean id="compEmptyArray"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
 		<argument>
-			<array value-type="java.lang.Object"></array>
+			<array value-type="java.lang.String"></array>
 		</argument>
 	</bean>
 
 	<!-- Null Array -->
 	<bean id="compNullArray"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-		<argument>
-			<array value-type="java.lang.Object">
+		<argument type="java.lang.String[]">
+			<array value-type="java.lang.String">
 				<null />
 			</array>
 		</argument>
@@ -273,7 +273,7 @@
 
 	<!-- String values from props -->
 	<bean id="compNestedProps"
-		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+		class="org.osgi.test.cases.blueprint.components.injection.PropsConstructorInjection">
 		<argument>
 			<array value-type="java.util.Properties">
 				<props>
@@ -327,8 +327,8 @@
 	<!-- Injection of nested array -->
 	<bean id="compNestedArray"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-		<argument>
-			<array value-type="java.lang.Object">
+		<argument type="java.lang.String[][]">
+			<array value-type="java.lang.String[]">
 				<array value-type="java.lang.String">
 					<value>abc</value>
 					<value>def</value>

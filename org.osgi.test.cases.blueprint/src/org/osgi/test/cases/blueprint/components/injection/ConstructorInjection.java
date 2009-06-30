@@ -22,7 +22,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
@@ -175,11 +174,6 @@ public class ConstructorInjection extends BaseTestComponent {
         setArgumentValue("arg1", arg1, URL.class);
     }
 
-    public ConstructorInjection(Properties arg1) {
-        super("PropertiesArg");
-        setArgumentValue("arg1", arg1, Properties.class);
-    }
-
     public ConstructorInjection(Date arg1) {
         super("DateArg");
         setArgumentValue("arg1", arg1, Date.class);
@@ -198,12 +192,6 @@ public class ConstructorInjection extends BaseTestComponent {
     public ConstructorInjection(List arg1) {
         super("ListArg");
         setArgumentValue("arg1", arg1, List.class);
-    }
-
-    // Array constructor argument
-    public ConstructorInjection(Object[] arg1) {
-        super();
-        this.setArgumentValue("arg1", arg1, Object[].class);
     }
 
     public ConstructorInjection(int[] arg1) {
@@ -229,6 +217,11 @@ public class ConstructorInjection extends BaseTestComponent {
     public ConstructorInjection(String[] arg1) {
         super();
         this.setArgumentValue("arg1", arg1, String[].class);
+    }
+
+    public ConstructorInjection(String[][] arg1) {
+        super();
+        this.setArgumentValue("arg1", arg1, String[][].class);
     }
 
     public ConstructorInjection(byte[] arg1) {
@@ -309,11 +302,6 @@ public class ConstructorInjection extends BaseTestComponent {
     public ConstructorInjection(Locale[] arg1) {
         super();
         this.setArgumentValue("arg1", arg1, Locale[].class);
-    }
-
-    public ConstructorInjection(Properties[] arg1) {
-        super();
-        this.setArgumentValue("arg1", arg1, Properties[].class);
     }
 
     public ConstructorInjection(Map[] arg1) {

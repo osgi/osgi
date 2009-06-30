@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
-    <bean id="compEmptyProps" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+    <bean id="compEmptyProps" factory-method="makeStatic" class="org.osgi.test.cases.blueprint.components.injection.PropsConstructorInjection">
         <argument>
             <props></props>
         </argument>
     </bean>
 
-    <bean id="compNullProps" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+    <bean id="compNullProps" factory-method="makeStatic" class="org.osgi.test.cases.blueprint.components.injection.PropsConstructorInjection">
         <argument type="java.util.Properties">
             <null/>
         </argument>
     </bean>
 
-    <bean id="compStringItems" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+    <bean id="compStringItems" factory-method="makeStatic" class="org.osgi.test.cases.blueprint.components.injection.PropsConstructorInjection">
         <argument>
             <props>
                 <prop key="administrator">administrator@example.org</prop>

@@ -3,22 +3,25 @@
 
 	<bean id="compFactory"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionInstanceFactory">
-		<!-- collaborators and configuration for this component go here -->
+	</bean>
+
+	<bean id="compPropsFactory"
+		class="org.osgi.test.cases.blueprint.components.injection.PropsConstructorInjection">
 	</bean>
 
 	<!-- Injection of an empty array -->
 	<bean id="compEmptyArray" factory-method="makeInstance"
 		factory-ref="compFactory">
 		<argument>
-			<array></array>
+			<array type="java.lang.String"></array>
 		</argument>
 	</bean>
 
 	<!-- Injection of a null array -->
 	<bean id="compNullArray" factory-method="makeInstance"
 		factory-ref="compFactory">
-		<argument>
-			<array value-type="java.lang.Object">
+		<argument type="java.lang.String[]">
+			<array value-type="java.lang.String">
 				<null />
 			</array>
 		</argument>
@@ -257,7 +260,7 @@
 
 	<!-- Injection of String values from props -->
 	<bean id="compNestedProps" factory-method="makeInstance"
-		factory-ref="compFactory">
+		factory-ref="compPropsFactory">
 		<argument type="java.util.Properties[]">
 			<array value-type="java.util.Properties">
 				<props>
@@ -311,8 +314,8 @@
 	<!-- Injection of nested array -->
 	<bean id="compNestedArray" factory-method="makeInstance"
 		factory-ref="compFactory">
-		<argument>
-			<array value-type="java.lang.Object">
+		<argument type="java.lang.String[][]">
+			<array value-type="java.lang.String[]">
 				<array value-type="java.lang.String">
 					<value>abc</value>
 					<value>def</value>
