@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    default-activation="eager">
+
+   <!-- prototype1 will have prototype scope, which means a new component will be instantiated for each request -->
+   <bean id="prototype1" class="org.osgi.test.cases.blueprint.components.injection.PrototypeComponentInjection" scope="prototype"
+       init-method="init" destroy-method="destroy">
+       <argument value="prototype1"/>
+   </bean>
+</blueprint>
+

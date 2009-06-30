@@ -266,19 +266,20 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         stopEvents.addAssertion("singleton1", AssertionService.BEAN_DESTROY_METHOD);
         stopEvents.addAssertion("singleton2", AssertionService.BEAN_DESTROY_METHOD);
 
-        // we should see destroy methods for all created protype component
-        startEvents.addAssertion("prototype1", AssertionService.BEAN_DESTROY_METHOD);
-        startEvents.addAssertion("prototype1", AssertionService.BEAN_DESTROY_METHOD);
-        startEvents.addAssertion("prototype1", AssertionService.BEAN_DESTROY_METHOD);
-
-        startEvents.addAssertion("prototype2", AssertionService.BEAN_DESTROY_METHOD);
-        startEvents.addAssertion("prototype2", AssertionService.BEAN_DESTROY_METHOD);
-        startEvents.addAssertion("prototype2", AssertionService.BEAN_DESTROY_METHOD);
-
         // and just one of these
-        startEvents.addAssertion("prototype3", AssertionService.BEAN_DESTROY_METHOD);
         startEvents.addAssertion("inlinePrototype1", AssertionService.BEAN_DESTROY_METHOD);
 
+        controller.run();
+    }
+
+
+    /**
+     * verify that destroy-method is a config error on prototype scope beans.
+     */
+    public void testPrototypeDestroy_Method() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/prototype_destroy_method.jar");
         controller.run();
     }
 }

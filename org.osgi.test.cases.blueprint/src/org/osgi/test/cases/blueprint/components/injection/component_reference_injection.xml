@@ -160,25 +160,25 @@
 
    <!-- prototype1 will have prototype scope, which means a new component will be instantiated for each request -->
    <bean id="prototype1" class="org.osgi.test.cases.blueprint.components.injection.PrototypeComponentInjection" scope="prototype"
-       init-method="init" destroy-method="destroy">
+       init-method="init">
        <argument value="prototype1"/>
    </bean>
 
    <!-- prototype2 tests prototype scope and lazy-init in combination. -->
    <bean id="prototype2" class="org.osgi.test.cases.blueprint.components.injection.PrototypeComponentInjection" scope="prototype" activation="lazy"
-       init-method="init" destroy-method="destroy">
+       init-method="init">
        <argument value="prototype2"/>
    </bean>
 
    <!-- prototype3 is only referenced via the module context.  This should not be instantiated until referenced -->
    <bean id="prototype3" class="org.osgi.test.cases.blueprint.components.injection.PrototypeComponentInjection" scope="prototype"
-       init-method="init" destroy-method="destroy">
+       init-method="init">
        <argument value="prototype3"/>
    </bean>
 
    <!-- referenced by a list, so will create unique ones for each element. -->
    <bean id="prototype4" class="org.osgi.test.cases.blueprint.components.injection.PrototypeComponentInjection" scope="prototype"
-       init-method="init" destroy-method="destroy">
+       init-method="init">
        <argument value="prototype4"/>
    </bean>
 
@@ -261,7 +261,7 @@
            <set>
                <!-- prototype1 will have prototype scope, which means a new component will be instantiated for each request -->
                <bean class="org.osgi.test.cases.blueprint.components.injection.PrototypeComponentInjection"
-                   init-method="init" destroy-method="destroy">
+                   init-method="init">
                    <argument value="inlinePrototype1"/>
                </bean>
            </set>
