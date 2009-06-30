@@ -18,7 +18,7 @@ package org.osgi.service.blueprint.container;
 import org.osgi.framework.ServiceException;
 
 /**
- * Thrown when an invocation is made on an OSGi service reference component, and
+ * Thrown when an invocation is made on a service reference, and
  * a backing service is not available.
  */
 public class ServiceUnavailableException extends ServiceException {

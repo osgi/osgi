@@ -36,18 +36,17 @@ public interface Converter {
 	boolean canConvert(Object s, ReifiedType T);
 
 	/**
-	 * Convert an object to an instance of the given class, using the built-in
-	 * and user-registered type converters as necessary.
+	 * Convert an object to an instance of the given class.
 	 * 
 	 * @param s
 	 *            The source object to convert from
 	 * @param T
 	 *            The target type
-	 * @return an instance of the class 'toType'
+	 * @return an instance with a type that is assignable from T's raw class
 	 * @throws Exception
-	 *             if the conversion cannot succeed. This exception is checked
-	 *             because callers should expect that not all source objects can
-	 *             be successfully converted.
+	 *             If the conversion cannot succeed. This exception should not
+	 *             be thrown when the {@link #canConvert} method has returned
+	 *             <code>true</code>.
 	 */
 	Object convert(Object s, ReifiedType T) throws Exception;
 

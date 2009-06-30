@@ -16,14 +16,23 @@
 package org.osgi.service.blueprint.container;
 
 /**
- * Listener for <code>BlueprintEvent</code>s.
+ * Listener for <code>BlueprintEvent</code>s. Implementers should register
+ * this a Blueprint Event Listener service. The Blueprint extender must inform
+ * the Blueprint Event Listener synchronously with the registration the last
+ * non-DESTROYED event of all managed bundles with the replay flag set before
+ * any of the other events are delivered. The delivery must maintain the time
+ * ordering.
  * 
  * @see BlueprintEvent
+ * 
+ * @ThreadSafe
  */
 public interface BlueprintListener {
 
 	/**
-	 * Receives notifications of a Blueprint Event.
+	 * Receives synchronous notifications of a Blueprint Event.
+	 * 
+	 * Implementers should quickly process the events and return.
 	 * 
 	 * @param event
 	 *            The <code>BlueprintEvent</code>.

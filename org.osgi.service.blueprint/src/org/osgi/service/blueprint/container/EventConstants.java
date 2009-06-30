@@ -18,7 +18,7 @@ package org.osgi.service.blueprint.container;
 import org.osgi.framework.*;
 
 /**
- * Event property names used in Event Admin events published for a Blueprint
+ * Event property names used in Event Admin events published by a Blueprint
  * container.
  * 
  * Each type of event is sent to a different topic:<br/>
@@ -78,7 +78,7 @@ public interface EventConstants {
 
 	/**
 	 * The bundle id property defining the id of the blueprint bundle for which
-	 * an event has been issued. This property is of type <code>Integer</code>.
+	 * an event has been issued. This property is of type <code>Long</code>.
 	 */
 	public static final String BUNDLE_ID = "bundle.id";
 
@@ -91,13 +91,13 @@ public interface EventConstants {
 
 	/**
 	 * The bundle id property defining the id of the blueprint bundle for which
-	 * an event has been issued. This property is of type <code>Integer</code>.
+	 * an event has been issued. This property is of type <code>Version</code>.
 	 */
 	public static final String BUNDLE_VERSION = "bundle.version";
 
 	/**
 	 * The extender bundle property defining the extender bundle processing the
-	 * blueprint container for which an event has been issued. This property is
+	 * Blueprint Container for which an event has been issued. This property is
 	 * of type {@link org.osgi.framework.Bundle}.
 	 * 
 	 * @see Bundle
@@ -105,23 +105,23 @@ public interface EventConstants {
 	public static final String EXTENDER_BUNDLE = "extender.bundle";
 
 	/**
-	 * The extender bundle id property defining the id of the extender bundle
-	 * processing the blueprint container for which an event has been issued.
-	 * This property is of type <code>Integer</code>.
+	 * The Blueprint extender bundle id property defining the id of the extender bundle
+	 * processing the Blueprint Container for which an event has been issued.
+	 * This property is of type <code>Long</code>.
 	 */
 	public static final String EXTENDER_BUNDLE_ID = "extender.bundle.id";
 
 	/**
 	 * The extender bundle symbolic name property defining the symbolic name of
-	 * the extender bundle processing the blueprint container for which an event
+	 * the extender bundle processing the Blueprint Container for which an event
 	 * has been issued. This property is of type <code>String</code>.
 	 */
 	public static final String EXTENDER_BUNDLE_SYMBOLICNAME = "extender.bundle.symbolicName";
 
 	/**
-	 * The extender bundle version property defining the version of the extender
-	 * bundle processing the blueprint container for which an event has been
-	 * issued. This property is of type <code>Integer</code>.
+	 * The Blueprint extender bundle version property defining the version of the Blueprint extender
+	 * bundle processing the Blueprint Container for which an event has been
+	 * issued. This property is of type <code>Version</code>.
 	 */
 	public static final String EXTENDER_BUNDLE_VERSION = "extender.bundle.version";
 
