@@ -16,10 +16,15 @@
 
 package org.osgi.test.cases.blueprint.components.serviceimport;
 
+import java.util.Properties;
+
 import org.osgi.service.blueprint.container.ServiceUnavailableException;
 import org.osgi.test.cases.blueprint.framework.TestService;
 import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.services.TestServiceOne;
+
+import org.osgi.framework.Filter;
+import org.osgi.framework.InvalidSyntaxException;
 
 
 /**
@@ -57,6 +62,18 @@ public class UnregisteredCollectionDependencyChecker extends DependencyDriver {
             // this should give an exception
             AssertionService.assertFalse(this, "Service proxy not detached", service.testOne());
         } catch (ServiceUnavailableException e) {
+            try {
+                String filterString = e.getFilter();
+                AssertionService.assertNotNull(this, "Null filter from ServiceUnavailableException", filterString);
+                Filter filter = serviceManager.createFilter(filterString);
+                Properties filterProps = new Properties();
+                filterProps.put(org.osgi.framework.Constants.OBJECTCLASS, new String[] { TestServiceOne.class.getName() });
+                // this is requested using the component-name attribute, so this should be in the filter too.
+                filterProps.put("osgi.service.blueprint.compname", "ServiceOneA");
+                AssertionService.assertTrue(this, "ServiceUnavailableException filter did not match expected properties", filter.match(filterProps));
+            } catch (InvalidSyntaxException ise) {
+                AssertionService.fail(this, "Invalid filter syntax for ServiceUnavailableException", ise);
+            }
             // we expect to get here
         }
         // this will bring our backing service back to life
@@ -67,6 +84,18 @@ public class UnregisteredCollectionDependencyChecker extends DependencyDriver {
             AssertionService.assertFalse(this, "Service proxy not detached", service.testOne());
         } catch (ServiceUnavailableException e) {
             // we expect to get here
+            try {
+                String filterString = e.getFilter();
+                AssertionService.assertNotNull(this, "Null filter from ServiceUnavailableException", filterString);
+                Filter filter = serviceManager.createFilter(filterString);
+                Properties filterProps = new Properties();
+                filterProps.put(org.osgi.framework.Constants.OBJECTCLASS, new String[] { TestServiceOne.class.getName() });
+                // this is requested using the component-name attribute, so this should be in the filter too.
+                filterProps.put("osgi.service.blueprint.compname", "ServiceOneA");
+                AssertionService.assertTrue(this, "ServiceUnavailableException filter did not match expected properties", filter.match(filterProps));
+            } catch (InvalidSyntaxException ise) {
+                AssertionService.fail(this, "Invalid filter syntax for ServiceUnavailableException", ise);
+            }
         }
         super.init();
     }

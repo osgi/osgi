@@ -70,6 +70,8 @@ public class ManagedService {
         }
         // add the service name
         this.props.put("test.service.name", name);
+        // emulate a blueprint published service...lookups should work with this
+        this.props.put("osgi.service.blueprint.compname", name);
         // nothing registered yet
         registration = null;
         this.start = start;
@@ -80,6 +82,17 @@ public class ManagedService {
 
     public void setName(String name) {
         this.name = name;
+        if (props == null) {
+            props = new Properties();
+        }
+        // add the service name
+        this.props.put("osgi.service.blueprint.compname", name);
+    }
+
+
+    // we need some setter methods so that we can create instances of this
+    // inside blueprint bundles.
+    public void setComponentName(String name) {
         if (props == null) {
             props = new Properties();
         }

@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Filter;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceRegistration;
 
 /**
@@ -263,5 +265,16 @@ public class ServiceManagerImpl implements ServiceManager {
         unregisterServices();
         // unregister ourselves, if needed.
         unregister();
+    }
+
+
+    /**
+     * Create a filter for a ServiceManager client using the
+     * ServiceManager's bundle context.
+     *
+     * @return A created filter instance.
+     */
+    public Filter createFilter(String filterString) throws InvalidSyntaxException {
+        return context.createFilter(filterString);
     }
 }

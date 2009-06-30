@@ -11,7 +11,7 @@
 
 
     <!-- single shared instance of the imported service.  The original backing service will go away. -->
-    <reference-list id="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
+    <reference-list id="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" component-name="ServiceOneA" filter="(service.name=ServiceOneA)" >
         <reference-listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
     </reference-list>
 
