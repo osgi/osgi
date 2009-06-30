@@ -42,11 +42,11 @@ public class ServiceComponentValidator extends MetadataValidator {
         try {
             // this should be a proxy, which will not allow this operation
             ((ServiceRegistration)componentObject).unregister();
-            fail("ServiceReference proxy did not throw an exception");
+            fail("ServiceRegistration proxy did not throw an exception");
         } catch (UnsupportedOperationException e) {
             // expected
         } catch (Throwable e) {
-            fail("ServiceReference proxy did not threw wrong exception :" + e.toString());
+            fail("ServiceRegistration.unregister() proxy threw wrong exception :" + e.toString());
         }
     }
 }

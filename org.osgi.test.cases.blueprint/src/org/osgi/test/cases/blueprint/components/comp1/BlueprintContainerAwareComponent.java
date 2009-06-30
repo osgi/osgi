@@ -75,8 +75,8 @@ public class BlueprintContainerAwareComponent extends BaseTestComponent {
 
     public void init() {
         // validate the information is consistent
-        AssertionService.assertEquals(this, "Mismatch in BlueprintContainer BundleContext", bundleContext, moduleContext.getBundleContext());
-        AssertionService.assertEquals(this, "Mismatch in BlueprintContainer Bundle", bundle, moduleContext.getBundleContext().getBundle());
+        AssertionService.assertEquals(this, "Mismatch in BlueprintContainer BundleContext", bundleContext, moduleContext.getComponentInstance("blueprintBundleContext"));
+        AssertionService.assertEquals(this, "Mismatch in BlueprintContainer Bundle", bundle, moduleContext.getComponentInstance("blueprintBundle"));
         super.init();
     }
 }

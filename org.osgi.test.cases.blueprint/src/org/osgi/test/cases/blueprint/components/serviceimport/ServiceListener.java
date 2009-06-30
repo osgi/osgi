@@ -56,6 +56,20 @@ public class ServiceListener extends BaseTestComponent {
         AssertionService.sendEvent(this, AssertionService.SERVICE_UNBIND, props);
     }
 
+    protected void bind(Class serviceInterface) {
+        Hashtable props = new Hashtable();
+        props.put("service.interface.name", serviceInterface.getName());
+        props.put("service.listener.type", "interface_nomap");
+        AssertionService.sendEvent(this, AssertionService.SERVICE_BIND, props);
+    }
+
+    protected void unbind(Class serviceInterface) {
+        Hashtable props = new Hashtable();
+        props.put("service.interface.name", serviceInterface.getName());
+        props.put("service.listener.type", "interface_nomap");
+        AssertionService.sendEvent(this, AssertionService.SERVICE_UNBIND, props);
+    }
+
     public void bindReference(ServiceReference ref) {
         Hashtable props = new Hashtable();
         props.putAll(TestUtil.getProperties(ref));

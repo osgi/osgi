@@ -52,11 +52,11 @@ public class ServiceRegistrationChecker extends BaseTestComponent {
         try {
             // this should be a proxy, which will not allow this operation
             reg.unregister();
-            AssertionService.fail(this, "ServiceReference proxy did not throw an exception");
+            AssertionService.fail(this, "ServiceRegistration.unregister() proxy did not throw an exception");
         } catch (UnsupportedOperationException e) {
             // expected
         } catch (Throwable e) {
-            AssertionService.fail(this, "ServiceReference proxy did not threw wrong exception :" + e.toString());
+            AssertionService.fail(this, "ServiceRegistration.unregister() proxy threw wrong exception", e);
         }
     }
 }

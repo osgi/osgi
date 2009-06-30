@@ -18,14 +18,13 @@ package org.osgi.test.cases.blueprint.tests;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-
 import org.osgi.service.blueprint.container.BlueprintContainer;
 import org.osgi.service.blueprint.container.Converter;
 import org.osgi.service.blueprint.container.ReifiedType;
 import org.osgi.service.blueprint.reflect.BeanMetadata;
-
-import org.osgi.test.cases.blueprint.components.comp1.SimpleTestComponent;
+import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.osgi.test.cases.blueprint.components.comp1.AltSimpleTestComponent;
+import org.osgi.test.cases.blueprint.components.comp1.SimpleTestComponent;
 import org.osgi.test.cases.blueprint.components.factory.SimpleInstanceFactory;
 import org.osgi.test.cases.blueprint.components.factory.TypeInstanceFactory;
 import org.osgi.test.cases.blueprint.components.staticfactory.SimpleStaticFactory;
@@ -460,10 +459,13 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         startEvents.addValidator(new ComponentNamePresenceValidator("blueprintConverter"));
 
         // now verify that these have associated metadata
-        startEvents.addValidator(new ComponentMetadataAbsenceValidator("blueprintBundle"));
-        startEvents.addValidator(new ComponentMetadataAbsenceValidator("blueprintBundleContext"));
-        startEvents.addValidator(new ComponentMetadataAbsenceValidator("blueprintContainer"));
-        startEvents.addValidator(new ComponentMetadataAbsenceValidator("blueprintConverter"));
+        startEvents.addValidator(new ComponentMetadataPresenceValidator("blueprintBundle", ComponentMetadata.class));
+        startEvents.addValidator(new ComponentMetadataPresenceValidator("blueprintBundleContext", ComponentMetadata.class));
+        startEvents.addValidator(new ComponentMetadataPresenceValidator("blueprintContainer", ComponentMetadata.class));
+        startEvents.addValidator(new ComponentMetadataPresenceValidator("blueprintConverter", ComponentMetadata.class));
+
+        // this is a good place to validate the error conditions from the BlueprintContainer APIs.
+        startEvents.addValidator(new NoSuchComponentExceptionValidator());
 
         // if we receive the above events and no assertion failures, then everything has worked.
         controller.run();

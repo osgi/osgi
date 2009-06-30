@@ -1,0 +1,7 @@
+Bundle-SymbolicName:                     ${p}.lazy_service_get
+Bundle-Version:                          4.2
+Import-Package:                          ${p}.components.serviceimport, ${p}.services
+-resourceonly: true
+Include-Resource					= \
+	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/serviceimport/lazy_service_get.xml
+
