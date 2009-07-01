@@ -79,7 +79,7 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         // and the collection metadata
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferenceCollection("TestCollection",
                 TestServiceOne.class, ServiceReferenceMetadata.AVAILABILITY_OPTIONAL,
-                ServiceReferenceMetadata.ACTIVATION_LAZY, null, null,
+                ServiceReferenceMetadata.ACTIVATION_EAGER, null, null,
                 new BindingListener[] { new BindingListener("ServiceOneListener", "bind", "unbind")},
                 ReferenceListMetadata.USE_SERVICE_OBJECT)));
 

@@ -86,7 +86,8 @@ public class ManagedService {
             props = new Properties();
         }
         // add the service name
-        this.props.put("osgi.service.blueprint.compname", name);
+        props.put("test.service.name", name);
+        props.put("osgi.service.blueprint.compname", name);
     }
 
 
@@ -97,7 +98,7 @@ public class ManagedService {
             props = new Properties();
         }
         // add the service name
-        props.put("test.service.name", name);
+        props.put("osgi.service.blueprint.compname", name);
     }
 
     public void setContext(BundleContext context) {
