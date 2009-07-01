@@ -1,7 +1,0 @@
-Bundle-SymbolicName:                     ${p}.factory_service_properties_auto_update
-Bundle-Version:                          4.2
-Import-Package:                          ${p}.components.cmsupport, ${p}.services
--resourceonly: true
-Include-Resource					= \
-	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/cmsupport/factory_service_properties_auto_update.xml
-

@@ -1,6 +1,0 @@
-Bundle-SymbolicName:                     ${p}.placeholder_default_properties
-Bundle-Version:                          4.2
-Import-Package:                          ${p}.components.cmsupport, ${p}.services, ${p}.components.injection
--resourceonly: true
-Include-Resource					= \
-	OSGI-INF/blueprint/config1.xml=src/org/osgi/test/cases/blueprint/components/cmsupport/placeholder_default_properties.xml

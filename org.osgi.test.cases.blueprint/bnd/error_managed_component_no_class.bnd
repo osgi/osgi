@@ -1,7 +1,0 @@
-Bundle-SymbolicName:                     ${p}.error_managed_component_no_class
-Bundle-Version:                          4.2
-Import-Package:                          ${p}.components.cmsupport, ${p}.services
--resourceonly: true
-Include-Resource					= \
-	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/cmsupport/error_managed_component_no_class.xml
-

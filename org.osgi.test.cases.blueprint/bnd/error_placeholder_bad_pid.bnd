@@ -1,7 +1,0 @@
-Bundle-SymbolicName:                     ${p}.error_placeholder_bad_pid
-Bundle-Version:                          4.2
-Import-Package:                          ${p}.components.cmsupport, ${p}.services, ${p}.components.injection
--resourceonly: true
-Include-Resource					= \
-	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/cmsupport/error_placeholder_bad_pid.xml
-

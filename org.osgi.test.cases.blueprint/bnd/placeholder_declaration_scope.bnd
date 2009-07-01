@@ -1,7 +1,0 @@
-Bundle-SymbolicName:                     ${p}.placeholder_declaration_scope
-Bundle-Version:                          4.2
-Import-Package:                          ${p}.components.cmsupport, ${p}.services, ${p}.components.injection
--resourceonly: true
-Include-Resource					= \
-	OSGI-INF/blueprint/config1.xml=src/org/osgi/test/cases/blueprint/components/cmsupport/placeholder_declaration_scope_part1.xml, \
-	OSGI-INF/blueprint/config2.xml=src/org/osgi/test/cases/blueprint/components/cmsupport/placeholder_declaration_scope_part2.xml

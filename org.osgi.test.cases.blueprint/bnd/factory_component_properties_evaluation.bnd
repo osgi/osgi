@@ -1,7 +1,0 @@
-Bundle-SymbolicName:                     ${p}.factory_component_properties_evaluation
-Bundle-Version:                          4.2
-Import-Package:                          ${p}.components.cmsupport, ${p}.services, ${p}.components.serviceexport
--resourceonly: true
-Include-Resource					= \
-	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/cmsupport/factory_component_properties_evaluation.xml
-
