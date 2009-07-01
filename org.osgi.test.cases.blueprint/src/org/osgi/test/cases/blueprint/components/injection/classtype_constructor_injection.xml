@@ -14,27 +14,6 @@
 		<argument><value type="java.net.URL">http://www.osgi.org</value></argument>
 	</bean>
 
-<!-- Date: 5 cases -->
-	<bean id="compDate" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-		<argument value="6/1/1999" type="java.util.Date"/>
-	</bean>
-
-    <bean id="compDate2" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-		<argument value="2000-12-31 23:59:59" type="java.util.Date"/>
-	</bean>
-
-    <bean id="compDate3" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-		<argument value="January 1, 1970, 00:00:00 GMT" type="java.util.Date"/>
-	</bean>
-
-    <bean id="compDateNull" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-		<argument type="java.util.Date"><null/></argument>
-	</bean>
-
-	<bean id="compDate_EleValue" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
-		<argument><value type="java.util.Date">1970-1-1</value></argument>
-	</bean>
-
 <!-- Locale:5 cases -->
 	<bean id="compLocale" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
 		<argument value="en" type="java.util.Locale"/>

@@ -17,8 +17,6 @@
 package org.osgi.test.cases.blueprint.tests;
 
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -66,13 +64,6 @@ public class TestClasstypeInjection extends DefaultTestBundleControl {
         this.addConstructorValidator(startEvents, "compURL", new URL("http://www.osgi.org"), URL.class, "http://www.osgi.org", null);
         this.addConstructorValidator(startEvents, "compURLNull", URL.class);
         this.addConstructorValidator(startEvents, "compURL_EleValue", new URL("http://www.osgi.org"), null, "http://www.osgi.org", URL.class);
-
-        // Date tests
-        this.addConstructorValidator(startEvents, "compDate", (new SimpleDateFormat("MM/dd/yyyy")).parse("6/1/1999"), Date.class, "6/1/1999", null);
-        this.addConstructorValidator(startEvents, "compDate2", (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse("2000-12-31 23:59:59"), Date.class, "2000-12-31 23:59:59", null);
-        this.addConstructorValidator(startEvents, "compDate3", new Date(0), Date.class, "January 1, 1970, 00:00:00 GMT", null);
-        this.addConstructorValidator(startEvents, "compDateNull", Date.class);
-        this.addConstructorValidator(startEvents, "compDate_EleValue", (new SimpleDateFormat("MM/dd/yyyy")).parse("1/1/1970"), null, "1970-1-1", Date.class);
 
         // Locale tests
         this.addConstructorValidator(startEvents, "compLocale", new Locale("en"), Locale.class, "en", null);
@@ -157,13 +148,6 @@ public class TestClasstypeInjection extends DefaultTestBundleControl {
         this.addPropertyValidator(startEvents, "compURL", "url", new URL("http://www.osgi.org"), URL.class, "http://www.osgi.org", null);
         this.addPropertyValidator(startEvents, "compURLNull", "url", URL.class);
         this.addPropertyValidator(startEvents, "compURL_EleValue", "url", new URL("http://www.osgi.org"), null, "http://www.osgi.org", null);
-
-        // Date tests
-        this.addPropertyValidator(startEvents, "compDate", "date", (new SimpleDateFormat("MM/dd/yyyy")).parse("6/1/1999"), Date.class);
-        this.addPropertyValidator(startEvents, "compDate2", "date", (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse("2000-12-31 23:59:59"), Date.class);
-        this.addPropertyValidator(startEvents, "compDate3", "date", new Date(0), Date.class);
-        this.addPropertyValidator(startEvents, "compDateNull", "date", Date.class);
-        this.addPropertyValidator(startEvents, "compDate_EleValue", "date", (new SimpleDateFormat("MM/dd/yyyy")).parse("1/1/1970"), Date.class);
 
         // Locale tests
         this.addPropertyValidator(startEvents, "compLocale", "locale", new Locale("en"), Locale.class);

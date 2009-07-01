@@ -14,27 +14,6 @@
 		<property name="url"><value>http://www.osgi.org</value></property>
 	</bean>
 
-<!-- Date: 5 cases -->
-	<bean id="compDate" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
-		<property name="date" value="6/1/1999"/>
-	</bean>
-
-    <bean id="compDate2" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
-		<property name="date" value="2000-12-31 23:59:59"/>
-	</bean>
-
-    <bean id="compDate3" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
-		<property name="date" value="January 1, 1970, 00:00:00 GMT"/>
-	</bean>
-
-    <bean id="compDateNull" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
-		<property name="date"><null/></property>
-	</bean>
-
-	<bean id="compDate_EleValue" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
-		<property name="date"><value type="java.util.Date">1970-1-1</value></property>
-	</bean>
-
 <!-- Locale:5 cases -->
 	<bean id="compLocale" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjectionStaticFactory">
 		<property name="locale" value="en"/>
