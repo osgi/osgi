@@ -45,7 +45,7 @@ public class RegistrationStateListener extends ServiceOneRegistrationListener {
         if (registration != null) {
             AssertionService.assertNotNull(this, "Null service reference from ServiceRegistration proxy", registration.getReference());
         }
-        registered(TestServiceOne.class, serviceProperties);
+        registered(TestServiceOne.class, serviceProperties, service);
     }
 
     public void unregistered(TestServiceOne service, Map serviceProperties) {
@@ -54,7 +54,7 @@ public class RegistrationStateListener extends ServiceOneRegistrationListener {
         if (registration != null) {
             AssertionService.assertNotNull(this, "Null service reference from ServiceRegistration proxy", registration.getReference());
         }
-        unregistered(TestServiceOne.class, serviceProperties);
+        unregistered(TestServiceOne.class, serviceProperties, service);
     }
 }
 

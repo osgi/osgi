@@ -2,9 +2,8 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
 <!-- instance factory -->
-    <bean id="compFactory" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionInstanceFactory">
-		<!-- collaborators and configuration for this component go here -->
-    </bean>
+    <bean id="compFactory" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionInstanceFactory"/>
+    <bean id="compPropsFactory" class="org.osgi.test.cases.blueprint.components.injection.PropsConstructorInjection"/>
 
 <!-- URL: 3 cases -->
 	<bean id="compURL" factory-method="makeInstance" factory-ref="compFactory">
@@ -20,7 +19,6 @@
 	</bean>
 
 <!-- Date: 5 cases -->
-<!-- TODO Temporarily disabled...bugzilla 1145
 	<bean id="compDate" factory-method="makeInstance" factory-ref="compFactory">
 		<argument value="6/1/1999" type="java.util.Date"/>
 	</bean>
@@ -40,7 +38,6 @@
 	<bean id="compDate_EleValue" factory-method="makeInstance" factory-ref="compFactory">
 		<argument><value type="java.util.Date">1970-1-1</value></argument>
 	</bean>
-    -->
 
 <!-- Locale:5 cases -->
 	<bean id="compLocale" factory-method="makeInstance" factory-ref="compFactory">
@@ -77,11 +74,11 @@
 	</bean>
 
 <!-- Properties: 4 cases -->
-	<bean id="compProperties" factory-method="makeInstance" factory-ref="compFactory">
+	<bean id="compProperties" factory-method="makeInstance" factory-ref="compPropsFactory">
 		<argument value="Name=Rex" type="java.util.Properties"/>
 	</bean>
 
-	<bean id="compProperties_EleValue" factory-method="makeInstance" factory-ref="compFactory">
+	<bean id="compProperties_EleValue" factory-method="makeInstance" factory-ref="compPropsFactory">
 		<argument type="java.util.Properties">
 			<value>
 				Name= Rex
@@ -99,11 +96,11 @@
 		</argument>
 	</bean>
 
-	<bean id="compPropertiesEmpty" factory-method="makeInstance" factory-ref="compFactory">
+	<bean id="compPropertiesEmpty" factory-method="makeInstance" factory-ref="compPropsFactory">
 		<argument type="java.util.Properties"><value>  </value></argument>
 	</bean>
 
-    <bean id="compPropertiesNull" factory-method="makeInstance" factory-ref="compFactory">
+    <bean id="compPropertiesNull" factory-method="makeInstance" factory-ref="compPropsFactory">
 		<argument type="java.util.Properties"><null/></argument>
 	</bean>
 

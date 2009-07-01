@@ -15,7 +15,6 @@
 	</bean>
 
 <!-- Date: 5 cases -->
-<!-- TODO Temporarily disabled...bugzilla 1145
 	<bean id="compDate" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
 		<argument value="6/1/1999" type="java.util.Date"/>
 	</bean>
@@ -35,7 +34,6 @@
 	<bean id="compDate_EleValue" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
 		<argument><value type="java.util.Date">1970-1-1</value></argument>
 	</bean>
-    -->
 
 <!-- Locale:5 cases -->
 	<bean id="compLocale" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
@@ -72,11 +70,11 @@
 	</bean>
 
 <!-- Properties: 4 cases -->
-	<bean id="compProperties" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+	<bean id="compProperties" class="org.osgi.test.cases.blueprint.components.injection.PropsConstructorInjection">
 		<argument value="Name=Rex" type="java.util.Properties"/>
 	</bean>
 
-	<bean id="compProperties_EleValue" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+	<bean id="compProperties_EleValue" class="org.osgi.test.cases.blueprint.components.injection.PropsConstructorInjection">
 		<argument type="java.util.Properties">
 			<value>
 				Name= Rex
@@ -94,11 +92,11 @@
 		</argument>
 	</bean>
 
-	<bean id="compPropertiesEmpty" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+	<bean id="compPropertiesEmpty" class="org.osgi.test.cases.blueprint.components.injection.PropsConstructorInjection">
 		<argument type="java.util.Properties"><value>  </value></argument>
 	</bean>
 
-    <bean id="compPropertiesNull" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
+    <bean id="compPropertiesNull" class="org.osgi.test.cases.blueprint.components.injection.PropsConstructorInjection">
 		<argument type="java.util.Properties"><null/></argument>
 	</bean>
 

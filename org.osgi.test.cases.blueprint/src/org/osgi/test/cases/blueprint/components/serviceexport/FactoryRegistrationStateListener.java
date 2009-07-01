@@ -41,22 +41,22 @@ public class FactoryRegistrationStateListener extends ServiceOneRegistrationList
     }
 
     public void registered(ServiceFactory service, Map serviceProperties) {
-        AssertionService.assertNull(this, "Null service instance expected for a prototype component", service);
+        AssertionService.assertNotNull(this, "Non-null factory instance expected for a ServiceFactory component", service);
 
         // this should be valid
         if (registration != null) {
-            AssertionService.assertNotNull(this, "Null service reference from ServiceRegistration proxy", registration.getReference());
+            AssertionService.assertNotNull(this, "Non-null service reference from ServiceRegistration proxy", registration.getReference());
         }
-        registered(TestServiceOne.class, serviceProperties);
+        registered(TestServiceOne.class, serviceProperties, service);
     }
 
     public void unregistered(ServiceFactory service, Map serviceProperties) {
-        AssertionService.assertNull(this, "Null service instance expected for a prototype component", service);
+        AssertionService.assertNotNull(this, "Non-null factory instance expected for a ServiceFactory component", service);
         // this should be valid
         if (registration != null) {
             AssertionService.assertNotNull(this, "Null service reference from ServiceRegistration proxy", registration.getReference());
         }
-        unregistered(TestServiceOne.class, serviceProperties);
+        unregistered(TestServiceOne.class, serviceProperties, service);
     }
 }
 

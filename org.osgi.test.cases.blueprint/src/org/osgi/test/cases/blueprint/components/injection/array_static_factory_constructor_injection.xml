@@ -306,7 +306,7 @@
 	<!-- Injection of nested array -->
 	<bean id="compNestedArray" factory-method="makeInstance"
 		class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
-	<argument type="java.lang.String[][]">
+	    <argument type="java.lang.String[][]">
 			<array value-type="java.lang.String[]">
 				<array value-type="java.lang.String">
 					<value>abc</value>

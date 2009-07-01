@@ -13,7 +13,7 @@
 	<bean id="compEmptyArray" factory-method="makeInstance"
 		factory-ref="compFactory">
 		<argument>
-			<array type="java.lang.String"></array>
+			<array value-type="java.lang.String"></array>
 		</argument>
 	</bean>
 

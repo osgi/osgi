@@ -22,6 +22,7 @@ import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.services.TestServiceOne;
 import org.osgi.test.cases.blueprint.services.ServiceOneRegistrationListenerInterface;
 
+import org.osgi.framework.ServiceFactory;
 
 /**
  * A base class for different reference listeners used to validate
@@ -33,11 +34,21 @@ public class ServiceOneRegistrationListener extends RegistrationListener impleme
     }
 
     public void registered(TestServiceOne service, Map serviceProperties) {
-        registered(TestServiceOne.class, serviceProperties);
+        registered(TestServiceOne.class, serviceProperties, service);
     }
 
     public void unregistered(TestServiceOne service, Map serviceProperties) {
-        unregistered(TestServiceOne.class, serviceProperties);
+        unregistered(TestServiceOne.class, serviceProperties, service);
+    }
+
+    // the following signature variations are to ensure that the multiple
+    // signatures can be tested
+    public void registered(ServiceFactory service, Map serviceProperties) {
+        registered(ServiceFactory.class, serviceProperties, service);
+    }
+
+    public void unregistered(ServiceFactory service, Map serviceProperties) {
+        unregistered(ServiceFactory.class, serviceProperties, service);
     }
 
     public void badRegistered(TestServiceOne service) {

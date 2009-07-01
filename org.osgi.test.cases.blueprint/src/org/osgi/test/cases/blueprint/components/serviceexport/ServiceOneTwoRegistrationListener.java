@@ -31,11 +31,11 @@ public class ServiceOneTwoRegistrationListener extends ServiceOneRegistrationLis
     }
 
     public void registered(TestServiceTwo service, Map serviceProperties) {
-        registered(TestServiceTwo.class, serviceProperties);
+        registered(TestServiceTwo.class, serviceProperties, service);
     }
 
     public void unregistered(TestServiceTwo service, Map serviceProperties) {
-        unregistered(TestServiceTwo.class, serviceProperties);
+        unregistered(TestServiceTwo.class, serviceProperties, service);
     }
 }
 

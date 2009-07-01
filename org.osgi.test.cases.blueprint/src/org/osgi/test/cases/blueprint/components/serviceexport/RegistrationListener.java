@@ -19,6 +19,8 @@ package org.osgi.test.cases.blueprint.components.serviceexport;
 import java.util.Hashtable;
 import java.util.Map;
 
+import org.osgi.framework.ServiceFactory;
+
 import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 
@@ -33,17 +35,21 @@ public class RegistrationListener extends BaseTestComponent {
         super(componentId);
     }
 
-    protected void registered(Class serviceInterface, Map serviceProperties) {
+    protected void registered(Class serviceInterface, Map serviceProperties, Object reference) {
+        AssertionService.assertNotNull(this, "Null service properties passed for registration listener registered callback", serviceProperties);
         Hashtable props = new Hashtable();
         props.putAll(serviceProperties);
         props.put("service.interface.name", serviceInterface.getName());
+        props.put("service.null.object", new Boolean(reference == null));
         AssertionService.sendEvent(this, AssertionService.SERVICE_REGISTERED, props);
     }
 
-    protected void unregistered(Class serviceInterface, Map serviceProperties) {
+    protected void unregistered(Class serviceInterface, Map serviceProperties, Object reference) {
+        AssertionService.assertNotNull(this, "Null service properties passed for registration listener unregistered callback", serviceProperties);
         Hashtable props = new Hashtable();
         props.putAll(serviceProperties);
         props.put("service.interface.name", serviceInterface.getName());
+        props.put("service.null.object", new Boolean(reference == null));
         AssertionService.sendEvent(this, AssertionService.SERVICE_UNREGISTERED, props);
     }
 }

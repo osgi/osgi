@@ -15,7 +15,6 @@
 	</bean>
 
 <!-- Date: 5 cases -->
-<!-- TODO Temporarily disabled...bugzilla 1145
 	<bean id="compDate" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
 		<argument value="6/1/1999" type="java.util.Date"/>
 	</bean>
@@ -35,7 +34,6 @@
 	<bean id="compDate_EleValue" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
 		<argument><value type="java.util.Date">1970-1-1</value></argument>
 	</bean>
-    -->
 
 <!-- Locale:5 cases -->
 	<bean id="compLocale" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
@@ -72,11 +70,11 @@
 	</bean>
 
 <!-- Properties: 4 cases -->
-	<bean id="compProperties" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+	<bean id="compProperties" factory-method="makeStatic" class="org.osgi.test.cases.blueprint.components.injection.PropsConstructorInjection">
 		<argument value="Name=Rex" type="java.util.Properties"/>
 	</bean>
 
-	<bean id="compProperties_EleValue" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+	<bean id="compProperties_EleValue" factory-method="makeStatic" class="org.osgi.test.cases.blueprint.components.injection.PropsConstructorInjection">
 		<argument type="java.util.Properties">
 			<value>
 				Name= Rex
@@ -94,11 +92,11 @@
 		</argument>
 	</bean>
 
-	<bean id="compPropertiesEmpty" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+	<bean id="compPropertiesEmpty" factory-method="makeStatic" class="org.osgi.test.cases.blueprint.components.injection.PropsConstructorInjection">
 		<argument type="java.util.Properties"><value>  </value></argument>
 	</bean>
 
-    <bean id="compPropertiesNull" factory-method="makeInstance" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjectionStaticFactory">
+    <bean id="compPropertiesNull" factory-method="makeStatic" class="org.osgi.test.cases.blueprint.components.injection.PropsConstructorInjection">
 		<argument type="java.util.Properties"><null/></argument>
 	</bean>
 

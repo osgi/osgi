@@ -447,7 +447,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         // This uses a special test controller.  The active portions of the test
         // are performed in the middle phase.
         StandardTestController controller = new StandardTestController(getContext());
-        controller.addBundle(getWebServer()+"www/lazy_activation.jar", Bundle.START_ACTIVATION_POLICY | Bundle.START_TRANSIENT);
+        controller.addBundle(getWebServer()+"www/eager_lazy_activation.jar", Bundle.START_ACTIVATION_POLICY | Bundle.START_TRANSIENT);
 
         // We're mostly going to tag things we don't expect to see happening, though there are a
         // few positive things we expect to see.

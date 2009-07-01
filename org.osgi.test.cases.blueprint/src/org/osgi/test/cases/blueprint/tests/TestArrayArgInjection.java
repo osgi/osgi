@@ -615,9 +615,7 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
         innerList.add("support@example.org");
         expected = new List[1];
         expected[0] = innerList;
-        this
-                .addConstructorValidator(startEvents, "compNestedList", expected, expected
-                        .getClass());
+        this.addConstructorValidator(startEvents, "compNestedList", expected, expected.getClass());
 
         // Nested array
         String [][] nested = new String[1][2];
@@ -807,10 +805,13 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
         addPropertyValidator(startEvents, "compNestedList", "listArray", expected, expected.getClass());
 
         // Nested array
-        String [][] nested = new String[1][2];
-        nested[0][0] = "abc";
-        nested[0][1] = "def";
-        this.addConstructorValidator(startEvents, "compNestedArray", nested, nested.getClass());
+        String[] innerArr = new String[2];
+        innerArr[0] = "abc";
+        innerArr[1] = "def";
+        expected = new Object[1];
+        expected[0] = innerArr;
+        addPropertyValidator(startEvents, "compNestedArray", "nestedArray", expected, expected.getClass());
+
         controller.run();
     }
 

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+        This tests the behavior of registration-listeners when a singleton service is getting
+        exported.  This service listener will have multiple methods that will pass assignability
+        tests on the exported service object, even though this is only exported using the
+        TestServiceOne interface.  We should expect to see calls for all matching methods, but
+        no call for the ServiceFactory versions.
+    </description>
+
+    <!-- the node this service export maps into. -->
+   <bean id="ServiceOne" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
+       <argument value="ServiceOne"/>
+   </bean>
+
+   <bean id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceexport.ServiceOneTwoRegistrationListener"
+       init-method="init" destroy-method="destroy">
+       <argument value="ServiceOneRegistrationListener"/>
+   </bean>
+
+   <!-- simple export using a reference and just one interface. -->
+   <service id="ServiceOneService" ref="ServiceOne">
+       <interfaces>
+            <value>org.osgi.test.cases.blueprint.services.TestServiceOne</value>
+       </interfaces>
+       <service-properties>
+           <entry key="service.component.name" value="ServiceOneService"/>
+       </service-properties>
+       <registration-listener ref="ServiceOneListener"
+           registration-method="registered"
+           unregistration-method="unregistered"/>
+   </service>
+</blueprint>
+

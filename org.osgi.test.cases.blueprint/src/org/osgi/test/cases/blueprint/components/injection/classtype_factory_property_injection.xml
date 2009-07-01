@@ -21,7 +21,6 @@
 	</bean>
 
 <!-- Date: 5 cases -->
-<!-- TODO Temporarily disabled...bugzilla 1145
 	<bean id="compDate" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="date" value="6/1/1999"/>
 	</bean>
@@ -41,7 +40,6 @@
 	<bean id="compDate_EleValue" factory-method="makeInstance" factory-ref="compFactory">
 		<property name="date"><value type="java.util.Date">1970-1-1</value></property>
 	</bean>
-    -->
 
 <!-- Locale:5 cases -->
 	<bean id="compLocale" factory-method="makeInstance" factory-ref="compFactory">

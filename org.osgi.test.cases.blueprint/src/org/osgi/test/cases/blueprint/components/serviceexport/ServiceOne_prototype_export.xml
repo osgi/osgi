@@ -7,7 +7,7 @@
 
     <!-- the node this service export maps into. -->
    <bean id="ServiceOne" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass"
-       init-method="init" destroy-method="destroy" scope="prototype">
+       init-method="init" scope="prototype">
        <argument value="ServiceOne"/>
    </bean>
 

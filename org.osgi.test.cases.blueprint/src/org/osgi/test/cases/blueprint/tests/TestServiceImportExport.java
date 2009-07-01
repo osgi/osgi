@@ -19,6 +19,8 @@ package org.osgi.test.cases.blueprint.tests;
 import java.util.Hashtable;
 import java.util.Properties;
 
+import org.osgi.framework.ServiceFactory;
+
 import org.osgi.service.blueprint.reflect.BeanMetadata;
 import org.osgi.service.blueprint.reflect.ServiceMetadata;
 import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
@@ -213,9 +215,6 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // also force the prototype bean to be immediately destroyed.
         exportStartEvents.addEvent(new ServiceTestEvent("REGISTERED", new Class[] {TestServiceOne.class}, null,
                 new ServiceRequestInitiator(getContext(), TestServiceOne.class, null)));
-        // The dynamically request service instance is immediately returned, so we should see
-        // a destroy call for the backing prototype component instance.
-        exportStartEvents.addAssertion("ServiceOne", AssertionService.BEAN_DESTROY_METHOD);
 
         // now the importing side.  We've got a couple of service injections to validate, plus the injection
         // results
@@ -243,8 +242,6 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
         // now some expected termination stuff
         EventSet exportStopEvents = controller.getStopEvents(1);
-        // the is the component creation
-        exportStopEvents.addAssertion("ServiceOne", AssertionService.BEAN_DESTROY_METHOD);
         // we should see a service event here indicating this is being deregistered
         exportStopEvents.addServiceEvent("UNREGISTERING", TestServiceOne.class);
         // and there should not be a registration active anymore
@@ -625,6 +622,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", new Class[] { TestServiceOne.class, TestServiceTwo.class});
+
 
         // now the importing side.  We've got a couple of service injections to validate, plus the injection
         // results
@@ -1142,6 +1140,54 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // now some expected termination stuff
         EventSet exportStopEvents = controller.getStopEvents();
         exportStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNREGISTERED, props));
+
+        controller.run();
+    }
+
+
+    /*
+     * A test of multiple signature matching with a registration listener and singleton
+     * scope.  ial service registration and the final service unregistration
+     */
+    public void testRegistrationListenerSingletonSignature() throws Exception {
+        // We only do the export and then shut this back down again.  That will
+        // cause the events of interests to be fired.
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/service_listener_singleton_signature.jar");
+        // We're really only interesting the listener events
+        MetadataEventSet exportStartEvents = controller.getStartEvents();
+        Hashtable propsOne = new Hashtable();
+        // the first property comes from the called method signature, the
+        // second should be passed to the registration listener.
+        propsOne.put("service.interface.name", TestServiceOne.class.getName());
+        propsOne.put("service.component.name", "ServiceOneService");
+        propsOne.put("service.null.object", Boolean.FALSE);
+
+        Hashtable propsTwo = new Hashtable();
+        // the first property comes from the called method signature, the
+        // second should be passed to the registration listener.
+        propsTwo.put("service.interface.name", TestServiceTwo.class.getName());
+        propsTwo.put("service.component.name", "ServiceOneService");
+        propsTwo.put("service.null.object", Boolean.FALSE);
+
+        Hashtable propsFactory = new Hashtable();
+        // the first property comes from the called method signature, the
+        // second should be passed to the registration listener.
+        propsFactory.put("service.interface.name", ServiceFactory.class.getName());
+
+        // we should see events for both of these signatures because of the assignability assertions
+        exportStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_REGISTERED, propsOne));
+        exportStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_REGISTERED, propsTwo));
+        // however, this one should be an error
+        exportStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_REGISTERED, propsFactory));
+
+        // now some expected termination stuff
+        EventSet exportStopEvents = controller.getStopEvents();
+        // we should see events for both of these signatures because of the assignability assertions
+        exportStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNREGISTERED, propsOne));
+        exportStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNREGISTERED, propsTwo));
+        // however, this one should be an error
+        exportStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNREGISTERED, propsFactory));
 
         controller.run();
     }

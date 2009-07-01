@@ -31,11 +31,11 @@ public class CircularRegistrationListener extends ServiceOneRegistrationListener
     }
 
     public void registered(TestServiceOne service, Map serviceProperties) {
-        registered(TestServiceOne.class, serviceProperties);
+        registered(TestServiceOne.class, serviceProperties, service);
     }
 
     public void unregistered(TestServiceOne service, Map serviceProperties) {
-        unregistered(TestServiceOne.class, serviceProperties);
+        unregistered(TestServiceOne.class, serviceProperties, service);
     }
 
     /**

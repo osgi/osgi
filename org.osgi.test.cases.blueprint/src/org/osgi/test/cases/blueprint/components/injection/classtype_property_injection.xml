@@ -15,7 +15,6 @@
 	</bean>
 
 <!-- Date: 5 cases -->
-<!-- TODO Temporarily disabled...bugzilla 1145
 	<bean id="compDate" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="date" value="6/1/1999"/>
 	</bean>
@@ -35,7 +34,6 @@
 	<bean id="compDate_EleValue" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
 		<property name="date"><value type="java.util.Date">1970-1-1</value></property>
 	</bean>
-    -->
 
 <!-- Locale:5 cases -->
 	<bean id="compLocale" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
