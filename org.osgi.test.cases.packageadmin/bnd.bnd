@@ -26,7 +26,7 @@ Include-Resource = \
 	tc5.tb5.jar, \
 	tc5.tb6.jar
 	
-Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+Test-Cases							= ${testcases}
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
