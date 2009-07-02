@@ -38,6 +38,7 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 		Bundle testBundle = installBundle("service1.jar");
 		// Grab the default initialContext so we can access the service registry
 		Context ctx = new InitialContext();
+		assertNotNull("The context should not be null", ctx);
 		// Lookup the example service
 		ExampleService service = (ExampleService) ctx.lookup("osgi:services/org.osgi.test.cases.jndi.service.ExampleService");
 		// Verify that we actually got the service
@@ -52,6 +53,7 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 		Bundle testBundle = installBundle("service1.jar");
 		// Grab the default InitialContext so we can access the service registry
 		Context ctx = new InitialContext();
+		assertNotNull("The context should not be null", ctx);
 		// Lookup the example service using the service name
 		ExampleService service = (ExampleService) ctx.lookup("osgi:services/ExampleService");
 		// Verify that we actually got the service

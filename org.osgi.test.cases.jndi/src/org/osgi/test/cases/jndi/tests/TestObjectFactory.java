@@ -45,6 +45,7 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 		Hashtable env = new Hashtable();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, "org.osgi.test.cases.jndi.provider.CTInitialContextFactory");
 		InitialContext ctx = new InitialContext(env);
+		assertNotNull("The context should not be null", ctx);
 		CTReference reference = new CTReference("java.lang.String", CTObjectFactory.class.getName());
 		ctx.bind("reference", reference);
 		String str = (String)ctx.lookup("reference");
@@ -61,6 +62,7 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 		Hashtable env = new Hashtable();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, "org.osgi.test.cases.jndi.provider.CTInitialContextFactory");
 		InitialContext ctx = new InitialContext(env);
+		assertNotNull("The context should not be null", ctx);
 		CTReference reference = new CTReference("java.lang.String");
 		ctx.bind("reference", reference);
 		String str = (String)ctx.lookup("reference");
@@ -81,6 +83,7 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 		// Try to grab the ObjectFactory.  We should get a NullPointerException
 		try {
 			InitialContext ctx = new InitialContext(env);
+			assertNotNull("The context should not be null", ctx);
 			CTReference reference = new CTReference("java.lang.String", CTObjectFactory.class.getName());
 			ctx.bind("reference", reference);
 			String str = (String)ctx.lookup("reference");
@@ -104,6 +107,7 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 		// Try to grab the ObjectFactory.  We should get a NullPointerException
 		try {
 			InitialContext ctx = new InitialContext(env);
+			assertNotNull("The context should not be null", ctx);
 			CTReference reference = new CTReference("java.lang.String");
 			ctx.bind("reference", reference);
 			String str = (String)ctx.lookup("reference");
@@ -121,6 +125,7 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 		Bundle testBundle = installBundle("objectFactory2.jar");
 		// Use the default context to grab one of the factories and make sure it's the right one
 		InitialContext ctx = new InitialContext();
+		assertNotNull("The context should not be null", ctx);
 		CTObjectFactory of = (CTObjectFactory) ctx.lookup("osgi:services/org.osgi.test.cases.jndi.provider.CTObjectFactory");
 		Hashtable ofEnv = of.getEnvironment();
 		if (!ofEnv.containsKey("test1")) {

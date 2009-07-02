@@ -43,6 +43,7 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		// Grab the initialContext
 		InitialContext ctx = new InitialContext(env);
+		assertNotNull("The context should not be null", ctx);
 		ctx.bind("testObject", new Object());
 		// Cleanup after the test completes
 		uninstallBundle(testBundle);
@@ -54,6 +55,7 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		Bundle testBundle = installBundle("initialContextFactory1.jar");
 		// We don't setup the environment because we want to see if the appropriate context factory is returned even if it isn't specified
 		InitialContext ctx = new InitialContext();
+		assertNotNull("The context should not be null", ctx);
 		ctx.bind("testObject", new Object());
 		// Cleanup after the test completes
 		uninstallBundle(testBundle);
@@ -64,6 +66,7 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		Bundle testBundle = installBundle("initialContextFactoryBuilder1.jar");
 		// Try to get an initialContext object using the builder
 	    InitialContext ctx = new InitialContext();
+		assertNotNull("The context should not be null", ctx);
 		// Verify that we actually received the InitialContext
 		ctx.bind("testObject", new Object());
 		// Cleanup after the test completes
@@ -80,6 +83,7 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		try {
 			InitialContext ctx = new InitialContext(env);
+			assertNotNull("The context should not be null", ctx);
 			ctx.bind("testObject", new Object());
 		} catch (javax.naming.NoInitialContextException ex) {
 			return;
@@ -94,8 +98,9 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		// Uninstall the bundle now so the provider implementations are unregistered
 		uninstallBundle(testBundle);
 		// Try to grab the initialContextFactory.  We should get a NullPointerException
-		InitialContext ctx = new InitialContext();
 		try {
+			InitialContext ctx = new InitialContext();
+			assertNotNull("The context should not be null", ctx);
 			ctx.bind("testObject", new Object());
 		} catch (NullPointerException npe) {
 			return;
@@ -112,6 +117,7 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		// Try to grab a context from the specified initialContextFactory.  This should throw an exception.
 	    try {
 	    	InitialContext ctx = new InitialContext(env);
+			assertNotNull("The context should not be null", ctx);
 	    	ctx.lookup("testObject");
 	    } catch ( javax.naming.NoInitialContextException ex ) {
 	    	return;
@@ -125,6 +131,7 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		Bundle testBundle = installBundle("initialContextFactory2.jar");
 		// Use the default context to grab one of the factories and make sure it's the right one
 		InitialContext ctx = new InitialContext();
+		assertNotNull("The context should not be null", ctx);
 		CTInitialContextFactory ctf = (CTInitialContextFactory) ctx.lookup("osgi:services/org.osgi.test.cases.jndi.provider.CTInitialContextFactory");
 		// Let's grab a context instance and check the environment
 		Hashtable ctxEnv = ctf.getInitialContext(null).getEnvironment();

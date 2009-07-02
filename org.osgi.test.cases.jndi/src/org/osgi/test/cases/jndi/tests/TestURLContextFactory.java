@@ -45,6 +45,7 @@ public class TestURLContextFactory extends DefaultTestBundleControl {
 		Hashtable env = new Hashtable();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		InitialContext ctx = new InitialContext(env);
+		assertNotNull("The context should not be null", ctx);
 		ctx.bind("testString", testString);
 		// Attempt to look up the test string
 		Context urlCtx = new InitialContext();
@@ -64,6 +65,7 @@ public class TestURLContextFactory extends DefaultTestBundleControl {
 		Hashtable env = new Hashtable();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		Context ctx = new InitialContext(env);
+		assertNotNull("The context should not be null", ctx);
 		ctx.bind("testString", testString);
 		// Remove the url context jar
 		uninstallBundle(testBundle);
