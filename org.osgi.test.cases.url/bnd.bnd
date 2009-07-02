@@ -6,7 +6,7 @@ Private-Package						= org.osgi.test.support.*, \
 	
 Export-Package						= \
 
-Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+Test-Cases							= ${testcases}
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
