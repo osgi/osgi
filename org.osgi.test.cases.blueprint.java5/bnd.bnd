@@ -14,7 +14,7 @@ Include-Resource					= \
 	www/reference_set_import.jar=reference_set_import.jar, \
 	www/pattern_injection.jar=pattern_injection.jar
 
-Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+Test-Cases							= ${testcases}
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
@@ -29,4 +29,4 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 	org.eclipse.equinox.event; version=latest, \
  	osgi.cmpn; version=latest, \
  	org.osgi.test.cases.blueprint;  version=project, \
-    org.springsource.service.blueprint; version=latest
+    org.springframework.osgi.blueprint.uber; version=latest

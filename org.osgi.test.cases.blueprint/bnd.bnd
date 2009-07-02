@@ -337,7 +337,7 @@ Include-Resource					= \
  	www/comp1_different_version.jar=comp1_different_version.jar, \
  	www/Service_lazy_export.jar=Service_lazy_export.jar
 
-Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+Test-Cases							= ${testcases}
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
@@ -351,6 +351,5 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 	org.osgi.impl.service.log; version=latest, \
 	org.apache.felix.configadmin;  version=latest, \
 	org.eclipse.equinox.event; version=latest, \
- 	osgi.cmpn; version=latest, \
- 	osgi.enterprise; version=latest, \
-        org.springsource.service.blueprint; version=latest
+	osgi.cmpn; version=latest, \
+    org.springframework.osgi.blueprint.uber; version=latest
