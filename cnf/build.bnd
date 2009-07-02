@@ -89,4 +89,4 @@ Bundle-Vendor			= OSGi Alliance
 	org.eclipse.osgi;		version=3.5, \
 	com.springsource.junit; version=3.8;    export="junit.framework;version=3.8"
 
-testcases = ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl;concrete}
+testcases = ${classes;extending;junit.framework.TestCase|*DefaultTestBundleControl;concrete}
