@@ -42,7 +42,7 @@ import org.osgi.service.remoteservices.*;
  * 
  * @ThreadSafe
  */
-public interface EndpointRegistry {
+public interface EndpointListener {
 	/**
 	 * Specifies the interest of this registry with filters. This registry is
 	 * only interested in Endpoint Descriptions where its properties match the

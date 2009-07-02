@@ -39,8 +39,19 @@ public interface ImportRegistration {
 	
 	
 	/**
-	 * TODO
-	 * @return
+	 * Exception for any error during the import process.
+	 * 
+	 * If the Remote Admin for some reasons is unable to create a registration,
+	 * then it must return a <code>Throwable</code> from this method. In this
+	 * case, all other methods must return on this interface must thrown an
+	 * Illegal State Exception. If no error occurred, this method must return
+	 * <code>null</code>.
+	 * 
+	 * The error must be set before this Import Registration is returned.
+	 * Asynchronously occurring errors must be reported to the log.
+	 * 
+	 * @return The exception that occurred during the creation of the
+	 *         registration or <code>null</code> if no exception occurred.
 	 */
 	Throwable getException();
 
