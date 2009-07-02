@@ -34,7 +34,7 @@
 			manifest header of a bundle. XML documents containing
 			component descriptions may contain a single, root component
 			element or one or more component elements embedded in a
-			larger document. Use of the name space for component 
+			larger document. Use of the namespace for component 
 			descriptions is mandatory. The attributes and subelements 
 			of a component element are always unqualified.
 		</documentation>
@@ -126,7 +126,7 @@
 				maxOccurs="unbounded" />
 			<!-- It is non-deterministic, per W3C XML Schema 1.0: 
 			http://www.w3.org/TR/xmlschema-1/#cos-nonambig
-			to use name space="##any" below. -->
+			to use namespace="##any" below. -->
 			<any namespace="##other" processContents="lax" minOccurs="0"
 				maxOccurs="unbounded" />
 		</sequence>
