@@ -30,9 +30,9 @@ public class TB2Activator implements BundleActivator {
 		ts2Props.put("compatible", new Float(1.0));
 		ts2Props.put("description", "TestService 2");
 
-		bc.registerService(TestService2.class.getName(),
-				new TestService2() {},
-				ts2Props);
+		bc.registerService(TestService2.class.getName(), new TestService2() {
+			// empty
+		}, ts2Props);
 
 	}
 
@@ -40,5 +40,6 @@ public class TB2Activator implements BundleActivator {
 	 * Stops the bundle.
 	 */
 	public void stop(BundleContext bc) {
+		// empty
 	}
 }

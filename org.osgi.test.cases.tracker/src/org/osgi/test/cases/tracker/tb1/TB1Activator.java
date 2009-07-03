@@ -30,13 +30,15 @@ public class TB1Activator implements BundleActivator {
 		ts1Props.put("compatible", new Float(1.0));
 		ts1Props.put("description", "TestService 1");
 
-		bc.registerService(TestService1.class.getName(), new TestService1() {},
-				ts1Props);
+		bc.registerService(TestService1.class.getName(), new TestService1() {
+			// empty
+		}, ts1Props);
 	}
 
 	/**
 	 * Stops the bundle.
 	 */
 	public void stop(BundleContext bc) {
+		// empty
 	}
 }

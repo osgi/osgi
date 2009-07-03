@@ -281,10 +281,6 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 
 		}
 
-		boolean isRunning() {
-			return bundle.getState() == Bundle.ACTIVE;
-		}
-
 		void close() throws Exception {
 			uninstallBundle(bundle);
 		}
@@ -468,7 +464,9 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 		ts1Props.put("description", "TestService 1 in tbc");
 
 		ServiceRegistration tsr1 = context.registerService(TestService1.NAME,
-				new TestService1() {}, ts1Props);
+				new TestService1() {
+					// empty
+				}, ts1Props);
 
 		assertEquals(
 				"The number of Services being tracked by ServiceTracker 1 is: 2",
@@ -510,7 +508,9 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 
 		ServiceRegistration sr = context.registerService(
 				TestService3.NAME,
-				new TestService3() {}, null);
+				new TestService3() {
+					// empty
+				}, null);
 		// Should be 1
 		assertEquals("ServiceTracker.getTrackingCount() == 1", 1, +st
 				.getTrackingCount());

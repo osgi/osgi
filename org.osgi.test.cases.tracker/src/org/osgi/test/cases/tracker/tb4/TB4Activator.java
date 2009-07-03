@@ -32,6 +32,6 @@ public class TB4Activator implements BundleActivator {
 	 * Stops the bundle.
 	 */
 	public void stop(BundleContext bc) {
-
+		// empty
 	}
 }

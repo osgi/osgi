@@ -29,13 +29,15 @@ public class TB3Activator implements BundleActivator {
 		ts3Props.put("compatible", new Float(1.0));
 		ts3Props.put("description", "TestService 3");
 
-		bc.registerService(TestService3.class.getName(), new TestService3() {},
-				ts3Props);
+		bc.registerService(TestService3.class.getName(), new TestService3() {
+			// empty
+		}, ts3Props);
 	}
 
 	/**
 	 * Stops the bundle.
 	 */
 	public void stop(BundleContext bc) {
+		// empty
 	}
 }
