@@ -22,27 +22,16 @@ import java.util.*;
 import org.osgi.framework.*;
 
 /**
- * This interface describes the details of a communications endpoint.
+ * A description of an endpoint that provides sufficient information for a
+ * compatible distribution provider to create a connection to this endpoint
  * 
+ * An Endpoint Description is easy to transfer between different systems. This
+ * allows it to be used as a communications device to convey available endpoint
+ * information to nodes in a network.
  * 
- * 
- * The use of this interface has the following purposes:
- * <ol>
- * <li>When a distribution provider exports a service it creates a
- * communications endpoint. The details of this endpoint can then be announced
- * through a Endpoint Description</li>
- * <li>A distribution provider can use a Endpoint Description to import a
- * service.</li>
- * <li>An Endpoint Description can be created for a non-OSGi service endpoint,
- * for example a Google webservice</li>
- * </ol>
- * 
- * The Endpoint Description is easy to transfer between different systems. It
- * can therefore be used in discovery or remote control schemes.
- * 
- * <code>EndpointDescription</code> objects are immutable.
- * 
- * ### are they serializable?? ### they must implement equals + hashCode
+ * An Endpoint Description reflects the perspective of an importer. That is,
+ * the property keys have been chosen to match filters that are created by
+ * client bundles that need a service.
  * 
  * @Immutable
  * @version $Revision: 7190 $
@@ -50,94 +39,51 @@ import org.osgi.framework.*;
 public interface EndpointDescription {
 
 	/**
-	 * The prefix for the version of an interface. The actual property should have 
-	 * a value of ENDPOINT_INTERFACE_VERSION_PREFIX + FQN, where the FQN is the 
-	 * name fully qualified name of the interface. The value of the property must 
-	 * be a properly formatted OSGi version string. For example:
-	 * <pre>
-	 * 	endpoint.interface.version.com.acme.foo.Foo = 3.0.0.v242112
-	 * </pre>
-	 */
-	final public static String ENDPOINT_INTERFACE_VERSION_PREFIX = "endpoint.interface.version.";
-	
-	/**
-	 * The prefix for the middleware specific name of an interface. The actual property should have 
-	 * a value of ENDPOINT_INTERFACE_NAME_PREFIX + FQN, where the FQN is the 
-	 * name fully qualified name of the interface. The value of the property must 
-	 * be a properly formatted OSGi version string. For example:
-	 * <pre>
-	 * 	endpoint.interface.name.com.acme.foo.Foo = Foo
-	 * </pre>
-	 */
-	final public static String ENDPOINT_INTERFACE_NAME_PREFIX = "endpoint.interface.name.";
-	
-	/**
-	 * The property key for the endpoint URI.
-	 * ### still no clue what this is ...
-	 */
-	final public static String ENDPOINT_URI = "endpoint.uri";
-	
-	/**
-	 * The Universally Unique ID for the service that corresponds to this endpoint. This
-	 * property should not be set if there is no OSGi service associated with it.
-	 */
-	final public static String ENDPOINT_SERVICE_UUID = "endpoint.service.uuid";
-	
-	/**
-	 * The property key for the local property. If this property is set to any
-	 * value than then this endpoint corresponds to an endpoint created on the
-	 * local framework.
-	 */
-	public static final String ENDPOINT_LOCAL = "endpoint.local";
-	
-	/**
-	 * An Interface Description holds the triplet of the fully qualified name
-	 * for the interface class, the version of the exported package that
-	 * provided the class for the interface, and a middle-ware specific name for
-	 * the communications interface.
+	 * Returns the endpoint's URI.
 	 * 
-	 * @version $Revision: 7190 $
-	 */
-	public static interface InterfaceDescription {
-
-		/**
-		 * @return The fully qualified Java interface name of this interface.
-		 */
-		public String getInterfaceName();
-
-		/**
-		 * The version of the Java interface of this interface. If no version could
-		 * be found, the version will be 0.0.0. 
-		 * 
-		 * @return Return the version of the exported package used for the interface or a 0.0.0 version. 
-		 */
-		public Version getVersion();
-
-	}
-
-	/**
-	 * Contains a collection of interface descriptions offered by this endpoint.
+	 * The URI is an opaque id for an endpoint in URI form. No two different
+	 * endpoints must have the same URI, two Endpoint Descriptions with the same
+	 * URI must represent the same endpoint.
 	 * 
-	 * ### what happens if this is not a service endpoint?
+	 * The value of the URI is stored in the {@link RemoteServiceConstants#ENDPOINT_URI} property.
 	 * 
-	 * @return <code>Collection (&lt;String&gt;)</code> of service interface
-	 *         descriptions provided by the advertised service endpoint. The
-	 *         collection is never <code>null</code> or empty but contains at
-	 *         least one service interface.
-	 */
-	public List /* <InterfaceDescription> */getInterfaceDescriptions();
-
-	/**
-	 * Returns the URI of the service location of this endpoint. 
-	 * 
-	 *
-	 * @return The URI of the service location, or <code>null</code> if it
-	 *         hasn't been provided.
+	 * @return The URI of the endpoint, never null.
 	 */
 	public URI getURI();
 
 	/**
-	 * Returns the universally unique id for the service represented by this
+	 * Answer the list of interfaces implemented by the exported service.
+	 * 
+	 * If this Endpoint Description does not map to a service, then this List
+	 * must be empty.
+	 * 
+	 * The value of the interfaces is derived from the <code>objectClass</code>
+	 * property.
+	 * 
+	 * @return The list of Java interface names accessible by this endpoint
+	 */
+	public List getInterfaces();
+
+	/**
+	 * Answer the version of the given interface.
+	 * 
+	 * The version is encoded by prefixing the given interface name with
+	 * <code>endpoint.version.</code>, and then using this as a property key.
+	 * The value must then be the <code>Version</code> object. For example:
+	 * 
+	 * <pre>
+	 * endpoint.version.com.acme.Foo
+	 * </pre>
+	 * 
+	 * @param name
+	 *            The name of the interface for which a version is requested
+	 * @return The version of the given interface or <code>null</code> if the
+	 *         interface has no version in this Endpoint Description
+	 */
+	public Version getInterfaceVersion(String name);
+
+	/**
+	 * Returns the universally unique id for the service exported through this
 	 * endpoint.
 	 * 
 	 * Each service in the OSGi service registry has a universally unique id.
@@ -146,10 +92,29 @@ public interface EndpointDescription {
 	 * This UUID can be used to filter out duplicate ways of communicating with
 	 * the same service.
 	 * 
-	 * @return Unique id of service represented by this endpoint, or
-	 *         <code>null</code> if it hasn't been provided.
+	 * The service UUID is constructed from two properties. It is first the
+	 * <code>org.osgi.framework.uuid</code> System property set by the
+	 * framework or through configuration. This property must uniquely
+	 * represents the UUID of a framework instance. This UUID must not contain
+	 * any dots ('.' \u002E). This is suffixed with a dot and then the
+	 * <code>service.id</code> service property of the service.
+	 * 
+	 * For example:
+	 * 
+	 * <pre>
+	 *   72dc5fd9-5f8f-4f8f-9821-9ebb433a5b72.121
+	 * </pre>
+	 * 
+	 * If this Endpoint Description does not map to a remote OSGi service, for
+	 * example some web service, then the Endpoint Description must not have a
+	 * service UUID. If two endpoints have the same URI, then they must refer to
+	 * the same OSGi service.
+	 * 
+	 * @return Unique id of a service or <code>null</code> if this Endpoint
+	 *         Description does not relate to an OSGi service
+	 * 
 	 */
-	public String getServiceUUID();
+	public String getRemoteServiceID();
 
 	/**
 	 * Returns the configuration types.
@@ -157,40 +122,49 @@ public interface EndpointDescription {
 	 * A distribution provider exports a service with an endpoint. This endpoint
 	 * uses some kind of communications protocol with a set of configuration
 	 * parameters. There are many different types but each endpoint is
-	 * configured by only one configuration type.
+	 * configured by only one configuration type. However, a distribution
+	 * provider can be aware of different configuration types and provide
+	 * synonyms to increase the change a receiving distributon provider can
+	 * create a connection to this endpoint.
 	 * 
-	 * @return The configuration type used for the associated endpoint.
+	 * This value represents the
+	 * {@link RemoteServiceConstants#SERVICE_IMPORTED_CONFIGS}
+	 * 
+	 * @return The configuration type used for the associated endpoint and
+	 *         optionally synonyms.
 	 */
-	public String getConfigurationType();
+	public List/* <String> */getConfigurationTypes();
 
 	/**
-	 * Returns all service endpoint properties.
+	 * Return the list of intents implemented by this endpoint.
 	 * 
-	 * @return all properties of the service as a
-	 *         <code>Map (&lt;String, Object&gt;)</code>. The map is never
-	 *         <code>null</code> or empty but contains at least mandatory
-	 *         <code>ServicePublication</code> properties. Since
-	 *         <code>ServiceEndpointDescription</code> objects are immutable,
-	 *         the returned map is also not going to be updated at a later point
-	 *         of time.
+	 * The intents are based on the service.intents on an imported service,
+	 * except for any intents that are additionally provided by the importing
+	 * distribution provider. All qualified intents must have been expanded.
+	 * 
+	 * The property the intents come from is
+	 * {@link RemoteServiceConstants#SERVICE_INTENTS}
+	 * 
+	 * @return A list of expanded intents that are provided by this endpoint.
+	 */
+	public List /* <String> */getIntents();
+
+	/**
+	 * Returns all endpoint properties.
+	 * 
+	 * @return An immutable map referring to the properties of this Endpoint
+	 *         Description.
 	 */
 	public Map/* <String, Object> */getProperties();
 
 	/**
-	 * Answers if the described endpoint is local to this framework. This is defined
-	 * as having the ENDPOINT_LOCAL property set to any value.
-	 * 
-	 * @return <code>true</code> if this an endpoint originating on this framework is described, <code>false</code> otherwise.
-	 */
-	public boolean isLocal();
-
-	/**
-	 * TODO ###
+	 * Two endpoints are equal if their URIs are equal, the hash code is therefore derived
+	 * from the URI.
 	 */
 	public int hashCode();
 
 	/**
-	 * TODO ###
+	 * Two endpoints are equal if their URIs are equal.
 	 */
 	public boolean equals(Object other);
 }

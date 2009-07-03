@@ -1,4 +1,4 @@
-package org.osgi.service.remoteservices.admin;
+package org.osgi.service.remoteservices;
 
 import java.util.*;
 

@@ -1,4 +1,4 @@
-package org.osgi.service.remoteservices.admin;
+package org.osgi.service.remoteservices;
 
 import org.osgi.framework.*;
 import org.osgi.service.remoteservices.*;
