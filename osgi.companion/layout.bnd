@@ -25,6 +25,7 @@ cmpn.specs = \
 	 info.dmtree, \
 	 org.osgi.application, \
 	 org.osgi.service.application, \
+	 org.osgi.service.blueprint, \
 	 org.osgi.service.cm, \
 	 org.osgi.service.component, \
 	 org.osgi.service.deploymentadmin, \
@@ -57,6 +58,7 @@ cmpn.packages = ${replace;$(cmpn.specs);^.*$;$0.*}
 cmpn.resources = {legal/about.html}, \
   				legal/LICENSE, \
   				xmlns/app=../xmlns/app, \
+  				xmlns/blueprint=../xmlns/blueprint, \
   				xmlns/metatype=../xmlns/metatype, \
   				xmlns/scr=../xmlns/scr
 
