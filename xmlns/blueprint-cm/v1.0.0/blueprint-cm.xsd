@@ -86,7 +86,7 @@
         <xsd:complexContent>
             <xsd:extension base="bp:Tcomponent">
                 <xsd:sequence>
-                    <xsd:group ref="bp:baseServiceElements"/>
+                    <xsd:group ref="bp:GbaseServiceElements"/>
                     <xsd:element name="managed-component" type="TmanagedComponent" minOccurs="1" maxOccurs="1"/>
                 </xsd:sequence>
                 <xsd:attribute name="interface" type="bp:Tclass" use="optional" />
@@ -100,7 +100,7 @@
     </xsd:complexType>
 
     <xsd:complexType name="TmanagedComponent">
-        <xsd:group ref="bp:beanElements"/>
+        <xsd:group ref="bp:GbeanElements"/>
         <xsd:attribute name="class" type="bp:Tclass"/>
         <xsd:attribute name="init-method" type="bp:Tmethod"/>
         <xsd:attribute name="destroy-method" type="bp:Tmethod"/>
