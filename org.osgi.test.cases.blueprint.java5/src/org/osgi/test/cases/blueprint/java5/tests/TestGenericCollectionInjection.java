@@ -178,7 +178,8 @@ public class TestGenericCollectionInjection extends DefaultTestBundleControl {
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
         // fail the test.
-        importStartEvents.addAssertion("ReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
+		importStartEvents.addAssertion("ReferenceChecker",
+				AssertionService.BEAN_INIT_METHOD);
 
         controller.run();
     }
@@ -203,7 +204,8 @@ public class TestGenericCollectionInjection extends DefaultTestBundleControl {
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
         // fail the test.
-        importStartEvents.addAssertion("ReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
+		importStartEvents.addAssertion("ReferenceChecker",
+				AssertionService.BEAN_INIT_METHOD);
 
         controller.run();
     }
@@ -228,7 +230,8 @@ public class TestGenericCollectionInjection extends DefaultTestBundleControl {
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
         // fail the test.
-        importStartEvents.addAssertion("ReferenceChecker", AssertionService.COMPONENT_INIT_METHOD);
+		importStartEvents.addAssertion("ReferenceChecker",
+				AssertionService.BEAN_INIT_METHOD);
 
         controller.run();
     }
