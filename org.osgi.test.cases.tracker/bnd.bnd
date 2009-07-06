@@ -15,7 +15,7 @@ Export-Package						= ${p}.service
 
 -runproperties						= report=true
 	
-Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+Test-Cases							= ${testcases}
 
 Include-Resource				= \
 	tb1.jar, \
