@@ -30,12 +30,12 @@ public interface BeanMetadata extends Target, ComponentMetadata {
 	 * {@link #getScope()}
 	 */
 
-	static final String	SCOPE_SINGLETON	= "singleton";
+	static final String SCOPE_SINGLETON = "singleton";
 	/**
 	 * Used when the <code>scope</code> is <code>prototype</code> See
 	 * {@link #getScope()}
 	 */
-	static final String	SCOPE_PROTOTYPE	= "prototype";
+	static final String SCOPE_PROTOTYPE = "prototype";
 
 	/**
 	 * The name of the class specified for this bean.
@@ -74,13 +74,13 @@ public interface BeanMetadata extends Target, ComponentMetadata {
 	 * Specified in all the child
 	 * <code>argument<code> elements. The return is a list of {@link BeanArgument} objects.
 	 * 
-	 * @return The arguments Metadata for the factory method or constructor, can
+	 * @return List of Bean Arguments for the factory method or constructor, can
 	 *         be empty if no arguments are specified
 	 */
 	List/* <BeanArgument> */getArguments();
 
 	/**
-	 * The property injection Metadata for this component.
+	 * The property injection {@link BeanProperty} Metadata for this bean.
 	 * 
 	 * Specified in all the child <code>property</code> elements.
 	 * 
@@ -104,7 +104,8 @@ public interface BeanMetadata extends Target, ComponentMetadata {
 	 * The component instance on which to invoke the factory method (if
 	 * specified).
 	 * 
-	 * The component is defined in the <code>factory-component</code>.
+	 * The to be used component instance is referred to by the
+	 * <code>factory-component</code>.
 	 * 
 	 * When a factory method and factory ref has been specified for this
 	 * component, this operation returns the Metadata specifying the manager on

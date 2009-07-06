@@ -16,9 +16,9 @@
 package org.osgi.service.blueprint.reflect;
 
 /**
- * A value which represents the id of another manager in the Blueprint
+ * A value which represents the verified id of another manager in the Blueprint
  * Container. The id itself will be injected, not the manager that the id refers
- * to.
+ * to. No implicit dependency is created.
  * 
  * @ThreadSafe
  * @version $Revision$

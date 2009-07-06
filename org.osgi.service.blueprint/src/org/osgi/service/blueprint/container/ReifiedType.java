@@ -21,33 +21,38 @@ package org.osgi.service.blueprint.container;
  * Java 5 and later support generic types. These types consist of a raw class
  * with type parameters. This class models such a <code>Type</code> class but
  * ensures that the type is <em>reified</em>. Reification means that the Type
- * graph associated with a Java 5 <code>Type</code> instance is traversed until
- * the type becomes a concrete class. In Java 1.4 a class has no type
- * parameters. This concrete class implements the Reified Type for Java 1.4.
+ * graph associated with a Java 5 <code>Type</code> instance is traversed
+ * until the type becomes a concrete class, this class is available with the
+ * {@link #getRawClass()} method. The optional type parameters are recursively
+ * represented as Reified Types.
  * 
- * In Java 1.4, this class works with non-generic types. In that cases, a
- * Reified Type provides access to the class and has zero type parameters,
- * though a subclass that provide type parameters should be respected. Blueprint
- * extender implementations can subclass this class and provide access to the
- * generics type parameter graph if used in a conversion. Such a subclass must
- * <em>reify</em> the different Java 5 <code>Type</code> instances into the
- * reified form. That is, a form where the raw Class is available with its
+ * In Java 1.4 a class has by definition no type parameters. This concrete class
+ * implements the Reified Type for Java 1.4 by making the raw class the Java 1.4
+ * class and using a Reified Type based on the <code>Object</code> class as
+ * any type parameter. A subclass that provide type parameters should be
+ * respected.
+ * 
+ * A Blueprint extender implementations can subclass this class and provide
+ * access to the generic type parameter graph for conversion. Such a subclass
+ * must <em>reify</em> the different Java 5 <code>Type</code> instances into
+ * the reified form. That is, a form where the raw Class is available with its
  * optional type parameters as Reified Types.
  * 
  * @Immutable
  * @version $Revision$
  */
 public class ReifiedType {
-	private final static ReifiedType	OBJECT	= new ReifiedType(Object.class);
+	private final static ReifiedType OBJECT = new ReifiedType(Object.class);
 
-	private final Class			clazz;
+	private final Class clazz;
 
 	/**
 	 * Create a Reified Type for a raw Java class without any generic type
 	 * parameters. Subclasses can provide the optional generic type parameter
 	 * information. Without subclassing, this instance has no type parameters.
 	 * 
-	 * @param clazz The raw class of the Reified Type.
+	 * @param clazz
+	 *            The raw class of the Reified Type.
 	 */
 	public ReifiedType(Class clazz) {
 		this.clazz = clazz;
@@ -62,7 +67,7 @@ public class ReifiedType {
 	 * example:
 	 * 
 	 * <pre>
-	 * Map&lt;String, Object&gt;	map;
+	 * Map&lt;String, Object&gt; map;
 	 * </pre>
 	 * 
 	 * The raw class is the Map class.
@@ -82,11 +87,11 @@ public class ReifiedType {
 	 * For example, in the following example:
 	 * 
 	 * <pre>
-	 * Map&lt;String, Object&gt;	map;
+	 * Map&lt;String, Class&lt;? extends Metadata&gt;&gt; map;
 	 * </pre>
 	 * 
 	 * type parameter 0 is <code>String</code>, and type parameter 1 is
-	 * <code>Object</code>.
+	 * <code>Metadata</code>.
 	 * 
 	 * <p>
 	 * This implementation returns a Reified Type that has <code>Object</code>
@@ -97,7 +102,8 @@ public class ReifiedType {
 	 * This method should be overridden by a subclass that provides access to
 	 * the generic type parameter information.
 	 * 
-	 * @param i The index of the type parameter
+	 * @param i
+	 *            The index of the type parameter
 	 * @return The <code>ReifiedType</code> for the generic type parameter at
 	 *         the specified index.
 	 */

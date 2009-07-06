@@ -37,7 +37,7 @@ public interface ReferenceListMetadata extends ServiceReferenceMetadata {
 	 * Whether the collection will contain service objects, or service
 	 * references Defined in the <code>member-type</code> attribute.
 	 * 
-	 * @return one of USE_SERVICE_OBJECT and USE_SERVICE_REFERENCE
+	 * @return one of {@link #USE_SERVICE_OBJECT} and {@link #USE_SERVICE_REFERENCE}
 	 * @see #USE_SERVICE_OBJECT
 	 * @see #USE_SERVICE_REFERENCE
 	 */

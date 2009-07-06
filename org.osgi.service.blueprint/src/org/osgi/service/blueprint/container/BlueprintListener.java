@@ -22,8 +22,8 @@ package org.osgi.service.blueprint.container;
  * To receive Blueprint Events, a bundle must register a Blueprint Listener
  * service.
  * 
- * In addition, after a Blueprint Listener is registered, the Blueprint extender
- * will synchronously send to this Blueprint Listener the last Blueprint Event
+ * After a Blueprint Listener is registered, the Blueprint extender
+ * must synchronously send to this Blueprint Listener the last Blueprint Event
  * for each ready Blueprint bundle managed by this extender. This replay of
  * Blueprint Events is designed so that the new Blueprint Listener can be
  * informed of the state of each Blueprint bundle. Blueprint Events sent during

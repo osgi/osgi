@@ -16,8 +16,10 @@
 package org.osgi.service.blueprint.reflect;
 
 /**
- * Metadata used in a Bean Manager to inject arguments in a method or
- * constructor. This Metadata class describes the <code>argument</element>.
+ * Metadata for a Bean Manager to describe the injection of arguments in a
+ * method or constructor, it is obtained from the
+ * {@link BeanMetadata#getArguments()}. This Metadata class describes the
+ * <code>argument</code> element of the <code>bean</code> element.
  * 
  * @ThreadSafe
  * @version $Revision$
@@ -26,34 +28,37 @@ public interface BeanArgument {
 
 	/**
 	 * The Metadata for the value to inject into the argument.
-	 *
+	 * 
 	 * This is the <code>value</code> attribute.
-	 *
+	 * 
 	 * @return the Metadata for the value
 	 */
 	Metadata getValue();
 
 	/**
-	 * The type to convert the value into when invoking the constructor or
-	 * factory method. If no explicit type was specified on the
-	 * definition then this method returns <code>null</code>.
-	 *
+	 * The type to match the argument and convert the value into when invoking
+	 * the constructor or factory method. If no explicit type was specified on
+	 * the definition then this method returns <code>null</code>.
+	 * 
 	 * This is the <code>type</code> attribute.
-	 *
-	 * @return the explicitly specified type to convert the value into, or <code>null</code>
-	 *         if no type was specified in the definition.
+	 * 
+	 * @return the explicitly specified type to convert the value into, or
+	 *         <code>null</code> if no type was specified in the definition.
 	 */
 	String getValueType();
 
 	/**
 	 * The (zero-based) index into the parameter list of the method or
-	 * constructor to be invoked for this argument. This is determined either
-	 * by explicitly specifying the <code>index</code> attribute in the component
-	 * declaration.  If not explicitly set, this will return -1.
-	 *
+	 * constructor to be invoked for this argument. This is determined either by
+	 * explicitly specifying the <code>index</code> attribute in the component
+	 * declaration. If not explicitly set, this will return -1 and the initial
+	 * ordering is defined by its position in the
+	 * {@link BeanMetadata#getArguments()} list.
+	 * 
 	 * This is the <code>index</code> attribute.
-	 *
-	 * @return the zero-based parameter index, or -1 if the argument position was not set.
+	 * 
+	 * @return the zero-based parameter index, or -1 if the argument position
+	 *         was not set.
 	 */
 	int getIndex();
 }

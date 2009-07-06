@@ -17,7 +17,7 @@
 package org.osgi.service.blueprint.reflect;
 
 /**
- * Metadata for an entry. An entry is the member of a {@link MapMetadata} so
+ * Metadata for a map entry. A map entry is the member of a {@link MapMetadata} List, so
  * that it can be treated as a {@link CollectionMetadata} with entries.
  * 
  * Defined in the <code>entry</code> element.
@@ -28,7 +28,6 @@ package org.osgi.service.blueprint.reflect;
 public interface MapEntry {
 	/**
 	 * Keys must be <code>non-null</code>.
-	 * 
 	 * 
 	 * Defined in the <code>key</code> attribute or element.
 	 * 

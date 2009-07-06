@@ -42,7 +42,7 @@ public interface ServiceReferenceMetadata extends ComponentMetadata {
 	/**
 	 * Whether or not a matching service is required at all times.
 	 * 
-	 * Defined in the <code>availibility</code> attribute.
+	 * Defined in the <code>availability</code> attribute.
 	 * 
 	 * @return one of {@link #AVAILABILITY_MANDATORY} or
 	 *         {@link #AVAILABILITY_OPTIONAL}

@@ -27,8 +27,8 @@ public interface Converter {
 	 * Return if this converter is able to convert the specified object to the
 	 * specified type.
 	 * 
-	 * @param sourceObject The source object to convert.
-	 * @param targetType The target type.
+	 * @param sourceObject The source object <code>s</code> to convert.
+	 * @param targetType The target type <code>T</code>.
 	 * 
 	 * @return <code>true</code> if the conversion is possible,
 	 *         <code>false</code> otherwise.
@@ -38,8 +38,8 @@ public interface Converter {
 	/**
 	 * Convert the specified object to an instance of the specified type.
 	 * 
-	 * @param sourceObject The source object to convert.
-	 * @param targetType The target type.
+	 * @param sourceObject The source object <code>s</code> to convert.
+	 * @param targetType The target type <code>T</code>.
 	 * @return An instance with a type that is assignable from targetType's raw
 	 *         class
 	 * @throws Exception If the conversion cannot succeed. This exception should

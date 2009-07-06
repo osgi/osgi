@@ -19,7 +19,8 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Metadata representing a service to registered by the Blueprint Container.
+ * Metadata representing a service to registered by the Blueprint Container when
+ * enabled.
  * 
  * @ThreadSafe
  * @version $Revision$
@@ -31,7 +32,7 @@ public interface ServiceMetadata extends ComponentMetadata {
 	 * 
 	 * @see #getAutoExport()
 	 */
-	public static final int	AUTO_EXPORT_DISABLED		= 1;
+	public static final int AUTO_EXPORT_DISABLED = 1;
 
 	/**
 	 * Advertise all Java interfaces implemented by the component instance type
@@ -39,7 +40,7 @@ public interface ServiceMetadata extends ComponentMetadata {
 	 * 
 	 * @see #getAutoExport()
 	 */
-	public static final int	AUTO_EXPORT_INTERFACES		= 2;
+	public static final int AUTO_EXPORT_INTERFACES = 2;
 
 	/**
 	 * Advertise all Java classes in the hierarchy of the component instance
@@ -47,7 +48,7 @@ public interface ServiceMetadata extends ComponentMetadata {
 	 * 
 	 * @see #getAutoExport()
 	 */
-	public static final int	AUTO_EXPORT_CLASS_HIERARCHY	= 3;
+	public static final int AUTO_EXPORT_CLASS_HIERARCHY = 3;
 
 	/**
 	 * Advertise all Java classes and interfaces in the component instance type
@@ -55,7 +56,7 @@ public interface ServiceMetadata extends ComponentMetadata {
 	 * 
 	 * @see #getAutoExport()
 	 */
-	public static final int	AUTO_EXPORT_ALL_CLASSES		= 4;
+	public static final int AUTO_EXPORT_ALL_CLASSES = 4;
 
 	/**
 	 * The component that is to be exported as a service. Value must refer to a
@@ -74,8 +75,8 @@ public interface ServiceMetadata extends ComponentMetadata {
 	 * Defined in the <code>interface</code> attribute or
 	 * <code>interfaces</code> element.
 	 * 
-	 * @return an immutable set of (<code>String</code>) interface names, or an
-	 *         empty set if using <code>auto-export</code> or not set.
+	 * @return an immutable set of (<code>String</code>) interface names, or
+	 *         an empty set if using <code>auto-export</code> or not set.
 	 */
 	List/* <String> */getInterfaces();
 

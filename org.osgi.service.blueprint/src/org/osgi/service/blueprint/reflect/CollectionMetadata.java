@@ -19,8 +19,8 @@ import java.util.List;
 
 /**
  * Metadata for a collection based value. Members of the collection are
- * instances of Metadata. This Metadata can constrain the members to a specific
- * type.
+ * instances of Metadata. This Collection Metadata can constrain the members of
+ * its collection to a specific type.
  * 
  * @ThreadSafe
  * @version $Revision$
@@ -31,8 +31,9 @@ public interface CollectionMetadata extends NonNullMetadata {
 	/**
 	 * Provide the interface that this collection must implement.
 	 * 
-	 * This is used for <code>Arrays (Object[])</code>, <code>Set</code>, and
-	 * <code>List</code>. This information is encoded in the element name.
+	 * This is used for <code>Arrays (Object[])</code>, <code>Set</code>,
+	 * and <code>List</code>. This information is encoded in the element
+	 * name.
 	 * 
 	 * @return The interface class that the collection must implement or
 	 *         <code>Object[]</code> for arrays.
@@ -49,7 +50,7 @@ public interface CollectionMetadata extends NonNullMetadata {
 	String getValueType();
 
 	/**
-	 * The of Metadata that describe the actual Collection or array.
+	 * The Metadata that describe the member values of the Collection or array.
 	 * 
 	 * @return A list of Metadata for the values of a collection or array.
 	 */
