@@ -1200,7 +1200,6 @@
 		<xsd:restriction base="xsd:NMTOKEN">
 			<xsd:enumeration value="singleton" />
 			<xsd:enumeration value="prototype" />
-			<xsd:enumeration value="bundle" />
 		</xsd:restriction>
 	</xsd:simpleType>
 
