@@ -16,28 +16,27 @@
 package org.osgi.service.blueprint.container;
 
 /**
- * A Blueprint exception indicating that a component does not exist.
+ * A Blueprint exception indicating that a component does not exist in a
+ * Blueprint Container.
  * 
  * This exception is thrown when an attempt is made to create a component
- * instance by id or lookup the manager's Metadata and this id does not exist in
- * the Blueprint Container.
+ * instance or lookup Component Metadata using a component id that does not
+ * exist in the Blueprint Container.
  * 
  * @version $Revision$
  */
 public class NoSuchComponentException extends RuntimeException {
-	private static final long serialVersionUID = 9082130257086743432L;
+	private static final long	serialVersionUID	= 1L;
 	/**
-	 * The id that generated the exception.
+	 * The requested component id that generated the exception.
 	 */
-	private final String componentId;
+	private final String		componentId;
 
 	/**
 	 * Create a No Such Component Exception for a non-existent component.
 	 * 
-	 * @param msg
-	 *            The associated message.
-	 * @param id
-	 *            The id of the non-existent component.
+	 * @param msg The associated message.
+	 * @param id The id of the non-existent component.
 	 */
 	public NoSuchComponentException(String msg, String id) {
 		super(msg);
@@ -47,19 +46,18 @@ public class NoSuchComponentException extends RuntimeException {
 	/**
 	 * Create a No Such Component Exception for a non-existent component.
 	 * 
-	 * @param id
-	 *            The id of the non-existent component.
+	 * @param id The id of the non-existent component.
 	 */
 	public NoSuchComponentException(String id) {
-		super("No manager with id '" + (id == null ? "<null>" : id)
+		super("No component with id '" + (id == null ? "<null>" : id)
 				+ "' could be found");
 		this.componentId = id;
 	}
 
 	/**
-	 * Returns the non-existent id.
+	 * Returns the id of the non-existent component.
 	 * 
-	 * @return The non-existent id.
+	 * @return The id of the non-existent component.
 	 */
 	public String getComponentId() {
 		return componentId;

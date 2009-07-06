@@ -24,7 +24,7 @@ package org.osgi.service.blueprint.container;
  * @version $Revision$
  */
 public class ComponentDefinitionException extends RuntimeException {
-	private static final long	serialVersionUID	= 1;
+	private static final long	serialVersionUID	= 1L;
 
 	/**
 	 * Creates a Component Definition Exception with no message or exception

@@ -26,8 +26,7 @@ import org.osgi.framework.ServiceException;
  * @version $Revision$
  */
 public class ServiceUnavailableException extends ServiceException {
-	private static final long	serialVersionUID	= 1;
-	
+	private static final long	serialVersionUID	= 1L;
 	/**
 	 * The filter string associated with the exception.
 	 */

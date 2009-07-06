@@ -24,12 +24,10 @@ package org.osgi.service.blueprint.container;
  * <code>org/osgi/service/blueprint/container/</code><em>&lt;event-type&gt;</em>
  * 
  * where <em>&lt;event-type&gt;</em> can have the values
- * {@link BlueprintEvent#CREATING CREATING},
- * {@link BlueprintEvent#CREATED CREATED},
- * {@link BlueprintEvent#DESTROYING DESTROYING},
- * {@link BlueprintEvent#DESTROYED DESTROYED},
- * {@link BlueprintEvent#FAILURE FAILURE},
- * {@link BlueprintEvent#GRACE_PERIOD GRACE_PERIOD}, or
+ * {@link BlueprintEvent#CREATING CREATING}, {@link BlueprintEvent#CREATED
+ * CREATED}, {@link BlueprintEvent#DESTROYING DESTROYING},
+ * {@link BlueprintEvent#DESTROYED DESTROYED}, {@link BlueprintEvent#FAILURE
+ * FAILURE}, {@link BlueprintEvent#GRACE_PERIOD GRACE_PERIOD}, or
  * {@link BlueprintEvent#WAITING WAITING}.
  * 
  * Such events have the following properties:
@@ -41,9 +39,7 @@ package org.osgi.service.blueprint.container;
  * <li>{@link #BUNDLE_SYMBOLICNAME bundle.symbolicName}</li>
  * <li>{@link #BUNDLE_ID bundle.id}</li>
  * <li>{@link #BUNDLE_VERSION bundle.version}</li>
- * <li>
- * {@link #EXTENDER_BUNDLE_SYMBOLICNAME extender.bundle.symbolicName}
- * </li>
+ * <li>{@link #EXTENDER_BUNDLE_SYMBOLICNAME extender.bundle.symbolicName}</li>
  * <li>{@link #EXTENDER_BUNDLE_ID extender.bundle.id}</li>
  * <li>{@link #EXTENDER_BUNDLE_VERSION extender.bundle.version}</li>
  * <li>{@link #DEPENDENCIES dependencies}</li>
@@ -127,15 +123,16 @@ public class EventConstants {
 
 	/**
 	 * The filters identifying the missing dependencies that caused this event
-	 * for a {@link BlueprintEvent#FAILURE},
-	 * {@link BlueprintEvent#GRACE_PERIOD} or {@link BlueprintEvent#WAITING}
-	 * event. The property type is an array of <code>String</code>.
+	 * for a {@link BlueprintEvent#FAILURE FAILURE},
+	 * {@link BlueprintEvent#GRACE_PERIOD GRACE_PERIOD}, or
+	 * {@link BlueprintEvent#WAITING WAITING} event. This property type is an
+	 * array of <code>String</code>.
 	 */
 	public static final String DEPENDENCIES = "dependencies";
 
 	/**
-	 * The cause for a {@link BlueprintEvent#FAILURE} event. This property is of type
-	 * <code>Throwable</code>.
+	 * The cause for a {@link BlueprintEvent#FAILURE FAILURE} event. This
+	 * property is of type <code>Throwable</code>.
 	 */
 	public static final String CAUSE = "cause";
 
