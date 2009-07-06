@@ -25,29 +25,36 @@ package org.osgi.service.blueprint.reflect;
 public interface ReferenceListener {
 
 	/**
-	 * The component instance that will receive bind and unbind events. The
-	 * returned value must reference a {@link Target} either directly or
-	 * indirectly.
+	 * Return the Metadata for the component that will receive bind and unbind
+	 * events.
 	 * 
-	 * Defined in the <code>ref</code> attribute or via an inlined manager.
+	 * This is specified by the <code>ref</code> attribute or via an inlined
+	 * component.
 	 * 
-	 * @return the listener component instance Metadata.
+	 * @return The Metadata for the component that will receive bind and unbind
+	 *         events.
 	 */
 	Target getListenerComponent();
 
 	/**
-	 * The name of the method to invoke on the reference listener when a
-	 * matching service is bound to the reference
+	 * Return the name of the bind method. The bind method will be invoked when
+	 * a matching service is bound to the reference.
 	 * 
-	 * @return the bind callback method name.
+	 * This is specified by the <code>bind-method</code> attribute of the
+	 * reference listener.
+	 * 
+	 * @return The name of the bind method.
 	 */
 	String getBindMethod();
 
 	/**
-	 * The name of the method to invoke on the reference listener when a service
-	 * is unbound from the reference.
+	 * Return the name of the unbind method. The unbind method will be invoked
+	 * when a matching service is unbound from the reference.
 	 * 
-	 * @return the unbind callback method name.
+	 * This is specified by the <code>unbind-method</code> attribute of the
+	 * reference listener.
+	 * 
+	 * @return The name of the unbind method.
 	 */
 	String getUnbindMethod();
 }

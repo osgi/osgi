@@ -16,7 +16,7 @@
 package org.osgi.service.blueprint.reflect;
 
 /**
- * Top level Metadata.
+ * Top level Metadata type. All Metdata types extends this base type.
  * 
  * @ThreadSafe
  * @version $Revision$

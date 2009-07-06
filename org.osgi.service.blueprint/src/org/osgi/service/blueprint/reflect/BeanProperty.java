@@ -16,8 +16,11 @@
 package org.osgi.service.blueprint.reflect;
 
 /**
- * Metadata describing a property to be injected. Properties are defined
- * according to the Java Beans conventions.
+ * Metadata for a property to be injected into a bean. The properties of a bean
+ * are obtained from {@link BeanMetadata#getProperties()}.
+ * 
+ * This is specified by the <code>property</code> elements of a bean. Properties
+ * are defined according to the Java Beans conventions.
  * 
  * @ThreadSafe
  * @version $Revision$
@@ -25,21 +28,21 @@ package org.osgi.service.blueprint.reflect;
 public interface BeanProperty {
 
 	/**
-	 * The name of the property to be injected, following Java Beans
-	 * conventions.
+	 * Return the name of the property to be injected. The name follows Java
+	 * Beans conventions.
 	 * 
-	 * Defined in the <code>name</code> attribute.
+	 * This is specified by the <code>name</code> attribute.
 	 * 
-	 * @return the property name.
+	 * @return The name of the property to be injected.
 	 */
 	String getName();
 
 	/**
-	 * The Metadata for the value to inject the property with.
+	 * Return the Metadata for the value to be injected into a bean.
 	 * 
-	 * Defined in the <code>value</code> attribute or in an inlined definition.
+	 * This is specified by the <code>value</code> attribute or in inlined text.
 	 * 
-	 * @return the Metadata for the property value.
+	 * @return The Metadata for the value to be injected into a bean.
 	 */
 	Metadata getValue();
 }

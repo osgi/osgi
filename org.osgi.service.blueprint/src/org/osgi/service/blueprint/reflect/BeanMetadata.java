@@ -18,7 +18,10 @@ package org.osgi.service.blueprint.reflect;
 import java.util.List;
 
 /**
- * Metadata for a Bean Manager.
+ * Metadata for a Bean component.
+ * 
+ * <p>
+ * This is specified by the <code>bean</code> element.
  * 
  * @ThreadSafe
  * @version $Revision$
@@ -26,108 +29,113 @@ import java.util.List;
 public interface BeanMetadata extends Target, ComponentMetadata {
 
 	/**
-	 * Used when the <code>scope</code> is <code>singleton</code>. See
-	 * {@link #getScope()}
+	 * The bean has <code>singleton</code> scope.
+	 * 
+	 * @see #getScope()
 	 */
-
-	static final String SCOPE_SINGLETON = "singleton";
-	/**
-	 * Used when the <code>scope</code> is <code>prototype</code> See
-	 * {@link #getScope()}
-	 */
-	static final String SCOPE_PROTOTYPE = "prototype";
+	static final String	SCOPE_SINGLETON	= "singleton";
 
 	/**
-	 * The name of the class specified for this bean.
+	 * The bean has <code>prototype</code> scope.
 	 * 
-	 * This is the <code>class</code> attribute.
+	 * @see #getScope()
+	 */
+	static final String	SCOPE_PROTOTYPE	= "prototype";
+
+	/**
+	 * Return the name of the class specified for the bean.
 	 * 
-	 * @return the name of the bean class. If no class was specified in the
-	 *         definition (because the a factory component is used instead) then
-	 *         this method will return <code>null</code>.
+	 * This is specified by the <code>class</code> attribute of the bean
+	 * definition.
+	 * 
+	 * @return The name of the class specified for the bean. If no class is
+	 *         specified in the bean definition, because the a factory component
+	 *         is used instead, then this method will return <code>null</code>.
 	 */
 	String getClassName();
 
 	/**
-	 * The name of the init method specified for this bean, if any.
+	 * Return the name of the init method specified for the bean.
 	 * 
-	 * This is the <code>init-method</code> attribute.
+	 * This is specified by the <code>init-method</code> attribute of the bean
+	 * definition.
 	 * 
-	 * @return the method name of the specified init method, or
-	 *         <code>null</code> if no init method was specified.
+	 * @return The name of the init method specified for the bean, or
+	 *         <code>null</code> if no init method is specified.
 	 */
 	String getInitMethod();
 
 	/**
-	 * The name of the destroy method specified for this bean, if any.
+	 * Return the name of the destroy method specified for the bean.
 	 * 
-	 * This is the <code>destroy-method</code> attribute.
+	 * This is specified by the <code>destroy-method</code> attribute of the
+	 * bean definition.
 	 * 
-	 * @return the method name of the specified destroy method, or
-	 *         <code>null</code> if no destroy method was specified.
+	 * @return The name of the destroy method specified for the bean, or
+	 *         <code>null</code> if no destroy method is specified.
 	 */
 	String getDestroyMethod();
 
 	/**
-	 * The arguments for the factory method or constructor.
+	 * Return the arguments for the factory method or constructor of the bean.
 	 * 
-	 * Specified in all the child
-	 * <code>argument<code> elements. The return is a list of {@link BeanArgument} objects.
+	 * This is specified by the child <code>argument<code> elements.
 	 * 
-	 * @return List of Bean Arguments for the factory method or constructor, can
-	 *         be empty if no arguments are specified
+	 * @return An immutable List of {@link BeanArgument} objects for the factory
+	 *         method or constructor of the bean. The List is empty if no
+	 *         arguments are specified for the bean.
 	 */
 	List/* <BeanArgument> */getArguments();
 
 	/**
-	 * The property injection {@link BeanProperty} Metadata for this bean.
+	 * Return the properties for the bean.
 	 * 
-	 * Specified in all the child <code>property</code> elements.
+	 * This is specified by the child <code>property</code> elements.
 	 * 
-	 * @return an immutable List of {@link BeanProperty}, with one entry for
-	 *         each property to be injected. If no property injection was
-	 *         specified for this bean then an empty List will be returned.
+	 * @return An immutable List of {@link BeanProperty} objects, with one entry
+	 *         for each property to be injected in the bean. The List is empty
+	 *         if no property injection is specified for the bean.
 	 * 
 	 */
 	List /* <BeanProperty> */getProperties();
 
 	/**
-	 * Provides the name of the optional factory method.
+	 * Return the name of the factory method for the bean.
 	 * 
-	 * This is the <code>factory-method</code> attribute.
+	 * This is specified by the <code>factory-method</code> attribute of the
+	 * bean.
 	 * 
-	 * @return The name of the factory method or <code>null</code>.
+	 * @return The name of the factory method of the bean or <code>null</code>
+	 *         if no factory method is specified for the bean.
 	 */
 	String getFactoryMethod();
 
 	/**
-	 * The component instance on which to invoke the factory method (if
-	 * specified).
+	 * Return the Metadata for the factory component on which to invoke the
+	 * factory method for the bean.
 	 * 
-	 * The to be used component instance is referred to by the
-	 * <code>factory-component</code>.
+	 * This is specified by the <code>factory-ref</code> attribute of the bean.
 	 * 
-	 * When a factory method and factory ref has been specified for this
-	 * component, this operation returns the Metadata specifying the manager on
-	 * which component instance the factory method is to be invoked. When no
-	 * factory component has been specified this operation will return
-	 * <code>null</code>.
+	 * <p>
+	 * When a factory method and factory component have been specified for the
+	 * bean, this method returns the factory component on which to invoke the
+	 * factory method for the bean. When no factory component has been specified
+	 * this method will return <code>null</code>.
 	 * 
-	 * A return value of <code>null with a <code>non-null</code> factory method
-	 * indicates that the factory method should be invoked as a static method on
-	 * the given class itself. For a <code>non-null</code> return value, the
-	 * Metadata returned will be a {@link Target} instance.
+	 * When a factory method has been specified for the bean but a factory
+	 * component has not been specified, the factory method must be invoked as a
+	 * static method on the bean's class.
 	 * 
-	 * @return A {@link Target} or <code>null</code> if no factory component was
-	 *         specified.
+	 * @return The Metadata for the factory component on which to invoke the
+	 *         factory method for the bean or <code>null</code> if no factory
+	 *         component is specified.
 	 */
 	Target getFactoryComponent();
 
 	/**
-	 * The specified scope for the manager's lifecycle.
+	 * Return the scope for the bean.
 	 * 
-	 * @return The scope specified for the component.
-	 * 
+	 * @return The scope for the bean.
 	 * @see #SCOPE_SINGLETON
 	 * @see #SCOPE_PROTOTYPE
 	 */

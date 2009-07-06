@@ -17,31 +17,32 @@
 package org.osgi.service.blueprint.reflect;
 
 /**
- * Metadata for a map entry. A map entry is the member of a {@link MapMetadata} List, so
- * that it can be treated as a {@link CollectionMetadata} with entries.
+ * Metadata for a map entry.
  * 
- * Defined in the <code>entry</code> element.
+ * This type is used by {@link MapMetadata}, {@link PropsMetadata} and
+ * {@link ServiceMetadata}.
  * 
  * @ThreadSafe
  * @version $Revision$
  */
 public interface MapEntry {
 	/**
-	 * Keys must be <code>non-null</code>.
+	 * Return the Metadata for the key of the map entry.
 	 * 
-	 * Defined in the <code>key</code> attribute or element.
+	 * This is specified by the <code>key</code> attribute or element.
 	 * 
-	 * @return the Metadata for the key
+	 * @return The Metadata for the key of the map entry. This must not be
+	 *         <code>null</code>.
 	 */
 	NonNullMetadata getKey();
 
 	/**
-	 * Return the Metadata for the value.
+	 * Return the Metadata for the value of the map entry.
 	 * 
-	 * Defined in the <code>value</code> attribute or element<.
+	 * This is specified by the <code>value</code> attribute or element.
 	 * 
-	 * @return the Metadata for the value
+	 * @return The Metadata for the value of the map entry. This must not be
+	 *         <code>null</code>.
 	 */
-
 	Metadata getValue();
 }

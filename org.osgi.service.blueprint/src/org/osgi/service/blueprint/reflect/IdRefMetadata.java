@@ -16,19 +16,21 @@
 package org.osgi.service.blueprint.reflect;
 
 /**
- * A value which represents the verified id of another manager in the Blueprint
- * Container. The id itself will be injected, not the manager that the id refers
- * to. No implicit dependency is created.
+ * Metadata for the verified id of another component managed by the Blueprint
+ * Container. The id itself will be injected, not the component to which the id
+ * refers. No implicit dependency is created.
  * 
  * @ThreadSafe
  * @version $Revision$
  */
 public interface IdRefMetadata extends NonNullMetadata {
 	/**
-	 * The id of the referenced manager. Defined in the
-	 * <code>component-id</code> attribute.
+	 * Return the id of the referenced component.
 	 * 
-	 * @return The referred manager id.
+	 * This is specified by the <code>component-id</code> attribute of a
+	 * component.
+	 * 
+	 * @return The id of the referenced component.
 	 */
 	String getComponentId();
 }

@@ -16,10 +16,10 @@
 package org.osgi.service.blueprint.reflect;
 
 /**
- * Metadata for a Bean Manager to describe the injection of arguments in a
- * method or constructor, it is obtained from the
- * {@link BeanMetadata#getArguments()}. This Metadata class describes the
- * <code>argument</code> element of the <code>bean</code> element.
+ * Metadata for a factory method or constructor argument of a bean. The
+ * arguments of a bean are obtained from {@link BeanMetadata#getArguments()}.
+ * 
+ * This is specified by the <code>argument</code> elements of a bean.
  * 
  * @ThreadSafe
  * @version $Revision$
@@ -27,38 +27,36 @@ package org.osgi.service.blueprint.reflect;
 public interface BeanArgument {
 
 	/**
-	 * The Metadata for the value to inject into the argument.
+	 * Return the Metadata for the argument value.
 	 * 
-	 * This is the <code>value</code> attribute.
+	 * This is specified by the <code>value</code> attribute.
 	 * 
-	 * @return the Metadata for the value
+	 * @return The Metadata for the argument value.
 	 */
 	Metadata getValue();
 
 	/**
-	 * The type to match the argument and convert the value into when invoking
-	 * the constructor or factory method. If no explicit type was specified on
-	 * the definition then this method returns <code>null</code>.
+	 * Return the name of the value type to match the argument and convert the
+	 * value into when invoking the constructor or factory method.
 	 * 
-	 * This is the <code>type</code> attribute.
+	 * This is specified by the <code>type</code> attribute.
 	 * 
-	 * @return the explicitly specified type to convert the value into, or
-	 *         <code>null</code> if no type was specified in the definition.
+	 * @return The name of the value type to convert the value into, or
+	 *         <code>null</code> if no type is specified.
 	 */
 	String getValueType();
 
 	/**
-	 * The (zero-based) index into the parameter list of the method or
-	 * constructor to be invoked for this argument. This is determined either by
-	 * explicitly specifying the <code>index</code> attribute in the component
-	 * declaration. If not explicitly set, this will return -1 and the initial
-	 * ordering is defined by its position in the
-	 * {@link BeanMetadata#getArguments()} list.
+	 * Return the zero-based index into the parameter list of the factory method
+	 * or constructor to be invoked for this argument. This is determined by
+	 * specifying the <code>index</code> attribute for the bean. If not
+	 * explicitly set, this will return -1 and the initial ordering is defined
+	 * by its position in the {@link BeanMetadata#getArguments()} list.
 	 * 
-	 * This is the <code>index</code> attribute.
+	 * This is specified by the <code>index</code> attribute.
 	 * 
-	 * @return the zero-based parameter index, or -1 if the argument position
-	 *         was not set.
+	 * @return The zero-based index of the parameter, or -1 if no index is
+	 *         specified.
 	 */
 	int getIndex();
 }

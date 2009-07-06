@@ -18,54 +18,58 @@ package org.osgi.service.blueprint.reflect;
 import java.util.List;
 
 /**
- * Base class for all managers.
+ * Metadata for managed components. This is the base type for
+ * {@link BeanMetadata}, {@link ServiceMetadata} and
+ * {@link ServiceReferenceMetadata}.
  * 
- * @see BeanMetadata
- * @see ServiceReferenceMetadata
- * @see ServiceMetadata
- * @see Target
  * @ThreadSafe
  * @version $Revision$
  */
 public interface ComponentMetadata extends NonNullMetadata {
 
 	/**
-	 * The manager will be eagerly activate
+	 * The component's manager must eagerly activate the component.
+	 * 
+	 * @see #getActivation()
 	 */
 	static final int	ACTIVATION_EAGER	= 1;
 
 	/**
-	 * The manager will be lazily activated
+	 * The component's manager must lazily activate the component.
+	 * 
+	 * @see #getActivation()
 	 */
 	static final int	ACTIVATION_LAZY		= 2;
 
 	/**
-	 * The id of the manager.
+	 * Return the id of the component.
 	 * 
-	 * @return manager id. The manager id can be <code>null</code> if this is an
-	 *         anonymously defined and/or inlined manager.
+	 * @return The id of the component. The component id can be
+	 *         <code>null</code> if this is an anonymously defined and/or
+	 *         inlined component.
 	 */
 	String getId();
 
 	/**
-	 * Activation strategy for this manager.
+	 * Return the activation strategy for the component.
 	 * 
-	 * This is the <code>activation</code> attribute or the
-	 * <code>default-activation</code> in the <code>blueprint</code> element if
-	 * not set. If this is also not set, it is {@link #ACTIVATION_EAGER}.
+	 * This is specified by the <code>activation</code> attribute of a component
+	 * definition. If this is not set, then the <code>default-activation</code>
+	 * in the <code>blueprint</code> element is used. If that is also not set,
+	 * then the activation strategy is {@link #ACTIVATION_EAGER}.
 	 * 
-	 * @return the activation method
+	 * @return The activation strategy for the component.
 	 * @see #ACTIVATION_EAGER
 	 * @see #ACTIVATION_LAZY
 	 */
 	int getActivation();
 
 	/**
-	 * The id of any managers listed in a <code>depends-on</code> attribute for
-	 * this manager.
+	 * Return the ids of any components listed in a <code>depends-on</code>
+	 * attribute for the component.
 	 * 
-	 * @return an immutable List of manager ids that are explicitly declared as
-	 *         a dependency, or an empty List if none.
+	 * @return An immutable List of component ids that are explicitly declared
+	 *         as a dependency, or an empty List if none.
 	 */
 	List/* <String> */getDependsOn();
 }

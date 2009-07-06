@@ -18,9 +18,9 @@ package org.osgi.service.blueprint.reflect;
 import java.util.List;
 
 /**
- * Metadata for a collection based value. Members of the collection are
- * instances of Metadata. This Collection Metadata can constrain the members of
- * its collection to a specific type.
+ * Metadata for a collection based value. Values of the collection are defined
+ * by Metadata objects. This Collection Metadata can constrain the values of the
+ * collection to a specific type.
  * 
  * @ThreadSafe
  * @version $Revision$
@@ -29,30 +29,29 @@ import java.util.List;
 public interface CollectionMetadata extends NonNullMetadata {
 
 	/**
-	 * Provide the interface that this collection must implement.
+	 * Return the type of the collection.
 	 * 
-	 * This is used for <code>Arrays (Object[])</code>, <code>Set</code>,
-	 * and <code>List</code>. This information is encoded in the element
-	 * name.
+	 * The possible types are: array (<code>Object[]</code>), <code>Set</code>,
+	 * and <code>List</code>. This information is specified in the element name.
 	 * 
-	 * @return The interface class that the collection must implement or
-	 *         <code>Object[]</code> for arrays.
+	 * @return The type of the collection. <code>Object[]</code> is returned to
+	 *         indicate an array.
 	 */
 	Class/* <?> */getCollectionClass();
 
 	/**
-	 * The value-type specified for the members of the collection or array.
+	 * Return the type specified for the values of the collection.
 	 * 
-	 * The <code>value-type</code> attribute.
+	 * The <code>value-type</code> attribute specified this information.
 	 * 
-	 * @return The value type for this Collection Metadata
+	 * @return The type specified for the values of the collection.
 	 */
 	String getValueType();
 
 	/**
-	 * The Metadata that describe the member values of the Collection or array.
+	 * Return Metadata for the values of the collection.
 	 * 
-	 * @return A list of Metadata for the values of a collection or array.
+	 * @return A List of Metadata for the values of the collection.
 	 */
 	List /* <Metadata> */getValues();
 }

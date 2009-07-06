@@ -16,18 +16,20 @@
 package org.osgi.service.blueprint.reflect;
 
 /**
- * A value which refers by its id to another manager in the Blueprint Container.
+ * Metadata for a reference to another component managed by the Blueprint
+ * Container.
  * 
  * @ThreadSafe
  * @version $Revision$
  */
 public interface RefMetadata extends Target, NonNullMetadata {
 	/**
-	 * The id of the referenced manager. Defined in the
-	 * <code>component-id</code> attribute.
+	 * Return the id of the referenced component.
 	 * 
-	 * @return The component id
+	 * This is specified by the <code>component-id</code> attribute of a
+	 * component.
 	 * 
+	 * @return The id of the referenced component.
 	 */
 	String getComponentId();
 }

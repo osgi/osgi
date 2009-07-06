@@ -18,7 +18,8 @@ package org.osgi.service.blueprint.reflect;
 import java.util.Collection;
 
 /**
- * Metadata describing a reference to an OSGi service.
+ * Metadata for a reference to an OSGi service. This is the base type for
+ * {@link ReferenceListMetadata} and {@link ReferenceMetadata}.
  * 
  * @ThreadSafe
  * @version $Revision$
@@ -30,66 +31,72 @@ public interface ServiceReferenceMetadata extends ComponentMetadata {
 	 * 
 	 * @see #getAvailability()
 	 */
-	public static final int	AVAILABILITY_MANDATORY	= 1;
+	static final int	AVAILABILITY_MANDATORY	= 1;
 
 	/**
 	 * A matching service is not required to be present.
 	 * 
 	 * @see #getAvailability()
 	 */
-	public static final int	AVAILABILITY_OPTIONAL	= 2;
+	static final int	AVAILABILITY_OPTIONAL	= 2;
 
 	/**
-	 * Whether or not a matching service is required at all times.
+	 * Return whether or not a matching service is required at all times.
 	 * 
-	 * Defined in the <code>availability</code> attribute.
+	 * This is specified in the <code>availability</code> attribute of the
+	 * service reference.
 	 * 
-	 * @return one of {@link #AVAILABILITY_MANDATORY} or
-	 *         {@link #AVAILABILITY_OPTIONAL}
+	 * @return Whether or not a matching service is required at all times.
+	 * @see #AVAILABILITY_MANDATORY
+	 * @see #AVAILABILITY_OPTIONAL
 	 */
 	int getAvailability();
 
 	/**
-	 * The interface type that the matching service must support
+	 * Return the name of the interface type that a matching service must
+	 * support.
 	 * 
-	 * Defined in the <code>interface</code> attribute.
+	 * This is specified in the <code>interface</code> attribute of the service
+	 * reference.
 	 * 
-	 * @return the name of the requested service interface or <code>null</code>
-	 *         when no interface name is defined.
+	 * @return The name of the interface type that a matching service must
+	 *         support or <code>null</code> when no interface name is specified.
 	 */
 	String getInterface();
 
 	/**
-	 * The value of the <code>component-name</code> attribute, if specified.
-	 * This specifies the id of a component that is registered in the service
-	 * registry. This will create an automatic filter (appended with the filter
-	 * if set) to select this component based on its automatic <code>id</code>
-	 * attribute.
+	 * Return the value of the <code>component-name</code> attribute of the
+	 * service reference. This specifies the id of a component that is
+	 * registered in the service registry. This will create an automatic filter,
+	 * appended with the filter if set, to select this component based on its
+	 * automatic <code>id</code> attribute.
 	 * 
-	 * Defined in the <code>component-name</code> attribute.
-	 * 
-	 * @return the <code>component-name</code> attribute value, or
-	 *         <code>null</code> if the attribute was not specified
+	 * @return The value of the <code>component-name</code> attribute of the
+	 *         service reference or <code>null</code> if the attribute is not
+	 *         specified.
 	 */
 	String getComponentName();
 
 	/**
-	 * The filter expression that a matching service must pass
+	 * Return the filter expression that a matching service must match.
 	 * 
-	 * Defined in the <code>filter</code> attribute.
+	 * This is specified by the <code>filter</code> attribute of the service
+	 * reference.
 	 * 
-	 * @return An OSGi filter expression
+	 * @return The filter expression that a matching service must match or
+	 *         <code>null</code> if a filter is not specified.
 	 */
 	String getFilter();
 
 	/**
-	 * The set of registration listeners defined to receive bind and unbind
-	 * events.
+	 * Return the reference listeners to receive bind and unbind events.
 	 * 
-	 * Defined in the <code>registration-listener</code> element.
+	 * This is specified by the <code>reference-listener</code> elements of the
+	 * service reference.
 	 * 
-	 * @return an immutable collection of {@link ReferenceListener} objects
+	 * @return An immutable Collection of {@link ReferenceListener} objects to
+	 *         receive bind and unbind events. The Collection is empty if no
+	 *         reference listeners are specified for the service reference.
 	 */
 	Collection /* <ReferenceListener> */getReferenceListeners();
-
 }

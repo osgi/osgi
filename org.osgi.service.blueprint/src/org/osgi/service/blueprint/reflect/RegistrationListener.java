@@ -17,8 +17,11 @@ package org.osgi.service.blueprint.reflect;
 
 /**
  * Metadata for a registration listener interested in service registration and
- * unregistration events. Available from the
- * {@link ServiceMetadata#getRegistrationListeners()} method.
+ * unregistration events for a service.
+ * 
+ * <p>
+ * The registration listener is called with the initial state of the service
+ * when the registration listener is actuated.
  * 
  * @ThreadSafe
  * @version $Revision$
@@ -26,38 +29,38 @@ package org.osgi.service.blueprint.reflect;
 public interface RegistrationListener {
 
 	/**
-	 * The component instance that will receive registration and unregistration
-	 * events. The returned value must reference a {@link Target} either
-	 * directly or indirectly. The return type will be a {@link Target}
-	 * instance.
+	 * Return the Metadata for the component that will receive registration and
+	 * unregistration events.
 	 * 
-	 * Defined in the <code>registration-listener</code> child element of the
-	 * <code>service</code> element.
+	 * This is specified by the <code>ref</code> attribute or via an inlined
+	 * component.
 	 * 
-	 * @return The registration listener target.
+	 * @return The Metadata for the component that will receive registration and
+	 *         unregistration events.
 	 */
 	Target getListenerComponent();
 
 	/**
-	 * The name of the method to invoke on the registration listener when the
-	 * associated service is registered with the service registry. This method
-	 * is also be called with the initial state when the listener is actuated.
+	 * Return the name of the registration method. The registration method will
+	 * be invoked when the associated service is registered with the service
+	 * registry.
 	 * 
-	 * Defined in the <code>registration-method</code> attribute.
+	 * This is specified by the <code>registration-method</code> attribute of
+	 * the registration listener.
 	 * 
-	 * @return The registration callback method name.
+	 * @return The name of the registration method.
 	 */
 	String getRegistrationMethod();
 
 	/**
-	 * The name of the method to invoke on the listener component when the
-	 * exported service is unregistered from the service registry. This method
-	 * can also be called with the initial state when the listener is actuated.
+	 * Return the name of the unregistration method. The unregistration method
+	 * will be invoked when the associated service is unregistered from the
+	 * service registry.
 	 * 
-	 * Defined in the <code>unregistration-method</code> attribute.
+	 * This is specified by the <code>unregistration-method</code> attribute of
+	 * the registration listener.
 	 * 
-	 * @return the unregistration callback method name.
+	 * @return The name of the unregistration method.
 	 */
 	String getUnregistrationMethod();
-
 }

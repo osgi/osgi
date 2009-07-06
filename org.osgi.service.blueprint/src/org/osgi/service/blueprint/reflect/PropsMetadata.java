@@ -18,10 +18,14 @@ package org.osgi.service.blueprint.reflect;
 import java.util.List;
 
 /**
- * A <code>java.util.Properties</code> based value. The properties are defined
- * as string to string.
+ * Metadata for a <code>java.util.Properties</code> based value.
  * 
- * Defined in the <code>props</code> element.
+ * <p>
+ * The {@link MapEntry}s of properties are defined with key and values of type
+ * <code>String</code>.
+ * 
+ * <p>
+ * This is specified by the <code>props</code> element.
  * 
  * @ThreadSafe
  * @version $Revision$
@@ -29,9 +33,11 @@ import java.util.List;
 public interface PropsMetadata extends NonNullMetadata {
 
 	/**
-	 * Defined in <code>prop</code> elements.
+	 * Return the entries for the properties.
 	 * 
-	 * @return List of <code>MapEntry</code> objects, never <code>null</code>
+	 * @return An immutable List of {@link MapEntry} objects for each entry in
+	 *         the properties. The List is empty if no entries are specified for
+	 *         the properties.
 	 */
 	List/* <MapEntry> */getEntries();
 }

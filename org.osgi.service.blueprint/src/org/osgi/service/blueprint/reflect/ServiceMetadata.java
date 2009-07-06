@@ -19,8 +19,11 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Metadata representing a service to registered by the Blueprint Container when
+ * Metadata for a service to be registered by the Blueprint Container when
  * enabled.
+ * 
+ * <p>
+ * This is specified by the <code>service</code> element.
  * 
  * @ThreadSafe
  * @version $Revision$
@@ -32,7 +35,7 @@ public interface ServiceMetadata extends ComponentMetadata {
 	 * 
 	 * @see #getAutoExport()
 	 */
-	public static final int AUTO_EXPORT_DISABLED = 1;
+	static final int		AUTO_EXPORT_DISABLED		= 1;
 
 	/**
 	 * Advertise all Java interfaces implemented by the component instance type
@@ -40,7 +43,7 @@ public interface ServiceMetadata extends ComponentMetadata {
 	 * 
 	 * @see #getAutoExport()
 	 */
-	public static final int AUTO_EXPORT_INTERFACES = 2;
+	static final int		AUTO_EXPORT_INTERFACES		= 2;
 
 	/**
 	 * Advertise all Java classes in the hierarchy of the component instance
@@ -48,7 +51,7 @@ public interface ServiceMetadata extends ComponentMetadata {
 	 * 
 	 * @see #getAutoExport()
 	 */
-	public static final int AUTO_EXPORT_CLASS_HIERARCHY = 3;
+	static final int		AUTO_EXPORT_CLASS_HIERARCHY	= 3;
 
 	/**
 	 * Advertise all Java classes and interfaces in the component instance type
@@ -56,69 +59,80 @@ public interface ServiceMetadata extends ComponentMetadata {
 	 * 
 	 * @see #getAutoExport()
 	 */
-	public static final int AUTO_EXPORT_ALL_CLASSES = 4;
+	static final int	AUTO_EXPORT_ALL_CLASSES		= 4;
 
 	/**
-	 * The component that is to be exported as a service. Value must refer to a
-	 * component and therefore be a {@link Target}.
+	 * Return the Metadata for the component to be exported as a service.
 	 * 
-	 * Defined inline or via the <code>ref</code> attribute.
+	 * This is specified inline or via the <code>ref</code> attribute of the
+	 * service.
 	 * 
-	 * @return the component to be exported as a service.
+	 * @return The Metadata for the component to be exported as a service.
 	 */
 	Target getServiceComponent();
 
 	/**
-	 * The type names of the set of interfaces that the service should be
+	 * Return the type names of the interfaces that the service should be
 	 * advertised as supporting.
 	 * 
-	 * Defined in the <code>interface</code> attribute or
-	 * <code>interfaces</code> element.
+	 * This is specified in the <code>interface</code> attribute or child
+	 * <code>interfaces</code> element of the service.
 	 * 
-	 * @return an immutable set of (<code>String</code>) interface names, or
-	 *         an empty set if using <code>auto-export</code> or not set.
+	 * @return An immutable List of <code>String</code> for the type names of
+	 *         the interfaces that the service should be advertised as
+	 *         supporting. The List is empty if using <code>auto-export</code>
+	 *         or no interface names are specified for the service.
 	 */
 	List/* <String> */getInterfaces();
 
 	/**
-	 * Return the auto-export mode specified.
+	 * Return the auto-export mode for the service.
 	 * 
-	 * Defined in the <code>auto-export</code> attribute.
+	 * This is specified by the <code>auto-export</code> attribute of the
+	 * service.
 	 * 
-	 * @return One of {@link #AUTO_EXPORT_DISABLED},
-	 *         {@link #AUTO_EXPORT_INTERFACES},
-	 *         {@link #AUTO_EXPORT_CLASS_HIERARCHY},
-	 *         {@link #AUTO_EXPORT_ALL_CLASSES}
+	 * @return The auto-export mode for the service.
+	 * @see #AUTO_EXPORT_DISABLED
+	 * @see #AUTO_EXPORT_INTERFACES
+	 * @see #AUTO_EXPORT_CLASS_HIERARCHY
+	 * @see #AUTO_EXPORT_ALL_CLASSES
 	 */
 	int getAutoExport();
 
 	/**
-	 * The user declared properties to be advertised with the service.
+	 * Return the user declared properties to be advertised with the service.
 	 * 
-	 * Defined in the <code>service-properties</code> element.
+	 * This is specified by the <code>service-properties</code> element of the
+	 * service.
 	 * 
-	 * @return <code>List</code> containing {@link MapEntry} objects, can be
-	 *         empty.
+	 * @return An immutable List of {@link MapEntry} objects for the user
+	 *         declared properties to be advertised with the service. The List
+	 *         is empty if no service properties are specified for the service.
 	 */
 	List/* <MapEntry> */getServiceProperties();
 
 	/**
-	 * The ranking value to use when advertising the service. If this value is
-	 * zero, no ranking service property must be registered.
+	 * Return the ranking value to use when advertising the service. If the
+	 * ranking value is zero, the service must be registered without a
+	 * <code>service.ranking</code> service property.
 	 * 
-	 * Defined in the <code>ranking</code> attribute.
+	 * This is specified by the <code>ranking</code> attribute of the service.
 	 * 
-	 * @return service ranking
+	 * @return The ranking value to use when advertising the service.
 	 */
 	int getRanking();
 
 	/**
-	 * The registration listeners to be notified when the service is registered
-	 * and unregistered with the framework.
+	 * Return the registration listeners to be notified when the service is
+	 * registered and unregistered with the framework.
 	 * 
-	 * Defined in the <code>registration-listener</code> elements.
+	 * This is specified by the <code>registration-listener</code> elements of
+	 * the service.
 	 * 
-	 * @return an immutable collection of {@link RegistrationListener}
+	 * @return An immutable Collection of {@link RegistrationListener} objects
+	 *         to be notified when the service is registered and unregistered
+	 *         with the framework. The Collection is empty if no registration
+	 *         listeners are specified for the service.
 	 */
 	Collection /* <RegistrationListener> */getRegistrationListeners();
 }

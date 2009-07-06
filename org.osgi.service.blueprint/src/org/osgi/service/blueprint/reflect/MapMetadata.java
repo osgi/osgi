@@ -18,37 +18,41 @@ package org.osgi.service.blueprint.reflect;
 import java.util.List;
 
 /**
- * A Map-based value. This represented as a Collection of {@link MapEntry}.
+ * Metadata for a Map based value.
  * 
- * A Map is defined in the <code>map</code> element.
+ * <p>
+ * This is specified by the <code>map</code> element.
  * 
  * @ThreadSafe
  * @version $Revision$
  */
 public interface MapMetadata extends NonNullMetadata {
 	/**
-	 * The key-type specified for map keys, or <code>null</code> if none given
+	 * Return the name of the type of the map keys.
 	 * 
-	 * Defined in the <code>key-type</code> attribute.
+	 * This is specified by the <code>key-type</code> attribute of the map.
 	 * 
-	 * @return The key type name
+	 * @return The name of the type of the map keys, or <code>null</code> if
+	 *         none is specified.
 	 */
 	String getKeyType();
 
 	/**
-	 * The value-type specified for the value.
+	 * Return the name of the type of the map values.
 	 * 
-	 * The <code>value-type</code> attribute.
+	 * This is specified by the <code>value-type</code> attribute of the map.
 	 * 
-	 * @return The value type name
+	 * @return The name of the type of the map values, or <code>null</code> if
+	 *         none is specified.
 	 */
 	String getValueType();
 
 	/**
-	 * The Metadata that describe the value.
+	 * Return the entries for the map.
 	 * 
-	 * @return A list of {@link MapEntry} objects describing the
-	 *         <code>Map<code> contents.
+	 * @return An immutable List of {@link MapEntry} objects for each entry in
+	 *         the map. The List is empty if no entries are specified for the
+	 *         map.
 	 */
 	List /* <MapEntry> */getEntries();
 }
