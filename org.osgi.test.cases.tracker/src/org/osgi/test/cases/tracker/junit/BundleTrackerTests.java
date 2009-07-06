@@ -322,7 +322,7 @@ public class BundleTrackerTests extends OSGiTestCase {
 				tb1.start();
 				synchronized (events) {
 					assertNull("adding called", events[0]);
-					assertNotNull("modified called", events[1]);
+					assertNotNull("modified not called", events[1]);
 					assertEquals("event type not resolved",
 							BundleEvent.RESOLVED, events[1].getType());
 					assertEquals("event bundle not tb1", tb1, events[1]
@@ -354,7 +354,7 @@ public class BundleTrackerTests extends OSGiTestCase {
 			}
 			synchronized (events) {
 				assertNull("adding called", events[0]);
-				assertNotNull("modified called", events[1]);
+				assertNotNull("modified not called", events[1]);
 				assertEquals("event type not unresolved",
 						BundleEvent.UNRESOLVED, events[1].getType());
 				assertEquals("event bundle not tb1", tb1, events[1].getBundle());
