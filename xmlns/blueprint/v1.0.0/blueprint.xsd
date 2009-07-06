@@ -65,7 +65,7 @@
                     The activation attribute for this component.  This can either
                     be "eager" or "lazy".  If not specified, it
                     defaults to default-activation attribute of the enclosing
-                    <blueprint> element.  The default is "eager".
+                    <blueprint> element.
                     ]]>
 				</xsd:documentation>
 			</xsd:annotation>
