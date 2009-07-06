@@ -28,7 +28,7 @@ public interface RemoteAdmin {
 	 *            The Service Reference to export
 	 * @return An Export Registration that combines the Endpoint Description and
 	 *         the Service Reference or
-	 *         <code>null</code if the service could not be exported
+	 *         <code>null</code> if the service could not be exported
 	 */
 	List<ExportRegistration> exportService(ServiceReference ref);
 
@@ -51,7 +51,7 @@ public interface RemoteAdmin {
 	 *            over any properties the service defines.
 	 * @return An Export Registration that combines the Endpoint Description and
 	 *         the Service Reference or
-	 *         <code>null</code if the service could not be exported
+	 *         <code>null</code> if the service could not be exported
 	 */
 	List<ExportRegistration> exportService(ServiceReference ref,
 			Map<String,Object> properties);
@@ -65,7 +65,7 @@ public interface RemoteAdmin {
 	 *            The Endpoint Description to be used for import
 	 * @return An Import Registration that combines the Endpoint Description and
 	 *         the Service Reference or
-	 *         <code>null</code if the endpoint could not be imported
+	 *         <code>null</code> if the endpoint could not be imported
 	 */
 	ImportRegistration importService(EndpointDescription endpoint);
 
