@@ -43,8 +43,8 @@ public interface Converter {
 	 * @return An instance with a type that is assignable from targetType's raw
 	 *         class
 	 * @throws Exception If the conversion cannot succeed. This exception should
-	 *         not be thrown when the {@link #canConvert} method has returned
-	 *         <code>true</code>.
+	 *         not be thrown when the {@link #canConvert canConvert} method has
+	 *         returned <code>true</code>.
 	 */
 	Object convert(Object sourceObject, ReifiedType targetType)
 			throws Exception;

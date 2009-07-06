@@ -21,8 +21,8 @@ import java.util.List;
  * Metadata for a <code>java.util.Properties</code> based value.
  * 
  * <p>
- * The {@link MapEntry}s of properties are defined with key and values of type
- * <code>String</code>.
+ * The {@link MapEntry} objects of properties are defined with keys and values
+ * of type <code>String</code>.
  * 
  * <p>
  * This is specified by the <code>props</code> element.

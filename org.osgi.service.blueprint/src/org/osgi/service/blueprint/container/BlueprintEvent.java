@@ -205,7 +205,7 @@ public class BlueprintEvent {
 
 	/**
 	 * Create a <code>BlueprintEvent</code> object associated with a failure
-	 * cause and related to a set of dependencies.
+	 * cause and a set of dependencies.
 	 * 
 	 * @param type The type of this event.
 	 * @param bundle The Blueprint bundle associated with this event. This

@@ -22,17 +22,18 @@ package org.osgi.service.blueprint.container;
  * To receive Blueprint Events, a bundle must register a Blueprint Listener
  * service.
  * 
- * After a Blueprint Listener is registered, the Blueprint extender
- * must synchronously send to this Blueprint Listener the last Blueprint Event
- * for each ready Blueprint bundle managed by this extender. This replay of
+ * After a Blueprint Listener is registered, the Blueprint extender must
+ * synchronously send to this Blueprint Listener the last Blueprint Event for
+ * each ready Blueprint bundle managed by this extender. This replay of
  * Blueprint Events is designed so that the new Blueprint Listener can be
  * informed of the state of each Blueprint bundle. Blueprint Events sent during
- * this replay will have the {@link BlueprintEvent#isReplay()} flag set. The
- * Blueprint extender must ensure that this replay phase does not interfere with
- * new Blueprint Events so that the chronological order of all Blueprint Events
- * received by the Blueprint Listener is preserved. If the last Blueprint Event
- * for a given Blueprint bundle is {@link BlueprintEvent#DESTROYED}, the
- * extender must not send it during this replay phase.
+ * this replay will have the {@link BlueprintEvent#isReplay() isReplay()} flag
+ * set. The Blueprint extender must ensure that this replay phase does not
+ * interfere with new Blueprint Events so that the chronological order of all
+ * Blueprint Events received by the Blueprint Listener is preserved. If the last
+ * Blueprint Event for a given Blueprint bundle is
+ * {@link BlueprintEvent#DESTROYED DESTROYED}, the extender must not send it
+ * during this replay phase.
  * 
  * @see BlueprintEvent
  * @ThreadSafe

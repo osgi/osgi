@@ -19,10 +19,13 @@ package org.osgi.service.blueprint.container;
  * Event property names used in Event Admin events published by a Blueprint
  * Container.
  * 
+ * <p>
  * Each type of event is sent to a different topic:
  * 
+ * <p>
  * <code>org/osgi/service/blueprint/container/</code><em>&lt;event-type&gt;</em>
  * 
+ * <p>
  * where <em>&lt;event-type&gt;</em> can have the values
  * {@link BlueprintEvent#CREATING CREATING}, {@link BlueprintEvent#CREATED
  * CREATED}, {@link BlueprintEvent#DESTROYING DESTROYING},
@@ -30,6 +33,7 @@ package org.osgi.service.blueprint.container;
  * FAILURE}, {@link BlueprintEvent#GRACE_PERIOD GRACE_PERIOD}, or
  * {@link BlueprintEvent#WAITING WAITING}.
  * 
+ * <p>
  * Such events have the following properties:
  * <ul>
  * <li>{@link #TYPE type}</li>

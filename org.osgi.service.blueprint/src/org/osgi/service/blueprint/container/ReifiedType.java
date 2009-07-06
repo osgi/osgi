@@ -18,6 +18,7 @@ package org.osgi.service.blueprint.container;
 /**
  * Provides access to a concrete type and its optional generic type parameters.
  * 
+ * <p>
  * Java 5 and later support generic types. These types consist of a raw class
  * with type parameters. This class models such a <code>Type</code> class but
  * ensures that the type is <em>reified</em>. Reification means that the Type
@@ -26,11 +27,13 @@ package org.osgi.service.blueprint.container;
  * {@link #getRawClass()} method. The optional type parameters are recursively
  * represented as Reified Types.
  * 
+ * <p>
  * In Java 1.4, a class has by definition no type parameters. This class
  * implementation provides the Reified Type for Java 1.4 by making the raw class
  * the Java 1.4 class and using a Reified Type based on the <code>Object</code>
  * class for any requested type parameter.
  * 
+ * <p>
  * A Blueprint extender implementations can subclass this class and provide
  * access to the generic type parameter graph for conversion. Such a subclass
  * must <em>reify</em> the different Java 5 <code>Type</code> instances into the
@@ -65,7 +68,7 @@ public class ReifiedType {
 	 * example:
 	 * 
 	 * <pre>
-	 * Map&lt;String, ? extends Metadata&gt;	map;
+	 * Map&lt;String, ? extends Metadata&gt;
 	 * </pre>
 	 * 
 	 * The raw class is the Map class.
@@ -85,7 +88,7 @@ public class ReifiedType {
 	 * For example, in the following example:
 	 * 
 	 * <pre>
-	 * Map&lt;String, ? extends Metadata&gt;	map;
+	 * Map&lt;String, ? extends Metadata&gt;
 	 * </pre>
 	 * 
 	 * type parameter 0 is <code>String</code>, and type parameter 1 is
