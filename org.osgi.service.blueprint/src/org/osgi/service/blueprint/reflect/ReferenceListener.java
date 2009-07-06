@@ -16,15 +16,18 @@
 package org.osgi.service.blueprint.reflect;
 
 /**
- * Metadata for a reference listener interested in the reference bind and unbind events for a
- * service reference.
+ * Metadata for a reference listener interested in the reference bind and unbind
+ * events for a service reference.
+ * 
+ * @ThreadSafe
+ * @version $Revision$
  */
 public interface ReferenceListener {
 
 	/**
 	 * The component instance that will receive bind and unbind events. The
-	 * returned value must reference a {@link Target} either directly
-	 * or indirectly.
+	 * returned value must reference a {@link Target} either directly or
+	 * indirectly.
 	 * 
 	 * Defined in the <code>ref</code> attribute or via an inlined manager.
 	 * 

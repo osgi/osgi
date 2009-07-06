@@ -17,11 +17,13 @@
 package org.osgi.service.blueprint.reflect;
 
 /**
- * Metadata for an entry. An entry is the member of a {@link MapMetadata} so that it can
- * be treated as a {@link CollectionMetadata} with entries.
+ * Metadata for an entry. An entry is the member of a {@link MapMetadata} so
+ * that it can be treated as a {@link CollectionMetadata} with entries.
  * 
  * Defined in the <code>entry</code> element.
  * 
+ * @ThreadSafe
+ * @version $Revision$
  */
 public interface MapEntry {
 	/**

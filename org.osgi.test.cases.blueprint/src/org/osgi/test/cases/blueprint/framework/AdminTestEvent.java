@@ -18,16 +18,17 @@ package org.osgi.test.cases.blueprint.framework;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.osgi.framework.Bundle;
-import org.osgi.service.event.Event;
-
 import junit.framework.AssertionFailedError;
+
+import org.osgi.framework.Bundle;
+import org.osgi.service.blueprint.container.EventConstants;
+import org.osgi.service.event.Event;
 
 /**
  * The base class for all events that are received using the
  * EventAdmin service.
  */
-public abstract class AdminTestEvent extends TestEvent implements org.osgi.service.blueprint.container.EventConstants {
+public abstract class AdminTestEvent extends TestEvent {
     // the type of the assertion (also the EventAdmin topic used broadcast the event)
     protected String topic;
     // Any additional properties associated with the event
@@ -78,7 +79,7 @@ public abstract class AdminTestEvent extends TestEvent implements org.osgi.servi
         topic = event.getTopic();
         props = copyProperties(event);
         // get the bundle from the event
-        bundle = (Bundle)event.getProperty(BUNDLE);
+		bundle = (Bundle) event.getProperty(EventConstants.BUNDLE);
     }
 
     /**

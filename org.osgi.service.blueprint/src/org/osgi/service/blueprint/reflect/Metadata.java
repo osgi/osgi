@@ -18,7 +18,9 @@ package org.osgi.service.blueprint.reflect;
 /**
  * Top level Metadata.
  * 
+ * @ThreadSafe
+ * @version $Revision$
  */
 public interface Metadata {
-
+	// marker interface
 }

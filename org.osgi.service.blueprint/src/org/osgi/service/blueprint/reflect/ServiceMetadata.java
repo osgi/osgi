@@ -21,6 +21,8 @@ import java.util.List;
 /**
  * Metadata representing a service to registered by the Blueprint Container.
  * 
+ * @ThreadSafe
+ * @version $Revision$
  */
 public interface ServiceMetadata extends ComponentMetadata {
 
@@ -29,7 +31,7 @@ public interface ServiceMetadata extends ComponentMetadata {
 	 * 
 	 * @see #getAutoExport()
 	 */
-	public static final int AUTO_EXPORT_DISABLED = 1;
+	public static final int	AUTO_EXPORT_DISABLED		= 1;
 
 	/**
 	 * Advertise all Java interfaces implemented by the component instance type
@@ -37,7 +39,7 @@ public interface ServiceMetadata extends ComponentMetadata {
 	 * 
 	 * @see #getAutoExport()
 	 */
-	public static final int AUTO_EXPORT_INTERFACES = 2;
+	public static final int	AUTO_EXPORT_INTERFACES		= 2;
 
 	/**
 	 * Advertise all Java classes in the hierarchy of the component instance
@@ -45,7 +47,7 @@ public interface ServiceMetadata extends ComponentMetadata {
 	 * 
 	 * @see #getAutoExport()
 	 */
-	public static final int AUTO_EXPORT_CLASS_HIERARCHY = 3;
+	public static final int	AUTO_EXPORT_CLASS_HIERARCHY	= 3;
 
 	/**
 	 * Advertise all Java classes and interfaces in the component instance type
@@ -53,7 +55,7 @@ public interface ServiceMetadata extends ComponentMetadata {
 	 * 
 	 * @see #getAutoExport()
 	 */
-	public static final int AUTO_EXPORT_ALL_CLASSES = 4;
+	public static final int	AUTO_EXPORT_ALL_CLASSES		= 4;
 
 	/**
 	 * The component that is to be exported as a service. Value must refer to a
@@ -94,7 +96,8 @@ public interface ServiceMetadata extends ComponentMetadata {
 	 * 
 	 * Defined in the <code>service-properties</code> element.
 	 * 
-	 * @return <code>List</code> containing {@link MapEntry} objects, can be empty.
+	 * @return <code>List</code> containing {@link MapEntry} objects, can be
+	 *         empty.
 	 */
 	List/* <MapEntry> */getServiceProperties();
 
@@ -109,8 +112,8 @@ public interface ServiceMetadata extends ComponentMetadata {
 	int getRanking();
 
 	/**
-	 * The registration listeners to be notified when the
-	 * service is registered and unregistered with the framework.
+	 * The registration listeners to be notified when the service is registered
+	 * and unregistered with the framework.
 	 * 
 	 * Defined in the <code>registration-listener</code> elements.
 	 * 

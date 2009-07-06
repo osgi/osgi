@@ -16,53 +16,50 @@
 package org.osgi.service.blueprint.container;
 
 /**
- * Exception thrown when a configuration-related error occurs during creation of
- * a Blueprint Container.
+ * A Blueprint exception indicating that a component definition is in error.
+ * 
+ * This exception is thrown when a configuration-related error occurs during
+ * creation of a Blueprint Container.
+ * 
+ * @version $Revision$
  */
 public class ComponentDefinitionException extends RuntimeException {
-	private static final long serialVersionUID = 1L;
+	private static final long	serialVersionUID	= 5050563281145090891L;
 
 	/**
-	 * Creates a <code>ComponentDefinitionException</code> with no message or
-	 * exception cause.
+	 * Creates a Component Definition Exception with no message or exception
+	 * cause.
 	 */
 	public ComponentDefinitionException() {
 		super();
 	}
 
 	/**
-	 * Creates a <code>ComponentDefinitionException</code> with the specified
-	 * message
+	 * Creates a Component Definition Exception with the specified message
 	 * 
-	 * @param explanation
-	 *            The associated message.
+	 * @param explanation The associated message.
 	 */
 	public ComponentDefinitionException(String explanation) {
 		super(explanation);
 	}
 
 	/**
-	 * Creates a <code>ComponentDefinitionException</code> with the specified
-	 * message and exception cause.
+	 * Creates a Component Definition Exception with the specified message and
+	 * exception cause.
 	 * 
-	 * @param explanation
-	 *            The associated message.
-	 * @param cause
-	 *            The cause of this exception.
+	 * @param explanation The associated message.
+	 * @param cause The cause of this exception.
 	 */
 	public ComponentDefinitionException(String explanation, Throwable cause) {
 		super(explanation, cause);
 	}
 
 	/**
-	 * Creates a <code>ComponentDefinitionException</code> with the exception
-	 * cause.
+	 * Creates a Component Definition Exception with the exception cause.
 	 * 
-	 * @param cause
-	 *            The cause of this exception.
+	 * @param cause The cause of this exception.
 	 */
 	public ComponentDefinitionException(Throwable cause) {
 		super(cause);
 	}
-
 }

@@ -17,6 +17,9 @@ package org.osgi.service.blueprint.reflect;
 
 /**
  * A value which refers by its id to another manager in the Blueprint Container.
+ * 
+ * @ThreadSafe
+ * @version $Revision$
  */
 public interface RefMetadata extends Target, NonNullMetadata {
 	/**

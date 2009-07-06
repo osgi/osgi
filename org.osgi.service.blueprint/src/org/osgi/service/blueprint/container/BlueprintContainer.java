@@ -15,88 +15,86 @@
  */
 package org.osgi.service.blueprint.container;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Set;
 
-import org.osgi.service.blueprint.reflect.*;
+import org.osgi.service.blueprint.reflect.BeanMetadata;
+import org.osgi.service.blueprint.reflect.ComponentMetadata;
+import org.osgi.service.blueprint.reflect.ReferenceListMetadata;
+import org.osgi.service.blueprint.reflect.ReferenceMetadata;
+import org.osgi.service.blueprint.reflect.ServiceMetadata;
+import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
 
 /**
- * Blueprint Container provides access to all the managers. These are the beans,
- * registered services, and service references. Only bundles in the
- * <code>ACTIVE</code> (or also <code>STARTING</code> for bundles with a
- * lazy activation policy) state can have an associated Blueprint Container. A
- * given Bundle Context has at most one associated Blueprint Container.
+ * A Blueprint Container for a bundle.
+ * 
+ * A Blueprint Container provides access to all managed components. These are
+ * the beans, registered services, and service references. Only bundles in the
+ * <code>ACTIVE</code> state (and also the <code>STARTING</code> state for
+ * bundles awaiting lazy activation) can have an associated Blueprint Container.
+ * A given Bundle Context has at most one associated Blueprint Container.
  * 
  * A Blueprint Container can be obtained by injecting the predefined
- * "blueprintContainer" environment manager. Alternatively the Blueprint
- * Container is registered as a service and its managers can be looked up.
- * 
- * @see org.osgi.framework.Constants
+ * &quot;blueprintContainer&quot; component id. The Blueprint Container is also
+ * registered as a service and its managed components can be queried.
  * 
  * @ThreadSafe
+ * @version $Revision$
  */
 public interface BlueprintContainer {
 	/**
-	 * The set of manager ids recognized by the Blueprint Container.
+	 * Returns the set of component ids managed by this Blueprint Container.
 	 * 
-	 * @return an immutable Set of Strings, containing the ids of all of the
-	 *         managers within the Blueprint Container.
+	 * @return An immutable Set of Strings, containing the ids of all of the
+	 *         components managed within this Blueprint Container.
 	 */
-	Set getComponentIds();
+	Set/* <String> */getComponentIds();
 
 	/**
-	 * Get the component instance for a given named component. If the manager
-	 * has not yet been activated, calling this operation will cause the
-	 * component instance to be created and initialized. If the component has a
-	 * prototype scope then each call to the <code>getComponentInstance</code>
-	 * method will return a new component instance.
+	 * Return the component instance for the specified component id.
 	 * 
-	 * Calling {link #getComponentInstance} from logic executing during the
-	 * construction of a component, before the <code>initMethod</code> (if
-	 * specified) has returned, may trigger a circular dependency.
+	 * If the component's manager has not yet been activated, calling this
+	 * operation will cause the component instance to be created and
+	 * initialized. If the component has a prototype scope then each call to
+	 * this method will return a new component instance.
 	 * 
-	 * @param id
-	 *            The id of the manager for which the instance is to be
-	 *            provided.
+	 * Calling this method from logic executing during the construction of a
+	 * component, before the <code>initMethod</code> (if specified) has
+	 * returned, may trigger a circular dependency.
 	 * 
-	 * @return The component instance, the type of the returned object is
-	 *         dependent on the manager, and may be determined with the
-	 *         Metadata.
-	 * 
-	 * @throws NoSuchComponentException
-	 *             If the id specified is not the id of a manager within the
-	 *             context.
+	 * @param id The component id for the requested component instance.
+	 * @return The component instance for the specified component id
+	 * @throws NoSuchComponentException If the specified component id is not
+	 *         managed by this Blueprint Container.
 	 */
 	Object getComponentInstance(String id);
 
 	/**
-	 * Get the Metadata for a given manager id.
+	 * Return the Component Metadata instance for the component with the
+	 * specified component id.
 	 * 
-	 * @param id
-	 *            the id of the manager for which the Metadata is to be
-	 *            retrieved.
-	 * 
-	 * @return the Metadata for the manager with the given id.
-	 * 
-	 * @throws NoSuchComponentException
-	 *             if the id specified is not the id of a manager within the
-	 *             Blueprint Container.
+	 * @param id The id of the component for the requested Component Metadata.
+	 * @return The Component Metadata instance for the component with the
+	 *         specified component id.
+	 * @throws NoSuchComponentException If the specified component id is not
+	 *         managed by this Blueprint Container.
 	 */
 	ComponentMetadata getComponentMetadata(String id);
 
 	/**
-	 * Returns all {@link ComponentMetadata} instances of the given type. The
-	 * supported Metadata types are {@link ComponentMetadata} (which returns the
-	 * Metadata for all defined manager types), {@link BeanMetadata},
+	 * Return all {@link ComponentMetadata} instances of the specified Component
+	 * Metadata type. The supported Component Metadata types are
+	 * {@link ComponentMetadata} (which returns the Component Metadata for all
+	 * defined manager types), {@link BeanMetadata} ,
 	 * {@link ServiceReferenceMetadata} (which returns both
 	 * {@link ReferenceMetadata} and {@link ReferenceListMetadata} instances),
-	 * and {@link ServiceMetadata}. The collection will include all Metadata
-	 * instances of the requested type, including components that are declared
-	 * as inline values.
+	 * and {@link ServiceMetadata}. The collection will include all Component
+	 * Metadata instances of the requested type, including components that are
+	 * declared as inline values.
 	 * 
-	 * @param type The super type or type of all returned Metadata 
-	 * 
-	 * @return An immutable collection of {@link ComponentMetadata} objects of the
-	 *         matching type.
+	 * @param type The super type or type of the requested Component Metadata.
+	 * @return An immutable collection of Component Metadata objects of the
+	 *         specified type.
 	 */
 	/* <T extends ComponentMetadata> */Collection/* <T> */getMetadata(
 			Class/* <T> */type);

@@ -20,6 +20,8 @@ import java.util.List;
 /**
  * Metadata for a Bean Manager.
  * 
+ * @ThreadSafe
+ * @version $Revision$
  */
 public interface BeanMetadata extends Target, ComponentMetadata {
 
@@ -28,12 +30,12 @@ public interface BeanMetadata extends Target, ComponentMetadata {
 	 * {@link #getScope()}
 	 */
 
-	static final String SCOPE_SINGLETON = "singleton";
+	static final String	SCOPE_SINGLETON	= "singleton";
 	/**
 	 * Used when the <code>scope</code> is <code>prototype</code> See
 	 * {@link #getScope()}
 	 */
-	static final String SCOPE_PROTOTYPE = "prototype";
+	static final String	SCOPE_PROTOTYPE	= "prototype";
 
 	/**
 	 * The name of the class specified for this bean.
@@ -71,8 +73,9 @@ public interface BeanMetadata extends Target, ComponentMetadata {
 	 * 
 	 * Specified in all the child
 	 * <code>argument<code> elements. The return is a list of {@link BeanArgument} objects.
-	 *
-	 * @return The arguments Metadata for the factory method or constructor, can be empty if no arguments are specified
+	 * 
+	 * @return The arguments Metadata for the factory method or constructor, can
+	 *         be empty if no arguments are specified
 	 */
 	List/* <BeanArgument> */getArguments();
 
@@ -109,12 +112,13 @@ public interface BeanMetadata extends Target, ComponentMetadata {
 	 * factory component has been specified this operation will return
 	 * <code>null</code>.
 	 * 
-	 * A return value of <code>null with a <code>non-null</code> factory method indicates that the
-	 * factory method should be invoked as a static method on the given
-	 * class itself. For a <code>non-null</code> return value, the Metadata returned
-	 * will be a {@link Target} instance.
+	 * A return value of <code>null with a <code>non-null</code> factory method
+	 * indicates that the factory method should be invoked as a static method on
+	 * the given class itself. For a <code>non-null</code> return value, the
+	 * Metadata returned will be a {@link Target} instance.
 	 * 
-	 * @return A {@link Target} or <code>null</code> if no factory component was specified.
+	 * @return A {@link Target} or <code>null</code> if no factory component was
+	 *         specified.
 	 */
 	Target getFactoryComponent();
 

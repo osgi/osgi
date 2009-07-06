@@ -17,7 +17,10 @@ package org.osgi.service.blueprint.reflect;
 
 /**
  * Metadata used in a Bean Manager to inject arguments in a method or
- * constructor. This Metadata class describes the <code>argument</element>
+ * constructor. This Metadata class describes the <code>argument</element>.
+ * 
+ * @ThreadSafe
+ * @version $Revision$
  */
 public interface BeanArgument {
 

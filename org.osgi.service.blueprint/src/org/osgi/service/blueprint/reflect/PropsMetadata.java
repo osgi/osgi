@@ -18,11 +18,13 @@ package org.osgi.service.blueprint.reflect;
 import java.util.List;
 
 /**
- * A <code>java.util.Properties</code> based value. The properties are
- * defined as string to string.
+ * A <code>java.util.Properties</code> based value. The properties are defined
+ * as string to string.
  * 
  * Defined in the <code>props</code> element.
  * 
+ * @ThreadSafe
+ * @version $Revision$
  */
 public interface PropsMetadata extends NonNullMetadata {
 

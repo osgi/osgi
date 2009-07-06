@@ -22,12 +22,14 @@ package org.osgi.service.blueprint.reflect;
  * 
  * Defines the <code>reference</code> element.
  * 
+ * @ThreadSafe
+ * @version $Revision$
  */
 public interface ReferenceMetadata extends ServiceReferenceMetadata, Target {
 
 	/**
-	 * Timeout for service invocations when a backing service is
-	 * is unavailable. Defined in the <code>timeout</code> attribute.
+	 * Timeout for service invocations when a backing service is is unavailable.
+	 * Defined in the <code>timeout</code> attribute.
 	 * 
 	 * @return service invocation timeout in milliseconds
 	 */

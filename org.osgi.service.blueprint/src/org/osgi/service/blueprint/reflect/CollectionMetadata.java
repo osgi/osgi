@@ -21,6 +21,9 @@ import java.util.List;
  * Metadata for a collection based value. Members of the collection are
  * instances of Metadata. This Metadata can constrain the members to a specific
  * type.
+ * 
+ * @ThreadSafe
+ * @version $Revision$
  */
 
 public interface CollectionMetadata extends NonNullMetadata {
@@ -28,9 +31,8 @@ public interface CollectionMetadata extends NonNullMetadata {
 	/**
 	 * Provide the interface that this collection must implement.
 	 * 
-	 * This is used for <code>Arrays (Object[])</code>, <code>Set</code>,
-	 * and <code>List</code>. This information is encoded in the element
-	 * name.
+	 * This is used for <code>Arrays (Object[])</code>, <code>Set</code>, and
+	 * <code>List</code>. This information is encoded in the element name.
 	 * 
 	 * @return The interface class that the collection must implement or
 	 *         <code>Object[]</code> for arrays.

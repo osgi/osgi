@@ -18,24 +18,25 @@ package org.osgi.service.blueprint.container;
 import org.osgi.framework.ServiceException;
 
 /**
- * Thrown when an invocation is made on a service reference, and
- * a backing service is not available.
+ * A Blueprint exception indicating that a service is unavailable.
+ * 
+ * This exception is thrown when an invocation is made on a service reference
+ * and a backing service is not available.
+ * 
+ * @version $Revision$
  */
 public class ServiceUnavailableException extends ServiceException {
-	private static final long serialVersionUID = 1L;
-
+	private static final long	serialVersionUID	= -4232059722267118438L;
 	/**
 	 * The filter string associated with the exception.
 	 */
-	private final String filter;
+	private final String		filter;
 
 	/**
 	 * Creates a Service Unavailable Exception with the specified message.
 	 * 
-	 * @param message
-	 *            The associated message.
-	 * @param filter
-	 *            The filter used for the service lookup.
+	 * @param message The associated message.
+	 * @param filter The filter used for the service lookup.
 	 */
 	public ServiceUnavailableException(String message, String filter) {
 		super(message, UNREGISTERED);
@@ -46,12 +47,9 @@ public class ServiceUnavailableException extends ServiceException {
 	 * Creates a Service Unavailable Exception with the specified message and
 	 * exception cause.
 	 * 
-	 * @param message
-	 *            The associated message.
-	 * @param filter
-	 *            The filter used for the service lookup.
-	 * @param cause
-	 *            The cause of this exception.
+	 * @param message The associated message.
+	 * @param filter The filter used for the service lookup.
+	 * @param cause The cause of this exception.
 	 */
 	public ServiceUnavailableException(String message, String filter,
 			Throwable cause) {

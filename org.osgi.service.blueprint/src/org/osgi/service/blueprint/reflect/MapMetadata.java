@@ -22,6 +22,8 @@ import java.util.List;
  * 
  * A Map is defined in the <code>map</code> element.
  * 
+ * @ThreadSafe
+ * @version $Revision$
  */
 public interface MapMetadata extends NonNullMetadata {
 	/**

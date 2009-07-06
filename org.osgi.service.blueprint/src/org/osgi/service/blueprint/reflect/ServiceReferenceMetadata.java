@@ -15,11 +15,13 @@
  */
 package org.osgi.service.blueprint.reflect;
 
-import java.util.*;
+import java.util.Collection;
 
 /**
- * Metadata describing a reference to am OSGi service.
+ * Metadata describing a reference to an OSGi service.
  * 
+ * @ThreadSafe
+ * @version $Revision$
  */
 public interface ServiceReferenceMetadata extends ComponentMetadata {
 
@@ -28,14 +30,14 @@ public interface ServiceReferenceMetadata extends ComponentMetadata {
 	 * 
 	 * @see #getAvailability()
 	 */
-	public static final int AVAILABILITY_MANDATORY = 1;
+	public static final int	AVAILABILITY_MANDATORY	= 1;
 
 	/**
 	 * A matching service is not required to be present.
 	 * 
 	 * @see #getAvailability()
 	 */
-	public static final int AVAILABILITY_OPTIONAL = 2;
+	public static final int	AVAILABILITY_OPTIONAL	= 2;
 
 	/**
 	 * Whether or not a matching service is required at all times.
@@ -52,7 +54,8 @@ public interface ServiceReferenceMetadata extends ComponentMetadata {
 	 * 
 	 * Defined in the <code>interface</code> attribute.
 	 * 
-	 * @return the name of the requested service interface or <code>null</code> when no interface name is defined.
+	 * @return the name of the requested service interface or <code>null</code>
+	 *         when no interface name is defined.
 	 */
 	String getInterface();
 
@@ -80,7 +83,8 @@ public interface ServiceReferenceMetadata extends ComponentMetadata {
 	String getFilter();
 
 	/**
-	 * The set of registration listeners defined to receive bind and unbind events.
+	 * The set of registration listeners defined to receive bind and unbind
+	 * events.
 	 * 
 	 * Defined in the <code>registration-listener</code> element.
 	 * 

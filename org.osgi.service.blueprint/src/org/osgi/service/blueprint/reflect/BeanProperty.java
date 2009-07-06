@@ -18,11 +18,15 @@ package org.osgi.service.blueprint.reflect;
 /**
  * Metadata describing a property to be injected. Properties are defined
  * following Java Beans conventions.
+ * 
+ * @ThreadSafe
+ * @version $Revision$
  */
 public interface BeanProperty {
 
 	/**
-	 * The name of the property to be injected, following Java Beans conventions.
+	 * The name of the property to be injected, following Java Beans
+	 * conventions.
 	 * 
 	 * Defined in the <code>name</code> attribute.
 	 * 

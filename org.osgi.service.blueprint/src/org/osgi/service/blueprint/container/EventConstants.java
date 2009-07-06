@@ -15,174 +15,176 @@
  */
 package org.osgi.service.blueprint.container;
 
-import org.osgi.framework.*;
-
 /**
  * Event property names used in Event Admin events published by a Blueprint
- * container.
+ * Container.
  * 
- * Each type of event is sent to a different topic:<br/>
+ * Each type of event is sent to a different topic:
  * 
- * <pre>
- *   org/osgi/service/blueprint/container/&lt;event-type&gt;
- * </pre>
+ * <p>
+ * <code>org/osgi/service/blueprint/container/</code><em>&lt;event-type&gt;</em>
  * 
- * where <code>&lt;event-type&gt;</code> can have the values
- * <code>CREATING</code>, <code>CREATED</code>, <code>DESTROYING</code>,
- * <code>DESTROYED</code>, <code>FAILURE</code>, <code>GRACE_PERIOD</code>
- * or <code>WAITING</code>. <br/> Such events have the following properties:
+ * <p>
+ * where <em>&lt;event-type&gt;</em> can have the values
+ * <code>{@link BlueprintEvent#CREATING CREATING}</code>,
+ * <code>{@link BlueprintEvent#CREATED CREATED}</code>,
+ * <code>{@link BlueprintEvent#DESTROYING DESTROYING}</code>,
+ * <code>{@link BlueprintEvent#DESTROYED DESTROYED}</code>,
+ * <code>{@link BlueprintEvent#FAILURE FAILURE}</code>,
+ * <code>{@link BlueprintEvent#GRACE_PERIOD GRACE_PERIOD}</code> or
+ * <code>{@link BlueprintEvent#WAITING WAITING}</code>.
+ * 
+ * <p>
+ * Such events have the following properties:
  * <ul>
- * <li><code>type<code>
- *   <li><code>event<code>
- *   <li><code>timestamp<code>
- *   <li><code>bundle<code>
- *   <li><code>bundle.symbolicName<code>
- *   <li><code>bundle.id<code>
- *   <li><code>bundle.version<code>
- *   <li><code>extender.bundle<code>
- *   <li><code>extender.bundle.symbolicName<code>
- *   <li><code>extender.bundle.id<code>
- *   <li><code>extender.bundle.version<code>
- *   <li><code>dependencies<code>
- *   <li><code>cause<code>
+ * <li><code>{@link #TYPE type}</code></li>
+ * <li><code>{@link #EVENT event}</code></li>
+ * <li><code>{@link #TIMESTAMP timestamp}</code></li>
+ * <li><code>{@link #BUNDLE bundle}</code></li>
+ * <li><code>{@link #BUNDLE_SYMBOLICNAME bundle.symbolicName}</code></li>
+ * <li><code>{@link #BUNDLE_ID bundle.id}</code></li>
+ * <li><code>{@link #BUNDLE_VERSION bundle.version}</code></li>
+ * <li>
+ * <code>{@link #EXTENDER_BUNDLE_SYMBOLICNAME extender.bundle.symbolicName}</code>
+ * </li>
+ * <li><code>{@link #EXTENDER_BUNDLE_ID extender.bundle.id}</code></li>
+ * <li><code>{@link #EXTENDER_BUNDLE_VERSION extender.bundle.version}</code></li>
+ * <li><code>{@link #DEPENDENCIES dependencies}</code></li>
+ * <li><code>{@link #CAUSE cause}</code></li>
  * </ul>
+ * 
+ * @Immutable
+ * @version $Revision$
  */
-public interface EventConstants {
+public class EventConstants {
+	private EventConstants() {
+		// non-instantiable class
+	}
 
 	/**
 	 * The type of the event that has been issued. This property is of type
 	 * <code>Integer</code> and can take one of the values defined in
 	 * {@link BlueprintEvent}.
 	 */
-	public static final String TYPE = "type";
+	public static final String	TYPE							= "type";
 
 	/**
 	 * The <code>BlueprintEvent</code> object that caused this event. This
 	 * property is of type {@link BlueprintEvent}.
 	 */
-	public static final String EVENT = "event";
+	public static final String	EVENT							= "event";
 
 	/**
-	 * The type of the event that has been issued. This property is of type
+	 * The time the event was created. This property is of type
 	 * <code>Long</code>.
 	 */
-	public static final String TIMESTAMP = "timestamp";
+	public static final String	TIMESTAMP						= "timestamp";
 
 	/**
-	 * The bundle property defining the blueprint bundle for which an event has
-	 * been issued. This property is of type {@link org.osgi.framework.Bundle}.
-	 * 
-	 * @see Bundle
+	 * The Blueprint bundle associated with this event. This property is of type
+	 * <code>Bundle</code>.
 	 */
-	public static final String BUNDLE = "bundle";
+	public static final String	BUNDLE							= "bundle";
 
 	/**
-	 * The bundle id property defining the id of the blueprint bundle for which
-	 * an event has been issued. This property is of type <code>Long</code>.
+	 * The bundle id of the Blueprint bundle associated with this event. This
+	 * property is of type <code>Long</code>.
 	 */
-	public static final String BUNDLE_ID = "bundle.id";
+	public static final String	BUNDLE_ID						= "bundle.id";
 
 	/**
-	 * The bundle symbolic name property defining the symbolic name of the
-	 * blueprint bundle for which an event has been issued. This property is of
-	 * type <code>String</code>.
+	 * The bundle symbolic name of the Blueprint bundle associated with this
+	 * event. This property is of type <code>String</code>.
 	 */
-	public static final String BUNDLE_SYMBOLICNAME = "bundle.symbolicName";
+	public static final String	BUNDLE_SYMBOLICNAME				= "bundle.symbolicName";
 
 	/**
-	 * The bundle id property defining the id of the blueprint bundle for which
-	 * an event has been issued. This property is of type <code>Version</code>.
+	 * The bundle version of the Blueprint bundle associated with this event.
+	 * This property is of type <code>Version</code>.
 	 */
-	public static final String BUNDLE_VERSION = "bundle.version";
+	public static final String	BUNDLE_VERSION					= "bundle.version";
 
 	/**
-	 * The extender bundle property defining the extender bundle processing the
-	 * Blueprint Container for which an event has been issued. This property is
-	 * of type {@link org.osgi.framework.Bundle}.
-	 * 
-	 * @see Bundle
+	 * The Blueprint extender bundle that is generating this event. This
+	 * property is of type <code>Bundle</code>.
 	 */
-	public static final String EXTENDER_BUNDLE = "extender.bundle";
+	public static final String	EXTENDER_BUNDLE					= "extender.bundle";
 
 	/**
-	 * The Blueprint extender bundle id property defining the id of the extender bundle
-	 * processing the Blueprint Container for which an event has been issued.
-	 * This property is of type <code>Long</code>.
+	 * The bundle id of the Blueprint extender bundle that is generating this
+	 * event. This property is of type <code>Long</code>.
 	 */
-	public static final String EXTENDER_BUNDLE_ID = "extender.bundle.id";
+	public static final String	EXTENDER_BUNDLE_ID				= "extender.bundle.id";
 
 	/**
-	 * The extender bundle symbolic name property defining the symbolic name of
-	 * the extender bundle processing the Blueprint Container for which an event
-	 * has been issued. This property is of type <code>String</code>.
+	 * The bundle symbolic of the Blueprint extender bundle that is generating
+	 * this event. This property is of type <code>String</code>.
 	 */
-	public static final String EXTENDER_BUNDLE_SYMBOLICNAME = "extender.bundle.symbolicName";
+	public static final String	EXTENDER_BUNDLE_SYMBOLICNAME	= "extender.bundle.symbolicName";
 
 	/**
-	 * The Blueprint extender bundle version property defining the version of the Blueprint extender
-	 * bundle processing the Blueprint Container for which an event has been
-	 * issued. This property is of type <code>Version</code>.
+	 * The bundle version of the Blueprint extender bundle that is generating
+	 * this event. This property is of type <code>Version</code>.
 	 */
-	public static final String EXTENDER_BUNDLE_VERSION = "extender.bundle.version";
+	public static final String	EXTENDER_BUNDLE_VERSION			= "extender.bundle.version";
 
 	/**
-	 * The dependencies property containing an array of filters describing the
-	 * missing mandatory dependencies for a FAILED, GRACE_PERIOD or WAITING
-	 * event. This property is an array of <code>String</code>.
+	 * The filters identifying the missing dependencies that caused this event
+	 * for a FAILED, GRACE_PERIOD or WAITING event. This property is an array of
+	 * <code>String</code>.
 	 */
-	public static final String DEPENDENCIES = "dependencies";
+	public static final String	DEPENDENCIES					= "dependencies";
 
 	/**
-	 * The exception property containing the cause for a FAILED event. This
-	 * property is of type <code>Throwable</code>.
+	 * The cause for a FAILED event. This property is of type
+	 * <code>Throwable</code>.
 	 */
-	public static final String EXCEPTION = "exception";
+	public static final String	CAUSE							= "cause";
 
 	/**
 	 * Topic prefix for all events issued by the Blueprint Container
 	 */
-	public static final String TOPIC_BLUEPRINT_EVENTS = "org/osgi/service/blueprint";
+	public static final String	TOPIC_BLUEPRINT_EVENTS			= "org/osgi/service/blueprint/container";
 
 	/**
 	 * Topic for Blueprint Container CREATING events
 	 */
-	public static final String TOPIC_CREATING = TOPIC_BLUEPRINT_EVENTS
-			+ "/container/CREATING";
+	public static final String	TOPIC_CREATING					= TOPIC_BLUEPRINT_EVENTS
+																		+ "/CREATING";
 
 	/**
 	 * Topic for Blueprint Container CREATED events
 	 */
-	public static final String TOPIC_CREATED = TOPIC_BLUEPRINT_EVENTS
-			+ "/container/CREATED";
+	public static final String	TOPIC_CREATED					= TOPIC_BLUEPRINT_EVENTS
+																		+ "/CREATED";
 
 	/**
 	 * Topic for Blueprint Container DESTROYING events
 	 */
-	public static final String TOPIC_DESTROYING = TOPIC_BLUEPRINT_EVENTS
-			+ "/container/DESTROYING";
+	public static final String	TOPIC_DESTROYING				= TOPIC_BLUEPRINT_EVENTS
+																		+ "/DESTROYING";
 
 	/**
 	 * Topic for Blueprint Container DESTROYED events
 	 */
-	public static final String TOPIC_DESTROYED = TOPIC_BLUEPRINT_EVENTS
-			+ "/container/DESTROYED";
+	public static final String	TOPIC_DESTROYED					= TOPIC_BLUEPRINT_EVENTS
+																		+ "/DESTROYED";
 
 	/**
 	 * Topic for Blueprint Container FAILURE events
 	 */
-	public static final String TOPIC_FAILURE = TOPIC_BLUEPRINT_EVENTS
-			+ "/container/FAILURE";
+	public static final String	TOPIC_FAILURE					= TOPIC_BLUEPRINT_EVENTS
+																		+ "/FAILURE";
 
 	/**
 	 * Topic for Blueprint Container GRACE_PERIOD events
 	 */
-	public static final String TOPIC_GRACE_PERIOD = TOPIC_BLUEPRINT_EVENTS
-			+ "/container/GRACE_PERIOD";
+	public static final String	TOPIC_GRACE_PERIOD				= TOPIC_BLUEPRINT_EVENTS
+																		+ "/GRACE_PERIOD";
 
 	/**
 	 * Topic for Blueprint Container WAITING events
 	 */
-	public static final String TOPIC_WAITING = TOPIC_BLUEPRINT_EVENTS
-			+ "/container/WAITING";
-
+	public static final String	TOPIC_WAITING					= TOPIC_BLUEPRINT_EVENTS
+																		+ "/WAITING";
 }

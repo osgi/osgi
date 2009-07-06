@@ -21,20 +21,23 @@ package org.osgi.service.blueprint.reflect;
  * 
  * This class is representing the <code>value</code> element.
  * 
+ * @ThreadSafe
+ * @version $Revision$
  */
 public interface ValueMetadata extends NonNullMetadata {
 	/**
 	 * The string value (unconverted) of this value.
 	 * 
-	 * Defined in the <code>value</code> attribute or text part of the <code>value</code> element.
+	 * Defined in the <code>value</code> attribute or text part of the
+	 * <code>value</code> element.
 	 * 
 	 * @return The content of the <code>value</code>
 	 */
 	String getStringValue();
 
 	/**
-	 * The name of the type to which this value should be converted. May be <code>null</code>.
-	 * Defined in the <code>type</code> attribute.
+	 * The name of the type to which this value should be converted. May be
+	 * <code>null</code>. Defined in the <code>type</code> attribute.
 	 * 
 	 * @return Optional class name for this value
 	 */

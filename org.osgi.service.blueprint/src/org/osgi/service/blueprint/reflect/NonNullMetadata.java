@@ -16,9 +16,13 @@
 package org.osgi.service.blueprint.reflect;
 
 /**
- * Base interfaces for Metadata that cannot result in a <code>null</code>
- * value. The {@link NullMetadata} is the only element not implementing this.
- * Mainly used for keys in Maps because they cannot be <code>null</code>.
+ * Base interfaces for Metadata that cannot result in a <code>null</code> value.
+ * The {@link NullMetadata} is the only element not implementing this. Mainly
+ * used for keys in Maps because they cannot be <code>null</code>.
+ * 
+ * @ThreadSafe
+ * @version $Revision$
  */
 public interface NonNullMetadata extends Metadata {
+	// marker interface
 }

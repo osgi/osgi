@@ -24,6 +24,7 @@ import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.Version;
 import org.osgi.service.blueprint.container.BlueprintEvent;
+import org.osgi.service.blueprint.container.EventConstants;
 import org.osgi.service.event.Event;
 import org.osgi.test.cases.blueprint.services.TestUtil;
 
@@ -163,31 +164,41 @@ public class BlueprintAdminEvent extends AdminTestEvent {
         Bundle extenderBundle = BaseTestController.getExtenderBundle(other.props);
 
         // if we have exception information, then keep this even if we replace it with another error.
-        Throwable cause = (Throwable)other.props.get(EXCEPTION);
+		Throwable cause = (Throwable) other.props.get(EventConstants.CAUSE);
         // if this is a failure event, then the exception property is required
         if (isError() && cause == null) {
             return new AssertionFailure("Missing exception cause on a blueprint admin failure event: " + other.toString());
         }
 
         // this must have an attached blueprint event
-        Object event = other.getProperty(EVENT);
+		Object event = other.getProperty(EventConstants.EVENT);
         if (event == null || !(event instanceof BlueprintEvent)) {
             return new AssertionFailure("Invalid or missing EVENT property on blueprint admin event: " + other.toString(), cause);
         }
 
-        Object timestamp = other.getProperty(TIMESTAMP);
+		Object timestamp = other.getProperty(EventConstants.TIMESTAMP);
         if (timestamp == null || !(timestamp instanceof Long)) {
             return new AssertionFailure("Invalid or missing timestamp property on blueprint admin event: " + other.toString(), cause);
         }
 
-        if (!TestUtil.validateBundleVersion(bundle, (Version)other.getProperty(BUNDLE_VERSION))) {
+		if (!TestUtil.validateBundleVersion(bundle, (Version) other
+				.getProperty(EventConstants.BUNDLE_VERSION))) {
             return new AssertionFailure("Mismatched bundle version on blueprint admin event expected=" + (String)bundle.getHeaders().get(Constants.BUNDLE_VERSION) + " received=" + other.getProperty("bundle.version"), cause);
         }
-        if (!TestUtil.validateBundleId(bundle, (Long)other.getProperty(BUNDLE_ID))) {
-            return new AssertionFailure("Mismatched bundle id on blueprint admin event other=" + other.getProperty(BUNDLE_ID), cause);
+		if (!TestUtil.validateBundleId(bundle, (Long) other
+				.getProperty(EventConstants.BUNDLE_ID))) {
+			return new AssertionFailure(
+					"Mismatched bundle id on blueprint admin event other="
+							+ other.getProperty(EventConstants.BUNDLE_ID),
+					cause);
         }
-        if (!TestUtil.validateBundleSymbolicName(bundle, (String)other.getProperty(BUNDLE_SYMBOLICNAME))) {
-            return new AssertionFailure("Mismatched bundle symbolic name on blueprint admin event other=" + other.getProperty(BUNDLE_SYMBOLICNAME), cause);
+		if (!TestUtil.validateBundleSymbolicName(bundle, (String) other
+				.getProperty(EventConstants.BUNDLE_SYMBOLICNAME))) {
+			return new AssertionFailure(
+					"Mismatched bundle symbolic name on blueprint admin event other="
+							+ other
+									.getProperty(EventConstants.BUNDLE_SYMBOLICNAME),
+					cause);
         }
 
         // do we expect dependencies to be included on this event?  If so, we need to do some filter
@@ -219,23 +230,33 @@ public class BlueprintAdminEvent extends AdminTestEvent {
             }
         }
 
-        if (bundle != (Bundle)other.getProperty(BUNDLE)) {
-            return new AssertionFailure("Mismatched bundle on blueprint admin event other=" + other.getProperty(BUNDLE), cause);
+		if (bundle != (Bundle) other.getProperty(EventConstants.BUNDLE)) {
+			return new AssertionFailure(
+					"Mismatched bundle on blueprint admin event other="
+							+ other.getProperty(EventConstants.BUNDLE), cause);
         }
         // now validate for the extender bundle
 
-        if (!extenderBundle.equals(other.getProperty(EXTENDER_BUNDLE))) {
+		if (!extenderBundle.equals(other
+				.getProperty(EventConstants.EXTENDER_BUNDLE))) {
             return new AssertionFailure("Mismatched extender bundle id blueprint admin event other=" +
-                other.getProperty(EXTENDER_BUNDLE), cause);
+ other.getProperty(EventConstants.EXTENDER_BUNDLE),
+					cause);
         }
 
-        if (!TestUtil.validateBundleId(extenderBundle, (Long)other.getProperty(EXTENDER_BUNDLE_ID))) {
+		if (!TestUtil.validateBundleId(extenderBundle, (Long) other
+				.getProperty(EventConstants.EXTENDER_BUNDLE_ID))) {
             return new AssertionFailure("Mismatched extender bundle id on blueprint admin event other=" +
-                other.getProperty(EXTENDER_BUNDLE_ID), cause);
+ other
+									.getProperty(EventConstants.EXTENDER_BUNDLE_ID),
+					cause);
         }
-        if (!TestUtil.validateBundleSymbolicName(extenderBundle, (String)other.getProperty(EXTENDER_BUNDLE_SYMBOLICNAME))) {
+		if (!TestUtil.validateBundleSymbolicName(extenderBundle, (String) other
+				.getProperty(EventConstants.EXTENDER_BUNDLE_SYMBOLICNAME))) {
             return new AssertionFailure("Mismatched extender bundle symbolic name on blueprint admin event other=" +
-                other.getProperty(EXTENDER_BUNDLE_SYMBOLICNAME), cause);
+ other
+									.getProperty(EventConstants.EXTENDER_BUNDLE_SYMBOLICNAME),
+					cause);
         }
 
         // allow the superclass to validate this (which includes calling potential

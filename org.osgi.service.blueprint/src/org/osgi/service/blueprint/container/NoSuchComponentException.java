@@ -16,45 +16,48 @@
 package org.osgi.service.blueprint.container;
 
 /**
- * Thrown when an attempt is made to lookup a component by id and no such
- * component exists in the Blueprint Container.
+ * A Blueprint exception indicating that a component does not exist.
+ * 
+ * This exception is thrown when an attempt is made to lookup a component by id
+ * and no such component exists in the Blueprint Container.
+ * 
+ * @version $Revision$
  */
 public class NoSuchComponentException extends RuntimeException {
-	private static final long serialVersionUID = 1L;
-
+	private static final long	serialVersionUID	= 9082130257086743432L;
 	/**
 	 * The id of the component request that generated the exception.
 	 */
-	private final String managerId;
+	private final String		componentId;
 
 	/**
-	 * Create an exception for a single manager id request.
+	 * Create a No Such Component Exception for a non-existent component.
 	 * 
-	 * @param id
-	 *            The id of the non-existent manager.
+	 * @param msg The associated message.
+	 * @param id The id of the non-existent component.
+	 */
+	public NoSuchComponentException(String msg, String id) {
+		super(msg);
+		this.componentId = id;
+	}
+
+	/**
+	 * Create a No Such Component Exception for a non-existent component.
+	 * 
+	 * @param id The id of the non-existent component.
 	 */
 	public NoSuchComponentException(String id) {
-		this.managerId = id;
+		super("No manager with id '" + (id == null ? "<null>" : id)
+				+ "' could be found");
+		this.componentId = id;
 	}
 
 	/**
-	 * Returns the manager id that generated the Exception.
+	 * Returns the component id non-existent component.
 	 * 
-	 * @return The id of the component associated with an unresolved
-	 *         request.
+	 * @return The id of the non-existent component.
 	 */
 	public String getComponentId() {
-		return this.managerId;
-	}
-
-	/**
-	 * Returns a human readable message associated with the exception.
-	 * 
-	 * @return The descriptive message for the exception.
-	 */
-	public String getMessage() {
-		return "No manager with id '"
-				+ (this.managerId == null ? "<null>" : this.managerId)
-				+ "' could be found";
+		return componentId;
 	}
 }

@@ -16,25 +16,27 @@
 package org.osgi.service.blueprint.reflect;
 
 /**
- * A reference-list Metadata
+ * A reference-list Metadata.
+ * 
+ * @ThreadSafe
+ * @version $Revision$
  */
 public interface ReferenceListMetadata extends ServiceReferenceMetadata {
 
 	/**
 	 * The List member types must be the proxies to the service objects
 	 */
-	public static final int USE_SERVICE_OBJECT = 1;
+	public static final int	USE_SERVICE_OBJECT		= 1;
 
 	/**
- 	 * The List member types must be Service Reference objects
- 	 */
-	public static final int USE_SERVICE_REFERENCE = 2;
+	 * The List member types must be Service Reference objects
+	 */
+	public static final int	USE_SERVICE_REFERENCE	= 2;
 
 	/**
 	 * Whether the collection will contain service objects, or service
-	 * references
-	 * Defined in the <code>member-type</code> attribute.
-	 *
+	 * references Defined in the <code>member-type</code> attribute.
+	 * 
 	 * @return one of USE_SERVICE_OBJECT and USE_SERVICE_REFERENCE
 	 * @see #USE_SERVICE_OBJECT
 	 * @see #USE_SERVICE_REFERENCE

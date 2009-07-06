@@ -20,6 +20,7 @@ import java.util.Properties;
 
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.service.blueprint.container.EventConstants;
 import org.osgi.service.event.Event;
 import org.osgi.test.cases.blueprint.services.TestUtil;
 
@@ -130,7 +131,7 @@ public class BlueprintContainerEvent extends AdminTestEvent {
         }
 
         // if we have exception information, then keep this even if we replace it with another error.
-        Throwable cause = (Throwable)other.props.get(EXCEPTION);
+		Throwable cause = (Throwable) other.props.get(EventConstants.CAUSE);
         // if this is a failure event, then the exception property is required
         if (isError() && cause == null) {
             return new AssertionFailure("Missing exception cause on a failure event: " + other.toString());

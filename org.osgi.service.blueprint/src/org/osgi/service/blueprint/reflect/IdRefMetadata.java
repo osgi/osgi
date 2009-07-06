@@ -16,9 +16,12 @@
 package org.osgi.service.blueprint.reflect;
 
 /**
- * A value which represents the id of another manager in the Blueprint Container.
- * The id itself will be injected, not the manager that the id refers to.
+ * A value which represents the id of another manager in the Blueprint
+ * Container. The id itself will be injected, not the manager that the id refers
+ * to.
  * 
+ * @ThreadSafe
+ * @version $Revision$
  */
 public interface IdRefMetadata extends NonNullMetadata {
 	/**

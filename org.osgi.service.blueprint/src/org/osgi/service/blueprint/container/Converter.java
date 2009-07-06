@@ -16,38 +16,36 @@
 package org.osgi.service.blueprint.container;
 
 /**
- * Provides access to the type conversions (both predefined and user registered)
- * that are defined for the Blueprint Container.
+ * Type converter to convert an object to a target type.
+ * 
+ * @ThreadSafe
+ * @version $Revision$
  */
 public interface Converter {
 
 	/**
-	 * Check if the converter is able to convert the given value to the
+	 * Return if this converter is able to convert the specified object to the
 	 * specified type.
 	 * 
-	 * @param s
-	 *            The source object to convert from
-	 * @param T
-	 *            The target type
+	 * @param sourceObject The source object to convert.
+	 * @param targetType The target type.
 	 * 
 	 * @return <code>true</code> if the conversion is possible,
 	 *         <code>false</code> otherwise.
 	 */
-	boolean canConvert(Object s, ReifiedType T);
+	boolean canConvert(Object sourceObject, ReifiedType targetType);
 
 	/**
-	 * Convert an object to an instance of the given class.
+	 * Convert the specified object to an instance of the specified type.
 	 * 
-	 * @param s
-	 *            The source object to convert from
-	 * @param T
-	 *            The target type
-	 * @return an instance with a type that is assignable from T's raw class
-	 * @throws Exception
-	 *             If the conversion cannot succeed. This exception should not
-	 *             be thrown when the {@link #canConvert} method has returned
-	 *             <code>true</code>.
+	 * @param sourceObject The source object to convert.
+	 * @param targetType The target type.
+	 * @return An instance with a type that is assignable from targetType's raw
+	 *         class
+	 * @throws Exception If the conversion cannot succeed. This exception should
+	 *         not be thrown when the {@link #canConvert} method has returned
+	 *         <code>true</code>.
 	 */
-	Object convert(Object s, ReifiedType T) throws Exception;
-
+	Object convert(Object sourceObject, ReifiedType targetType)
+			throws Exception;
 }

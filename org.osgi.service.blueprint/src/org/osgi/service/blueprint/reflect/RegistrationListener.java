@@ -18,6 +18,9 @@ package org.osgi.service.blueprint.reflect;
 /**
  * Metadata for a registration listener interested in service registration and
  * unregistration events.
+ * 
+ * @ThreadSafe
+ * @version $Revision$
  */
 public interface RegistrationListener {
 
