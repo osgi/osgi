@@ -45,7 +45,7 @@ public interface BlueprintListener {
 	 * 
 	 * Implementers should quickly process the event and return.
 	 * 
-	 * @param event The {@link BlueprintEvent}</code>.
+	 * @param event The {@link BlueprintEvent}.
 	 */
 	void blueprintEvent(BlueprintEvent event);
 }

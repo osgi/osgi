@@ -21,36 +21,33 @@ package org.osgi.service.blueprint.container;
  * 
  * Each type of event is sent to a different topic:
  * 
- * <p>
  * <code>org/osgi/service/blueprint/container/</code><em>&lt;event-type&gt;</em>
  * 
- * <p>
  * where <em>&lt;event-type&gt;</em> can have the values
- * <code>{@link BlueprintEvent#CREATING CREATING}</code>,
- * <code>{@link BlueprintEvent#CREATED CREATED}</code>,
- * <code>{@link BlueprintEvent#DESTROYING DESTROYING}</code>,
- * <code>{@link BlueprintEvent#DESTROYED DESTROYED}</code>,
- * <code>{@link BlueprintEvent#FAILURE FAILURE}</code>,
- * <code>{@link BlueprintEvent#GRACE_PERIOD GRACE_PERIOD}</code> or
- * <code>{@link BlueprintEvent#WAITING WAITING}</code>.
+ * {@link BlueprintEvent#CREATING CREATING},
+ * {@link BlueprintEvent#CREATED CREATED},
+ * {@link BlueprintEvent#DESTROYING DESTROYING},
+ * {@link BlueprintEvent#DESTROYED DESTROYED},
+ * {@link BlueprintEvent#FAILURE FAILURE},
+ * {@link BlueprintEvent#GRACE_PERIOD GRACE_PERIOD}, or
+ * {@link BlueprintEvent#WAITING WAITING}.
  * 
- * <p>
  * Such events have the following properties:
  * <ul>
- * <li><code>{@link #TYPE type}</code></li>
- * <li><code>{@link #EVENT event}</code></li>
- * <li><code>{@link #TIMESTAMP timestamp}</code></li>
- * <li><code>{@link #BUNDLE bundle}</code></li>
- * <li><code>{@link #BUNDLE_SYMBOLICNAME bundle.symbolicName}</code></li>
- * <li><code>{@link #BUNDLE_ID bundle.id}</code></li>
- * <li><code>{@link #BUNDLE_VERSION bundle.version}</code></li>
+ * <li>{@link #TYPE type}</li>
+ * <li>{@link #EVENT event}</li>
+ * <li>{@link #TIMESTAMP timestamp}</li>
+ * <li>{@link #BUNDLE bundle}</li>
+ * <li>{@link #BUNDLE_SYMBOLICNAME bundle.symbolicName}</li>
+ * <li>{@link #BUNDLE_ID bundle.id}</li>
+ * <li>{@link #BUNDLE_VERSION bundle.version}</li>
  * <li>
- * <code>{@link #EXTENDER_BUNDLE_SYMBOLICNAME extender.bundle.symbolicName}</code>
+ * {@link #EXTENDER_BUNDLE_SYMBOLICNAME extender.bundle.symbolicName}
  * </li>
- * <li><code>{@link #EXTENDER_BUNDLE_ID extender.bundle.id}</code></li>
- * <li><code>{@link #EXTENDER_BUNDLE_VERSION extender.bundle.version}</code></li>
- * <li><code>{@link #DEPENDENCIES dependencies}</code></li>
- * <li><code>{@link #CAUSE cause}</code></li>
+ * <li>{@link #EXTENDER_BUNDLE_ID extender.bundle.id}</li>
+ * <li>{@link #EXTENDER_BUNDLE_VERSION extender.bundle.version}</li>
+ * <li>{@link #DEPENDENCIES dependencies}</li>
+ * <li>{@link #CAUSE cause}</li>
  * </ul>
  * 
  * @Immutable
