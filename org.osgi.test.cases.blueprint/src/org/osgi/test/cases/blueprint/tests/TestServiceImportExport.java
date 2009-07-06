@@ -279,21 +279,21 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
                 new Class[] { TestServiceOne.class, TestServiceTwo.class, TestServiceTwoSubclass.class, TestServiceAllSubclass.class,
                     TestGoodService.class, TestGoodServiceSubclass.class, TestBadService.class, BaseTestComponent.class,
                     ComponentTestInfo.class, Comparable.class},
-                "BadService", null, serviceProps));
+                    null, null, serviceProps));
         // also validate the metadata for the exported service
         TestPropsValue metaServiceProps = new TestPropsValue();
         metaServiceProps.put("serviceType", "Bad");
         metaServiceProps.put("autoExport", "All");
-        exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService",
+        exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService[] {
+			new ExportedService("ServiceOneService",
                 ServiceMetadata.ACTIVATION_EAGER, "ServiceOne", TestServiceOne.class,
-                ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
+                ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null),
 
-        // This is the metadata for the bad service, which specifies quite a few things, including a lazy-init on the component.
-        exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("BadServiceService",
+            new ExportedService("BadServiceService",
                 ServiceMetadata.ACTIVATION_EAGER, null,
                 new Class[] { TestServiceOne.class, TestServiceTwo.class, TestServiceTwoSubclass.class, TestServiceAllSubclass.class,
                     TestGoodService.class, TestGoodServiceSubclass.class, TestBadService.class},
-                ServiceMetadata.AUTO_EXPORT_DISABLED, 2, metaServiceProps, null, null)));
+                ServiceMetadata.AUTO_EXPORT_ALL_CLASSES, 2, metaServiceProps, null, null)}));
         // we should see a service event here indicating this was registered
         Hashtable props2 = new Hashtable();
         props2.put("osgi.service.blueprint.compname", "ServiceOne");
@@ -320,7 +320,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // embedded elements, they're reuse the definition above
         importStartEvents.addValidator(new ArgumentMetadataValidator("ServiceOneConstructor", new TestArgument[] {
             new StringArgument("ServiceOneConstructor"),
-                    new TestArgument(new TestComponentValue(service))
+                    new TestArgument(new TestComponentValue(service), TestServiceOne.class)
         }));
 
         importStartEvents.addValidator(new PropertyMetadataValidator("ServiceOneProperty", new TestProperty[] {
@@ -344,8 +344,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // and make sure all of the bad ones are unregistered also
         exportStopEvents.addValidator(new ServiceUnregistrationValidator(
                 new Class[] { TestServiceOne.class, TestServiceTwo.class, TestServiceTwoSubclass.class, TestServiceAllSubclass.class,
-                    TestGoodService.class, TestGoodServiceSubclass.class, TestBadService.class, BaseTestComponent.class, ComponentTestInfo.class},
-                "(osgi.service.blueprint.compname=BadService)"));
+                    TestGoodService.class, TestGoodServiceSubclass.class, TestBadService.class, BaseTestComponent.class, ComponentTestInfo.class}, null));
 
         controller.run();
     }

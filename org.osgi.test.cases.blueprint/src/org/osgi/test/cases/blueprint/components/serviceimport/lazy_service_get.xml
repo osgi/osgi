@@ -21,10 +21,10 @@
         <reference-listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
     </reference>
 
-    <reference id="ServiceList" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
+    <reference-list id="ServiceList" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
         <description>Testing descriptions also</description>
         <reference-listener bind-method="bind" unbind-method="unbind" ref="ServiceListListener"/>
-    </reference>
+    </reference-list>
 
    <!-- just a property import...we track side effects (or frequently, lack of side effects) -->
    <bean id="ServiceOneProperty" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceSilentChecker">

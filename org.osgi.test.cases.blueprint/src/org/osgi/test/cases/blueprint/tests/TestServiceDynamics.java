@@ -305,6 +305,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         startEvents.addEvent(new BlueprintAdminEvent("GRACE_PERIOD", null, new Properties[] { filterProps }, null));
 
         // remove the current failure event....we want a more specific one to test the properties getting set.
+        startEvents.removeEvent(new BlueprintContainerEvent("FAILURE"));
         startEvents.removeEvent(new BlueprintAdminEvent("FAILURE"));
         // this failure event will verify the information about the failing dependency is set.
         startEvents.addEvent(new BlueprintContainerEvent("FAILURE", null, new Properties[] { filterProps }, null));
@@ -401,8 +402,8 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         // We will register this when we receive then GRACE_PERIOD event from the blueprint service.
         ServiceManager serviceManager = new ServiceManagerImpl(getContext(),
             new ManagedService[] {
-                // this one is registered from the start
-                new ManagedService("ServiceOneA", new TestGoodService("ServiceOneA"), TestServiceOne.class, getContext(), null, true),
+                // this one is not registered initially
+                new ManagedService("ServiceOneA", new TestGoodService("ServiceOneA"), TestServiceOne.class, getContext(), null, false),
             });
 
         // now we chain a few events to actions to allow us to track the dynamics.

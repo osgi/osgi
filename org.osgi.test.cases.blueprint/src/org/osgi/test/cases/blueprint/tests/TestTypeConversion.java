@@ -66,11 +66,11 @@ public class TestTypeConversion extends DefaultTestBundleControl {
 
         MetadataEventSet startEvents = controller.getStartEvents();
 
-        startEvents.validateComponentProperty("assignableRegionCode", "regionCode", new EuropeanRegionCode("CN+24"), RegionCode.class);
+        startEvents.validateComponentProperty("assignableRegionCode", "regionCode", new EuropeanRegionCode("UK+24"), RegionCode.class);
         startEvents.validateComponentProperty("wrapperToPrim", "primInteger", new Integer(1), Integer.TYPE);
         startEvents.validateComponentProperty("primToWrapper", "integer", new Integer(1), Integer.class);
         startEvents.validateComponentProperty("convertedRegionCode", "regionCode", new AsianRegionCode("CN+90"), RegionCode.class);
-        startEvents.validateComponentProperty("convertedAsianRegionCode", "regionCode", new AsianRegionCode("CN+94"), AsianRegionCode.class);
+        startEvents.validateComponentProperty("convertedAsianRegionCode", "asianRegionCode", new AsianRegionCode("CN+94"), AsianRegionCode.class);
         startEvents.validateComponentProperty("stringArrayToIntArray", "primIntArray", new int[] {1, 2}, int[].class);
         startEvents.validateComponentProperty("integerArrayToIntArray", "primIntArray", new int[] {1, 2}, int[].class);
         startEvents.validateComponentProperty("intArrayToIntegerArray", "wrappedIntArray", new Integer[] {new Integer(1), new Integer(2)}, Integer[].class);
@@ -84,26 +84,26 @@ public class TestTypeConversion extends DefaultTestBundleControl {
         target.add("2");
         startEvents.validateComponentProperty("stringArrayToList", "list", target, List.class);
         startEvents.validateComponentProperty("stringArrayToLinkedList", "linkedList", target, LinkedList.class);
-        startEvents.validateComponentProperty("stringArrayToCollectionSubTypeImple", "collectionSubTypeImpl", target, CollectionSubTypeImpl.class);
+        startEvents.validateComponentProperty("stringListToLinkedList", "linkedList", target, LinkedList.class);
+        startEvents.validateComponentProperty("stringArrayToCollectionSubTypeImpl", "collectionSubTypeImpl", target, CollectionSubTypeImpl.class);
 
         target = new ArrayList();
-        target.add(new Integer(2));
         target.add(new Integer(1));
+        target.add(new Integer(2));
         startEvents.validateComponentProperty("intArrayToList", "list", target, List.class);
 
         Map mapTarget = new HashMap();
         mapTarget.put("abc", "123");
         mapTarget.put("def", "456");
 
-        startEvents.validateComponentProperty("mapToTreeMap", "treeMap", mapTarget, TreeMap.class);
-
         Properties propTarget = new Properties();
         propTarget.put("abc", "123");
         propTarget.put("def", "456");
+
+        startEvents.validateComponentProperty("mapToTreeMap", "treeMap", mapTarget, TreeMap.class);
         startEvents.validateComponentProperty("mapToProperties", "properties", propTarget, Properties.class);
-        startEvents.validateComponentProperty("dictionaryToMap", "treeMap", mapTarget, TreeMap.class);
-        startEvents.validateComponentProperty("mapToMapSubTypeImpl", "mapSubTypeImpl", mapTarget, TreeMap.class);
-        startEvents.validateComponentProperty("mapToDictionarySubTypeImpl", "dictionarySubTypeImpl", propTarget, DictionarySubTypeImpl.class);
+        startEvents.validateComponentProperty("mapToMapSubType", "mapSubTypeImpl", mapTarget, MapSubTypeImpl.class);
+        startEvents.validateComponentProperty("mapToDictionarySubType", "dictionarySubTypeImpl", propTarget, DictionarySubTypeImpl.class);
 
         // wrapper to corresponding primitive
 
@@ -117,18 +117,18 @@ public class TestTypeConversion extends DefaultTestBundleControl {
         startEvents.validateComponentProperty("wrapperToFloat", "primFloat", new Float(1), Float.TYPE);
 
         // Number-type conversions
-        startEvents.validateComponentProperty("longToInteger", "integer", new Integer(1), Integer.TYPE);
-        startEvents.validateComponentProperty("shortToInteger", "integer", new Integer(1), Integer.TYPE);
-        startEvents.validateComponentProperty("byteToInteger", "integer", new Integer(1), Integer.TYPE);
-        startEvents.validateComponentProperty("doubleToInteger", "integer", new Integer(1), Integer.TYPE);
-        startEvents.validateComponentProperty("floatToInteger", "integer", new Integer(1), Integer.TYPE);
+        startEvents.validateComponentProperty("longToInteger", "integer", new Integer(1), Integer.class);
+        startEvents.validateComponentProperty("shortToInteger", "integer", new Integer(1), Integer.class);
+        startEvents.validateComponentProperty("byteToInteger", "integer", new Integer(1), Integer.class);
+        startEvents.validateComponentProperty("doubleToInteger", "integer", new Integer(1), Integer.class);
+        startEvents.validateComponentProperty("floatToInteger", "integer", new Integer(1), Integer.class);
 
         // primitive number-type conversions
-        startEvents.validateComponentProperty("primLongToInteger", "integer", new Integer(1), Integer.TYPE);
-        startEvents.validateComponentProperty("primShortToInteger", "integer", new Integer(1), Integer.TYPE);
-        startEvents.validateComponentProperty("primByteToInteger", "integer", new Integer(1), Integer.TYPE);
-        startEvents.validateComponentProperty("primDoubleToInteger", "integer", new Integer(1), Integer.TYPE);
-        startEvents.validateComponentProperty("primFloatToInteger", "integer", new Integer(1), Integer.TYPE);
+        startEvents.validateComponentProperty("primLongToInteger", "integer", new Integer(1), Integer.class);
+        startEvents.validateComponentProperty("primShortToInteger", "integer", new Integer(1), Integer.class);
+        startEvents.validateComponentProperty("primByteToInteger", "integer", new Integer(1), Integer.class);
+        startEvents.validateComponentProperty("primDoubleToInteger", "integer", new Integer(1), Integer.class);
+        startEvents.validateComponentProperty("primFloatToInteger", "integer", new Integer(1), Integer.class);
 
         controller.run();
     }

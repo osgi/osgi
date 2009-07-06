@@ -377,7 +377,7 @@ public class PropertyInjection extends BaseTestComponent {
         setPropertyValue("regionCode", v, RegionCode.class);
     }
 
-    public void setAsianRegionCode(RegionCode v) {
+    public void setAsianRegionCode(AsianRegionCode v) {
         setPropertyValue("asianRegionCode", v, AsianRegionCode.class);
     }
 

@@ -1,5 +1,6 @@
 Bundle-SymbolicName:                     ${p}.blueprint_version_two
 Export-Package: org.osgi.service.blueprint.*;version=2.0;-split-package:=first
+Import-Package: !*
 Bundle-Version: 2.0
 
 

@@ -195,17 +195,6 @@
         </property>
     </bean>
 
-
-    <!-- convert from a Dictionary to Map -->
-    <bean id="dictionaryToMap" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
-        <property name="treeMap">
-            <props>
-                <prop key="abc">123</prop>
-                <prop key="def">456</prop>
-            </props>
-        </property>
-    </bean>
-
     <!-- convert from map to custom map subtype -->
     <bean id="mapToMapSubType" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="mapSubTypeImpl">

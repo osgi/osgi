@@ -166,8 +166,11 @@ public class ManagedService {
         // belt-and-braces in case things get out of sync
         if (registration != null) {
             // unregister and delete the registration reference
-            registration.unregister();
+            // make sure to set the registration to null before in case the
+            // call to unregister() is reentrant and would call register() again
+            ServiceRegistration reg = registration;
             registration = null;
+            reg.unregister();
         }
     }
 

@@ -65,7 +65,9 @@ public class UnavailableDependencyChecker extends DependencyDriver {
                 filterProps.put(org.osgi.framework.Constants.OBJECTCLASS, new String[] { TestServiceOne.class.getName() });
                 // this is requested using the component-name attribute, so this should be in the filter too.
                 filterProps.put("osgi.service.blueprint.compname", "ServiceOneA");
-                AssertionService.assertTrue(this, "ServiceUnavailableException filter did not match expected properties", filter.match(filterProps));
+                // we also include a filter looking for this property with the same name
+                filterProps.put("test.service.name", "ServiceOneA");
+                AssertionService.assertTrue(this, "ServiceUnavailableException filter did not match expected properties: " + filterString, filter.match(filterProps));
             } catch (InvalidSyntaxException ise) {
                 AssertionService.fail(this, "Invalid filter syntax for ServiceUnavailableException", ise);
             }
@@ -79,6 +81,7 @@ public class UnavailableDependencyChecker extends DependencyDriver {
         try {
             // this should give an exception
             AssertionService.assertFalse(this, "Service proxy not detached", serviceOne.testOne());
+            AssertionService.fail(this, "Service proxy not detached");
         } catch (ServiceUnavailableException e) {
             // we expect to get here
             // we expect to get here
@@ -91,8 +94,8 @@ public class UnavailableDependencyChecker extends DependencyDriver {
                 // this is requested using the component-name attribute, so this should be in the filter too.
                 filterProps.put("osgi.service.blueprint.compname", "ServiceOneA");
                 // we also include a filter looking for this property with the same name
-                filterProps.put("service.name", "ServiceOneA");
-                AssertionService.assertTrue(this, "ServiceUnavailableException filter did not match expected properties", filter.match(filterProps));
+                filterProps.put("test.service.name", "ServiceOneA");
+                AssertionService.assertTrue(this, "ServiceUnavailableException filter did not match expected properties: " + filterString, filter.match(filterProps));
             } catch (InvalidSyntaxException ise) {
                 AssertionService.fail(this, "Invalid filter syntax for ServiceUnavailableException", ise);
             }
