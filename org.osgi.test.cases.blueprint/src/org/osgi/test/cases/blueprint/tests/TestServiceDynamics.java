@@ -22,6 +22,7 @@ import java.util.Properties;
 
 import org.osgi.framework.Bundle;
 import org.osgi.service.blueprint.container.EventConstants;
+import org.osgi.test.cases.blueprint.build.TestConstants;
 import org.osgi.test.cases.blueprint.framework.*;
 import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.services.ComponentTestInfo;
@@ -315,42 +316,6 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
 
 
 	/**
-	 * A lazy activation test.  The started bundle should register a single service, then
-     * register two additional ones when triggered by a service request for the first.
-	 */
-	public void testServiceRequestActivation() throws Exception {
-        // This uses a special test controller.  The active portions of the test
-        // are performed in the middle phase.
-        LazyActivationTestController controller = new LazyActivationTestController(getContext(),
-            getWebServer()+"www/lazy_activation.jar");
-
-        // We're mostly going to tag things we don't expect to see happening, though there are a
-        // few positive things we expect to see.
-        MetadataEventSet startEvents = controller.getStartEvents(0);
-        // we should see a single registration of TestServiceOne
-        startEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
-        // none of these component should be instantiated
-        startEvents.addFailureEvent(new ComponentAssertion("ServiceOne", AssertionService.BEAN_INIT_METHOD));
-
-        // now for the middle events.  We'll request a class to be loaded from the bundle, which
-        // should trigger the ModuleContext to be created.
-        MetadataEventSet middleEvents = controller.getMiddleEvents(0);
-
-        // this will request the registered service, which should kick start the activation process.
-        middleEvents.addInitializer(new ServiceRequestInitiator(getContext(), TestServiceOne.class, null));
-
-        // all of the components should now be instantiated
-        middleEvents.addAssertion("ServiceOne", AssertionService.BEAN_INIT_METHOD);
-
-        // now some expected termination stuff
-        EventSet stopEvents = controller.getStopEvents(0);
-        // normal shutdown processing
-        stopEvents.addServiceEvent("UNREGISTERING", TestServiceOne.class);
-        controller.run();
-    }
-
-
-	/**
 	 * A lazy initialization test.  This is the same as the lazy activation test, and should
      * display essentially the same behavior.  The service will be registered, but will not
      * create any components until the first service request.
@@ -388,6 +353,45 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
 
 
 	/**
+	 * A lazy activation test.  The started bundle should pause until an activating class
+     * load occurs.  No blueprint activity should register until that point.
+	 */
+	public void testServiceRequestActivation() throws Exception {
+        // This uses a special test controller.  The active portions of the test
+        // are performed in the middle phase.
+        LazyActivationTestController controller = new LazyActivationTestController(getContext(),
+            getWebServer()+"www/lazy_activation.jar");
+
+        // We're mostly going to tag things we don't expect to see happening, though there are a
+        // few positive things we expect to see.
+        MetadataEventSet startEvents = controller.getStartEvents(0);
+        // we should see a single registration of TestServiceOne
+        startEvents.addFailureEvent(new ServiceTestEvent("REGISTERED", TestServiceOne.class));
+        // none of these component should be instantiated
+        startEvents.addFailureEvent(new ComponentAssertion("ServiceOne", AssertionService.BEAN_INIT_METHOD));
+
+        // now for the middle events.  We'll request a class to be loaded from the bundle, which
+        // should trigger the ModuleContext to be created.
+        MetadataEventSet middleEvents = controller.getMiddleEvents(0);
+
+        // this will force the bundle to activation, which will trigger everything else.
+        middleEvents.addInitializer(new ClassLoadInitiator(TestConstants.class.getName()));
+
+        // we should see a single registration of TestServiceOne
+        middleEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
+
+        // all of the components should now be instantiated
+        middleEvents.addAssertion("ServiceOne", AssertionService.BEAN_INIT_METHOD);
+
+        // now some expected termination stuff
+        EventSet stopEvents = controller.getStopEvents(0);
+        // normal shutdown processing
+        stopEvents.addServiceEvent("UNREGISTERING", TestServiceOne.class);
+        controller.run();
+    }
+
+
+	/**
 	 * Lazy activation processing will wait on dependencies before registering
      * any services.
 	 */
@@ -409,6 +413,14 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         // now we chain a few events to actions to allow us to track the dynamics.
         MetadataEventSet startEvents = controller.getStartEvents(0);
 
+
+        // now for the middle events.  We'll request a class to be loaded from the bundle, which
+        // should trigger the ModuleContext to be created.
+        MetadataEventSet middleEvents = controller.getMiddleEvents(0);
+
+        // this will force the bundle to activation, which will trigger everything else.
+        middleEvents.addInitializer(new ClassLoadInitiator(TestConstants.class.getName()));
+
         // Ok, when the GRACE_PERIOD event is triggered, we register the first service.
         // we expect one of these to both handlers, but only one triggers the action
 
@@ -416,18 +428,11 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         Properties filterProps = new Properties();
         filterProps.put(org.osgi.framework.Constants.OBJECTCLASS, new String[] { TestServiceOne.class.getName() });
 
-        startEvents.addEvent(new BlueprintContainerEvent("GRACE_PERIOD", null, new Properties[] { filterProps }, null));
-        startEvents.addEvent(new BlueprintAdminEvent("GRACE_PERIOD", null, new Properties[] { filterProps }, new ServiceManagerRegister(serviceManager, "ServiceOneA")));
+        middleEvents.addEvent(new BlueprintContainerEvent("GRACE_PERIOD", null, new Properties[] { filterProps }, null));
+        middleEvents.addEvent(new BlueprintAdminEvent("GRACE_PERIOD", null, new Properties[] { filterProps }, new ServiceManagerRegister(serviceManager, "ServiceOneA")));
 
-        // then we should see this REGISTERED again at the end.
-        startEvents.addServiceEvent("REGISTERED", TestServiceDynamicsInterface.class);
-
-        // now for the middle events.  We'll request a class to be loaded from the bundle, which
-        // should trigger the ModuleContext to be created.
-        MetadataEventSet middleEvents = controller.getMiddleEvents(0);
-
-        // this will request the registered service, which should kick start the activation process.
-        middleEvents.addInitializer(new ServiceRequestInitiator(getContext(), TestServiceDynamicsInterface.class, null));
+        // then we should see this REGISTERED at the end.
+        middleEvents.addServiceEvent("REGISTERED", TestServiceDynamicsInterface.class);
 
         // now some expected termination stuff
         EventSet stopEvents = controller.getStopEvents(0);

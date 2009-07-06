@@ -49,21 +49,20 @@ public class LazyActivationTestController extends ThreePhaseTestController {
         // this will kick the STARTING process, but the bundle will not fully initialize
         // until we do something to force classloading
         events.addInitializer(new TestBundleStarter(bundle, 0, Bundle.START_ACTIVATION_POLICY | Bundle.START_TRANSIENT));
-        // we should not see a Modudle context getting registered yet.
+        // we should not see a container getting registered yet.
         events.addFailureEvent(new ServiceTestEvent("REGISTERED", "org.osgi.service.blueprint.container.BlueprintContainer"));
-        // we shhould see the CREATING blueprint event.
-        events.addBlueprintEvent("CREATING");
         // we should not see any of the standard blueprint events
+        events.addFailureEvent(new BlueprintAdminEvent("CREATING"));
+        events.addFailureEvent(new BlueprintContainerEvent("CREATING"));
         events.addFailureEvent(new BlueprintAdminEvent("CREATED"));
         events.addFailureEvent(new BlueprintContainerEvent("CREATED"));
         events.addFailureEvent(new BundleTestEvent("STARTED"));
-        // the bundle should be in the STARTING state when everything settles down
-        events.addValidator(new BundleStateValidator(Bundle.STARTING));
     }
 
 
     /**
-     * Add a standard set of bundle middle events for this event type.
+     * Add a standard set of bundle middle events for this event type.  In the middle phase,
+     * we kick the bundle to start processing, so now it goes through the normal bundle activation steps
      *
      * @param bundle The bundle the event set is tracking.
      * @param blueprintMetadata
@@ -77,10 +76,11 @@ public class LazyActivationTestController extends ThreePhaseTestController {
 
         // we always expect to see a started bundle event
         events.addBundleEvent("STARTED");
+        // we shhould see the CREATING blueprint event.
+        events.addBlueprintEvent("CREATING");
+        events.addBlueprintEvent("CREATED");
         // we should see a service registered for the module context.
         events.addServiceEvent("REGISTERED", "org.osgi.service.blueprint.container.BlueprintContainer");
-        // now standard blueprint revents.
-        events.addBlueprintEvent("CREATED");
 
         // this needs to be the first validator of the set, since
         // it initializes the module context.
