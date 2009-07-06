@@ -26,17 +26,17 @@ import org.osgi.service.blueprint.reflect.ServiceMetadata;
 import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
 
 /**
- * A Blueprint Container for a bundle.
+ * A Blueprint Container represents the managed state of a Blueprint bundle.
  * 
- * A Blueprint Container provides access to all managed components. These are
- * the beans, registered services, and service references. Only bundles in the
- * <code>ACTIVE</code> state (and also the <code>STARTING</code> state for
- * bundles awaiting lazy activation) can have an associated Blueprint Container.
- * A given Bundle Context has at most one associated Blueprint Container.
+ * A Blueprint Container provides access to all managers. These are the beans,
+ * services, and service references. Only bundles in the <code>ACTIVE</code>
+ * state (and also the <code>STARTING</code> state for bundles awaiting lazy
+ * activation) can have an associated Blueprint Container. A given Bundle
+ * Context has at most one associated Blueprint Container.
  * 
  * A Blueprint Container can be obtained by injecting the predefined
  * &quot;blueprintContainer&quot; component id. The Blueprint Container is also
- * registered as a service and its managed components can be queried.
+ * registered as a service and its managers can be queried.
  * 
  * @ThreadSafe
  * @version $Revision$
@@ -53,31 +53,31 @@ public interface BlueprintContainer {
 	/**
 	 * Return the component instance for the specified component id.
 	 * 
-	 * If the component's manager has not yet been activated, calling this
-	 * operation will cause the component instance to be created and
+	 * If the manager has not yet been activated, calling this operation will
+	 * atomically activate it. If the manager is a singleton manager, the
+	 * activation will cause the component instance to be created and
 	 * initialized. If the component has a prototype scope then each call to
 	 * this method will return a new component instance.
 	 * 
-	 * Calling this method from logic executing during the construction of a
-	 * component, before the <code>initMethod</code> (if specified) has
-	 * returned, may trigger a circular dependency.
-	 * 
-	 * @param id The component id for the requested component instance.
-	 * @return The component instance for the specified component id
-	 * @throws NoSuchComponentException If the specified component id is not
-	 *         managed by this Blueprint Container.
+	 * @param id
+	 *            The id for the requested manager.
+	 * @return The component instance for the specified id
+	 * @throws NoSuchComponentException
+	 *             If the specified id is not managed by this Blueprint
+	 *             Container.
 	 */
 	Object getComponentInstance(String id);
 
 	/**
-	 * Return the Component Metadata instance for the component with the
-	 * specified component id.
+	 * Return the Component Metadata instance for the manager with the
+	 * specified id.
 	 * 
-	 * @param id The id of the component for the requested Component Metadata.
-	 * @return The Component Metadata instance for the component with the
-	 *         specified component id.
-	 * @throws NoSuchComponentException If the specified component id is not
-	 *         managed by this Blueprint Container.
+	 * @param id
+	 *            The id of the requested Component Metadata.
+	 * @return The Component Metadata for the given id.
+	 * @throws NoSuchComponentException
+	 *             If the specified id is not managed by this
+	 *             Blueprint Container.
 	 */
 	ComponentMetadata getComponentMetadata(String id);
 
@@ -90,9 +90,10 @@ public interface BlueprintContainer {
 	 * {@link ReferenceMetadata} and {@link ReferenceListMetadata} instances),
 	 * and {@link ServiceMetadata}. The collection will include all Component
 	 * Metadata instances of the requested type, including components that are
-	 * declared as inline values.
+	 * declared inline.
 	 * 
-	 * @param type The super type or type of the requested Component Metadata.
+	 * @param type
+	 *            The super type or type of the requested Component Metadata.
 	 * @return An immutable collection of Component Metadata objects of the
 	 *         specified type.
 	 */
