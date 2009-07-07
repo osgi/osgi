@@ -6,8 +6,10 @@
  */
 package org.osgi.test.cases.packageadmin.tc2.tb4;
 
-import org.osgi.framework.*;
-import org.osgi.test.cases.packageadmin.tc2.tb3.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.test.cases.packageadmin.tc2.tb3.TestService3;
 
 /**
  * Bundle for exporting packages
@@ -15,21 +17,22 @@ import org.osgi.test.cases.packageadmin.tc2.tb3.*;
  * @author Ericsson Telecom AB
  */
 public class TB4Activator implements BundleActivator {
-	BundleContext	bc;
 
 	/**
 	 * Starts the bundle. Installs several services later filtered by the tbc
 	 */
 	public void start(BundleContext bc) {
-		this.bc = bc;
-		ServiceReference sr = bc
-				.getServiceReference("org.osgi.test.cases.packageadmin.tc2.tb3.TestService3");
-		TestService3 ts3 = (TestService3) bc.getService(sr);
+		ServiceReference sr = bc.getServiceReference(TestService3.class
+				.getName());
+        if (sr != null) {
+            TestService3 ts3 = (TestService3) bc.getService(sr);
+        }
 	}
 
 	/**
 	 * Stops the bundle.
 	 */
 	public void stop(BundleContext bc) {
+		// empty
 	}
 }
