@@ -43,6 +43,7 @@ import org.osgi.test.support.OSGiTestCase;
 public class FrameworkLaunchTests extends OSGiTestCase {
 	private static final String STORAGEROOT = "org.osgi.test.cases.framework.launch.storageroot";
 	private static final String FRAMEWORK_FACTORY = "/META-INF/services/org.osgi.framework.launch.FrameworkFactory";
+	private static final String TEST_TRUST_REPO = "org.osgi.test.cases.framework.launch.secure.trust.repository";
 
 	private String frameworkFactoryClassName;
 	private String rootStorageArea;
@@ -179,6 +180,20 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		return configuration;
 	}
 
+	private Bundle installBundle(Framework framework, String bundle) throws BundleException, IOException {
+		BundleContext fwkContext = framework.getBundleContext();
+		assertNotNull("Framework context is null", fwkContext);
+		URL input = getBundleInput(bundle);
+		assertNotNull("Cannot find resource: " + bundle, input);
+		return fwkContext.installBundle(bundle, input.openStream());
+	}
+
+	private URL getBundleInput(String bundle) {
+		BundleContext context = getBundleContextWithoutFail();
+		return context == null ? this.getClass().getResource(bundle) : context.getBundle().getEntry(bundle);
+	}
+
+
 	private void initFramework(Framework framework) {
 		try {
 			framework.init();
@@ -188,6 +203,18 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 			fail("Unexpected BundleException initializing", e);
 		}
 		assertEquals("Wrong framework state after init", Bundle.STARTING, framework.getState());
+	}
+
+	private void startFramework(Framework framework) {
+		try {
+			framework.start();
+			assertNotNull("BundleContext is null after start", framework.getBundleContext());
+		}
+		catch (BundleException e) {
+			fail("Unexpected BundleException initializing", e);
+		}
+		assertEquals("Wrong framework state after init", Bundle.ACTIVE, framework.getState());
+
 	}
 
 	private void stopFramework(Framework framework) {
@@ -246,6 +273,34 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 				System.setSecurityManager(previousSM);
 			Policy.setPolicy(previous);
 		}
+	}
+
+	public void testTrustRepositories() throws BundleException, IOException {
+		BundleContext context = getBundleContextWithoutFail();
+		String testRepo = context != null ? context.getProperty(TEST_TRUST_REPO) : System.getProperty(TEST_TRUST_REPO);
+		if (testRepo == null)
+			fail("Must set property to test: \"" + TEST_TRUST_REPO + "\"");
+		Map configuration = getConfiguration(getName());
+		doTestTrustRepository(configuration, null, false);
+		doTestTrustRepository(configuration, testRepo, true);
+	}
+
+
+	private void doTestTrustRepository(Map configuration, String testRepo, boolean trusted) throws BundleException, IOException {
+		if (testRepo != null)
+			configuration.put(Constants.FRAMEWORK_TRUST_REPOSITORIES, testRepo);
+		else
+			configuration.remove(Constants.FRAMEWORK_TRUST_REPOSITORIES);
+		Framework framework = createFramework(configuration);
+		startFramework(framework);
+		Bundle testBundle = installBundle(framework, "/launch.secure.tb1.jar");
+		Map signers = testBundle.getSignerCertificates(Bundle.SIGNERS_ALL);
+		assertEquals("Expecting 1 signer", 1, signers.size());
+		Map trustedSigners = testBundle.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
+		if (trusted)
+			assertEquals("Expecting 1 signer", 1, trustedSigners.size());
+		else
+			assertEquals("Expecting 0 signers", 0, trustedSigners.size());
 	}
 
 	static class AllPolicy extends Policy {
