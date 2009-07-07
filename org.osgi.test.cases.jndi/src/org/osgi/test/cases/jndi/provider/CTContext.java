@@ -37,15 +37,17 @@ public class CTContext implements Context {
 	
 	protected static Map storage = new HashMap();
 	private Map env 	= new HashMap();
+	private static int invokeCount = 0;
 	
 	private static final NameParser parser = new CTNameParser();
 
 	public CTContext() throws NamingException {
-	
+		invokeCount++;
 	}
 	
 	public CTContext(Map env) throws NamingException {
 		this.env = env;
+		invokeCount++;
 	}
 
 	public Object addToEnvironment(String propName, Object propVal)
@@ -72,6 +74,7 @@ public class CTContext implements Context {
 	public void close() throws NamingException {
 		storage.clear();
 		env.clear();
+		invokeCount--;
 	}
 
 	public String composeName(String first, String second) throws NamingException {
@@ -203,6 +206,10 @@ public class CTContext implements Context {
 			throw new NamingException("Unable to unbind " + name);
 		}
 		
+	}
+	
+	public static int getInvokeCount() {
+		return invokeCount;
 	}
 
 }

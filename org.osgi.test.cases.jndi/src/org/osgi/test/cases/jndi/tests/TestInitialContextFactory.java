@@ -23,6 +23,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 
 import org.osgi.framework.Bundle;
+import org.osgi.test.cases.jndi.provider.CTContext;
 import org.osgi.test.cases.jndi.provider.CTInitialContextFactory;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
@@ -38,6 +39,7 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 	public void testSpecificInitialContextFactory() throws Exception {
 		// Install the bundles needed for this test
 		Bundle testBundle = installBundle("initialContextFactory1.jar");
+		int invokeCountBefore = CTContext.getInvokeCount();
 		// Setup the environment for grabbing the specific initialContextFactory
 		Hashtable env = new Hashtable();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
@@ -45,7 +47,15 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		InitialContext ctx = new InitialContext(env);
 		assertNotNull("The context should not be null", ctx);
 		ctx.bind("testObject", new Object());
+		int invokeCountAfter = CTContext.getInvokeCount();
+		if (!(invokeCountAfter > invokeCountBefore)) {
+			ctx.close();
+			fail("The correct Context object was not found");
+		}
+		Object testObject = (Object) ctx.lookup("testObject");
+		assertNotNull(testObject);
 		// Cleanup after the test completes
+		ctx.close();
 		uninstallBundle(testBundle);
 		
 	}
@@ -54,10 +64,19 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		// Install the bundles needed for this test
 		Bundle testBundle = installBundle("initialContextFactory1.jar");
 		// We don't setup the environment because we want to see if the appropriate context factory is returned even if it isn't specified
+		int invokeCountBefore = CTContext.getInvokeCount();
 		InitialContext ctx = new InitialContext();
 		assertNotNull("The context should not be null", ctx);
 		ctx.bind("testObject", new Object());
+		int invokeCountAfter = CTContext.getInvokeCount();
+		if (!(invokeCountAfter > invokeCountBefore)) {
+			ctx.close();
+			fail("The correct Context object was not found");
+		}
+		Object testObject = ctx.lookup("testObject");
+		assertNotNull(testObject);
 		// Cleanup after the test completes
+		ctx.close();
 		uninstallBundle(testBundle);
 	}
 	
@@ -65,11 +84,20 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		// Install the bundles needed for this test
 		Bundle testBundle = installBundle("initialContextFactoryBuilder1.jar");
 		// Try to get an initialContext object using the builder
+		int invokeCountBefore = CTContext.getInvokeCount();
 	    InitialContext ctx = new InitialContext();
 		assertNotNull("The context should not be null", ctx);
 		// Verify that we actually received the InitialContext
 		ctx.bind("testObject", new Object());
+		int invokeCountAfter = CTContext.getInvokeCount();
+		if (!(invokeCountAfter > invokeCountBefore)) {
+			ctx.close();
+			fail("The correct Context object was not found");
+		}
+		Object testObject = ctx.lookup("testObject");
+		assertNotNull(testObject);
 		// Cleanup after the test completes
+		ctx.close();
 		uninstallBundle(testBundle);
 	}
 	
@@ -81,15 +109,17 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		// Try to get a context using the just removed initialContextFactory
 		Hashtable env = new Hashtable();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
+		InitialContext ctx = new InitialContext(env);
+		assertNotNull("The context should not be null", ctx);
 		try {
-			InitialContext ctx = new InitialContext(env);
-			assertNotNull("The context should not be null", ctx);
 			ctx.bind("testObject", new Object());
 		} catch (javax.naming.NoInitialContextException ex) {
+			ctx.close();
 			return;
 		}
 	    // If we don't get the exception, then this test fails
-	    failException("testInitialContextFactoryRemoval failed, ", javax.naming.NoInitialContextException.class);
+		ctx.close();
+		failException("testInitialContextFactoryRemoval failed, ", javax.naming.NoInitialContextException.class);
 	}
 	
 	public void testInitialContextFactoryBuilderRemoval() throws Exception {
@@ -98,15 +128,16 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		// Uninstall the bundle now so the provider implementations are unregistered
 		uninstallBundle(testBundle);
 		// Try to grab the initialContextFactory.  We should get a NullPointerException
+		InitialContext ctx = new InitialContext();
+		assertNotNull("The context should not be null", ctx);
 		try {
-			InitialContext ctx = new InitialContext();
-			assertNotNull("The context should not be null", ctx);
 			ctx.bind("testObject", new Object());
 		} catch (NullPointerException npe) {
+			ctx.close();
 			return;
 		}
 	    // If we don't get the exception, then this test fails
-		
+		ctx.close();
 		failException("testInitialContextFactoryBuilderRemoval failed, ", java.lang.NullPointerException.class);
 	}
 	
@@ -115,14 +146,16 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		Hashtable env = new Hashtable();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		// Try to grab a context from the specified initialContextFactory.  This should throw an exception.
-	    try {
-	    	InitialContext ctx = new InitialContext(env);
-			assertNotNull("The context should not be null", ctx);
+    	InitialContext ctx = new InitialContext(env);
+		assertNotNull("The context should not be null", ctx);
+		try {
 	    	ctx.lookup("testObject");
 	    } catch ( javax.naming.NoInitialContextException ex ) {
+	    	ctx.close();
 	    	return;
 	    }
 	    // If we don't get the exception, then this test fails
+    	ctx.close();
 	    failException("testNoInitialContextFound failed, ", javax.naming.NoInitialContextException.class);
 	}
 	
@@ -136,10 +169,11 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		// Let's grab a context instance and check the environment
 		Hashtable ctxEnv = ctf.getInitialContext(null).getEnvironment();
 		if (!ctxEnv.containsKey("test1")) {
+			ctx.close();
 			uninstallBundle(testBundle);
 			fail("The right context was not returned");
 		}
-		
+		ctx.close();
 		uninstallBundle(testBundle);
 	}
 	
