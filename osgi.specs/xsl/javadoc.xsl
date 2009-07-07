@@ -55,21 +55,38 @@
 					<xsl:value-of select="@modifiers"/>
 					<xsl:text> </xsl:text>
 					<xsl:value-of select="@name"/>
-					<xsl:if test="@superclass and @superclass!='Object'">
-						<br/><tab/>extends 
-						<xsl:value-of select="@superclass"/>
-					</xsl:if>
-					<xsl:for-each select="implements[@local]">
-						<xsl:choose>
-							<xsl:when test="position()=1">
-								<br/><tab/>implements
-							</xsl:when>
-							<xsl:otherwise>
-								,
-							</xsl:otherwise>
-						</xsl:choose>
-						<xsl:value-of select="@name"/>
-					</xsl:for-each>
+					<xsl:choose>
+					   <xsl:when test="@interface">
+                            <xsl:for-each select="implements[@local]">
+                                <xsl:choose>
+                                    <xsl:when test="position()=1">
+                                        <br/><tab/>extends
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        ,
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                                <xsl:value-of select="@name"/>
+                            </xsl:for-each>
+					   </xsl:when>
+					   <xsl:otherwise>
+        					<xsl:if test="@superclass and @superclass!='Object'">
+        						<br/><tab/>extends 
+        						<xsl:value-of select="@superclass"/>
+        					</xsl:if>
+        					<xsl:for-each select="implements[@local]">
+        						<xsl:choose>
+        							<xsl:when test="position()=1">
+        								<br/><tab/>implements
+        							</xsl:when>
+        							<xsl:otherwise>
+        								,
+        							</xsl:otherwise>
+        						</xsl:choose>
+        						<xsl:value-of select="@name"/>
+        					</xsl:for-each>
+        				</xsl:otherwise>
+    				</xsl:choose>
 				</h2>
 				<xsl:apply-templates select="description" mode="html"/>
 				<xsl:call-template name="descriptors"><xsl:with-param name="target" select="."/></xsl:call-template>
