@@ -248,7 +248,7 @@
 		<echo>repo:                   ${repo}</echo>
 		<echo>use.bnd:                ${use.bnd}</echo>
 		<echo>nodeploy:               ${nodeploy}</echo>
-		<echo>-dependson:             ${-dependson}</echo>
+		<echo>-dependson:             ${project.dependson}</echo>
 
 	</target>
 
