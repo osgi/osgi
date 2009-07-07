@@ -90,7 +90,7 @@ public class XmlDoclet extends Doclet {
 				+ (clazz.isInterface() ? "' interface='yes" : "") + "'>");
 		printComment(clazz);
 
-		if (!clazz.isInterface()) {
+		//if (!clazz.isInterface()) {
 			ClassDoc ptr = clazz;
 			Hashtable ht = new Hashtable();
 			while (ptr != null) {
@@ -108,7 +108,7 @@ public class XmlDoclet extends Doclet {
 				}
 				ptr = null; // ptr.superclass();
 			}
-		}
+		//}
 		ConstructorDoc constructors[] = clazz.constructors();
 		for (int cnst = 0; cnst < constructors.length; cnst++)
 			print(constructors[cnst]);
