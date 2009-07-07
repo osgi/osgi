@@ -10,7 +10,7 @@
 			<fileset dir="xml" includes="*.xml" />
 		</delete>
 		<echo>${javadoc}</echo>
-		<javadoc doclet="org.osgi.tools.xmldoclet.XmlDoclet" docletpath="../org.osgi.tools/src" encoding="utf-8" packagenames="${javadoc}">
+		<javadoc doclet="org.osgi.tools.xmldoclet.XmlDoclet" docletpath="../org.osgi.tools/src" encoding="utf-8" packagenames="${javadoc},org.osgi.service.remoteadmin">
 			<sourcepath>
 				<dirset dir="${project.workspace}">
 					<include name="*/src" />

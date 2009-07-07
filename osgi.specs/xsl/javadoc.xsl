@@ -40,7 +40,7 @@
 	
 	<xsl:template match="class" mode="index">
 		<p class="{saxon:if(position()=1,'BulletedFirst','Bulleted')}">
-			<em class="Emphasis"><xsl:value-of select="@name"/></em> - <xsl:apply-templates select="lead" mode="html"/> <a href="#{@name}"/>
+			<em><xsl:value-of select="@name"/></em> - <xsl:apply-templates select="lead" mode="html"/> <a href="#{@name}"/>
 		</p>
 	</xsl:template>
 	
