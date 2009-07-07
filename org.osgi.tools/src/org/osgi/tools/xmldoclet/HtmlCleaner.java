@@ -96,7 +96,8 @@ public class HtmlCleaner {
 			}
 			return result.toString();
 		}
-		catch( Exception e ) {
+		catch( Throwable e ) {
+			System.out.println("Error " + source);
 			e.printStackTrace();
 			error( "Cannot parse text" );
 			return "XXX" + escape( source );
