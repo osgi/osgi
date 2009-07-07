@@ -478,7 +478,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 
 	public void testLibraryExtensions() throws BundleException, IOException {
 		Map configuration = getConfiguration(getName());
-		configuration.put(Constants.FRAMEWORK_LIBRARY_EXTENSIONS, ".1, .test");
+		configuration.put(Constants.FRAMEWORK_LIBRARY_EXTENSIONS, "1,test");
 		configuration.put("nativecodetest", "1");
 		Framework framework = createFramework(configuration);
 		startFramework(framework);
@@ -487,7 +487,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		stopFramework(framework);
 
 		configuration = getConfiguration(getName());
-		configuration.put(Constants.FRAMEWORK_LIBRARY_EXTENSIONS, ".2, .test");
+		configuration.put(Constants.FRAMEWORK_LIBRARY_EXTENSIONS, "2,test");
 		configuration.put("nativecodetest", "2");
 		framework = createFramework(configuration);
 		startFramework(framework);
@@ -496,7 +496,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		stopFramework(framework);
 
 		configuration = getConfiguration(getName());
-		configuration.put(Constants.FRAMEWORK_LIBRARY_EXTENSIONS, ".3, .test");
+		configuration.put(Constants.FRAMEWORK_LIBRARY_EXTENSIONS, "3,test");
 		configuration.put("nativecodetest", "3");
 		framework = createFramework(configuration);
 		startFramework(framework);
@@ -596,7 +596,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 			configuration.put(Constants.FRAMEWORK_EXECPERMISSION, "copy ${abspath} " + testOutputFile.getAbsolutePath());
 		else
 			configuration.put(Constants.FRAMEWORK_EXECPERMISSION, "cp ${abspath} " + testOutputFile.getAbsolutePath());
-		configuration.put(Constants.FRAMEWORK_LIBRARY_EXTENSIONS, ".1, .test");
+		configuration.put(Constants.FRAMEWORK_LIBRARY_EXTENSIONS, "1,test");
 		configuration.put("nativecodetest", "1");
 		Framework framework = createFramework(configuration);
 		startFramework(framework);
