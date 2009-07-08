@@ -52,6 +52,8 @@ public class TestURLContextFactory extends DefaultTestBundleControl {
 		String result = (String)urlCtx.lookup("ct://testString");
 		assertEquals(testString, result);
 		// Cleanup after the test
+		ctx.close();
+		urlCtx.close();
 		uninstallBundle(factoryBundle);
 		uninstallBundle(testBundle);
 	}
@@ -75,10 +77,12 @@ public class TestURLContextFactory extends DefaultTestBundleControl {
 			assertEquals(testString, result);
 		} catch (NamingException ex) {
 			// We're expecting this, since they're should be no context able to handle this url
+			urlCtx.close();
 			uninstallBundle(factoryBundle);
 			return;
 		}
-		
+		urlCtx.close();
+		uninstallBundle(factoryBundle);
 	    failException("testURLContextFactoryRemoval failed, ", javax.naming.NamingException.class);
 	    
 	}
