@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.osgi.test.cases.jndi.tests;
 
 import java.util.Hashtable;
@@ -30,121 +29,131 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * 
- *
- * A set of tests for the access and use of ObjectFactory and ObjectFactoryBuilder instances
  * 
- * @version $Revision$ $Date$
+ * A set of tests for the access and use of ObjectFactory and
+ * ObjectFactoryBuilder instances
+ * 
+ * @version $Revision$ $Date: 2009-07-08 12:50:57 -0400 (Wed, 08 Jul
+ *          2009) $
  */
 public class TestObjectFactory extends DefaultTestBundleControl {
-	
+
 	public void testReferenceLookup() throws Exception {
 		// Install the bundles required for this test
 		Bundle testBundle = installBundle("objectFactory1.jar");
 		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
-		// Create an appropriate context, store a reference, then attempt to correctly lookup the reference.
+		// Create an appropriate context, store a reference, then attempt to
+		// correctly lookup the reference.
 		Hashtable env = new Hashtable();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, "org.osgi.test.cases.jndi.provider.CTInitialContextFactory");
 		InitialContext ctx = new InitialContext(env);
-		assertNotNull("The context should not be null", ctx);
-		CTReference reference = new CTReference("java.lang.String", CTObjectFactory.class.getName());
-		ctx.bind("reference", reference);
-		String str = (String)ctx.lookup("reference");
-		assertNotNull(str);
-		// Cleanup after the test completes
-		ctx.close();
-		uninstallBundle(factoryBundle);
-		uninstallBundle(testBundle);
+		try {
+			assertNotNull("The context should not be null", ctx);
+			CTReference reference = new CTReference("java.lang.String", CTObjectFactory.class.getName());
+			ctx.bind("reference", reference);
+			String str = (String) ctx.lookup("reference");
+			assertNotNull(str);
+		} finally {
+			// Cleanup after the test completes
+			ctx.close();
+			uninstallBundle(factoryBundle);
+			uninstallBundle(testBundle);
+		}
 	}
 
 	public void testReferenceLookupWithBuilder() throws Exception {
 		// Install the bundles required for this test
 		Bundle testBundle = installBundle("objectFactoryBuilder1.jar");
 		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
-		// Create an appropriate context, store a reference, then attempt to correctly lookup the reference.
+		// Create an appropriate context, store a reference, then attempt to
+		// correctly lookup the reference.
 		Hashtable env = new Hashtable();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, "org.osgi.test.cases.jndi.provider.CTInitialContextFactory");
 		InitialContext ctx = new InitialContext(env);
-		assertNotNull("The context should not be null", ctx);
-		CTReference reference = new CTReference("java.lang.String");
-		ctx.bind("reference", reference);
-		String str = (String)ctx.lookup("reference");
-		assertNotNull(str);
-		// Cleanup after the test completes
-		ctx.close();
-		uninstallBundle(factoryBundle);
-		uninstallBundle(testBundle);
+		try {
+			assertNotNull("The context should not be null", ctx);
+			CTReference reference = new CTReference("java.lang.String");
+			ctx.bind("reference", reference);
+			String str = (String) ctx.lookup("reference");
+			assertNotNull(str);
+		} finally {
+			// Cleanup after the test completes
+			ctx.close();
+			uninstallBundle(factoryBundle);
+			uninstallBundle(testBundle);
+		}
 	}
-	
-	
-	public void testObjectFactoryRemoval () throws Exception {
+
+	public void testObjectFactoryRemoval() throws Exception {
 		// Install the bundle that has the test provider implementations
 		Bundle testBundle = installBundle("objectFactory1.jar");
 		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
 		Hashtable env = new Hashtable();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, "org.osgi.test.cases.jndi.provider.CTInitialContextFactory");
-		// Uninstall the bundle now so the provider implementations are unregistered
+		// Uninstall the bundle now so the provider implementations are
+		// unregistered
 		uninstallBundle(testBundle);
-		// Try to grab the ObjectFactory.  We should get a NullPointerException
+		// Try to grab the ObjectFactory. We should get a NullPointerException
 		InitialContext ctx = new InitialContext(env);
-		assertNotNull("The context should not be null", ctx);
 		try {
+			assertNotNull("The context should not be null", ctx);
 			CTReference reference = new CTReference("java.lang.String", CTObjectFactory.class.getName());
 			ctx.bind("reference", reference);
-			String str = (String)ctx.lookup("reference");
+			String str = (String) ctx.lookup("reference");
 			assertNotNull(str);
 		} catch (NamingException ne) {
+			return;
+		} finally {
+			// If we don't get the exception, then this test fails
 			ctx.close();
 			uninstallBundle(factoryBundle);
-			return;
 		}
-	    // If we don't get the exception, then this test fails
-		ctx.close();
-		uninstallBundle(factoryBundle);
-	    failException("testObjectFactoryRemoval failed, ", NamingException.class);
 	}
-	
-	public void testObjectFactoryBuilderRemoval () throws Exception {
+
+	public void testObjectFactoryBuilderRemoval() throws Exception {
 		// Install the bundle that has the test provider implementations
 		Bundle testBundle = installBundle("objectFactoryBuilder1.jar");
 		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
 		Hashtable env = new Hashtable();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, "org.osgi.test.cases.jndi.provider.CTInitialContextFactory");
-		// Uninstall the bundle now so the provider implementations are unregistered
+		// Uninstall the bundle now so the provider implementations are
+		// unregistered
 		uninstallBundle(testBundle);
-		// Try to grab the ObjectFactory.  We should get a NullPointerException
+		// Try to grab the ObjectFactory. We should get a NullPointerException
 		InitialContext ctx = new InitialContext(env);
-		assertNotNull("The context should not be null", ctx);
 		try {
+			assertNotNull("The context should not be null", ctx);
 			CTReference reference = new CTReference("java.lang.String");
 			ctx.bind("reference", reference);
-			String str = (String)ctx.lookup("reference");
+			String str = (String) ctx.lookup("reference");
 			assertNotNull(str);
 		} catch (NamingException ne) {
+			return;
+		} finally {
+			// If we don't get the exception, then this test fails
 			ctx.close();
 			uninstallBundle(factoryBundle);
-			return;
 		}
-	    // If we don't get the exception, then this test fails
-		ctx.close();
-		uninstallBundle(factoryBundle);
-	    failException("testObjectFactoryBuilderRemoval failed, ", NamingException.class);
+		failException("testObjectFactoryBuilderRemoval failed, ", NamingException.class);
 	}
-	
+
 	public void testServiceRanking() throws Exception {
 		// Install the necessary bundles
 		Bundle testBundle = installBundle("objectFactory2.jar");
-		// Use the default context to grab one of the factories and make sure it's the right one
+		// Use the default context to grab one of the factories and make sure
+		// it's the right one
 		InitialContext ctx = new InitialContext();
-		assertNotNull("The context should not be null", ctx);
-		CTObjectFactory of = (CTObjectFactory) ctx.lookup("osgi:services/org.osgi.test.cases.jndi.provider.CTObjectFactory");
-		Hashtable ofEnv = of.getEnvironment();
-		if (!ofEnv.containsKey("test1")) {
+		try {
+			assertNotNull("The context should not be null", ctx);
+			CTObjectFactory of = (CTObjectFactory) ctx.lookup("osgi:services/org.osgi.test.cases.jndi.provider.CTObjectFactory");
+			Hashtable ofEnv = of.getEnvironment();
+			if (!ofEnv.containsKey("test1")) {
+				fail("The right context was not returned");
+			}
+		} finally {
 			ctx.close();
 			uninstallBundle(testBundle);
-			fail("The right context was not returned");
 		}
-		ctx.close();
-		uninstallBundle(testBundle);
 	}
-	
+
 }

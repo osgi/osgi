@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.osgi.test.cases.jndi.tests;
 
 import org.osgi.framework.Bundle;
@@ -23,37 +22,46 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * 
- *
+ * 
  * A set of tests for Java EE and jndi integration
  * 
- * @version $Revision$ $Date$
+ * @version $Revision$ $Date: 2009-06-13 08:09:54 -0400 (Sat, 13 Jun
+ *          2009) $
  */
 public class TestJavaEE extends DefaultTestBundleControl {
 
-	public void testApplicationName () throws Exception {
+	public void testApplicationName() throws Exception {
 		// Install the bundle that contains the app
 		Bundle testBundle = installBundle("service1.jar");
-	    // Get a ServiceReference object so we can access the service properties
-		ServiceReference ref = testBundle.getBundleContext().getServiceReference(org.osgi.test.cases.jndi.service.ExampleService.class.getName());
-		// Grab the property we're looking for
-		ref.getProperty("javaee.application.name");
-		// Verify we actually received a value
-		assertNotNull(ref);
-		// Cleanup after the test completes
-		uninstallBundle(testBundle);
+		try {
+			// Get a ServiceReference object so we can access the service
+			// properties
+			ServiceReference ref = testBundle.getBundleContext().getServiceReference(org.osgi.test.cases.jndi.service.ExampleService.class.getName());
+			// Grab the property we're looking for
+			ref.getProperty("javaee.application.name");
+			// Verify we actually received a value
+			assertNotNull(ref);
+		} finally {
+			// Cleanup after the test completes
+			uninstallBundle(testBundle);
+		}
 	}
-	
-	public void testApplicationVersion () throws Exception {
+
+	public void testApplicationVersion() throws Exception {
 		// Install the bundle that contains the app
 		Bundle testBundle = installBundle("service1.jar");
-	    // Get a ServiceReference object so we can access the service properties
-		ServiceReference ref = testBundle.getBundleContext().getServiceReference(org.osgi.test.cases.jndi.service.ExampleService.class.getName());
-		// Grab the property we're looking for
-		ref.getProperty("javaee.application.version");
-		// Verify we actually received a value
-		assertNotNull(ref);
-		// Cleanup after the test completes
-		uninstallBundle(testBundle);
+		try {
+			// Get a ServiceReference object so we can access the service
+			// properties
+			ServiceReference ref = testBundle.getBundleContext().getServiceReference(org.osgi.test.cases.jndi.service.ExampleService.class.getName());
+			// Grab the property we're looking for
+			ref.getProperty("javaee.application.version");
+			// Verify we actually received a value
+			assertNotNull(ref);
+		} finally {
+			// Cleanup after the test completes
+			uninstallBundle(testBundle);
+		}
 	}
-	
+
 }

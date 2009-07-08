@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.osgi.test.cases.jndi.tests;
 
 import java.util.Hashtable;
@@ -32,58 +31,63 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * 
  * A set of tests for URL operations in jndi
  * 
- * @version $Revision$ $Date$
+ * @version $Revision$ $Date: 2009-07-08 13:20:41 -0400 (Wed, 08 Jul
+ *          2009) $
  */
 public class TestURLContextFactory extends DefaultTestBundleControl {
-	
+
 	public void testURLContextFactoryRegistration() throws Exception {
 		// Install the bundles needed for this test
 		Bundle testBundle = installBundle("urlContext1.jar");
 		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
-		// Setup the standard context that we'll be using the URL to access so that we have something to lookup
-		String testString = "test string";
-		Hashtable env = new Hashtable();
-		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
-		InitialContext ctx = new InitialContext(env);
-		assertNotNull("The context should not be null", ctx);
-		ctx.bind("testString", testString);
-		// Attempt to look up the test string
-		Context urlCtx = new InitialContext();
-		String result = (String)urlCtx.lookup("ct://testString");
-		assertEquals(testString, result);
-		// Cleanup after the test
-		ctx.close();
-		urlCtx.close();
-		uninstallBundle(factoryBundle);
-		uninstallBundle(testBundle);
-	}
-	
-	public void testURLContextFactoryRemoval() throws Exception {
-		// Install the bundles needed for this test
-		Bundle testBundle = installBundle("urlContext1.jar");
-		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
-		// Setup the standard context that we'll be using the URL to access so that we have something to lookup
+		// Setup the standard context that we'll be using the URL to access so
+		// that we have something to lookup
 		String testString = "test string";
 		Hashtable env = new Hashtable();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		Context ctx = new InitialContext(env);
-		assertNotNull("The context should not be null", ctx);
-		ctx.bind("testString", testString);
-		// Remove the url context jar
-		uninstallBundle(testBundle);
-		InitialContext urlCtx = new InitialContext();
+		Context urlCtx = new InitialContext();
 		try {
-			String result = (String)urlCtx.lookup("ct://testString");
+			assertNotNull("The context should not be null", ctx);
+			ctx.bind("testString", testString);
+			// Attempt to look up the test string
+			String result = (String) urlCtx.lookup("ct://testString");
 			assertEquals(testString, result);
-		} catch (NamingException ex) {
-			// We're expecting this, since they're should be no context able to handle this url
+		} finally {
+			// Cleanup after the test
+			ctx.close();
 			urlCtx.close();
 			uninstallBundle(factoryBundle);
-			return;
+			uninstallBundle(testBundle);
 		}
-		urlCtx.close();
-		uninstallBundle(factoryBundle);
-	    failException("testURLContextFactoryRemoval failed, ", javax.naming.NamingException.class);
-	    
+	}
+
+	public void testURLContextFactoryRemoval() throws Exception {
+		// Install the bundles needed for this test
+		Bundle testBundle = installBundle("urlContext1.jar");
+		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
+		// Setup the standard context that we'll be using the URL to access so
+		// that we have something to lookup
+		String testString = "test string";
+		Hashtable env = new Hashtable();
+		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
+		Context ctx = new InitialContext(env);
+		Context urlCtx = new InitialContext();
+		try {
+			assertNotNull("The context should not be null", ctx);
+			ctx.bind("testString", testString);
+			// Remove the url context jar
+			uninstallBundle(testBundle);
+			String result = (String) urlCtx.lookup("ct://testString");
+			assertEquals(testString, result);
+		} catch (NamingException ex) {
+			// We're expecting this, since they're should be no context able to
+			// handle this url
+			return;
+		} finally {
+			urlCtx.close();
+			uninstallBundle(factoryBundle);
+		}
+		failException("testURLContextFactoryRemoval failed, ", javax.naming.NamingException.class);
 	}
 }

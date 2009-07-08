@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.osgi.test.cases.jndi.tests;
 
 import javax.naming.Context;
@@ -26,43 +25,48 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * 
- *
+ * 
  * A set of tests for jndi interaction with the service registry
  * 
- * @version $Revision$ $Date$
+ * @version $Revision$ $Date: 2009-07-08 14:07:59 -0400 (Wed, 08 Jul
+ *          2009) $
  */
 public class TestServiceIntegration extends DefaultTestBundleControl {
-	
+
 	public void testServiceLookup() throws Exception {
 		// Install the bundle needed for this test
 		Bundle testBundle = installBundle("service1.jar");
 		// Grab the default initialContext so we can access the service registry
 		Context ctx = new InitialContext();
-		assertNotNull("The context should not be null", ctx);
-		// Lookup the example service
-		ExampleService service = (ExampleService) ctx.lookup("osgi:services/org.osgi.test.cases.jndi.service.ExampleService");
-		// Verify that we actually got the service
-		assertNotNull(service);
-		// Cleanup after the test completes
-		ctx.close();
-		uninstallBundle(testBundle);
+		try {
+			assertNotNull("The context should not be null", ctx);
+			// Lookup the example service
+			ExampleService service = (ExampleService) ctx.lookup("osgi:services/org.osgi.test.cases.jndi.service.ExampleService");
+			// Verify that we actually got the service
+			assertNotNull(service);
+			// Cleanup after the test completes
+		} finally {
+			ctx.close();
+			uninstallBundle(testBundle);
+		}
 	}
-	
-	
+
 	public void testServiceNameProperty() throws Exception {
 		// Install the bundles need for this test
 		Bundle testBundle = installBundle("service1.jar");
 		// Grab the default InitialContext so we can access the service registry
 		Context ctx = new InitialContext();
-		assertNotNull("The context should not be null", ctx);
-		// Lookup the example service using the service name
-		ExampleService service = (ExampleService) ctx.lookup("osgi:services/ExampleService");
-		// Verify that we actually got the service
-		assertNotNull(service);
-		// Cleanup after the test completes
-		ctx.close();
-		uninstallBundle(testBundle);
+		try {
+			assertNotNull("The context should not be null", ctx);
+			// Lookup the example service using the service name
+			ExampleService service = (ExampleService) ctx.lookup("osgi:services/ExampleService");
+			// Verify that we actually got the service
+			assertNotNull(service);
+		} finally {
+			// Cleanup after the test completes
+			ctx.close();
+			uninstallBundle(testBundle);
+		}
 	}
-	
-	
+
 }
