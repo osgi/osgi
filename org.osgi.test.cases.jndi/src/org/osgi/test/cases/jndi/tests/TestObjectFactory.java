@@ -49,7 +49,9 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 		CTReference reference = new CTReference("java.lang.String", CTObjectFactory.class.getName());
 		ctx.bind("reference", reference);
 		String str = (String)ctx.lookup("reference");
+		assertNotNull(str);
 		// Cleanup after the test completes
+		ctx.close();
 		uninstallBundle(factoryBundle);
 		uninstallBundle(testBundle);
 	}
@@ -66,7 +68,9 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 		CTReference reference = new CTReference("java.lang.String");
 		ctx.bind("reference", reference);
 		String str = (String)ctx.lookup("reference");
+		assertNotNull(str);
 		// Cleanup after the test completes
+		ctx.close();
 		uninstallBundle(factoryBundle);
 		uninstallBundle(testBundle);
 	}
@@ -81,17 +85,20 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 		// Uninstall the bundle now so the provider implementations are unregistered
 		uninstallBundle(testBundle);
 		// Try to grab the ObjectFactory.  We should get a NullPointerException
+		InitialContext ctx = new InitialContext(env);
+		assertNotNull("The context should not be null", ctx);
 		try {
-			InitialContext ctx = new InitialContext(env);
-			assertNotNull("The context should not be null", ctx);
 			CTReference reference = new CTReference("java.lang.String", CTObjectFactory.class.getName());
 			ctx.bind("reference", reference);
 			String str = (String)ctx.lookup("reference");
+			assertNotNull(str);
 		} catch (NamingException ne) {
+			ctx.close();
 			uninstallBundle(factoryBundle);
 			return;
 		}
 	    // If we don't get the exception, then this test fails
+		ctx.close();
 		uninstallBundle(factoryBundle);
 	    failException("testObjectFactoryRemoval failed, ", NamingException.class);
 	}
@@ -105,17 +112,20 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 		// Uninstall the bundle now so the provider implementations are unregistered
 		uninstallBundle(testBundle);
 		// Try to grab the ObjectFactory.  We should get a NullPointerException
+		InitialContext ctx = new InitialContext(env);
+		assertNotNull("The context should not be null", ctx);
 		try {
-			InitialContext ctx = new InitialContext(env);
-			assertNotNull("The context should not be null", ctx);
 			CTReference reference = new CTReference("java.lang.String");
 			ctx.bind("reference", reference);
 			String str = (String)ctx.lookup("reference");
+			assertNotNull(str);
 		} catch (NamingException ne) {
+			ctx.close();
 			uninstallBundle(factoryBundle);
 			return;
 		}
 	    // If we don't get the exception, then this test fails
+		ctx.close();
 		uninstallBundle(factoryBundle);
 	    failException("testObjectFactoryBuilderRemoval failed, ", NamingException.class);
 	}
@@ -129,10 +139,11 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 		CTObjectFactory of = (CTObjectFactory) ctx.lookup("osgi:services/org.osgi.test.cases.jndi.provider.CTObjectFactory");
 		Hashtable ofEnv = of.getEnvironment();
 		if (!ofEnv.containsKey("test1")) {
+			ctx.close();
 			uninstallBundle(testBundle);
 			fail("The right context was not returned");
 		}
-		
+		ctx.close();
 		uninstallBundle(testBundle);
 	}
 	
