@@ -1,10 +1,22 @@
 package org.osgi.impl.bundle.rsh;
 
-import java.io.*;
-import java.net.*;
-import java.security.*;
-import javax.crypto.*;
-import javax.crypto.spec.*;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.security.MessageDigest;
+import java.security.SecureRandom;
+
+import javax.crypto.Cipher;
+import javax.crypto.Mac;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESedeKeySpec;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  * URLConnection for the RSH protocol. Most of the work is actually done by
@@ -87,7 +99,7 @@ public class RshConnection extends URLConnection {
 	 * passed parameters.
 	 */
 	public RshConnection(URL url, String spid, byte rshSecret[])
-			throws MalformedURLException {
+			throws IOException {
 		super(url);
 		this.rshSecret = rshSecret;
 		String sansRsh = url.toString().substring(3);
@@ -109,13 +121,17 @@ public class RshConnection extends URLConnection {
 		end.append("&clientfg=");
 		end.append(generateClientFG());
 		httpURL = new URL("http" + sansRsh + end.toString());
+		urlConnection = httpURL.openConnection();
 	}
 
 	/**
 	 * @see java.net.URLConnection#connect()
 	 */
-	public void connect() throws IOException {
-		urlConnection = httpURL.openConnection();
+	public synchronized void connect() throws IOException {
+		if (!connected) {
+			urlConnection.connect();
+			connected = true;
+		}
 	}
 
 	/** Constant used to calculate the encryption key */
@@ -129,8 +145,7 @@ public class RshConnection extends URLConnection {
 	synchronized public InputStream getInputStream() throws IOException {
 		if (bais != null)
 			return bais;
-		if (urlConnection == null)
-			urlConnection = httpURL.openConnection();
+		connect();	
 		InputStream is = urlConnection.getInputStream();
 		DataInputStream dis = new DataInputStream(is);
 		dis.readInt();
@@ -245,8 +260,7 @@ public class RshConnection extends URLConnection {
 
 	/** Proxied to the shadowed HTTP url connection */
 	public void setRequestProperty(java.lang.String p, java.lang.String v) {
-		if (urlConnection != null)
-			urlConnection.setRequestProperty(p, v);
+		urlConnection.setRequestProperty(p, v);
 	}
 
 	/** Proxied to the shadowed HTTP url connection */
