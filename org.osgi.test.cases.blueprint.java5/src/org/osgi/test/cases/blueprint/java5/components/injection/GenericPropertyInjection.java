@@ -18,13 +18,15 @@ package org.osgi.test.cases.blueprint.java5.components.injection;
 
 import java.net.URL;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 
-public class GenericMapInjection extends BaseTestComponent {
+/**
+ * Simple target class for testing generic injections.
+ */
+public class GenericPropertyInjection extends BaseTestComponent {
 
     /**
      * Simple injection with a single string argument.
@@ -32,35 +34,20 @@ public class GenericMapInjection extends BaseTestComponent {
      * @param componentId
      *               The component identifier used for test verification purposes.
      */
-    public GenericMapInjection() {
-        super("GenericMapInjection");
+    public GenericPropertyInjection(String componentId) {
+        super(componentId);
     }
 
-    /**
-     * Simple injection with a converted array argument.
-     *
-     * @param componentId
-     *               The component identifier used for test verification purposes.
-     */
-    public GenericMapInjection(Map<Long, Boolean> arg1) {
-        super("GenericMapInjection");
-        setArgumentValue("arg1", arg1, Map.class);
+    public void setSuit(Suit value) {
+        setPropertyValue("suit", value, Suit.class);
     }
 
-    public void setMap1(Map<Double, String> arg1) {
-        setPropertyValue("map1", arg1, Map.class);
+    public void setStringHolder(GenericHolder<String> value) {
+        setPropertyValue("stringHolder", value, GenericHolder.class);
     }
 
-    public void setMap2(Map<String, URL> arg1) {
-        setPropertyValue("map2", arg1, Map.class);
-    }
-
-    public void setConcurrentMap(ConcurrentMap arg1) {
-        setPropertyValue("concurrentMap", arg1, ConcurrentMap.class);
-    }
-
-    public void setPointMap(TreeMap<String, Point> arg1) {
-        setPropertyValue("pointMap", arg1, TreeMap.class);
+    public void setBooleanHolder(GenericHolder<Boolean> value) {
+        setPropertyValue("boolHolder", value, GenericHolder.class);
     }
 }
 

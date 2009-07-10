@@ -26,14 +26,19 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.Properties;
 import java.util.Set;
 
 import org.osgi.test.cases.blueprint.framework.*;
 import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.cases.blueprint.java5.components.injection.GenericListInjection;
+import org.osgi.test.cases.blueprint.java5.components.injection.Point;
+import org.osgi.test.cases.blueprint.java5.components.injection.Suit;
+import org.osgi.test.cases.blueprint.java5.components.injection.GenericHolder;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
@@ -64,7 +69,7 @@ public class TestGenericCollectionInjection extends DefaultTestBundleControl {
         // There's nothing special about the metadata here, so we're really only interested in the fact
         // the collections get converted appropriately.
 
-        // simple list of strings
+        // array of ints converted into a Generic list of Point items
         {
             List<Integer> expected = new ArrayList<Integer>();
             expected.add(new Integer(123));
@@ -73,17 +78,31 @@ public class TestGenericCollectionInjection extends DefaultTestBundleControl {
         }
 
         {
-            List<String> expected = new ArrayList<String>();
-            expected.add("abc");
-            expected.add("def");
-            startEvents.validateComponentProperty("GenericListProperty", "string", expected, List.class);
-        }
-
-        {
             List<Class> expected = new ArrayList<Class>();
             expected.add(String.class);
             expected.add(GenericListInjection.class);
             startEvents.validateComponentProperty("GenericListProperty", "classList", expected, List.class);
+        }
+
+        {
+            List<Integer> expected = new ArrayList<Integer>();
+            expected.add(new Integer(123));
+            expected.add(new Integer(456));
+            startEvents.validateComponentProperty("GenericListExtendsProperty", "extendsList", expected, List.class);
+        }
+
+        {
+            List<Integer> expected = new ArrayList<Integer>();
+            expected.add(new Integer(123));
+            expected.add(new Integer(456));
+            startEvents.validateComponentProperty("GenericListSuperProperty", "superList", expected, List.class);
+        }
+
+        {
+            List<Double> expected = new ArrayList<Double>();
+            expected.add(new Double(123));
+            expected.add(new Double(456));
+            startEvents.validateComponentProperty("GenericListAProperty", "a", expected, List.class);
         }
 
         {
@@ -160,6 +179,47 @@ public class TestGenericCollectionInjection extends DefaultTestBundleControl {
 
 
     /**
+     * Some very specific generic tests.
+     *
+     * @exception Exception
+     */
+    public void testGenericPropertyInjection() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/generic_property_injection.jar");
+        MetadataEventSet startEvents = controller.getStartEvents();
+
+        // There's nothing special about the metadata here, so we're really only interested in the fact
+        // the collections get converted appropriately.
+
+        // simple list of strings
+        {
+            List<Point> expected = new LinkedList<Point>();
+            expected.add(new Point(123, 456));
+            expected.add(new Point(0, 0));
+            startEvents.validateComponentProperty("GenericListConversion", "pointList", expected, LinkedList.class);
+        }
+
+        {
+            Map<String, Point> expected = new TreeMap<String, Point>();
+            expected.put("Start", new Point(123, 456));
+            expected.put("Finish", new Point(0, 0));
+            startEvents.validateComponentProperty("GenericMapConversion", "pointMap", expected, TreeMap.class);
+        }
+
+        {
+            GenericHolder<Boolean> expected = new GenericHolder<Boolean>(Boolean.TRUE);
+            startEvents.validateComponentProperty("GenericConversion", "booleanHolder", expected, GenericHolder.class);
+        }
+
+        {
+            startEvents.validateComponentArgument("EnumConversion", "suit", Suit.CLUBS, Suit.class);
+        }
+
+        controller.run();
+    }
+
+
+    /**
      * Import a list of ServiceReferences and validate against an expected set.
      * This will also unregister the services, validate the collection
      * has been emptied, then register and check again.
@@ -178,24 +238,22 @@ public class TestGenericCollectionInjection extends DefaultTestBundleControl {
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
         // fail the test.
-		importStartEvents.addAssertion("ReferenceChecker",
-				AssertionService.BEAN_INIT_METHOD);
-
+        importStartEvents.addAssertion("ReferenceChecker", AssertionService.BEAN_INIT_METHOD);
         controller.run();
     }
 
 
     /**
-     * Import a set of ServiceReferences and validate against an expected set.
+     * Import a list of services and validate against an expected set.
      * This will also unregister the services, validate the collection
      * has been emptied, then register and check again.
      */
-    public void testSetCollectionReferenceImport() throws Exception {
+    public void testListCollectionServiceImport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
         // one first might result in a dependency wait in the second.  This should
         // still work.
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/reference_set_import.jar",
+                getWebServer()+"www/reference_list_service_import.jar",
                 getWebServer()+"www/managed_service_export.jar");
 
         // all of our validation here is on the importing side
@@ -204,9 +262,7 @@ public class TestGenericCollectionInjection extends DefaultTestBundleControl {
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
         // fail the test.
-		importStartEvents.addAssertion("ReferenceChecker",
-				AssertionService.BEAN_INIT_METHOD);
-
+        importStartEvents.addAssertion("ReferenceChecker", AssertionService.BEAN_INIT_METHOD);
         controller.run();
     }
 
@@ -230,9 +286,7 @@ public class TestGenericCollectionInjection extends DefaultTestBundleControl {
         // this event signals completion of all of the checking work.  If there
         // have been any errors, these get signalled as assertion failures and will
         // fail the test.
-		importStartEvents.addAssertion("ReferenceChecker",
-				AssertionService.BEAN_INIT_METHOD);
-
+        importStartEvents.addAssertion("ReferenceChecker", AssertionService.BEAN_INIT_METHOD);
         controller.run();
     }
 

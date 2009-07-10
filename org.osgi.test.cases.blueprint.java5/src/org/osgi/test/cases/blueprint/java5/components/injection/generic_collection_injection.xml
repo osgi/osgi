@@ -25,6 +25,33 @@
         </property>
     </bean>
 
+    <bean id="GenericListExtendsProperty" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericListInjection">
+        <property name="extendsInteger">
+            <list value-type="java.lang.Integer">
+                <value>123</value>
+                <value>456</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="GenericListSuperProperty" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericListInjection">
+        <property name="superInteger">
+            <list value-type="java.lang.Integer">
+                <value>123</value>
+                <value>456</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="GenericListAProperty" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericListInjection">
+        <property name="a">
+            <list value-type="java.lang.Double">
+                <value>123</value>
+                <value>456</value>
+            </list>
+        </property>
+    </bean>
+
     <bean id="GenericSetConstructor" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericSetInjection">
         <argument>
             <set>

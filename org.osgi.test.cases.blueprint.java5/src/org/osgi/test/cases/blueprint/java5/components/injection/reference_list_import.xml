@@ -12,7 +12,7 @@
            <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
        </property>
        <property name="genericList">
-           <ref-list interface="org.osgi.test.cases.blueprint.services.TestServiceOne" availability="optional"/>
+           <reference-list interface="org.osgi.test.cases.blueprint.services.TestServiceOne" member-type="service-reference" availability="optional"/>
        </property>
    </bean>
 </blueprint>

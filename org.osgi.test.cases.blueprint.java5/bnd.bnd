@@ -8,10 +8,11 @@ Bundle-RequiredExecutionEnvironment = J2SE-1.5
 
 Include-Resource					= \
 	www/generic_collection_injection.jar=generic_collection_injection.jar , \
+	www/generic_property_injection.jar=generic_property_injection.jar , \
 	www/managed_service_export.jar=managed_service_export.jar , \
 	www/reference_collection_import.jar=reference_collection_import.jar , \
 	www/reference_list_import.jar=reference_list_import.jar , \
-	www/reference_set_import.jar=reference_set_import.jar, \
+	www/reference_list_service_import.jar=reference_list_service_import.jar , \
 	www/pattern_injection.jar=pattern_injection.jar
 
 Test-Cases							= ${testcases}

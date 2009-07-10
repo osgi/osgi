@@ -6,13 +6,13 @@
     </description>
 
     <!-- This gets both a ServiceManager and a reference collection injected -->
-   <bean id="ReferenceChecker" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericCollectionChecker" init-method="init">
+   <bean id="ReferenceChecker" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericServiceCollectionChecker" init-method="init">
        <argument value="ReferenceChecker"/>
        <property name="serviceManager">
            <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
        </property>
-       <property name="genericSet">
-           <ref-set interface="org.osgi.test.cases.blueprint.services.TestServiceOne" availability="optional"/>
+       <property name="genericList">
+           <reference-list interface="org.osgi.test.cases.blueprint.services.TestServiceOne" availability="optional"/>
        </property>
    </bean>
 </blueprint>

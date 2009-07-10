@@ -21,12 +21,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.Properties;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 
-public class GenericListInjection extends BaseTestComponent {
+public class GenericListInjection<A extends Double> extends BaseTestComponent {
 
     /**
      * Simple injection with a single string argument.
@@ -59,5 +60,21 @@ public class GenericListInjection extends BaseTestComponent {
 
     public void setQueue(Queue arg1) {
         setPropertyValue("queue", arg1, Queue.class);
+    }
+
+    public void setPointList(LinkedList<Point> arg1) {
+        setPropertyValue("pointList", arg1, LinkedList.class);
+    }
+
+    public void setExtendsInteger(List<? extends Integer> arg1) {
+        setPropertyValue("extendsInteger", arg1, List.class);
+    }
+
+    public void setSuperInteger(List<? super Integer> arg1) {
+        setPropertyValue("superInteger", arg1, List.class);
+    }
+
+    public void setA(List<A> arg1) {
+        setPropertyValue("a", arg1, List.class);
     }
 }
