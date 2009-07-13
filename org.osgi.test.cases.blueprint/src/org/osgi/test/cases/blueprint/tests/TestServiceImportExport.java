@@ -1146,7 +1146,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
     /*
      * A test of multiple signature matching with a registration listener and singleton
-     * scope.  ial service registration and the final service unregistration
+     * scope.
      */
     public void testRegistrationListenerSingletonSignature() throws Exception {
         // We only do the export and then shut this back down again.  That will
