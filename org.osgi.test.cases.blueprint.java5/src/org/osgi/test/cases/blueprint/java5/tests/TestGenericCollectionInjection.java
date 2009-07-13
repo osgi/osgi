@@ -301,5 +301,52 @@ public class TestGenericCollectionInjection extends DefaultTestBundleControl {
         // this one is self checking and will raise an assertion failure if something is wrong
         controller.run();
     }
+
+
+    /**
+     * tests conversion errors resulting from generic list injection.
+     */
+    public void testGenericConversionError() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_generic_conversion.jar");
+        controller.run();
+    }
+
+
+    /**
+     * tests conversion errors resulting from inserting a generic raw class instance
+     * into a qualified method with no available type converter.
+     */
+    public void testGenericRawClassError() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_generic_rawclass.jar");
+        controller.run();
+    }
+
+
+    /**
+     * tests generic injection of a reference-list when the member type is incorrect.
+     * The target property  is List<service> but the member type is service reference.
+     */
+    public void testReferenceListServiceError() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_reference_list_service_import.jar");
+        controller.run();
+    }
+
+
+    /**
+     * tests generic injection of a reference-list when the member type is incorrect.
+     * The target property  is List<ServiceReference> but the member type is service instance.
+     */
+    public void testReferenceListError() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_refereice_list_import.jar");
+        controller.run();
+    }
 }
 

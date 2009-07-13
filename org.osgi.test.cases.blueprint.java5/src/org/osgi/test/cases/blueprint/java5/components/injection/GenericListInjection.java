@@ -54,6 +54,10 @@ public class GenericListInjection<A extends Double> extends BaseTestComponent {
         setPropertyValue("string", arg1, List.class);
     }
 
+    public void setInteger(List<Integer> arg1) {
+        setPropertyValue("integer", arg1, List.class);
+    }
+
     public void setClassList(List<Class> arg1) {
         setPropertyValue("classList", arg1, List.class);
     }
