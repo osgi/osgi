@@ -32,7 +32,7 @@ public class CTObjectFactoryBuilder implements javax.naming.spi.ObjectFactoryBui
 	public ObjectFactory createObjectFactory(Object obj, Hashtable var1)
 			throws NamingException {
 		if (obj instanceof CTReference) {
-		return new CTObjectFactory();
+			return new CTObjectFactory();
 		} else { 
 			return null;
 		}
