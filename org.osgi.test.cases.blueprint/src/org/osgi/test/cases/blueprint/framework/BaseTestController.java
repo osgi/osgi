@@ -413,49 +413,8 @@ public class BaseTestController implements EventHandler, BlueprintListener, Serv
      * @param version The bundle version information.
      */
     public void blueprintEvent(BlueprintEvent e) {
-        // transform the type into a string topic name
-        String topic = "UNKNOWN";
-        switch (e.getType()) {
-            case BlueprintEvent.CREATING:
-                topic = "CREATING";
-                break;
-            case BlueprintEvent.CREATED:
-                topic = "CREATED";
-                break;
-            case BlueprintEvent.DESTROYING:
-                topic = "DESTROYING";
-                break;
-            case BlueprintEvent.DESTROYED:
-                topic = "DESTROYED";
-                break;
-            case BlueprintEvent.FAILURE:
-                topic = "FAILURE";
-                break;
-            case BlueprintEvent.GRACE_PERIOD:
-                topic = "GRACE_PERIOD";
-                break;
-            case BlueprintEvent.WAITING:
-                topic = "WAITING";
-                break;
-        }
-
-        // strip off the bundle information
-        Bundle bundle = e.getBundle();
-        // just turn this into a special event typed.
-        Dictionary props = new Hashtable();
-        props.put(EventConstants.BUNDLE_SYMBOLICNAME, bundle.getSymbolicName());
-        props.put("bundle.version", Version.parseVersion((String)bundle.getHeaders().get(Constants.BUNDLE_VERSION)));
-        props.put(EventConstants.BUNDLE, bundle);
-        props.put(EventConstants.BUNDLE_ID, new Long(bundle.getBundleId()));
-        // also attach the event information
-        props.put(EventConstants.EVENT, e);
-		if (e.getCause() != null) {
-			props.put(org.osgi.service.blueprint.container.EventConstants.CAUSE, e.getCause());
-        }
-        if (e.getDependencies() != null) {
-            props.put(org.osgi.service.blueprint.container.EventConstants.DEPENDENCIES, e.getDependencies());
-        }
-        handleEvent(new Event("org/osgi/test/cases/blueprint/BlueprintContainer/" + topic, props));
+        // transform into an emulated Event and send to the handler
+        handleEvent(BlueprintContainerEvent.createEvent(e));
     }
 
 

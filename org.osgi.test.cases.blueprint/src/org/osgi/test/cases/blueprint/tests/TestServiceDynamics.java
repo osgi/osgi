@@ -498,6 +498,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         Map props = new HashMap();
         props.put("serviceType", "Good");
         props.put("autoExport", "Disabled");
+        props.put("osgi.service.blueprint.compname", "ServiceOneReference");
 
         // we need to add one of these at the head of the queue to catch the initial registration.
         // We need to consume this event so that additional triggered events don't interfere.

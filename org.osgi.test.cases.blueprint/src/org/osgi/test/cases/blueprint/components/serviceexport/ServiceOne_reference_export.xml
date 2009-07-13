@@ -6,11 +6,11 @@
     </description>
 
     <!-- the node this service export maps into.  We use a filter here to ensure we don't get rebound to the one we export! -->
-   <reference id="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne"
+   <reference id="ServiceOneReference" interface="org.osgi.test.cases.blueprint.services.TestServiceOne"
         filter="(test.service.name=ServiceOneA)"/>
 
    <!-- Add some service properties that can be filtered on.  -->
-   <service id="GoodServiceService" ref="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
+   <service id="GoodServiceService" ref="ServiceOneReference" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
        <!-- some service properties for filter tests. -->
        <service-properties>
            <entry key="serviceType" value="Good"/>

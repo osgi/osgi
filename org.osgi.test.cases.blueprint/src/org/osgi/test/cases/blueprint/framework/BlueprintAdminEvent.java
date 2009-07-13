@@ -175,6 +175,11 @@ public class BlueprintAdminEvent extends AdminTestEvent {
             return new AssertionFailure("Invalid or missing EVENT property on blueprint admin event: " + other.toString(), cause);
         }
 
+        // replay events should never be broadcast using EventAdmin, so the replay flag must be false
+        if (((BlueprintEvent)event).isReplay()) {
+            return new AssertionFailure("Replay event broadcast using EventAdmin services: " + other.toString(), cause);
+        }
+
         Object timestamp = other.getProperty(EventConstants.TIMESTAMP);
         if (timestamp == null || !(timestamp instanceof Long)) {
             return new AssertionFailure("Invalid or missing timestamp property on blueprint admin event: " + other.toString(), cause);

@@ -47,6 +47,7 @@ public class AssertionService
     public static final String SERVICE_UNBIND = "SERVICE_UNBIND";
     public static final String SERVICE_REGISTERED = "SERVICE_REGISTERED";
     public static final String SERVICE_UNREGISTERED = "SERVICE_UNREGISTERED";
+    public static final String LISTENER_REPLAY = "LISTENER_REPLAY";
 
     public static final String ASSERTION_MESSAGE = "ASSERTION_MESSAGE";
     public static final String BEAN = "BEAN";
@@ -54,6 +55,7 @@ public class AssertionService
     public static final String PROPERTY_NAME = "PROPERTY_NAME";
     public static final String TRACEBACK = "TRACEBACK";
     public static final String EVENT_TYPE = "EVENT_TYPE";
+    public static final String REPLAY_EVENT = "REPLAY_EVENT";
 
     // our current hosting context
     static BundleContext testContext;

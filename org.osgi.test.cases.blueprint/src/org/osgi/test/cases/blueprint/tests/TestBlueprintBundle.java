@@ -595,4 +595,52 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         // nothing should happen, which is all handled by the controller
         controller.run();
     }
+
+
+    /**
+     * Test for the replay of blueprint events for managed bundles when
+     * a new BlueprintListener is registered.
+     *
+     * @exception Exception
+     */
+    public void testBlueprintListenerReplay() throws Exception {
+
+        // we're going to register 3 different bundles, which will get started first.
+        ThreePhaseTestController controller = new ThreePhaseTestController(getContext(),
+            getWebServer()+"www/comp1_no_header.jar",
+            getWebServer()+"www/config_wildcard.jar");
+        controller.addBundle(getWebServer()+"www/comp1a_no_header.jar");
+
+        // we attach a kicker to the start of the middlephase that will register
+        // an additional listener
+
+        ReplayListener listener = new ReplayListener("ReplayListener", getContext());
+
+        // this one is to generate some additional traffic to the listener.  We
+        // want to ensure that all replay events are broadcast first.
+        ManagedBundle bundle = new ManagedBundle(getContext(),
+            getWebServer()+"www/comp1_explicit_config.jar");
+
+        EventSet middleEvents = controller.getMiddleEvents(0);
+
+        // attach this to the initial event set
+        middleEvents.addInitializer(new ReplayListenerRegister(listener));
+        // this starts up an additional bundle, which will have its own events
+        middleEvents.addInitializer(bundle);
+        // look for an assertion for each bundle.  We need to attach each one to the
+        // correct event set.
+        middleEvents.addEvent(new ReplayAssertion("ReplayListener", new BlueprintContainerEvent("CREATED")));
+        middleEvents = controller.getMiddleEvents(1);
+        middleEvents.addEvent(new ReplayAssertion("ReplayListener", new BlueprintContainerEvent("CREATED")));
+        middleEvents = controller.getMiddleEvents(2);
+        middleEvents.addEvent(new ReplayAssertion("ReplayListener", new BlueprintContainerEvent("CREATED")));
+
+        // this will shut down the listener
+        EventSet stopEvents = controller.getStopEvents(0);
+        stopEvents.addInitializer(new ReplayListenerUnregister(listener));
+        // this will clean up the bundle too
+        stopEvents.addTerminator(bundle);
+
+        controller.run();
+    }
 }
