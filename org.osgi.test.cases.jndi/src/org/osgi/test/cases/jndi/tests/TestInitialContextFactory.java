@@ -91,8 +91,10 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		// Install the bundles needed for this test
 		Bundle testBundle = installBundle("initialContextFactoryBuilder1.jar");
 		// Try to get an initialContext object using the builder
+		Hashtable env = new Hashtable();
+		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		int invokeCountBefore = CTContext.getInvokeCount();
-		InitialContext ctx = new InitialContext();
+		InitialContext ctx = new InitialContext(env);
 		try {
 			assertNotNull("The context should not be null", ctx);
 			// Verify that we actually received the InitialContext
@@ -141,7 +143,9 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		uninstallBundle(testBundle);
 		// Try to grab the initialContextFactory. We should get a
 		// NullPointerException
-		InitialContext ctx = new InitialContext();
+		Hashtable env = new Hashtable();
+		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
+		InitialContext ctx = new InitialContext(env);
 		try {
 			assertNotNull("The context should not be null", ctx);
 			ctx.bind("testObject", new Object());

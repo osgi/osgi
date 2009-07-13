@@ -19,6 +19,7 @@ package org.osgi.test.cases.jndi.provider;
 
 import java.util.Hashtable;
 
+import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.naming.spi.InitialContextFactory;
 
@@ -27,9 +28,12 @@ import javax.naming.spi.InitialContextFactory;
  */
 public class CTInitialContextFactoryBuilder implements javax.naming.spi.InitialContextFactoryBuilder {
 
-	public InitialContextFactory createInitialContextFactory(Hashtable var0)
-			throws NamingException {
-		return new CTInitialContextFactory();
+	public InitialContextFactory createInitialContextFactory(Hashtable env) throws NamingException {
+		if (((String)env.get(Context.INITIAL_CONTEXT_FACTORY)).equals(CTInitialContextFactory.class.getName())) {
+			return new CTInitialContextFactory();
+		} else {
+			return null;
+		}
 	}
 
 }
