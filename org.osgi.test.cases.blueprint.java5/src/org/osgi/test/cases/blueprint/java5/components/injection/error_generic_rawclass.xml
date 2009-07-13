@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <!-- Handle mapping of a parameterized type to a matching argument, with argument type validation.
+         This will be an error because there's no type converter available to validate the generic bounds -->
+    <bean id="GenericConversion" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericPropertyInjection">
+        <property name="booleanHolder">
+            <bean id="GenericConversion" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericHolder">
+                <argument type="java.util.Boolean" value="true"/>
+            </bean>
+        </property>
+    </bean>
+</blueprint>
+

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+    <description>
+        Tests conversion errors resulting from generic collection signatures
+    </description>
+
+    <bean id="GenericListProperty" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericListInjection">
+        <property name="integer">
+            <list>
+                <value>123</value>
+                <value>def</value>
+            </list>
+        </property>
+    </bean>
+</blueprint>
+

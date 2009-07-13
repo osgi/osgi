@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <!-- Handle builtin conversion of enum values. This is an error case because the enumeration value is not found -->
+    <bean id="EnumConversion" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericPropertyInjection">
+        <property name="suit" value="CLUBSXXXX"/>
+    </bean>
+</blueprint>
+

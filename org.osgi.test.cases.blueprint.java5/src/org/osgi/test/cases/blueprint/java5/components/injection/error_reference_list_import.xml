@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+        This tests type mismatches when generics are used for reference lists.  The injected
+        property expects ServiceReference instances, but the member-type is the default.
+    </description>
+
+    <!-- This gets both a ServiceManager and a reference collection injected -->
+   <bean id="ReferenceChecker" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericCollectionChecker" init-method="init">
+       <argument value="ReferenceChecker"/>
+       <property name="serviceManager">
+           <reference interface="org.osgi.test.cases.blueprint.services.ServiceManager"/>
+       </property>
+       <property name="genericList">
+           <reference-list interface="org.osgi.test.cases.blueprint.services.TestServiceOne" availability="optional"/>
+       </property>
+   </bean>
+</blueprint>
+
