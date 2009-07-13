@@ -12,6 +12,7 @@ Include-Resource					= \
 	www/error_generic_rawclass.jar=error_generic_rawclass.jar , \
 	www/error_reference_list_import.jar=error_reference_list_import.jar , \
 	www/error_reference_list_service_import.jar=error_reference_list_service_import.jar , \
+	www/error_enum_conversion.jar=error_enum_conversion.jar , \
 	www/generic_property_injection.jar=generic_property_injection.jar , \
 	www/managed_service_export.jar=managed_service_export.jar , \
 	www/reference_collection_import.jar=reference_collection_import.jar , \

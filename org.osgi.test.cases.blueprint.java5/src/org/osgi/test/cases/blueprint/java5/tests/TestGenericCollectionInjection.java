@@ -348,5 +348,16 @@ public class TestGenericCollectionInjection extends DefaultTestBundleControl {
             getWebServer()+"www/error_refereice_list_import.jar");
         controller.run();
     }
+
+
+    /**
+     * tests conversion errors for enum values.
+     */
+    public void testEnumConversionError() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_enum_conversion.jar");
+        controller.run();
+    }
 }
 
