@@ -1185,10 +1185,10 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // now some expected termination stuff
         EventSet exportStopEvents = controller.getStopEvents();
         // we should see events for both of these signatures because of the assignability assertions
-        exportStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNREGISTERED, propsOne));
-        exportStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNREGISTERED, propsTwo));
+        exportStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNREGISTERED, propsOne));
+        exportStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNREGISTERED, propsTwo));
         // however, this one should be an error
-        exportStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNREGISTERED, propsFactory));
+        exportStopEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNREGISTERED, propsFactory));
 
         controller.run();
     }
