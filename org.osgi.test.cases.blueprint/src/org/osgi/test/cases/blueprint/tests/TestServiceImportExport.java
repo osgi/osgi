@@ -336,7 +336,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // the is the component creation
         exportStopEvents.addAssertion("ServiceOne", AssertionService.BEAN_DESTROY_METHOD);
         // we should see a service event here indicating this is being deregistered
-        exportStopEvents.addServiceEvent("UNREGISTERING", TestServiceOne.class);
+        exportStopEvents.addServiceEvent("UNREGISTERING", TestServiceOne.class, props2);
         exportStopEvents.addServiceEvent("UNREGISTERING", new Class[] { TestServiceOne.class, TestServiceTwo.class,
                     TestServiceTwoSubclass.class, TestServiceAllSubclass.class, TestGoodService.class,
                     TestGoodServiceSubclass.class, TestBadService.class, BaseTestComponent.class, ComponentTestInfo.class,
