@@ -259,7 +259,8 @@ public class DivTests extends DefaultTestBundleControl {
 			fail("Required Execution Environment is not available");
 		}
 		catch (BundleException e) {
-			// expected
+            // expecting exception, but bundle should not have resolved
+            assertEquals("Bundle should not be resolved!", Bundle.INSTALLED, tb.getState());
 		}
 		finally {
 			tb.uninstall();
@@ -299,9 +300,11 @@ public class DivTests extends DefaultTestBundleControl {
 		Bundle tb = getContext().installBundle(getWebServer() + "div.tb15.jar");
 		try {
 			tb.start();
+			fail("Bundle should not start!");
 		}
 		catch (BundleException be) {
-			// expected
+            // expecting exception, but bundle should not have resolved
+            assertEquals("Bundle should not be resolved!", Bundle.INSTALLED, tb.getState());
 		}
 		finally {
 			tb.uninstall();
@@ -365,7 +368,8 @@ public class DivTests extends DefaultTestBundleControl {
 			fail("Error: Bundle should NOT be loaded: language should not match");
 		}
 		catch (BundleException be) {
-			// expected
+            // expecting exception, but bundle should not have resolved
+            assertEquals("Bundle should not be resolved!", Bundle.INSTALLED, tb.getState());
 		}
 		finally {
 			tb.uninstall();
@@ -409,7 +413,8 @@ public class DivTests extends DefaultTestBundleControl {
 			fail("Error: Bundle should NOT be loaded: os version out of range");
 		}
 		catch (BundleException be) {
-			// expected
+            // expecting exception, but bundle should not have resolved
+            assertEquals("Bundle should not be resolved!", Bundle.INSTALLED, tb.getState());
 		}
 		finally {
 			tb.uninstall();
