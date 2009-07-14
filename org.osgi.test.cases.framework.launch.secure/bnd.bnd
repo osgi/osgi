@@ -24,5 +24,6 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 	osgi.compatibility.bootdelegation=false, \
 	osgi.resolverMode=strict, \
 	osgi.support.multipleHosts=true, \
-	org.osgi.test.cases.framework.launch.secure.trust.repository=${build}/keystore
-	
+	org.osgi.test.cases.framework.launch.secure.trust.repository=${build}/keystore, \
+	noframework=true, \
+	org.osgi.test.cases.framework.launch.storageroot=generated/testStorageRoot 

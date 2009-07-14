@@ -25,4 +25,6 @@ Test-Cases							= ${testcases}
 -runproperties = report=true, \
 	osgi.compatibility.bootdelegation=false, \
 	osgi.resolverMode=strict, \
-	osgi.support.multipleHosts=true
+	osgi.support.multipleHosts=true, \
+	noframework=true, \
+	org.osgi.test.cases.framework.launch.storageroot=generated/testStorageRoot 

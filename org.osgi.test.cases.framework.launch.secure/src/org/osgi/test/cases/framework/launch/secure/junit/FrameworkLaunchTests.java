@@ -115,6 +115,8 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 
 	private BundleContext getBundleContextWithoutFail() {
 		try {
+			if ("true".equals(System.getProperty("noframework")))
+				return null;
 			return getContext();
 		} catch (Throwable t) {
 			return null; // don't fail
