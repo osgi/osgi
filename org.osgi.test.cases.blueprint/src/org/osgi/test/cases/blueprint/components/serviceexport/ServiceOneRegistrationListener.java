@@ -58,5 +58,13 @@ public class ServiceOneRegistrationListener extends RegistrationListener impleme
     public void badUnregistered(TestServiceOne service) {
         AssertionService.fail(this, "Invalid unregistered method call");
     }
+
+    void nonPublicRegistered(TestServiceOne service, Map serviceProperties) {
+        AssertionService.fail(this, "Invalid registered method call");
+    }
+
+    void nonPublicUnregistered(TestServiceOne service, Map serviceProperties) {
+        AssertionService.fail(this, "Invalid unregistered method call");
+    }
 }
 

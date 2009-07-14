@@ -595,6 +595,26 @@ public class TestConfigErrors extends DefaultTestBundleControl {
     }
 
     /**
+     * non-public registered method signature
+     */
+    public void testServiceListenerNonPublicRegistered() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_service_listener_non_public_register.jar");
+        controller.run();
+    }
+
+    /**
+     * non-public unregistered method signature
+     */
+    public void testServiceListenerNonPublicUnregistered() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_service_listener_non_public_unregistered.jar");
+        controller.run();
+    }
+
+    /**
      * No listener component specified
      */
     public void testServiceListenerNoComponent() throws Exception {
@@ -703,6 +723,30 @@ public class TestConfigErrors extends DefaultTestBundleControl {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
             getWebServer()+"www/error_reference_listener_bad_unbind.jar");
+        // this allows the references to be resolvable to trigger the listener errors
+        controller.addSetupBundle(getWebServer()+"www/ServiceOne_export.jar");
+        controller.run();
+    }
+
+    /**
+     * non-public bind method signature
+     */
+    public void testReferenceListenerNonPublicBind() throws Exception {
+        // this should just be the standard error set,
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_reference_listener_non_public_bind.jar");
+        // this allows the references to be resolvable to trigger the listener errors
+        controller.addSetupBundle(getWebServer()+"www/ServiceOne_export.jar");
+        controller.run();
+    }
+
+    /**
+     * non-public unbind method signature
+     */
+    public void testReferenceListenerNonPublicUnbind() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_reference_listener_non_public_unbind.jar");
         // this allows the references to be resolvable to trigger the listener errors
         controller.addSetupBundle(getWebServer()+"www/ServiceOne_export.jar");
         controller.run();

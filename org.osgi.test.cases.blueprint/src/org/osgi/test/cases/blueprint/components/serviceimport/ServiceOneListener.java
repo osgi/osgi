@@ -104,5 +104,14 @@ public class ServiceOneListener extends ServiceListener implements ServiceOneLis
     public void badUnbind() {
         AssertionService.fail(this, "Bad unbind call");
     }
+
+    // non public listener methods
+    void bindNonPublic(TestServiceOne service) {
+        AssertionService.fail(this, "Bad bind call");
+    }
+
+    void unbindNonPublic(TestServiceOne service) {
+        AssertionService.fail(this, "Bad unbind call");
+    }
 }
 

@@ -16,7 +16,7 @@
    <!-- This service will not be registered before activation because it uses a listener -->
    <service id="ServiceTwoService" ref="ServiceTwo" interface="org.osgi.test.cases.blueprint.services.TestServiceTwo">
        <registration-listener ref="ServiceOneListener"
-           registration-method="badRegistered"
+           registration-method="nonPublicRegistered"
            unregistration-method="unregistered"/>
    </service>
 </blueprint>
