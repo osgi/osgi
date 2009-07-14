@@ -665,16 +665,6 @@ public class TestConfigErrors extends DefaultTestBundleControl {
     }
 
     /**
-     * Missing interface spec on <ref-list>
-     */
-    public void testRefListNoInterface() throws Exception {
-        // this should just be the standard error set
-        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
-            getWebServer()+"www/error_ref_list_no_interface.jar");
-        controller.run();
-    }
-
-    /**
      * Bad interface class name specified on <ref-list>
      */
     public void testRefListBadInterface() throws Exception {

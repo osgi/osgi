@@ -301,7 +301,8 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // a very complex service event
         exportStartEvents.addServiceEvent("REGISTERED", new Class[] { TestServiceOne.class, TestServiceTwo.class,
                     TestServiceTwoSubclass.class, TestServiceAllSubclass.class, TestGoodService.class,
-                    TestGoodServiceSubclass.class, TestBadService.class, BaseTestComponent.class, ComponentTestInfo.class}, serviceProps);
+                    TestGoodServiceSubclass.class, TestBadService.class, BaseTestComponent.class, ComponentTestInfo.class,
+                    Comparable.class}, serviceProps);
 
         // now the importing side.  We've got a couple of service injections to validate, plus the injection
         // results
@@ -338,7 +339,8 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStopEvents.addServiceEvent("UNREGISTERING", TestServiceOne.class);
         exportStopEvents.addServiceEvent("UNREGISTERING", new Class[] { TestServiceOne.class, TestServiceTwo.class,
                     TestServiceTwoSubclass.class, TestServiceAllSubclass.class, TestGoodService.class,
-                    TestGoodServiceSubclass.class, TestBadService.class}, serviceProps);
+                    TestGoodServiceSubclass.class, TestBadService.class, BaseTestComponent.class, ComponentTestInfo.class,
+                    Comparable.class}, serviceProps);
         // and there should not be a registration active anymore
         exportStopEvents.addValidator(new ServiceUnregistrationValidator(TestServiceOne.class, "(osgi.service.blueprint.compname=ServiceOne)"));
         // and make sure all of the bad ones are unregistered also

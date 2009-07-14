@@ -78,7 +78,7 @@ public class ServiceOneListener extends ServiceListener implements ServiceOneLis
         } catch (Throwable e) {
             AssertionService.fail(this, "Unexpected exception in service listener", e);
         }
-        bind(TestServiceOne.class, null);
+        bind(TestServiceOne.class);
     }
 
     public void unbindNoMap(TestServiceOne service) {
@@ -94,7 +94,7 @@ public class ServiceOneListener extends ServiceListener implements ServiceOneLis
         } catch (Throwable e) {
             AssertionService.fail(this, "Unexpected exception in service listener", e);
         }
-        unbind(TestServiceOne.class, null);
+        unbind(TestServiceOne.class);
     }
 
     public void badBind() {

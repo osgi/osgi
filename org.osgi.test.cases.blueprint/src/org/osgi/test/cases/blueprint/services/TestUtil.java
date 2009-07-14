@@ -222,7 +222,12 @@ public class TestUtil {
      * @return The string containing the property values.
      */
     static public String formatProperties(Map props) {
+        if (props == null) {
+            return "[]";
+        }
+
         StringBuffer buffer = new StringBuffer();
+        buffer.append("[");
         Iterator i = props.keySet().iterator();
         while (i.hasNext()) {
             String name = (String)i.next();
@@ -233,6 +238,7 @@ public class TestUtil {
         }
         // remove the trailing comma
         buffer.deleteCharAt(buffer.length() - 2);
+        buffer.append("]");
         return buffer.toString();
     }
 

@@ -16,7 +16,7 @@
 
    <bean id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceexport.ServiceOneTwoRegistrationListener"
        init-method="init" destroy-method="destroy">
-       <argument value="ServiceOneRegistrationListener"/>
+       <argument value="ServiceOneListener"/>
    </bean>
 
    <!-- simple export using a reference and just one interface. -->

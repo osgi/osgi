@@ -29,7 +29,7 @@
         <argument value="ServiceOne"/>
     </bean>
 
-    <bean id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceexport.RegistrationListener"
+    <bean id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceexport.ServiceOneRegistrationListener"
         init-method="init" destroy-method="destroy">
         <argument value="ServiceOneListener"/>
     </bean>

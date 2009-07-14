@@ -201,10 +201,10 @@ public class ComponentAssertion extends AdminTestEvent {
     public void failExpected() {
         // we could be expecting a property set event.  Give a different message for that.
         if (propertyName != null) {
-            throw new AssertionFailedError("Property " + propertyName + " for " + componentId + " was not set: " + message);
+            throw new AssertionFailedError("Property " + propertyName + " for " + componentId + " was not set: " + TestUtil.formatProperties(props));
         }
         else {
-            throw new AssertionFailedError("Expected event " + topic + " for " + componentId + " was not received: " + message);
+            throw new AssertionFailedError("Expected event " + topic + " for " + componentId + " was not received: " + TestUtil.formatProperties(props));
         }
     }
 
