@@ -208,6 +208,13 @@ public class TestPhase {
      * @param timeout The timeout value (in milliseconds).
      */
     public void runTest() throws Exception {
+        // It is possible that there are no events configured for a given
+        // test phase.  If we attempt to wait then, we'll just get a timeout
+        // error.
+        if (events.isEmpty()) {
+            return;
+        }
+
         // add all event sets to the completion list
         pending.addAll(events);
 

@@ -643,4 +643,30 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
 
         controller.run();
     }
+
+
+    /**
+     * Test for config files located in a bundle fragment using the specified
+     * default.  Config files will exist in the default dir in both the host
+     * bundle and fragment.  In addition, the fragment bundle contains a
+     * Blueprint-Bundle header that must be ignored.
+     *
+     * @exception Exception
+     */
+    public void testFragmentDefault() throws Exception {
+
+        // we're going to register 3 different bundles, which will get started first.
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/fragment_host_default.jar");
+        // the fragment bundles require special handling
+        controller.addFragmentBundle(getWebServer()+"www/fragment_default.jar");
+
+        // we should see two beans created, but it's an error if we see the 3rd.
+        MetadataEventSet startEvents = controller.getStartEvents();
+        startEvents.addAssertion("comp1", AssertionService.BEAN_CREATED);
+        startEvents.addAssertion("comp2", AssertionService.BEAN_CREATED);
+        startEvents.addFailureEvent(new ComponentAssertion("comp3", AssertionService.BEAN_CREATED));
+
+        controller.run();
+    }
 }

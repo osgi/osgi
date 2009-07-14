@@ -160,6 +160,39 @@ public class BaseTestController implements EventHandler, BlueprintListener, Serv
 
 
     /**
+     * Add a fragment bundle that must be installed
+     * before testing can begin.  This
+     * bundle will be installed and uninstalled, but
+     * will not be started.
+     *
+     * @param name   The name of the bundle to add.
+     */
+    public void addFragmentBundle(String bundleName) throws Exception {
+        // make sure we have these additional phases to work with
+        createSetupPhases();
+        // first install this
+        Bundle testBundle = installBundle(bundleName);
+
+        EventSet setupEvents = new EventSet(testContext, testBundle);
+
+        // add an initializer that will generate an event for us
+        setupEvents.addInitializer(new PhasePing());
+        // and look for the ping to end the phase
+        setupEvents.addEvent(new ComponentAssertion(null, AssertionService.PING));
+        setupPhase.addEventSet(setupEvents);
+
+        EventSet cleanupEvents = new EventSet(testContext, testBundle);
+        // we start this test phase out by stopping the bundle.  Everything else flows
+        // from that.
+        cleanupEvents.addTerminator(new TestBundleUninstaller(testBundle));
+        // we always expect to see an UNINSTALLED bundle event at the end.  We need at least one
+        // event to wake us up to kill the timeout
+        cleanupEvents.addBundleEvent("UNINSTALLED");
+        cleanupPhase.addEventSet(cleanupEvents);
+    }
+
+
+    /**
      * Add a setup bundle that must be installed and
      * initialialized before testing can begin.  This bundle will not be
      * a managed bundle, so we don't look for a REGISTERED event.

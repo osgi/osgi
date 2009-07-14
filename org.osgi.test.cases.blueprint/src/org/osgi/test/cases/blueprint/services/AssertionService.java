@@ -48,6 +48,7 @@ public class AssertionService
     public static final String SERVICE_REGISTERED = "SERVICE_REGISTERED";
     public static final String SERVICE_UNREGISTERED = "SERVICE_UNREGISTERED";
     public static final String LISTENER_REPLAY = "LISTENER_REPLAY";
+    public static final String PING = "PING";
 
     public static final String ASSERTION_MESSAGE = "ASSERTION_MESSAGE";
     public static final String BEAN = "BEAN";
