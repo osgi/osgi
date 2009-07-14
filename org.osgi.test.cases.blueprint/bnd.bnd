@@ -309,6 +309,7 @@ Include-Resource					= \
  	www/lazy_reference.jar=lazy_reference.jar, \
  	www/lazy_service_get.jar=lazy_service_get.jar, \
  	www/lazy_ref_list.jar=lazy_ref_list.jar, \
+ 	www/reference_no_interface.jar=reference_no_interface.jar, \
  	www/injected_component.jar=injected_component.jar, \
  	www/lazy_injected_component.jar=lazy_injected_component.jar, \
  	www/lazy_activation.jar=lazy_activation.jar, \

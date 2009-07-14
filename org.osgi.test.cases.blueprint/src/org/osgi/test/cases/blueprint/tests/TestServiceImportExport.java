@@ -2243,7 +2243,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         importStartEvents.addEvent(new ComponentAssertion("ServiceListListener", AssertionService.SERVICE_BIND, propsObject));
 
         Hashtable propsObjectNoMap = new Hashtable();
-        propsObjectNoMap.put("service.interface.name", TestServiceOne.class.getName());
+        propsObjectNoMap.put("service.interface.name", Object.class.getName());
         propsObjectNoMap.put("service.listener.type", "interface_nomap");
 
         importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsObjectNoMap));
@@ -2266,6 +2266,64 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
         importStopEvents.addEvent(new ComponentAssertion("ServiceListListener", AssertionService.SERVICE_UNBIND, propsServiceOne));
         importStopEvents.addEvent(new ComponentAssertion("ServiceListListener", AssertionService.SERVICE_UNBIND, propsServiceOneNoMap));
+        importStopEvents.addEvent(new ComponentAssertion("ServiceListListener", AssertionService.SERVICE_UNBIND, propsObject));
+        importStopEvents.addEvent(new ComponentAssertion("ServiceListListener", AssertionService.SERVICE_UNBIND, propsObjectNoMap));
+        importStopEvents.addEvent(new ComponentAssertion("ServiceListListener", AssertionService.SERVICE_UNBIND, propsServiceReference));
+
+        controller.run();
+    }
+
+
+    /*
+     * Test that service <reference> elements will request a service object without
+     * specifying an interface.  The proxy should just be an object with no interfaces
+     * from the service object implemented.
+     */
+    public void testInterfacelessReference() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/reference_no_interface.jar",
+                getWebServer()+"www/ServiceOne_factory_export.jar");
+        // we add different validation stuff to each jar.  We'll start with the
+        // export jar
+        MetadataEventSet exportStartEvents = controller.getStartEvents(1);
+        // nothing we do here should cause a GET request for the service, so this is a failure if we see one.
+        TestEvent factoryGet = new ComponentAssertion("ServiceOneFactory", AssertionService.SERVICE_FACTORY_GET);
+        exportStartEvents.addFailureEvent(factoryGet);
+
+        // now the importing side.  We mostly look for the listener variations here.  This listener has implemented
+        // all of the different signatures, but we should only see ones for the Object types and the ServiceReference
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+
+        Hashtable propsObject = new Hashtable();
+        propsObject.put("service.interface.name", Object.class.getName());
+        propsObject.put("service.listener.type", "interface");
+
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsObject));
+        importStartEvents.addEvent(new ComponentAssertion("ServiceListListener", AssertionService.SERVICE_BIND, propsObject));
+
+        Hashtable propsObjectNoMap = new Hashtable();
+        propsObjectNoMap.put("service.interface.name", Object.class.getName());
+        propsObjectNoMap.put("service.listener.type", "interface_nomap");
+
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsObjectNoMap));
+        importStartEvents.addEvent(new ComponentAssertion("ServiceListListener", AssertionService.SERVICE_BIND, propsObjectNoMap));
+
+        Hashtable propsServiceReference = new Hashtable();
+        propsServiceReference.put("service.listener.type", "reference");
+
+        importStartEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsServiceReference));
+        importStartEvents.addEvent(new ComponentAssertion("ServiceListListener", AssertionService.SERVICE_BIND, propsServiceReference));
+
+        // now some expected termination stuff
+        EventSet importStopEvents = controller.getStopEvents(0);
+
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsObject));
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsObjectNoMap));
+        importStopEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, propsServiceReference));
+
         importStopEvents.addEvent(new ComponentAssertion("ServiceListListener", AssertionService.SERVICE_UNBIND, propsObject));
         importStopEvents.addEvent(new ComponentAssertion("ServiceListListener", AssertionService.SERVICE_UNBIND, propsObjectNoMap));
         importStopEvents.addEvent(new ComponentAssertion("ServiceListListener", AssertionService.SERVICE_UNBIND, propsServiceReference));

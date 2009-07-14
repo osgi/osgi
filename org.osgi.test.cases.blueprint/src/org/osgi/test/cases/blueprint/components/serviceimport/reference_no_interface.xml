@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+        This tests performing service import without specifying an interface.  This tests both
+        singleton and list forms.
+    </description>
+
+
+    <!-- this listener listens for all of the potential signatures, but does so without calling the service -->
+    <bean id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceOneSilentListener">
+        <argument value="ServiceOneListener"/>
+    </bean>
+
+    <bean id="ServiceListListener" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceOneSilentListener">
+        <argument value="ServiceListListener"/>
+    </bean>
+
+    <!-- This has the additional side effect of validating that the osgi.service.blueprint.compname property is
+         set when the published service is a ServiceFactory -->
+    <reference id="ServiceOne" component-name="ServiceOneFactory">
+        <description>Testing descriptions also</description>
+        <reference-listener bind-method="bind" unbind-method="unbind" ref="ServiceOneListener"/>
+    </reference>
+
+    <reference-list id="ServiceList"  component-name="ServiceOneFactory">
+        <description>Testing descriptions also</description>
+        <reference-listener bind-method="bind" unbind-method="unbind" ref="ServiceListListener"/>
+    </reference-list>
+
+   <!-- just a property import...we track side effects (or frequently, lack of side effects) -->
+   <bean id="ServiceOneProperty" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceObjectSilentChecker">
+       <argument value="ServiceOneProperty"/>
+       <property name="object" ref="ServiceOne"/>
+       <property name="list" ref="ServiceList"/>
+   </bean>
+</blueprint>
+
