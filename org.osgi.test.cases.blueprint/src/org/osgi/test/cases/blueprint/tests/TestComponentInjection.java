@@ -144,18 +144,27 @@ public class TestComponentInjection extends DefaultTestBundleControl {
             }),"componentMap")
         }));
 
-        // now some dependson tests.  The dependency ordering tests are done in the module
-        startEvents.addAssertion("dependsleaf1", AssertionService.BEAN_CREATED);
-        startEvents.addAssertion("dependsOnOne", AssertionService.BEAN_CREATED);
+        // now some dependson tests.  The dependency ordering tests are done in the module,
+        // but we can also validate using the event ordering
+        TestEvent dependsleaf1 = new ComponentAssertion("dependsleaf1", AssertionService.BEAN_CREATED);
+        startEvents.addEvent(dependsleaf1);
+        TestEvent dependsOnOne = new ComponentAssertion("dependsOnOne", AssertionService.BEAN_CREATED);
+        dependsOnOne.addDependency(dependsleaf1);
+        startEvents.addEvent(dependsOnOne);
 
         startEvents.addValidator(new ComponentMetadataValidator(
             new BeanComponent("dependsOnOne", ComponentInjection.class, null, "init", "destroy",
             new TestArgument[] { new StringArgument("dependsOnOne") } , null,
             new String[] { "dependsleaf1" }, BeanMetadata.ACTIVATION_EAGER, null)));
 
-        startEvents.addAssertion("dependsleaf2", AssertionService.BEAN_CREATED);
-        startEvents.addAssertion("dependsleaf3", AssertionService.BEAN_CREATED);
-        startEvents.addAssertion("dependsOnTwo", AssertionService.BEAN_CREATED);
+        TestEvent dependsleaf2 = new ComponentAssertion("dependsleaf2", AssertionService.BEAN_CREATED);
+        startEvents.addEvent(dependsleaf2);
+        TestEvent dependsleaf3 = new ComponentAssertion("dependsleaf3", AssertionService.BEAN_CREATED);
+        startEvents.addEvent(dependsleaf3);
+        TestEvent dependsOnTwo = new ComponentAssertion("dependsOnTwo", AssertionService.BEAN_CREATED);
+        dependsOnOne.addDependency(dependsleaf2);
+        dependsOnOne.addDependency(dependsleaf3);
+        startEvents.addEvent(dependsOnTwo);
 
         startEvents.addValidator(new ComponentMetadataValidator(
             new BeanComponent("dependsOnTwo", ComponentInjection.class, null, "init", "destroy",
