@@ -18,6 +18,7 @@ package org.osgi.test.cases.blueprint.framework;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.blueprint.container.BlueprintContainer;
 
 import junit.framework.Assert;
 
@@ -57,7 +58,7 @@ public class NoBlueprintContainerValidator extends Assert implements TestValidat
      * @exception Exception
      */
     public void validate(BundleContext testContext) throws Exception {
-        ServiceReference[] refs = testContext.getServiceReferences("org.osgi.service.blueprint.container.BlueprintContainer", "(osgi.blueprint.container.verson=" + bundle.getSymbolicName() + ")");
+        ServiceReference[] refs = testContext.getServiceReferences(BlueprintContainer.class.getName(), "(osgi.blueprint.container.verson=" + bundle.getSymbolicName() + ")");
         assertNull("Unexpected BlueprintContainer located", refs);
     }
 }

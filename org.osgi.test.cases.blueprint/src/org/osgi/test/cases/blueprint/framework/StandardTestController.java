@@ -16,12 +16,13 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.HashMap;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.service.blueprint.container.BlueprintContainer;
 
 /**
  * Controller for a standard, single bundle test with involving
@@ -143,13 +144,15 @@ public class StandardTestController extends BaseTestController {
         // now standard blueprint revents.
         events.addBlueprintEvent("CREATING");
         events.addBlueprintEvent("CREATED");
-        events.addServiceEvent("REGISTERED", "org.osgi.service.blueprint.container.BlueprintContainer");
+        events.addServiceEvent("REGISTERED", BlueprintContainer.class.getName());
 
         // this needs to be the first validator of the set, since
         // it initializes the module context.
         events.addValidator(blueprintMetadata);
         // the bundle should be in the ACTIVE state when everything settles down
         events.addValidator(new BundleStateValidator(Bundle.ACTIVE));
+        // and we need to validate the container registration also
+        events.addValidator(new BlueprintContainerValidator());
     }
 
     /**
@@ -167,7 +170,7 @@ public class StandardTestController extends BaseTestController {
         // we always expect to see a stopped bundle event at the end
         events.addBundleEvent("STOPPED");
         // we should see the module context unregistered during shutdown.
-        events.addServiceEvent("UNREGISTERING", "org.osgi.service.blueprint.container.BlueprintContainer");
+        events.addServiceEvent("UNREGISTERING", BlueprintContainer.class.getName());
         // now standard blueprint revents.
         events.addBlueprintEvent("DESTROYING");
         events.addBlueprintEvent("DESTROYED");

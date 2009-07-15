@@ -19,6 +19,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
+import org.osgi.service.blueprint.container.BlueprintContainer;
 import org.osgi.test.cases.blueprint.services.TestUtil;
 
 import junit.framework.Assert;
@@ -56,16 +57,17 @@ public class BlueprintContainerValidator extends Assert implements TestValidator
      * @exception Exception
      */
     public void validate(BundleContext testContext) throws Exception {
-        ServiceReference[] refs = testContext.getServiceReferences("org.osgi.service.blueprint.container.BlueprintContainer", "(osgi.blueprint.container.symbolicName=" + bundle.getSymbolicName() + ")");
+        ServiceReference[] refs = testContext.getServiceReferences(BlueprintContainer.class.getName(), "(osgi.blueprint.container.symbolicname=" + bundle.getSymbolicName() + ")");
         if (refs == null || refs[0].getBundle() != bundle) {
             fail("No BlueprintContainer located for bundle " + bundle.getSymbolicName());
         }
 
         // now validate the bundle version
-        Version bundleVersion = (Version)refs[0].getProperty("osgi.blueprint.container.symbolicName");
+        Object bundleVersion = refs[0].getProperty("osgi.blueprint.container.version");
         assertNotNull("no osgi.blueprint.container.version property set", bundleVersion);
+        assertTrue("Incorrect osgi.blueprint.container.version type for bundle " + bundle.getSymbolicName(), bundleVersion instanceof Version);
 
-        assertTrue("Incorrect osgi.blueprint.container.version ", TestUtil.validateBundleVersion(bundle, bundleVersion));
+        assertTrue("Incorrect osgi.blueprint.container.version ", TestUtil.validateBundleVersion(bundle, (Version)bundleVersion));
     }
 }
 
