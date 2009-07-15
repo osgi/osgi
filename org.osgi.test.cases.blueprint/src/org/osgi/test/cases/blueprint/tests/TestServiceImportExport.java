@@ -105,6 +105,27 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         controller.run();
     }
 
+
+    /*
+     * this is the same imports/exports as above, but this test only checks that there
+     * is no GRACE_PERIOD event when the dependencies are satisfied.
+     */
+    public void testNoGracePeriod() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/ServiceOne_import.jar");
+        // we add this as a setup bundle to ensure everything is available before we
+        // start the importing bundle.
+        controller.addSetupBundle(getWebServer()+"www/ServiceOne_export.jar");
+
+        // now the importing side.  We've got a couple of service injections to validate, plus the injection
+        // results
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+
+        // a grace period event is a failure...that's all we're really testing here.
+        importStartEvents.addFailureEvent(new BlueprintContainerEvent("GRACE_PERIOD"));
+        controller.run();
+    }
+
     /*
      * Just a simple export/import test, but with the added wrinkle of a depends-on
      * relationship with the with the <reference> element

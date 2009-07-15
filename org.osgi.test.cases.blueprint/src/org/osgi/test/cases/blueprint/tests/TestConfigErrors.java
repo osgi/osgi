@@ -57,6 +57,11 @@ public class TestConfigErrors extends DefaultTestBundleControl {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
             getWebServer()+"www/error_duplicate_name.jar");
+        // in the spec lifecycle diagram, the "CREATING" event should be sent before parsing
+        // starts, so any configuration errors related to parsing the files should be
+        // preceded by a CREATING event.
+        EventSet testEvents = controller.getTestEvents();
+        testEvents.addBlueprintEvent("CREATING");
         controller.run();
     }
 
@@ -67,6 +72,11 @@ public class TestConfigErrors extends DefaultTestBundleControl {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
             getWebServer()+"www/error_missing_component_class.jar");
+        // in the spec lifecycle diagram, the "CREATING" event should be sent before parsing
+        // starts, so any configuration errors related to parsing the files should be
+        // preceded by a CREATING event.
+        EventSet testEvents = controller.getTestEvents();
+        testEvents.addBlueprintEvent("CREATING");
         controller.run();
     }
 
@@ -77,6 +87,11 @@ public class TestConfigErrors extends DefaultTestBundleControl {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
             getWebServer()+"www/error_no_component_class.jar");
+        // in the spec lifecycle diagram, the "CREATING" event should be sent before parsing
+        // starts, so any configuration errors related to parsing the files should be
+        // preceded by a CREATING event.
+        EventSet testEvents = controller.getTestEvents();
+        testEvents.addBlueprintEvent("CREATING");
         controller.run();
     }
 
@@ -87,6 +102,11 @@ public class TestConfigErrors extends DefaultTestBundleControl {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
             getWebServer()+"www/error_static_factory_missing_class.jar");
+        // in the spec lifecycle diagram, the "CREATING" event should be sent before parsing
+        // starts, so any configuration errors related to parsing the files should be
+        // preceded by a CREATING event.
+        EventSet testEvents = controller.getTestEvents();
+        testEvents.addBlueprintEvent("CREATING");
         controller.run();
     }
 
@@ -97,6 +117,11 @@ public class TestConfigErrors extends DefaultTestBundleControl {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
             getWebServer()+"www/error_static_factory_missing_method.jar");
+        // in the spec lifecycle diagram, the "CREATING" event should be sent before parsing
+        // starts, so any configuration errors related to parsing the files should be
+        // preceded by a CREATING event.
+        EventSet testEvents = controller.getTestEvents();
+        testEvents.addBlueprintEvent("CREATING");
         controller.run();
     }
 
@@ -107,6 +132,11 @@ public class TestConfigErrors extends DefaultTestBundleControl {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
             getWebServer()+"www/error_static_factory_non_public_class.jar");
+        // in the spec lifecycle diagram, the "CREATING" event should be sent before parsing
+        // starts, so any configuration errors related to parsing the files should be
+        // preceded by a CREATING event.
+        EventSet testEvents = controller.getTestEvents();
+        testEvents.addBlueprintEvent("CREATING");
         controller.run();
     }
 
@@ -117,6 +147,11 @@ public class TestConfigErrors extends DefaultTestBundleControl {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
             getWebServer()+"www/error_static_factory_non_public_class.jar");
+        // in the spec lifecycle diagram, the "CREATING" event should be sent before parsing
+        // starts, so any configuration errors related to parsing the files should be
+        // preceded by a CREATING event.
+        EventSet testEvents = controller.getTestEvents();
+        testEvents.addBlueprintEvent("CREATING");
         controller.run();
     }
 
@@ -127,6 +162,11 @@ public class TestConfigErrors extends DefaultTestBundleControl {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
             getWebServer()+"www/error_static_factory_nonstatic_method.jar");
+        // in the spec lifecycle diagram, the "CREATING" event should be sent before parsing
+        // starts, so any configuration errors related to parsing the files should be
+        // preceded by a CREATING event.
+        EventSet testEvents = controller.getTestEvents();
+        testEvents.addBlueprintEvent("CREATING");
         controller.run();
     }
 
@@ -137,6 +177,11 @@ public class TestConfigErrors extends DefaultTestBundleControl {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
             getWebServer()+"www/error_static_factory_no_class.jar");
+        // in the spec lifecycle diagram, the "CREATING" event should be sent before parsing
+        // starts, so any configuration errors related to parsing the files should be
+        // preceded by a CREATING event.
+        EventSet testEvents = controller.getTestEvents();
+        testEvents.addBlueprintEvent("CREATING");
         controller.run();
     }
 
@@ -147,6 +192,11 @@ public class TestConfigErrors extends DefaultTestBundleControl {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
             getWebServer()+"www/error_instance_factory_missing_method.jar");
+        // in the spec lifecycle diagram, the "CREATING" event should be sent before parsing
+        // starts, so any configuration errors related to parsing the files should be
+        // preceded by a CREATING event.
+        EventSet testEvents = controller.getTestEvents();
+        testEvents.addBlueprintEvent("CREATING");
         controller.run();
     }
 
@@ -157,6 +207,11 @@ public class TestConfigErrors extends DefaultTestBundleControl {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
             getWebServer()+"www/error_instance_factory_no_method.jar");
+        // in the spec lifecycle diagram, the "CREATING" event should be sent before parsing
+        // starts, so any configuration errors related to parsing the files should be
+        // preceded by a CREATING event.
+        EventSet testEvents = controller.getTestEvents();
+        testEvents.addBlueprintEvent("CREATING");
         controller.run();
     }
 
@@ -167,6 +222,11 @@ public class TestConfigErrors extends DefaultTestBundleControl {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
             getWebServer()+"www/error_instance_factory_no_component.jar");
+        // in the spec lifecycle diagram, the "CREATING" event should be sent before parsing
+        // starts, so any configuration errors related to parsing the files should be
+        // preceded by a CREATING event.
+        EventSet testEvents = controller.getTestEvents();
+        testEvents.addBlueprintEvent("CREATING");
         controller.run();
     }
 
