@@ -70,6 +70,11 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         MetadataEventSet startEvents = controller.getStartEvents();
         startEvents.addAssertion("comp1", AssertionService.BEAN_CREATED);
         startEvents.validateComponent("comp1", SimpleTestComponent.class);
+
+        // wildcard searches must be done in non-recursive mode.  There's a trap config file
+        // in a subdirectory of the target path.  If the bean identified in that file is
+        // created, this is a failure.
+        startEvents.addFailureEvent(new ComponentAssertion("comp2", AssertionService.BEAN_CREATED));
         // make sure the name is in the component list
         startEvents.addValidator(new ComponentNamePresenceValidator("comp1"));
         startEvents.addValidator(new GetBeanMetadataValidator("comp1"));

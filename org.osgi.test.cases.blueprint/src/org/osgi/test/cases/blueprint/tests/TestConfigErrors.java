@@ -37,6 +37,10 @@ public class TestConfigErrors extends DefaultTestBundleControl {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
             getWebServer()+"www/error_no_config_file.jar");
+        // Section 121.3.5:  Locating of the config files is considered part of the PARSING
+        // phase, so we expect to see a CREATING event.
+        EventSet testEvents = controller.getTestEvents();
+        testEvents.addBlueprintEvent("CREATING");
         controller.run();
     }
 
@@ -47,6 +51,10 @@ public class TestConfigErrors extends DefaultTestBundleControl {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
             getWebServer()+"www/error_missing_config_file.jar");
+        // Section 121.3.5:  Locating of the config files is considered part of the PARSING
+        // phase, so we expect to see a CREATING event.
+        EventSet testEvents = controller.getTestEvents();
+        testEvents.addBlueprintEvent("CREATING");
         controller.run();
     }
 

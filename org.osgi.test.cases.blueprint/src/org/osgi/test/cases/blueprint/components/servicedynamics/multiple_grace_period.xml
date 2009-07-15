@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+        This the grace period cycles in import.  We have two dependencies that will be unsatisfied.
+        We'll cycle the registrations to trigger multiple GRACE_PERIOD events.
+    </description>
+
+   <!-- This component does nothing other than get created and have a service injected as a property -->
+   <bean id="ServiceOneAImporter" class="org.osgi.test.cases.blueprint.components.servicedynamics.DependencyService">
+       <argument value="ServiceOneAImporter"/>
+       <property name="one">
+           <reference interface="org.osgi.test.cases.blueprint.services.TestServiceOne" filter="(test.service.name=ServiceOneA"/>
+       </property>
+   </bean>
+   <bean id="ServiceOneBImporter" class="org.osgi.test.cases.blueprint.components.servicedynamics.DependencyService">
+       <argument value="ServiceOneBImporter"/>
+       <property name="one">
+           <reference interface="org.osgi.test.cases.blueprint.services.TestServiceOne" filter="(test.service.name=ServiceOneB"/>
+       </property>
+   </bean>
+   <bean id="ServiceOneBImporter" class="org.osgi.test.cases.blueprint.components.servicedynamics.DependencyService">
+       <argument value="ServiceOneCImporter"/>
+       <property name="one">
+           <reference interface="org.osgi.test.cases.blueprint.services.TestServiceOne" filter="(test.service.name=ServiceOneC"/>
+       </property>
+   </bean>
+</blueprint>
+

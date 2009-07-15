@@ -242,6 +242,83 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
 
 
 	/**
+	 * Test multiple grace period event updates.
+	 */
+	public void testMultipleGracePeriod() throws Exception {
+        // We're only going to load one jar for this test.  The unstatisfied
+        // dependency will be handled by a service that's registered when
+        // the GRACE_PERIOD blueprint event is received.
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/multiple_grace_period.jar");
+
+        // create a ServiceManager instance with one instance of an injected service.
+        // We will key these to different GRACE_PERIOD events, eventually getting everything registered.
+        ServiceManager serviceManager = new ServiceManagerImpl(getContext(),
+            new ManagedService[] {
+                // we start out with two unregistered, and one registered
+                new ManagedService("ServiceOneA", new TestGoodService("ServiceOneA"), TestServiceOne.class, getContext(), null, false),
+                new ManagedService("ServiceOneB", new TestGoodService("ServiceOneB"), TestServiceOne.class, getContext(), null, false),
+                new ManagedService("ServiceOneC", new TestGoodService("ServiceOneC"), TestServiceOne.class, getContext(), null, true),
+            });
+
+        // now we chain a few events to actions to allow us to track the dynamics.
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+
+        // we need a property bundle to validate the filter used to request this
+        Properties aFilterProps = new Properties();
+        aFilterProps.put(org.osgi.framework.Constants.OBJECTCLASS, new String[] { TestServiceOne.class.getName() });
+        aFilterProps.put("test.service.name", "ServiceOneA");
+
+        Properties bFilterProps = new Properties();
+        bFilterProps.put(org.osgi.framework.Constants.OBJECTCLASS, new String[] { TestServiceOne.class.getName() });
+        bFilterProps.put("test.service.name", "ServiceOneB");
+
+        Properties cFilterProps = new Properties();
+        cFilterProps.put(org.osgi.framework.Constants.OBJECTCLASS, new String[] { TestServiceOne.class.getName() });
+        cFilterProps.put("test.service.name", "ServiceOneC");
+
+        // Ok, when the GRACE_PERIOD event is triggered, we register the first service.
+        // this will have dependencies for everything.  We'll only trace the BlueprintListener
+        // events here to keep things manageable.
+
+        // NOTE:  the BlueprintContainerEvents do not use the dependencies for
+        // matching, only for validation.  However, the event list is ordered,
+        // so each new GRACE_PERIOD event we receive will be processed in sequence
+        // and should validate against the expected filters.
+        importStartEvents.addEvent(new BlueprintContainerEvent("GRACE_PERIOD",
+            null, new Properties[] { aFilterProps, bFilterProps },
+            new ServiceManagerRegister(serviceManager, "ServiceOneA")));
+        // since one of the services was satisfied, we'll see an event showing just
+        // a single request
+        importStartEvents.addEvent(new BlueprintContainerEvent("GRACE_PERIOD",
+            null, new Properties[] { bFilterProps },
+            new ServiceManagerUnregister(serviceManager, "ServiceOneC")));
+        // ok, now we're waiting on B and C...register B now
+        importStartEvents.addEvent(new BlueprintContainerEvent("GRACE_PERIOD",
+            null, new Properties[] { cFilterProps, bFilterProps },
+            new ServiceManagerRegister(serviceManager, "ServiceOneB")));
+        // ok, now just waiting for C...register it
+        importStartEvents.addEvent(new BlueprintContainerEvent("GRACE_PERIOD",
+            null, new Properties[] { cFilterProps },
+            new ServiceManagerRegister(serviceManager, "ServiceOneC")));
+
+        // there should not be a GRACE_PERIOD event at the end, so add a failure event
+        // to trap additional ones.
+        importStartEvents.addFailureEvent(new BlueprintContainerEvent("GRACE_PERIOD"));
+
+        // then we should see this REGISTERED again at the end.
+        importStartEvents.addServiceEvent("REGISTERED", TestServiceDynamicsInterface.class);
+
+        // now some expected termination stuff
+        EventSet importStopEvents = controller.getStopEvents(0);
+        // add a cleanup processor for the exported services.
+        importStopEvents.addTerminator(new ServiceManagerUnregister(serviceManager));
+
+        controller.run();
+    }
+
+
+	/**
 	 * Test component dependency dynamics involved with blueprint.wait-for-dependencies:=false
 	 */
 	public void testComponentNowaitDependency() throws Exception {
@@ -282,7 +359,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
 
 
 	/**
-	 * Test component dependency dynamics involved with blueprint.wait-for-dependencies:=false
+	 * Test component grace_period timeouts
 	 */
 	public void testComponentTimeoutDependency() throws Exception {
         // this is testing a dependency wait time out.  This will be an error test, but
@@ -311,6 +388,39 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         // this failure event will verify the information about the failing dependency is set.
         startEvents.addEvent(new BlueprintContainerEvent("FAILURE", null, new Properties[] { filterProps }, null));
         startEvents.addEvent(new BlueprintAdminEvent("FAILURE", null, new Properties[] { filterProps }, null));
+        controller.run();
+    }
+
+
+	/**
+	 * Test component grace_period timeouts, with a timeout value of 0 (infinite)
+	 */
+	public void testInfiniteComponentTimeoutDependency() throws Exception {
+        // this is testing a dependency wait time out.  This will be an error test, but
+        // we also look for a GRACE_PERIOD event.
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/timeout_injected_component.jar");
+        // use a little shorter timeout here because there is no grace period timeout.
+        controller.setTimeout(30000);
+
+        // now we chain a few events to actions to allow us to track the dynamics.
+        EventSet startEvents = controller.getTestEvents();
+        // we should see one of these before the failures
+
+        // we need a property bundle to validate the filter used to request this
+        Properties filterProps = new Properties();
+        filterProps.put(org.osgi.framework.Constants.OBJECTCLASS, new String[] { TestServiceOne.class.getName() });
+        filterProps.put("osgi.service.blueprint.compname", "XYZ");
+        filterProps.put("someproperty", "abc");
+
+        startEvents.addEvent(new BlueprintContainerEvent("GRACE_PERIOD", null, new Properties[] { filterProps }, null));
+        startEvents.addEvent(new BlueprintAdminEvent("GRACE_PERIOD", null, new Properties[] { filterProps }, null));
+
+        // remove the current failure event...the test will time out and handle this for us.  We should not
+        // see the failure event.
+        startEvents.removeEvent(new BlueprintContainerEvent("FAILURE"));
+        startEvents.removeEvent(new BlueprintAdminEvent("FAILURE"));
+
         controller.run();
     }
 
