@@ -40,7 +40,7 @@ Include-Resource					= \
 	www/invalid_dlota.xml=res/invalid_dlota.xml,\
 	www/update/bundle001.jar=res/bundle001.jar
 		
-Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+Test-Cases							= ${testcases}
 
 -buildpath=\
 	org.osgi.service.deploymentadmin; version=project, \

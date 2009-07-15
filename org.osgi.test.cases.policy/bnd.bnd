@@ -10,7 +10,7 @@ Include-Resource					= \
 	tb1.jar, \
 	com.provider.messages.jar
 
-Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+Test-Cases							= ${testcases}
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \

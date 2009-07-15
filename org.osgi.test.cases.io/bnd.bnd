@@ -9,7 +9,7 @@ Private-Package						= org.osgi.test.support.*, \
 Import-Package: javax.microedition.io, javax.microedition.pki, *
 Export-Package: javax.microedition.io, javax.microedition.pki
 	
-Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+Test-Cases							= ${testcases}
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \

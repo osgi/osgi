@@ -23,7 +23,7 @@ Include-Resource					= \
 	tb13a.jar, \
 	tb14.jar
 	
-Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+Test-Cases							= ${testcases}
 
 -buildpath							= \
     org.osgi.test.support;                  version=project, \

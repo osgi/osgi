@@ -34,7 +34,7 @@ Include-Resource					= \
 	www/simple_no_bundle.dp=res/simple_no_bundle.dp,\
 	www/simple_uninstall_bundle.dp=res/simple_uninstall_bundle.dp
 			
-Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+Test-Cases							= ${testcases}
 
 -runbundles							= \
 	org.osgi.impl.service.log; version=latest,\

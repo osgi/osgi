@@ -15,4 +15,4 @@ Private-Package						= org.osgi.test.support.*, \
 
 -runproperties					= \
 
-Test-Cases: ${classes;extending;*TestCase}
+Test-Cases							= ${testcases}

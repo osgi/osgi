@@ -14,7 +14,7 @@ Include-Resource					= \
 	tb1.jar, \
 	tb2.jar
 	
-Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+Test-Cases							= ${testcases}
 
 -buildpath							= \
 	org.osgi.service.cm;			version=project, \

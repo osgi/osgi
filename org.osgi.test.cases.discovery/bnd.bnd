@@ -4,7 +4,7 @@ Bundle-RequiredExecutionEnvironment = J2SE-1.4
 Private-Package						= ${p}.*, \
 	org.osgi.test.support.*
 
-Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+Test-Cases							= ${testcases}
 
 -buildpath							= \
 	org.osgi.service.discovery;				version=project	, \

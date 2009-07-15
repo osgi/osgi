@@ -4,7 +4,7 @@ Bundle-Version: 4.2.0.${project.build}
 Private-Package						= org.osgi.test.support.*, \
 	${p}.junit.*
 	
-Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+Test-Cases							= ${testcases}
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \

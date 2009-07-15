@@ -6,7 +6,7 @@ Export-Package						= ${p}.tbc.*, \
 Include-Resource					= \
 	tb1.jar
 
-Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+Test-Cases							= ${testcases}
 
 -buildpath							= \
 	info.dmtree;							version=project, \

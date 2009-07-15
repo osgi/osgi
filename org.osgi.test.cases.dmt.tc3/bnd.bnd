@@ -3,7 +3,7 @@ Bundle-Description: Dmt Test Case 003
 Private-Package						= ${p}.tbc.*, \
 	org.osgi.test.support.*
 
-Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+Test-Cases							= ${testcases}
 
 -buildpath							= \
 	info.dmtree;							version=project, \

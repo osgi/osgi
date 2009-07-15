@@ -203,7 +203,7 @@ Include-Resource = \
 	resources.tb2.jar, \
 	syncbundlelistener.tb3.jar
 	
-Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+Test-Cases							= ${testcases}
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \

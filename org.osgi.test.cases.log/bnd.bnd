@@ -14,4 +14,4 @@ Private-Package						= ${p}.*
 
 -runproperties					= report=true
 
-Test-Cases: ${classes;extending;*TestCase}
+Test-Cases							= ${testcases}

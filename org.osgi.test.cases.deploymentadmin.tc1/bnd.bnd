@@ -56,7 +56,7 @@ Include-Resource					= \
 	www/signing_files_not_next.dp=res/signing_files_not_next.dp,\
 	www/non_customizer_rp.dp=res/non_customizer_rp.dp
 		
-Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+Test-Cases							= ${testcases}
 
 -runbundles							= \
 	org.osgi.impl.service.deploymentadmin; 			version=project, \

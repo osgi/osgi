@@ -7,7 +7,7 @@ Private-Package						= org.osgi.test.support.*, \
 Include-Resource = \
     launch.secure.tb1.jar
 	
-Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+Test-Cases							= ${testcases}
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \

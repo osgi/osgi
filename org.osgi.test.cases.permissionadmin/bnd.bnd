@@ -23,7 +23,7 @@ Private-Package						= ${p}.junit, \
 	org.osgi.framework.security=osgi, \
 	org.osgi.framework.trust.repositories=${build}/keystore
 
-Test-Cases: ${classes;extending;*TestCase}
+Test-Cases							= ${testcases}
 
 Include-Resource		: \
 	contextsharer.jar, \

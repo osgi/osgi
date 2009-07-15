@@ -29,6 +29,6 @@ Import-Package = \
 -runproperties					= report=true, \
     org.osgi.test.cases.transaction.waittime=30
 
-Test-Cases						= ${classes;extending;org.junit.framework.TestCase|*TransactionTestBundleControl|*DefaultSignatureTestControl}
+Test-Cases							= ${testcases}
 
 	

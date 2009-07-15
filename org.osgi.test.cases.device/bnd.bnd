@@ -19,7 +19,7 @@ Include-Resource					= \
 	drv6.jar, \
 	drv7.jar
 	
-Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+Test-Cases							= ${testcases}
 
 -buildpath							= \
     org.osgi.service.device;                version=project , \
