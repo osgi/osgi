@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    default-activation="eager">
+
+    <description>
+        Cycle-breaking example shown in section 121.2.6 of the blueprint spec.  A singleton
+        bean is injected with a reference to itself.
+    </description>
+
+   <bean id="a" class="org.osgi.test.cases.blueprint.components.injection.CircularComponentInjection" init-method="init">
+       <argument value="a"/>
+       <property name="componentOne" ref="a"/>
+   </bean>
+</blueprint>
+

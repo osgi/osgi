@@ -54,6 +54,7 @@ public class AssertionService
     public static final String BEAN = "BEAN";
     public static final String BEAN_PROPERTIES = "BEAN_PROPERTIES";
     public static final String PROPERTY_NAME = "PROPERTY_NAME";
+    public static final String PROPERTY_VALUE = "PROPERTY_VALUE";
     public static final String TRACEBACK = "TRACEBACK";
     public static final String EVENT_TYPE = "EVENT_TYPE";
     public static final String REPLAY_EVENT = "REPLAY_EVENT";

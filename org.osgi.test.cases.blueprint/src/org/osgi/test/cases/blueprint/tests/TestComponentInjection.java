@@ -282,4 +282,140 @@ public class TestComponentInjection extends DefaultTestBundleControl {
             getWebServer()+"www/error_prototype_destroy_method.jar");
         controller.run();
     }
+
+
+    /**
+     * Test the example shown in section 12.2.6 of the
+     * blueprint spec of a 3-bean cycle and how it must
+     * be broken.  This will test that the different
+     * events occur in the correct order.
+     *
+     * @exception Exception
+     */
+    public void testCycleBreaking() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/dependency_cycle_breaking.jar");
+        MetadataEventSet startEvents = controller.getStartEvents();
+
+        // this will be the first event
+        TestEvent cCreated = new ComponentAssertion("c", AssertionService.BEAN_CREATED);
+        startEvents.addEvent(cCreated);
+        // this occurs next...constrain it to be after the creation of C
+        TestEvent bCreated = new ComponentAssertion("b", AssertionService.BEAN_CREATED);
+        bCreated.addDependency(cCreated);
+        startEvents.addEvent(bCreated);
+        // a must be injected with an instance of b in the constructor, so that's next
+        // in the chain.
+        TestEvent aCreated = new ComponentAssertion("a", AssertionService.BEAN_CREATED);
+        aCreated.addDependency(bCreated);
+        startEvents.addEvent(aCreated);
+        // a will now be injected into an instance of c.
+        TestEvent aInjected = new ComponentAssertion("c", AssertionService.BEAN_PROPERTY_SET);
+        aInjected.addDependency(aCreated);
+        startEvents.addEvent(aInjected);
+
+        // and finally, the init-method of C will be run.
+        TestEvent cInit = new ComponentAssertion("c", AssertionService.BEAN_INIT_METHOD);
+        cInit.addDependency(aInjected);
+        startEvents.addEvent(cInit);
+
+        // the events are now ordered and queued up, kick this into action.
+        controller.run();
+    }
+
+
+    /**
+     * Test the example shown in section 12.2.6 of the
+     * blueprint spec of a self-referential singleton.
+     *
+     * @exception Exception
+     */
+    public void testSingletonCycle() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/singleton_cycle.jar");
+        MetadataEventSet startEvents = controller.getStartEvents();
+
+        // this will be the first event
+        TestEvent aCreated = new ComponentAssertion("a", AssertionService.BEAN_CREATED);
+        startEvents.addEvent(aCreated);
+        // a will now be injected into an instance of a.
+        TestEvent aInjected = new ComponentAssertion("a", AssertionService.BEAN_PROPERTY_SET);
+        aInjected.addDependency(aCreated);
+        startEvents.addEvent(aInjected);
+
+        // and finally, the init-method of a will be run.
+        TestEvent aInit = new ComponentAssertion("a", AssertionService.BEAN_INIT_METHOD);
+        aInit.addDependency(aInjected);
+        startEvents.addEvent(aInit);
+
+        // the events are now ordered and queued up, kick this in motion.
+        controller.run();
+    }
+
+
+    /**
+     * Test the example shown in section 12.2.6 of the
+     * blueprint spec of a self-referential prototype scope bean.
+     * This should be handled just like the singleton according to
+     * the spect.
+     *
+     * @exception Exception
+     */
+    public void testPrototypeCycle() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/prototype_cycle.jar");
+        MetadataEventSet startEvents = controller.getStartEvents();
+
+        // this will be the first event
+        TestEvent aCreated = new ComponentAssertion("a", AssertionService.BEAN_CREATED);
+        startEvents.addEvent(aCreated);
+        // a will now be injected into an instance of a.
+        TestEvent aInjected = new ComponentAssertion("a", AssertionService.BEAN_PROPERTY_SET);
+        aInjected.addDependency(aCreated);
+        startEvents.addEvent(aInjected);
+
+        // and finally, the init-method of a will be run.
+        TestEvent aInit = new ComponentAssertion("a", AssertionService.BEAN_INIT_METHOD);
+        aInit.addDependency(aInjected);
+        startEvents.addEvent(aInit);
+
+        // the events are now ordered and queued up, kick this in motion.
+        controller.run();
+    }
+
+
+    /**
+     * verify that recursive calls to getComponentInstance() from a bean constructor are
+     * detected as an error.
+     */
+    public void testRecursiveConstructor() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/recursive_constructor.jar");
+        controller.run();
+    }
+
+
+    /**
+     * verify that recursive calls to getComponentInstance() from a bean property setter are
+     * detected as an error.
+     */
+    public void testRecursivePropertyInjection() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/recursive_property_injection.jar");
+        controller.run();
+    }
+
+
+    /**
+     * verify that recursive calls to getComponentInstance() from a bean init-method are
+     * detected as an error.
+     */
+    public void testRecursiveInitMethod() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/recursive_init-method.jar");
+        controller.run();
+    }
 }

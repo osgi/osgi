@@ -1131,4 +1131,15 @@ public class TestConfigErrors extends DefaultTestBundleControl {
             getWebServer()+"www/error_blueprintContainer_override.jar");
         controller.run();
     }
+
+
+    /**
+     * tests that extra, unrecognized namespaces on the config document is an error.
+     */
+    public void testExtraNamespace() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/comp1_extra_namespace.jar");
+        controller.run();
+    }
 }

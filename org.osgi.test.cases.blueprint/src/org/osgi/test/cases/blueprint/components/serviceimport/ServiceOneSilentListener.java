@@ -93,4 +93,3 @@ public class ServiceOneSilentListener extends ServiceListener implements Service
         unbind(Object.class, serviceProperties );
     }
 }
-
