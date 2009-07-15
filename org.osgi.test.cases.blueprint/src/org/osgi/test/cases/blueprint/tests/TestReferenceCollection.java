@@ -222,19 +222,35 @@ public class TestReferenceCollection extends DefaultTestBundleControl {
         propsC.put("service.listener.type", "interface");
         propsC.put("test.service.name", "ServiceOneC");
 
-        // we should see both the construction and INIT of this.  It's difficult to test the ordering,
-        // but we should see the events from this lazy bean.
+        // we should see both the construction and INIT of this.  We set up a dependency try to enforce
+        // some ordering.
         importMiddleEvents.addAssertion("dependsleaf2", AssertionService.BEAN_CREATED);
-        importMiddleEvents.addAssertion("dependsleaf2", AssertionService.BEAN_INIT_METHOD);
         importMiddleEvents.addAssertion("dependsleaf1", AssertionService.BEAN_CREATED);
-        importMiddleEvents.addAssertion("dependsleaf1", AssertionService.BEAN_INIT_METHOD);
         importMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.BEAN_CREATED));
-        importMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.BEAN_INIT_METHOD));
-        importMiddleEvents.addEvent(new ComponentAssertion("ReferenceChecker", AssertionService.BEAN_CREATED));
+
+        TestEvent dependsleaf1 = new ComponentAssertion("dependsleaf1", AssertionService.BEAN_INIT_METHOD);
+        TestEvent dependsleaf2 = new ComponentAssertion("dependsleaf2", AssertionService.BEAN_INIT_METHOD);
+        TestEvent serviceListener = new ComponentAssertion("ServiceOneListener", AssertionService.BEAN_INIT_METHOD);
+
+        importMiddleEvents.addEvent(dependsleaf1);
+        importMiddleEvents.addEvent(dependsleaf2);
+        importMiddleEvents.addEvent(serviceListener);
+
 
         // We should see both of these initially
-        importMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsA));
-        importMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsC));
+        TestEvent bindA = new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsA);
+        TestEvent bindC = new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, propsC);
+
+        bindA.addDependency(dependsleaf1);
+        bindA.addDependency(dependsleaf2);
+        bindA.addDependency(serviceListener);
+
+        bindC.addDependency(dependsleaf1);
+        bindC.addDependency(dependsleaf2);
+        bindC.addDependency(serviceListener);
+
+        importMiddleEvents.addEvent(bindA);
+        importMiddleEvents.addEvent(bindC);
 
         // validate the metadata for the imported service manager, since it is directly used
         importMiddleEvents.addValidator(new PropertyMetadataValidator("ReferenceChecker",

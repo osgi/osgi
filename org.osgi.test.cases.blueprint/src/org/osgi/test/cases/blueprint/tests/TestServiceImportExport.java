@@ -2081,6 +2081,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStartEvents.addFailureEvent(new ComponentAssertion("Depends2", AssertionService.BEAN_CREATED));
         exportStartEvents.addFailureEvent(new ComponentAssertion("ServiceOne", AssertionService.BEAN_CREATED));
         exportStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.BEAN_CREATED));
+
         // and there should not be a registered service for this yet
         exportStartEvents.addValidator(new ServiceUnregistrationValidator(TestServiceOne.class, null));
 
@@ -2091,10 +2092,14 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
         // these all get created now
         exportMiddleEvents.addEvent(new ComponentAssertion("Trigger", AssertionService.BEAN_CREATED));
-        exportMiddleEvents.addEvent(new ComponentAssertion("Depends1", AssertionService.BEAN_CREATED));
-        exportMiddleEvents.addEvent(new ComponentAssertion("Depends2", AssertionService.BEAN_CREATED));
         exportMiddleEvents.addEvent(new ComponentAssertion("ServiceOne", AssertionService.BEAN_CREATED));
         exportMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.BEAN_CREATED));
+
+        TestEvent depends1 = new ComponentAssertion("Depends1", AssertionService.BEAN_CREATED);
+        TestEvent depends2 = new ComponentAssertion("Depends2", AssertionService.BEAN_CREATED);
+
+        exportMiddleEvents.addEvent(depends1);
+        exportMiddleEvents.addEvent(depends2);
 
         // and initialized
         exportMiddleEvents.addEvent(new ComponentAssertion("Trigger", AssertionService.BEAN_INIT_METHOD));
@@ -2102,8 +2107,11 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportMiddleEvents.addEvent(new ComponentAssertion("Depends2", AssertionService.BEAN_INIT_METHOD));
         exportMiddleEvents.addEvent(new ComponentAssertion("ServiceOne", AssertionService.BEAN_INIT_METHOD));
         exportMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.BEAN_INIT_METHOD));
-        // our listener should get called
-        exportMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_REGISTERED));
+        // our listener should get called, but not before the depends-on relationships are finished.
+        TestEvent register = new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_REGISTERED);
+        register.addDependency(depends1);
+        register.addDependency(depends2);
+        exportMiddleEvents.addEvent(register);
 
         // validate that the service has been registered
         // this will be run after all of the events have settled down, so this shoulbe
@@ -2166,8 +2174,11 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
         // these all get created now
         importMiddleEvents.addEvent(new ComponentAssertion("ReboundDependencyChecker", AssertionService.BEAN_CREATED));
-        importMiddleEvents.addEvent(new ComponentAssertion("Depends1", AssertionService.BEAN_CREATED));
-        importMiddleEvents.addEvent(new ComponentAssertion("Depends2", AssertionService.BEAN_CREATED));
+        TestEvent depends1 = new ComponentAssertion("Depends1", AssertionService.BEAN_CREATED);
+        TestEvent depends2 = new ComponentAssertion("Depends2", AssertionService.BEAN_CREATED);
+
+        importMiddleEvents.addEvent(depends1);
+        importMiddleEvents.addEvent(depends2);
         importMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.BEAN_CREATED));
 
         // and initialized
@@ -2185,8 +2196,13 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         props2.put("service.interface.name", TestServiceOne.class.getName());
         props2.put("service.listener.type", "interface");
         props2.put("test.service.name", "BadService");
-        // this is the the initial bind operation.
-        importMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, props1));
+        // this is the the initial bind operation.  Ensure the depends-on relationships are handled first.
+        TestEvent bind = new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_BIND, props1);
+        bind.addDependency(depends1);
+        bind.addDependency(depends2);
+
+        importMiddleEvents.addEvent(bind);
+
         // According to the spec, if there is a service immediately available, then we won't see the
         // UNBIND happening.  So this would be a failure if this shows up
         importMiddleEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_UNBIND, props1));
