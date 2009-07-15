@@ -83,7 +83,6 @@ public class TestTypeConversion extends DefaultTestBundleControl {
         target.add("1");
         target.add("2");
         startEvents.validateComponentProperty("stringArrayToList", "list", target, List.class);
-        startEvents.validateComponentProperty("stringArrayToLinkedList", "linkedList", target, LinkedList.class);
         startEvents.validateComponentProperty("stringListToLinkedList", "linkedList", target, LinkedList.class);
         startEvents.validateComponentProperty("stringArrayToCollectionSubTypeImpl", "collectionSubTypeImpl", target, CollectionSubTypeImpl.class);
 
