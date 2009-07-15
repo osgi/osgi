@@ -294,7 +294,7 @@
 
     <bean id="floatToInteger" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
         <property name="integer">
-            <value type="java.lang.float">1.67</value>
+            <value type="java.lang.Float">1.67</value>
         </property>
     </bean>
 

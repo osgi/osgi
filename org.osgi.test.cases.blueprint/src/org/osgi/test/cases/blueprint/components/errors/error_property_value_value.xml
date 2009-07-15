@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+   <!-- both value attribute and inline value used -->
+   <bean id="compPrimInteger" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+       <property name="protected" value="123">
+           <value>
+               456
+           </value>
+       </property>
+   </bean>
+</blueprint>
+

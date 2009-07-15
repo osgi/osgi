@@ -1210,4 +1210,50 @@ public class TestConfigErrors extends DefaultTestBundleControl {
             getWebServer()+"www/comp1_extra_namespace.jar");
         controller.run();
     }
+
+
+    /**
+     * tests for different combinations of value/ref/inline value on argument and property
+     */
+    public void testPropertyValueValue() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/property_value_value.jar");
+        controller.run();
+    }
+
+    public void testPropertyRefValue() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/property_ref_value.jar");
+        controller.run();
+    }
+
+    public void testPropertyValueRef() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/property_value_ref.jar");
+        controller.run();
+    }
+
+    public void testArgumentValueValue() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/argument_value_value.jar");
+        controller.run();
+    }
+
+    public void testArgumentRefValue() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/argument_ref_value.jar");
+        controller.run();
+    }
+
+    public void testArgumentValueRef() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/argument_value_ref.jar");
+        controller.run();
+    }
 }

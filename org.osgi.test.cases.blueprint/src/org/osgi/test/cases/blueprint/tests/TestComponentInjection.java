@@ -294,6 +294,18 @@ public class TestComponentInjection extends DefaultTestBundleControl {
 
 
     /**
+     * verify that explicitly setting activation to eager and scope to prototype is an error.
+     * (section 121.5.2 of the spec)
+     */
+    public void testEagerPrototype() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_eager_prototype.jar");
+        controller.run();
+    }
+
+
+    /**
      * Test the example shown in section 12.2.6 of the
      * blueprint spec of a 3-bean cycle and how it must
      * be broken.  This will test that the different

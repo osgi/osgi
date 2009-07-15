@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+        Tests for a failure cause by specifying both the ref attribute and an inline value
+    </description>
+
+   <bean id="comp1" class="org.osgi.test.cases.blueprint.components.comp1.SimpleTestComponent">
+       <argument ref="comp1a">
+           <value>456</value>
+       </argument>
+   </bean>
+
+   <bean id="comp1a" class="org.osgi.test.cases.blueprint.components.comp1.SimpleTestComponent">
+       <argument value="123"/>
+   </bean>
+</blueprint>
+

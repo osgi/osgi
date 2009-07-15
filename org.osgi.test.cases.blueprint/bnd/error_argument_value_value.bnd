@@ -1,0 +1,7 @@
+Bundle-SymbolicName:                     ${p}.error_argument_value_value
+Bundle-Version:                          4.2
+Import-Package:                          ${p}.components.comp1, ${p}.services
+-resourceonly: true
+Include-Resource					= \
+	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/errors/error_argument_value_value.xml
+
