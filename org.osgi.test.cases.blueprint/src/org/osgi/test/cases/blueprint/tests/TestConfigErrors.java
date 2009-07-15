@@ -610,7 +610,7 @@ public class TestConfigErrors extends DefaultTestBundleControl {
     public void testServiceListenerNonPublicUnregistered() throws Exception {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
-            getWebServer()+"www/error_service_listener_non_public_unregistered.jar");
+            getWebServer()+"www/error_service_listener_non_public_unregister.jar");
         controller.run();
     }
 

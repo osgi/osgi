@@ -55,12 +55,12 @@ public class ServiceOneSilentListener extends ServiceListener implements Service
 
     public void bind(TestServiceOne service) {
         AssertionService.assertNotNull(this, "Null service instance passed to reference-listener bind()", service);
-        bind(TestServiceOne.class, null);
+        bind(TestServiceOne.class);
     }
 
     public void unbind(TestServiceOne service) {
         AssertionService.assertNotNull(this, "Null service instance passed to reference-listener unbind()", service);
-        unbind(TestServiceOne.class, null);
+        unbind(TestServiceOne.class);
     }
 
     public void bind(ServiceReference service) {

@@ -47,7 +47,7 @@ public class BaseTestController implements EventHandler, BlueprintListener, Serv
     // default timeout for the test.  For most tests, we're not dealing with
     // expected timeout situations, so a short timeout is acceptable.  This will
     // need to be set higher if we're testing actual timeout situations.
-    public static final long DEFAULT_TIMEOUT = 10000;
+    public static final long DEFAULT_TIMEOUT = 15000;
 
     protected long timeout = DEFAULT_TIMEOUT;
 

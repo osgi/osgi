@@ -279,7 +279,7 @@ public class TestComponentInjection extends DefaultTestBundleControl {
     public void testPrototypeDestroy_Method() throws Exception {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
-            getWebServer()+"www/prototype_destroy_method.jar");
+            getWebServer()+"www/error_prototype_destroy_method.jar");
         controller.run();
     }
 }
