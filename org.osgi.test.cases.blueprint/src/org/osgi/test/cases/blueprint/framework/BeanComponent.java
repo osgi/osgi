@@ -56,26 +56,26 @@ public class BeanComponent extends Assert implements TestComponentMetadata {
 
     // indicated the component is created directly from class
     public BeanComponent(String name, Class classType, TestArgument[] parms, TestProperty[] props) {
-        this(name, classType, null, null, null, parms, props, null, BeanMetadata.ACTIVATION_EAGER, BeanMetadata.SCOPE_SINGLETON);
+        this(name, classType, null, null, null, parms, props, null, BeanMetadata.ACTIVATION_EAGER, null);
     }
 
     // indicated the component is created by instance factory
     public BeanComponent(String name, String factoryMethodName, TestArgument[] parms, TestProperty[] props) {
-        this(name, null, factoryMethodName, null, null, parms, props, null, BeanMetadata.ACTIVATION_EAGER, BeanMetadata.SCOPE_SINGLETON);
+        this(name, null, factoryMethodName, null, null, parms, props, null, BeanMetadata.ACTIVATION_EAGER, null);
     }
 
     // indicated the component is created by static factory
     public BeanComponent(String name, Class classType, String factoryMethodName, TestArgument[] parms, TestProperty[] props) {
-        this(name, classType, factoryMethodName, null, null, parms, props, null, BeanMetadata.ACTIVATION_EAGER, BeanMetadata.SCOPE_SINGLETON);
+        this(name, classType, factoryMethodName, null, null, parms, props, null, BeanMetadata.ACTIVATION_EAGER, null);
     }
 
     // indicated the component is inner component
     public BeanComponent(Class classType, String factoryMethodName, TestArgument[] parms, TestProperty[] props) {
-        this(null, classType, factoryMethodName, null, null, parms, props, null, BeanMetadata.ACTIVATION_EAGER, BeanMetadata.SCOPE_SINGLETON);
+        this(null, classType, factoryMethodName, null, null, parms, props, null, BeanMetadata.ACTIVATION_EAGER, null);
     }
 
     public BeanComponent(String name, Class classType, String initMethodName, String destroyMethodName, TestArgument[] parms, TestProperty[] props) {
-        this(name, classType, null, initMethodName, destroyMethodName, parms, props, null, BeanMetadata.ACTIVATION_EAGER, BeanMetadata.SCOPE_SINGLETON);
+        this(name, classType, null, initMethodName, destroyMethodName, parms, props, null, BeanMetadata.ACTIVATION_EAGER, null);
     }
 
     public BeanComponent(String name, Class classType, String factoryMethodName, String initMethodName, String destroyMethodName, TestArgument[] parms, TestProperty[] props, String[] dependsOn, int activation, String scope) {

@@ -1620,7 +1620,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
             new BindingListener("ServiceOneListener", "bind", "unbind"),
             // this is done with an inner component
             new BindingListener(new TestComponentValue(new BeanComponent(null, ServiceOneListener.class, null, null, null, null, null,
-            null, BeanMetadata.ACTIVATION_LAZY, BeanMetadata.SCOPE_PROTOTYPE)), "bind", "unbind"),
+            null, BeanMetadata.ACTIVATION_LAZY, null)), "bind", "unbind"),
         };
         // validate the metadata for the imported service (this one only has a single import, so easy to locate)
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferencedService("ServiceOne", TestServiceOne.class,

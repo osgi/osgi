@@ -168,7 +168,7 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
                         null,
  						null,
  						BeanMetadata.ACTIVATION_LAZY,
- 						BeanMetadata.SCOPE_PROTOTYPE
+ 						null
                 )
         );
         startEvents.addValidator(
@@ -440,7 +440,7 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
                         new TestProperty[] { new StringProperty(innerProName, innerProType, innerProSource) },
  						null,
  						BeanMetadata.ACTIVATION_LAZY,
- 						BeanMetadata.SCOPE_PROTOTYPE
+ 						null
                 )
         );
         startEvents.addValidator(
@@ -536,7 +536,7 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
                         null,
                         null,
  						BeanMetadata.ACTIVATION_LAZY,
- 						BeanMetadata.SCOPE_PROTOTYPE
+ 						null
                 )
         );
     }
@@ -586,7 +586,7 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
                         new TestProperty[] { new StringProperty("string", null, "compInner4") },
                      	null,
  						BeanMetadata.ACTIVATION_LAZY,
- 						BeanMetadata.SCOPE_PROTOTYPE
+ 						null
                 )
         );
         startEvents.addValidator(
@@ -628,7 +628,7 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
                 new TestProperty[] { new StringProperty("string", null, "compInnerEntryKey2") },
                 null,
  				BeanMetadata.ACTIVATION_LAZY,
- 				BeanMetadata.SCOPE_PROTOTYPE
+ 			    null
                 )
         );
         TestComponentValue compInnerEntryValue2 =  new TestComponentValue(
@@ -642,7 +642,7 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
                         new TestProperty[] { new StringProperty("string", null, "compInnerEntryValue2") },
                         null,
                         BeanMetadata.ACTIVATION_LAZY,
-                        BeanMetadata.SCOPE_PROTOTYPE
+                        null
                         )
                 );
 
