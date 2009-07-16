@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+        Test the conflict between the auto-export attribute and interface attribute
+    </description>
+
+    <!-- the node this service export maps into. -->
+   <bean id="ServiceAll" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass"
+        init-method="init" destroy-method="destroy">
+       <argument value="ServiceAll"/>
+   </bean>
+
+   <!-- export all of the interfaces -->
+   <service id="ServiceAllService" ref="ServiceAll" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" auto-export="all-classes"/>
+</blueprint>
+

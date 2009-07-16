@@ -1,0 +1,7 @@
+Bundle-SymbolicName:                     ${p}.error_auto_export_interface
+Bundle-Version:                          4.2
+Import-Package:                          ${p}.components.serviceexport, ${p}.services
+-resourceonly: true
+Include-Resource					= \
+	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/serviceexport/error_auto_export_interface.xml
+
