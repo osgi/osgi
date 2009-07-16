@@ -3,6 +3,4 @@ Bundle-SymbolicName: $(p).tb1
 Bundle-Activator: $(p).tb3.CustomXMLParserActivator
 
 Private-Package	: $(p).tb3
-Include-Resource = \
-	META-INF/services/javax.xml.parsers.SAXParserFactory=src/org/osgi/test/cases/xml/tb3/javax.xml.parsers.SAXParserFactory, \
-	META-INF/services/javax.xml.parsers.DocumentBuilderFactory=src/org/osgi/test/cases/xml/tb3/javax.xml.parsers.DocumentBuilderFactory
+Include-Resource = resources/tb3

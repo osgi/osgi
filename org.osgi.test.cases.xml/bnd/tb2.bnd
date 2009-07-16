@@ -3,5 +3,4 @@ Bundle-SymbolicName: $(p).tb2
 Bundle-Activator: org.osgi.util.xml.XMLParserActivator
 
 Private-Package	: $(p).tb2
-Include-Resource = \
-	META-INF/services/javax.xml.parsers.DocumentBuilderFactory=src/org/osgi/test/cases/xml/tb2/javax.xml.parsers.DocumentBuilderFactory
+Include-Resource = resources/tb2
