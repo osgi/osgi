@@ -4,14 +4,4 @@ Bundle-SymbolicName: $(p).tb1
 Private-Package	: $(p).tb1
 
 Include-Resource					= \
- OSGI-INF/l10n/bundle.properties=tb1/bundle.properties, \
- icons/icon.bmp=tb1/icon.bmp, \
- icons/icon_en_US.bmp=tb1/icon_en_US.bmp, \
- icons/icon_du.bmp=tb1/icon_du.bmp, \
- icons/icon_du_NL.bmp=tb1/icon_du_NL.bmp, \
- OSGI-INF/l10n/bundle_en_US.properties=tb1/bundle_en_US.properties, \
- OSGI-INF/l10n/bundle_du.properties=tb1/bundle_du.properties, \
- OSGI-INF/l10n/bundle_du_NL.properties=tb1/bundle_du_NL.properties, \
- OSGI-INF/metatype/testfile.xml=tb1/testfile.xml
-
-
+ resources/tb1
