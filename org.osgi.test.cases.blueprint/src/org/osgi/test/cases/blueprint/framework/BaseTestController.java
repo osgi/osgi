@@ -88,19 +88,6 @@ public class BaseTestController implements EventHandler, BlueprintListener, Serv
         this.timeout = timeout;
     }
 
-    /**
-     * Return the extender bundle that we believe we're running
-     * against.
-     *
-     * @return
-     */
-    static public Bundle getExtenderBundle(Map props) {
-        // if we've not been asked for this yet, extract it from the properties
-        if (extenderBundle == null) {
-            extenderBundle = (Bundle)props.get(org.osgi.service.blueprint.container.EventConstants.EXTENDER_BUNDLE);
-        }
-        return extenderBundle;
-    }
 
     /**
      * Retrieve the test bundle context from the controller.
@@ -109,17 +96,6 @@ public class BaseTestController implements EventHandler, BlueprintListener, Serv
      */
     public BundleContext getTestContext() {
         return testContext;
-    }
-
-
-    /**
-     * Return the extender bundle that we believe we're running
-     * against.
-     *
-     * @return
-     */
-    static public Bundle getExtenderBundle() {
-        return extenderBundle;
     }
 
 

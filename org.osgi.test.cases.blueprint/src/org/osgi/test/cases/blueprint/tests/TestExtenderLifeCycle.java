@@ -107,9 +107,9 @@ public class TestExtenderLifeCycle extends DefaultTestBundleControl {
             // load a simple test bundle and run the test.  The extender bundle will
             // be obtained in the context of running this
             StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/comp1_no_header.jar");
+                getWebServer()+"www/comp1_id.jar");
             controller.run();
-            extender = BaseTestController.getExtenderBundle();
+            extender = BlueprintContainerEvent.getExtenderBundle();
         }
         return extender;
     }

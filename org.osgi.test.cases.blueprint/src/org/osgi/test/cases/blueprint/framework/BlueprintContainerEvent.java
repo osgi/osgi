@@ -36,6 +36,8 @@ import org.osgi.test.cases.blueprint.services.TestUtil;
  * service.
  */
 public class BlueprintContainerEvent extends AdminTestEvent {
+    // our extender bundle
+    static protected Bundle extenderBundle;
     // an optional set of dependency filters we match on
     protected Properties[] dependencies = null;
     // a replay indicator (used for capturing state replays)
@@ -186,6 +188,13 @@ public class BlueprintContainerEvent extends AdminTestEvent {
                 }
             }
         }
+
+        if (!getExtenderBundle().equals(other.getProperty(EventConstants.EXTENDER_BUNDLE))) {
+            return new AssertionFailure("Mismatched extender bundle id blueprint event other=" +
+                    other.getProperty(EventConstants.EXTENDER_BUNDLE),
+                    cause);
+        }
+
         // validate the replay status (normally false)
         if (event.isReplay() != replay) {
             return new AssertionFailure("Incorrect replay status for Blueprint event: " + other.toString());
@@ -294,6 +303,17 @@ public class BlueprintContainerEvent extends AdminTestEvent {
         props.put("bundle.version", Version.parseVersion((String)bundle.getHeaders().get(Constants.BUNDLE_VERSION)));
         props.put(EventConstants.BUNDLE, bundle);
         props.put(EventConstants.BUNDLE_ID, new Long(bundle.getBundleId()));
+
+        // get the extender as well
+        Bundle extender = e.getExtenderBundle();
+        // save this information the first time through...all events after this should be consistent
+        if (extenderBundle == null) {
+            extenderBundle = extender;
+        }
+
+        // store the extender bundle information
+        props.put(EventConstants.EXTENDER_BUNDLE, extender);
+
         // also attach the event information
         props.put(EventConstants.EVENT, e);
 		if (e.getCause() != null) {
@@ -314,6 +334,11 @@ public class BlueprintContainerEvent extends AdminTestEvent {
      */
     public static BlueprintContainerEvent createContainerEvent(BlueprintEvent e) {
         return new BlueprintContainerEvent(createEvent(e));
+    }
+
+
+    public static Bundle getExtenderBundle() {
+        return extenderBundle;
     }
 }
 

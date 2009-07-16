@@ -158,9 +158,9 @@ public class BlueprintAdminEvent extends AdminTestEvent {
 
         // this is a little circular, but it's probably the best solution for getting
         // a reference to the extender bundle.  The first time we process an event from
-        // the extender, we'll snag the bundle from the event properties and that bundle
+        // the extender, we snag the bundle from the BlueprintEvent  and that bundle
         // will be used to validate all subsequent events.
-        Bundle extenderBundle = BaseTestController.getExtenderBundle(other.props);
+        Bundle extenderBundle = BlueprintContainerEvent.getExtenderBundle();
 
         // if we have exception information, then keep this even if we replace it with another error.
         Throwable cause = (Throwable) other.props.get(EventConstants.CAUSE);
