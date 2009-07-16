@@ -88,6 +88,7 @@ Include-Resource					= \
 	www/error_missing_property.jar=error_missing_property.jar, \
 	www/error_ambiguous_property.jar=error_ambiguous_property.jar, \
 	www/error_private_property.jar=error_private_property.jar, \
+	www/error_eager_prototype.jar=error_eager_prototype.jar, \
 	www/error_protected_property.jar=error_protected_property.jar, \
 	www/error_property_value_value.jar=error_property_value_value.jar, \
 	www/error_property_ref_value.jar=error_property_ref_value.jar, \

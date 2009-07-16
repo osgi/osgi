@@ -162,8 +162,8 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         TestEvent dependsleaf3 = new ComponentAssertion("dependsleaf3", AssertionService.BEAN_CREATED);
         startEvents.addEvent(dependsleaf3);
         TestEvent dependsOnTwo = new ComponentAssertion("dependsOnTwo", AssertionService.BEAN_CREATED);
-        dependsOnOne.addDependency(dependsleaf2);
-        dependsOnOne.addDependency(dependsleaf3);
+        dependsOnTwo.addDependency(dependsleaf2);
+        dependsOnTwo.addDependency(dependsleaf3);
         startEvents.addEvent(dependsOnTwo);
 
         startEvents.addValidator(new ComponentMetadataValidator(
@@ -193,9 +193,9 @@ public class TestComponentInjection extends DefaultTestBundleControl {
 
         // this is the first with a prototype scope
         startEvents.addValidator(new ComponentMetadataValidator(
-            new BeanComponent("prototype1", PrototypeComponentInjection.class, null, "init", "destroy",
+            new BeanComponent("prototype1", PrototypeComponentInjection.class, null, "init", null,
             new TestArgument[] { new StringArgument("prototype1") } , null,
-            null, BeanMetadata.ACTIVATION_EAGER, BeanMetadata.SCOPE_PROTOTYPE)));
+            null, BeanMetadata.ACTIVATION_LAZY, BeanMetadata.SCOPE_PROTOTYPE)));
 
         // we should see 3 created, and all 3 should end up in the set because
         // they will not compare equal
@@ -277,10 +277,6 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         // our singletons should be destroyed
         stopEvents.addAssertion("singleton1", AssertionService.BEAN_DESTROY_METHOD);
         stopEvents.addAssertion("singleton2", AssertionService.BEAN_DESTROY_METHOD);
-
-        // and just one of these
-        startEvents.addAssertion("inlinePrototype1", AssertionService.BEAN_DESTROY_METHOD);
-
         controller.run();
     }
 
