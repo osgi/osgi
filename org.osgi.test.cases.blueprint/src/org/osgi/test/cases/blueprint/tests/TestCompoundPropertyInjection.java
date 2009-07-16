@@ -19,16 +19,41 @@ package org.osgi.test.cases.blueprint.tests;
 import org.osgi.test.cases.blueprint.framework.CompoundPropertyValidator;
 import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
 import org.osgi.test.cases.blueprint.framework.StandardTestController;
+import org.osgi.test.cases.blueprint.framework.StandardErrorTestController;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 public class TestCompoundPropertyInjection  extends DefaultTestBundleControl {
     public void testCompoundProperty() throws Exception {
-        StandardTestController controller = new StandardTestController(getContext(), getWebServer()
-                + "www/compound_property_injection.jar");
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/compound_property_injection.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
 
         startEvents.addValidator(new CompoundPropertyValidator("compoundProperty", "fred.bob.sammy", "sammy", new String("abc"), String.class));
 
+        controller.run();
+    }
+
+
+    /**
+     * Tests a missing property name in the chain.
+     *
+     * @exception Exception
+     */
+    public void testCompoundPropertyMissingName() throws Exception {
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/compound_property_missing_name.jar");
+        controller.run();
+    }
+
+
+    /**
+     * Tests an uninitialized intermediate field.
+     *
+     * @exception Exception
+     */
+    public void testCompoundPropertyMissingValue() throws Exception {
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/compound_property_missing_value.jar");
         controller.run();
     }
 }

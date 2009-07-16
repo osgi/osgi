@@ -26,6 +26,13 @@ public class CompBar extends BaseTestComponent {
         this.setFred(new CompFred());
     }
 
+    public CompBar(String componentId,  boolean init){
+        super(componentId);
+        if (init) {
+            this.setFred(new CompFred());
+        }
+    }
+
     public CompFred getFred() {
         return fred;
     }
