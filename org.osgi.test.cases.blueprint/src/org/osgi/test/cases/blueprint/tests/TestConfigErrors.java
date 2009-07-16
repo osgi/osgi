@@ -1218,42 +1218,42 @@ public class TestConfigErrors extends DefaultTestBundleControl {
     public void testPropertyValueValue() throws Exception {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
-            getWebServer()+"www/property_value_value.jar");
+            getWebServer()+"www/error_property_value_value.jar");
         controller.run();
     }
 
     public void testPropertyRefValue() throws Exception {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
-            getWebServer()+"www/property_ref_value.jar");
+            getWebServer()+"www/error_property_ref_value.jar");
         controller.run();
     }
 
     public void testPropertyValueRef() throws Exception {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
-            getWebServer()+"www/property_value_ref.jar");
+            getWebServer()+"www/error_property_value_ref.jar");
         controller.run();
     }
 
     public void testArgumentValueValue() throws Exception {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
-            getWebServer()+"www/argument_value_value.jar");
+            getWebServer()+"www/error_argument_value_value.jar");
         controller.run();
     }
 
     public void testArgumentRefValue() throws Exception {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
-            getWebServer()+"www/argument_ref_value.jar");
+            getWebServer()+"www/error_argument_ref_value.jar");
         controller.run();
     }
 
     public void testArgumentValueRef() throws Exception {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
-            getWebServer()+"www/argument_value_ref.jar");
+            getWebServer()+"www/error_argument_value_ref.jar");
         controller.run();
     }
 }

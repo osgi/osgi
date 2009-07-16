@@ -184,7 +184,7 @@ public class BaseTestController implements EventHandler, BlueprintListener, Serv
         EventSet cleanupEvents = new EventSet(testContext, testBundle);
         // we start this test phase out by stopping the bundle.  Everything else flows
         // from that.
-        cleanupEvents.addTerminator(new TestBundleUninstaller(testBundle));
+        cleanupEvents.addInitializer(new TestBundleUninstaller(testBundle));
         // we always expect to see an UNINSTALLED bundle event at the end.  We need at least one
         // event to wake us up to kill the timeout
         cleanupEvents.addBundleEvent("UNINSTALLED");

@@ -191,11 +191,8 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         startEvents.addFailureEvent(new ComponentAssertion("singleton1", AssertionService.BEAN_CREATED));
         startEvents.addFailureEvent(new ComponentAssertion("singleton2", AssertionService.BEAN_CREATED));
 
-        // we expect to see 6 (and only 6) instantiations of the prototype components
-        startEvents.addAssertion("prototype1", AssertionService.BEAN_CREATED);
-
         // this is the first with a prototype scope
-        startEvents.addValidator(new ComponentMetadataValidator(
+        startEvents.addValidator(new ComponesvntMetadataValidator(
             new BeanComponent("prototype1", PrototypeComponentInjection.class, null, "init", "destroy",
             new TestArgument[] { new StringArgument("prototype1") } , null,
             null, BeanMetadata.ACTIVATION_EAGER, BeanMetadata.SCOPE_PROTOTYPE)));

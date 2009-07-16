@@ -21,12 +21,28 @@ import org.osgi.framework.BundleContext;
 /**
  * uninstall a bundle at the end of a test phase.
  */
-public class TestBundleUninstaller implements TestCleanup {
+public class TestBundleUninstaller implements TestInitializer, TestCleanup {
     // the bundle we manage
     protected Bundle bundle;
 
     public TestBundleUninstaller(Bundle bundle) {
         this.bundle = bundle;
+    }
+
+
+    /**
+     * Perform any additional test phase cleanup actions.
+     *
+     * @param testContext
+     *               The BundleContext for the test (used for inspecting the test
+     *               environment).
+     *
+     * @exception Exception
+     */
+    public void start(BundleContext testContext) throws Exception {
+        System.out.println(">>>>>>>> uninstalling bundle " + bundle);
+        // this will stop the bundle also.
+        bundle.uninstall();
     }
 
     /**

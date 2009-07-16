@@ -5,6 +5,6 @@ Private-Package                          ${p}.build
 Bundle-Blueprint: config/comp3.xml
 Fragment-Host: ${p}.fragment_host_default
 Include-Resource					= \
-	OSGI-INF/blueprint/comp1.xml=src/org/osgi/test/cases/blueprint/components/comp1/comp2.xml, \
+	OSGI-INF/blueprint/comp2.xml=src/org/osgi/test/cases/blueprint/components/comp1/comp2.xml, \
 	config/comp3.xml=src/org/osgi/test/cases/blueprint/components/comp1/comp3.xml
 

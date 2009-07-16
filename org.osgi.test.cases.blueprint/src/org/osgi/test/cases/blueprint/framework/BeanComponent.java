@@ -183,8 +183,8 @@ public class BeanComponent extends Assert implements TestComponentMetadata {
             assertEquals("Depends on definition", test, meta.getDependsOn());
         }
 
-        assertEquals("Component activation attribute", activation, meta.getActivation());
-        assertEquals("Component scope", scope, meta.getScope());
+        assertEquals("Component " + meta.getId() + " activation attribute mismatch", activation, meta.getActivation());
+        assertEquals("Component " + meta.getId() + " scope mismatch", scope, meta.getScope());
     }
 
 
