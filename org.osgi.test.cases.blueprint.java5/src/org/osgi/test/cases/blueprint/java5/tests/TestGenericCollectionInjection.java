@@ -345,7 +345,7 @@ public class TestGenericCollectionInjection extends DefaultTestBundleControl {
     public void testReferenceListError() throws Exception {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
-            getWebServer()+"www/error_refereice_list_import.jar");
+            getWebServer()+"www/error_reference_list_import.jar");
         controller.run();
     }
 

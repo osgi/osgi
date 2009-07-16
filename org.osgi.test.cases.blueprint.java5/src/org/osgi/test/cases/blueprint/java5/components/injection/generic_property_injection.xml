@@ -3,10 +3,10 @@
 
     <!-- This converter handles several generic type conversions -->
 	<type-converters>
-		<bean id="genericConverter" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericTypeConverter">
-            <argument value="genericConverter"/>
-            <argument value="blueprintConverter"/>
-    	</bean>
+	    <bean id="genericConverter" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericTypeConverter">
+                <argument value="genericConverter"/>
+                <argument value="blueprintConverter"/>
+    	    </bean>
 	</type-converters>
 
     <!-- Convert int[] into a List<Point>.  This consumes two array entries for each target value -->
@@ -17,14 +17,14 @@
                 <value>456</value>
                 <value>0</value>
                 <value>0</value>
-            </list>
+            </array>
         </property>
     </bean>
 
     <!-- Convert List into a Mao<String,Point>.  This consumes three list entries for each target value -->
     <bean id="GenericMapConversion" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericMapInjection">
         <property name="pointMap">
-            <List>
+            <list>
                 <value>Start</value>
                 <value>123</value>
                 <value>456</value>
@@ -38,7 +38,7 @@
     <!-- Handle mapping of a parameterized type to a matching argument, with argument type validation. -->
     <bean id="GenericConversion" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericPropertyInjection">
         <property name="booleanHolder">
-            <bean id="GenericConversion" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericHolder">
+            <bean class="org.osgi.test.cases.blueprint.java5.components.injection.GenericHolder">
                 <argument type="java.util.Boolean" value="true"/>
             </bean>
         </property>
