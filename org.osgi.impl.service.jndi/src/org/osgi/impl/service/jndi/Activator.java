@@ -16,11 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.impl.service.template;
+package org.osgi.impl.service.jndi;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.service.template.TemplateService;
 
 /**
  * 
@@ -28,7 +27,7 @@ import org.osgi.service.template.TemplateService;
  * 
  * @version $Revision$
  */
-public class Activator implements BundleActivator, TemplateService {
+public class Activator implements BundleActivator {
 	/**
 	 * @param context
 	 * @throws java.lang.Exception
@@ -36,7 +35,6 @@ public class Activator implements BundleActivator, TemplateService {
 	 */
 	public void start(BundleContext context) throws Exception {
 		System.out.println("Hello World");
-		context.registerService(TemplateService.class.getName(), this, null);
 	}
 
 	/**
