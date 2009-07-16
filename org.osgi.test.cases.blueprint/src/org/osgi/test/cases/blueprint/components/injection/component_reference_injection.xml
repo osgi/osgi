@@ -211,9 +211,9 @@
    </bean>
 
    <!-- Expecting 3 component instances -->
-   <bean id="threeListPrototype1" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent"
+   <bean id="threeListPrototype4" class="org.osgi.test.cases.blueprint.components.injection.ScopeComponent"
        init-method="init" destroy-method="destroy">
-       <argument value="threePrototype1"/>
+       <argument value="threeListPrototype4"/>
        <argument value="3"/>
        <property name="listReferences">
            <list>

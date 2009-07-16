@@ -192,12 +192,13 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         startEvents.addFailureEvent(new ComponentAssertion("singleton2", AssertionService.BEAN_CREATED));
 
         // this is the first with a prototype scope
-        startEvents.addValidator(new ComponesvntMetadataValidator(
+        startEvents.addValidator(new ComponentMetadataValidator(
             new BeanComponent("prototype1", PrototypeComponentInjection.class, null, "init", "destroy",
             new TestArgument[] { new StringArgument("prototype1") } , null,
             null, BeanMetadata.ACTIVATION_EAGER, BeanMetadata.SCOPE_PROTOTYPE)));
 
-        // we should see 3 created, but only 2 will end up in a set.
+        // we should see 3 created, and all 3 should end up in the set because
+        // they will not compare equal
         startEvents.addAssertion("prototype1", AssertionService.BEAN_CREATED);
         startEvents.addAssertion("prototype1", AssertionService.BEAN_CREATED);
         startEvents.addAssertion("prototype1", AssertionService.BEAN_CREATED);
@@ -205,10 +206,15 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         startEvents.addAssertion("prototype1", AssertionService.BEAN_INIT_METHOD);
         startEvents.addAssertion("prototype1", AssertionService.BEAN_INIT_METHOD);
         startEvents.addAssertion("prototype1", AssertionService.BEAN_INIT_METHOD);
-        // only 4 of these also
+
+        // only 3 of these also
         startEvents.addAssertion("prototype4", AssertionService.BEAN_CREATED);
         startEvents.addAssertion("prototype4", AssertionService.BEAN_CREATED);
         startEvents.addAssertion("prototype4", AssertionService.BEAN_CREATED);
+
+        startEvents.addAssertion("prototype4", AssertionService.BEAN_INIT_METHOD);
+        startEvents.addAssertion("prototype4", AssertionService.BEAN_INIT_METHOD);
+        startEvents.addAssertion("prototype4", AssertionService.BEAN_INIT_METHOD);
 
         startEvents.addAssertion("prototype2", AssertionService.BEAN_CREATED);
         startEvents.addAssertion("prototype2", AssertionService.BEAN_CREATED);
