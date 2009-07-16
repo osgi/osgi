@@ -713,6 +713,16 @@ public class TestConfigErrors extends DefaultTestBundleControl {
     }
 
     /**
+     * target specified both as ref attribute and inline
+     */
+    public void testServiceListenerRefInline() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_service_listener_ref_inline.jar");
+        controller.run();
+    }
+
+    /**
      * No unregister method found
      */
     public void testServiceListenerNoUnregister() throws Exception {

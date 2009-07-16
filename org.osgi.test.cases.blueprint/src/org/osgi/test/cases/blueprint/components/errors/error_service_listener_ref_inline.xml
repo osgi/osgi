@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <!-- the node is the one that is used for the registered service -->
+   <bean id="ServiceOne" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass" init-method="init">
+       <argument value="ServiceOne"/>
+   </bean>
+
+   <bean id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceexport.ServiceOneRegistrationListener">
+       <argument value="ServiceOneListener"/>
+   </bean>
+
+   <!-- This service will be registered before activation because it's just a simple interface registration -->
+   <service id="ServiceOneService" ref="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne"/>
+
+   <!-- This service will not be registered before activation because it uses a listener -->
+   <service id="ServiceTwoService" ref="ServiceTwo" interface="org.osgi.test.cases.blueprint.services.TestServiceTwo">
+       <registration-listener ref="ServiceOneListener"
+           registration-method="register"
+           unregistration-method="unregister">
+       <ref component-id="ServiceOneListener"/
+       </registration-listener>
+   </service>
+</blueprint>
+

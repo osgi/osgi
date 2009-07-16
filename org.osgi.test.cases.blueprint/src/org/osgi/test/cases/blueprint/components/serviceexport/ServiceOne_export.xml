@@ -12,8 +12,8 @@
    </bean>
 
    <!-- simple export using a reference and just one interface. -->
-   <service id="ServiceOneService" ref="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
-       <description>Testing descriptions also</description>
+    <service id="ServiceOneService" ref="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" auto-export="disable">
+       <description>Testing descriptions also.  This also tests explicit use of the default auto-export value.</description>
    </service>
 </blueprint>
 

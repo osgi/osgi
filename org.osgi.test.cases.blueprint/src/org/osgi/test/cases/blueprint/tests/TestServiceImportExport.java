@@ -2367,4 +2367,44 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
         controller.run();
     }
+
+    /*
+     * Just a simple export/import for a service with an unsatisfied dependency.  According to
+     * section 121.6.11, the manager must call the listener with the initial registration state.
+     * In this test, there will be two services, one that is registered at activation and one
+     * unregistered.
+     */
+    public void testRegistrationListenerInitialState() throws Exception {
+        // We only do the export and then shut this back down again.  That will
+        // cause the events of interests to be fired.
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/registration_listener_initial_state.jar");
+        // We're really only interesting the listener events, but we'll take a look
+        // at the metadata as well
+        MetadataEventSet exportStartEvents = controller.getStartEvents();
+        Hashtable activeProps = new Hashtable();
+        // the first property comes from the called method signature, the
+        // second should be passed to the registration listener.
+        activeProps.put("service.interface.name", TestServiceOne.class.getName());
+        activeProps.put("service.component.name", "ServiceOneActive");
+        exportStartEvents.addEvent(new ComponentAssertion("registeredListener", AssertionService.SERVICE_REGISTERED, activeProps));
+
+        Hashtable inactiveProps = new Hashtable();
+        // the first property comes from the called method signature, the
+        // second should be passed to the registration listener.
+        inactiveProps.put("service.interface.name", TestServiceOne.class.getName());
+        inactiveProps.put("service.component.name", "ServiceOneInactive");
+        // this service should get an unregistered call
+        exportStartEvents.addEvent(new ComponentAssertion("unregisteredListener", AssertionService.SERVICE_UNREGISTERED, inactiveProps));
+        // we'll fail this if we see a registered event
+        exportStartEvents.addFailureEvent(new ComponentAssertion("unregisteredListener", AssertionService.SERVICE_REGISTERED, inactiveProps));
+
+        // now some expected termination stuff
+        EventSet exportStopEvents = controller.getStopEvents();
+        exportStopEvents.addEvent(new ComponentAssertion("registeredListener", AssertionService.SERVICE_UNREGISTERED, activeProps));
+        // and we should not see a second unregistered event for this
+        exportStopEvents.addFailureEvent(new ComponentAssertion("unregisteredListener", AssertionService.SERVICE_UNREGISTERED, inactiveProps));
+
+        controller.run();
+    }
 }

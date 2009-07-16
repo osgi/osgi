@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+        Tests the initial state call for a registration listener.  Since the exported service
+        has an unsatisified service dependency, it will not be registered.  When the service
+        manager activates, it must call the unregistered method for the service.
+    </description>
+
+    <!-- the node this service export maps into. -->
+   <bean id="ServiceOne" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
+       <argument value="ServiceOne"/>
+   </bean>
+
+   <bean id="unregisteredListener" class="org.osgi.test.cases.blueprint.components.serviceexport.RegistrationStateListener">
+       <argument value="unregisteredListener"/>
+       <!-- Another circular depdendency.  This allows us to check the service registration state
+            during the listener calls -->
+       <property name="registration" ref="ServiceOneInactive"/>
+   </bean>
+
+   <bean id="registeredListener" class="org.osgi.test.cases.blueprint.components.serviceexport.RegistrationStateListener">
+       <argument value="registeredListener"/>
+       <!-- Another circular depdendency.  This allows us to check the service registration state
+            during the listener calls -->
+       <property name="registration" ref="ServiceOneActive"/>
+   </bean>
+
+   <reference id="ServiceOneDependency" interface="org.osgi.test.cases.blueprint.services.ServiceOneRegistrationListenerInterface" availability="optional"/>
+
+   <!-- simple export using a reference and just one interface.  This one will not register because of the unstatisfied dependency-->
+   <service id="ServiceOneInactive" ref="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" depends-on="ServiceOneDependency">
+       <service-properties>
+           <entry key="service.component.name" value="ServiceOneInactive" />
+       </service-properties>
+       <registration-listener ref="unregisteredListener"
+           registration-method="registered" unregistration-method="unregistered"/>
+   </service>
+
+   <!-- simple export using a reference and just one interface.  This one will not register because of the unstatisfied dependency-->
+   <service id="ServiceOneActive" ref="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
+       <service-properties>
+           <entry key="service.component.name" value="ServiceOneActive" />
+       </service-properties>
+       <registration-listener ref="ServiceOneListener"
+           registration-method="registered" unregistration-method="unregistered"/>
+   </service>
+</blueprint>
+
