@@ -1270,4 +1270,11 @@ public class TestConfigErrors extends DefaultTestBundleControl {
             getWebServer()+"www/error_auto_export_interfaces.jar");
         controller.run();
     }
+
+    public void testAutoRefInline() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_service_ref_inline.jar");
+        controller.run();
+    }
 }
