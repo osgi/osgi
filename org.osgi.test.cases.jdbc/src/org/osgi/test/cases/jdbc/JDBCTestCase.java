@@ -26,6 +26,7 @@ import javax.sql.DataSource;
 import javax.sql.XADataSource;
 
 import org.osgi.framework.ServiceReference;
+import org.osgi.impl.service.jdbc.DerbyEmbeddedDataSourceFactory;
 import org.osgi.service.jdbc.DataSourceFactory;
 import org.osgi.test.support.OSGiTestCase;
 
@@ -45,6 +46,12 @@ public class JDBCTestCase extends OSGiTestCase {
 		assertNotNull("No DataSourceFactory service available", ref);
 		factory = (DataSourceFactory) getContext().getService(ref);
 		assertNotNull(factory);
+		assertEquals( DerbyEmbeddedDataSourceFactory.JDBC_DRIVER_CLASS_PROPERTY_VALUE,
+				ref.getProperty( DataSourceFactory.JDBC_DRIVER_CLASS ) );
+		assertEquals( DerbyEmbeddedDataSourceFactory.JDBC_DRIVER_NAME_PROPERTY_VALUE,
+				ref.getProperty( DataSourceFactory.JDBC_DRIVER_NAME ) );
+		assertEquals( DerbyEmbeddedDataSourceFactory.JDBC_DRIVER_VERSION_PROPERTY_VALUE,
+				ref.getProperty( DataSourceFactory.JDBC_DRIVER_VERSION ) );
 	}
 	
 	protected void tearDown() {

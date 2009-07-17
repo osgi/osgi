@@ -49,7 +49,9 @@ import org.osgi.service.jdbc.DataSourceFactory;
  * 
  */
 public class DerbyEmbeddedDataSourceFactory implements DataSourceFactory {
-	public static final String JDBC_DRIVER_PROPERTY_VALUE = "org.apache.derby.jdbc.Driver40";
+	public static final String JDBC_DRIVER_CLASS_PROPERTY_VALUE = "org.apache.derby.jdbc.Driver40";
+	public static final String JDBC_DRIVER_NAME_PROPERTY_VALUE = "Derby Embedded Data Source";
+	public static final String JDBC_DRIVER_VERSION_PROPERTY_VALUE = "40";
 
 	/**
 	 * Create a Derby DataSource object.

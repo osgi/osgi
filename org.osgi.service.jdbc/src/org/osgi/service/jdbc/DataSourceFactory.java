@@ -33,11 +33,26 @@ import javax.sql.XADataSource;
  */
 public interface DataSourceFactory {
     /**
-     * Property used by JDBC driver to declare driver class when registering 
-     * as a JDBC DataSourceFactory service. Clients may filter or test this
+     * Property used by a JDBC driver to declare the driver class when registering 
+     * a JDBC DataSourceFactory service. Clients may filter or test this
      * property to determine if the driver is suitable, or the desired one.
      */
-    public static final String JDBC_DRIVER = "osgi.jdbc.driver";
+    public static final String JDBC_DRIVER_CLASS = "osgi.jdbc.driver.class";
+    
+    /**
+     * Property used by a JDBC driver to declare the driver name when registering 
+     * a JDBC DataSourceFactory service. Clients may filter or test this
+     * property to determine if the driver is suitable, or the desired one.
+     */
+    public static final String JDBC_DRIVER_NAME = "osgi.jdbc.driver.name";
+    
+    /**
+     * Property used by a JDBC driver to declare the driver version when registering 
+     * a JDBC DataSourceFactory service. Clients may filter or test this
+     * property to determine if the driver is suitable, or the desired one.
+     */
+    public static final String JDBC_DRIVER_VERSION = "osgi.jdbc.driver.version";
+    
     
     /**
      * Common property keys that DataSource clients should supply values for

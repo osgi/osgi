@@ -40,7 +40,9 @@ public class Activator implements BundleActivator {
 	 */
 	public void start(BundleContext context) throws Exception {
 		Hashtable props = new Hashtable();
-		props.put( DataSourceFactory.JDBC_DRIVER, DerbyEmbeddedDataSourceFactory.JDBC_DRIVER_PROPERTY_VALUE );
+		props.put( DataSourceFactory.JDBC_DRIVER_CLASS, DerbyEmbeddedDataSourceFactory.JDBC_DRIVER_CLASS_PROPERTY_VALUE );
+		props.put( DataSourceFactory.JDBC_DRIVER_NAME, DerbyEmbeddedDataSourceFactory.JDBC_DRIVER_NAME_PROPERTY_VALUE );
+		props.put( DataSourceFactory.JDBC_DRIVER_VERSION, DerbyEmbeddedDataSourceFactory.JDBC_DRIVER_VERSION_PROPERTY_VALUE );
 
 		dataSourceServiceRegistration = context.registerService( DataSourceFactory.class.getName(),
 				new DerbyEmbeddedDataSourceFactory(), 
