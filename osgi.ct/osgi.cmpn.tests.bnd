@@ -6,12 +6,7 @@ Bundle-Version					: ${cmpn.release.version}
 Bundle-Activator				: org.osgi.tools.group.Group
 
 Include-Resource				: \
-	${repo;${build.cmpn.tests}}, \
-    \
     NOTICE=../osgi.companion/legal/NOTICE.txt, \
  	about.html=../osgi.companion/legal/about-ri.html
-
-#   org.osgi.test.cases.signature.cmpn, \
-
-Private-Package					: \
-	org.osgi.tools.group
+ 	
+-pack: org.osgi.test.cases.component, org.osgi.test.cases.cm, org.osgi.test.cases.blueprint

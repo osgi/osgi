@@ -1,26 +1,8 @@
 -include : layout.bnd
--reportnewer : true
-
-# Build the deliverables that are published in the repository
-# for use in all projects.
-
-bin.includes				= \
-	osgi.core.tests.jar, \
-	osgi.cmpn.tests.jar, \
-	osgi.mobile.tests.jar, \
-	osgi.enterprise.tests.jar
-
+-resourceonly: true
 
 # The following line builds all these files and publishes them to 
 # the repository (if they are deployable)
-
--dependson 					= ${uniq; \
-    osgi.ri, \
-	${build.core.tests}, \
-	${build.cmpn.tests}, \
-	${build.enterprise.tests}, \
-	${build.mobile.tests} \
- }
 
 -buildpath 					= org.osgi.internal; version=project
 

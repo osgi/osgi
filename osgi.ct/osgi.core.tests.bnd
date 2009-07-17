@@ -6,13 +6,5 @@ Bundle-Version				: ${core.release.version}
 Bundle-Activator			: org.osgi.tools.group.Group
 
 Include-Resource				: \
-	${repo;${build.core.tests}}, \
-    \
  	NOTICE=../osgi.companion/legal/NOTICE.txt, \
  	about.html=../osgi.companion/legal/about-ri.html
-
-
-#   org.osgi.test.cases.signature.core, \
-
-Private-Package				: \
-	org.osgi.tools.group
