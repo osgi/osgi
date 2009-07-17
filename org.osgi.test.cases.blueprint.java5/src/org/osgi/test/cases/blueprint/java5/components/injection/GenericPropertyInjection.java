@@ -47,7 +47,7 @@ public class GenericPropertyInjection extends BaseTestComponent {
     }
 
     public void setBooleanHolder(GenericHolder<Boolean> value) {
-        setPropertyValue("boolHolder", value, GenericHolder.class);
+        setPropertyValue("booleanHolder", value, GenericHolder.class);
     }
 }
 

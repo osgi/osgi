@@ -3,6 +3,7 @@
 
     <!-- Handle builtin conversion of enum values. This is an error case because the enumeration value is not found -->
     <bean id="EnumConversion" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericPropertyInjection">
+        <argument value="EnumConversion"/>
         <property name="suit" value="CLUBSXXXX"/>
     </bean>
 </blueprint>

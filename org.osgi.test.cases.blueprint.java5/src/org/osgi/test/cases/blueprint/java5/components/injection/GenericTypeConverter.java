@@ -25,7 +25,7 @@ import org.osgi.service.blueprint.container.ReifiedType;
 import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 
 @SuppressWarnings("unchecked")
-public class GenericTypeConverter extends BaseTestComponent {
+public class GenericTypeConverter extends BaseTestComponent implements Converter {
     // the injected converter type
     protected Converter blueprintConverter;
 
@@ -123,7 +123,7 @@ public class GenericTypeConverter extends BaseTestComponent {
             {
                 Class<?>targetType = type.getRawClass();
                 // we only handle TreeMap<String, Point>, and only from a List of triplet values
-                if (!(targetType != TreeMap.class)) {
+                if (targetType != TreeMap.class) {
                     return false;
                 }
                 Class<?>indexType = type.getActualTypeArgument(0).getRawClass();

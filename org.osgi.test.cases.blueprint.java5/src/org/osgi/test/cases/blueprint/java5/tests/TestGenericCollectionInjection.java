@@ -88,14 +88,14 @@ public class TestGenericCollectionInjection extends DefaultTestBundleControl {
             List<Integer> expected = new ArrayList<Integer>();
             expected.add(new Integer(123));
             expected.add(new Integer(456));
-            startEvents.validateComponentProperty("GenericListExtendsProperty", "extendsList", expected, List.class);
+            startEvents.validateComponentProperty("GenericListExtendsProperty", "extendsInteger", expected, List.class);
         }
 
         {
             List<Integer> expected = new ArrayList<Integer>();
             expected.add(new Integer(123));
             expected.add(new Integer(456));
-            startEvents.validateComponentProperty("GenericListSuperProperty", "superList", expected, List.class);
+            startEvents.validateComponentProperty("GenericListSuperProperty", "superInteger", expected, List.class);
         }
 
         {
@@ -165,8 +165,8 @@ public class TestGenericCollectionInjection extends DefaultTestBundleControl {
 
             // this is the result expected when the source is a set...the dup has been removed
             Collection expectedSetList = new ArrayList();
-            expectedList.add("abc");
-            expectedList.add("def");
+            expectedSetList.add("abc");
+            expectedSetList.add("def");
 
             // these should all end up being the same type
             addPropertyValidator(startEvents, "setToQueue", "queue", expectedSetList, Queue.class, LinkedList.class);
@@ -212,7 +212,7 @@ public class TestGenericCollectionInjection extends DefaultTestBundleControl {
         }
 
         {
-            startEvents.validateComponentArgument("EnumConversion", "suit", Suit.CLUBS, Suit.class);
+            startEvents.validateComponentProperty("EnumConversion", "suit", Suit.CLUBS, Suit.class);
         }
 
         controller.run();
@@ -334,6 +334,7 @@ public class TestGenericCollectionInjection extends DefaultTestBundleControl {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
             getWebServer()+"www/error_reference_list_service_import.jar");
+        controller.addSetupBundle(getWebServer()+"www/managed_service_export.jar");
         controller.run();
     }
 
@@ -346,6 +347,7 @@ public class TestGenericCollectionInjection extends DefaultTestBundleControl {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
             getWebServer()+"www/error_reference_list_import.jar");
+        controller.addSetupBundle(getWebServer()+"www/managed_service_export.jar");
         controller.run();
     }
 

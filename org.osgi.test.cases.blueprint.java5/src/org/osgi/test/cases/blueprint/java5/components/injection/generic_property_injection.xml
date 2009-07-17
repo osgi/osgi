@@ -5,8 +5,8 @@
 	<type-converters>
 	    <bean id="genericConverter" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericTypeConverter">
                 <argument value="genericConverter"/>
-                <argument value="blueprintConverter"/>
-    	    </bean>
+                <argument ref="blueprintConverter"/>
+    	 </bean>
 	</type-converters>
 
     <!-- Convert int[] into a List<Point>.  This consumes two array entries for each target value -->
@@ -37,15 +37,17 @@
 
     <!-- Handle mapping of a parameterized type to a matching argument, with argument type validation. -->
     <bean id="GenericConversion" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericPropertyInjection">
+        <argument value="GenericConversion"/>
         <property name="booleanHolder">
             <bean class="org.osgi.test.cases.blueprint.java5.components.injection.GenericHolder">
-                <argument type="java.util.Boolean" value="true"/>
+                <argument><value type="java.lang.Boolean">true</value></argument>
             </bean>
         </property>
     </bean>
 
     <!-- Handle builtin conversion of enum values. -->
     <bean id="EnumConversion" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericPropertyInjection">
+        <argument value="EnumConversion" />
         <property name="suit" value="CLUBS"/>
     </bean>
 </blueprint>

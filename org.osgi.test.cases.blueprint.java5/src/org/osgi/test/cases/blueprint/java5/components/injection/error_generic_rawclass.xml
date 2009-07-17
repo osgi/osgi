@@ -4,9 +4,10 @@
     <!-- Handle mapping of a parameterized type to a matching argument, with argument type validation.
          This will be an error because there's no type converter available to validate the generic bounds -->
     <bean id="GenericConversion" class="org.osgi.test.cases.blueprint.java5.components.injection.GenericPropertyInjection">
+        <argument value="GenericConversion"/>
         <property name="booleanHolder">
             <bean class="org.osgi.test.cases.blueprint.java5.components.injection.GenericHolder">
-                <argument type="java.util.Boolean" value="true"/>
+                <argument><value type="java.lang.Boolean">true</value></argument>
             </bean>
         </property>
     </bean>
