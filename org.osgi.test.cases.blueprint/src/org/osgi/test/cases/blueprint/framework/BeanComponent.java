@@ -91,10 +91,7 @@ public class BeanComponent extends Assert implements TestComponentMetadata {
         this.dependsOn = dependsOn;
         this.activation = activation;
         this.scope = scope;
-        // make sure we get the default set
-        if (this.scope == null) {
-            this.scope = BeanMetadata.SCOPE_SINGLETON;
-        }
+
         // these generally get set post-construction
         this.factoryComponent = null;
 

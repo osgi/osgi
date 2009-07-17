@@ -12,21 +12,15 @@
        <argument value="ServiceOne"/>
    </bean>
 
-   <bean id="unregisteredListener" class="org.osgi.test.cases.blueprint.components.serviceexport.RegistrationStateListener">
+   <bean id="unregisteredListener" class="org.osgi.test.cases.blueprint.components.serviceexport.ServiceOneRegistrationListener">
        <argument value="unregisteredListener"/>
-       <!-- Another circular depdendency.  This allows us to check the service registration state
-            during the listener calls -->
-       <property name="registration" ref="ServiceOneInactive"/>
    </bean>
 
-   <bean id="registeredListener" class="org.osgi.test.cases.blueprint.components.serviceexport.RegistrationStateListener">
+   <bean id="registeredListener" class="org.osgi.test.cases.blueprint.components.serviceexport.ServiceOneRegistrationListener">
        <argument value="registeredListener"/>
-       <!-- Another circular depdendency.  This allows us to check the service registration state
-            during the listener calls -->
-       <property name="registration" ref="ServiceOneActive"/>
    </bean>
 
-   <reference id="ServiceOneDependency" interface="org.osgi.test.cases.blueprint.services.ServiceOneRegistrationListenerInterface" availability="optional"/>
+   <reference id="ServiceOneDependency" interface="org.osgi.test.cases.blueprint.services.TestServiceTwo"/>
 
    <!-- simple export using a reference and just one interface.  This one will not register because of the unstatisfied dependency-->
    <service id="ServiceOneInactive" ref="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" depends-on="ServiceOneDependency">
@@ -42,7 +36,7 @@
        <service-properties>
            <entry key="service.component.name" value="ServiceOneActive" />
        </service-properties>
-       <registration-listener ref="ServiceOneListener"
+       <registration-listener ref="registered_listener"
            registration-method="registered" unregistration-method="unregistered"/>
    </service>
 </blueprint>

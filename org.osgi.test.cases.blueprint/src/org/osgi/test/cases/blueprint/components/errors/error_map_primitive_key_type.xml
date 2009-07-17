@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    default-activation="eager">
+
+    <bean id="compTypedKeys" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection"
+       init-method="init" destroy-method="destroy">
+        <argument>
+            <map value-type="boolean">
+                <entry key="true" value="true"/>
+                <entry value="false">
+                    <key><value>false</value></key>
+                </entry>
+                <entry>
+                    <key><value type="java.lang.Double">1.0</value></key>
+                    <value>double</value>
+                </entry>
+            </map>
+        </argument>
+    </bean>
+</blueprint>
+

@@ -915,6 +915,16 @@ public class TestConfigErrors extends DefaultTestBundleControl {
     }
 
     /**
+     * primitive type for a key-type
+     */
+    public void testMapPrimitiveKeyType() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_map_primitive_key_type.jar");
+        controller.run();
+    }
+
+    /**
      * Duplicate ref values specified
      */
     public void testMapDupValueRef() throws Exception {
@@ -1285,6 +1295,30 @@ public class TestConfigErrors extends DefaultTestBundleControl {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
             getWebServer()+"www/error_service_ref_inline.jar");
+        controller.run();
+    }
+
+    public void testReferenceNegativeTimeout() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_reference_negative_timeout.jar");
+        controller.run();
+    }
+
+    public void testReferenceNegativeDefaultTimeout() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_reference_negative_default_timeout.jar");
+        controller.run();
+    }
+
+    /**
+     * target specified both as ref attribute and inline
+     */
+    public void testReferenceListenerRefInline() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/error_reference_listener_ref_inline.jar");
         controller.run();
     }
 }
