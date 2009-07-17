@@ -1,6 +1,6 @@
 Bundle-Version: 4.2.0.${project.build}
 Bundle-RequiredExecutionEnvironment = J2SE-1.5
-Signature-Packages:  javax.transaction, javax.transaction.xa
+-signaturetest                      = javax.transaction, javax.transaction.xa
 
 Private-Package						= org.osgi.test.support.*, \
 	${p}.*

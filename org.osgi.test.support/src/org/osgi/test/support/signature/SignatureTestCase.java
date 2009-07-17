@@ -1,29 +1,19 @@
 /*
- * $Id: TestControl.java 4756 2007-04-06 02:42:28Z bjhargrave $
+ * Copyright (c) OSGi Alliance (2009). All Rights Reserved.
  * 
- * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
- * 
- * Implementation of certain elements of the OSGi Specification may be subject
- * to third party intellectual property rights, including without limitation,
- * patent rights (such a third party may or may not be a member of the OSGi
- * Alliance). The OSGi Alliance is not responsible and shall not be held
- * responsible in any manner for identifying or failing to identify any or all
- * such third party intellectual property rights.
- * 
- * This document and the information contained herein are provided on an "AS IS"
- * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
- * HEREIN WILL NOT INFRINGE ANY RIGHTS AND ANY IMPLIED WARRANTIES OF
- * MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL THE
- * OSGI ALLIANCE BE LIABLE FOR ANY LOSS OF PROFITS, LOSS OF BUSINESS, LOSS OF
- * USE OF DATA, INTERRUPTION OF BUSINESS, OR FOR DIRECT, INDIRECT, SPECIAL OR
- * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
- * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
- * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
- * 
- * All Company, brand and product names may be trademarks that are the sole
- * property of their respective owners. All rights reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.osgi.test.support.signature;
 
 /**
@@ -31,46 +21,45 @@ package org.osgi.test.support.signature;
  * and less fields, methods, end constructors that are visible.
  */
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.StringTokenizer;
 import java.util.TreeSet;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.OSGiTestCase;
 
 /**
  * 
- * @version $Revision$
+ * @version $Revision: 7050 $
  */
-public abstract class DefaultSignatureTestControl extends DefaultTestBundleControl implements
+public abstract class SignatureTestCase extends OSGiTestCase implements
 		ParserCallback {
-	Class		clazz;
-	Method		methods[];
-	Constructor	constructors[];
-	Field		fields[];
-	Class		inner[];
-	Set			found;
-	Set			missing;
-	boolean		ignore;
-	Bundle testb;
+	private Class		clazz;
+	private Method		methods[];
+	private Constructor	constructors[];
+	private Field		fields[];
+	private Class		inner[];
+	private Set			found;
+	private Set			missing;
 
-	
-	/** Callback
-	 *  For the class parser to do attributes that are unknown.
+	public void testSignature() {
+		doPackage(getContext().getBundle(), "OSGI-INF/signature");
+	}
+
+	/**
+	 * Callback For the class parser to do attributes that are unknown.
+	 * 
 	 * @param name
 	 * @param data
-	 * @see org.osgi.test.cases.signature.tbc.ParserCallback#doAttribute(java.lang.String, byte[])
+	 * @see org.osgi.test.cases.signature.tbc.ParserCallback#doAttribute(java.lang.String,
+	 *      byte[])
 	 */
 	public Object doAttribute(String name, byte[] data) {
 		return null;
@@ -78,12 +67,14 @@ public abstract class DefaultSignatureTestControl extends DefaultTestBundleContr
 
 	/**
 	 * Call back to handle a class file.
+	 * 
 	 * @param access
 	 * @param name
 	 * @param superName
 	 * @param interfaces
 	 * @return
-	 * @see org.osgi.test.cases.signature.tbc.ParserCallback#doClass(int, java.lang.String, java.lang.String, java.lang.String[])
+	 * @see org.osgi.test.cases.signature.tbc.ParserCallback#doClass(int,
+	 *      java.lang.String, java.lang.String, java.lang.String[])
 	 */
 	public boolean doClass(int access, String name, String superName,
 			String[] interfaces) {
@@ -110,15 +101,15 @@ public abstract class DefaultSignatureTestControl extends DefaultTestBundleContr
 				checkInterfaces(clazz, interfaces);
 
 				int cMods = clazz.getModifiers();
-				checkModifiers(access, cMods, ACC_PUBLIC + ACC_FINAL
-						+ ACC_INTERFACE + ACC_ABSTRACT);
+				checkModifiers(access, cMods, ACC_PUBLIC | ACC_FINAL
+						| ACC_INTERFACE | ACC_ABSTRACT);
 
 				checkSuperClass(clazz, superClassName);
 
-				methods = clazz.getDeclaredMethods();
-				fields = clazz.getDeclaredFields();
-				constructors = clazz.getDeclaredConstructors();
-				inner = clazz.getDeclaredClasses();
+				methods = clazz.getMethods();
+				fields = clazz.getFields();
+				constructors = clazz.getConstructors();
+				inner = clazz.getClasses();
 				return true;
 			}
 			catch (ClassNotFoundException cnfe) {
@@ -126,9 +117,13 @@ public abstract class DefaultSignatureTestControl extends DefaultTestBundleContr
 			}
 		}
 		catch (Exception e) {
-			fail("Unexpected exception: " + e);
+			fail("Unexpected exception", e);
 		}
 		return false;
+	}
+
+	private void log(String string) {
+		System.out.println(string);
 	}
 
 	public void doField(int access, String name, String desiredDescriptor,
@@ -139,16 +134,14 @@ public abstract class DefaultSignatureTestControl extends DefaultTestBundleContr
 		for (int i = 0; i < fields.length; i++) {
 			if (fields[i] != null && fields[i].getName().equals(name)) {
 				int cMods = fields[i].getModifiers();
-				checkModifiers(access, cMods, ACC_PUBLIC + ACC_PRIVATE
-						+ ACC_PROTECTED + ACC_STATIC + ACC_FINAL);
+				checkModifiers(access, cMods, ACC_PUBLIC | ACC_PRIVATE
+						| ACC_PROTECTED | ACC_STATIC | ACC_FINAL);
 
 				Class type = fields[i].getType();
 				StringBuffer sb = new StringBuffer();
 				createTypeDescriptor(sb, type);
-				assertEquals(
-						"Field " + getClassName(clazz) + "." + name,
-						desiredDescriptor,
-						sb.toString());
+				assertEquals("Field " + getClassName(clazz) + "." + name,
+						desiredDescriptor, sb.toString());
 
 				if (constant != null)
 					try {
@@ -175,9 +168,10 @@ public abstract class DefaultSignatureTestControl extends DefaultTestBundleContr
 		if (!isVisible(access))
 			return;
 
-		if (clazz == null)
+		if (inner == null)
 			return;
 
+		// TODO we do now have inner interface in ListenerHook.ListenerInfo
 		// TODO Not sure what to do here?
 		// We currently have no visible classes in our API
 		// so we can skip it for now.
@@ -189,7 +183,7 @@ public abstract class DefaultSignatureTestControl extends DefaultTestBundleContr
 		if (!isVisible(access))
 			return;
 
-		log("#visit " + getClassName(clazz) + "." + name + " " + desc );
+		log("#visit " + getClassName(clazz) + "." + name + " " + desc);
 
 		if (name.equals("<init>"))
 			checkConstructors(access, name, desc, exceptions);
@@ -197,31 +191,11 @@ public abstract class DefaultSignatureTestControl extends DefaultTestBundleContr
 			checkMethods(access, name, desc, exceptions);
 	}
 
+	/**
+	 * We removed the check to see if there is too much
+	 */
 	public void doEnd() {
-		for (int i = 0; i < methods.length; i++) {
-			if (methods[i] != null) {
-				int cMods = methods[i].getModifiers();
-				if (Modifier.isPublic(cMods) || Modifier.isProtected(cMods))
-					fail("Extra visible method " + getClassName(clazz) + "."
-							+ methods[i]);
-			}
-		}
-		for (int i = 0; i < fields.length; i++) {
-			if (fields[i] != null) {
-				int cMods = fields[i].getModifiers();
-				if (Modifier.isPublic(cMods) || Modifier.isProtected(cMods))
-					fail("Extra visible field " + getClassName(clazz) + "."
-							+ fields[i]);
-			}
-		}
-		for (int i = 0; i < constructors.length; i++) {
-			if (constructors[i] != null) {
-				int cMods = constructors[i].getModifiers();
-				if (Modifier.isPublic(cMods) || Modifier.isProtected(cMods))
-					fail("Extra visible constructor " + getClassName(clazz)
-							+ "." + constructors[i]);
-			}
-		}
+		// empty
 	}
 
 	/**
@@ -230,25 +204,27 @@ public abstract class DefaultSignatureTestControl extends DefaultTestBundleContr
 	 * 
 	 * @param fin
 	 * @param cv
-	 * @throws IOException
 	 */
 
-	public void doPackage(Bundle bundle, String path, ParserCallback cv)
-			throws IOException {
+	private void doPackage(Bundle bundle, String path) {
 		found = new HashSet();
 		missing = new HashSet();
-		Enumeration e = bundle.findEntries(path, "*.class", false);
+		Enumeration e = bundle.findEntries(path, null, true);
+		if (e == null)
+			fail("No Signature Files found in " + path);
+
 		while (e.hasMoreElements()) {
 			URL url = (URL) e.nextElement();
-			try {
-				InputStream in = url.openStream();
-				ClassParser rdr = new ClassParser(in);
-				rdr.go(this);
-				in.close();
-			}
-			catch (Exception ioe) {
-				ioe.printStackTrace();
-				fail("Unexpected exception " + ioe);
+			if (!url.toString().endsWith("/")) {
+				try {
+					InputStream in = url.openStream();
+					ClassParser rdr = new ClassParser(in);
+					rdr.go(this);
+					in.close();
+				}
+				catch (Exception ioe) {
+					fail("Unexpected exception", ioe);
+				}
 			}
 		}
 		if (found.isEmpty()) {
@@ -270,9 +246,9 @@ public abstract class DefaultSignatureTestControl extends DefaultTestBundleContr
 				String actualDescriptor = sb.toString();
 				if (actualDescriptor.equals(desiredDescriptor)) {
 					int cMods = constructors[i].getModifiers();
-					checkModifiers(access, cMods, ACC_PUBLIC + ACC_PRIVATE
-							+ ACC_PROTECTED + ACC_STATIC + ACC_FINAL
-							+ ACC_ABSTRACT);
+					checkModifiers(access, cMods, ACC_PUBLIC | ACC_PRIVATE
+							| ACC_PROTECTED | ACC_STATIC | ACC_FINAL
+							| ACC_ABSTRACT);
 					checkExceptions(exceptions, constructors[i]
 							.getExceptionTypes());
 					constructors[i] = null;
@@ -287,36 +263,34 @@ public abstract class DefaultSignatureTestControl extends DefaultTestBundleContr
 	}
 
 	private void checkExceptions(String[] exceptions, Class[] exceptionTypes) {
-		if ( exceptions == null && (exceptionTypes==null || exceptionTypes.length==0))
+		if (exceptions == null
+				&& (exceptionTypes == null || exceptionTypes.length == 0))
 			return;
-		
+
 		Set set = new TreeSet(Arrays.asList(exceptions));
-		for (int i = 0; exceptionTypes !=null && i < exceptionTypes.length; i++) {
-			String name = exceptionTypes[i].getName().replace('.','/');
+		for (int i = 0; exceptionTypes != null && i < exceptionTypes.length; i++) {
+			String name = exceptionTypes[i].getName().replace('.', '/');
 			if (!set.remove(name))
 				fail("Superfluous Exception " + exceptionTypes[i]);
 		}
-		if ( ! set.isEmpty() )
-			fail("Missing declared exceptions: " + set );
+		if (!set.isEmpty())
+			fail("Missing declared exceptions: " + set);
 	}
 
-	private void checkInterfaces(Class clazz, String[] interfaces) {
-		Class implemented[] = clazz.getInterfaces();
+	private void checkInterfaces(Class c, String[] interfaces) {
+		Class implemented[] = c.getInterfaces();
 		outer: for (int i = 0; i < interfaces.length; i++) {
 			String ifname = interfaces[i].replace('/', '.');
-			for (int c = 0; c < implemented.length; c++) {
-				if (implemented[c] != null
-						&& implemented[c].getName().equals(ifname)) {
-					implemented[c] = null;
+			for (int j = 0; j < implemented.length; j++) {
+				if (implemented[j] != null
+						&& implemented[j].getName().equals(ifname)) {
+					implemented[j] = null;
 					continue outer;
 				}
 			}
-			fail("Missing interface, class " + getClassName(clazz) + " misses "
+			fail("Missing interface, class " + getClassName(c) + " misses "
 					+ ifname);
 		}
-		for (int i = 0; i < implemented.length; i++)
-			assertNull("Extra interface: " + getClassName(clazz)
-					+ " implements " + implemented[i], implemented[i]);
 	}
 
 	private void checkMethods(int access, String name,
@@ -326,9 +300,9 @@ public abstract class DefaultSignatureTestControl extends DefaultTestBundleContr
 				String cDesc = getMethodDescriptor(methods[i]);
 				if (cDesc.equals(desiredDescriptor)) {
 					int cMods = methods[i].getModifiers();
-					checkModifiers(access, cMods, ACC_PUBLIC + ACC_PRIVATE
-							+ ACC_PROTECTED + ACC_STATIC + ACC_FINAL
-							+ ACC_ABSTRACT);
+					checkModifiers(access, cMods, ACC_PUBLIC | ACC_PRIVATE
+							| ACC_PROTECTED | ACC_STATIC | ACC_FINAL
+							| ACC_ABSTRACT);
 					checkExceptions(exceptions, methods[i].getExceptionTypes());
 					methods[i] = null;
 					return;
@@ -345,13 +319,10 @@ public abstract class DefaultSignatureTestControl extends DefaultTestBundleContr
 		assertEquals("Relevant access modifiers", access, cMods);
 	}
 
-	private void checkSuperClass(Class clazz, String superClassName) {
-		Class superClass = clazz.getSuperclass();
+	private void checkSuperClass(Class c, String superClassName) {
+		Class superClass = c.getSuperclass();
 		if (superClass != null)
-			assertEquals(
-					"Super class",
-					superClassName,
-					superClass.getName());
+			assertEquals("Super class", superClassName, superClass.getName());
 	}
 
 	private void createTypeDescriptor(StringBuffer sb, Class type) {
@@ -363,25 +334,34 @@ public abstract class DefaultSignatureTestControl extends DefaultTestBundleContr
 			if (type.isPrimitive()) {
 				if (type == byte.class)
 					sb.append("B");
-				else if (type == char.class)
-					sb.append("C");
-				else if (type == double.class)
-					sb.append("D");
-				else if (type == float.class)
-					sb.append("F");
-				else if (type == int.class)
-					sb.append("I");
-				else if (type == long.class)
-					sb.append("J");
-				else if (type == short.class)
-					sb.append("S");
-				else if (type == boolean.class)
-					sb.append("Z");
-				else if (type == void.class)
-					sb.append("V");
 				else
-					throw new IllegalArgumentException(
-							"Unknown primitive type " + type);
+					if (type == char.class)
+						sb.append("C");
+					else
+						if (type == double.class)
+							sb.append("D");
+						else
+							if (type == float.class)
+								sb.append("F");
+							else
+								if (type == int.class)
+									sb.append("I");
+								else
+									if (type == long.class)
+										sb.append("J");
+									else
+										if (type == short.class)
+											sb.append("S");
+										else
+											if (type == boolean.class)
+												sb.append("Z");
+											else
+												if (type == void.class)
+													sb.append("V");
+												else
+													throw new IllegalArgumentException(
+															"Unknown primitive type "
+																	+ type);
 			}
 			else {
 				sb.append("L");
@@ -391,10 +371,10 @@ public abstract class DefaultSignatureTestControl extends DefaultTestBundleContr
 		}
 	}
 
-	private String getClassName(Class clazz) {
-		if (clazz.isArray())
-			return getClassName(clazz.getComponentType()) + "[]";
-		return clazz.getName();
+	private String getClassName(Class c) {
+		if (c.isArray())
+			return getClassName(c.getComponentType()) + "[]";
+		return c.getName();
 	}
 
 	private void getDescriptor(StringBuffer sb, Class[] parameters) {
