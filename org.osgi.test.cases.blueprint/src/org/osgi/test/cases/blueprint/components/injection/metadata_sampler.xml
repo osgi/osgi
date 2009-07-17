@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+    <description>
+        Base test configuration for testing different BlueprintContainer APIs.
+        This will have a representative sampling of all of the component types, both
+        toplevel and inline to test the getMetadata() variations.
+    </description>
+
+    <!-- a toplevel bean anonymous bean -->
+    <bean class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+       <argument value="leaf1"/>
+   </bean>
+
+   <!-- a named bean referenced by a service element -->
+    <bean id="ServiceOne" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
+      <argument value="ServiceOne"/>
+   </bean>
+
+  <!-- an anonymous service component -->
+   <service ref="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" auto-export="disabled"/>
+
+  <!-- a named service component -->
+  <service id="NamedService" ref="ServiceOnce" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" auto-export="disabled"/>
+
+  <!-- an unnamed reference element -->
+  <reference interface="org.osgi.test.cases.blueprint.services.TestServiceTwo" availability="optional"/>
+
+  <!-- a named reference element -->
+  <reference id="NamedReference" interface="org.osgi.test.cases.blueprint.services.TestServiceTwo" availability="optional"/>
+
+  <!-- an unnamed reference-list element -->
+  <reference-list interface="org.osgi.test.cases.blueprint.services.TestServiceTwo" availability="optional"/>
+
+  <!-- a named reference-list element -->
+  <reference-list id="NamedReferenceList" interface="org.osgi.test.cases.blueprint.services.TestServiceTwo" availability="optional"/>
+
+  <!-- this bean is a place holder for creating other inline component types -->
+  <bean id="inlineItems" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
+      <property name="list">
+          <list>
+              <service ref="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" auto-export="disabled"/>
+              <reference interface="org.osgi.test.cases.blueprint.services.TestServiceTwo" availability="optional"/>
+              <reference-list interface="org.osgi.test.cases.blueprint.services.TestServiceTwo" availability="optional"/>
+              <bean class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+                 <argument value="leaf1"/>
+             </bean>
+          </list>
+      </property>
+  </bean>
+</blueprint>
+

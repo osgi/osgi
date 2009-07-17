@@ -438,4 +438,21 @@ public class TestComponentInjection extends DefaultTestBundleControl {
             getWebServer()+"www/recursive_init-method.jar");
         controller.run();
     }
+
+
+    /**
+     * Test the getMetdata() variations using a combination
+     * of all metadata types and id variations.  This will
+     * verify that all of the expected comments, including
+     * the inline ones and environment components, can be
+     * retrieved.
+     */
+    public void testMetadataSampler() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/metadata_sampler.jar");
+        MetadataEventSet startEvents = controller.getStartEvents();
+        // this is a special validator just for this test
+        startEvents.addValidator(new MetadataSamplerValidator());
+        controller.run();
+    }
 }

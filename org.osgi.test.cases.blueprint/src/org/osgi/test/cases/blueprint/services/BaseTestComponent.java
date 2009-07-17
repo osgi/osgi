@@ -273,7 +273,28 @@ public class BaseTestComponent implements ComponentTestInfo{
      * @return The component id name.
      */
     public String toString() {
-        return "Component:" + componentId + "|Args:" + arguments + "|Props:" + properties;
+        return "Component:" + componentId + "|Args:" + toString(arguments) + "|Props:" + toString(properties);
+    }
+
+    private String toString(Hashtable properties) {
+        StringBuffer buf = new StringBuffer();
+        buf.append("{");
+        Iterator i = properties.keySet().iterator();
+        while (i.hasNext()) {
+            String name = (String)i.next();
+            buf.append(name).append(" = ");
+            ValueDescriptor desc = (ValueDescriptor) properties.get(name);
+            if (desc.getValue() == this) {
+                buf.append("<Component:").append(componentId).append(">");
+            } else {
+                buf.append(desc);
+            }
+            if (i.hasNext()) {
+                buf.append(", ");
+            }
+        }
+        buf.append("}");
+        return buf.toString();
     }
 
     /**
