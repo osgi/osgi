@@ -24,6 +24,7 @@ Include-Resource					= \
 	tb14.jar
 	
 Test-Cases							= ${testcases}
+-signaturetest                      = org.osgi.service.component
 
 -buildpath							= \
     org.osgi.test.support;                  version=project, \

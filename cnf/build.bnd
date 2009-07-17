@@ -48,7 +48,8 @@ btool.compress			= true
 #${replace;${project.allsourcepath};:;,}
 -plugin	            	= aQute.lib.deployer.FileRepo;location=${repo}, \
   						  aQute.lib.deployer.FileRepo;location=${licensed-repo};readonly=true, \
-  						  aQute.bnd.signing.JartoolSigner; keystore=${build}/keystore; keypass=testtest; storepass=testtest
+  						  aQute.bnd.signing.JartoolSigner; keystore=${build}/keystore; keypass=testtest; storepass=testtest, \
+  						  aQute.bnd.make.SignatureTest
 
 
 
