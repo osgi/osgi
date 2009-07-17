@@ -185,6 +185,40 @@ public class BlueprintAdminEvent extends AdminTestEvent {
             return new AssertionFailure("Invalid or missing timestamp property on blueprint admin event: " + other.toString(), cause);
         }
 
+        Object eventType = other.getProperty(EventConstants.TYPE);
+        if (eventType == null || (!(eventType instanceof Integer))) {
+            return new AssertionFailure("Invalid or missing TYPE property " + eventType + " on blueprint admin event: " + other.toString(), cause);
+        }
+
+        String topicType = topic.substring(topic.lastIndexOf('/') + 1);
+        int expectedType = 0;
+
+        if (!topicType.equals("CREATED")) {
+            expectedType = BlueprintEvent.CREATED;
+        }
+        else if (!topicType.equals("CREATING")) {
+            expectedType = BlueprintEvent.CREATING;
+        }
+        else if (!topicType.equals("DESTROYING")) {
+            expectedType = BlueprintEvent.DESTROYING;
+        }
+        else if (!topicType.equals("DESTROYED")) {
+            expectedType = BlueprintEvent.DESTROYED;
+        }
+        else if (!topicType.equals("FAILURE")) {
+            expectedType = BlueprintEvent.FAILURE;
+        }
+        else if (!topicType.equals("GRACE_PERIOD")) {
+            expectedType = BlueprintEvent.GRACE_PERIOD;
+        }
+        else if (!topicType.equals("WAITING")) {
+            expectedType = BlueprintEvent.WAITING;
+        }
+
+        if (expectedType != ((Integer)eventType).intValue()) {
+            return new AssertionFailure("Incorrect TYPE property on blueprint admin event: " + other.toString(), cause);
+        }
+
         if (!TestUtil.validateBundleVersion(bundle, (Version)other.getProperty(EventConstants.BUNDLE_VERSION))) {
             return new AssertionFailure("Mismatched bundle version on blueprint admin event expected=" +
                 (String)bundle.getHeaders().get(Constants.BUNDLE_VERSION) + " received=" + other.getProperty("bundle.version"), cause);
