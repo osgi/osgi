@@ -193,25 +193,25 @@ public class BlueprintAdminEvent extends AdminTestEvent {
         String topicType = topic.substring(topic.lastIndexOf('/') + 1);
         int expectedType = 0;
 
-        if (!topicType.equals("CREATED")) {
+        if (topicType.equals("CREATED")) {
             expectedType = BlueprintEvent.CREATED;
         }
-        else if (!topicType.equals("CREATING")) {
+        else if (topicType.equals("CREATING")) {
             expectedType = BlueprintEvent.CREATING;
         }
-        else if (!topicType.equals("DESTROYING")) {
+        else if (topicType.equals("DESTROYING")) {
             expectedType = BlueprintEvent.DESTROYING;
         }
-        else if (!topicType.equals("DESTROYED")) {
+        else if (topicType.equals("DESTROYED")) {
             expectedType = BlueprintEvent.DESTROYED;
         }
-        else if (!topicType.equals("FAILURE")) {
+        else if (topicType.equals("FAILURE")) {
             expectedType = BlueprintEvent.FAILURE;
         }
-        else if (!topicType.equals("GRACE_PERIOD")) {
+        else if (topicType.equals("GRACE_PERIOD")) {
             expectedType = BlueprintEvent.GRACE_PERIOD;
         }
-        else if (!topicType.equals("WAITING")) {
+        else if (topicType.equals("WAITING")) {
             expectedType = BlueprintEvent.WAITING;
         }
 

@@ -36,7 +36,7 @@
        <service-properties>
            <entry key="service.component.name" value="ServiceOneActive" />
        </service-properties>
-       <registration-listener ref="registered_listener"
+       <registration-listener ref="registeredListener"
            registration-method="registered" unregistration-method="unregistered"/>
    </service>
 </blueprint>

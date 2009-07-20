@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+        This tests the re-evaluation of the service properties each time the
+        service is registered (Section 121.6.5, which states it must be used when
+        the service is registered).
+    </description>
+
+    <bean id="CounterFactory" class="org.osgi.test.cases.blueprint.components.servicedynamics.CounterFactory"/>
+
+   <!-- This component does nothing other than get created and have a service injected as a property -->
+   <bean id="ServiceOneImporter" class="org.osgi.test.cases.blueprint.components.servicedynamics.DependencyService">
+       <argument value="ServiceOneImporter"/>
+       <property name="one">
+           <reference interface="org.osgi.test.cases.blueprint.services.TestServiceOne"/>
+       </property>
+   </bean>
+
+   <!-- This service registration should come and go as the dependent service does,
+        the service properties should be re-evaluated each time. -->
+    <service id="ServiceOneExporter" ref="ServiceOneImporter" interface="org.osgi.test.cases.blueprint.services.TestServiceDynamicsInterface">
+        <service-properties>
+            <entry key="test.service.counter">
+                <bean factory-ref="CounterFactory" factory-method="makeInstance"/>
+            </entry>
+        </service-properties>
+    </service>
+</blueprint>
+

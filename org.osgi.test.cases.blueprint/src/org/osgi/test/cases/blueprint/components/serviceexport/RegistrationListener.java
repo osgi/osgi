@@ -45,9 +45,10 @@ public class RegistrationListener extends BaseTestComponent {
     }
 
     protected void unregistered(Class serviceInterface, Map serviceProperties, Object reference) {
-        AssertionService.assertNotNull(this, "Null service properties passed for registration listener unregistered callback", serviceProperties);
         Hashtable props = new Hashtable();
-        props.putAll(serviceProperties);
+        if (serviceProperties != null) {
+            props.putAll(serviceProperties);
+        }
         props.put("service.interface.name", serviceInterface.getName());
         props.put("service.null.object", new Boolean(reference == null));
         AssertionService.sendEvent(this, AssertionService.SERVICE_UNREGISTERED, props);

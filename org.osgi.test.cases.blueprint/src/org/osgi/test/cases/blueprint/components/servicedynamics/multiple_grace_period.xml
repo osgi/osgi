@@ -10,19 +10,19 @@
    <bean id="ServiceOneAImporter" class="org.osgi.test.cases.blueprint.components.servicedynamics.DependencyService">
        <argument value="ServiceOneAImporter"/>
        <property name="one">
-           <reference interface="org.osgi.test.cases.blueprint.services.TestServiceOne" filter="(test.service.name=ServiceOneA"/>
+           <reference interface="org.osgi.test.cases.blueprint.services.TestServiceOne" filter="(test.service.name=ServiceOneA)"/>
        </property>
    </bean>
    <bean id="ServiceOneBImporter" class="org.osgi.test.cases.blueprint.components.servicedynamics.DependencyService">
        <argument value="ServiceOneBImporter"/>
        <property name="one">
-           <reference interface="org.osgi.test.cases.blueprint.services.TestServiceOne" filter="(test.service.name=ServiceOneB"/>
+           <reference interface="org.osgi.test.cases.blueprint.services.TestServiceOne" filter="(test.service.name=ServiceOneB)"/>
        </property>
    </bean>
-   <bean id="ServiceOneBImporter" class="org.osgi.test.cases.blueprint.components.servicedynamics.DependencyService">
+   <bean id="ServiceOneCImporter" class="org.osgi.test.cases.blueprint.components.servicedynamics.DependencyService">
        <argument value="ServiceOneCImporter"/>
        <property name="one">
-           <reference interface="org.osgi.test.cases.blueprint.services.TestServiceOne" filter="(test.service.name=ServiceOneC"/>
+           <reference interface="org.osgi.test.cases.blueprint.services.TestServiceOne" filter="(test.service.name=ServiceOneC)"/>
        </property>
    </bean>
 </blueprint>

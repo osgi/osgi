@@ -2392,7 +2392,6 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // the first property comes from the called method signature, the
         // second should be passed to the registration listener.
         inactiveProps.put("service.interface.name", TestServiceOne.class.getName());
-        inactiveProps.put("service.component.name", "ServiceOneInactive");
         // this service should get an unregistered call
         exportStartEvents.addEvent(new ComponentAssertion("unregisteredListener", AssertionService.SERVICE_UNREGISTERED, inactiveProps));
         // we'll fail this if we see a registered event
