@@ -28,8 +28,13 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import org.osgi.test.cases.blueprint.framework.ArgumentMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
 import org.osgi.test.cases.blueprint.framework.StandardTestController;
+import org.osgi.test.cases.blueprint.framework.TestArgument;
+import org.osgi.test.cases.blueprint.framework.TestArrayValue;
+import org.osgi.test.cases.blueprint.framework.TestStringValue;
+import org.osgi.test.cases.blueprint.framework.TestValue;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
@@ -66,6 +71,11 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
         int[] expectedIntArr = new int[1];
         expectedIntArr[0] = 1;
         this.addConstructorValidator(startEvents, "compSinglePrimIntItem", expectedIntArr, expectedIntArr.getClass());
+
+        // validate the metadata for this one too.  The embedded <value> metadata should inherit the
+        // collection valueType.
+        startEvents.addValidator(new ArgumentMetadataValidator("compSinglePrimIntItem", new TestArgument(
+            new TestArrayValue(new TestValue[] { new TestStringValue(Integer.TYPE, "1") }, Integer.TYPE))));
 
         // Primitive int array
         expectedIntArr = new int[2];
@@ -573,16 +583,13 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
         expected = new Class[2];
         expected[0] = String.class;
         expected[1] = Boolean.class;
-        this
-                .addConstructorValidator(startEvents, "compClassArray", expected, expected
-                        .getClass());
+        this.addConstructorValidator(startEvents, "compClassArray", expected, expected.getClass());
 
         // Locale array
         expected = new Locale[2];
         expected[0] = new Locale("en", "US");
         expected[1] = new Locale("zh", "CN");
-        this.addConstructorValidator(startEvents, "compLocaleArray", expected, expected
-                .getClass());
+        this.addConstructorValidator(startEvents, "compLocaleArray", expected, expected.getClass());
 
         // Nested props
         Properties innerProps = new Properties();
@@ -590,8 +597,7 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
         innerProps.put("support", "support@example.org");
         expected = new Properties[1];
         expected[0] = innerProps;
-        this.addConstructorValidator(startEvents, "compNestedProps", expected, expected
-                .getClass());
+        this.addConstructorValidator(startEvents, "compNestedProps", expected, expected.getClass());
 
         // Nested map
         Map innerMap = new HashMap();
