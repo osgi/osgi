@@ -13,5 +13,11 @@
        <argument value="a"/>
        <property name="componentOne" ref="a"/>
    </bean>
+
+   <!-- This bean exists just to drive the creation of the prototype "a" bean -->
+   <bean id="b" class="org.osgi.test.cases.blueprint.components.injection.CircularComponentInjection">
+      <argument value="b"/>
+      <property name="componentOne" ref="a"/>
+  </bean>
 </blueprint>
 
