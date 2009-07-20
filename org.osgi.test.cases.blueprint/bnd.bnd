@@ -253,6 +253,7 @@ Include-Resource					= \
  	www/ServiceTwoSubclass_export.jar=ServiceTwoSubclass_export.jar, \
  	www/ServiceTwoSubclass_import.jar=ServiceTwoSubclass_import.jar, \
  	www/circular_ref_one.jar=circular_ref_one.jar, \
+ 	www/circular_ref_one_ranked.jar=circular_ref_one_ranked.jar, \
  	www/circular_ref_two.jar=circular_ref_two.jar, \
  	www/ServiceOne_ranked_export.jar=ServiceOne_ranked_export.jar, \
  	www/ServiceOne_property_export.jar=ServiceOne_property_export.jar, \

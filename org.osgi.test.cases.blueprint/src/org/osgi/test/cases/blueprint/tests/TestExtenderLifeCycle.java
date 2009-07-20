@@ -83,6 +83,7 @@ public class TestExtenderLifeCycle extends DefaultTestBundleControl {
         ExtenderStopController controller = new ExtenderStopController(getContext(), getExtenderBundle());
         // no imports or exports on this one
         controller.addBundle(getWebServer()+"www/comp1_no_header.jar");
+
         // the import jar has a dependency on the export one, so the import should be
         // shutdown first
         controller.addBundle(getWebServer()+"www/ServiceTwoSubclass_export.jar");
@@ -91,6 +92,119 @@ public class TestExtenderLifeCycle extends DefaultTestBundleControl {
         // will shutdown the first installed one first.
         controller.addBundle(getWebServer()+"www/circular_ref_one.jar");
         controller.addBundle(getWebServer()+"www/circular_ref_two.jar");
+
+        // now create dependencies between the events for these bundles to
+        // verify that these are done in the correct order.
+        EventSet events = controller.getStopEvents(0);
+        TestEvent template = new BlueprintContainerEvent("DESTROYED");
+
+        // locate the bundle event for the first bundle that should be destroyed
+        TestEvent firstStarted = events.locateEvent(template);
+
+        // this is a bundle that is importing, but not exporting.  This was
+        // started after the first started, so will be destroyed first
+        events = controller.getStopEvents(2);
+        TestEvent importing = events.locateEvent(template);
+
+        // this is exporting services used by the importing bundle, it must be destroyed after
+        // the importing one.
+        events = controller.getStopEvents(1);
+        TestEvent exporting = events.locateEvent(template);
+
+        // this is in a circular relationship with another bundle.  The services
+        // exported by these bundles have default service rankings, so the bundle
+        // with the highest registered service id will be stopped first, which should
+        // be the second one started.
+        events = controller.getStopEvents(3);
+        TestEvent circular1 = events.locateEvent(template);
+        // the other circular item
+        events = controller.getStopEvents(4);
+        TestEvent circular2 = events.locateEvent(template);
+
+        // now set up the ordering dependencies.
+
+        // neither of these export services, so the last installed goes first
+        firstStarted.addDependency(importing);
+
+        // the exporting one can only be destroyed after both bundles
+        // that don't export any services.
+        exporting.addDependency(firstStarted);
+        exporting.addDependency(importing);
+
+        // the second circular bundle will be stopped first, but only
+        // after the other bundles
+        circular2.addDependency(exporting);
+        // and this can only be destroyed after the cycle was broken.
+        circular1.addDependency(circular2);
+
+        controller.run();
+    }
+
+
+    /**
+     * A second test of orderly shutdown using the ranking rule to
+     * determine how circular references are broken.
+     *
+     * @exception Exception
+     */
+    public void testExtenderRankedStop() throws Exception {
+        // this test uses something other than the standard set of
+        // events/validators/controllers, so we'll hand construct the
+        // test phases rather than using the standard controller.
+        ExtenderStopController controller = new ExtenderStopController(getContext(), getExtenderBundle());
+        // no imports or exports on this one
+        controller.addBundle(getWebServer()+"www/comp1_no_header.jar");
+
+        // the import jar has a dependency on the export one, so the import should be
+        // shutdown first
+        controller.addBundle(getWebServer()+"www/ServiceTwoSubclass_export.jar");
+        controller.addBundle(getWebServer()+"www/ServiceTwoSubclass_import.jar");
+        // there's a circular reference relationship between these two bundles...this
+        // will shutdown the first installed one first.
+        controller.addBundle(getWebServer()+"www/circular_ref_one.jar");
+        controller.addBundle(getWebServer()+"www/circular_ref_two.jar");
+
+        // now create dependencies between the events for these bundles to
+        // verify that these are done in the correct order.
+        EventSet events = controller.getStopEvents(0);
+        TestEvent template = new BlueprintContainerEvent("DESTROYED");
+
+        // locate the bundle event for the first bundle that should be destroyed
+        TestEvent firstStarted = events.locateEvent(template);
+
+        // this is a bundle that is importing, but not exporting.  This was
+        // started after the first started, so will be destroyed first
+        events = controller.getStopEvents(2);
+        TestEvent importing = events.locateEvent(template);
+
+        // this is exporting services used by the importing bundle, it must be destroyed after
+        // the importing one.
+        events = controller.getStopEvents(1);
+        TestEvent exporting = events.locateEvent(template);
+
+        // this is in a circular relationship with another bundle.  The first bundle
+        // exports a higher ranked service, so it should be stopped first.
+        events = controller.getStopEvents(3);
+        TestEvent circular1 = events.locateEvent(template);
+        // the other circular item
+        events = controller.getStopEvents(4);
+        TestEvent circular2 = events.locateEvent(template);
+
+        // now set up the ordering dependencies.
+
+        // neither of these export services, so the last installed goes first
+        firstStarted.addDependency(importing);
+
+        // the exporting one can only be destroyed after both bundles
+        // that don't export any services.
+        exporting.addDependency(firstStarted);
+        exporting.addDependency(importing);
+
+        // the first circular bundle will be stopped first, but only
+        // after the other bundles
+        circular1.addDependency(exporting);
+        // and this can only be destroyed after the cycle was broken.
+        circular2.addDependency(circular1);
 
         controller.run();
     }
@@ -104,7 +218,7 @@ public class TestExtenderLifeCycle extends DefaultTestBundleControl {
      */
     protected Bundle getExtenderBundle() throws Exception {
         if (extender == null) {
-            // load a simple test bundle and run the test.  The extender bundle will
+            /* load a simple test bundle and run the test.  The extender bundle will */
             // be obtained in the context of running this
             StandardTestController controller = new StandardTestController(getContext(),
                 getWebServer()+"www/comp1_id.jar");

@@ -216,6 +216,41 @@ public class EventSet {
 
 
     /**
+     * Locate a particular event using matching logic.  This will not
+     * remove the located event from the list.  This only searches
+     * the expected list.
+     *
+     * @param target The target event we're looking to match.
+     *
+     * @return The matched event or null if no match was found.
+     */
+    public TestEvent locateEvent(TestEvent target) {
+        // event equality is frequently based on the bundle
+        // that the event is specific to.  We need to inject
+        // this into the target so we get correct matching
+        if (target instanceof BundleAware) {
+            // set the component bundle into the event.
+            ((BundleAware)target).setBundle(componentBundle);
+        }
+
+        // we try not to block on these threads very much, so we're only
+        // going to block on the event lists while actually searching/updating
+        synchronized (expectedEvents) {
+            Iterator i = expectedEvents.iterator();
+            while (i.hasNext()) {
+                TestEvent current = (TestEvent)i.next();
+                // the equal tests needs to be driven by the expected
+                if (current.matches(target)) {
+                    // just return this
+                    return current;
+                }
+            }
+            return null;
+        }
+    }
+
+
+    /**
      * Check to see if this event set has received all of it's expected
      * events.
      *
