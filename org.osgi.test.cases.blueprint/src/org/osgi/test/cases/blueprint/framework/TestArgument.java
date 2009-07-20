@@ -30,17 +30,17 @@ public class TestArgument extends Assert {
 
     public TestArgument(String value) {
         // the parameter type is inferred from specified position
-        this(new TestStringValue(value), null, -1);
+        this(new TestStringValue(value), (String) null, -1);
     }
 
     public TestArgument(String value, int index) {
         // the parameter type is inferred from specified position
-        this(new TestStringValue(value), null, index);
+        this(new TestStringValue(value), (String) null, index);
     }
 
     public TestArgument(TestValue parameterType) {
         // the parameter type is inferred from specified position
-        this(parameterType, null, -1);
+        this(parameterType, (String) null, -1);
     }
 
     public TestArgument(TestValue parameterType, Class type) {
@@ -50,7 +50,7 @@ public class TestArgument extends Assert {
 
     public TestArgument(TestValue parameterType, int index) {
         // the index has been specified
-        this(parameterType, null, index);
+        this(parameterType, (String) null, index);
     }
 
     /**
@@ -72,6 +72,11 @@ public class TestArgument extends Assert {
         this.index = index;
     }
 
+    public TestArgument(TestValue parameterType, String typeName, int index) {
+        this.parameterTestValue = parameterType;
+        this.typeName = typeName;
+        this.index = index;
+    }
 
     /**
      * Validate a ParameterSpecification against an expected value.

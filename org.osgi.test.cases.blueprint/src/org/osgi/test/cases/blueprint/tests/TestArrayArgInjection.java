@@ -75,7 +75,7 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
         // validate the metadata for this one too.  The embedded <value> metadata should inherit the
         // collection valueType.
         startEvents.addValidator(new ArgumentMetadataValidator("compSinglePrimIntItem", new TestArgument(
-            new TestArrayValue(new TestValue[] { new TestStringValue(Integer.TYPE, "1") }, Integer.TYPE))));
+            new TestArrayValue(new TestValue[] { new TestStringValue(Integer.TYPE, "1") }, Integer.TYPE), "int[]", -1)));
 
         // Primitive int array
         expectedIntArr = new int[2];
