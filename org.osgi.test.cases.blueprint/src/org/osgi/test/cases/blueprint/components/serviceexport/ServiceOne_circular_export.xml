@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+        This is just a simple exported service using a single interface.
+    </description>
+
+    <!-- the node this service export maps into. -->
+   <bean id="ServiceOneCircular" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass"
+       init-method="init" destroy-method="destroy">
+       <argument value="ServiceOne"/>
+   </bean>
+
+   <!-- simple export using a reference and just one interface. -->
+    <service id="ServiceOneService" ref="ServiceOneCircular" interface="org.osgi.test.cases.blueprint.services.TestServiceOne" auto-export="disabled">
+       <description>Testing descriptions also.  This also tests explicit use of the default auto-export value.</description>
+   </service>
+</blueprint>
+

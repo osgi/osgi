@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+        This is just a simple exported service using a single interface.
+    </description>
+
+    <!-- the node this service export maps into. -->
+   <bean id="ServiceTwoCircular" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass"
+       init-method="init" destroy-method="destroy">
+       <argument value="ServiceTwo"/>
+   </bean>
+
+   <!-- simple export using a reference and just one interface. -->
+   <service id="GoodServiceService" ref="ServiceTwoCircular" interface="org.osgi.test.cases.blueprint.services.TestServiceTwo"/>
+</blueprint>
+

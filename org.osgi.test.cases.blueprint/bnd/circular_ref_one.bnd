@@ -3,6 +3,6 @@ Bundle-Version:                          4.2
 Import-Package:                          ${p}.components.serviceexport, ${p}.components.serviceimport, ${p}.services
 -resourceonly: true
 Include-Resource					= \
-	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/serviceexport/ServiceOne_export.xml, \
+	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/serviceexport/ServiceOne_circular_export.xml, \
 	OSGI-INF/blueprint/config2.xml=src/org/osgi/test/cases/blueprint/components/serviceimport/ServiceTwo_list_import.xml
 
