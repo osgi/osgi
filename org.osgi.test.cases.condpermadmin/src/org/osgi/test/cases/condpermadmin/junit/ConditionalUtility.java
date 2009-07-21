@@ -1,4 +1,4 @@
-package org.osgi.test.cases.condpermadmin.tbc;
+package org.osgi.test.cases.condpermadmin.junit;
 
 
 import java.lang.reflect.Constructor;

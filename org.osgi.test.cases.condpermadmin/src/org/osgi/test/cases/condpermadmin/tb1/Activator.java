@@ -33,9 +33,9 @@ import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 
 import org.osgi.framework.*;
-import org.osgi.test.cases.condpermadmin.tbc.ConditionalDomTBCService;
-import org.osgi.test.cases.condpermadmin.tbc.ConditionalPermTBCService;
-import org.osgi.test.cases.condpermadmin.tbc.ConditionalTBCService;
+import org.osgi.test.cases.condpermadmin.junit.ConditionalDomTBCService;
+import org.osgi.test.cases.condpermadmin.junit.ConditionalPermTBCService;
+import org.osgi.test.cases.condpermadmin.junit.ConditionalTBCService;
 
 
 public class Activator implements BundleActivator, ConditionalTBCService {

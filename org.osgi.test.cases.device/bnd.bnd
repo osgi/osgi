@@ -20,6 +20,7 @@ Include-Resource					= \
 	drv7.jar
 	
 Test-Cases							= ${testcases}
+-signaturetest                      = org.osgi.service.device
 
 -buildpath							= \
     org.osgi.service.device;                version=project , \

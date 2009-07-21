@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.component.junit;
+package org.osgi.test.cases.cm.junit;
 
-import org.osgi.test.support.signature.SignatureTestCase;
-
-public class ComponentSignatureTestCase extends
- SignatureTestCase {
+public class SignatureTestCase extends
+		org.osgi.test.support.signature.SignatureTestCase {
 	// concrete subclass
 }

@@ -7,7 +7,7 @@ Bundle-Category: osgi,test
 
 Private-Package						= \
 	org.osgi.test.support.*, \
-	${p}.tbc.*, \
+	${p}.junit, \
 	${p}.common
 
 Include-Resource					= \
@@ -15,6 +15,7 @@ Include-Resource					= \
 	tb2.jar
 	
 Test-Cases							= ${testcases}
+-signaturetest                      = org.osgi.service.cm
 
 -buildpath							= \
 	org.osgi.service.cm;			version=project, \
@@ -26,7 +27,7 @@ Test-Cases							= ${testcases}
 -runbundles							= \
 	org.osgi.impl.service.log; version=latest, \
 	org.apache.felix.configadmin; version=latest, \
-	osgi.cmpn; version=latest
+	osgi.cmpn; version=4.2
 	
 -runproperties = report=true, \
 	org.osgi.framework.security=osgi, \

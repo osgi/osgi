@@ -16,7 +16,7 @@
  * ============================================================================
  */
 
-package org.osgi.test.cases.cdma;
+package org.osgi.test.cases.cdma.junit;
 
 import junit.framework.TestCase;
 
@@ -24,65 +24,65 @@ import org.osgi.framework.Bundle;
 import org.osgi.service.condpermadmin.Condition;
 import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.test.support.MockFactory;
-import org.osgi.util.cdma.MEIDCondition;
+import org.osgi.util.cdma.ESNCondition;
 
-public class TestMEID extends TestCase {
+public class TestESN extends TestCase {
 	private Bundle				bundle		= (Bundle) MockFactory.newMock(
 													Bundle.class, null);
-	private static final String	SYSTEM_MEID	= "23456789abcdef";
-	private static final String	OTHER_MEID	= "CAFEBABE42CAFE";
+	private static final String	SYSTEM_ESN	= "89abcdef";
+	private static final String	OTHER_ESN	= "CAFEBABE";
 	static {
-		System.getProperties().put("org.osgi.util.cdma.meid", SYSTEM_MEID);
+		System.getProperties().put("org.osgi.util.cdma.esn", SYSTEM_ESN);
 	}
 
 	public void testBasic() throws Exception {
-		Condition esn = MEIDCondition.getCondition(bundle, new ConditionInfo(
-				"", new String[] {SYSTEM_MEID}));
+		Condition esn = ESNCondition.getCondition(bundle, new ConditionInfo("",
+				new String[] {SYSTEM_ESN}));
 		assertFalse(esn.isPostponed());
 		assertTrue(esn.isSatisfied());
 
-		esn = MEIDCondition.getCondition(bundle, new ConditionInfo("",
-				new String[] {OTHER_MEID}));
+		esn = ESNCondition.getCondition(bundle, new ConditionInfo("",
+				new String[] {OTHER_ESN}));
 		assertFalse(esn.isPostponed());
 		assertFalse(esn.isSatisfied());
 	}
 
-	public void testMEIDValidator() throws Exception {
+	public void testESNValidator() throws Exception {
 		try {
-			MEIDCondition.getCondition(bundle, new ConditionInfo("",
+			ESNCondition.getCondition(bundle, new ConditionInfo("",
 					new String[] {""}));
 			fail();
 		}
 		catch (IllegalArgumentException e) {/* expected */
 		}
 		try {
-			MEIDCondition.getCondition(bundle, new ConditionInfo("",
-					new String[] {"1234567890123"}));
+			ESNCondition.getCondition(bundle, new ConditionInfo("",
+					new String[] {"1234567"}));
 			fail();
 		}
 		catch (IllegalArgumentException e) {/* expected */
 		}
 		try {
-			MEIDCondition.getCondition(bundle, new ConditionInfo("",
-					new String[] {"123456789012345"}));
+			ESNCondition.getCondition(bundle, new ConditionInfo("",
+					new String[] {"123456789"}));
 			fail();
 		}
 		catch (IllegalArgumentException e) {/* expected */
 		}
 		try {
-			MEIDCondition.getCondition(bundle, new ConditionInfo("",
-					new String[] {"1234567890ghij"}));
+			ESNCondition.getCondition(bundle, new ConditionInfo("",
+					new String[] {"1234567g"}));
 			fail();
 		}
 		catch (IllegalArgumentException e) {/* expected */
 		}
 
-		MEIDCondition.getCondition(bundle, new ConditionInfo("",
-				new String[] {"1234567891*"}));
+		ESNCondition.getCondition(bundle, new ConditionInfo("",
+				new String[] {"123456*"}));
 
 		try {
-			MEIDCondition.getCondition(bundle, new ConditionInfo("",
-					new String[] {"12345678901234*"}));
+			ESNCondition.getCondition(bundle, new ConditionInfo("",
+					new String[] {"12345678*"}));
 			fail();
 		}
 		catch (IllegalArgumentException e) {/* expected */
@@ -90,13 +90,12 @@ public class TestMEID extends TestCase {
 	}
 
 	public void testWildcards() throws Exception {
-		Condition esn = MEIDCondition.getCondition(bundle, new ConditionInfo(
-				"", new String[] {SYSTEM_MEID.substring(0, 5) + "*"}));
+		Condition esn = ESNCondition.getCondition(bundle, new ConditionInfo("",
+				new String[] {SYSTEM_ESN.substring(0, 5) + "*"}));
 		assertTrue(esn.isSatisfied());
 
-		esn = MEIDCondition.getCondition(bundle, new ConditionInfo("",
+		esn = ESNCondition.getCondition(bundle, new ConditionInfo("",
 				new String[] {"777*"}));
 		assertFalse(esn.isSatisfied());
-
 	}
 }

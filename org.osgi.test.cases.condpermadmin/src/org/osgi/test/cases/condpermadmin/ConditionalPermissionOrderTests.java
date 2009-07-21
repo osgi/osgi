@@ -20,7 +20,6 @@ import java.io.FilePermission;
 import java.net.SocketPermission;
 import java.security.AllPermission;
 import java.security.Permission;
-import java.security.ProtectionDomain;
 import java.util.List;
 
 import org.osgi.framework.Bundle;
@@ -29,9 +28,9 @@ import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
 import org.osgi.service.condpermadmin.ConditionalPermissionUpdate;
 import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.test.cases.condpermadmin.tbc.ConditionalDomTBCService;
-import org.osgi.test.cases.condpermadmin.tbc.ConditionalPermTBCService;
-import org.osgi.test.cases.condpermadmin.tbc.ConditionalTBCService;
+import org.osgi.test.cases.condpermadmin.junit.ConditionalDomTBCService;
+import org.osgi.test.cases.condpermadmin.junit.ConditionalPermTBCService;
+import org.osgi.test.cases.condpermadmin.junit.ConditionalTBCService;
 import org.osgi.test.cases.condpermadmin.testcond.TestPostPonedCondition;
 
 

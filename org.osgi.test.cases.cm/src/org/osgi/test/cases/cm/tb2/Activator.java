@@ -35,7 +35,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.test.cases.cm.common.ConfigurationListenerImpl;
-import org.osgi.test.cases.cm.tbc.CMControl;
+import org.osgi.test.cases.cm.junit.CMControl;
 
 /**
  * <p>

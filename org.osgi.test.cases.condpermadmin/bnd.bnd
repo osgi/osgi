@@ -4,12 +4,12 @@ Bundle-Vendor: OSGi Alliance
 Bundle-DocURL: http://www.osgi.org/
 Bundle-ContactAddress: info@mail.osgi.org
 Bundle-Category: osgi,test
-Export-Package: ${p}.tbc
+Export-Package: ${p}.junit
 DynamicImport-Package: ${p}.testcond
 
 Private-Package						= \
 	org.osgi.test.support.*, \
-	${p}.tbc.*, \
+	${p}.junit, \
 	${p}
 
 Include-Resource					= \
@@ -19,6 +19,7 @@ Include-Resource					= \
 	testcond.jar, \
 	
 Test-Cases							= ${testcases}
+-signaturetest                      = org.osgi.service.condpermadmin
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \

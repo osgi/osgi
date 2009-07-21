@@ -203,8 +203,6 @@ Include-Resource = \
 	resources.tb2.jar, \
 	syncbundlelistener.tb3.jar
 	
-Test-Cases							= ${testcases}
-
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
 	org.osgi.framework;						version=project	, \
@@ -213,8 +211,11 @@ Test-Cases							= ${testcases}
 	ee.minimum; 							version=1.2, \
 	${junit}
 
+Test-Cases							= ${testcases}
+-testbundles						= ${p}
+-signaturetest                      = org.osgi.framework, org.osgi.framework.hooks.service
+
 -runbundles							= \
-	
 
 -runproperties = report=true, \
 	osgi.compatibility.bootdelegation=false, \
