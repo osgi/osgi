@@ -1,0 +1,41 @@
+Bundle-Version: 4.2.0.${project.build}
+Export-Package						= ${p}.*
+Bundle-RequiredExecutionEnvironment = J2SE-1.4
+Bundle-Vendor: IBM
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+Bundle-Copyright: ${copyright}
+
+Private-Package						= org.osgi.test.support.*
+
+Include-Resource					= \
+	www/blueprint_denied.jar=blueprint_denied.jar , \
+	www/ServiceOne_export.jar=ServiceOne_export.jar, \
+	www/ServiceOne_export_denied.jar=ServiceOne_export_denied.jar, \
+	www/ServiceOne_import.jar=ServiceOne_import.jar, \
+	www/ServiceOne_import_denied.jar=ServiceOne_import_denied.jar
+
+Test-Cases							= ${testcases}
+
+-buildpath							= \
+    org.osgi.test.support;                  version=project , \
+    org.osgi.service.blueprint;             version=project , \
+    org.osgi.test.cases.blueprint;          version=project , \
+    osgi.core;				    version=4.1	, \
+    ${junit}
+
+-runbundles							= \
+	org.osgi.impl.service.log; version=latest, \
+	org.apache.felix.configadmin;  version=latest, \
+	org.eclipse.equinox.event; version=latest, \
+	osgi.cmpn; version=latest, \
+ 	org.osgi.test.cases.blueprint;  version=project, \
+        org.springframework.osgi.blueprint.uber; version=latest
+
+-runproperties = report=true, \
+	osgi.compatibility.bootdelegation=false, \
+	osgi.resolverMode=strict, \
+	osgi.support.multipleHosts=true, \
+	org.osgi.framework.security=osgi, \
+	org.osgi.framework.trust.repositories=${build}/keystore
