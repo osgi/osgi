@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+        This is a reusable config for validating different service registrations.
+    </description>
+
+
+    <!-- single shared instance of the imported service -->
+    <reference id="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
+        <description>Testing descriptions also</description>
+    </reference>
+
+   <bean id="ServiceOneProperty" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceReferenceChecker">
+       <argument value="ServiceOneProperty"/>
+       <property name="one" ref="ServiceOne"/>
+   </bean>
+</blueprint>
+

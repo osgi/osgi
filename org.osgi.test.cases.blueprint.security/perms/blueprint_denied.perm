@@ -1,0 +1,12 @@
+# Lines beginning with '#' or '//' are comments
+#
+# This file contains the permissions to be granted
+# to Filter test bundle.
+# The permissions are listed one per
+# line in PermissionInfo encoded format.
+# See org.osgi.service.permissionadmin.PermissionInfo
+
+${permissions;packages}
+(org.osgi.framework.PackagePermission "org.osgi.framework" "import")
+(org.osgi.framework.PackagePermission "org.osgi.test.cases.blueprint.*" "import")
+

@@ -1,0 +1,8 @@
+Bundle-SymbolicName:                     ${p}.ServiceOne_export_denied
+Bundle-Version:                          4.2
+Import-Package:                          org.osgi.test.cases.blueprint.components.serviceexport, org.osgi.test.cases.blueprint.services
+-resourceonly: true
+Include-Resource					= \
+    OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/security/components/security/simple_bean.xml, \
+    {OSGI-INF/permissions.perm=perms/blueprint_denied.perm}
+
