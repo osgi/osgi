@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.blueprint.security.tests;
+package org.osgi.test.cases.blueprint.secure.tests;
 
 import java.util.Hashtable;
 
