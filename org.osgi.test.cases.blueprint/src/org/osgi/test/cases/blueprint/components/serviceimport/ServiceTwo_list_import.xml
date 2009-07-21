@@ -6,10 +6,10 @@
     </description>
 
     <!-- This gets both a reference collection injected -->
-   <bean id="ServiceTwoChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.NullReferenceList">
+    <bean id="ServiceTwoChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceProxyChecker">
        <argument value="ServiceTwoChecker"/>
-       <property name="list">
-           <reference-list interface="org.osgi.test.cases.blueprint.services.TestServiceOne" component-name="ServiceTwoCircular" availability="optional"/>
+       <property name="two">
+           <reference interface="org.osgi.test.cases.blueprint.services.TestServiceTwo" component-name="ServiceTwoCircular" availability="optional"/>
        </property>
    </bean>
 </blueprint>

@@ -1,6 +1,11 @@
 Bundle-Version: 4.2.0.${project.build}
 Export-Package						= ${p}.*
 Bundle-RequiredExecutionEnvironment = J2SE-1.4
+Bundle-Vendor: IBM
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+Bundle-Copyright: ${copyright}
 
 Private-Package						= org.osgi.test.support.*
 

@@ -161,8 +161,8 @@ public class TestExtenderLifeCycle extends DefaultTestBundleControl {
         controller.addBundle(getWebServer()+"www/ServiceTwoSubclass_import.jar");
         // there's a circular reference relationship between these two bundles...this
         // will shutdown the first installed one first.
-        controller.addBundle(getWebServer()+"www/circular_ref_one.jar");
         controller.addBundle(getWebServer()+"www/circular_ref_two.jar");
+        controller.addBundle(getWebServer()+"www/circular_ref_one_ranked.jar");
 
         // now create dependencies between the events for these bundles to
         // verify that these are done in the correct order.
@@ -183,11 +183,11 @@ public class TestExtenderLifeCycle extends DefaultTestBundleControl {
         TestEvent exporting = events.locateEvent(template);
 
         // this is in a circular relationship with another bundle.  The first bundle
-        // exports a higher ranked service, so it should be stopped first.
-        events = controller.getStopEvents(3);
+        // exports a higher ranked service, so it should be stopped last.
+        events = controller.getStopEvents(4);
         TestEvent circular1 = events.locateEvent(template);
         // the other circular item
-        events = controller.getStopEvents(4);
+        events = controller.getStopEvents(3);
         TestEvent circular2 = events.locateEvent(template);
 
         // now set up the ordering dependencies.

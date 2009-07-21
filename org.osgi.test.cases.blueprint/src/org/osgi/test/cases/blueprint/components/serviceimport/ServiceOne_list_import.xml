@@ -8,8 +8,8 @@
     <!-- This gets both a reference collection injected -->
    <bean id="ServiceOneChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.NullReferenceList">
        <argument value="ServiceOneChecker"/>
-       <property name="list">
-           <reference-list interface="org.osgi.test.cases.blueprint.services.TestServiceOne" component-name="ServiceOneCircular" availability="optional"/>
+       <property name="one">
+           <reference interface="org.osgi.test.cases.blueprint.services.TestServiceOne" component-name="ServiceOneCircular" availability="optional"/>
        </property>
    </bean>
 </blueprint>
