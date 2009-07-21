@@ -50,7 +50,34 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 	private Set			missing;
 
 	public void testSignature() {
-		doPackage(getContext().getBundle(), "OSGI-INF/signature");
+		Bundle bundle = getContext().getBundle();
+		String path = "OSGI-INF/signature";
+		found = new HashSet();
+		missing = new HashSet();
+		Enumeration e = bundle.findEntries(path, null, true);
+		if (e == null)
+			fail("No Signature Files found in " + path);
+	
+		while (e.hasMoreElements()) {
+			URL url = (URL) e.nextElement();
+			if (!url.toString().endsWith("/")) {
+				try {
+					InputStream in = url.openStream();
+					ClassParser rdr = new ClassParser(in);
+					rdr.go(this);
+					in.close();
+				}
+				catch (Exception ioe) {
+					fail("Unexpected exception", ioe);
+				}
+			}
+		}
+		if (found.isEmpty()) {
+			log("#Package is not present: " + path);
+			return;
+		}
+		if (!missing.isEmpty())
+			fail("Missing classes. Found " + found + " but not " + missing);
 	}
 
 	/**
@@ -196,43 +223,6 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 	 */
 	public void doEnd() {
 		// empty
-	}
-
-	/**
-	 * Traverse the paths in out bundle. Visit each class and verify against the
-	 * imported classes.
-	 * 
-	 * @param fin
-	 * @param cv
-	 */
-
-	private void doPackage(Bundle bundle, String path) {
-		found = new HashSet();
-		missing = new HashSet();
-		Enumeration e = bundle.findEntries(path, null, true);
-		if (e == null)
-			fail("No Signature Files found in " + path);
-
-		while (e.hasMoreElements()) {
-			URL url = (URL) e.nextElement();
-			if (!url.toString().endsWith("/")) {
-				try {
-					InputStream in = url.openStream();
-					ClassParser rdr = new ClassParser(in);
-					rdr.go(this);
-					in.close();
-				}
-				catch (Exception ioe) {
-					fail("Unexpected exception", ioe);
-				}
-			}
-		}
-		if (found.isEmpty()) {
-			log("#Package is not present: " + path);
-			return;
-		}
-		if (!missing.isEmpty())
-			fail("Missing classes. Found " + found + " but not " + missing);
 	}
 
 	private void checkConstructors(int access, String name,
