@@ -6,7 +6,7 @@
     </description>
 
     <!-- This gets both a reference collection injected -->
-   <bean id="ServiceOneChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.NullReferenceList">
+   <bean id="ServiceOneChecker" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceProxyChecker">
        <argument value="ServiceOneChecker"/>
        <property name="one">
            <reference interface="org.osgi.test.cases.blueprint.services.TestServiceOne" component-name="ServiceOneCircular" availability="optional"/>
