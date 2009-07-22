@@ -85,6 +85,7 @@ public class TestPermissions extends DefaultTestBundleControl {
     public void testNoImportPermission() throws Exception {
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
                 getWebServer()+"www/ServiceOne_import_denied.jar");
+        controller.addSetupBundle(getWebServer()+"www/ServiceOne_export.jar");
         controller.run();
     }
 
