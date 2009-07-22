@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+        A test of the example shown in section 121.16.1 that should fail because of security permissions.
+    </description>
+
+    <!-- the node this service export maps into. -->
+    <bean id="ServiceOne" class="java.lang.System" factory-method="exit">
+       <argument value="1"/>
+   </bean>
+</blueprint>
+

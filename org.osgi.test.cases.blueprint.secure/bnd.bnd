@@ -11,6 +11,7 @@ Private-Package						= org.osgi.test.support.*
 
 Include-Resource					= \
 	www/blueprint_denied.jar=blueprint_denied.jar , \
+	www/system_bean.jar=system_bean.jar , \
 	www/ServiceOne_export.jar=ServiceOne_export.jar, \
 	www/ServiceOne_export_denied.jar=ServiceOne_export_denied.jar, \
 	www/ServiceOne_import.jar=ServiceOne_import.jar, \

@@ -41,9 +41,9 @@ public class TestPermissions extends DefaultTestBundleControl {
      *
      * @exception Exception
      */
-	public void testNoBlueprintPermission() throws Exception {
+    public void testNoBlueprintPermission() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer()+"www/blueprint_denied.jar");
+                getWebServer()+"www/blueprint_denied.jar");
 
         // we should see one bean created.
         MetadataEventSet startEvents = controller.getStartEvents();
@@ -52,14 +52,27 @@ public class TestPermissions extends DefaultTestBundleControl {
     }
 
     /**
+     * Tests that trying to use java.lang.System.exit() as a factory
+     * method will fail because of a security exception.
+     *
+     * @exception Exception
+     */
+    public void testNoSystemPermission() throws Exception {
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+                getWebServer()+"www/system_bean.jar");
+        controller.run();
+    }
+
+
+    /**
      * Tests that the BlueprintContainer cannot be created if the
      * bundle cannot register its exported services.
      *
      * @exception Exception
      */
-	public void testNoExportPermission() throws Exception {
+    public void testNoExportPermission() throws Exception {
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
-            getWebServer()+"www/ServiceOne_export_denied.jar");
+                getWebServer()+"www/ServiceOne_export_denied.jar");
         controller.run();
     }
 
@@ -69,9 +82,9 @@ public class TestPermissions extends DefaultTestBundleControl {
      *
      * @exception Exception
      */
-	public void testNoImportPermission() throws Exception {
+    public void testNoImportPermission() throws Exception {
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
-            getWebServer()+"www/ServiceOne_import_denied.jar");
+                getWebServer()+"www/ServiceOne_import_denied.jar");
         controller.run();
     }
 
@@ -82,9 +95,9 @@ public class TestPermissions extends DefaultTestBundleControl {
      *
      * @exception Exception
      */
-	public void testImportExportPermission() throws Exception {
+    public void testImportExportPermission() throws Exception {
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
-            getWebServer()+"www/ServiceOne_export_denied.jar");
+                getWebServer()+"www/ServiceOne_export_denied.jar");
         controller.run();
     }
 
