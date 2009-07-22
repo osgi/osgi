@@ -44,6 +44,7 @@ public class ServiceProxyChecker extends BaseTestComponent {
     public void setOne(TestServiceOne service) {
         AssertionService.assertNotNull(this, "Null service reference injected", service);
         AssertionService.assertTrue(this, "Bad service result", service.testOne());
+        AssertionService.sendEvent(this, AssertionService.SERVICE_SUCCESS);
         serviceOne = service;
     }
 
@@ -55,6 +56,7 @@ public class ServiceProxyChecker extends BaseTestComponent {
     public void setTwo(TestServiceTwo service) {
         AssertionService.assertNotNull(this, "Null service reference injected", service);
         AssertionService.assertTrue(this, "Bad service result", service.testTwo());
+        AssertionService.sendEvent(this, AssertionService.SERVICE_SUCCESS);
         serviceTwo = service;
     }
 }

@@ -62,10 +62,10 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStartEvents.addValidator(new ComponentNamePresenceValidator("ServiceOneService"));
         exportStartEvents.addValidator(new GetExportedServicesMetadataValidator("ServiceOneService"));
 
-        // also validate the metadata for the exported service
+        // also validate the metadata for the exported service (also verify the empty case for service properties
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService",
                 ServiceMetadata.ACTIVATION_EAGER, "ServiceOne", TestServiceOne.class,
-                ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
+                ServiceMetadata.AUTO_EXPORT_DISABLED, 0, new MapValueEntry[0], null, null)));
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
 
@@ -302,9 +302,11 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
                     ComponentTestInfo.class, Comparable.class},
                     null, null, serviceProps));
         // also validate the metadata for the exported service
-        TestPropsValue metaServiceProps = new TestPropsValue();
-        metaServiceProps.put("serviceType", "Bad");
-        metaServiceProps.put("autoExport", "All");
+        MapValueEntry []  metaServiceProps = new MapValueEntry[] {
+            new MapValueEntry("serviceType", "Bad"),
+            new MapValueEntry("autoExport", "All")
+        };
+
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService[] {
 			new ExportedService("ServiceOneService",
                 ServiceMetadata.ACTIVATION_EAGER, "ServiceOne", TestServiceOne.class,
@@ -446,9 +448,10 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         serviceProps.put("autoExport", "Disabled");
         // We should see both of these registered
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, "ServiceOne", null, serviceProps));
-        TestPropsValue metaServiceProps = new TestPropsValue();
-        metaServiceProps.put("serviceType", "Good");
-        metaServiceProps.put("autoExport", "Disabled");
+        MapValueEntry[] metaServiceProps = new MapValueEntry[] {
+            new MapValueEntry("serviceType", "Good"),
+            new MapValueEntry("autoExport", "Disabled")
+        };
         // also validate the metadata for the exported service
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService [] {
             new ExportedService("GoodServiceService", ServiceMetadata.ACTIVATION_EAGER, "ServiceOne",
@@ -512,6 +515,107 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         MetadataEventSet exportStartEvents = controller.getStartEvents();
         // This will validate all of the service properties
         exportStartEvents.addValidator(new ComplexServicePropertyValidator());
+
+        exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService",
+                ServiceMetadata.ACTIVATION_EAGER, "ServiceOne", TestServiceOne.class,
+                ServiceMetadata.AUTO_EXPORT_DISABLED, 0,
+                new MapValueEntry[] {
+                    new MapValueEntry("osgi.service.blueprint.compname", "BAD"),
+                    new MapValueEntry("service.ranking", "666", Integer.class),
+                    new MapValueEntry("test.case.property.int", "1", Integer.TYPE),
+                    new MapValueEntry("test.case.property.short", "2", Short.TYPE),
+                    new MapValueEntry("test.case.property.byte", "3", Byte.TYPE),
+                    new MapValueEntry("test.case.property.char", "4", Character.TYPE),
+                    new MapValueEntry("test.case.property.long", "5", Long.TYPE),
+                    new MapValueEntry("test.case.property.boolean", "true", Boolean.TYPE),
+                    new MapValueEntry("test.case.property.float", "6.0", Float.TYPE),
+                    new MapValueEntry("test.case.property.double", "7.0", Double.TYPE),
+
+                    new MapValueEntry("test.case.property.java.lang.Integer", "11", Integer.class),
+                    new MapValueEntry("test.case.property.java.lang.Short", "12", Short.class),
+                    new MapValueEntry("test.case.property.java.lang.Byte", "13", Byte.class),
+                    new MapValueEntry("test.case.property.java.lang.Character", "a", Character.class),
+                    new MapValueEntry("test.case.property.java.lang.Long", "15", Long.class),
+                    new MapValueEntry("test.case.property.java.lang.Boolean", "false", Boolean.class),
+                    new MapValueEntry("test.case.property.java.lang.Float", "16.0", Float.class),
+                    new MapValueEntry("test.case.property.java.lang.Double", "17.0", Double.class),
+
+                    new MapValueEntry("test.case.property.int.array",
+                        new TestArrayValue(new TestValue[] { new TestStringValue("1") }, Integer.TYPE)),
+                    new MapValueEntry("test.case.property.short.array",
+                        new TestArrayValue(new TestValue[] { new TestStringValue("2") }, Short.TYPE)),
+                    new MapValueEntry("test.case.property.byte.array",
+                        new TestArrayValue(new TestValue[] { new TestStringValue("3") }, Byte.TYPE)),
+                    new MapValueEntry("test.case.property.char.array",
+                        new TestArrayValue(new TestValue[] { new TestStringValue("4") }, Character.TYPE)),
+                    new MapValueEntry("test.case.property.long.array",
+                        new TestArrayValue(new TestValue[] { new TestStringValue("5") }, Long.TYPE)),
+                    new MapValueEntry("test.case.property.boolean.array",
+                        new TestArrayValue(new TestValue[] { new TestStringValue("true") }, Boolean.TYPE)),
+                    new MapValueEntry("test.case.property.float.array",
+                        new TestArrayValue(new TestValue[] { new TestStringValue("6.0") }, Float.TYPE)),
+                    new MapValueEntry("test.case.property.double.array",
+                        new TestArrayValue(new TestValue[] { new TestStringValue("7.0") }, Double.TYPE)),
+
+                    new MapValueEntry("test.case.property.java.lang.String.array",
+                        new TestArrayValue(new TestValue[] { new TestStringValue("abc") }, String.class)),
+                    new MapValueEntry("test.case.property.java.lang.Integer.array",
+                        new TestArrayValue(new TestValue[] { new TestStringValue("11") }, Integer.class)),
+                    new MapValueEntry("test.case.property.java.lang.Short.array",
+                        new TestArrayValue(new TestValue[] { new TestStringValue("12") }, Short.class)),
+                    new MapValueEntry("test.case.property.java.lang.Byte.array",
+                        new TestArrayValue(new TestValue[] { new TestStringValue("13") }, Byte.class)),
+                    new MapValueEntry("test.case.property.java.lang.Character.array",
+                        new TestArrayValue(new TestValue[] { new TestStringValue("a") }, Character.class)),
+                    new MapValueEntry("test.case.property.java.lang.Long.array",
+                        new TestArrayValue(new TestValue[] { new TestStringValue("15") }, Long.class)),
+                    new MapValueEntry("test.case.property.java.lang.Boolean.array",
+                        new TestArrayValue(new TestValue[] { new TestStringValue("false") }, Boolean.class)),
+                    new MapValueEntry("test.case.property.java.lang.Float.array",
+                        new TestArrayValue(new TestValue[] { new TestStringValue("16.0") }, Float.class)),
+                    new MapValueEntry("test.case.property.java.lang.Double.array",
+                        new TestArrayValue(new TestValue[] { new TestStringValue("17.0") }, Double.class)),
+
+                    new MapValueEntry("test.case.property.java.lang.String.Set",
+                        new TestSetValue(new TestValue[] { new TestStringValue(String.class, "abc") }, String.class)),
+                    new MapValueEntry("test.case.property.java.lang.Integer.Set",
+                        new TestSetValue(new TestValue[] { new TestStringValue(Integer.class, "11") }, Integer.class)),
+                    new MapValueEntry("test.case.property.java.lang.Short.Set",
+                        new TestSetValue(new TestValue[] { new TestStringValue(Short.class, "12") }, Short.class)),
+                    new MapValueEntry("test.case.property.java.lang.Byte.Set",
+                        new TestSetValue(new TestValue[] { new TestStringValue(Byte.class, "13") }, Byte.class)),
+                    new MapValueEntry("test.case.property.java.lang.Character.Set",
+                        new TestSetValue(new TestValue[] { new TestStringValue(Character.class, "a") }, Character.class)),
+                    new MapValueEntry("test.case.property.java.lang.Long.Set",
+                        new TestSetValue(new TestValue[] { new TestStringValue(Long.class, "15") }, Long.class)),
+                    new MapValueEntry("test.case.property.java.lang.Boolean.Set",
+                        new TestSetValue(new TestValue[] { new TestStringValue(Boolean.class, "false") }, Boolean.class)),
+                    new MapValueEntry("test.case.property.java.lang.Float.Set",
+                        new TestSetValue(new TestValue[] { new TestStringValue(Float.class, "16.0") }, Float.class)),
+                    new MapValueEntry("test.case.property.java.lang.Double.Set",
+                        new TestSetValue(new TestValue[] { new TestStringValue(Double.class, "17.0") }, Double.class)),
+
+                    new MapValueEntry("test.case.property.java.lang.String.List",
+                        new TestListValue(new TestValue[] { new TestStringValue(String.class, "abc") }, String.class)),
+                    new MapValueEntry("test.case.property.java.lang.Integer.List",
+                        new TestListValue(new TestValue[] { new TestStringValue(Integer.class, "11") }, Integer.class)),
+                    new MapValueEntry("test.case.property.java.lang.Short.List",
+                        new TestListValue(new TestValue[] { new TestStringValue(Short.class, "12") }, Short.class)),
+                    new MapValueEntry("test.case.property.java.lang.Byte.List",
+                        new TestListValue(new TestValue[] { new TestStringValue(Byte.class, "13") }, Byte.class)),
+                    new MapValueEntry("test.case.property.java.lang.Character.List",
+                        new TestListValue(new TestValue[] { new TestStringValue(Character.class, "a") }, Character.class)),
+                    new MapValueEntry("test.case.property.java.lang.Long.List",
+                        new TestListValue(new TestValue[] { new TestStringValue(Long.class, "15") }, Long.class)),
+                    new MapValueEntry("test.case.property.java.lang.Boolean.List",
+                        new TestListValue(new TestValue[] { new TestStringValue(Boolean.class, "false") }, Boolean.class)),
+                    new MapValueEntry("test.case.property.java.lang.Float.List",
+                        new TestListValue(new TestValue[] { new TestStringValue(Float.class, "16.0") }, Float.class)),
+                    new MapValueEntry("test.case.property.java.lang.Double.List",
+                        new TestListValue(new TestValue[] { new TestStringValue(Double.class, "17.0") }, Double.class)),
+                },
+                null, null)));
+        // we should see a service event here indicating this was registered
 
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class);

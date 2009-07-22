@@ -26,6 +26,7 @@ import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.osgi.service.blueprint.reflect.RefMetadata;
 import org.osgi.service.blueprint.reflect.RegistrationListener;
 import org.osgi.service.blueprint.reflect.ServiceMetadata;
+import org.osgi.service.blueprint.reflect.MapEntry;
 import org.osgi.service.blueprint.reflect.Metadata;
 import org.osgi.service.blueprint.reflect.Target;
 
@@ -48,7 +49,7 @@ public class ExportedService extends Assert implements TestComponentMetadata {
     // the set of exported interfaces
     protected List serviceInterfaces;
     // an optional set of service properties
-    protected TestPropsValue serviceProperties;
+    protected List serviceProperties;
     // the exported service ranking
     protected int serviceRanking;
     // the set of explicit dependencies
@@ -73,7 +74,7 @@ public class ExportedService extends Assert implements TestComponentMetadata {
      * @param deps       A set of explicit dependencies
      * @param listeners  Any optional registration listeners.
      */
-    public ExportedService(String serviceId, int activation, String componentId, Class serviceInterface, int exportMode, int ranking, TestPropsValue props,
+    public ExportedService(String serviceId, int activation, String componentId, Class serviceInterface, int exportMode, int ranking, MapValueEntry[] props,
             String[] deps, TestRegistrationListener[] listeners) {
         this(serviceId, activation, componentId, new Class[] { serviceInterface }, exportMode, ranking, props, deps, listeners);
     }
@@ -96,14 +97,20 @@ public class ExportedService extends Assert implements TestComponentMetadata {
      * @param deps       A set of explicit dependencies
      * @param listeners  Any optional registration listeners.
      */
-    public ExportedService(String serviceId, int activation, String componentId, Class[] interfaces, int exportMode, int ranking, TestPropsValue props,
+    public ExportedService(String serviceId, int activation, String componentId, Class[] interfaces, int exportMode, int ranking, MapValueEntry[] props,
         String[] deps, TestRegistrationListener[] listeners) {
         this.serviceId = serviceId;
         this.activation = activation;
         this.componentId = componentId;
         this.exportMode = exportMode;
         this.serviceRanking = ranking;
-        this.serviceProperties = props;
+        if (props != null) {
+            this.serviceProperties = new ArrayList();
+            // copy this over to the list
+            for (int i = 0; i < props.length; i++) {
+                serviceProperties.add(props[i]);
+            }
+        }
         // convert this into a set
         this.serviceInterfaces = new ArrayList();
         for (int i = 0; i < interfaces.length; i++) {
@@ -171,14 +178,6 @@ public class ExportedService extends Assert implements TestComponentMetadata {
                 return false;
             }
         }
-
-
-        // for some tests, the service properties are necessary to disambiguate
-        // the service.  If we have some specified, then a match is required on
-        // all of these as well.
-        if (serviceProperties != null) {
-            return serviceProperties.equals(meta.getServiceProperties());
-        }
         return true;
     }
 
@@ -209,7 +208,20 @@ public class ExportedService extends Assert implements TestComponentMetadata {
             }
         }
 
-        // TODO:  Need to validate the service properties
+        // for some tests, the service properties are necessary to disambiguate
+        // the service.  If we have some specified, then a match is required on
+        // all of these as well.
+        if (serviceProperties != null) {
+            List propEntries = meta.getServiceProperties();
+            // validate the size first
+            assertEquals("Service properties value size mismatch", serviceProperties.size(), propEntries.size());
+            // now validate each of the entries
+            for (int i = 0; i < serviceProperties.size(); i++) {
+                MapValueEntry e = (MapValueEntry)propEntries.get(i);
+                // validate the real entry
+                e.validate(blueprintMetadata, (MapEntry)propEntries.get(i));
+            }
+        }
     }
 
 

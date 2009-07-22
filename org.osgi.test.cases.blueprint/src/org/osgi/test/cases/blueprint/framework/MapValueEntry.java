@@ -56,7 +56,7 @@ public class MapValueEntry {
     }
 
     public boolean equals(MapEntry entry) {
-        return key.equals(entry.getKey());
+        return key.equals(entry.getKey()) && value.equals(entry.getValue());
     }
 
     public void validate(BlueprintMetadata blueprintMetadata, MapEntry entry) throws Exception {
