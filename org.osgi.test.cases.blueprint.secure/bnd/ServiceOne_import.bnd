@@ -1,6 +1,6 @@
 Bundle-SymbolicName:                     ${p}.ServiceOne_import
 Bundle-Version:                          4.2
-Import-Package:                          org.osgi.test.cases.blueprint.components.serviceexport, org.osgi.test.cases.blueprint.services
+Import-Package:                          org.osgi.test.cases.blueprint.components.serviceimport, org.osgi.test.cases.blueprint.services
 -resourceonly: true
 Include-Resource					= \
         OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/secure/components/security/ServiceOne_import.xml, \

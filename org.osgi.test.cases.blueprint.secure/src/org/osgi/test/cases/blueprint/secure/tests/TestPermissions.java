@@ -34,14 +34,20 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  */
 public class TestPermissions extends DefaultTestBundleControl {
     /**
-     * Tests that the BlueprintContainer cannot be created if the
-     * bundle does not have register permission for the BlueprintContainer
+     * Tests that the BlueprintContainer with no get or register permissions
+     * can be created if it does not import or export any services.  The
+     * extender needs to use its own permissions for registering the
+     * BlueprintContainer instance
      *
      * @exception Exception
      */
 	public void testNoBlueprintPermission() throws Exception {
-        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+        StandardTestController controller = new StandardTestController(getContext(),
             getWebServer()+"www/blueprint_denied.jar");
+
+        // we should see one bean created.
+        MetadataEventSet startEvents = controller.getStartEvents();
+        startEvents.addAssertion("ServiceOne", AssertionService.BEAN_CREATED);
         controller.run();
     }
 
