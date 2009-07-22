@@ -160,6 +160,7 @@ Include-Resource					= \
  	www/classtype_static_factory_property_injection.jar=classtype_static_factory_property_injection.jar, \
  	www/component_reference_injection.jar=component_reference_injection.jar, \
  	www/metadata_sampler.jar=metadata_sampler.jar, \
+ 	www/idref_injection.jar=idref_injection.jar, \
  	www/dependency_cycle_breaking.jar=dependency_cycle_breaking.jar, \
  	www/singleton_cycle.jar=singleton_cycle.jar, \
  	www/prototype_cycle.jar=prototype_cycle.jar, \

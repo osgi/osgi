@@ -324,12 +324,4 @@
 		</argument>
 	</bean>
 
-	<!-- String values from array -->
-
-	<!-- Array Injection from idref -->
-
-	<!-- Array Injection from ref -->
-
-	<!-- Array Injection from component -->
-
 </blueprint>

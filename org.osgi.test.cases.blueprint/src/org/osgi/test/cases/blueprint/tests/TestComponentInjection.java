@@ -455,4 +455,24 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         startEvents.addValidator(new MetadataSamplerValidator());
         controller.run();
     }
+
+
+    /**
+     * Test of the <idref> attribute and associated metadata.
+     */
+    public void testIdrefInjection() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/idref_injection.jar");
+        MetadataEventSet startEvents = controller.getStartEvents();
+        // this is a special validator just for this test
+        startEvents.addValidator(new MetadataSamplerValidator());
+
+        // validate the value
+        startEvents.validateComponentArgument("comp1", "arg1", "refComp");
+        // and also validate the metadata.  This should be the corresponding idref metadata
+        startEvents.addValidator(new ArgumentMetadataValidator("comp1", new TestArgument[] {
+            new TestArgument(new TestIdRefValue("refComp"), null)
+        }));
+        controller.run();
+    }
 }

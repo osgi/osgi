@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    default-activation="eager">
+
+
+    <bean id="refComp" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+        <argument value="refComp"/>
+    </bean>
+
+   <!-- the lazyleaf does not exist -->
+    <bean id="comp1" class="org.osgi.test.cases.blueprint.components.injection.PrimitiveConstructorInjection">
+       <argument>
+           <idref component-id="refComp"/>
+       </argument>
+   </bean>
+</blueprint>
+

@@ -315,10 +315,4 @@
 			</array>
 		</argument>
 	</bean>
-
-	<!-- Array Injection from idref -->
-
-	<!-- Array Injection from ref -->
-
-	<!-- Array Injection from component -->
 </blueprint>
