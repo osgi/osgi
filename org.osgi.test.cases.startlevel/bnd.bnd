@@ -15,6 +15,7 @@ Include-Resource = \
 	tb5.jar
 	
 Test-Cases							= ${testcases}
+-signaturetest                      = org.osgi.service.startlevel
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \

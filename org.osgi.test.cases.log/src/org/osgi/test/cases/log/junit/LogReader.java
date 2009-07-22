@@ -1,4 +1,4 @@
-package org.osgi.test.cases.log;
+package org.osgi.test.cases.log.junit;
 
 import java.util.ArrayList;
 import java.util.List;

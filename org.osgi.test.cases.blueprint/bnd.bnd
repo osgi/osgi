@@ -380,6 +380,7 @@ Include-Resource					= \
  	www/Service_lazy_export.jar=Service_lazy_export.jar
 
 Test-Cases							= ${testcases}
+-signaturetest                      = org.osgi.service.blueprint.container, org.osgi.service.blueprint.reflect
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \

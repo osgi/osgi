@@ -1,6 +1,5 @@
 Bundle-Version: 4.2.0.${project.build}
 Bundle-RequiredExecutionEnvironment = J2SE-1.5
--signaturetest                      = javax.transaction, javax.transaction.xa
 
 Private-Package						= org.osgi.test.support.*, \
 	${p}.*
@@ -30,5 +29,6 @@ Import-Package = \
     org.osgi.test.cases.transaction.waittime=30
 
 Test-Cases							= ${testcases}
+-signaturetest                      = javax.transaction, javax.transaction.xa
 
 	

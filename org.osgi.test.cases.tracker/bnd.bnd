@@ -16,6 +16,7 @@ Export-Package						= ${p}.service
 -runproperties						= report=true
 	
 Test-Cases							= ${testcases}
+-signaturetest                      = org.osgi.util.tracker
 
 Include-Resource				= \
 	tb1.jar, \

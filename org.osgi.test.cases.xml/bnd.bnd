@@ -14,6 +14,7 @@ Include-Resource = \
 	tb3.jar
 	
 Test-Cases							= ${testcases}
+-signaturetest                      = org.osgi.util.xml
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \

@@ -7,6 +7,7 @@ Private-Package						= org.osgi.test.support.*, \
 Export-Package						= \
 
 Test-Cases							= ${testcases}
+-signaturetest                      = org.osgi.service.url
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \

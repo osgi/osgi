@@ -5,6 +5,7 @@ Private-Package						= org.osgi.test.support.*, \
 	${p}.junit.*
 	
 Test-Cases							= ${testcases}
+-signaturetest                      = org.osgi.service.useradmin
 
 -buildpath							= \
 	org.osgi.service.useradmin;				version=project, \

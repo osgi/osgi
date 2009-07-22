@@ -10,6 +10,7 @@ Import-Package: javax.microedition.io, javax.microedition.pki, *
 Export-Package: javax.microedition.io, javax.microedition.pki
 	
 Test-Cases							= ${testcases}
+-signaturetest                      = org.osgi.service.io
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \

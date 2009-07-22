@@ -35,7 +35,7 @@
  * 2009/05/13   Yan Pujante: copied/adapted from org.osgi.test.cases.policy
  * ===========  ==============================================================
  */
-package org.osgi.test.cases.gsm;
+package org.osgi.test.cases.gsm.junit;
 
 public class PolicyConstants
 {

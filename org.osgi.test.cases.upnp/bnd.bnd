@@ -27,5 +27,6 @@ Include-Resource:
 
 
 Test-Cases							= ${testcases}
+-signaturetest                      = org.osgi.service.upnp
 
 

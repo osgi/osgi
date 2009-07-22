@@ -11,6 +11,7 @@ Include-Resource					= \
 	com.provider.messages.jar
 
 Test-Cases							= ${testcases}
+-signaturetest                      = org.osgi.util.mobile
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \

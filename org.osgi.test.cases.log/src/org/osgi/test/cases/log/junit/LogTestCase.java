@@ -1,42 +1,33 @@
 /**
  * OSGi Test Suite Implementation. OSGi Confidential.
  */
-package org.osgi.test.cases.log;
-
-import junit.framework.TestCase;
+package org.osgi.test.cases.log.junit;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogReaderService;
 import org.osgi.service.log.LogService;
+import org.osgi.test.support.OSGiTestCase;
 
-public class LogTestCase extends TestCase {
+public class LogTestCase extends OSGiTestCase {
 
 	ServiceReference logServiceReference;
 	LogService logService;
 	LogReaderService logReaderService;
-	BundleContext context;
-
-	public void setBundleContext(BundleContext context) {
-		this.context = context;
-	}
 	
-	
-	public void setUp() throws Exception {
-		logServiceReference = context.getServiceReference(LogService.class
+	protected void setUp() throws Exception {
+		logServiceReference = getContext().getServiceReference(
+				LogService.class
 				.getName());
-		logService = (LogService) context.getService(logServiceReference);
+		logService = (LogService) getContext().getService(logServiceReference);
 		
-		ServiceReference logReaderServiceReference = context.getServiceReference(LogReaderService.class.getName());
-		logReaderService = (LogReaderService) context
+		ServiceReference logReaderServiceReference = getContext()
+				.getServiceReference(LogReaderService.class.getName());
+		logReaderService = (LogReaderService) getContext()
 				.getService(logReaderServiceReference);
 	}
 	
-	public void tearDown() throws Exception {
-	}
-
 	public void testLog() {
 		LogReader reader = new LogReader();
 		LogReader readers[] = new LogReader[] { reader };
@@ -44,7 +35,7 @@ public class LogTestCase extends TestCase {
 		RuntimeException e = new RuntimeException();
 		String message = "'The message <4711>'";
 		ServiceReference sr = logServiceReference;
-		Bundle b = context.getBundle();
+		Bundle b = getContext().getBundle();
 		
 		
 		assertLog(readers, b, null, LogService.LOG_ERROR, message, null);
@@ -83,7 +74,7 @@ public class LogTestCase extends TestCase {
 		RuntimeException e = new RuntimeException();
 		String message = "'The message <4711>'";
 		ServiceReference sr = logServiceReference;
-		Bundle b = context.getBundle();
+		Bundle b = getContext().getBundle();
 
 		logReaderService.addLogListener(reader1);
 		logReaderService.addLogListener(reader2);

@@ -8,6 +8,8 @@ Export-Package						= \
 	${p}.classpath.exported, \
 	${p}.dynpkgimport.exported, \
 	${p}.lifecycle.servicereferencegetter
+	
+Import-Package	= org.osgi.framework, org.osgi.framework.launch, org.osgi.framework.hooks.service, *
 
 Bundle-ClassPath: .,div.tb6.jar
 
@@ -213,7 +215,7 @@ Include-Resource = \
 
 Test-Cases							= ${testcases}
 -testbundles						= ${p}
--signaturetest                      = org.osgi.framework, org.osgi.framework.hooks.service
+-signaturetest                      = org.osgi.framework, org.osgi.framework.launch, org.osgi.framework.hooks.service
 
 -runbundles							= \
 

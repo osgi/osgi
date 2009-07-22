@@ -24,6 +24,7 @@ Private-Package						= ${p}.junit, \
 	org.osgi.framework.trust.repositories=${build}/keystore
 
 Test-Cases							= ${testcases}
+-signaturetest                      = org.osgi.service.permissionadmin
 
 Include-Resource		: \
 	contextsharer.jar, \

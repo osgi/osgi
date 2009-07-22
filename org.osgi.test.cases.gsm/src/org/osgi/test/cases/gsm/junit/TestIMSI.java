@@ -16,7 +16,7 @@
  * ============================================================================
  */
 
-package org.osgi.test.cases.gsm;
+package org.osgi.test.cases.gsm.junit;
 
 import junit.framework.TestCase;
 
@@ -24,86 +24,84 @@ import org.osgi.framework.Bundle;
 import org.osgi.service.condpermadmin.Condition;
 import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.test.support.MockFactory;
-import org.osgi.util.gsm.IMEICondition;
+import org.osgi.util.gsm.IMSICondition;
 
-public class TestIMEI extends TestCase {
+public class TestIMSI extends TestCase {
 	private Bundle				bundle		= (Bundle) MockFactory.newMock(
 													Bundle.class, null);
-	public static final String	SYSTEM_IMEI	= "012345678901234";
-	public static final String	OTHER_IMEI	= "123456789012345";
+	public static final String	SYSTEM_IMSI	= "012345678901234";
+	public static final String	OTHER_IMSI	= "123456789012345";
 	static {
-		System.getProperties().put("org.osgi.util.gsm.imei", SYSTEM_IMEI);
+		System.getProperties().put("org.osgi.util.gsm.imsi", SYSTEM_IMSI);
 	}
 	
 	public void testBasic() throws Exception {
-		Condition imei = IMEICondition.getCondition(bundle, new ConditionInfo(
-				"", new String[] {SYSTEM_IMEI}));
-		assertFalse(imei.isPostponed());
-		assertTrue(imei.isSatisfied());
+		Condition imsi = IMSICondition.getCondition(bundle, new ConditionInfo(
+				"", new String[] {SYSTEM_IMSI}));
+		assertFalse(imsi.isPostponed());
+		assertTrue(imsi.isSatisfied());
 		
-		imei = IMEICondition.getCondition(bundle, new ConditionInfo("",
-				new String[] {OTHER_IMEI}));
-		assertFalse(imei.isPostponed());
-		assertFalse(imei.isSatisfied());
+		imsi = IMSICondition.getCondition(bundle, new ConditionInfo("",
+				new String[] {OTHER_IMSI}));
+		assertFalse(imsi.isPostponed());
+		assertFalse(imsi.isSatisfied());
 	}
 	
-	public void testIMEIValidator() throws Exception {
+	public void testIMSIValidator() throws Exception {
 		try {
-			IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{""}));
+			IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{""}));
 			fail();
 		}
 		catch (IllegalArgumentException e) {/* expected */
 		}
 		try {
-			IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{"12345678901234"}));
+			IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{"12345678901234"}));
 			fail();
 		}
 		catch (IllegalArgumentException e) {/* expected */
 		}
 		try {
-			IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{"1234567890123456"}));
+			IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{"1234567890123456"}));
 			fail();
 		}
 		catch (IllegalArgumentException e) {/* expected */
 		}
 		try {
-			IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{"12345678901234a"}));
+			IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{"12345678901234a"}));
 			fail();
 		}
 		catch (IllegalArgumentException e) {/* expected */
 		}
-
-		IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{"01234567891234*"}));
-
+		IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{"12345678901234*"}));
 		try {
-			IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{"012345678901234*"}));
+			IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{"123456789012345*"}));
 			fail();
 		}
 		catch (IllegalArgumentException e) {/* expected */
 		}
 	}
-	
+
 	public void testWildcards() throws Exception {
-		Condition imei = IMEICondition.getCondition(bundle, new ConditionInfo(
-				"", new String[] {SYSTEM_IMEI.substring(0, 5) + "*"}));
-		assertTrue(imei.isSatisfied());	
+		Condition IMSI = IMSICondition.getCondition(bundle, new ConditionInfo(
+				"", new String[] {SYSTEM_IMSI.substring(0, 5) + "*"}));
+		assertTrue(IMSI.isSatisfied());	
 
-		imei = IMEICondition.getCondition(bundle, new ConditionInfo("",
+		IMSI = IMSICondition.getCondition(bundle, new ConditionInfo("",
 				new String[] {"777*"}));
-		assertFalse(imei.isSatisfied());
+		assertFalse(IMSI.isSatisfied());
 	}
 
   /**
-   * This test asserts if a condition is sucessfully created when imei
+   * This test asserts if a condition is sucessfully created when imsi
    * parameter is a valid code
    *
-   * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
+   * @spec IMSICondition.getCondition(Bundle,ConditionInfo)
    */
 
   public void testGetCondition001() {
-          Condition cond = IMEICondition.getCondition(
-                  bundle,
-                  new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{PolicyConstants.IMEI_VALID_CODE}));
+          Condition cond = IMSICondition.getCondition(
+              bundle,
+                  new ConditionInfo("org.osgi.util.gsm.IMSICondition",new String[]{PolicyConstants.IMSI_VALID_CODE}));
 
           assertNotNull("created condition", cond);
   }
@@ -115,16 +113,17 @@ public class TestIMEI extends TestCase {
    * passed for the first parameter
    */
 
+
   /**
    * This test asserts if NullPointerException is thrown when null is
    * passed for the second parameter
    *
-   * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
+   * @spec IMSICondition.getCondition(Bundle,ConditionInfo)
    */
 
   public void testGetCondition003() {
       try {
-          IMEICondition.getCondition(
+          IMSICondition.getCondition(
               bundle, null);
 
           failException("", NullPointerException.class);
@@ -136,16 +135,16 @@ public class TestIMEI extends TestCase {
 
   /**
    * This test asserts if IllegalArgumentException is thrown if the
-   * imei code is not a valid string
+   * imsi is not a valid string
    *
-   * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
+   * @spec IMSICondition.getCondition(Bundle,ConditionInfo)
    */
 
   public void testGetCondition004() {
       try {
-          IMEICondition.getCondition(
+          IMSICondition.getCondition(
               bundle,
-                  new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{PolicyConstants.INVALID_CODE}));
+                  new ConditionInfo("org.osgi.util.gsm.IMSICondition",new String[]{PolicyConstants.INVALID_CODE}));
 
           failException("", IllegalArgumentException.class);
       } catch (IllegalArgumentException e) {
@@ -156,16 +155,16 @@ public class TestIMEI extends TestCase {
 
   /**
    * This test asserts if IllegalArgumentException is thrown if the
-   * imei code is a string with less than 15 digits
+   * imsi code is with more than 15 digits
    *
-   * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
+   * @spec IMSICondition.getCondition(Bundle,ConditionInfo)
    */
 
   public void testGetCondition005() {
       try {
-          IMEICondition.getCondition(
+          IMSICondition.getCondition(
               bundle,
-                  new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{PolicyConstants.IMEI_LESS_DIGIT_CODE}));
+                  new ConditionInfo("org.osgi.util.gsm.IMSICondition",new String[]{PolicyConstants.IMSI_MORE_DIGIT_CODE}));
 
           failException("", IllegalArgumentException.class);
       } catch (IllegalArgumentException e) {
@@ -175,36 +174,16 @@ public class TestIMEI extends TestCase {
 
 
   /**
-   * This test asserts if IllegalArgumentException is thrown if the
-   * imei code is a string with more than 15 digits
+   * This test asserts if a condition is not created when imsi
+   * parameter is an invalid char code
    *
-   * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
+   * @spec IMSICondition.getCondition(Bundle,ConditionInfo)
    */
 
   public void testGetCondition006() {
       try {
-          IMEICondition.getCondition(
-              bundle,
-                  new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{PolicyConstants.IMEI_MORE_DIGIT_CODE}));
-
-          failException("", IllegalArgumentException.class);
-      } catch (IllegalArgumentException e) {
-        // expected
-      }
-  }
-
-
-  /**
-   * This test asserts if a condition is not created when imei
-   * parameter is a char code
-   *
-   * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
-   */
-
-  public void testGetCondition007() {
-      try {
-          IMEICondition.getCondition(bundle,
-                  new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{PolicyConstants.IMEI_CHAR_CODE}));
+          IMSICondition.getCondition(bundle,
+                  new ConditionInfo("org.osgi.util.gsm.IMSICondition",new String[]{PolicyConstants.IMSI_CHAR_CODE}));
 
           failException("", IllegalArgumentException.class);
       } catch (IllegalArgumentException e) {
@@ -215,16 +194,36 @@ public class TestIMEI extends TestCase {
 
   /**
    * This test asserts if IllegalArgumentException is thrown if the
-   * imei code is a string with hyphens
+   * imsi code is with less than 15 digits
    *
-   * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
+   * @spec IMSICondition.getCondition(Bundle,ConditionInfo)
+   */
+
+  public void testGetCondition007() {
+      try {
+          IMSICondition.getCondition(
+              bundle,
+                  new ConditionInfo("org.osgi.util.gsm.IMSICondition",new String[]{PolicyConstants.IMSI_LESS_DIGIT_CODE}));
+
+             failException("", IllegalArgumentException.class);
+      } catch (IllegalArgumentException e) {
+        // expected
+      }
+  }
+
+
+  /**
+   * This test asserts if IllegalArgumentException is thrown if the
+   * imsi code is a string with hyphens
+   *
+   * @spec IMSICondition.getCondition(Bundle,ConditionInfo)
    */
 
   public void testGetCondition008() {
       try {
-          IMEICondition.getCondition(
+          IMSICondition.getCondition(
               bundle,
-                  new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{PolicyConstants.IMEI_INVALID_CODE}));
+                  new ConditionInfo("org.osgi.util.gsm.IMSICondition",new String[]{PolicyConstants.IMSI_INVALID_CODE}));
 
           failException("", IllegalArgumentException.class);
       } catch (IllegalArgumentException e) {
@@ -236,28 +235,29 @@ public class TestIMEI extends TestCase {
    * This test asserts if a condition is sucessfully created when the imei
    * parameter ends with a wildcard
    *
-   * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
+   * @spec IMSICondition.getCondition(Bundle,ConditionInfo)
    */
 
   public void testGetCondition009() {
-          Condition cond = IMEICondition.getCondition(
-              bundle,
-                  new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{PolicyConstants.IMEI_VALID_CODE_WILDCARD}));
+        Condition cond = IMSICondition.getCondition(
+            bundle,
+                  new ConditionInfo("org.osgi.util.gsm.IMSICondition",new String[]{PolicyConstants.IMSI_VALID_CODE_WILDCARD}));
 
           assertNotNull("created condition", cond);
   }
+
 
   /**
    * This test asserts if a condition is sucessfully created when the imei
    * parameter has only one element, a wildcard.
    *
-   * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
+   * @spec IMSICondition.getCondition(Bundle,ConditionInfo)
    */
 
   public void testGetCondition010() {
-          Condition cond = IMEICondition.getCondition(
-              bundle,
-                  new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{"*"}));
+        Condition cond = IMSICondition.getCondition(
+            bundle,
+                  new ConditionInfo("org.osgi.util.gsm.IMSICondition",new String[]{"*"}));
 
         assertNotNull("created condition", cond);
   }
@@ -266,5 +266,5 @@ public class TestIMEI extends TestCase {
       Class expectedExceptionClass) {
     fail(message + " expected:[" + expectedExceptionClass.getName()
         + "] and got nothing");
-  }
+  }  
 }

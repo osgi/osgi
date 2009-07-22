@@ -1,7 +1,7 @@
 Bundle-Version: 4.2.0.${project.build}
 
 Private-Package						= org.osgi.test.support.*, \
-	${p}.*
+	${p}.junit
 
 -buildpath							= \
 	org.osgi.util.gsm;					version=project	, \
@@ -16,3 +16,4 @@ Private-Package						= org.osgi.test.support.*, \
 -runproperties					= \
 
 Test-Cases							= ${testcases}
+-signaturetest                      = org.osgi.util.gsm

@@ -9,6 +9,7 @@ Include-Resource					= \
 	tb2.jar
 
 Test-Cases							= ${testcases}
+-signaturetest                      = org.osgi.service.metatype
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \

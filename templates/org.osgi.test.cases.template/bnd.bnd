@@ -3,6 +3,7 @@ Bundle-Version: 4.2.0.${project.build}
 Private-Package						= ${p}.*
 
 -buildpath							= \
+    org.osgi.test.support;                  version=project , \
 	org.osgi.service.template;					version=project	, \
 	osgi.core;									version=4.2		, \
 	osgi.cmpn;									version=4.2		, \
@@ -15,4 +16,5 @@ Private-Package						= ${p}.*
 -runproperties					= report=true
 
 Test-Cases							= ${testcases}
+-signaturetest                      = org.osgi.service.template
 	

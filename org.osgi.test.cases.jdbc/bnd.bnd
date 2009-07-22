@@ -1,6 +1,6 @@
 Bundle-Version: 3.0.0.${project.build}
 
-Private-Package						= ${p}.*, \
+Private-Package						= ${p}.junit, \
 	org.osgi.test.support.*
 
 -buildpath							= \
@@ -18,4 +18,5 @@ Private-Package						= ${p}.*, \
 -runproperties					= report=true
 
 Test-Cases							= ${testcases}
+-signaturetest                      = org.osgi.service.jdbc
 	

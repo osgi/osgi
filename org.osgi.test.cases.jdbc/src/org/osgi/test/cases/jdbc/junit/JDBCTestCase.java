@@ -15,7 +15,7 @@
  */
 
 
-package org.osgi.test.cases.jdbc;
+package org.osgi.test.cases.jdbc.junit;
 
 import java.lang.reflect.Method;
 import java.sql.SQLException;
