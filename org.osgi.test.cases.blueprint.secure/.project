@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>org.osgi.test.cases.blueprint</name>
+	<name>org.osgi.test.cases.blueprint.secure</name>
 	<comment></comment>
 	<projects>
 	</projects>

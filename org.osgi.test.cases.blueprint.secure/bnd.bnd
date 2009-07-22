@@ -24,6 +24,7 @@ Test-Cases							= ${testcases}
     org.osgi.service.blueprint;             version=project , \
     org.osgi.test.cases.blueprint;          version=project , \
     osgi.core;				    version=4.1	, \
+	ee.j2se;								version=1.4	, \
     ${junit}
 
 -runbundles							= \
