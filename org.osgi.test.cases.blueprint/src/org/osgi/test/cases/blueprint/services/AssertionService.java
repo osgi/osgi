@@ -28,6 +28,7 @@ import org.osgi.service.event.EventAdmin;
 public class AssertionService
 {
     public static final String ASSERTION_BASE = "org/osgi/test/cases/blueprint/";
+    public static final String SECURITY_BASE = "org/osgi/test/cases/security/Blueprint/";
     public static final String ASSERTION_FAILURE = "ASSERTION_FAILURE";
     public static final String BEAN_CREATED = "BEAN_CREATED";
     public static final String BEAN_INIT_METHOD = "BEAN_INIT_METHOD";
@@ -539,6 +540,31 @@ public class AssertionService
             fail(source, "Object " + source + " is not a valid test component");
         }
         assertNotSame(source, "Property " + name + " of " + source, ((ComponentTestInfo)source).getProperty(name), value);
+    }
+
+
+    /**
+     * Send an event intended to generate a security exception
+     *
+     * @param component
+     */
+    static public void sendSecurityEvent(Object component) {
+        Dictionary props = new Hashtable();
+        props.put(BEAN, component);
+        // if this is a ComponentTestInfo object, then send along the component properties
+        // in the event.  Note that the attached properties will be a snapshot of the
+        // component state at the time the event is posted.  This will allow the test validation
+        // code to see the full state of the information.
+        if (component instanceof ComponentTestInfo) {
+            props.put(BEAN_PROPERTIES, ((ComponentTestInfo)component).getComponentProperties());
+        }
+        // we reuse some components outside the normal test context.  In
+        // that role, we don't care if they send events or not.  It's possible
+        // that the admin service will not be initialized yet, so if the
+        // service is not here, don't send the event.
+        if (adminService != null) {
+            adminService.sendEvent(new Event(SECURITY_BASE, props));
+        }
     }
 }
 

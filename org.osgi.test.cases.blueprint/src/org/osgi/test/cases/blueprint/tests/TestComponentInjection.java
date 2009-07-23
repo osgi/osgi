@@ -464,8 +464,6 @@ public class TestComponentInjection extends DefaultTestBundleControl {
         StandardTestController controller = new StandardTestController(getContext(),
             getWebServer()+"www/idref_injection.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
-        // this is a special validator just for this test
-        startEvents.addValidator(new MetadataSamplerValidator());
 
         // validate the value
         startEvents.validateComponentArgument("comp1", "arg1", "refComp");

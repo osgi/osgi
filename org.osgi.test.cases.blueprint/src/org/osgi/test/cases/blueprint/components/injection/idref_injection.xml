@@ -8,7 +8,7 @@
     </bean>
 
    <!-- the lazyleaf does not exist -->
-    <bean id="comp1" class="org.osgi.test.cases.blueprint.components.injection.PrimitiveConstructorInjection">
+    <bean id="comp1" class="org.osgi.test.cases.blueprint.components.injection.ConstructorInjection">
        <argument>
            <idref component-id="refComp"/>
        </argument>

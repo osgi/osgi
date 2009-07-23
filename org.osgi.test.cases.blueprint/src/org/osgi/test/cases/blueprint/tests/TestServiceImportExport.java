@@ -516,7 +516,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // This will validate all of the service properties
         exportStartEvents.addValidator(new ComplexServicePropertyValidator());
 
-        exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService",
+        exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("GoodServiceService",
                 ServiceMetadata.ACTIVATION_EAGER, "ServiceOne", TestServiceOne.class,
                 ServiceMetadata.AUTO_EXPORT_DISABLED, 0,
                 new MapValueEntry[] {

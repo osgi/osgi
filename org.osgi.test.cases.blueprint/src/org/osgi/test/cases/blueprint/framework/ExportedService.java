@@ -217,9 +217,9 @@ public class ExportedService extends Assert implements TestComponentMetadata {
             assertEquals("Service properties value size mismatch", serviceProperties.size(), propEntries.size());
             // now validate each of the entries
             for (int i = 0; i < serviceProperties.size(); i++) {
-                MapValueEntry e = (MapValueEntry)propEntries.get(i);
+                MapValueEntry entry = (MapValueEntry)serviceProperties.get(i);
                 // validate the real entry
-                e.validate(blueprintMetadata, (MapEntry)propEntries.get(i));
+                entry.validate(blueprintMetadata, (MapEntry)propEntries.get(i)); 
             }
         }
     }
