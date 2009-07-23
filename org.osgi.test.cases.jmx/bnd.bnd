@@ -1,0 +1,31 @@
+Bundle-Version: 3.0.0.${project.build}
+
+Private-Package						= ${p}.*, \
+	org.osgi.test.support.*
+	
+Include-Resource					= \
+	tb1.jar	,\
+	tb2.jar
+
+-buildpath							= \
+	org.osgi.jmx;					version=project	, \
+	osgi;									version=4.0		, \
+	org.osgi.service.cm; version=project, \
+	org.osgi.test.support;	version=project, \
+	org.osgi.service.permissionadmin; version=project, \
+	org.osgi.service.provisioning; version=project, \
+	ee.minimum											, \
+	${junit}	
+
+-runbundles						= \
+	org.osgi.impl.bundle.jmx; version=project, \
+	org.osgi.impl.service.useradmin; version=project, \
+	org.osgi.impl.service.log; version=project, \
+	org.apache.felix.configadmin; version=latest, \
+	org.osgi.impl.service.provisioning; version=project, \
+	osgi.cmpn; version=latest
+
+-runproperties					= report=true
+
+Test-Cases: ${classes;extending;*TestCase}
+	

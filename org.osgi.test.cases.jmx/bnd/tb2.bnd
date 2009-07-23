@@ -1,0 +1,17 @@
+Bundle-SymbolicName: ${p}.tb2
+Bundle-Name: test.cases.jmx.tb2
+Bundle-Description: test-bundle for PackageStateMBeanTestCase
+Bundle-Version: 4.2.0.${project.build}
+Bundle-Activator: ${p}.tb2.Activator
+Bundle-Vendor: SAP
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+Bundle-Copyright: ${copyright}
+Export-Package: 		org.osgi.test.cases.jmx.tb2.api;version="4.2.0.${project.build}" , \
+						org.osgi.test.cases.jmx.tb2
+						
+Private-Package						= \
+	${p}.tb2.impl.*
+
+
