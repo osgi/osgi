@@ -31,19 +31,22 @@ public class ReferenceCollection extends ReferencedServiceBase {
      * Create a ReferenceService descriptor.
      *
      * @param name       The registered component id for the collection.
-     * @param interfaces The set of interfaces to access.
+     * @param interfaceClass
+     *                   The referenced inteface class.
      * @param availability
      *                   The availability setting.
      * @param initialization
      *                   The initialization setting for the collection.
+     * @param componentName
+     *                   The component-name attribute value.
      * @param filter     The declared filter string for the reference.
      * @param deps       Explicit dependencies for the collection.
      * @param listeners  An expected set of listener metadata.
      * @param memberType The collection member type
      */
     public ReferenceCollection(String name, Class interfaceClass, int availability, int initialization,
-            String filter, String[] deps, BindingListener[] listeners, int memberType) {
-        super(name, interfaceClass, availability, initialization, filter, deps, listeners);
+            String componentName, String filter, String[] deps, BindingListener[] listeners, int memberType) {
+        super(name, interfaceClass, availability, initialization, componentName, filter, deps, listeners);
         this.memberType = memberType;
     }
 

@@ -32,21 +32,24 @@ public class ReferencedService extends ReferencedServiceBase implements TestComp
     /**
      * Create a ReferenceService descriptor.
      *
-     * @param name       The registered name of the reference (can be null for inline
-     *                   definitions).
-     * @param interfaces The set of interfaces to access.
+     * @param name      The registered name of the reference (can be null for inline
+     *                  definitions).
+     * @param interfaceClass
+     *                  The single optional interface class.
      * @param availability
-     *                   The availability setting.
+     *                  The availability setting.
      * @param initialization
      *                  The lazy/eager initialization setting.
-     * @param filter     The declared filter string for the reference.
-     * @param deps       The collection if explicit depends-on relationships.
-     * @param listeners  An expected set of listener metadata.
-     * @param timeout    The service call timeout interval for damped services.
+     * @param componentName
+     *                  The component-name attribute.
+     * @param filter    The declared filter string for the reference.
+     * @param deps      The collection if explicit depends-on relationships.
+     * @param listeners An expected set of listener metadata.
+     * @param timeout   The service call timeout interval for damped services.
      */
     public ReferencedService(String name, Class interfaceClass, int availability, int initialization,
-            String filter, String[] deps, BindingListener[] listeners, long timeout) {
-        super(name, interfaceClass, availability, initialization, filter, deps, listeners);
+            String componentName, String filter, String[] deps, BindingListener[] listeners, long timeout) {
+        super(name, interfaceClass, availability, initialization, componentName, filter, deps, listeners);
         this.timeout = timeout;
     }
 

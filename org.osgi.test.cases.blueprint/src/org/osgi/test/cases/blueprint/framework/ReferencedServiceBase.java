@@ -40,6 +40,8 @@ public class ReferencedServiceBase extends Assert implements TestComponentMetada
     protected int serviceAvailability;
     // the service activation style
     protected int activation;
+    // the referenced name of the component (used in the filter request)
+    protected String componentName;
     // the request filter string
     protected String filter;
     // the list of binding listeners
@@ -50,20 +52,29 @@ public class ReferencedServiceBase extends Assert implements TestComponentMetada
     /**
      * Create a ReferenceService descriptor.
      *
-     * @param interfaces The set of interfaces to access.
+     * @param name       The id of the component (null for inline references)
+     * @param interfaceClass
+     *                   The referenced interface class.
      * @param availability
      *                   The availability setting.
+     * @param activation The activation setting.
+     * @param componentName
+     *                   The component-name attribute.
      * @param filter     The declared filter string for the reference.
+     * @param deps       The declared dependencies for this reference.
      * @param listeners  An expected set of listener metadata.
      */
-    public ReferencedServiceBase(String name, Class interfaceClass, int availability, int activation, String filter, String[] deps, BindingListener[] listeners) {
+    public ReferencedServiceBase(String name, Class interfaceClass, int availability, int activation, String componentName, String filter, String[] deps, BindingListener[] listeners) {
         this.name = name;
         this.serviceAvailability = availability;
         this.activation = activation;
         this.filter = filter;
+        this.componentName = componentName;
         this.listeners = listeners;
-        // convert this into a set
-        this.serviceInterface = interfaceClass.getName();
+        // the interface class is optional, so only convert the name if we have a class.
+        if (interfaceClass != null) {
+            this.serviceInterface = interfaceClass.getName();
+        }
 
         dependencies = new ArrayList();
         // handle the dependency tracking
@@ -90,9 +101,27 @@ public class ReferencedServiceBase extends Assert implements TestComponentMetada
         }
         ServiceReferenceMetadata meta = (ServiceReferenceMetadata)componentMeta;
 
-        // match on the interfaces first
-        if (!serviceInterface.equals(meta.getInterface())) {
-            return false;
+        // match on the interfaces first...but the interface is optional
+        if (serviceInterface == null) {
+            if (meta.getInterface() != null) {
+                return false;
+            }
+        }
+        else {
+            if (!serviceInterface.equals(meta.getInterface())) {
+                return false;
+            }
+        }
+
+        // the component name is an important attribute for matching
+        if (componentName != null) {
+            if (meta.getComponentName() != null) {
+                return false;
+            }
+
+            if (!componentName.equals(meta.getComponentName())) {
+                return false;
+            }
         }
 
         // if the request filter is null, we're going to pass on the
@@ -122,9 +151,8 @@ public class ReferencedServiceBase extends Assert implements TestComponentMetada
         ServiceReferenceMetadata meta = (ServiceReferenceMetadata)componentMeta;
         assertEquals("Explicit dependencies mismatch", dependencies, meta.getDependsOn());
         // if we have a name to compare, they must be equal
-        if (name != null) {
-            assertEquals(name, getId());
-        }
+        assertEquals(name, getId());
+        assertEquals(serviceInterface, meta.getInterface());
         assertEquals("Availability setting mismatch", serviceAvailability, meta.getAvailability());
         assertEquals("Activation setting mismatch", activation, meta.getActivation());
         // we might have a listener list also
@@ -139,6 +167,9 @@ public class ReferencedServiceBase extends Assert implements TestComponentMetada
                 s.validate(blueprintMetadata, l);
             }
         }
+
+        assertEquals("Component name mismatch", componentName, meta.getComponentName());
+        assertEquals("Filter mismatch", filter, meta.getFilter());
     }
 
 
