@@ -50,12 +50,13 @@ public class LazyActivationTestController extends ThreePhaseTestController {
         // until we do something to force classloading
         events.addInitializer(new TestBundleStarter(bundle, 0, Bundle.START_ACTIVATION_POLICY | Bundle.START_TRANSIENT));
         // we should not see a container getting registered yet.
-        events.addFailureEvent(new ServiceTestEvent("REGISTERED", "org.osgi.service.blueprint.container.BlueprintContainer"));
-        // we should not see any of the standard blueprint events
-        events.addFailureEvent(new BlueprintAdminEvent("CREATING"));
-        events.addFailureEvent(new BlueprintContainerEvent("CREATING"));
-        events.addFailureEvent(new BlueprintAdminEvent("CREATED"));
-        events.addFailureEvent(new BlueprintContainerEvent("CREATED"));
+        events.addEvent(new ServiceTestEvent("REGISTERED", "org.osgi.service.blueprint.container.BlueprintContainer"));
+        // we should still the normal lifecycle events.
+        events.addEvent(new BlueprintAdminEvent("CREATING"));
+        events.addEvent(new BlueprintContainerEvent("CREATING"));
+        events.addEvent(new BlueprintAdminEvent("CREATED"));
+        events.addEvent(new BlueprintContainerEvent("CREATED"));
+        // the bundle should not be started here because all of the components are lazy activated
         events.addFailureEvent(new BundleTestEvent("STARTED"));
     }
 
@@ -76,11 +77,6 @@ public class LazyActivationTestController extends ThreePhaseTestController {
 
         // we always expect to see a started bundle event
         events.addBundleEvent("STARTED");
-        // we shhould see the CREATING blueprint event.
-        events.addBlueprintEvent("CREATING");
-        events.addBlueprintEvent("CREATED");
-        // we should see a service registered for the module context.
-        events.addServiceEvent("REGISTERED", "org.osgi.service.blueprint.container.BlueprintContainer");
 
         // this needs to be the first validator of the set, since
         // it initializes the module context.
