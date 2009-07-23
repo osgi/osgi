@@ -33,7 +33,7 @@ import org.osgi.test.cases.blueprint.components.injection.EuropeanRegionCode;
  * a security exception if the bundle has been called with the correct access control
  * context.
  */
-public class SecurityTestBean extends BaseTestComponent {
+public class SecurityTestBean extends BaseTestComponent implements Converter {
 
     /**
      * The null argument constructor version is used for normal operations where
