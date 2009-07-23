@@ -1194,9 +1194,11 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, null, null, props));
         // also validate the metadata for the exported service.  The inline component is
         // marked as lazy because it is inline
-        exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService(null,
-                ServiceMetadata.ACTIVATION_LAZY, null, TestServiceOne.class,
-                ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
+        exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService(null, ServiceMetadata.ACTIVATION_LAZY, 
+                new TestComponentValue(new BeanComponent(null, TestGoodServiceSubclass.class, null, null, null,
+                        new TestArgument[] { new StringArgument("ServiceOne") },
+                        null, null, BeanMetadata.ACTIVATION_LAZY, null)), 
+                new Class [] { TestServiceOne.class }, ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
         // this should be modified, and have the new service properties available.

@@ -103,7 +103,7 @@ public class ReferencedServiceBase extends Assert implements TestComponentMetada
 
         // match on the interfaces first...but the interface is optional
         if (serviceInterface == null) {
-            if (meta.getInterface() != null) {
+            if (meta.getInterface() != null) {                
                 return false;
             }
         }
@@ -115,7 +115,7 @@ public class ReferencedServiceBase extends Assert implements TestComponentMetada
 
         // the component name is an important attribute for matching
         if (componentName != null) {
-            if (meta.getComponentName() != null) {
+            if (meta.getComponentName() == null) {
                 return false;
             }
 
