@@ -28,7 +28,7 @@ import org.osgi.service.event.EventAdmin;
 public class AssertionService
 {
     public static final String ASSERTION_BASE = "org/osgi/test/cases/blueprint/";
-    public static final String SECURITY_BASE = "org/osgi/test/cases/security/Blueprint/";
+    public static final String SECURITY_BASE = "org/osgi/test/cases/security/Blueprint";
     public static final String ASSERTION_FAILURE = "ASSERTION_FAILURE";
     public static final String BEAN_CREATED = "BEAN_CREATED";
     public static final String BEAN_INIT_METHOD = "BEAN_INIT_METHOD";
