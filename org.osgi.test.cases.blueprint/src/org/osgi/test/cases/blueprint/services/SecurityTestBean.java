@@ -119,7 +119,13 @@ public class SecurityTestBean extends BaseTestComponent {
 
     // type converter methods to trigger security exceptions
     public Object convert(Object source, ReifiedType toType) throws Exception {
-        causeSecurityFailure();
+        try {
+            causeSecurityFailure();
+        } catch (SecurityException e) {
+            // if the security exception did not occur, an ASSERTION_FAILURE
+            // has been sent.  We'll just swallow the exception when it does occur
+            // and continue with the conversion step.
+        }
         return new EuropeanRegionCode("UK+86");
     }
 
@@ -127,7 +133,13 @@ public class SecurityTestBean extends BaseTestComponent {
         Class toClass = (Class)toType.getRawClass();
         // if this is the AsianRegionCode, then cause a failure now
         if (toClass == AsianRegionCode.class) {
-            causeSecurityFailure();
+            try {
+                causeSecurityFailure();
+            } catch (SecurityException e) {
+                // if the security exception did not occur, an ASSERTION_FAILURE
+                // has been sent.  We'll just swallow the exception when it does occur
+                // and say we can't convert this
+            }
             return false;
         }
         else {
