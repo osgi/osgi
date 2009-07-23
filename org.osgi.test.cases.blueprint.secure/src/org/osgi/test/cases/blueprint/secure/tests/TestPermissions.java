@@ -65,6 +65,79 @@ public class TestPermissions extends DefaultTestBundleControl {
 
 
     /**
+     * The bean class is imported from a bundle with AllPermissions, however,
+     * the call to the constructor should be made as if it was coming from
+     * code within the bundle and should die with a SecurityException
+     *
+     * @exception Exception
+     */
+    public void testBeanConstructorPermission() throws Exception {
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+                getWebServer()+"www/bean_constructor.jar");
+        controller.run();
+    }
+
+
+    /**
+     * The bean class is imported from a bundle with AllPermissions, however,
+     * the call to the factory method should be made as if it was coming from
+     * code within the bundle and should die with a SecurityException
+     *
+     * @exception Exception
+     */
+    public void testBeanInstanceFactoryPermission() throws Exception {
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+                getWebServer()+"www/bean_instance_factory.jar");
+        controller.run();
+    }
+
+
+    /**
+     * The bean class is imported from a bundle with AllPermissions, however,
+     * the call to the constructor should be made as if it was coming from
+     * code within the bundle and should die with a SecurityException
+     *
+     * @exception Exception
+     */
+    public void testBeanStaticFactoryPermission() throws Exception {
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+                getWebServer()+"www/bean_static_factory.jar");
+        controller.run();
+    }
+
+
+    /**
+     * The bean class is imported from a bundle with AllPermissions, however,
+     * the call to the init-method should be made as if it was coming from
+     * code within the bundle and should die with a SecurityException
+     *
+     * @exception Exception
+     */
+    public void testBeanInitMethodPermission() throws Exception {
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+                getWebServer()+"www/bean_init_method.jar");
+        controller.run();
+    }
+
+
+    /**
+     * The bean class is imported from a bundle with AllPermissions, however,
+     * the call to the destroy-method should be made as if it was coming from
+     * code within the bundle and should die with a SecurityException
+     *
+     * @exception Exception
+     */
+    public void testBeanDestroyMethodPermission() throws Exception {
+        // NOTE:  exceptions from the destroy method are just swallowed, so this is
+        // not an error test.  If the security exception is not thrown, there
+        // will be an ASSERTION_FAILURE raised that will cause the test failure.
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/bean_destroy_method.jar");
+        controller.run();
+    }
+
+
+    /**
      * Tests that the BlueprintContainer cannot be created if the
      * bundle cannot register its exported services.
      *
@@ -86,6 +159,102 @@ public class TestPermissions extends DefaultTestBundleControl {
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
                 getWebServer()+"www/ServiceOne_import_denied.jar");
         controller.addSetupBundle(getWebServer()+"www/ServiceOne_export.jar");
+        controller.run();
+    }
+
+    /**
+     * The listener code is imported from a bundle with AllPermissions.  However,
+     * the listener callback needs to be made using the bundle's access control context,
+     * so a security exception should result.  Exceptions in listener methods are not
+     * causes for container failures, so we're relying on an ASSERTION_FAILURE event
+     * to indicate this didn't work.
+     *
+     * @exception Exception
+     */
+    public void testBindMethodPermission() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/bind_method.jar");
+        controller.addSetupBundle(getWebServer()+"www/ServiceOne_export.jar");
+        controller.run();
+    }
+
+    /**
+     * The listener code is imported from a bundle with AllPermissions.  However,
+     * the listener callback needs to be made using the bundle's access control context,
+     * so a security exception should result.  Exceptions in listener methods are not
+     * causes for container failures, so we're relying on an ASSERTION_FAILURE event
+     * to indicate this didn't work.
+     *
+     * @exception Exception
+     */
+    public void testUnbindMethodPermission() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/unbind_method.jar");
+        controller.addSetupBundle(getWebServer()+"www/ServiceOne_export.jar");
+        controller.run();
+    }
+
+
+    /**
+     * The listener code is imported from a bundle with AllPermissions.  However,
+     * the listener callback needs to be made using the bundle's access control context,
+     * so a security exception should result.  Exceptions in listener methods are not
+     * causes for container failures, so we're relying on an ASSERTION_FAILURE event
+     * to indicate this didn't work.
+     *
+     * @exception Exception
+     */
+    public void testRegistrationMethodPermission() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/registered_method.jar");
+        controller.run();
+    }
+
+
+    /**
+     * The listener code is imported from a bundle with AllPermissions.  However,
+     * the listener callback needs to be made using the bundle's access control context,
+     * so a security exception should result.  Exceptions in listener methods are not
+     * causes for container failures, so we're relying on an ASSERTION_FAILURE event
+     * to indicate this didn't work.
+     *
+     * @exception Exception
+     */
+    public void testUnegistrationMethodPermission() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/unregistered_method.jar");
+        controller.run();
+    }
+
+
+    /**
+     * The type converter de is imported from a bundle with AllPermissions.  However,
+     * the converter method calls need to be made using the bundle's access control context,
+     * so a security exception should result.  Exceptions in listener methods are not
+     * causes for container failures, so we're relying on an ASSERTION_FAILURE event
+     * to indicate this didn't work.
+     *
+     * @exception Exception
+     */
+    public void testCanConvertPermission() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/converter_canConvert.jar");
+        controller.run();
+    }
+
+
+    /**
+     * The type converter de is imported from a bundle with AllPermissions.  However,
+     * the converter method calls need to be made using the bundle's access control context,
+     * so a security exception should result.  Exceptions in listener methods are not
+     * causes for container failures, so we're relying on an ASSERTION_FAILURE event
+     * to indicate this didn't work.
+     *
+     * @exception Exception
+     */
+    public void testConvertPermission() throws Exception {
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/converter_convert.jar");
         controller.run();
     }
 
@@ -126,8 +295,6 @@ public class TestPermissions extends DefaultTestBundleControl {
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
 
-        // now the importing side.  We've got a couple of service injections to validate, plus the injection
-        // results
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
         importStartEvents.addAssertion("ServiceOneProperty", AssertionService.SERVICE_SUCCESS);
 

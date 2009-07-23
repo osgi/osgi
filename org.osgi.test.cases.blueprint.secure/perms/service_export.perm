@@ -8,4 +8,4 @@
 
 ${permissions;packages}
 (org.osgi.framework.ServicePermission "org.osgi.test.cases.blueprint.services.*" "register")
-
+(org.osgi.service.event.TopicPermission "org/osgi/test/cases/blueprint/*" "publish")

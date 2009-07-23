@@ -7,4 +7,5 @@
 # See org.osgi.service.permissionadmin.PermissionInfo
 
 ${permissions;packages}
+(org.osgi.service.event.TopicPermission "org/osgi/test/cases/blueprint/*" "publish")  
 

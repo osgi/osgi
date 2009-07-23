@@ -1,0 +1,8 @@
+Bundle-SymbolicName:                     ${p}.unregistered_method
+Bundle-Version:                          4.2
+Import-Package:                          org.osgi.test.cases.blueprint.components.serviceexport, org.osgi.test.cases.blueprint.services
+-resourceonly: true
+Include-Resource					= \
+    OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/secure/components/security/unregistered_method.xml, \
+    {OSGI-INF/permissions.perm=perms/service_export.perm}
+

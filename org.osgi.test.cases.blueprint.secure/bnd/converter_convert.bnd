@@ -1,0 +1,8 @@
+Bundle-SymbolicName:                     ${p}.converter_convert
+Bundle-Version:                          4.2
+Import-Package:                          org.osgi.test.cases.blueprint.components.injection, org.osgi.test.cases.blueprint.services
+-resourceonly: true
+Include-Resource					= \
+    OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/secure/components/security/converter_convert.xml, \
+    {OSGI-INF/permissions.perm=perms/standard.perm}
+

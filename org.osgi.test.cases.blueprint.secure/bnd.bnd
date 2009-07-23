@@ -11,6 +11,17 @@ Private-Package						= org.osgi.test.support.*
 
 Include-Resource					= \
 	www/blueprint_denied.jar=blueprint_denied.jar , \
+	www/bean_constructor.jar=bean_constructor.jar , \
+	www/bean_instance_factory.jar=bean_instance_factory.jar , \
+	www/bean_static_factory.jar=bean_static_factory.jar , \
+	www/bean_init_method.jar=bean_init_method.jar , \
+	www/bean_destroy_method.jar=bean_destroy_method.jar , \
+	www/bind_method.jar=bind_method.jar , \
+	www/unbind_method.jar=unbind_method.jar , \
+	www/registered_method.jar=registered_method.jar , \
+	www/unregistered_method.jar=unregistered_method.jar , \
+	www/converter_canConvert.jar=converter_canConvert.jar , \
+	www/converter_convert.jar=converter_convert.jar , \
 	www/system_bean.jar=system_bean.jar , \
 	www/ServiceOne_export.jar=ServiceOne_export.jar, \
 	www/ServiceOne_export_denied.jar=ServiceOne_export_denied.jar, \
