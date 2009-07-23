@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+        This is just a simple exported service with a listener that's an imported service
+    </description>
+
+    <!-- the node this service export maps into. -->
+   <bean id="ServiceOne" class="org.osgi.test.cases.blueprint.services.TestGoodServiceSubclass">
+       <argument value="ServiceOne"/>
+   </bean>
+
+   <!-- simple export using a reference and just one interface. -->
+   <service id="ServiceOneService" ref="ServiceOne">
+       <interfaces>
+            <value>org.osgi.test.cases.blueprint.services.TestServiceOne</value>
+            <value>org.osgi.test.cases.blueprint.services.TestServiceTwo</value>
+       </interfaces>
+       <service-properties>
+           <entry key="service.component.name" value="ServiceOneService"/>
+       </service-properties>
+       <registration-listener registration-method="registered" unregistration-method="unregistered">
+           <reference interface="org.osgi.test.cases.blueprint.services.ServiceOneRegistrationListenerInterface"/>
+       </registration-listener>
+   </service>
+</blueprint>
+

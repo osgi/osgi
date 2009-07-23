@@ -15,9 +15,11 @@
        <service-properties>
            <entry key="service.component.name" value="ServiceOneService" />
        </service-properties>
-       <registration-listener ref="ServiceOneListener"
+       <registration-listener
            registration-method="registered"
-           unregistration-method="unregistered"/>
+           unregistration-method="unregistered">
+           <ref component-id="ServiceOneListener"/>
+       </registration-listener>
    </service>
 </blueprint>
 

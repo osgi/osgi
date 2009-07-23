@@ -12,14 +12,6 @@
        <argument value="ServiceOne"/>
    </bean>
 
-   <bean id="unregisteredListener" class="org.osgi.test.cases.blueprint.components.serviceexport.ServiceOneRegistrationListener">
-       <argument value="unregisteredListener"/>
-   </bean>
-
-   <bean id="registeredListener" class="org.osgi.test.cases.blueprint.components.serviceexport.ServiceOneRegistrationListener">
-       <argument value="registeredListener"/>
-   </bean>
-
    <reference id="ServiceOneDependency" interface="org.osgi.test.cases.blueprint.services.TestServiceTwo"/>
 
    <!-- simple export using a reference and just one interface.  This one will not register because of the unstatisfied dependency-->
@@ -27,8 +19,11 @@
        <service-properties>
            <entry key="service.component.name" value="ServiceOneInactive" />
        </service-properties>
-       <registration-listener ref="unregisteredListener"
-           registration-method="registered" unregistration-method="unregistered"/>
+       <registration-listener registration-method="registered" unregistration-method="unregistered">
+           <bean class="org.osgi.test.cases.blueprint.components.serviceexport.ServiceOneRegistrationListener">
+               <argument value="unregisteredListener"/>
+           </bean>
+       </registration-listener>
    </service>
 
    <!-- simple export using a reference and just one interface.  This one will not register because of the unstatisfied dependency-->
@@ -36,8 +31,11 @@
        <service-properties>
            <entry key="service.component.name" value="ServiceOneActive" />
        </service-properties>
-       <registration-listener ref="registeredListener"
-           registration-method="registered" unregistration-method="unregistered"/>
+       <registration-listener registration-method="registered" unregistration-method="unregistered">
+           <bean class="org.osgi.test.cases.blueprint.components.serviceexport.ServiceOneRegistrationListener">
+               <argument value="registeredListener"/>
+           </bean>
+       </registration-listener>
    </service>
 </blueprint>
 

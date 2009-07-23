@@ -35,7 +35,7 @@
     </bean>
 
     <!-- simple export using a reference and just one interface. -->
-    <service id="ServiceOneService" ref="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne"
+    <service id="ServiceOneService" interface="org.osgi.test.cases.blueprint.services.TestServiceOne"
         depends-on="Depends1 Depends2">
         <service-properties>
             <entry key="service.property.integer">
@@ -45,6 +45,7 @@
         <registration-listener ref="ServiceOneListener"
             registration-method="registered"
             unregistration-method="unregistered"/>
+        <ref component-id="ServiceOne"/>
     </service>
 
     <!-- This is the trigger for the entire dependency tree.  Nothing should happen with this bundle until this
