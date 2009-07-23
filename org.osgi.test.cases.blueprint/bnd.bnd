@@ -255,6 +255,7 @@ Include-Resource					= \
  	www/ServiceOne_export.jar=ServiceOne_export.jar, \
  	www/GoodService_export.jar=GoodService_export.jar, \
  	www/ServiceOne_reference_export.jar=ServiceOne_reference_export.jar, \
+ 	www/ServiceOne_inline_reference_export.jar=ServiceOne_inline_reference_export.jar, \
  	www/ServiceOne_prototype_export.jar=ServiceOne_prototype_export.jar, \
  	www/ServiceTwoSubclass_export.jar=ServiceTwoSubclass_export.jar, \
  	www/ServiceTwoSubclass_import.jar=ServiceTwoSubclass_import.jar, \

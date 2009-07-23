@@ -23,6 +23,8 @@ import java.util.Properties;
 
 import org.osgi.framework.Bundle;
 import org.osgi.service.blueprint.container.EventConstants;
+import org.osgi.service.blueprint.reflect.ServiceMetadata;
+import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
 import org.osgi.test.cases.blueprint.build.TestConstants;
 import org.osgi.test.cases.blueprint.framework.*;
 import org.osgi.test.cases.blueprint.services.AssertionService;
@@ -624,6 +626,81 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
                 new ServiceManagerRegister(serviceManager, "ServiceOneA")));
         // then we should see this REGISTERED again at the end.
         importStartEvents.addEvent(new ServiceTestEvent("REGISTERED", TestServiceOne.class, props));
+
+        // also validate the metadata for the exported service
+        importStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("GoodServiceService",
+                ServiceMetadata.ACTIVATION_EAGER, "ServiceOne", TestServiceOne.class,
+                ServiceMetadata.AUTO_EXPORT_DISABLED, 0, new MapValueEntry[] {
+                    new MapValueEntry("serviceType", "Good"),
+                    new MapValueEntry("autoExport", "Disabled")
+                },
+                null, null)));
+
+        // now some expected termination stuff
+        EventSet importStopEvents = controller.getStopEvents(0);
+        // add a cleanup processor for the exported services.
+        importStopEvents.addTerminator(new ServiceManagerUnregister(serviceManager));
+
+        controller.run();
+    }
+
+
+    /**
+     * Same as testServiceReferenceExport, but the source reference is specified
+     * inline to verify the manager accepts all of the target types.
+     */
+    public void testInlineServiceReferenceExport() throws Exception {
+        // We're only going to load one jar for this test.  The services
+        // we're dependent upon are handled by a driver created service manager.
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/ServiceOne_inline_reference_export.jar");
+
+        // create a ServiceManager instance with one instance of the sevice.  We'll flip
+        // this on and off
+        ServiceManager serviceManager = new ServiceManagerImpl(getContext(),
+                new ManagedService[] {
+            // this one is registered from the start
+            new ManagedService("ServiceOneA", new TestGoodService("ServiceOneA"), TestServiceOne.class, getContext(), null, true),
+        });
+
+        // now we chain a few events to actions to allow us to track the dynamics.
+        MetadataEventSet importStartEvents = controller.getStartEvents(0);
+
+        Map props = new HashMap();
+        props.put("serviceType", "Good");
+        props.put("autoExport", "Disabled");
+        // NOTE: there is no component name here.
+
+        // we need to add one of these at the head of the queue to catch the initial registration.
+        // We need to consume this event so that additional triggered events don't interfere.
+        importStartEvents.addEvent(new ServiceTestEvent("REGISTERED", TestServiceOne.class, props));
+
+        // a CREATED event is part of our standard set.  We need to remove
+        // that one and attach a new one with a listener
+        importStartEvents.removeEvent(new BlueprintAdminEvent("CREATED"));
+
+        // Ok, when the CREATED event is triggered, we unregister the first service.
+        importStartEvents.addEvent(new BlueprintAdminEvent("CREATED", null, null, new ServiceManagerUnregister(serviceManager, "ServiceOneA")));
+
+        // when our expect service unregisters, then reregister the original
+        importStartEvents.addEvent(new ServiceTestEvent("UNREGISTERING", new Class[] { TestServiceOne.class}, props,
+                new ServiceManagerRegister(serviceManager, "ServiceOneA")));
+        // then we should see this REGISTERED again at the end.
+        importStartEvents.addEvent(new ServiceTestEvent("REGISTERED", TestServiceOne.class, props));
+
+        TestComponentValue serviceComponent = new TestComponentValue(
+            new ReferencedService(null, TestServiceOne.class,
+                    ServiceReferenceMetadata.AVAILABILITY_MANDATORY, ServiceReferenceMetadata.ACTIVATION_LAZY,
+                    null, "(test.service.name=ServiceOneA)", null, null, ReferencedService.DEFAULT_TIMEOUT));
+
+        // also validate the metadata for the exported service
+        importStartEvents.addValidator(new ExportedServiceValidator(new ExportedService("GoodServiceService",
+                ServiceMetadata.ACTIVATION_EAGER, serviceComponent, new Class[] { TestServiceOne.class },
+                ServiceMetadata.AUTO_EXPORT_DISABLED, 0, new MapValueEntry[] {
+                    new MapValueEntry("serviceType", "Good"),
+                    new MapValueEntry("autoExport", "Disabled")
+                },
+                null, null)));
 
         // now some expected termination stuff
         EventSet importStopEvents = controller.getStopEvents(0);

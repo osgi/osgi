@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <description>
+        This is a service export that exports a service derived from an inline service reference.
+    </description>
+
+   <!-- Add some service properties that can be filtered on.  -->
+   <service id="GoodServiceService" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
+       <!-- some service properties for filter tests. -->
+       <service-properties>
+           <entry key="serviceType" value="Good"/>
+           <entry key="autoExport" value="Disabled"/>
+       </service-properties>
+       <reference interface="org.osgi.test.cases.blueprint.services.TestServiceOne"
+            filter="(test.service.name=ServiceOneA)"/>
+   </service>
+</blueprint>
+

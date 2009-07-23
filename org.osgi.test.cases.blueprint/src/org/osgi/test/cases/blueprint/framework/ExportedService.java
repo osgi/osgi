@@ -44,8 +44,8 @@ public class ExportedService extends Assert implements TestComponentMetadata {
     protected int activation;
     // the expected export mode for the export.
     protected int exportMode;
-    // the exported component name (can be null if we expect an anonymous component)
-    protected String componentId;
+    // the exported target component.
+    protected TestValue target;
     // the set of exported interfaces
     protected List serviceInterfaces;
     // an optional set of service properties
@@ -99,9 +99,30 @@ public class ExportedService extends Assert implements TestComponentMetadata {
      */
     public ExportedService(String serviceId, int activation, String componentId, Class[] interfaces, int exportMode, int ranking, MapValueEntry[] props,
         String[] deps, TestRegistrationListener[] listeners) {
+        this(serviceId, activation, new TestRefValue(componentId), interfaces, exportMode, ranking, props, deps, listeners);
+    }
+
+    /**
+     * Create an exported service definition.
+     *
+     * @param serviceId  The id specified on the service reference tag.
+     * @param activation
+     *                   The eager/lazy activation mode
+     * @param target
+     *                   The source of the exported service item.
+     * @param serviceInterfaces
+     *                   The service interface classes we expect to be exported.
+     * @param exportMode The metadata export mode.
+     * @param ranking    The service ranking.
+     * @param props      Any additional service properties that were specified on the service.
+     * @param deps       A set of explicit dependencies
+     * @param listeners  Any optional registration listeners.
+     */
+    public ExportedService(String serviceId, int activation, TestValue target, Class[] interfaces, int exportMode, int ranking, MapValueEntry[] props,
+        String[] deps, TestRegistrationListener[] listeners) {
         this.serviceId = serviceId;
         this.activation = activation;
-        this.componentId = componentId;
+        this.target = target;
         this.exportMode = exportMode;
         this.serviceRanking = ranking;
         if (props != null) {
@@ -160,25 +181,8 @@ public class ExportedService extends Assert implements TestComponentMetadata {
         }
 
         Target component = meta.getServiceComponent();
-        // if we have an explicit component id, we need to verify this
-        if (componentId != null) {
-            // this must be a reference to a component
-            if (!(component instanceof RefMetadata)) {
-                return false;
-            }
-            // the component names must match
-            if (!componentId.equals(((RefMetadata)component).getComponentId())) {
-                return false;
-            }
-        }
-        else {
-            // this must be an inner component
-            // this must be a reference to a component
-            if (!(component instanceof BeanMetadata)) {
-                return false;
-            }
-        }
-        return true;
+        // We always have a component to export...verify the type.
+        return target.equals(component);
     }
 
 
@@ -219,7 +223,7 @@ public class ExportedService extends Assert implements TestComponentMetadata {
             for (int i = 0; i < serviceProperties.size(); i++) {
                 MapValueEntry entry = (MapValueEntry)serviceProperties.get(i);
                 // validate the real entry
-                entry.validate(blueprintMetadata, (MapEntry)propEntries.get(i)); 
+                entry.validate(blueprintMetadata, (MapEntry)propEntries.get(i));
             }
         }
     }

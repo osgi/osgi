@@ -40,7 +40,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * @version $Revision$
  */
 public class TestServiceImportExport extends DefaultTestBundleControl {
-    /*
+    /**
      * Just a simple export/import test.  This will perform fairly full
      * metadata validation on both ends.
      */
@@ -107,7 +107,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
-    /*
+    /**
      * this is the same imports/exports as above, but this test only checks that there
      * is no GRACE_PERIOD event when the dependencies are satisfied.
      */
@@ -127,7 +127,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         controller.run();
     }
 
-    /*
+    /**
      * Just a simple export/import test, but with the added wrinkle of a depends-on
      * relationship with the <reference> element
      */
@@ -308,13 +308,28 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
             new MapValueEntry("autoExport", "All")
         };
 
+        TestComponentValue badServiceBean = new TestComponentValue(
+                new BeanComponent(
+                        (String)null,
+                        TestBadService.class,
+                        null,
+                        "init",
+                        null,
+                        new TestArgument[] { new StringArgument("ServiceOne") },
+                        null,
+ 						null,
+ 						BeanMetadata.ACTIVATION_LAZY,
+ 						null
+                )
+        );
+
         exportStartEvents.addValidator(new ExportedServiceValidator(new ExportedService[] {
 			new ExportedService("ServiceOneService",
                 ServiceMetadata.ACTIVATION_EAGER, "ServiceOne", TestServiceOne.class,
                 ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null),
 
             new ExportedService("BadServiceService",
-                ServiceMetadata.ACTIVATION_EAGER, null,
+                ServiceMetadata.ACTIVATION_EAGER, badServiceBean,
                 new Class[] { TestServiceOne.class, TestServiceTwo.class, TestServiceTwoSubclass.class, TestServiceAllSubclass.class,
                     TestGoodService.class, TestGoodServiceSubclass.class, TestBadService.class},
                 ServiceMetadata.AUTO_EXPORT_ALL_CLASSES, 2, metaServiceProps, null, null)}));
@@ -988,7 +1003,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
-    /*
+    /**
      * Test accessing a service using an exported ServiceFactory instance.
      */
     public void testFactoryExport() throws Exception {
@@ -1053,7 +1068,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
-    /*
+    /**
      * Test accessing a service using a prototype scope exported ServiceFactory instance.
      */
     public void testPrototypeFactoryExport() throws Exception {
@@ -1238,7 +1253,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         controller.run();
     }
 
-    /*
+    /**
      * Just a simple export/import with a registration listener.  This should see
      * the initial service registration and the final service unregistration
      */
@@ -1272,7 +1287,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
-    /*
+    /**
      * A test of multiple signature matching with a registration listener and singleton
      * scope.
      */
@@ -1320,7 +1335,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
-    /*
+    /**
      * Listener test, but only the registered method is specified in the config.
      */
     public void testListenerRegisteredExport() throws Exception {
@@ -1350,7 +1365,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
-    /*
+    /**
      * Listener test, but only the unregistered method is specified in the config.
      */
     public void testListenerUnregisteredExport() throws Exception {
@@ -1383,7 +1398,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
-    /*
+    /**
      * Just a simple export/import with a registration listener with a prototype instance component.
      * The service listeners should be passed null on the registration/unregistration events.
      */
@@ -1417,7 +1432,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
     }
 
 
-    /*
+    /**
      * Just a simple export/import with a registration listener with an inline instance component.
      * The service listeners should be passed null on the registration/unregistration events.
      */
