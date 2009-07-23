@@ -1,6 +1,6 @@
 Bundle-SymbolicName:                     ${p}.unbind_method
 Bundle-Version:                          4.2
-Import-Package:                          org.osgi.test.cases.blueprint.services
+Import-Package:                          org.osgi.test.cases.blueprint.services org.osgi.test.cases.blueprint.components.serviceimport
 -resourceonly: true
 Include-Resource					= \
     OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/secure/components/security/unbind_method.xml, \

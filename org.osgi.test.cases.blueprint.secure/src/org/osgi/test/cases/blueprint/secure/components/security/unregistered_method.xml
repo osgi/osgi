@@ -15,7 +15,7 @@
 
    <!-- simple export using a reference and just one interface. -->
     <service id="ServiceOneService" ref="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
-       <reference-listener unregistration-method="unregistered" ref="listener"/>
+       <registration-listener unregistration-method="unregistered" ref="listener"/>
    </service>
 </blueprint>
 
