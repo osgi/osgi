@@ -160,9 +160,9 @@ public class TestExtenderLifeCycle extends DefaultTestBundleControl {
 
         // now set up the shutdown order.
 
-        exporting.addDependency(importing);
-        firstStarted.addDependency(exporting);
-        circular2.addDependency(firstStarted);
+        firstStarted.addDependency(importing);
+        exporting.addDependency(firstStarted);
+        circular2.addDependency(exporting);
         circular1.addDependency(circular2);
 
         controller.run();
@@ -225,8 +225,8 @@ public class TestExtenderLifeCycle extends DefaultTestBundleControl {
          *    firstStarted : 0
          *    export       : 1
          *    import       : 0
-         *    circular1    : 1
          *    circular2    : 1
+         *    circular1    : 1
          *
          * Result: Must close all bundles that do not have services in
          *         use.  Candidates are firstStarted and import.
@@ -235,8 +235,8 @@ public class TestExtenderLifeCycle extends DefaultTestBundleControl {
          *
          * Iteration 1:
          *    export       : 0
-         *    circular1    : 1
          *    circular2    : 1
+         *    circular1    : 1
          *
          *  Result: Usage of export goes to 0, so this is a repeat of rule 1.
          *          Export is destroyed next.
@@ -256,9 +256,9 @@ public class TestExtenderLifeCycle extends DefaultTestBundleControl {
 
         // now set up the shutdown order.
 
-        exporting.addDependency(importing);
-        firstStarted.addDependency(exporting);
-        circular2.addDependency(firstStarted);
+        firstStarted.addDependency(importing);
+        exporting.addDependency(firstStarted);       
+        circular2.addDependency(exporting);
         circular1.addDependency(circular2);
 
         controller.run();
