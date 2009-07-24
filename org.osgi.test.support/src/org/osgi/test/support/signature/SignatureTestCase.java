@@ -28,7 +28,9 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -41,13 +43,12 @@ import org.osgi.test.support.OSGiTestCase;
  */
 public abstract class SignatureTestCase extends OSGiTestCase implements
 		ParserCallback {
-	private Class		clazz;
-	private Method		methods[];
-	private Constructor	constructors[];
-	private Field		fields[];
-	private Class		inner[];
-	private Set			found;
-	private Set			missing;
+	private Class	clazz;
+	private Map	/* <String,Method> */methods;
+	private Map	/* <String,Constructor> */constructors;
+	private Map	/* <String,Field> */fields;
+	private Set		found;
+	private Set		missing;
 
 	public void testSignature() {
 		Bundle bundle = getContext().getBundle();
@@ -57,7 +58,7 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 		Enumeration e = bundle.findEntries(path, null, true);
 		if (e == null)
 			fail("No Signature Files found in " + path);
-	
+
 		while (e.hasMoreElements()) {
 			URL url = (URL) e.nextElement();
 			if (!url.toString().endsWith("/")) {
@@ -133,10 +134,9 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 
 				checkSuperClass(clazz, superClassName);
 
-				methods = clazz.getMethods();
-				fields = clazz.getFields();
-				constructors = clazz.getConstructors();
-				inner = clazz.getClasses();
+				methods = getMethods(clazz);
+				fields = getFields(clazz);
+				constructors = getConstructors(clazz);
 				return true;
 			}
 			catch (ClassNotFoundException cnfe) {
@@ -149,6 +149,64 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 		return false;
 	}
 
+	private Map getFields(Class c) {
+		Map result = new HashMap();
+		while (c != null) {
+			Field[] f = c.getDeclaredFields();
+			for (int i = 0, l = f.length; i < l; i++) {
+				if (!isVisible(f[i].getModifiers())) {
+					continue;
+				}
+				String key = f[i].getName();
+				if (result.containsKey(key)) {
+					continue;
+				}
+				result.put(key, f[i]);
+			}
+			c = c.getSuperclass();
+		}
+		return result;
+	}
+
+	private Map getMethods(Class c) {
+		Map result = new HashMap();
+		while (c != null) {
+			Method[] m = c.getDeclaredMethods();
+			for (int i = 0, l = m.length; i < l; i++) {
+				if (!isVisible(m[i].getModifiers())) {
+					continue;
+				}
+				String key = m[i].getName() + getMethodDescriptor(m[i]);
+				if (result.containsKey(key)) {
+					continue;
+				}
+				result.put(key, m[i]);
+			}
+			c = c.getSuperclass();
+		}
+		return result;
+	}
+
+	private Map getConstructors(Class c) {
+		Map result = new HashMap();
+		Constructor[] m = c.getDeclaredConstructors();
+		for (int i = 0, l = m.length; i < l; i++) {
+			if (!isVisible(m[i].getModifiers())) {
+				continue;
+			}
+			StringBuffer sb = new StringBuffer();
+			sb.append("(");
+			getDescriptor(sb, m[i].getParameterTypes());
+			sb.append(")V");
+			String key = sb.toString();
+			if (result.containsKey(key)) {
+				continue;
+			}
+			result.put(key, m[i]);
+		}
+		return result;
+	}
+
 	private void log(String string) {
 		System.out.println(string);
 	}
@@ -158,50 +216,37 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 		if (!isVisible(access))
 			return;
 
-		for (int i = 0; i < fields.length; i++) {
-			if (fields[i] != null && fields[i].getName().equals(name)) {
-				int cMods = fields[i].getModifiers();
-				checkModifiers(access, cMods, ACC_PUBLIC | ACC_PRIVATE
-						| ACC_PROTECTED | ACC_STATIC | ACC_FINAL);
+		log("#visit " + getClassName(clazz) + "." + name + " "
+				+ desiredDescriptor);
 
-				Class type = fields[i].getType();
-				StringBuffer sb = new StringBuffer();
-				createTypeDescriptor(sb, type);
-				assertEquals("Field " + getClassName(clazz) + "." + name,
-						desiredDescriptor, sb.toString());
+		Field f = (Field) fields.remove(name);
+		if (f == null) {
+			// Field not found!
+			fail("Could not find field: " + getClassName(clazz) + "." + name);
+		}
 
-				if (constant != null)
-					try {
-						assertEquals("Constant value:", constant, fields[i]
-								.get(null));
-					}
-					// These can probably be ignored
-					catch (IllegalArgumentException e) {
-						e.printStackTrace();
-					}
-					catch (IllegalAccessException e) {
-						e.printStackTrace();
-					}
-				fields[i] = null;
-				return;
+		int cMods = f.getModifiers();
+		checkModifiers(access, cMods, ACC_PUBLIC | ACC_PRIVATE | ACC_PROTECTED
+				| ACC_STATIC | ACC_FINAL);
+
+		Class type = f.getType();
+		StringBuffer sb = new StringBuffer();
+		createTypeDescriptor(sb, type);
+		assertEquals("Field " + getClassName(clazz) + "." + name,
+				desiredDescriptor, sb.toString());
+
+		if (constant != null) {
+			try {
+				assertEquals("Constant value:", constant, f.get(null));
+			}
+			// These can probably be ignored
+			catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			}
+			catch (IllegalAccessException e) {
+				e.printStackTrace();
 			}
 		}
-		// Field not found!
-		fail("Could not find field: " + getClassName(clazz) + "." + name);
-	}
-
-	public void doInnerClass(String name, String outerName, String innerName,
-			int access) {
-		if (!isVisible(access))
-			return;
-
-		if (inner == null)
-			return;
-
-		// TODO we do now have inner interface in ListenerHook.ListenerInfo
-		// TODO Not sure what to do here?
-		// We currently have no visible classes in our API
-		// so we can skip it for now.
 	}
 
 	public void doMethod(int access, String name, String desc,
@@ -213,43 +258,31 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 		log("#visit " + getClassName(clazz) + "." + name + " " + desc);
 
 		if (name.equals("<init>"))
-			checkConstructors(access, name, desc, exceptions);
+			checkConstructor(access, name, desc, exceptions);
 		else
-			checkMethods(access, name, desc, exceptions);
+			checkMethod(access, name, desc, exceptions);
 	}
 
-	/**
-	 * We removed the check to see if there is too much
-	 */
 	public void doEnd() {
-		// empty
+		/**
+		 * We removed the check to see if there is too much
+		 */
 	}
 
-	private void checkConstructors(int access, String name,
+	private void checkConstructor(int access, String name,
 			String desiredDescriptor, String[] exceptions) {
-		for (int i = 0; i < constructors.length; i++) {
-			if (constructors[i] != null) {
-				StringBuffer sb = new StringBuffer();
-				sb.append("(");
-				getDescriptor(sb, constructors[i].getParameterTypes());
-				sb.append(")V");
-				String actualDescriptor = sb.toString();
-				if (actualDescriptor.equals(desiredDescriptor)) {
-					int cMods = constructors[i].getModifiers();
-					checkModifiers(access, cMods, ACC_PUBLIC | ACC_PRIVATE
-							| ACC_PROTECTED | ACC_STATIC | ACC_FINAL
-							| ACC_ABSTRACT);
-					checkExceptions(exceptions, constructors[i]
-							.getExceptionTypes());
-					constructors[i] = null;
-					return;
-				}
-			}
+		String key = desiredDescriptor;
+		Constructor m = (Constructor) constructors.remove(key);
+		if (m == null) {
+			// Method not found!
+			fail("Could not find constructor: " + getClassName(clazz) + "."
+					+ name + " " + desiredDescriptor);
 		}
-		// Method not found!
-		fail("Could not find constructor: " + getClassName(clazz) + "." + name
-				+ " " + desiredDescriptor);
 
+		int cMods = m.getModifiers();
+		checkModifiers(access, cMods, ACC_PUBLIC | ACC_PRIVATE | ACC_PROTECTED
+				| ACC_STATIC | ACC_FINAL | ACC_ABSTRACT);
+		checkExceptions(exceptions, m.getExceptionTypes());
 	}
 
 	private void checkExceptions(String[] exceptions, Class[] exceptionTypes) {
@@ -283,24 +316,18 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 		}
 	}
 
-	private void checkMethods(int access, String name,
-			String desiredDescriptor, String[] exceptions) {
-		for (int i = 0; i < methods.length; i++) {
-			if (methods[i] != null && methods[i].getName().equals(name)) {
-				String cDesc = getMethodDescriptor(methods[i]);
-				if (cDesc.equals(desiredDescriptor)) {
-					int cMods = methods[i].getModifiers();
-					checkModifiers(access, cMods, ACC_PUBLIC | ACC_PRIVATE
-							| ACC_PROTECTED | ACC_STATIC | ACC_FINAL
-							| ACC_ABSTRACT);
-					checkExceptions(exceptions, methods[i].getExceptionTypes());
-					methods[i] = null;
-					return;
-				}
-			}
+	private void checkMethod(int access, String name, String desiredDescriptor,
+			String[] exceptions) {
+		String key = name + desiredDescriptor;
+		Method m = (Method) methods.remove(key);
+		if (m == null) {
+			// Method not found!
+			fail("Could not find method: " + getClassName(clazz) + "." + name);
 		}
-		// Method not found!
-		fail("Could not find method: " + getClassName(clazz) + "." + name);
+		int cMods = m.getModifiers();
+		checkModifiers(access, cMods, ACC_PUBLIC | ACC_PRIVATE | ACC_PROTECTED
+				| ACC_STATIC | ACC_FINAL | ACC_ABSTRACT);
+		checkExceptions(exceptions, m.getExceptionTypes());
 	}
 
 	private void checkModifiers(int access, int cMods, int mask) {
