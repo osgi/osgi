@@ -1,6 +1,6 @@
-Bundle-Version: 3.0.0.${project.build}
+Bundle-Version: 4.2.0.${project.build}
 
-Private-Package						= ${p}.*, \
+Private-Package						= ${p}.junit.*, \
 	org.osgi.test.support.*
 	
 Include-Resource					= \
@@ -8,24 +8,23 @@ Include-Resource					= \
 	tb2.jar
 
 -buildpath							= \
+	org.osgi.test.support;			version=project, \
 	org.osgi.jmx;					version=project	, \
-	osgi;									version=4.0		, \
-	org.osgi.service.cm; version=project, \
-	org.osgi.test.support;	version=project, \
-	org.osgi.service.permissionadmin; version=project, \
-	org.osgi.service.provisioning; version=project, \
-	ee.minimum											, \
+	osgi.core;						version=4.2		, \
+	osgi.cmpn;						version=4.2		, \
 	${junit}	
 
 -runbundles						= \
 	org.osgi.impl.bundle.jmx; version=project, \
-	org.osgi.impl.service.useradmin; version=project, \
-	org.osgi.impl.service.log; version=project, \
+	org.osgi.impl.service.useradmin; version=latest, \
+	org.osgi.impl.service.log; version=latest, \
 	org.apache.felix.configadmin; version=latest, \
-	org.osgi.impl.service.provisioning; version=project, \
+	org.osgi.impl.service.provisioning; version=latest, \
 	osgi.cmpn; version=latest
 
 -runproperties					= report=true
 
-Test-Cases: ${classes;extending;*TestCase}
+Test-Cases							= ${testcases}
+-signaturetest                      = org.osgi.jmx, org.osgi.jmx.cm, org.osgi.jmx.codec, org.osgi.jmx.framework, \
+									  org.osgi.jmx.permissionadmin, org.osgi.jmx.provisioning, org.osgi.jmx.useradmin
 	

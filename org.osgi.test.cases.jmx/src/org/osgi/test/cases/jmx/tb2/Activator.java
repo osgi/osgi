@@ -1,5 +1,5 @@
 /*
- * $Id: Activator.java 4794 2007-04-06 02:47:53Z bjhargrave $
+ * $Id$
  * 
  * Copyright (c) OSGi Alliance (2005). All Rights Reserved.
  * 
