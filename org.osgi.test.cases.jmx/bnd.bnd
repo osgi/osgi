@@ -1,5 +1,6 @@
 Bundle-Version: 4.2.0.${project.build}
 
+Import-Package: org.osgi.jmx, *
 Private-Package						= ${p}.junit.*, \
 	org.osgi.test.support.*
 	
