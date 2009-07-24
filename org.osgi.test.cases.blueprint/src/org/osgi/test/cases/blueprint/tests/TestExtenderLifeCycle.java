@@ -121,20 +121,48 @@ public class TestExtenderLifeCycle extends DefaultTestBundleControl {
         events = controller.getStopEvents(4);
         TestEvent circular2 = events.locateEvent(template);
 
-        // now set up the ordering dependencies.
+        /*
+         * Module service usage information and shutdown order:
+         *
+         * Iteration 0:
+         *    firstStarted : 0
+         *    export       : 1
+         *    import       : 0
+         *    circular1    : 1
+         *    circular2    : 1
+         *
+         * Result: Must close all bundles that do not have services in
+         *         use.  Candidates are firstStarted and import.
+         *         Import is destroyed first since it was installed later,
+         *         followed by firstStarted.
+         *
+         * Iteration 1:
+         *    export       : 0
+         *    circular1    : 1
+         *    circular2    : 1
+         *
+         *  Result: Usage of export goes to 0, so this is a repeat of rule 1.
+         *          Export is destroyed next.
+         *
+         * Iteration 2:
+         *    circular1    : 1
+         *    circular2    : 1
+         *
+         *  Result: Usage of each is 1 and all services have default ranking.
+         *          Since ciruclar2 was installed later,
+         *          it must be destroyed first.
+         *
+         * Iteration 3:
+         *    circular1    : 0
+         *
+         *  Result: Finally circular1 is destroyed.
+         */
 
-        // neither of these export services, so the last installed goes first
-        firstStarted.addDependency(importing);
+        // now set up the shutdown order.
 
-        // the exporting one can only be destroyed after both bundles
-        // that don't export any services.
-        exporting.addDependency(firstStarted);
         exporting.addDependency(importing);
-
-        // the second circular bundle will be stopped first, but only
-        // after the other bundles
-        circular2.addDependency(exporting);
-        // and this can only be destroyed after the cycle was broken.
+        firstStarted.addDependency(exporting);
+        circular2.addDependency(firstStarted);
         circular1.addDependency(circular2);
 
         controller.run();
@@ -190,21 +218,48 @@ public class TestExtenderLifeCycle extends DefaultTestBundleControl {
         events = controller.getStopEvents(3);
         TestEvent circular2 = events.locateEvent(template);
 
-        // now set up the ordering dependencies.
+        /*
+         * Module service usage information and shutdown order:
+         *
+         * Iteration 0:
+         *    firstStarted : 0
+         *    export       : 1
+         *    import       : 0
+         *    circular1    : 1
+         *    circular2    : 1
+         *
+         * Result: Must close all bundles that do not have services in
+         *         use.  Candidates are firstStarted and import.
+         *         Import is destroyed first since it was installed later,
+         *         followed by firstStarted.
+         *
+         * Iteration 1:
+         *    export       : 0
+         *    circular1    : 1
+         *    circular2    : 1
+         *
+         *  Result: Usage of export goes to 0, so this is a repeat of rule 1.
+         *          Export is destroyed next.
+         *
+         * Iteration 3:
+         *    circular2    : 1
+         *    circular1    : 1
+         *
+         *  Result: Since usage of each is 1 and even though circular1 was installed later,
+         *          circular2 has a lower ranking service so it must be destroyed first.
+         *
+         * Iteration 4:
+         *    circular1    : 0
+         *
+         *  Result: Finally circular1 is destroyed.
+         */
 
-        // neither of these export services, so the last installed goes first
-        firstStarted.addDependency(importing);
+        // now set up the shutdown order.
 
-        // the exporting one can only be destroyed after both bundles
-        // that don't export any services.
-        exporting.addDependency(firstStarted);
         exporting.addDependency(importing);
-
-        // the first circular bundle will be stopped first, but only
-        // after the other bundles
-        circular1.addDependency(exporting);
-        // and this can only be destroyed after the cycle was broken.
-        circular2.addDependency(circular1);
+        firstStarted.addDependency(exporting);
+        circular2.addDependency(firstStarted);
+        circular1.addDependency(circular2);
 
         controller.run();
     }
