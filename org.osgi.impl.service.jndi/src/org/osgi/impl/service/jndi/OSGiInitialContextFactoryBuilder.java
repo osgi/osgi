@@ -15,10 +15,10 @@
  */
 package org.osgi.impl.service.jndi;
 
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.Constants;
-import org.osgi.framework.ServiceReference;
-import org.osgi.util.tracker.ServiceTracker;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Hashtable;
+import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
@@ -28,7 +28,12 @@ import javax.naming.spi.InitialContextFactory;
 import javax.naming.spi.InitialContextFactoryBuilder;
 import javax.naming.spi.ObjectFactory;
 import javax.naming.spi.ObjectFactoryBuilder;
-import java.util.*;
+
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.jndi.JndiConstants;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * This class represents the main integration point between the JNDI framework
@@ -190,8 +195,7 @@ public class OSGiInitialContextFactoryBuilder implements
 			ServiceReference[] serviceReferences = sortServiceReferences(m_urlContextFactoryServiceTracker);
 			for (int i = 0; i < serviceReferences.length; i++) {
 				ServiceReference serviceReference = serviceReferences[i];
-				if (serviceReference.getProperty(
-						org.osgi.service.jndi.Constants.JNDI_URL_SCHEME)
+				if (serviceReference.getProperty(JndiConstants.JNDI_URLSCHEME)
 						.equals(urlScheme)) {
 					return (ObjectFactory) m_bundleContext
 							.getService(serviceReference);
@@ -224,8 +228,7 @@ public class OSGiInitialContextFactoryBuilder implements
 		m_objectFactoryServiceTracker = new ServiceTracker(bundleContext,
 				ObjectFactory.class.getName(), null) {
 			public Object addingService(ServiceReference serviceReference) {
-				if (serviceReference
-						.getProperty(org.osgi.service.jndi.Constants.JNDI_URL_SCHEME) == null) {
+				if (serviceReference.getProperty(JndiConstants.JNDI_URLSCHEME) == null) {
 					return super.addingService(serviceReference);
 				}
 
@@ -239,8 +242,7 @@ public class OSGiInitialContextFactoryBuilder implements
 		m_urlContextFactoryServiceTracker = new ServiceTracker(bundleContext,
 				ObjectFactory.class.getName(), null) {
 			public Object addingService(ServiceReference serviceReference) {
-				if (serviceReference
-						.getProperty(org.osgi.service.jndi.Constants.JNDI_URL_SCHEME) != null) {
+				if (serviceReference.getProperty(JndiConstants.JNDI_URLSCHEME) != null) {
 					return super.addingService(serviceReference);
 				}
 

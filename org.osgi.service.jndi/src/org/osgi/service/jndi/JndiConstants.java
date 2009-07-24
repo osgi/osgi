@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance 2009. All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,25 @@
  * limitations under the License.
  */
 
-package org.osgi.service.template;
+package org.osgi.service.jndi;
 
 /**
- * Template for a service project.
+ * Constants for the JNDI Factory Manager implementation.
  * 
- * @ThreadSafe
  * @version $Revision$
  */
-public interface TemplateService {
+public class JndiConstants {
+	/**
+	 * TODO Add javadoc text
+	 */
+	public static final String	JNDI_URLSCHEME		= "osgi.jndi.urlScheme";
 
+	/**
+	 * TODO Add javadoc text
+	 */
+	public static final String	JNDI_SERVICENAME	= "osgi.jndi.serviceName";
+
+	private JndiConstants() {
+		// non-instantiable
+	}
 }

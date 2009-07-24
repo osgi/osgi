@@ -18,13 +18,15 @@
  */
 package org.osgi.impl.service.jndi;
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
+import java.util.Hashtable;
 
 import javax.naming.spi.NamingManager;
 import javax.naming.spi.ObjectFactory;
-import java.util.Hashtable;
+
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.jndi.JndiConstants;
 
 /**
  * Activator implementation for the JNDI Factory Manager Bundle.
@@ -85,7 +87,7 @@ public class Activator implements BundleActivator {
 	 */
 	private void registerOSGiURLContextFactory() {
 		Hashtable serviceProperties = new Hashtable();
-		serviceProperties.put(org.osgi.service.jndi.Constants.JNDI_URL_SCHEME,
+		serviceProperties.put(JndiConstants.JNDI_URLSCHEME,
 				              OSGI_URL_SCHEME);
 
 		m_osgiUrlFactoryRegistration = m_bundleContext.registerService(

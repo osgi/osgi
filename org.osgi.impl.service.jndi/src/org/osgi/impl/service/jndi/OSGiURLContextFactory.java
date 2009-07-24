@@ -15,17 +15,23 @@
  */
 package org.osgi.impl.service.jndi;
 
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleReference;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
-
-import javax.naming.*;
-import javax.naming.spi.ObjectFactory;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Hashtable;
+
+import javax.naming.Context;
+import javax.naming.Name;
+import javax.naming.NameNotFoundException;
+import javax.naming.NamingException;
+import javax.naming.OperationNotSupportedException;
+import javax.naming.spi.ObjectFactory;
+
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleReference;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.jndi.JndiConstants;
 
 /**
  * A URL context factory that supports lookups of OSGi services.
@@ -163,7 +169,7 @@ public class OSGiURLContextFactory implements ObjectFactory {
 					// check the registry for a service that supports the
 					// osgi.jndi.serviceName property
 					final String serviceNameFilter = "("
-							+ org.osgi.service.jndi.Constants.JNDI_SERVICE_NAME_PROPERTY
+							+ JndiConstants.JNDI_SERVICENAME
 							+ "=" + urlParser.getServiceInterface() + ")";
 					ServiceReference[] serviceReferencesByName = bundleContext
 							.getServiceReferences(null, serviceNameFilter);
