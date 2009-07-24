@@ -89,7 +89,7 @@ Bundle-Vendor			= OSGi Alliance
 -removeheader			= Include-Resource
 
 -runpath							= \
-	org.eclipse.osgi;		version=3.5, \
+	org.eclipse.osgi;		version=3.5.1, \
 	com.springsource.junit; version=3.8;    export="junit.framework;version=3.8"
 
 testcases = ${classes;extending;junit.framework.TestCase|*DefaultTestBundleControl;concrete}
