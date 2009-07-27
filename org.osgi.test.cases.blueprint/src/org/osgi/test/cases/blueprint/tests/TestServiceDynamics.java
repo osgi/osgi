@@ -439,9 +439,9 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         // We're mostly going to tag things we don't expect to see happening, though there are a
         // few positive things we expect to see.
         MetadataEventSet startEvents = controller.getStartEvents(0);
-        // the service is lazily activated, so this should not be registered until there
-        // is a triggering event.
-        startEvents.addFailureEvent(new ServiceTestEvent("REGISTERED", TestServiceOne.class));
+        // the service is lazily activated, but the service itself should be registered
+        // during the service registration phase
+        startEvents.addEvent(new ServiceTestEvent("REGISTERED", TestServiceOne.class));
         // none of these component should be instantiated
         startEvents.addFailureEvent(new ComponentAssertion("ServiceOne", AssertionService.BEAN_INIT_METHOD));
 
@@ -450,11 +450,13 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         MetadataEventSet middleEvents = controller.getMiddleEvents(0);
 
         // this will request the registered service, which should kick start the activation process.
-        middleEvents.addInitializer(new LazyComponentStarter("ServiceOneService"));
+        middleEvents.addInitializer(new ServiceRequestInitiator(getContext(), TestServiceOne.class, null));
+
+        // we should not see this reregistered on activation
+        middleEvents.addFailureEvent(new ServiceTestEvent("REGISTERED", TestServiceOne.class));
 
         // all of the components should now be instantiated
         middleEvents.addAssertion("ServiceOne", AssertionService.BEAN_INIT_METHOD);
-        middleEvents.addEvent(new ServiceTestEvent("REGISTERED", TestServiceOne.class));
 
         // now some expected termination stuff
         EventSet stopEvents = controller.getStopEvents(0);
@@ -477,8 +479,9 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         // We're mostly going to tag things we don't expect to see happening, though there are a
         // few positive things we expect to see.
         MetadataEventSet startEvents = controller.getStartEvents(0);
-        // we should see a single registration of TestServiceOne
-        startEvents.addFailureEvent(new ServiceTestEvent("REGISTERED", TestServiceOne.class));
+        // service registration is separate from service activation.  We should see this
+        // registered, but nothing activated yet until there is a request
+        startEvents.addEvent(new ServiceTestEvent("REGISTERED", TestServiceOne.class));
         // none of these component should be instantiated
         startEvents.addFailureEvent(new ComponentAssertion("ServiceOne", AssertionService.BEAN_INIT_METHOD));
 
@@ -488,10 +491,10 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
 
 
         // this will request the registered service, which should kick start the activation process.
-        middleEvents.addInitializer(new LazyComponentStarter("ServiceOneService"));
+        middleEvents.addInitializer(new ServiceRequestInitiator(getContext(), TestServiceOne.class, null));
 
-        // we should see a single registration of TestServiceOne
-        middleEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
+        // we should not see this reregistered on activation
+        middleEvents.addFailureEvent(new ServiceTestEvent("REGISTERED", TestServiceOne.class));
 
         // all of the components should now be instantiated
         middleEvents.addAssertion("ServiceOne", AssertionService.BEAN_INIT_METHOD);
