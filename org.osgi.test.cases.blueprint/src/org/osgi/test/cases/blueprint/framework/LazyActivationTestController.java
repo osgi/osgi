@@ -74,10 +74,7 @@ public class LazyActivationTestController extends ThreePhaseTestController {
 
         // these events would normally be expected in the first phase, but won't show up
         // until the second phase because of the LAZY_ACTIVATION
-
-        // we always expect to see a started bundle event
-        events.addBundleEvent("STARTED");
-
+       
         // this needs to be the first validator of the set, since
         // it initializes the module context.
         events.addValidator(blueprintMetadata);
@@ -85,6 +82,7 @@ public class LazyActivationTestController extends ThreePhaseTestController {
         // NOTE:  we don't check for ACTIVE state for the bundle...that will only occur
         // if there is a real class load...which doesn't actually happen here because
         // all of the classes involved are imported.
+        events.addValidator(new BundleStateValidator(Bundle.STARTING));
     }
 }
 

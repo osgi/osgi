@@ -1691,10 +1691,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
         // we're expecting some listener metadata on the import.
         BindingListener[] listeners = new BindingListener[] {
-            new BindingListener(new TestComponentValue(new ReferencedService(null, ServiceOneListenerInterface.class,
-                ServiceReferenceMetadata.AVAILABILITY_MANDATORY, ServiceReferenceMetadata.ACTIVATION_EAGER,
-                null, null, null, null, ReferencedService.DEFAULT_TIMEOUT)),
-            "bind", "unbind"),
+            new BindingListener("ServiceOneListener", "bind", "unbind")
         };
         // validate the metadata for the imported service (this one only has a single import, so easy to locate)
         importStartEvents.addValidator(new ComponentMetadataValidator(new ReferencedService("ServiceOne", TestServiceOne.class,
