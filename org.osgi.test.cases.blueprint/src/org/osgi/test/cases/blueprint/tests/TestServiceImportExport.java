@@ -2298,8 +2298,11 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStartEvents.addFailureEvent(new ComponentAssertion("ServiceOne", AssertionService.BEAN_CREATED));
         exportStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.BEAN_CREATED));
 
-        // and there should not be a registered service for this yet
-        exportStartEvents.addValidator(new ServiceUnregistrationValidator(TestServiceOne.class, null));
+        // activation is separate from enablement.  This service should be registered at the end of
+        // the first phase
+        exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, null));
+        // we should see a service event here indicating this was registered
+        exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
 
         // ok, now we'll request the trigger component, and that should fire off a whole sequence of events
         MetadataEventSet exportMiddleEvents = controller.getMiddleEvents();
@@ -2343,8 +2346,6 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportMiddleEvents.addValidator(new ExportedServiceValidator(new ExportedService("ServiceOneService",
                 ServiceMetadata.ACTIVATION_LAZY, "ServiceOne", TestServiceOne.class,
                 ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, new String[] { "Depends1", "Depends2" }, listeners)));
-        // we should see a service event here indicating this was registered
-        exportMiddleEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
 
         // now some expected termination stuff
         EventSet exportStopEvents = controller.getStopEvents();
