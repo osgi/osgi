@@ -8,5 +8,7 @@
 
 ${permissions;packages}
 (org.osgi.framework.ServicePermission "org.osgi.test.cases.blueprint.services.*" "register")
+#NB:  The BlueprintContainer register permission is required
+(org.osgi.framework.ServicePermission "org.osgi.service.blueprint.container.BlueprintContainer" "register")
 (org.osgi.service.event.TopicPermission "org/osgi/test/cases/blueprint/*" "publish")
-(org.osgi.service.event.TopicPermission "org/osgi/service/log/LogEntry/*" "publish")  
+(org.osgi.service.event.TopicPermission "org/osgi/service/log/LogEntry/*" "publish")
