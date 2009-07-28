@@ -2295,8 +2295,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * No directives are architected by the framework for DynamicImport-Package.
-	 * Hence, dynamic imports may not be propagated.
+	 * Dynamic imports may not be used when the package is exported.
 	 * 
 	 * @spec Bundle.loadClass(String)
 	 * @throws Exception if there is any problem or an assert fails
@@ -2314,7 +2313,12 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 			try {
 				tb17i
 						.loadClass("org.osgi.test.cases.framework.classloading.exports.service.SomeService");
-
+				fail("bundle does not export package");
+			}
+			catch (ClassNotFoundException ex) {
+				// expected
+			}
+			try {
 				tb17j
 						.loadClass("org.osgi.test.cases.framework.classloading.exports.service.SomeService");
 				fail("The dynamic import must not be propagated");
