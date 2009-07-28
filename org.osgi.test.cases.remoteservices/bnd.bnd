@@ -6,11 +6,12 @@ Export-Package 					= ${p}.common;version=1.0.0, \
 	
 Private-Package						= org.osgi.test.support.*, \
 	org.osgi.service.remoteservices.*, \
+	OSGI-INF.*, \
 	${p}.junit, \
 	${p}.impl, \
 	${p}.common
 	
-Include-Resource					= \
+Include-Resource					= 
 	
 Test-Cases							= ${testcases}
 

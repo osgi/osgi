@@ -1,0 +1,9 @@
+<service-descriptions xmlns="http://www.osgi.org/xmlns/sd/v1.0.0">
+  <service-description>
+    <provide interface="org.osgi.test.cases.remoteservices.common.A" />
+    <property name="service.exported.interfaces">*</property>
+    <property name="service.exported.configs">org.apache.cxf.ws</property>
+    <property name="org.apache.cxf.ws.address">http://localhost:9090/test</property>
+	<property name="implementation">1</property>
+  </service-description>
+</service-descriptions>
