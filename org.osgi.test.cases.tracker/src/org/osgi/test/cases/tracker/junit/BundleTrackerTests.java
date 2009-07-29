@@ -354,11 +354,14 @@ public class BundleTrackerTests extends OSGiTestCase {
 			}
 			synchronized (events) {
 				assertNull("adding called", events[0]);
-				// ignore any modified events
+				assertNotNull("modified not called", events[1]);
+				assertEquals("event type not unresolved",
+						BundleEvent.UNRESOLVED, events[1].getType());
+				assertEquals("event bundle not tb1", tb1, events[1].getBundle());
 				events[1] = null;
 				assertNotNull("removed not called", events[2]);
-				boolean actual = (events[2].getType() & (BundleEvent.UNRESOLVED | BundleEvent.UNINSTALLED)) != 0;
-				assertTrue("event type not unresolved or uninstalled", actual);
+				assertEquals("event type not uninstalled",
+						BundleEvent.UNINSTALLED, events[2].getType());
 				assertEquals("event bundle not tb1", tb1, events[2].getBundle());
 				events[2] = null;
 			}
