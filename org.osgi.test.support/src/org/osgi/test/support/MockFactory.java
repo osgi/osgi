@@ -79,12 +79,14 @@ public class MockFactory {
 							return delegateMethod.invoke(delegate, args);
 						}
 						catch (IllegalAccessException e) {
-							e.printStackTrace();
 							throw e;
 						}
 						catch (InvocationTargetException e) {
-							e.printStackTrace();
-							throw e;
+							Throwable cause = e.getCause();
+							if (cause == null) {
+								cause = e;
+							}
+							throw cause;
 						}
 					}
 				});
