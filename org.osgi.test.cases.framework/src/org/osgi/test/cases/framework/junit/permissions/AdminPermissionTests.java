@@ -378,13 +378,6 @@ public class AdminPermissionTests extends PermissionTestCase {
 		assertImplies(pc, all);
 	}
 
-	public void testBundleSource() {
-		AdminPermission granted = new AdminPermission("(id=*)", "class");
-		AdminPermission requested = new AdminPermission(getContext()
-				.getBundle(), "class");
-		assertImplies(granted, requested);
-	}
-
 	private static void invalidAdminPermission(String name, String actions) {
 		try {
 			AdminPermission p = new AdminPermission(name, actions);

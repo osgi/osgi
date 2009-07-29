@@ -17,13 +17,13 @@
 
 package org.osgi.test.cases.framework.secure.junit.permissions;
 
+import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.test.support.PermissionTestCase;
 
 public class AdminPermissionBundleTests extends PermissionTestCase {
 
 	public void testRecursion() throws Exception {
-		
 		Bundle admin2 = install("permissions.admin2.jar");
 		Bundle admin1 = install("permissions.admin1.jar");
 		try {
@@ -34,5 +34,12 @@ public class AdminPermissionBundleTests extends PermissionTestCase {
 			admin1.uninstall();
 			admin2.uninstall();
 		}
+	}
+
+	public void testBundleSource() {
+		AdminPermission granted = new AdminPermission("(id=*)", "class");
+		AdminPermission requested = new AdminPermission(getContext()
+				.getBundle(), "class");
+		assertImplies(granted, requested);
 	}
 }
