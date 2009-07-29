@@ -1,13 +1,30 @@
 package org.osgi.tools.jar2xml;
 
-import java.io.*;
-import java.security.cert.*;
-import java.util.*;
-import java.util.jar.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.security.cert.Certificate;
+import java.security.cert.X509Certificate;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.jar.Attributes;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 
-import org.apache.bcel.classfile.*;
-import org.osgi.test.script.Tag;
+import org.apache.bcel.classfile.AccessFlags;
+import org.apache.bcel.classfile.ClassParser;
+import org.apache.bcel.classfile.Code;
+import org.apache.bcel.classfile.ExceptionTable;
+import org.apache.bcel.classfile.Field;
+import org.apache.bcel.classfile.FieldOrMethod;
+import org.apache.bcel.classfile.JavaClass;
+import org.apache.bcel.classfile.Method;
+import org.osgi.tools.tag.Tag;
 
 public class JAR2XML {
 	Tag					top;

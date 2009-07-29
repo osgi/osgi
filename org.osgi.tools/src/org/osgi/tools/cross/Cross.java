@@ -58,7 +58,7 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
-import org.osgi.test.script.Tag;
+import org.osgi.tools.tag.Tag;
 
 public class Cross {
 	static Map			interfacesAPI	= new HashMap();

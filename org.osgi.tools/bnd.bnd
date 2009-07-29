@@ -1,7 +1,6 @@
 -sub org.osgi.tools.*.bnd
 
 -buildpath: \
-    org.osgi.test.tool;					version=project;		output=src,	\
 	org.apache.tools.ant, 									\
 	org.osgi.internal, 										\
 	com.icl.saxon, 											\
