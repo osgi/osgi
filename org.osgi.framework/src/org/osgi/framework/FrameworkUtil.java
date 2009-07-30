@@ -1810,6 +1810,9 @@ public class FrameworkUtil {
 				if (endIndex > dnChain.length()) {
 					throw new IllegalArgumentException("unterminated escape");
 				}
+				if (startIndex >= endIndex) {
+					throw new IllegalArgumentException("empty item");
+				}
 				parsed.add(dnChain.substring(startIndex, endIndex));
 				startIndex = endIndex + 1;
 				startIndex = skipSpaces(dnChain, startIndex);
