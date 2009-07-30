@@ -1,6 +1,5 @@
 build.tests                 = ${uniq; ${build.core.tests}, ${build.cmpn.tests}, ${build.mobile.tests}, ${build.enterprise.tests}}
 
-
 build.core.tests = \
     org.osgi.test.cases.framework, \
     org.osgi.test.cases.framework.secure, \
@@ -16,6 +15,7 @@ build.cmpn.tests = \
     org.osgi.test.cases.application, \
     org.osgi.test.cases.blueprint, \
     org.osgi.test.cases.blueprint.java5, \
+    org.osgi.test.cases.blueprint.secure, \
     org.osgi.test.cases.cdma, \
     org.osgi.test.cases.cm, \
     org.osgi.test.cases.component, \
@@ -69,8 +69,6 @@ build.mobile.tests = \
 build.enterprise.tests = \
     org.osgi.test.cases.blueprint, \
     org.osgi.test.cases.blueprint.java5, \
-	org.osgi.test.cases.discovery, \
+    org.osgi.test.cases.blueprint.secure, \
 	org.osgi.test.cases.jdbc, \
 	org.osgi.test.cases.transaction
-	
-	 

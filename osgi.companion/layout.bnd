@@ -48,10 +48,6 @@ cmpn.specs = \
 	 org.osgi.util.mobile, \
 	 org.osgi.util.tracker, \
 	 org.osgi.util.xml
-# The following project are not part of compendium for 4.2
-#	 org.osgi.service.jdbc, \
-#	 org.osgi.service.command, \
-#	 org.osgi.service.threadio, \
 
 cmpn.packages = ${replace;$(cmpn.specs);^.*$;$0.*}
 
@@ -65,17 +61,13 @@ cmpn.resources = {legal/about.html}, \
 enterprise.specs = \
 	 org.osgi.jmx, \
 	 org.osgi.service.blueprint, \
-	 org.osgi.service.discovery, \
-	 org.osgi.service.distribution, \
 	 org.osgi.service.jdbc
 
 enterprise.packages = ${replace;$(enterprise.specs);^.*$;$0.*}
 
 enterprise.resources = {legal/about.html}, \
   						legal/LICENSE, \
-  						xmlns/blueprint=../xmlns/blueprint, \
-  						xmlns/blueprint-cm=../xmlns/blueprint-cm, \
-  						xmlns/sd=../xmlns/sd
+  						xmlns/blueprint=../xmlns/blueprint
 
 mobile.specs = \
 	 info.dmtree, \
