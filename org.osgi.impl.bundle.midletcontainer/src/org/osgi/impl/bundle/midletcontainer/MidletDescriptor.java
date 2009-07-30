@@ -1,17 +1,32 @@
 package org.osgi.impl.bundle.midletcontainer;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.security.AccessController;
-import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
-import java.util.*;
-import org.osgi.service.log.LogService;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
 
 import javax.microedition.midlet.MIDlet;
-import org.osgi.framework.*;
-import org.osgi.service.application.*;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceEvent;
+import org.osgi.framework.ServiceListener;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.application.ApplicationDescriptor;
+import org.osgi.service.application.ApplicationHandle;
+import org.osgi.service.log.LogService;
 
 public final class MidletDescriptor extends ApplicationDescriptor implements ServiceListener {
 	private Properties					props;
@@ -257,53 +272,22 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 			throw new NullPointerException( "Pattern cannot be null!" );
 			
 		checkBundle(); // TODO throw IllegalStateException if the AppDesc is invalid
-		
-		final Bundle bundle = this.bundle;
-		try {
-		  return ((Boolean)AccessController.doPrivileged(new PrivilegedExceptionAction() {
-			  public Object run() throws Exception {			
-					Method getBundleData = null;
-					
-					Class bundleClass = bundle.getClass();					
-					do {
-						try {
-							getBundleData = bundleClass.getDeclaredMethod( "getBundleData", new Class[0] );
-							break;
-						} catch( NoSuchMethodException e ) {
-							bundleClass = bundleClass.getSuperclass();
-							if( bundleClass == null )
-								throw e;
-						}
-					}while( true );
-					
-					getBundleData.setAccessible( true );
-					
-					Object data = getBundleData.invoke( bundle, new Class [0] );
-					if( data == null )
-						return new Boolean( false );
-					
-					Method matchDNChain = null;
-					
-					Class  matchDNClass = data.getClass();					
-					do {
-						try {
-							matchDNChain = matchDNClass.getDeclaredMethod( "matchDNChain", new Class[] { String.class } );
-							break;
-						} catch( NoSuchMethodException e ) {
-							matchDNClass = matchDNClass.getSuperclass();
-							if( matchDNClass == null )
-								throw e;
-						}
-					}while( true );
-					matchDNChain.setAccessible( true );
-					
-					return matchDNChain.invoke( data, new Object [] { pattern } );
-			  }
-		  })).booleanValue();
-		}catch(PrivilegedActionException e ) {
-			Activator.log( LogService.LOG_ERROR, "Exception occurred at matching the DN chain!",	e);
-			return false;
+
+		Map/* <X509Certificate, List<X509Certificate>> */signers = bundle
+				.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
+		for (Iterator iSigners = signers.values().iterator(); iSigners
+				.hasNext();) {
+			List/* <X509Certificate> */signerCerts = (List) iSigners.next();
+			List/* <String> */dnChain = new ArrayList(signerCerts.size());
+			for (Iterator iCerts = signerCerts.iterator(); iCerts.hasNext();) {
+				dnChain.add(((X509Certificate) iCerts.next()).getSubjectDN()
+						.getName());
+			}
+			if (FrameworkUtil.matchDistinguishedNameChain(pattern, dnChain)) {
+				return true;
+			}
 		}
+		return false;
 	}
 
 	protected boolean isLaunchableSpecific() {

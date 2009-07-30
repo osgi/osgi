@@ -10,5 +10,5 @@ Include-Resource				= TestIcon.gif
 
 -buildpath						= \
 	ee.j2se;					version=1.4, \
-	osgi.core;					version=4.0.1, \
-	osgi.mobile;				version=4.0
+	osgi.core;					version=4.2, \
+	osgi.cmpn;					version=4.1

@@ -27,13 +27,27 @@
 
 package org.osgi.impl.bundle.midletcontainer;
 
-import java.lang.reflect.*;
-import java.security.*;
-import java.util.*;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Vector;
 
-import org.osgi.framework.*;
-import org.osgi.application.*;
-import org.osgi.service.application.*;
+import org.osgi.application.ApplicationContext;
+import org.osgi.application.ApplicationServiceEvent;
+import org.osgi.application.ApplicationServiceListener;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
+import org.osgi.framework.Filter;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceEvent;
+import org.osgi.framework.ServiceListener;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.application.ApplicationHandle;
 import org.osgi.service.log.LogService;
 
 public class OATApplicationContextImpl implements ApplicationContext, ServiceListener {
@@ -85,7 +99,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	}
 		
 	public OATApplicationContextImpl( Bundle bundle, Map startupParams, OATApplicationData appData, ApplicationHandle appHandle, Object mainClass ) {
-		bc = frameworkHook( bundle );
+		bc = bundle.getBundleContext();
 		this.startupParams = startupParams;
 		this.mainClass = mainClass;
 		serviceList = new LinkedList();
@@ -370,66 +384,6 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		startupParams = null;
 	}
 	
-	private BundleContext frameworkHook( final Bundle bundle ) {
-		if (System.getSecurityManager() == null) {
-			return (BundleContext) invokeMethod(bundle, "getContext", null, null);
-		}
-		return (BundleContext) AccessController.doPrivileged(new PrivilegedAction() {
-			public Object run() {
-				return invokeMethod(bundle, "getContext", null, null);
-			}
-		});
-	}
-	
-	private Object invokeMethod(Object object, String methodName, Class[] params, Object[] args) {
-		Class clazz;
-		if (object instanceof Class) {
-			clazz = (Class) object;
-			object = null;
-		} else {
-			clazz = object.getClass();
-		}
-
-		Method method = getMethod(clazz, methodName, params);
-		if( method == null )
-			return null;
-		
-		try {
-			return method.invoke(object, args);
-		} catch (IllegalAccessException e) {
-			Activator.log( LogService.LOG_ERROR,
-					"No access rights to method '" + methodName+ "' in class '" +
-					clazz.getName() + "' !", e);
-		} catch (InvocationTargetException e) {
-			Activator.log( LogService.LOG_ERROR,
-					"InvocationTargetException at method '" + methodName+ "' in class '" +
-					clazz.getName() + "' !", e);
-		}
-		return null;
-	}
-
-	private Method getMethod(Class clazz, String methodName, Class[] params) {
-		String origClassName = clazz.getName();
-		
-		Exception exception = null;
-		for (; clazz != null; clazz = clazz.getSuperclass()) {
-			try {
-				Method method = clazz.getDeclaredMethod(methodName, params);
-				// enable us to access the method if not public
-				method.setAccessible(true);
-				return method;
-			} catch (NoSuchMethodException e) {
-				exception = e;
-				continue;
-			}
-		}
-
-		Activator.log( LogService.LOG_ERROR,
-				"Method '" + methodName + "' not found in class '" + 
-				origClassName + "' !", exception);
-		return null;
-	}
-
 	private void terminateImmediately() {
 		Thread destroyerThread = requestTermination();		
 		try {
