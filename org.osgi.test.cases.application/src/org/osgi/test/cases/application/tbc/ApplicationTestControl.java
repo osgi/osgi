@@ -80,42 +80,42 @@ import org.osgi.test.cases.application.tbc.util.TestAppControllerImpl;
 import org.osgi.test.cases.application.tbc.util.TestingActivator;
 import org.osgi.test.cases.application.tbc.util.TestingActivatorImplHigh;
 import org.osgi.test.cases.application.tbc.util.TestingActivatorImplLow;
-import org.osgi.test.cases.util.DefaultTestBundleControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * Controls the execution of the test case
  */
 public class ApplicationTestControl extends DefaultTestBundleControl {
 
-	private String tb2Location;
+	private static String					tb2Location;
 
-	private TestInterface[] testInterfaces;
+	private static TestInterface[]			testInterfaces;
 
-	private PermissionAdmin permissionAdmin;
+	private static PermissionAdmin			permissionAdmin;
 
-	private ApplicationDescriptor appDescriptor;
+	private static ApplicationDescriptor	appDescriptor;
 
-	private Bundle bundleTestApplication;
+	private static Bundle					bundleTestApplication;
 
-	private Bundle testBundle;
+	private static Bundle					testBundle;
 
-	private DmtAdmin dmtAdmin;
+	private static DmtAdmin					dmtAdmin;
 
-	private boolean isUnregistered;
+	private static boolean					isUnregistered;
 
-	private boolean isRegistered;
+	private static boolean					isRegistered;
 
-	private boolean isModified;
+	private static boolean					isModified;
 
-	private TestAppControllerImpl appController;
+	private static TestAppControllerImpl	appController;
 
-	private PermissionWorker worker;
+	private static PermissionWorker			worker;
 
-	private EventHandlerActivator eventBundle;
+	private static EventHandlerActivator	eventBundle;
 
-	private TestingActivator testingActivator;
+	private static TestingActivator			testingActivator;
 
-	private TestingActivator testingActivator2;
+	private static TestingActivator			testingActivator2;
 
 	public void prepare() {
 		try {
@@ -638,7 +638,8 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 			if (handle != null) {
 				handle.destroy();
 			}
-		} catch (Exception e) {
+		}
+		catch (IllegalStateException e) {
 			log("#error at handle destroy");
 		}
 	}
@@ -650,13 +651,14 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 			if (handle != null) {
 				handle.destroy();
 			}			
-		} catch (Exception e) {
+		}
+		catch (IllegalStateException e) {
 			log("#fail at handle destroy.");
 		} finally {
 			try {
 				getAppDescriptor().unlock();
 			} catch (Exception e) {
-				log("#failt at unlock method.");
+				log("#fail at unlock method.");
 			}
 		}
 	}
@@ -989,7 +991,7 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 					"org.osgi.service.application.ApplicationDescriptor",
 					"(service.pid=" + ApplicationConstants.TEST_PID + ")");
 		} catch (InvalidSyntaxException e) {
-			log("#error getting the ApplicationDescriptor");
+			fail("#error getting the ApplicationDescriptor", e);
 		}
 
 		if (appDescRefs != null) {

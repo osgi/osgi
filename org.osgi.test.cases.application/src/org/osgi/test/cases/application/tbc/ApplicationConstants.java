@@ -37,6 +37,7 @@
 package org.osgi.test.cases.application.tbc;
 
 import org.osgi.service.application.ApplicationAdminPermission;
+import org.osgi.test.support.OSGiTestCaseProperties;
 
 
 public class ApplicationConstants {  
@@ -131,15 +132,8 @@ public class ApplicationConstants {
 	
 	
     static {
-    	if (System.getProperty("SHORT_TIMEOUT")!=null) {
-    		SHORT_TIMEOUT = Integer.parseInt(System.getProperty("SHORT_TIMEOUT"));
-    	} else {
-    		SHORT_TIMEOUT = 600;
-    	}
-    	if (System.getProperty("TIMEOUT")!=null) {
-    		TIMEOUT = Integer.parseInt(System.getProperty("TIMEOUT"));
-    	} else {
-    		TIMEOUT = 60000;
-    	}    	    	
-    }	
+		TIMEOUT = OSGiTestCaseProperties.getTimeout()
+				* OSGiTestCaseProperties.getScaling();
+		SHORT_TIMEOUT = TIMEOUT / 100;
+	}
 }

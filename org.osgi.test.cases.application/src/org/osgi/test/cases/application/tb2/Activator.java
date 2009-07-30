@@ -61,7 +61,6 @@ import org.osgi.test.cases.application.tb2.ScheduledApplication.Remove;
 import org.osgi.test.cases.application.tbc.ApplicationTestControl;
 import org.osgi.test.cases.application.tbc.TB2Service;
 import org.osgi.test.cases.application.tbc.TestInterface;
-import org.osgi.test.cases.util.DefaultTestBundleControl;
 
 public class Activator implements BundleActivator, TB2Service {
 	private ServiceRegistration servReg;
@@ -75,7 +74,7 @@ public class Activator implements BundleActivator, TB2Service {
 		servReg.unregister();
 	}
 
-	public TestInterface[] getTestClasses(DefaultTestBundleControl tbc) {
+	public TestInterface[] getTestClasses(ApplicationTestControl tbc) {
 		return new TestInterface[] {
 				new Lock((ApplicationTestControl) tbc),
 				new Unlock((ApplicationTestControl) tbc),

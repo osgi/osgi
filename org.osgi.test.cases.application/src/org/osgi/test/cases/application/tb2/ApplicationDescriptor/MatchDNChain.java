@@ -166,9 +166,13 @@ public class MatchDNChain implements TestInterface {
 					.assertTrue(
 							"Asserting that false is returned when we have passed an invalid format of signer.",
 							!tbc.getAppDescriptor().matchDNChain(ApplicationConstants.INVALID));
+		}
+		catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] {e.getClass().getName()}));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
-					+ e.getClass().getName());
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION, e);
 		} finally {
 			tbc.cleanUp(infos);
 		}

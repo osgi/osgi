@@ -1,0 +1,45 @@
+Bundle-Version						: 4.0.0.${project.build}
+Bundle-Description					: A test case for the ??.
+
+Private-Package						= org.osgi.test.support.*, \
+	${p}.tbc.*
+Export-Package						= \
+	${p}.tbc.*
+
+Include-Resource					= \
+	tb1.jar, \
+	tb2.jar, \
+	tb3.jar
+	
+Test-Cases							= ${testcases}
+-signaturetest                      = org.osgi.application, org.osgi.service.application
+
+-buildpath							= \
+    org.osgi.test.support;                  version=project , \
+    org.osgi.service.application;           version=project , \
+	osgi.core;								version=4.0.1	, \
+	osgi.cmpn;								version=4.1	, \
+	ee.foundation; 							version=1.1	, \
+	org.osgi.impl.bundle.midletcontainer; 	version=1.0, \
+	${junit}
+
+-runbundles							= \
+	org.osgi.impl.bundle.midletcontainer; version=project, \
+	org.osgi.impl.service.application; version=project, \
+	org.osgi.impl.service.log; version=latest, \
+	org.apache.felix.configadmin; version=latest, \
+	org.eclipse.equinox.event; version=latest, \
+	org.osgi.impl.service.dmt;  version=latest, \
+	org.osgi.impl.bundle.jaxp; version=latest, \
+	osgi.cmpn; version=latest
+
+-runproperties = report=true, \
+	org.osgi.framework.security=osgi, \
+	org.osgi.framework.trust.repositories=${build}/keystore, \
+	org.osgi.test.testcase.timeout=60000, \
+	org.osgi.vendor.dmtree.DigestDelegate=org.osgi.impl.service.dmt.export.Digest, \
+	info.dmtree.osgi.root=./OSGi/, \
+	org.osgi.vendor.application=org.osgi.impl.service.application, \
+	org.osgi.vendor.application.ApplicationDescriptor=org.osgi.impl.service.application.ApplicationDescriptorImpl, \
+	org.osgi.vendor.application.ApplicationHandle=org.osgi.impl.service.application.ApplicationHandleImpl
+	

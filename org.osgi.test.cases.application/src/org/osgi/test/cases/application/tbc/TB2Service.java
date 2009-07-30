@@ -36,8 +36,7 @@
  */
 package org.osgi.test.cases.application.tbc;
 
-import org.osgi.test.cases.util.DefaultTestBundleControl;
 
 public interface TB2Service {
-	public TestInterface[] getTestClasses(DefaultTestBundleControl tbc);
+	public TestInterface[] getTestClasses(ApplicationTestControl tbc);
 }
