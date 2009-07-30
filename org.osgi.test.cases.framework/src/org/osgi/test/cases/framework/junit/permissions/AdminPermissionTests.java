@@ -233,6 +233,18 @@ public class AdminPermissionTests extends PermissionTestCase {
 		assertNotImplies(ap, new AdminPermission(newMockBundle(5, "test.bsn",
 				"test.location", "dc=www, dc=acme, dc=com, c=US"), "*"));
 	}
+
+	public void testInvalidDN() {
+		AdminPermission ap = new AdminPermission("(signer=;`´$.,@)", "*");
+		try {
+			ap.implies(new AdminPermission(newMockBundle(1, "test.bsn",
+					"test.location", "cn=Bugs Bunny, o=ACME, c=US"), "*"));
+			fail(ap + " created with invalid arguments");
+		}
+		catch (IllegalArgumentException e) {
+			// expected
+		}
+	}
 	
 	public void testActionImplications() {
 		AdminPermission classx = new AdminPermission("*", "class");
