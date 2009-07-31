@@ -19,6 +19,8 @@ package org.osgi.test.cases.jndi.initialContextFactoryBuilder1;
 
 import java.util.Hashtable;
 
+import javax.naming.spi.InitialContextFactoryBuilder;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -34,9 +36,10 @@ public class InitialContextFactoryBuilder1Activator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 		Hashtable props = new Hashtable();
 		props.put("osgi.jndi.serviceName", "CTInitialContextFactoryBuilder");
+		String[] interfaces = {CTInitialContextFactoryBuilder.class.getName(), InitialContextFactoryBuilder.class.getName()};
 		
 		CTInitialContextFactoryBuilder ctfb = new CTInitialContextFactoryBuilder();
-		sr = context.registerService(CTInitialContextFactoryBuilder.class.getName(), ctfb, props);		
+		sr = context.registerService(interfaces, ctfb, props);		
 
 		
 	}
