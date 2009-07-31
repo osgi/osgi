@@ -63,7 +63,7 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		}
 	}
 
-	public void testDefaultInitialContextFactory() throws Exception {
+	public void testUnspecifiedInitialContextFactory() throws Exception {
 		// Install the bundles needed for this test
 		Bundle testBundle = installBundle("initialContextFactory1.jar");
 		// We don't setup the environment because we want to see if the
