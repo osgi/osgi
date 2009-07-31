@@ -19,6 +19,8 @@ package org.osgi.test.cases.jndi.objectFactory2;
 
 import java.util.Hashtable;
 
+import javax.naming.spi.ObjectFactory;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -35,7 +37,8 @@ public class ObjectFactory2Activator implements BundleActivator {
 	
 	public void start(BundleContext context) throws Exception {
 		Hashtable props1 = new Hashtable();
-		Hashtable props2 = new Hashtable();
+		Hashtable props2 = new Hashtable();	
+		String[] interfaces = {CTObjectFactory.class.getName(), ObjectFactory.class.getName()};		
 		
 		props1.put("osgi.jndi.serviceName", "CTObjectFactory");
 		props1.put(Constants.SERVICE_RANKING, new Integer(3));
@@ -50,8 +53,8 @@ public class ObjectFactory2Activator implements BundleActivator {
 		CTObjectFactory of1 = new CTObjectFactory(env1);
 		CTObjectFactory of2 = new CTObjectFactory(env2);
 		
-		sr1 = context.registerService(CTObjectFactory.class.getName(), of1, props1);
-		sr2 = context.registerService(CTObjectFactory.class.getName(), of2, props2);
+		sr1 = context.registerService(interfaces, of1, props1);
+		sr2 = context.registerService(interfaces, of2, props2);
 	}
 
 	public void stop(BundleContext context) throws Exception {

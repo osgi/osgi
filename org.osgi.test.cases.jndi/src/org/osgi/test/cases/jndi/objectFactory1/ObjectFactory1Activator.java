@@ -20,6 +20,8 @@ package org.osgi.test.cases.jndi.objectFactory1;
 
 import java.util.Hashtable;
 
+import javax.naming.spi.ObjectFactory;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -35,9 +37,10 @@ public class ObjectFactory1Activator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 		Hashtable props = new Hashtable();
 		props.put("osgi.jndi.serviceName", "CTObjectFactory");
+		String[] interfaces = {CTObjectFactory.class.getName(), ObjectFactory.class.getName()};
 		
 		CTObjectFactory of = new CTObjectFactory();
-		sr = context.registerService(CTObjectFactory.class.getName(), of, props);		
+		sr = context.registerService(interfaces, of, props);		
 		
 	}
 
