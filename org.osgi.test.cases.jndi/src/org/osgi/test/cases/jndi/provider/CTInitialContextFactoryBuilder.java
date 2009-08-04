@@ -29,11 +29,16 @@ import javax.naming.spi.InitialContextFactory;
 public class CTInitialContextFactoryBuilder implements javax.naming.spi.InitialContextFactoryBuilder {
 
 	public InitialContextFactory createInitialContextFactory(Hashtable env) throws NamingException {
-		if (((String)env.get(Context.INITIAL_CONTEXT_FACTORY)).equals(CTInitialContextFactory.class.getName())) {
-			return new CTInitialContextFactory();
-		} else {
-			return null;
+		String contextFactory =  (String) env.get(Context.INITIAL_CONTEXT_FACTORY);
+		if (contextFactory != null) {
+			if (contextFactory.equals(CTInitialContextFactory.class.getName())) {
+				return new CTInitialContextFactory();
+			} else {
+				return null;
+			}
 		}
+		
+		return null;
 	}
 
 }

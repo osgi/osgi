@@ -87,7 +87,7 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		}
 	}
 
-	public void testInitialContextFactoryBuilder() throws Exception {
+	public void testInitialContextFactoryBuilderWithFactory() throws Exception {
 		// Install the bundles needed for this test
 		Bundle testBundle = installBundle("initialContextFactoryBuilder1.jar");
 		// Try to get an initialContext object using the builder
@@ -109,6 +109,32 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		} finally {
 			// Cleanup after the test completes
 			ctx.close();
+			uninstallBundle(testBundle);
+		}
+	}
+	
+	public void testInitialContextFactoryBuilderWithNoFactory() throws Exception {
+		// Install the bundles needed fort his test
+		Bundle testBundle = installBundle("initialContextFactoryBuilder1.jar");
+		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
+		// Try to get an initialContext object using the builder
+		int invokeCountBefore = CTContext.getInvokeCount();
+		InitialContext ctx = new InitialContext();
+		try {
+			assertNotNull("The context should not be null", ctx);
+			// Verify that we actually received an InitialContext
+			ctx.bind("testObject", new Object());
+			int invokeCountAfter = CTContext.getInvokeCount();
+			if (!(invokeCountAfter > invokeCountBefore)) {
+				ctx.close();
+				fail("The correct Context object was not found");
+			}
+			Object testObject = ctx.lookup("testObject");
+			assertNotNull(testObject);
+		} finally {
+			// Cleanup after the test completes
+			ctx.close();
+			uninstallBundle(factoryBundle);
 			uninstallBundle(testBundle);
 		}
 	}
