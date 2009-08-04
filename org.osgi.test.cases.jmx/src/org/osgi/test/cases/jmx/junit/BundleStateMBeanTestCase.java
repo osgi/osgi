@@ -60,10 +60,24 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 	}
 
 
-//	public void testGetExportedPackages() {
-//
-//		throw new UnsupportedOperationException("not yet implemented.");
-//	}
+	public void testGetExportedPackages() throws IOException {
+		String expectedExportedPackages = "org.osgi.test.cases.jmx.tb2.api";
+		
+		
+		String[] exportedPackages = bsMBean.getExportedPackages(testBundle2.getBundleId());
+		
+		boolean found = false;
+		for(String exportedPackage : exportedPackages) {
+			if(exportedPackage.startsWith(expectedExportedPackages)) {
+				found = true;
+				break;
+			}
+		}
+		
+		if(!found) {
+			fail("failed to find the exported package " + expectedExportedPackages + " in the bundle " + testBundle2.getSymbolicName());
+		}
+	}
 //
 //	public void testGetFragments()  {
 //		throw new UnsupportedOperationException("not yet implemented.");
@@ -78,17 +92,34 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 //		throw new UnsupportedOperationException("not yet implemented.");
 //	}
 //
-//	public void testGetImportedPackages() {
-//		throw new UnsupportedOperationException("not yet implemented.");
-//	}
+	public void testGetImportedPackages() throws IOException {
+		String expectedImportedPackages = "org.osgi.test.cases.jmx.tb2.api";
+		
+		String[] importedPackages = bsMBean.getImportedPackages(testBundle1.getBundleId());
+		
+		boolean found = false;
+		for(String importedPackage : importedPackages) {
+			if(importedPackage.startsWith(expectedImportedPackages)) {
+				found = true;
+				break;
+			}
+		}
+		
+		if(!found) {
+			fail("failed to find the imported package " + expectedImportedPackages + " in the bundle " + testBundle1.getSymbolicName());
+		}
+	}
 //
 //	public void testGetLastModified() {
 //		throw new UnsupportedOperationException("not yet implemented.");
 //	}
 //
-//	public void testGetRegisteredServices()  {
-//		throw new UnsupportedOperationException("not yet implemented.");
-//	}
+	public void testGetRegisteredServices() throws IOException {
+		
+//		 long[] serviceIdentifiers = bsMBean.getRegisteredServices(testBundle2.getBundleId());
+//		 ServiceReference ref = getContext().getServiceReference("org.osgi.test.cases.jmx.tb2.api.HelloSayer");
+		 
+	}
 //
 //	public void testGetRequiringBundles() {
 //		throw new UnsupportedOperationException("not yet implemented.");
