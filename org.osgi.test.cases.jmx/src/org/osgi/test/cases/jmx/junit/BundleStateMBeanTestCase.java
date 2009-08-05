@@ -51,7 +51,7 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 
 	public void testGetBundles() throws IOException {
 		assertNotNull(bsMBean);
-		
+		assertTrue("getBundles() did not return any data.", bsMBean.getBundles().size()> 0);
 		/*
 		 * FIXME: commented because of 
 		 * https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1386
@@ -61,6 +61,7 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 
 
 	public void testGetExportedPackages() throws IOException {
+		assertNotNull(bsMBean);
 		String expectedExportedPackages = "org.osgi.test.cases.jmx.tb2.api";
 		
 		
@@ -93,6 +94,7 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 //	}
 //
 	public void testGetImportedPackages() throws IOException {
+		assertNotNull(bsMBean);
 		String expectedImportedPackages = "org.osgi.test.cases.jmx.tb2.api";
 		
 		String[] importedPackages = bsMBean.getImportedPackages(testBundle1.getBundleId());
@@ -138,25 +140,30 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 //		throw new UnsupportedOperationException("not yet implemented.");
 //	}
 //
-//	public void testGetSymbolicName() {
-//		throw new UnsupportedOperationException("not yet implemented.");
-//	}
+	public void testGetSymbolicName() {
+		assertNotNull(bsMBean);
+		
+
+	}
 //
 //	public void testIsPersistentlyStarted() {
 //		throw new UnsupportedOperationException("not yet implemented.");
 //	}
 //	
-//	public void testIsFragment() {
-//		throw new UnsupportedOperationException("not yet implemented.");
-//	}
+	public void testIsFragment() throws IOException {
+		assertNotNull(bsMBean);
+		assertFalse("tb1 is a bundle and not a fragment.", bsMBean.isFragment(testBundle1.getBundleId()));
+	}
 //
-//	public void isRemovalPending() {
-//		throw new UnsupportedOperationException("not yet implemented.");
-//	}
-//
-//	public void isRequired() { 
-//		throw new UnsupportedOperationException("not yet implemented.");
-//	}
+	public void testIsRemovalPending() throws IOException {
+		assertNotNull(bsMBean);
+		assertTrue("removal is pending for testbundle1 which is not going to be removed ",!bsMBean.isRemovalPending(testBundle1.getBundleId()));
+	}
+
+	public void testIsRequired() throws IOException { 
+		assertNotNull(bsMBean);
+		assertTrue("tb2 is required by tb1, thus the isRequired call on tb2 should be true.", bsMBean.isRequired(testBundle2.getBundleId()));
+	}
 	
 	@Override
 	protected void tearDown() throws Exception {
