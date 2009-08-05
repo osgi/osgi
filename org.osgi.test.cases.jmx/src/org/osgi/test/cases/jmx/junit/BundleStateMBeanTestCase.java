@@ -3,6 +3,7 @@ package org.osgi.test.cases.jmx.junit;
 import java.io.IOException;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.ServiceReference;
 import org.osgi.jmx.JmxConstants;
 import org.osgi.jmx.framework.BundleStateMBean;
 
@@ -136,19 +137,84 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 		}
 		assertTrue("tb2 is required by tb1. getRequiringBundles() was not able to detect this dependency.", found);
 	}
-//
-//
-//	public void testGetServicesInUse() {
-//		throw new UnsupportedOperationException("not yet implemented.");
-//	}
-//
+
+	public void testGetServicesInUse() throws IOException {
+		assertNotNull(bsMBean);
+		ServiceReference ref = getContext().getServiceReference("org.osgi.test.cases.jmx.tb2.api.HelloSayer");
+		Long expectedserviceId = (Long)ref.getProperty("service.id"); 
+		long[] servicesInUse = bsMBean.getServicesInUse(testBundle1.getBundleId());
+		boolean found = false;
+		
+		for(long serviceId : servicesInUse) {
+			if(serviceId == expectedserviceId) {
+				found = true;
+				break;
+			}
+		}
+		
+		assertTrue("tb1 is using service HelloSayer from tb2. However the method call did not return the expected result.", found);
+	}
+
 //	public void testGetStartLevel() {
 //		throw new UnsupportedOperationException("not yet implemented.");
 //	}
 //
-//	public void testGetState() {
-//		throw new UnsupportedOperationException("not yet implemented.");
-//	}
+	public void testGetState() throws IOException {
+		assertNotNull(bsMBean);
+		String bundleState = bsMBean.getState(testBundle1.getBundleId());
+		final String expectedBundleState;
+		
+		boolean isBundleStateCorrect = false;
+		switch (testBundle1.getState()) {
+			case Bundle.ACTIVE :
+				if(bundleState.equals("ACTIVE")) {
+					isBundleStateCorrect = true;
+				}
+				expectedBundleState = "ACTIVE";
+				break;
+
+			case Bundle.INSTALLED :
+				if(bundleState.equals("INSTALLED")) {
+					isBundleStateCorrect = true;
+					
+				}
+				expectedBundleState = "INSTALLED";
+				break;
+			
+			case Bundle.STARTING :
+				if(bundleState.equals("STARTING")) {
+					isBundleStateCorrect = true;
+				}
+				expectedBundleState = "STARTING";
+				break;
+				
+			case Bundle.RESOLVED :
+				if(bundleState.equals("RESOLVED")) {
+					isBundleStateCorrect = true;
+				}
+				expectedBundleState = "RESOLVED";
+				break;
+				
+			case Bundle.STOPPING :
+				if(bundleState.equals("STOPPING")) {
+					isBundleStateCorrect = true;
+				}
+				expectedBundleState = "STOPPING";
+				break;
+				
+			case Bundle.UNINSTALLED :
+				if(bundleState.equals("UNINSTALLED")) {
+					isBundleStateCorrect = true;
+				}
+				expectedBundleState = "UNINSTALLED";
+				break;
+				
+			default:
+				expectedBundleState = "none";
+				fail();
+		}
+		assertTrue("could not retrieve the correct bundlestate for testbundle1 got state " + bundleState + " but expected state " + expectedBundleState, isBundleStateCorrect);
+	}
 //
 	public void testGetSymbolicName() {
 		assertNotNull(bsMBean);
