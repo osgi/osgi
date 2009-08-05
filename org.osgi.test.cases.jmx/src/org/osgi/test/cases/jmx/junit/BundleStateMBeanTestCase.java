@@ -84,15 +84,15 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 //		throw new UnsupportedOperationException("not yet implemented.");
 //	}
 //
-//	public void testGetHeaders() {
-//		throw new UnsupportedOperationException("not yet implemented.");
-//		
-//	}
-//
+	public void testGetHeaders() throws IOException {
+		assertNotNull(bsMBean);
+		assertTrue("getHeaders() did not return any headers", bsMBean.getHeaders(testBundle1.getBundleId()).size() > 0);
+	}
+
 //	public void testGetHosts() {
 //		throw new UnsupportedOperationException("not yet implemented.");
 //	}
-//
+
 	public void testGetImportedPackages() throws IOException {
 		assertNotNull(bsMBean);
 		String expectedImportedPackages = "org.osgi.test.cases.jmx.tb2.api";
@@ -123,9 +123,19 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 		 
 	}
 //
-//	public void testGetRequiringBundles() {
-//		throw new UnsupportedOperationException("not yet implemented.");
-//	}
+	public void testGetRequiringBundles() throws IOException {
+		assertNotNull(bsMBean);
+		long expectedBundleID = testBundle1.getBundleId();
+		
+		boolean found = false;
+		for(long bundleId : bsMBean.getRequiringBundles(testBundle2.getBundleId())) {
+			if(bundleId == expectedBundleID) {
+				found = true;
+				break;
+			}
+		}
+		assertTrue("tb2 is required by tb1. getRequiringBundles() was not able to detect this dependency.", found);
+	}
 //
 //
 //	public void testGetServicesInUse() {
