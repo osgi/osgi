@@ -40,14 +40,13 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 			}
 		}
 		/*
-		 * FIXME: commented because of
-		 * https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1388
+		 * FIXME: https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1388
 		 */
-//		assertTrue(
-//				"testbundle1 depends on testbundle2. This dependency was not reflected "
-//						+ "by the result of the call to getDependencies. result: "
-//						+ bsMBean.getDependencies(testBundle1.getBundleId()),
-//				found);
+		assertTrue(
+				"testbundle1 depends on testbundle2. This dependency was not reflected "
+						+ "by the result of the call to getDependencies. result: "
+						+ bsMBean.getDependencies(testBundle1.getBundleId()),
+				found);
 	}
 
 	public void testGetBundles() throws IOException {
