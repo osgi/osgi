@@ -61,25 +61,25 @@ public class UserManagerMBeanTestCase extends MBeanGeneralTestCase {
 		String username = "foo";
 		String illegalUsername = "gnobbelbra";
 		/*
-		 * commented due to bug https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1407
+		 * FIXME: https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1407
 		 */
 		
-//		try {
-//			userManagerMBean.getCredentials(illegalUsername);
-//			fail("Failed to throw IllegalArgumentException because of non existent user "+ illegalUsername +".");
-//		}
-//		catch(IOException ioex) {
-//			//just catch and forget the provoced exception
-//		}
-//		catch(IllegalArgumentException ia) {
-//			//just catch and forget the provoced exception
-//		}
-//		userManagerMBean.createUser(username);
-//		userManagerMBean.addCredential(UserManagerMBean.ENCODED_CREDENTIALS, "bar", username);
-//		assertTrue("failed to retrieve previously added credentials.", userManagerMBean.getCredentials(username).values().size() > 0);
-//		
-//		userManagerMBean.removeCredential(UserManagerMBean.ENCODED_CREDENTIALS, username);
-//		assertTrue("failed to removeCredential for user " + username, userManagerMBean.getCredentials(username).values().size() == 0);
+		try {
+			userManagerMBean.getCredentials(illegalUsername);
+			fail("Failed to throw IllegalArgumentException because of non existent user "+ illegalUsername +".");
+		}
+		catch(IOException ioex) {
+			//just catch and forget the provoced exception
+		}
+		catch(IllegalArgumentException ia) {
+			//just catch and forget the provoced exception
+		}
+		userManagerMBean.createUser(username);
+		userManagerMBean.addCredential(UserManagerMBean.ENCODED_CREDENTIALS, "bar", username);
+		assertTrue("failed to retrieve previously added credentials.", userManagerMBean.getCredentials(username).values().size() > 0);
+		
+		userManagerMBean.removeCredential(UserManagerMBean.ENCODED_CREDENTIALS, username);
+		assertTrue("failed to removeCredential for user " + username, userManagerMBean.getCredentials(username).values().size() == 0);
 	}
 
 	public void testAddAndRemoveGroupMember() throws IOException {

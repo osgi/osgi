@@ -79,10 +79,9 @@ public class PackageStateMBeanTestCase extends MBeanGeneralTestCase {
 		assertNotNull(pMBean);
 		assertNotNull(pAdmin);
 		/*
-		 * FIXME: currently deactivated because of 
-		 * https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1385  
+		 * FIXME: https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1385  
 		 */
-		//pMBean.getPackages();
+		pMBean.getPackages();
 	}
 
 	public void testIsRemovalPending() throws IOException {

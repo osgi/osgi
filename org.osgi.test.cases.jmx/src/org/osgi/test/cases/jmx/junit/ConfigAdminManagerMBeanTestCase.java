@@ -72,7 +72,6 @@ public class ConfigAdminManagerMBeanTestCase extends MBeanGeneralTestCase {
 	
 	@Override
 	protected void tearDown() throws Exception {
-		// TODO Auto-generated method stub
 		super.tearDown();
 		super.waitForUnRegistering(createObjectName(JmxConstants.CM_SERVICE));
 	}

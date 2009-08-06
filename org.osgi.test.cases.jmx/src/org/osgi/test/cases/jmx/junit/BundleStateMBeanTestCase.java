@@ -1,10 +1,12 @@
 package org.osgi.test.cases.jmx.junit;
 
 import java.io.IOException;
+import java.util.Hashtable;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.jmx.JmxConstants;
+import org.osgi.jmx.codec.OSGiProperties;
 import org.osgi.jmx.framework.BundleStateMBean;
 
 public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
@@ -53,10 +55,10 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 		assertNotNull(bsMBean);
 		assertTrue("getBundles() did not return any data.", bsMBean.getBundles().size()> 0);
 		/*
-		 * FIXME: commented because of 
+		 * FIXME:  
 		 * https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1386
 		 */
-//		Hashtable<String, Object> props = OSGiProperties.propertiesFrom(bsMBean.getBundles());
+		Hashtable<String, Object> props = OSGiProperties.propertiesFrom(bsMBean.getBundles());
 	}
 
 
