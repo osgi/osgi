@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.framework.junit.filter;
+package org.osgi.test.cases.framework.junit.frameworkutil;
 
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.test.cases.framework.junit.filter.AbstractFilterTests;
 
 public class FrameworkUtilFilterTests extends AbstractFilterTests {
 	public Filter createFilter(String filterString)
