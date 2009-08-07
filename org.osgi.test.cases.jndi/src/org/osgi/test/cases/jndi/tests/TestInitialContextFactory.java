@@ -148,8 +148,9 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		// Try to get a context using the just removed initialContextFactory
 		Hashtable env = new Hashtable();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
-		InitialContext ctx = new InitialContext(env);
+		InitialContext ctx = null;
 		try {
+			ctx = new InitialContext(env);
 			assertNotNull("The context should not be null", ctx);
 			ctx.bind("testObject", new Object());
 		} catch (javax.naming.NoInitialContextException ex) {
@@ -171,8 +172,9 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		// NullPointerException
 		Hashtable env = new Hashtable();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
-		InitialContext ctx = new InitialContext(env);
+		InitialContext ctx = null;
 		try {
+			ctx = new InitialContext(env);
 			assertNotNull("The context should not be null", ctx);
 			ctx.bind("testObject", new Object());
 		} catch (NullPointerException npe) {
@@ -190,8 +192,9 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		// Try to grab a context from the specified initialContextFactory. This
 		// should throw an exception.
-		InitialContext ctx = new InitialContext(env);
+		InitialContext ctx = null;
 		try {
+			ctx = new InitialContext(env);
 			assertNotNull("The context should not be null", ctx);
 			ctx.lookup("testObject");
 		} catch (javax.naming.NoInitialContextException ex) {
