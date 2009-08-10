@@ -135,7 +135,8 @@ public interface BeanMetadata extends Target, ComponentMetadata {
 	/**
 	 * Return the scope for the bean.
 	 * 
-	 * @return The scope for the bean.
+	 * @return The scope for the bean. Returns <code>null</code> if the scope
+	 *         has not been explicitly specified in the bean definition.
 	 * @see #SCOPE_SINGLETON
 	 * @see #SCOPE_PROTOTYPE
 	 */
