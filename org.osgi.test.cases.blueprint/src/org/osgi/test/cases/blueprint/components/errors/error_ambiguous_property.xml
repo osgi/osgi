@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
-
-   <!-- inject a null into a primitive type target -->
-   <bean id="compPrimInteger" class="org.osgi.test.cases.blueprint.components.injection.PropertyInjection">
-       <property name="ambiguous" value="123"/>
-   </bean>
-</blueprint>
-
