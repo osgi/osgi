@@ -284,7 +284,10 @@ public class BaseTestComponent implements ComponentTestInfo{
             String name = (String)i.next();
             buf.append(name).append(" = ");
             ValueDescriptor desc = (ValueDescriptor) properties.get(name);
-            if (desc.getValue() == this) {
+            // we can get into a nasty situation with component cycles, so if this
+            // is an instance of one of our test components, don't use its toString
+            // method to format the properties.
+            if (desc.getValue() instanceof BaseTestComponent) {
                 buf.append("<Component:").append(componentId).append(">");
             } else {
                 buf.append(desc);
