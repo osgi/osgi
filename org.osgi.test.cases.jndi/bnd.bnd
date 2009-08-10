@@ -21,6 +21,7 @@ Include-Resource 					= \
 	objectFactoryBuilder1.jar , \
 	service1.jar , \
 	urlContext1.jar
+	{jndi.properties=resources/jndi.properties}
 	
 Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
 

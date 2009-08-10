@@ -47,6 +47,7 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		// Grab the initialContext
 		InitialContext ctx = new InitialContext(env);
 		try {
+			// Verify that we actually received the InitialContext
 			assertNotNull("The context should not be null", ctx);
 			ctx.bind("testObject", new Object());
 			int invokeCountAfter = CTContext.getInvokeCount();
@@ -96,8 +97,8 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		int invokeCountBefore = CTContext.getInvokeCount();
 		InitialContext ctx = new InitialContext(env);
 		try {
-			assertNotNull("The context should not be null", ctx);
 			// Verify that we actually received the InitialContext
+			assertNotNull("The context should not be null", ctx);
 			ctx.bind("testObject", new Object());
 			int invokeCountAfter = CTContext.getInvokeCount();
 			if (!(invokeCountAfter > invokeCountBefore)) {
@@ -121,8 +122,8 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		int invokeCountBefore = CTContext.getInvokeCount();
 		InitialContext ctx = new InitialContext();
 		try {
-			assertNotNull("The context should not be null", ctx);
 			// Verify that we actually received an InitialContext
+			assertNotNull("The context should not be null", ctx);
 			ctx.bind("testObject", new Object());
 			int invokeCountAfter = CTContext.getInvokeCount();
 			if (!(invokeCountAfter > invokeCountBefore)) {
@@ -136,6 +137,27 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 			ctx.close();
 			uninstallBundle(factoryBundle);
 			uninstallBundle(testBundle);
+		}
+	}
+	
+	public void testInitialContextFactoryFromPropertiesFile() throws Exception {
+		// No bundles need to be installed.  Everything should be pulled from test bundle
+		int invokeCountBefore = CTContext.getInvokeCount();
+		InitialContext ctx = new InitialContext();
+		try {
+			// Verify that we actually received the InitialContext
+			assertNotNull("The context should not be null", ctx);
+			ctx.bind("testObject", new Object());
+			int invokeCountAfter = CTContext.getInvokeCount();
+			if (!(invokeCountAfter > invokeCountBefore)) {
+				ctx.close();
+				fail("The correct Context object was not found");
+			}
+			Object testObject = ctx.lookup("testObject");
+			assertNotNull(testObject);
+		} finally {
+			// Cleanup after the test completes
+			ctx.close();
 		}
 	}
 
