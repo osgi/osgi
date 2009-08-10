@@ -149,8 +149,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new ArgumentMetadataValidator("compTypedItems", new TestArgument(
             new TestListValue(new TestValue[] {
-                new TestStringValue(Double.class, "0.0"),
-                new TestStringValue(Double.class, "1.0")
+                new TestStringValue("0.0"),
+                new TestStringValue("1.0")
             }, Double.class))));
 
         // a type list of Doubles with an element override
@@ -163,8 +163,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         startEvents.addValidator(new ArgumentMetadataValidator("compTypeOverride", new TestArgument(
             new TestListValue(new TestValue[] {
                 // these are not specified, but inherit from the collection type.
-                new TestStringValue(Double.class, "0.0"),
-                new TestStringValue(Double.class, "1.0"),
+                new TestStringValue("0.0"),
+                new TestStringValue("1.0"),
                 new TestStringValue(Boolean.class, "true")
             }, Double.class))));
 
@@ -287,8 +287,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new ArgumentMetadataValidator("compTypedItems", new TestArgument(
             new TestListValue(new TestValue[] {
-                new TestStringValue(Double.class, "0.0"),
-                new TestStringValue(Double.class, "1.0")
+                new TestStringValue("0.0"),
+                new TestStringValue("1.0")
             }, Double.class))));
 
         // a type list of Doubles with an element override
@@ -300,8 +300,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new ArgumentMetadataValidator("compTypeOverride", new TestArgument(
             new TestListValue(new TestValue[] {
-                new TestStringValue(Double.class, "0.0"),
-                new TestStringValue(Double.class, "1.0"),
+                new TestStringValue("0.0"),
+                new TestStringValue("1.0"),
                 new TestStringValue(Boolean.class, "true")
             }, Double.class))));
 
@@ -424,8 +424,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new ArgumentMetadataValidator("compTypedItems", new TestArgument(
             new TestListValue(new TestValue[] {
-                new TestStringValue(Double.class, "0.0"),
-                new TestStringValue(Double.class, "1.0")
+                new TestStringValue("0.0"),
+                new TestStringValue("1.0")
             }, Double.class))));
 
         // a type list of Doubles with an element override
@@ -437,8 +437,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new ArgumentMetadataValidator("compTypeOverride", new TestArgument(
             new TestListValue(new TestValue[] {
-                new TestStringValue(Double.class, "0.0"),
-                new TestStringValue(Double.class, "1.0"),
+                new TestStringValue("0.0"),
+                new TestStringValue("1.0"),
                 new TestStringValue(Boolean.class, "true")
             }, Double.class))));
 
@@ -576,8 +576,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new PropertyMetadataValidator("compTypedItems", new TestProperty(
             new TestListValue(new TestValue[] {
-                new TestStringValue(Double.class, "0.0"),
-                new TestStringValue(Double.class, "1.0")
+                new TestStringValue("0.0"),
+                new TestStringValue("1.0")
             }, Double.class)
             , "list")));
 
@@ -590,8 +590,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new PropertyMetadataValidator("compTypeOverride", new TestProperty(
             new TestListValue(new TestValue[] {
-                new TestStringValue(Double.class, "0.0"),
-                new TestStringValue(Double.class, "1.0"),
+                new TestStringValue("0.0"),
+                new TestStringValue("1.0"),
                 new TestStringValue(Boolean.class, "true")
             }, Double.class)
             , "list")));
@@ -796,8 +796,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new PropertyMetadataValidator("compTypedItems", new TestProperty(
             new TestListValue(new TestValue[] {
-                new TestStringValue(Double.class, "0.0"),
-                new TestStringValue(Double.class, "1.0")
+                new TestStringValue("0.0"),
+                new TestStringValue("1.0")
             }, Double.class)
             , "list")));
 
@@ -810,8 +810,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new PropertyMetadataValidator("compTypeOverride", new TestProperty(
             new TestListValue(new TestValue[] {
-                new TestStringValue(Double.class, "0.0"),
-                new TestStringValue(Double.class, "1.0"),
+                new TestStringValue("0.0"),
+                new TestStringValue("1.0"),
                 new TestStringValue(Boolean.class, "true")
             }, Double.class)
             , "list")));
@@ -934,8 +934,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new PropertyMetadataValidator("compTypedItems", new TestProperty(
             new TestListValue(new TestValue[] {
-                new TestStringValue(Double.class, "0.0"),
-                new TestStringValue(Double.class, "1.0")
+                new TestStringValue("0.0"),
+                new TestStringValue("1.0")
             }, Double.class)
             , "list")));
 
@@ -948,8 +948,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new PropertyMetadataValidator("compTypeOverride", new TestProperty(
             new TestListValue(new TestValue[] {
-                new TestStringValue(Double.class, "0.0"),
-                new TestStringValue(Double.class, "1.0"),
+                new TestStringValue("0.0"),
+                new TestStringValue("1.0"),
                 new TestStringValue(Boolean.class, "true")
             }, Double.class)
             , "list")));
@@ -1072,8 +1072,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new ArgumentMetadataValidator("compTypedItems", new TestArgument(
             new TestSetValue(new TestValue[] {
-                new TestStringValue(Double.class, "0.0"),
-                new TestStringValue(Double.class, "1.0")
+                new TestStringValue("0.0"),
+                new TestStringValue("1.0")
             }, Double.class))));
 
         // a typed set of elements, with an element override
@@ -1085,8 +1085,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new ArgumentMetadataValidator("compTypeOverride", new TestArgument(
             new TestSetValue(new TestValue[] {
-                new TestStringValue(Double.class, "0.0"),
-                new TestStringValue(Double.class, "1.0"),
+                new TestStringValue("0.0"),
+                new TestStringValue("1.0"),
                 new TestStringValue(Boolean.class, "true")
             }, Double.class))));
 
@@ -1209,8 +1209,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new ArgumentMetadataValidator("compTypedItems", new TestArgument(
             new TestSetValue(new TestValue[] {
-                new TestStringValue(Double.class, "0.0"),
-                new TestStringValue(Double.class, "1.0")
+                new TestStringValue("0.0"),
+                new TestStringValue("1.0")
             }, Double.class))));
 
         // a typed set of elements, with an element override
@@ -1222,9 +1222,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new ArgumentMetadataValidator("compTypeOverride", new TestArgument(
             new TestSetValue(new TestValue[] {
-                // TODO:  Remove explicit type once bug is fixed
-                new TestStringValue(Double.class, "0.0"),
-                new TestStringValue(Double.class, "1.0"),
+                new TestStringValue("0.0"),
+                new TestStringValue("1.0"),
                 new TestStringValue(Boolean.class, "true")
             }, Double.class))));
 
@@ -1348,8 +1347,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new ArgumentMetadataValidator("compTypedItems", new TestArgument(
             new TestSetValue(new TestValue[] {
-                new TestStringValue(Double.class, "0.0"),
-                new TestStringValue(Double.class, "1.0")
+                new TestStringValue("0.0"),
+                new TestStringValue("1.0")
             }, Double.class))));
 
         // a typed set of elements, with an element override
@@ -1361,8 +1360,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new ArgumentMetadataValidator("compTypeOverride", new TestArgument(
             new TestSetValue(new TestValue[] {
-                new TestStringValue(Double.class, "0.0"),
-                new TestStringValue(Double.class, "1.0"),
+                new TestStringValue("0.0"),
+                new TestStringValue("1.0"),
                 new TestStringValue(Boolean.class, "true")
             }, Double.class))));
 
@@ -1492,8 +1491,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         // be null).  The value type of the collection is set to Double.
         startEvents.addValidator(new PropertyMetadataValidator("compTypedItems", new TestProperty(
             new TestSetValue(new TestValue[] {
-                new TestStringValue(Double.class, "0.0"),
-                new TestStringValue(Double.class, "1.0")
+                new TestStringValue("0.0"),
+                new TestStringValue("1.0")
             }, Double.class)
             , "set")));
 
@@ -1506,8 +1505,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new PropertyMetadataValidator("compTypeOverride", new TestProperty(
             new TestSetValue(new TestValue[] {
-                new TestStringValue(Double.class, "0.0"),
-                new TestStringValue(Double.class, "1.0"),
+                new TestStringValue("0.0"),
+                new TestStringValue("1.0"),
                 new TestStringValue(Boolean.class, "true")
             }, Double.class)
             , "set")));
@@ -1635,8 +1634,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new PropertyMetadataValidator("compTypedItems", new TestProperty(
             new TestSetValue(new TestValue[] {
-                new TestStringValue(Double.class, "0.0"),
-                new TestStringValue(Double.class, "1.0")
+                new TestStringValue("0.0"),
+                new TestStringValue("1.0")
             }, Double.class)
             , "set")));
 
@@ -1649,8 +1648,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new PropertyMetadataValidator("compTypeOverride", new TestProperty(
             new TestSetValue(new TestValue[] {
-                new TestStringValue(Double.class, "0.0"),
-                new TestStringValue(Double.class, "1.0"),
+                new TestStringValue("0.0"),
+                new TestStringValue("1.0"),
                 new TestStringValue(Boolean.class, "true")
             }, Double.class)
             , "set")));
@@ -1772,8 +1771,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new PropertyMetadataValidator("compTypedItems", new TestProperty(
             new TestSetValue(new TestValue[] {
-                new TestStringValue(Double.class, "0.0"),
-                new TestStringValue(Double.class, "1.0")
+                new TestStringValue("0.0"),
+                new TestStringValue("1.0")
             }, Double.class)
             , "set")));
 
@@ -1786,8 +1785,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         startEvents.addValidator(new PropertyMetadataValidator("compTypeOverride", new TestProperty(
             new TestSetValue(new TestValue[] {
-                new TestStringValue(Double.class, "0.0"),
-                new TestStringValue(Double.class, "1.0"),
+                new TestStringValue("0.0"),
+                new TestStringValue("1.0"),
                 new TestStringValue(Boolean.class, "true")
             }, Double.class)
             , "set")));

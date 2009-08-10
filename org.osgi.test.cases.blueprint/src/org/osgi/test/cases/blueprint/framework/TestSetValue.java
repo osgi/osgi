@@ -21,8 +21,8 @@ import java.util.Set;
 public class TestSetValue extends TestCollectionValue {
 
     /**
-     * A TestListValue that only verifies that the value
-     * is a list type.  No entry validation is done.
+     * A TestSetValue that only verifies that the value
+     * is a set type.  No entry validation is done.
      */
     public TestSetValue() {
         this(null, null);
