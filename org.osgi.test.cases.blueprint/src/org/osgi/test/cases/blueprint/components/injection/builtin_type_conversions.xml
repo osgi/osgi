@@ -24,7 +24,7 @@
     </bean>
 
     <bean id="IntegerOne" class="java.lang.Integer">
-        <argument value="1"/>
+        <argument type="int" value="1"/>
     </bean>
 
 

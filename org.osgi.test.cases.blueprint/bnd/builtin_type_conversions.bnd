@@ -1,6 +1,6 @@
 Bundle-SymbolicName:                     ${p}.builtin_type_conversions
 Bundle-Version:                          4.2
-Import-Package:                          ${p}.components.injection, ${p}.services
+Import-Package:                          ${p}.components.injection, ${p}.services, org.osgi.service.blueprint.container
 -resourceonly: true
 Include-Resource					= \
 	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/injection/builtin_type_conversions.xml

@@ -109,8 +109,8 @@ public class TestCustomConverter extends DefaultTestBundleControl {
      */
     public void testServiceBooleanConverter() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-            getWebServer() + "www/converter_custom_service_converter.jar",
-            getWebServer() + "www/converter_type_converter_service.jar");
+            getWebServer() + "www/converter_service_boolean_converter.jar",
+            getWebServer() + "www/type_converter_service.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
 
         // constructor

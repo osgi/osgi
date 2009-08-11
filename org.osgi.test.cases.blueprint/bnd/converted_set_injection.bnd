@@ -1,6 +1,6 @@
 Bundle-SymbolicName:                     ${p}.converted_set_injection
 Bundle-Version:                          4.2
-Import-Package:                          ${p}.components.injection, ${p}.services
+Import-Package:                          ${p}.components.injection, ${p}.services, org.osgi.service.blueprint.container, org.osgi.service.blueprint.container
 -resourceonly: true
 Include-Resource					= \
 	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/injection/converted_set_injection.xml
