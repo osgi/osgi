@@ -1,4 +1,4 @@
-package org.osgi.service.remoteadmin;
+package org.osgi.service.remoteserviceadmin;
 
 import org.osgi.framework.*;
 
@@ -20,13 +20,15 @@ public interface ExportRegistration {
 	 * 
 	 * @return The service being exported, must be <code>null</code> when this
 	 *         registration is unregistered.
+	 * @throws IllegalStateException Thrown when this object was not properly initialized, see {@link #getException()}
 	 */
-	ServiceReference getExportedService();
+	ServiceReference getExportedService() throws IllegalStateException;
 
 	/**
 	 * Return the Endpoint Description that is created for this registration.
 	 * 
 	 * @return the local Endpoint Description
+	 * @throws IllegalStateException Thrown when this object was not properly initialized, see {@link #getException()}
 	 */
 	EndpointDescription getEndpointDescription();
 
@@ -51,6 +53,8 @@ public interface ExportRegistration {
 	 * 
 	 * The error must be set before this Import Registration is returned.
 	 * Asynchronously occurring errors must be reported to the log.
+	 * 
+	 * future ....
 	 * 
 	 * @return The exception that occurred during the creation of the
 	 *         registration or <code>null</code> if no exception occurred.

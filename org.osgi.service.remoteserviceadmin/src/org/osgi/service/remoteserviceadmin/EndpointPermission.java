@@ -1,4 +1,4 @@
-package org.osgi.service.remoteadmin;
+package org.osgi.service.remoteserviceadmin;
 
 // TODO Hacked from ServiePermission
 
@@ -51,6 +51,8 @@ public final class EndpointPermission extends BasicPermission {
 	 * The action string <code>register</code>.
 	 */
 	public final static String IMPORT = "import";
+	
+	public final static String LISTENING = "listening";
 
 	private final static int ACTION_EXPORT = 0x00000001;
 	private final static int ACTION_IMPORT = 0x00000002;
@@ -563,13 +565,13 @@ public final class EndpointPermission extends BasicPermission {
 	 * 
 	 * @return a dictionary of properties for this permission.
 	 */
-	private Dictionary<String,Object> getProperties() {
-		Dictionary<String, Object> result = properties;
+	private Dictionary/*<String,Object>*/ getProperties() {
+		Dictionary/*<String, Object>*/ result = properties;
 		if (result != null) {
 			return result;
 		}
 		if (endpoint == null) {
-			result = new Hashtable<String, Object>(1);
+			result = new Hashtable/*<String, Object>*/(1);
 			if (filter == null) {
 				result.put(Constants.OBJECTCLASS, new String[] { getName() });
 			}

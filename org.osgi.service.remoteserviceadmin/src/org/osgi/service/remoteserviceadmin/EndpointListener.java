@@ -1,4 +1,4 @@
-package org.osgi.service.remoteservices;
+package org.osgi.service.remoteserviceadmin;
 
 
 /**
@@ -95,7 +95,7 @@ public interface EndpointListener {
 	/**
 	 * Remove the registration of an endpoint.
 	 * 
-	 * If an endpoint that was registered with the {@link #registerEndpoint}
+	 * If an endpoint that was registered with the {@link #addEndpoint}
 	 * method is no longer available then this method should be called. This
 	 * will remove the endpoint from the listener.
 	 * 

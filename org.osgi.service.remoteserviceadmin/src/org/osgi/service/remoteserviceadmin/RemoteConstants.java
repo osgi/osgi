@@ -1,11 +1,11 @@
-package org.osgi.service.remoteservices;
+package org.osgi.service.remoteserviceadmin;
 
 /**
  * Provide the definition of the constants used in the Remote Services API.
  * 
  */
-public class RemoteServiceConstants {
-	private RemoteServiceConstants() {
+public class RemoteConstants {
+	private RemoteConstants() {
 	}
 
 	/**
@@ -36,9 +36,9 @@ public class RemoteServiceConstants {
 	 * 
 	 * The value of this property is of type <code>String+</code>.
 	 * 
-	 * @see RemoteServiceConstants#SERVICE_INTENTS
-	 * @see RemoteServiceConstants#SERVICE_EXPORTED_INTENTS
-	 * @see RemoteServiceConstants#SERVICE_EXPORTED_INTENTS_EXTRA
+	 * @see #SERVICE_INTENTS
+	 * @see #SERVICE_EXPORTED_INTENTS
+	 * @see #SERVICE_EXPORTED_INTENTS_EXTRA
 	 */
 	public final static String REMOTE_INTENTS_SUPPORTED = "remote.intents.supported";
 
@@ -71,7 +71,7 @@ public class RemoteServiceConstants {
 	 * 
 	 * These intents are merged with the service.exported.intents and therefore
 	 * have the same semantics. They are extra, so that the
-	 * {@link service.exported.intents} can be set by the bundle developer and
+	 * {@link #SERVICE_EXPORTED_INTENTS} can be set by the bundle developer and
 	 * this property is then set by the administrator/deployer. Bundles should
 	 * make this property configurable, for example through the Configuration
 	 * Admin service.
@@ -115,7 +115,7 @@ public class RemoteServiceConstants {
 	 *
 	 * The value of this property is of type <code>String+</code>.
 	 */
-	String SERVICE_IMPORTED_CONFIGS = "service.imported.configs";
+	public final String SERVICE_IMPORTED_CONFIGS = "service.imported.configs";
 
 	/**
 	 * A list of intents that this service implements. This property has dual
@@ -138,6 +138,13 @@ public class RemoteServiceConstants {
 	 * concerned, this unique id is opaque.
 	 */
 	final public static String ENDPOINT_URI = "endpoint.uri";
+
+	/**
+	 * The property key for the endpoint service id. This is a unique id for a
+	 * service based on the framework id '.' service id or another model. As far as this specification is
+	 * concerned, this unique id is opaque.
+	 */
+	final public static String ENDPOINT_REMOTE_SERVICE_ID = "endpoint.remote.service.id";
 
 	/**
 	 * The key for a framework property that defines the UUID of the framework.

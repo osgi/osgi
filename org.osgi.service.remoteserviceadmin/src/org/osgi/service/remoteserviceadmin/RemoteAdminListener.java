@@ -1,4 +1,4 @@
-package org.osgi.service.remoteadmin;
+package org.osgi.service.remoteserviceadmin;
 
 /**
  * A Remote Service Admin Listener is notified asynchronously of any export or

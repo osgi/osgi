@@ -1,4 +1,4 @@
-package org.osgi.service.remoteadmin;
+package org.osgi.service.remoteserviceadmin;
 
 import java.util.*;
 
@@ -15,7 +15,7 @@ import org.osgi.framework.*;
  * 
  * @ThreadSafe
  */
-public interface RemoteAdmin {
+public interface RemoteServiceAdmin {
 
 	/**
 	 * Export a service to an endpoint. The Remote Service Admin must create an
@@ -29,8 +29,10 @@ public interface RemoteAdmin {
 	 * @return An Export Registration that combines the Endpoint Description and
 	 *         the Service Reference or
 	 *         <code>null</code> if the service could not be exported
+	 * @throws IllegalArgumentException 
+	 * @throws UnsupportedOperationException 
 	 */
-	List<ExportRegistration> exportService(ServiceReference ref);
+	List/*<ExportRegistration>*/ exportService(ServiceReference ref) throws IllegalArgumentException, UnsupportedOperationException;
 
 	/**
 	 * Export a service to a given endpoint. The Remote Service Admin must
@@ -52,9 +54,12 @@ public interface RemoteAdmin {
 	 * @return An Export Registration that combines the Endpoint Description and
 	 *         the Service Reference or
 	 *         <code>null</code> if the service could not be exported
+	 * @throws IllegalArgumentException 
+	 * @throws UnsupportedOperationException 
 	 */
-	List<ExportRegistration> exportService(ServiceReference ref,
-			Map<String,Object> properties);
+	List/*<ExportRegistration>*/ exportService(ServiceReference ref,
+			Map/*<String,Object>*/ properties) throws IllegalArgumentException, UnsupportedOperationException;
+
 
 	/**
 	 * Import a service from an endpoint. The Remote Service Admin must use the
@@ -75,13 +80,13 @@ public interface RemoteAdmin {
 	 * 
 	 * @return A collection of Export Registrations that are currently active.
 	 */
-	Collection<? extends ExportRegistration>getExportedServices();
+	Collection/*<? extends ExportRegistration>*/ getExportedServices();
 
 	/**
 	 * Answer the currently active Import Registrations.
 	 * 
 	 * @return A collection of Import Registrations that are currently active.
 	 */
-	Collection<? extends ImportRegistration> getImportedEndpoints();
+	Collection/*<? extends ImportRegistration>*/ getImportedEndpoints();
 
 }

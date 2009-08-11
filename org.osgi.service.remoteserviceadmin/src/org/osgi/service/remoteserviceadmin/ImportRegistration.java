@@ -1,14 +1,13 @@
-package org.osgi.service.remoteservices;
+package org.osgi.service.remoteserviceadmin;
 
 import org.osgi.framework.*;
-import org.osgi.service.remoteservices.*;
 
 /**
  * An Import Registration associates an active proxy service to a remote
  * endpoint.
  * 
  * The Import Registration can be used to delete the proxy associated with an
- * endpoint. It is created with the{@link RemoteServiceAdmin#importService}
+ * endpoint. It is created with the{@link RemoteAdmin#importService}
  * method.
  * 
  * @ThreadSafe
@@ -18,6 +17,7 @@ public interface ImportRegistration {
 	 * Answer the associated Service Reference for the proxy to the endpoint.
 	 * 
 	 * @return A Service Reference to the proxy for the endpoint.
+	 * @throws IllegalStateException Thrown when this object was not properly initialized, see {@link #getException()}
 	 */
 	ServiceReference getImportedService();
 
@@ -25,6 +25,7 @@ public interface ImportRegistration {
 	 * Answer the associated remote Endpoint Description.
 	 * 
 	 * @return A Endpoint Description for the remote endpoint.
+	 * @throws IllegalStateException Thrown when this object was not properly initialized, see {@link #getException()}
 	 */
 	EndpointDescription getImportedEndpointDescription();
 
