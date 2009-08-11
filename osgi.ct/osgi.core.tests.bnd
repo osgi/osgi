@@ -3,8 +3,8 @@ Bundle-Description			: \
 	Core Test Case Bundles.
 
 Bundle-Version				: ${core.release.version}
-Bundle-Activator			: org.osgi.tools.group.Group
-
 Include-Resource				: \
  	NOTICE=../osgi.companion/legal/NOTICE.txt, \
  	about.html=../osgi.companion/legal/about-ri.html
+
+-pack: ${build.core.tests}

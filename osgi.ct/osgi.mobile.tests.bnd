@@ -1,10 +1,9 @@
 Bundle-Description				: \
 	OSGi Service Platform Release ${version;=;${mobile.release.version}} version ${mobile.release.version}, \
 	Mobile Test Case Bundles.
-
 Bundle-Version					: ${mobile.release.version}
-Bundle-Activator				: org.osgi.tools.group.Group
-
 Include-Resource				: \
 	 	NOTICE=../osgi.companion/legal/NOTICE.txt, \
 	 	about.html=../osgi.companion/legal/about-ri.html
+
+-pack: ${build.mobile.tests}

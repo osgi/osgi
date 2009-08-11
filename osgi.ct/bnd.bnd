@@ -1,10 +1,7 @@
--include : layout.bnd
--resourceonly: true
-
-# The following line builds all these files and publishes them to 
-# the repository (if they are deployable)
-
--buildpath 					= org.osgi.internal; version=project
+-dependson          : osgi.ri
+-include            : layout.bnd
+-resourceonly       : true
+-buildpath 			: org.osgi.internal; version=project
 
 # Build the osgi spec files
 -sub       = osgi*.bnd
