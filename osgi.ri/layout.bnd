@@ -19,8 +19,7 @@ build.cmpn.impls = \
 	org.osgi.impl.service.upnp.cp , \
 	org.osgi.impl.service.upnp.cd , \
 	org.osgi.impl.service.useradmin , \
-	org.osgi.impl.service.wireadmin, \
-	org.osgi.impl.service.discovery 
+	org.osgi.impl.service.wireadmin 
 
 build.mobile.impls = \
    	org.osgi.impl.service.log , \
