@@ -726,7 +726,7 @@ public void testIndirectServiceReferenceExport() throws Exception {
 
 
     /**
-     * Test that service properties are re-evaluated each time a service is registered.
+     * Test that service properties are evaluated only once when a service is registered
      */
     public void testServicePropertiesReevaluation() throws Exception {
         // We're only going to load one jar for this test.  The services
@@ -747,9 +747,8 @@ public void testIndirectServiceReferenceExport() throws Exception {
         // now we chain a few events to actions to allow us to track the dynamics.
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
 
-        int counter = 0;
         Hashtable props = new Hashtable();
-        props.put("test.service.counter", new Integer(counter++));
+        props.put("test.service.counter", new Integer(0));
 
         // we need to add one of these at the head of the queue to catch the initial registration.
         // If we don't then the initial registration will trigger the the registration event below and
@@ -767,9 +766,7 @@ public void testIndirectServiceReferenceExport() throws Exception {
         importStartEvents.addEvent(new ServiceTestEvent("UNREGISTERING", new Class[] { TestServiceDynamicsInterface.class}, null,
                 new ServiceManagerRegister(serviceManager, "ServiceOneB")));
 
-        props = new Hashtable();
-        props.put("test.service.counter", new Integer(counter++));
-        // then we should see this REGISTERED again at the end, with an updated counter property.
+        // then we should see this REGISTERED again at the end, and the service properties should be unchanged.
         importStartEvents.addServiceEvent("REGISTERED", TestServiceDynamicsInterface.class, props);
 
         // now some expected termination stuff
