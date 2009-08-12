@@ -374,32 +374,15 @@ public class TestComponentInjection extends DefaultTestBundleControl {
 
 
     /**
-     * Test the example shown in section 12.2.6 of the
-     * blueprint spec of a self-referential prototype scope bean.
-     * This should be handled just like the singleton according to
-     * the spect.
+     * Cycles can only be broken at singleton components, so a self-referential
+     * prototype scope bean like the one used with the singletons must result in an
+     * error.
      *
      * @exception Exception
      */
     public void testPrototypeCycle() throws Exception {
-        StandardTestController controller = new StandardTestController(getContext(),
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
             getWebServer()+"www/prototype_cycle.jar");
-        MetadataEventSet startEvents = controller.getStartEvents();
-
-        // this will be the first event
-        TestEvent aCreated = new ComponentAssertion("a", AssertionService.BEAN_CREATED);
-        startEvents.addEvent(aCreated);
-        // a will now be injected into an instance of a.
-        TestEvent aInjected = new ComponentAssertion("a", AssertionService.BEAN_PROPERTY_SET);
-        aInjected.addDependency(aCreated);
-        startEvents.addEvent(aInjected);
-
-        // and finally, the init-method of a will be run.
-        TestEvent aInit = new ComponentAssertion("a", AssertionService.BEAN_INIT_METHOD);
-        aInit.addDependency(aInjected);
-        startEvents.addEvent(aInit);
-
-        // the events are now ordered and queued up, kick this in motion.
         controller.run();
     }
 
