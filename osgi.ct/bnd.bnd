@@ -1,8 +1,7 @@
--dependson          : osgi.ri
+-dependson          : osgi.ri, ${build.tests}
 -include            : layout.bnd
 -resourceonly       : true
--buildpath 			: org.osgi.internal; version=project
 
 # Build the osgi spec files
--sub       = osgi*.bnd
+-sub       = osgi.*.bnd
 
