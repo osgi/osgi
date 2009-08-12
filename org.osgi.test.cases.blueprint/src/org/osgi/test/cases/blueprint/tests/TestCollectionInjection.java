@@ -1828,7 +1828,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
     }
 
 	public void testMapConstructor() throws Exception {
-        StandardTestController controller = new StandardTestController(getContext(), getWebServer()+"www/map_constructor_injection.jar");
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/map_constructor_injection.jar");
         MetadataEventSet startEvents = controller.getStartEvents();
         // Empty Map
         Map expected = new HashMap();
@@ -1898,8 +1899,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         // in the individual metadata items).
         startEvents.addValidator(new ArgumentMetadataValidator("compTypedItems", new TestArgument(
             new TestMapValue(new MapValueEntry[]{
-                new MapValueEntry("true", new TestStringValue(Boolean.class, "true")),
-                new MapValueEntry("false", new TestStringValue(Boolean.class, "false")),
+                new MapValueEntry("true", new TestStringValue("true")),
+                new MapValueEntry("false", new TestStringValue("false")),
                 new MapValueEntry("double", new TestStringValue(Double.class, "1.0"))
             }, null, Boolean.class
             ))));
@@ -1914,8 +1915,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         // validate the metadata for this one too
         startEvents.addValidator(new ArgumentMetadataValidator("compTypedKeys", new TestArgument(
             new TestMapValue(new MapValueEntry[]{
-                new MapValueEntry(new TestStringValue(Boolean.class, "true"), "true"),
-                new MapValueEntry(new TestStringValue(Boolean.class, "false"), "false"),
+                new MapValueEntry(new TestStringValue("true"), "true"),
+                new MapValueEntry(new TestStringValue("false"), "false"),
                 new MapValueEntry(new TestStringValue(Double.class, "1.0"), new TestStringValue("double"))
             }, Boolean.class, null
             ))));
@@ -2061,8 +2062,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         // validate the metadata for this one too
         startEvents.addValidator(new ArgumentMetadataValidator("compTypedItems", new TestArgument(
             new TestMapValue(new MapValueEntry[]{
-                new MapValueEntry("true", new TestStringValue(Boolean.class, "true")),
-                new MapValueEntry("false", new TestStringValue(Boolean.class, "false")),
+                new MapValueEntry("true", new TestStringValue("true")),
+                new MapValueEntry("false", new TestStringValue("false")),
                 new MapValueEntry("double", new TestStringValue(Double.class, "1.0"))
             }, null, Boolean.class
             ))));
@@ -2077,8 +2078,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         // validate the metadata for this one too
         startEvents.addValidator(new ArgumentMetadataValidator("compTypedKeys", new TestArgument(
             new TestMapValue(new MapValueEntry[]{
-                new MapValueEntry(new TestStringValue(Boolean.class, "true"), "true"),
-                new MapValueEntry(new TestStringValue(Boolean.class, "false"), "false"),
+                new MapValueEntry(new TestStringValue("true"), "true"),
+                new MapValueEntry(new TestStringValue("false"), "false"),
                 new MapValueEntry(new TestStringValue(Double.class, "1.0"), new TestStringValue("double"))
             }, Boolean.class, null
             ))));
@@ -2224,8 +2225,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         // validate the metadata for this one too
         startEvents.addValidator(new ArgumentMetadataValidator("compTypedItems", new TestArgument(
             new TestMapValue(new MapValueEntry[]{
-                new MapValueEntry("true", new TestStringValue(Boolean.class, "true")),
-                new MapValueEntry("false", new TestStringValue(Boolean.class, "false")),
+                new MapValueEntry("true", new TestStringValue("true")),
+                new MapValueEntry("false", new TestStringValue("false")),
                 new MapValueEntry("double", new TestStringValue(Double.class, "1.0"))
             }, null, Boolean.class
             ))));
@@ -2240,8 +2241,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         // validate the metadata for this one too
         startEvents.addValidator(new ArgumentMetadataValidator("compTypedKeys", new TestArgument(
             new TestMapValue(new MapValueEntry[]{
-                new MapValueEntry(new TestStringValue(Boolean.class, "true"), "true"),
-                new MapValueEntry(new TestStringValue(Boolean.class, "false"), "false"),
+                new MapValueEntry(new TestStringValue("true"), "true"),
+                new MapValueEntry(new TestStringValue("false"), "false"),
                 new MapValueEntry(new TestStringValue(Double.class, "1.0"), new TestStringValue("double"))
             }, Boolean.class, null
             ))));
@@ -2389,8 +2390,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         // validate the metadata for this one too
         startEvents.addValidator(new PropertyMetadataValidator("compTypedItems", new TestProperty(
             new TestMapValue(new MapValueEntry[]{
-                new MapValueEntry("true", new TestStringValue(Boolean.class, "true")),
-                new MapValueEntry("false", new TestStringValue(Boolean.class, "false")),
+                new MapValueEntry("true", new TestStringValue("true")),
+                new MapValueEntry("false", new TestStringValue("false")),
                 new MapValueEntry("double", new TestStringValue(Double.class, "1.0"))
             }, null, Boolean.class
             ), "map")));
@@ -2405,8 +2406,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         // validate the metadata for this one too
         startEvents.addValidator(new PropertyMetadataValidator("compTypedKeys", new TestProperty(
             new TestMapValue(new MapValueEntry[]{
-                new MapValueEntry(new TestStringValue(Boolean.class, "true"), "true"),
-                new MapValueEntry(new TestStringValue(Boolean.class, "false"), "false"),
+                new MapValueEntry(new TestStringValue("true"), "true"),
+                new MapValueEntry(new TestStringValue("false"), "false"),
                 new MapValueEntry(new TestStringValue(Double.class, "1.0"), new TestStringValue("double"))
             }, Boolean.class, null
             ), "map")));
@@ -2555,8 +2556,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         // validate the metadata for this one too
         startEvents.addValidator(new PropertyMetadataValidator("compTypedItems", new TestProperty(
             new TestMapValue(new MapValueEntry[]{
-                new MapValueEntry("true", new TestStringValue(Boolean.class, "true")),
-                new MapValueEntry("false", new TestStringValue(Boolean.class, "false")),
+                new MapValueEntry("true", new TestStringValue("true")),
+                new MapValueEntry("false", new TestStringValue("false")),
                 new MapValueEntry("double", new TestStringValue(Double.class, "1.0"))
             }, null, Boolean.class
             ), "map")));
@@ -2571,8 +2572,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         // validate the metadata for this one too
         startEvents.addValidator(new PropertyMetadataValidator("compTypedKeys", new TestProperty(
             new TestMapValue(new MapValueEntry[]{
-                new MapValueEntry(new TestStringValue(Boolean.class, "true"), "true"),
-                new MapValueEntry(new TestStringValue(Boolean.class, "false"), "false"),
+                new MapValueEntry(new TestStringValue("true"), "true"),
+                new MapValueEntry(new TestStringValue("false"), "false"),
                 new MapValueEntry(new TestStringValue(Double.class, "1.0"), new TestStringValue("double"))
             }, Boolean.class, null
             ), "map")));
@@ -2720,8 +2721,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         // validate the metadata for this one too
         startEvents.addValidator(new PropertyMetadataValidator("compTypedItems", new TestProperty(
             new TestMapValue(new MapValueEntry[]{
-                new MapValueEntry("true", new TestStringValue(Boolean.class, "true")),
-                new MapValueEntry("false", new TestStringValue(Boolean.class, "false")),
+                new MapValueEntry("true", new TestStringValue("true")),
+                new MapValueEntry("false", new TestStringValue("false")),
                 new MapValueEntry("double", new TestStringValue(Double.class, "1.0"))
             }, null, Boolean.class
             ), "map")));

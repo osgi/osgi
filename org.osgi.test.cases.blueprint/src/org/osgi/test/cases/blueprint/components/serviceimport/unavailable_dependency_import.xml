@@ -7,6 +7,7 @@
 
     <bean id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceOneListener">
         <argument value="ServiceOneListener"/>
+        <property name="initialUnbind" value="true"/>
     </bean>
 
 

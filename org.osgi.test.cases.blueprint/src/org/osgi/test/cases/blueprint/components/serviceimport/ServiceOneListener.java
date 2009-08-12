@@ -28,9 +28,15 @@ import org.osgi.test.cases.blueprint.services.ServiceOneListenerInterface;
  * reference registration/deregistration calls.
  */
 public class ServiceOneListener extends ServiceListener implements ServiceOneListenerInterface {
+    // an interlock flag so we don't try to use the service on an initial unbind operation.
+    protected boolean initialUnbind = false;
 
     public ServiceOneListener(String componentId) {
         super(componentId);
+    }
+
+    public void setInitialUnbind(boolean setting) {
+        initialUnbind = setting;
     }
 
     public void bind(TestServiceOne service, Map serviceProperties) {
@@ -50,19 +56,28 @@ public class ServiceOneListener extends ServiceListener implements ServiceOneLis
     }
 
     public void unbind(TestServiceOne service, Map serviceProperties) {
-        try {
-            // Some tests we switch back and forth, so check the name
-            // to see which result we should be getting
-            if ("BadService".equals(service.getServiceName())) {
-                AssertionService.assertFalse(this, "Bad service call", service.testOne());
-            }
-            else {
-                AssertionService.assertTrue(this, "Bad service call", service.testOne());
-            }
-        } catch (Throwable e) {
-            AssertionService.fail(this, "Unexpected exception in service listener", e);
+        // if the initial state is unbound, then we get passed a null for the proxy
+        if (initialUnbind) {
+            AssertionService.assertNull(this, "non null proxy passed to an initial unbind method", service);
+            // all unbinds from this point are required to pass a proxy
+            initialUnbind = false;
         }
-        unbind(TestServiceOne.class, serviceProperties);
+        else {
+
+            try {
+                // Some tests we switch back and forth, so check the name
+                // to see which result we should be getting
+                if ("BadService".equals(service.getServiceName())) {
+                    AssertionService.assertFalse(this, "Bad service call", service.testOne());
+                }
+                else {
+                    AssertionService.assertTrue(this, "Bad service call", service.testOne());
+                }
+            } catch (Throwable e) {
+                AssertionService.fail(this, "Unexpected exception in service listener", e);
+            }
+            unbind(TestServiceOne.class, serviceProperties);
+        }
     }
 
     public void bindNoMap(TestServiceOne service) {
@@ -82,19 +97,27 @@ public class ServiceOneListener extends ServiceListener implements ServiceOneLis
     }
 
     public void unbindNoMap(TestServiceOne service) {
-        try {
-            // Some tests we switch back and forth, so check the name
-            // to see which result we should be getting
-            if ("BadService".equals(service.getServiceName())) {
-                AssertionService.assertFalse(this, "Bad service call", service.testOne());
-            }
-            else {
-                AssertionService.assertTrue(this, "Bad service call", service.testOne());
-            }
-        } catch (Throwable e) {
-            AssertionService.fail(this, "Unexpected exception in service listener", e);
+        // if the initial state is unbound, then we get passed a null for the proxy
+        if (initialUnbind) {
+            AssertionService.assertNull(this, "non null proxy passed to an initial unbind method", service);
+            // all unbinds from this point are required to pass a proxy
+            initialUnbind = false;
         }
-        unbind(TestServiceOne.class);
+        else {
+            try {
+                // Some tests we switch back and forth, so check the name
+                // to see which result we should be getting
+                if ("BadService".equals(service.getServiceName())) {
+                    AssertionService.assertFalse(this, "Bad service call", service.testOne());
+                }
+                else {
+                    AssertionService.assertTrue(this, "Bad service call", service.testOne());
+                }
+            } catch (Throwable e) {
+                AssertionService.fail(this, "Unexpected exception in service listener", e);
+            }
+            unbind(TestServiceOne.class);
+        }
     }
 
     public void badBind() {

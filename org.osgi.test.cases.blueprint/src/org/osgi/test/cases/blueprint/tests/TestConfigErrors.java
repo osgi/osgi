@@ -463,16 +463,6 @@ public class TestConfigErrors extends DefaultTestBundleControl {
     }
 
     /**
-     * Tests the checking for multple setters for a name
-     */
-    public void testAmbiguousProperty() throws Exception {
-        // this should just be the standard error set
-        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
-            getWebServer()+"www/error_ambiguous_property.jar");
-        controller.run();
-    }
-
-    /**
      * Tests the checking for protected properties
      */
     public void testProtectedProperty() throws Exception {
