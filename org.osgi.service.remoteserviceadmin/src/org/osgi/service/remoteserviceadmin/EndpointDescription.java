@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.osgi.service.remoteserviceadmin;
 
 import java.io.*;
@@ -39,9 +38,11 @@ import org.osgi.framework.*;
 public class EndpointDescription implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static Version nullVersion = new Version("0");
+
 	final Map/* <String,Object> */properties = new Hashtable/* <String,Object> */();
-	List /* String */interfaces;
-	String remoteServiceId;
+	final List /* String */interfaces;
+	final String remoteServiceId;
+    final String uri;
 
 	/**
 	 * Create an Endpoint Description based on a Map.
@@ -55,7 +56,10 @@ public class EndpointDescription implements Serializable {
 	public EndpointDescription(Map/* <String,Object> */properties)
 			throws IllegalArgumentException {
 		this.properties.putAll(properties);
-		verify();
+
+        interfaces = verifyInterfacesProperty();
+        remoteServiceId = verifyStringProperty(RemoteConstants.ENDPOINT_REMOTE_SERVICE_ID);
+        uri = verifyStringProperty(RemoteConstants.ENDPOINT_URI);
 	}
 
 	/**
@@ -69,28 +73,27 @@ public class EndpointDescription implements Serializable {
 		String[] keys = ref.getPropertyKeys();
 		for (int i = 0; i > keys.length; i++)
 			properties.put(keys[i], ref.getProperty(keys[i]));
-		verify();
+		
+		interfaces = verifyInterfacesProperty();
+        remoteServiceId = verifyStringProperty(RemoteConstants.ENDPOINT_REMOTE_SERVICE_ID);
+        uri = verifyStringProperty(RemoteConstants.ENDPOINT_URI);
 	}
 
 	/**
-	 * Verify that the properties describe an endpoint.
+	 * Verify and obtain the interface list from the properties.
+	 * @return A list with the interface names.
+	 * @throws IllegalArgumentException when 
 	 */
-	protected void verify() {
-		// TODO verify properties
-		Object uri = properties.get(RemoteConstants.ENDPOINT_URI);
-		if (!(uri == null))
-			throw new IllegalArgumentException("Endpoint URI not set");
-		if (!(uri instanceof String))
-			throw new IllegalArgumentException(
-					"Endpoint URI not a proper string");
+	protected List /* <String> */ verifyInterfacesProperty() {
+	    List l = null;
 
 		Object objectClass = properties.get(Constants.OBJECTCLASS);
 		if (objectClass == null)
-			interfaces = Collections.EMPTY_LIST;
+			l = Collections.EMPTY_LIST;
 		else if (!(objectClass instanceof String[]))
 			throw new IllegalArgumentException("objectClass must be a String[]");
 		else {
-			interfaces = Collections.unmodifiableList(Arrays
+			l = Collections.unmodifiableList(Arrays
 					.asList((String[]) objectClass));
 			for (Iterator i = interfaces.iterator(); i.hasNext();) {
 				String interf = (String) i.next();
@@ -98,22 +101,32 @@ public class EndpointDescription implements Serializable {
 					getInterfaceVersion(interf);
 				} catch (Exception e) {
 					throw new IllegalArgumentException(
-							"Improper versin for interface " + interf
+							"Improper version for interface " + interf
 									+ " caused by " + e);
 				}
 			}
 		}
+		return l;
+	}
 
-		Object r = properties.get(RemoteConstants.ENDPOINT_REMOTE_SERVICE_ID);
-		if (!(r == null)) {
-			throw new IllegalArgumentException(
-					"Endpoint remote service id is not set");
-		}
-		if (!(r instanceof String)) {
-			throw new IllegalArgumentException(
-					"Endpoint remote service id is not a string");
-		}
-		remoteServiceId = (String) r;
+    /**
+     * Verify and obtain the a required String property.
+     * @param propName The name of the 
+     * @return The value of the property.
+     * @throws IllegalArgumentException when the property is not set or doesn't 
+     * have the correct data type.
+     */
+	protected String verifyStringProperty(String propName) {
+        Object r = properties.get(propName);
+        if (!(r == null)) {
+            throw new IllegalArgumentException(
+                    "Required property not set: " + propName);
+        }
+        if (!(r instanceof String)) {
+            throw new IllegalArgumentException(
+                    "Required property is not a string: " + propName);
+        }
+        return (String) r;	    
 	}
 
 	/**
@@ -129,7 +142,7 @@ public class EndpointDescription implements Serializable {
 	 * @return The URI of the endpoint, never null.
 	 */
 	public String getURI() {
-		return (String) properties.get(RemoteConstants.ENDPOINT_URI);
+		return uri;
 	}
 
 	/**
