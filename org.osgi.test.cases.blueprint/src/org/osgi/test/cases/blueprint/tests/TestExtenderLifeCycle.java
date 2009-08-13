@@ -187,8 +187,10 @@ public class TestExtenderLifeCycle extends DefaultTestBundleControl {
         // shutdown first
         controller.addBundle(getWebServer()+"www/ServiceTwoSubclass_export.jar");
         controller.addBundle(getWebServer()+"www/ServiceTwoSubclass_import.jar");
-        // there's a circular reference relationship between these two bundles...this
-        // will shutdown the first installed one first.
+        // there's a circular reference relationship between these two bundles...the
+        // first has the lowest ranked registered service that is in use, the second
+        // has the one with the highest registered service id.  The ranking rule
+        // predominates, forcing the circular_ref_two bundle to be stopped first.
         controller.addBundle(getWebServer()+"www/circular_ref_two.jar");
         controller.addBundle(getWebServer()+"www/circular_ref_one_ranked.jar");
 
@@ -257,7 +259,7 @@ public class TestExtenderLifeCycle extends DefaultTestBundleControl {
         // now set up the shutdown order.
 
         firstStarted.addDependency(importing);
-        exporting.addDependency(firstStarted);       
+        exporting.addDependency(firstStarted);
         circular2.addDependency(exporting);
         circular1.addDependency(circular2);
 
