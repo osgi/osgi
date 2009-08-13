@@ -82,9 +82,14 @@ public class RecursiveRequestor extends BaseTestComponent {
      * @param myId   The id to request.
      */
     public void setMyId(String myId) {
-        // this should cause an error, which should throw an exception
-        Object instance = container.getComponentInstance(myId);
-        AssertionService.fail(this, "recursive getComponentInstance() did not throw an exception");
+        // this is used for singleton tests, which is a breakable cycle from a
+        // setter.  This should not cause an error
+        try {
+            Object instance = container.getComponentInstance(myId);
+            AssertionService.assertSame(this, "Invalid recursive getComponentInstance() result returned", this, instance);
+        } catch (Throwable e) {
+            AssertionService.fail(this, "recursive getComponentInstance() threw an unexpected exception", e);
+        }
     }
 
 
@@ -93,6 +98,34 @@ public class RecursiveRequestor extends BaseTestComponent {
      * be detected.
      */
     public void init() {
+        try {
+            // this is a breakable cycle because this is a singleton component, so
+            // this should not be an error
+            Object instance = container.getComponentInstance(myId);
+            AssertionService.assertSame(this, "Invalid recursive getComponentInstance() result returned", this, instance);
+        } catch (Throwable e) {
+            AssertionService.fail(this, "recursive getComponentInstance() threw an unexpected exception", e);
+        }
+    }
+
+
+    /**
+     * Property setter used to trigger recursion test during
+     * injection phase of a prototype scope component.
+     *
+     * @param myId   The id to request.
+     */
+    public void setMyPrototypeId(String myId) {
+        // this should cause an error, which should throw an exception
+        Object instance = container.getComponentInstance(myId);
+        AssertionService.fail(this, "recursive getComponentInstance() did not throw an exception");
+    }
+
+
+    /**
+     * An init method to test recursion during construction of a prototype scope component.
+     */
+    public void prototypeInit() {
         // this should cause an error, which should throw an exception
         Object instance = container.getComponentInstance(myId);
         AssertionService.fail(this, "recursive getComponentInstance() did not throw an exception");

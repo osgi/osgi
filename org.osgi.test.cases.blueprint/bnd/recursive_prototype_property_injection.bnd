@@ -1,0 +1,7 @@
+Bundle-SymbolicName:                     ${p}.recursive_prototype_property_injection
+Bundle-Version:                          4.2
+Import-Package:                          ${p}.components.injection, ${p}.services
+-resourceonly: true
+Include-Resource					= \
+	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/injection/recursive_prototype_property_injection.xml
+

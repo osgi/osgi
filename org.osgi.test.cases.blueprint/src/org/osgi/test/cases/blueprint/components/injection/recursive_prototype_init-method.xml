@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    default-activation="eager">
+
+    <description>
+        Test for recursive calls to getComponentInstance().  This test is made from a
+        bean init method, which uses getComponentInstance to request itself.
+    </description>
+
+    <bean id="a" class="org.osgi.test.cases.blueprint.components.injection.RecursiveRequestor" init-method="prototypeInit" scope="prototype">
+       <argument value="a"/>
+       <argument ref="blueprintContainer"/>
+   </bean>
+</blueprint>
+

@@ -400,25 +400,53 @@ public class TestComponentInjection extends DefaultTestBundleControl {
 
 
     /**
-     * verify that recursive calls to getComponentInstance() from a bean property setter are
-     * detected as an error.
+     * verify that recursive calls to getComponentInstance() from a bean property setter works
+     * when a reference cycle can be broken.
      */
     public void testRecursivePropertyInjection() throws Exception {
         // this should just be the standard error set
-        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+        StandardTestController controller = new StandardTestController(getContext(),
             getWebServer()+"www/recursive_property_injection.jar");
+
+        // self checking test case that will raise error events for failures
+        controller.run();
+    }
+
+
+    /**
+     * verify that recursive calls to getComponentInstance() from a bean init-method works
+     * when a refernence cycle can be broken.
+     */
+    public void testRecursiveInitMethod() throws Exception {
+        // this should just be the standard error set
+        StandardTestController controller = new StandardTestController(getContext(),
+            getWebServer()+"www/recursive_init-method.jar");
+
+        // self checking test case that will raise error events for failures
+        controller.run();
+    }
+
+
+    /**
+     * verify that recursive calls to getComponentInstance() from a bean property setter are
+     * detected as an error when the cycle cannot be broken.
+     */
+    public void testRecursivePrototypePropertyInjection() throws Exception {
+        // this should just be the standard error set
+        StandardErrorTestController controller = new StandardErrorTestController(getContext(),
+            getWebServer()+"www/recursive_prototype_property_injection.jar");
         controller.run();
     }
 
 
     /**
      * verify that recursive calls to getComponentInstance() from a bean init-method are
-     * detected as an error.
+     * detected as an error when the cycle cannot be broken.
      */
-    public void testRecursiveInitMethod() throws Exception {
+    public void testRecursivePrototypeInitMethod() throws Exception {
         // this should just be the standard error set
         StandardErrorTestController controller = new StandardErrorTestController(getContext(),
-            getWebServer()+"www/recursive_init-method.jar");
+            getWebServer()+"www/recursive_prototype_init-method.jar");
         controller.run();
     }
 
