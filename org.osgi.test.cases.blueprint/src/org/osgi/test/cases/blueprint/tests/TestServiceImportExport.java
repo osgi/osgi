@@ -206,7 +206,8 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
     /**
      * Just a simple export/import test, using prototype scope for the export.
-     * This will also test the prototype lifecycle
+     * This will also test that only a single instance of the bean object is
+     * obtained for this service.
      */
     public void testSingleInterfacePrototypeExport() throws Exception {
         // NB:  We're going to load the import jar first, since starting that
@@ -218,9 +219,10 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // we add different validation stuff to each jar.  We'll start with the
         // export jar
         MetadataEventSet exportStartEvents = controller.getStartEvents(1);
-        // the is the component creation...we should see two of those.  One from the importing
-        // bundle, and a second when we request the service from this bundle.
+        // the is the component creation...we should only see one instance of the bean getting
+        // created, so add this both as an expectation and a failure event to trap a second
         exportStartEvents.addAssertion("ServiceOne", AssertionService.BEAN_CREATED);
+        exportStartEvents.addFailureEvent(new ComponentAssertion("ServiceOne", AssertionService.BEAN_CREATED));
         // validate that the service has been registered
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, "ServiceOne"));
         // this will validate the getComponent() result and check this is also in getComponentNames();
@@ -233,8 +235,8 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
                 ServiceMetadata.ACTIVATION_EAGER, "ServiceOne", TestServiceOne.class,
                 ServiceMetadata.AUTO_EXPORT_DISABLED, 0, null, null, null)));
         // we should see a service event here indicating this was registered.  When this occurs, we'll
-        // make a request from this bundle context.  This will trigger a second prototype to be created, and
-        // also force the prototype bean to be immediately destroyed.
+        // make a request from this bundle context.  This will trigger a second request for the service from
+        // this bundle.  We should not see a second bean instance getting created.
         exportStartEvents.addEvent(new ServiceTestEvent("REGISTERED", new Class[] {TestServiceOne.class}, null,
                 new ServiceRequestInitiator(getContext(), TestServiceOne.class, null)));
 
@@ -1148,8 +1150,8 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportStartEvents.addEvent(factoryGet);
         // the is the factory component creation
         exportStartEvents.addAssertion("ServiceOneFactory", AssertionService.BEAN_CREATED);
-        // Even though the factory is prototype scope, only one instance is requested BECAUSE this
-        // implements ServiceFactory.  So seeing an additiona creation event here is an error.
+        // Even though the factory is prototype scope, only one instance is evern requested.
+        // Seeing an additiona creation event here is an error.
         exportStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneFactory", AssertionService.BEAN_CREATED));
         // this the service instance getting created as a result of the factory getting called
         exportStartEvents.addAssertion("ServiceOneFactory_0", AssertionService.BEAN_CREATED);
@@ -1463,7 +1465,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // We only do the export and then shut this back down again.  That will
         // cause the events of interests to be fired.
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/ServiceOne_listener_export.jar");
+                getWebServer()+"www/ServiceOne_prototype_listener_export.jar");
         // We're really only interesting the listener events, but we'll take a look
         // at the metadata as well
         MetadataEventSet exportStartEvents = controller.getStartEvents();

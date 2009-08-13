@@ -40,7 +40,9 @@ public class PrototypeRegistrationStateListener extends ServiceOneRegistrationLi
     }
 
     public void registered(TestServiceOne service, Map serviceProperties) {
-        AssertionService.assertNull(this, "Null service instance expected for a prototype component", service);
+        // There is just one copy of the prototype scope bean obtained by the service, so this should
+        // never be null for these tests.
+        AssertionService.assertNotNull(this, "Null service instance expected for a prototype component", service);
 
         // this should be valid
         if (registration != null) {
@@ -50,7 +52,9 @@ public class PrototypeRegistrationStateListener extends ServiceOneRegistrationLi
     }
 
     public void unregistered(TestServiceOne service, Map serviceProperties) {
-        AssertionService.assertNull(this, "Null service instance expected for a prototype component", service);
+        // There is just one copy of the prototype scope bean obtained by the service, so this should
+        // never be null for these tests.
+        AssertionService.assertNotNull(this, "Null service instance expected for a prototype component", service);
         // this should be valid
         if (registration != null) {
             AssertionService.assertNotNull(this, "Null service reference from ServiceRegistration proxy", registration.getReference());
