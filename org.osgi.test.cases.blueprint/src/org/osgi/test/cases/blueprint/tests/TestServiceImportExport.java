@@ -666,11 +666,20 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
         // these are lazy-inited components, but we should see them get created
         // because of the depends-on attribute
-        exportStartEvents.addAssertion("Depends1", AssertionService.BEAN_CREATED);
-        exportStartEvents.addAssertion("Depends2", AssertionService.BEAN_CREATED);
+        TestEvent depends1 = new ComponentAssertion("Depends1", AssertionService.BEAN_CREATED);
+        TestEvent depends2 = new ComponentAssertion("Depends2", AssertionService.BEAN_CREATED);
 
-        // we should see a service event here indicating this was registered
-        exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
+        exportStartEvents.addEvent(depends1);
+        exportStartEvents.addEvent(depends2);
+
+        // the activation of explicit dependencies is required before the service registration,
+        // so set up the event dependencies to verify that
+        TestEvent registered = new ServiceTestEvent("REGISTERED", TestServiceOne.class);
+
+        registered.addDependency(depends1);
+        registered.addDependency(depends2);
+
+        exportStartEvents.addEvent(registered);
 
         // now the importing side.  We've got a couple of service injections to validate, plus the injection
         // results
@@ -2295,16 +2304,38 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         MetadataEventSet exportStartEvents = controller.getStartEvents();
         // There will all sorts of events that will signal a failure if we see them
         exportStartEvents.addFailureEvent(new ComponentAssertion("Trigger", AssertionService.BEAN_CREATED));
-        exportStartEvents.addFailureEvent(new ComponentAssertion("Depends1", AssertionService.BEAN_CREATED));
-        exportStartEvents.addFailureEvent(new ComponentAssertion("Depends2", AssertionService.BEAN_CREATED));
         exportStartEvents.addFailureEvent(new ComponentAssertion("ServiceOne", AssertionService.BEAN_CREATED));
         exportStartEvents.addFailureEvent(new ComponentAssertion("ServiceOneListener", AssertionService.BEAN_CREATED));
 
         // activation is separate from enablement.  This service should be registered at the end of
         // the first phase
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, null));
+
+        // Even though this uses a lazy activation, the explicit dependencies must be activated
+        // before the service is registered
+        TestEvent depends1 = new ComponentAssertion("Depends1", AssertionService.BEAN_CREATED);
+        TestEvent depends2 = new ComponentAssertion("Depends2", AssertionService.BEAN_CREATED);
+        exportStartEvents.addEvent(depends1);
+        exportStartEvents.addEvent(depends2);
+
+        // the service properties also have a reference dependency, so this must also be called before
+        // the service is registered
+        TestEvent serviceProp = new ComponentAssertion(AssertionService.FACTORY_CALLED);
+        exportStartEvents.addEvent(serviceProp);
+
+        // This is the evaluated service properties that the service is registered under.
+        // These are evaluated eagerly also
+        Hashtable props = new Hashtable();
+        props.put("service.property.integer", new Integer(999));
+
         // we should see a service event here indicating this was registered
-        exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class);
+        TestEvent registered = new ServiceTestEvent("REGISTERED", TestServiceOne.class, props);
+        // the explicit dependencies must be activated before this service is registered
+        registered.addDependency(depends1);
+        registered.addDependency(depends2);
+        registered.addDependency(serviceProp);
+
+        exportStartEvents.addEvent(registered);
 
         // ok, now we'll request the trigger component, and that should fire off a whole sequence of events
         MetadataEventSet exportMiddleEvents = controller.getMiddleEvents();
@@ -2316,29 +2347,12 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         exportMiddleEvents.addEvent(new ComponentAssertion("ServiceOne", AssertionService.BEAN_CREATED));
         exportMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.BEAN_CREATED));
 
-        TestEvent depends1 = new ComponentAssertion("Depends1", AssertionService.BEAN_CREATED);
-        TestEvent depends2 = new ComponentAssertion("Depends2", AssertionService.BEAN_CREATED);
-
-        exportMiddleEvents.addEvent(depends1);
-        exportMiddleEvents.addEvent(depends2);
-
         // and initialized
         exportMiddleEvents.addEvent(new ComponentAssertion("Trigger", AssertionService.BEAN_INIT_METHOD));
-        exportMiddleEvents.addEvent(new ComponentAssertion("Depends1", AssertionService.BEAN_INIT_METHOD));
-        exportMiddleEvents.addEvent(new ComponentAssertion("Depends2", AssertionService.BEAN_INIT_METHOD));
         exportMiddleEvents.addEvent(new ComponentAssertion("ServiceOne", AssertionService.BEAN_INIT_METHOD));
         exportMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.BEAN_INIT_METHOD));
-        // our listener should get called, but not before the depends-on relationships are finished.
-        TestEvent register = new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_REGISTERED);
-        register.addDependency(depends1);
-        register.addDependency(depends2);
-        exportMiddleEvents.addEvent(register);
-
-        // validate that the service has been registered
-        // this will be run after all of the events have settled down, so this shoulbe
-        // reflect the modified properties.
-        Hashtable props = new Hashtable();
-        props.put("service.property.integer", new Integer(999));
+        // our listener should get called only after activation.
+        exportMiddleEvents.addEvent(new ComponentAssertion("ServiceOneListener", AssertionService.SERVICE_REGISTERED));
         exportMiddleEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, "ServiceOne", null, props));
         // also validate the metadata for the exported service (explicitly declared lazy)
         // we're expecting some listener metadata on the export.

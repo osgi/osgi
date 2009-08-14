@@ -26,7 +26,7 @@
        </registration-listener>
    </service>
 
-   <!-- simple export using a reference and just one interface.  This one will not register because of the unstatisfied dependency-->
+   <!-- simple export using a reference and just one interface.  This one will register because all dependencies are satisfied -->
    <service id="ServiceOneActive" ref="ServiceOne" interface="org.osgi.test.cases.blueprint.services.TestServiceOne">
        <service-properties>
            <entry key="service.component.name" value="ServiceOneActive" />
