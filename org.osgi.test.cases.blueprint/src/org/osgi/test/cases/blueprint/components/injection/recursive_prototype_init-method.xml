@@ -11,5 +11,14 @@
        <argument value="a"/>
        <argument ref="blueprintContainer"/>
    </bean>
+
+   <!-- singleton trigger to force creation of prototype scope component -->
+   <bean id="trigger" class="org.osgi.test.cases.blueprint.components.injection.ComponentInjection">
+       <argument value="twoleaf"/>
+       <property name="componentOne">
+           <ref component-id="a" />
+       </property>
+   </bean>
+
 </blueprint>
 
