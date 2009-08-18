@@ -111,7 +111,7 @@ public abstract class AdminTestEvent extends TestEvent {
      */
     public Throwable getException() {
         if (props != null) {
-            return (Throwable)props.get("exception");
+            return (Throwable)props.get(org.osgi.service.blueprint.container.EventConstants.CAUSE);
         }
         return null;
     }

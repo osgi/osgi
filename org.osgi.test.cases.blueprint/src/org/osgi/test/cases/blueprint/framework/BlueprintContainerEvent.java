@@ -246,18 +246,6 @@ public class BlueprintContainerEvent extends AdminTestEvent {
             topic.equals("org/osgi/test/cases/blueprint/BlueprintContainer/UNKNOWN");
     }
 
-    /**
-     * Get an exception that might be attached with an event.
-     *
-     * @return A Throwable object that was attached with an admin event.
-     */
-    public Throwable getException() {
-        if (props != null) {
-            return (Throwable)props.get("exception");
-        }
-        return null;
-    }
-
 
     /**
      * Transform a BlueprintEvent into an emulated EventAdmin
