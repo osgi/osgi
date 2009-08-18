@@ -1,1 +1,5 @@
+
+javac.source            = 1.5
+javac.target            = 1.5
+
 -buildpath = biz.aQute.bnd; version=latest
