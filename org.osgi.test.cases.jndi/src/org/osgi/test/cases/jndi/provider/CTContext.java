@@ -77,8 +77,36 @@ public class CTContext implements Context {
 		invokeCount--;
 	}
 
+	public String composeName(String first, String second) throws NamingException {
+		return composeName(new CompositeName(first), new CompositeName(second)).toString();
+	}
+
+	public Name composeName(Name first, Name second) throws NamingException {
+		throw new OperationNotSupportedException("Subcontexts are not supported");
+	}
+
+	public Context createSubcontext(String name) throws NamingException {
+		return createSubcontext(new CompositeName(name));
+	}
+
+	public Context createSubcontext(Name name) throws NamingException {
+		throw new OperationNotSupportedException("Subcontexts are not supported");
+	}
+
+	public void destroySubcontext(String name) throws NamingException {
+		destroySubcontext(new CompositeName(name));
+	}
+
+	public void destroySubcontext(Name name) throws NamingException {
+		throw new OperationNotSupportedException("Subcontexts are not supported");
+	}
+
 	public Hashtable getEnvironment() throws NamingException {
 		return new Hashtable(env);
+	}
+
+	public String getNameInNamespace() throws NamingException {
+		throw new OperationNotSupportedException("Namespace has no hierarchy");
 	}
 
 	public NameParser getNameParser(String name) throws NamingException {
