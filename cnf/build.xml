@@ -61,7 +61,14 @@
 	-->
 	<target name="dependencies" depends="init" if="project.dependson" unless="top">
 		<property name="top" value="${target}" />
-		<echo>dependencies ${top}</echo>
+		
+		<!-- Have to compile the bnd plugins before ... -->
+		
+        <subant target="compile" inheritAll="false" buildpath="../cnf">
+            <property name="top" value="${top}" />
+        </subant>
+		
+		<!-- Nowbuild all dependends on their dependency order -->
 		<subant target="publish" inheritAll="false" buildpath="${project.dependson}">
 			<property name="top" value="${top}" />
 		</subant>

@@ -45,13 +45,13 @@ btool.compress			= true
 #Bnd options
 -sources               	= true
 -sourcepath             = ${project}/src 
-#${replace;${project.allsourcepath};:;,}
+
 -plugin	            	= aQute.lib.deployer.FileRepo;location=${repo}, \
   						  aQute.lib.deployer.FileRepo;location=${licensed-repo};readonly=true, \
   						  aQute.bnd.signing.JartoolSigner; keystore=${build}/keystore; keypass=testtest; storepass=testtest, \
   						  aQute.bnd.make.SignatureTest, \
-  						  aQute.bnd.make.Packaging
-
+                          Packaging; path:=${build}/${bin}, \
+                          SignatureTest; path:=${build}/${bin}
 
 
 -make                   =  \
@@ -83,6 +83,7 @@ mobile.release.version		= ${osgi.release.version}
 enterprise.release.version	= ${osgi.release.version}
 proposed.release.version	= ${osgi.release.version}
 
+
 # Documentation
 Bundle-Copyright       	= ${copyright}
 Bundle-Vendor			= OSGi Alliance
@@ -93,3 +94,5 @@ Bundle-Vendor			= OSGi Alliance
 	com.springsource.junit; version=3.8;    export="junit.framework;version=3.8"
 
 testcases = ${classes;extending;junit.framework.TestCase|*DefaultTestBundleControl;concrete}
+
+
