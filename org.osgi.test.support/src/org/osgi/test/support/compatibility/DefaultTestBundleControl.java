@@ -395,6 +395,19 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 		return service;
 	}
 
+	public ServiceReference getServiceReference(Object service) {
+		ServiceReference ref;
+		synchronized (fetchedServices) {
+			ref = (ServiceReference) fetchedServices.get(service);
+		}
+
+		if (ref == null) {
+			fail("trying to get ServiceReference for a service which is not currently bound");
+		}
+
+		return ref;
+	}
+
 	public void ungetService(Object service) {
 		ServiceReference ref;
 		synchronized (fetchedServices) {
