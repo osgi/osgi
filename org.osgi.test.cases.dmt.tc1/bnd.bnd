@@ -19,7 +19,7 @@ Test-Cases							= ${testcases}
 	org.apache.felix.configadmin; version=latest, \
 	org.osgi.impl.service.dmt;  version=project
 
--runproperties = report=true
+-runproperties = report=true, \
 	org.osgi.framework.security=osgi, \
 	org.osgi.framework.trust.repositories=${build}/keystore, \
 	org.osgi.vendor.dmtree.DigestDelegate=org.osgi.impl.service.dmt.export.Digest, \
