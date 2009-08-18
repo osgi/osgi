@@ -59,10 +59,6 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * @author Neviana Ducheva, Vasil Panushev
  */
 public class WireAdminControl extends DefaultTestBundleControl {
-	public static void log(String m1, String m2) {
-		log(m1 + ": " + m2);
-	}
-
 	private PermissionAdmin	pa;
 	private Helper			helper;
 	private WireAdmin		wa;
@@ -90,6 +86,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 	protected synchronized void tearDown() {
 		helper.unregisterAll();
 		Helper.deleteAllWires(wa);
+		removePermissions();
 		ungetService(pa);
 		ungetService(wa);
 	}
@@ -717,7 +714,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		helper.registerProducer("producer.ProducerImplC", new Class[] {
 				String.class, Float.class, Boolean.class});
 
-		// wait for producers/consumersConnected(null) calls when beeing
+		// wait for producers/consumersConnected(null) calls when being
 		// registered without existing wires
 		waitForSync(4, 100);
 		checkForAdditionalNotifications(5); // check for possible
@@ -1224,323 +1221,200 @@ public class WireAdminControl extends DefaultTestBundleControl {
 	// here //////////////////////////////////////////
 	// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public void testNullScopes() throws Exception {
-		// [begin=test_statemanagement_null_scopes]
-		// Test Wire Scope with null scope and without WirePermission:
-		// "Operation passed: OK."
-		// Test Wire Scope with null scope, after setting WirePermissions:
-		// "Operation passed: OK."
-		// Test Wire update with null scope: "Operation passed: OK."
-		// [end=test_statemanagement_null_scopes]
-		// clean up the wire admin test case regs ...
 		Bundle consumer = installBundle("tb1.jar");
 		Bundle producer = installBundle("tb4.jar");
-		Wire wire = helper.createWire(wa, "producer.ProducerImplA",
-				"consumer.ConsumerImplA", null);
-		if (wire.getScope() == null) {
-			log("Test Wire Scope with null scope and without WirePermission",
-					"Operation passed: OK.");
-		}
-		else {
-			log("Test Wire Scope without WirePermission", "NOT OK.");
-		}
+		try {
+			Wire wire = helper.createWire(wa, "producer.ProducerImplA",
+					"consumer.ConsumerImplA", null);
+			assertNull("Test Wire Scope without WirePermission: NOT OK.", wire
+					.getScope());
 
-		wa.deleteWire(wire);
+			wa.deleteWire(wire);
 
-		setWirePermissions(new String[] {"*"}, consumer, true);
-		Hashtable h = new Hashtable();
-		h.put("org.osgi.test.wireadmin", "yes");
-		wire = helper.createWire(wa, "producer.ProducerImplA",
-				"consumer.ConsumerImplA", h);
-		if (compareScopes(wire.getScope(), null)) {
-			log(
-					"Test Wire Scope with null scope, after setting WirePermissions",
-					"Operation passed: OK.");
+			setWirePermissions(new String[] {"*"}, consumer, true);
+			wire = helper.createWire(wa, "producer.ProducerImplA",
+					"consumer.ConsumerImplA", null);
+			assertTrue(
+					"Test Wire Scope with null scope, after setting WirePermissions: NOT OK.",
+					compareScopes(wire.getScope(), null));
+			BasicEnvelope envelope = new BasicEnvelope("true", "door1", "A");
+			wire.update(envelope);
+			assertEquals("Test Wire update with null scope: NOT OK.", envelope,
+					wire.getLastValue());
 		}
-		else {
-			log(
-					"Test Wire Scope with null scope, after setting WirePermissions",
-					"NOT OK.");
+		finally {
+			consumer.uninstall();
+			producer.uninstall();
 		}
-		BasicEnvelope envelope = new BasicEnvelope("true", "door1", "A");
-		wire.update(envelope);
-		if (!envelope.equals(wire.getLastValue())) {
-			log("Test Wire update with null scope", "NOT OK.");
-		}
-		else {
-			log("Test Wire update with null scope", "Operation passed: OK.");
-		}
-		removePermissions();
 	}
 
 	public void testConsumerScope() throws Exception {
-		// [begin=test_statemanagement_consumer_scope]
-		// Test Wire Scope with null producer scope without WirePermission:
-		// "Operation passed: OK."
-		// Test Wire Scope with null producer scope, after setting
-		// WirePermission: "Operation passed: OK."
-		// Test Wire update with null scope: "Operation passed: OK."
-		// [end=test_statemanagement_consumer_scope]
 		Bundle consumer = installBundle("tb2.jar");
-		Hashtable h = new Hashtable();
-		h.put("org.osgi.test.wireadmin", "yes");
-		Wire wire = helper.createWire(wa, "producer.ProducerImplA",
-				"consumer.ConsumerImplB", h);
-		if (wire.getScope() == null) {
-			log(
-					"Test Wire Scope with null producer scope without WirePermission",
-					"Operation passed: OK.");
+		Bundle producer = installBundle("tb4.jar");
+		try {
+			Wire wire = helper.createWire(wa, "producer.ProducerImplA",
+					"consumer.ConsumerImplB", null);
+			assertNull(
+					"Test Wire Scope with null producer scope without WirePermission: NOT OK.",
+					wire.getScope());
+			wa.deleteWire(wire);
+			setWirePermissions(new String[] {"*"}, consumer, true);
+			setWirePermissions(new String[] {"*"}, producer, false);
+			wire = helper.createWire(wa, "producer.ProducerImplA",
+					"consumer.ConsumerImplB", null);
+			assertTrue(
+					"Test Wire Scope with null producer scope, after setting WirePermission: NOT OK.",
+					compareScopes(wire.getScope(), null));
+			BasicEnvelope envelope = new BasicEnvelope(new Integer(42),
+					"window1", "A");
+			wire.update(envelope);
+
+			assertEquals("Test Wire update with null scope: NOT OK.", envelope,
+					wire.getLastValue());
 		}
-		else {
-			log(
-					"Test Wire Scope with null producer scope without WirePermission",
-					"NOT OK.");
+		finally {
+			consumer.uninstall();
+			producer.uninstall();
 		}
-		wa.deleteWire(wire);
-		setWirePermissions(new String[] {"*"}, consumer, true);
-		// setWirePermissions(new String[] {"*"}, producer, false);
-		h = new Hashtable();
-		h.put("org.osgi.test.wireadmin", "yes");
-		wire = helper.createWire(wa, "producer.ProducerImplA",
-				"consumer.ConsumerImplB", h);
-		if (compareScopes(wire.getScope(), null)) {
-			log(
-					"Test Wire Scope with null producer scope, after setting WirePermission",
-					"Operation passed: OK.");
-		}
-		else {
-			log(
-					"Test Wire Scope with null producer scope, after setting WirePermission",
-					"NOT OK.");
-		}
-		BasicEnvelope envelope = new BasicEnvelope(new Integer(42), "window1",
-				"A");
-		wire.update(envelope);
-		if (!envelope.equals(wire.getLastValue())) {
-			log("Test Wire update with null scope", "NOT OK.");
-		}
-		else {
-			log("Test Wire update with null scope", "Operation passed: OK.");
-		}
-		removePermissions();
 	}
 
 	public void testAllScope() throws Exception {
-		// [begin=test_statemanagement_all_scope]
-		// Test Wire Scope without WirePermission: "Operation passed: OK."
-		// Test Wire update without permission: "Operation passed: OK."
-		// Test Wire Scope, after setting WirePermission:
-		// "Operation passed: OK."
-		// Test Wire update with envelope object: "Operation passed: OK."
-		// [end=test_statemanagement_all_scope]
+		Bundle consumer = installBundle("tb2.jar");
 		Bundle producer = installBundle("tb5.jar");
-		Hashtable h = new Hashtable();
-		h.put("org.osgi.test.wireadmin", "yes");
-		Wire wire = helper.createWire(wa, "producer.ProducerImplB",
-				"consumer.ConsumerImplB", h);
-		if (compareScopes(wire.getScope(), new String[] {"A", "B", "C"})) {
-			log("Test Wire Scope without WirePermission",
-					"Operation passed: OK.");
+		try {
+			Wire wire = helper.createWire(wa, "producer.ProducerImplB",
+					"consumer.ConsumerImplB", null);
+			assertTrue(
+					"Test Wire Scope without WirePermission: NOT OK.",
+					compareScopes(wire.getScope(), new String[] {"A", "B", "C"}));
+			BasicEnvelope envelope = new BasicEnvelope(new Integer(42),
+					"window2", "YY");
+			wire.update(envelope);
+			assertNull("Test Wire update without permission: NOT OK.", wire
+					.getLastValue());
+			wa.deleteWire(wire);
+			setWirePermissions(new String[] {"B", "C"}, consumer, true);
+			setWirePermissions(new String[] {"A", "B"}, producer, false);
+			wire = helper.createWire(wa, "producer.ProducerImplB",
+					"consumer.ConsumerImplB", null);
+			assertTrue(
+					"Test Wire Scope, after setting WirePermission: NOT OK.",
+					compareScopes(wire.getScope(), new String[] {"B"}));
+			envelope = new BasicEnvelope(new Integer(42), "window2", "B");
+			wire.update(envelope);
+			assertEquals("Test Wire update with envelope object: NOT OK.",
+					envelope, wire.getLastValue());
 		}
-		else {
-			log("Test Wire Scope without WirePermission", "NOT OK.");
+		finally {
+			consumer.uninstall();
+			producer.uninstall();
 		}
-		BasicEnvelope envelope = new BasicEnvelope(new Integer(42), "window2",
-				"YY");
-		wire.update(envelope);
-		if (wire.getLastValue() != null) {
-			log("Test Wire update without permission", "NOT OK.");
-		}
-		else {
-			log("Test Wire update without permission", "Operation passed: OK.");
-		}
-		wa.deleteWire(wire);
-		// setWirePermissions(new String[] {"B", "C"}, consumer, true);
-		setWirePermissions(new String[] {"A", "B"}, producer, false);
-		h = new Hashtable();
-		h.put("org.osgi.test.wireadmin", "yes");
-		wire = helper.createWire(wa, "producer.ProducerImplB",
-				"consumer.ConsumerImplB", h);
-		if (compareScopes(wire.getScope(), new String[] {"B"})) {
-			log("Test Wire Scope, after setting WirePermission",
-					"Operation passed: OK.");
-		}
-		else {
-			log("Test Wire Scope, after setting WirePermission", "NOT OK.");
-		}
-		envelope = new BasicEnvelope(new Integer(42), "window2", "B");
-		wire.update(envelope);
-		if (envelope.equals(wire.getLastValue())) {
-			log("Test Wire update with envelope object",
-					"Operation passed: OK.");
-		}
-		else {
-			log("Test Wire update with envelope object", "NOT OK.");
-		}
-		removePermissions();
 	}
 
 	public void testAsteriskConsumer() throws Exception {
-		// [begin=test_statemanagement_asterisk_consumer]
-		// Test Wire Scope without WirePermission: "Operation passed: OK."
-		// Test Wire update without permission: "Operation passed: OK."
-		// Test Wire Scope, after setting WirePermission:
-		// "Operation passed: OK."
-		// Test Wire update with envelope object: "Operation passed: OK."
-		// [end=test_statemanagement_asterisk_consumer]
 		Bundle consumer = installBundle("tb3.jar");
-		Hashtable h = new Hashtable();
-		h.put("org.osgi.test.wireadmin", "yes");
-		Wire wire = helper.createWire(wa, "producer.ProducerImplB",
-				"consumer.ConsumerImplC", h);
-		if (compareScopes(wire.getScope(), new String[] {"A", "B", "C"})) {
-			log("Test Wire Scope without WirePermission",
-					"Operation passed: OK.");
+		Bundle producer = installBundle("tb5.jar");
+		try {
+			Wire wire = helper.createWire(wa, "producer.ProducerImplB",
+					"consumer.ConsumerImplC", null);
+			assertTrue(
+					"Test Wire Scope without WirePermission: NOT OK.",
+					compareScopes(wire.getScope(), new String[] {"A", "B", "C"}));
+			BasicEnvelope envelope = new BasicEnvelope("open", "door2", "DD");
+			wire.update(envelope);
+			assertNull("Test Wire update without permission: NOT OK.", wire
+					.getLastValue());
+			setWirePermissions(new String[] {"*"}, consumer, true);
+			setWirePermissions(new String[] {"A", "B", "C"}, producer, false);
+			wa.deleteWire(wire);
+			wire = helper.createWire(wa, "producer.ProducerImplB",
+					"consumer.ConsumerImplC", null);
+			assertTrue(
+					"Test Wire Scope, after setting WirePermission: NOT OK.",
+					compareScopes(wire.getScope(), new String[] {"A", "B", "C"}));
+			envelope = new BasicEnvelope("locked", "backdoor", "B");
+			wire.update(envelope);
+			assertEquals("Test Wire update with envelope object: NOT OK.",
+					envelope, wire.getLastValue());
 		}
-		else {
-			log("Test Wire Scope without WirePermission", "NOT OK.");
+		finally {
+			consumer.uninstall();
+			producer.uninstall();
 		}
-		BasicEnvelope envelope = new BasicEnvelope("open", "door2", "DD");
-		wire.update(envelope);
-		if (wire.getLastValue() == null) {
-			log("Test Wire update without permission", "Operation passed: OK.");
-		}
-		else {
-			log("Test Wire update without permission", "NOT OK.");
-		}
-		setWirePermissions(new String[] {"*"}, consumer, true);
-		// setWirePermissions(new String[] {"A", "B", "C"}, producer, false);
-		wa.deleteWire(wire);
-		h = new Hashtable();
-		h.put("org.osgi.test.wireadmin", "yes");
-		wire = helper.createWire(wa, "producer.ProducerImplB",
-				"consumer.ConsumerImplC", h);
-		if (compareScopes(wire.getScope(), new String[] {"A", "B", "C"})) {
-			log("Test Wire Scope, after setting WirePermission",
-					"Operation passed: OK.");
-		}
-		else {
-			log("Test Wire Scope, after setting WirePermission", "NOT OK.");
-		}
-		envelope = new BasicEnvelope("locked", "backdoor", "B");
-		wire.update(envelope);
-		if (envelope.equals(wire.getLastValue())) {
-			log("Test Wire update with envelope object",
-					"Operation passed: OK.");
-		}
-		else {
-			log("Test Wire update with envelope object", "NOT OK.");
-		}
-		removePermissions();
 	}
 
 	public void testAllAsterisk() throws Exception {
-		// [begin=test_statemanagement_all_asterisk]
-		// Test Wire Scope with *(scope) and *(WirePermission):
-		// "Operation passed: OK."
-		// Test Wire update with envelope object: "Operation passed: OK."
-		// [end=test_statemanagement_all_asterisk]
+		Bundle consumer = installBundle("tb3.jar");
 		Bundle producer = installBundle("tb6.jar");
-		// setWirePermissions(new String[] {"*"}, consumer, true);
-		setWirePermissions(new String[] {"*"}, producer, false);
-		Hashtable h = new Hashtable();
-		h.put("org.osgi.test.wireadmin", "yes");
-		Wire wire = helper.createWire(wa, "producer.ProducerImplC",
-				"consumer.ConsumerImplC", h);
-		if (compareScopes(wire.getScope(), new String[] {"*"})) {
-			log("Test Wire Scope with *(scope) and *(WirePermission)",
-					"Operation passed: OK.");
+		try {
+			setWirePermissions(new String[] {"*"}, consumer, true);
+			setWirePermissions(new String[] {"*"}, producer, false);
+			Wire wire = helper.createWire(wa, "producer.ProducerImplC",
+					"consumer.ConsumerImplC", null);
+			assertTrue(
+					"Test Wire Scope with *(scope) and *(WirePermission): NOT OK.",
+					compareScopes(wire.getScope(), new String[] {"*"}));
+			BasicEnvelope envelope = new BasicEnvelope(new Integer(5),
+					"numberDoors", "AA");
+			wire.update(envelope);
+			assertEquals("Test Wire update with envelope object: NOT OK.",
+					envelope, wire.getLastValue());
 		}
-		else {
-			log("Test Wire Scope with *(scope) and *(WirePermission)",
-					"NOT OK.");
+		finally {
+			consumer.uninstall();
+			producer.uninstall();
 		}
-		BasicEnvelope envelope = new BasicEnvelope(new Integer(5),
-				"numberDoors", "AA");
-		wire.update(envelope);
-		if (envelope.equals(wire.getLastValue())) {
-			log("Test Wire update with envelope object",
-					"Operation passed: OK.");
-		}
-		else {
-			log("Test Wire update with envelope object", "NOT OK.");
-		}
-		removePermissions();
 	}
 
 	public void testMissingScopePermissions() throws Exception {
-		// [begin=test_statemanagement_missing_scope_permissions]
-		// Test Wire Scope: "Operation passed: OK."
-		// Test Wire update with incompatible wire scope:
-		// "Operation passed: OK."
-		// [end=test_statemanagement_missing_scope_permissions]
 		Bundle consumer = installBundle("tb2.jar");
 		Bundle producer = installBundle("tb5.jar");
-		setWirePermissions(new String[] {"A", "B", "C"}, consumer, true);
-		setWirePermissions(new String[] {"X"}, producer, false);
-		Hashtable h = new Hashtable();
-		h.put("org.osgi.test.wireadmin", "yes");
-		Wire wire = helper.createWire(wa, "producer.ProducerImplB",
-				"consumer.ConsumerImplB", h);
-		if (compareScopes(wire.getScope(), new String[] {})) {
-			log("Test Wire Scope", "Operation passed: OK.");
+		try {
+			setWirePermissions(new String[] {"A", "B", "C"}, consumer, true);
+			setWirePermissions(new String[] {"X"}, producer, false);
+			Wire wire = helper.createWire(wa, "producer.ProducerImplB",
+					"consumer.ConsumerImplB", null);
+			assertTrue("Test Wire Scope: NOT OK.", compareScopes(wire
+					.getScope(), new String[] {}));
+			BasicEnvelope envelope = new BasicEnvelope(new Integer(44),
+					"numberWindows", "A");
+			wire.update(envelope);
+			assertNull(
+					"Test Wire update with incompatible wire scope: NOT OK.",
+					wire.getLastValue());
 		}
-		else {
-			log("Test Wire Scope", "NOT OK.");
+		finally {
+			consumer.uninstall();
+			producer.uninstall();
 		}
-		BasicEnvelope envelope = new BasicEnvelope(new Integer(44),
-				"numberWindows", "A");
-		wire.update(envelope);
-		if (wire.getLastValue() == null) {
-			log("Test Wire update with incompatible wire scope",
-					"Operation passed: OK.");
-		}
-		else {
-			log("Test Wire update with incompatible wire scope", "NOT OK.");
-		}
-		removePermissions();
 	}
 
 	public void testScopeIntersection() throws Exception {
-		// [begin=test_statemanagement_scope_intersection]
-		// Test Wire Scope: "Operation passed: OK."
-		// Test Wire update with incompatible wire scope:
-		// "Operation passed: OK."
-		// Test Wire update with correct envelope object:
-		// "Operation passed: OK."
-		// [end=test_statemanagement_scope_intersection]
+		Bundle consumer = installBundle("tb2.jar");
 		Bundle producer = installBundle("tb7.jar");
-		// setWirePermissions(new String[] {"*"}, consumer, true);
-		setWirePermissions(new String[] {"C", "E"}, producer, false);
-		Hashtable h = new Hashtable();
-		h.put("org.osgi.test.wireadmin", "yes");
-		Wire wire = helper.createWire(wa, "producer.ProducerImplD",
-				"consumer.ConsumerImplB", h);
-		if (compareScopes(wire.getScope(), new String[] {"C"})) {
-			log("Test Wire Scope", "Operation passed: OK.");
+		try {
+			setWirePermissions(new String[] {"*"}, consumer, true);
+			setWirePermissions(new String[] {"C", "E"}, producer, false);
+			Wire wire = helper.createWire(wa, "producer.ProducerImplD",
+					"consumer.ConsumerImplB", null);
+			assertTrue("Test Wire Scope: NOT OK.", compareScopes(wire
+					.getScope(), new String[] {"C"}));
+			BasicEnvelope envelope = new BasicEnvelope("unlocked",
+					"front.Door", "A");
+			wire.update(envelope);
+			assertNull(
+					"Test Wire update with incompatible wire scope: NOT OK.",
+					wire.getLastValue());
+			envelope = new BasicEnvelope("closed", "front.Door", "C");
+			wire.update(envelope);
+			assertEquals(
+					"Test Wire update with correct envelope object: NOT OK.",
+					envelope, wire.getLastValue());
 		}
-		else {
-			log("Test Wire Scope", "NOT OK.");
+		finally {
+			consumer.uninstall();
+			producer.uninstall();
 		}
-		BasicEnvelope envelope = new BasicEnvelope("unlocked", "front.Door",
-				"A");
-		wire.update(envelope);
-		if (wire.getLastValue() == null) {
-			log("Test Wire update with incompatible wire scope",
-					"Operation passed: OK.");
-		}
-		else {
-			log("Test Wire update with incompatible wire scope", "NOT OK.");
-		}
-		envelope = new BasicEnvelope("closed", "front.Door", "C");
-		wire.update(envelope);
-		if (envelope.equals(wire.getLastValue())) {
-			log("Test Wire update with correct envelope object",
-					"Operation passed: OK.");
-		}
-		else {
-			log("Test Wire update with correct envelope object", "NOT OK.");
-		}
-		removePermissions();
 	}
 
 	// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1559,12 +1433,22 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		String type = flag ? WirePermission.CONSUME : WirePermission.PRODUCE;
 		PermissionInfo[] perms = new PermissionInfo[permissions.length];
 		for (int i = 0; i < permissions.length; i++) {
-			perms[i] = new PermissionInfo(
-					"org.osgi.service.wireadmin.WirePermission",
+			perms[i] = new PermissionInfo(WirePermission.class.getName(),
 					permissions[i], type);
 		}
 		pa.setPermissions(bundle.getLocation(), perms);
-		permBundles.add(bundle.getLocation());
+		synchronized (permBundles) {
+			permBundles.add(bundle.getLocation());
+		}
+	}
+
+	private void removePermissions() {
+		synchronized (permBundles) {
+			for (Iterator i = permBundles.iterator(); i.hasNext();) {
+				pa.setPermissions((String) i.next(), null);
+			}
+			permBundles.clear();
+		}
 	}
 
 	private boolean compareScopes(String[] current, String[] correct) {
@@ -1589,12 +1473,6 @@ public class WireAdminControl extends DefaultTestBundleControl {
 			}
 		}
 		return true;
-	}
-
-	private void removePermissions() {
-		for (Iterator i = permBundles.iterator(); i.hasNext();) {
-			pa.setPermissions((String) i.next(), null);
-		}
 	}
 
 	private Wire[] getConnected(Wire[] all) {

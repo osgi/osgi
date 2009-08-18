@@ -6,8 +6,14 @@
 package org.osgi.test.cases.wireadmin.tb2;
 
 import java.util.Hashtable;
-import org.osgi.framework.*;
-import org.osgi.service.wireadmin.*;
+
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
+import org.osgi.service.wireadmin.Consumer;
+import org.osgi.service.wireadmin.Envelope;
+import org.osgi.service.wireadmin.Wire;
+import org.osgi.service.wireadmin.WireConstants;
 
 /**
  * 
@@ -17,40 +23,18 @@ import org.osgi.service.wireadmin.*;
  * @since
  */
 public class ConsumerImpl implements BundleActivator, Consumer {
-	ServiceRegistration	regConsumer;
-	BundleContext		context;
-
-	public ConsumerImpl() {
-	}
-
 	public void start(BundleContext context) {
-		this.context = context;
 		Hashtable p = new Hashtable();
-		p
-				.put(
-						org.osgi.service.wireadmin.WireConstants.WIREADMIN_CONSUMER_FLAVORS,
-						new Class[] {String.class, Integer.class,
-								Envelope.class});
-		p.put(org.osgi.framework.Constants.SERVICE_PID,
-				"consumer.ConsumerImplB");
-		p
-				.put(
-						org.osgi.service.wireadmin.WireConstants.WIREADMIN_CONSUMER_SCOPE,
-						new String[] {"A", "B", "C"});
-		regConsumer = context.registerService(Consumer.class.getName(),
-				new ConsumerImpl(), p);
+		p.put(WireConstants.WIREADMIN_CONSUMER_FLAVORS, new Class[] {
+				String.class, Integer.class, Envelope.class});
+		p.put(Constants.SERVICE_PID, "consumer.ConsumerImplB");
+		p.put(WireConstants.WIREADMIN_CONSUMER_SCOPE, new String[] {"A", "B",
+				"C"});
+		context.registerService(Consumer.class.getName(), this, p);
 	}
 
 	public void stop(BundleContext context) {
-		try {
-			if (regConsumer != null) {
-				regConsumer.unregister();
-				regConsumer = null;
-			}
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+		// service unregistered by framework
 	}
 
 	/**
@@ -59,6 +43,7 @@ public class ConsumerImpl implements BundleActivator, Consumer {
 	 * @param wires
 	 */
 	public void producersConnected(Wire[] wires) {
+		// empty
 	}
 
 	/**
@@ -68,5 +53,6 @@ public class ConsumerImpl implements BundleActivator, Consumer {
 	 * @param value
 	 */
 	public void updated(Wire wire, Object value) {
+		// empty
 	}
 }

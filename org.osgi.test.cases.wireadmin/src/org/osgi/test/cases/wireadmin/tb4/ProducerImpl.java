@@ -6,8 +6,14 @@
 package org.osgi.test.cases.wireadmin.tb4;
 
 import java.util.Hashtable;
-import org.osgi.framework.*;
-import org.osgi.service.wireadmin.*;
+
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
+import org.osgi.service.wireadmin.Envelope;
+import org.osgi.service.wireadmin.Producer;
+import org.osgi.service.wireadmin.Wire;
+import org.osgi.service.wireadmin.WireConstants;
 
 /**
  * 
@@ -17,36 +23,16 @@ import org.osgi.service.wireadmin.*;
  * @since
  */
 public class ProducerImpl implements BundleActivator, Producer {
-	ServiceRegistration	regProducer;
-	BundleContext		context;
-
-	public ProducerImpl() {
-	}
-
 	public void start(BundleContext context) {
-		this.context = context;
 		Hashtable p = new Hashtable();
-		p
-				.put(
-						org.osgi.service.wireadmin.WireConstants.WIREADMIN_PRODUCER_FLAVORS,
-						new Class[] {String.class, Integer.class,
-								Envelope.class});
-		p.put(org.osgi.framework.Constants.SERVICE_PID,
-				"producer.ProducerImplA");
-		regProducer = context.registerService(Producer.class.getName(),
-				new ProducerImpl(), p);
+		p.put(WireConstants.WIREADMIN_PRODUCER_FLAVORS, new Class[] {
+				String.class, Integer.class, Envelope.class});
+		p.put(Constants.SERVICE_PID, "producer.ProducerImplA");
+		context.registerService(Producer.class.getName(), this, p);
 	}
 
-	public void stop(BundleContext context) {
-		try {
-			if (regProducer != null) {
-				regProducer.unregister();
-				regProducer = null;
-			}
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+	public void stop(BundleContext contextc) {
+		// service unregistered by framework
 	}
 
 	/**
@@ -55,6 +41,7 @@ public class ProducerImpl implements BundleActivator, Producer {
 	 * @param wires
 	 */
 	public void consumersConnected(Wire[] wires) {
+		// empty
 	}
 
 	/**
