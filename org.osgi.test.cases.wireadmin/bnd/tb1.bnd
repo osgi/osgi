@@ -1,0 +1,6 @@
+Bundle-Description: Wire Admin test controller
+Bundle-Activator: ${p}.tb1.ConsumerImpl
+Bundle-Version: 4.2.0
+Bundle-SymbolicName: $(p).tb1
+
+Private-Package	: $(p).tb1

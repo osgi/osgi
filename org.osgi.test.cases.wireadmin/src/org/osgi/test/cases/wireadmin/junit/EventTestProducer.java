@@ -1,4 +1,4 @@
-package org.osgi.test.cases.wireadmin.tbc;
+package org.osgi.test.cases.wireadmin.junit;
 
 import org.osgi.service.wireadmin.*;
 

@@ -1,0 +1,6 @@
+Bundle-Description: Installs WireAdmin Consumer
+Bundle-Activator: ${p}.tb2.ConsumerImpl
+Bundle-Version: 4.2.0
+Bundle-SymbolicName: $(p).tb2
+
+Private-Package	: $(p).tb2

@@ -1,6 +1,7 @@
-package org.osgi.test.cases.wireadmin.tbc;
+package org.osgi.test.cases.wireadmin.junit;
 
-import org.osgi.service.wireadmin.*;
+import org.osgi.service.wireadmin.Producer;
+import org.osgi.service.wireadmin.Wire;
 
 /**
  * A simple producer for test purposes
@@ -18,22 +19,26 @@ public class ProducerImpl implements Producer {
 
 	public void consumersConnected(Wire[] wires) {
 		    if (System.getProperty("dump.now") != null) {
-			      System.out.println("**********************************************************************");
-			      System.out.println("cc called and will set counter to " +
+			WireAdminControl
+					.log("**********************************************************************");
+			WireAdminControl
+					.log("consumersConnected called and will set counter to "
+							+
 			    		  (wac.synchCounterx + 1));
-			      System.out.println("producer is: " + pid + " " + hashCode());
+			WireAdminControl.log("producer is: " + pid + " " + hashCode());
 		
 			      if (wires != null) {
 			        for (int i = 0; i < wires.length; i++) {
 			          Wire wire = wires[i];
-			          System.out.println("wire is: " + wire);
-			          System.out.println("connected: " + wire.isConnected());
-			          System.out.println("properties: " + wire.getProperties());
+					WireAdminControl.log("wire is: " + wire);
+					WireAdminControl.log("connected: " + wire.isConnected());
+					WireAdminControl.log("properties: " + wire.getProperties());
 			        }
 			      } else {
-			        System.out.println("wires are null");
+				WireAdminControl.log("wires are null");
 			      }
-		          System.out.println("**********************************************************************");
+			WireAdminControl
+					.log("**********************************************************************");
 //		          new Exception("Stack trace").printStackTrace();
             }
 		wac.addInHashtable(pid, wires);
