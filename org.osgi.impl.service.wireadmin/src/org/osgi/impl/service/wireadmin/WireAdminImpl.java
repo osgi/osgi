@@ -1,12 +1,33 @@
 package org.osgi.impl.service.wireadmin;
 
-import java.util.*;
-import org.osgi.service.log.LogService;
-import org.osgi.util.tracker.ServiceTracker;
-import org.osgi.service.wireadmin.*;
 import java.io.IOException;
-import org.osgi.service.cm.*;
-import org.osgi.framework.*;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Vector;
+
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Filter;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceEvent;
+import org.osgi.framework.ServiceListener;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
+import org.osgi.service.cm.ConfigurationException;
+import org.osgi.service.cm.ManagedServiceFactory;
+import org.osgi.service.log.LogService;
+import org.osgi.service.wireadmin.Consumer;
+import org.osgi.service.wireadmin.Producer;
+import org.osgi.service.wireadmin.Wire;
+import org.osgi.service.wireadmin.WireAdmin;
+import org.osgi.service.wireadmin.WireAdminEvent;
+import org.osgi.service.wireadmin.WireAdminListener;
+import org.osgi.service.wireadmin.WireConstants;
+import org.osgi.util.tracker.ServiceTracker;
 
 public class WireAdminImpl implements ServiceListener, WireAdmin,
 		ManagedServiceFactory, BundleActivator {
@@ -365,9 +386,12 @@ public class WireAdminImpl implements ServiceListener, WireAdmin,
 		props.put(org.osgi.framework.Constants.SERVICE_PID, FACTORY_PID);
 		context.registerService(ManagedServiceFactory.class.getName(), this,
 				props);
-		WireCommandProvider cProvider = new WireCommandProvider(context, this);
-		context.registerService("org.osgi.tools.command.CommandProvider",
-				cProvider, null);
+		try {
+			WireCommandProvider.registerCommandProvider(context, this);
+		}
+		catch (NoClassDefFoundError e) {
+			// no command provider available
+		}
 	}
 
 	/**

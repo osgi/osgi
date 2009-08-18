@@ -6,6 +6,7 @@ Export-Service					= org.osgi.service.wireadmin.WireAdmin
 
 Export-Package					= org.osgi.service.wireadmin; -split-package:=first
 Private-Package					= ${p}.*
+Import-Package					= org.osgi.tools.command;resolution:=optional,*
 
 -buildpath = \
 	org.osgi.service.wireadmin; 	version=project, \

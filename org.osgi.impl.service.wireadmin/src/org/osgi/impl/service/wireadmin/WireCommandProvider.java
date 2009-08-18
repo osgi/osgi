@@ -1,14 +1,24 @@
 package org.osgi.impl.service.wireadmin;
 
-import org.osgi.framework.*;
-import org.osgi.tools.command.*;
-import org.osgi.service.wireadmin.*;
-import java.util.*;
+import java.util.Hashtable;
+import java.util.Vector;
+
+import org.osgi.framework.BundleContext;
+import org.osgi.service.wireadmin.Wire;
+import org.osgi.tools.command.CommandInterpreter;
+import org.osgi.tools.command.CommandProvider;
 
 public class WireCommandProvider implements CommandProvider {
 	BundleContext	bc			= null;
 	WireAdminImpl	wireAdmin	= null;
 
+	public static void registerCommandProvider(BundleContext context,
+			WireAdminImpl wa) {
+		WireCommandProvider cProvider = new WireCommandProvider(context, wa);
+		context.registerService("org.osgi.tools.command.CommandProvider",
+				cProvider, null);
+
+	}
 	public WireCommandProvider(BundleContext bc, WireAdminImpl wireAdmin) {
 		this.bc = bc;
 		this.wireAdmin = wireAdmin;
