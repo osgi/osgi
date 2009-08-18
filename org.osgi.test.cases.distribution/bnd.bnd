@@ -1,0 +1,33 @@
+Bundle-Version: 1.0.0.${project.build}
+Bundle-Description: Remote Services Test R4
+Bundle-Vendor: OSGi Alliance
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+
+Export-Package                      = ${p}.internal, ${p}.common
+
+Private-Package						= ${p}.*, \
+	org.osgi.test.support.*
+
+Include-Resource					= \
+	tb1.jar, \
+	tb2.jar
+	
+Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+
+-buildpath							= \
+    org.osgi.test.support;                  version=project , \
+	org.osgi.service.distribution;			version=project	, \
+	org.osgi.service.discovery;             version=project , \
+	osgi;									version=4.2		, \
+	ee.j2se;                                version=1.4, \
+	${junit}
+
+-runbundles							= \
+	org.eclipse.equinox.event;				version=1.0, \
+	org.osgi.impl.service.discovery; 		version=project, \
+	org.apache.cxf.dosgi.singlebundle;      version=1.0, \
+	osgi;									version="[4.2,5)", \
+	ch.ethz.iks.slp, \
+	org.osgi.impl.service.log
