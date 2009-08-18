@@ -107,7 +107,7 @@
 		JARS
 		Iterate of the jars to build.
 	-->
-	<target name="jars" depends="-mktarget,jars-btool,jars-bnd,copy-from">
+	<target name="jars" depends="-mktarget,jars-bnd,copy-from">
 	</target>
 
 	<target name="-mktarget" if="target">
@@ -118,15 +118,8 @@
 		<copy overwrite="true" file="${copy.from}" tofile="${target}/${p}.jar" preservelastmodified="true" />
 	</target>
 
-	<!-- Use the older btool tool -->
-	<target name="jars-btool" depends="init" if="jars.compile.order">
-		<echo>JARs ${jars.compile.order}</echo>
-		<!-- For each jar file, build it -->
-		<foreach list="${jars.compile.order}" delimiter=" ," target="-jar" param="item.jarFile" inheritAll="true" />
-	</target>
-
 	<!-- Use the next generation bnd tool -->
-	<target name="jars-bnd" depends="init" if="use.bnd">
+	<target name="jars-bnd" depends="init">
 		<echo>JARs ${use.bnd}</echo>
 		<antcall target="-interleave">
 			<param name="x" value="before.${item.jarFile}" />
@@ -134,57 +127,6 @@
 		<bndproject basedir="${projectdir}"/>
 	</target>
 
-	<target name="-jar" depends="-btool,-signjar" />
-
-	<!--
-	     BTOOL
-	     Build the jar file with btool. Due to ants fantastic lack of
-	     variable handling, we have to refer to giving btool property names
-	     so it can do the expansion of properties itself ...
-	     
-	     eclipse             project directory
-	     analyse             Analyse the manifest
-	     showmanifest        List the manifest on the console
-	     manifestVersion	 Manifest version
-	     silent              Suppress messages
-	     includeProperty     name of the property that is a 
-	                         list of include files (may rename with 
-	                         an = in the name)
-	     expandProperty      name of the property that is a list
-	                         of package names. If the package name
-	                         is enclosed in square brackets, it is
-	                         assumed to be exported
-	     ipaProperty         Property name for ipa parameters. ipa
-	                         is the file used in initial provisioning
-	     ignoreVersions      Do not use version on automatic import/export
-	     compress			true/false
-	-->
-	<target name="-btool">
-		<echo>JAR ${item.jarFile}</echo>
-		<antcall target="-interleave">
-			<param name="x" value="before.${item.jarFile}" />
-		</antcall>
-
-		<btool jar="${target}/${item.jarFile}" 
-			failok="${btool.failok}" 
-			eclipse="${projectdir}" 
-			analyse="${btool.analyse}" 
-			showmanifest="${btool.showmanifest}" 
-			includeProperty="include.${item.jarFile}" 
-			expandProperty="expand.${item.jarFile}" 
-			contentFoldersProperty="source.${item.jarFile}" 
-			excludeImportProperty="excludeImport.${item.jarFile}" 
-			includeExportProperty="includeExport.${item.jarFile}" 
-			ipaProperty="ipa.${item.jarFile}" 
-			verbose="${verbose}" sources="${btool.sources}" 
-			ignoreVersions="${btool.noversion}" 
-			manifestVersion="${btool.manifestVersion}" 
-			modified="${base.modified}" 
-			extraRoots="root.${item.jarFile}" 
-			noExtraHeaders="${btool.noextraheaders}" 
-			compress="${btool.compressed}" 
-			doNotCopy="${doNotCopy}" />
-	</target>
 
 	<target name="-signjar" if="sign.${item.jarFile}">
 		<signjar jar="${target}/${item.jarFile}" signedjar="${target}/${item.jarFile}.signed" keystore="${project.workspace}/cnf/keystore" storepass="testtest" keypass="testtest" alias="test" />
