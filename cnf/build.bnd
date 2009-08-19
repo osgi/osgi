@@ -36,11 +36,21 @@ javac.target 			= 1.2
 -sources               	= true
 -sourcepath             = ${project}/src 
 
--plugin	            	= aQute.lib.deployer.FileRepo;location=${repo}, \
-  						  aQute.lib.deployer.FileRepo;location=${licensed-repo};readonly=true, \
-  						  aQute.bnd.signing.JartoolSigner; keystore=${build}/keystore; keypass=testtest; storepass=testtest, \
-                          Packaging; path:=${build}/${bin}, \
-                          SignatureTest; path:=${build}/${bin}
+-plugin	            	= aQute.lib.deployer.FileRepo; \
+                                location=${repo}, \
+  						  aQute.lib.deployer.FileRepo; \
+  						        location=${licensed-repo}; \
+  						        readonly=true, \
+  						  aQute.bnd.signing.JartoolSigner; \
+  						        keystore=${build}/keystore; \
+  						        keypass=testtest; \
+  						        storepass=testtest, \
+                          Packaging; \
+                                path:=${build}/${bin}; \
+                                command:=-pack, \
+                          SignatureTest; \
+                                path:=${build}/${bin}; \
+                                command:="-signaturetest"
 
 
 -make                   =  \

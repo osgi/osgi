@@ -36,8 +36,6 @@
 		
 		<taskdef resource="aQute/bnd/ant/taskdef.properties" classpath="${workspacedir}/licensed/repo/biz.aQute.bnd/biz.aQute.bnd-latest.jar" />
 
-		<available file="bnd.bnd" property="use.bnd" />
-
 		<bndprepare basedir="${projectdir}" print="false" top="${top}"/>
 		<!-- Now we have the same properties set as bnd 
 		-->
@@ -48,7 +46,7 @@
 		
 		<!-- mark init has been run -->
 		<property name="initialized" value="set" />
-		<echo>Enter project ${project.name} (${top} ${release.target})</echo>
+		<echo>Enter project ${project.name} (${top})</echo>
 	</target>
 
 	<!-- 
@@ -62,8 +60,7 @@
 	<target name="dependencies" depends="init" if="project.dependson" unless="top">
 		<property name="top" value="${target}" />
 		
-		<!-- Have to compile the bnd plugins before ... -->
-		
+		<!-- Have to compile the bnd plugins before ... -->		
         <subant target="compile" inheritAll="false" buildpath="../cnf">
             <property name="top" value="${top}" />
         </subant>
@@ -132,7 +129,6 @@
 
 	<!-- Use the next generation bnd tool -->
 	<target name="jars-bnd" depends="init">
-		<echo>JARs ${use.bnd}</echo>
 		<antcall target="-interleave">
 			<param name="x" value="before.${item.jarFile}" />
 		</antcall>
@@ -159,9 +155,10 @@
 	    Copy the JAR file to the osgi.released directory.
 	-->
 	<target name="release" depends="init" if="top">
+		<!--
 		<copy todir="${top}" verbose="${verbose}" preservelastmodified="true">
 			<fileset dir="${target}" includes="${bin.includes}" />
-		</copy>
+		</copy> -->
 	</target>
 
 	<!--
@@ -204,10 +201,8 @@
 		<echo>bin.includes:           ${bin.includes}</echo>
 		<echo>base.modfied:           ${base.modified} (${base.modified.readable})</echo>
 		<echo>target:                 ${target}</echo>
-		<echo>release.target:         ${release.target}</echo>
 		<echo>licensed repo:          ${licensed-repo}</echo>
 		<echo>repo:                   ${repo}</echo>
-		<echo>use.bnd:                ${use.bnd}</echo>
 		<echo>nodeploy:               ${nodeploy}</echo>
 		<echo>-dependson:             ${project.dependson}</echo>
 
