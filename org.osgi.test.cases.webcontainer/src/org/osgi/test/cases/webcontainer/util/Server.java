@@ -62,7 +62,7 @@ public class Server {
     // here.
     int guessHttpPort() {
         // Try to find the HTTP port.
-        String p = System.getProperty("org.osgi.service.webcontainer.port");
+        String p = System.getProperty("org.osgi.service.webcontainer.port.http");
         return (p == null) ? 8080 : Integer.parseInt(p);
     }
 }

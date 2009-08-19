@@ -50,7 +50,11 @@ public class EventTest extends WebContainerTestBundleControl {
 
         // install the war file
         log("install war file: tw1.war at context path " + this.warContextPath);
-        this.b = installBundle(super.getWarURL("tw1.war", this.options), false);
+        String loc = super.getWarURL("tw1.war", this.options);
+        if (this.debug) {
+            log("bundleName to be passed into installBundle is " + loc);	
+        }
+        this.b = installBundle(loc, false);
         
         // verify event admin service is installed
         log("verify event admin service is installed.  The tests in this class require event admin service being installed.");
@@ -101,22 +105,24 @@ public class EventTest extends WebContainerTestBundleControl {
         long startingTime = Long.parseLong((String)eventPrevious.getProperty(EventConstants.TIMESTAMP));
         long startedTime = Long.parseLong((String)eventCurrent.getProperty(EventConstants.TIMESTAMP));
         
-        assertEquals(eventPrevious.getTopic(), "org/osgi/service/web/STARTING");
-        assertEquals((String)eventPrevious.getProperty(EventConstants.BUNDLE_SYMBOLICNAME), "org.osgi.test.cases.webcontainer.tw1");
-        assertEquals(Long.parseLong((String) eventPrevious.getProperty(EventConstants.BUNDLE_ID)), this.b.getBundleId());
-        assertEquals((Bundle)eventPrevious.getProperty(EventConstants.BUNDLE), this.b);
-        assertEquals((Version)eventPrevious.getProperty(EventConstants.BUNDLE_VERSION), this.b.getVersion());
+        assertEquals("org/osgi/service/web/DEPLOYING", eventPrevious.getTopic());
+        assertEquals("org.osgi.test.cases.webcontainer.tw1", (String)eventPrevious.getProperty(EventConstants.BUNDLE_SYMBOLICNAME));
+        assertEquals(this.b.getBundleId(), Long.parseLong((String) eventPrevious.getProperty(EventConstants.BUNDLE_ID)));
+        assertEquals(this.b, ((Bundle)eventPrevious.getProperty(EventConstants.BUNDLE)));
+        assertEquals(this.b.getVersion(), (Version)eventPrevious.getProperty(EventConstants.BUNDLE_VERSION));
+        assertEquals((String)this.b.getHeaders().get("Web-ContextPath"), (String)eventPrevious.getProperty("context.path"));
         assertNotNull(startingTime);
         assertNotNull((Bundle)eventPrevious.getProperty(EXTENDER_BUNDLE));
         assertNotNull(Long.parseLong((String)eventPrevious.getProperty(EXTENDER_BUNDLE_ID)));
         assertNotNull((String)eventPrevious.getProperty(EXTENDER_BUNDLE_SYMBOLICNAME));
         assertNotNull((Version)eventPrevious.getProperty(EXTENDER_BUNDLE_VERSION));
         
-        assertEquals(eventCurrent.getTopic(), "org/osgi/service/web/STARTED");
-        assertEquals((String)eventCurrent.getProperty(EventConstants.BUNDLE_SYMBOLICNAME), "org.osgi.test.cases.webcontainer.tw1");
-        assertEquals(Long.parseLong((String) eventCurrent.getProperty(EventConstants.BUNDLE_ID)), this.b.getBundleId());
-        assertEquals((Bundle)eventCurrent.getProperty(EventConstants.BUNDLE), this.b);
-        assertEquals((Version)eventCurrent.getProperty(EventConstants.BUNDLE_VERSION), this.b.getVersion());
+        assertEquals("org/osgi/service/web/DEPLOYED", eventCurrent.getTopic());
+        assertEquals("org.osgi.test.cases.webcontainer.tw1", (String)eventCurrent.getProperty(EventConstants.BUNDLE_SYMBOLICNAME));
+        assertEquals(this.b.getBundleId(), Long.parseLong((String) eventCurrent.getProperty(EventConstants.BUNDLE_ID)));
+        assertEquals(this.b, (Bundle)eventCurrent.getProperty(EventConstants.BUNDLE));
+        assertEquals(this.b.getVersion(), (Version)eventCurrent.getProperty(EventConstants.BUNDLE_VERSION));
+        assertEquals((String)this.b.getHeaders().get("Web-ContextPath"), (String)eventPrevious.getProperty("context.path"));
         assertNotNull(startedTime);
         assertNotNull((Bundle)eventCurrent.getProperty(EXTENDER_BUNDLE));
         assertNotNull(Long.parseLong((String)eventCurrent.getProperty(EXTENDER_BUNDLE_ID)));
@@ -126,10 +132,10 @@ public class EventTest extends WebContainerTestBundleControl {
         // the extender information should be the same
 
         assertTrue(startedTime >= startingTime);
-        assertEquals(eventCurrent.getProperty(EXTENDER_BUNDLE), eventPrevious.getProperty(EXTENDER_BUNDLE));
-        assertEquals(eventCurrent.getProperty(EXTENDER_BUNDLE_ID), eventPrevious.getProperty(EXTENDER_BUNDLE_ID));
-        assertEquals(eventCurrent.getProperty(EXTENDER_BUNDLE_SYMBOLICNAME), eventPrevious.getProperty(EXTENDER_BUNDLE_SYMBOLICNAME));
-        assertEquals(eventCurrent.getProperty(EXTENDER_BUNDLE_VERSION), eventPrevious.getProperty(EXTENDER_BUNDLE_VERSION));
+        assertEquals(eventPrevious.getProperty(EXTENDER_BUNDLE), eventCurrent.getProperty(EXTENDER_BUNDLE));
+        assertEquals(eventPrevious.getProperty(EXTENDER_BUNDLE_ID), eventCurrent.getProperty(EXTENDER_BUNDLE_ID));
+        assertEquals(eventPrevious.getProperty(EXTENDER_BUNDLE_SYMBOLICNAME), eventCurrent.getProperty(EXTENDER_BUNDLE_SYMBOLICNAME));
+        assertEquals(eventPrevious.getProperty(EXTENDER_BUNDLE_VERSION), eventCurrent.getProperty(EXTENDER_BUNDLE_VERSION));
 
         eventPrevious = null;
         eventCurrent = null;
@@ -150,8 +156,8 @@ public class EventTest extends WebContainerTestBundleControl {
         eventCurrent = ExtenderTestEventHandler.getCurrentEvent();
         assertNotNull(eventPrevious);
         assertNotNull(eventCurrent);
-        assertEquals(eventPrevious.getTopic(), "org/osgi/service/web/STOPPING");
-        assertEquals(eventCurrent.getTopic(), "org/osgi/service/web/STOPPED");
+        assertEquals("org/osgi/service/web/UNDEPLOYING", eventPrevious.getTopic());
+        assertEquals("org/osgi/service/web/UNDEPLOYED", eventCurrent.getTopic());
         assertTrue(Long.parseLong((String)eventPrevious.getProperty(EventConstants.TIMESTAMP)) >= startedTime);
         assertTrue(Long.parseLong((String)eventCurrent.getProperty(EventConstants.TIMESTAMP)) >= Long.parseLong((String)eventPrevious.getProperty(EventConstants.TIMESTAMP)));
         
@@ -199,22 +205,24 @@ public class EventTest extends WebContainerTestBundleControl {
         long startingTime = Long.parseLong((String)eventPrevious.getProperty(EventConstants.TIMESTAMP));
         long failedTime = Long.parseLong((String)eventCurrent.getProperty(EventConstants.TIMESTAMP));
         
-        assertEquals(eventPrevious.getTopic(), "org/osgi/service/web/STARTING");
-        assertEquals((String)eventPrevious.getProperty(EventConstants.BUNDLE_SYMBOLICNAME), "org.osgi.test.cases.webcontainer.tw1");
-        assertEquals(Long.parseLong((String) eventPrevious.getProperty(EventConstants.BUNDLE_ID)), this.b.getBundleId());
-        assertEquals((Bundle)eventPrevious.getProperty(EventConstants.BUNDLE), this.b);
-        assertEquals((Version)eventPrevious.getProperty(EventConstants.BUNDLE_VERSION), this.b.getVersion());
+        assertEquals("org/osgi/service/web/DEPLOYING", eventPrevious.getTopic());
+        assertEquals("org.osgi.test.cases.webcontainer.tw1", (String)eventPrevious.getProperty(EventConstants.BUNDLE_SYMBOLICNAME));
+        assertEquals(this.b.getBundleId(), Long.parseLong((String) eventPrevious.getProperty(EventConstants.BUNDLE_ID)));
+        assertEquals(this.b, (Bundle)eventPrevious.getProperty(EventConstants.BUNDLE));
+        assertEquals(this.b.getVersion(), (Version)eventPrevious.getProperty(EventConstants.BUNDLE_VERSION));
+        assertEquals((String)this.b.getHeaders().get("Web-ContextPath"), (String)eventPrevious.getProperty("context.path"));
         assertNotNull(startingTime);
         assertNotNull((Bundle)eventPrevious.getProperty(EXTENDER_BUNDLE));
         assertNotNull(Long.parseLong((String)eventPrevious.getProperty(EXTENDER_BUNDLE_ID)));
         assertNotNull((String)eventPrevious.getProperty(EXTENDER_BUNDLE_SYMBOLICNAME));
         assertNotNull((Version)eventPrevious.getProperty(EXTENDER_BUNDLE_VERSION));
         
-        assertEquals(eventCurrent.getTopic(), "org/osgi/service/web/FAILED");
-        assertEquals((String)eventCurrent.getProperty(EventConstants.BUNDLE_SYMBOLICNAME), "org.osgi.test.cases.webcontainer.tw1");
-        assertEquals(Long.parseLong((String) eventCurrent.getProperty(EventConstants.BUNDLE_ID)), this.b.getBundleId());
-        assertEquals((Bundle)eventCurrent.getProperty(EventConstants.BUNDLE), this.b);
-        assertEquals((Version)eventCurrent.getProperty(EventConstants.BUNDLE_VERSION), this.b.getVersion());
+        assertEquals("org/osgi/service/web/FAILED", eventCurrent.getTopic());
+        assertEquals("org.osgi.test.cases.webcontainer.tw1", (String)eventCurrent.getProperty(EventConstants.BUNDLE_SYMBOLICNAME));
+        assertEquals(this.b.getBundleId(), Long.parseLong((String) eventCurrent.getProperty(EventConstants.BUNDLE_ID)));
+        assertEquals(this.b, (Bundle)eventCurrent.getProperty(EventConstants.BUNDLE));
+        assertEquals(this.b.getVersion(), (Version)eventCurrent.getProperty(EventConstants.BUNDLE_VERSION));
+        assertEquals((String)this.b.getHeaders().get("Web-ContextPath"), (String)eventPrevious.getProperty("context.path"));
         assertNotNull(failedTime);
         assertNotNull((Bundle)eventCurrent.getProperty(EXTENDER_BUNDLE));
         assertNotNull(Long.parseLong((String)eventCurrent.getProperty(EXTENDER_BUNDLE_ID)));
@@ -224,10 +232,10 @@ public class EventTest extends WebContainerTestBundleControl {
         
         // the extender information should be the same
         assertTrue(failedTime >= startingTime);
-        assertEquals(eventCurrent.getProperty(EXTENDER_BUNDLE), eventPrevious.getProperty(EXTENDER_BUNDLE));
-        assertEquals(eventCurrent.getProperty(EXTENDER_BUNDLE_ID), eventPrevious.getProperty(EXTENDER_BUNDLE_ID));
-        assertEquals(eventCurrent.getProperty(EXTENDER_BUNDLE_SYMBOLICNAME), eventPrevious.getProperty(EXTENDER_BUNDLE_SYMBOLICNAME));
-        assertEquals(eventCurrent.getProperty(EXTENDER_BUNDLE_VERSION), eventPrevious.getProperty(EXTENDER_BUNDLE_VERSION));
+        assertEquals(eventPrevious.getProperty(EXTENDER_BUNDLE), eventCurrent.getProperty(EXTENDER_BUNDLE));
+        assertEquals(eventPrevious.getProperty(EXTENDER_BUNDLE_ID), eventCurrent.getProperty(EXTENDER_BUNDLE_ID));
+        assertEquals(eventPrevious.getProperty(EXTENDER_BUNDLE_SYMBOLICNAME), eventCurrent.getProperty(EXTENDER_BUNDLE_SYMBOLICNAME));
+        assertEquals(eventPrevious.getProperty(EXTENDER_BUNDLE_VERSION), eventCurrent.getProperty(EXTENDER_BUNDLE_VERSION));
 
         ExtenderTestEventHandler.clearEvents();
         

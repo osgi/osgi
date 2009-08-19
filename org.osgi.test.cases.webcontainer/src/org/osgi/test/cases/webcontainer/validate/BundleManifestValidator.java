@@ -46,7 +46,7 @@ public class BundleManifestValidator extends Assert implements Validator{
     Manifest manifest;
     Map deployOptions;
     private final String[] REQUIREDIMPORT = {"javax.servlet; version=2.5","javax.servlet.http; version=2.5", "javax.servlet.jsp; version=2.1", "javax.servlet.jsp.tagext; version=2.1"};
-    private static final String WEBINFCLASSES = "WEB-INF/classes/";
+    private static final String WEBINFCLASSES = "WEB-INF/classes";
     private static final String WEBINFLIB = "WEB-INF/lib";
     
     public BundleManifestValidator(Bundle b) {
@@ -82,9 +82,7 @@ public class BundleManifestValidator extends Assert implements Validator{
         validateBundleManifestVersion();
         validateBundleClassPath();
         validateImportPackage();
-        validateExportPackage();
         validateWebContextPath();
-        validateJSPExtractLocation();
         validateOthersPreserved();
     }
     
@@ -110,17 +108,17 @@ public class BundleManifestValidator extends Assert implements Validator{
         // mSymbolicName - manifest Bundle-SymbolicName value
         Object mSymbolicName = this.manifest == null ? null : this.manifest.getMainAttributes().getValue(new Name(Constants.BUNDLE_SYMBOLICNAME));
         if (dSymbolicName != null) {
-            assertEquals(this.b.getSymbolicName(), (String)dSymbolicName);
+            assertEquals((String)dSymbolicName, this.b.getSymbolicName());
         } else if (mSymbolicName != null) {
-            assertEquals(this.b.getSymbolicName(), (String)mSymbolicName);
+            assertEquals((String)mSymbolicName, this.b.getSymbolicName());
         } 
         
         // TODO: can we verify if the symbolic name is unique?
         // TODO: possible test case: what if a deployer or manifest specifies a non-unique symbolic name?
     }
     
-    /* TODO: depends on clarification of RFC 66
-     * validate Bundle-Version is required.
+    /** 
+     * validate Bundle-Version is not required.  if it is not there, default to 0.0.0
      * Also validate:
      * 1. the deployer specified Bundle-Version value will be used.
      * 2. Otherwise, preserve the Bundle-Version value in the manifest file
@@ -128,26 +126,27 @@ public class BundleManifestValidator extends Assert implements Validator{
     public void validateBundleVersion() throws Exception {
         assertNotNull(this.dictionary);
         Object versionObj = this.dictionary.get(Constants.BUNDLE_VERSION);
-        assertNotNull(versionObj);
-        String version = (String)versionObj;
-        if (this.debug) {
-            log(Constants.BUNDLE_VERSION + " is " + version);
-        }       
-
-        // validate the version
-        // this could throw IllegalArgumentException 
-        // if v is improperly formatted
-        Version v = new Version(version);
-
-        // dVersion - deployer specified Bundle-Version value
-        Object dVersion = this.deployOptions == null ? null : this.deployOptions.get(Constants.BUNDLE_VERSION);
-        // mVersion - manifest Bundle-Version value
-        Object mVersion = this.manifest == null ? null : this.manifest.getMainAttributes().getValue(new Name(Constants.BUNDLE_VERSION));
-        if (dVersion != null) {
-            assertEquals(version, (String)dVersion);
-        } else if (mVersion !=null) {
-            assertEquals(version, (String)mVersion);
-        }   
+        if (versionObj != null) {
+	        String version = (String)versionObj;
+	        if (this.debug) {
+	            log(Constants.BUNDLE_VERSION + " is " + version);
+	        }       
+	
+	        // validate the version
+	        // this could throw IllegalArgumentException 
+	        // if v is improperly formatted
+	        Version v = new Version(version);
+	
+	        // dVersion - deployer specified Bundle-Version value
+	        Object dVersion = this.deployOptions == null ? null : this.deployOptions.get(Constants.BUNDLE_VERSION);
+	        // mVersion - manifest Bundle-Version value
+	        Object mVersion = this.manifest == null ? null : this.manifest.getMainAttributes().getValue(Constants.BUNDLE_VERSION);
+	        if (dVersion != null) {
+	            assertEquals((String)dVersion, version);
+	        } else if (mVersion !=null) {
+	            assertEquals((String)mVersion, version);
+	        }  
+        }
     }
     
     /*
@@ -173,11 +172,11 @@ public class BundleManifestValidator extends Assert implements Validator{
         // mVersion - manifest Bundle-Version value
         Object mVersion = this.manifest == null ? null : this.manifest.getMainAttributes().getValue(new Name(Constants.BUNDLE_MANIFESTVERSION));
         if (dVersion != null) {
-            assertEquals((String) this.dictionary.get(Constants.BUNDLE_MANIFESTVERSION), (String)dVersion);
+            assertEquals((String)dVersion, (String) this.dictionary.get(Constants.BUNDLE_MANIFESTVERSION));
         } else if (mVersion !=null) {
-            assertEquals((String) this.dictionary.get(Constants.BUNDLE_MANIFESTVERSION), (String)mVersion);
+            assertEquals((String)mVersion, (String) this.dictionary.get(Constants.BUNDLE_MANIFESTVERSION));
         } else {
-            assertEquals((String) this.dictionary.get(Constants.BUNDLE_MANIFESTVERSION), "2");
+            assertEquals("2", (String) this.dictionary.get(Constants.BUNDLE_MANIFESTVERSION));
         }
         
     }
@@ -226,7 +225,7 @@ public class BundleManifestValidator extends Assert implements Validator{
         // per rfc 66, If a Bundle-Classpath header is specified in the source bundles manifest and it references jars or 
         // directories outside of the WEB-INF this is considered an error and the URL handler must throw an 
         // exception
-        assertEquals("verify no other path gets added to the Bundle-Classpath", actualClassPathArray.length, count + 1);
+        assertEquals("verify no other path gets added to the Bundle-Classpath", count + 1, actualClassPathArray.length);
         
         // verify no dups on the classpath
         assertTrue(!containDuplicate(actualClassPathArray));
@@ -286,51 +285,6 @@ public class BundleManifestValidator extends Assert implements Validator{
     }
     
     /*
-     * Export-Package is optional
-     * verify deploy options should overwrite original manifest options.
-     */
-    // TODO: whether export-package is needed is under discussion
-    public void validateExportPackage() throws Exception {
-        assertNotNull(this.dictionary);
-        String actualExports = (String)this.dictionary.get(Constants.EXPORT_PACKAGE);
-        // verify Import-package exists
-        if (this.debug) {
-            log(Constants.EXPORT_PACKAGE + " is " + actualExports);
-        }
-        // assertNotNull(actualExports);
-        
-        // mExports - original manifest Export-Package String array
-        Object mExports = this.manifest == null ? null : this.manifest.getMainAttributes().get(new Name(Constants.EXPORT_PACKAGE));
-        // dExports - deployer specified Export-Package String array
-        Object dExports = this.deployOptions == null ? null : this.deployOptions.get(Constants.EXPORT_PACKAGE);
-        
-        // verify dImports are added to the actualImports
-        if (dExports != null) {
-            String[] de = toArray((String)dExports);
-            for (int i = 0; i < de.length ; i++) {
-                assertTrue(exist(de[i], toArray(actualExports), true));
-            }
-        }
-        
-        // verify package specified by mExports are on the actualExports
-        // if there are conflicts with dExports, dExports should win
-        if (mExports != null) {
-            String[] me = toArray((String)mExports);
-            for (int i = 0; i< me.length; i++) {
-                boolean exist = exist(me[i], toArray(actualExports), true);
-                if (!exist) {
-                    // it is possible because of the conflicts with dExports
-                    assertTrue(existLoose(getPackage(me[i]), toArray((String)dExports)));
-                    assertTrue(existLoose(getPackage(me[i]), toArray(actualExports)));
-                }              
-            }
-        }
-        
-        // verify no dups on the Import-Package list
-        assertTrue(!containDuplicate(toArray(actualExports)));
-    }
-    
-    /*
      * validate the existence of Web-ContextPath as it is required
      * Also validate:
      * 1. the deployer specified Web-ContextPath value will be used.
@@ -355,33 +309,6 @@ public class BundleManifestValidator extends Assert implements Validator{
             assertEquals((String) this.dictionary.get(WEB_CONTEXT_PATH), (String)mWebContextPath);
         }
         // TODO: verify Web-ContextPath is unique on the server
-    }
-    
-    /*
-     * validate Web-JSPExtractLocation is optional
-     * Also validate:
-     * 1. the deployer specified Web-JSPExtractLocation value will be used.
-     * 2. Otherwise, use the Web-JSPExtractLocation value in the manifest file
-     */
-    public void validateJSPExtractLocation() throws Exception {
-        // verify Web-ContextPath exists
-        log(WEB_JSP_EXTRACT_LOCATION + " is optional");
-        if (this.debug) {
-            log(WEB_JSP_EXTRACT_LOCATION + " is " + (String)this.dictionary.get(WEB_JSP_EXTRACT_LOCATION));
-        }
-        
-        // dWebContextPath - deployer specified Web-ContextPath value
-        Object dJSPExtractLocation = this.deployOptions == null ? null : this.deployOptions.get(WEB_JSP_EXTRACT_LOCATION);
-        // mWebContextPath - manifest Web-ContextPath value
-        Object mJSPExtractLocation = this.manifest == null ? null : this.manifest.getMainAttributes().getValue(new Name(WEB_JSP_EXTRACT_LOCATION));
-        if (dJSPExtractLocation != null) {
-            assertEquals((String) this.dictionary.get(WEB_JSP_EXTRACT_LOCATION), (String)dJSPExtractLocation);
-        } else if (mJSPExtractLocation !=null) {
-            assertEquals((String) this.dictionary.get(WEB_JSP_EXTRACT_LOCATION), (String)mJSPExtractLocation);
-        }
-        
-        // TODO verify the extract location exists and has the right content.
-        // TODO what if a user specifies a non-unique jsp extract location?
     }
     
     /*

@@ -41,7 +41,11 @@ public class TW4Test extends WebContainerTestBundleControl {
         super.prepare("/tw4");
         // install + start the war file
         log("install war file: tw4.war at context path " + this.warContextPath);
-        this.b = installBundle(super.getWarURL("tw4.war", this.options), true);
+        String loc = super.getWarURL("tw4.war", this.options);
+        if (this.debug) {
+            log("bundleName to be passed into installBundle is " + loc);	
+        }
+        this.b = installBundle(loc, true);
     }
 
     private void uninstallWar() throws Exception {
@@ -83,15 +87,15 @@ public class TW4Test extends WebContainerTestBundleControl {
         final URL url = Dispatcher.createURL(request, this.server);
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), null);
+            assertEquals(200, conn.getResponseCode());
+            assertEquals(null, conn.getContentType());
             String response = Dispatcher.dispatch(conn);
             if (this.debug) {
                 log(response);
             }
             // check if content of response is empty
             log("verify content of response is correct");
-            assertEquals(response, "");
+            assertEquals("", response);
         } finally {
             conn.disconnect();
         }
@@ -109,7 +113,7 @@ public class TW4Test extends WebContainerTestBundleControl {
         String response = super.getResponse(request);
         // check if content of response is correct
         log("verify content of response is correct");
-        assertEquals(response, ConstantsUtil.TW4LONGPARAMS);
+        assertEquals(ConstantsUtil.TW4LONGPARAMS, response);
     }
 
     /*
@@ -128,7 +132,7 @@ public class TW4Test extends WebContainerTestBundleControl {
         String response = super.getResponse(request);
         // check if content of response is correct
         log("verify content of response is correct");
-        assertEquals(response, ConstantsUtil.TW4SPECPARAMS);
+        assertEquals(ConstantsUtil.TW4SPECPARAMS, response);
     }
 
     /*
@@ -140,8 +144,8 @@ public class TW4Test extends WebContainerTestBundleControl {
         final URL url = Dispatcher.createURL(request, this.server);
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/plain");
+            assertEquals(200, conn.getResponseCode());
+            assertEquals("text/plain", conn.getContentType());
             BufferedReader in = null;
             int bufsize = 0;
             int len = 0;
@@ -156,7 +160,7 @@ public class TW4Test extends WebContainerTestBundleControl {
             // check if content of response is correct
             log("verify content of response is correct");
             log(bufsize + "");
-            assertEquals(bufsize, 4194304);
+            assertEquals(4194304, bufsize);
         } finally {
             conn.disconnect();
         }
@@ -171,15 +175,15 @@ public class TW4Test extends WebContainerTestBundleControl {
         final URL url = Dispatcher.createURL(request, this.server);
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/plain");
+            assertEquals(200, conn.getResponseCode());
+            assertEquals("text/plain", conn.getContentType());
             String response = Dispatcher.dispatch(conn);
             if (this.debug) {
                 log(response);
             }
             // check if content of response is correct
             log("verify content of response is correct");
-            assertEquals(response, ConstantsUtil.PLAINRESPONSE);
+            assertEquals(ConstantsUtil.PLAINRESPONSE, response);
         } finally {
             conn.disconnect();
         }
@@ -194,7 +198,7 @@ public class TW4Test extends WebContainerTestBundleControl {
         String response = super.getResponse(request);
         // check if content of response is correct
         log("verify content of response is correct");
-        assertEquals(response, ConstantsUtil.HTMLRESPONSE);
+        assertEquals(ConstantsUtil.HTMLRESPONSE, response);
     }
 
     /*
@@ -206,8 +210,8 @@ public class TW4Test extends WebContainerTestBundleControl {
         final URL url = Dispatcher.createURL(request, this.server);
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "image/jpeg");
+            assertEquals(200, conn.getResponseCode());
+            assertEquals("image/jpeg", conn.getContentType());
             String response = Dispatcher.dispatch(conn);
             if (this.debug) {
                 log(response);

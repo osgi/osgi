@@ -43,7 +43,11 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
 
         // install + start the war file
         log("install war file: tw5.war at context path " + this.warContextPath);
-        this.b = installBundle(super.getWarURL("tw5.war", this.options), true);
+        String loc = super.getWarURL("tw5.war", this.options);
+        if (this.debug) {
+            log("bundleName to be passed into installBundle is " + loc);	
+        }
+        this.b = installBundle(loc, true);
 
         ServiceReference logReaderServiceReference = getContext()
                 .getServiceReference(LogReaderService.class.getName());
@@ -92,15 +96,15 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
         log("verify content of response is correct");
         assertTrue(response.indexOf("BundleContextTestServlet") > 0);
         assertTrue(response.indexOf(ConstantsUtil.TESTLOGMSG) > 0);
-        assertEquals(response.indexOf("null"), -1);
+        assertEquals(-1, response.indexOf("null"));
 
         Enumeration e = logReaderService.getLog();
         while (e.hasMoreElements()) {
             LogEntry logentry = (LogEntry) e.nextElement();
             log("get log message: " + logentry.getMessage());
-            assertEquals(logentry.getMessage(), ConstantsUtil.TESTLOGMSG);
-            assertEquals(logentry.getBundle(), this.b.getBundleContext());
-            assertEquals(logentry.getLevel(), LogService.LOG_ERROR);
+            assertEquals(ConstantsUtil.TESTLOGMSG, logentry.getMessage());
+            assertEquals(this.b.getBundleContext(), logentry.getBundle());
+            assertEquals(LogService.LOG_ERROR, logentry.getLevel());
             assertTrue(logentry.getTime() >= beforeLog);
             assertTrue(logentry.getTime() <= System.currentTimeMillis());
             break;
@@ -117,15 +121,15 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
         log("verify content of response is correct");
         assertTrue(response.indexOf("BundleContextTestServlet") > 0);
         assertTrue(response.indexOf(ConstantsUtil.TESTLOGMSG2) > 0);
-        assertEquals(response.indexOf("null"), -1);
+        assertEquals(-1, response.indexOf("null"));
 
         Enumeration e = logReaderService.getLog();
         while (e.hasMoreElements()) {
             LogEntry logentry = (LogEntry) e.nextElement();
             log("get log message: " + logentry.getMessage());
-            assertEquals(logentry.getMessage(), ConstantsUtil.TESTLOGMSG2);
-            assertEquals(logentry.getBundle(), this.b.getBundleContext());
-            assertEquals(logentry.getLevel(), LogService.LOG_WARNING);
+            assertEquals(ConstantsUtil.TESTLOGMSG2, logentry.getMessage());
+            assertEquals(this.b.getBundleContext(), logentry.getBundle());
+            assertEquals(LogService.LOG_WARNING, logentry.getLevel());
             assertTrue(logentry.getTime() >= beforeLog);
             assertTrue(logentry.getTime() <= System.currentTimeMillis());
             break;
@@ -143,15 +147,15 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
         log("verify content of response is correct");
         assertTrue(response.indexOf("BundleContextTestServlet") > 0);
         assertTrue(response.indexOf(ConstantsUtil.TESTLOGMSG3) > 0);
-        assertEquals(response.indexOf("null"), -1);
+        assertEquals(-1, response.indexOf("null"));
 
         Enumeration e = logReaderService.getLog();
         while (e.hasMoreElements()) {
             LogEntry logentry = (LogEntry) e.nextElement();
             log("get log message: " + logentry.getMessage());
-            assertEquals(logentry.getMessage(), ConstantsUtil.TESTLOGMSG3);
-            assertEquals(logentry.getBundle(), this.b.getBundleContext());
-            assertEquals(logentry.getLevel(), LogService.LOG_INFO);
+            assertEquals(ConstantsUtil.TESTLOGMSG3, logentry.getMessage());
+            assertEquals(this.b.getBundleContext(), logentry.getBundle());
+            assertEquals(LogService.LOG_INFO, logentry.getLevel());
             assertTrue(logentry.getTime() >= beforeLog);
             assertTrue(logentry.getTime() <= System.currentTimeMillis());
             break;
@@ -169,15 +173,15 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
         log("verify content of response is correct");
         assertTrue(response.indexOf("BundleContextTestServlet") > 0);
         assertTrue(response.indexOf(ConstantsUtil.TESTLOGMSG4) > 0);
-        assertEquals(response.indexOf("null"), -1);
+        assertEquals(-1, response.indexOf("null"));
 
         Enumeration e = logReaderService.getLog();
         while (e.hasMoreElements()) {
             LogEntry logentry = (LogEntry) e.nextElement();
             log("get log message: " + logentry.getMessage());
-            assertEquals(logentry.getMessage(), ConstantsUtil.TESTLOGMSG4);
-            assertEquals(logentry.getBundle(), this.b.getBundleContext());
-            assertEquals(logentry.getLevel(), LogService.LOG_DEBUG);
+            assertEquals(ConstantsUtil.TESTLOGMSG4, logentry.getMessage());
+            assertEquals(this.b.getBundleContext(), logentry.getBundle());
+            assertEquals(LogService.LOG_DEBUG, logentry.getLevel());
             assertTrue(logentry.getTime() >= beforeLog);
             assertTrue(logentry.getTime() <= System.currentTimeMillis());
             assertEquals(logentry.getException(), new RuntimeException());
@@ -192,7 +196,7 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
         final String request = this.warContextPath
         + "/ClasspathTestServlet";
         String response = super.getResponse(request);
-        assertEquals("checking response content", response,"<html><head><title>ClasspathTestServlet</title></head><body>" 
-                + ConstantsUtil.ABLEGETLOG + "<br/>" +  ConstantsUtil.ABLEGETSIMPLEHELLO + "<br/></body></html>");
+        assertEquals("checking response content", "<html><head><title>ClasspathTestServlet</title></head><body>" 
+                + ConstantsUtil.ABLEGETLOG + "<br/>" +  ConstantsUtil.ABLEGETSIMPLEHELLO + "<br/></body></html>", response);
     }
 }

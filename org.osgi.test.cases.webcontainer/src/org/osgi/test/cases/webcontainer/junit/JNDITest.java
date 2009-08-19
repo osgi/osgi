@@ -44,7 +44,11 @@ public class JNDITest extends WebContainerTestBundleControl {
 
         // install + start the war file
         log("install war file: tw5.war at context path " + this.warContextPath);
-        this.b = installBundle(super.getWarURL("tw5.war", this.options), true);
+        String loc = super.getWarURL("t51.war", this.options);
+        if (this.debug) {
+            log("bundleName to be passed into installBundle is " + loc);	
+        }
+        this.b = installBundle(loc, true);
 
         // verify JNDI in OSGi service is installed
         log("verify JNDI in OSGi service is installed.  The tests in this class require JNDI in OSGi being installed.");
@@ -101,7 +105,7 @@ public class JNDITest extends WebContainerTestBundleControl {
         log("verify content of response is correct");
         assertTrue(response.indexOf("JNDITestServlet") > 0);
         assertTrue(response.indexOf(ConstantsUtil.TESTLOGMSG) > 0);
-        assertEquals("should not get this", response.indexOf("unable to lookup logService via JNDI"), -1);
+        assertEquals("should not get this", -1, response.indexOf("unable to lookup logService via JNDI"));
 
         ServiceReference logReaderServiceReference = getContext()
                 .getServiceReference(LogReaderService.class.getName());
@@ -111,9 +115,9 @@ public class JNDITest extends WebContainerTestBundleControl {
         while (e.hasMoreElements()) {
             LogEntry logentry = (LogEntry) e.nextElement();
             log("get log message: " + logentry.getMessage());
-            assertEquals(logentry.getMessage(), ConstantsUtil.TESTLOGMSG);
-            assertEquals(logentry.getBundle(), this.b.getBundleContext());
-            assertEquals(logentry.getLevel(), LogService.LOG_ERROR);
+            assertEquals(ConstantsUtil.TESTLOGMSG, logentry.getMessage());
+            assertEquals(this.b.getBundleContext(), logentry.getBundle());
+            assertEquals(LogService.LOG_ERROR, logentry.getLevel());
             assertTrue(logentry.getTime() >= beforeLog);
             assertTrue(logentry.getTime() <= System.currentTimeMillis());
             break;

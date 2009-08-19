@@ -40,7 +40,7 @@ public class ServletContextRegistrationTest extends
     Bundle b;
     private final static String OSGI_WEB_SYMBOLICNAME = "osgi.web.symbolicname";
     private final static String OSGI_WEB_VERSION = "osgi.web.version";
-    private final static String OSGI_WEB_CONTEXTROOT = "osgi.web.contextroot";
+    private final static String OSGI_WEB_CONTEXTPATH = "osgi.web.contextpath";
     
     public void setUp() throws Exception {
         super.setUp();
@@ -211,8 +211,8 @@ public class ServletContextRegistrationTest extends
         validator.validate();
         
         if (!start) {
-            assertEquals("Bundle status should be Resolved but not Active", b
-                    .getState(), Bundle.RESOLVED);
+            assertEquals("Bundle status should be Resolved but not Active", 
+            		Bundle.RESOLVED, b.getState());
             assertFalse(
                     "Bundle not started yet - should not be able to access "
                             + cp, super.ableAccessPath(cp));
@@ -224,7 +224,7 @@ public class ServletContextRegistrationTest extends
         sr = getContext().getServiceReference(ServletContext.class.getName());
         assertNotNull(sr);
         sc = (ServletContext)getContext().getService(sr);
-        assertEquals("check if servlet context path is correct", sc.getContextPath(), sr.getProperty(OSGI_WEB_CONTEXTROOT));
+        assertEquals("check if servlet context path is correct", sr.getProperty(OSGI_WEB_CONTEXTPATH), sc.getContextPath());
         
         // get the service reference by Bundle-SymbolicName and Bundle-Version
         ServiceReference[] srs = getContext().getServiceReferences(ServletContext.class.getName(), "(" + OSGI_WEB_SYMBOLICNAME + "=" + (String)b.getHeaders().get(Constants.BUNDLE_SYMBOLICNAME));
@@ -237,18 +237,18 @@ public class ServletContextRegistrationTest extends
                 sr = srs[i];
             }
         }
-        assertEquals((ServletContext)getContext().getService(sr), sc);
+        assertEquals(sc, (ServletContext)getContext().getService(sr));
         
         // get the service reference by context-path
-        srs = getContext().getServiceReferences(ServletContext.class.getName(), "(" + OSGI_WEB_CONTEXTROOT + "=" + (String)b.getHeaders().get(WEB_CONTEXT_PATH));
+        srs = getContext().getServiceReferences(ServletContext.class.getName(), "(" + OSGI_WEB_CONTEXTPATH + "=" + (String)b.getHeaders().get(WEB_CONTEXT_PATH));
         assertNotNull(srs);
-        assertEquals((ServletContext)getContext().getService(srs[0]), sc);
+        assertEquals(sc, (ServletContext)getContext().getService(srs[0]));
         
         // rough test able to access the app
         assertTrue("should be able to access " + cp, super.ableAccessPath(cp));
 
-        assertEquals("Bundle status should be Active", b.getState(),
-                Bundle.ACTIVE);
+        assertEquals("Bundle status should be Active", 
+                Bundle.ACTIVE, b.getState());
         try {
             String response = super.getResponse(cp);
             super.checkHomeResponse(response, warName);
@@ -258,8 +258,8 @@ public class ServletContextRegistrationTest extends
 
         b.stop();
         // test unable to access pathes yet as it is not started
-        assertEquals("Bundle status should be Resolved but not Active", b
-                .getState(), Bundle.RESOLVED);
+        assertEquals("Bundle status should be Resolved but not Active", 
+        		Bundle.RESOLVED, b.getState());
         assertFalse("Bundle not started yet - should not be able to access "
                 + cp, super.ableAccessPath(cp));
         

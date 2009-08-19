@@ -156,7 +156,7 @@ public class BundleImportPackageTest extends ManifestHeadersTestBundleControl {
             fail("Bundle should be installed but not resolved as Import-Package contains package that won't be resolved");
         }
         assertNotNull("Bundle b should not be null", this.b);
-        assertEquals("Checking Bundle state is installed", b.getState(), Bundle.INSTALLED);
+        assertEquals("Checking Bundle state is installed", Bundle.INSTALLED, b.getState());
         
         try {
             this.b.start();
@@ -189,7 +189,7 @@ public class BundleImportPackageTest extends ManifestHeadersTestBundleControl {
             fail("Bundle should be installed but not resolved as Import-Package contains package that won't be resolved");
         }
         assertNotNull("Bundle b should not be null", this.b);
-        assertEquals("Checking Bundle state is installed", b.getState(), Bundle.INSTALLED);
+        assertEquals("Checking Bundle state is installed", Bundle.INSTALLED, b.getState());
         
         try {
             this.b.start();

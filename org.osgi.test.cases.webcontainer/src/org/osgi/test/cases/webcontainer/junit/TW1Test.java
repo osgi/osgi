@@ -29,7 +29,7 @@ import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
 /**
  * @version $Rev$ $Date$
  * 
- *          test class for tw1
+ *          test class for tw1.war
  */
 public class TW1Test extends WebContainerTestBundleControl {
     Bundle b;
@@ -39,8 +39,11 @@ public class TW1Test extends WebContainerTestBundleControl {
         super.prepare("/tw1");
 
         // install + start the war file
-        log("install war file: tw1.war at context path " + this.warContextPath);
-        this.b = installBundle(super.getWarURL("tw1.war", this.options), true);
+        String loc = super.getWarURL("tw1.war", this.options);
+        if (this.debug) {
+            log("bundleName to be passed into installBundle is " + loc);	
+        }
+        this.b = installBundle(loc, true);
     }
 
     private void uninstallWar() throws Exception {
