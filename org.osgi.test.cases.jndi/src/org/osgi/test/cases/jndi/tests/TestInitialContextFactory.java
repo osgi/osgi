@@ -211,7 +211,7 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 			ctx = new InitialContext(env);
 			assertNotNull("The context should not be null", ctx);
 			ctx.bind("testObject", new Object());
-		} catch (NullPointerException npe) {
+		} catch (javax.naming.NoInitialContextException ex) {
 			return;
 		} finally {
 			// If we don't get the exception, then this test fails
@@ -219,7 +219,7 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 				ctx.close();
 			}
 		}
-		failException("testInitialContextFactoryBuilderRemoval failed, ", java.lang.NullPointerException.class);
+		failException("testInitialContextFactoryBuilderRemoval failed, ", javax.naming.NoInitialContextException.class);
 	}
 
 	public void testNoInitialContextFound() throws Exception {
