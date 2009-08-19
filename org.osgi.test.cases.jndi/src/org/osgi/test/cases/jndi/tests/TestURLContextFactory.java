@@ -55,8 +55,12 @@ public class TestURLContextFactory extends DefaultTestBundleControl {
 			assertEquals(testString, result);
 		} finally {
 			// Cleanup after the test
-			ctx.close();
-			urlCtx.close();
+			if (ctx != null) {
+				ctx.close();
+			}
+			if (urlCtx != null) {
+				urlCtx.close();
+			}
 			uninstallBundle(factoryBundle);
 			uninstallBundle(testBundle);
 		}
@@ -85,7 +89,9 @@ public class TestURLContextFactory extends DefaultTestBundleControl {
 			// handle this url
 			return;
 		} finally {
-			urlCtx.close();
+			if (urlCtx != null) {
+				urlCtx.close();
+			}
 			uninstallBundle(factoryBundle);
 		}
 		failException("testURLContextFactoryRemoval failed, ", javax.naming.NamingException.class);

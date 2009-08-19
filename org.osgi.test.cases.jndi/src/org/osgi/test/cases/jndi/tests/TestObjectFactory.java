@@ -55,7 +55,9 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 			assertNotNull(str);
 		} finally {
 			// Cleanup after the test completes
-			ctx.close();
+			if (ctx != null) {
+				ctx.close();
+			}
 			uninstallBundle(factoryBundle);
 			uninstallBundle(testBundle);
 		}
@@ -78,7 +80,9 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 			assertNotNull(str);
 		} finally {
 			// Cleanup after the test completes
-			ctx.close();
+			if (ctx != null) {
+				ctx.close();
+			}
 			uninstallBundle(factoryBundle);
 			uninstallBundle(testBundle);
 		}
@@ -105,7 +109,9 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 			return;
 		} finally {
 			// If we don't get the exception, then this test fails
-			ctx.close();
+			if (ctx != null) {
+				ctx.close();
+			}
 			uninstallBundle(factoryBundle);
 		}
 	}
@@ -131,7 +137,9 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 			return;
 		} finally {
 			// If we don't get the exception, then this test fails
-			ctx.close();
+			if (ctx != null) {
+				ctx.close();
+			}
 			uninstallBundle(factoryBundle);
 		}
 		failException("testObjectFactoryBuilderRemoval failed, ", NamingException.class);
@@ -151,7 +159,9 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 				fail("The right context was not returned");
 			}
 		} finally {
-			ctx.close();
+			if (ctx != null) {
+				ctx.close();
+			}
 			uninstallBundle(testBundle);
 		}
 	}

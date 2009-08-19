@@ -46,7 +46,9 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 			assertNotNull(service);
 			// Cleanup after the test completes
 		} finally {
-			ctx.close();
+			if (ctx != null) {
+				ctx.close();
+			}
 			uninstallBundle(testBundle);
 		}
 	}
@@ -64,7 +66,9 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 			assertNotNull(service);
 		} finally {
 			// Cleanup after the test completes
-			ctx.close();
+			if (ctx != null) {
+				ctx.close();
+			}
 			uninstallBundle(testBundle);
 		}
 	}

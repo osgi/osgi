@@ -59,7 +59,9 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 			assertNotNull(testObject);
 		} finally {
 			// Cleanup after the test completes
-			ctx.close();
+			if (ctx != null) {
+				ctx.close();
+			}
 			uninstallBundle(testBundle);
 		}
 	}
@@ -83,7 +85,9 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 			assertNotNull(testObject);
 		} finally {
 			// Cleanup after the test completes
-			ctx.close();
+			if (ctx != null) {
+				ctx.close();
+			}
 			uninstallBundle(testBundle);
 		}
 	}
@@ -109,7 +113,9 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 			assertNotNull(testObject);
 		} finally {
 			// Cleanup after the test completes
-			ctx.close();
+			if (ctx != null) {
+				ctx.close();
+			}
 			uninstallBundle(testBundle);
 		}
 	}
@@ -134,7 +140,9 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 			assertNotNull(testObject);
 		} finally {
 			// Cleanup after the test completes
-			ctx.close();
+			if (ctx != null) {
+				ctx.close();
+			}
 			uninstallBundle(factoryBundle);
 			uninstallBundle(testBundle);
 		}
@@ -157,7 +165,9 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 			assertNotNull(testObject);
 		} finally {
 			// Cleanup after the test completes
-			ctx.close();
+			if (ctx != null) {
+				ctx.close();
+			}
 		}
 	}
 
@@ -179,7 +189,9 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 			return;
 		} finally {
 			// If we don't get the exception, then this test fails
-			ctx.close();
+			if (ctx != null) {
+				ctx.close();
+			}
 		}
 		failException("testInitialContextFactoryRemoval failed, ", javax.naming.NoInitialContextException.class);
 	}
@@ -203,7 +215,9 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 			return;
 		} finally {
 			// If we don't get the exception, then this test fails
-			ctx.close();
+			if (ctx != null) {
+				ctx.close();
+			}
 		}
 		failException("testInitialContextFactoryBuilderRemoval failed, ", java.lang.NullPointerException.class);
 	}
@@ -223,7 +237,9 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 			return;
 		} finally {
 			// If we don't get the exception, then this test fails
-			ctx.close();
+			if (ctx != null) {
+				ctx.close();
+			}
 		}
 		failException("testNoInitialContextFound failed, ", javax.naming.NoInitialContextException.class);
 	}
@@ -243,7 +259,9 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 				fail("The right context was not returned");
 			}
 		} finally {
-			ctx.close();
+			if (ctx != null) {
+				ctx.close();
+			}
 			uninstallBundle(testBundle);
 		}
 	}
