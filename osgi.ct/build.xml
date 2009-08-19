@@ -3,9 +3,9 @@
 	<import file="../cnf/build.xml" />
 
 	<target name="runtests">
-      <!--  <antcall target="-runtest">
+      <antcall target="-runtest">
             <param name="test-name" value="osgi.core.tests" />
-        </antcall> -->
+        </antcall>
 
       <antcall target="-runtest">
             <param name="test-name" value="osgi.cmpn.tests" />
