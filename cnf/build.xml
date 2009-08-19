@@ -101,6 +101,18 @@
 			debug="${javac.debug}" 
 			includeAntRuntime="no" 
 			verbose="${verbose}" />
+		
+		<!-- 
+		  The eclipse compiler copies resources but the Javac compiler does not
+		  If ${src} == ${bin} then this is not necessary, but unfortunately, now 
+		  it is. 
+		--> 
+		<copy todir="${project.output}">
+			<fileset dir="${src}">
+                <exclude name="**/*.java"/>
+                <exclude name="**/*.class"/>
+			</fileset>
+		</copy>
 	</target>
 
 	<!-- 
