@@ -51,7 +51,7 @@ public class CTNameClassPairEnumeration implements NamingEnumeration {
 	}
 
 	public boolean hasMore() throws NamingException {
-		if(nameClassPair.size() > 0) {
+		if(!(nameClassPair.isEmpty())) {
 			return true;
 		} else {
 			return false;
@@ -65,7 +65,7 @@ public class CTNameClassPairEnumeration implements NamingEnumeration {
 	}
 
 	public boolean hasMoreElements() {
-		if(nameClassPair.size() > 0) {
+		if(!(nameClassPair.isEmpty())) {
 			return true;
 		} else {
 			return false;

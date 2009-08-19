@@ -82,7 +82,7 @@ public class CTContext implements Context {
 	}
 
 	public Name composeName(Name first, Name second) throws NamingException {
-		throw new OperationNotSupportedException("Subcontexts are not supported");
+		throw new OperationNotSupportedException("Namespace has no hierarchy");
 	}
 
 	public Context createSubcontext(String name) throws NamingException {

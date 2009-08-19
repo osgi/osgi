@@ -49,7 +49,7 @@ public class CTBindingEnumeration implements NamingEnumeration {
 	}
 
 	public boolean hasMore() throws NamingException {
-		if(bindings.size() > 0) {
+		if(!(bindings.isEmpty())) {
 			return true;
 		} else {
 			return false;
@@ -63,7 +63,7 @@ public class CTBindingEnumeration implements NamingEnumeration {
 	}
 
 	public boolean hasMoreElements() {
-		if(bindings.size() > 0) {
+		if(!(bindings.isEmpty())) {
 			return true;
 		} else {
 			return false;
