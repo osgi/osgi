@@ -48,6 +48,7 @@
  */
 
 package org.osgi.test.cases.dmt.tc2.tbc;
+
 import info.dmtree.Acl;
 import info.dmtree.DmtAdmin;
 import info.dmtree.DmtException;
@@ -82,207 +83,235 @@ import org.osgi.test.support.Base64Encoder;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 public class DmtTestControl extends DefaultTestBundleControl {
-	
+
+	private static boolean inited = false;
 	private static TestExecPluginActivator		testExecPluginActivator;
-	
-    private static TestNonAtomicPluginActivator	testNonAtomicPluginActivator;
-    
+
+	private static TestNonAtomicPluginActivator	testNonAtomicPluginActivator;
+
 	private static TestReadOnlyPluginActivator	testReadOnlyPluginActivator;
-	
+
 	private static RemoteAlertSenderActivator	remoteAlertSenderActivator;
-	
+
 	private static DmtAdmin						dmtAdmin;
-	
-	private static EventHandlerActivator		testDmtHandlerActivator; 
-	
-	public static String LOCATION = "";
+
+	private static EventHandlerActivator		testDmtHandlerActivator;
+
+	public static String						LOCATION		= "";
 
 	private static PermissionAdmin				permissionAdmin;
-	
+
 	private static TB1Service					tb1Service;
-	
+
 	private static TestInterface[]				testClasses;
-    
-    private static PermissionWorker				permissionWorker;
 
-	//URIs too long, to be used simulating DmtException.URI_TOO_LONG
-	public final static String[] URIS_TOO_LONG;
-	
-    static {
-	    Vector uriTooLong = new Vector();
-	    if (Uri.getMaxSegmentNameLength()!=Integer.MAX_VALUE) {
-	    	uriTooLong.add(getSegmentTooLong(TestExecPluginActivator.ROOT));
-	    }
-        if (Uri.getMaxUriSegments()!=Integer.MAX_VALUE) {
-	        uriTooLong.add(getExcedingSegmentsUri(TestExecPluginActivator.ROOT));
-        }
-        if (Uri.getMaxUriLength()!=Integer.MAX_VALUE) {
-        	uriTooLong.add(getUriTooLong(TestExecPluginActivator.ROOT));
-        }
-        
-        URIS_TOO_LONG = new String[uriTooLong.size()];
-        uriTooLong.copyInto(URIS_TOO_LONG);
- 
-	            
-    };
-	
-    //Invalid URIs, to be used simulating DmtException.INVALID_URI
-    public final static Object[] INVALID_URIS = new Object[]{ 
-        null, 
-        TestExecPluginActivator.INTERIOR_NODE + "/", 
-        TestExecPluginActivator.INTERIOR_NODE + "\\", 
-        TestExecPluginActivator.ROOT + "/./" + TestExecPluginActivator.INTERIOR_NODE_NAME, 
-        TestExecPluginActivator.INTERIOR_NODE + "/../" + TestExecPluginActivator.INTERIOR_NODE_NAME};
-    
+	private static PermissionWorker				permissionWorker;
 
+	// URIs too long, to be used simulating DmtException.URI_TOO_LONG
+	public final static String[]				URIS_TOO_LONG;
 
-	public void prepare() {
-
-		try {
-			dmtAdmin = (DmtAdmin) getContext().getService(
-					getContext().getServiceReference(DmtAdmin.class.getName()));
-		} catch (NullPointerException e) {
-			log("There is no DmtAdmin service in the service registry, tests will not be executed correctly");
+	static {
+		Vector uriTooLong = new Vector();
+		if (Uri.getMaxSegmentNameLength() != Integer.MAX_VALUE) {
+			uriTooLong.add(getSegmentTooLong(TestExecPluginActivator.ROOT));
+		}
+		if (Uri.getMaxUriSegments() != Integer.MAX_VALUE) {
+			uriTooLong
+					.add(getExcedingSegmentsUri(TestExecPluginActivator.ROOT));
+		}
+		if (Uri.getMaxUriLength() != Integer.MAX_VALUE) {
+			uriTooLong.add(getUriTooLong(TestExecPluginActivator.ROOT));
 		}
 
-		try {
-			permissionAdmin = (PermissionAdmin) getContext().getService(
-					getContext().getServiceReference(
-							PermissionAdmin.class.getName()));
-		} catch (NullPointerException e) {
-			log("There is no PermissionAdmin service in the service registry, tests will not be executed correctly");
+		URIS_TOO_LONG = new String[uriTooLong.size()];
+		uriTooLong.copyInto(URIS_TOO_LONG);
+
+	};
+
+	// Invalid URIs, to be used simulating DmtException.INVALID_URI
+	public final static Object[]				INVALID_URIS	= new Object[] {
+			null,
+			TestExecPluginActivator.INTERIOR_NODE + "/",
+			TestExecPluginActivator.INTERIOR_NODE + "\\",
+			TestExecPluginActivator.ROOT + "/./"
+					+ TestExecPluginActivator.INTERIOR_NODE_NAME,
+			TestExecPluginActivator.INTERIOR_NODE + "/../"
+					+ TestExecPluginActivator.INTERIOR_NODE_NAME};
+
+	public void setUp() {
+		if (!inited) {
+			inited = true;
+			try {
+				dmtAdmin = (DmtAdmin) getContext().getService(
+						getContext().getServiceReference(
+								DmtAdmin.class.getName()));
+			}
+			catch (NullPointerException e) {
+				log("There is no DmtAdmin service in the service registry, tests will not be executed correctly");
+			}
+
+			try {
+				permissionAdmin = (PermissionAdmin) getContext().getService(
+						getContext().getServiceReference(
+								PermissionAdmin.class.getName()));
+			}
+			catch (NullPointerException e) {
+				log("There is no PermissionAdmin service in the service registry, tests will not be executed correctly");
+			}
+
+			installBundle();
+			installPlugins();
+			installHandler();
+			installRemoteAlertSender();
+			permissionWorker = new PermissionWorker(this);
+			permissionWorker.start();
 		}
-		
-
-
-		
-		installBundle();
-		installPlugins();
-		installHandler();
-		installRemoteAlertSender();
-        permissionWorker = new PermissionWorker(this);
-        permissionWorker.start(); 
-		
 	}
+
 	public void installRemoteAlertSender() {
 		try {
 			remoteAlertSenderActivator = new RemoteAlertSenderActivator();
 			remoteAlertSenderActivator.start(getContext());
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			log("TestControl: Failed starting the remote alert sender");
 		}
-	}	
-	
-	
+	}
+
 	private void installBundle() {
 		try {
 			installBundle("tb1.jar");
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			log("TestControl: Failed installing tb1 bundle");
 		}
-		ServiceReference tb1SvrReference = getContext().getServiceReference(TB1Service.class.getName());
-		LOCATION = tb1SvrReference.getBundle().getLocation();		
+		ServiceReference tb1SvrReference = getContext().getServiceReference(
+				TB1Service.class.getName());
+		LOCATION = tb1SvrReference.getBundle().getLocation();
 		tb1Service = (TB1Service) getContext().getService(tb1SvrReference);
 		testClasses = tb1Service.getTestClasses(this);
-				
+
 	}
+
 	private void installPlugins() {
 		try {
 			testExecPluginActivator = new TestExecPluginActivator(this);
 			testExecPluginActivator.start(getContext());
-            
-            testNonAtomicPluginActivator = new TestNonAtomicPluginActivator(this);
-            testNonAtomicPluginActivator.start(getContext());    
-            
+
+			testNonAtomicPluginActivator = new TestNonAtomicPluginActivator(
+					this);
+			testNonAtomicPluginActivator.start(getContext());
+
 			testReadOnlyPluginActivator = new TestReadOnlyPluginActivator(this);
-			testReadOnlyPluginActivator.start(getContext());	
-		} catch (Exception e) {
+			testReadOnlyPluginActivator.start(getContext());
+		}
+		catch (Exception e) {
 			log("#TestControl: Failed starting plugins");
 		}
 	}
+
 	public void setPermissions(PermissionInfo[] permissions) {
 		PermissionInfo[] defaults = new PermissionInfo[] {
-			new PermissionInfo(TopicPermission.class.getName(), "info/dmtree/DmtEvent/*", TopicPermission.PUBLISH +","+TopicPermission.SUBSCRIBE),
-			new PermissionInfo(PackagePermission.class.getName(), "*", "EXPORT, IMPORT"),
-			new PermissionInfo(ServicePermission.class.getName(), "*",
-					ServicePermission.GET + ","+ ServicePermission.REGISTER),
-			new PermissionInfo(AdminPermission.class.getName(), "*", "*"),
-			new PermissionInfo(RuntimePermission.class.getName(),"*", "accessDeclaredMembers"), 
-			new PermissionInfo(PropertyPermission.class.getName(), "*","read"),
-		};
-        PermissionInfo[] perm;
+				new PermissionInfo(TopicPermission.class.getName(),
+						"info/dmtree/DmtEvent/*", TopicPermission.PUBLISH + ","
+								+ TopicPermission.SUBSCRIBE),
+				new PermissionInfo(PackagePermission.class.getName(), "*",
+						"EXPORT, IMPORT"),
+				new PermissionInfo(ServicePermission.class.getName(), "*",
+						ServicePermission.GET + ","
+								+ ServicePermission.REGISTER),
+				new PermissionInfo(AdminPermission.class.getName(), "*", "*"),
+				new PermissionInfo(RuntimePermission.class.getName(), "*",
+						"accessDeclaredMembers"),
+				new PermissionInfo(PropertyPermission.class.getName(), "*",
+						"read"),};
+		PermissionInfo[] perm;
 		if (permissions.length != defaults.length) {
-    		int size = permissions.length + defaults.length;
-            perm = new PermissionInfo[size];
-    		System.arraycopy(defaults, 0, perm, 0, defaults.length);
-    		System.arraycopy(permissions, 0, perm, defaults.length, permissions.length);
-        } else {
-            perm = defaults;
-        }
+			int size = permissions.length + defaults.length;
+			perm = new PermissionInfo[size];
+			System.arraycopy(defaults, 0, perm, 0, defaults.length);
+			System.arraycopy(permissions, 0, perm, defaults.length,
+					permissions.length);
+		}
+		else {
+			perm = defaults;
+		}
 
-        permissionWorker.updatePermissions(LOCATION, perm, DmtConstants.WAITING_TIME);
+		permissionWorker.updatePermissions(LOCATION, perm,
+				DmtConstants.WAITING_TIME);
 	}
-    
+
 	public void setPermissions(PermissionInfo permission) {
-        
-        PermissionInfo[] perm = new PermissionInfo[] {
-            new PermissionInfo(TopicPermission.class.getName(), "org/osgi/service/dmt/*", TopicPermission.PUBLISH),
-            new PermissionInfo(PackagePermission.class.getName(), "*", "EXPORT, IMPORT"),
-			new PermissionInfo(ServicePermission.class.getName(), "*",
-					ServicePermission.GET + ","+ ServicePermission.REGISTER),
-			new PermissionInfo(AdminPermission.class.getName(), "*", "*"),
-			new PermissionInfo(RuntimePermission.class.getName(),"*", "accessDeclaredMembers"), 
-            new PermissionInfo(PropertyPermission.class.getName(), "*","read"),
-            permission
-        };
 
-        permissionWorker.updatePermissions(LOCATION, perm, DmtConstants.WAITING_TIME);
+		PermissionInfo[] perm = new PermissionInfo[] {
+				new PermissionInfo(TopicPermission.class.getName(),
+						"org/osgi/service/dmt/*", TopicPermission.PUBLISH),
+				new PermissionInfo(PackagePermission.class.getName(), "*",
+						"EXPORT, IMPORT"),
+				new PermissionInfo(ServicePermission.class.getName(), "*",
+						ServicePermission.GET + ","
+								+ ServicePermission.REGISTER),
+				new PermissionInfo(AdminPermission.class.getName(), "*", "*"),
+				new PermissionInfo(RuntimePermission.class.getName(), "*",
+						"accessDeclaredMembers"),
+				new PermissionInfo(PropertyPermission.class.getName(), "*",
+						"read"), permission};
+
+		permissionWorker.updatePermissions(LOCATION, perm,
+				DmtConstants.WAITING_TIME);
 	}
-	
+
 	public PermissionAdmin getPermissionAdmin() {
 		return permissionAdmin;
 	}
+
 	public String getHash(String str) throws Exception {
 		MessageDigest md = MessageDigest.getInstance("SHA");
 		byte[] b = md.digest(str.getBytes("UTF-8"));
-		StringBuffer temp = new StringBuffer(new String(Base64Encoder.encode(b),"UTF-8"));
-		int index=0;
-		while (temp.length()>index) {
-		    if (temp.charAt(index) == '=') {
-		        temp.deleteCharAt(index);
-		    } else if (temp.charAt(index) == '/') {
-		        temp.setCharAt(index,'_');
-		    }
-		    index++;
+		StringBuffer temp = new StringBuffer(new String(
+				Base64Encoder.encode(b), "UTF-8"));
+		int index = 0;
+		while (temp.length() > index) {
+			if (temp.charAt(index) == '=') {
+				temp.deleteCharAt(index);
+			}
+			else
+				if (temp.charAt(index) == '/') {
+					temp.setCharAt(index, '_');
+				}
+			index++;
 		}
 		return temp.toString();
 	}
+
 	public void testEvents() {
 		testClasses[32].run();
 	}
 
-	//DmtSession test cases
-	
-	//Tests common DmtSession exceptions
+	// DmtSession test cases
+
+	// Tests common DmtSession exceptions
 	public void testDmtSessionExceptions() {
 		testClasses[31].run();
 	}
-	
+
 	public void testDmtSessionConstants() {
 		testClasses[21].run();
 	}
-	
+
 	public void testDmtSessionClose() {
 		testClasses[0].run();
-		
+
 	}
+
 	public void testDmtSessionCommit() {
 		testClasses[1].run();
-		
-	}	
+
+	}
+
 	public void testDmtSessionCopy() {
 		testClasses[2].run();
-		
+
 	}
 
 	public void testDmtSessionCreateInteriorNode() {
@@ -310,16 +339,16 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	}
 
 	public void testDmtSessionGetEffectiveNodeAcl() {
-	   testClasses[18].run();
+		testClasses[18].run();
 	}
-	
+
 	public void testDmtSessionGetMetaNode() {
 		testClasses[7].run();
-		
+
 	}
 
 	public void testDmtSessionGetSetNodeAcl() {
-	    testClasses[19].run();
+		testClasses[19].run();
 	}
 
 	public void testDmtSessionGetNodeSize() {
@@ -327,8 +356,8 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	}
 
 	public void testDmtSessionGetNodeTimestamp() {
-	    testClasses[9].run();
-		
+		testClasses[9].run();
+
 	}
 
 	public void testDmtSessionGetNodeVersion() {
@@ -348,7 +377,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	}
 
 	public void testDmtSessionGetSetNodeTitle() {
-	    testClasses[11].run();
+		testClasses[11].run();
 
 	}
 
@@ -363,7 +392,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	public void testDmtSessionGetState() {
 		testClasses[26].run();
 	}
-	
+
 	public void testDmtSessionIsLeafNode() {
 		testClasses[16].run();
 	}
@@ -379,73 +408,75 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	public void testDmtSessionRollback() {
 		testClasses[15].run();
 	}
-	
+
 	public void testDmtSessionSetDefaultNodeValue() {
 		testClasses[29].run();
 	}
-	
 
-	//Acl Constraints test cases 
-	//(it is not at org.osgi.test.cases.dmt.tc1 because it uses the DmtAdmin and there we cannot get any services)
-	
+	// Acl Constraints test cases
+	// (it is not at org.osgi.test.cases.dmt.tc1 because it uses the DmtAdmin
+	// and there we cannot get any services)
+
 	public void testAclConstraints() {
 		new AclConstraints(this).run();
-	}	
-	
-	//DmtAdmin Test cases
+	}
+
+	// DmtAdmin Test cases
 	public void testDmtAdminGetSession() {
 		testClasses[20].run();
 	}
-	
+
 	public void testDmtAdminDmtAdressingUri() {
 		testClasses[30].run();
 	}
-	
+
 	public void testDmtAdminAddEventListener() {
 		testClasses[33].run();
 	}
-	
+
 	public void testDmtAdminRemoveEventListener() {
 		testClasses[34].run();
 	}
 
-	//NotificationService
+	// NotificationService
 	public void testNotificationServiceSendNotification() {
 		testClasses[28].run();
 	}
-	
-    //DmtEvent Test cases
-    public void testDmtEvent() {
-        testClasses[35].run();
-    }
 
-    public void testDmtEventConstants() {
-        testClasses[36].run();
-    }
+	// DmtEvent Test cases
+	public void testDmtEvent() {
+		testClasses[35].run();
+	}
 
-    //Uri
+	public void testDmtEventConstants() {
+		testClasses[36].run();
+	}
+
+	// Uri
 	public void testUriIsAbsoluteUri() {
 		new IsAbsoluteUri(this).run();
 	}
-	
+
 	public void testUriIsValidUri() {
 		new IsValidUri(this).run();
 	}
+
 	public void testUriMangle() {
 		new Mangle(this).run();
 	}
+
 	public void testUriToUri() {
 		new ToUri(this).run();
 	}
+
 	public void testUriToPath() {
 		new ToPath(this).run();
 	}
-	
+
 	public void unprepare() {
 		uninstallHandler();
-        permissionWorker.shutdown();
+		permissionWorker.shutdown();
 	}
-
 
 	public DmtAdmin getDmtAdmin() {
 		if (dmtAdmin != null)
@@ -454,27 +485,28 @@ public class DmtTestControl extends DefaultTestBundleControl {
 			throw new NullPointerException("DmtAdmin is null");
 	}
 
-
 	public void cleanUp(DmtSession session, String nodeUri) {
 		closeSession(session);
 		if (nodeUri != null)
 			cleanAcl(nodeUri);
 	}
-	
+
 	private void installHandler() {
 		testDmtHandlerActivator = new EventHandlerActivator(this);
 		try {
 			testDmtHandlerActivator.start(this.getContext());
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			log("#Fail when starting the Handler");
-		}		
+		}
 	}
-	
+
 	public void uninstallHandler() {
 		if (testDmtHandlerActivator != null) {
 			try {
 				testDmtHandlerActivator.stop(this.getContext());
-			} catch (Exception e) {
+			}
+			catch (Exception e) {
 				log("#Fail when stopping the Handler");
 			}
 		}
@@ -483,169 +515,198 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	public void cleanAcl(String nodeUri) {
 		DmtSession session = null;
 		try {
-			session = getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session = getDmtAdmin().getSession(".",
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			TestExecPlugin.setAllUriIsExistent(true);
 			if (session.isNodeUri(nodeUri)) {
-			    session.setNodeAcl(nodeUri,null);
+				session.setNodeAcl(nodeUri, null);
 			}
 			TestExecPlugin.setAllUriIsExistent(false);
-		} catch (Exception e) {
-			log("#Exception cleaning the acl from "+ nodeUri +" : "+e.getClass().getName() + "Message: [" +e.getMessage() +"]");
-		} finally {
+		}
+		catch (Exception e) {
+			log("#Exception cleaning the acl from " + nodeUri + " : "
+					+ e.getClass().getName() + "Message: [" + e.getMessage()
+					+ "]");
+		}
+		finally {
 			closeSession(session);
 		}
-		
+
 	}
+
 	public void closeSession(DmtSession session) {
 		if (null != session) {
 			if (session.getState() == DmtSession.STATE_OPEN) {
 				try {
 					session.close();
-				} catch (DmtException e) {
-					log("#Exception closing the session: "+e.getClass().getName() + "Message: [" +e.getMessage() +"]");
+				}
+				catch (DmtException e) {
+					log("#Exception closing the session: "
+							+ e.getClass().getName() + "Message: ["
+							+ e.getMessage() + "]");
 				}
 			}
 		}
-	}	
+	}
+
 	public String mangleUri(String[] nodeUri) {
-	    String nodeName="";
-	    if (null != nodeUri) {
-		    StringBuffer nodeNameBuffer= new StringBuffer();
-			if (nodeUri.length>0) {
-				for (int i=0;i<nodeUri.length;i++) {
-					nodeNameBuffer = nodeNameBuffer.append(Uri.mangle(nodeUri[i]) + "/");
+		String nodeName = "";
+		if (null != nodeUri) {
+			StringBuffer nodeNameBuffer = new StringBuffer();
+			if (nodeUri.length > 0) {
+				for (int i = 0; i < nodeUri.length; i++) {
+					nodeNameBuffer = nodeNameBuffer.append(Uri
+							.mangle(nodeUri[i])
+							+ "/");
 				}
-				nodeName = nodeNameBuffer.substring(0,nodeNameBuffer.length()-1);
+				nodeName = nodeNameBuffer.substring(0,
+						nodeNameBuffer.length() - 1);
 			}
-	    }		
+		}
 		return nodeName;
 	}
 
-
-    /**
+	/**
 	 * Appends a nodeUri with exceeding segments
+	 * 
 	 * @param nodeUri The URI base
 	 * @return The URI base appended with the an exceeding number of segments
 	 */
 	public static String getExcedingSegmentsUri(String nodeUri) {
-	    //Gets the number of segments
+		// Gets the number of segments
 		int rootPluginSegments = uriTotalSegments(nodeUri);
-		//The segments to be appended are equal to the maximum number of segments plus one.
+		// The segments to be appended are equal to the maximum number of
+		// segments plus one.
 		int totalSegments = Uri.getMaxUriSegments() - rootPluginSegments + 1;
-		//Appends an the specified number of segments
-		return appendSegments(nodeUri,totalSegments);
+		// Appends an the specified number of segments
+		return appendSegments(nodeUri, totalSegments);
 	}
+
 	/**
-	 * Appends a nodeUri with a number of segments. 
+	 * Appends a nodeUri with a number of segments.
+	 * 
 	 * @param nodeUri The URI base
 	 * @param numberOfSegments The number of segments to be appended.
 	 * @return The URI base appended with the number of segments specified
 	 */
-	
-	public static String appendSegments(String nodeUri,int numberOfSegments) {
-	    StringBuffer uriTooLong =  new StringBuffer(nodeUri);
-	    for (int i=0; i<numberOfSegments;i++) {
-	        uriTooLong.append("/a");
+
+	public static String appendSegments(String nodeUri, int numberOfSegments) {
+		StringBuffer uriTooLong = new StringBuffer(nodeUri);
+		for (int i = 0; i < numberOfSegments; i++) {
+			uriTooLong.append("/a");
 		}
-		return uriTooLong.toString(); 
+		return uriTooLong.toString();
 	}
-	
+
 	/**
-	 * This method returns the total number of segments, assuming that '/' are not in node names 
+	 * This method returns the total number of segments, assuming that '/' are
+	 * not in node names
+	 * 
 	 * @param nodeUri The URI to be checked
 	 * @return The total number of segments of that URI.
 	 */
 	public static int uriTotalSegments(String nodeUri) {
-		int totalSegments =0;
-		int currentIndex=-1;
+		int totalSegments = 0;
+		int currentIndex = -1;
 		boolean finish = false;
 		while (!finish) {
-		    currentIndex =nodeUri.indexOf("/",currentIndex+1);
-		    if (currentIndex!=-1) {
-		        totalSegments++;
-		    } else {
-		        finish=true;
-		    }
+			currentIndex = nodeUri.indexOf("/", currentIndex + 1);
+			if (currentIndex != -1) {
+				totalSegments++;
+			}
+			else {
+				finish = true;
+			}
 		}
 		return totalSegments;
 	}
+
 	/**
 	 * Appends a base URI with a segment that exceeds the limit defined by the
 	 * implementation
+	 * 
 	 * @param nodeUri The URI base
-	 * @return If nodeUri is not null it returns the URI base appended with a segment that exceeds the limit else
-	 * it returns a segment too long.
+	 * @return If nodeUri is not null it returns the URI base appended with a
+	 *         segment that exceeds the limit else it returns a segment too
+	 *         long.
 	 */
 	public static String getSegmentTooLong(String nodeUri) {
 		int nodeLength = Uri.getMaxSegmentNameLength() + 1;
 		StringBuffer nodeName = new StringBuffer(nodeLength);
-		for (int i=0;i<nodeLength;i++) {
+		for (int i = 0; i < nodeLength; i++) {
 			nodeName.append("a");
 		}
-		if (null!=nodeUri) { 
-			return nodeUri + "/" + nodeName.toString(); 
-		} else {
-		    return nodeName.toString();
+		if (null != nodeUri) {
+			return nodeUri + "/" + nodeName.toString();
+		}
+		else {
+			return nodeName.toString();
 		}
 	}
-	
+
 	/**
-	 * Appends a base URI with a segment that exceeds the maximum allowed length of a URI defined by the
-	 * implementation
+	 * Appends a base URI with a segment that exceeds the maximum allowed length
+	 * of a URI defined by the implementation
+	 * 
 	 * @param nodeUri The URI base
-	 * @return If nodeUri is not null it returns the URI base appended with a segment that exceeds the maximum 
-	 * allowed length of a URI else it returns the root node appended with the exceeding segment
+	 * @return If nodeUri is not null it returns the URI base appended with a
+	 *         segment that exceeds the maximum allowed length of a URI else it
+	 *         returns the root node appended with the exceeding segment
 	 */
 	public static String getUriTooLong(String nodeUri) {
 		int uriLength = Uri.getMaxUriLength() + 1;
-		if (nodeUri==null) {
+		if (nodeUri == null) {
 			nodeUri = ".";
 		}
-		//The segment to be appended must not consider the nodeUri + "/"
-		StringBuffer nodeName = new StringBuffer(uriLength - nodeUri.length() - 1);
-		for (int i=0;i<uriLength;i++) {
+		// The segment to be appended must not consider the nodeUri + "/"
+		StringBuffer nodeName = new StringBuffer(uriLength - nodeUri.length()
+				- 1);
+		for (int i = 0; i < uriLength; i++) {
 			nodeName.append("a");
 		}
-		return nodeUri + "/" + nodeName.toString(); 
-			    
+		return nodeUri + "/" + nodeName.toString();
+
 	}
 
 	public static String[] toPath(String nodeUri) {
-		StringTokenizer st = new StringTokenizer(nodeUri,"/");
+		StringTokenizer st = new StringTokenizer(nodeUri, "/");
 		String[] uri = new String[st.countTokens()];
-		int i=0;
+		int i = 0;
 		while (st.hasMoreElements()) {
 			uri[i] = st.nextToken();
 			i++;
 		}
 		return uri;
 	}
-    
-    public void openSessionAndSetNodeAcl(String nodeUri,String principal,int permissions) {
-        DmtSession session = null;
-        try {
-            session = getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
-            session.setNodeAcl(
-                nodeUri,new Acl(new String[]{ principal }, new int[]{ permissions }));
-            
-        } catch (Exception e) {
-            fail("Unexpected Exception: " + e.getClass().getName()
-                + " [Message: " + e.getMessage() + "]", e);
-        } finally {
-            closeSession(session);
-        }
-    
-    }
-    
+
+	public void openSessionAndSetNodeAcl(String nodeUri, String principal,
+			int permissions) {
+		DmtSession session = null;
+		try {
+			session = getDmtAdmin().getSession(".",
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session.setNodeAcl(nodeUri, new Acl(new String[] {principal},
+					new int[] {permissions}));
+
+		}
+		catch (Exception e) {
+			fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]", e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+	}
+
 	public void failUnexpectedException(Exception exception) {
 		fail("Unexpected Exception: " + exception.getClass().getName()
 				+ " [Message: " + exception.getMessage() + "]", exception);
 	}
-	
-	public void failExpectedOtherException(Class expected,Throwable found) {
+
+	public void failExpectedOtherException(Class expected, Throwable found) {
 		fail("Expected " + expected.getName() + " but was "
 				+ found.getClass().getName(), found);
 	}
 
-    
 }
