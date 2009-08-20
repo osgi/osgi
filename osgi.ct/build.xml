@@ -2,7 +2,7 @@
 <project name="project" default="publish">
 	<import file="../cnf/build.xml" />
 
-	<target name="runtests">
+	<target name="runtests" depends="init">
       <antcall target="-runtest">
             <param name="test-name" value="osgi.core.tests" />
         </antcall>
@@ -12,7 +12,7 @@
         </antcall>
 	</target>
 
-	<target name="-runtest" depends="publish">
+	<target name="-runtest">
 		<property name="prefix" value="${target}/${test-name}"/>
 		<delete dir="${prefix}"/>
 		<mkdir dir="${prefix}"/>
