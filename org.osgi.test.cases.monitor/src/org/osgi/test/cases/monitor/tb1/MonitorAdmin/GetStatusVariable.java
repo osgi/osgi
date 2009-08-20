@@ -42,6 +42,8 @@
  */
 package org.osgi.test.cases.monitor.tb1.MonitorAdmin;
 
+import junit.framework.*;
+
 import org.osgi.service.monitor.MonitorPermission;
 import org.osgi.service.monitor.StatusVariable;
 import org.osgi.service.permissionadmin.PermissionInfo;
@@ -188,8 +190,6 @@ public class GetStatusVariable implements TestInterface {
 																	.indexOf("/") + 1) }),
 							MonitorConstants.SV_NAME1, sv.getID());
 
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
 			tbc.setTb1Permission(infos);
 		}

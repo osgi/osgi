@@ -16,7 +16,7 @@
 
 package org.osgi.test.cases.monitor.tbc;
 
-public class SignatureTestCase extends
+public class ASignatureTestCase extends
 		org.osgi.test.support.signature.SignatureTestCase {
 	// concrete subclass
 }
