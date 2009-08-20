@@ -64,86 +64,92 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * Controls the execution of the test case
  */
 public class PolicyTestControl extends DefaultTestBundleControl {
-	
-	private static TB1Service tb1Service;
 
-	private static TestInterface[] testBundleTB1;
+	private static boolean						inited	= false;
 
-	private static ConditionalPermissionAdmin cpa;
+	private static TB1Service					tb1Service;
 
-	private static PermissionAdmin pa;
-	
-	private static DmtAdmin da;
+	private static TestInterface[]				testBundleTB1;
 
-	private static Bundle bundle;
-	
-	private static Bundle providerMessages;
+	private static ConditionalPermissionAdmin	cpa;
 
-	public void prepare() {
-		cpa = (ConditionalPermissionAdmin) getContext().getService(
-				getContext().getServiceReference(
-						ConditionalPermissionAdmin.class.getName()));
+	private static PermissionAdmin				pa;
 
-		pa = (PermissionAdmin) getContext().getService(
-				getContext().getServiceReference(
-						PermissionAdmin.class.getName()));
+	private static DmtAdmin						da;
 
-		da = (DmtAdmin) getContext().getService(
-				getContext().getServiceReference(DmtAdmin.class.getName()));
+	private static Bundle						bundle;
 
-        bundle = this.getContext().getBundle();
-        
-        try {
-			providerMessages = installBundle("com.provider.messages.jar");
-		} catch (Exception e) {
-			log("#the installation of com.provider.messages.jar bundle has failed.");
+	private static Bundle						providerMessages;
+
+	public void setUp() {
+		if (!inited) {
+			inited = true;
+			cpa = (ConditionalPermissionAdmin) getContext().getService(
+					getContext().getServiceReference(
+							ConditionalPermissionAdmin.class.getName()));
+
+			pa = (PermissionAdmin) getContext().getService(
+					getContext().getServiceReference(
+							PermissionAdmin.class.getName()));
+
+			da = (DmtAdmin) getContext().getService(
+					getContext().getServiceReference(DmtAdmin.class.getName()));
+
+			bundle = this.getContext().getBundle();
+
+			try {
+				providerMessages = installBundle("com.provider.messages.jar");
+			}
+			catch (Exception e) {
+				log("#the installation of com.provider.messages.jar bundle has failed.");
+			}
+
+			installBundle();
 		}
-        
-        installBundle();		
 	}
-	
-  public boolean isPolicyAutomatic()
-  {
-    String value = System.getProperty("org.osgi.test.cases.policy.automatic");
-    return !(value != null && value.equals("false"));
-  }
 
-  /**
-   * Executes test methods for isMutable
-   */
-  public void testIsMutable() {
-    if(isPolicyAutomatic())
-      System.out.println("testIsMutable skipped in automatic mode");
-    else
-      new IsMutable(this).run();
-  }
+	public boolean isPolicyAutomatic() {
+		String value = System
+				.getProperty("org.osgi.test.cases.policy.automatic");
+		return !(value != null && value.equals("false"));
+	}
 
-  /**
-   * Executes test methods for isPostponed
-   */
-  public void testIsPostponed() {
-    if(isPolicyAutomatic())
-      System.out.println("testIsPostponed skipped in automatic mode");
-    else
-    new IsPostponed(this).run();
-  }
+	/**
+	 * Executes test methods for isMutable
+	 */
+	public void testIsMutable() {
+		if (isPolicyAutomatic())
+			System.out.println("testIsMutable skipped in automatic mode");
+		else
+			new IsMutable(this).run();
+	}
 
-  /**
-   * Executes test methods for isSatisfied
-   */
-  public void testIsSatisfied() {
-    if(isPolicyAutomatic())
-      System.out.println("testIsSatisfied skipped in automatic mode");
-    else
-      new IsSatisfied(this).run();
-  }
+	/**
+	 * Executes test methods for isPostponed
+	 */
+	public void testIsPostponed() {
+		if (isPolicyAutomatic())
+			System.out.println("testIsPostponed skipped in automatic mode");
+		else
+			new IsPostponed(this).run();
+	}
 
-  /*
-   * Executes test methods for tree structure meta nodes
-   */
-  public void testMetaNode() {
-      testBundleTB1[1].run();
-  }
+	/**
+	 * Executes test methods for isSatisfied
+	 */
+	public void testIsSatisfied() {
+		if (isPolicyAutomatic())
+			System.out.println("testIsSatisfied skipped in automatic mode");
+		else
+			new IsSatisfied(this).run();
+	}
+
+	/*
+	 * Executes test methods for tree structure meta nodes
+	 */
+	public void testMetaNode() {
+		testBundleTB1[1].run();
+	}
 
 	/*
 	 * Executes test methods for tree structure
@@ -152,14 +158,13 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 		testBundleTB1[0].run();
 	}
 
-  /*
-   * Calls UserPromptCondition.getCondition test methods
-   */
-  public void testUserPromptConditionGetCondition() {
-    new org.osgi.test.cases.policy.tbc.UserPromptCondition.GetCondition(
-        this).run();
-  }
-
+	/*
+	 * Calls UserPromptCondition.getCondition test methods
+	 */
+	public void testUserPromptConditionGetCondition() {
+		new org.osgi.test.cases.policy.tbc.UserPromptCondition.GetCondition(
+				this).run();
+	}
 
 	public ConditionalPermissionAdmin getConditionalPermissionAdmin() {
 		return cpa;
@@ -172,7 +177,7 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 	public DmtAdmin getDmtAdmin() {
 		return da;
 	}
-	
+
 	public Bundle getBundle() {
 		if (bundle == null)
 			throw new NullPointerException("null Bundle.");
@@ -182,7 +187,8 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 	private void installBundle() {
 		try {
 			installBundle("tb1.jar");
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			log("TestControl: Failed installing a bundle");
 		}
 		ServiceReference tb1SvrReference = getContext().getServiceReference(
@@ -190,16 +196,15 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 		PolicyConstants.LOCATION = tb1SvrReference.getBundle().getLocation();
 		tb1Service = (TB1Service) getContext().getService(tb1SvrReference);
 		testBundleTB1 = tb1Service.getTestClasses(this);
-		new DmtPermission(".",DmtPermission.ADD);
+		new DmtPermission(".", DmtPermission.ADD);
 
 		setPermissions(new PermissionInfo(DmtPermission.class.getName(),
 				PolicyConstants.ALL_NODES, PolicyConstants.ALL_ACTIONS));
-		
+
 	}
 
-
 	public void setPermissions(PermissionInfo permission) {
-		new TopicPermission("*",TopicPermission.PUBLISH);
+		new TopicPermission("*", TopicPermission.PUBLISH);
 		pa.setPermissions(PolicyConstants.LOCATION,
 				new PermissionInfo[] {
 						new PermissionInfo(TopicPermission.class.getName(),
@@ -222,7 +227,10 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 						new PermissionInfo(ServicePermission.class.getName(),
 								"*", "GET"),
 						new PermissionInfo(AdminPermission.class.getName(),
-								"*", "*"), permission , new PermissionInfo(AllPermission.class.getName(),"*","*")});
+								"*", "*"),
+						permission,
+						new PermissionInfo(AllPermission.class.getName(), "*",
+								"*")});
 	}
 
 	public void closeSession(DmtSession session) {
@@ -230,7 +238,8 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 			if (session.getState() == DmtSession.STATE_OPEN) {
 				try {
 					session.close();
-				} catch (DmtException e) {
+				}
+				catch (DmtException e) {
 					log("#Exception closing the session: "
 							+ e.getClass().getName() + "Message: ["
 							+ e.getMessage() + "]");
@@ -243,11 +252,13 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 		if (session != null && session.getState() == DmtSession.STATE_OPEN) {
 			if (nodeUri == null) {
 				closeSession(session);
-			} else {
+			}
+			else {
 				for (int i = 0; i < nodeUri.length; i++) {
 					try {
 						session.deleteNode(nodeUri[i]);
-					} catch (Throwable e) {
+					}
+					catch (Throwable e) {
 						log("#Exception at cleanUp: " + e.getClass().getName()
 								+ " [Message: " + e.getMessage() + "]");
 					}
@@ -257,14 +268,14 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 		}
 	}
 
-	
 	public void unprepare() {
 		try {
 			providerMessages.stop();
 			providerMessages.uninstall();
-		} catch (BundleException e) {
+		}
+		catch (BundleException e) {
 			log("#error uninstalling the com.provider.messages bundle");
 		}
-		
+
 	}
 }
