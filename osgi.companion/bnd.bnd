@@ -29,8 +29,7 @@ bin.includes				= \
 
 -buildpath 					= \
 	${replace;${specs};.+;$0\\;version=project}, \
-	ee.foundation;version=1.1, \
-	org.osgi.internal
+	ee.foundation;version=1.1
 
 # Build the osgi spec files
 -sub       = osgi*.bnd

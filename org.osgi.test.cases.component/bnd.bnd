@@ -1,5 +1,6 @@
 Bundle-Version: 4.2.0.${project.build}
 Bundle-Description: Declarative Services Test Case
+-debug: true
 
 Private-Package						= org.osgi.test.support.*, \
 	${p}.junit

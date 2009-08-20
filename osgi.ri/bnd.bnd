@@ -7,24 +7,20 @@
 bin.includes				= \
 	osgi.cmpn.impls.jar, \
 	osgi.mobile.impls.jar, \
-	osgi.enterprise.impls.jar, \
-    org.osgi.internal
-
+	osgi.enterprise.impls.jar
 
 # The following line builds all these files and publishes them to 
 # the repository (if they are deployable)
 
 -dependson 					= ${uniq; \
     osgi.companion, \
-    org.osgi.internal, \
 	${build.cmpn.impls}, \
 	${build.mobile.impls}, \
 	${build.enterprise.impls}, \
  }
 
 -buildpath 					= \
-	ee.foundation; version=1.1, \
-	org.osgi.internal; version=project
+	ee.foundation; version=1.1
 
 # Build the osgi spec files
 -sub       = osgi*.bnd
