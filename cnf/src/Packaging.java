@@ -28,10 +28,10 @@ public class Packaging implements AnalyzerPlugin {
 			return false;
 
 		// Make sure -pack is set in the actual file or one of its includes
-		String pack = (String) analyzer.getProperties().get(PACK);
-		if (pack == null)
+		if (!analyzer.getProperties().containsKey(PACK))
 			return false;
 
+		String pack = analyzer.getProperty(PACK);
 		ProjectBuilder pb = (ProjectBuilder) analyzer;
 
 		Workspace workspace = pb.getProject().getWorkspace();
