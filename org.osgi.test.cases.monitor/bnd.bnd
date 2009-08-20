@@ -12,9 +12,7 @@ Include-Resource					= \
 	tb4.jar, \
 	tb5.jar
 
-Test-Cases = org.osgi.test.cases.monitor.tbc.MonitorTestControl,  org.osgi.test.cases.monitor.tbc.SignatureTestCase 
-
-#Test-Cases							= ${testcases}
+Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.monitor
 
 -buildpath							= \
