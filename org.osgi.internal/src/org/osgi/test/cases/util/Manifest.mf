@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Bundle-Name: test.cases.util
-Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
-Bundle-Description: Utility classes for test cases 
-Bundle-Vendor: OSGi Alliance
-Bundle-Category: osgi,test
-$(EXPORT-PACKAGE)
-$(IMPORT-PACKAGE)
-
