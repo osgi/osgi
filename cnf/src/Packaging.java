@@ -8,6 +8,16 @@ import aQute.lib.osgi.*;
 import aQute.libg.header.*;
 import aQute.libg.version.*;
 
+/**
+ * This script runs after the bnd file stuff has been done, before analyzing any
+ * classes. It will check if the bnd file contains -pack (the bnd file must
+ * contain it, not a parent). It will then pack all projects listed as its
+ * valued. For each project, a bnd file is created that has no longer references
+ * to the build. All dependent JAR files are stored in the jar directory for
+ * this purpose. Additionally, a runtests script is added and the bnd jar is
+ * included to make the tess self contained.
+ */
+
 public class Packaging implements AnalyzerPlugin {
 
 	final static String	PACK	= "-pack";
@@ -17,7 +27,8 @@ public class Packaging implements AnalyzerPlugin {
 		if (!(analyzer instanceof ProjectBuilder))
 			return false;
 
-		String pack = analyzer.getProperty(PACK);
+		// Make sure -pack is set in the actual file or one of its includes
+		String pack = (String) analyzer.getProperties().get(PACK);
 		if (pack == null)
 			return false;
 
@@ -25,6 +36,8 @@ public class Packaging implements AnalyzerPlugin {
 
 		Workspace workspace = pb.getProject().getWorkspace();
 		Jar jar = analyzer.getJar();
+
+		// For each project listed ...
 		Map<String, Map<String, String>> ct = pb.parseHeader(pack);
 		for (Map.Entry<String, Map<String, String>> entry : ct.entrySet()) {
 			try {
@@ -99,6 +112,7 @@ public class Packaging implements AnalyzerPlugin {
 					.parseProperties(runproperties);
 
 			String del = "\n\n" + Constants.RUNPROPERTIES + " = \\\n";
+			properties.put("report", "true");
 			for (Map.Entry<String, String> entry : properties.entrySet()) {
 				sb.append(del);
 
