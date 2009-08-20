@@ -5,6 +5,6 @@ Bundle-Description			: \
 Bundle-Version				: ${core.release.version}
 Include-Resource				: \
  	NOTICE=../osgi.companion/legal/NOTICE.txt, \
- 	about.html=../osgi.companion/legal/about-ri.html
+ 	{about.html=../osgi.companion/legal/about-ri.html}
 
 -pack: ${build.core.tests}
