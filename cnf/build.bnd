@@ -86,7 +86,7 @@ proposed.release.version	= ${osgi.release.version}
 # Documentation
 Bundle-Copyright       	= ${copyright}
 Bundle-Vendor			= OSGi Alliance
--removeheader			= Include-Resource
+-removeheaders			= Include-Resource, Private-Package
 
 -runpath							= \
 	org.eclipse.osgi;		version=3.5.1, \
