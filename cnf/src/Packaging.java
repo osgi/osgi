@@ -17,12 +17,15 @@ public class Packaging implements AnalyzerPlugin {
 		if (!(analyzer instanceof ProjectBuilder))
 			return false;
 
+		String pack = analyzer.getProperty(PACK);
+		if (pack == null)
+			return false;
+
 		ProjectBuilder pb = (ProjectBuilder) analyzer;
 
 		Workspace workspace = pb.getProject().getWorkspace();
 		Jar jar = analyzer.getJar();
-		Map<String, Map<String, String>> ct = pb.parseHeader(analyzer
-				.getProperty(PACK));
+		Map<String, Map<String, String>> ct = pb.parseHeader(pack);
 		for (Map.Entry<String, Map<String, String>> entry : ct.entrySet()) {
 			try {
 				Project project = workspace.getProject(entry.getKey());
@@ -169,8 +172,9 @@ public class Packaging implements AnalyzerPlugin {
 		if (subs == null) {
 			analyzer.error("Project cannot build %s ", project);
 		}
-		for (File sub : subs)
-			flatten(analyzer, sb, jar, sub, map);
+		else
+			for (File sub : subs)
+				flatten(analyzer, sb, jar, sub, map);
 	}
 
 	private void flatten(Analyzer analyzer, StringBuilder sb, Jar jar,
