@@ -2,7 +2,6 @@
 
 -buildpath: \
 	org.apache.tools.ant, 									\
-	org.osgi.internal, 										\
 	com.icl.saxon, 											\
 	osgi.core;							version=4.0.1, 		\
 	osgi.mobile;						version=4.0, 		\
