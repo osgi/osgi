@@ -107,36 +107,35 @@ public class Packaging implements AnalyzerPlugin {
 		sb.append("-runbundles = ");
 		flatten(analyzer, sb, jar, runbundles);
 
-		if (runproperties != null) {
-			Map<String, String> properties = OSGiHeader
-					.parseProperties(runproperties);
+		Map<String, String> properties = OSGiHeader
+				.parseProperties(runproperties);
 
-			String del = "\n\n" + Constants.RUNPROPERTIES + " = \\\n";
-			properties.put("report", "true");
-			for (Map.Entry<String, String> entry : properties.entrySet()) {
-				sb.append(del);
+		String del = "\n\n" + Constants.RUNPROPERTIES + " = \\\n";
+		properties.put("report", "true");
+		for (Map.Entry<String, String> entry : properties.entrySet()) {
+			sb.append(del);
 
-				sb.append(entry.getKey());
-				sb.append("=");
-				if (entry.getKey().equals(
-						"org.osgi.framework.trust.repositories")) {
-					sb.append("keystore");
+			sb.append(entry.getKey());
+			sb.append("=");
+			if (entry.getKey().equals("org.osgi.framework.trust.repositories")) {
+				sb.append("keystore");
 
-					// Copy the key store
-					File keystore = analyzer.getFile(entry.getValue());
-					if (keystore.exists() && keystore.isFile()) {
-						jar.putResource("keystore", new FileResource(keystore));
-					}
-					else {
-						analyzer.error(
-								"The referred keystore %s is not a file", entry
-										.getValue());
-					}
+				// Copy the key store
+				File keystore = analyzer.getFile(entry.getValue());
+				if (keystore.exists() && keystore.isFile()) {
+					jar.putResource("keystore", new FileResource(keystore));
 				}
-				else
-					sb.append(entry.getValue());
-				del = ", \\\n";
+				else {
+					analyzer.error("The referred keystore %s is not a file",
+							entry.getValue());
+				}
 			}
+			else {
+				sb.append("\"");
+				sb.append(entry.getValue());
+				sb.append("\"");
+			}
+			del = ", \\\n";
 		}
 		sb.append("\n\n\n\n");
 
