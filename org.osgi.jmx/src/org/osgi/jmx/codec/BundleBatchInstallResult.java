@@ -70,6 +70,7 @@ public class BundleBatchInstallResult {
 	 *            operation.
 	 */
 	public BundleBatchInstallResult(CompositeData compositeData) {
+	        success = ((Boolean) compositeData.get(FrameworkMBean.BUNDLE_SUCCESS)).booleanValue();
 		errorMessage = (String) compositeData
 				.get(FrameworkMBean.BUNDLE_ERROR_MESSAGE);
 		Long[] c = (Long[]) compositeData.get(FrameworkMBean.BUNDLE_COMPLETED);
