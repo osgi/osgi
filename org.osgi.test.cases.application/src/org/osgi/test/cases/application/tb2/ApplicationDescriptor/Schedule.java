@@ -93,6 +93,9 @@ public class Schedule implements TestInterface {
 		PermissionInfo[] infos = null;
 		ScheduledApplication sa = null;
 		try {
+			//remove all previously launched handles
+			tbc.destroyHandles();
+			
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb2Location());
 
