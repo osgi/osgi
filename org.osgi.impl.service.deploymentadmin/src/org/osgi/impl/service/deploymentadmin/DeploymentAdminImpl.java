@@ -628,7 +628,10 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         if (startEvent.getTopic().equals(DAConstants.TOPIC_INSTALL)) {
         	if (startEvent.getProperty(DAConstants.EVENTPROP_DP_CURRENT_VERSION) != null)
         	ht.put(DAConstants.EVENTPROP_DP_CURRENT_VERSION, startEvent.getProperty(DAConstants.EVENTPROP_DP_CURRENT_VERSION));
-        	ht.put(DAConstants.EVENTPROP_DP_NEXT_VERSION, session.getSourceDeploymentPackage().getVersion());
+        	Version version = dp.getVersion();
+        	if (version != null) {
+        		ht.put(DAConstants.EVENTPROP_DP_NEXT_VERSION, version);
+        	}
         }
         ht.put(DAConstants.EVENTPROP_SUCCESSFUL, new Boolean(succ));
         
