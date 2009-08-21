@@ -18,20 +18,13 @@
 package org.osgi.impl.service.deploymentadmin;
 
 import java.io.*;
-import java.security.cert.Certificate;
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Vector;
-import java.util.jar.Attributes;
-import java.util.jar.JarEntry;
-import java.util.jar.JarInputStream;
-import java.util.jar.Manifest;
-import java.util.zip.ZipException;
+import java.lang.reflect.*;
+import java.security.cert.*;
+import java.util.*;
+import java.util.jar.*;
+import java.util.zip.*;
 
-import org.osgi.service.deploymentadmin.DeploymentException;
+import org.osgi.service.deploymentadmin.*;
 
 /**
  * DeploymentPackageJarInputStream class wraps the JarInputStream implementation  
@@ -150,6 +143,32 @@ public class DeploymentPackageJarInputStream {
                 list.add(buffer.toArray(new String[] {}));
             }
             return list;
+        }
+        public Certificate[] getCertificates() {
+        	Certificate[] certs = super.getCertificates();
+        	if ( certs != null )
+        		return certs;
+        	
+        	try {
+        		List certificates= new ArrayList();
+        		Object signers[] = (Object[]) call(this,"getCodeSigners");
+        		if ( signers != null ) {
+        			for ( int i =0; i<signers.length; i++ ) {
+        				Object certpath = call(signers[i], "getSignerCertPath");
+        				List signerCertificates = (List) call(certpath, "getCertificates");
+        				Certificate cert = (Certificate) signerCertificates.get(0);
+        				if ( cert != null )
+        					certificates.add(cert);
+        			}
+        		}
+        		return (Certificate[]) certificates.toArray(new Certificate[certificates.size()]);
+        	} catch( Throwable t ) {
+        		return null;
+        	}
+        }
+        Object call(Object target, String name ) throws Exception {
+        	Method m = target.getClass().getMethod(name, null);
+        	return m.invoke(target, null);    	
         }
     }
     
