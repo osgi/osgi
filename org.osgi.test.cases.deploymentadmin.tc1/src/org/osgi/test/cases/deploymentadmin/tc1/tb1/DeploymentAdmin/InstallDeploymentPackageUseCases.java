@@ -616,11 +616,11 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 			e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
-			try {
-				tbc.getEventHandlerActivator().stop(tbc.getContext());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+//			try {
+//				tbc.getEventHandlerActivator().stop(tbc.getContext());
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
 			tbc.uninstall(dp);
 			deploymentEventHandler.reset();
 		}
@@ -636,8 +636,9 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 		DeploymentPackage dp = null;
 		try {
 			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
-			
-			tbc.getEventHandlerActivator().start(tbc.getContext());
+			//wait for events from previous test to arrive 
+			Thread.sleep(DeploymentConstants.SHORT_TIMEOUT);
+//			tbc.getEventHandlerActivator().start(tbc.getContext());
             deploymentEventHandler.reset();
             deploymentEventHandler.setVerifying(true);
             deploymentEventHandler.setHandlingComplete(true);
@@ -655,11 +656,11 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 			e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
-			try {
-				tbc.getEventHandlerActivator().stop(tbc.getContext());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+//			try {
+//				tbc.getEventHandlerActivator().stop(tbc.getContext());
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
 			tbc.uninstall(dp);
 		}
 	}
@@ -677,8 +678,9 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 		boolean dpInstalled = false;
 		try {
 			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
-			
-			tbc.getEventHandlerActivator().start(tbc.getContext());
+			//wait for events from previous test to arrive 
+			Thread.sleep(DeploymentConstants.SHORT_TIMEOUT);
+//			tbc.getEventHandlerActivator().start(tbc.getContext());
             deploymentEventHandler.reset();
             deploymentEventHandler.setVerifying(true);
             deploymentEventHandler.setHandlingComplete(true);
@@ -762,6 +764,5 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 			}
 			return null;
 		}
-
 	}
 }
