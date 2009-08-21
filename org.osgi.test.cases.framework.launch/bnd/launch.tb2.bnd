@@ -4,14 +4,23 @@ Bundle-Version: 4.2.0.${project.build}
 Bundle-Activator: ${p}.tb2.Activator
 Bundle-NativeCode: \
  libs/libnativecode.1; osname=Linux; processor=x86; selection-filter="(nativecodetest=1)", \
+ libs/libnativecode.1; osname=Linux; processor=x86-64; selection-filter="(nativecodetest=1)", \
  libs/nativecode.1; osname=Win32; processor=x86; selection-filter="(nativecodetest=1)", \
+ libs/nativecode.1; osname=Win32; processor=x86-64; selection-filter="(nativecodetest=1)", \
  libs/libnativecode.1; osname=MacOSx; processor=x86; selection-filter="(nativecodetest=1)", \
+ libs/libnativecode.1; osname=MacOSx; processor=x86-64; selection-filter="(nativecodetest=1)", \
  libs/libnativecode.2; osname=Linux; processor=x86; selection-filter="(nativecodetest=2)", \
+ libs/libnativecode.2; osname=Linux; processor=x86-64; selection-filter="(nativecodetest=2)", \
  libs/nativecode.2; osname=Win32; processor=x86; selection-filter="(nativecodetest=2)", \
+ libs/nativecode.2; osname=Win32; processor=x86-64; selection-filter="(nativecodetest=2)", \
  libs/libnativecode.2; osname=MacOSx; processor=x86; selection-filter="(nativecodetest=2)", \
+ libs/libnativecode.2; osname=MacOSx; processor=x86-64; selection-filter="(nativecodetest=2)", \
  libs/libnativecode.3; osname=Linux; processor=x86; selection-filter="(nativecodetest=3)", \
+ libs/libnativecode.3; osname=Linux; processor=x86-64; selection-filter="(nativecodetest=3)", \
  libs/nativecode.3; osname=Win32; processor=x86; selection-filter="(nativecodetest=3)", \
- libs/libnativecode.3; osname=MacOSx; processor=x86; selection-filter="(nativecodetest=3)"
+ libs/nativecode.3; osname=Win32; processor=x86-64; selection-filter="(nativecodetest=3)", \
+ libs/libnativecode.3; osname=MacOSx; processor=x86; selection-filter="(nativecodetest=3)", \
+ libs/libnativecode.3; osname=MacOSx; processor=x86-64; selection-filter="(nativecodetest=3)"
 
 Private-Package						= \
 	${p}.tb2.*

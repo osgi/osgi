@@ -8,6 +8,9 @@ Bundle-Description: Bundle-Description: This is a framework extension bundle use
  native code test. Framework extension bundles cannot have a native \
  code header.
 Export-Package: q, p
-Bundle-NativeCode: org/osgi/test/cases/framework/fragments/tb8/linux_x86/libNative.so; osname=Linux; processor=x86; osversion="(1000,10000]", *
+Bundle-NativeCode: \
+    org/osgi/test/cases/framework/fragments/tb8/linux_x86/libNative.so; osname=Linux; processor=x86; osversion="(1000,10000]", \
+    org/osgi/test/cases/framework/fragments/tb8/linux_x86/libNative.so; osname=Linux; processor=x86-64; osversion="(1000,10000]", \
+    *
 
 -failok: true
