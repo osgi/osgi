@@ -122,7 +122,13 @@ public class DmtEvent implements TestInterface {
 		} finally {
 			tbc.getDmtAdmin().removeEventListener(eventListener);
 			tbc.closeSession(session);
-			
+			//wait for the close session event to be processed, otherwise it would interfere with the next test
+            synchronized (tbc) {
+            	try {
+                	Thread.sleep(DmtConstants.WAITING_TIME);
+            	} catch (Exception e) {
+				}
+            }
 		}
 	
 	}
@@ -170,7 +176,6 @@ public class DmtEvent implements TestInterface {
 		DmtEventListenerImpl eventListener = new DmtEventListenerImpl();
 		try {
 			tbc.log("#testDmtEvent002");
-			
 			
 			tbc.getDmtAdmin().addEventListener(DmtConstants.ALL_DMT_EVENTS,
 					TestExecPluginActivator.INTERIOR_NODE,eventListener);
