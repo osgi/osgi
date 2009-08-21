@@ -108,7 +108,6 @@ public class DeploymentPackageJarInputStream {
 		private List getCertificateChains() {
 			List ret = new LinkedList();
 			Certificate[] certs = getCertificates();
-			System.out.println("Certs: " + certs);
 
 			if (null == certs || certs.length == 0)
 				return ret;
