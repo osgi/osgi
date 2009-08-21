@@ -17,20 +17,20 @@ Test-Cases							= ${testcases}
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
     org.osgi.service.application;           version=project , \
+	org.osgi.impl.bundle.midletcontainer; 	version=project, \
 	osgi.core;								version=4.0.1	, \
 	osgi.cmpn;								version=4.1	, \
 	ee.foundation; 							version=1.1	, \
-	org.osgi.impl.bundle.midletcontainer; 	version=1.0, \
 	${junit}
 
 -runbundles							= \
 	org.osgi.impl.bundle.midletcontainer; version=project, \
 	org.osgi.impl.service.application; version=project, \
-	org.osgi.impl.service.log; version=latest, \
+	org.osgi.impl.service.log; version=project, \
 	org.apache.felix.configadmin; version=latest, \
+	org.osgi.impl.service.dmt;  version=project, \
+	org.osgi.impl.bundle.jaxp; version=project, \
 	org.eclipse.equinox.event; version=latest, \
-	org.osgi.impl.service.dmt;  version=latest, \
-	org.osgi.impl.bundle.jaxp; version=latest, \
 	osgi.cmpn; version=latest
 
 -runproperties = report=true, \
