@@ -3019,7 +3019,7 @@ public class TreeStructure {
 			sa.remove();
 			
 			while (tbc.getScheduledApplication() != null) {
-				
+				Thread.sleep(10);
 			}
 
 			tbc
@@ -3075,6 +3075,7 @@ public class TreeStructure {
             tbc.fail(MessagesConstants.getMessage(
                     MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
+        	sa.remove();
             tbc.cleanUp(session,new String[] { ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID });
         }
     }   
