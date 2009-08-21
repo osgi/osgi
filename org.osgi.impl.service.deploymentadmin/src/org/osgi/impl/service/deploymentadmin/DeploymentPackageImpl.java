@@ -333,7 +333,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     public synchronized Version getVersion() {
         String s = (String) mainSection.get(DAConstants.DP_VERSION);
         if (null == s)
-            return new Version("0.0.0");
+            return null;
         return new Version(s); 
     }
 
