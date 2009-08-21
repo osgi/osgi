@@ -7,17 +7,15 @@ Bundle-Activator: org.osgi.test.cases.div.tb2.NativeCode
 Comment: Windows NT should be WindowsNT, Linux processor must be x386
 Bundle-NativeCode: \
  linux_x86/libNative.so; osname=Linux; processor=x86, \
- linux_x86/libNative.so; osname=Linux; processor=x86-64, \
+ linux_x86-64/libNative.so; osname=Linux; processor=x86-64, \
  qnx_x86/libNative.so; osname=QNX; processor=x86, \
  qnx_ppc/libNative.so; osname=QNX; processor=PowerPC, \
  qnx_armle/libNative.so; osname=QNX; processor=arm_le, \
  windows_x86/Native.dll; osname=Win32; processor=x86, \
- windows_x86/Native.dll; osname=Win32; processor=x86-64, \
  solaris_sparc/libNative.so; osname=Solaris; processor=sparc, \
  solaris_sparc/libNative.so; osname=SunOS; processor=sparc, \
  windows_arm/Native.dll; osname="windows ce"; processor=arm_le, \
  macosx_x86/libNative.jnilib; osname="mac os x"; processor=x86, \
- macosx_x86/libNative.jnilib; osname="mac os x"; processor=x86-64, \
  macosx_x86/libNative.jnilib; osname="mac os x"; processor=ppc
 Include-Resource = resources/div.tb2
 # could not rename this package without rebuilding native so/dll

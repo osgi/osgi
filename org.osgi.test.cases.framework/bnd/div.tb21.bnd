@@ -10,7 +10,7 @@ Bundle-Activator: ${p}.div.tb21.NativeCodeVersion
 Comment: osversion should not match since version ranges do not match valid os versions
 Bundle-NativeCode: \
  linux_x86/libNative.so; osname=Linux; processor=x86; osversion="(1000,10000]", \
- linux_x86/libNative.so; osname=Linux; processor=x86-64; osversion="(1000,10000]", \
+ linux_x86-64/libNative.so; osname=Linux; processor=x86-64; osversion="(1000,10000]", \
  qnx_x86/libNative.so; osname=QNX; processor=x86; osversion="[1000,10000)", \
  qnx_ppc/libNative.so; osname=QNX; processor=PowerPC; osversion="[1000,10000]", \
  qnx_armle/libNative.so; osname=QNX; processor=arm_le; osversion="(1000,10000.1.3.10-b_c)", \
@@ -18,15 +18,10 @@ Bundle-NativeCode: \
  windows_x86/Native.dll; osname=Win32; processor=x86; osversion="10000", \
  windows_x86/Native.dll; osname=Win32; processor=x86; osversion="10000.1.3.10-b_c", \
  windows_x86/Native.dll; osname=Win32; processor=x86; osversion="[1000.1.3.10-b_c,10000]", \
- windows_x86/Native.dll; osname=Win32; processor=x86-64; osversion=10000, \
- windows_x86/Native.dll; osname=Win32; processor=x86-64; osversion="10000", \
- windows_x86/Native.dll; osname=Win32; processor=x86-64; osversion="10000.1.3.10-b_c", \
- windows_x86/Native.dll; osname=Win32; processor=x86-64; osversion="[1000.1.3.10-b_c,10000]", \
  solaris_sparc/libNative.so; osname=Solaris; processor=sparc; osversion="[10000,10000]", \
  solaris_sparc/libNative.so; osname=SunOS; processor=sparc; osversion="[10000.1.3.10-b_c,10000.1.3.10-b_c]", \
  windows_arm/Native.dll; osname="windows ce"; processor=arm_le; osversion="[10000.1.3.10-b_c,10000.1.3.10-b_c]", \
  macosx_x86/libNative.jnilib; osname="mac os x"; processor=x86; osversion="[10000,10000]", \
- macosx_x86/libNative.jnilib; osname="mac os x"; processor=x86-64; osversion="[10000,10000]", \
  macosx_x86/libNative.jnilib; osname="mac os x"; processor=ppc; osversion="[10000,10000]"
 Include-Resource = resources/div.tb2
 Private-Package:                         ${p}.div.tb21, org.osgi.test.cases.div.tb2

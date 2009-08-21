@@ -9,17 +9,15 @@ Bundle-Activator: ${p}.div.tb19.NativeCodeLanguage
 Comment: Language should not match
 Bundle-NativeCode: \
  linux_x86/libNative.so; osname=Linux; processor=x86; language=zz, \
- linux_x86/libNative.so; osname=Linux; processor=x86-64; language=zz, \
+ linux_x86-64/libNative.so; osname=Linux; processor=x86-64; language=zz, \
  qnx_x86/libNative.so; osname=QNX; processor=x86; language=zz, \
  qnx_ppc/libNative.so; osname=QNX; processor=PowerPC; language=zz, \
  qnx_armle/libNative.so; osname=QNX; processor=arm_le; language=zz, \
  windows_x86/Native.dll; osname=Win32; processor=x86; language=zz, \
- windows_x86/Native.dll; osname=Win32; processor=x86-64; language=zz, \
  solaris_sparc/libNative.so; osname=Solaris; processor=sparc; language=zz, \
  solaris_sparc/libNative.so; osname=SunOS; processor=sparc; language=zz, \
  windows_arm/Native.dll; osname="windows ce"; processor=arm_le; language=zz \
  macosx_x86/libNative.jnilib; osname="mac os x"; processor=x86; language=zz, \
- macosx_x86/libNative.jnilib; osname="mac os x"; processor=x86-64; language=zz, \
  macosx_x86/libNative.jnilib; osname="mac os x"; processor=ppc; language=zz
 Include-Resource = resources/div.tb2
 Private-Package:                         ${p}.div.tb19, org.osgi.test.cases.div.tb2
