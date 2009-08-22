@@ -30,6 +30,7 @@ package org.osgi.test.cases.cm.common;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.cm.ConfigurationEvent;
 import org.osgi.service.cm.ConfigurationListener;
+import org.osgi.test.cases.cm.shared.Synchronizer;
 
 /**
  * 

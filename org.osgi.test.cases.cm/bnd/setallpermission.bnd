@@ -1,0 +1,12 @@
+Bundle-SymbolicName: ${p}.setallpermission
+Bundle-Name: ${p}.setallpermission
+Bundle-Description: set AllPermission to testContorol Bundle
+Bundle-Activator: ${p}.setallpermission.SetAllPermissionActivator
+Bundle-Vendor: NTT
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+
+Private-Package	= \
+	${p}.setallpermission
+

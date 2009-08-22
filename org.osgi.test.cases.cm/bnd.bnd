@@ -9,11 +9,17 @@ Private-Package						= \
 	org.osgi.test.support.*, \
 	${p}.junit, \
 	${p}.common
-
+	
 Include-Resource					= \
 	tb1.jar, \
-	tb2.jar
-
+	tb2.jar, \
+	setallpermission.jar, \
+	targetb1.jar, \
+	targetb2.jar
+	
+Export-Package = \
+	${p}.shared;version=1.0.0
+	
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.cm
 

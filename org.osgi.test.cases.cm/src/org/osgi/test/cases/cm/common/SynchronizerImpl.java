@@ -27,6 +27,10 @@
 
 package org.osgi.test.cases.cm.common;
 
+import java.util.Dictionary;
+
+import org.osgi.test.cases.cm.shared.Synchronizer;
+
 /**
  * 
  * Helper class to be used for synchronization when dealing with asynchronous
@@ -36,16 +40,29 @@ package org.osgi.test.cases.cm.common;
  * 
  * @author Jorge Mascena
  */
-public class Synchronizer {
-	private int	signalCount;
+public class SynchronizerImpl implements Synchronizer {
+	private int				signalCount;
+	private final String	id;
+	private final String	header;
+	private Dictionary		props;
+	private static boolean	DEBUG	= false;
 
 	/**
 	 * Creates a <code>Synchronizer</code> instance with no signals on the
 	 * queue.
 	 * 
+	 * @param id
+	 * 
 	 */
-	public Synchronizer() {
+	public SynchronizerImpl(String id) {
 		signalCount = 0;
+		this.id = id;
+		this.header = "SYNC(" + this.id + ")";
+	}
+
+	public SynchronizerImpl() {
+		this.id = null;
+		this.header = "SYNC";
 	}
 
 	/**
@@ -55,11 +72,14 @@ public class Synchronizer {
 	 */
 	public synchronized void signal() {
 		signalCount++;
+		if (DEBUG)
+			System.out.println(header
+					+ ":signal() signalCount is incremented to " + signalCount);
 		notifyAll();
 	}
 
 	/**
-	 * Consumes a signal from the queue. If no signal is available, waits for
+	 * Consumes signals from the queue. If no signal is available, waits for
 	 * <code>timemilli</code> milliseconds and then checks again if there's a
 	 * signal to be consumed.
 	 * 
@@ -73,25 +93,65 @@ public class Synchronizer {
 	}
 
 	/**
-	 * Consumes some signals from the queue. If no signal is available, waits for
-	 * <code>timemilli</code> milliseconds and then checks again if there's
-	 * signals to be consumed.
+	 * Consumes some signals from the queue. If the specified compareCount
+	 * signals are received or expire <code>timemilli</code> milliseconds,
+	 * return the flag the signals are consumed.
 	 * 
 	 * @param timemilli the time (in millisends) to wait for a signal if none is
 	 *        available.
 	 * @param compareCount the amount of signals to consume
-	 * @return <code>true</code> if there was a signal to be consumed.
+	 * @return <code>true</code> if there were signals to be consumed.
 	 *         <code>false</code> otherwise.
-	 */	
+	 */
 	public synchronized boolean waitForSignal(long timemilli, int compareCount) {
-		if (signalCount < compareCount) {
+		if (DEBUG)
+			System.out.println(header + ":Begin waitForSignal(" + timemilli
+					+ "," + compareCount + "): signalCount=" + signalCount);
+		final long preTime = System.currentTimeMillis();
+		while (signalCount < compareCount) {
+			long curTime = System.currentTimeMillis();
+			if (curTime >= preTime + timemilli)
+				break;
+			long period = preTime + timemilli - curTime;
 			try {
-				wait(timemilli);
+				if (DEBUG)
+					System.out.println(header + ":waitForSignal(" + timemilli
+							+ "," + compareCount + "): signalCount="
+							+ signalCount + ": going to wait...");
+				wait(period);
+				if (DEBUG)
+					System.out.println(header + ":waitForSignal(" + timemilli
+							+ "," + compareCount + "):signalCount="
+							+ signalCount + ": timeout or notified !!");
 			}
 			catch (InterruptedException e) {
+				if (DEBUG)
+					System.out.println(header + ":waitForSignal(" + timemilli
+							+ "," + compareCount + "):signalCount="
+							+ signalCount + ": interrupted!!");
 			}
 		}
-		
+		if (DEBUG)
+			System.out.println(header + ":end   waitForSignal(" + timemilli
+					+ "," + compareCount + "): signalCount=" + signalCount);
+
 		return signalCount >= compareCount;
+	}
+
+	public void signal(Dictionary props) {
+		this.props = props;
+		this.signal();
+	}
+
+	public Dictionary getProps() {
+		return props;
+	}
+
+	public synchronized int getCount() {
+		return signalCount;
+	}
+
+	public synchronized void resetCount() {
+		signalCount = 0;
 	}
 }

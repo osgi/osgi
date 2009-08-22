@@ -31,7 +31,8 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.ConfigurationListener;
 import org.osgi.test.cases.cm.common.ConfigurationListenerImpl;
-import org.osgi.test.cases.cm.common.Synchronizer;
+import org.osgi.test.cases.cm.common.SynchronizerImpl;
+import org.osgi.test.cases.cm.shared.Synchronizer;
 
 /**
  * 
@@ -57,7 +58,7 @@ public class Activator implements BundleActivator {
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
-		Synchronizer synchronizer = new Synchronizer();
+		Synchronizer synchronizer = new SynchronizerImpl();
 		ConfigurationListenerImpl cl = new ConfigurationListenerImpl(
 				synchronizer);
 		context
