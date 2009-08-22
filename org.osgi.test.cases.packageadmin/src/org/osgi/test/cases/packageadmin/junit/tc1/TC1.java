@@ -21,8 +21,8 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * @author Ericsson Telecom AB
  */
 public class TC1 extends DefaultTestBundleControl {
-	private final String	TP1				= "org.osgi.test.cases.packageadmin.tc1.tb1";
-	private final String	TP2				= "org.osgi.test.cases.packageadmin.tc1.tb2";
+	private final String	TP1	= "org.osgi.test.cases.packageadmin.tc1.tb1";
+	private final String	TP2	= "org.osgi.test.cases.packageadmin.tc1.tb2";
 
 	/**
 	 *  
@@ -33,23 +33,24 @@ public class TC1 extends DefaultTestBundleControl {
 		Bundle tb3;
 		PackageAdmin pa = null;
 		// 2.15.1 Testcase1 (tc1), exporting packages and re-exporting packages
-		//Tb1 will export package ...testpackage1
+		// Tb1 will export package ...testpackage1
 		// Tb2 actively has chosen ...testpackage1, tb2 exports ...testpackage2
 		// Tb3 actively has chosen ...testpackage2,
-		ServiceReference sr = getContext().getServiceReference(PackageAdmin.class
-				.getName());
+		ServiceReference sr = getContext().getServiceReference(
+				PackageAdmin.class.getName());
 		if (sr != null)
 			pa = (PackageAdmin) getContext().getService(sr);
 		else
 			fail("Can't find ServiceReference to PackageAdmin.");
-		//Check that the packages doesn?t exist before and do not run if they
+		// Check that the packages doesn?t exist before and do not run if they
 		// do
 		if ((pa.getExportedPackage(TP1) != null)
 				|| (pa.getExportedPackage(TP2) != null)) {
 			fail("The packages used for the test are already exported, i.e. the test is impossible to make.");
 		}
 		else {
-			assertEquals("The PackageAdmin is not in the System Bundle", 0, sr.getBundle().getBundleId());
+			assertEquals("The PackageAdmin is not in the System Bundle", 0, sr
+					.getBundle().getBundleId());
 			// install tb1, tb2 and tb3
 
 			tb1 = installBundle("tc1.tb1.jar");
@@ -58,23 +59,27 @@ public class TC1 extends DefaultTestBundleControl {
 			log("Install Testbundle 1, 2 and 3.");
 			// Call PackageAdmin.getExportedPackages(Bundle bundle) for tb1
 			ExportedPackage[] tps = pa.getExportedPackages(tb1);
-			//See that it exports only ...testpackage1
+			// See that it exports only ...testpackage1
 			int only = 0;
 			for (int i = 0; i < tps.length; i++) {
 				if (tps[i].getName().equals(TP1)) {
 					only++;
 				}
 			}
-			assertEquals("Test Bundle 1 is not the only exporter TestPackage1", 1, only);
+			assertEquals("Test Bundle 1 is not the only exporter TestPackage1",
+					1, only);
 			// (null as argument could be tried for framework where only the
 			// framework is being run)
 			try {
-				ExportedPackage[] tpnull = pa.getExportedPackages((Bundle)null);
+				ExportedPackage[] tpnull = pa
+						.getExportedPackages((Bundle) null);
 			}
 			catch (Exception e) {
-				fail("The method getExportedPackages(null) could not handle a null argument.", e);
+				fail(
+						"The method getExportedPackages(null) could not handle a null argument.",
+						e);
 			}
-			//uninstall tb1
+			// uninstall tb1
 			log("Uninstall Testbundle 1.");
 			tb1.stop();
 			tb1.uninstall();
@@ -82,8 +87,9 @@ public class TC1 extends DefaultTestBundleControl {
 			// ...testpackage1 still exported? (yes)
 			ExportedPackage tp1 = pa.getExportedPackage(TP1);
 			assertNotNull(TP1 + " was not a package that was exported.", tp1);
-			//is tb2 active (yes)
-			assertEquals("Is testbundle 2 still active", Bundle.ACTIVE, tb2.getState());
+			// is tb2 active (yes)
+			assertEquals("Is testbundle 2 still active", Bundle.ACTIVE, tb2
+					.getState());
 			// Call PackageAdmin.getExportedPackages(Bundle bundle) for tb2
 			// ...testpackage2 still exported? (yes)
 			boolean tp2present = false;
@@ -97,28 +103,31 @@ public class TC1 extends DefaultTestBundleControl {
 			}
 			assertTrue("Is testpackage 2 still exported:", tp2present);
 			// is tb3 active (yes)
-			assertEquals("Is testbundle 3 still active:", Bundle.ACTIVE, tb3.getState());
+			assertEquals("Is testbundle 3 still active:", Bundle.ACTIVE, tb3
+					.getState());
 			// Call ExportedPackage.isRemovalPending()
-			//Answer should be true
-			assertTrue("Is TestPackage 1 scheduled for removal:", tp1.isRemovalPending());
+			// Answer should be true
+			assertTrue("Is TestPackage 1 scheduled for removal:", tp1
+					.isRemovalPending());
 			// Call PackageAdmin.refreshPackages()
 			Bundle[] b = new Bundle[3];
 			b[0] = tb1;
 			b[1] = tb2;
 			b[2] = tb3;
 			log("The Framework is being refreshed.");
-      
+
 			PackagesRefreshedListener prl = new PackagesRefreshedListener();
 			try {
 				getContext().addFrameworkListener(prl);
 				pa.refreshPackages(b);
 				prl.waitForPackagesRefreshedEvent();
-			} finally {
+			}
+			finally {
 				getContext().removeFrameworkListener(prl);
 			}
-      
-			//Call PackageAdmin.getExportedPackages(Bundle bundle) for tb1
-			//...testpackage1 still exported? (no)
+
+			// Call PackageAdmin.getExportedPackages(Bundle bundle) for tb1
+			// ...testpackage1 still exported? (no)
 			boolean tp1present = false;
 			ExportedPackage[] tps1 = pa.getExportedPackages(tb1);
 			if (tps1 != null)
@@ -128,13 +137,16 @@ public class TC1 extends DefaultTestBundleControl {
 					}
 				}
 			assertFalse("After refresh. Is Testpackage 1 exported:", tp1present);
-			//is tb2 active (no)
-			assertFalse("Is testbundle 2 still active:", tb2.getState() == Bundle.ACTIVE);
-			//Call PackageAdmin.getExportedPackages(Bundle bundle) for tb2
-			//...testpackage2 still exported? (no)
-			assertNull("Is TestPackage 2 still exported:", pa.getExportedPackage(TP2));
-			//is tb3 active (no)
-			assertFalse("Is testbundle 3 still active:", tb3.getState() == Bundle.ACTIVE);
+			// is tb2 active (no)
+			assertFalse("Is testbundle 2 still active:",
+					tb2.getState() == Bundle.ACTIVE);
+			// Call PackageAdmin.getExportedPackages(Bundle bundle) for tb2
+			// ...testpackage2 still exported? (no)
+			assertNull("Is TestPackage 2 still exported:", pa
+					.getExportedPackage(TP2));
+			// is tb3 active (no)
+			assertFalse("Is testbundle 3 still active:",
+					tb3.getState() == Bundle.ACTIVE);
 			tb2.stop();
 			tb2.uninstall();
 			tb3.stop();
@@ -148,30 +160,38 @@ public class TC1 extends DefaultTestBundleControl {
 			log("PackageAdmin TestCase 1 is completed.");
 		}
 	}
-  
-  class PackagesRefreshedListener implements FrameworkListener {
-    int count = 0;
 
-    public void frameworkEvent(FrameworkEvent event) {
-      if (event.getType() == FrameworkEvent.PACKAGES_REFRESHED) {
-        count++;
-        synchronized (this) {
-          notify();
-        }
-      }
-    }
-    
-    public void waitForPackagesRefreshedEvent() {
-      if (count == 0) {
-        try {
-          synchronized (this) {
-            wait(30000); // wait maximum 30 sec to avoid infinite wait
-          }
-          if (count == 0) {
-            log("Timeout occured while waiting for PACKAGES_REFRESHED event");
-          }
-        } catch (Exception e) {}
-      }
-    }
-  }
+	static class PackagesRefreshedListener implements FrameworkListener {
+		private int	count;
+
+		PackagesRefreshedListener() {
+			synchronized (this) {
+				count = 0;
+			}
+		}
+
+		public void frameworkEvent(FrameworkEvent event) {
+			if (event.getType() == FrameworkEvent.PACKAGES_REFRESHED) {
+				synchronized (this) {
+					count++;
+					notify();
+				}
+			}
+		}
+
+		synchronized void waitForPackagesRefreshedEvent() {
+			if (count > 0) {
+				return;
+			}
+			try {
+				wait(30000); // wait maximum 30 sec to avoid infinite wait
+				if (count == 0) {
+					fail("Timeout occured while waiting for PACKAGES_REFRESHED event");
+				}
+			}
+			catch (InterruptedException e) {
+				// ignored
+			}
+		}
+	}
 }
