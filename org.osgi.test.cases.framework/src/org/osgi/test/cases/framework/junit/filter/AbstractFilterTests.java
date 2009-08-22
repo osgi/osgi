@@ -72,6 +72,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		props.put("primbooleanarrayvalue", new boolean[] {false}); 
 		props.put("bigintvalue", new BigInteger("4123456"));
 		props.put("bigdecvalue", new BigDecimal("4.123456"));   
+		props.put("*", "foo");
 		return props;
 	}
 
@@ -122,7 +123,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 				"(& (| (room =d*m) (room =bed*) (room=abc)) (! (channel=999)))",
 				props, ISTRUE);
 		testFilter("(room=bedroom)", null, ISFALSE); 
-
+		testFilter("(*=foo)", props, ISTRUE);
 	}
 
 	public void testIllegal() {
