@@ -8,10 +8,10 @@ Private-Package: ${p}
 	com.springsource.junit
 	
 
-Test-Cases = ${classes;extending;*TestCase}
+Test-Cases = ${testcases}
 
 -runbundles = \
-    org.apache.felix.configadmin, \
+    org.apache.felix.configadmin; version=latest, \
     org.osgi.impl.service.homegateway; version=project, \
     org.osgi.impl.service.dmt; version=project, \
     osgi;version=4.1    

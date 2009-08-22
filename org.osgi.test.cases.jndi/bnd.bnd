@@ -23,7 +23,7 @@ Include-Resource 					= \
 	urlContext1.jar , \
 	jndi.properties=resources/jndi.properties
 	
-Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+Test-Cases							= ${testcases}
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \

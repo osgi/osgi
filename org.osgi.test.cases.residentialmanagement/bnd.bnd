@@ -25,7 +25,7 @@ Private-Package		= ${p}.*
 	org.osgi.impl.service.dmt;	version=project, \
 	org.osgi.impl.service.residentialmanagement;	version=project
 
-Test-Cases: ${classes;extending;*TestCase}
+Test-Cases: ${testcases}
 
 Include-Resource	= \
 	org.osgi.test.cases.residentialmanagement.tb1.jar=tb1.jar, \
