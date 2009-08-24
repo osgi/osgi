@@ -46,6 +46,8 @@ import info.dmtree.DmtSession;
 import info.dmtree.notification.AlertItem;
 
 import java.net.SocketPermission;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
@@ -124,8 +126,6 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	private static String					monitorablePid			= null;
 	private static String					listenerId				= null;
 
-	private static PermissionWorker			worker;
-
 	public void stopMonitorables() {
 		try {
 
@@ -191,24 +191,20 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 			remoteAlertSenderActivator.start(getContext());
 		}
 		catch (Exception e) {
-			this
-					.fail("Unexpected exception at prepare(installRemoteAlertSender). "
+			this.fail("Unexpected exception at prepare(installRemoteAlertSender). "
 							+ e.getClass());
 		}
 	}
 
-	private void setPermission(PermissionInfo[] permissions, String location) {
-		synchronized (worker) {
-			worker.setLocation(location);
-			worker.setPermissions(permissions);
-			worker.notifyAll();
-			try {
-				worker.wait(MonitorConstants.SHORT_TIMEOUT);
-			}
-			catch (InterruptedException e) {
-				log("#error on PermissionWorker wait.");
-			}
-		}
+	private void setPermission(final PermissionInfo[] permissions, final String location) {
+	  if (System.getSecurityManager() != null) {
+		    AccessController.doPrivileged(new PrivilegedAction() {
+	        public Object run() {
+	          getPermissionAdmin().setPermissions(location, permissions);
+	          return null;
+	        }
+		    });
+	  }
 	}
 
 	public void setUp() throws Exception {
@@ -225,8 +221,7 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 				installBundle("tb1.jar");
 			}
 			catch (Exception e) {
-				this
-						.log("Unexpected exception at prepare when try to install tb1.jar.");
+				this.log("Unexpected exception at prepare when try to install tb1.jar.");
 				throw new Exception(e.getMessage());
 			}
 
@@ -249,13 +244,7 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 
 			dmtAdmin = (DmtAdmin) getContext().getService(
 					getContext().getServiceReference(DmtAdmin.class.getName()));
-			startPermissionWorker();
 		}
-	}
-
-	private void startPermissionWorker() {
-		worker = new PermissionWorker(this);
-		worker.start();
 	}
 
 	public void setLocalPermission(PermissionInfo[] permissions) {
@@ -576,10 +565,6 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 		}
 		catch (Exception e) {
 			this.log("#Unexpected exception at unprepare. " + e.getClass());
-		}
-		synchronized (worker) {
-			worker.setRunning(false);
-			worker.notifyAll();
 		}
 	}
 
