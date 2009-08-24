@@ -11,7 +11,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.InvalidSyntaxException;
@@ -173,7 +172,6 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		properties.put("property1", new Integer(1));
 		properties.put("property2", new Float(1.0));
 		properties.put("property3", new Boolean(false));
-		properties.put("org.osgi.test.wireadmin", "yes");
 
 		log("Must call both consumersConnected(..) for producer.ProducerImplA and producersConnected(..) for consumer.ConsumerImplA");
 		Wire wire = helper.createWire(wa, "producer.ProducerImplA",
@@ -198,20 +196,12 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		newProperties.put("property1", new Integer(2));
 		newProperties.put("property2", new Float(2.0));
 		newProperties.put("property3", new Boolean(false));
-		newProperties.put("org.osgi.test.wireadmin", "yes");
 		log("Must call both consumersConnected(..) for producer.ProducerImplA and producersConnected(..) for consumer.ConsumerImplA");
 		helper.updateWire(wa, wire, newProperties);
 		waitForSync(2, 100);
 		compareConnected("producer.ProducerImplA", "consumer.ConsumerImplA");
 		assertTrue("Test wire properties after updateWire: NOT OK.",
 				compareWireProperties(wire.getProperties(), newProperties));
-		try {
-			// Wait some seconds to avoid upcomming invalid sync notifications
-			Thread.sleep(1000);
-		}
-		catch (InterruptedException ie) {
-			// empty
-		}
 	}
 
 	/**
@@ -223,12 +213,10 @@ public class WireAdminControl extends DefaultTestBundleControl {
 	 */
 	public void testDeleteWire() throws Exception {
 		log("creating two wires");
-		Hashtable props = new Hashtable();
-		props.put("org.osgi.test.wireadmin", "yes");
 		Wire wire1 = helper.createWire(wa, "deletedWireProducer",
-				"deletedWireConsumer", props);
+				"deletedWireConsumer", null);
 		Wire wire2 = helper.createWire(wa, "deletedWireProducer",
-				"deletedWireConsumer", props);
+				"deletedWireConsumer", null);
 		log("registering consumer and producer so the wires are connected when we delete one of them later");
 		helper.registerProducer("deletedWireProducer",
 				new Class[] {java.lang.String.class});
@@ -400,14 +388,6 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		try {
 			helper.updateWire(wa, wire, properties);
 			fail("Test updateWire with case insensitive properties' keys: NOT OK. Exception was not thrown");
-			// try {
-			// // Wait some seconds to avoid upcoming invalid sync
-			// // notifications
-			// Thread.sleep(3000);
-			// clearSync();
-			// }
-			// catch (InterruptedException ie) {
-			// }
 		}
 		catch (IllegalArgumentException e) {
 			log("Test updateWire with case insensitive properties' keys: Operation passed: OK.Exception thrown.");
@@ -423,15 +403,6 @@ public class WireAdminControl extends DefaultTestBundleControl {
 			helper.updateWire(wa, wire, properties);
 			assertFalse("Test updateWire with non- existing wire: NOT OK.",
 					compareWireProperties(wire.getProperties(), properties));
-			// try {
-			// // Wait some seconds to avoid upcomming invalid sync
-			// // notifications
-			// Thread.sleep(3000);
-			// clearSync(); // reset the sync counter synce it may
-			// // have been updated
-			// }
-			// catch (InterruptedException ie) {
-			// }
 		}
 		catch (IllegalArgumentException e) {
 			log("Test updateWire with non-existing wire: Operation passed: OK.Exception thrown.");
@@ -670,14 +641,6 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		assertTrue(
 				"Test wire state after WireAdmin restart: first wire isn't valid or connected.",
 				wire2.isConnected());
-		// The test must wait several seconds in order to finish the cleanup
-		try {
-			Thread.sleep(3000 * OSGiTestCaseProperties.getScaling());
-			// changed
-		}
-		catch (InterruptedException ie) {
-			// ignored
-		}
 	}
 
 	/**
@@ -740,7 +703,8 @@ public class WireAdminControl extends DefaultTestBundleControl {
 				"consumer.ConsumerImplA", null);
 		waitForSync(2, 100);
 		compareConnected("producer.ProducerImplC", "consumer.ConsumerImplA");
-		Wire[] correct = wa.getWires("(org.osgi.test.wireadmin=yes)");
+		Wire[] correct = wa.getWires("(org.osgi.test.wireadmin=" + getName()
+				+ ")");
 		log("Must call producersConnected(..) for: consumer.ConsumerImplA and consumer.ConsumerImplC");
 		helper.unregisterProducer("producer.ProducerImplA");
 		waitForSync(2, 100);
@@ -748,8 +712,9 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		compareConnected("", "consumer.ConsumerImplC");
 		assertTrue(
 				"Test Wireadmin Wires after Producer's unregistration: NOT OK.",
-				compareWires_Flavors(correct, wa
-						.getWires("(org.osgi.test.wireadmin=yes)")));
+				compareWires_Flavors(correct,
+						wa.getWires("(org.osgi.test.wireadmin=" + getName()
+								+ ")")));
 		log("Must call consumersConnected(..) for: producer.ProducerImplA");
 		log("and producersConnected(..) for: consumer.ConsumerImplA and consumer.ConsumerImplC");
 		helper.registerProducer("producer.ProducerImplA", new Class[] {
@@ -762,8 +727,9 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		compareConnected("", "consumer.ConsumerImplC");
 		assertTrue(
 				"Test Wireadmin Wires after Producer's registration: NOT OK.",
-				compareWires_Flavors(correct, wa
-						.getWires("(org.osgi.test.wireadmin=yes)")));
+				compareWires_Flavors(correct,
+						wa.getWires("(org.osgi.test.wireadmin=" + getName()
+								+ ")")));
 		log("Must call consumersConnected(..) for: producer.ProducerImplA and producer.ProducerImplC");
 		helper.unregisterConsumer("consumer.ConsumerImplC");
 		waitForSync(2, 100);
@@ -771,8 +737,9 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		compareConnected("producer.ProducerImplC", "");
 		assertTrue(
 				"Test Wireadmin Wires after Consumer's unregistration: NOT OK.",
-				compareWires_Flavors(correct, wa
-						.getWires("(org.osgi.test.wireadmin=yes)")));
+				compareWires_Flavors(correct,
+						wa.getWires("(org.osgi.test.wireadmin=" + getName()
+								+ ")")));
 		log("Must call consumersConnected(..) for: producer.ProducerImplA and producer.ProducerImplC");
 		log("and producersConnected(..) for: consumer.ConsumerImplC");
 		helper.registerConsumer("consumer.ConsumerImplC", new Class[] {
@@ -785,8 +752,9 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		compareConnected("producer.ProducerImplC", "consumer.ConsumerImplC");
 		assertTrue(
 				"Test Wireadmin Wires after Consumer's registration: NOT OK.",
-				compareWires_Flavors(correct, wa
-						.getWires("(org.osgi.test.wireadmin=yes)")));
+				compareWires_Flavors(correct,
+						wa.getWires("(org.osgi.test.wireadmin=" + getName()
+								+ ")")));
 	}
 
 	/**
@@ -998,82 +966,20 @@ public class WireAdminControl extends DefaultTestBundleControl {
 						new Integer(6), new Integer(9)}), values);
 		log(delimiter);
 		log("Finished");
-
-		// The test must wait several seconds.
-		// The events, genereated from the operations above, must be delivered
-		// in order not to interfere with the next test
-		// try {
-		// Thread.sleep(4000);
-		// }
-		// catch (InterruptedException ie) {
-		// }
 	}
 
 	/**
 	 * Tests event dispatching in the wire admin
 	 */
 	public void testEvents() throws Exception {
-		// [begin=testEvents]
-		// event test: "Create a wire: WIRE_CREATED event is expected"
-		// wire listener: "received event WIRE_CREATED"
-		// wire listener: "wire is OK"
-		// event test: "update a wire: WIRE_UPDATED event is expected"
-		// wire listener: "received event WIRE_UPDATED"
-		// wire listener: "wire is OK"
-		// event test: "connect a wire: WIRE_CONNECTED event is expected"
-		// wire listener: "received event WIRE_CONNECTED"
-		// wire listener: "wire is OK"
-		// event test: "poll the wire: WIRE_TRACE event is expected"
-		// wire listener: "received event WIRE_TRACE"
-		// wire listener: "wire is OK"
-		// event test: "disconnect wire: WIRE_DISCONNECTED event is expected"
-		// wire listener: "received event WIRE_DISCONNECTED"
-		// wire listener: "wire is OK"
-		// event test:
-		// "cause exception from producersConnected: CONSUMER_EXCEPTION is expected"
-		// wire listener: "received event CONSUMER_EXCEPTION"
-		// wire listener: "wire is OK"
-		// wire listener: "correct Throwable passed! OK"
-		// event test:
-		// "cause exception from updated: CONSUMER_EXCEPTION is expected"
-		// wire listener: "received event CONSUMER_EXCEPTION"
-		// wire listener: "wire is OK"
-		// wire listener: "correct Throwable passed! OK"
-		// event test:
-		// "cause exception from consumersConnected: PRODUCER_EXCEPTION is expected"
-		// wire listener: "received event PRODUCER_EXCEPTION"
-		// wire listener: "wire is OK"
-		// wire listener: "correct Throwable passed! OK"
-		// event test:
-		// "cause exception from polled: PRODUCER_EXCEPTION is expected"
-		// wire listener: "received event PRODUCER_EXCEPTION"
-		// wire listener: "wire is OK"
-		// wire listener: "correct Throwable passed! OK"
-		// event test: "delete wire: WIRE_DELETED event is expected"
-		// wire listener: "received event WIRE_DELETED"
-		// wire listener: "wire is OK"
-		// event test:
-		// "cause exception form producersConnected of a 'free' Consumer. CONSUMER_EXCEPTION is expected"
-		// wire listener: "received event CONSUMER_EXCEPTION"
-		// wire listener:
-		// "event.getWire() returned null. No specific wire was responsible for the event"
-		// wire listener: "correct Throwable passed! OK"
-		// event test:
-		// "cause exception form consumersConnected of a 'free' Producer. PRODUCER_EXCEPTION is expected"
-		// wire listener: "received event PRODUCER_EXCEPTION"
-		// wire listener:
-		// "event.getWire() returned null. No specific wire was responsible for the event"
-		// wire listener: "correct Throwable passed! OK"
-		// [end=testEvents]
-
 		// a full mask
 		Integer mask = new Integer(0xFFFFFFFF);
 		// register the listeners
-		TestWireAdminListener listener = new TestWireAdminListener(false); // should
+		TestWireAdminListener listener = new TestWireAdminListener(this, false); // should
 		// receive
 		// all
 		// events
-		TestWireAdminListener dummy = new TestWireAdminListener(true); // shouldn't
+		TestWireAdminListener dummy = new TestWireAdminListener(this, true); // shouldn't
 		// receive
 		// events
 		// real listener
@@ -1476,17 +1382,17 @@ public class WireAdminControl extends DefaultTestBundleControl {
 	}
 
 	private Wire[] getConnected(Wire[] all) {
-		Vector v = new Vector();
 		if (all == null)
 			return null;
+		List v = new ArrayList();
 		for (int counter = 0; counter < all.length; counter++) {
 			if (all[counter].isConnected())
-				v.addElement(all[counter]);
+				v.add(all[counter]);
 		}
 		if (v.size() == 0)
 			return null;
 		Wire[] toReturn = new Wire[v.size()];
-		v.copyInto(toReturn);
+		v.toArray(toReturn);
 		return toReturn;
 	}
 

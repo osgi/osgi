@@ -132,7 +132,7 @@ public class Helper {
 	public static void deleteAllWires(WireAdmin wa) {
 		Wire[] wires = null;
 		try {
-			wires = wa.getWires("(org.osgi.test.wireadmin=yes)");
+			wires = wa.getWires("(org.osgi.test.wireadmin=*)");
 		}
 		catch (InvalidSyntaxException e) { /* no way */
 			OSGiTestCase.fail("unexpected exception", e);
@@ -184,7 +184,7 @@ public class Helper {
 		if (map != null) {
 			props.putAll(map);
 		}
-		props.put("org.osgi.test.wireadmin", "yes");
+		props.put("org.osgi.test.wireadmin", wac.getName());
 		Wire wire = wa.createWire(from, to, props);
 		return wire;
 	}
@@ -194,7 +194,7 @@ public class Helper {
 		if (map != null) {
 			props.putAll(map);
 		}
-		props.put("org.osgi.test.wireadmin", "yes");
+		props.put("org.osgi.test.wireadmin", wac.getName());
 		wa.updateWire(wire, props);
 		return wire;
 	}

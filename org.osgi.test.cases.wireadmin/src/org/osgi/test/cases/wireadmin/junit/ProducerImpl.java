@@ -9,8 +9,8 @@ import org.osgi.service.wireadmin.Wire;
  * @author Neviana Ducheva
  */
 public class ProducerImpl implements Producer {
-	WireAdminControl	wac;
-	String				pid;
+	private final WireAdminControl	wac;
+	private final String			pid;
 
 	public ProducerImpl(WireAdminControl wac, String pid) {
 		this.wac = wac;

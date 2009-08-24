@@ -14,8 +14,8 @@ import org.osgi.service.wireadmin.Wire;
  * @author Neviana Ducheva
  */
 public class ConsumerImpl implements Consumer {
-	WireAdminControl	wac;
-	String				pid;
+	private final WireAdminControl	wac;
+	private final String			pid;
 
 	public ConsumerImpl(WireAdminControl wac, String pid) {
 		this.wac = wac;

@@ -15,11 +15,13 @@ import org.osgi.service.wireadmin.WireAdminListener;
  * @version 1.1 Aug 2005
  */
 public class TestWireAdminListener implements WireAdminListener {
+	private final WireAdminControl	wac;
 	private final boolean	dummy;
 	private List			valuesReceived	= new ArrayList();
 	private boolean			called			= false;
 
-	public TestWireAdminListener(boolean dummy) {
+	public TestWireAdminListener(WireAdminControl wac, boolean dummy) {
+		this.wac = wac;
 		this.dummy = dummy;
 	}
 
@@ -29,14 +31,26 @@ public class TestWireAdminListener implements WireAdminListener {
 	 * @param event describes the fired event
 	 */
 	public void wireAdminEvent(WireAdminEvent event) {
-		try {
-			if (dummy) {
-				WireAdminControl.log("Dummy received an event! Error");
+		Wire wire = event.getWire();
+		if (wire != null) {
+			// check for right test case
+			if (!wac.getName().equals(
+					wire.getProperties().get("org.osgi.test.wireadmin"))) {
+				WireAdminControl
+						.log("received an event from a different test case");
 				return;
 			}
+		}
+		try {
 			int type = event.getType();
+			if (dummy) {
+				WireAdminControl.log("Dummy received an event! Error");
+				synchronized (this) {
+					valuesReceived.add(new Integer(type));
+				}
+				return;
+			}
 			WireAdminControl.log("received event " + getEventName(type));
-			Wire wire = event.getWire();
 			if (wire != null) {
 				Dictionary dict = event.getWire().getProperties();
 				String prop = (String) dict

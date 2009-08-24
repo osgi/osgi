@@ -1,6 +1,7 @@
 package org.osgi.test.cases.wireadmin.junit;
 
-import org.osgi.service.wireadmin.*;
+import org.osgi.service.wireadmin.Consumer;
+import org.osgi.service.wireadmin.Wire;
 
 /**
  * Helps in testing event dispatchment in the wire admin
@@ -8,22 +9,24 @@ import org.osgi.service.wireadmin.*;
  * @author Vasil Panushev
  */
 public class EventTestConsumer implements Consumer {
-	private boolean	crash			= false;
-	private boolean	pcCrashed		= false;
-	private boolean	updatedCrashed	= false;
+	private final boolean	crash;
+	private boolean			pcCrashed;
+	private boolean			updatedCrashed;
 
-	public EventTestConsumer(boolean cr) {
-		this.crash = cr;
+	public EventTestConsumer(boolean crash) {
+		pcCrashed = false;
+		updatedCrashed = false;
+		this.crash = crash;
 	}
 
-	public void producersConnected(Wire[] wires) {
+	public synchronized void producersConnected(Wire[] wires) {
 		if (crash && !pcCrashed) {
 			pcCrashed = true;
 			throw new RuntimeException("testing");
 		}
 	}
 
-	public void updated(Wire wire, Object data) {
+	public synchronized void updated(Wire wire, Object data) {
 		if (crash && !updatedCrashed) {
 			updatedCrashed = true;
 			throw new RuntimeException("testing");
