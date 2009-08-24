@@ -600,7 +600,7 @@ public class OSGiBundle {
 	@SuppressWarnings("unchecked")
 	private static Map<String, String> mapFrom(TabularData data) {
 		Map<String, String> headers = new HashMap<String, String>();
-		Set<List< ? >> keySet = data.keySet();
+		Set<List< ? >> keySet = (Set<List< ? >>) data.keySet();
 		for (List<?> key : keySet) {
 			headers.put((String) key.get(0), (String) data.get(
 					new Object[] { key.get(0) }).get(VALUE));
