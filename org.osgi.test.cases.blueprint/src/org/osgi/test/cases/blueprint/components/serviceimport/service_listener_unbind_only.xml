@@ -8,6 +8,7 @@
     <bean id="ServiceOneListener" class="org.osgi.test.cases.blueprint.components.serviceimport.ServiceOneListener"
        init-method="init" destroy-method="destroy">
         <argument value="ServiceOneListener"/>
+        <property name="initialUnbind" value="false"/>
     </bean>
 
     <!-- single shared instance of the imported service -->
