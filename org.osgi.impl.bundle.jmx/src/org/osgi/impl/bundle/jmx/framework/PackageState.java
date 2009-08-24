@@ -16,7 +16,8 @@
 package org.osgi.impl.bundle.jmx.framework;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.management.openmbean.TabularData;
 
@@ -92,7 +93,7 @@ public class PackageState implements PackageStateMBean {
 	 * @see org.osgi.jmx.core.PackageStateMBean#getPackages()
 	 */
 	public TabularData getPackages() {
-		ArrayList<OSGiPackage> packages = new ArrayList<OSGiPackage>();
+		Set<OSGiPackage> packages = new HashSet<OSGiPackage>();
 		for (Bundle bundle : bc.getBundles()) {
 			ExportedPackage[] pkgs = admin.getExportedPackages(bundle);
 			if (pkgs != null) {

@@ -19,9 +19,10 @@ package org.osgi.jmx.codec;
 import static org.osgi.jmx.codec.Util.LONG_ARRAY_TYPE;
 import static org.osgi.jmx.codec.Util.LongArrayFrom;
 import static org.osgi.jmx.codec.Util.longArrayFrom;
-import static org.osgi.jmx.framework.PackageStateMBean.*;
+import static org.osgi.jmx.framework.PackageStateMBean.BUNDLE_IDENTIFIER;
+import static org.osgi.jmx.framework.PackageStateMBean.PACKAGE_NAME;
 
-import java.util.ArrayList;
+import java.util.Set;
 
 import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.CompositeDataSupport;
@@ -120,7 +121,7 @@ public class OSGiPackage {
 	 * @param packages
 	 * @return the tabular data representation of the OSGPacakges
 	 */
-	public static TabularData tableFrom(ArrayList<OSGiPackage> packages) {
+	public static TabularData tableFrom(Set<OSGiPackage> packages) {
 		TabularDataSupport table = new TabularDataSupport(PACKAGE_TABLE);
 		for (OSGiPackage pkg : packages) {
 			table.put(pkg.asCompositeData());
