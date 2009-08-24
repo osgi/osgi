@@ -55,6 +55,8 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.SocketPermission;
 import java.net.URL;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.HashMap;
 import java.util.PropertyPermission;
 
@@ -100,7 +102,6 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
     
     private DeploymentEventHandlerImpl deploymentEventHandler;
     DeploymentEventHandlerActivator deploymentEventHandlerActivator;
-    private PermissionWorker permWorker;
     
 	/**
 	 * <remove>Prepare for each run. It is important that a test run is properly
@@ -128,38 +129,18 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Failed to install bundle tb1.jar");
-//			log("Failed to install bundle tb1.jar");
 		}
 
 		// set this permissions to all resource processors
 		//---------
 		createTestingDeploymentPackages();
 		setBundleServicePermissions();
-        startPermissionWorker();
-        //
 	}
 	
 	public String getWebServer() {
 		return super.getWebServer() + "www/";
 	}
 	
-    /**
-     * 
-     */
-    private void startPermissionWorker() {
-        permWorker = new PermissionWorker(this);
-        permWorker.start();
-        //make sure the thread has started
-        synchronized (permWorker) {
-          if (!permWorker.isRunning()) {
-            try {
-              permWorker.wait();
-            } catch (InterruptedException ie) {
-            }
-          }
-        }
-    }
-
     /**
 	 * Sets permissions to resource processors bundles installed in deployment packages
 	 */
@@ -193,7 +174,6 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 		} catch (Exception e) {
         	e.printStackTrace();
 			fail("Failed starting Handles and Listeners");
-//			log("#TestControl: Failed starting Handles and Listeners");
 		}
 	}
 	
@@ -204,7 +184,6 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 		} catch (Exception e) {
         	e.printStackTrace();
 			fail("Failed starting Handles and Listeners");
-//			log("#TestControl: Failed starting Handles and Listeners");
 		}
 	}
 	
@@ -499,10 +478,6 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 //		log("#after each run");
 		uninstallHandlersAndListeners();
 		getContext().removeBundleListener(bundleListener);
-	    synchronized (permWorker) {
-	    	permWorker.setRunning(false);
-	    	permWorker.notifyAll();
-	    }
 	}
 
 	/**
@@ -797,18 +772,15 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
      * @param bundleLocation2
      * @param info
      */
-    private void setAssyncPermission(PermissionInfo[] info) {
-        synchronized (permWorker) {
-            try {
-                permWorker.setLocation(bundleLocation);
-                permWorker.setPermissions(info);
-                permWorker.notifyAll();
-                // wait for worker to notify tha permission is set
-                permWorker.wait(DeploymentConstants.TIMEOUT);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+    private void setAssyncPermission(final PermissionInfo[] info) {
+  	  if (System.getSecurityManager() != null) {
+		    AccessController.doPrivileged(new PrivilegedAction() {
+	        public Object run() {
+	          getPermissionAdmin().setPermissions(bundleLocation, info);
+	          return null;
+	        }
+		    });
+	  }
     }
     
     
