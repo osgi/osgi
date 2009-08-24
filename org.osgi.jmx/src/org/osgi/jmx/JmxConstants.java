@@ -75,6 +75,6 @@ public class JmxConstants {
 	/**
 	 * The fully qualified object name of the <link>UserManagerMBean</link>
 	 */
-	public static final String UA_SERVICE = COMPENDIUM + ":service=useradmin";
+	public static final String UA_SERVICE = COMPENDIUM + ":service=userAdmin";
 
 }
