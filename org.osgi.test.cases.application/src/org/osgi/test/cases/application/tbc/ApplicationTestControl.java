@@ -38,6 +38,8 @@ import info.dmtree.Uri;
 import java.io.FilePermission;
 import java.lang.reflect.ReflectPermission;
 import java.net.SocketPermission;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.Hashtable;
 
 import org.osgi.framework.AdminPermission;
@@ -111,8 +113,6 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 
 	private static TestAppControllerImpl	appController;
 
-	private static PermissionWorker			worker;
-
 	private static EventHandlerActivator	eventBundle;
 
 	private static TestingActivator			testingActivator;
@@ -142,11 +142,10 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 				testInterfaces = tcb1Service.getTestClasses(this);
 				appController = new TestAppControllerImpl();
 				appController.start(this.getContext());
-				startPermissionWorker();
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				this.log("Unexpected exception at prepare." + e.toString()
 						+ " : " + e.getMessage());
+				e.printStackTrace();
 			}
 		}
 	}
@@ -230,21 +229,6 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 				+ "Cesar/Recurring";
 	}
 
-	private void startPermissionWorker() {
-		worker = new PermissionWorker(this);
-		worker.start();
-		// make sure the thread has started
-		synchronized (worker) {
-			while (!worker.isRunning()) {
-				try {
-					worker.wait(50);
-				}
-				catch (InterruptedException ie) {
-				}
-			}
-		}
-	}
-
 	public void setLocalPermission(PermissionInfo permission) {
 		PermissionInfo[] defaults = new PermissionInfo[] {
 				new PermissionInfo(SocketPermission.class.getName(), "*",
@@ -264,20 +248,15 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 		setPermission(defaults);
 	}
 
-	public void setPermission(PermissionInfo[] permissions) {
-		synchronized (worker) {
-			worker.setLocation(getTb2Location());
-			worker.setPermissions(permissions);
-			worker.notifyAll();
-			long start = System.currentTimeMillis();
-			while (worker.isWorking()
-					&& (System.currentTimeMillis() - start < 10000)) {
-				try {
-					worker.wait(1000);
+	public void setPermission(final PermissionInfo[] permissions) {
+		if (System.getSecurityManager() != null) {
+			AccessController.doPrivileged(new PrivilegedAction() {
+				public Object run() {
+					getPermissionAdmin().setPermissions(getTb2Location(),
+							permissions);
+					return null;
 				}
-				catch (InterruptedException e) {
-				}
-			}
+			});
 		}
 	}
 
@@ -1063,10 +1042,6 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 		}
 		catch (Exception e) {
 			log("#error on unPrepare");
-		}
-		synchronized (worker) {
-			worker.setRunning(false);
-			worker.notifyAll();
 		}
 	}
 
