@@ -47,7 +47,11 @@ public class PackageState implements PackageStateMBean {
 	public long getExportingBundle(String packageName, String version)
 			throws IOException {
 		Version v = Version.parseVersion(version);
-		for (ExportedPackage pkg : admin.getExportedPackages(packageName)) {
+		ExportedPackage[] exportedPackages = admin.getExportedPackages(packageName);
+		if (exportedPackages == null) {
+			return -1;
+		}
+		for (ExportedPackage pkg : exportedPackages) {
 			if (pkg.getVersion().equals(v)) {
 				return pkg.getExportingBundle().getBundleId();
 			}
@@ -65,7 +69,11 @@ public class PackageState implements PackageStateMBean {
 	public long[] getImportingBundles(String packageName, String version)
 			throws IOException {
 		Version v = Version.parseVersion(version);
-		for (ExportedPackage pkg : admin.getExportedPackages(packageName)) {
+		ExportedPackage[] exportedPackages = admin.getExportedPackages(packageName);
+		if (exportedPackages == null) {
+			return new long[0];
+		}
+		for (ExportedPackage pkg : exportedPackages) {
 			if (pkg.getVersion().equals(v)) {
 				Bundle[] bundles = pkg.getImportingBundles();
 				long[] ids = new long[bundles.length];
@@ -106,7 +114,11 @@ public class PackageState implements PackageStateMBean {
 	public boolean isRemovalPending(String packageName, String version)
 			throws IOException {
 		Version v = Version.parseVersion(version);
-		for (ExportedPackage pkg : admin.getExportedPackages(packageName)) {
+		ExportedPackage[] exportedPackages = admin.getExportedPackages(packageName);
+		if (exportedPackages == null) {
+			return false;
+		}
+		for (ExportedPackage pkg : exportedPackages) {
 			if (pkg.getVersion().equals(v)) {
 				return pkg.isRemovalPending();
 			}
