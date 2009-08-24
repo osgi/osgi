@@ -29,7 +29,7 @@ import org.osgi.test.cases.blueprint.services.ServiceOneListenerInterface;
  */
 public class ServiceOneListener extends ServiceListener implements ServiceOneListenerInterface {
     // an interlock flag so we don't try to use the service on an initial unbind operation.
-    protected boolean initialUnbind = false;
+    protected boolean initialUnbind = true;
 
     public ServiceOneListener(String componentId) {
         super(componentId);
@@ -40,6 +40,8 @@ public class ServiceOneListener extends ServiceListener implements ServiceOneLis
     }
 
     public void bind(TestServiceOne service, Map serviceProperties) {
+        // once we've had a bind call, the unbinds must present an object
+        initialUnbind = false;
         try {
             // Some tests we switch back and forth, so check the name
             // to see which result we should be getting
@@ -81,6 +83,8 @@ public class ServiceOneListener extends ServiceListener implements ServiceOneLis
     }
 
     public void bindNoMap(TestServiceOne service) {
+        // once we've had a bind call, the unbinds must present an object
+        initialUnbind = false;
         try {
             // Some tests we switch back and forth, so check the name
             // to see which result we should be getting
