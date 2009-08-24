@@ -148,7 +148,7 @@ public class OSGiProperties {
 	public static Hashtable<String, Object> propertiesFrom(TabularData table) {
 		Hashtable props = new Hashtable();
 		if (table == null) {
-			return null;
+			return props;
 		}
 		for (CompositeData data : (Collection<CompositeData>) table.values()) {
 			props.put(data.get(KEY), parse((String) data.get(VALUE),
