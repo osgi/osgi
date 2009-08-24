@@ -62,7 +62,21 @@ public class ExtenderStopController extends BaseTestController {
      * @exception Exception
      */
     public void addBundle(String bundleName) throws Exception {
-        addBundle(bundleName, 0);
+        addBundle(bundleName, 0, 0);
+    }
+
+
+    /**
+     * Add a bundle to this test phase.  This installs the bundle and
+     * tracks it.
+     *
+     * @param bundleName The fully qualified bundle name.
+     * @param delay      The initial delay before starting the bundle.
+     *
+     * @exception Exception
+     */
+    public void addBundle(String bundleName, long delay) throws Exception {
+        addBundle(bundleName, 0, delay);
     }
 
 
@@ -76,14 +90,14 @@ public class ExtenderStopController extends BaseTestController {
      *
      * @exception Exception
      */
-    public void addBundle(String bundleName, int startOptions) throws Exception {
+    public void addBundle(String bundleName, int startOptions, long delay) throws Exception {
         // first install this
         Bundle bundle = installBundle(bundleName);
 
         // A standard start/stop cycle test has a common set of events we look for
         // in each phase.  Add the events to each list
         EventSet startEvents = new EventSet(testContext, bundle);
-        addStartEvents(bundle, startOptions, startEvents);
+        addStartEvents(bundle, startOptions, delay, startEvents);
         startPhase.addEventSet(startEvents);
 
         EventSet endEvents = new EventSet(testContext, bundle);
@@ -98,11 +112,12 @@ public class ExtenderStopController extends BaseTestController {
      * @param bundle The bundle the event set is tracking.
      * @param startOptions
      *               The bundle start options.
+     * @param delay  The delay to use when starting the bundle.
      * @param events The created event set.
      */
-    public void addStartEvents(Bundle bundle, int startOptions, EventSet events) {
+    public void addStartEvents(Bundle bundle, int startOptions, long delay, EventSet events) {
         // we add an initializer to start our bundle when the test starts
-        events.addInitializer(new TestBundleStarter(bundle, 0, startOptions));
+        events.addInitializer(new TestBundleStarter(bundle, delay, startOptions));
         // we always expect to see a started bundle event
         events.addBundleEvent("STARTED");
         // now standard blueprint revents.

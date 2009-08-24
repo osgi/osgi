@@ -91,7 +91,11 @@ public class TestExtenderLifeCycle extends DefaultTestBundleControl {
         // there's a circular reference relationship between these two bundles...this
         // will shutdown the first installed one first.
         controller.addBundle(getWebServer()+"www/circular_ref_one.jar");
-        controller.addBundle(getWebServer()+"www/circular_ref_two.jar");
+        // the test is dependent upon the first bundle having the highest service id,
+        // but there is a race condition between these two even though they get started
+        // in sequence.  We'll delay the second start by a little to allow them to
+        // avoid the competition
+        controller.addBundle(getWebServer()+"www/circular_ref_two.jar", 500);
 
         // now create dependencies between the events for these bundles to
         // verify that these are done in the correct order.
@@ -192,7 +196,11 @@ public class TestExtenderLifeCycle extends DefaultTestBundleControl {
         // has the one with the highest registered service id.  The ranking rule
         // predominates, forcing the circular_ref_two bundle to be stopped first.
         controller.addBundle(getWebServer()+"www/circular_ref_two.jar");
-        controller.addBundle(getWebServer()+"www/circular_ref_one_ranked.jar");
+        // the test is dependent upon the first bundle having the highest service id,
+        // but there is a race condition between these two even though they get started
+        // in sequence.  We'll delay the second start by a little to allow them to
+        // avoid the competition
+        controller.addBundle(getWebServer()+"www/circular_ref_one_ranked.jar", 500);
 
         // now create dependencies between the events for these bundles to
         // verify that these are done in the correct order.
