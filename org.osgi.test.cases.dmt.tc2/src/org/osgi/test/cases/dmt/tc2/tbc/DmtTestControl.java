@@ -55,7 +55,9 @@ import info.dmtree.DmtException;
 import info.dmtree.DmtSession;
 import info.dmtree.Uri;
 
+import java.security.AccessController;
 import java.security.MessageDigest;
+import java.security.PrivilegedAction;
 import java.util.PropertyPermission;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -105,8 +107,6 @@ public class DmtTestControl extends DefaultTestBundleControl {
 
 	private static TestInterface[]				testClasses;
 
-	private static PermissionWorker				permissionWorker;
-
 	// URIs too long, to be used simulating DmtException.URI_TOO_LONG
 	public final static String[]				URIS_TOO_LONG;
 
@@ -125,7 +125,6 @@ public class DmtTestControl extends DefaultTestBundleControl {
 
 		URIS_TOO_LONG = new String[uriTooLong.size()];
 		uriTooLong.copyInto(URIS_TOO_LONG);
-
 	};
 
 	// Invalid URIs, to be used simulating DmtException.INVALID_URI
@@ -163,8 +162,6 @@ public class DmtTestControl extends DefaultTestBundleControl {
 			installPlugins();
 			installHandler();
 			installRemoteAlertSender();
-			permissionWorker = new PermissionWorker(this);
-			permissionWorker.start();
 		}
 	}
 
@@ -225,7 +222,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
 						"accessDeclaredMembers"),
 				new PermissionInfo(PropertyPermission.class.getName(), "*",
 						"read"),};
-		PermissionInfo[] perm;
+		final PermissionInfo[] perm;
 		if (permissions.length != defaults.length) {
 			int size = permissions.length + defaults.length;
 			perm = new PermissionInfo[size];
@@ -236,14 +233,19 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		else {
 			perm = defaults;
 		}
+	  if (System.getSecurityManager() != null) {
+		    AccessController.doPrivileged(new PrivilegedAction() {
+	        public Object run() {
+	          getPermissionAdmin().setPermissions(LOCATION, perm);
+	          return null;
+	        }
+		    });
+	  }
 
-		permissionWorker.updatePermissions(LOCATION, perm,
-				DmtConstants.WAITING_TIME);
 	}
 
 	public void setPermissions(PermissionInfo permission) {
-
-		PermissionInfo[] perm = new PermissionInfo[] {
+		final PermissionInfo[] perm = new PermissionInfo[] {
 				new PermissionInfo(TopicPermission.class.getName(),
 						"org/osgi/service/dmt/*", TopicPermission.PUBLISH),
 				new PermissionInfo(PackagePermission.class.getName(), "*",
@@ -256,9 +258,14 @@ public class DmtTestControl extends DefaultTestBundleControl {
 						"accessDeclaredMembers"),
 				new PermissionInfo(PropertyPermission.class.getName(), "*",
 						"read"), permission};
-
-		permissionWorker.updatePermissions(LOCATION, perm,
-				DmtConstants.WAITING_TIME);
+		if (System.getSecurityManager() != null) {
+			AccessController.doPrivileged(new PrivilegedAction() {
+				public Object run() {
+					getPermissionAdmin().setPermissions(LOCATION, perm);
+					return null;
+				}
+			});
+		}
 	}
 
 	public PermissionAdmin getPermissionAdmin() {
@@ -475,7 +482,6 @@ public class DmtTestControl extends DefaultTestBundleControl {
 
 	public void unprepare() {
 		uninstallHandler();
-		permissionWorker.shutdown();
 	}
 
 	public DmtAdmin getDmtAdmin() {
