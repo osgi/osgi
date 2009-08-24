@@ -103,12 +103,10 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 			assertNotNull("The context should not be null", ctx);
 			CTReference reference = new CTReference("java.lang.String", CTObjectFactory.class.getName());
 			ctx.bind("reference", reference);
-			String str = (String) ctx.lookup("reference");
-			assertNotNull(str);
-		} catch (NamingException ne) {
-			return;
+			// If no object factory is available for use, we should just return the reference.
+			CTReference ref = (CTReference)ctx.lookup("reference");
+			assertNotNull(ref);
 		} finally {
-			// If we don't get the exception, then this test fails
 			if (ctx != null) {
 				ctx.close();
 			}
@@ -129,20 +127,17 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 		InitialContext ctx = new InitialContext(env);
 		try {
 			assertNotNull("The context should not be null", ctx);
-			CTReference reference = new CTReference("java.lang.String");
+			CTReference reference = new CTReference("java.lang.String", CTObjectFactory.class.getName());
 			ctx.bind("reference", reference);
-			String str = (String) ctx.lookup("reference");
-			assertNotNull(str);
-		} catch (NamingException ne) {
-			return;
+			// If no object factory is available for use, we should just return the reference.
+			CTReference ref = (CTReference)ctx.lookup("reference");
+			assertNotNull(ref);
 		} finally {
-			// If we don't get the exception, then this test fails
 			if (ctx != null) {
 				ctx.close();
 			}
 			uninstallBundle(factoryBundle);
 		}
-		failException("testObjectFactoryBuilderRemoval failed, ", NamingException.class);
 	}
 
 	public void testServiceRanking() throws Exception {
