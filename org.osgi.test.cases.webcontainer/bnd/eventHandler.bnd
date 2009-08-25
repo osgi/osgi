@@ -6,3 +6,4 @@ Bundle-Version:                         4.2
 Private-Package:                        ${p}.handler
 Export-Package:                         ${p}.handler;version=1.0
 Bundle-Activator:						${p}.handler.ExtenderTestEventHandler
+Import-Package:                         org.osgi.framework, org.osgi.service.event, ${p}.util

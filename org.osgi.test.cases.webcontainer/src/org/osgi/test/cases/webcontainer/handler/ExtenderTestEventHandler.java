@@ -23,6 +23,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
+import org.osgi.test.cases.webcontainer.util.EventFactory;
 
 /**
  * @version $Rev$ $Date$
@@ -32,8 +33,6 @@ import org.osgi.service.event.EventHandler;
  */
 public class ExtenderTestEventHandler implements EventHandler, BundleActivator {
 
-    static Event eventPrevious;
-    static Event eventCurrent;
     final static String[] topics = new String[] {
             "org/osgi/service/web/STARTING",
             "org/osgi/service/web/STARTED",
@@ -53,20 +52,9 @@ public class ExtenderTestEventHandler implements EventHandler, BundleActivator {
 
     public void handleEvent(Event event) {
         // let's record the event
-        eventPrevious = eventCurrent;
-        eventCurrent = event;
-    }
-    
-    public static Event getCurrentEvent() {
-        return eventCurrent;
+    	EventFactory.registerEvent(event);
+    	System.out.println("event factory size is " + EventFactory.getEventSize());
+    	System.out.println("handled event is " + event.toString());
     }
 
-    public static Event getPreviousEvent() {
-        return eventPrevious;
-    }
-    
-    public static void clearEvents() {
-        eventCurrent = null;
-        eventPrevious = null;
-    }
 }

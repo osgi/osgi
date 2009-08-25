@@ -36,6 +36,7 @@ Import-Package = \
  	
 Export-Package =\
 	org.osgi.test.cases.webcontainer;version=1.0, \
+	org.osgi.test.cases.webcontainer.util;version=1.0, \
 	javax.annotation; version=1.0, \
 	javax.servlet; version=2.5, \
 	javax.servlet.http; version=2.5

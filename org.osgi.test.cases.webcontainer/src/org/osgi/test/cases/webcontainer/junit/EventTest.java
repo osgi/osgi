@@ -26,7 +26,7 @@ import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.event.EventConstants;
 import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
-import org.osgi.test.cases.webcontainer.handler.ExtenderTestEventHandler;
+import org.osgi.test.cases.webcontainer.util.EventFactory;
 
 /**
  * @version $Rev$ $Date$
@@ -37,7 +37,7 @@ import org.osgi.test.cases.webcontainer.handler.ExtenderTestEventHandler;
 public class EventTest extends WebContainerTestBundleControl {
     Bundle b;
     Bundle eventhandler;
-    private final int WAITCOUNT = 5;
+    private final int WAITCOUNT = 30;
     private final String EXTENDER_BUNDLE = "extender.bundle";
     private final String EXTENDER_BUNDLE_ID = "extender.bundle.id";
     private final String EXTENDER_BUNDLE_VERSION = "extender.bundle.version";
@@ -47,7 +47,7 @@ public class EventTest extends WebContainerTestBundleControl {
         super.setUp();
         super.prepare("/tw1");
         this.options.put(Constants.BUNDLE_SYMBOLICNAME, "org.osgi.test.cases.webcontainer.tw1");
-
+        
         // install the war file
         log("install war file: tw1.war at context path " + this.warContextPath);
         String loc = super.getWarURL("tw1.war", this.options);
@@ -81,24 +81,27 @@ public class EventTest extends WebContainerTestBundleControl {
     }
     
     public void testEvent001() throws Exception {
-        ExtenderTestEventHandler.clearEvents();
-        assertNull(ExtenderTestEventHandler.getPreviousEvent());
-        assertNull(ExtenderTestEventHandler.getCurrentEvent());
+        // clear all events in the eventfactory
+        //EventFactory.clearEvents();
+        //assertEquals("factory should not have any event", 0, EventFactory.getEventSize());
         
         this.b.start();
         
         // expect emit of the following events:
-        // org/osgi/service/web/STARTING Ð the web extender has spotted the web application bundle and is starting it. 
-        // org/osgi/service/web/STARTED Ð the web extender has finished starting the web application bundle. Formatted: Bullets and Numbering 
+        // org/osgi/service/web/DEPLOYING Ð the web extender has spotted the web application bundle and is starting it. 
+        // org/osgi/service/web/DEPLOYED Ð the web extender has finished starting the web application bundle. Formatted: Bullets and Numbering 
         // wait a few seconds to make sure events are delivered.
         int count = 0;
-        while(ExtenderTestEventHandler.getPreviousEvent() == null && count < WAITCOUNT) {
+        Event eventPrevious = null;
+        Event eventCurrent = null;
+        while(eventCurrent == null && count < WAITCOUNT) {
+        	eventPrevious = EventFactory.getEvent("org.osgi.test.cases.webcontainer.tw1", "org/osgi/service/web/DEPLOYED");
             Thread.sleep(1000);
             count++;
         }
 
-        Event eventPrevious = ExtenderTestEventHandler.getPreviousEvent();
-        Event eventCurrent = ExtenderTestEventHandler.getCurrentEvent();
+        assertEquals("event factory size should be 2", 2, EventFactory.getEventSize());
+        eventPrevious = EventFactory.getEvent("org.osgi.test.cases.webcontainer.tw1", "org/osgi/service/web/DEPLOYING");
         assertNotNull(eventPrevious);
         assertNotNull(eventCurrent);
         
@@ -139,45 +142,40 @@ public class EventTest extends WebContainerTestBundleControl {
 
         eventPrevious = null;
         eventCurrent = null;
-        ExtenderTestEventHandler.clearEvents();
         
         
         this.b.stop();
         // emit the following events:
-        // org/osgi/service/web/STOPPING Ð the web extender is stopping the web application bundle. 
-        // org/osgi/service/web/STOPPED Ð a web extender has stopped the web application bundle. 
+        // org/osgi/service/web/UNDEPLOYING Ð the web extender is stopping the web application bundle. 
+        // org/osgi/service/web/UNDEPLOYED Ð a web extender has stopped the web application bundle. 
         // wait a few seconds to make sure events are delivered.
         count = 0;
-        while(ExtenderTestEventHandler.getPreviousEvent() == null && count < WAITCOUNT) {
+        while(eventCurrent == null && count < WAITCOUNT) {
+        	eventCurrent = EventFactory.getEvent("org.osgi.test.cases.webcontainer.tw1", "org/osgi/service/web/UNDEPLOYED");
             Thread.sleep(1000);
             count++;
         }
-        eventPrevious = ExtenderTestEventHandler.getPreviousEvent();
-        eventCurrent = ExtenderTestEventHandler.getCurrentEvent();
+        eventPrevious = EventFactory.getEvent("org.osgi.test.cases.webcontainer.tw1", "org/osgi/service/web/UNDEPLOYING");
         assertNotNull(eventPrevious);
         assertNotNull(eventCurrent);
         assertEquals("org/osgi/service/web/UNDEPLOYING", eventPrevious.getTopic());
         assertEquals("org/osgi/service/web/UNDEPLOYED", eventCurrent.getTopic());
         assertTrue(Long.parseLong((String)eventPrevious.getProperty(EventConstants.TIMESTAMP)) >= startedTime);
         assertTrue(Long.parseLong((String)eventCurrent.getProperty(EventConstants.TIMESTAMP)) >= Long.parseLong((String)eventPrevious.getProperty(EventConstants.TIMESTAMP)));
-        
-        ExtenderTestEventHandler.clearEvents();
     }
     
-    public void testEvent002() throws Exception {
+    public void testEvent002() throws Exception {  
         // start the bundle again and try deploy another bundle that cause a failure
         this.b.start();
         // wait a few seconds to make sure events are delivered.
         int count = 0;
-        while(ExtenderTestEventHandler.getPreviousEvent() == null && count < WAITCOUNT) {
-            Thread.sleep(1000);
-            count++;
-        }
+        Event eventPrevious = null;
+        Event eventCurrent = null;
         
-        ExtenderTestEventHandler.clearEvents();
-        assertNull(ExtenderTestEventHandler.getPreviousEvent());
-        assertNull(ExtenderTestEventHandler.getCurrentEvent());
-        
+        // clear all events in the eventfactory
+        EventFactory.clearEvents();
+        assertEquals("factory should not have any event", 0, EventFactory.getEventSize());
+      
         Map options = new HashMap();
         options.put(WEB_CONTEXT_PATH, "/tw1");
         options.put(Constants.BUNDLE_SYMBOLICNAME, "org.osgi.test.cases.webcontainer.tw2");
@@ -188,17 +186,17 @@ public class EventTest extends WebContainerTestBundleControl {
         
         b2.start();
         // emit the following events:
-        // org/osgi/service/web/STARTING Ð the web extender has spotted the web application bundle and is starting it.
-        // org/osgi/service/web/FAILED - a web extender cannot start the bundle, this will be fired after a STARTING 
+        // org/osgi/service/web/DEPLOYING Ð the web extender has spotted the web application bundle and is starting it.
+        // org/osgi/service/web/FAILED - a web extender cannot start the bundle, this will be fired after a DEPLOYING 
         // event has been fired if the bundle cannot be started for any reason. 
         // wait a few seconds to make sure events are delivered.
         count = 0;
-        while(ExtenderTestEventHandler.getPreviousEvent() == null && count < WAITCOUNT) {
+        while(eventCurrent == null && count < WAITCOUNT) {
+        	eventCurrent = EventFactory.getEvent("org.osgi.test.cases.webcontainer.tw2", "org/osgi/service/web/FAILED");
             Thread.sleep(1000);
             count++;
         }
-        Event eventPrevious = ExtenderTestEventHandler.getPreviousEvent();
-        Event eventCurrent = ExtenderTestEventHandler.getCurrentEvent();
+        eventPrevious = EventFactory.getEvent("org.osgi.test.cases.webcontainer.tw2", "org/osgi/service/web/DEPLOYING");
         assertNotNull(eventPrevious);
         assertNotNull(eventCurrent);
         
@@ -236,12 +234,7 @@ public class EventTest extends WebContainerTestBundleControl {
         assertEquals(eventPrevious.getProperty(EXTENDER_BUNDLE_ID), eventCurrent.getProperty(EXTENDER_BUNDLE_ID));
         assertEquals(eventPrevious.getProperty(EXTENDER_BUNDLE_SYMBOLICNAME), eventCurrent.getProperty(EXTENDER_BUNDLE_SYMBOLICNAME));
         assertEquals(eventPrevious.getProperty(EXTENDER_BUNDLE_VERSION), eventCurrent.getProperty(EXTENDER_BUNDLE_VERSION));
-
-        ExtenderTestEventHandler.clearEvents();
         
         b2.uninstall();
-        // should not emit any events
-        assertNull(ExtenderTestEventHandler.getPreviousEvent());
-        assertNull(ExtenderTestEventHandler.getCurrentEvent());
     }
 }
