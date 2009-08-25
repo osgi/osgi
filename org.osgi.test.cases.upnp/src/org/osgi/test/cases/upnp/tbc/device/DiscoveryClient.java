@@ -1,17 +1,19 @@
 package org.osgi.test.cases.upnp.tbc.device;
 
-import java.net.*;
+import java.net.DatagramPacket;
 
 /**
  * 
  * 
  */
 public abstract class DiscoveryClient implements Runnable {
-	private DatagramPacket[]	packet;
-	private DiscoveryServer		server;
-	public boolean				running	= true;
+	private final DiscoveryServer	server;
+	public volatile boolean			running;
+	private volatile boolean		isDone;
 
 	public DiscoveryClient(DiscoveryServer server) {
+		running = true;
+		isDone = false;
 		this.server = server;
 	}
 
@@ -21,10 +23,14 @@ public abstract class DiscoveryClient implements Runnable {
 
 	public abstract long getTimeout();
 
-	public abstract void request();
+	public synchronized void stop() {
+		running = false;
+		notifyAll();
+	}
 
 	public void run() {
 		try {
+			DatagramPacket[] packet;
 			while (running) {
 				packet = getAliveDiscoveries();
 				int len = packet.length;
@@ -38,8 +44,8 @@ public abstract class DiscoveryClient implements Runnable {
 					break;
 				}
 				try {
-					synchronized (server) {
-						server.wait(getTimeout());
+					synchronized (this) {
+						wait(getTimeout());
 					}
 				}
 				catch (InterruptedException er) {
@@ -55,5 +61,12 @@ public abstract class DiscoveryClient implements Runnable {
 		catch (Exception er) {
 			er.printStackTrace();
 		}
+		finally {
+			isDone = true;
+		}
+	}
+
+	public boolean isDone() {
+		return isDone;
 	}
 }

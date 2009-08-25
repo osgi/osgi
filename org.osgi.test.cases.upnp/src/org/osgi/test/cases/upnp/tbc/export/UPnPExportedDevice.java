@@ -1,31 +1,29 @@
 package org.osgi.test.cases.upnp.tbc.export;
 
-import java.util.*;
-import org.osgi.framework.*;
-import org.osgi.service.upnp.*;
-import org.osgi.test.cases.upnp.tbc.*;
+import java.util.Dictionary;
+import java.util.Hashtable;
+
+import org.osgi.service.upnp.UPnPAction;
+import org.osgi.service.upnp.UPnPDevice;
+import org.osgi.service.upnp.UPnPService;
+import org.osgi.service.upnp.UPnPStateVariable;
+import org.osgi.test.cases.upnp.tbc.UPnPConstants;
 
 /**
  * 
  * 
  */
 public class UPnPExportedDevice implements UPnPDevice {
-	private boolean					root;
-	private boolean					active			= true;
-	private boolean					enable			= true;
 	static final String				TESTING_SV		= "Testing";
 	static final String				TESTMSG_SV		= "TestMessage";
 	static final String				SERVICE_ID		= "urn:prosyst-com:serviceId:TesterDevice";
 	static final String				SERVICE_TYPE	= "urn:schemas-prosyst-com:service:Tester";
 	static final String				SERVICE_VER		= "1";
-	private Hashtable				props;
-	private Dictionary				defaultProperties;
-	private static BundleContext	bc;
-	private TestService[]			service;
+	private final Hashtable		props;
+	private Dictionary			defaultProperties;
+	private final UPnPService[]	service;
 
-	public UPnPExportedDevice(TestService[] service, BundleContext bc) {
-		this.service = service;
-		UPnPExportedDevice.bc = bc;
+	public UPnPExportedDevice(UPnPService[] service) {
 		// put properties
 		this.props = new Hashtable(13);
 		String ip = "unknown ip";
@@ -33,6 +31,7 @@ public class UPnPExportedDevice implements UPnPDevice {
 			ip = java.net.InetAddress.getLocalHost().getHostName();
 		}
 		catch (Exception uhe) {
+			// ignored
 		}
 		props.put(UPnPDevice.UDN, "uuid:TesterType-" + ip);
 		props.put(UPnPDevice.TYPE,
@@ -48,104 +47,130 @@ public class UPnPExportedDevice implements UPnPDevice {
 		props.put(UPnPDevice.SERIAL_NUMBER, "1230456");
 		props.put(UPnPDevice.UPNP_EXPORT, "Yes");
 		props.put(UPnPDevice.PRESENTATION_URL, "");
+		this.service = service;
 	}
 
 	public static UPnPExportedDevice newUPnPTestervice() {
     // init state var Printing
-    TestStateVariable testingSV = new TestStateVariable(TESTING_SV, Boolean.class,
+		UPnPStateVariable testingSV = new TestStateVariable(TESTING_SV,
+				Boolean.class,
                                                         UPnPStateVariable.TYPE_BOOLEAN, Boolean.FALSE,
                                                         null, null, null, null, false);
     // init state var PrintMessage
-    TestStateVariable testMsg = new TestStateVariable(TESTMSG_SV, String.class,
+		UPnPStateVariable testMsg = new TestStateVariable(TESTMSG_SV,
+				String.class,
                                                         UPnPStateVariable.TYPE_STRING, "",
                                                         null, null, null, null, false);
 
 
-    TestStateVariable outString = new TestStateVariable(UPnPConstants.N_OUT_STRING, String.class,
+		UPnPStateVariable outString = new TestStateVariable(
+				UPnPConstants.N_OUT_STRING, String.class,
                                                         UPnPStateVariable.TYPE_STRING, "",
                                                         null, null, null, null, false);
 
-    TestStateVariable outStr = new TestStateVariable(UPnPConstants.N_OUT_STR, String.class,
+		UPnPStateVariable outStr = new TestStateVariable(
+				UPnPConstants.N_OUT_STR, String.class,
                                                         UPnPStateVariable.TYPE_STRING, "",
                                                         null, null, null, null, false);
 
-    TestStateVariable outBoolean = new TestStateVariable(UPnPConstants.N_OUT_BOOLEAN, Boolean.class,
+		UPnPStateVariable outBoolean = new TestStateVariable(
+				UPnPConstants.N_OUT_BOOLEAN, Boolean.class,
                                                         UPnPStateVariable.TYPE_BOOLEAN, null,
                                                         null, null, null, null, false);
 
 
     // var number
-    TestStateVariable outNumber = new TestStateVariable(UPnPConstants.N_OUT_NUMBER, Double.class,
+		UPnPStateVariable outNumber = new TestStateVariable(
+				UPnPConstants.N_OUT_NUMBER, Double.class,
                                                         UPnPStateVariable.TYPE_NUMBER, null,
                                                         null, null, null, null, true);
 
     // var int
-    TestStateVariable outInt = new TestStateVariable(UPnPConstants.N_OUT_INT, Integer.class,
+		UPnPStateVariable outInt = new TestStateVariable(
+				UPnPConstants.N_OUT_INT, Integer.class,
                                                         UPnPStateVariable.TYPE_INT, null,
                                                         null, null, null, null, true);
 
     // var char
-    TestStateVariable outChar = new TestStateVariable(UPnPConstants.N_OUT_CHAR, Character.class,
+		UPnPStateVariable outChar = new TestStateVariable(
+				UPnPConstants.N_OUT_CHAR, Character.class,
                                                         UPnPStateVariable.TYPE_CHAR, null,
                                                         null, null, null, null, true);
 
     // var float
-    TestStateVariable outFloat = new TestStateVariable(UPnPConstants.N_OUT_FLOAT, Float.class,
+		UPnPStateVariable outFloat = new TestStateVariable(
+				UPnPConstants.N_OUT_FLOAT, Float.class,
                                                         UPnPStateVariable.TYPE_FLOAT, null,
                                                         null, null, null, null, true);
 
     // init state var Printing
-    TestStateVariable inBoolean = new TestStateVariable(UPnPConstants.N_IN_BOOLEAN, Boolean.class,
+		UPnPStateVariable inBoolean = new TestStateVariable(
+				UPnPConstants.N_IN_BOOLEAN, Boolean.class,
                                                         UPnPStateVariable.TYPE_BOOLEAN, Boolean.FALSE,
                                                         null, null, null, null, true);
     // init state var PrintMessage
-    TestStateVariable inString = new TestStateVariable(UPnPConstants.N_IN_STRING, String.class,
+		UPnPStateVariable inString = new TestStateVariable(
+				UPnPConstants.N_IN_STRING, String.class,
                                                       UPnPStateVariable.TYPE_STRING, "",
                                                       null, null, null, null, true);
 
     // var number
-    TestStateVariable inNumber = new TestStateVariable(UPnPConstants.N_IN_NUMBER, Double.class,
+		UPnPStateVariable inNumber = new TestStateVariable(
+				UPnPConstants.N_IN_NUMBER, Double.class,
                                                         UPnPStateVariable.TYPE_NUMBER, null,
                                                         null, null, null, null, false);
 
     // var int
-    TestStateVariable inInt = new TestStateVariable(UPnPConstants.N_IN_INT, Integer.class,
+		UPnPStateVariable inInt = new TestStateVariable(UPnPConstants.N_IN_INT,
+				Integer.class,
                                                         UPnPStateVariable.TYPE_INT, null,
                                                         null, null, null, null, false);
 
     // var char
-    TestStateVariable inChar = new TestStateVariable(UPnPConstants.N_IN_CHAR, Character.class,
+		UPnPStateVariable inChar = new TestStateVariable(
+				UPnPConstants.N_IN_CHAR, Character.class,
                                                         UPnPStateVariable.TYPE_CHAR, null,
                                                         null, null, null, null, false);
 
     // var float
-    TestStateVariable inFloat = new TestStateVariable(UPnPConstants.N_IN_FLOAT, Float.class,
+		UPnPStateVariable inFloat = new TestStateVariable(
+				UPnPConstants.N_IN_FLOAT, Float.class,
                                                         UPnPStateVariable.TYPE_FLOAT, null,
                                                         null, null, null, null, false);
 
-    TestStateVariable levski = new TestStateVariable("blabla", String.class,
+		UPnPStateVariable levski = new TestStateVariable("blabla",
+				String.class,
                                                         UPnPStateVariable.TYPE_STRING, "",
                                                         null, null, null, null, false);
 
 
-    TestStateVariable[] vars = new TestStateVariable[] {testingSV, testMsg, outStr, outString, outNumber, outInt, outChar, outFloat, outBoolean,
+		UPnPStateVariable[] vars = new UPnPStateVariable[] {testingSV, testMsg,
+				outStr, outString, outNumber, outInt, outChar, outFloat,
+				outBoolean,
                                                         inBoolean, inString, inNumber, inInt, inChar, inFloat, levski};
     // init action Print
     Hashtable nameVar = new Hashtable(6);
     nameVar.put(testMsg.getName(), testMsg);
-    TestAction msgAct = new TestAction("testMsg", null, new String[]{TESTMSG_SV}, null, nameVar, null);
+		UPnPAction msgAct = new TestAction("testMsg", null,
+				new String[] {TESTMSG_SV}, null, nameVar, null);
     nameVar.put(testingSV.getName(), testingSV);
     nameVar.put(levski.getName(), levski);
     Hashtable resp = new Hashtable();
-    TestAction printAct = new TestAction("testPrint", null, new String[]{TESTMSG_SV}, new String[]{"blabla"}, nameVar, null);
+		UPnPAction printAct = new TestAction("testPrint", null,
+				new String[] {TESTMSG_SV}, new String[] {"blabla"}, nameVar,
+				null);
     nameVar.put(outNumber.getName(), outNumber);
-    TestAction numAct = new TestAction("testNum", null, new String[]{UPnPConstants.N_OUT_NUMBER}, null, nameVar, null);
+		UPnPAction numAct = new TestAction("testNum", null,
+				new String[] {UPnPConstants.N_OUT_NUMBER}, null, nameVar, null);
     nameVar.put(outInt.getName(), outInt);
-    TestAction intAct = new TestAction("testInt", null, new String[]{UPnPConstants.N_OUT_INT}, null, nameVar, null);
+		UPnPAction intAct = new TestAction("testInt", null,
+				new String[] {UPnPConstants.N_OUT_INT}, null, nameVar, null);
     nameVar.put(outChar.getName(), outChar);
-    TestAction charAct = new TestAction("testChar", null, new String[]{UPnPConstants.N_OUT_CHAR}, null, nameVar, null);
+		UPnPAction charAct = new TestAction("testChar", null,
+				new String[] {UPnPConstants.N_OUT_CHAR}, null, nameVar, null);
     nameVar.put(outFloat.getName(), outFloat);
-    TestAction floatAct = new TestAction("testFloat", null, new String[]{UPnPConstants.N_OUT_FLOAT}, null, nameVar, null);
+		UPnPAction floatAct = new TestAction("testFloat", null,
+				new String[] {UPnPConstants.N_OUT_FLOAT}, null, nameVar, null);
 
     nameVar.put(inBoolean.getName(), inBoolean);
     nameVar.put(inString.getName(), inString);
@@ -167,15 +192,17 @@ public class UPnPExportedDevice implements UPnPDevice {
     resp.put(UPnPConstants.N_OUT_CHAR, new Character('\42'));
     resp.put(UPnPConstants.N_OUT_FLOAT, new Float(42.0f));
 
-    TestAction testALL = new TestAction("testALL", null, new String[]{UPnPConstants.N_IN_STRING, UPnPConstants.N_IN_BOOLEAN, UPnPConstants.N_IN_NUMBER, UPnPConstants.N_IN_INT,
+		UPnPAction testALL = new TestAction("testALL", null, new String[] {
+				UPnPConstants.N_IN_STRING, UPnPConstants.N_IN_BOOLEAN,
+				UPnPConstants.N_IN_NUMBER, UPnPConstants.N_IN_INT,
                                                                       UPnPConstants.N_IN_CHAR, UPnPConstants.N_IN_FLOAT}, new String[]{UPnPConstants.N_OUT_STRING,
                                                                       UPnPConstants.N_OUT_STR, UPnPConstants.N_OUT_BOOLEAN, UPnPConstants.N_OUT_NUMBER, UPnPConstants.N_OUT_INT,UPnPConstants.N_OUT_CHAR,
                                                                       UPnPConstants.N_OUT_FLOAT}, nameVar, resp);
-    TestAction[] actions = new TestAction[] {testALL, printAct, msgAct,
+		UPnPAction[] actions = new UPnPAction[] {testALL, printAct, msgAct,
 				numAct, intAct, charAct, floatAct};
 		// init printer service
-		TestService[] services = new TestService[] {new TestService(actions,
-				vars, bc) {
+		UPnPService[] services = new UPnPService[] {new TestService(actions,
+				vars) {
 			public String getId() {
 				return SERVICE_ID;
 			}
@@ -188,14 +215,8 @@ public class UPnPExportedDevice implements UPnPDevice {
 				return SERVICE_VER;
 			}
 		}};
-		for (int i = 0; i < actions.length; i++) {
-			actions[i].setParent(services[0]);
-		}
 		// init printer device
-		UPnPExportedDevice upnpTester = new UPnPExportedDevice(services, bc);
-		for (int j = 0; j < services.length; j++) {
-			services[j].setDevice(upnpTester);
-		}
+		UPnPExportedDevice upnpTester = new UPnPExportedDevice(services);
 		return upnpTester;
 	}
 
@@ -233,14 +254,14 @@ public class UPnPExportedDevice implements UPnPDevice {
 		return null;
 	}
 
-	public String getUDN() {
+	public synchronized String getUDN() {
 		if (defaultProperties == null) {
 			defaultProperties = getDescriptions(null);
 		}
 		return (String) defaultProperties.get(UPnPDevice.UDN);
 	}
 
-	public String getType() {
+	public synchronized String getType() {
 		if (defaultProperties == null) {
 			defaultProperties = getDescriptions(null);
 		}

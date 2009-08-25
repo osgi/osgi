@@ -1,35 +1,29 @@
 package org.osgi.test.cases.upnp.tbc.export;
 
-import java.util.*;
-import org.osgi.framework.*;
-import org.osgi.service.upnp.*;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.osgi.service.upnp.UPnPAction;
+import org.osgi.service.upnp.UPnPService;
+import org.osgi.service.upnp.UPnPStateVariable;
 
 /**
  * 
  * 
  */
-public abstract class TestService implements UPnPService, ServiceListener {
-	private UPnPAction[]		actions;
-	private UPnPStateVariable[]	variables;
-	private Hashtable			acts;
-	private Hashtable			vars;
-	private Hashtable			serviceProps;
-	private Hashtable			refLis;
-	private UPnPExportedDevice	device;
-	private BundleContext		bc;
-	private Vector				listeners;
+public abstract class TestService implements UPnPService {
+	private final UPnPAction[]			actions;
+	private final UPnPStateVariable[]	variables;
+	private final Map					acts;
+	private final Map					vars;
 
-	public TestService(UPnPAction[] actions, UPnPStateVariable[] variables,
-			BundleContext bc) {
-		this.bc = bc;
-		acts = new Hashtable();
-		vars = new Hashtable();
+	public TestService(UPnPAction[] actions, UPnPStateVariable[] variables) {
 		if (variables == null || variables.length < 1) {
 			throw new IllegalArgumentException(
 					"UPnPService must have at least one state variable");
 		}
-		this.actions = actions;
-		this.variables = variables;
+		acts = new HashMap();
+		vars = new HashMap();
 		if (actions != null) {
 			for (int i = 0; i < actions.length; i++) {
 				acts.put(actions[i].getName(), actions[i]);
@@ -38,6 +32,9 @@ public abstract class TestService implements UPnPService, ServiceListener {
 		for (int j = 0; j < variables.length; j++) {
 			vars.put(variables[j].getName(), variables[j]);
 		}
+		this.actions = ((actions == null) ? null : (UPnPAction[]) actions
+				.clone());
+		this.variables = (UPnPStateVariable[]) variables.clone();
 	}
 
 	public abstract String getId();
@@ -63,11 +60,14 @@ public abstract class TestService implements UPnPService, ServiceListener {
 	}
 
 	public final UPnPAction[] getActions() {
-		return (UPnPAction[]) ((Object) actions);
+		if (actions == null) {
+			return null;
+		}
+		return (UPnPAction[]) actions.clone();
 	}
 
 	public final UPnPStateVariable[] getStateVariables() {
-		return (UPnPStateVariable[]) ((Object) variables);
+		return (UPnPStateVariable[]) variables.clone();
 	}
 
 	public final UPnPStateVariable getStateVariable(String name) {
@@ -84,106 +84,4 @@ public abstract class TestService implements UPnPService, ServiceListener {
 		}
 	}
 
-	public void generateEvent(Dictionary events) {
-		if (device != null) {
-			if (listeners != null) {
-				synchronized (listeners) {
-					for (int i = 0; i < listeners.size(); i++) {
-						UPnPEventListener tmp = (UPnPEventListener) listeners
-								.elementAt(i);
-						tmp.notifyUPnPEvent(device.getUDN(), getId(), events);
-					}
-				}
-			}
-		}
-	}
-
-	final void setDevice(UPnPExportedDevice device) {
-		this.device = device;
-	}
-
-	public final void registerListener() {
-		if (serviceProps == null) {
-			serviceProps = new Hashtable(4);
-			serviceProps.put(UPnPService.ID, getId());
-			serviceProps.put(UPnPDevice.ID, device.getUDN());
-			int xxx = Integer.parseInt(this.getVersion());
-			String[] types = new String[xxx];
-			for (int i = 0; i < xxx; i++) {
-				types[i] = getType() + ":" + i;
-			}
-			serviceProps.put(UPnPService.TYPE, types);
-			serviceProps.put(UPnPDevice.TYPE, device.getType());
-		}
-		listeners = new Vector(1);
-		refLis = new Hashtable(1);
-		try {
-			StringBuffer filter = new StringBuffer();
-			filter.append("(ObjectClass=");
-			filter.append(UPnPEventListener.class.getName());
-			filter.append(")");
-			bc.addServiceListener(this, filter.toString());
-			ServiceReference[] refs = bc.getServiceReferences(
-					UPnPEventListener.class.getName(), filter.toString());
-			//System.out.println("REFS: " + refs);
-			if (refs != null && refs.length > 0) {
-				//        synchronized (listeners) {
-				for (int i = 0; i < refs.length; i++) {
-					Filter f = (Filter) refs[i].getProperty("Filter.Object");
-					if (f != null && f.match(serviceProps)) {
-						UPnPEventListener tmp = (UPnPEventListener) bc
-								.getService(refs[i]);
-						listeners.addElement(tmp);
-						refLis.put(refs[i], tmp);
-					}
-				}
-				//        }
-			}
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public final void unregisterListener() {
-		if (bc != null) {
-			bc.removeServiceListener(this);
-			synchronized (listeners) {
-				listeners.removeAllElements();
-				Enumeration en = refLis.keys();
-				while (en.hasMoreElements()) {
-					ServiceReference ref = (ServiceReference) en.nextElement();
-					bc.ungetService(ref);
-				}
-				refLis.clear();
-			}
-			listeners = null;
-			refLis = null;
-			bc = null;
-		}
-	}
-
-	public void serviceChanged(ServiceEvent se) {
-		if (se.getType() == ServiceEvent.REGISTERED) {
-			synchronized (listeners) {
-				ServiceReference ref = se.getServiceReference();
-				Filter f = (Filter) ref.getProperty("Filter.Object");
-				if (f != null && f.match(serviceProps)) {
-					UPnPEventListener tmp = (UPnPEventListener) bc
-							.getService(ref);
-					listeners.addElement(tmp);
-					refLis.put(ref, tmp);
-				}
-			}
-		}
-		else
-			if (se.getType() == ServiceEvent.UNREGISTERING) {
-				synchronized (listeners) {
-					ServiceReference ref = se.getServiceReference();
-					UPnPEventListener tmp = (UPnPEventListener) refLis
-							.remove(ref);
-					listeners.removeElement(tmp);
-				}
-			}
-	}
 }

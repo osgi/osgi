@@ -13,33 +13,34 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * 
  */
 public class TestStarter {
-	private DiscoveryServer				server;
-	private DiscoveryMsgSender			sender;
+	private final DiscoveryServer		server;
+	private final DiscoveryMsgSender	sender;
 
-	public TestStarter(HttpService http, DefaultTestBundleControl logger)
+	public TestStarter(HttpService http)
 			throws Exception {
 		DServletContext dscontext = new DServletContext();
 		UPnPControl.log("Register Http Servlet");
-		http.registerServlet(UPnPConstants.SR_DESC, new DeviceServlet(logger),
+		http.registerServlet(UPnPConstants.SR_DESC, new DeviceServlet(),
 				null, dscontext);
-		http.registerServlet(UPnPConstants.SR_IM, new DeviceServlet(logger),
+		http.registerServlet(UPnPConstants.SR_IM, new DeviceServlet(),
 				null, dscontext);
-		http.registerServlet(UPnPConstants.SR_CON, new DeviceServlet(logger),
+		http.registerServlet(UPnPConstants.SR_CON, new DeviceServlet(),
 				null, dscontext);
-		http.registerServlet(UPnPConstants.SR_EV, new DeviceServlet(logger),
+		http.registerServlet(UPnPConstants.SR_EV, new DeviceServlet(),
 				null, dscontext);
-		http.registerServlet(UPnPConstants.SR_PRES, new DeviceServlet(logger),
+		http.registerServlet(UPnPConstants.SR_PRES, new DeviceServlet(),
 				null, dscontext);
-		UPnPControl.log("Start Discovery Live and Bye messages creator");
+		DefaultTestBundleControl
+				.log("Start Discovery Live and Bye messages creator");
 		DiscoveryMsgCreator creator = new DiscoveryMsgCreator();
-		server = new DiscoveryServer(logger);
+		server = new DiscoveryServer();
 		sender = new DiscoveryMsgSender(server, creator);
 		server.registerSender(sender);
 	}
 
 	public void stop() throws Exception {
 		server.unregisterSender(sender);
-		while (!server.isDone) {
+		while (!sender.isDone()) {
 			Thread.sleep(20);
 		}
 		try {

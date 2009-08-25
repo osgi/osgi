@@ -1,15 +1,17 @@
 package org.osgi.test.cases.upnp.tbc.device.discovery;
 
-import java.net.*;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
-import org.osgi.test.cases.upnp.tbc.*;
+import org.osgi.test.cases.upnp.tbc.UPnPConstants;
 
 /**
  * 
  * 
  */
 public class DiscoveryMsgCreator {
-	private InetAddress	address;
+	private final InetAddress	address;
 	
 	public DiscoveryMsgCreator() throws UnknownHostException {
 		address = InetAddress.getByName(UPnPConstants.UPnPMCAddress);

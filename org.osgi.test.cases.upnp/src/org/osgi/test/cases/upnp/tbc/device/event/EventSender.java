@@ -12,6 +12,7 @@ import java.util.Hashtable;
 
 import org.osgi.test.cases.upnp.tbc.UPnPConstants;
 import org.osgi.test.cases.upnp.tbc.device.description.Hex;
+import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
@@ -19,18 +20,17 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * 
  */
 public class EventSender implements Runnable {
-	private String						sid;
-	private URL							loc;
-	private int							next;
-	private DefaultTestBundleControl	logger;
+	private final String	sid;
+	private final URL		loc;
+	private int				next;
 
-	public EventSender(String sid, URL loc, DefaultTestBundleControl logger) {
+	public EventSender(String sid, URL loc) {
 		this.sid = sid;
 		this.loc = loc;
-		this.logger = logger;
 	}
 
 	public void run() {
+		DefaultTestBundleControl.log("Sending the initial event");
 		Hashtable hash = new Hashtable();
 		hash.put(UPnPConstants.N_INT, UPnPConstants.V_INT);
 		hash.put(UPnPConstants.N_UI4, UPnPConstants.V_UI4);
@@ -44,109 +44,131 @@ public class EventSender implements Runnable {
 		hash.put(UPnPConstants.N_HEX, Hex
 				.encode(UPnPConstants.V_HEX.getBytes()));
 		hash.put(UPnPConstants.N_OUT, UPnPConstants.V_OUT);
-		logger.log("Sending the initial event");
 		try {
-			genEvent(hash, 0);
+			genEvent(hash);
 		}
 		catch (IOException exc) {
 			exc.printStackTrace();
 		}
+		// DefaultTestBundleControl.log("Sending an event with name "
+		// + UPnPConstants.N_CHAR
+		// + " and value " + UPnPConstants.V_CHAR);
 		hash.clear();
-		logger.log("Sending an event with name " + UPnPConstants.N_CHAR
-				+ " and value " + UPnPConstants.V_CHAR);
 		if (sid.indexOf("e") >= 0) {
-			hash.put(UPnPConstants.N_INT, UPnPConstants.V_INT);
-			logger.log("Sending an event with name " + UPnPConstants.N_INT
+			DefaultTestBundleControl
+					.log("Sending event 1 with name " + UPnPConstants.N_INT
 					+ " and value " + UPnPConstants.V_INT);
+			hash.put(UPnPConstants.N_INT, UPnPConstants.V_INT);
 			try {
-				genEvent(hash, 0);
+				genEvent(hash);
 			}
 			catch (IOException exc) {
 				exc.printStackTrace();
 			}
-			hash.put(UPnPConstants.N_UI4, UPnPConstants.V_UI4);
-			logger.log("Sending an event with name " + UPnPConstants.N_UI4
+
+			DefaultTestBundleControl
+					.log("Sending event 2 with name " + UPnPConstants.N_UI4
 					+ " and value " + UPnPConstants.V_UI4);
+			hash.put(UPnPConstants.N_UI4, UPnPConstants.V_UI4);
 			try {
-				genEvent(hash, 0);
+				genEvent(hash);
 			}
 			catch (IOException exc) {
 				exc.printStackTrace();
 			}
+
+			DefaultTestBundleControl.log("Sending event 3 with name "
+					+ UPnPConstants.N_NUMBER + " and value "
+					+ UPnPConstants.V_NUMBER);
 			duble = new Double(UPnPConstants.V_NUMBER);
 			hash.put(UPnPConstants.N_NUMBER, duble);
-			logger.log("Sending an event with name " + UPnPConstants.N_NUMBER
-					+ " and value " + UPnPConstants.V_NUMBER);
 			try {
-				genEvent(hash, 0);
+				genEvent(hash);
 			}
 			catch (IOException exc) {
 				exc.printStackTrace();
 			}
+
+			DefaultTestBundleControl.log("Sending event 4 with name "
+					+ UPnPConstants.N_FLOAT + " and value "
+					+ UPnPConstants.V_FLOAT);
 			fl = new Float(UPnPConstants.V_FLOAT);
 			hash.put(UPnPConstants.N_FLOAT, fl);
-			logger.log("Sending an event with name " + UPnPConstants.N_FLOAT
-					+ " and value " + UPnPConstants.V_FLOAT);
 			try {
-				genEvent(hash, 0);
+				genEvent(hash);
 			}
 			catch (IOException exc) {
 				exc.printStackTrace();
 			}
-			hash.put(UPnPConstants.N_CHAR, UPnPConstants.V_CHAR);
-			logger.log("Sending an event with name " + UPnPConstants.N_CHAR
+
+			DefaultTestBundleControl.log("Sending event 5 with name "
+					+ UPnPConstants.N_CHAR
 					+ " and value " + UPnPConstants.V_CHAR);
+			hash.put(UPnPConstants.N_CHAR, UPnPConstants.V_CHAR);
 			try {
-				genEvent(hash, 0);
+				genEvent(hash);
 			}
 			catch (IOException exc) {
 				exc.printStackTrace();
 			}
-			hash.put(UPnPConstants.N_STRING, UPnPConstants.V_STRING);
-			logger.log("Sending an event with name " + UPnPConstants.N_STRING
+
+			DefaultTestBundleControl.log("Sending event 6 with name "
+					+ UPnPConstants.N_STRING
 					+ " and value " + UPnPConstants.V_STRING);
+			hash.put(UPnPConstants.N_STRING, UPnPConstants.V_STRING);
 			try {
-				genEvent(hash, 0);
+				genEvent(hash);
 			}
 			catch (IOException exc) {
 				exc.printStackTrace();
 			}
-			hash.put(UPnPConstants.N_BOOLEAN, UPnPConstants.V_BOOLEAN);
-			logger.log("Sending an event with name " + UPnPConstants.N_BOOLEAN
+
+			DefaultTestBundleControl.log("Sending event 7 with name "
+					+ UPnPConstants.N_BOOLEAN
 					+ " and value " + UPnPConstants.V_BOOLEAN);
+			hash.put(UPnPConstants.N_BOOLEAN, UPnPConstants.V_BOOLEAN);
 			try {
-				genEvent(hash, 0);
+				genEvent(hash);
 			}
 			catch (IOException exc) {
 				exc.printStackTrace();
 			}
+
+			DefaultTestBundleControl
+					.log("Sending event 8 with name " + UPnPConstants.N_HEX
+							+ " and value " + UPnPConstants.V_HEX);
 			try {
 				hash.put(UPnPConstants.N_HEX, Hex.encode(UPnPConstants.V_HEX
 						.getBytes()));
-				logger.log("Sending an event with name " + UPnPConstants.N_HEX
-						+ " and value " + UPnPConstants.V_HEX);
 			}
 			catch (Exception exc) {
 				hash.put(UPnPConstants.N_HEX, UPnPConstants.V_HEX);
 			}
 			try {
-				genEvent(hash, 0);
+				genEvent(hash);
 			}
 			catch (IOException exc) {
 				exc.printStackTrace();
 			}
+
+			DefaultTestBundleControl
+					.log("Sending event 9 with name " + UPnPConstants.N_OUT
+							+ " and value " + UPnPConstants.V_OUT);
 			hash.put(UPnPConstants.N_OUT, UPnPConstants.V_OUT);
 			try {
-				genEvent(hash, 0);
+				genEvent(hash);
 			}
 			catch (IOException exc) {
 				exc.printStackTrace();
 			}
 		}
 		else {
+			DefaultTestBundleControl.log("Sending event 1 with name "
+					+ UPnPConstants.N_OUT_STR + " and value "
+					+ UPnPConstants.V_OUT_STR);
 			hash.put(UPnPConstants.N_OUT_STR, UPnPConstants.V_OUT_STR);
 			try {
-				genEvent(hash, 0);
+				genEvent(hash);
 			}
 			catch (IOException exc) {
 				exc.printStackTrace();
@@ -154,7 +176,7 @@ public class EventSender implements Runnable {
 		}
 	}
 
-	private void genEvent(Dictionary dict, int err) throws IOException {
+	private void genEvent(Dictionary dict) throws IOException {
 		StringBuffer sb = new StringBuffer();
 		sb.append(UPnPConstants.PROPSET_ST);
 		sb.append(UPnPConstants.CRLF);
@@ -202,7 +224,10 @@ public class EventSender implements Runnable {
 		sb.append(sid);
 		sb.append(UPnPConstants.CRLF);
 		sb.append(UPnPConstants.H_SEQ);
-		sb.append(next++);
+		sb.append(next);
+		synchronized (this) {
+			next++;
+		}
 		sb.append(UPnPConstants.CRLF);
 		sb.append(UPnPConstants.CRLF);
 		String head = sb.toString();
@@ -221,5 +246,11 @@ public class EventSender implements Runnable {
 		ps.close();
 		br.close();
 		sock.close();
+		try {
+			Thread.sleep(1000 * OSGiTestCaseProperties.getScaling());
+		}
+		catch (InterruptedException e) {
+			// ignored
+		}
 	}
 }

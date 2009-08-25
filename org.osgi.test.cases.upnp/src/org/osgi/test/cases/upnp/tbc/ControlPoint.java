@@ -11,16 +11,17 @@ import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.osgi.test.support.OSGiTestCaseProperties;
+
 /**
  * 
  * 
  */
 public class ControlPoint extends Thread {
-	public String			received;
-	private DatagramSocket	msocket;
-	private InetAddress		address;
-	private DatagramPacket	packet;
-	private boolean			running;
+	public volatile String			received;
+	private final DatagramSocket	msocket;
+	private final InetAddress		address;
+	private volatile boolean			running;
 	private final int		SEC_TO_DELAY	= 6;
 	private final String	NS_VALUE		= "01";
 
@@ -35,7 +36,7 @@ public class ControlPoint extends Thread {
 		super.start();
 
 		try {
-			sleep(2000);
+			sleep(2000 * OSGiTestCaseProperties.getScaling());
 		}
 		catch (InterruptedException e) {
 			// ignored
@@ -53,7 +54,7 @@ public class ControlPoint extends Thread {
 	public void run() {
 		try {
 			byte[] bytes = new byte[1048];
-			packet = new DatagramPacket(bytes, bytes.length);
+			DatagramPacket packet = new DatagramPacket(bytes, bytes.length);
 			msocket.receive(packet);
 			//      System.out.println("RECEIVED DATA: " + new
 			// String(packet.getData()));

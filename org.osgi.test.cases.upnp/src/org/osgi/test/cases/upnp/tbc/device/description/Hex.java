@@ -7,9 +7,12 @@ package org.osgi.test.cases.upnp.tbc.device.description;
  * @version 
  * @since 
  */
-import java.util.*;
+import java.util.Vector;
 
 public final class Hex {
+	private Hex() {
+		// empty
+	}
 	/**
 	 * Encodes <code>byte[]</code> into HEX.
 	 * 

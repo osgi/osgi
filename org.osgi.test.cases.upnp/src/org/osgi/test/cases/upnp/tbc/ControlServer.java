@@ -21,23 +21,20 @@ import org.osgi.test.cases.upnp.tbc.parser.XMLTag;
  * 
  */
 public class ControlServer extends Assert implements Runnable {
-	public volatile boolean	isFinished	= false;
-	private Hashtable		hash;
-	private Socket			socket;
-	private InetAddress		address;
-	private XMLParser		parser;
-	private OutputStream	os;
-	private InputStream		is;
-	private volatile String	ans;
+	private final Socket		socket;
+	private final InetAddress	address;
+	private volatile String		ans;
+	public volatile boolean		isFinished;
 
 	public ControlServer(String host, int port) throws Exception {
+		isFinished = false;
 		address = InetAddress.getByName(host);
 		socket = new Socket(address, port);
 	}
 
 	public void send(byte[] bytes) {
 		try {
-			os = socket.getOutputStream();
+			OutputStream os = socket.getOutputStream();
 			os.write(bytes);
 		}
 		catch (Exception er) {
@@ -48,7 +45,7 @@ public class ControlServer extends Assert implements Runnable {
 	public void run() {
 		try {
 			socket.setSoTimeout(32000);
-			is = socket.getInputStream();
+			InputStream is = socket.getInputStream();
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			byte[] bytes = new byte[1024];
 			int rd = is.read(bytes);
@@ -65,12 +62,14 @@ public class ControlServer extends Assert implements Runnable {
 	}
 
 	public void checkAns() throws Exception {
-		BufferedReader br = new BufferedReader(new StringReader(ans));
-		hash = new Hashtable(6);
+		String answer = ans;
+		BufferedReader br = new BufferedReader(new StringReader(answer));
+		Hashtable hash = new Hashtable(6);
 		String ll = br.readLine();
 		if (ll.equals("HTTP/1.1 200 OK")) {
-			String body = ans.substring(ans.indexOf('<'), ans.length());
-			parser = new XMLParser(body);
+			String body = answer
+					.substring(answer.indexOf('<'), answer.length());
+			XMLParser parser = new XMLParser(body);
 			XMLTag rootTag = parser.getRootXMLTag();
 			if (!rootTag.hasOnlyTags()) {
 				fail("CONTROL SERVER: Root tag has something else except tags");
@@ -95,7 +94,7 @@ public class ControlServer extends Assert implements Runnable {
 			log("Control test of Export is OK");
 		}
 		else {
-			fail("RECEIVED ERROR : " + ans);
+			fail("RECEIVED ERROR : " + answer);
 		}
 	}
 
@@ -149,8 +148,6 @@ public class ControlServer extends Assert implements Runnable {
 
 	public void finish() throws Exception {
 		socket.close();
-		os.close();
-		is.close();
 	}
 
 	private static void log(String message) {

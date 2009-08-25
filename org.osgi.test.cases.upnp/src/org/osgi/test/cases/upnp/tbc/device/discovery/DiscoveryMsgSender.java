@@ -1,18 +1,17 @@
 package org.osgi.test.cases.upnp.tbc.device.discovery;
 
-import java.net.*;
-import org.osgi.test.cases.upnp.tbc.*;
-import org.osgi.test.cases.upnp.tbc.device.*;
+import java.net.DatagramPacket;
+
+import org.osgi.test.cases.upnp.tbc.UPnPConstants;
+import org.osgi.test.cases.upnp.tbc.device.DiscoveryClient;
+import org.osgi.test.cases.upnp.tbc.device.DiscoveryServer;
 
 /**
  * 
  * 
  */
 public class DiscoveryMsgSender extends DiscoveryClient {
-	private DiscoveryServer		server;
-	private DiscoveryMsgCreator	creator;
-	private DatagramPacket[]	adp;
-	private DatagramPacket[]	bdp;
+	private final DiscoveryMsgCreator	creator;
 
 	public DiscoveryMsgSender(DiscoveryServer server,
 			DiscoveryMsgCreator creator) {
@@ -21,7 +20,7 @@ public class DiscoveryMsgSender extends DiscoveryClient {
 	}
 
 	public DatagramPacket[] getAliveDiscoveries() {
-		adp = new DatagramPacket[22];
+		DatagramPacket[] adp = new DatagramPacket[22];
 		String location = "http://" + UPnPConstants.LOCAL_HOST + ":"
 				+ UPnPConstants.HTTP_PORT + "/description?xml=root";
 		adp[0] = creator.createAlive(UPnPConstants.V_ROOT,
@@ -91,7 +90,7 @@ public class DiscoveryMsgSender extends DiscoveryClient {
 	}
 
 	public DatagramPacket[] getByeDiscoveries() {
-		bdp = new DatagramPacket[22];
+		DatagramPacket[] bdp = new DatagramPacket[22];
 		bdp[0] = creator.createByeBye(UPnPConstants.V_ROOT,
 				UPnPConstants.UDN_ROOT + UPnPConstants.QD
 						+ UPnPConstants.V_ROOT);
@@ -160,9 +159,5 @@ public class DiscoveryMsgSender extends DiscoveryClient {
 
 	public long getTimeout() {
 		return 1800 * 1000;
-	}
-
-	public void request() {
-		server.send(adp[0]);
 	}
 }

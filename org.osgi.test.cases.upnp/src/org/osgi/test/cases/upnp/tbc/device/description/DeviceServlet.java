@@ -26,15 +26,14 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * 
  */
 public class DeviceServlet extends HttpServlet {
-	private DescriptionInvoker			invoker;
-	private Hashtable					evs;
-	private StringBuffer				root;
+	private static final long			serialVersionUID	= 1L;
+	private final DescriptionInvoker	invoker;
+	private final Hashtable				evs;
+	private final StringBuffer			root;
 	private static long					sids	= 0;
-	private DefaultTestBundleControl	logger;
 
-	public DeviceServlet(DefaultTestBundleControl logger) throws Exception {
-		this.logger = logger;
-		invoker = new DescriptionInvoker(logger);
+	public DeviceServlet() throws Exception {
+		invoker = new DescriptionInvoker();
 		evs = new Hashtable();
 		root = new StringBuffer();
 		addContent(root, "/org/osgi/test/cases/upnp/tbc/resources/dd1.xml");
@@ -133,7 +132,7 @@ public class DeviceServlet extends HttpServlet {
 
 	public void doPost(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException {
-		logger.log("{DeviceServlet} - Incoming POST request");
+		DefaultTestBundleControl.log("{DeviceServlet} - Incoming POST request");
 		String uri = req.getRequestURI();
 		if (uri.equals(UPnPConstants.SR_CON)) {
 			String dsi = req.getParameter(UPnPConstants.DSI);
@@ -143,9 +142,9 @@ public class DeviceServlet extends HttpServlet {
 		}
 	}
 
-	public void doMPost(HttpServletRequest req, HttpServletResponse res)
-			throws ServletException, IOException {
-		logger.log("{DeviceServlet} - Incoming M-POST request");
+	public void doMPost(HttpServletRequest req, HttpServletResponse res) {
+		DefaultTestBundleControl
+				.log("{DeviceServlet} - Incoming M-POST request");
 		//// try {
 		//// Object xx = null;
 		//// Enumeration en = req.getHeaderNames();
@@ -189,31 +188,34 @@ public class DeviceServlet extends HttpServlet {
 	}
 
 	private void genError(HttpServletResponse httpservletresponse, int i,
-			String s) throws ServletException, IOException {
+			String s) throws IOException {
 		invoker.sendError(httpservletresponse, i, s);
 	}
 
 	private Dictionary getActionArguments(String xml, String actionName) {
 		String env_string = extractStringT(xml, ":Envelope", ">");
 		if (env_string.length() == 0) {
-			logger.log("Unable to find <Envelope> tag in action XML");
+			DefaultTestBundleControl
+					.log("Unable to find <Envelope> tag in action XML");
 			return null;
 		}
 		String env_ns = extractStringT(env_string, "xmlns:", "=");
 		if (env_ns.length() == 0) {
-			logger
+			DefaultTestBundleControl
 					.log("Unable to find xmlns definition for <Envelope> tag in action XML");
 			return null;
 		}
 		String body = extractStringT(xml, "<" + env_ns + ":Body>", "</"
 				+ env_ns + ":Body>");
 		if (body.length() == 0) {
-			logger.log("Unable to find <Body> tag in action XML");
+			DefaultTestBundleControl
+					.log("Unable to find <Body> tag in action XML");
 			return null;
 		}
 		String act_ns = extractStringT(body, "<", ":" + actionName);
 		if (act_ns.length() == 0) {
-			logger.log("Unable to find the XML NS for <" + actionName
+			DefaultTestBundleControl.log("Unable to find the XML NS for <"
+					+ actionName
 					+ "> or the tag it self in action XML");
 			return null;
 		}
@@ -222,13 +224,14 @@ public class DeviceServlet extends HttpServlet {
 				+ actionName + act_xmlns + ">"), ("</" + act_ns + ":"
 				+ actionName + ">"));
 		if (arguments.length() == 0) {
-			logger
+			DefaultTestBundleControl
 					.log("There are no argumets in the invoke XML, although that is a possible scenario the testcase has no actions with no arguments");
 			return null;
 		}
 		Dictionary a = parseArgs(arguments);
 		if (a == null) {
-			logger.log("Unable to parse the " + actionName + " arguments");
+			DefaultTestBundleControl.log("Unable to parse the " + actionName
+					+ " arguments");
 		}
 		return a;
 	}
@@ -343,14 +346,14 @@ public class DeviceServlet extends HttpServlet {
 	//// }
 	//// }
 	private void replyControl(String dsi, String soap, String body,
-			HttpServletResponse res, boolean mposted) throws ServletException,
-			IOException {
+			HttpServletResponse res, boolean mposted) throws IOException {
 		int in = 0;
 		String serviceType = soap.substring(1, in = soap.indexOf("#"));
 		String actionName = soap.substring(in + 1, soap.length() - 1);
 		Dictionary args = getActionArguments(body, actionName);
 		if (args == null) {
-			logger.log("Error while parsing invoke XML for action "
+			DefaultTestBundleControl
+					.log("Error while parsing invoke XML for action "
 					.concat(actionName));
 			genError(res, 500, UPnPConstants.ERR_WB);
 			return;
@@ -359,8 +362,9 @@ public class DeviceServlet extends HttpServlet {
 	}
 
 	public synchronized void doSubscribe(HttpServletRequest req,
-			HttpServletResponse res) throws ServletException, IOException {
-		logger.log("{DeviceServlet} - Incoming SUBSCRIBE request");
+			HttpServletResponse res) throws IOException {
+		DefaultTestBundleControl
+				.log("{DeviceServlet} - Incoming SUBSCRIBE request");
 		String uri = req.getRequestURI();
 		if (uri == null || !uri.equals(UPnPConstants.SR_EV)) {
 			res.sendError(400, "Must access event url");
@@ -422,16 +426,18 @@ public class DeviceServlet extends HttpServlet {
 					url = new URL(callback.substring(1, callback.length() - 1));
 				}
 				catch (MalformedURLException mue) {
-					logger.log("Call Back URL: " + callback + " is invalid");
+					DefaultTestBundleControl.log("Call Back URL: " + callback
+							+ " is invalid");
 					res.sendError(412, UPnPConstants.ERR_MICB);
 					return;
 				}
-				sid = "uuid:" + dsi + sids++;
+				synchronized (DeviceServlet.class) {
+					sid = "uuid:" + dsi + sids++;
+				}
 				if (dsi.indexOf("s") > 0) {
 					res.sendError(500, UPnPConstants.ERR_UAS);
-					Thread th = new Thread(new EventSender(sid, url, logger),
+					Thread th = new Thread(new EventSender(sid, url),
 							"EVENT SENDER #0");
-					//          th.setName("EVENT SENDER #0");
 					th.start();
 					return;
 				}
@@ -452,9 +458,8 @@ public class DeviceServlet extends HttpServlet {
 			res.setHeader(UPnPConstants.N_SID, sid);
 			res.setHeader(UPnPConstants.N_TIMEOUT, UPnPConstants.V_SEC + time);
 			if (eventing) {
-				Thread th = new Thread(new EventSender(sid, url, logger),
+				Thread th = new Thread(new EventSender(sid, url),
 						"EVENT SENDER");
-				//        th.setName("EVENT SENDER");
 				th.start();
 			}
 		}
@@ -465,7 +470,7 @@ public class DeviceServlet extends HttpServlet {
 	}
 
 	public synchronized void doUnsubscribe(HttpServletRequest req,
-			HttpServletResponse res) throws ServletException, IOException {
+			HttpServletResponse res) throws IOException {
 		//    logger.log("{DeviceServlet} - Incoming UNSUBSCRIBE request");
 		String uri = req.getRequestURI();
 		if (uri == null || !uri.equals(UPnPConstants.SR_EV)) {

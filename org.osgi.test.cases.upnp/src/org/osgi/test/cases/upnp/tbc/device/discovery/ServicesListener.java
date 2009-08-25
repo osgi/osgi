@@ -4,6 +4,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.upnp.UPnPDevice;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -14,10 +15,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * 
  */
 public class ServicesListener extends ServiceTracker {
-	public boolean				listen	= false;
-	public int					count	= 0;
-	private ServiceReference	sr;
-	private static UPnPDevice	device;
+	private UPnPDevice	last;
 
 	public ServicesListener(BundleContext bc) throws InvalidSyntaxException {
 		super(
@@ -28,41 +26,26 @@ public class ServicesListener extends ServiceTracker {
 	}
 
 	public Object addingService(ServiceReference ref) {
-		listen = true;
-		count++;
+		UPnPDevice device = (UPnPDevice) super.addingService(ref);
+
 		synchronized (this) {
+			last = device;
 			notifyAll();
 		}
-		sr = ref;
-		device = (UPnPDevice) super.addingService(ref);
 		return device;
 	}
 
-	public void removedService(Object service, ServiceReference ref) {
-		sr = ref;
-		device = (UPnPDevice) service;
-	}
-
-	public void modifiedService(Object service, ServiceReference ref) {
-		sr = ref;
-		device = (UPnPDevice) service;
-	}
-
-	public ServiceReference getServiceRef() {
-		return sr;
-	}
-
-	public static UPnPDevice getUPnPDevice() {
-		return device;
+	public synchronized UPnPDevice getUPnPDevice() {
+		return last;
 	}
 
 	public synchronized void waitFor(int i) {
-		while (count != i) {
+		while (size() != i) {
 			try {
 				wait();
 			}
 			catch (InterruptedException e) {
-				e.printStackTrace();
+				// ignored
 			}
 		}
 	}

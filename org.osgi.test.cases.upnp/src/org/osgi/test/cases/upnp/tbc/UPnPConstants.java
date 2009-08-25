@@ -1,6 +1,7 @@
 package org.osgi.test.cases.upnp.tbc;
 
-import java.net.*;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 /**
  * 
@@ -12,12 +13,12 @@ public final class UPnPConstants {
 	public static final String	DE_TEST				= "upnp.test.description";
 	public static final String	CO_TEST				= "upnp.test.control";
 	public static final String	CRLF				= "\r\n";
-	public static String		LOCAL_HOST			= "127.0.0.1";
+	public static final String	LOCAL_HOST;
 	public static final String	DUPnPMCPort			= "upnp.mc.port";
 	public static final String	UPnPMCAddress		= "239.255.255.250";
 	public static final String	SEARCH_ADDRESS		= "239.255.255.250:1900";
-	public static int			UPnPMCPort;
-	public static int			HTTP_PORT			= 8080;
+	public static final int		UPnPMCPort;
+	public static final int		HTTP_PORT;
 	public static final String	QD					= "::";
 	public static final String	DD					= ":";
 	public static final String	CC					= ";";
@@ -67,7 +68,7 @@ public final class UPnPConstants {
 	public static final String	N_CT				= "CONTENT-TYPE";
 	public static final String	N_EXT				= "EXT";
 	//default header values
-	public static String		V_MC_HOST			= "239.255.255.250:";
+	public static final String	V_MC_HOST;
 	public static final String	V_CC				= "1800";
 	public static final String	V_MA				= "max-age = ";
 	public static final String	V_NTS_A				= "ssdp:alive";
@@ -90,35 +91,18 @@ public final class UPnPConstants {
 	public static final String	MPOST				= "M-POST";
 	public static final String	NOTIFY				= "NOTIFY";
 	//ids
-	public static String		UDN_RCD				= "uuid:prosyst-com:rcd:";														//r
-																																		 // continues
-																																		 // device
-	public static String		UDN_RBD				= "uuid:prosyst-com:rbd:";														//r
-																																		 // bye
-																																		 // device
-	public static String		UDN_RNBD			= "uuid:prosyst-com:rnbd:";														//r no
-																																	   // bye
-																																	   // device
-	public static String		UDN_WLD				= "uuid:prosyst-com:wld:";														//w
-																																		 // location
-																																		 // device
-	public static String		UDN_WND				= "uuid:prosyst-com:wnd:";														//w
-																																		 // nts
-																																		 // device
-	public static String		UDN_WCCLD			= "uuid:prosyst-com:wccld:";													//w
-																																	 // cache-control
-																																	 // letter
-																																	 // device
-	public static String		UDN_WCCND			= "uuid:prosyst-com:wccnd:";													//w
-																																	 // cache-control
-																																	 // negative
-																																	 // device
-	public static String		UDN_WADS			= "uuid:prosyst-com:wads:";														//w
-																																	   // advertisement
-																																	   // devices
-	public static String		UDN_ROOT			= "uuid:prosyst-com:root:";
-	public static String		UDN_EMB1			= "uuid:prosyst-com:emb1:";
-	public static String		UDN_EMB2			= "uuid:prosyst-com:emb2:";
+	public static final String	UDN_RCD;																							// r
+	public static final String	UDN_RBD;																							// r
+	public static final String	UDN_RNBD;																							// r
+																																	// no
+	public static final String	UDN_WLD;																							// w
+	public static final String	UDN_WND;																							// w
+	public static final String	UDN_WCCLD;																							// w
+	public static final String	UDN_WCCND;																							// w
+	public static final String	UDN_WADS;																							// w
+	public static final String	UDN_ROOT;
+	public static final String	UDN_EMB1;
+	public static final String	UDN_EMB2;
 	public static final String	DEVICE_TYPE			= "urn:prosyst-com:device:Test:1";
 	public static final String	SCONT_TYPE			= "urn:prosyst-com:service:control:1";
 	public static final String	SCONT_ID			= "urn:prosyst-com:serviceId:ControlService";
@@ -348,59 +332,29 @@ public final class UPnPConstants {
 	public static final String	E_CHAR				= "y";
 	public static final String	E_FLOAT				= "45.6";
 
-	public static void init() {
+	static {
+		HTTP_PORT = Integer.getInteger("org.osgi.service.http.port", 80)
+				.intValue();
 		UPnPMCPort = Integer.getInteger(DUPnPMCPort, 1900).intValue();
-		V_MC_HOST += UPnPMCPort;
-		V_MC_HOST = V_MC_HOST.intern();
+		V_MC_HOST = ("239.255.255.250:" + UPnPMCPort).intern();
+		String localHost;
 		try {
-			LOCAL_HOST = InetAddress.getLocalHost().getHostAddress();
-			LOCAL_HOST = LOCAL_HOST.intern();
-			UDN_ROOT += LOCAL_HOST;
-			UDN_ROOT = UDN_ROOT.intern();
-			UDN_EMB1 += LOCAL_HOST;
-			UDN_EMB1 = UDN_EMB1.intern();
-			UDN_EMB2 += LOCAL_HOST;
-			UDN_EMB2 = UDN_EMB2.intern();
-			UDN_RCD += LOCAL_HOST;
-			UDN_RCD = UDN_RCD.intern();
-			UDN_RBD += LOCAL_HOST;
-			UDN_RBD = UDN_RBD.intern();
-			UDN_RNBD += LOCAL_HOST;
-			UDN_RNBD = UDN_RNBD.intern();
-			UDN_WLD += LOCAL_HOST;
-			UDN_WLD = UDN_WLD.intern();
-			UDN_WND += LOCAL_HOST;
-			UDN_WND = UDN_WND.intern();
-			UDN_WCCLD += LOCAL_HOST;
-			UDN_WCCLD = UDN_WCCLD.intern();
-			UDN_WCCND += LOCAL_HOST;
-			UDN_WCCND = UDN_WCCND.intern();
-			UDN_WADS += LOCAL_HOST;
-			UDN_WADS = UDN_WADS.intern();
+			localHost = InetAddress.getLocalHost().getHostAddress();
 		}
-		catch (UnknownHostException exc) {
-			UDN_ROOT += LOCAL_HOST;
-			UDN_ROOT = UDN_ROOT.intern();
-			UDN_EMB1 += LOCAL_HOST;
-			UDN_EMB1 = UDN_EMB1.intern();
-			UDN_EMB2 += LOCAL_HOST;
-			UDN_EMB2 = UDN_EMB2.intern();
-			UDN_RCD += LOCAL_HOST;
-			UDN_RCD = UDN_RCD.intern();
-			UDN_RBD += LOCAL_HOST;
-			UDN_RBD = UDN_RBD.intern();
-			UDN_RNBD += LOCAL_HOST;
-			UDN_RNBD = UDN_RNBD.intern();
-			UDN_WLD += LOCAL_HOST;
-			UDN_WLD = UDN_WLD.intern();
-			UDN_WND += LOCAL_HOST;
-			UDN_WND = UDN_WND.intern();
-			UDN_WCCLD += LOCAL_HOST;
-			UDN_WCCLD = UDN_WCCLD.intern();
-			UDN_WCCND += LOCAL_HOST;
-			UDN_WCCND = UDN_WCCND.intern();
-			UDN_WADS += LOCAL_HOST;
-			UDN_WADS = UDN_WADS.intern();
+		catch (UnknownHostException e) {
+			localHost = "127.0.0.1";
 		}
+		LOCAL_HOST = localHost.intern();
+		UDN_ROOT = ("uuid:prosyst-com:root:" + localHost).intern();
+		UDN_EMB1 = ("uuid:prosyst-com:emb1:" + localHost).intern();
+		UDN_EMB2 = ("uuid:prosyst-com:emb2:" + localHost).intern();
+		UDN_RCD = ("uuid:prosyst-com:rcd:" + localHost).intern();
+		UDN_RBD = ("uuid:prosyst-com:rbd:" + localHost).intern();
+		UDN_RNBD = ("uuid:prosyst-com:rnbd:" + localHost).intern();
+		UDN_WLD = ("uuid:prosyst-com:wld:" + localHost).intern();
+		UDN_WND = ("uuid:prosyst-com:wnd:" + localHost).intern();
+		UDN_WCCLD = ("uuid:prosyst-com:wccld:" + localHost).intern();
+		UDN_WCCND = ("uuid:prosyst-com:wccnd:" + localHost).intern();
+		UDN_WADS = ("uuid:prosyst-com:wads:" + localHost).intern();
 	}
 }

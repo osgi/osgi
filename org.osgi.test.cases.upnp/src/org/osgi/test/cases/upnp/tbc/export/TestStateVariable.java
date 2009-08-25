@@ -1,52 +1,52 @@
 package org.osgi.test.cases.upnp.tbc.export;
 
-import org.osgi.service.upnp.*;
+import org.osgi.service.upnp.UPnPLocalStateVariable;
 
 /**
  * 
  * 
  */
-public class TestStateVariable implements UPnPStateVariable {
+public class TestStateVariable implements UPnPLocalStateVariable {
 	/**
 	 * The state variable name.
 	 */
-	private String		name;
+	private final String	name;
 	/**
 	 * The java type of the variable.
 	 */
-	private Class		javaDT;
+	private final Class		javaDT;
 	/**
 	 * The upnp data type of the variable.
 	 */
-	private String		upnpDT;
+	private final String	upnpDT;
 	/**
 	 * The current value of the variable.
 	 */
-	private Object		value;
+	private final Object	value;
 	/**
 	 * The default value of the variable.
 	 */
-	private Object		dv;
+	private final Object	dv;
 	/**
 	 * A list of all accepted values.
 	 */
-	private String[]	values;
+	private final String[]	values;
 	/**
 	 * The minimum value of the variable.
 	 */
-	private Number		min;
+	private final Number	min;
 	/**
 	 * The maximum value of the variable.
 	 */
-	private Number		max;
+	private final Number	max;
 	/**
 	 * The inc/dec step of this variable.
 	 */
-	private Number		step;
+	private final Number	step;
 	/**
 	 * Indicates if events should be send.
 	 */
-	private boolean		events;
+	private final boolean	events;
 
 	/**
 	 * 
@@ -154,5 +154,9 @@ public class TestStateVariable implements UPnPStateVariable {
 	 */
 	public boolean sendsEvents() {
 		return events;
+	}
+
+	public Object getCurrentValue() {
+		return value;
 	}
 }
