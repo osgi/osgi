@@ -29,7 +29,7 @@ import javax.sql.XADataSource;
  * {@link javax.sql.ConnectionPoolDataSource}, and {@link javax.sql.XADataSource}.
  * 
  * DataSource providers should implement this interface and register it as an
- * OSGi service with the JDBC driver class name in the "osgi.jdbc.driver" property.
+ * OSGi service with the JDBC driver class name in the "osgi.jdbc.driver.class" property.
  */
 public interface DataSourceFactory {
     /**
