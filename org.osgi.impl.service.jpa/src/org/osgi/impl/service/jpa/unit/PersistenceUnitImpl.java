@@ -69,19 +69,16 @@ public class PersistenceUnitImpl implements PersistenceUnitInfoService
   }
   
   
-  @Override
   public Bundle getDefiningBundle()
   {
     return xmlLocationData.getPersistenceBundle();
   }
 
-  @Override
   public ServiceReference getProviderReference()
   {
     return provider;
   }
 
-  @Override
   public Map<String, Object> getPersistenceXmlMetadata()
   {
     Map<String, Object> data = new HashMap<String, Object>(metadata);
@@ -97,13 +94,11 @@ public class PersistenceUnitImpl implements PersistenceUnitInfoService
     return data;
   }
 
-  @Override
   public URL getPersistenceXmlLocation()
   {
     return xmlLocationData.getPersistenceXML();
   }
   
-  @Override
   public URL getPersistenceUnitRoot()
   {
     return xmlLocationData.getPersistenceUnitRoot();
@@ -203,7 +198,6 @@ public class PersistenceUnitImpl implements PersistenceUnitInfoService
     provider = providerRef;
   }
 
-  @Override
   public ClassLoader getClassLoader()
   {
     return new BundleDelegatingClassLoader(getDefiningBundle());

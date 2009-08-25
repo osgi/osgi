@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.service.impl.jpa.provider;
+package org.osgi.impl.service.jpa.provider;
 
 import java.io.BufferedReader;
 import java.io.IOException;

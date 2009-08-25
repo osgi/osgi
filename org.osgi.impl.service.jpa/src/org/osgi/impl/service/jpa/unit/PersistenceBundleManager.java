@@ -361,7 +361,6 @@ public class PersistenceBundleManager implements SynchronousBundleListener, Bund
         Collections.sort(refs, new Comparator<ServiceReference>() {
 
           //TODO we may wish to use Ranking, then versions for equal ranks
-          @Override
           public int compare(ServiceReference object1, ServiceReference object2)
           {
             Version v1 = object1.getBundle().getVersion();

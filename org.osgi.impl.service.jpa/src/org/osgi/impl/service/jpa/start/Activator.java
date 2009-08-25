@@ -17,8 +17,8 @@ package org.osgi.impl.service.jpa.start;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.impl.service.jpa.provider.PersistenceProviderManager;
 import org.osgi.impl.service.jpa.unit.PersistenceBundleManager;
-import org.osgi.service.impl.jpa.provider.PersistenceProviderManager;
 
 
 public class Activator implements BundleActivator
@@ -26,7 +26,6 @@ public class Activator implements BundleActivator
   private PersistenceProviderManager providerMgr;
   private PersistenceBundleManager bundleMgr;
   
-  @Override
   public void start(BundleContext ctx) throws Exception
   {
    try {
@@ -46,7 +45,6 @@ public class Activator implements BundleActivator
    }
   }
 
-  @Override
   public void stop(BundleContext ctx) throws Exception
   {
     Exception ex = null;
