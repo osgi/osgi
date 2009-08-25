@@ -115,7 +115,7 @@ public class BlueprintContainerEvent extends AdminTestEvent {
         BlueprintContainerEvent other = (BlueprintContainerEvent)o;
 
         // fail immediately on a mismatch on id or type
-        if (bundle != bundle || !topic.equals(other.topic)) {
+        if (bundle != other.bundle || !topic.equals(other.topic)) {
             return false;
         }
 

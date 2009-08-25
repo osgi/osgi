@@ -104,7 +104,7 @@ public class ThreePhaseTestController extends StandardTestController {
      * @return The middle phase test event processor.
      */
     public MetadataEventSet getMiddleEvents(int index) {
-        return (MetadataEventSet)middlePhase.getEventSet(0);
+        return (MetadataEventSet)middlePhase.getEventSet(index);
     }
 }
 
