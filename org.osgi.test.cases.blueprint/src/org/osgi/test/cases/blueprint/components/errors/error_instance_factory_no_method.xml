@@ -6,7 +6,7 @@
    </bean>
 
 
-   <bean id="compFactory" factory-ref="compFactory">
+   <bean factory-ref="compFactory">
      <!-- collaborators and configuration for this component go here -->
    </bean>
 </blueprint>

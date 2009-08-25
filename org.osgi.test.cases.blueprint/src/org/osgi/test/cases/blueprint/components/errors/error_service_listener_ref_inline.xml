@@ -18,7 +18,7 @@
        <registration-listener ref="ServiceOneListener"
            registration-method="register"
            unregistration-method="unregister">
-       <ref component-id="ServiceOneListener"/
+          <ref component-id="ServiceOneListener"/>
        </registration-listener>
    </service>
 </blueprint>
