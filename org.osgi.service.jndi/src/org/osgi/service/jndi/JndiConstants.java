@@ -23,12 +23,15 @@ package org.osgi.service.jndi;
  */
 public class JndiConstants {
 	/**
-	 * TODO Add javadoc text
+	 * This service property is set by JNDI Providers that publish URL Context
+	 * Factories as OSGi Services. The value of this property should be the URL
+	 * scheme that is supported by the published service.
 	 */
 	public static final String	JNDI_URLSCHEME		= "osgi.jndi.urlScheme";
 
 	/**
-	 * TODO Add javadoc text
+	 * This service property is set on an OSGi service to provide a name that
+	 * can be used to locate the service other than the service interface name.
 	 */
 	public static final String	JNDI_SERVICENAME	= "osgi.jndi.serviceName";
 

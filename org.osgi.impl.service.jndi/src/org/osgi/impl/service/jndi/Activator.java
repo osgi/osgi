@@ -19,6 +19,7 @@
 package org.osgi.impl.service.jndi;
 
 import java.util.Hashtable;
+import java.util.logging.Logger;
 
 import javax.naming.spi.NamingManager;
 import javax.naming.spi.ObjectFactory;
@@ -40,6 +41,8 @@ import org.osgi.service.jndi.JndiConstants;
 public class Activator implements BundleActivator {
 
 	private static final String					OSGI_URL_SCHEME					= "osgi";
+	
+	private static Logger m_logger = Logger.getLogger(Activator.class.getName());
 
 	private BundleContext						m_bundleContext					= null;
 	private OSGiInitialContextFactoryBuilder	m_builder						= null;
@@ -54,13 +57,17 @@ public class Activator implements BundleActivator {
 	 * )
 	 */
 	public void start(BundleContext context) throws Exception {
+		m_logger.info("Initializing JNDI Factory Manager Bundle");
+		
 		m_bundleContext = context;
 		m_builder = new OSGiInitialContextFactoryBuilder(m_bundleContext);
 
 		// register with the JNDI framework
+		m_logger.info("Installing Factory Manager as a JNDI Builder");
 		NamingManager.setInitialContextFactoryBuilder(m_builder);
 		NamingManager.setObjectFactoryBuilder(m_builder);
 
+		m_logger.info("Registering URL Context Factory for 'osgi' URL scheme");
 		registerOSGiURLContextFactory();
 	}
 
@@ -72,6 +79,7 @@ public class Activator implements BundleActivator {
 	 * org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
+		m_logger.info("Shutting down JNDI Factory Manager Bundle");
 		if (m_builder != null) {
 			m_builder.close();
 		}
@@ -90,9 +98,10 @@ public class Activator implements BundleActivator {
 		serviceProperties.put(JndiConstants.JNDI_URLSCHEME,
 				              OSGI_URL_SCHEME);
 
-		m_osgiUrlFactoryRegistration = m_bundleContext.registerService(
-				ObjectFactory.class.getName(), new OSGiURLContextFactory(
-						m_bundleContext), serviceProperties);
+		m_osgiUrlFactoryRegistration = 
+			m_bundleContext.registerService(ObjectFactory.class.getName(), 
+										    new OSGiURLContextFactory(m_bundleContext), 
+										    serviceProperties);
 	}
 
 }
