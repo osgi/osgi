@@ -153,6 +153,7 @@ public class ManagedService {
     public void register() {
         // belt-and-braces in case things get out of sync
         if (registration == null) {
+            System.out.println("----------- Registering service " + name);
             // go register this service
             registration = context.registerService(interfaces, service, props);
         }
@@ -170,6 +171,7 @@ public class ManagedService {
             // call to unregister() is reentrant and would call register() again
             ServiceRegistration reg = registration;
             registration = null;
+            System.out.println("----------- Unregistering service " + name);
             reg.unregister();
         }
     }

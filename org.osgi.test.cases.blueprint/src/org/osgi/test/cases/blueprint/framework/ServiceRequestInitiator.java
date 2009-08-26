@@ -19,13 +19,16 @@ package org.osgi.test.cases.blueprint.framework;
 import junit.framework.Assert;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 
 /**
  * Validate that a target service is registered at the requested
  * test phase boundary.
  */
-public class ServiceRequestInitiator extends Assert implements TestCleanup, TestEventListener, TestInitializer {
+public class ServiceRequestInitiator extends Assert implements TestCleanup, TestEventListener, TestInitializer, BundleAware {
+    // the bundle we're validating for
+    protected Bundle bundle;
     // our test bundle context
     protected BundleContext testContext;
     // the name of the interface to validate
@@ -48,6 +51,15 @@ public class ServiceRequestInitiator extends Assert implements TestCleanup, Test
     }
 
     /**
+     * Inject the event set's bundler into this validator instance.
+     *
+     * @param bundle The bundle associated with the hosting event set.
+     */
+    public void setBundle(Bundle bundle) {
+        this.bundle = bundle;
+    }
+
+    /**
      * Perform the service request.
      *
      * @exception Exception
@@ -56,10 +68,15 @@ public class ServiceRequestInitiator extends Assert implements TestCleanup, Test
         try {
             ServiceReference[] refs = testContext.getServiceReferences(interfaceName, filter);
             if (refs != null) {
-                // request the service instance
-                testContext.getService(refs[0]);
-                // that should be all we need
-                testContext.ungetService(refs[0]);
+                for (int i = 0; i < refs.length; i++) {
+                    if (refs[i].getBundle() == bundle) {
+                        // request the service instance
+                        testContext.getService(refs[i]);
+                        // that should be all we need
+                        testContext.ungetService(refs[i]);
+                        return;
+                    }
+                }
             }
         } catch (Exception e) {
             System.out.println("Unexpected exception" + e);

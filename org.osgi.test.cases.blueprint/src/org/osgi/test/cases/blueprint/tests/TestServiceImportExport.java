@@ -1316,7 +1316,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // now some expected termination stuff
         EventSet exportStopEvents = controller.getStopEvents();
         // add a cleanup processor for the exported services.
-        exportStopEvents.addTerminator(new ServiceManagerUnregister(serviceManager));
+        exportStopEvents.addTerminator(new ServiceManagerDestroy(serviceManager));
 
         controller.run();
     }
