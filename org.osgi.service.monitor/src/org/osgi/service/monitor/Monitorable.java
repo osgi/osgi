@@ -38,7 +38,7 @@ package org.osgi.service.monitor;
  * <code>MonitorPermission</code> with the <code>publish</code> action string.
  * This permission, however, is not checked during registration of the
  * <code>Monitorable</code> service. Instead, the <code>MonitorAdmin</code>
- * implemenatation must make sure that when a <code>StatusVariable</code> is
+ * implementation must make sure that when a <code>StatusVariable</code> is
  * queried, it is shown only if the <code>Monitorable</code> is authorized to
  * publish the given <code>StatusVariable</code>.
  * 
