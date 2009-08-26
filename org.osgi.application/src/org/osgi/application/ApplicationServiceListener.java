@@ -45,7 +45,7 @@ import org.osgi.framework.*;
  * the listener if the application which defines the listener object's class has the
  * appropriate <code>ServicePermission</code> to get the service using at
  * least one of the named classes the service was registered under, and the application
- * specified its dependece on the corresponding service in the application metadata.
+ * specified its dependence on the corresponding service in the application metadata.
  * 
  * <p>
  * <code>ApplicationServiceEvent</code> object delivery to <code>ApplicationServiceListener</code>

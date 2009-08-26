@@ -65,7 +65,7 @@ public class ApplicationServiceEvent extends ServiceEvent {
 	
 	/**
 	 * This method returns the service object of this service bound to the listener
-	 * application instace. A service object becomes bound to the application when it
+	 * application instance. A service object becomes bound to the application when it
 	 * first obtains a service object reference to that service by calling the
 	 * <code>ApplicationContext.locateService</code> or <code>locateServices</code>
 	 * methods. If the application is not bound to the service yet, this method returns
