@@ -27,22 +27,16 @@
 
 package org.osgi.test.cases.permissionadmin.junit;
 
-
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Dictionary;
+import java.util.Enumeration;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
-
-//import org.osgi.service.cm.Configuration;
 import org.osgi.service.permissionadmin.PermissionInfo;
-
-import java.net.URL;
-
-import java.io.IOException;
-import java.io.InputStream;
-
-import java.util.Dictionary;
-import java.util.Enumeration;
 
 /**
  * Used to exit from the permissions calling context.
@@ -52,48 +46,65 @@ import java.util.Enumeration;
  */
 public interface PermissionSignatureTBCService {
 
-  // from Bundle class
+	// from Bundle class
 	public Dictionary callBundle_getHeaders(Bundle bundle);
+
 	public Dictionary callBundle_getHeaders(Bundle bundle, String localeString);
+
 	public String callBundle_getLocation(Bundle bundle);
+
 	public URL callBundle_getResource(Bundle bundle, String name);
-	public Enumeration callBundle_getResources(Bundle bundle, String name) throws IOException;
+
+	public Enumeration callBundle_getResources(Bundle bundle, String name)
+			throws IOException;
+
 	public URL callBundle_getEntry(Bundle bundle, String name);
+
 	public Enumeration callBundle_getEntryPaths(Bundle bundle, String path);
-	public Class callBundle_loadClass(Bundle bundle, String name) throws ClassNotFoundException;
+
+	public Class callBundle_loadClass(Bundle bundle, String name)
+			throws ClassNotFoundException;
+
 	public void callBundle_stop(Bundle bundle) throws BundleException;
+
 	public void callBundle_uninstall(Bundle bundle) throws BundleException;
+
 	public void callBundle_update(Bundle bundle) throws BundleException;
-	public void callBundle_update(Bundle bundle, InputStream in) throws BundleException;
+
+	public void callBundle_update(Bundle bundle, InputStream in)
+			throws BundleException;
+
 	public void callBundle_start(Bundle bundle) throws BundleException;
 
-  // from BundleContext class	
-	public Bundle callBundleContext_installBundle(BundleContext context, String location) throws BundleException ;
-	public Bundle callBundleContext_installBundle(BundleContext context, String location, InputStream input) throws BundleException ;
+	// from BundleContext class
+	public Bundle callBundleContext_installBundle(BundleContext context,
+			String location) throws BundleException;
+
+	public Bundle callBundleContext_installBundle(BundleContext context,
+			String location, InputStream input) throws BundleException;
+
 	public void callBundleContext_addBundleListener(BundleContext context);
+
 	public void callBundleContext_removeBundleListener(BundleContext context);
-	
-  // from StartLevel service
-	public void callStartLevel_setBundleStartLevel(Bundle bundle, Integer startlevel);
+
+	// from StartLevel service
+	public void callStartLevel_setBundleStartLevel(Bundle bundle,
+			Integer startlevel);
+
 	public void callStartLevel_setStartLevel(Integer startlevel);
+
 	public void callStartLevel_setInitialBundleStartLevel(Integer startlevel);
 
-  // from PermisssionAdmin service
-	public void callPermissionAdmin_setPermissions(String location, PermissionInfo[] permissions);
-	public void callPermissionAdmin_setDefaultPermissions(PermissionInfo[] permissions);
-	
-  // from PackageAdmin service	
+	// from PermisssionAdmin service
+	public void callPermissionAdmin_setPermissions(String location,
+			PermissionInfo[] permissions);
+
+	public void callPermissionAdmin_setDefaultPermissions(
+			PermissionInfo[] permissions);
+
+	// from PackageAdmin service
 	public void callPackageAdmin_refreshPackages(Bundle[] bundles);
+
 	public boolean callPackageAdmin_resolveBundles(Bundle[] bundles);
-	
-  // from ConfigurationAdmin service
-//	public Configuration callConfigurationAdmin_getConfiguration(String pid) throws IOException;
-//	public Configuration callConfigurationAdmin_getConfiguration(String pid, String location) throws IOException;
-//	public Configuration[] callConfigurationAdmin_listConfigurations(String filter) throws Exception;
-//	public void callConfiguration_delete(String pid) throws IOException;
-//	public void callConfiguration_update(String pid) throws IOException;
-//	public void callConfiguration_update(String pid, Dictionary properties) throws IOException;
-//	public void callConfiguration_setBundleLocation(String pis) throws IOException;
-//	public Configuration callConfigurationAdmin_createFactoryConfiguration(String factoryPid) throws IOException;
-//	public Configuration callConfigurationAdmin_createFactoryConfiguration(String factoryPid, String location) throws IOException;
+
 }

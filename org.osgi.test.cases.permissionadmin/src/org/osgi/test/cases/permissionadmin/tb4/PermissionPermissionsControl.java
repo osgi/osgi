@@ -34,17 +34,18 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 
-public class PermissionPermissionsControl implements BundleActivator {
+public class PermissionPermissionsControl extends Assert implements
+		BundleActivator {
 
 	public void start(BundleContext context) throws Exception {
 		ServiceReference ref = context.getServiceReference(PermissionAdmin.class.getName());
 		PermissionAdmin	permissionAdmin = (PermissionAdmin) (ref == null ? null : context.getService(ref));
-		Assert.assertNotNull("No Permission Admin", permissionAdmin);
+		assertNotNull("No Permission Admin", permissionAdmin);
 		try {
 			System.out.println(System.getSecurityManager());
-			Assert.assertNotNull(System.getSecurityManager());
+			assertNotNull(System.getSecurityManager());
 			permissionAdmin.setDefaultPermissions(null);
-			Assert.fail("Were able to set default permissions without "
+			fail("Were able to set default permissions without "
 					+ "admin permission");
 		}
 		catch (SecurityException e) {
@@ -52,7 +53,7 @@ public class PermissionPermissionsControl implements BundleActivator {
 		}
 		try {
 			permissionAdmin.setPermissions("fake.jar", null);
-			Assert.fail("Were able to set permissions without " + "admin permission");
+			fail("Were able to set permissions without " + "admin permission");
 		}
 		catch (SecurityException e) {
 			// Do nothing; PASS

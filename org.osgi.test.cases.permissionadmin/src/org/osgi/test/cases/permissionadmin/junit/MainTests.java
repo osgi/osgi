@@ -31,30 +31,23 @@ import java.io.FilePermission;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.osgi.framework.*;
-import org.osgi.service.permissionadmin.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.permissionadmin.PermissionAdmin;
+import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 public class MainTests extends DefaultTestBundleControl {
-	PermissionAdmin		permissionAdmin;
-	PermissionInfo[]	defaultPermissions;
 
-    public void setUp() throws Exception {
-    	assertTrue("Must have a security manager", System.getSecurityManager() != null);
-		assertTrue(serviceAvailable(PermissionAdmin.class)); 
-		permissionAdmin = (PermissionAdmin) getService(PermissionAdmin.class);
-		/* Give this bundle all permissions */
-		permissionAdmin.setPermissions(
-				(getContext().getBundle()).getLocation(),
-				new PermissionInfo[] {new PermissionInfo(
-						"java.security.AllPermission", "", "")});
-    }
+	protected void setUp() throws Exception {
+		assertNotNull("Must have a security manager", System
+				.getSecurityManager());
+	}
 
-
-    public void tearDown() {  
-    	permissionAdmin.setPermissions(getContext().getBundle().getLocation(), null);
-    	ungetAllServices();
-    }
+	protected void tearDown() {
+		ungetAllServices();
+	}
 
 	/** *** Test methods **** */
 	public void testBasicPermissionInfo() throws Exception {
@@ -153,32 +146,9 @@ public class MainTests extends DefaultTestBundleControl {
 				"Too many arguments",
 				"(java.io.FilePermission \"<<ALL FILES>>\" \"read\" \"write\")",
 				IllegalArgumentException.class);
-		/* This is problematic. The comma seems to be associated with the type */
-		//        createBadPermissionInfo("Comma separation between type and name",
-		//            "(java.io.FilePermission, \"<<ALL FILES>>\" \"read\")",
-		//            IllegalArgumentException.class);
 		createBadPermissionInfo("Comma separation between name and action",
 				"(java.io.FilePermission \"<<ALL FILES>>\", \"read\")",
 				IllegalArgumentException.class);
-// in R4 we are more forgiving about whitespace
-//		createBadPermissionInfo("Too much whitespace between type and name",
-//				"(java.io.FilePermission  \"<<ALL FILES>>\" \"read\")",
-//				IllegalArgumentException.class);
-//		createBadPermissionInfo("Too much whitespace between name and action",
-//				"(java.io.FilePermission \"<<ALL FILES>>\"  \"read\")",
-//				IllegalArgumentException.class);
-//		createBadPermissionInfo("Leading whitespace",
-//				" (java.io.FilePermission \"<<ALL FILES>>\" \"read\")",
-//				IllegalArgumentException.class);
-//		createBadPermissionInfo("Whitespace after opening parenthesis",
-//				"( java.io.FilePermission \"<<ALL FILES>>\" \"read\")",
-//				IllegalArgumentException.class);
-//		createBadPermissionInfo("Trailing whitespace",
-//				"(java.io.FilePermission \"<<ALL FILES>>\" \"read\") ",
-//				IllegalArgumentException.class);
-//		createBadPermissionInfo("Whitespace before closing parenthesis",
-//				"(java.io.FilePermission \"<<ALL FILES>>\" \"read\" )",
-//				IllegalArgumentException.class);
 	}
 
 	/**
@@ -270,60 +240,74 @@ public class MainTests extends DefaultTestBundleControl {
 		Bundle tb4 = installBundle("tb4.jar", false);
 		try {
 			tb4.start();
-		} catch (BundleException e) {
+		}
+		catch (BundleException e) {
 			fail("Unexpected Exception", e.getCause());
+		}
+		finally {
+			tb4.uninstall();
 		}
 	}
 
+	/* called by testImplicitPermissions */
 	public void implicitPermissionsTest() throws Exception {
 		getContext().getBundle().getBundleContext().getDataFile("nicke.txt");
 	}
 
-	public void invokeWithPermissions(String methodName, PermissionInfo[] perms, boolean fail)
-			throws Throwable {
+	private void invokeWithPermissions(String methodName,
+			PermissionInfo[] perms, boolean fail) throws Throwable {
 		/* Install and start the context sharing bundle */
 		Bundle contextBundle = installBundle("contextsharer.jar", true);
-		String contextBundleLocation = contextBundle.getLocation();
-
-		/* Get the context sharing service */
-		ServiceReference sr = getContext().getServiceReference(
-				ContextSharer.class.getName());
-		ContextSharer cs = (ContextSharer) (getContext().getService(sr));
-
-		/* Get the PermissionAdmin service */
-		ServiceReference paRef = getContext().getServiceReference(
-				PermissionAdmin.class.getName());
-		PermissionAdmin pa = (PermissionAdmin) getContext().getService(paRef);
-
-		/* Set the permissions for the context sharing bundle */
-		pa.setPermissions(contextBundleLocation, perms);
-
-		/*
-		 * Make the context sharer invoke the specified method on this object
-		 * and thereby calling the method with its permissions
-		 */
-		Method m = this.getClass().getDeclaredMethod(methodName, new Class[0]);
 		try {
-			cs.invoke(this, m);
-			if (fail) {
-				fail("Expecting a security exception");
-			}
-		} catch (InvocationTargetException e) {
-			if (e.getTargetException() instanceof SecurityException) {
-				if (!fail) {
-					fail("Unexpected security exception", e.getTargetException());
+			String contextBundleLocation = contextBundle.getLocation();
+
+			/* Get the context sharing service */
+			ServiceReference sr = getContext().getServiceReference(
+					ContextSharer.class.getName());
+			ContextSharer cs = (ContextSharer) (getContext().getService(sr));
+
+			/* Get the PermissionAdmin service */
+			ServiceReference paRef = getContext().getServiceReference(
+					PermissionAdmin.class.getName());
+			PermissionAdmin pa = (PermissionAdmin) getContext().getService(
+					paRef);
+
+			/* Set the permissions for the context sharing bundle */
+			pa.setPermissions(contextBundleLocation, perms);
+
+			/*
+			 * Make the context sharer invoke the specified method on this
+			 * object and thereby calling the method with its permissions
+			 */
+			Method m = this.getClass().getDeclaredMethod(methodName,
+					new Class[0]);
+			try {
+				cs.invoke(this, m);
+				if (fail) {
+					fail("Expecting a security exception");
 				}
 			}
-			else {
-				throw e.getTargetException();
+			catch (InvocationTargetException e) {
+				if (e.getTargetException() instanceof SecurityException) {
+					if (!fail) {
+						fail("Unexpected security exception", e
+								.getTargetException());
+					}
+				}
+				else {
+					throw e.getTargetException();
+				}
 			}
-		}
-		/* Delete the permissions for the context sharing bundle */
-		pa.setPermissions(contextBundleLocation, null);
+			/* Delete the permissions for the context sharing bundle */
+			pa.setPermissions(contextBundleLocation, null);
 
-		/* Uninstall the context sharing bundle */
-		contextBundle.uninstall();
+		}
+		finally {
+			/* Uninstall the context sharing bundle */
+			contextBundle.uninstall();
+		}
 	}
+
 	/** *** Helper methods **** */
 	/**
 	 * Creates a PermissionInfo with a bad encoded string and checks that it

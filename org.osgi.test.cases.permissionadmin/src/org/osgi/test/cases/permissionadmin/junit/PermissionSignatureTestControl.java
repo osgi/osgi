@@ -45,848 +45,976 @@ import org.osgi.test.support.compatibility.MethodCall;
  * @version 1.1
  */
 public class PermissionSignatureTestControl extends DefaultTestBundleControl {
-  
-  private PermissionSignatureTBCService tbc;
-  private PermissionAdmin               permissionAdmin;
 
-  private Bundle                        testBundle;
-  private String                        testBundleLocation;
+	private PermissionSignatureTBCService	tbc;
+	private PermissionAdmin					permissionAdmin;
 
-  private Bundle                        testSignatureBundle;
-  private String                        signatureBundleLocation;
+	private Bundle							testBundle;
+	private String							testBundleLocation;
 
-  private String                        signatureBundleName;
+	private Bundle							testSignatureBundle;
+	private String							signatureBundleLocation;
 
-  private PermissionSignatureUtility    utility;
+	private String							signatureBundleName;
 
-  private String                        resourceName;
-  private String                        resourcesName;
-  private String                        entryName;
-  private String                        entryPath;
-  private String                        className;
-  private String                        extensionEntryName;
-  private String                        extensionEntryPath;
-  private String                        extensionClassName;
-  
-  private int                           startLevel = 10;
-  private int                           initialBundleStartLevel = 10;
-  private boolean                       checkStartLevel = false;
-  
-  private String                        extensionBundleName;
-  
-  static String[] methods = new String[] {
-    "test_Permission", 
-    "test_AdminPermission", 
-    "test_AdminPermission_metadata",
-    "test_AdminPermission_resource", 
-    "test_AdminPermission_class", 
-    "test_AdminPermission_execute",
-    "test_AdminPermission_listener",
-    "test_AdminPermission_resolve",
-    "test_AdminPermission_startlevel", 
-    "test_AdminPermission_lifecycle",
-    //"test_AdminPermission_extensionLifecycle",
-    //"test_ConfigurationPermission_get",
-    //"test_ConfigurationPermission_set"
-  };
+	private PermissionSignatureUtility		utility;
 
-  
-  public String[] getMethods() {
-    return methods;
-  } 
-  
-  
-  public void setUp() throws Exception {
-	assertTrue("Must have a security manager", System.getSecurityManager() != null);
-	assertTrue(serviceAvailable(PermissionAdmin.class)); 
-    testBundle = installBundle("tb1.jar");
-    testBundleLocation = testBundle.getLocation();
-    
-    signatureBundleName = SignatureResource.getString("bundle.name");
-    resourceName = SignatureResource.getString("resource.name");
-    resourcesName = SignatureResource.getString("resources.name");
-    entryName = SignatureResource.getString("entry.name");
-    entryPath = SignatureResource.getString("entry.path");
-    className = SignatureResource.getString("load.class");
-    
-    extensionEntryName = SignatureResource.getString("extension.entry.name");
-    extensionEntryPath =  SignatureResource.getString("extension.entry.path");
-    extensionClassName = SignatureResource.getString("extension.load.class");
-    
-    extensionBundleName = SignatureResource.getString("extensionBundle.name");
-    
-    tbc = (PermissionSignatureTBCService) getService(PermissionSignatureTBCService.class);
-    permissionAdmin = (PermissionAdmin) getService(PermissionAdmin.class);
-    StartLevel startLevelService = (StartLevel) getService(StartLevel.class);
-    if (startLevelService != null) {
-      startLevel = startLevelService.getStartLevel();
-      initialBundleStartLevel = startLevelService.getInitialBundleStartLevel();
-      checkStartLevel = true;
-    }
+	private String							resourceName;
+	private String							resourcesName;
+	private String							entryName;
+	private String							entryPath;
+	private String							className;
+	private String							extensionEntryName;
+	private String							extensionEntryPath;
+	private String							extensionClassName;
 
-    utility = new PermissionSignatureUtility(this, tbc, getContext()); 
+	private int								startLevel				= 10;
+	private int								initialBundleStartLevel	= 10;
+	private boolean							checkStartLevel			= false;
 
-    permissionAdmin.setPermissions(testBundleLocation, null);
-    //uninstallTestSignatureBundle();
-    installTestSignatureBundle();
-  }
+	private String							extensionBundleName;
 
-  public void tearDown() {    
-    log("#after each run");
-    permissionAdmin.setPermissions(testBundleLocation, null);
-    ungetAllServices();
-  }
+	protected void setUp() throws Exception {
+		assertNotNull("Must have a security manager", System
+				.getSecurityManager());
+		permissionAdmin = (PermissionAdmin) getService(PermissionAdmin.class);
+		assertNotNull(permissionAdmin);
 
-  /**
-   * Tests AdminPermission. 
-   * Checks if a bundle with NoPermission can not execute anything that requires AdminPermission.
-   */
-  public void test_Permission() throws Throwable {
-    permissionAdmin.setPermissions(testBundleLocation, new PermissionInfo[0]);
-    printPermissions(testBundleLocation);
-    String message = "";
-    
-    // Each bundle must be given AdminPermission(<bundle id>, "resource") so that it can access it's own resources. 
-    utility.allowed_Bundle_getResource(message, testBundle, resourceName);
-    utility.allowed_Bundle_getResources(message, testBundle, resourcesName);
-    utility.allowed_Bundle_getEntry(message, testBundle, resourceName);
-    utility.allowed_Bundle_getEntryPaths(message, testBundle, "/META-INF/");
-    
-    utility.not_allowed_Bundle_getHeaders(message, testSignatureBundle);
-    utility.not_allowed_Bundle_getHeaders_byLocation(message, testSignatureBundle);
-    utility.not_allowed_Bundle_getLocation(message, testSignatureBundle);
-    utility.not_allowed_Bundle_getResource(message, testSignatureBundle, resourceName);
-    utility.not_allowed_Bundle_getResources(message, testSignatureBundle, resourcesName);
-    utility.not_allowed_Bundle_getEntry(message, testSignatureBundle, entryName);
-    utility.not_allowed_Bundle_getEntryPaths(message, testSignatureBundle, entryPath);
-    if (checkStartLevel) {
-      utility.not_allowed_StartLevel_setBundleStartLevel(message, testSignatureBundle, startLevel);
-      utility.not_allowed_StartLevel_setStartLevel(message, startLevel);
-      utility.not_allowed_StartLevel_setInitialBundleStartLevel(message, initialBundleStartLevel);
-    }
-    utility.not_allowed_Bundle_loadClass(message, testSignatureBundle, className);
-    utility.not_allowed_Bundle_stop(message, testSignatureBundle);
-    utility.not_allowed_Bundle_start(message, testSignatureBundle);
-    utility.not_allowed_Bundle_update(message, testSignatureBundle);
-    utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getInputStream(signatureBundleName));
-    utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
-    utility.not_allowed_BundleContext_addBundleListener(message);
-    utility.not_allowed_BundleContext_removeBundleListener(message);
-    utility.not_allowed_PackageAdmin_refreshPackages(message, null);
-    utility.not_allowed_PackageAdmin_resolveBundles(message, null);
-    utility.not_allowed_PermissionAdmin_setPermissions(message, signatureBundleLocation, 
-        new PermissionInfo[]{new PermissionInfo(AdminPermission.class.getName(), "*", "*")});
-    utility.not_allowed_PermissionAdmin_setDefaultPermissions(message, permissionAdmin.getDefaultPermissions());
-  } 
+		testBundle = installBundle("tb1.jar", false);
+		testBundleLocation = testBundle.getLocation();
+		permissionAdmin.setPermissions(testBundleLocation, null);
+		testBundle.start();
 
-  /**
-   * Tests AdminPermission with all actions allowed on all. 
-   * Checks if a bundle with AllPermission can execute all methods requiring AdminPermission.
-   */
-  public void test_AdminPermission() throws Throwable {
-    PermissionInfo info = new PermissionInfo(AdminPermission.class.getName(), "*", "*");
-    permissionAdmin.setPermissions(testBundleLocation, new PermissionInfo[]{info});
-    printPermissions(testBundleLocation);
-    String message = "";
-  
-    utility.allowed_Bundle_getHeaders(message, testSignatureBundle);
-    utility.allowed_Bundle_getHeaders_byLocation(message, testSignatureBundle);
-    utility.allowed_Bundle_getLocation(message, testSignatureBundle);
-    utility.allowed_Bundle_getResource(message, testSignatureBundle, resourceName);
-    utility.allowed_Bundle_getResources(message, testSignatureBundle, resourcesName);
-    utility.allowed_Bundle_getEntry(message, testSignatureBundle, entryName);
-    utility.allowed_Bundle_getEntryPaths(message, testSignatureBundle, entryPath);
-    if (checkStartLevel) {
-      utility.allowed_StartLevel_setStartLevel(message, startLevel);
-      utility.allowed_StartLevel_setInitialBundleStartLevel(message, initialBundleStartLevel);
-    }
-    utility.allowed_Bundle_loadClass(message, testSignatureBundle, className);
-    utility.allowed_Bundle_stop(message, testSignatureBundle);
-    utility.allowed_Bundle_start(message, testSignatureBundle);
-    utility.allowed_Bundle_update(message, testSignatureBundle);
-    utility.allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getInputStream(signatureBundleName));
-    
-    utility.allowed_BundleContext_addBundleListener(message);
-    utility.allowed_BundleContext_removeBundleListener(message);
-    utility.allowed_PackageAdmin_refreshPackages(message, null);
-    utility.allowed_PackageAdmin_resolveBundles(message, null);
-    utility.not_allowed_PermissionAdmin_setPermissions(message, signatureBundleLocation, 
-        new PermissionInfo[]{new PermissionInfo(AdminPermission.class.getName(), "*", "*")});
-    utility.not_allowed_PermissionAdmin_setDefaultPermissions(message, permissionAdmin.getDefaultPermissions());
-    
-//    utility.not_allowed_ConfigurationAdmin_createFactoryConfiguration(message, PermissionSignatureUtility.CONFIG_FPID);
-//    utility.not_allowed_ConfigurationAdmin_createFactoryConfiguration(message, PermissionSignatureUtility.CONFIG_FPID, "");
-//    utility.not_allowed_Configuration_update(message, PermissionSignatureUtility.CONFIG_FPID);
-//    utility.not_allowed_Configuration_delete(message, PermissionSignatureUtility.CONFIG_FPID);
-//    utility.not_allowed_ConfigurationAdmin_getConfiguration(message, PermissionSignatureUtility.CONFIG_FPID);
-//    utility.not_allowed_ConfigurationAdmin_getConfiguration(message, PermissionSignatureUtility.CONFIG_FPID, "");
-//    utility.not_allowed_ConfigurationAdmin_listConfigurations(message, null);
-//    utility.not_allowed_Configuration_delete(message, PermissionSignatureUtility.CONFIG_FPID);
-//    utility.not_allowed_Configuration_update(message, PermissionSignatureUtility.CONFIG_FPID, new Hashtable());
-//    utility.not_allowed_Configuration_setBundleLocation(message, PermissionSignatureUtility.CONFIG_FPID);
-  }
-  
-  
-  
-  /**
-   * Tests AdminPermission with an action parameter - metadata. 
-   * Checks if a bundle with AdminPrmission - metadata can execute: 
-   *  - Bundle.getHeaders
-   *  - Bundle.getLocation
-   * and can not execute anything else that requires other AdminPermission.
-   * 
-   * The bundle is specified either by bundle id or by filter string.
-   */
-  public void test_AdminPermission_metadata() throws Throwable {
-    String message = "";
-    Vector permissions = utility.getPInfosForAdminPermisssion(
-        AdminPermission.METADATA,
-        testSignatureBundle.getBundleId(), 
-        testSignatureBundle.getLocation(), 
-        testSignatureBundle.getSymbolicName()); 
-    
-    PermissionInfo info; 
-    for (int i = 0; i < permissions.size(); ++i) {
-      info = (PermissionInfo)permissions.elementAt(i);
-      permissionAdmin.setPermissions(testBundleLocation, new PermissionInfo[]{info});
-      printPermissions(testBundleLocation);
-      
-      utility.allowed_Bundle_getHeaders(message, testSignatureBundle);
-      utility.allowed_Bundle_getHeaders_byLocation(message, testSignatureBundle);
-      utility.allowed_Bundle_getLocation(message, testSignatureBundle);
+		signatureBundleName = SignatureResource.getString("bundle.name");
+		resourceName = SignatureResource.getString("resource.name");
+		resourcesName = SignatureResource.getString("resources.name");
+		entryName = SignatureResource.getString("entry.name");
+		entryPath = SignatureResource.getString("entry.path");
+		className = SignatureResource.getString("load.class");
 
-      utility.not_allowed_Bundle_getResource(message, testSignatureBundle, resourceName);
-      utility.not_allowed_Bundle_getResources(message, testSignatureBundle, resourcesName);
-      utility.not_allowed_Bundle_getEntry(message, testSignatureBundle, entryName);
-      utility.not_allowed_Bundle_getEntryPaths(message, testSignatureBundle, entryPath);
-      
-      if (checkStartLevel) {
-        utility.not_allowed_StartLevel_setBundleStartLevel(message, testSignatureBundle, startLevel);
-        utility.not_allowed_StartLevel_setStartLevel(message, startLevel);
-        utility.not_allowed_StartLevel_setInitialBundleStartLevel(message, initialBundleStartLevel);
-      }
-      utility.not_allowed_Bundle_loadClass(message, testSignatureBundle, className);
-      utility.not_allowed_Bundle_stop(message, testSignatureBundle);
-      utility.not_allowed_Bundle_start(message, testSignatureBundle);
-      utility.not_allowed_Bundle_update(message, testSignatureBundle);
-      utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getInputStream(signatureBundleName));
-      utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
-      utility.not_allowed_BundleContext_addBundleListener(message);
-      utility.not_allowed_BundleContext_removeBundleListener(message);
-      utility.not_allowed_PackageAdmin_refreshPackages(message, null);
-      utility.not_allowed_PackageAdmin_resolveBundles(message, null);
-      
-    }
-  }
+		extensionEntryName = SignatureResource
+				.getString("extension.entry.name");
+		extensionEntryPath = SignatureResource
+				.getString("extension.entry.path");
+		extensionClassName = SignatureResource
+				.getString("extension.load.class");
 
-  /**
-   * Tests AdminPermission with an action parameter - resource. 
-   * Checks if a bundle with AdminPrmission - resource can execute:
-   *  - Bundle.getResource
-   *  - Bundle.getEntry
-   *  - Bundle.getEntryPaths
-   * and can not execute anything else that requires other AdminPermission.
-   * 
-   * The bundle is specified either by bundle id or by filter string.
-   */
-  public void test_AdminPermission_resource() throws Throwable {
-    String message = "";
-    Vector permissions = utility.getPInfosForAdminPermisssion(
-        AdminPermission.RESOURCE,
-        testSignatureBundle.getBundleId(), 
-        testSignatureBundle.getLocation(), 
-        testSignatureBundle.getSymbolicName()); 
+		extensionBundleName = SignatureResource
+				.getString("extensionBundle.name");
 
-    
-    PermissionInfo info; 
-    for (int i = 0; i < permissions.size(); ++i) {
-      info = (PermissionInfo)permissions.elementAt(i);
+		tbc = (PermissionSignatureTBCService) getService(PermissionSignatureTBCService.class);
+		StartLevel startLevelService = (StartLevel) getService(StartLevel.class);
+		if (startLevelService != null) {
+			startLevel = startLevelService.getStartLevel();
+			initialBundleStartLevel = startLevelService
+					.getInitialBundleStartLevel();
+			checkStartLevel = true;
+		}
 
-      permissionAdmin.setPermissions(testBundleLocation, new PermissionInfo[]{info});
-      printPermissions(testBundleLocation);
+		utility = new PermissionSignatureUtility(this, tbc);
 
-      utility.allowed_Bundle_getResource(message, testSignatureBundle, resourceName);
-      utility.allowed_Bundle_getResources(message, testSignatureBundle, resourcesName);
-      utility.allowed_Bundle_getEntry(message, testSignatureBundle, entryName);
-      utility.allowed_Bundle_getEntryPaths(message, testSignatureBundle, entryPath);
+		testSignatureBundle = installBundle(signatureBundleName, false);
+		signatureBundleLocation = testSignatureBundle.getLocation();
+		permissionAdmin.setPermissions(signatureBundleLocation, null);
+		testSignatureBundle.start();
+	}
 
-      // note that in R4.2 a change was made to make resource imply resolve
-      utility.allowed_PackageAdmin_refreshPackages(message, null);
-      utility.allowed_PackageAdmin_resolveBundles(message, null);
+	protected void tearDown() throws Exception {
+		log("#after each run");
+		testSignatureBundle.uninstall();
+		permissionAdmin.setPermissions(signatureBundleLocation, null);
+		testBundle.uninstall();
+		permissionAdmin.setPermissions(testBundleLocation, null);
+		ungetAllServices();
+	}
 
-      utility.not_allowed_Bundle_getHeaders(message, testSignatureBundle);
-      utility.not_allowed_Bundle_getHeaders_byLocation(message, testSignatureBundle);
-      utility.not_allowed_Bundle_getLocation(message, testSignatureBundle);
-      
-      if (checkStartLevel) {
-        utility.not_allowed_StartLevel_setBundleStartLevel(message, testSignatureBundle, startLevel);
-        utility.not_allowed_StartLevel_setStartLevel(message, startLevel);
-        utility.not_allowed_StartLevel_setInitialBundleStartLevel(message, initialBundleStartLevel);
-      }
-      utility.not_allowed_Bundle_loadClass(message, testSignatureBundle, className);
-      utility.not_allowed_Bundle_stop(message, testSignatureBundle);
-      utility.not_allowed_Bundle_start(message, testSignatureBundle);
-      utility.not_allowed_Bundle_update(message, testSignatureBundle);
-      utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getInputStream(signatureBundleName));
-      utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
-      utility.not_allowed_BundleContext_addBundleListener(message);
-      utility.not_allowed_BundleContext_removeBundleListener(message);
-      utility.not_allowed_PermissionAdmin_setPermissions(message, signatureBundleLocation, 
-          new PermissionInfo[]{new PermissionInfo(AdminPermission.class.getName(), "*", "*")});
-      utility.not_allowed_PermissionAdmin_setDefaultPermissions(message, permissionAdmin.getDefaultPermissions());
-    }
-  }
-  
-  /**
-   * Tests AdminPermission with an action parameter - Class. 
-   * Checks if a bundle with AdminPrmission - Class can execute:
-   *  - Bundle.loadClass
-   * and can not execute anything else that requires other AdminPermission.
-   * 
-   * The bundle is specified either by bundle id or by filter string.
-   */
-  public void test_AdminPermission_class() throws Throwable {
-    String message = "";
-    Vector permissions = utility.getPInfosForAdminPermisssion(
-        AdminPermission.CLASS,
-        testSignatureBundle.getBundleId(), 
-        testSignatureBundle.getLocation(), 
-        testSignatureBundle.getSymbolicName()); 
+	/**
+	 * Tests AdminPermission. Checks if a bundle with NoPermission can not
+	 * execute anything that requires AdminPermission.
+	 */
+	public void testPermission() throws Throwable {
+		permissionAdmin.setPermissions(testBundleLocation,
+				new PermissionInfo[0]);
+		printPermissions(testBundleLocation);
+		String message = "";
 
-    
-    PermissionInfo info; 
-    for (int i = 0; i < permissions.size(); ++i) {
-      info = (PermissionInfo)permissions.elementAt(i);
+		// Each bundle must be given AdminPermission(<bundle id>, "resource") so
+		// that it can access it's own resources.
+		utility.allowed_Bundle_getResource(message, testBundle, resourceName);
+		utility.allowed_Bundle_getResources(message, testBundle, resourcesName);
+		utility.allowed_Bundle_getEntry(message, testBundle, resourceName);
+		utility.allowed_Bundle_getEntryPaths(message, testBundle, "/META-INF/");
 
-      permissionAdmin.setPermissions(testBundleLocation, new PermissionInfo[]{info});
-      printPermissions(testBundleLocation);
+		utility.not_allowed_Bundle_getHeaders(message, testSignatureBundle);
+		utility.not_allowed_Bundle_getHeaders_byLocation(message,
+				testSignatureBundle);
+		utility.not_allowed_Bundle_getLocation(message, testSignatureBundle);
+		utility.not_allowed_Bundle_getResource(message, testSignatureBundle,
+				resourceName);
+		utility.not_allowed_Bundle_getResources(message, testSignatureBundle,
+				resourcesName);
+		utility.not_allowed_Bundle_getEntry(message, testSignatureBundle,
+				entryName);
+		utility.not_allowed_Bundle_getEntryPaths(message, testSignatureBundle,
+				entryPath);
+		if (checkStartLevel) {
+			utility.not_allowed_StartLevel_setBundleStartLevel(message,
+					testSignatureBundle, startLevel);
+			utility.not_allowed_StartLevel_setStartLevel(message, startLevel);
+			utility.not_allowed_StartLevel_setInitialBundleStartLevel(message,
+					initialBundleStartLevel);
+		}
+		utility.not_allowed_Bundle_loadClass(message, testSignatureBundle,
+				className);
+		utility.not_allowed_Bundle_stop(message, testSignatureBundle);
+		utility.not_allowed_Bundle_start(message, testSignatureBundle);
+		utility.not_allowed_Bundle_update(message, testSignatureBundle);
+		utility.not_allowed_Bundle_update_by_InputStream(message,
+				testSignatureBundle, getInputStream(signatureBundleName));
+		utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
+		utility.not_allowed_BundleContext_addBundleListener(message,
+				testSignatureBundle);
+		utility.not_allowed_BundleContext_removeBundleListener(message,
+				testSignatureBundle);
+		utility.not_allowed_PackageAdmin_refreshPackages(message,
+				new Bundle[] {testSignatureBundle});
+		utility.not_allowed_PackageAdmin_resolveBundles(message,
+				new Bundle[] {testSignatureBundle});
+		utility.not_allowed_PermissionAdmin_setPermissions(message,
+				signatureBundleLocation,
+				new PermissionInfo[] {new PermissionInfo(AdminPermission.class
+						.getName(), "*", "*")});
+		utility.not_allowed_PermissionAdmin_setDefaultPermissions(message,
+				permissionAdmin.getDefaultPermissions());
+	}
 
-      utility.allowed_Bundle_loadClass(message, testSignatureBundle, className);
+	/**
+	 * Tests AdminPermission with all actions allowed on all. Checks if a bundle
+	 * with AllPermission can execute all methods requiring AdminPermission.
+	 */
+	public void testAdminPermission() throws Throwable {
+		PermissionInfo info = new PermissionInfo(AdminPermission.class
+				.getName(), "*", "*");
+		permissionAdmin.setPermissions(testBundleLocation,
+				new PermissionInfo[] {info});
+		printPermissions(testBundleLocation);
+		String message = "";
 
-      // note that in R4.2 a change was made to make resource imply resolve
-      utility.allowed_PackageAdmin_refreshPackages(message, null);
-      utility.allowed_PackageAdmin_resolveBundles(message, null);
+		utility.allowed_Bundle_getHeaders(message, testSignatureBundle);
+		utility.allowed_Bundle_getHeaders_byLocation(message,
+				testSignatureBundle);
+		utility.allowed_Bundle_getLocation(message, testSignatureBundle);
+		utility.allowed_Bundle_getResource(message, testSignatureBundle,
+				resourceName);
+		utility.allowed_Bundle_getResources(message, testSignatureBundle,
+				resourcesName);
+		utility
+				.allowed_Bundle_getEntry(message, testSignatureBundle,
+						entryName);
+		utility.allowed_Bundle_getEntryPaths(message, testSignatureBundle,
+				entryPath);
+		if (checkStartLevel) {
+			utility.allowed_StartLevel_setStartLevel(message, startLevel);
+			utility.allowed_StartLevel_setInitialBundleStartLevel(message,
+					initialBundleStartLevel);
+		}
+		utility.allowed_Bundle_loadClass(message, testSignatureBundle,
+				className);
+		utility.allowed_Bundle_stop(message, testSignatureBundle);
+		utility.allowed_Bundle_start(message, testSignatureBundle);
+		utility.allowed_Bundle_update(message, testSignatureBundle);
+		utility.allowed_Bundle_update_by_InputStream(message,
+				testSignatureBundle, getInputStream(signatureBundleName));
 
-      utility.not_allowed_Bundle_getHeaders(message, testSignatureBundle);
-      utility.not_allowed_Bundle_getHeaders_byLocation(message, testSignatureBundle);
-      utility.not_allowed_Bundle_getLocation(message, testSignatureBundle);
-      utility.not_allowed_Bundle_getResource(message, testSignatureBundle, resourceName);
-      utility.not_allowed_Bundle_getResources(message, testSignatureBundle, resourcesName);
-      utility.not_allowed_Bundle_getEntry(message, testSignatureBundle, entryName);
-      utility.not_allowed_Bundle_getEntryPaths(message, testSignatureBundle, entryPath);
-      if (checkStartLevel) {
-        utility.not_allowed_StartLevel_setBundleStartLevel(message, testSignatureBundle, startLevel);
-        utility.not_allowed_StartLevel_setStartLevel(message, startLevel);
-        utility.not_allowed_StartLevel_setInitialBundleStartLevel(message, initialBundleStartLevel);
-      }
-      utility.not_allowed_Bundle_stop(message, testSignatureBundle);
-      utility.not_allowed_Bundle_start(message, testSignatureBundle);
-      utility.not_allowed_Bundle_update(message, testSignatureBundle);
-      utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getInputStream(signatureBundleName));
-      utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
-      utility.not_allowed_BundleContext_addBundleListener(message);
-      utility.not_allowed_BundleContext_removeBundleListener(message);
-      utility.not_allowed_PermissionAdmin_setPermissions(message, signatureBundleLocation, 
-          new PermissionInfo[]{new PermissionInfo(AdminPermission.class.getName(), "*", "*")});
-      utility.not_allowed_PermissionAdmin_setDefaultPermissions(message, permissionAdmin.getDefaultPermissions());
-    }
+		utility.allowed_BundleContext_addBundleListener(message,
+				testSignatureBundle);
+		utility.allowed_BundleContext_removeBundleListener(message,
+				testSignatureBundle);
+		utility.allowed_PackageAdmin_refreshPackages(message,
+				new Bundle[] {testSignatureBundle});
+		utility.allowed_PackageAdmin_resolveBundles(message,
+				new Bundle[] {testSignatureBundle});
+		utility.not_allowed_PermissionAdmin_setPermissions(message,
+				signatureBundleLocation,
+				new PermissionInfo[] {new PermissionInfo(AdminPermission.class
+						.getName(), "*", "*")});
+		utility.not_allowed_PermissionAdmin_setDefaultPermissions(message,
+				permissionAdmin.getDefaultPermissions());
 
-  }
-  
-  /**
-   * Tests AdminPermission with an action parameter - lifecycle. 
-   * Checks if a bundle with AdminPrmission - lifecycle can execute:
-   *  - BundleContext.installBundle
-   *  - Bundle.update
-   *  - Bundle.uninstall
-   * and can not execute anything else that requires other AdminPermission.
-   * 
-   * The bundle is specified either by bundle id or by filter string.
-   */
-  public void test_AdminPermission_lifecycle() throws Throwable {
-    String message = "";
-    Vector permissions = utility.getPInfosForAdminPermisssion(
-        AdminPermission.LIFECYCLE,
-        testSignatureBundle.getBundleId(), 
-        testSignatureBundle.getLocation(), 
-        testSignatureBundle.getSymbolicName()); 
+	}
 
-    PermissionInfo info; 
-    for (int i = 0; i < permissions.size(); ++i) {
-      info = (PermissionInfo)permissions.elementAt(i);
+	/**
+	 * Tests AdminPermission with an action parameter - metadata. Checks if a
+	 * bundle with AdminPrmission - metadata can execute: - Bundle.getHeaders -
+	 * Bundle.getLocation and can not execute anything else that requires other
+	 * AdminPermission.
+	 * 
+	 * The bundle is specified either by bundle id or by filter string.
+	 */
+	public void testAdminPermissionMetadata() throws Throwable {
+		String message = "";
+		Vector permissions = utility.getPInfosForAdminPermisssion(
+				AdminPermission.METADATA, testSignatureBundle.getBundleId(),
+				testSignatureBundle.getLocation(), testSignatureBundle
+						.getSymbolicName());
 
-      permissionAdmin.setPermissions(testBundleLocation, new PermissionInfo[]{info});
-      printPermissions(testBundleLocation);
-      
-      utility.not_allowed_Bundle_getHeaders(message, testSignatureBundle);
-      utility.not_allowed_Bundle_getHeaders_byLocation(message, testSignatureBundle);
-      utility.not_allowed_Bundle_getLocation(message, testSignatureBundle);
-      utility.not_allowed_Bundle_getResource(message, testSignatureBundle, resourceName);
-      utility.not_allowed_Bundle_getResources(message, testSignatureBundle, resourcesName);
-      utility.not_allowed_Bundle_getEntry(message, testSignatureBundle, entryName);
-      utility.not_allowed_Bundle_getEntryPaths(message, testSignatureBundle, entryPath);
-      if (checkStartLevel) {
-        utility.not_allowed_StartLevel_setBundleStartLevel(message, testSignatureBundle, startLevel);
-        utility.not_allowed_StartLevel_setStartLevel(message, startLevel);
-        utility.not_allowed_StartLevel_setInitialBundleStartLevel(message, initialBundleStartLevel);
-      }
-      utility.not_allowed_Bundle_loadClass(message, testSignatureBundle, className);
-      utility.not_allowed_Bundle_stop(message, testSignatureBundle);
-      utility.not_allowed_Bundle_start(message, testSignatureBundle);
-      utility.not_allowed_BundleContext_addBundleListener(message);
-      utility.not_allowed_BundleContext_removeBundleListener(message);
-      utility.not_allowed_PackageAdmin_refreshPackages(message, null);
-      utility.not_allowed_PackageAdmin_resolveBundles(message, null);
-      utility.not_allowed_PermissionAdmin_setPermissions(message, signatureBundleLocation, 
-          new PermissionInfo[]{new PermissionInfo(AdminPermission.class.getName(), "*", "*")});
-      utility.not_allowed_PermissionAdmin_setDefaultPermissions(message, permissionAdmin.getDefaultPermissions());
-    }
-  }
-  
-  
-  /**
-   * Tests AdminPermission with an action parameter - lifecycle. 
-   * Checks if a bundle with AdminPrmission - lifecycle can execute:
-   *  - BundleContext.installBundle
-   *  - Bundle.update
-   *  - Bundle.uninstall
-   * and can not execute anything else that requires other AdminPermission.
-   * 
-   * The bundle is specified either by bundle id or by filter string.
-   */
-  public void test_AdminPermission_extensionLifecycle() throws Throwable {
-    String message = "";
-    String extensionBundleLocation = getInstallBundleLocation(extensionBundleName);
-    
-    Vector permissions = utility.getPInfosForAdminPermisssion(
-        AdminPermission.EXTENSIONLIFECYCLE + ',' + AdminPermission.LIFECYCLE,
-        -1, // extension bundle is not yet installed  
-        extensionBundleLocation,  // ?
-        null);  
+		PermissionInfo info;
+		for (int i = 0; i < permissions.size(); ++i) {
+			info = (PermissionInfo) permissions.elementAt(i);
+			permissionAdmin.setPermissions(testBundleLocation,
+					new PermissionInfo[] {info});
+			printPermissions(testBundleLocation);
 
-    
-    PermissionInfo info; 
-    for (int i = 0; i < permissions.size(); ++i) {
-      info = (PermissionInfo)permissions.elementAt(i);
+			utility.allowed_Bundle_getHeaders(message, testSignatureBundle);
+			utility.allowed_Bundle_getHeaders_byLocation(message,
+					testSignatureBundle);
+			utility.allowed_Bundle_getLocation(message, testSignatureBundle);
 
-      permissionAdmin.setPermissions(testBundleLocation, new PermissionInfo[]{info});
-      printPermissions(testBundleLocation);
-      
-      Bundle extensionBundle = (Bundle)utility.allowed_BundleContext_installBundle(message, extensionBundleLocation);
-      utility.allowed_Bundle_update(message, extensionBundle);
-      utility.allowed_Bundle_update_by_InputStream(message, extensionBundle, getInputStream(extensionBundleName));
-      
-      utility.not_allowed_Bundle_getHeaders(message, extensionBundle);
-      utility.not_allowed_Bundle_getHeaders_byLocation(message, extensionBundle);
-      utility.not_allowed_Bundle_getLocation(message, extensionBundle);
-      
-      utility.not_allowed_Bundle_getResource(message, extensionBundle, resourceName);
-      utility.not_allowed_Bundle_getResources(message, extensionBundle, resourcesName);
-      utility.not_allowed_Bundle_getEntry(message, extensionBundle, extensionEntryName);
-      utility.not_allowed_Bundle_getEntryPaths(message, extensionBundle, extensionEntryPath);
-      
-      if (checkStartLevel) {
-        utility.not_allowed_StartLevel_setBundleStartLevel(message, extensionBundle, startLevel);
-        utility.not_allowed_StartLevel_setStartLevel(message, startLevel);
-        utility.not_allowed_StartLevel_setInitialBundleStartLevel(message, initialBundleStartLevel);
-      }
-      
-      utility.not_allowed_Bundle_loadClass(message, extensionBundle, extensionClassName);
-      
-      utility.not_allowed_Bundle_stop(message, extensionBundle);
-      utility.not_allowed_Bundle_start(message, extensionBundle);
-      utility.not_allowed_BundleContext_addBundleListener(message);
-      utility.not_allowed_BundleContext_removeBundleListener(message);
-      utility.not_allowed_PackageAdmin_refreshPackages(message, null);
-      utility.not_allowed_PackageAdmin_resolveBundles(message, null);
-      utility.not_allowed_PermissionAdmin_setPermissions(message, extensionBundleLocation, 
-          new PermissionInfo[]{new PermissionInfo(AdminPermission.class.getName(), "*", "*")});
-      utility.not_allowed_PermissionAdmin_setDefaultPermissions(message, permissionAdmin.getDefaultPermissions());
+			utility.not_allowed_Bundle_getResource(message,
+					testSignatureBundle, resourceName);
+			utility.not_allowed_Bundle_getResources(message,
+					testSignatureBundle, resourcesName);
+			utility.not_allowed_Bundle_getEntry(message, testSignatureBundle,
+					entryName);
+			utility.not_allowed_Bundle_getEntryPaths(message,
+					testSignatureBundle, entryPath);
 
-      utility.allowed_Bundle_uninstall(message, extensionBundle);
-    }
-  }
+			if (checkStartLevel) {
+				utility.not_allowed_StartLevel_setBundleStartLevel(message,
+						testSignatureBundle, startLevel);
+				utility.not_allowed_StartLevel_setStartLevel(message,
+						startLevel);
+				utility.not_allowed_StartLevel_setInitialBundleStartLevel(
+						message, initialBundleStartLevel);
+			}
+			utility.not_allowed_Bundle_loadClass(message, testSignatureBundle,
+					className);
+			utility.not_allowed_Bundle_stop(message, testSignatureBundle);
+			utility.not_allowed_Bundle_start(message, testSignatureBundle);
+			utility.not_allowed_Bundle_update(message, testSignatureBundle);
+			utility.not_allowed_Bundle_update_by_InputStream(message,
+					testSignatureBundle, getInputStream(signatureBundleName));
+			utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
+			utility.not_allowed_BundleContext_addBundleListener(message,
+					testSignatureBundle);
+			utility.not_allowed_BundleContext_removeBundleListener(message,
+					testSignatureBundle);
+			utility.not_allowed_PackageAdmin_refreshPackages(message,
+					new Bundle[] {testSignatureBundle});
+			utility.not_allowed_PackageAdmin_resolveBundles(message,
+					new Bundle[] {testSignatureBundle});
+		}
+	}
 
-  
-  /**
-   * Tests AdminPermission with an action parameter - execute. 
-   * Checks if a bundle with AdminPrmission - execute can execute:
-   *  - Bundle.start
-   *  - Bundle.stop
-   *  - StartLevel.setBundleStartLevel
-   * and can not execute anything else that requires other AdminPermission.
-   * 
-   * The bundle is specified either by bundle id or by filter string.
-   */
-  public void test_AdminPermission_execute() throws Throwable {
-    String message = "";
-    Vector permissions = utility.getPInfosForAdminPermisssion(
-        AdminPermission.EXECUTE,
-        testSignatureBundle.getBundleId(), 
-        testSignatureBundle.getLocation(), 
-        testSignatureBundle.getSymbolicName()); 
+	/**
+	 * Tests AdminPermission with an action parameter - resource. Checks if a
+	 * bundle with AdminPrmission - resource can execute: - Bundle.getResource -
+	 * Bundle.getEntry - Bundle.getEntryPaths and can not execute anything else
+	 * that requires other AdminPermission.
+	 * 
+	 * The bundle is specified either by bundle id or by filter string.
+	 */
+	public void testAdminPermissionResource() throws Throwable {
+		String message = "";
+		Vector permissions = utility.getPInfosForAdminPermisssion(
+				AdminPermission.RESOURCE, testSignatureBundle.getBundleId(),
+				testSignatureBundle.getLocation(), testSignatureBundle
+						.getSymbolicName());
 
-    
-    PermissionInfo info; 
-    for (int i = 0; i < permissions.size(); ++i) {
-      info = (PermissionInfo)permissions.elementAt(i);
+		PermissionInfo info;
+		for (int i = 0; i < permissions.size(); ++i) {
+			info = (PermissionInfo) permissions.elementAt(i);
 
-      permissionAdmin.setPermissions(testBundleLocation, new PermissionInfo[]{info});
-      printPermissions(testBundleLocation);
+			permissionAdmin.setPermissions(testBundleLocation,
+					new PermissionInfo[] {info});
+			printPermissions(testBundleLocation);
 
-      utility.allowed_Bundle_stop(message, testSignatureBundle);
-      utility.allowed_Bundle_start(message, testSignatureBundle);
-      
-      // note that in R4.2 a change was made to make resource imply resolve
-      utility.allowed_PackageAdmin_refreshPackages(message, null);
-      utility.allowed_PackageAdmin_resolveBundles(message, null);
+			utility.allowed_Bundle_getResource(message, testSignatureBundle,
+					resourceName);
+			utility.allowed_Bundle_getResources(message, testSignatureBundle,
+					resourcesName);
+			utility.allowed_Bundle_getEntry(message, testSignatureBundle,
+					entryName);
+			utility.allowed_Bundle_getEntryPaths(message, testSignatureBundle,
+					entryPath);
 
-      utility.not_allowed_Bundle_getHeaders(message, testSignatureBundle);
-      utility.not_allowed_Bundle_getHeaders_byLocation(message, testSignatureBundle);
-      utility.not_allowed_Bundle_getLocation(message, testSignatureBundle);
-      utility.not_allowed_Bundle_getResource(message, testSignatureBundle, resourceName);
-      utility.not_allowed_Bundle_getResources(message, testSignatureBundle, resourcesName);
-      utility.not_allowed_Bundle_getEntry(message, testSignatureBundle, entryName);
-      utility.not_allowed_Bundle_getEntryPaths(message, testSignatureBundle, entryPath);
-      if (checkStartLevel) {
-        utility.not_allowed_StartLevel_setStartLevel(message, startLevel);
-        utility.not_allowed_StartLevel_setInitialBundleStartLevel(message, initialBundleStartLevel);
-      }
-      utility.not_allowed_Bundle_loadClass(message, testSignatureBundle, className);
-      utility.not_allowed_Bundle_update(message, testSignatureBundle);
-      utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getInputStream(signatureBundleName));
-      utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
-      utility.not_allowed_BundleContext_addBundleListener(message);
-      utility.not_allowed_BundleContext_removeBundleListener(message);
-      utility.not_allowed_PermissionAdmin_setPermissions(message, signatureBundleLocation, 
-          new PermissionInfo[]{new PermissionInfo(AdminPermission.class.getName(), "*", "*")});
-      utility.not_allowed_PermissionAdmin_setDefaultPermissions(message, permissionAdmin.getDefaultPermissions());
+			// note that in R4.2 a change was made to make resource imply
+			// resolve
+			if (i == 0) {
+				utility.allowed_PackageAdmin_refreshPackages(message,
+						new Bundle[] {testSignatureBundle});
+				utility.allowed_PackageAdmin_resolveBundles(message,
+						new Bundle[] {testSignatureBundle});
+			}
+			else {
+				utility.not_allowed_PackageAdmin_refreshPackages(message,
+						new Bundle[] {testSignatureBundle});
+				utility.not_allowed_PackageAdmin_resolveBundles(message,
+						new Bundle[] {testSignatureBundle});
+			}
 
-    }
-  }
+			utility.not_allowed_Bundle_getHeaders(message, testSignatureBundle);
+			utility.not_allowed_Bundle_getHeaders_byLocation(message,
+					testSignatureBundle);
+			utility
+					.not_allowed_Bundle_getLocation(message,
+							testSignatureBundle);
 
-  /**
-   * Tests AdminPermission with an action parameter - listener. 
-   * Checks if a bundle with AdminPrmission - listener can execute:
-   *  - BundleContext.addBundleListener 
-   *  - BundleContext.removeBundleListener 
-   * and can not execute anything else that requires other AdminPermission.
-   * 
-   * The bundle is specified either by bundle id or by filter string.
-   */
-  public void test_AdminPermission_listener() throws Throwable {
-    String message = "";
-    Vector permissions = utility.getPInfosForAdminPermisssion(
-        AdminPermission.LISTENER,
-        testSignatureBundle.getBundleId(), 
-        testSignatureBundle.getLocation(), 
-        testSignatureBundle.getSymbolicName()); 
+			if (checkStartLevel) {
+				utility.not_allowed_StartLevel_setBundleStartLevel(message,
+						testSignatureBundle, startLevel);
+				utility.not_allowed_StartLevel_setStartLevel(message,
+						startLevel);
+				utility.not_allowed_StartLevel_setInitialBundleStartLevel(
+						message, initialBundleStartLevel);
+			}
+			utility.not_allowed_Bundle_loadClass(message, testSignatureBundle,
+					className);
+			utility.not_allowed_Bundle_stop(message, testSignatureBundle);
+			utility.not_allowed_Bundle_start(message, testSignatureBundle);
+			utility.not_allowed_Bundle_update(message, testSignatureBundle);
+			utility.not_allowed_Bundle_update_by_InputStream(message,
+					testSignatureBundle, getInputStream(signatureBundleName));
+			utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
+			utility.not_allowed_BundleContext_addBundleListener(message,
+					testSignatureBundle);
+			utility.not_allowed_BundleContext_removeBundleListener(message,
+					testSignatureBundle);
+			utility.not_allowed_PermissionAdmin_setPermissions(message,
+					signatureBundleLocation,
+					new PermissionInfo[] {new PermissionInfo(
+							AdminPermission.class.getName(), "*", "*")});
+			utility.not_allowed_PermissionAdmin_setDefaultPermissions(message,
+					permissionAdmin.getDefaultPermissions());
+		}
+	}
 
-    
-    PermissionInfo info; 
-    for (int i = 0; i < permissions.size(); ++i) {
-      info = (PermissionInfo)permissions.elementAt(i);
+	/**
+	 * Tests AdminPermission with an action parameter - Class. Checks if a
+	 * bundle with AdminPrmission - Class can execute: - Bundle.loadClass and
+	 * can not execute anything else that requires other AdminPermission.
+	 * 
+	 * The bundle is specified either by bundle id or by filter string.
+	 */
+	public void testAdminPermissionClass() throws Throwable {
+		String message = "";
+		Vector permissions = utility.getPInfosForAdminPermisssion(
+				AdminPermission.CLASS, testSignatureBundle.getBundleId(),
+				testSignatureBundle.getLocation(), testSignatureBundle
+						.getSymbolicName());
 
-      permissionAdmin.setPermissions(testBundleLocation, new PermissionInfo[]{info});
-      printPermissions(testBundleLocation);
-  
-      utility.allowed_BundleContext_addBundleListener(message);
-      utility.allowed_BundleContext_removeBundleListener(message);
-      
-      utility.not_allowed_Bundle_getHeaders(message, testSignatureBundle);
-      utility.not_allowed_Bundle_getHeaders_byLocation(message, testSignatureBundle);
-      utility.not_allowed_Bundle_getLocation(message, testSignatureBundle);
-      utility.not_allowed_Bundle_getResource(message, testSignatureBundle, resourceName);
-      utility.not_allowed_Bundle_getResources(message, testSignatureBundle, resourcesName);
-      utility.not_allowed_Bundle_getEntry(message, testSignatureBundle, entryName);
-      utility.not_allowed_Bundle_getEntryPaths(message, testSignatureBundle, entryPath);
-      if (checkStartLevel) {
-        utility.not_allowed_StartLevel_setBundleStartLevel(message, testSignatureBundle, startLevel);
-        utility.not_allowed_StartLevel_setStartLevel(message, startLevel);
-        utility.not_allowed_StartLevel_setInitialBundleStartLevel(message, initialBundleStartLevel);
-      }
-      utility.not_allowed_Bundle_loadClass(message, testSignatureBundle, className);
-      utility.not_allowed_Bundle_stop(message, testSignatureBundle);
-      utility.not_allowed_Bundle_start(message, testSignatureBundle);
-      utility.not_allowed_Bundle_update(message, testSignatureBundle);
-      utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getInputStream(signatureBundleName));
-      utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
-      utility.not_allowed_PackageAdmin_refreshPackages(message, null);
-      utility.not_allowed_PackageAdmin_resolveBundles(message, null);
-      utility.not_allowed_PermissionAdmin_setPermissions(message, signatureBundleLocation, 
-          new PermissionInfo[]{new PermissionInfo(AdminPermission.class.getName(), "*", "*")});
-      utility.not_allowed_PermissionAdmin_setDefaultPermissions(message, permissionAdmin.getDefaultPermissions());
+		PermissionInfo info;
+		for (int i = 0; i < permissions.size(); ++i) {
+			info = (PermissionInfo) permissions.elementAt(i);
 
-    }
-  
-  }
-  
-  /**
-   * Tests AdminPermission with an action parameter - resolve. 
-   * Checks if a bundle with AdminPrmission - resolve can execute:
-   *  - PackageAdmin.refreshPackages
-   *  - PackageAdmin.resolveBundles
-   * and can not execute anything else that requires other AdminPermission.
-   * 
-   * The bundle is specified either by bundle id or by filter string.
-   */
-  public void test_AdminPermission_resolve() throws Throwable {
-    String message = "";
-    Vector permissions = utility.getPInfosForAdminPermisssion(
-        AdminPermission.RESOLVE,
-        0, 
-        testSignatureBundle.getLocation(), 
-        testSignatureBundle.getSymbolicName()); 
+			permissionAdmin.setPermissions(testBundleLocation,
+					new PermissionInfo[] {info});
+			printPermissions(testBundleLocation);
 
-    
-    PermissionInfo info; 
-    for (int i = 0; i < permissions.size(); ++i) {
-      info = (PermissionInfo)permissions.elementAt(i);
+			utility.allowed_Bundle_loadClass(message, testSignatureBundle,
+					className);
 
-      permissionAdmin.setPermissions(testBundleLocation, new PermissionInfo[]{info});
-      printPermissions(testBundleLocation);
-  
-      
-      if (i < 2) {
-        utility.allowed_PackageAdmin_refreshPackages(message, null);
-        utility.allowed_PackageAdmin_resolveBundles(message, null);
-      } else {
-        utility.not_allowed_PackageAdmin_refreshPackages(message, null);
-        utility.not_allowed_PackageAdmin_resolveBundles(message, null);
-      }
-      
-      utility.not_allowed_BundleContext_addBundleListener(message);
-      utility.not_allowed_BundleContext_removeBundleListener(message);
-      utility.not_allowed_Bundle_getHeaders(message, testSignatureBundle);
-      utility.not_allowed_Bundle_getHeaders_byLocation(message, testSignatureBundle);
-      utility.not_allowed_Bundle_getLocation(message, testSignatureBundle);
-      utility.not_allowed_Bundle_getResource(message, testSignatureBundle, resourceName);
-      utility.not_allowed_Bundle_getResources(message, testSignatureBundle, resourcesName);
-      utility.not_allowed_Bundle_getEntry(message, testSignatureBundle, entryName);
-      utility.not_allowed_Bundle_getEntryPaths(message, testSignatureBundle, entryPath);
-      if (checkStartLevel) {
-        utility.not_allowed_StartLevel_setBundleStartLevel(message, testSignatureBundle, startLevel);
-        utility.not_allowed_StartLevel_setStartLevel(message, startLevel);
-        utility.not_allowed_StartLevel_setInitialBundleStartLevel(message, initialBundleStartLevel);
-      }
-      utility.not_allowed_Bundle_loadClass(message, testSignatureBundle, className);
-      utility.not_allowed_Bundle_stop(message, testSignatureBundle);
-      utility.not_allowed_Bundle_start(message, testSignatureBundle);
-      utility.not_allowed_Bundle_update(message, testSignatureBundle);
-      utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getInputStream(signatureBundleName));
-      utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
-      utility.not_allowed_PermissionAdmin_setPermissions(message, signatureBundleLocation, 
-          new PermissionInfo[]{new PermissionInfo(AdminPermission.class.getName(), "*", "*")});
-      utility.not_allowed_PermissionAdmin_setDefaultPermissions(message, permissionAdmin.getDefaultPermissions());
-    
-    }
-  
-  }
-  
-  /**
-   * Tests AdminPermission with an action parameter - startlevel. 
-   * Checks if a bundle with AdminPrmission - startlevel can execute:
-   *  - StartLevel.setStartLevel
-   *  - StartLevel.setInitialBundleStartLevel
-   * and can not execute anything else that requires other AdminPermission.
-   * 
-   * The bundle is specified either by bundle id or by filter string.
-   */
-  public void test_AdminPermission_startlevel() throws Throwable {
-    if (!checkStartLevel) {
-      return; // this method shall not be excecuted - no StartLevel service detected
-    }
-    String message = "";
-    Vector permissions = utility.getPInfosForAdminPermisssion(
-        AdminPermission.STARTLEVEL,
-        0, 
-        testSignatureBundle.getLocation(), 
-        testSignatureBundle.getSymbolicName()); 
+			// note that in R4.2 a change was made to make class imply
+			// resolve
+			if (i == 0) {
+				utility.allowed_PackageAdmin_refreshPackages(message,
+						new Bundle[] {testSignatureBundle});
+				utility.allowed_PackageAdmin_resolveBundles(message,
+						new Bundle[] {testSignatureBundle});
+			}
+			else {
+				utility.not_allowed_PackageAdmin_refreshPackages(message,
+						new Bundle[] {testSignatureBundle});
+				utility.not_allowed_PackageAdmin_resolveBundles(message,
+						new Bundle[] {testSignatureBundle});
+			}
 
-    PermissionInfo info; 
-    for (int i = 0; i < permissions.size(); ++i) {
-      info = (PermissionInfo)permissions.elementAt(i);
+			utility.not_allowed_Bundle_getHeaders(message, testSignatureBundle);
+			utility.not_allowed_Bundle_getHeaders_byLocation(message,
+					testSignatureBundle);
+			utility
+					.not_allowed_Bundle_getLocation(message,
+							testSignatureBundle);
+			utility.not_allowed_Bundle_getResource(message,
+					testSignatureBundle, resourceName);
+			utility.not_allowed_Bundle_getResources(message,
+					testSignatureBundle, resourcesName);
+			utility.not_allowed_Bundle_getEntry(message, testSignatureBundle,
+					entryName);
+			utility.not_allowed_Bundle_getEntryPaths(message,
+					testSignatureBundle, entryPath);
+			if (checkStartLevel) {
+				utility.not_allowed_StartLevel_setBundleStartLevel(message,
+						testSignatureBundle, startLevel);
+				utility.not_allowed_StartLevel_setStartLevel(message,
+						startLevel);
+				utility.not_allowed_StartLevel_setInitialBundleStartLevel(
+						message, initialBundleStartLevel);
+			}
+			utility.not_allowed_Bundle_stop(message, testSignatureBundle);
+			utility.not_allowed_Bundle_start(message, testSignatureBundle);
+			utility.not_allowed_Bundle_update(message, testSignatureBundle);
+			utility.not_allowed_Bundle_update_by_InputStream(message,
+					testSignatureBundle, getInputStream(signatureBundleName));
+			utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
+			utility.not_allowed_BundleContext_addBundleListener(message,
+					testSignatureBundle);
+			utility.not_allowed_BundleContext_removeBundleListener(message,
+					testSignatureBundle);
+			utility.not_allowed_PermissionAdmin_setPermissions(message,
+					signatureBundleLocation,
+					new PermissionInfo[] {new PermissionInfo(
+							AdminPermission.class.getName(), "*", "*")});
+			utility.not_allowed_PermissionAdmin_setDefaultPermissions(message,
+					permissionAdmin.getDefaultPermissions());
+		}
 
-      permissionAdmin.setPermissions(testBundleLocation, new PermissionInfo[]{info});
-      printPermissions(testBundleLocation);
-  
-      if (i < 2) {
-        utility.allowed_StartLevel_setStartLevel(message, startLevel);
-        utility.allowed_StartLevel_setInitialBundleStartLevel(message, initialBundleStartLevel);
-      } else {
-        utility.not_allowed_StartLevel_setStartLevel(message, startLevel);
-        utility.not_allowed_StartLevel_setInitialBundleStartLevel(message, initialBundleStartLevel);
-      }
-      
-      utility.not_allowed_BundleContext_addBundleListener(message);
-      utility.not_allowed_BundleContext_removeBundleListener(message);
-      utility.not_allowed_Bundle_getHeaders(message, testSignatureBundle);
-      utility.not_allowed_Bundle_getHeaders_byLocation(message, testSignatureBundle);
-      utility.not_allowed_Bundle_getLocation(message, testSignatureBundle);
-      utility.not_allowed_Bundle_getResource(message, testSignatureBundle, resourceName);
-      utility.not_allowed_Bundle_getResources(message, testSignatureBundle, resourcesName);
-      utility.not_allowed_Bundle_getEntry(message, testSignatureBundle, entryName);
-      utility.not_allowed_Bundle_getEntryPaths(message, testSignatureBundle, entryPath);
-      if (checkStartLevel) {
-        utility.not_allowed_StartLevel_setBundleStartLevel(message, testSignatureBundle, startLevel);
-      }
-      utility.not_allowed_Bundle_loadClass(message, testSignatureBundle, className);
-      utility.not_allowed_Bundle_stop(message, testSignatureBundle);
-      utility.not_allowed_Bundle_start(message, testSignatureBundle);
-      utility.not_allowed_Bundle_update(message, testSignatureBundle);
-      utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getInputStream(signatureBundleName));
-      utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
-      utility.not_allowed_PackageAdmin_refreshPackages(message, null);
-      utility.not_allowed_PackageAdmin_resolveBundles(message, null);
-      utility.not_allowed_PermissionAdmin_setPermissions(message, signatureBundleLocation, 
-          new PermissionInfo[]{new PermissionInfo(AdminPermission.class.getName(), "*", "*")});
-      utility.not_allowed_PermissionAdmin_setDefaultPermissions(message, permissionAdmin.getDefaultPermissions());
-    
-    }
-  }
-  
-  
-  /**
-   * Tests ConfigurationPermission with an action parameter - get. 
-   * Checks if a bundle with ConfigurationPermission - get can execute:
-   *  - ConfigurationAdmin.getConfiguration
-   *  - ConfigurationAdmin.listConfigurations
-   * and can not execute anything else that requires other ConfigurationPermission.
-   */
-  public void test_ConfigurationPermission_get() throws Exception {
-    // TODO test case for configuration permission
-//    Vector permissions = utility.createWildcardPermissionInfo(
-//        ConfigurationPermission.class, 
-//        "", ConfigurationPermission.SET, 
-//        PermissionSignatureUtility.CONFIG_FPID);
-//
-//    String message = "";
-//    PermissionInfo info; 
-//    for (int i = 0; i < permissions.size(); ++i) {
-//      info = (PermissionInfo)permissions.elementAt(i);
-//      permissionAdmin.setPermissions(testBundleLocation, new PermissionInfo[]{info});
-//      printPermissions(testBundleLocation);
-//
-//
-//      utility.allowed_ConfigurationAdmin_getConfiguration(message, PermissionSignatureUtility.CONFIG_FPID);
-//      utility.allowed_ConfigurationAdmin_getConfiguration(message, PermissionSignatureUtility.CONFIG_FPID, "");
-//      utility.allowed_ConfigurationAdmin_listConfigurations(message, null);
-//
-//      utility.not_allowed_ConfigurationAdmin_createFactoryConfiguration(message, PermissionSignatureUtility.CONFIG_FPID);
-//      utility.not_allowed_Configuration_update(message, PermissionSignatureUtility.CONFIG_FPID);
-//      utility.not_allowed_Configuration_delete(message, PermissionSignatureUtility.CONFIG_FPID);
-//      utility.not_allowed_ConfigurationAdmin_createFactoryConfiguration(message, PermissionSignatureUtility.CONFIG_FPID, "");
-//      utility.not_allowed_Configuration_update(message, PermissionSignatureUtility.CONFIG_FPID, new Hashtable());
-//      utility.not_allowed_Configuration_setBundleLocation(message, PermissionSignatureUtility.CONFIG_FPID);
-//      utility.not_allowed_Configuration_delete(message, PermissionSignatureUtility.CONFIG_FPID);
-//    }
-  }
+	}
 
-  /**
-   * Tests ConfigurationPermission with an action parameter - set. 
-   * Checks if a bundle with ConfigurationPermission - set can execute:
-   *  - Configuration.setBundleLocation
-   *  - Configuration.delete
-   *  - Configuration.update
-   *  - ConfigurationAdmin.createFactoryConfiguration
-   */
-  public void test_ConfigurationPermission_set() throws Exception {
-    // TODO ConfigurationPermission test
-//    Vector permissions = utility.createWildcardPermissionInfo(
-//                ConfigurationPermission.class, 
-//                "", ConfigurationPermission.SET, 
-//                PermissionSignatureUtility.CONFIG_FPID);
-//    
-//    String message = "";
-//    PermissionInfo info; 
-//    for (int i = 0; i < permissions.size(); ++i) {
-//      info = (PermissionInfo)permissions.elementAt(i);
-//      permissionAdmin.setPermissions(testBundleLocation, new PermissionInfo[]{info});
-//      printPermissions(testBundleLocation);
-//    
-//      
-//      utility.allowed_ConfigurationAdmin_createFactoryConfiguration(message, PermissionSignatureUtility.CONFIG_FPID);
-//      utility.allowed_Configuration_update(message, PermissionSignatureUtility.CONFIG_FPID);
-//      utility.allowed_Configuration_delete(message, PermissionSignatureUtility.CONFIG_FPID);
-//      utility.allowed_ConfigurationAdmin_createFactoryConfiguration(message, PermissionSignatureUtility.CONFIG_FPID, "");
-//      utility.allowed_Configuration_update(message, PermissionSignatureUtility.CONFIG_FPID, new Hashtable());
-//      utility.allowed_Configuration_setBundleLocation(message, PermissionSignatureUtility.CONFIG_FPID);
-//      utility.allowed_Configuration_delete(message, PermissionSignatureUtility.CONFIG_FPID);
-//      
-//      // dali?
-//      utility.not_allowed_ConfigurationAdmin_getConfiguration(message, PermissionSignatureUtility.CONFIG_FPID);
-//      utility.not_allowed_ConfigurationAdmin_getConfiguration(message, PermissionSignatureUtility.CONFIG_FPID, "");
-//      utility.not_allowed_ConfigurationAdmin_listConfigurations(message, null);
-//    }
-//    
-  }
-  
-  // returns true if 'method' failed
-  boolean not_allowed_call(String message, String methodName,  Class[] paramClasses, Object[] paramObjects, Class wanted) throws Exception {
-    try {
-      MethodCall method = new MethodCall(methodName, paramClasses, paramObjects);
-      method.invoke(tbc);
-    } catch (Throwable e) {
-      assertException(message, wanted, e);
-      return true;
-    }
-    failException(message, wanted);
-    return false;
-  }
-  
-  boolean not_allowed_call_assertNull(String message, String methodName,  Class[] paramClasses, Object[] paramObjects) throws Throwable {
-    MethodCall method = new MethodCall(methodName, paramClasses, paramObjects);
-    Object result = method.invoke(tbc);
-    if (result == null) {
-      pass(message + " and correctly returns null");
-      return true;
-    } else {
-      fail(message + " but returns not null");
-      return false;
-    }
-  }
+	/**
+	 * Tests AdminPermission with an action parameter - lifecycle. Checks if a
+	 * bundle with AdminPrmission - lifecycle can execute: -
+	 * BundleContext.installBundle - Bundle.update - Bundle.uninstall and can
+	 * not execute anything else that requires other AdminPermission.
+	 * 
+	 * The bundle is specified either by bundle id or by filter string.
+	 */
+	public void testAdminPermissionLifecycle() throws Throwable {
+		String message = "";
+		Vector permissions = utility.getPInfosForAdminPermisssion(
+				AdminPermission.LIFECYCLE, testSignatureBundle.getBundleId(),
+				testSignatureBundle.getLocation(), testSignatureBundle
+						.getSymbolicName());
 
-  boolean allowed_call_assertNotNull(String message, String methodName,  Class[] paramClasses, Object[] paramObjects) throws Throwable {
-    MethodCall method = new MethodCall(methodName, paramClasses, paramObjects);
-    Object result = method.invoke(tbc);
-    if (result == null) {
-      fail(message + " but returns null");
-      return false;
-    } else {
-      pass(message + " and correctly returns not null");
-      return true;
-    }
-  } 
+		PermissionInfo info;
+		for (int i = 0; i < permissions.size(); ++i) {
+			info = (PermissionInfo) permissions.elementAt(i);
 
-  Object allowed_call(String message, String methodName,  Class[] paramClasses, Object[] paramObjects) {
-    try {
-      MethodCall method = new MethodCall(methodName, paramClasses, paramObjects);
-      Object result = method.invoke(tbc);
-      pass(message);
-      return result;
-    } catch (Throwable e) {
-      fail(message + " but " + e.getClass().getName() + " was thrown");
-      return null;
-    }
-  }
-  
-  private void installTestSignatureBundle() throws Exception {
-     testSignatureBundle = installBundle(signatureBundleName);
-     signatureBundleLocation = testSignatureBundle.getLocation();
-  }
-  
-  private InputStream getInputStream(String bundleName) throws Exception {
-    return (new URL(getInstallBundleLocation(bundleName))).openStream();
-  }
-  
-  private void printPermissions(String bundleLocation) {
-//    PermissionInfo[] pi = permissionAdmin.getPermissions(bundleLocation);
-//    for (int j = 0; pi != null && j < pi.length; ++j) {
-//      log(pi[j].toString());
-//    }
-  }
-  
-  private String getInstallBundleLocation(String bundleName) {
-    return getWebServer() + bundleName;
-  }
+			permissionAdmin.setPermissions(testBundleLocation,
+					new PermissionInfo[] {info});
+			printPermissions(testBundleLocation);
+
+			utility.not_allowed_Bundle_getHeaders(message, testSignatureBundle);
+			utility.not_allowed_Bundle_getHeaders_byLocation(message,
+					testSignatureBundle);
+			utility
+					.not_allowed_Bundle_getLocation(message,
+							testSignatureBundle);
+			utility.not_allowed_Bundle_getResource(message,
+					testSignatureBundle, resourceName);
+			utility.not_allowed_Bundle_getResources(message,
+					testSignatureBundle, resourcesName);
+			utility.not_allowed_Bundle_getEntry(message, testSignatureBundle,
+					entryName);
+			utility.not_allowed_Bundle_getEntryPaths(message,
+					testSignatureBundle, entryPath);
+			if (checkStartLevel) {
+				utility.not_allowed_StartLevel_setBundleStartLevel(message,
+						testSignatureBundle, startLevel);
+				utility.not_allowed_StartLevel_setStartLevel(message,
+						startLevel);
+				utility.not_allowed_StartLevel_setInitialBundleStartLevel(
+						message, initialBundleStartLevel);
+			}
+			utility.not_allowed_Bundle_loadClass(message, testSignatureBundle,
+					className);
+			utility.not_allowed_Bundle_stop(message, testSignatureBundle);
+			utility.not_allowed_Bundle_start(message, testSignatureBundle);
+			utility.not_allowed_BundleContext_addBundleListener(message,
+					testSignatureBundle);
+			utility.not_allowed_BundleContext_removeBundleListener(message,
+					testSignatureBundle);
+			utility.not_allowed_PackageAdmin_refreshPackages(message,
+					new Bundle[] {testSignatureBundle});
+			utility.not_allowed_PackageAdmin_resolveBundles(message,
+					new Bundle[] {testSignatureBundle});
+			utility.not_allowed_PermissionAdmin_setPermissions(message,
+					signatureBundleLocation,
+					new PermissionInfo[] {new PermissionInfo(
+							AdminPermission.class.getName(), "*", "*")});
+			utility.not_allowed_PermissionAdmin_setDefaultPermissions(message,
+					permissionAdmin.getDefaultPermissions());
+		}
+	}
+
+	/**
+	 * Tests AdminPermission with an action parameter - lifecycle. Checks if a
+	 * bundle with AdminPrmission - lifecycle can execute: -
+	 * BundleContext.installBundle - Bundle.update - Bundle.uninstall and can
+	 * not execute anything else that requires other AdminPermission.
+	 * 
+	 * The bundle is specified either by bundle id or by filter string.
+	 */
+	public void testAdminPermissionExtensionLifecycle() throws Throwable {
+		String message = "";
+		String extensionBundleLocation = getInstallBundleLocation(extensionBundleName);
+
+		Vector permissions = utility.getPInfosForAdminPermisssion(
+				AdminPermission.EXTENSIONLIFECYCLE + ','
+						+ AdminPermission.LIFECYCLE, -1, // extension bundle is
+				// not yet installed
+				extensionBundleLocation, // ?
+				null);
+
+		PermissionInfo info;
+		for (int i = 0; i < permissions.size(); ++i) {
+			info = (PermissionInfo) permissions.elementAt(i);
+
+			permissionAdmin.setPermissions(testBundleLocation,
+					new PermissionInfo[] {info});
+			printPermissions(testBundleLocation);
+
+			Bundle extensionBundle = (Bundle) utility
+					.allowed_BundleContext_installBundle(message,
+							testSignatureBundle,
+							extensionBundleLocation);
+			utility.allowed_Bundle_update(message, extensionBundle);
+			utility.allowed_Bundle_update_by_InputStream(message,
+					extensionBundle, getInputStream(extensionBundleName));
+
+			utility.not_allowed_Bundle_getHeaders(message, extensionBundle);
+			utility.not_allowed_Bundle_getHeaders_byLocation(message,
+					extensionBundle);
+			utility.not_allowed_Bundle_getLocation(message, extensionBundle);
+
+			utility.not_allowed_Bundle_getResource(message, extensionBundle,
+					resourceName);
+			utility.not_allowed_Bundle_getResources(message, extensionBundle,
+					resourcesName);
+			utility.not_allowed_Bundle_getEntry(message, extensionBundle,
+					extensionEntryName);
+			utility.not_allowed_Bundle_getEntryPaths(message, extensionBundle,
+					extensionEntryPath);
+
+			if (checkStartLevel) {
+				utility.not_allowed_StartLevel_setBundleStartLevel(message,
+						extensionBundle, startLevel);
+				utility.not_allowed_StartLevel_setStartLevel(message,
+						startLevel);
+				utility.not_allowed_StartLevel_setInitialBundleStartLevel(
+						message, initialBundleStartLevel);
+			}
+
+			utility.not_allowed_Bundle_loadClass(message, extensionBundle,
+					extensionClassName);
+
+			utility.not_allowed_Bundle_stop(message, extensionBundle);
+			utility.not_allowed_Bundle_start(message, extensionBundle);
+			utility.not_allowed_BundleContext_addBundleListener(message,
+					testSignatureBundle);
+			utility.not_allowed_BundleContext_removeBundleListener(message,
+					testSignatureBundle);
+			utility.not_allowed_PackageAdmin_refreshPackages(message,
+					new Bundle[] {testSignatureBundle});
+			utility.not_allowed_PackageAdmin_resolveBundles(message,
+					new Bundle[] {testSignatureBundle});
+			utility.not_allowed_PermissionAdmin_setPermissions(message,
+					extensionBundleLocation,
+					new PermissionInfo[] {new PermissionInfo(
+							AdminPermission.class.getName(), "*", "*")});
+			utility.not_allowed_PermissionAdmin_setDefaultPermissions(message,
+					permissionAdmin.getDefaultPermissions());
+
+			utility.allowed_Bundle_uninstall(message, extensionBundle);
+		}
+	}
+
+	/**
+	 * Tests AdminPermission with an action parameter - execute. Checks if a
+	 * bundle with AdminPrmission - execute can execute: - Bundle.start -
+	 * Bundle.stop - StartLevel.setBundleStartLevel and can not execute anything
+	 * else that requires other AdminPermission.
+	 * 
+	 * The bundle is specified either by bundle id or by filter string.
+	 */
+	public void testAdminPermissionExecute() throws Throwable {
+		String message = "";
+		Vector permissions = utility.getPInfosForAdminPermisssion(
+				AdminPermission.EXECUTE, testSignatureBundle.getBundleId(),
+				testSignatureBundle.getLocation(), testSignatureBundle
+						.getSymbolicName());
+
+		PermissionInfo info;
+		for (int i = 0; i < permissions.size(); ++i) {
+			info = (PermissionInfo) permissions.elementAt(i);
+
+			permissionAdmin.setPermissions(testBundleLocation,
+					new PermissionInfo[] {info});
+			printPermissions(testBundleLocation);
+
+			utility.allowed_Bundle_stop(message, testSignatureBundle);
+			utility.allowed_Bundle_start(message, testSignatureBundle);
+
+			// note that in R4.2 a change was made to make execute imply
+			// resolve
+			if (i == 0) {
+				utility.allowed_PackageAdmin_refreshPackages(message,
+						new Bundle[] {testSignatureBundle});
+				utility.allowed_PackageAdmin_resolveBundles(message,
+						new Bundle[] {testSignatureBundle});
+			}
+			else {
+				utility.not_allowed_PackageAdmin_refreshPackages(message,
+						new Bundle[] {testSignatureBundle});
+				utility.not_allowed_PackageAdmin_resolveBundles(message,
+						new Bundle[] {testSignatureBundle});
+			}
+
+			utility.not_allowed_Bundle_getHeaders(message, testSignatureBundle);
+			utility.not_allowed_Bundle_getHeaders_byLocation(message,
+					testSignatureBundle);
+			utility
+					.not_allowed_Bundle_getLocation(message,
+							testSignatureBundle);
+			utility.not_allowed_Bundle_getResource(message,
+					testSignatureBundle, resourceName);
+			utility.not_allowed_Bundle_getResources(message,
+					testSignatureBundle, resourcesName);
+			utility.not_allowed_Bundle_getEntry(message, testSignatureBundle,
+					entryName);
+			utility.not_allowed_Bundle_getEntryPaths(message,
+					testSignatureBundle, entryPath);
+			if (checkStartLevel) {
+				utility.not_allowed_StartLevel_setStartLevel(message,
+						startLevel);
+				utility.not_allowed_StartLevel_setInitialBundleStartLevel(
+						message, initialBundleStartLevel);
+			}
+			utility.not_allowed_Bundle_loadClass(message, testSignatureBundle,
+					className);
+			utility.not_allowed_Bundle_update(message, testSignatureBundle);
+			utility.not_allowed_Bundle_update_by_InputStream(message,
+					testSignatureBundle, getInputStream(signatureBundleName));
+			utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
+			utility.not_allowed_BundleContext_addBundleListener(message,
+					testSignatureBundle);
+			utility.not_allowed_BundleContext_removeBundleListener(message,
+					testSignatureBundle);
+			utility.not_allowed_PermissionAdmin_setPermissions(message,
+					signatureBundleLocation,
+					new PermissionInfo[] {new PermissionInfo(
+							AdminPermission.class.getName(), "*", "*")});
+			utility.not_allowed_PermissionAdmin_setDefaultPermissions(message,
+					permissionAdmin.getDefaultPermissions());
+
+		}
+	}
+
+	/**
+	 * Tests AdminPermission with an action parameter - listener. Checks if a
+	 * bundle with AdminPrmission - listener can execute: -
+	 * BundleContext.addBundleListener - BundleContext.removeBundleListener and
+	 * can not execute anything else that requires other AdminPermission.
+	 * 
+	 * The bundle is specified either by bundle id or by filter string.
+	 */
+	public void testAdminPermissionListener() throws Throwable {
+		String message = "";
+		Vector permissions = utility.getPInfosForAdminPermisssion(
+				AdminPermission.LISTENER, testSignatureBundle.getBundleId(),
+				testSignatureBundle.getLocation(), testSignatureBundle
+						.getSymbolicName());
+
+		PermissionInfo info;
+		for (int i = 0; i < permissions.size(); ++i) {
+			info = (PermissionInfo) permissions.elementAt(i);
+
+			permissionAdmin.setPermissions(testBundleLocation,
+					new PermissionInfo[] {info});
+			printPermissions(testBundleLocation);
+
+			utility.allowed_BundleContext_addBundleListener(message,
+					testSignatureBundle);
+			utility.allowed_BundleContext_removeBundleListener(message,
+					testSignatureBundle);
+
+			utility.not_allowed_Bundle_getHeaders(message, testSignatureBundle);
+			utility.not_allowed_Bundle_getHeaders_byLocation(message,
+					testSignatureBundle);
+			utility
+					.not_allowed_Bundle_getLocation(message,
+							testSignatureBundle);
+			utility.not_allowed_Bundle_getResource(message,
+					testSignatureBundle, resourceName);
+			utility.not_allowed_Bundle_getResources(message,
+					testSignatureBundle, resourcesName);
+			utility.not_allowed_Bundle_getEntry(message, testSignatureBundle,
+					entryName);
+			utility.not_allowed_Bundle_getEntryPaths(message,
+					testSignatureBundle, entryPath);
+			if (checkStartLevel) {
+				utility.not_allowed_StartLevel_setBundleStartLevel(message,
+						testSignatureBundle, startLevel);
+				utility.not_allowed_StartLevel_setStartLevel(message,
+						startLevel);
+				utility.not_allowed_StartLevel_setInitialBundleStartLevel(
+						message, initialBundleStartLevel);
+			}
+			utility.not_allowed_Bundle_loadClass(message, testSignatureBundle,
+					className);
+			utility.not_allowed_Bundle_stop(message, testSignatureBundle);
+			utility.not_allowed_Bundle_start(message, testSignatureBundle);
+			utility.not_allowed_Bundle_update(message, testSignatureBundle);
+			utility.not_allowed_Bundle_update_by_InputStream(message,
+					testSignatureBundle, getInputStream(signatureBundleName));
+			utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
+			utility.not_allowed_PackageAdmin_refreshPackages(message,
+					new Bundle[] {testSignatureBundle});
+			utility.not_allowed_PackageAdmin_resolveBundles(message,
+					new Bundle[] {testSignatureBundle});
+			utility.not_allowed_PermissionAdmin_setPermissions(message,
+					signatureBundleLocation,
+					new PermissionInfo[] {new PermissionInfo(
+							AdminPermission.class.getName(), "*", "*")});
+			utility.not_allowed_PermissionAdmin_setDefaultPermissions(message,
+					permissionAdmin.getDefaultPermissions());
+
+		}
+
+	}
+
+	/**
+	 * Tests AdminPermission with an action parameter - resolve. Checks if a
+	 * bundle with AdminPrmission - resolve can execute: -
+	 * PackageAdmin.refreshPackages - PackageAdmin.resolveBundles and can not
+	 * execute anything else that requires other AdminPermission.
+	 * 
+	 * The bundle is specified either by bundle id or by filter string.
+	 */
+	public void testAdminPermissionResolve() throws Throwable {
+		String message = "";
+		Vector permissions = utility.getPInfosForAdminPermisssion(
+				AdminPermission.RESOLVE, testSignatureBundle.getBundleId(),
+				testSignatureBundle.getLocation(),
+				testSignatureBundle.getSymbolicName());
+
+		PermissionInfo info;
+		for (int i = 0; i < permissions.size(); ++i) {
+			info = (PermissionInfo) permissions.elementAt(i);
+
+			permissionAdmin.setPermissions(testBundleLocation,
+					new PermissionInfo[] {info});
+			printPermissions(testBundleLocation);
+
+			if (i == 0) {
+				utility.allowed_PackageAdmin_refreshPackages(message,
+						new Bundle[] {testSignatureBundle});
+				utility.allowed_PackageAdmin_resolveBundles(message,
+						new Bundle[] {testSignatureBundle});
+			}
+			else {
+				utility.not_allowed_PackageAdmin_refreshPackages(message,
+						new Bundle[] {testSignatureBundle});
+				utility.not_allowed_PackageAdmin_resolveBundles(message,
+						new Bundle[] {testSignatureBundle});
+			}
+
+			utility.not_allowed_BundleContext_addBundleListener(message,
+					testSignatureBundle);
+			utility.not_allowed_BundleContext_removeBundleListener(message,
+					testSignatureBundle);
+			utility.not_allowed_Bundle_getHeaders(message, testSignatureBundle);
+			utility.not_allowed_Bundle_getHeaders_byLocation(message,
+					testSignatureBundle);
+			utility
+					.not_allowed_Bundle_getLocation(message,
+							testSignatureBundle);
+			utility.not_allowed_Bundle_getResource(message,
+					testSignatureBundle, resourceName);
+			utility.not_allowed_Bundle_getResources(message,
+					testSignatureBundle, resourcesName);
+			utility.not_allowed_Bundle_getEntry(message, testSignatureBundle,
+					entryName);
+			utility.not_allowed_Bundle_getEntryPaths(message,
+					testSignatureBundle, entryPath);
+			if (checkStartLevel) {
+				utility.not_allowed_StartLevel_setBundleStartLevel(message,
+						testSignatureBundle, startLevel);
+				utility.not_allowed_StartLevel_setStartLevel(message,
+						startLevel);
+				utility.not_allowed_StartLevel_setInitialBundleStartLevel(
+						message, initialBundleStartLevel);
+			}
+			utility.not_allowed_Bundle_loadClass(message, testSignatureBundle,
+					className);
+			utility.not_allowed_Bundle_stop(message, testSignatureBundle);
+			utility.not_allowed_Bundle_start(message, testSignatureBundle);
+			utility.not_allowed_Bundle_update(message, testSignatureBundle);
+			utility.not_allowed_Bundle_update_by_InputStream(message,
+					testSignatureBundle, getInputStream(signatureBundleName));
+			utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
+			utility.not_allowed_PermissionAdmin_setPermissions(message,
+					signatureBundleLocation,
+					new PermissionInfo[] {new PermissionInfo(
+							AdminPermission.class.getName(), "*", "*")});
+			utility.not_allowed_PermissionAdmin_setDefaultPermissions(message,
+					permissionAdmin.getDefaultPermissions());
+
+		}
+
+	}
+
+	/**
+	 * Tests AdminPermission with an action parameter - startlevel. Checks if a
+	 * bundle with AdminPrmission - startlevel can execute: -
+	 * StartLevel.setStartLevel - StartLevel.setInitialBundleStartLevel and can
+	 * not execute anything else that requires other AdminPermission.
+	 * 
+	 * The bundle is specified either by bundle id or by filter string.
+	 */
+	public void testAdminPermissionStartlevel() throws Throwable {
+		if (!checkStartLevel) {
+			return; // this method shall not be excecuted - no StartLevel
+			// service detected
+		}
+		String message = "";
+		Vector permissions = utility.getPInfosForAdminPermisssion(
+				AdminPermission.STARTLEVEL, 0, testSignatureBundle
+						.getLocation(), testSignatureBundle.getSymbolicName());
+
+		PermissionInfo info;
+		for (int i = 0; i < permissions.size(); ++i) {
+			info = (PermissionInfo) permissions.elementAt(i);
+
+			permissionAdmin.setPermissions(testBundleLocation,
+					new PermissionInfo[] {info});
+			printPermissions(testBundleLocation);
+
+			if (i < 2) {
+				utility.allowed_StartLevel_setStartLevel(message, startLevel);
+				utility.allowed_StartLevel_setInitialBundleStartLevel(message,
+						initialBundleStartLevel);
+			}
+			else {
+				utility.not_allowed_StartLevel_setStartLevel(message,
+						startLevel);
+				utility.not_allowed_StartLevel_setInitialBundleStartLevel(
+						message, initialBundleStartLevel);
+			}
+
+			utility.not_allowed_BundleContext_addBundleListener(message,
+					testSignatureBundle);
+			utility.not_allowed_BundleContext_removeBundleListener(message,
+					testSignatureBundle);
+			utility.not_allowed_Bundle_getHeaders(message, testSignatureBundle);
+			utility.not_allowed_Bundle_getHeaders_byLocation(message,
+					testSignatureBundle);
+			utility
+					.not_allowed_Bundle_getLocation(message,
+							testSignatureBundle);
+			utility.not_allowed_Bundle_getResource(message,
+					testSignatureBundle, resourceName);
+			utility.not_allowed_Bundle_getResources(message,
+					testSignatureBundle, resourcesName);
+			utility.not_allowed_Bundle_getEntry(message, testSignatureBundle,
+					entryName);
+			utility.not_allowed_Bundle_getEntryPaths(message,
+					testSignatureBundle, entryPath);
+			if (checkStartLevel) {
+				utility.not_allowed_StartLevel_setBundleStartLevel(message,
+						testSignatureBundle, startLevel);
+			}
+			utility.not_allowed_Bundle_loadClass(message, testSignatureBundle,
+					className);
+			utility.not_allowed_Bundle_stop(message, testSignatureBundle);
+			utility.not_allowed_Bundle_start(message, testSignatureBundle);
+			utility.not_allowed_Bundle_update(message, testSignatureBundle);
+			utility.not_allowed_Bundle_update_by_InputStream(message,
+					testSignatureBundle, getInputStream(signatureBundleName));
+			utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
+			utility.not_allowed_PackageAdmin_refreshPackages(message,
+					new Bundle[] {testSignatureBundle});
+			utility.not_allowed_PackageAdmin_resolveBundles(message,
+					new Bundle[] {testSignatureBundle});
+			utility.not_allowed_PermissionAdmin_setPermissions(message,
+					signatureBundleLocation,
+					new PermissionInfo[] {new PermissionInfo(
+							AdminPermission.class.getName(), "*", "*")});
+			utility.not_allowed_PermissionAdmin_setDefaultPermissions(message,
+					permissionAdmin.getDefaultPermissions());
+
+		}
+	}
+
+	// returns true if 'method' failed
+	boolean not_allowed_call(String message, String methodName,
+			Class[] paramClasses, Object[] paramObjects, Class wanted)
+			throws Exception {
+		try {
+			MethodCall method = new MethodCall(methodName, paramClasses,
+					paramObjects);
+			method.invoke(tbc);
+		}
+		catch (Throwable e) {
+			assertException(message, wanted, e);
+			return true;
+		}
+		failException(message, wanted);
+		return false;
+	}
+
+	boolean not_allowed_call_assertNull(String message, String methodName,
+			Class[] paramClasses, Object[] paramObjects) throws Throwable {
+		MethodCall method = new MethodCall(methodName, paramClasses,
+				paramObjects);
+		Object result = method.invoke(tbc);
+		if (result == null) {
+			pass(message + " and correctly returns null");
+			return true;
+		}
+		else {
+			fail(message + " but returns not null");
+			return false;
+		}
+	}
+
+	boolean allowed_call_assertNotNull(String message, String methodName,
+			Class[] paramClasses, Object[] paramObjects) throws Throwable {
+		MethodCall method = new MethodCall(methodName, paramClasses,
+				paramObjects);
+		Object result = method.invoke(tbc);
+		if (result == null) {
+			fail(message + " but returns null");
+			return false;
+		}
+		else {
+			pass(message + " and correctly returns not null");
+			return true;
+		}
+	}
+
+	Object allowed_call(String message, String methodName,
+			Class[] paramClasses, Object[] paramObjects) {
+		try {
+			MethodCall method = new MethodCall(methodName, paramClasses,
+					paramObjects);
+			Object result = method.invoke(tbc);
+			pass(message);
+			return result;
+		}
+		catch (Throwable e) {
+			fail(message + " but " + e.getClass().getName() + " was thrown", e);
+			return null;
+		}
+	}
+
+	private InputStream getInputStream(String bundleName) throws Exception {
+		return (new URL(getInstallBundleLocation(bundleName))).openStream();
+	}
+
+	private void printPermissions(String bundleLocation) {
+		PermissionInfo[] pi = permissionAdmin.getPermissions(bundleLocation);
+		if ((pi == null) || (pi.length == 0)) {
+			log("No permissions for " + bundleLocation);
+			return;
+		}
+		log("Permissions for " + bundleLocation);
+		for (int j = 0; j < pi.length; ++j) {
+			log(pi[j].toString());
+		}
+	}
+
+	private String getInstallBundleLocation(String bundleName) {
+		return getWebServer() + bundleName;
+	}
 }
