@@ -184,7 +184,7 @@ public class MonitorPermission extends Permission {
             mask = 0;
             StringTokenizer st = new StringTokenizer(actions, ",");
             while (st.hasMoreTokens()) {
-                String action = st.nextToken();
+                String action = st.nextToken().trim();
                 if (action.equalsIgnoreCase(READ)) {
                     addToMask(READ_FLAG, READ);
                 } else if (action.equalsIgnoreCase(RESET)) {
