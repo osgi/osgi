@@ -34,10 +34,10 @@ import org.osgi.test.cases.webcontainer.util.EventFactory;
 public class ExtenderTestEventHandler implements EventHandler, BundleActivator {
 
     final static String[] topics = new String[] {
-            "org/osgi/service/web/STARTING",
-            "org/osgi/service/web/STARTED",
-            "org/osgi/service/web/STOPPING",
-            "org/osgi/service/web/STOPPED",
+            "org/osgi/service/web/DEPLOYING",
+            "org/osgi/service/web/DEPLOYED",
+            "org/osgi/service/web/UNDEPLOYING",
+            "org/osgi/service/web/UNDEPLOYED",
             "org/osgi/service/web/FAILED" };
 
     public void start(BundleContext context) {

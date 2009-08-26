@@ -126,8 +126,8 @@ public abstract class WebContainerTestBundleControl extends
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         final String response;
         try {
-            assertEquals(conn.getResponseCode(), 200);
-            assertEquals(conn.getContentType(), "text/html");
+            assertEquals(200, conn.getResponseCode());
+            assertEquals("text/html", conn.getContentType());
             response = Dispatcher.dispatch(conn);
             if (this.debug) {
                 log(response);
@@ -146,7 +146,7 @@ public abstract class WebContainerTestBundleControl extends
         // check the correctness of a dynamic page
         String path = contextPath;
         if (warName.indexOf("tw1.war") > -1) {
-            path += "/BasicTestServlet";
+            path += "/BasicTest";
         } else if (warName.indexOf("tw2.war") > -1) {
             path += "/ResourceServlet2";
         } else if (warName.indexOf("tw3.war") > -1) {
