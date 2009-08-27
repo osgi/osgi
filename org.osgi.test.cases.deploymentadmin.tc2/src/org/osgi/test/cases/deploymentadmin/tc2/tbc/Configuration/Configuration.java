@@ -251,13 +251,6 @@ public class Configuration extends DeploymentTestControl {
 			ConditionalPermissionUpdate update = ca
 					.newConditionalPermissionUpdate();
 			List rows = update.getConditionalPermissionInfos();
-//			// Must grant all existing bundles all permission
-			rows
-					.add(ca
-							.newConditionalPermissionInfo(
-									"org.osgi.test.cases.deploymentadmin.tc2.tbc.Configuration:2",
-									null, DeploymentConstants.ALL_PERMISSION,
-									ConditionalPermissionInfo.ALLOW));
 			// now add the signer condition.
 			rows
 					.add(ca
@@ -268,6 +261,13 @@ public class Configuration extends DeploymentTestControl {
 											ConfigurationPermission.class
 													.getName(), "*", "configure")},
 									ConditionalPermissionInfo.DENY));
+			// Must grant all existing bundles all permission
+			rows
+					.add(ca
+							.newConditionalPermissionInfo(
+									"org.osgi.test.cases.deploymentadmin.tc2.tbc.Configuration:2",
+									null, DeploymentConstants.ALL_PERMISSION,
+									ConditionalPermissionInfo.ALLOW));
 			update.commit();
 			dp = installDeploymentPackage(getWebServer() + testDP.getFilename());
 			assertNotNull(MessagesConstants.getMessage(
