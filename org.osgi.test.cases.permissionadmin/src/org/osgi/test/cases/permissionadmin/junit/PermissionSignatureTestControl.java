@@ -230,16 +230,16 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 				testSignatureBundle);
 		utility.allowed_BundleContext_removeBundleListener(message,
 				testSignatureBundle);
-		utility.allowed_PackageAdmin_refreshPackages(message,
-				new Bundle[] {testSignatureBundle});
-		utility.allowed_PackageAdmin_resolveBundles(message,
-				new Bundle[] {testSignatureBundle});
 		utility.not_allowed_PermissionAdmin_setPermissions(message,
 				signatureBundleLocation,
 				new PermissionInfo[] {new PermissionInfo(AdminPermission.class
 						.getName(), "*", "*")});
 		utility.not_allowed_PermissionAdmin_setDefaultPermissions(message,
 				permissionAdmin.getDefaultPermissions());
+		utility.allowed_PackageAdmin_resolveBundles(message,
+				new Bundle[] {testSignatureBundle});
+		utility.allowed_PackageAdmin_refreshPackages(message,
+				new Bundle[] {testSignatureBundle});
 
 	}
 
@@ -322,7 +322,7 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 						.getSymbolicName());
 
 		PermissionInfo info;
-		for (int i = 0; i < permissions.size(); ++i) {
+		for (int i = permissions.size() - 1; i >= 0; i--) {
 			info = (PermissionInfo) permissions.elementAt(i);
 
 			permissionAdmin.setPermissions(testBundleLocation,
@@ -338,20 +338,6 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 			utility.allowed_Bundle_getEntryPaths(message, testSignatureBundle,
 					entryPath);
 
-			// note that in R4.2 a change was made to make resource imply
-			// resolve
-			if (i == 0) {
-				utility.allowed_PackageAdmin_refreshPackages(message,
-						new Bundle[] {testSignatureBundle});
-				utility.allowed_PackageAdmin_resolveBundles(message,
-						new Bundle[] {testSignatureBundle});
-			}
-			else {
-				utility.not_allowed_PackageAdmin_refreshPackages(message,
-						new Bundle[] {testSignatureBundle});
-				utility.not_allowed_PackageAdmin_resolveBundles(message,
-						new Bundle[] {testSignatureBundle});
-			}
 
 			utility.not_allowed_Bundle_getHeaders(message, testSignatureBundle);
 			utility.not_allowed_Bundle_getHeaders_byLocation(message,
@@ -386,6 +372,21 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 							AdminPermission.class.getName(), "*", "*")});
 			utility.not_allowed_PermissionAdmin_setDefaultPermissions(message,
 					permissionAdmin.getDefaultPermissions());
+
+			// note that in R4.2 a change was made to make resource imply
+			// resolve
+			if (i == 0) {
+				utility.allowed_PackageAdmin_resolveBundles(message,
+						new Bundle[] {testSignatureBundle});
+				utility.allowed_PackageAdmin_refreshPackages(message,
+						new Bundle[] {testSignatureBundle});
+			}
+			else {
+				utility.not_allowed_PackageAdmin_resolveBundles(message,
+						new Bundle[] {testSignatureBundle});
+				utility.not_allowed_PackageAdmin_refreshPackages(message,
+						new Bundle[] {testSignatureBundle});
+			}
 		}
 	}
 
@@ -404,7 +405,7 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 						.getSymbolicName());
 
 		PermissionInfo info;
-		for (int i = 0; i < permissions.size(); ++i) {
+		for (int i = permissions.size() - 1; i >= 0; i--) {
 			info = (PermissionInfo) permissions.elementAt(i);
 
 			permissionAdmin.setPermissions(testBundleLocation,
@@ -413,21 +414,6 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 
 			utility.allowed_Bundle_loadClass(message, testSignatureBundle,
 					className);
-
-			// note that in R4.2 a change was made to make class imply
-			// resolve
-			if (i == 0) {
-				utility.allowed_PackageAdmin_refreshPackages(message,
-						new Bundle[] {testSignatureBundle});
-				utility.allowed_PackageAdmin_resolveBundles(message,
-						new Bundle[] {testSignatureBundle});
-			}
-			else {
-				utility.not_allowed_PackageAdmin_refreshPackages(message,
-						new Bundle[] {testSignatureBundle});
-				utility.not_allowed_PackageAdmin_resolveBundles(message,
-						new Bundle[] {testSignatureBundle});
-			}
 
 			utility.not_allowed_Bundle_getHeaders(message, testSignatureBundle);
 			utility.not_allowed_Bundle_getHeaders_byLocation(message,
@@ -467,6 +453,21 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 							AdminPermission.class.getName(), "*", "*")});
 			utility.not_allowed_PermissionAdmin_setDefaultPermissions(message,
 					permissionAdmin.getDefaultPermissions());
+
+			// note that in R4.2 a change was made to make class imply
+			// resolve
+			if (i == 0) {
+				utility.allowed_PackageAdmin_resolveBundles(message,
+						new Bundle[] {testSignatureBundle});
+				utility.allowed_PackageAdmin_refreshPackages(message,
+						new Bundle[] {testSignatureBundle});
+			}
+			else {
+				utility.not_allowed_PackageAdmin_resolveBundles(message,
+						new Bundle[] {testSignatureBundle});
+				utility.not_allowed_PackageAdmin_refreshPackages(message,
+						new Bundle[] {testSignatureBundle});
+			}
 		}
 
 	}
@@ -635,7 +636,7 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 						.getSymbolicName());
 
 		PermissionInfo info;
-		for (int i = 0; i < permissions.size(); ++i) {
+		for (int i = permissions.size() - 1; i >= 0; i--) {
 			info = (PermissionInfo) permissions.elementAt(i);
 
 			permissionAdmin.setPermissions(testBundleLocation,
@@ -644,21 +645,6 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 
 			utility.allowed_Bundle_stop(message, testSignatureBundle);
 			utility.allowed_Bundle_start(message, testSignatureBundle);
-
-			// note that in R4.2 a change was made to make execute imply
-			// resolve
-			if (i == 0) {
-				utility.allowed_PackageAdmin_refreshPackages(message,
-						new Bundle[] {testSignatureBundle});
-				utility.allowed_PackageAdmin_resolveBundles(message,
-						new Bundle[] {testSignatureBundle});
-			}
-			else {
-				utility.not_allowed_PackageAdmin_refreshPackages(message,
-						new Bundle[] {testSignatureBundle});
-				utility.not_allowed_PackageAdmin_resolveBundles(message,
-						new Bundle[] {testSignatureBundle});
-			}
 
 			utility.not_allowed_Bundle_getHeaders(message, testSignatureBundle);
 			utility.not_allowed_Bundle_getHeaders_byLocation(message,
@@ -697,6 +683,20 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 			utility.not_allowed_PermissionAdmin_setDefaultPermissions(message,
 					permissionAdmin.getDefaultPermissions());
 
+			// note that in R4.2 a change was made to make execute imply
+			// resolve
+			if (i == 0) {
+				utility.allowed_PackageAdmin_resolveBundles(message,
+						new Bundle[] {testSignatureBundle});
+				utility.allowed_PackageAdmin_refreshPackages(message,
+						new Bundle[] {testSignatureBundle});
+			}
+			else {
+				utility.not_allowed_PackageAdmin_resolveBundles(message,
+						new Bundle[] {testSignatureBundle});
+				utility.not_allowed_PackageAdmin_refreshPackages(message,
+						new Bundle[] {testSignatureBundle});
+			}
 		}
 	}
 
@@ -789,25 +789,12 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 				testSignatureBundle.getSymbolicName());
 
 		PermissionInfo info;
-		for (int i = 0; i < permissions.size(); ++i) {
+		for (int i = permissions.size() - 1; i >= 0; i--) {
 			info = (PermissionInfo) permissions.elementAt(i);
 
 			permissionAdmin.setPermissions(testBundleLocation,
 					new PermissionInfo[] {info});
 			printPermissions(testBundleLocation);
-
-			if (i == 0) {
-				utility.allowed_PackageAdmin_refreshPackages(message,
-						new Bundle[] {testSignatureBundle});
-				utility.allowed_PackageAdmin_resolveBundles(message,
-						new Bundle[] {testSignatureBundle});
-			}
-			else {
-				utility.not_allowed_PackageAdmin_refreshPackages(message,
-						new Bundle[] {testSignatureBundle});
-				utility.not_allowed_PackageAdmin_resolveBundles(message,
-						new Bundle[] {testSignatureBundle});
-			}
 
 			utility.not_allowed_BundleContext_addBundleListener(message,
 					testSignatureBundle);
@@ -849,6 +836,19 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 							AdminPermission.class.getName(), "*", "*")});
 			utility.not_allowed_PermissionAdmin_setDefaultPermissions(message,
 					permissionAdmin.getDefaultPermissions());
+
+			if (i == 0) {
+				utility.allowed_PackageAdmin_resolveBundles(message,
+						new Bundle[] {testSignatureBundle});
+				utility.allowed_PackageAdmin_refreshPackages(message,
+						new Bundle[] {testSignatureBundle});
+			}
+			else {
+				utility.not_allowed_PackageAdmin_resolveBundles(message,
+						new Bundle[] {testSignatureBundle});
+				utility.not_allowed_PackageAdmin_refreshPackages(message,
+						new Bundle[] {testSignatureBundle});
+			}
 
 		}
 
