@@ -311,8 +311,8 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
                 new ManagedService[] {
             // we start out with two unregistered, and one registered
             new ManagedService("ServiceOneA", new TestGoodService("ServiceOneA"), TestServiceOne.class, getContext(), null, false),
-                    new ManagedService("ServiceOneB", new TestGoodService("ServiceOneB"), TestServiceOne.class, getContext(), null, false),
-                    new ManagedService("ServiceOneC", new TestGoodService("ServiceOneC"), TestServiceOne.class, getContext(), null, true),
+            new ManagedService("ServiceOneB", new TestGoodService("ServiceOneB"), TestServiceOne.class, getContext(), null, false),
+            new ManagedService("ServiceOneC", new TestGoodService("ServiceOneC"), TestServiceOne.class, getContext(), null, true),
         });
 
         // now we chain a few events to actions to allow us to track the dynamics.
@@ -335,30 +335,35 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         // this will have dependencies for everything.  We'll only trace the BlueprintListener
         // events here to keep things manageable.
 
-        // NOTE:  the BlueprintContainerEvents do not use the dependencies for
+        // NOTE:  the BlueprintAdminEvents do not use the dependencies for
         // matching, only for validation.  However, the event list is ordered,
         // so each new GRACE_PERIOD event we receive will be processed in sequence
         // and should validate against the expected filters.
-        importStartEvents.addEvent(new BlueprintContainerEvent("GRACE_PERIOD",
+
+        // Also, we trace the AdminEvent for this because they are delivered
+        // asynchronously.  Having nested registers/deregisters results in
+        // a service registration not getting cleaned up when this test ends,
+        // which can raise havoc with subsequent tests.
+        importStartEvents.addEvent(new BlueprintAdminEvent("GRACE_PERIOD",
                 null, new Properties[] { aFilterProps, bFilterProps},
                 new ServiceManagerRegister(serviceManager, "ServiceOneA")));
         // since one of the services was satisfied, we'll see an event showing just
         // a single request
-        importStartEvents.addEvent(new BlueprintContainerEvent("GRACE_PERIOD",
+        importStartEvents.addEvent(new BlueprintAdminEvent("GRACE_PERIOD",
                 null, new Properties[] { bFilterProps},
                 new ServiceManagerUnregister(serviceManager, "ServiceOneC")));
         // ok, now we're waiting on B and C...register B now
-        importStartEvents.addEvent(new BlueprintContainerEvent("GRACE_PERIOD",
+        importStartEvents.addEvent(new BlueprintAdminEvent("GRACE_PERIOD",
                 null, new Properties[] { cFilterProps, bFilterProps},
                 new ServiceManagerRegister(serviceManager, "ServiceOneB")));
         // ok, now just waiting for C...register it
-        importStartEvents.addEvent(new BlueprintContainerEvent("GRACE_PERIOD",
+        importStartEvents.addEvent(new BlueprintAdminEvent("GRACE_PERIOD",
                 null, new Properties[] { cFilterProps},
                 new ServiceManagerRegister(serviceManager, "ServiceOneC")));
 
         // there should not be a GRACE_PERIOD event at the end, so add a failure event
         // to trap additional ones.
-        importStartEvents.addFailureEvent(new BlueprintContainerEvent("GRACE_PERIOD"));
+        importStartEvents.addFailureEvent(new BlueprintAdminEvent("GRACE_PERIOD"));
 
         // now some expected termination stuff
         EventSet importStopEvents = controller.getStopEvents(0);

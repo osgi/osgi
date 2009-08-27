@@ -262,8 +262,6 @@ public class ServiceManagerImpl implements ServiceManager {
      * service is defined in a managed bundle context.
      */
     public void destroy() {
-        System.out.println("+++++++++ destroying Service manager");
-
         // ask each service instance to unregister itself.
         Iterator i = services.values().iterator();
         while (i.hasNext()) {
