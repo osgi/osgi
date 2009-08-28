@@ -394,23 +394,16 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
 
 
     /**
-     * This is testing the using of the ranking qualifier for service matching.  Our good
-     * service will have a higher ranking than the "bad" service, so it should be resolved.
-     * This is a lot like the component qualifier test, so we'll scale back the amount of
-     * validity checking on this one (particuarly the processing of the "bad" service).
+     * This is testing the using of the ranking qualifier for service export.  This is primarily testing
+     * the metadata aspects.
      */
-    public void testRankingQualifier() throws Exception {
-        // NB:  We're going to load the import jar first, since starting that
-        // one first might result in a dependency wait in the second.  This should
-        // still work.  The export jar will export both the target "good" service
-        // and secondary "bad" service.  We should resolve to the good service.
+    public void testRankingExport() throws Exception {
         StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/ServiceOne_ranked_import.jar",
                 getWebServer()+"www/ServiceOne_ranked_export.jar");
 
         // we add different validation stuff to each jar.  We'll start with the
         // export jar
-        MetadataEventSet exportStartEvents = controller.getStartEvents(1);
+        MetadataEventSet exportStartEvents = controller.getStartEvents(0);
         // the service ranking is stored in the service properties, so validate it is what we expect to see
         Hashtable serviceProps = new Hashtable();
         serviceProps.put("service.ranking", new Integer(3));
@@ -427,18 +420,39 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // we should see a service event here indicating this was registered
         exportStartEvents.addServiceEvent("REGISTERED", TestServiceOne.class, serviceProps);
 
+        // now some expected termination stuff
+        EventSet exportStopEvents = controller.getStopEvents(0);
+        // we should see a service event here indicating this is being deregistered
+        exportStopEvents.addServiceEvent("UNREGISTERING", TestServiceOne.class);
+        // and there should not be a registration active anymore
+        exportStopEvents.addValidator(new ServiceUnregistrationValidator(TestServiceOne.class, "(osgi.service.blueprint.compname=ServiceOne)"));
+
+        controller.run();
+    }
+
+
+    /**
+     * This is testing the using of the ranking qualifier for service matching.  Our good
+     * service will have a higher ranking than the "bad" service, so it should be resolved.
+     * This is a lot like the component qualifier test, so we'll scale back the amount of
+     * validity checking on this one (particuarly the processing of the "bad" service).
+     */
+    public void testRankingImport() throws Exception {
+        // NB:  We're going to load the import jar first, since starting that
+        // one first might result in a dependency wait in the second.  This should
+        // still work.  The export jar will export both the target "good" service
+        // and secondary "bad" service.  We should resolve to the good service.
+        StandardTestController controller = new StandardTestController(getContext(),
+                getWebServer()+"www/ServiceOne_ranked_import.jar");
+        // we need to use this as a setup bundle to ensure both services are registered
+        // before the reference requests them.
+        controller.addSetupBundle(getWebServer()+"www/ServiceOne_ranked_export.jar");
+
         // now the importing side.  We've got a couple of service injections to validate, plus the injection
         // results
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
         importStartEvents.addAssertion("ServiceOneConstructor", AssertionService.SERVICE_SUCCESS);
         importStartEvents.addAssertion("ServiceOneProperty", AssertionService.SERVICE_SUCCESS);
-
-        // now some expected termination stuff
-        EventSet exportStopEvents = controller.getStopEvents(1);
-        // we should see a service event here indicating this is being deregistered
-        exportStopEvents.addServiceEvent("UNREGISTERING", TestServiceOne.class);
-        // and there should not be a registration active anymore
-        exportStopEvents.addValidator(new ServiceUnregistrationValidator(TestServiceOne.class, "(osgi.service.blueprint.compname=ServiceOne)"));
 
         controller.run();
     }
