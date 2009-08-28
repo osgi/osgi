@@ -302,8 +302,9 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         // We're only going to load one jar for this test.  The unstatisfied
         // dependency will be handled by a service that's registered when
         // the GRACE_PERIOD blueprint event is received.
-        StandardTestController controller = new StandardTestController(getContext(),
-                getWebServer()+"www/multiple_grace_period.jar");
+        // because of the multiple waits involved, we'll use a longer timeout period for this test
+        StandardTestController controller = new StandardTestController(getContext(), StandardTestController.DEFAULT_TIMEOUT * 3);
+        controller.addBundle(getWebServer()+"www/multiple_grace_period.jar");
 
         // create a ServiceManager instance with one instance of an injected service.
         // We will key these to different GRACE_PERIOD events, eventually getting everything registered.
