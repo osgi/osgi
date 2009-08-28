@@ -147,7 +147,11 @@ public class TestPermissions extends DefaultTestBundleControl {
 
     /**
      * Tests that the BlueprintContainer cannot be created if the
-     * bundle cannot import its required services.
+     * bundle cannot import its required services.  This bundle
+     * has a short grace period timeout specified, in case the
+     * implementation handles the security failure as if it was a
+     * service unavailable situation.  Either way, there should be
+     * a creation failure.
      *
      * @exception Exception
      */
