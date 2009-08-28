@@ -4,7 +4,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.upnp.UPnPDevice;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -16,6 +15,7 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class ServicesListener extends ServiceTracker {
 	private UPnPDevice	last;
+	private int			count;
 
 	public ServicesListener(BundleContext bc) throws InvalidSyntaxException {
 		super(
@@ -29,10 +29,18 @@ public class ServicesListener extends ServiceTracker {
 		UPnPDevice device = (UPnPDevice) super.addingService(ref);
 
 		synchronized (this) {
+			count++;
 			last = device;
 			notifyAll();
 		}
 		return device;
+	}
+
+	public void removedService(ServiceReference reference, Object service) {
+		synchronized (this) {
+			count--;
+		}
+		super.removedService(reference, service);
 	}
 
 	public synchronized UPnPDevice getUPnPDevice() {
@@ -40,7 +48,7 @@ public class ServicesListener extends ServiceTracker {
 	}
 
 	public synchronized void waitFor(int i) {
-		while (size() != i) {
+		while (count < i) {
 			try {
 				wait();
 			}

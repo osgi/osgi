@@ -1,13 +1,18 @@
 package org.osgi.impl.service.upnp.cp.basedriver;
 
-import java.util.Hashtable;
-import java.util.Properties;
 import java.util.Dictionary;
 import java.util.Enumeration;
-import org.osgi.framework.*;
-import org.osgi.service.upnp.*;
-import org.osgi.impl.service.upnp.cp.util.*;
-import org.osgi.impl.service.upnp.cp.description.*;
+import java.util.Hashtable;
+import java.util.Properties;
+
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.impl.service.upnp.cp.description.RootDevice;
+import org.osgi.impl.service.upnp.cp.util.Control;
+import org.osgi.impl.service.upnp.cp.util.EventService;
+import org.osgi.impl.service.upnp.cp.util.UPnPController;
+import org.osgi.impl.service.upnp.cp.util.UPnPDeviceListener;
+import org.osgi.service.upnp.UPnPDevice;
 
 public class UPnPBaseDriver implements UPnPDeviceListener {
 	private UPnPController	controller;
@@ -99,7 +104,6 @@ public class UPnPBaseDriver implements UPnPDeviceListener {
 				System.out.println("REGISTERING UPnP DEVICE");
 				ServiceRegistration sr = bc.registerService(names, upnpdevice,
 						props);
-				ServiceReference sr1 = bc.getServiceReference(names);
 				servicerefs.put(udn, sr);
 			}
 			catch (Exception e) {
@@ -120,7 +124,7 @@ public class UPnPBaseDriver implements UPnPDeviceListener {
 	// regEmbedded method gets the properties of the new embeded device and then
 	// registers
 	// the service in the osgi framework.
-	public void regEmbedded(RootDevice[] sembdevices) {
+	private void regEmbedded(RootDevice[] sembdevices) {
 		Properties props = new Properties();
 		for (int i = 0; i < sembdevices.length; i++) {
 			UPnPDeviceImpl upnpdevice = null;
@@ -142,7 +146,7 @@ public class UPnPBaseDriver implements UPnPDeviceListener {
 				try {
 					upnpdevice = new UPnPDeviceImpl(this, sembdevices[i],
 							props, bc);
-					System.out.println("REGISTERING UPnP DEVICE");
+					System.out.println("REGISTERING Embedded UPnP DEVICE");
 					ServiceRegistration sr = bc.registerService(
 							"org.osgi.service.upnp.UPnPDevice", upnpdevice,
 							props);
@@ -231,6 +235,7 @@ public class UPnPBaseDriver implements UPnPDeviceListener {
 						}
 						UPnPDeviceImpl dev = (UPnPDeviceImpl) devices.get(uuid);
 						dev.unsubscribe();
+						System.out.println("UNREGISTERING UPnP DEVICE");
 						sreg.unregister();
 						servicerefs.remove(uuid);
 						devices.remove(uuid);
