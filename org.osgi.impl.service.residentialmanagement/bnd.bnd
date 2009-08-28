@@ -4,24 +4,8 @@ Bundle-Activator	= $(p).plugins.ResidentialPluginActivator
 Private-Package		= ${p}.*
 
 -buildpath			= \
-	org.osgi.framework;			version=project , \
-	osgi;						version=4.2		, \
-	ee.foundation								, \
-	${junit}
+	osgi.core;					version=4.2		, \
+	osgi.cmpn;					version=4.2		, \
+	ee.foundation;				version=1.1	
 
--runpath			= \
-	org.eclipse.osgi;			version=3.5;		framework=org.eclipse.osgi.launch.Equinox, \
-	com.springsource.junit;		version=3.8;		export="junit.framework;version=3.8", \
-	osgi;						version=4.1;		export="info.dmtree;version=1.0, \
-															info.dmtree.spi;version=1.0, \
-															info.dmtree.notification;version=1.0, \
-															info.dmtree.notification.spi;version=1.0, \
-															info.dmtree.registry;version=1.0, \
-															info.dmtree.security;version=1.0, \
-															org.osgi.service.event;version=1.1"
-
--runbundles			= \
-	org.osgi.impl.service.log;	version=project, \
-	org.osgi.impl.service.cm;	version=project, \
-	org.osgi.impl.service.dmt;	version=project	
 	

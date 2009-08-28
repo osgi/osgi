@@ -15,6 +15,7 @@ Test-Cases							= ${testcases}
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
+    info.dmtree;                  			version=project , \
 	osgi.core;								version=4.0.1	, \
 	osgi.mobile;							version=4.0	, \
 	ee.foundation;							version=1.1	, \

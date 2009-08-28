@@ -26,10 +26,10 @@ Test-Cases							= ${testcases}
 -runbundles							= \
 	org.osgi.impl.bundle.midletcontainer; version=project, \
 	org.osgi.impl.service.application; version=project, \
-	org.osgi.impl.service.log; version=project, \
+	org.osgi.impl.service.log; version=latest, \
 	org.apache.felix.configadmin; version=latest, \
-	org.osgi.impl.service.dmt;  version=project, \
-	org.osgi.impl.bundle.jaxp; version=project, \
+	org.osgi.impl.service.dmt;  version=latest, \
+	org.osgi.impl.bundle.jaxp; version=latest, \
 	org.eclipse.equinox.event; version=latest, \
 	osgi.cmpn; version=latest
 

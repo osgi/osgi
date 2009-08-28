@@ -2,10 +2,10 @@
 Private-Package: ${p}
 
 -buildpath = \
-	osgi; version=4.1, \
+	osgi.core; version=4.1, \
 	org.osgi.service.homegateway; version=project, \
 	ee.j2se; version=1.4, \
-	com.springsource.junit
+	${junit}
 	
 
 Test-Cases = ${testcases}
@@ -13,5 +13,4 @@ Test-Cases = ${testcases}
 -runbundles = \
     org.apache.felix.configadmin; version=latest, \
     org.osgi.impl.service.homegateway; version=project, \
-    org.osgi.impl.service.dmt; version=project, \
-    osgi;version=4.1    
+    org.osgi.impl.service.dmt; version=latest
