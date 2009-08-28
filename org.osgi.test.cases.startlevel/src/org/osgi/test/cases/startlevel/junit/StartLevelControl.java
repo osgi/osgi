@@ -567,7 +567,8 @@ public class StartLevelControl extends DefaultTestBundleControl {
 			assertEquals("getBundleStartLevel", sl_15, sl
 					.getBundleStartLevel(tb3));
 			assertEquals("Received bundle events", bec.getComparator(),
-					expectedBundleEvents, bec.getList(expectedBundleEvents
+					expectedBundleEvents, bec.getListSorted(
+							expectedBundleEvents
 							.size(), TIMEOUT));
 		}
 		finally {
