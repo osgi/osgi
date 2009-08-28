@@ -46,15 +46,10 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 public class ServiceTrackerTests extends DefaultTestBundleControl {
 
 	public void testOpenClose() throws Exception {
-		Bundle tb;
-		Object ss;
-		Object[] sss;
-		Object ssr;
-		ServiceReference[] srs;
 		// 2.23.1 Testcase1 (tc1), tracking a service
 		// Tb1 contains service: testservice1
 		// Install tb1
-		tb = installBundle("tb1.jar");
+		Bundle tb = installBundle("tb1.jar");
 
 		// Creates ServiceTracker object with ServiceReference to testservice1
 		ServiceReference sr = getContext().getServiceReference(
@@ -62,108 +57,113 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 		ServiceTracker st = new ServiceTracker(getContext(), sr, null);
 		st.open();
 
-		// Call ServiceTracker.size()
-		// Should reply 1
-		assertEquals(
-				"The number of Services being tracked by ServiceTracker is: 1",
-				1, st.size());
+		try {
+			// Call ServiceTracker.size()
+			// Should reply 1
+			assertEquals(
+					"The number of Services being tracked by ServiceTracker is: 1",
+					1, st.size());
 
-		// Call ServiceTracker.getServiceReferences()
-		srs = st.getServiceReferences();
-		assertNotNull(
-				"ServiceReference for the tracked service can be reached at this time: true",
-				srs);
-		assertEquals(
-				"ServiceReference for the tracked service can be reached at this time: 1",
-				1, srs.length);
-		// Call ServiceTracker.getService()
-		ss = st.getService();
-		// Call ServiceTracker.getServices()
-		sss = st.getServices();
-		// Call ServiceTracker.getService(ServiceReference)
-		ssr = st.getService(sr);
-		// All should be equal and testservice1
-		assertSame(
-				"Tracked services can be reached at this time and are equal in the different methods",
-				ss, sss[0]);
-		assertSame(
-				"Tracked services can be reached at this time and are equal in the different methods",
-				ss, ssr);
+			// Call ServiceTracker.getServiceReferences()
+			ServiceReference[] srs = st.getServiceReferences();
+			assertNotNull(
+					"ServiceReference for the tracked service can be reached at this time: true",
+					srs);
+			assertEquals(
+					"ServiceReference for the tracked service can be reached at this time: 1",
+					1, srs.length);
+			// Call ServiceTracker.getService()
+			Object ss = st.getService();
+			// Call ServiceTracker.getServices()
+			Object[] sss = st.getServices();
+			// Call ServiceTracker.getService(ServiceReference)
+			Object ssr = st.getService(sr);
+			// All should be equal and testservice1
+			assertSame(
+					"Tracked services can be reached at this time and are equal in the different methods",
+					ss, sss[0]);
+			assertSame(
+					"Tracked services can be reached at this time and are equal in the different methods",
+					ss, ssr);
 
-		// Call ServiceTracker.close()
-		st.close();
+			// Call ServiceTracker.close()
+			st.close();
 
-		// Call ServiceTracker.getServiceReferences()
-		srs = st.getServiceReferences();
-		assertNull(
-				"No ServiceReferences for tracked services can be reached at this time",
-				srs);
-		// Call ServiceTracker.getService()
-		ss = st.getService();
-		// Call ServiceTracker.getServices()
-		sss = st.getServices();
-		// Call ServiceTracker.getService(ServiceReference)
-		ssr = st.getService(sr);
-		// All should be null
-		assertNull(
-				"No Services for tracked services can be reached at this time: true",
-				ss);
-		assertNull(
-				"No Services for tracked services can be reached at this time: true",
-				sss);
-		assertNull(
-				"No Services for tracked services can be reached at this time: true",
-				ssr);
+			// Call ServiceTracker.getServiceReferences()
+			srs = st.getServiceReferences();
+			assertNull(
+					"No ServiceReferences for tracked services can be reached at this time",
+					srs);
+			// Call ServiceTracker.getService()
+			ss = st.getService();
+			// Call ServiceTracker.getServices()
+			sss = st.getServices();
+			// Call ServiceTracker.getService(ServiceReference)
+			ssr = st.getService(sr);
+			// All should be null
+			assertNull(
+					"No Services for tracked services can be reached at this time: true",
+					ss);
+			assertNull(
+					"No Services for tracked services can be reached at this time: true",
+					sss);
+			assertNull(
+					"No Services for tracked services can be reached at this time: true",
+					ssr);
 
-		// Call ServiceTracker.size()
-		// Should reply 0
-		assertEquals(
-				"The number of Services being tracked by ServiceTracker is: 0 ",
-				0, st.size());
+			// Call ServiceTracker.size()
+			// Should reply 0
+			assertEquals(
+					"The number of Services being tracked by ServiceTracker is: 0 ",
+					0, st.size());
 
-		st.open();
+			st.open();
 
-		// Call ServiceTracker.size()
-		// Should reply 1
-		assertEquals(
-				"The number of Services being tracked by ServiceTracker is: 1",
-				1, st.size());
+			// Call ServiceTracker.size()
+			// Should reply 1
+			assertEquals(
+					"The number of Services being tracked by ServiceTracker is: 1",
+					1, st.size());
 
-		uninstallBundle(tb);
-		// Call ServiceTracker.getServiceReferences()
-		srs = st.getServiceReferences();
-		assertNull(
-				"No ServiceReferences for tracked services can be reached at this time: true",
-				srs);
-		// Call ServiceTracker.getService()
-		ss = st.getService();
-		// Call ServiceTracker.getServices()
-		sss = st.getServices();
-		// Call ServiceTracker.getService(ServiceReference)
-		ssr = st.getService(sr);
-		// Should reply with null
-		assertNull(
-				"No Services for tracked services can be reached at this time: true",
-				ss);
-		assertNull(
-				"No Services for tracked services can be reached at this time: true",
-				sss);
-		assertNull(
-				"No Services for tracked services can be reached at this time: true",
-				ssr);
+			uninstallBundle(tb);
+			tb = null;
+			// Call ServiceTracker.getServiceReferences()
+			srs = st.getServiceReferences();
+			assertNull(
+					"No ServiceReferences for tracked services can be reached at this time: true",
+					srs);
+			// Call ServiceTracker.getService()
+			ss = st.getService();
+			// Call ServiceTracker.getServices()
+			sss = st.getServices();
+			// Call ServiceTracker.getService(ServiceReference)
+			ssr = st.getService(sr);
+			// Should reply with null
+			assertNull(
+					"No Services for tracked services can be reached at this time: true",
+					ss);
+			assertNull(
+					"No Services for tracked services can be reached at this time: true",
+					sss);
+			assertNull(
+					"No Services for tracked services can be reached at this time: true",
+					ssr);
 
-		// Call ServiceTracker.size()
-		// Should reply 0
-		assertEquals(
-				"The number of Services being tracked by ServiceTracker is: 0 ",
-				0, st.size());
-		st.close();
+			// Call ServiceTracker.size()
+			// Should reply 0
+			assertEquals(
+					"The number of Services being tracked by ServiceTracker is: 0 ",
+					0, st.size());
+		}
+		finally {
+			st.close();
+			if (tb != null) {
+				uninstallBundle(tb);
+			}
+		}
 	}
 
 	public void testWaitForService() throws Exception {
-		ServiceTracker st1;
-		ServiceTracker st2;
-		ServiceTracker st3;
 
 		BundleContext context = getContext();
 
@@ -172,117 +172,120 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 		// Tb2 contains service: testservice2
 		// Tb3 contains service: testservice3
 		// Install tb1, tb2 and tb3
+		Bundle b1 = installBundle("tb1.jar", false);
+		Bundle b2 = installBundle("tb2.jar", false);
+		Bundle b3 = installBundle("tb3.jar", false);
 
 		// Creates ServiceTracker1 object with testservice1
 		// Call ServiceTracker.open()
-		st1 = new ServiceTracker(context, TestService1.NAME, null);
+		ServiceTracker st1 = new ServiceTracker(context, TestService1.NAME,
+				null);
 		st1.open();
 		// Creates ServiceTracker2 object with testservice2
 		// Call ServiceTracker.open()
-		st2 = new ServiceTracker(context, TestService2.NAME, null);
+		ServiceTracker st2 = new ServiceTracker(context, TestService2.NAME,
+				null);
 		st2.open();
 		// Creates ServiceTracker3 object with testservice3
 		// Call ServiceTracker.open()
-		st3 = new ServiceTracker(context, TestService3.NAME, null);
+		ServiceTracker st3 = new ServiceTracker(context, TestService3.NAME,
+				null);
 		st3.open();
 
-		// Call ServiceTracker.size()
-		assertEquals(
-				"The number of Services being tracked by ServiceTracker 1 is: 0",
-				0, st1.size());
-		// Call ServiceTracker.size()
-		assertEquals(
-				"The number of Services being tracked by ServiceTracker 2 is: 0",
-				0, st2.size());
-		// Call ServiceTracker.size()
-		assertEquals(
-				"The number of Services being tracked by ServiceTracker 3 is: 0",
-				0, st3.size());
+		try {
+			// Call ServiceTracker.size()
+			assertEquals(
+					"The number of Services being tracked by ServiceTracker 1 is: 0",
+					0, st1.size());
+			// Call ServiceTracker.size()
+			assertEquals(
+					"The number of Services being tracked by ServiceTracker 2 is: 0",
+					0, st2.size());
+			// Call ServiceTracker.size()
+			assertEquals(
+					"The number of Services being tracked by ServiceTracker 3 is: 0",
+					0, st3.size());
 
-		Semaphore s1 = new Semaphore();
-		BundleStarter t1 = new BundleStarter("tb1.jar", s1);
-		t1.start();
-		s1.signal();
-		Object tt1 = st1.waitForService(0);
-		assertNotNull("Returned an object in ServiceTracker 1?:  true", tt1);
-		assertEquals(
-				"The number of Services being tracked by ServiceTracker 1 is: 1",
-				1, st1.size());
-		assertEquals(
-				"The number of Services being tracked by ServiceTracker 2 is: 0",
-				0, st2.size());
-		assertEquals(
-				"The number of Services being tracked by ServiceTracker 3 is: 0",
-				0, st3.size());
+			Semaphore s1 = new Semaphore();
+			BundleStarter t1 = new BundleStarter(b1, s1);
+			t1.start();
+			s1.signal();
+			Object tt1 = st1.waitForService(0);
+			assertNotNull("Returned an object in ServiceTracker 1?:  true", tt1);
+			assertEquals(
+					"The number of Services being tracked by ServiceTracker 1 is: 1",
+					1, st1.size());
+			assertEquals(
+					"The number of Services being tracked by ServiceTracker 2 is: 0",
+					0, st2.size());
+			assertEquals(
+					"The number of Services being tracked by ServiceTracker 3 is: 0",
+					0, st3.size());
 
-		Semaphore s2 = new Semaphore();
-		BundleStarter t2 = new BundleStarter("tb2.jar", s2);
-		t2.start();
-		Object tt2 = st2.waitForService(500);
-		assertNull("Returned an object in ServiceTracker 2?: false", tt2);
-		assertEquals(
-				"The number of Services being tracked by ServiceTracker 1 is: 1",
-				1, st1.size());
-		assertEquals(
-				"The number of Services being tracked by ServiceTracker 2 is: 0",
-				0, st2.size());
-		assertEquals(
-				"The number of Services being tracked by ServiceTracker 3 is: 0",
-				0, st3.size());
-		s2.signal();
+			Semaphore s2 = new Semaphore();
+			BundleStarter t2 = new BundleStarter(b2, s2);
+			t2.start();
+			Object tt2 = st2.waitForService(1000);
+			assertNull("Returned an object in ServiceTracker 2?: false", tt2);
+			assertEquals(
+					"The number of Services being tracked by ServiceTracker 1 is: 1",
+					1, st1.size());
+			assertEquals(
+					"The number of Services being tracked by ServiceTracker 2 is: 0",
+					0, st2.size());
+			assertEquals(
+					"The number of Services being tracked by ServiceTracker 3 is: 0",
+					0, st3.size());
+			s2.signal();
 
-		Semaphore s3 = new Semaphore(1);
-		BundleStarter t3 = new BundleStarter("tb3.jar", s3);
-		t3.start();
+			Semaphore s3 = new Semaphore(1);
+			BundleStarter t3 = new BundleStarter(b3, s3);
+			t3.start();
 
-		// wait for threads to complete
-		st2.waitForService(5000);
-		st3.waitForService(5000);
+			// wait for threads to complete
+			st2.waitForService(5000);
+			st3.waitForService(5000);
 
-		assertEquals(
-				"The number of Services being tracked by ServiceTracker 1 is: 1",
-				1, st1.size());
-		assertEquals(
-				"The number of Services being tracked by ServiceTracker 2 is: 1",
-				1, st2.size());
-		assertEquals(
-				"The number of Services being tracked by ServiceTracker 3 is: 1",
-				1, st3.size());
+			assertEquals(
+					"The number of Services being tracked by ServiceTracker 1 is: 1",
+					1, st1.size());
+			assertEquals(
+					"The number of Services being tracked by ServiceTracker 2 is: 1",
+					1, st2.size());
+			assertEquals(
+					"The number of Services being tracked by ServiceTracker 3 is: 1",
+					1, st3.size());
+		}
+		finally {
+			// Call ServiceTracker.close()
+			st1.close();
+			st2.close();
+			st3.close();
 
-		// Call ServiceTracker.close()
-		st1.close();
-		st2.close();
-		st3.close();
-
-		t3.close();
-		t2.close();
-		t1.close();
+			b3.uninstall();
+			b2.uninstall();
+			b1.uninstall();
+		}
 	}
 
 	private class BundleStarter extends Thread {
-		final String	bundleName;
-		final Semaphore	semaphore;
-		volatile Bundle	bundle;
+		private final Semaphore	semaphore;
+		private final Bundle	bundle;
 
-		BundleStarter(String bundleName, Semaphore semaphore) {
-			this.bundleName = bundleName;
+		BundleStarter(Bundle bundle, Semaphore semaphore) {
+			this.bundle = bundle;
 			this.semaphore = semaphore;
 		}
 
 		public void run() {
 			try {
 				semaphore.waitForSignal();
-				bundle = installBundle(bundleName);
+				bundle.start();
 			}
 			catch (Exception e) {
 				log(e.getMessage());
 				e.printStackTrace();
 			}
-
-		}
-
-		void close() throws Exception {
-			uninstallBundle(bundle);
 		}
 	}
 
@@ -323,39 +326,41 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 			}
 		});
 		st.open();
-		// Call ServiceTracker.size()
-		assertEquals(
-				"The number of Services being tracked by ServiceTracker 1 is: 0",
-				0, st.size());
-		// Install tb1
-		tb = installBundle("tb1.jar");
-		synchronized (customizerCalled) {
-			assertTrue("addingService not called", customizerCalled[0]);
-		}
-		assertEquals(
-				"The number of Services being tracked by ServiceTracker 1 is: 1",
-				1, st.size());
-		// Addingservice should do something
+		try {
+			// Call ServiceTracker.size()
+			assertEquals(
+					"The number of Services being tracked by ServiceTracker 1 is: 0",
+					0, st.size());
+			// Install tb1
+			tb = installBundle("tb1.jar");
+			try {
+				synchronized (customizerCalled) {
+					assertTrue("addingService not called", customizerCalled[0]);
+				}
+				assertEquals(
+						"The number of Services being tracked by ServiceTracker 1 is: 1",
+						1, st.size());
+				// Addingservice should do something
 
-		// Uninstall tb1
-		uninstallBundle(tb);
-		// RemovedService should do something
-		synchronized (customizerCalled) {
-			assertTrue("removedService not called", customizerCalled[2]);
+			}
+			finally {
+				// Uninstall tb1
+				uninstallBundle(tb);
+			}
+			// RemovedService should do something
+			synchronized (customizerCalled) {
+				assertTrue("removedService not called", customizerCalled[2]);
+			}
 		}
-		// Call ServiceTracker.close()
-		st.close();
+		finally {
+			// Call ServiceTracker.close()
+			st.close();
+		}
 
 	}
 
 	public void testRemove() throws Exception {
 		BundleContext context = getContext();
-
-		Bundle tb1;
-		Bundle tb2;
-		Bundle tb3;
-		Bundle tb4;
-		ServiceTracker st;
 
 		// 2.23.4 Testcase4 (tc4), tracking a classname
 		// Tb1 contains service: testservice1, testservice2, testservice3
@@ -365,166 +370,181 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 		// Creates ServiceTracker object with classname testservice1
 		// Call ServiceTracker.open()
 		Filter f = context.createFilter("(name=TestService1)");
-		st = new ServiceTracker(context, f, null);
+		ServiceTracker st = new ServiceTracker(context, f, null);
 		st.open();
 
 		// Install tb1, tb2, tb3 and tb4
-		tb1 = installBundle("tb1.jar");
-		tb2 = installBundle("tb2.jar");
-		tb3 = installBundle("tb3.jar");
-		tb4 = installBundle("tb4.jar");
+		Bundle tb1 = installBundle("tb1.jar");
+		Bundle tb2 = installBundle("tb2.jar");
+		Bundle tb3 = installBundle("tb3.jar");
+		Bundle tb4 = installBundle("tb4.jar");
 
-		// Call ServiceTracker.getServiceReferences()
-		ServiceReference[] srs = st.getServiceReferences();
-		assertNotNull("one bundle registered TestService1", srs);
-		assertEquals("one bundle registered TestService1", 1, srs.length);
-		assertEquals("tb1 registered TestService1", tb1.getBundleId(), srs[0]
-				.getBundle().getBundleId());
-		// Call ServiceTracker.getServices()
-		Object[] os = st.getServices();
-		assertNotNull("one registered TestService1", os);
-		assertEquals("one registered TestService1", 1, os.length);
-		assertTrue("instanceof TestService1", os[0] instanceof TestService1);
+		try {
+			// Call ServiceTracker.getServiceReferences()
+			ServiceReference[] srs = st.getServiceReferences();
+			assertNotNull("one bundle registered TestService1", srs);
+			assertEquals("one bundle registered TestService1", 1, srs.length);
+			assertEquals("tb1 registered TestService1", tb1.getBundleId(),
+					srs[0].getBundle().getBundleId());
+			// Call ServiceTracker.getServices()
+			Object[] os = st.getServices();
+			assertNotNull("one registered TestService1", os);
+			assertEquals("one registered TestService1", 1, os.length);
+			assertTrue("instanceof TestService1", os[0] instanceof TestService1);
 
-		// Call ServiceTracker.size()
-		assertEquals(
-				"The number of Services being tracked by ServiceTracker 1 is: 1",
-				1, st.size());
+			// Call ServiceTracker.size()
+			assertEquals(
+					"The number of Services being tracked by ServiceTracker 1 is: 1",
+					1, st.size());
 
-		ServiceReference sr = context.getServiceReference(TestService1.NAME);
-		st.remove(sr);
-		// Call ServiceTracker.getServiceReferences()
-		// Should find tb1, tb3
-		srs = st.getServiceReferences();
-		assertNull("no TestService1", srs);
+			ServiceReference sr = context
+					.getServiceReference(TestService1.NAME);
+			st.remove(sr);
+			// Call ServiceTracker.getServiceReferences()
+			// Should find tb1, tb3
+			srs = st.getServiceReferences();
+			assertNull("no TestService1", srs);
 
-		// Call ServiceTracker.getServices()
-		// Should find testservice1
-		os = st.getServices();
-		assertNull("no TestService1", os);
+			// Call ServiceTracker.getServices()
+			// Should find testservice1
+			os = st.getServices();
+			assertNull("no TestService1", os);
 
-		// Call ServiceTracker.size()
-		assertEquals(
-				"The number of Services being tracked by ServiceTracker 1 is: 0",
-				0, st.size());
-		// Call ServiceTracker.close()
-		st.close();
+			// Call ServiceTracker.size()
+			assertEquals(
+					"The number of Services being tracked by ServiceTracker 1 is: 0",
+					0, st.size());
+		}
+		finally {
+			// Call ServiceTracker.close()
+			st.close();
 
-		uninstallBundle(tb4);
-		uninstallBundle(tb3);
-		uninstallBundle(tb2);
-		uninstallBundle(tb1);
+			uninstallBundle(tb4);
+			uninstallBundle(tb3);
+			uninstallBundle(tb2);
+			uninstallBundle(tb1);
+		}
 	}
 
 	public void testFilterWithPropertyChanges() throws Exception {
 		BundleContext context = getContext();
-		ServiceTracker st;
-		Bundle tb1;
 		// 2.23.5 Testcase5 (tc5), filter match
 		// Tb1 contains service: testservice1
 		// Call BundleContext.BundleContext.createFilter(String) (testservice1)
 
 		Filter f = context.createFilter("(name=TestService1)");
 		// Creates ServiceTracker object with Filter
-		st = new ServiceTracker(context, f, null);
+		ServiceTracker st = new ServiceTracker(context, f, null);
 		// Call ServiceTracker.open()
 		st.open();
+		try {
+			// Call ServiceTracker.size()
+			// Should reply 0
+			assertEquals(
+					"The number of Services being tracked by ServiceTracker 1 is: 0",
+					0, st.size());
+			// Install tb1
+			Bundle tb1 = installBundle("tb1.jar");
+			try {
+				// Call ServiceTracker.size()
+				// Should reply 1
+				assertEquals(
+						"The number of Services being tracked by ServiceTracker 1 is: 1",
+						1, st.size());
+				// Call ServiceTracker.getServiceReferences()
+				// Should find all
+				// Call ServiceTracker.getServiceReferences()
+				// Should find tb1, tb3
+				ServiceReference[] srs = st.getServiceReferences();
 
-		// Call ServiceTracker.size()
-		// Should reply 0
-		assertEquals(
-				"The number of Services being tracked by ServiceTracker 1 is: 0",
-				0, st.size());
-		// Install tb1
-		tb1 = installBundle("tb1.jar");
-		// Call ServiceTracker.size()
-		// Should reply 1
-		assertEquals(
-				"The number of Services being tracked by ServiceTracker 1 is: 1",
-				1, st.size());
-		// Call ServiceTracker.getServiceReferences()
-		// Should find all
-		// Call ServiceTracker.getServiceReferences()
-		// Should find tb1, tb3
-		ServiceReference[] srs = st.getServiceReferences();
+				assertNotNull(
+						"There were no ServiceReferences in this ServiceTracker.",
+						srs);
+				for (int i = 0; i < srs.length; i++) {
+					assertEquals(
+							"The ServiceReferences contains: TestService1",
+							"TestService1", srs[i].getProperty("name"));
+				}
 
-		assertNotNull("There were no ServiceReferences in this ServiceTracker.",srs);
-		for (int i = 0; i < srs.length; i++) {
-			assertEquals("The ServiceReferences contains: TestService1",
-					"TestService1", srs[i].getProperty("name"));
+				// Change property for TestService1 so that the filter doesn't
+				// match
+				// The only way to change property is to have the
+				// ServiceRegistration,
+				// i.e. reg a new TestService1
+				Hashtable ts1Props = new Hashtable();
+				ts1Props.put("name", "TestService1");
+				ts1Props.put("version", new Float(1.0));
+				ts1Props.put("compatible", new Float(1.0));
+				ts1Props.put("description", "TestService 1 in tbc");
+
+				ServiceRegistration tsr1 = context.registerService(
+						TestService1.NAME, new TestService1() {
+							// empty
+						}, ts1Props);
+
+				assertEquals(
+						"The number of Services being tracked by ServiceTracker 1 is: 2",
+						2, st.size());
+				ts1Props.put("name", "TestService1a");
+				tsr1.setProperties(ts1Props);
+				// Check that the servicetracker doesn't find the TestService
+				assertEquals(
+						"The number of Services being tracked by ServiceTracker 1 is: 1",
+						1, st.size());
+				// Change property for tb1 so that the filter match again
+				ts1Props.put("name", "TestService1");
+				tsr1.setProperties(ts1Props);
+				// Check that the servicetracker find TestService
+				assertEquals(
+						"The number of Services being tracked by ServiceTracker 1 is: 2",
+						2, st.size());
+
+				tsr1.unregister();
+				assertEquals(
+						"The number of Services being tracked by ServiceTracker 1 is: 1",
+						1, st.size());
+			}
+			finally {
+				uninstallBundle(tb1);
+			}
 		}
-
-		// Change property for TestService1 so that the filter doesn't match
-		// The only way to change property is to have the ServiceRegistration,
-		// i.e. reg a new TestService1
-		Hashtable ts1Props = new Hashtable();
-		ts1Props.put("name", "TestService1");
-		ts1Props.put("version", new Float(1.0));
-		ts1Props.put("compatible", new Float(1.0));
-		ts1Props.put("description", "TestService 1 in tbc");
-
-		ServiceRegistration tsr1 = context.registerService(TestService1.NAME,
-				new TestService1() {
-					// empty
-				}, ts1Props);
-
-		assertEquals(
-				"The number of Services being tracked by ServiceTracker 1 is: 2",
-				2, st.size());
-		ts1Props.put("name", "TestService1a");
-		tsr1.setProperties(ts1Props);
-		// Check that the servicetracker doesn't find the TestService
-		assertEquals(
-				"The number of Services being tracked by ServiceTracker 1 is: 1",
-				1, st.size());
-		// Change property for tb1 so that the filter match again
-		ts1Props.put("name", "TestService1");
-		tsr1.setProperties(ts1Props);
-		// Check that the servicetracker find TestService
-		assertEquals(
-				"The number of Services being tracked by ServiceTracker 1 is: 2",
-				2, st.size());
-
-		tsr1.unregister();
-		assertEquals(
-				"The number of Services being tracked by ServiceTracker 1 is: 1",
-				1, st.size());
-
-		// Call ServiceTracker.close()
-		st.close();
-		uninstallBundle(tb1);
+		finally {
+			// Call ServiceTracker.close()
+			st.close();
+		}
 	}
 
 	public void testTrackingCount() throws Exception {
 		BundleContext context = getContext();
-		ServiceTracker st;
-		st = new ServiceTracker(context, TestService3.NAME, null);
+		ServiceTracker st = new ServiceTracker(context, TestService3.NAME, null);
 		assertEquals("ServiceTracker.getTrackingCount() == -1", -1, st
 				.getTrackingCount());
 		st.open();
-		// Should be 0
-		assertEquals("ServiceTracker.getTrackingCount() == 0", 0, st
-				.getTrackingCount());
+		try {
+			// Should be 0
+			assertEquals("ServiceTracker.getTrackingCount() == 0", 0, st
+					.getTrackingCount());
 
-		ServiceRegistration sr = context.registerService(
-				TestService3.NAME,
-				new TestService3() {
-					// empty
-				}, null);
-		// Should be 1
-		assertEquals("ServiceTracker.getTrackingCount() == 1", 1, +st
-				.getTrackingCount());
+			ServiceRegistration sr = context.registerService(TestService3.NAME,
+					new TestService3() {
+						// empty
+					}, null);
+			// Should be 1
+			assertEquals("ServiceTracker.getTrackingCount() == 1", 1, +st
+					.getTrackingCount());
 
-		sr.unregister();
-		// Should be 2
-		assertEquals("ServiceTracker.getTrackingCount() == 2", 2, st
-				.getTrackingCount());
-
-		st.close();
+			sr.unregister();
+			// Should be 2
+			assertEquals("ServiceTracker.getTrackingCount() == 2", 2, st
+					.getTrackingCount());
+		}
+		finally {
+			st.close();
+		}
 		assertEquals("ServiceTracker.getTrackingCount() == -1", -1, st
 				.getTrackingCount());
 	}
-	
+
 	public void testServiceTracker01() {
 		// simple ServiceTracker test
 		Runnable runIt = new Runnable() {
@@ -556,27 +576,25 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 				}
 			};
 			try {
-				testTracker = new ServiceTracker(
-						getContext(),
-						FrameworkUtil
-								.createFilter("(&(objectClass=java.lang.Runnable)("
+				testTracker = new ServiceTracker(getContext(), FrameworkUtil
+						.createFilter("(&(objectClass=java.lang.Runnable)("
 								+ getName() + "=true))"), testCustomizer);
 			}
 			catch (InvalidSyntaxException e) {
-				fail("filter error", e); 
+				fail("filter error", e);
 			}
 			testTracker.open();
 			assertTrue("Did not call addingService", results[0]);
 			assertFalse("Did call modifiedService", results[1]);
-			assertFalse("Did call removedService", results[2]); 
+			assertFalse("Did call removedService", results[2]);
 			clearResults(results);
 
 			// change props to still match
-			props.put("testChangeProp", Boolean.FALSE); 
+			props.put("testChangeProp", Boolean.FALSE);
 			reg.setProperties(props);
 			assertFalse("Did call addingService", results[0]);
 			assertTrue("Did not call modifiedService", results[1]);
-			assertFalse("Did call removedService", results[2]); 
+			assertFalse("Did call removedService", results[2]);
 			clearResults(results);
 
 			// change props to no longer match
@@ -584,15 +602,15 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 			reg.setProperties(props);
 			assertFalse("Did call addingService", results[0]);
 			assertFalse("Did call modifiedService", results[1]);
-			assertTrue("Did not call removedService", results[2]); 
+			assertTrue("Did not call removedService", results[2]);
 			clearResults(results);
 
 			// change props to no longer match
-			props.put("testChangeProp", Boolean.TRUE); 
+			props.put("testChangeProp", Boolean.TRUE);
 			reg.setProperties(props);
 			assertFalse("Did call addingService", results[0]);
 			assertFalse("Did call modifiedService", results[1]);
-			assertFalse("Did call removedService", results[2]); 
+			assertFalse("Did call removedService", results[2]);
 			clearResults(results);
 
 			// change props back to match
@@ -600,7 +618,7 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 			reg.setProperties(props);
 			assertTrue("Did not call addingService", results[0]);
 			assertFalse("Did call modifiedService", results[1]);
-			assertFalse("Did call removedService", results[2]); 
+			assertFalse("Did call removedService", results[2]);
 			clearResults(results);
 
 		}
@@ -621,8 +639,8 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 		};
 		Hashtable props = new Hashtable();
 		props.put(getName(), Boolean.FALSE);
-		ServiceRegistration reg = getContext()
-				.registerService(Runnable.class.getName(), runIt, props);
+		ServiceRegistration reg = getContext().registerService(
+				Runnable.class.getName(), runIt, props);
 		ServiceTracker testTracker = null;
 		try {
 			final boolean[] results = new boolean[] {false, false, false};
@@ -643,19 +661,17 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 				}
 			};
 			try {
-				testTracker = new ServiceTracker(
-						getContext(),
-						FrameworkUtil
-								.createFilter("(&(objectClass=java.lang.Runnable)("
+				testTracker = new ServiceTracker(getContext(), FrameworkUtil
+						.createFilter("(&(objectClass=java.lang.Runnable)("
 								+ getName() + "=true))"), testCustomizer);
 			}
 			catch (InvalidSyntaxException e) {
-				fail("filter error", e); 
+				fail("filter error", e);
 			}
 			testTracker.open();
 			assertFalse("Did call addingService", results[0]);
 			assertFalse("Did call modifiedService", results[1]);
-			assertFalse("Did call removedService", results[2]); 
+			assertFalse("Did call removedService", results[2]);
 			clearResults(results);
 
 			// change props to match
@@ -663,15 +679,15 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 			reg.setProperties(props);
 			assertTrue("Did not call addingService", results[0]);
 			assertFalse("Did call modifiedService", results[1]);
-			assertFalse("Did call removedService", results[2]); 
+			assertFalse("Did call removedService", results[2]);
 			clearResults(results);
 
 			// change props to still match
-			props.put("testChangeProp", Boolean.TRUE); 
+			props.put("testChangeProp", Boolean.TRUE);
 			reg.setProperties(props);
 			assertFalse("Did call addingService", results[0]);
 			assertTrue("Did not call modifiedService", results[1]);
-			assertFalse("Did call removedService", results[2]); 
+			assertFalse("Did call removedService", results[2]);
 			clearResults(results);
 
 			// change props to no longer match
@@ -679,15 +695,15 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 			reg.setProperties(props);
 			assertFalse("Did call addingService", results[0]);
 			assertFalse("Did call modifiedService", results[1]);
-			assertTrue("Did not call removedService", results[2]); 
+			assertTrue("Did not call removedService", results[2]);
 			clearResults(results);
 
 			// change props to no longer match
-			props.put("testChangeProp", Boolean.FALSE); 
+			props.put("testChangeProp", Boolean.FALSE);
 			reg.setProperties(props);
 			assertFalse("Did call addingService", results[0]);
 			assertFalse("Did call modifiedService", results[1]);
-			assertFalse("Did call removedService", results[2]); 
+			assertFalse("Did call removedService", results[2]);
 			clearResults(results);
 
 		}
@@ -730,9 +746,7 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 				}
 			};
 			try {
-				testTracker = new ServiceTracker(
-						getContext(),
-						FrameworkUtil
+				testTracker = new ServiceTracker(getContext(), FrameworkUtil
 						.createFilter("(&(objectclass=java.lang.Runnable)("
 								+ getName().toLowerCase() + "=true))"),
 						testCustomizer);
