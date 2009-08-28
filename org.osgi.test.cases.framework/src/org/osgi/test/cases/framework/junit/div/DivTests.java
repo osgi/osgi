@@ -13,7 +13,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.net.URL;
-import java.util.Comparator;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.List;
@@ -1178,18 +1177,6 @@ public class DivTests extends DefaultTestBundleControl {
 	public void testVersionConstantsValues() {
 		assertEquals("emptyVersion not equal to 0.0.0", new Version(0, 0, 0),
 				Version.emptyVersion);
-	}
-
-	public static void assertEquals(String message, Comparator comparator,
-			List expected, List actual) {
-		if (expected.size() != actual.size()) {
-			fail(message);
-		}
-
-		for (int i = 0, l = expected.size(); i < l; i++) {
-			assertEquals(message, 0, comparator.compare(expected.get(i), actual
-					.get(i)));
-		}
 	}
 
 	private String reportProcessorOS() {

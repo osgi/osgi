@@ -132,7 +132,7 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 	public static void assertEqualProperties(String message,
 			Dictionary expected, Dictionary actual) {
 		if (expected == actual) {
-			passNotEquals(message, expected, actual);
+			passEquals(message, expected, actual);
 			return;
 		}
 
@@ -158,7 +158,7 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 			}
 		}
 
-		passNotEquals(message, expected, actual);
+		passEquals(message, expected, actual);
 	}
 
 	/**
@@ -166,7 +166,7 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 	 * object types are arrays.
 	 * 
 	 */
-	public static boolean objectEquals(Object expected, Object actual) {
+	private static boolean objectEquals(Object expected, Object actual) {
 		return objectEquals(null, expected, actual);
 	}
 
@@ -175,7 +175,7 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 	 * object types are arrays.
 	 * 
 	 */
-	public static boolean objectEquals(Comparator comparator, Object expected,
+	private static boolean objectEquals(Comparator comparator, Object expected,
 			Object actual) {
 		if (expected == actual) {
 			return true;
@@ -298,7 +298,7 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 		return result;
 	}
 
-	private static void passNotEquals(String message, Object expected,
+	private static void passEquals(String message, Object expected,
 			Object actual) {
 		String formatted = "";
 

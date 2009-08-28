@@ -27,8 +27,6 @@
 package org.osgi.test.cases.startlevel.junit;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
@@ -92,7 +90,7 @@ public class StartLevelControl extends DefaultTestBundleControl {
 			}
 		}
 	}
-	
+
 	protected void setUp() throws Exception {
 		sl = (StartLevel) getService(StartLevel.class);
 		ibsl = sl.getInitialBundleStartLevel();
@@ -135,28 +133,42 @@ public class StartLevelControl extends DefaultTestBundleControl {
 				FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0),
 				null));
 		assertEquals("Received start level changed event", fec.getComparator(),
-				expectedFrameworkEvents, fec.getList(1, TIMEOUT));
+				expectedFrameworkEvents, fec.getList(expectedFrameworkEvents
+						.size(), TIMEOUT));
 
 		Bundle tb1 = getContext().installBundle(getWebServer() + "tb1.jar");
-		tb1.start();
-		assertTrue("getState() = INSTALLED | RESOLVED", inState(tb1,
-				Bundle.INSTALLED | Bundle.RESOLVED));
+		Bundle tb2 = null;
+		try {
+			tb1.start();
+			assertTrue("getState() = INSTALLED | RESOLVED", inState(tb1,
+					Bundle.INSTALLED | Bundle.RESOLVED));
 
-		sl.setInitialBundleStartLevel(sl_10);
-		Bundle tb2 = getContext().installBundle(getWebServer() + "tb2.jar");
-		tb2.start();
-		expectedBundleStartEvents
-				.add(new BundleEvent(BundleEvent.STARTED, tb2));
-		assertEquals("Received bundle started event", bec.getComparator(),
-				expectedBundleStartEvents, bec.getList(1, TIMEOUT));
-		assertTrue("getState() = ACTIVE", inState(tb2, Bundle.ACTIVE));
-
-		tb1.uninstall();
-		tb2.stop();
-		expectedBundleStopEvents.add(new BundleEvent(BundleEvent.STOPPED, tb2));
-		assertEquals("Received bundle stopped event", bec.getComparator(),
-				expectedBundleStopEvents, bec.getList(1, TIMEOUT));
-		tb2.uninstall();
+			sl.setInitialBundleStartLevel(sl_10);
+			tb2 = getContext().installBundle(getWebServer() + "tb2.jar");
+			tb2.start();
+			expectedBundleStartEvents.add(new BundleEvent(BundleEvent.STARTED,
+					tb2));
+			assertEquals("Received bundle started event", bec.getComparator(),
+					expectedBundleStartEvents, bec.getList(
+							expectedBundleStartEvents.size(), TIMEOUT));
+			assertTrue("getState() = ACTIVE", inState(tb2, Bundle.ACTIVE));
+			tb1.uninstall();
+			tb1 = null;
+			tb2.stop();
+			expectedBundleStopEvents.add(new BundleEvent(BundleEvent.STOPPED,
+					tb2));
+			assertEquals("Received bundle stopped event", bec.getComparator(),
+					expectedBundleStopEvents, bec.getList(
+							expectedBundleStopEvents.size(), TIMEOUT));
+		}
+		finally {
+			if (tb1 != null) {
+				tb1.uninstall();
+			}
+			if (tb2 != null) {
+				tb2.uninstall();
+			}
+		}
 	}
 
 	public void testStartOrder() throws Exception {
@@ -170,7 +182,8 @@ public class StartLevelControl extends DefaultTestBundleControl {
 				FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0),
 				null));
 		assertEquals("Received start level changed event", fec.getComparator(),
-				expectedFrameworkEvents, fec.getList(1, TIMEOUT));
+				expectedFrameworkEvents, fec.getList(expectedFrameworkEvents
+						.size(), TIMEOUT));
 
 		Bundle tb1 = getContext().installBundle(getWebServer() + "tb1.jar");
 		tb1.start();
@@ -180,26 +193,28 @@ public class StartLevelControl extends DefaultTestBundleControl {
 			// start tb1 and tb2
 			sl.setStartLevel(sl_20);
 			assertEquals("Received start level changed event", fec
-					.getComparator(), expectedFrameworkEvents, fec.getList(1,
-					TIMEOUT));
+					.getComparator(), expectedFrameworkEvents, fec.getList(
+					expectedFrameworkEvents.size(), TIMEOUT));
 			expectedBundleStartEvents.add(new BundleEvent(BundleEvent.STARTED,
 					tb1));
 			expectedBundleStartEvents.add(new BundleEvent(BundleEvent.STARTED,
 					tb2));
 			assertEquals("Received bundle started event", bec.getComparator(),
-					expectedBundleStartEvents, bec.getListSorted(2, TIMEOUT));
+					expectedBundleStartEvents, bec.getListSorted(
+							expectedBundleStartEvents.size(), TIMEOUT));
 
 			// stop tb2 and tb1
 			sl.setStartLevel(sl_10);
 			assertEquals("Received start level changed event", fec
-					.getComparator(), expectedFrameworkEvents, fec.getList(1,
-					TIMEOUT));
+					.getComparator(), expectedFrameworkEvents, fec.getList(
+					expectedFrameworkEvents.size(), TIMEOUT));
 			expectedBundleStopEvents.add(new BundleEvent(BundleEvent.STOPPED,
 					tb1));
 			expectedBundleStopEvents.add(new BundleEvent(BundleEvent.STOPPED,
 					tb2));
 			assertEquals("Received bundle stopped event", bec.getComparator(),
-					expectedBundleStopEvents, bec.getListSorted(2, TIMEOUT));
+					expectedBundleStopEvents, bec.getListSorted(
+							expectedBundleStopEvents.size(), TIMEOUT));
 
 			// reverse the start order
 			sl.setBundleStartLevel(tb2, sl_15);
@@ -208,28 +223,30 @@ public class StartLevelControl extends DefaultTestBundleControl {
 			// start tb2 and tb1
 			sl.setStartLevel(sl_20);
 			assertEquals("Received start level changed event", fec
-					.getComparator(), expectedFrameworkEvents, fec.getList(1,
-					TIMEOUT));
+					.getComparator(), expectedFrameworkEvents, fec.getList(
+					expectedFrameworkEvents.size(), TIMEOUT));
 			expectedBundleStartEvents.clear();
 			expectedBundleStartEvents.add(new BundleEvent(BundleEvent.STARTED,
 					tb2));
 			expectedBundleStartEvents.add(new BundleEvent(BundleEvent.STARTED,
 					tb1));
 			assertEquals("Received bundle started event", bec.getComparator(),
-					expectedBundleStartEvents, bec.getList(2, TIMEOUT));
+					expectedBundleStartEvents, bec.getList(
+							expectedBundleStartEvents.size(), TIMEOUT));
 
 			// stop tb1 and tb2
 			sl.setStartLevel(sl_10);
 			assertEquals("Received start level changed event", fec
-					.getComparator(), expectedFrameworkEvents, fec.getList(1,
-					TIMEOUT));
+					.getComparator(), expectedFrameworkEvents, fec.getList(
+					expectedFrameworkEvents.size(), TIMEOUT));
 			expectedBundleStopEvents.clear();
 			expectedBundleStopEvents.add(new BundleEvent(BundleEvent.STOPPED,
 					tb1));
 			expectedBundleStopEvents.add(new BundleEvent(BundleEvent.STOPPED,
 					tb2));
 			assertEquals("Received bundle stopped event", bec.getComparator(),
-					expectedBundleStopEvents, bec.getList(2, TIMEOUT));
+					expectedBundleStopEvents, bec.getList(
+							expectedBundleStopEvents.size(), TIMEOUT));
 		}
 		finally {
 			tb1.uninstall();
@@ -249,7 +266,8 @@ public class StartLevelControl extends DefaultTestBundleControl {
 		sl.setInitialBundleStartLevel(sl_15);
 		sl.setStartLevel(sl_10);
 		assertEquals("Received start level changed event", fec.getComparator(),
-				expectedFrameworkEvents, fec.getList(1, TIMEOUT));
+				expectedFrameworkEvents, fec.getList(expectedFrameworkEvents
+						.size(), TIMEOUT));
 
 		Bundle tb1 = getContext().installBundle(getWebServer() + "tb1.jar");
 
@@ -259,15 +277,15 @@ public class StartLevelControl extends DefaultTestBundleControl {
 		try {
 			sl.setStartLevel(sl_20);
 			assertEquals("Received start level changed event", fec
-					.getComparator(), expectedFrameworkEvents, fec.getList(1,
-					TIMEOUT));
+					.getComparator(), expectedFrameworkEvents, fec.getList(
+					expectedFrameworkEvents.size(), TIMEOUT));
 			assertTrue("getState() = INSTALLED | RESOLVED", inState(tb1,
 					Bundle.INSTALLED | Bundle.RESOLVED));
 
 			sl.setStartLevel(sl_10);
 			assertEquals("Received start level changed event", fec
-					.getComparator(), expectedFrameworkEvents, fec.getList(1,
-					TIMEOUT));
+					.getComparator(), expectedFrameworkEvents, fec.getList(
+					expectedFrameworkEvents.size(), TIMEOUT));
 			assertTrue("getState() = INSTALLED | RESOLVED", inState(tb1,
 					Bundle.INSTALLED | Bundle.RESOLVED));
 
@@ -277,26 +295,28 @@ public class StartLevelControl extends DefaultTestBundleControl {
 
 			sl.setStartLevel(sl_20);
 			assertEquals("Received start level changed event", fec
-					.getComparator(), expectedFrameworkEvents, fec.getList(1,
-					TIMEOUT));
+					.getComparator(), expectedFrameworkEvents, fec.getList(
+					expectedFrameworkEvents.size(), TIMEOUT));
 			assertTrue("getState() = ACTIVE", inState(tb1, Bundle.ACTIVE));
 			assertEquals("Received bundle started event", bec.getComparator(),
-					expectedBundleStartEvents, bec.getList(1, TIMEOUT));
+					expectedBundleStartEvents, bec.getList(
+							expectedBundleStartEvents.size(), TIMEOUT));
 
 			sl.setStartLevel(sl_10);
 			assertEquals("Received start level changed event", fec
-					.getComparator(), expectedFrameworkEvents, fec.getList(1,
-					TIMEOUT));
+					.getComparator(), expectedFrameworkEvents, fec.getList(
+					expectedFrameworkEvents.size(), TIMEOUT));
 			assertTrue("getState() = INSTALLED | RESOLVED", inState(tb1,
 					Bundle.INSTALLED | Bundle.RESOLVED));
 			assertEquals("Received bundle stopped event", bec.getComparator(),
-					expectedBundleStopEvents, bec.getList(1, TIMEOUT));
+					expectedBundleStopEvents, bec.getList(
+							expectedBundleStopEvents.size(), TIMEOUT));
 
 			tb1.stop();
 			sl.setStartLevel(sl_20);
 			assertEquals("Received start level changed event", fec
-					.getComparator(), expectedFrameworkEvents, fec.getList(1,
-					TIMEOUT));
+					.getComparator(), expectedFrameworkEvents, fec.getList(
+					expectedFrameworkEvents.size(), TIMEOUT));
 			assertTrue("getState() = INSTALLED | RESOLVED", inState(tb1,
 					Bundle.INSTALLED | Bundle.RESOLVED));
 		}
@@ -317,7 +337,8 @@ public class StartLevelControl extends DefaultTestBundleControl {
 		sl.setInitialBundleStartLevel(sl_15);
 		sl.setStartLevel(sl_10);
 		assertEquals("Received start level changed event", fec.getComparator(),
-				expectedFrameworkEvents, fec.getList(1, TIMEOUT));
+				expectedFrameworkEvents, fec.getList(expectedFrameworkEvents
+						.size(), TIMEOUT));
 
 		Bundle tb1 = getContext().installBundle(getWebServer() + "tb1.jar");
 
@@ -341,23 +362,27 @@ public class StartLevelControl extends DefaultTestBundleControl {
 
 			sl.setBundleStartLevel(tb1, sl_5);
 			assertEquals("Received bundle started event", bec.getComparator(),
-					expectedBundleStartEvents, bec.getList(1, TIMEOUT));
+					expectedBundleStartEvents, bec.getList(
+							expectedBundleStartEvents.size(), TIMEOUT));
 			assertTrue("StartLevel 10/5 start", inState(tb1, Bundle.ACTIVE));
 
 			sl.setBundleStartLevel(tb1, sl_15);
 			assertEquals("Received bundle stopped event", bec.getComparator(),
-					expectedBundleStopEvents, bec.getList(1, TIMEOUT));
+					expectedBundleStopEvents, bec.getList(
+							expectedBundleStopEvents.size(), TIMEOUT));
 			assertTrue("StartLevel 10/15 start", inState(tb1, Bundle.INSTALLED
 					| Bundle.RESOLVED));
 
 			sl.setBundleStartLevel(tb1, sl_5);
 			assertEquals("Received bundle started event", bec.getComparator(),
-					expectedBundleStartEvents, bec.getList(1, TIMEOUT));
+					expectedBundleStartEvents, bec.getList(
+							expectedBundleStartEvents.size(), TIMEOUT));
 			assertTrue("StartLevel 10/5 start", inState(tb1, Bundle.ACTIVE));
 
 			tb1.stop();
 			assertEquals("Received bundle stopped event", bec.getComparator(),
-					expectedBundleStopEvents, bec.getList(1, TIMEOUT));
+					expectedBundleStopEvents, bec.getList(
+							expectedBundleStopEvents.size(), TIMEOUT));
 			assertTrue("stop", inState(tb1, Bundle.INSTALLED | Bundle.RESOLVED));
 		}
 		finally {
@@ -380,7 +405,8 @@ public class StartLevelControl extends DefaultTestBundleControl {
 
 		sl.setStartLevel(sl_10);
 		assertEquals("Received start level changed event", fec.getComparator(),
-				expectedFrameworkEvents, fec.getList(1, TIMEOUT));
+				expectedFrameworkEvents, fec.getList(expectedFrameworkEvents
+						.size(), TIMEOUT));
 
 		Bundle tb1 = getContext().installBundle(getWebServer() + "tb1.jar");
 
@@ -397,31 +423,35 @@ public class StartLevelControl extends DefaultTestBundleControl {
 
 			sl.setStartLevel(sl_20);
 			assertEquals("Received start level changed event", fec
-					.getComparator(), expectedFrameworkEvents, fec.getList(1,
-					TIMEOUT));
+					.getComparator(), expectedFrameworkEvents, fec.getList(
+					expectedFrameworkEvents.size(), TIMEOUT));
 			assertEquals("Received bundle started event", bec.getComparator(),
-					expectedBundleStartEvents, bec.getList(1, TIMEOUT));
+					expectedBundleStartEvents, bec.getList(
+							expectedBundleStartEvents.size(), TIMEOUT));
 			assertEquals("isBundlePersistentlyStarted", true, sl
 					.isBundlePersistentlyStarted(tb1));
 
 			sl.setStartLevel(sl_10);
 			assertEquals("Received start level changed event", fec
-					.getComparator(), expectedFrameworkEvents, fec.getList(1,
-					TIMEOUT));
+					.getComparator(), expectedFrameworkEvents, fec.getList(
+					expectedFrameworkEvents.size(), TIMEOUT));
 			assertEquals("Received bundle stopped event", bec.getComparator(),
-					expectedBundleStopEvents, bec.getList(1, TIMEOUT));
+					expectedBundleStopEvents, bec.getList(
+							expectedBundleStopEvents.size(), TIMEOUT));
 			assertEquals("isBundlePersistentlyStarted", true, sl
 					.isBundlePersistentlyStarted(tb1));
 
 			sl.setBundleStartLevel(tb1, sl_5);
 			assertEquals("Received bundle started event", bec.getComparator(),
-					expectedBundleStartEvents, bec.getList(1, TIMEOUT));
+					expectedBundleStartEvents, bec.getList(
+							expectedBundleStartEvents.size(), TIMEOUT));
 			assertEquals("isBundlePersistentlyStarted", true, sl
 					.isBundlePersistentlyStarted(tb1));
 
 			sl.setBundleStartLevel(tb1, sl_15);
 			assertEquals("Received bundle stopped event", bec.getComparator(),
-					expectedBundleStopEvents, bec.getList(1, TIMEOUT));
+					expectedBundleStopEvents, bec.getList(
+							expectedBundleStopEvents.size(), TIMEOUT));
 			assertEquals("isBundlePersistentlyStarted", true, sl
 					.isBundlePersistentlyStarted(tb1));
 		}
@@ -452,68 +482,73 @@ public class StartLevelControl extends DefaultTestBundleControl {
 				FrameworkEvent.STARTLEVEL_CHANGED | FrameworkEvent.ERROR);
 		getContext().addFrameworkListener(fec2);
 
-		expectedFrameworkEvents.add(new FrameworkEvent(
-				FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0),
-				null));
-
-		sl.setInitialBundleStartLevel(sl_5);
-		sl.setStartLevel(sl_10);
-		assertEquals("Received start level changed event",
-				fec2.getComparator(), expectedFrameworkEvents, fec2.getList(1,
-						TIMEOUT));
-
-		Bundle tb5 = getContext().installBundle(getWebServer() + "tb5.jar");
-		expectedFrameworkError1.add(new FrameworkEvent(FrameworkEvent.ERROR,
-				tb5, new BundleException("")));
-		expectedFrameworkError2.add(new FrameworkEvent(FrameworkEvent.ERROR,
-				tb5, new BundleException("")));
-		expectedFrameworkError2.add(new FrameworkEvent(
-				FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0),
-				null));
-
 		try {
+			expectedFrameworkEvents.add(new FrameworkEvent(
+					FrameworkEvent.STARTLEVEL_CHANGED, getContext()
+							.getBundle(0), null));
+
+			sl.setInitialBundleStartLevel(sl_5);
+			sl.setStartLevel(sl_10);
+			assertEquals("Received start level changed event", fec2
+					.getComparator(), expectedFrameworkEvents, fec2.getList(
+					expectedFrameworkEvents.size(), TIMEOUT));
+
+			Bundle tb5 = getContext().installBundle(getWebServer() + "tb5.jar");
+			expectedFrameworkError1.add(new FrameworkEvent(
+					FrameworkEvent.ERROR, tb5, new BundleException("")));
+			expectedFrameworkError2.add(new FrameworkEvent(
+					FrameworkEvent.ERROR, tb5, new BundleException("")));
+			expectedFrameworkError2.add(new FrameworkEvent(
+					FrameworkEvent.STARTLEVEL_CHANGED, getContext()
+							.getBundle(0), null));
+
 			try {
-				tb5.start();
+				try {
+					tb5.start();
+					assertEquals("getState() = ACTIVE", true, inState(tb5,
+							Bundle.ACTIVE));
+
+				}
+				catch (Exception e) {
+					fail("Unexpected exception: " + e.getMessage());
+				}
+
+				// FrameworkEvent.ERROR due to active startlevel change
+				sl.setStartLevel(sl_4);
+				assertEquals("Received framework events", fec2.getComparator(),
+						expectedFrameworkError2, fec2.getList(
+								expectedFrameworkError2.size(), TIMEOUT));
+				assertEquals("getState() = INSTALLED | RESOLVED", true,
+						inState(tb5, Bundle.INSTALLED | Bundle.RESOLVED));
+
+				// no FrameworkEvent.ERROR
+				sl.setStartLevel(sl_5);
+				assertEquals("Received start level changed event", fec2
+						.getComparator(), expectedFrameworkEvents, fec2
+						.getList(expectedFrameworkEvents.size(), TIMEOUT));
 				assertEquals("getState() = ACTIVE", true, inState(tb5,
 						Bundle.ACTIVE));
 
+				// FrameworkEvent.ERROR due to bundle startlevel change
+				sl.setBundleStartLevel(tb5, sl_6);
+				assertEquals("Received framework events", fec2.getComparator(),
+						expectedFrameworkError1, fec2.getList(
+								expectedFrameworkError1.size(), TIMEOUT));
+				assertEquals("getState() = INSTALLED | RESOLVED", true,
+						inState(tb5, Bundle.INSTALLED | Bundle.RESOLVED));
 			}
-			catch (Exception e) {
-				fail("Unexpected exception: " + e.getMessage());
+			finally {
+				tb5.uninstall();
 			}
-
-			// FrameworkEvent.ERROR due to active startlevel change
-			sl.setStartLevel(sl_4);
-			assertEquals("Received framework events", fec2.getComparator(),
-					expectedFrameworkError2, fec2.getList(2, TIMEOUT));
-			assertEquals("getState() = INSTALLED | RESOLVED", true, inState(
-					tb5, Bundle.INSTALLED | Bundle.RESOLVED));
-
-			// no FrameworkEvent.ERROR
-			sl.setStartLevel(sl_5);
-			assertEquals("Received start level changed event", fec2
-					.getComparator(), expectedFrameworkEvents, fec2.getList(1,
-					TIMEOUT));
-			assertEquals("getState() = ACTIVE", true, inState(tb5,
-					Bundle.ACTIVE));
-
-			// FrameworkEvent.ERROR due to bundle startlevel change
-			sl.setBundleStartLevel(tb5, sl_6);
-			assertEquals("Received framework events", fec2.getComparator(),
-					expectedFrameworkError1, fec2.getList(1, TIMEOUT));
-			assertEquals("getState() = INSTALLED | RESOLVED", true, inState(
-					tb5, Bundle.INSTALLED | Bundle.RESOLVED));
 		}
 		finally {
-			tb5.uninstall();
 			getContext().removeFrameworkListener(fec2);
 		}
 	}
 
-	public void testActivator() throws Exception {
+	public void testActivatorChangeBundleStartLevel() throws Exception {
 		ArrayList expectedFrameworkEvents = new ArrayList();
-		ArrayList expectedTB3Events = new ArrayList();
-		ArrayList expectedTB4Events = new ArrayList();
+		ArrayList expectedBundleEvents = new ArrayList();
 
 		expectedFrameworkEvents.add(new FrameworkEvent(
 				FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0),
@@ -522,57 +557,62 @@ public class StartLevelControl extends DefaultTestBundleControl {
 		sl.setInitialBundleStartLevel(sl_5);
 		sl.setStartLevel(sl_10);
 		assertEquals("Received start level changed event", fec.getComparator(),
-				expectedFrameworkEvents, fec.getList(1, TIMEOUT));
+				expectedFrameworkEvents, fec.getList(expectedFrameworkEvents
+						.size(), TIMEOUT));
 		Bundle tb3 = getContext().installBundle(getWebServer() + "tb3.jar");
-		expectedTB3Events.add(new BundleEvent(BundleEvent.STARTED, tb3));
-		expectedTB3Events.add(new BundleEvent(BundleEvent.STOPPED, tb3));
+		expectedBundleEvents.add(new BundleEvent(BundleEvent.STARTED, tb3));
+		expectedBundleEvents.add(new BundleEvent(BundleEvent.STOPPED, tb3));
 		try {
 			tb3.start();
-			assertEquals("Received bundle events", bec.getComparator(),
-					expectedTB3Events, bec.getList(2, TIMEOUT));
 			assertEquals("getBundleStartLevel", sl_15, sl
 					.getBundleStartLevel(tb3));
+			assertEquals("Received bundle events", bec.getComparator(),
+					expectedBundleEvents, bec.getList(expectedBundleEvents
+							.size(), TIMEOUT));
 		}
 		finally {
 			tb3.uninstall();
 		}
+	}
 
-		Bundle tb4 = getContext().installBundle(getWebServer() + "tb4.jar");
-		expectedTB4Events.add(new BundleEvent(BundleEvent.STARTED, tb4));
-		expectedTB4Events.add(new BundleEvent(BundleEvent.STOPPED, tb4));
-		expectedFrameworkEvents.clear();
+	public void testActivatorChangeStartLevel() throws Exception {
+		ArrayList expectedFrameworkEvents = new ArrayList();
+		ArrayList expectedBundleStartEvents = new ArrayList();
+		ArrayList expectedBundleStopEvents = new ArrayList();
+
 		expectedFrameworkEvents.add(new FrameworkEvent(
 				FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0),
 				null));
+		sl.setInitialBundleStartLevel(sl_5);
+		sl.setStartLevel(sl_10);
+		assertEquals("Received start level changed event", fec.getComparator(),
+				expectedFrameworkEvents, fec.getList(expectedFrameworkEvents
+						.size(), TIMEOUT));
+		Bundle tb4 = getContext().installBundle(getWebServer() + "tb4.jar");
+		expectedBundleStartEvents
+				.add(new BundleEvent(BundleEvent.STARTED, tb4));
+		expectedBundleStopEvents.add(new BundleEvent(BundleEvent.STOPPED, tb4));
 		try {
 			tb4.start();
+			assertEquals("Received bundle events", bec.getComparator(),
+					expectedBundleStartEvents, bec.getList(
+							expectedBundleStartEvents.size(), TIMEOUT));
 			assertEquals("Received start level changed event", fec
-					.getComparator(), expectedFrameworkEvents, fec.getList(1,
-					TIMEOUT));
+					.getComparator(), expectedFrameworkEvents, fec.getList(
+					expectedFrameworkEvents.size(), TIMEOUT));
 			assertEquals("getStartLevel", sl_15, sl.getStartLevel());
 
 			tb4.stop();
-			assertEquals("Received start level changed event", fec
-					.getComparator(), expectedFrameworkEvents, fec.getList(1,
-					TIMEOUT));
 			assertEquals("Received bundle events", bec.getComparator(),
-					expectedTB4Events, bec.getList(2, TIMEOUT));
+					expectedBundleStopEvents, bec.getList(
+							expectedBundleStopEvents.size(), TIMEOUT));
+			assertEquals("Received start level changed event", fec
+					.getComparator(), expectedFrameworkEvents, fec.getList(
+					expectedFrameworkEvents.size(), TIMEOUT));
 			assertEquals("getStartLevel", sl_10, sl.getStartLevel());
 		}
 		finally {
 			tb4.uninstall();
-		}
-	}
-
-	public static void assertEquals(String message, Comparator comparator,
-			List expected, List actual) {
-		if (expected.size() != actual.size()) {
-			fail(message);
-		}
-	
-		for (int i = 0, l = expected.size(); i < l; i++) {
-			assertEquals(message, 0, comparator.compare(expected.get(i), actual
-					.get(i)));
 		}
 	}
 

@@ -7,7 +7,6 @@
 package org.osgi.test.cases.framework.junit.syncbundlelistener;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import org.osgi.framework.Bundle;
@@ -88,17 +87,5 @@ public class SyncBundleListenerTests extends DefaultTestBundleControl {
 		assertEquals("SBL missed events", sbec.getComparator(), expected,
 				sresult);
 		assertEquals("BL missed events", abec.getComparator(), expected, aresult);
-	}
-
-	public static void assertEquals(String message, Comparator comparator,
-			List expected, List actual) {
-		if (expected.size() != actual.size()) {
-			fail(message);
-		}
-
-		for (int i = 0, l = expected.size(); i < l; i++) {
-			assertEquals(message, 0, comparator.compare(expected.get(i), actual
-					.get(i)));
-		}
 	}
 }

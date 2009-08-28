@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.URL;
+import java.util.Comparator;
+import java.util.List;
 
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
@@ -87,6 +89,24 @@ public abstract class OSGiTestCase extends TestCase {
 		}
 	}
 	
+	public static void assertEquals(String message, Comparator comparator,
+			List expected, List actual) {
+		if (expected.size() != actual.size()) {
+			failNotEquals(message, expected, actual);
+		}
+
+		for (int i = 0, l = expected.size(); i < l; i++) {
+			assertEquals(message, comparator, expected.get(i), actual.get(i));
+		}
+	}
+
+	public static void assertEquals(String message, Comparator comparator,
+			Object expected, Object actual) {
+		if (comparator.compare(expected, actual) == 0) {
+			return;
+		}
+		failNotEquals(message, expected, actual);
+	}
 
 	/**
 	 * Installs a resource within the test bundle as a bundle
