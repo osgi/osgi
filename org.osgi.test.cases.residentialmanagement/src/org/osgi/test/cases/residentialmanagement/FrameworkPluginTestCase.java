@@ -1,19 +1,22 @@
 package org.osgi.test.cases.residentialmanagement;
 
+import info.dmtree.DmtAdmin;
+import info.dmtree.DmtData;
+import info.dmtree.DmtException;
+import info.dmtree.DmtIllegalStateException;
+import info.dmtree.DmtSession;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Hashtable;
+
 import junit.framework.TestCase;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.startlevel.StartLevel;
-import info.dmtree.DmtAdmin;
-import info.dmtree.DmtSession;
-import info.dmtree.DmtData;
-import info.dmtree.DmtException;
-import info.dmtree.DmtIllegalStateException;
 
 public class FrameworkPluginTestCase extends TestCase {
 	static final String INSTANCE_ID = "1";
@@ -33,8 +36,8 @@ public class FrameworkPluginTestCase extends TestCase {
 	protected static final String SHUTDOWN = "Shutdown";
 	protected static final String UPDATE = "Update";
 
-	private static String TESTBUNDLE1 = "org.osgi.test.cases.residentialmanagement.tb1.jar";
-	private static String TESTBUNDLE2 = "org.osgi.test.cases.residentialmanagement.tb2.jar";
+	private static String			TESTBUNDLE1				= "tb1.jar";
+	private static String			TESTBUNDLE2				= "tb2.jar";
 
 	private BundleContext context;
 	private ServiceReference ref;
