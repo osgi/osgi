@@ -2102,7 +2102,7 @@ public class CMControl extends DefaultTestBundleControl {
 			trace("Wait for signal.");
 			calledback2 = sync2.waitForSignal(SIGNAL_WAITING_TIME, 8);
 			assertTrue("Both ManagedService must be called back", calledback2);
-			assertNull("called back with null props", sync2.getProps());
+			assertNull("called back with non-null props", sync2.getProps());
 		} finally {
 			if (reg2 != null)
 				reg2.unregister();
@@ -2129,7 +2129,7 @@ public class CMControl extends DefaultTestBundleControl {
 						"1");
 		bundle2 = getContext().installBundle(getWebServer() + "targetb2.jar");
 		try {
-			SynchronizerImpl sync2 = new SynchronizerImpl("ID1");
+			SynchronizerImpl sync2 = new SynchronizerImpl("ID2");
 			reg2 = getContext().registerService(Synchronizer.class.getName(),
 					sync2, propsForSync2);
 			this.startTargetBundle(bundle2);
@@ -2138,9 +2138,9 @@ public class CMControl extends DefaultTestBundleControl {
 			assertTrue(
 					"ManagedService MUST be called back even if no configuration.",
 					calledback2);
-			assertNull("called back with null props", sync2.getProps());
+			assertNull("called back with non-null props", sync2.getProps());
 
-			SynchronizerImpl sync1 = new SynchronizerImpl("ID2");
+			SynchronizerImpl sync1 = new SynchronizerImpl("ID1");
 			reg1 = getContext().registerService(Synchronizer.class.getName(),
 					sync1, propsForSync1);
 			this.startTargetBundle(bundle1);
@@ -2180,7 +2180,7 @@ public class CMControl extends DefaultTestBundleControl {
 			calledback2 = sync2.waitForSignal(SIGNAL_WAITING_TIME, 3);
 			assertTrue("ManagedService firstly registered must be called back",
 					calledback2);
-			assertNull("called back with null props", sync2.getProps());
+			assertNull("called back with non-null props", sync2.getProps());
 			calledback1 = sync1.waitForSignal(SIGNAL_WAITING_TIME, 2);
 			assertFalse("ManagedService must NOT be called back", calledback1);
 
@@ -2230,7 +2230,7 @@ public class CMControl extends DefaultTestBundleControl {
 			assertTrue(
 					"ManagedService MUST be called back even if configuration has no props.",
 					calledback2);
-			assertNull("called back with null props", sync2.getProps());
+			assertNull("called back with non-null props", sync2.getProps());
 
 			SynchronizerImpl sync1 = new SynchronizerImpl("ID1");
 			reg1 = getContext().registerService(Synchronizer.class.getName(),
@@ -2263,7 +2263,7 @@ public class CMControl extends DefaultTestBundleControl {
 			calledback2 = sync2.waitForSignal(SIGNAL_WAITING_TIME, ++count2);
 			assertTrue("ManagedService firstly registered must be called back",
 					calledback2);
-			assertEquals("called back with null props", null, sync2.getProps());
+			assertNull("called back with non-null props", sync2.getProps());
 			calledback1 = sync1.waitForSignal(SIGNAL_WAITING_TIME, count1 + 1);
 			assertFalse("ManagedService must NOT be called back", calledback1);
 
@@ -2287,7 +2287,7 @@ public class CMControl extends DefaultTestBundleControl {
 		 * duplicated ManagedService. ==> Only one, firstly registered, must be
 		 * called back.
 		 */
-		trace("################## B2 testManagedServiceRegistrationDuplicatedTargets()");
+		trace("################## B3 testManagedServiceRegistrationDuplicatedTargets()");
 
 		reg2 = null;
 		reg1 = null;
@@ -2304,7 +2304,7 @@ public class CMControl extends DefaultTestBundleControl {
 			Dictionary props = new Hashtable();
 			props.put("StringKey", "stringvalue");
 			conf.update(props);
-			SynchronizerImpl sync2 = new SynchronizerImpl("ID1");
+			SynchronizerImpl sync2 = new SynchronizerImpl("ID2");
 			reg2 = getContext().registerService(Synchronizer.class.getName(),
 					sync2, propsForSync2);
 			this.startTargetBundle(bundle2);
@@ -2315,7 +2315,7 @@ public class CMControl extends DefaultTestBundleControl {
 			assertTrue("ManagedService MUST be called back.", calledback2);
 			assertNotNull("called back with null props", sync2.getProps());
 
-			SynchronizerImpl sync1 = new SynchronizerImpl("ID2");
+			SynchronizerImpl sync1 = new SynchronizerImpl("ID1");
 			reg1 = getContext().registerService(Synchronizer.class.getName(),
 					sync1, propsForSync1);
 			this.startTargetBundle(bundle1);
@@ -2344,7 +2344,7 @@ public class CMControl extends DefaultTestBundleControl {
 			calledback2 = sync2.waitForSignal(SIGNAL_WAITING_TIME, ++count2);
 			assertTrue("ManagedService firstly registered must be called back",
 					calledback2);
-			assertNull("called back with null props", sync2.getProps());
+			assertNull("called back with non-null props", sync2.getProps());
 			calledback1 = sync1.waitForSignal(SIGNAL_WAITING_TIME, count1 + 1);
 			assertFalse("ManagedService must NOT be called back", calledback1);
 

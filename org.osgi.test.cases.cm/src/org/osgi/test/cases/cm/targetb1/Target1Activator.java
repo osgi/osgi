@@ -9,7 +9,6 @@ import java.util.Set;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.test.cases.cm.shared.Constants;
@@ -25,9 +24,6 @@ import org.osgi.test.cases.cm.shared.Util;
  * 
  */
 public class Target1Activator implements BundleActivator {
-
-	private BundleContext context;
-	private ServiceRegistration registration;
 	private static final boolean DEBUG = true;
 
 	/*
@@ -39,7 +35,6 @@ public class Target1Activator implements BundleActivator {
 	 */
 	public void start(BundleContext context) throws Exception {
 		log("going to start.");
-		this.context = context;
 
 		final String clazz = ManagedService.class.getName();
 
@@ -92,7 +87,7 @@ public class Target1Activator implements BundleActivator {
 		props.put(org.osgi.framework.Constants.SERVICE_PID, value);
 
 		try {
-			this.registration = this.context.registerService(clazz, service,
+			context.registerService(clazz, service,
 					props);
 			log("Succeed in registering service: " + clazz);
 
@@ -112,13 +107,9 @@ public class Target1Activator implements BundleActivator {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		log("going to stop.");
-		if (this.registration != null)
-			this.registration.unregister();
-
 	}
 
-	class ManagedServiceImpl implements ManagedService {
-//		private Dictionary props = null;
+	static class ManagedServiceImpl implements ManagedService {
 		final private Synchronizer sync;
 
 		public ManagedServiceImpl(Synchronizer sync) {
@@ -126,7 +117,6 @@ public class Target1Activator implements BundleActivator {
 		}
 
 		public void updated(Dictionary props) throws ConfigurationException {
-//			this.props = props;
 			if (props != null) {
 				String pid = (String) props
 						.get(org.osgi.framework.Constants.SERVICE_PID);
@@ -138,12 +128,10 @@ public class Target1Activator implements BundleActivator {
 				sync.signal(props);
 			else
 				log("sync == null.");
-
 		}
-
 	}
 
-	void log(String msg) {
+	static void log(String msg) {
 		if (DEBUG)
 			System.out.println("# Register Test> " + msg);
 	}

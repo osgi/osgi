@@ -45,7 +45,7 @@ public class SynchronizerImpl implements Synchronizer {
 	private final String	id;
 	private final String	header;
 	private Dictionary		props;
-	private static boolean	DEBUG	= false;
+	private static final boolean	DEBUG	= false;
 
 	/**
 	 * Creates a <code>Synchronizer</code> instance with no signals on the
@@ -138,12 +138,14 @@ public class SynchronizerImpl implements Synchronizer {
 		return signalCount >= compareCount;
 	}
 
-	public void signal(Dictionary props) {
-		this.props = props;
+	public synchronized void signal(Dictionary p) {
+		this.props = p;
+		if (DEBUG)
+			System.out.println(header + ":signal(" + p + ")");
 		this.signal();
 	}
 
-	public Dictionary getProps() {
+	public synchronized Dictionary getProps() {
 		return props;
 	}
 

@@ -5,7 +5,6 @@ import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.test.cases.cm.shared.Constants;
@@ -20,8 +19,6 @@ import org.osgi.test.cases.cm.shared.Util;
  */
 public class Target2Activator implements BundleActivator {
 
-	private BundleContext context;
-	private ServiceRegistration registration;
 	private static final boolean DEBUG = true;
 
 	/*
@@ -33,8 +30,6 @@ public class Target2Activator implements BundleActivator {
 	 */
 	public void start(BundleContext context) throws Exception {
 		log("going to start.");
-		this.context = context;
-
 		final String clazz = ManagedService.class.getName();
 
 		String filter = "(" + Constants.SERVICEPROP_KEY_SYNCID + "=sync2)";
@@ -53,7 +48,7 @@ public class Target2Activator implements BundleActivator {
 			if (count > 1)
 				props.put("DuplicatedID", new Integer(i));
 			try {
-				this.registration = this.context.registerService(clazz,
+				context.registerService(clazz,
 						service, props);
 				log("Succeed in registering service " + i + ": " + clazz);
 			} catch (Exception e) {
@@ -73,13 +68,9 @@ public class Target2Activator implements BundleActivator {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		log("going to stop.");
-		if (this.registration != null)
-			this.registration.unregister();
-
 	}
 
-	class ManagedServiceImpl implements ManagedService {
-//		private Dictionary props = null;
+	static class ManagedServiceImpl implements ManagedService {
 		final private Synchronizer sync;
 		final private int id;
 
@@ -89,7 +80,6 @@ public class Target2Activator implements BundleActivator {
 		}
 
 		public void updated(Dictionary props) throws ConfigurationException {
-//			this.props = props;
 			if (props != null) {
 				String pid = (String) props
 						.get(org.osgi.framework.Constants.SERVICE_PID);
@@ -103,12 +93,10 @@ public class Target2Activator implements BundleActivator {
 				sync.signal(props);
 			else
 				log("sync == null.");
-
 		}
-
 	}
 
-	void log(String msg) {
+	static void log(String msg) {
 		if (DEBUG)
 			System.out.println("# Register Test> " + msg);
 	}
