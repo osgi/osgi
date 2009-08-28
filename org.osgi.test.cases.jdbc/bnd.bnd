@@ -1,4 +1,4 @@
-Bundle-Version: 3.0.0.${project.build}
+Bundle-Version: 4.2.0.${project.build}
 
 Private-Package						= ${p}.junit, \
 	org.osgi.test.support.*
@@ -6,7 +6,6 @@ Private-Package						= ${p}.junit, \
 -buildpath							= \
 	org.osgi.test.support; 	version=project, \
 	org.osgi.service.jdbc; 	version=project, \
-	org.osgi.impl.service.jdbc;  version=project, \
 	osgi.core;									version=4.0		, \
 	ee.j2se;version=latest												, \
 	${junit}
