@@ -45,7 +45,7 @@ public class SynchronizerImpl implements Synchronizer {
 	private final String	id;
 	private final String	header;
 	private Dictionary		props;
-	private static final boolean	DEBUG	= false;
+	private static final boolean	DEBUG	= true;
 
 	/**
 	 * Creates a <code>Synchronizer</code> instance with no signals on the
