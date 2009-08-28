@@ -494,7 +494,7 @@ public class CMControl extends DefaultTestBundleControl {
 		checkConfiguration(conf, "A new Configuration object", bundlePid, null);
 
 		Dictionary props = new Hashtable();
-		props.put("StringKey", "stringvalue");
+		props.put("StringKey", getName());
 		conf.update(props);
 
 		/* Get existing Configuration with null location */
@@ -502,7 +502,7 @@ public class CMControl extends DefaultTestBundleControl {
 		assertEquals("Pid", bundlePid, conf3.getPid());
 		assertNull("FactoryPid", conf3.getFactoryPid());
 		assertNull("Location", this.getBundleLocationForCompare(conf3));
-		assertEquals("The same Confiuration props", "stringvalue", conf3
+		assertEquals("The same Confiuration props", getName(), conf3
 				.getProperties().get("StringKey"));
 
 		this.setInappropriatePermission();
@@ -612,7 +612,7 @@ public class CMControl extends DefaultTestBundleControl {
 			conf = cm.getConfiguration(bundlePid, bundle1.getLocation());
 
 			props = new Hashtable();
-			props.put("StringKey", "stringvalue");
+			props.put("StringKey", getName() + "-1");
 			conf.update(props);
 			conf.setBundleLocation(null);
 
@@ -647,9 +647,10 @@ public class CMControl extends DefaultTestBundleControl {
 			if (bundle1 != null && bundle1.getState() != Bundle.UNINSTALLED)
 				bundle1.uninstall();
 			bundle1 = null;
-			conf = cm.getConfiguration(bundlePid);
+			// conf = cm.getConfiguration(bundlePid);
 			if (conf != null)
 				conf.delete();
+			conf = null;
 		}
 
 		/* 2. created newly with null location.(with properties) */
@@ -658,7 +659,7 @@ public class CMControl extends DefaultTestBundleControl {
 			conf = cm.getConfiguration(bundlePid, null);
 			/* props is set. */
 			props = new Hashtable();
-			props.put("StringKey", "stringvalue");
+			props.put("StringKey", getName() + "-2");
 			conf.update(props);
 			reg = null;
 
@@ -691,15 +692,15 @@ public class CMControl extends DefaultTestBundleControl {
 			if (bundle1 != null && bundle1.getState() != Bundle.UNINSTALLED)
 				bundle1.uninstall();
 			bundle1 = null;
-			conf = cm.getConfiguration(bundlePid);
+			// conf = cm.getConfiguration(bundlePid);
 			if (conf != null)
 				conf.delete();
+			conf = null;
 		}
 		/* 3. created newly with null location. (no properties) */
 		trace("############ 3 testDynamicBinding()");
-		conf = cm.getConfiguration(bundlePid, null);
-		reg = null;
 		try {
+			conf = cm.getConfiguration(bundlePid, null);
 			SynchronizerImpl sync = new SynchronizerImpl();
 			reg = getContext().registerService(Synchronizer.class.getName(),
 					sync, propsForSync1);
@@ -729,9 +730,10 @@ public class CMControl extends DefaultTestBundleControl {
 			if (bundle1 != null && bundle1.getState() != Bundle.UNINSTALLED)
 				bundle1.uninstall();
 			bundle1 = null;
-			conf = cm.getConfiguration(bundlePid);
+			// conf = cm.getConfiguration(bundlePid);
 			if (conf != null)
 				conf.delete();
+			conf = null;
 		}
 		/*
 		 * 4. created newly with null location and dynamic bound. Then
@@ -742,7 +744,7 @@ public class CMControl extends DefaultTestBundleControl {
 		try {
 			conf = cm.getConfiguration(bundlePid, null);
 			props = new Hashtable();
-			props.put("StringKey", "stringvalue");
+			props.put("StringKey", getName() + "-4");
 			conf.update(props);
 			SynchronizerImpl sync = new SynchronizerImpl();
 			reg = getContext().registerService(Synchronizer.class.getName(),
@@ -775,9 +777,10 @@ public class CMControl extends DefaultTestBundleControl {
 			if (bundle1 != null && bundle1.getState() != Bundle.UNINSTALLED)
 				bundle1.uninstall();
 			bundle1 = null;
-			conf = cm.getConfiguration(bundlePid);
+			// conf = cm.getConfiguration(bundlePid);
 			if (conf != null)
 				conf.delete();
+			conf = null;
 		}
 		/*
 		 * 5. dynamic binding and cm restart 1 (with properties).
@@ -793,7 +796,7 @@ public class CMControl extends DefaultTestBundleControl {
 		try {
 			conf = cm.getConfiguration(bundlePid, null);
 			props = new Hashtable();
-			props.put("StringKey", "stringvalue");
+			props.put("StringKey", getName() + "-5");
 			conf.update(props);
 			reg = null;
 
@@ -832,11 +835,14 @@ public class CMControl extends DefaultTestBundleControl {
 			reg = null;
 			if (bundle1 != null && bundle1.getState() != Bundle.UNINSTALLED)
 				bundle1.uninstall();
+			bundle1 = null;
 			cmBundle.start();
+			cmBundle = null;
 			cm = (ConfigurationAdmin) getService(ConfigurationAdmin.class);
 			conf = cm.getConfiguration(bundlePid);
 			if (conf != null)
 				conf.delete();
+			conf = null;
 		}
 
 		/*
@@ -850,13 +856,11 @@ public class CMControl extends DefaultTestBundleControl {
 		 * ==> configuration is still bound to the uninstalled bundle
 		 */
 		trace("############ 6 testDynamicBinding()");
-		conf = cm.getConfiguration(bundlePid, null);
-		props = new Hashtable();
-		props.put("StringKey", "stringvalue");
-		conf.update(props);
-		reg = null;
-		cmBundle = null;
 		try {
+			conf = cm.getConfiguration(bundlePid, null);
+			props = new Hashtable();
+			props.put("StringKey", getName() + "-6");
+			conf.update(props);
 			SynchronizerImpl sync = new SynchronizerImpl();
 			reg = getContext().registerService(Synchronizer.class.getName(),
 					sync, propsForSync1);
@@ -896,11 +900,14 @@ public class CMControl extends DefaultTestBundleControl {
 			reg = null;
 			if (bundle1 != null && bundle1.getState() != Bundle.UNINSTALLED)
 				bundle1.uninstall();
+			bundle1 = null;
 			cmBundle.start();
+			cmBundle = null;
 			cm = (ConfigurationAdmin) getService(ConfigurationAdmin.class);
 			conf = cm.getConfiguration(bundlePid);
 			if (conf != null)
 				conf.delete();
+			conf = null;
 		}
 
 		/*
@@ -914,13 +921,11 @@ public class CMControl extends DefaultTestBundleControl {
 		 * ==> configuration is still bound to the uninstalled bundle
 		 */
 		trace("############ 7 testDynamicBinding()");
-		conf = cm.getConfiguration(bundlePid, null);
-		// props = new Hashtable();
-		// props.put("StringKey", "stringvalue");
-		// conf.update(props);
-		reg = null;
-		cmBundle = null;
 		try {
+			conf = cm.getConfiguration(bundlePid, null);
+			// props = new Hashtable();
+			// props.put("StringKey", getName()+"-7");
+			// conf.update(props);
 			SynchronizerImpl sync = new SynchronizerImpl();
 			reg = getContext().registerService(Synchronizer.class.getName(),
 					sync, propsForSync1);
@@ -955,11 +960,14 @@ public class CMControl extends DefaultTestBundleControl {
 			reg = null;
 			if (bundle1 != null && bundle1.getState() != Bundle.UNINSTALLED)
 				bundle1.uninstall();
+			bundle1 = null;
 			cmBundle.start();
+			cmBundle = null;
 			cm = (ConfigurationAdmin) getService(ConfigurationAdmin.class);
 			conf = cm.getConfiguration(bundlePid);
 			if (conf != null)
 				conf.delete();
+			conf = null;
 		}
 
 		/*
@@ -971,9 +979,10 @@ public class CMControl extends DefaultTestBundleControl {
 		ServiceRegistration reg2 = null;
 		Bundle bundle2 = null;
 		try {
-			conf = cm.getConfiguration(bundlePid, bundle1.getLocation());
+			conf = cm.getConfiguration(bundlePid, getWebServer()
+					+ "targetb1.jar");
 			props = new Hashtable();
-			props.put("StringKey", "stringvalue");
+			props.put("StringKey", getName() + "-8");
 			conf.update(props);
 
 			SynchronizerImpl sync = new SynchronizerImpl("ID1");
@@ -1060,11 +1069,14 @@ public class CMControl extends DefaultTestBundleControl {
 			reg = null;
 			if (bundle1 != null && bundle1.getState() != Bundle.UNINSTALLED)
 				bundle1.uninstall();
+			bundle1 = null;
 			if (reg2 != null)
 				reg2.unregister();
 			reg2 = null;
+			reg2 = null;
 			if (bundle2 != null && bundle2.getState() != Bundle.UNINSTALLED)
 				bundle2.uninstall();
+			bundle2 = null;
 			conf = cm.getConfiguration(bundlePid);
 			if (conf != null)
 				conf.delete();
@@ -1502,7 +1514,7 @@ public class CMControl extends DefaultTestBundleControl {
 
 			trace("The configuration is being updated ");
 			Dictionary props = new Hashtable();
-			props.put("StringKey", "stringvalue");
+			props.put("StringKey", getName() + "-A");
 			conf.update(props);
 			trace("Wait for signal.");
 			calledback = sync.waitForSignal(SIGNAL_WAITING_TIME, ++count);
@@ -1511,7 +1523,7 @@ public class CMControl extends DefaultTestBundleControl {
 			assertNotNull("called back with non-null props", sync.getProps());
 			props = sync.getProps();
 			assertEquals("pid", bundlePid, props.get(Constants.SERVICE_PID));
-			assertEquals("pid", "stringvalue", props.get("StringKey"));
+			assertEquals("pid", getName() + "-A", props.get("StringKey"));
 			assertNull("bundleLocation must be not included", props
 					.get("service.bundleLocation"));
 			assertEquals("Size of props must be 2", 2, props.size());
@@ -1587,7 +1599,7 @@ public class CMControl extends DefaultTestBundleControl {
 			}
 			trace("The configuration is being updated ");
 			Dictionary props = new Hashtable();
-			props.put("StringKey", "stringvalue");
+			props.put("StringKey", getName() + "-B1");
 			conf.update(props);
 			trace("Wait for signal.");
 			calledback = sync.waitForSignal(SIGNAL_WAITING_TIME, ++count);
@@ -1595,7 +1607,7 @@ public class CMControl extends DefaultTestBundleControl {
 			assertNotNull("called back with non-null props", sync.getProps());
 			props = sync.getProps();
 			assertEquals("pid", bundlePid, props.get(Constants.SERVICE_PID));
-			assertEquals("pid", "stringvalue", props.get("StringKey"));
+			assertEquals("pid", getName() + "-B1", props.get("StringKey"));
 			assertNull("bundleLocation must be not included", props
 					.get("service.bundleLocation"));
 			assertEquals("Size of props must be 2", 2, props.size());
@@ -1649,7 +1661,7 @@ public class CMControl extends DefaultTestBundleControl {
 					neverlandLocation);
 			trace("The configuration is being updated ");
 			Dictionary props = new Hashtable();
-			props.put("StringKey", "stringvalue");
+			props.put("StringKey", getName() + "-B2");
 			conf.update(props);
 			SynchronizerImpl sync = new SynchronizerImpl();
 			reg = getContext().registerService(Synchronizer.class.getName(),
@@ -1765,7 +1777,7 @@ public class CMControl extends DefaultTestBundleControl {
 
 			trace("The configuration is being updated ");
 			Dictionary props = new Hashtable();
-			props.put("StringKey", "stringvalue");
+			props.put("StringKey", getName() + "-B3");
 			conf.update(props);
 			trace("Wait for signal.");
 			calledback = sync.waitForSignal(SIGNAL_WAITING_TIME, count + 1);
@@ -1805,7 +1817,7 @@ public class CMControl extends DefaultTestBundleControl {
 			assertNotNull("called back with non-null props", sync.getProps());
 			props = sync.getProps();
 			assertEquals("pid", bundlePid, props.get(Constants.SERVICE_PID));
-			assertEquals("pid", "stringvalue", props.get("StringKey"));
+			assertEquals("pid", getName() + "-B3", props.get("StringKey"));
 			assertNull("bundleLocation must be not included", props
 					.get("service.bundleLocation"));
 			assertEquals("Size of props must be 2", 2, props.size());
@@ -2083,7 +2095,7 @@ public class CMControl extends DefaultTestBundleControl {
 
 			trace("The configuration is being updated ");
 			Dictionary props = new Hashtable();
-			props.put("StringKey", "stringvalue");
+			props.put("StringKey", getName() + "-A");
 			conf.update(props);
 			trace("Wait for signal.");
 			calledback2 = sync2.waitForSignal(SIGNAL_WAITING_TIME, 4);
@@ -2165,7 +2177,7 @@ public class CMControl extends DefaultTestBundleControl {
 
 			trace("The configuration is being updated ");
 			Dictionary props = new Hashtable();
-			props.put("StringKey", "stringvalue");
+			props.put("StringKey", getName() + "-B1");
 			conf.update(props);
 			trace("Wait for signal.");
 			calledback2 = sync2.waitForSignal(SIGNAL_WAITING_TIME, 2);
@@ -2248,7 +2260,7 @@ public class CMControl extends DefaultTestBundleControl {
 
 			trace("The configuration is being updated ");
 			Dictionary props = new Hashtable();
-			props.put("StringKey", "stringvalue");
+			props.put("StringKey", getName() + "-B2");
 			conf.update(props);
 			trace("Wait for signal.");
 			calledback2 = sync2.waitForSignal(SIGNAL_WAITING_TIME, ++count2);
@@ -2302,7 +2314,7 @@ public class CMControl extends DefaultTestBundleControl {
 			Configuration conf = cm.getConfiguration(bundlePid, bundle2
 					.getLocation());
 			Dictionary props = new Hashtable();
-			props.put("StringKey", "stringvalue");
+			props.put("StringKey", getName() + "-B3");
 			conf.update(props);
 			SynchronizerImpl sync2 = new SynchronizerImpl("ID2");
 			reg2 = getContext().registerService(Synchronizer.class.getName(),
@@ -2391,7 +2403,7 @@ public class CMControl extends DefaultTestBundleControl {
 		Configuration conf = cm.getConfiguration(pid);
 		/* Put all legal types in the properties and update */
 		Hashtable props = new Hashtable();
-		props.put("StringKey", "stringvalue");
+		props.put("StringKey", getName());
 		props.put("IntegerKey", new Integer(12));
 		props.put("LongKey", new Long(-29));
 		props.put("FloatKey", new Float(921.14));
@@ -2404,7 +2416,7 @@ public class CMControl extends DefaultTestBundleControl {
 		props.put("BooleanKey", new Boolean(true));
 
 		Collection v = new ArrayList();
-		v.add("stringvalue");
+		v.add(getName());
 		// ### is now invalid ....
 		// v.addElement(new Integer(12));
 		// v.addElement(new Long(-29));
@@ -2466,7 +2478,7 @@ public class CMControl extends DefaultTestBundleControl {
 
 		/* Check if the properties are case independent */
 		String s = (String) msprops.get("sTringkeY");
-		assertEquals("case independant properties", "stringvalue", s);
+		assertEquals("case independant properties", getName(), s);
 		Hashtable illegalprops = new Hashtable();
 		illegalprops.put("exception", new Exception());
 		String message = "Exception is not a legal type";
