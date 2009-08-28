@@ -56,7 +56,7 @@ public class IOControl extends OSGiTestCase {
 	public void testOpen() throws Exception {
 		BundleContext bc = getContext();
 		Hashtable props = new Hashtable();
-		props.put(ConnectionFactory.IO_SCHEME, "test");
+		props.put(ConnectionFactory.IO_SCHEME, new String[] {"test"});
 		TestConnectionFactory cf = new TestConnectionFactory();
 		ServiceRegistration reg = bc.registerService(ConnectionFactory.class
 				.getName(), cf, props);
