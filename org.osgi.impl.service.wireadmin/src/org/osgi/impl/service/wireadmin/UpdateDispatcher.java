@@ -1,15 +1,21 @@
 package org.osgi.impl.service.wireadmin;
 
-import java.util.Vector;
-import org.osgi.service.wireadmin.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.osgi.service.wireadmin.Consumer;
+import org.osgi.service.wireadmin.Producer;
+import org.osgi.service.wireadmin.Wire;
+import org.osgi.service.wireadmin.WireAdminEvent;
 
 public class UpdateDispatcher extends Thread {
-	private Vector			updates	= new Vector(3);
-	private boolean			active	= true;
-	private WireAdminImpl	parent;
+	private final List			updates;
+	private volatile boolean	active	= true;
+	private final WireAdminImpl	parent;
 
 	public UpdateDispatcher(WireAdminImpl parent) {
 		super("wireadmin update dispatcher");
+		updates = new ArrayList();
 		this.parent = parent;
 		setDaemon(true);
 	}
@@ -27,12 +33,11 @@ public class UpdateDispatcher extends Thread {
 						irx.printStackTrace();
 					}
 				}
+				if (!active) {
+					return;
+				}
+				update = (Object[]) updates.remove(0);
 			}
-			if (!active) {
-				return;
-			}
-			update = (Object[]) updates.elementAt(0);
-			updates.removeElement(update);
 			if (((Boolean) update[2]).booleanValue()) {
 				try {
 					((Producer) update[0])
@@ -70,14 +75,13 @@ public class UpdateDispatcher extends Thread {
 
 	private void addUpdate(Object receiver, Wire source, Wire[] wires,
 			boolean producer) {
-		synchronized (updates) {
-			updates.addElement(new Object[] {receiver, wires,
-					new Boolean(producer), source});
-		}
 		if (!isAlive()) {
 			start();
 		}
 		synchronized (this) {
+			updates.add(new Object[] {receiver, wires,
+					Boolean.valueOf(producer),
+					source});
 			this.notifyAll();
 		}
 	}
