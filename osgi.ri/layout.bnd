@@ -1,38 +1,37 @@
 build.impls                 = ${uniq; ${build.cmpn.impls}, ${build.mobile.impls}, ${build.enterprise.impls}}
 
 build.cmpn.impls = \
-	org.osgi.impl.service.log, \
-	org.osgi.impl.bundle.rsh, \
-	org.osgi.impl.bundle.jaxp, \
 	org.osgi.impl.bundle.autoconf, \
+	org.osgi.impl.bundle.jaxp, \
+  	org.osgi.impl.bundle.midletcontainer, \
+	org.osgi.impl.bundle.rsh, \
 	org.osgi.impl.service.application, \
-	org.osgi.impl.service.device.basicdriverlocator, \
-	org.osgi.impl.service.device.manager , \
-	org.osgi.impl.service.http , \
 	org.osgi.impl.service.deploymentadmin , \
+	org.osgi.impl.service.device.manager , \
 	org.osgi.impl.service.dmt , \
+	org.osgi.impl.service.http , \
 	org.osgi.impl.service.io , \
+	org.osgi.impl.service.log , \
 	org.osgi.impl.service.monitor , \
 	org.osgi.impl.service.policy , \
 	org.osgi.impl.service.prefs , \
-	org.osgi.impl.service.provisioning , \
 	org.osgi.impl.service.upnp.cp , \
 	org.osgi.impl.service.upnp.cd , \
 	org.osgi.impl.service.useradmin , \
 	org.osgi.impl.service.wireadmin 
 
 build.mobile.impls = \
-   	org.osgi.impl.service.log , \
-  	org.osgi.impl.bundle.jaxp , \
   	org.osgi.impl.bundle.autoconf , \
+  	org.osgi.impl.bundle.jaxp , \
+  	org.osgi.impl.bundle.midletcontainer, \
   	org.osgi.impl.service.application , \
   	org.osgi.impl.service.deploymentadmin , \
   	org.osgi.impl.service.dmt , \
   	org.osgi.impl.service.io , \
+   	org.osgi.impl.service.log , \
   	org.osgi.impl.service.monitor , \
-  	org.osgi.impl.service.prefs , \
   	org.osgi.impl.service.policy , \
-  	org.osgi.impl.bundle.midletcontainer
+  	org.osgi.impl.service.prefs
   	
 build.enterprise.impls = \
 	org.osgi.impl.bundle.jmx, \

@@ -1,0 +1,15 @@
+Bundle-Description				: \
+	OSGi Service Platform Release ${version;=;${core.release.version}} Version ${version;==;${core.release.version}}, \
+	Core Reference Implementation.
+
+Bundle-Version					: ${version;==;${core.release.version}}.0.${project.build}
+
+Include-Resource				: \
+	  	\
+	  	${repo;org.eclipse.osgi}, \
+		${repo;osgi.core;${version;==;${core.release.version}};LOWEST}, \
+	 	\
+		apache/LICENSE=../licensed/licenses/ASL-2.0.txt, \
+	 	NOTICE=../osgi.companion/legal/NOTICE.txt, \
+	 	{about.html=../osgi.companion/legal/about-ri.html}
+ 
