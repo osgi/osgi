@@ -329,8 +329,7 @@ public class UPnPControl extends DefaultTestBundleControl {
 				}
 			}
 
-			public synchronized void notifyUPnPEvent(String did, String sid,
-					Dictionary vals) {
+			public void notifyUPnPEvent(String did, String sid, Dictionary vals) {
 				log("SERVER: Received Event for UDN: " + did + " & SID: " + sid
 						+ ".\r\nDictionary: " + vals);
 				if (!did.equals(udn) || !sid.equals(currentServ)) {
@@ -339,10 +338,12 @@ public class UPnPControl extends DefaultTestBundleControl {
 							+ currentServ);
 					return;
 				}
-				vector.add(vals);
-				ender--;
-				if (ender == 0) {
-					notify();
+				synchronized (this) {
+					vector.add(vals);
+					ender--;
+					if (ender == 0) {
+						notify();
+					}
 				}
 			}
 		};
@@ -350,7 +351,6 @@ public class UPnPControl extends DefaultTestBundleControl {
 				UPnPEventListener.class.getName(), el, hash);
 		try {
 			synchronized (el) {
-
 				for (int tries = 0; (tries < 10) && (vector.size() < 10); tries++) {
 					log("Waiting for events: try=" + tries + "; size="
 							+ vector.size());

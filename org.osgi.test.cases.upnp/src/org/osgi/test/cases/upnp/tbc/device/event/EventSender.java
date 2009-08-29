@@ -224,8 +224,8 @@ public class EventSender implements Runnable {
 		sb.append(sid);
 		sb.append(UPnPConstants.CRLF);
 		sb.append(UPnPConstants.H_SEQ);
-		sb.append(next);
 		synchronized (this) {
+			sb.append(next);
 			next++;
 		}
 		sb.append(UPnPConstants.CRLF);
