@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="build" default="build-clean">
+	<description>
+		Master build file for the OSGi build. The build-clean target does a full build of the 
+		companion code, the reference implementations and the compliance tests. The build-libs
+		target just builds the companion code. After doing a full build with the build-clean target, 
+		the runtests target can be run to execute the compliance tests against the reference 
+		implementations.
+	</description>
+
+	<target name="build-clean">
+		<ant dir="osgi.ct" />
+	</target>
+
+	<target name="build-libs">
+		<ant dir="osgi.companion" />
+	</target>
+
+	<target name="runtests">
+		<ant dir="osgi.ct" target="runtests" />
+	</target>
+</project>
