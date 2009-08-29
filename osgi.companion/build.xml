@@ -47,89 +47,89 @@
 	
 	<target name="japitools" depends="init">
 		<mkdir dir="${target}/japi"/>
-		<echo>osgi.core</echo>
+		<echo>osgi.core ${target}/osgi.core.jar</echo>
 		<java classname="net.wuffies.japi.Japize">
-			<classpath path="${project.workspace}/licensed/japitools/share/java/japitools.jar" />
+			<classpath path="${licensed}/japitools/share/java/japitools.jar" />
 			<arg value="unzip" />
 			<arg value="as" />
 			<arg value="${target}/japi/osgi.core-latest.japi" />
 			<arg value="packages" />
-			<arg value="${release.target}/ee.minimum.jar" />
-			<arg value="${release.target}/osgi.core.jar" />
+			<arg value="${repo}/ee.minimum/ee.minimum-1.2.0.jar" />
+			<arg value="${target}/osgi.core.jar" />
 			<arg line="${japi.osgi.core}" />
 		</java>
-		<echo>osgi.cmpn</echo>
+		<echo>osgi.cmpn ${target}/osgi.cmpn.jar</echo>
 		<java classname="net.wuffies.japi.Japize">
-			<classpath path="${project.workspace}/licensed/japitools/share/java/japitools.jar" />
+			<classpath path="${licensed}/japitools/share/java/japitools.jar" />
 			<arg value="unzip" />
 			<arg value="as" />
 			<arg value="${target}/japi/osgi.cmpn-latest.japi" />
 			<arg value="packages" />
-			<arg value="${release.target}/ee.foundation.jar" />
-			<arg value="${release.target}/osgi.core.jar" />
-			<arg value="${release.target}/osgi.cmpn.jar" />
+			<arg value="${repo}/ee.foundation/ee.foundation-1.1.0.jar" />
+			<arg value="${target}/osgi.core.jar" />
+			<arg value="${target}/osgi.cmpn.jar" />
 			<arg value="${licensed-repo}/org.osgi.impl.bundle.servlet/org.osgi.impl.bundle.servlet-2.1.0.jar" />
 			<arg value="${licensed-repo}/com.icl.saxon/com.icl.saxon-6.5.1.jar" />
 			<arg line="${japi.osgi.cmpn}" />
 		</java>
-		<echo>osgi.mobile</echo>
+		<echo>osgi.mobile ${target}/osgi.mobile.jar</echo>
 		<java classname="net.wuffies.japi.Japize">
-			<classpath path="${project.workspace}/licensed/japitools/share/java/japitools.jar" />
+			<classpath path="${licensed}/japitools/share/java/japitools.jar" />
 			<arg value="unzip" />
 			<arg value="as" />
 			<arg value="${target}/japi/osgi.mobile-latest.japi" />
 			<arg value="packages" />
-			<arg value="${release.target}/ee.foundation.jar" />
-			<arg value="${release.target}/osgi.core.jar" />
-			<arg value="${release.target}/osgi.mobile.jar" />
+			<arg value="${repo}/ee.foundation/ee.foundation-1.1.0.jar" />
+			<arg value="${target}/osgi.core.jar" />
+			<arg value="${target}/osgi.mobile.jar" />
 			<arg value="${licensed-repo}/com.icl.saxon/com.icl.saxon-6.5.1.jar" />
 			<arg line="${japi.osgi.mobile}" />
 		</java>
-		<echo>osgi.enterprise</echo>
+		<echo>osgi.enterprise ${target}/osgi.enterprise.jar</echo>
 		<java classname="net.wuffies.japi.Japize">
-			<classpath path="${project.workspace}/licensed/japitools/share/java/japitools.jar" />
+			<classpath path="${licensed}/japitools/share/java/japitools.jar" />
 			<arg value="unzip" />
 			<arg value="as" />
 			<arg value="${target}/japi/osgi.enterprise-latest.japi" />
 			<arg value="packages" />
-			<arg value="${release.target}/ee.foundation.jar" />
-			<arg value="${release.target}/osgi.core.jar" />
-			<arg value="${release.target}/osgi.enterprise.jar" />
+			<arg value="${repo}/ee.j2se/ee.j2se-1.4.0.jar" />
+			<arg value="${target}/osgi.core.jar" />
+			<arg value="${target}/osgi.enterprise.jar" />
 			<arg value="${licensed-repo}/com.icl.saxon/com.icl.saxon-6.5.1.jar" />
 			<arg line="${japi.osgi.enterprise}" />
 		</java>
-		<echo>osgi.proposed</echo>
+		<echo>osgi.proposed ${target}/osgi.proposed.jar</echo>
 		<java classname="net.wuffies.japi.Japize">
-			<classpath path="${project.workspace}/licensed/japitools/share/java/japitools.jar" />
+			<classpath path="${licensed}/japitools/share/java/japitools.jar" />
 			<arg value="unzip" />
 			<arg value="as" />
 			<arg value="${target}/japi/osgi.proposed-latest.japi" />
 			<arg value="packages" />
-			<arg value="${release.target}/ee.foundation.jar" />
-			<arg value="${release.target}/osgi.core.jar" />
-			<arg value="${release.target}/osgi.proposed.jar" />
+			<arg value="${repo}/ee.foundation/ee.foundation-1.1.0.jar" />
+			<arg value="${target}/osgi.core.jar" />
+			<arg value="${target}/osgi.proposed.jar" />
 			<arg value="${licensed-repo}/com.icl.saxon/com.icl.saxon-6.5.1.jar" />
 			<arg line="${japi.osgi.proposed}" />
 		</java>
-		<echo>ee.minimum</echo>
+		<echo>ee.minimum ${project.workspace}/ee.minimum/${target-dir}/ee.minimum.jar</echo>
 		<java classname="net.wuffies.japi.Japize">
-			<classpath path="${project.workspace}/licensed/japitools/share/java/japitools.jar" />
+			<classpath path="${licensed}/japitools/share/java/japitools.jar" />
 			<arg value="unzip" />
 			<arg value="as" />
 			<arg value="${target}/japi/ee.minimum-latest.japi" />
 			<arg value="packages" />
-			<arg value="${release.target}/ee.minimum.jar" />
+			<arg value="${project.workspace}/ee.minimum/${target-dir}/ee.minimum.jar" />
 			<arg value="+java" />
 			<arg value="+javax" />
 		</java>
-		<echo>ee.foundation</echo>
+		<echo>ee.foundation ${project.workspace}/ee.foundation/${target-dir}/ee.foundation.jar</echo>
 		<java classname="net.wuffies.japi.Japize">
-			<classpath path="${project.workspace}/licensed/japitools/share/java/japitools.jar" />
+			<classpath path="${licensed}/japitools/share/java/japitools.jar" />
 			<arg value="unzip" />
 			<arg value="as" />
 			<arg value="${target}/japi/ee.foundation-latest.japi" />
 			<arg value="packages" />
-			<arg value="${release.target}/ee.foundation.jar" />
+			<arg value="${project.workspace}/ee.foundation/${target-dir}/ee.foundation.jar" />
 			<arg value="+java" />
 			<arg value="+javax" />
 		</java>
@@ -138,7 +138,7 @@
 	<target name="japicompat" depends="init">
 		<echo>osgi.core</echo>
 		<exec executable="perl" failifexecutionfails="false">
-			<arg value="${project.workspace}/licensed/japitools/bin/japicompat" />
+			<arg value="${licensed}/japitools/bin/japicompat" />
 			<arg value="-h" />
 			<arg value="-v" />
 			<arg value="-o" />
@@ -147,7 +147,7 @@
 			<arg value="${target}/japi/osgi.core-latest.japi" />
 		</exec>
 		<exec executable="perl" failifexecutionfails="false">
-			<arg value="${project.workspace}/licensed/japitools/bin/japicompat" />
+			<arg value="${licensed}/japitools/bin/japicompat" />
 			<arg value="-h" />
 			<arg value="-v" />
 			<arg value="-o" />
@@ -157,7 +157,7 @@
 		</exec>
 		<echo>osgi.cmpn</echo>
 		<exec executable="perl" failifexecutionfails="false">
-			<arg value="${project.workspace}/licensed/japitools/bin/japicompat" />
+			<arg value="${licensed}/japitools/bin/japicompat" />
 			<arg value="-h" />
 			<arg value="-v" />
 			<arg value="-o" />
@@ -166,7 +166,7 @@
 			<arg value="${target}/japi/osgi.cmpn-latest.japi" />
 		</exec>
 		<exec executable="perl" failifexecutionfails="false">
-			<arg value="${project.workspace}/licensed/japitools/bin/japicompat" />
+			<arg value="${licensed}/japitools/bin/japicompat" />
 			<arg value="-h" />
 			<arg value="-v" />
 			<arg value="-o" />
@@ -176,7 +176,7 @@
 		</exec>
 		<echo>osgi.mobile</echo>
 		<exec executable="perl" failifexecutionfails="false">
-			<arg value="${project.workspace}/licensed/japitools/bin/japicompat" />
+			<arg value="${licensed}/japitools/bin/japicompat" />
 			<arg value="-h" />
 			<arg value="-v" />
 			<arg value="-o" />
@@ -185,7 +185,7 @@
 			<arg value="${target}/japi/osgi.mobile-latest.japi" />
 		</exec>
 		<exec executable="perl" failifexecutionfails="false">
-			<arg value="${project.workspace}/licensed/japitools/bin/japicompat" />
+			<arg value="${licensed}/japitools/bin/japicompat" />
 			<arg value="-h" />
 			<arg value="-v" />
 			<arg value="-o" />
@@ -195,7 +195,7 @@
 		</exec>
 		<echo>ee.minimum</echo>
 		<exec executable="perl" failifexecutionfails="false">
-			<arg value="${project.workspace}/licensed/japitools/bin/japicompat" />
+			<arg value="${licensed}/japitools/bin/japicompat" />
 			<arg value="-h" />
 			<arg value="-o" />
 			<arg value="${target}/japi/ee.minimum-japicompat.html" />
@@ -203,7 +203,7 @@
 			<arg value="${target}/japi/ee.minimum-latest.japi" />
 		</exec>
 		<exec executable="perl" failifexecutionfails="false">
-			<arg value="${project.workspace}/licensed/japitools/bin/japicompat" />
+			<arg value="${licensed}/japitools/bin/japicompat" />
 			<arg value="-h" />
 			<arg value="-o" />
 			<arg value="${target}/japi/ee.minimum-changed-japicompat.html" />
@@ -212,7 +212,7 @@
 		</exec>
 		<echo>ee.foundation</echo>
 		<exec executable="perl" failifexecutionfails="false">
-			<arg value="${project.workspace}/licensed/japitools/bin/japicompat" />
+			<arg value="${licensed}/japitools/bin/japicompat" />
 			<arg value="-h" />
 			<arg value="-o" />
 			<arg value="${target}/japi/ee.foundation-japicompat.html" />
@@ -220,7 +220,7 @@
 			<arg value="${target}/japi/ee.foundation-latest.japi" />
 		</exec>
 		<exec executable="perl" failifexecutionfails="false">
-			<arg value="${project.workspace}/licensed/japitools/bin/japicompat" />
+			<arg value="${licensed}/japitools/bin/japicompat" />
 			<arg value="-h" />
 			<arg value="-o" />
 			<arg value="${target}/japi/ee.foundation-changed-japicompat.html" />
@@ -229,7 +229,7 @@
 		</exec>
 		<echo>ee compare</echo>
 		<exec executable="perl" failifexecutionfails="false">
-			<arg value="${project.workspace}/licensed/japitools/bin/japicompat" />
+			<arg value="${licensed}/japitools/bin/japicompat" />
 			<arg value="-h" />
 			<arg value="-o" />
 			<arg value="${target}/japi/ee.minimum2foundation-japicompat.html" />
