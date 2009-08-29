@@ -104,7 +104,7 @@
 		  If ${src} == ${bin} then this is not necessary, but unfortunately, now 
 		  it is. 
 		--> 
-		<copy todir="${project.output}">
+		<copy todir="${project.output}" verbose="${verbose}" preservelastmodified="true">
 			<fileset dir="${project.sourcepath}">
                 <exclude name="**/*.java"/>
                 <exclude name="**/*.class"/>
@@ -170,7 +170,7 @@
 
 	<target name="clean" depends="init">
 		<delete quiet="true" includeEmptyDirs="true" verbose="${verbose}">
-			<fileset dir="${project.output}" includes="**/*.class" />
+			<fileset dir="${project.output}" />
 			<fileset dir="${target}" />
 		</delete>
 	</target>
