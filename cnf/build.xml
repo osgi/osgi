@@ -105,7 +105,7 @@
 		  it is. 
 		--> 
 		<copy todir="${project.output}">
-			<fileset dir="${src}">
+			<fileset dir="${project.sourcepath}">
                 <exclude name="**/*.java"/>
                 <exclude name="**/*.class"/>
 			</fileset>
