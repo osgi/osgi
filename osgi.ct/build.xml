@@ -3,26 +3,33 @@
 	<import file="../cnf/build.xml" />
 
 	<target name="runtests" depends="init">
-      <antcall target="-runtest">
-            <param name="test-name" value="osgi.core.tests" />
-        </antcall>
+		<antcall target="-runtest">
+			<param name="test-name" value="osgi.core.tests" />
+			<param name="jars" value="../osgi.ri/generated/osgi.core.impls.jar" />
+		</antcall>
 
-      <antcall target="-runtest">
-            <param name="test-name" value="osgi.cmpn.tests" />
-        </antcall>
+		<antcall target="-runtest">
+			<param name="test-name" value="osgi.cmpn.tests" />
+			<param name="jars" value="${workspace}/osgi.ri/generated/osgi.core.impls.jar,${workspace}/osgi.ri/generated/osgi.core.impls.jar" />
+		</antcall>
 	</target>
 
 	<target name="-runtest">
-		<property name="prefix" value="${target}/${test-name}"/>
-		<delete dir="${prefix}"/>
-		<mkdir dir="${prefix}"/>
-		<unzip dest="${prefix}" src="${prefix}.jar"/>
-
-        <java dir="${prefix}"  jar="${prefix}/jar/bnd.jar" fork="true">
-            <arg value="-exceptions"/>
-            <arg value="runtests"/>
-            <arg value="-title"/>
-            <arg value="${test-name}"/>
-        </java>
+		<property name="prefix" value="${target}/${test-name}" />
+		<delete dir="${prefix}" />
+		<mkdir dir="${prefix}" />
+		<unzip dest="${prefix}" src="${prefix}.jar" />
+		<for list="${jars}" param="jar">
+			<sequential>
+				<echo>Proc @{jar} </echo>
+		        <unzip dest="${prefix}/jar" src="@{jar}" />
+			</sequential>
+		</for>
+		<java dir="${prefix}" jar="${prefix}/jar/bnd.jar" fork="true">
+			<arg value="-exceptions" />
+			<arg value="runtests" />
+			<arg value="-title" />
+			<arg value="${test-name}" />
+		</java>
 	</target>
 </project>
