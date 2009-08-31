@@ -21,7 +21,6 @@ import aQute.libg.version.*;
 public class Packaging implements AnalyzerPlugin {
 
 	final static String	PACK	= "-pack";
-	final static String	PACKNOIMPLS	= "-packnoimpls";
 	final static String	ROOT	= "";
 
 	public boolean analyzeJar(Analyzer analyzer) throws Exception {
@@ -34,7 +33,6 @@ public class Packaging implements AnalyzerPlugin {
 
 		String pack = analyzer.getProperty(PACK);
 		ProjectBuilder pb = (ProjectBuilder) analyzer;
-		boolean impls = Processor.isTrue(analyzer.getProperty(PACKNOIMPLS));
 		Workspace workspace = pb.getProject().getWorkspace();
 		Jar jar = analyzer.getJar();
 
@@ -46,7 +44,7 @@ public class Packaging implements AnalyzerPlugin {
 				if (!project.isValid())
 					analyzer.error("Invalid project to pack: %s", project);
 				else
-					pack(analyzer, jar, project, impls);
+					pack(analyzer, jar, project);
 			}
 			catch (Exception t) {
 				analyzer.error("While packaging %s got %s", entry.getKey(), t);
@@ -64,6 +62,9 @@ public class Packaging implements AnalyzerPlugin {
 			jar.putResource("jar/bnd.jar", new FileResource(f));
 		else
 			analyzer.error("Cannot find bnd's jar file in a repository ");
+
+		List<Container> extra = pb.getProject().getBundles(Constants.STRATEGY_HIGHEST, "com.springsource.junit");
+		flatten(analyzer,null,jar,extra,true);
 
 		StringBuilder script = new StringBuilder();
 		script.append("java -jar jar/bnd.jar runtests -title ");
@@ -84,7 +85,7 @@ public class Packaging implements AnalyzerPlugin {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	private void pack(Analyzer analyzer, Jar jar, Project project, boolean impls)
+	private void pack(Analyzer analyzer, Jar jar, Project project)
 			throws Exception {
 		Collection<Container> runpath = project.getRunpath();
 		Collection<Container> runbundles = project.getRunbundles();
@@ -102,11 +103,11 @@ public class Packaging implements AnalyzerPlugin {
 		sb.append("\n");
 		sb.append("\n");
 		sb.append("-runpath = ");
-		flatten(analyzer, sb, jar, runpath, impls);
+		flatten(analyzer, sb, jar, runpath, false);
 
 		sb.append("\n\n");
 		sb.append("-runbundles = ");
-		flatten(analyzer, sb, jar, runbundles, impls);
+		flatten(analyzer, sb, jar, runbundles, false);
 
 		Map<String, String> properties = OSGiHeader
 				.parseProperties(runproperties);
