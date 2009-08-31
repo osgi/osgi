@@ -10,7 +10,7 @@
 
 		<antcall target="-runtest">
 			<param name="test-name" value="osgi.cmpn.tests" />
-			<param name="jars" value="${workspace}/osgi.ri/generated/osgi.core.impls.jar,${workspace}/osgi.ri/generated/osgi.core.impls.jar" />
+			<param name="jars" value="../osgi.ri/generated/osgi.core.impls.jar,../osgi.ri/generated/osgi.cmpn.impls.jar" />
 		</antcall>
 	</target>
 
