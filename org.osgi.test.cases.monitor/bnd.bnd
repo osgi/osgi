@@ -29,7 +29,7 @@ Test-Cases							= ${testcases}
 	org.osgi.impl.service.dmt; version=project, \
 	org.osgi.impl.service.monitor; version=project, \
 	org.osgi.impl.service.log; version=latest, \
-	osgi.mobile; version=latest
+	osgi.cmpn; version=latest
 
 
 

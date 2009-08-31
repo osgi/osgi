@@ -57,7 +57,7 @@ Test-Cases							= ${testcases}
 	org.osgi.impl.bundle.jaxp;  version=latest, \
 	org.osgi.impl.service.deploymentadmin; version=project, \
 	org.osgi.impl.service.dmt; version=latest, \
-	osgi.mobile; version=latest
+	osgi.cmpn; version=latest
 
 -runproperties= \
 	report=true, \

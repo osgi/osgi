@@ -28,7 +28,7 @@ Test-Cases							= ${testcases}
 	org.osgi.impl.service.policy;     version=project, \
     org.apache.felix.configadmin;     version=latest, \
 	org.osgi.impl.service.dmt;        version=latest, \
-	osgi.mobile;                      version=latest
+	osgi.cmpn;	                      version=latest
 
 
 -runproperties = report=true, \
