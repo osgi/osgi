@@ -1,5 +1,6 @@
 -include: layout.bnd
 -reportnewer : true
+-resourceonly: true
 
 # Build the deliverables that are published in the repository
 # for use in all projects.
