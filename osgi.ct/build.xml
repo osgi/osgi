@@ -12,14 +12,14 @@
 	<target name="osgi.core.tests" depends="init">
 		<antcall target="-runtest">
 			<param name="test-name" value="osgi.core.tests" />
-			<param name="jars" value="${osgi.ri}/osgi.core.impls.jar" />
+			<param name="jars" value="osgi.core.impls.jar" />
 		</antcall>
 	</target>
 
 	<target name="osgi.cmpn.tests" depends="init">
 		<antcall target="-runtest">
 			<param name="test-name" value="osgi.cmpn.tests" />
-			<param name="jars" value="${osgi.ri}/osgi.core.impls.jar:${osgi.ri}/osgi.cmpn.impls.jar" />
+			<param name="jars" value="osgi.core.impls.jar,osgi.cmpn.impls.jar" />
 		</antcall>
 	</target>
 
@@ -28,7 +28,7 @@
 		<delete dir="${prefix}" />
 		<mkdir dir="${prefix}/jar" />
 		<unzip dest="${prefix}/jar">
-			<path path="${jars}" />
+			<fileset dir="${osgi.ri}" includes="${jars}" />
 			<patternset includes="**/*.jar"/>
 		</unzip>
 		<unzip dest="${prefix}" src="${prefix}.jar" />
