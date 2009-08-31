@@ -5,18 +5,17 @@ Bundle-Description				: \
 Bundle-Version					: ${mobile.release.version}
 
 Include-Resource				: \
-    ${repo;${build.mobile.impls};0;HIGHEST}, \
-  	\
-	${repo;org.apache.felix.configadmin}, \
-  	${repo;org.eclipse.equinox.ds}, \
-  	${repo;org.eclipse.equinox.event}, \
- 	${repo;org.eclipse.equinox.metatype}, \
- 	${repo;org.eclipse.equinox.util}, \
-	${repo;org.osgi.impl.bundle.servlet;2.1}, \
-	${repo;osgi.mobile;${version;===;${mobile.release.version}}}, \
- 	\
-	apache/LICENSE=../licensed/licenses/ASL-2.0.txt, \
- 	NOTICE=../osgi.companion/legal/NOTICE.txt, \
- 	{about.html=../osgi.companion/legal/about-ri.html}
+		${repo;${build.mobile.impls};0;HIGHEST}, \
+		\
+		${repo;org.apache.felix.configadmin}, \
+		${repo;org.eclipse.equinox.ds}, \
+		${repo;org.eclipse.equinox.event}, \
+		${repo;org.eclipse.equinox.metatype}, \
+		${repo;org.eclipse.equinox.util}, \
+		${repo;org.osgi.impl.bundle.servlet;2.1}, \
+		${repo;osgi.mobile;${version;===;${mobile.release.version}}}, \
+		\
+		NOTICE=legal/NOTICE.txt, \
+		{about.html=legal/about.html}
  	
  

@@ -1,26 +1,8 @@
--include: layout.bnd
--reportnewer : true
--resourceonly: true
-
-# Build the deliverables that are published in the repository
-# for use in all projects.
-
-bin.includes				= \
-	osgi.core.impls.jar, \
-	osgi.cmpn.impls.jar, \
-	osgi.mobile.impls.jar, \
-	osgi.enterprise.impls.jar
-
-# The following line builds all these files and publishes them to 
-# the repository (if they are deployable)
-
--dependson 					= ${uniq; \
-    osgi.companion, \
-	${build.cmpn.impls}, \
-	${build.mobile.impls}, \
-	${build.enterprise.impls}, \
- }
+-include			: layout.bnd
+-dependson			: osgi.companion, ${build.impls}
+-reportnewer		: true
+-resourceonly		: true
 
 # Build the osgi spec files
--sub       = osgi*.bnd
+-sub       = osgi.*.impls.bnd
 

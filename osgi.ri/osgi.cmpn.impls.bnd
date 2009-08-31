@@ -2,7 +2,7 @@ Bundle-Description				: \
 	OSGi Service Platform Release ${version;=;${cmpn.release.version}} Version ${version;==;${cmpn.release.version}}, \
 	Compendium Reference Implementations.
 
-Bundle-Version					: ${version;==;${cmpn.release.version}}.0.${project.build}
+Bundle-Version					: ${cmpn.release.version}
 
 Include-Resource				: \
         ${repo;${build.cmpn.impls};0;HIGHEST}, \
@@ -15,9 +15,8 @@ Include-Resource				: \
 	 	${repo;org.eclipse.equinox.util}, \
 	 	${repo;org.springframework.osgi.blueprint.uber}, \
 		${repo;org.osgi.impl.bundle.servlet;2.1}, \
-		${repo;osgi.cmpn;${version;==;${cmpn.release.version}};LOWEST}, \
+		${repo;osgi.cmpn;${version;===;${cmpn.release.version}}}, \
 	 	\
-		apache/LICENSE=../licensed/licenses/ASL-2.0.txt, \
-	 	NOTICE=../osgi.companion/legal/NOTICE.txt, \
-	 	{about.html=../osgi.companion/legal/about-ri.html}
+		NOTICE=legal/NOTICE.txt, \
+		{about.html=legal/about.html}
  

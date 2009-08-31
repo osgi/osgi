@@ -4,7 +4,7 @@ Bundle-Description				: \
 
 Bundle-Version					: ${cmpn.release.version}
 Include-Resource				: \
-    NOTICE=../osgi.companion/legal/NOTICE.txt, \
- 	{about.html=../osgi.companion/legal/about-ri.html}
+    NOTICE=legal/NOTICE.txt, \
+ 	{about.html=legal/about.html}
  	
 -pack: ${build.cmpn.tests}
