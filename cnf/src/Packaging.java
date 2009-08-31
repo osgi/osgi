@@ -21,6 +21,7 @@ import aQute.libg.version.*;
 public class Packaging implements AnalyzerPlugin {
 
 	final static String	PACK	= "-pack";
+	final static String	PACKNOIMPLS	= "-packnoimpls";
 	final static String	ROOT	= "";
 
 	public boolean analyzeJar(Analyzer analyzer) throws Exception {
@@ -33,7 +34,7 @@ public class Packaging implements AnalyzerPlugin {
 
 		String pack = analyzer.getProperty(PACK);
 		ProjectBuilder pb = (ProjectBuilder) analyzer;
-
+		boolean impls = Processor.isTrue(analyzer.getProperty(PACKNOIMPLS));
 		Workspace workspace = pb.getProject().getWorkspace();
 		Jar jar = analyzer.getJar();
 
@@ -45,7 +46,7 @@ public class Packaging implements AnalyzerPlugin {
 				if (!project.isValid())
 					analyzer.error("Invalid project to pack: %s", project);
 				else
-					pack(analyzer, jar, project);
+					pack(analyzer, jar, project, impls);
 			}
 			catch (Exception t) {
 				analyzer.error("While packaging %s got %s", entry.getKey(), t);
@@ -83,7 +84,7 @@ public class Packaging implements AnalyzerPlugin {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	private void pack(Analyzer analyzer, Jar jar, Project project)
+	private void pack(Analyzer analyzer, Jar jar, Project project, boolean impls)
 			throws Exception {
 		Collection<Container> runpath = project.getRunpath();
 		Collection<Container> runbundles = project.getRunbundles();
@@ -95,17 +96,17 @@ public class Packaging implements AnalyzerPlugin {
 		sb.append("build=.\n");
 		sb.append("\n");
 		sb.append("-target = ");
-		flatten(analyzer, sb, jar, project, Collections.EMPTY_MAP);
+		flatten(analyzer, sb, jar, project, Collections.EMPTY_MAP, true);
 		sb.deleteCharAt(sb.length() - 1);
 
 		sb.append("\n");
 		sb.append("\n");
 		sb.append("-runpath = ");
-		flatten(analyzer, sb, jar, runpath);
+		flatten(analyzer, sb, jar, runpath, impls);
 
 		sb.append("\n\n");
 		sb.append("-runbundles = ");
-		flatten(analyzer, sb, jar, runbundles);
+		flatten(analyzer, sb, jar, runbundles, impls);
 
 		Map<String, String> properties = OSGiHeader
 				.parseProperties(runproperties);
@@ -146,40 +147,40 @@ public class Packaging implements AnalyzerPlugin {
 	}
 
 	private void flatten(Analyzer analyzer, StringBuilder sb, Jar jar,
-			Collection<Container> path) throws Exception {
+			Collection<Container> path, boolean store) throws Exception {
 		for (Container container : path) {
-			flatten(analyzer, sb, jar, container);
+			flatten(analyzer, sb, jar, container, store);
 		}
 		if (sb != null)
 			sb.deleteCharAt(sb.length() - 2);
 	}
 
 	private void flatten(Analyzer analyzer, StringBuilder sb, Jar jar,
-			Container container) throws Exception {
+			Container container, boolean store) throws Exception {
 		switch (container.getType()) {
 			case LIBRARY :
-				flatten(analyzer, sb, jar, container.getMembers());
+				flatten(analyzer, sb, jar, container.getMembers(), store);
 				return;
 
 			case PROJECT :
 				flatten(analyzer, sb, jar, container.getProject(), container
-						.getAttributes());
+						.getAttributes(), store);
 				break;
 
 			case EXTERNAL :
 				flatten(analyzer, sb, jar, container.getFile(), container
-						.getAttributes());
+						.getAttributes(), store);
 				break;
 
 			case REPO :
 				flatten(analyzer, sb, jar, container.getFile(), container
-						.getAttributes());
+						.getAttributes(), store);
 				break;
 		}
 	}
 
 	private void flatten(Analyzer analyzer, StringBuilder sb, Jar jar,
-			Project project, Map<String, String> map) throws Exception {
+			Project project, Map<String, String> map, boolean store) throws Exception {
 		File[] subs = project.getBuildFiles();
 		analyzer.getInfo(project);
 		if (subs == null) {
@@ -187,11 +188,11 @@ public class Packaging implements AnalyzerPlugin {
 		}
 		else
 			for (File sub : subs)
-				flatten(analyzer, sb, jar, sub, map);
+				flatten(analyzer, sb, jar, sub, map, store);
 	}
 
 	private void flatten(Analyzer analyzer, StringBuilder sb, Jar jar,
-			File sub, Map<String, String> map) throws Exception {
+			File sub, Map<String, String> map, boolean store) throws Exception {
 		Jar s = new Jar(sub);
 		try {
 			Manifest m = s.getManifest();
@@ -209,7 +210,10 @@ public class Packaging implements AnalyzerPlugin {
 
 			String path = "jar/" + bsn + "-" + v.getMajor() + "."
 					+ v.getMinor() + "." + v.getMicro() + ".jar";
-			jar.putResource(path, new FileResource(sub));
+			
+			if ( store )
+				jar.putResource(path, new FileResource(sub));
+			
 			if (sb != null) {
 				sb.append("\\\n    ");
 				sb.append(path);
