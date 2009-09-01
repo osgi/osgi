@@ -1,3 +1,6 @@
+javac.source 			= 1.5
+javac.target 			= 1.5
+
 # in order to build with this bnd file, i copied the geronimo servlet spec and annotation spec to the licensed/repo
 # this needs to be updated when the RFC 66 RI is in svn
 Bundle-Description: OSGi Web Container RFC 66 Compliance Test
@@ -44,12 +47,10 @@ Export-Package =\
 -buildpath							= \
     org.apache.geronimo.specs.geronimo-servlet_2.5_spec;			version=1.2, \
     org.apache.geronimo.specs.geronimo-annotation_1.0_spec;version=1.1.1, \
-	ee.j2se;								version=1.4, \
-	osgi;									version=4.2, \
+	osgi.core;									version=4.2, \
+	osgi.cmpn;									version=4.2, \
 	org.osgi.test.support;					version=project, \
-	org.osgi.service.log;					version=project, \
 	${junit}, \
-	org.osgi.service.event;                 version=project , \
 	org.apache.commons-logging;version=1.0.4
 
 -runbundles						= \
@@ -105,5 +106,6 @@ Export-Package =\
 	org.osgi.service.webcontainer.http.port=8080
 
 Test-Cases						= ${testcases}
+-signaturetest                      = org.osgi.service.webapplication
 
 	
