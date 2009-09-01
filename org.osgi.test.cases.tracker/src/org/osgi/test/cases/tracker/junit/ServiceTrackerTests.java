@@ -30,6 +30,7 @@ import java.util.Hashtable;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
@@ -787,6 +788,49 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 		finally {
 			if (reg != null)
 				reg.unregister();
+			if (testTracker != null)
+				testTracker.close();
+		}
+	}
+
+	public void testModifiedRanking() {
+		Runnable runIt = new Runnable() {
+			public void run() {
+				// nothing
+			}
+		};
+		Hashtable props = new Hashtable();
+		props.put(getName(), Boolean.TRUE);
+		props.put(Constants.SERVICE_RANKING, new Integer(15));
+		ServiceRegistration reg1 = getContext().registerService(
+				Runnable.class.getName(), runIt, props);
+		props.put(Constants.SERVICE_RANKING, new Integer(10));
+		ServiceRegistration reg2 = getContext().registerService(
+				Runnable.class.getName(), runIt, props);
+		ServiceTracker testTracker = null;
+		try {
+			try {
+				testTracker = new ServiceTracker(getContext(), FrameworkUtil
+						.createFilter("(&(objectclass=java.lang.Runnable)("
+								+ getName().toLowerCase() + "=true))"), null);
+			}
+			catch (InvalidSyntaxException e) {
+				fail("filter error", e);
+			}
+			testTracker.open();
+			assertEquals("wrong service reference", reg1.getReference(),
+					testTracker.getServiceReference());
+
+			props.put(Constants.SERVICE_RANKING, new Integer(20));
+			reg2.setProperties(props);
+			assertEquals("wrong service reference", reg2.getReference(),
+					testTracker.getServiceReference());
+		}
+		finally {
+			if (reg1 != null)
+				reg1.unregister();
+			if (reg2 != null)
+				reg2.unregister();
 			if (testTracker != null)
 				testTracker.close();
 		}

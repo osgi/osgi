@@ -14,6 +14,13 @@ Export-Package						= ${p}.service
 	osgi.cmpn; version=latest
 
 -runproperties						= report=true
+
+# Uncomment the following to test the tracker code in the org.osgi.util.tracker 
+# project instead of the one in Equinox.
+#-runpath							= \
+#	org.osgi.util.tracker;	version=project, \
+#	org.eclipse.osgi;		version=3.5.1, \
+#	${junit}
 	
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.util.tracker
