@@ -3,23 +3,14 @@
 	The is main OSGi build file. It is included from projects
 	as is.
 	
-	It is described in http://www2.osgi.org/members/Build/HomePage 
+	It is described in http://www.osgi.org/members/Build/HomePage 
 -->
-<project name="master" default="none">
+<project name="master" default="compile">
 
 	<target name="all" depends="publish">
 		<!-- all target is a synonym for publish target -->
 	</target>
-	<target name="publish" depends="init,dependencies,compile,jars,release,deploy">
-		<echo>Exit project ${project.name}</echo>
-	</target>
-
-	<target name="deploy" depends="init,dependencies,compile,jars,release" unless="nodeploy">
-		<bnddeploy>
-			<fileset dir="${target}" includes="${bin.includes}" />
-		</bnddeploy>
-	</target>
-
+	
 	<!-- 
 	     INIT
 	     The target is a dependent of all other targets.
@@ -40,10 +31,6 @@
 		<!-- Now we have the same properties set as bnd 
 		-->
 			
-		<taskdef resource="org/osgi/tools/build/ant/taskdef.properties" classpath="${repo}/org.osgi.tools.btool/org.osgi.tools.btool-latest.jar" />
-		<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${project.workspace}/licensed/ant-contrib/ant-contrib-0.6.jar" />
-
-		
 		<!-- mark init has been run -->
 		<property name="initialized" value="set" />
 		<echo>Enter project ${project.name} (${top})</echo>
@@ -61,29 +48,22 @@
 		<property name="top" value="${target}" />
 		
 		<!-- Have to compile the bnd plugins before ... -->		
-        <subant target="compile" inheritAll="false" buildpath="../cnf">
+        <subant target="compile" inheritAll="false" buildpath="${build}">
             <property name="top" value="${top}" />
         </subant>
 		
-		<!-- Nowbuild all dependends on their dependency order -->
+		<!-- Now build all dependends in their dependency order -->
 		<subant target="publish" inheritAll="false" buildpath="${project.dependson}">
 			<property name="top" value="${top}" />
 		</subant>
 	</target>
 
 	<!--
-	     Test
-	-->
-	<target name="test" depends="compile">
-		<bnd command="test" exceptions="true" basedir="${projectdir}"/>
-	</target>
-
-	<!--
 	     COMPILE
 	     Compile the sources. 
 	-->
-	<target name="compile" depends="init" if="project.sourcepath">
-		<echo>${project.sourcepath} ${project.output}</echo>
+	<target name="compile" depends="dependencies" if="project.sourcepath">
+		<echo>Compile ${project.sourcepath} to ${project.output}</echo>
 		<mkdir dir="${project.output}"/>
 		<javac fork="yes" 
 			executable="${javac}" 
@@ -112,59 +92,35 @@
 		</copy>
 	</target>
 
+	<!--
+	     Test
+	-->
+	<target name="test" depends="compile">
+		<bnd command="test" exceptions="true" basedir="${projectdir}"/>
+	</target>
+
 	<!-- 
 		JARS
-		Iterate of the jars to build.
 	-->
-	<target name="jars" depends="-mktarget,jars-bnd,copy-from">
-	</target>
-
-	<target name="-mktarget" if="target">
+	<target name="jars" depends="compile">
 		<mkdir dir="${target}" />
-	</target>
-
-	<target name="copy-from" if="copy.from">
-		<copy overwrite="true" file="${copy.from}" tofile="${target}/${p}.jar" preservelastmodified="true" />
-	</target>
-
-	<!-- Use the next generation bnd tool -->
-	<target name="jars-bnd" depends="init">
-		<antcall target="-interleave">
-			<param name="x" value="before.${item.jarFile}" />
-		</antcall>
 		<bndproject basedir="${projectdir}"/>
 	</target>
 
-
-	<target name="-signjar" if="sign.${item.jarFile}">
-		<signjar jar="${target}/${item.jarFile}" signedjar="${target}/${item.jarFile}.signed" keystore="${project.workspace}/cnf/keystore" storepass="testtest" keypass="testtest" alias="test" />
-	</target>
-
-
-	<!--
-	  If you specify before.<jarfile>.jar=target, then we will
-	  call this target before the creation of the jar file.
-	-->
-	<target name="-interleave" if="${x}">
-		<indirect inputName="${x}" outputName="before" />
-		<antcall target="${before}" />
-	</target>
-
-	<!--
-	    RELEASE
-	    Copy the JAR file to the osgi.released directory.
-	-->
-	<target name="release" depends="init" if="top">
-		<!--
-		<copy todir="${top}" verbose="${verbose}" preservelastmodified="true">
+	<target name="deploy" depends="jars" unless="nodeploy">
+		<bnddeploy>
 			<fileset dir="${target}" includes="${bin.includes}" />
-		</copy> -->
+		</bnddeploy>
+	</target>
+
+	<target name="publish" depends="deploy">
+		<echo>Exit project ${project.name}</echo>
 	</target>
 
 	<!--
 	     CLEAN
 	-->
-	<target name="deepclean" depends="init,clean" if="project.dependson">
+	<target name="deepclean" depends="clean" if="project.dependson">
 		<subant target="clean" inheritAll="false" buildpath="${project.dependson}"/>
 	</target>
 
@@ -206,13 +162,6 @@
 		<echo>nodeploy:               ${nodeploy}</echo>
 		<echo>-dependson:             ${project.dependson}</echo>
 
-	</target>
-
-	<!--
-	     Default Target
-	-->
-	<target name="none">
-		<fail message="This ant script should never be directly called." />
 	</target>
 
 </project>

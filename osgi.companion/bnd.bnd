@@ -6,33 +6,22 @@ Bundle-License	= http://opensource.org/licenses/apache2.0.php; \
 # Build the deliverables that are published in the repository
 # for use in all projects.
 
-bin.includes				= \
-	osgi.jar, \
-	osgi.core.jar, \
-	osgi.cmpn.jar, \
-	osgi.mobile.jar, \
-	osgi.enterprise.jar, \
-	osgi.proposed.jar, \
-	osgi.min.jar, \
-	ee.minimum.jar, \
-	ee.foundation.jar, \
-	ee.j2se.jar
+bin.includes				= osgi.*.jar
 
 
 # The following line builds all these files and publishes them to 
 # the repository (if they are deployable)
 
--dependson 					= ${uniq; \
+-dependson 					=  \
 	${ees}, \
-	${specs} \
- }
+	${specs} 
 
 -buildpath 					= \
 	${replace;${specs};.+;$0\\;version=project}, \
 	ee.foundation;version=1.1
 
 # Build the osgi spec files
--sub       = osgi*.bnd
+-sub       = osgi.*.bnd
 
 japi.osgi.core 				= ${replace;$(core.specs);.+;+$0}
 japi.osgi.cmpn 				= ${replace;$(cmpn.specs);.+;+$0}

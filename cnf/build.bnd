@@ -58,8 +58,6 @@ javac.target 			= 1.2
   (*).(ipa);                             type=bnd;  recipe="ipa/$1.bnd"
 
 
-junit					= com.springsource.junit;version=3.8;export="junit.framework;version=3.8,junit.extensions;version=3.8"
-
 # Time options
 # base.modified is used by bnd to not make when files are not changed
 base.modified			= ${fmodified;${build}/build.xml,${build}/build.bnd,${project}/build.properties,${project}/bnd.bnd,${project}/build.xml}
@@ -70,10 +68,10 @@ copyright = Copyright (c) OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reser
 copyright.html = Copyright &copy; OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reserved.
 
 osgi.release				= 4
-osgi.version				= 4.2.0
+osgi.version				= 4.2
 -versionpolicy				= "[${version;==;${@}},${version;+;${@}})"
 
-osgi.release.version		= ${osgi.version}.${project.build}
+osgi.release.version		= ${osgi.version}.0.${project.build}
 # Increment micro version of core since core is complete and we need to leave 4.2.0 stable
 core.release.version		= ${version;==+=;${osgi.release.version}}
 # Increment micro version of cmpn since cmpn is complete and we need to leave 4.2.0 stable
@@ -88,9 +86,10 @@ Bundle-Copyright       	= ${copyright}
 Bundle-Vendor			= OSGi Alliance
 -removeheaders			= Include-Resource, Private-Package
 
+junit					= com.springsource.junit;version=3.8;export="junit.framework;version=3.8"
 -runpath							= \
 	org.eclipse.osgi;		version=3.5.1, \
-	com.springsource.junit; version=3.8;    export="junit.framework;version=3.8"
+	${junit}
 
 testcases = ${classes;extending;junit.framework.TestCase|*DefaultTestBundleControl;concrete}
 
