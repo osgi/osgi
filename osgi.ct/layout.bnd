@@ -38,6 +38,7 @@ build.cmpn.tests = \
     org.osgi.test.cases.policy, \
     org.osgi.test.cases.position, \
     org.osgi.test.cases.prefs, \
+    org.osgi.test.cases.remoteservices, \
     org.osgi.test.cases.tracker, \
     org.osgi.test.cases.upnp, \
     org.osgi.test.cases.useradmin, \
@@ -70,5 +71,8 @@ build.enterprise.tests = \
     org.osgi.test.cases.blueprint, \
     org.osgi.test.cases.blueprint.java5, \
     org.osgi.test.cases.blueprint.secure, \
+	org.osgi.test.cases.jmx, \
 	org.osgi.test.cases.jdbc, \
+	org.osgi.test.cases.jndi, \
+    org.osgi.test.cases.remoteservices, \
 	org.osgi.test.cases.transaction

@@ -8,6 +8,7 @@ Include-Resource				: \
         ${repo;${build.cmpn.impls};0;HIGHEST}, \
 	  	\
 	 	${repo;org.apache.felix.configadmin}, \
+	 	${repo;org.apache.cxf.dosgi.singlebundle}, \
 	  	${repo;org.eclipse.equinox.ds}, \
 	  	${repo;org.eclipse.equinox.event}, \
 	  	${repo;org.eclipse.equinox.ip}, \

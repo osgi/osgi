@@ -6,7 +6,7 @@
 		<property name="osgi.ri" value="${project.workspace}/osgi.ri/${target-dir}" />
 	</target>
 
-	<target name="runtests" depends="osgi.core.tests,osgi.cmpn.tests">
+	<target name="runtests" depends="osgi.core.tests,osgi.cmpn.tests,osgi.enterprise.tests">
 	</target>
 
 	<target name="osgi.core.tests" depends="init">
@@ -20,6 +20,13 @@
 		<antcall target="-runtest">
 			<param name="test-name" value="osgi.cmpn.tests" />
 			<param name="jars" value="osgi.core.impls.jar,osgi.cmpn.impls.jar" />
+		</antcall>
+	</target>
+
+	<target name="osgi.enterprise.tests" depends="init">
+		<antcall target="-runtest">
+			<param name="test-name" value="osgi.enterprise.tests" />
+			<param name="jars" value="osgi.core.impls.jar,osgi.enterprise.impls.jar" />
 		</antcall>
 	</target>
 

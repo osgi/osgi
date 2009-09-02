@@ -36,4 +36,8 @@ build.mobile.impls = \
 build.enterprise.impls = \
 	org.osgi.impl.bundle.jmx, \
 	org.osgi.impl.bundle.transaction, \
-	org.osgi.impl.service.jdbc
+	org.osgi.impl.service.jdbc, \
+	org.osgi.impl.service.jndi, \
+	org.osgi.impl.service.log, \
+	org.osgi.impl.service.useradmin
+	

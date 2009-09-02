@@ -7,7 +7,16 @@ Bundle-Version					: ${enterprise.release.version}
 Include-Resource				: \
         ${repo;${build.enterprise.impls}}, \
 	  	\
+	 	${repo;com.springsource.org.apache.derby}, \
+	 	${repo;org.apache.felix.configadmin}, \
+	 	${repo;org.apache.cxf.dosgi.singlebundle}, \
+	  	${repo;org.eclipse.equinox.event}, \
+	  	${repo;org.eclipse.equinox.ip}, \
+	 	${repo;org.eclipse.equinox.util}, \
+	 	${repo;org.springframework.osgi.blueprint.uber}, \
+		${repo;org.osgi.impl.bundle.servlet;2.1}, \
 		${repo;osgi.enterprise;${version;===;${enterprise.release.version}}}, \
+		${repo;osgi.cmpn;${version;===;${cmpn.release.version}}}, \
 	 	\
 		NOTICE=legal/NOTICE.txt, \
 		{about.html=legal/about.html}
