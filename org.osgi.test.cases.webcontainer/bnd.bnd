@@ -1,6 +1,3 @@
-javac.source 			= 1.5
-javac.target 			= 1.5
-
 # in order to build with this bnd file, i copied the geronimo servlet spec and annotation spec to the licensed/repo
 # this needs to be updated when the RFC 66 RI is in svn
 Bundle-Description: OSGi Web Container RFC 66 Compliance Test
@@ -16,18 +13,18 @@ Private-Package						= org.osgi.test.support.*, \
 	${p}.handler.*
 
 Include-Resource					= \
-	resources/tw1/tw1.war, \
-	resources/tw2/tw2.war, \
-	resources/tw3/tw3.war, \
-	resources/tw4/tw4.war, \
-	resources/tw5/tw5.war, \
-	resources/tw1/wmtw1.war, \
-	resources/tw2/wmtw2.war, \
-	resources/tw3/wmtw3.war, \
-	resources/tw4/wmtw4.war, \
-	resources/tw5/wmtw5.war, \
-	resources/tw5/wm2tw5.war, \
-	resources/tw5/wm3tw5.war, \
+	generated/tw1.war, \
+	generated/tw2.war, \
+	generated/tw3.war, \
+	generated/tw4.war, \
+	generated/tw5.war, \
+	generated/wmtw1.war, \
+	generated/wmtw2.war, \
+	generated/wmtw3.war, \
+	generated/wmtw4.war, \
+	generated/wmtw5.war, \
+	generated/wm2tw5.war, \
+	generated/wm3tw5.war, \
 	util.jar, \
 	eventHandler.jar
 	
@@ -47,57 +44,18 @@ Export-Package =\
 -buildpath							= \
     org.apache.geronimo.specs.geronimo-servlet_2.5_spec;			version=1.2, \
     org.apache.geronimo.specs.geronimo-annotation_1.0_spec;version=1.1.1, \
-	osgi.core;									version=4.2, \
-	osgi.cmpn;									version=4.2, \
+	ee.j2se;								version=1.4, \
+	osgi.core;								version=4.2, \
 	org.osgi.test.support;					version=project, \
+	org.osgi.service.log;					version=project, \
 	${junit}, \
+	org.osgi.service.event;                 version=project , \
 	org.apache.commons-logging;version=1.0.4
 
 -runbundles						= \
-    com.springsource.slf4j.api; version=1.5.6, \
-	com.springsource.slf4j.nop; version=1.5.6, \
-	com.springsource.util.common; version=2.0.0, \
-	com.springsource.util.io; version=2.0.0, \
-	com.springsource.util.math; version=2.0.0, \
-	com.springsource.util.osgi; version=2.0.0, \
-	com.springsource.javax.activation; version=1.1.1, \
-	com.springsource.javax.annotation; version=1.0.0, \
-	com.springsource.javax.ejb; version=3.0.0, \
-	com.springsource.javax.el; version=1.0.0, \
-	com.springsource.javax.mail; version=1.4.0, \
-	com.springsource.javax.persistence; version=1.0.0, \
-	com.springsource.javax.servlet.jsp; version=2.1.0, \
-	com.springsource.javax.servlet; version=2.5.0, \
-	com.springsource.javax.transaction; version=1.1.0, \
-	com.springsource.javax.xml.bind; version=2.1.7, \
-	com.springsource.javax.xml.rpc; version=1.1.0, \
-	com.springsource.javax.xml.soap; version=1.3.0, \
-	com.springsource.javax.xml.stream; version=1.0.1, \
-	com.springsource.javax.xml.ws; version=2.1.1, \
-	com.springsource.org.aopalliance; version=1.0.0, \
-	com.springsource.org.apache.catalina.ha; version=6.0.18, \
-	com.springsource.org.apache.catalina.tribes; version=6.0.18, \
-	com.springsource.org.apache.catalina; version=6.0.18, \
-	com.springsource.org.apache.commons.logging; version=1.1.1, \
-	com.springsource.org.apache.coyote; version=6.0.18, \
-	com.springsource.org.apache.el; version=6.0.18, \
-	com.springsource.org.apache.jasper.org.eclipse.jdt; version=6.0.18, \
-	com.springsource.org.apache.jasper; version=6.0.18, \
-	com.springsource.org.apache.juli.extras; version=6.0.18, \
-	com.springsource.org.eclipse.jdt.core.compiler.batch; version=3.3.0, \
-	org.springframework.osgi.core; version=1.2.0, \
-	org.springframework.osgi.io; version=1.2.0, \
-	org.springframework.aop; version=2.5.6, \
-	org.springframework.beans; version=2.5.6, \
-	org.springframework.context; version=2.5.6, \
-	org.springframework.core; version=2.5.6, \
-	com.springsource.osgi.webcontainer.core;version=1.0.0, \
-	com.springsource.osgi.webcontainer.extender;version=1.0.0, \
-	com.springsource.osgi.webcontainer.tomcat;version=1.0.0, \
 	org.osgi.impl.bundle.servlet;		version=2.1, \
 	org.osgi.impl.service.log; 			version=project, \
-	org.eclipse.equinox.event; 			version=latest, \
-	osgi; version=latest
+	org.eclipse.equinox.event; 			version=latest
 # TODO replace the above 40 springsource rfc 66 ri with one consolidated jar when it is avail
 # TODO add rfc142 impl bundle here if user wants to run some simple rfc 66 + rfc 142 tests
 	
@@ -106,6 +64,5 @@ Export-Package =\
 	org.osgi.service.webcontainer.http.port=8080
 
 Test-Cases						= ${testcases}
--signaturetest                      = org.osgi.service.webapplication
 
 	

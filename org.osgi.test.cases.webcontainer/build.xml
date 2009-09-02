@@ -30,9 +30,9 @@
 	
 	<target name="build-war1" depends="compile">
 		<echo>Building tw1.war file</echo>
-		<war destfile="resources/tw1/tw1.war" webxml="resources/tw1/WebContent/WEB-INF/web.xml">
+		<war destfile="generated/tw1.war" webxml="resources/tw1/WebContent/WEB-INF/web.xml">
 			<fileset dir="resources/tw1/WebContent/"/>
-			<classes dir="src/">
+			<classes dir="bin/">
 				<include name="org/osgi/test/cases/webcontainer/tw1/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
@@ -41,9 +41,9 @@
 	
 	<target name="build-war2" depends="compile">
 		<echo>Building tw2.war file</echo>
-		<war destfile="resources/tw2/tw2.war" webxml="resources/tw2/WebContent/WEB-INF/web.xml">
+		<war destfile="generated/tw2.war" webxml="resources/tw2/WebContent/WEB-INF/web.xml">
 			<fileset dir="resources/tw2/WebContent/"/>
-			<classes dir="src/">
+			<classes dir="bin/">
 				<include name="org/osgi/test/cases/webcontainer/tw2/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
@@ -52,10 +52,9 @@
 	
 	<target name="build-war3" depends="compile">
 		<echo>Building tw3.war file</echo>
-		<war destfile="resources/tw3/tw3.war" webxml="resources/tw3/WebContent/WEB-INF/web.xml">
+		<war destfile="generated/tw3.war" webxml="resources/tw3/WebContent/WEB-INF/web.xml">
 			<fileset dir="resources/tw3/WebContent/"/>
-			<classes dir="src/">
-				<!-- tw3 uses same class files as tw2 -->
+			<classes dir="bin/">
 				<include name="org/osgi/test/cases/webcontainer/tw2/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
@@ -64,9 +63,9 @@
 		
 	<target name="build-war4" depends="compile">
 		<echo>Building tw4.war file</echo>
-		<war destfile="resources/tw4/tw4.war" webxml="resources/tw4/WebContent/WEB-INF/web.xml">
+		<war destfile="generated/tw4.war" webxml="resources/tw4/WebContent/WEB-INF/web.xml">
 			<fileset dir="resources/tw4/WebContent/"/>
-			<classes dir="src/">
+			<classes dir="bin/">
 				<include name="org/osgi/test/cases/webcontainer/tw4/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
@@ -79,9 +78,9 @@
 		<copy file="../licensed/repo/org.apache.commons-logging/org.apache.commons-logging-1.0.4.jar" todir="resources/tw5/WebContent/WEB-INF/lib"/>		
 		<echo>copy simple jar to the lib dir</echo>
 		<copy file="generated/org.osgi.test.cases.webcontainer.simple.jar" todir="resources/tw5/WebContent/WEB-INF/lib"/>	
-		<war destfile="resources/tw5/tw5.war" webxml="resources/tw5/WebContent/WEB-INF/web.xml">
+		<war destfile="generated/tw5.war" webxml="resources/tw5/WebContent/WEB-INF/web.xml">
 			<fileset dir="resources/tw5/WebContent/"/>
-			<classes dir="src/">
+			<classes dir="bin/">
 				<include name="org/osgi/test/cases/webcontainer/tw5/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
@@ -91,9 +90,9 @@
 	<!-- same as tw1.war file but with pre-specified manifest - wmtw1.war -->
 	<target name="build-wmwar1" depends="compile">
 		<echo>Building tw1.war file</echo>
-		<war destfile="resources/tw1/wmtw1.war" webxml="resources/tw1/WebContent/WEB-INF/web.xml" manifest="resources/tw1/WebContent/META-INF/MANIFEST.MF">
+		<war destfile="generated/wmtw1.war" webxml="resources/tw1/WebContent/WEB-INF/web.xml" manifest="resources/tw1/WebContent/META-INF/MANIFEST.MF">
 			<fileset dir="resources/tw1/WebContent/"/>
-			<classes dir="src/">
+			<classes dir="bin/">
 				<include name="org/osgi/test/cases/webcontainer/tw1/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
@@ -103,9 +102,9 @@
 	<!-- same as tw2.war file but with pre-specified manifest - wmtw2.war -->
 	<target name="build-wmwar2" depends="compile">
 		<echo>Building wmtw2.war file</echo>
-		<war destfile="resources/tw2/wmtw2.war" webxml="resources/tw2/WebContent/WEB-INF/web.xml" manifest="resources/tw2/WebContent/META-INF/MANIFEST.MF">
+		<war destfile="generated/wmtw2.war" webxml="resources/tw2/WebContent/WEB-INF/web.xml" manifest="resources/tw2/WebContent/META-INF/MANIFEST.MF">
 			<fileset dir="resources/tw2/WebContent/"/>
-			<classes dir="src/">
+			<classes dir="bin/">
 				<include name="org/osgi/test/cases/webcontainer/tw2/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
@@ -115,9 +114,9 @@
 	<!-- same as tw3.war file but with pre-specified manifest - wmtw3.war -->
 	<target name="build-wmwar3" depends="compile">
 		<echo>Building wmtw3.war file</echo>
-		<war destfile="resources/tw3/wmtw3.war" webxml="resources/tw3/WebContent/WEB-INF/web.xml" manifest="resources/tw3/WebContent/META-INF/MANIFEST.MF">
+		<war destfile="generated/wmtw3.war" webxml="resources/tw3/WebContent/WEB-INF/web.xml" manifest="resources/tw3/WebContent/META-INF/MANIFEST.MF">
 			<fileset dir="resources/tw3/WebContent/"/>
-			<classes dir="src/">
+			<classes dir="bin/">
 				<include name="org/osgi/test/cases/webcontainer/tw3/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
@@ -127,9 +126,9 @@
 	<!-- same as tw4.war file but with pre-specified manifest - wmtw4.war -->
 	<target name="build-wmwar4" depends="compile">
 		<echo>Building wmtw4.war file</echo>
-		<war destfile="resources/tw4/wmtw4.war" webxml="resources/tw4/WebContent/WEB-INF/web.xml" manifest="resources/tw4/WebContent/META-INF/MANIFEST.MF">
+		<war destfile="generated/wmtw4.war" webxml="resources/tw4/WebContent/WEB-INF/web.xml" manifest="resources/tw4/WebContent/META-INF/MANIFEST.MF">
 			<fileset dir="resources/tw4/WebContent/"/>
-			<classes dir="src/">
+			<classes dir="bin/">
 				<include name="org/osgi/test/cases/webcontainer/tw4/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
@@ -143,9 +142,9 @@
 		<copy file="../licensed/repo/org.apache.commons-logging/org.apache.commons-logging-1.0.4.jar" todir="resources/tw5/WebContent/WEB-INF/lib"/>		
 		<echo>copy simple jar to the lib dir</echo>
 		<copy file="generated/org.osgi.test.cases.webcontainer.simple.jar" todir="resources/tw5/WebContent/WEB-INF/lib"/>
-		<war destfile="resources/tw5/wmtw5.war" webxml="resources/tw5/WebContent/WEB-INF/web.xml" manifest="resources/tw5/WebContent/META-INF/MANIFEST.MF">
+		<war destfile="generated/wmtw5.war" webxml="resources/tw5/WebContent/WEB-INF/web.xml" manifest="resources/tw5/WebContent/META-INF/MANIFEST.MF">
 			<fileset dir="resources/tw5/WebContent/"/>
-			<classes dir="src/">
+			<classes dir="bin/">
 				<include name="org/osgi/test/cases/webcontainer/tw5/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
@@ -159,9 +158,9 @@
 		<copy file="../licensed/repo/org.apache.commons-logging/org.apache.commons-logging-1.0.4.jar" todir="resources/tw5/WebContent/WEB-INF/lib"/>		
 		<echo>copy simple jar to the lib dir</echo>
 		<copy file="generated/org.osgi.test.cases.webcontainer.simple.jar" todir="resources/tw5/WebContent/WEB-INF/lib"/>
-		<war destfile="resources/tw5/wm2tw5.war" webxml="resources/tw5/WebContent/WEB-INF/web.xml" manifest="resources/tw5/manifest/MANIFEST2.MF">
+		<war destfile="generated/wm2tw5.war" webxml="resources/tw5/WebContent/WEB-INF/web.xml" manifest="resources/tw5/manifest/MANIFEST2.MF">
 			<fileset dir="resources/tw5/WebContent/"/>
-			<classes dir="src/">
+			<classes dir="bin/">
 				<include name="org/osgi/test/cases/webcontainer/tw5/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
@@ -176,9 +175,9 @@
 		<echo>copy simple jar to the lib dir</echo>
 		<copy file="generated/org.osgi.test.cases.webcontainer.simple.jar" todir="resources/tw5/WebContent/WEB-INF/lib"/>
 		<copy file="generated/org.osgi.test.cases.webcontainer.simple.jar" todir="resources/tw5/WebContent/WEB-INF/lib2"/>
-		<war destfile="resources/tw5/wm3tw5.war" webxml="resources/tw5/WebContent/WEB-INF/web.xml" manifest="resources/tw5/manifest/MANIFEST3.MF">
+		<war destfile="generated/wm3tw5.war" webxml="resources/tw5/WebContent/WEB-INF/web.xml" manifest="resources/tw5/manifest/MANIFEST3.MF">
 			<fileset dir="resources/tw5/WebContent/"/>
-			<classes dir="src/">
+			<classes dir="bin/">
 				<include name="org/osgi/test/cases/webcontainer/tw5/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
@@ -187,18 +186,20 @@
 	
 	<!-- build the simple jar to test Bundle-Classpath header -->
 	<target name="build-simplejar" depends="compile">
+        <mkdir dir="${target}" />
+        <bndproject basedir="${projectdir}"/>
 	    <echo>Building org.osgi.test.cases.webcontainer.simple.jar file</echo>
 	    <jar destfile="generated/org.osgi.test.cases.webcontainer.simple.jar"
-		     basedir="src/"
+		     basedir="bin/"
 		     includes="org/osgi/test/cases/webcontainer/simple/**"
 	    />
 	</target>
 	
-	<target name="jars" depends="build-simplejar, build-war,build-wmwar, -mktarget,jars-btool,jars-bnd,copy-from"/>
+	<target name="jars" depends="build-simplejar, build-war,build-wmwar"/>
 		
 	<target name="clean" depends="init">
 		<delete quiet="true" includeEmptyDirs="true" verbose="${verbose}">
-			<fileset dir="${project.output}" includes="**/*.class" />
+			<fileset dir="${project.output}" />
 			<fileset dir="${target}" />
 			<fileset dir="resources" includes="**/*.war" />
 			<fileset dir="resources" includes="**/*.jar" />
