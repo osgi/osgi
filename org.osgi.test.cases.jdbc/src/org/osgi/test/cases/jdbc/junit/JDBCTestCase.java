@@ -18,6 +18,7 @@
 package org.osgi.test.cases.jdbc.junit;
 
 import java.lang.reflect.Method;
+import java.sql.Driver;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -144,6 +145,21 @@ public class JDBCTestCase extends OSGiTestCase {
 		props.put( "junk", "junk" );
 		try {
 			factory.createXADataSource( props );
+			fail( "Should have gotten a SQLException." );
+		} catch ( SQLException ignore ) { }
+	}
+
+	public void testCreateDriver() throws Exception {
+		Properties props = new Properties();
+
+		Driver driver = factory.createDriver( props );
+		assertTrue( driver.acceptsURL( "jdbc:derby:testDBName" ) );
+
+		// make sure we get an exception if we use an unknown property
+		props = new Properties();
+		props.put( "junk", "junk" );
+		try {
+			factory.createDriver( props );
 			fail( "Should have gotten a SQLException." );
 		} catch ( SQLException ignore ) { }
 	}

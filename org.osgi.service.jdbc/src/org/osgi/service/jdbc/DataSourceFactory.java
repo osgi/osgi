@@ -16,6 +16,7 @@
 
 package org.osgi.service.jdbc;
 
+import java.sql.Driver;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -118,4 +119,16 @@ public interface DataSourceFactory {
      * @throws SQLException If the XADataSource cannot be created.
      */
     public XADataSource createXADataSource(Properties props) throws SQLException;
+
+    /**
+     * Create a new {@link Driver} using the given properties.
+     * 
+     * @param props The properties used to configure the Driver.  Null 
+     *              indicates no properties.
+     *              If the property cannot be set on the Driver being 
+     *              created then a SQLException must be thrown.
+     * @return A configured Driver.
+     * @throws SQLException If the Driver cannot be created.
+     */
+    public Driver createDriver( Properties props ) throws SQLException;
 }

@@ -17,6 +17,7 @@
 package org.osgi.impl.service.jdbc;
 
 import java.lang.reflect.Method;
+import java.sql.Driver;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -29,6 +30,7 @@ import javax.sql.XADataSource;
 
 import org.apache.derby.jdbc.EmbeddedConnectionPoolDataSource;
 import org.apache.derby.jdbc.EmbeddedDataSource;
+import org.apache.derby.jdbc.EmbeddedDriver;
 import org.apache.derby.jdbc.EmbeddedXADataSource;
 import org.osgi.service.jdbc.DataSourceFactory;
 
@@ -274,6 +276,25 @@ public class DerbyEmbeddedDataSourceFactory implements DataSourceFactory {
 		}
 		throw new SQLException("No such property: " + name
 				+ ", exists.  Witable properties are: " + names);
+	}
+
+    /**
+     * Create a new org.apache.derby.jdbc.EmbeddedDriver.
+     * 
+     * @param props The properties used to configure the Driver.  Null 
+     *              indicates no properties.
+     *              If the property cannot be set on the Driver being 
+     *              created then a SQLException must be thrown.
+     * @return A configured org.apache.derby.jdbc.EmbeddedDriver.
+     * @throws SQLException If the org.apache.derby.jdbc.EmbeddedDriver cannot be created.
+     */
+	public Driver createDriver(Properties props) throws SQLException {
+		if (props == null) {
+			props = new Properties();
+		}
+		EmbeddedDriver driver = new EmbeddedDriver();
+		setDataSourceProperties(driver, props);
+		return driver;
 	}
 
 }
