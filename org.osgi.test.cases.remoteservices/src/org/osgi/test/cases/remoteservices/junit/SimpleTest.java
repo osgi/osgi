@@ -34,8 +34,6 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.launch.Framework;
 import org.osgi.service.packageadmin.ExportedPackage;
 import org.osgi.service.packageadmin.PackageAdmin;
-import org.osgi.service.remoteservices.DistributionProviderConstants;
-import org.osgi.service.remoteservices.RemoteServiceConstants;
 import org.osgi.test.cases.remoteservices.common.A;
 import org.osgi.test.cases.remoteservices.impl.TestServiceImpl;
 import org.osgi.util.tracker.ServiceTracker;
