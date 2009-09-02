@@ -62,7 +62,7 @@ public class TW1Test extends WebContainerTestBundleControl {
      * generate the manifest
      */
     public void testBundleManifest() throws Exception {
-        Manifest originalManifest = super.getManifest("/resources/tw1/tw1.war");
+		Manifest originalManifest = super.getManifest("/tw1.war");
         BundleManifestValidator validator = new BundleManifestValidator(this.b,
                 originalManifest, this.options, this.debug);
         validator.validate();

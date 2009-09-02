@@ -64,7 +64,7 @@ public class OtherAnnotationTest extends WebContainerTestBundleControl {
      * generate the manifest
      */
     public void testBundleManifest() throws Exception {
-        Manifest originalManifest = super.getManifest("/resources/tw2/tw2.war");
+		Manifest originalManifest = super.getManifest("/tw2.war");
         BundleManifestValidator validator = new BundleManifestValidator(this.b,
                 originalManifest, this.options, this.debug);
         validator.validate();

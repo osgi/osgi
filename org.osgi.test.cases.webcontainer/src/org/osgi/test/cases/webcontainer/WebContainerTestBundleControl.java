@@ -86,18 +86,12 @@ public abstract class WebContainerTestBundleControl extends
         return getManifest(getWarPath(warName));
     }
 
-    /*
-     * return the warPath based on the warName, for example tw1.war path is
-     * /resources/tw1/tw1.war
-     */
+	/*
+	 * return the warPath based on the warName, for example tw1.war path is
+	 * /tw1.war
+	 */
     private String getWarPath(String warName) throws Exception {
-        int i = warName.indexOf(".");
-        int j = warName.indexOf("tw");
-        if (warName.startsWith("wm")) {
-            return "/resources/" + warName.substring(j, i) + "/" + warName;
-        } else {
-            return "/resources/" + warName.substring(0, i) + "/" + warName;
-        }
+		return "/" + warName;
     }
 
     protected static void cleanupPropertyFile() {

@@ -1,25 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="project" default="publish"> 
-	<property name="javac.source" value="5"/>
 	<import file="../cnf/build.xml"/>
 	
-	<target name="compile" depends="init" if="project.sourcepath">
-		<echo>${project.sourcepath} ${project.output}</echo>
-		<mkdir dir="${project.output}"/>
-		<javac fork="yes" 
-		executable="${javac}" 
-		srcdir="${project.sourcepath}" 
-			destdir="${project.output}" 
-			classpath="${project.buildpath}" 
-			deprecation="true" 
-			listfiles="true" 
-			target="1.5" 
-			source="1.5" 
-			debug="${javac.debug}" 
-			includeAntRuntime="no" 
-			verbose="${verbose}" />
-	</target>	
-		
+	<target name="prewar" depends="compile">
+		<mkdir dir="${target}" />
+	</target> 
+	
 	<target name="build-war" depends="build-war1, build-war2, build-war3, build-war4, build-war5">
 		<echo>build test war files</echo>
 	</target>
@@ -28,71 +14,74 @@
 		<echo>build test war files with pre-specified manifest</echo>
 	</target>
 	
-	<target name="build-war1" depends="compile">
+	<target name="build-war1" depends="prewar">
 		<echo>Building tw1.war file</echo>
-		<war destfile="generated/tw1.war" webxml="resources/tw1/WebContent/WEB-INF/web.xml">
-			<fileset dir="resources/tw1/WebContent/"/>
-			<classes dir="bin/">
+		<war destfile="${target}/tw1.war" webxml="${project.dir}/resources/tw1/WebContent/WEB-INF/web.xml">
+			<fileset dir="${project.dir}/resources/tw1/WebContent/"/>
+			<classes dir="${project.output}">
 				<include name="org/osgi/test/cases/webcontainer/tw1/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
 		</war>
 	</target>
 	
-	<target name="build-war2" depends="compile">
+	<target name="build-war2" depends="prewar">
 		<echo>Building tw2.war file</echo>
-		<war destfile="generated/tw2.war" webxml="resources/tw2/WebContent/WEB-INF/web.xml">
-			<fileset dir="resources/tw2/WebContent/"/>
-			<classes dir="bin/">
+		<war destfile="${target}/tw2.war" webxml="${project.dir}/resources/tw2/WebContent/WEB-INF/web.xml">
+			<fileset dir="${project.dir}/resources/tw2/WebContent/"/>
+			<classes dir="${project.output}">
 				<include name="org/osgi/test/cases/webcontainer/tw2/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
 		</war>
 	</target>
 	
-	<target name="build-war3" depends="compile">
+	<target name="build-war3" depends="prewar">
 		<echo>Building tw3.war file</echo>
-		<war destfile="generated/tw3.war" webxml="resources/tw3/WebContent/WEB-INF/web.xml">
-			<fileset dir="resources/tw3/WebContent/"/>
-			<classes dir="bin/">
+		<war destfile="${target}/tw3.war" webxml="${project.dir}/resources/tw3/WebContent/WEB-INF/web.xml">
+			<fileset dir="${project.dir}/resources/tw3/WebContent/"/>
+			<classes dir="${project.output}">
+				<!-- tw3 uses same class files as tw2 -->
 				<include name="org/osgi/test/cases/webcontainer/tw2/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
 		</war>
 	</target>
 		
-	<target name="build-war4" depends="compile">
+	<target name="build-war4" depends="prewar">
 		<echo>Building tw4.war file</echo>
-		<war destfile="generated/tw4.war" webxml="resources/tw4/WebContent/WEB-INF/web.xml">
-			<fileset dir="resources/tw4/WebContent/"/>
-			<classes dir="bin/">
+		<war destfile="${target}/tw4.war" webxml="${project.dir}/resources/tw4/WebContent/WEB-INF/web.xml">
+			<fileset dir="${project.dir}/resources/tw4/WebContent/"/>
+			<classes dir="${project.output}">
 				<include name="org/osgi/test/cases/webcontainer/tw4/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
 		</war>
 	</target>
 		
-	<target name="build-war5" depends="compile">
+	<target name="build-war5" depends="prewar,build-simplejar">
 		<echo>Building tw5.war file</echo>
-		<echo>copy commons-logging jar from repo to the lib dir</echo>
-		<copy file="../licensed/repo/org.apache.commons-logging/org.apache.commons-logging-1.0.4.jar" todir="resources/tw5/WebContent/WEB-INF/lib"/>		
-		<echo>copy simple jar to the lib dir</echo>
-		<copy file="generated/org.osgi.test.cases.webcontainer.simple.jar" todir="resources/tw5/WebContent/WEB-INF/lib"/>	
-		<war destfile="generated/tw5.war" webxml="resources/tw5/WebContent/WEB-INF/web.xml">
-			<fileset dir="resources/tw5/WebContent/"/>
-			<classes dir="bin/">
+		<war destfile="${target}/tw5.war" webxml="${project.dir}/resources/tw5/WebContent/WEB-INF/web.xml">
+			<fileset dir="${project.dir}/resources/tw5/WebContent/"/>
+			<classes dir="${project.output}">
 				<include name="org/osgi/test/cases/webcontainer/tw5/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
+			<lib dir="${licensed-repo}/org.apache.commons-logging">
+				<include name="org.apache.commons-logging-1.0.4.jar"/>
+			</lib>
+			<lib dir="${target}">
+				<include name="org.osgi.test.cases.webcontainer.simple.jar"/>
+			</lib>
 		</war>
 	</target>
 	
 	<!-- same as tw1.war file but with pre-specified manifest - wmtw1.war -->
-	<target name="build-wmwar1" depends="compile">
+	<target name="build-wmwar1" depends="prewar">
 		<echo>Building tw1.war file</echo>
-		<war destfile="generated/wmtw1.war" webxml="resources/tw1/WebContent/WEB-INF/web.xml" manifest="resources/tw1/WebContent/META-INF/MANIFEST.MF">
-			<fileset dir="resources/tw1/WebContent/"/>
-			<classes dir="bin/">
+		<war destfile="${target}/wmtw1.war" webxml="${project.dir}/resources/tw1/WebContent/WEB-INF/web.xml" manifest="${project.dir}/resources/tw1/WebContent/META-INF/MANIFEST.MF">
+			<fileset dir="${project.dir}/resources/tw1/WebContent/"/>
+			<classes dir="${project.output}">
 				<include name="org/osgi/test/cases/webcontainer/tw1/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
@@ -100,11 +89,11 @@
 	</target>
 
 	<!-- same as tw2.war file but with pre-specified manifest - wmtw2.war -->
-	<target name="build-wmwar2" depends="compile">
+	<target name="build-wmwar2" depends="prewar">
 		<echo>Building wmtw2.war file</echo>
-		<war destfile="generated/wmtw2.war" webxml="resources/tw2/WebContent/WEB-INF/web.xml" manifest="resources/tw2/WebContent/META-INF/MANIFEST.MF">
-			<fileset dir="resources/tw2/WebContent/"/>
-			<classes dir="bin/">
+		<war destfile="${target}/wmtw2.war" webxml="${project.dir}/resources/tw2/WebContent/WEB-INF/web.xml" manifest="${project.dir}/resources/tw2/WebContent/META-INF/MANIFEST.MF">
+			<fileset dir="${project.dir}/resources/tw2/WebContent/"/>
+			<classes dir="${project.output}">
 				<include name="org/osgi/test/cases/webcontainer/tw2/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
@@ -112,11 +101,11 @@
 	</target>
 
 	<!-- same as tw3.war file but with pre-specified manifest - wmtw3.war -->
-	<target name="build-wmwar3" depends="compile">
+	<target name="build-wmwar3" depends="prewar">
 		<echo>Building wmtw3.war file</echo>
-		<war destfile="generated/wmtw3.war" webxml="resources/tw3/WebContent/WEB-INF/web.xml" manifest="resources/tw3/WebContent/META-INF/MANIFEST.MF">
-			<fileset dir="resources/tw3/WebContent/"/>
-			<classes dir="bin/">
+		<war destfile="${target}/wmtw3.war" webxml="${project.dir}/resources/tw3/WebContent/WEB-INF/web.xml" manifest="${project.dir}/resources/tw3/WebContent/META-INF/MANIFEST.MF">
+			<fileset dir="${project.dir}/resources/tw3/WebContent/"/>
+			<classes dir="${project.output}">
 				<include name="org/osgi/test/cases/webcontainer/tw3/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
@@ -124,11 +113,11 @@
 	</target>
 
 	<!-- same as tw4.war file but with pre-specified manifest - wmtw4.war -->
-	<target name="build-wmwar4" depends="compile">
+	<target name="build-wmwar4" depends="prewar">
 		<echo>Building wmtw4.war file</echo>
-		<war destfile="generated/wmtw4.war" webxml="resources/tw4/WebContent/WEB-INF/web.xml" manifest="resources/tw4/WebContent/META-INF/MANIFEST.MF">
-			<fileset dir="resources/tw4/WebContent/"/>
-			<classes dir="bin/">
+		<war destfile="${target}/wmtw4.war" webxml="${project.dir}/resources/tw4/WebContent/WEB-INF/web.xml" manifest="${project.dir}/resources/tw4/WebContent/META-INF/MANIFEST.MF">
+			<fileset dir="${project.dir}/resources/tw4/WebContent/"/>
+			<classes dir="${project.output}">
 				<include name="org/osgi/test/cases/webcontainer/tw4/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
@@ -136,76 +125,71 @@
 	</target>
 	
 	<!-- same as tw5.war file but with pre-specified manifest - wmtw5.war -->
-	<target name="build-wmwar5" depends="compile">
+	<target name="build-wmwar5" depends="prewar,build-simplejar">
 		<echo>Building wmtw5.war file</echo>
-		<echo>copy commons-logging jar from repo to the lib dir</echo>
-		<copy file="../licensed/repo/org.apache.commons-logging/org.apache.commons-logging-1.0.4.jar" todir="resources/tw5/WebContent/WEB-INF/lib"/>		
-		<echo>copy simple jar to the lib dir</echo>
-		<copy file="generated/org.osgi.test.cases.webcontainer.simple.jar" todir="resources/tw5/WebContent/WEB-INF/lib"/>
-		<war destfile="generated/wmtw5.war" webxml="resources/tw5/WebContent/WEB-INF/web.xml" manifest="resources/tw5/WebContent/META-INF/MANIFEST.MF">
-			<fileset dir="resources/tw5/WebContent/"/>
-			<classes dir="bin/">
+		<war destfile="${target}/wmtw5.war" webxml="${project.dir}/resources/tw5/WebContent/WEB-INF/web.xml" manifest="${project.dir}/resources/tw5/WebContent/META-INF/MANIFEST.MF">
+			<fileset dir="${project.dir}/resources/tw5/WebContent/"/>
+			<classes dir="${project.output}">
 				<include name="org/osgi/test/cases/webcontainer/tw5/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
+			<lib dir="${licensed-repo}/org.apache.commons-logging">
+				<include name="org.apache.commons-logging-1.0.4.jar"/>
+			</lib>
+			<lib dir="${target}">
+				<include name="org.osgi.test.cases.webcontainer.simple.jar"/>
+			</lib>
 		</war>
 	</target>
 	
 	<!-- same as tw5.war file but with pre-specified manifest - wm2tw5.war -->
-	<target name="build-wm2war5" depends="compile">
+	<target name="build-wm2war5" depends="prewar,build-simplejar">
 		<echo>Building wm2tw5.war file</echo>
-		<echo>copy commons-logging jar from repo to the lib dir</echo>
-		<copy file="../licensed/repo/org.apache.commons-logging/org.apache.commons-logging-1.0.4.jar" todir="resources/tw5/WebContent/WEB-INF/lib"/>		
-		<echo>copy simple jar to the lib dir</echo>
-		<copy file="generated/org.osgi.test.cases.webcontainer.simple.jar" todir="resources/tw5/WebContent/WEB-INF/lib"/>
-		<war destfile="generated/wm2tw5.war" webxml="resources/tw5/WebContent/WEB-INF/web.xml" manifest="resources/tw5/manifest/MANIFEST2.MF">
-			<fileset dir="resources/tw5/WebContent/"/>
-			<classes dir="bin/">
+		<war destfile="${target}/wm2tw5.war" webxml="${project.dir}/resources/tw5/WebContent/WEB-INF/web.xml" manifest="${project.dir}/resources/tw5/manifest/MANIFEST2.MF">
+			<fileset dir="${project.dir}/resources/tw5/WebContent/"/>
+			<classes dir="${project.output}">
 				<include name="org/osgi/test/cases/webcontainer/tw5/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
+			<lib dir="${licensed-repo}/org.apache.commons-logging">
+				<include name="org.apache.commons-logging-1.0.4.jar"/>
+			</lib>
+			<lib dir="${target}">
+				<include name="org.osgi.test.cases.webcontainer.simple.jar"/>
+			</lib>
 		</war>
 	</target>
 					
 	<!-- same as tw5.war file but with pre-specified manifest - wm3tw5.war -->
-	<target name="build-wm3war5" depends="compile">
-		<echo>Building wm3tw5.war file</echo>
-		<echo>copy commons-logging jar from repo to the lib dir</echo>
-		<copy file="../licensed/repo/org.apache.commons-logging/org.apache.commons-logging-1.0.4.jar" todir="resources/tw5/WebContent/WEB-INF/lib"/>		
-		<echo>copy simple jar to the lib dir</echo>
-		<copy file="generated/org.osgi.test.cases.webcontainer.simple.jar" todir="resources/tw5/WebContent/WEB-INF/lib"/>
-		<copy file="generated/org.osgi.test.cases.webcontainer.simple.jar" todir="resources/tw5/WebContent/WEB-INF/lib2"/>
-		<war destfile="generated/wm3tw5.war" webxml="resources/tw5/WebContent/WEB-INF/web.xml" manifest="resources/tw5/manifest/MANIFEST3.MF">
-			<fileset dir="resources/tw5/WebContent/"/>
-			<classes dir="bin/">
+	<target name="build-wm3war5" depends="prewar,build-simplejar">
+		<mkdir dir="${target}/wm3tw5/lib2" />
+		<copy file="${target}/org.osgi.test.cases.webcontainer.simple.jar" todir="${target}/wm3tw5/lib2"/>
+		<war destfile="${target}/wm3tw5.war" webxml="${project.dir}/resources/tw5/WebContent/WEB-INF/web.xml" manifest="${project.dir}/resources/tw5/manifest/MANIFEST3.MF">
+			<fileset dir="${project.dir}/resources/tw5/WebContent/"/>
+			<classes dir="${project.output}">
 				<include name="org/osgi/test/cases/webcontainer/tw5/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
+			<lib dir="${licensed-repo}/org.apache.commons-logging">
+				<include name="org.apache.commons-logging-1.0.4.jar"/>
+			</lib>
+			<lib dir="${target}">
+				<include name="org.osgi.test.cases.webcontainer.simple.jar"/>
+			</lib>
+			<webinf dir="${target}/wm3tw5">
+			</webinf>
 		</war>
 	</target>
 	
 	<!-- build the simple jar to test Bundle-Classpath header -->
-	<target name="build-simplejar" depends="compile">
-        <mkdir dir="${target}" />
-        <bndproject basedir="${projectdir}"/>
+	<target name="build-simplejar" depends="prewar">
 	    <echo>Building org.osgi.test.cases.webcontainer.simple.jar file</echo>
-	    <jar destfile="generated/org.osgi.test.cases.webcontainer.simple.jar"
-		     basedir="bin/"
-		     includes="org/osgi/test/cases/webcontainer/simple/**"
-	    />
+	    <jar destfile="${target}/org.osgi.test.cases.webcontainer.simple.jar"
+		     basedir="${project.output}"
+		     includes="org/osgi/test/cases/webcontainer/simple/**">
+	    </jar>
 	</target>
 	
-	<target name="jars" depends="build-simplejar, build-war,build-wmwar"/>
+	<target name="jars" depends="build-war,build-wmwar,master.jars"/>
 		
-	<target name="clean" depends="init">
-		<delete quiet="true" includeEmptyDirs="true" verbose="${verbose}">
-			<fileset dir="${project.output}" />
-			<fileset dir="${target}" />
-			<fileset dir="resources" includes="**/*.war" />
-			<fileset dir="resources" includes="**/*.jar" />
-			<fileset dir="resources" includes="**/tw5/WebContent/WEB-INF/**/*.jar" />
-			<fileset dir="resources/tw5/WebContent/WEB-INF/lib2" />
-		</delete>
-	</target>
-
 </project>

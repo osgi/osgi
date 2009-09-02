@@ -70,7 +70,7 @@ public class MCOtherAnnotationTest extends WebContainerTestBundleControl {
      * generate the manifest
      */
     public void testBundleManifest() throws Exception {
-        Manifest originalManifest = super.getManifest("/resources/tw3/tw3.war");
+		Manifest originalManifest = super.getManifest("/tw3.war");
         BundleManifestValidator validator = new BundleManifestValidator(this.b,
                 originalManifest, this.options, this.debug);
         validator.validate();

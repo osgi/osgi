@@ -128,7 +128,7 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
 
         log("attempt to install war file: tw3.war at context path /tw3");
         Bundle b2 = null;
-        Manifest originalManifest = super.getManifest("/resources/tw3/tw3.war");
+		Manifest originalManifest = super.getManifest("/tw3.war");
         final Map options2 = new HashMap();
         options2.put(Constants.BUNDLE_SYMBOLICNAME, SYMBOLICNAME1);
         options.put(Constants.BUNDLE_VERSION, VERSION10);

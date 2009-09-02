@@ -71,7 +71,7 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
      * generate the manifest
      */
     public void testBundleManifest() throws Exception {
-        Manifest originalManifest = super.getManifest("/resources/tw5/tw5.war");
+		Manifest originalManifest = super.getManifest("/tw5.war");
         BundleManifestValidator validator = new BundleManifestValidator(this.b,
                 originalManifest, this.options, this.debug);
         validator.validate();
