@@ -4,31 +4,27 @@ Bundle-Description					: Remote Services test cases.
 Export-Package 					= ${p}.common;version=1.0.0
 	
 Private-Package						= org.osgi.test.support.*, \
-	OSGI-INF.*, \
-	${p}.junit, \
-	${p}.impl, \
-	${p}.common
+	${p}.*
 	
-Include-Resource					= 
+Include-Resource					= resources
 	
 Test-Cases							= ${testcases}
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
-	osgi.core;								version=4.2.1	, \
-	osgi.cmpn;								version=4.2.1	, \
+	osgi.core;								version=4.2	, \
+	osgi.cmpn;								version=4.2	, \
 	ee.minimum; 							version=1.2	, \
 	${junit}
 
 -runbundles							= \
-	org.apache.cxf.dosgi.singlebundle;      version=1.1, \
-    osgi.core;                              version=4.2.1 , \
-	osgi.cmpn;								version=4.2.1	, \
-	org.osgi.impl.service.log
+	org.apache.cxf.dosgi.singlebundle;      version=latest, \
+	osgi.cmpn;								version=latest	, \
+	org.osgi.impl.service.log;				version=latest
 	
 
 -runproperties = report=true, \
 	osgi.compatibility.bootdelegation=false, \
 	osgi.resolverMode=strict, \
 	osgi.support.multipleHosts=true, \
-	tck.dp.bundles=${licensed-repo}/org.apache.cxf.dosgi.singlebundle/org.apache.cxf.dosgi.singlebundle-1.1.0.jar|${repo}/osgi.core/osgi.core-4.2.1.jar|${repo}/osgi.cmpn/osgi.cmpn-4.2.1.jar|${repo}/org.osgi.impl.service.log/org.osgi.impl.service.log-1.3.2.jar
+	${p}.bundles=${repo;org.apache.cxf.dosgi.singlebundle}|${repo;osgi.core}|${repo;osgi.cmpn}|${repo;org.osgi.impl.service.log}
