@@ -14,14 +14,14 @@
 	</welcome-file-list>
 	<servlet>
 		<description></description>
-		<display-name>BundleTestServlet</display-name>
-		<servlet-name>BundleTestServlet</servlet-name>
+		<display-name>BundleContextTestServlet</display-name>
+		<servlet-name>BundleContextTestServlet</servlet-name>
 		<servlet-class>
-			org.osgi.test.cases.webcontainer.tw5.servlet.BundleTestServlet</servlet-class>
+			org.osgi.test.cases.webcontainer.tw5.servlet.BundleContextTestServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>BundleTestServlet</servlet-name>
-		<url-pattern>/BundleTestServlet</url-pattern>
+		<servlet-name>BundleContextTestServlet</servlet-name>
+		<url-pattern>/BundleContextTestServlet</url-pattern>
 	</servlet-mapping>
 	<servlet>
 		<description></description>
