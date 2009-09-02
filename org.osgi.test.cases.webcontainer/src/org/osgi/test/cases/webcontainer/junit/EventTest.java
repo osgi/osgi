@@ -37,7 +37,7 @@ import org.osgi.test.cases.webcontainer.util.EventFactory;
 public class EventTest extends WebContainerTestBundleControl {
     Bundle b;
     Bundle eventhandler;
-    private final int WAITCOUNT = 30;
+    private final int WAITCOUNT = 10;
     private final String EXTENDER_BUNDLE = "extender.bundle";
     private final String EXTENDER_BUNDLE_ID = "extender.bundle.id";
     private final String EXTENDER_BUNDLE_VERSION = "extender.bundle.version";

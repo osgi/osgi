@@ -220,13 +220,12 @@ public class BundleManifestValidator extends Assert implements Validator{
                 jarPath = url.getFile().substring(1);
             } 
             assertTrue("verify WEB-INF/lib jars exist in the actual classpath", exist(jarPath, actualClassPathArray, false));
+
             count++;
         }
         
-        // verify no other path gets added to the Bundle-Classpath
-        // per rfc 66, If a Bundle-Classpath header is specified in the source bundles manifest and it references jars or 
-        // directories outside of the WEB-INF this is considered an error and the URL handler must throw an 
-        // exception
+        // verify no other path gets added to the Bundle-Classpath, the following should be true unless one of the jar 
+        // in the lib dir contains a Class-Path entry in the manifest.
         assertEquals("verify no other path gets added to the Bundle-Classpath", count + 1, actualClassPathArray.length);
         
         // verify no dups on the classpath

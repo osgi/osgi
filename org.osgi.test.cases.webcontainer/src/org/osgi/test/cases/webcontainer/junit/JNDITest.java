@@ -44,7 +44,7 @@ public class JNDITest extends WebContainerTestBundleControl {
 
         // install + start the war file
         log("install war file: tw5.war at context path " + this.warContextPath);
-        String loc = super.getWarURL("t51.war", this.options);
+        String loc = super.getWarURL("tw5.war", this.options);
         if (this.debug) {
             log("bundleName to be passed into installBundle is " + loc);	
         }

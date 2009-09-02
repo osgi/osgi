@@ -113,9 +113,16 @@ public abstract class WebContainerTestBundleControl extends
     protected String getWarURL(String name, Map options) {
         String query = generateQuery(options);
         if (query != null && query.length() > 0) {
+        	if (debug) {
+        		log("Install URL is " + WARSCHEMA + getWebServer() + name + "?"
+                        + generateQuery(options));
+        	}
             return WARSCHEMA + getWebServer() + name + "?"
                     + generateQuery(options);
         } else {
+        	if (debug) {
+        		log("Install URL is " + WARSCHEMA + getWebServer() + name);
+        	}
             return WARSCHEMA + getWebServer() + name;
         }
     }
