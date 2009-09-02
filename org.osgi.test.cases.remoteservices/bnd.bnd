@@ -27,4 +27,8 @@ Test-Cases							= ${testcases}
 	osgi.compatibility.bootdelegation=false, \
 	osgi.resolverMode=strict, \
 	osgi.support.multipleHosts=true, \
-	${p}.bundles=${repo;org.apache.cxf.dosgi.singlebundle}|${repo;osgi.core}|${repo;osgi.cmpn}|${repo;org.osgi.impl.service.log}
+	${p}.bundles=${repo;org.apache.cxf.dosgi.singlebundle}|${repo;osgi.core}|${repo;osgi.cmpn}|${repo;org.osgi.impl.service.log}, \
+	${p}.serverconfig="service.exported.configs,org.apache.cxf.ws.address", \
+	service.exported.configs=org.apache.cxf.ws, \
+	org.apache.cxf.ws.address=http://localhost:9090/test
+	

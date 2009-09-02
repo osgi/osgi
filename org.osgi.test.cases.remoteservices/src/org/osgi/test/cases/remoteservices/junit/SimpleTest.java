@@ -15,15 +15,12 @@
  */
 package org.osgi.test.cases.remoteservices.junit;
 
-import java.io.FileInputStream;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -163,18 +160,19 @@ public class SimpleTest extends MultiFrameworkTestCase {
 	 * @return
 	 */
 	private Hashtable loadServerTCKProperties() {
-		Properties props = new Properties();
-		try {
-			props.load(new FileInputStream("server_dp.properties"));
-		} catch (Exception e) {
-			System.out.println("Did not find server_db.properties file");
-		}
-		
+		String serverconfig = System
+				.getProperty("org.osgi.test.cases.remoteservices.serverconfig");
+		assertNotNull(
+				"did not find org.osgi.test.cases.remoteservices.serverconfig system property",
+				serverconfig);
 		Hashtable properties = new Hashtable();
 		
-		for (Enumeration e = props.propertyNames(); e.hasMoreElements();) {
-			Object key = e.nextElement();
-			properties.put(key, props.get(key));
+		for (StringTokenizer tok = new StringTokenizer(serverconfig, ","); tok
+				.hasMoreTokens();) {
+			String propertyName = tok.nextToken();
+			String value = System.getProperty(propertyName);
+			assertNotNull("system property not found: " + propertyName, value);
+			properties.put(propertyName, value);
 		}
 		
 		return properties;
