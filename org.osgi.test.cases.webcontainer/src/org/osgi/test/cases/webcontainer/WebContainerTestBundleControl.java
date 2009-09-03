@@ -15,6 +15,7 @@
  */
 package org.osgi.test.cases.webcontainer;
 
+import java.io.File;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.JarURLConnection;
@@ -70,7 +71,13 @@ public abstract class WebContainerTestBundleControl extends
      */
     protected Manifest getManifest(String warPath) throws Exception {
         // test bundle manifest is constructed per user's deployment options
-        String location = System.getProperty("user.dir") + warPath;
+        String location = System.getProperty("user.dir");
+        
+        if (!location.endsWith(File.separator)) {
+        	location += File.separator;
+        }
+        
+        location += "generated" + warPath;
         log("jar:file:" + location + "!/");
         URL url = new URL("jar:file:" + location + "!/");
         JarURLConnection conn = (JarURLConnection) url.openConnection();
