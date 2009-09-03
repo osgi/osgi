@@ -61,7 +61,9 @@ cmpn.resources = {legal/about.html}, \
 enterprise.specs = \
 	 org.osgi.jmx, \
 	 org.osgi.service.blueprint, \
-	 org.osgi.service.jdbc
+	 org.osgi.service.jdbc, \
+	 org.osgi.service.jndi, \
+	 org.osgi.service.jpa
 
 enterprise.packages = ${replace;$(enterprise.specs);^.*$;$0.*}
 

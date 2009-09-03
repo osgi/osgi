@@ -8,8 +8,9 @@ Include-Resource				: \
         ${repo;${build.enterprise.impls}}, \
 	  	\
 	 	${repo;com.springsource.org.apache.derby}, \
-	 	${repo;org.apache.felix.configadmin}, \
 	 	${repo;org.apache.cxf.dosgi.singlebundle}, \
+	 	${repo;org.apache.felix.configadmin}, \
+	 	${repo;org.apache.geronimo.specs.geronimo-jpa_3.0_spec}, \
 	  	${repo;org.eclipse.equinox.event}, \
 	  	${repo;org.eclipse.equinox.ip}, \
 	 	${repo;org.eclipse.equinox.util}, \

@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) OSGi Alliance (2009). All Rights Reserved.
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -40,117 +42,106 @@ public interface PersistenceUnitInfoService {
      * =======================================================================
      */
 
-    /**
-     * The key used to store the schema version of the persistence.xml file.
-     * This entry should always be present and will always contain a value.
-     *
-     *   persistence.xml – <persistence version=...> attribute
-     *   value type - String
-     */
+	/**
+	 * The key used to store the schema version of the persistence.xml file.
+	 * This entry should always be present and will always contain a value.
+	 * 
+	 * persistence.xml - <persistence version=...> attribute value type - String
+	 */
     public static final String SCHEMA_VERSION =
                                    "javax.persistence.schemaVersion";
-    
-    /**
-     * The key used to store the persistence unit name.
-     * This entry should always be present and will always contain a value.
-     *
-     *   persistence.xml – <persistence-unit name=...> attribute
-     *   value type - String
-     */
+
+	/**
+	 * The key used to store the persistence unit name. This entry should always
+	 * be present and will always contain a value.
+	 * 
+	 * persistence.xml - <persistence-unit name=...> attribute value type -
+	 * String
+	 */
     public static final String UNIT_NAME = "javax.persistence.unitName";
-    
-    /**
-     * The key used to store the transaction type.
-     *
-     *   persistence.xml – <persistence-unit transaction-type=...> attribute
-     *   value type - String
-     */
+
+	/**
+	 * The key used to store the transaction type.
+	 * 
+	 * persistence.xml - <persistence-unit transaction-type=...> attribute value
+	 * type - String
+	 */
     public static final String TRANSACTION_TYPE =
                                  "javax.persistence.transactionType";
 
-    /**
-     * The key used to store the provider class name.
-     *
-     *   persistence.xml – <provider> element
-     *   value type - String
-     */
+	/**
+	 * The key used to store the provider class name.
+	 * 
+	 * persistence.xml - <provider> element value type - String
+	 */
     public static final String PROVIDER_CLASSNAME = "javax.persistence.provider";
 
-    /**
-     * The key used to store the JTA data source.
-     *
-     *   persistence.xml – <jta-data-source> element
-     *   value type - String
-     */
+	/**
+	 * The key used to store the JTA data source.
+	 * 
+	 * persistence.xml - <jta-data-source> element value type - String
+	 */
     public static final String JTA_DATASOURCE = "javax.persistence.jtaDataSource";
 
-    /**
-     * The key used to store the non-JTA data source.
-     *
-     *   persistence.xml – <non-jta-data-source> element
-     *   value type - String
-     */
+	/**
+	 * The key used to store the non-JTA data source.
+	 * 
+	 * persistence.xml - <non-jta-data-source> element value type - String
+	 */
     public static final String NON_JTA_DATASOURCE =
                                  "javax.persistence.nonJtaDataSource";
-    
-    /**
-     * The key used to store the List of mapping file names.
-     *
-     *   persistence.xml – <mapping-file> elements
-     *   value type - List<String>
-     */
+
+	/**
+	 * The key used to store the List of mapping file names.
+	 * 
+	 * persistence.xml - <mapping-file> elements value type - List<String>
+	 */
     public static final String MAPPING_FILES = "javax.persistence.mappingFiles";
-    
-    /**
-     * The key used to store the List of jar file locations.
-     *
-     *   persistence.xml – <jar-file> elements
-     *   value type - List<URL>
-     */
+
+	/**
+	 * The key used to store the List of jar file locations.
+	 * 
+	 * persistence.xml - <jar-file> elements value type - List<URL>
+	 */
     public static final String JAR_FILES = "javax.persistence.jarFiles";
-    
-    /**
-     * The key used to store the List of managed class names.
-     * 
-     *   persistence.xml – <class> elements
-     *   value type - List<String>
-     */
+
+	/**
+	 * The key used to store the List of managed class names.
+	 * 
+	 * persistence.xml - <class> elements value type - List<String>
+	 */
     public static final String MANAGED_CLASSES  =
                                  "javax.persistence.managedClasses";
-    
-    /**
-     * The key used to store whether unlisted classes should be excluded.
-     * 
-     *   persistence.xml – <exclude-unlisted-classes> element
-     *   value type - Boolean
-     */
+
+	/**
+	 * The key used to store whether unlisted classes should be excluded.
+	 * 
+	 * persistence.xml - <exclude-unlisted-classes> element value type - Boolean
+	 */
     public static final String EXCLUDE_UNLISTED_CLASSES =
                                  "javax.persistence.excludeUnlistedClasses";
-    
-    /**
-     * The key used to store the shared cache mode.
-     * 
-     *   persistence.xml – <shared-cache-mode> element
-     *   value type - String
-     */
+
+	/**
+	 * The key used to store the shared cache mode.
+	 * 
+	 * persistence.xml - <shared-cache-mode> element value type - String
+	 */
     public static final String SHARED_CACHE_MODE  =
                                  "javax.persistence.sharedCacheMode";
-    
-    /**
-     * The key used to store the validation mode.
-     * 
-     *   persistence.xml – <validation-mode> element
-     *   value type - String
-     */
+
+	/**
+	 * The key used to store the validation mode.
+	 * 
+	 * persistence.xml - <validation-mode> element value type - String
+	 */
     public static final String VALIDATION_MODE  =
                                  "javax.persistence.validationMode";
- 
-    /**
-     * The key used to store the persistence unit properties.
-     *
-     *   persistence.xml – <property> elements
-     *   value type - Properties
-     */
+
+	/**
+	 * The key used to store the persistence unit properties.
+	 * 
+	 * persistence.xml - <property> elements value type - Properties
+	 */
     public static final String PROPERTIES = "javax.persistence.properties";
     
     /* ===============================================================

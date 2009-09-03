@@ -1,18 +1,10 @@
 javac.source 			= 1.5
 javac.target 			= 1.5
 
-Bundle-Version				= 4.2.0.${project.build}
-Bundle-Activator			= org.osgi.service.impl.jpa.start.Activator
-Bundle-Description			= OSGi JPA Extender Reference Implementation by IBM Corporation.
-
-Private-Package 			= ${p}.*
-
-Import-Package = \
-    javax.persistence;version="[1.0.0, 2.0.0)", \
-    javax.persistence.spi;version="[1.0.0, 2.0.0)", \
-    org.osgi.framework;version="[1.5.0,2.0.0)"
-Export-Package = \
-    org.osgi.service.jpa;version="1.0.0";uses:="org.osgi.framework"
+-nope							= true
+nodeploy						= true
 
 -buildpath 					= \
-	osgi.core;					version=4.2
+	osgi.core;					version=4.2, \
+	org.apache.geronimo.specs.geronimo-jpa_3.0_spec; version=latest
+	
