@@ -10,9 +10,7 @@ Import-Package = \
  	*
 
  Export-Package =\
-	org.osgi.test.cases.transaction.util;version=1.0, \
-	javax.transaction.*, \
-	javax.transaction.xa.*
+	org.osgi.test.cases.transaction.util;version=1.0
 	
 -buildpath							= \
 	org.apache.geronimo.specs.geronimo-j2ee-connector_1.5_spec;version=2.0, \
