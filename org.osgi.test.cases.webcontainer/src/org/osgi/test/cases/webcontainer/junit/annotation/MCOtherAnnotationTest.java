@@ -18,7 +18,6 @@ package org.osgi.test.cases.webcontainer.junit.annotation;
 
 import java.util.jar.Manifest;
 
-import org.osgi.framework.Bundle;
 import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
@@ -39,8 +38,8 @@ import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
  *          when the metadata-complete attribute is set to true.
  */
 public class MCOtherAnnotationTest extends WebContainerTestBundleControl {
-    Bundle b;
-    
+
+    @Override
     public void setUp() throws Exception {
         super.setUp();
         super.prepare("/tw3");
@@ -52,18 +51,6 @@ public class MCOtherAnnotationTest extends WebContainerTestBundleControl {
         this.b = installBundle(super.getWarURL("tw3.war", this.options), true);
     }
 
-    private void uninstallWar() throws Exception {
-        if (this.b != null && this.b.getState() != Bundle.UNINSTALLED) {
-            // uninstall the war file
-            log("uninstall war file: tw3.war at context path "
-                    + this.warContextPath);
-            uninstallBundle(this.b);
-        }
-    }
-
-    public void tearDown() throws Exception {
-        uninstallWar();
-    }
 
     /*
      * set deployOptions to null to rely on the web container service to
@@ -244,7 +231,7 @@ public class MCOtherAnnotationTest extends WebContainerTestBundleControl {
      * javax.servlet.http.HttpSessionAttributeListener
      */
     public void testPreDestroyOther() throws Exception {
-        uninstallWar();
+        super.tearDown();
 
         // check if annotated methods are not invoked
         log("verify annotated methods are not invoked");

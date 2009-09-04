@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import org.osgi.framework.Bundle;
 import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
@@ -30,8 +29,8 @@ import org.osgi.test.cases.webcontainer.util.Dispatcher;
  */
 public class PostConstructPreDestroyErrorTest extends
         WebContainerTestBundleControl {
-    Bundle b;
 
+    @Override
     public void setUp() throws Exception {
         super.setUp();
         super.prepare("/tw2");
@@ -41,19 +40,6 @@ public class PostConstructPreDestroyErrorTest extends
         // install + start the war file
         log("install war file: tw2.war at context path " + this.warContextPath);
         this.b = installBundle(super.getWarURL("tw3.war", this.options), true);
-    }
-
-    private void uninstallWar() throws Exception {
-        if (this.b != null && this.b.getState() != Bundle.UNINSTALLED) {
-            // uninstall the war file
-            log("uninstall war file: tw2.war at context path "
-                    + this.warContextPath);
-            uninstallBundle(this.b);
-        }
-    }
-
-    public void tearDown() throws Exception {
-        uninstallWar();
     }
 
     /*
@@ -209,7 +195,7 @@ public class PostConstructPreDestroyErrorTest extends
         testPreDestroyError001();
         testPreDestroyError002();
         testPreDestroyError003();
-        uninstallWar();
+        super.tearDown();
         // TODO do we need to wait till the war is uninstalled properly?
 
         log("verify pre-destroy annotated methods are not called");

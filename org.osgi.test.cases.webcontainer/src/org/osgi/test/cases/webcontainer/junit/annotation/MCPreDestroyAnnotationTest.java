@@ -16,16 +16,15 @@
 
 package org.osgi.test.cases.webcontainer.junit.annotation;
 
-import org.osgi.framework.Bundle;
 import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
 
 /**
  * @version $Rev$ $Date$
  */
 public class MCPreDestroyAnnotationTest extends WebContainerTestBundleControl {
-    Bundle b;
     long beforeUninstall;
 
+    @Override
     public void setUp() throws Exception {
         super.setUp();
         super.prepare("/tw3");
@@ -40,23 +39,12 @@ public class MCPreDestroyAnnotationTest extends WebContainerTestBundleControl {
         this.beforeUninstall = System.currentTimeMillis();
     }
 
-    private void uninstallWar() throws Exception {
-        // uninstall the war file
-        log("uninstall war file: tw3.war at context path " + this.warContextPath);
-        uninstallBundle(this.b);
-    }
-
-    public void tearDown() throws Exception {
-        // already uninstalled in the test
-        // uninstallWar();
-    }
-
     /*
      * test @preDestroy annotated public method is not called
      * when the metadata-complete attribute is set to true.
      */
     public void testPreDestroy001() throws Exception {
-        uninstallWar();
+        super.tearDown();
         // TODO do we need to wait till the war is uninstalled properly?
         log("verify annotated methods are not invoked");
         assertEquals(this.timeUtil.getTimeFromLog(

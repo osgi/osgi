@@ -19,7 +19,6 @@ package org.osgi.test.cases.webcontainer.junit.annotation;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import org.osgi.framework.Bundle;
 import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
@@ -29,8 +28,8 @@ import org.osgi.test.support.Base64Encoder;
  * @version $Rev$ $Date$
  */
 public class SecurityAnnotationTest extends WebContainerTestBundleControl {
-    Bundle b;
-
+    
+    @Override
     public void setUp() throws Exception {
         super.setUp();
         super.prepare("/tw2");
@@ -38,16 +37,6 @@ public class SecurityAnnotationTest extends WebContainerTestBundleControl {
         // install + start the war file
         log("install war file: tw2.war at context path " + this.warContextPath);
         this.b = installBundle(super.getWarURL("tw3.war", this.options), true);
-    }
-
-    private void uninstallWar() throws Exception {
-        // uninstall the war file
-        log("uninstall war file: tw2.war at context path " + this.warContextPath);
-        uninstallBundle(this.b);
-    }
-
-    public void tearDown() throws Exception {
-        uninstallWar();
     }
 
     /*

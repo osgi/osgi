@@ -16,7 +16,6 @@
 
 package org.osgi.test.cases.webcontainer.junit.annotation;
 
-import org.osgi.framework.Bundle;
 import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
 
 /**
@@ -24,8 +23,8 @@ import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
  */
 public class PreDestroyAnnotationTest extends WebContainerTestBundleControl {
     long beforeUninstall;
-    Bundle b;
 
+    @Override
     public void setUp() throws Exception {
         super.setUp();
         super.prepare("/tw2");
@@ -39,21 +38,11 @@ public class PreDestroyAnnotationTest extends WebContainerTestBundleControl {
         beforeUninstall = System.currentTimeMillis();
     }
 
-    private void uninstallWar() throws Exception {
-        // uninstall the war file
-        log("uninstall war file: tw2.war at context path " + this.warContextPath);
-        uninstallBundle(this.b);
-    }
-
-    public void tearDown() throws Exception {
-        uninstallWar();
-    }
-
     /*
      * test @preDestroy annotated public method is called
      */
     public void testPreDestroy001() throws Exception {
-        uninstallWar();
+        super.tearDown();
         // TODO do we need to wait till the war is uninstalled properly?
         log("verify annotated methods are invoked");
         assertTrue(this.timeUtil.getTimeFromLog(

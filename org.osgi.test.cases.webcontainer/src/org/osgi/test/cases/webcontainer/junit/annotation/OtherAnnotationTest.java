@@ -18,7 +18,6 @@ package org.osgi.test.cases.webcontainer.junit.annotation;
 
 import java.util.jar.Manifest;
 
-import org.osgi.framework.Bundle;
 import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
@@ -37,8 +36,8 @@ import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
  *          javax.servlet.http.HttpSessionAttributeListener
  */
 public class OtherAnnotationTest extends WebContainerTestBundleControl {
-    Bundle b;
 
+    @Override
     public void setUp() throws Exception {
         super.setUp();
         super.prepare("/tw2");
@@ -46,17 +45,6 @@ public class OtherAnnotationTest extends WebContainerTestBundleControl {
         // install + start the war file
         log("install war file: tw2.war at context path " + this.warContextPath);
         this.b = installBundle(super.getWarURL("tw3.war", this.options), true);
-    }
-
-    private void uninstallWar() throws Exception {
-        // uninstall the war file
-        log("uninstall war file: tw2.war at context path "
-                + this.warContextPath);
-        uninstallBundle(this.b);
-    }
-
-    public void tearDown() throws Exception {
-        uninstallWar();
     }
 
     /*
@@ -365,7 +353,7 @@ public class OtherAnnotationTest extends WebContainerTestBundleControl {
     public void testPreDestroyOther() throws Exception {
         // capture the beforeUninstall time
         long beforeUninstall = System.currentTimeMillis();
-        uninstallWar();
+        super.tearDown();
 
         log("verify annotated methods are invoked");
         assertTrue(this.timeUtil.getTimeFromLog("TestFilter",
