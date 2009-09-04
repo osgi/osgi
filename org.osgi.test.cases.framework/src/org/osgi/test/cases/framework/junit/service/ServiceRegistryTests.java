@@ -768,6 +768,37 @@ public class ServiceRegistryTests extends OSGiTestCase {
 		}
 	}
 
+	public void testModifiedRanking() {
+		Runnable runIt = new Runnable() {
+			public void run() {
+				// nothing
+			}
+		};
+		Hashtable props = new Hashtable();
+		props.put(getName(), Boolean.TRUE);
+		props.put(Constants.SERVICE_RANKING, new Integer(15));
+		ServiceRegistration reg1 = getContext().registerService(
+				Runnable.class.getName(), runIt, props);
+		props.put(Constants.SERVICE_RANKING, new Integer(10));
+		ServiceRegistration reg2 = getContext().registerService(
+				Runnable.class.getName(), runIt, props);
+		try {
+			assertEquals("wrong service reference", reg1.getReference(),
+					getContext().getServiceReference("java.lang.Runnable"));
+
+			props.put(Constants.SERVICE_RANKING, new Integer(20));
+			reg2.setProperties(props);
+			assertEquals("wrong service reference", reg2.getReference(),
+					getContext().getServiceReference("java.lang.Runnable"));
+		}
+		finally {
+			if (reg1 != null)
+				reg1.unregister();
+			if (reg2 != null)
+				reg2.unregister();
+		}
+	}
+
 	static interface Marker1 {
 		public int getValue();
 	}
