@@ -28,6 +28,7 @@ import java.util.jar.Manifest;
 import javax.servlet.ServletContext;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
@@ -81,6 +82,31 @@ public abstract class WebContainerTestBundleControl extends
 		assertEquals("service registry size should be the same", this.srSize, sr == null ? 0 : sr.length);
 		this.b = null;
 	}
+	
+    /**
+     * install the specified war and return the installed bundle
+     * @param options
+     * @param warName
+     * @param start
+     * @return
+     * @throws Exception
+     */
+    protected Bundle installWar(Map<String, Object> options, String warName,
+            boolean start) throws Exception {
+        // install the war file
+        log("install and start war file: " + warName);
+
+        try {
+            String loc = getWarURL(warName, options);
+            if (debug) {
+                log("bundleName to be passed into installBundle is " + loc);
+            }
+            return installBundle(loc, start);
+        } catch (BundleException e) {
+            // expected
+        }
+        return null;
+    }
 
     protected void prepare(String wcp) throws Exception {
         this.warContextPath = wcp;

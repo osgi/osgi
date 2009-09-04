@@ -33,11 +33,23 @@ import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
  */
 public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
 
+    private Map<String, Object> createOptions(String name, String version, String cp) {
+        final Map<String, Object> options = new HashMap<String, Object>();
+        options.put(Constants.BUNDLE_SYMBOLICNAME, name);
+        if (version != null) {
+            options.put(Constants.BUNDLE_VERSION, version);
+        }
+        options.put(WEB_CONTEXT_PATH, cp);
+        return options;
+    }
+    
     /*
      * verify valid deployOptions overwrite original manifest Bundle-SymbolicName
      */
     public void testBundleSymbolicName001() throws Exception {
-        generalSymbolicNameTest(SYMBOLICNAME1, "/tw1", "tw1.war", false);
+        final Map<String, Object> options = createOptions(SYMBOLICNAME1, null, "/tw1");
+        this.b = super.installWar(options, "tw1.war", false);
+        super.generalHeadersTest(options, "tw1.war", false, this.b);
     }
     
 
@@ -45,7 +57,9 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
      * verify valid deployOptions overwrite original manifest Bundle-SymbolicName
      */
     public void testBundleSymbolicName002() throws Exception {
-        generalSymbolicNameTest(SYMBOLICNAME2, "/tw2", "tw2.war", false);
+        final Map<String, Object> options = createOptions(SYMBOLICNAME2, null, "/tw2");
+        this.b = super.installWar(options, "tw2.war", false);
+        super.generalHeadersTest(options, "tw2.war", false, this.b);
     }
     
 
@@ -53,7 +67,9 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
      * verify valid deployOptions overwrite original manifest Bundle-SymbolicName
      */
     public void testBundleSymbolicName003() throws Exception {
-        generalSymbolicNameTest(SYMBOLICNAME3, "/tw3", "tw3.war", true);
+        final Map<String, Object> options = createOptions(SYMBOLICNAME3, null, "/tw3");
+        this.b = super.installWar(options, "tw3.war", true);
+        super.generalHeadersTest(options, "tw3.war", true, this.b);
     }
     
 
@@ -61,7 +77,9 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
      * verify valid deployOptions overwrite original manifest Bundle-SymbolicName
      */
     public void testBundleSymbolicName004() throws Exception {
-        generalSymbolicNameTest(SYMBOLICNAME4, "/tw4", "tw4.war", false);
+        final Map<String, Object> options = createOptions(SYMBOLICNAME4, null, "/tw4");
+        this.b = super.installWar(options, "tw4.war", false);
+        super.generalHeadersTest(options, "tw4.war", false, this.b);
     }
     
 
@@ -69,14 +87,18 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
      * verify valid deployOptions overwrite original manifest Bundle-SymbolicName
      */
     public void testBundleSymbolicName005() throws Exception {
-        generalSymbolicNameTest(SYMBOLICNAME5, "/tw5", "tw5.war", false);
+        final Map<String, Object> options = createOptions(SYMBOLICNAME5, null, "/tw5");
+        this.b = super.installWar(options, "tw5.war", false);
+        super.generalHeadersTest(options, "tw5.war", false, this.b);
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Bundle-SymbolicName
      */
     public void testBundleSymbolicName006() throws Exception {
-        generalSymbolicNameTest(SYMBOLICNAME1, "/tw1", "wmtw1.war", false);
+        final Map<String, Object> options = createOptions(SYMBOLICNAME1, null, "/tw1");
+        this.b = super.installWar(options, "wmtw1.war", false);
+        super.generalHeadersTest(options, "wmtw1.war", false, this.b);
     }
     
 
@@ -84,7 +106,9 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
      * verify valid deployOptions overwrite original manifest Bundle-SymbolicName
      */
     public void testBundleSymbolicName007() throws Exception {
-        generalSymbolicNameTest(SYMBOLICNAME2, "/tw2", "wmtw2.war", false);
+        final Map<String, Object> options = createOptions(SYMBOLICNAME2, null, "/tw2");
+        this.b = super.installWar(options, "wmtw2.war", false);
+        super.generalHeadersTest(options, "wmtw2.war", false, this.b);
     }
     
 
@@ -92,7 +116,9 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
      * verify valid deployOptions overwrite original manifest Bundle-SymbolicName
      */
     public void testBundleSymbolicName008() throws Exception {
-        generalSymbolicNameTest(SYMBOLICNAME3, "/tw3", "wmtw3.war", true);
+        final Map<String, Object> options = createOptions(SYMBOLICNAME3, null, "/tw3");
+        this.b = super.installWar(options, "wmtw3.war", true);
+        super.generalHeadersTest(options, "wmtw3.war", true, this.b);
     }
     
 
@@ -100,7 +126,9 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
      * verify valid deployOptions overwrite original manifest Bundle-SymbolicName
      */
     public void testBundleSymbolicName009() throws Exception {
-        generalSymbolicNameTest(SYMBOLICNAME4, "/tw4", "wmtw4.war", false);
+        final Map<String, Object> options = createOptions(SYMBOLICNAME4, null, "/tw4");
+        this.b = super.installWar(options, "wmtw4.war", false);
+        super.generalHeadersTest(options, "wmtw4.war", false, this.b);
     }
     
 
@@ -108,23 +136,23 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
      * verify valid deployOptions overwrite original manifest Bundle-SymbolicName
      */
     public void testBundleSymbolicName010() throws Exception {
-        generalSymbolicNameTest(SYMBOLICNAME5, "/tw5", "wmtw5.war", false);
+        final Map<String, Object> options = createOptions(SYMBOLICNAME5, null, "/tw5");
+        this.b = super.installWar(options, "wmtw5.war", false);
+        super.generalHeadersTest(options, "wmtw5.war", false, this.b);
     }
 
     /*
      * verify Bundle-SymbolicName and Bundle-Version has to be unique
      */
     public void testBundleSymbolicNameError001() throws Exception {
-        
-        this.b = generalSymbolicNameVersionTest(SYMBOLICNAME1, "/tw1", "tw1.war", true);
+        final Map<String, Object> options = createOptions(SYMBOLICNAME1, null, "/tw1");
+        this.b = super.installWar(options, "tw1.war", true);
+        super.generalHeadersTest(options, "tw1.war", true, this.b);
 
         log("attempt to install war file: tw3.war at context path /tw3");
         Bundle b2 = null;
 		Manifest originalManifest = super.getManifest("/tw3.war");
-        final Map<String, Object> options2 = new HashMap<String, Object>();
-        options2.put(Constants.BUNDLE_SYMBOLICNAME, SYMBOLICNAME1);
-        options.put(Constants.BUNDLE_VERSION, VERSION10);
-        options2.put(WEB_CONTEXT_PATH, "/tw3");
+        final Map<String, Object> options2 = createOptions(SYMBOLICNAME1, VERSION10, "/tw3");
         try {
             b2 = installBundle(super.getWarURL("tw3.war", options2), false);
             fail("bundle install should fail as " + Constants.BUNDLE_SYMBOLICNAME + "is not unique: " + Constants.BUNDLE_SYMBOLICNAME + " = " + SYMBOLICNAME1);
@@ -137,10 +165,7 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
         assertFalse("should not be able to access /tw3", super.ableAccessPath("/tw3/"));
         
         // try let the system to generate a symbolic name
-        final Map<String, Object> options3 = new HashMap<String, Object>();
-        options3.put(Constants.BUNDLE_SYMBOLICNAME, null);
-        options.put(Constants.BUNDLE_VERSION, VERSION10);
-        options3.put(WEB_CONTEXT_PATH, "/tw3");
+        final Map<String, Object> options3 = createOptions(null, VERSION10, "/tw3");
         log("2nd attempt to install war file: tw3.war at context path /tw3");
         try {
             b2 = installBundle(super.getWarURL("tw3.war", options3), true);
@@ -178,16 +203,50 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
      */
     public void testMultipleBundleSymbolicName001() throws Exception {
         
-        this.b = generalSymbolicNameVersionTest(SYMBOLICNAME1, "/tw1", "tw1.war", true);
-        Bundle b2 = generalSymbolicNameVersionTest(SYMBOLICNAME2, "/tw2", "tw2.war", true);
-        Bundle b3 = generalSymbolicNameVersionTest(SYMBOLICNAME3, "/tw3", "tw3.war", true);
-        Bundle b4 = generalSymbolicNameVersionTest(SYMBOLICNAME4, "/tw4", "tw4.war", true);
-        Bundle b5 = generalSymbolicNameVersionTest(SYMBOLICNAME5, "/tw5", "tw5.war", true);
-        Bundle b6 = generalSymbolicNameVersionTest(null, null, "tw1.war", true);
-        Bundle b7 = generalSymbolicNameVersionTest(null, null, "tw2.war", true);
-        Bundle b8 = generalSymbolicNameVersionTest(null, null, "tw3.war", true);
-        Bundle b9 = generalSymbolicNameVersionTest(null, null, "tw4.war", true);
-        Bundle b10 = generalSymbolicNameVersionTest(null, null, "tw5.war", true);
+        Map<String, Object> options = createOptions(SYMBOLICNAME1, null, "/tw1");
+        this.b = super.installWar(options, "tw1.war", true);
+        super.generalHeadersTest(options, "tw1.war", true, this.b);
+        
+        
+        options = createOptions(SYMBOLICNAME2, null, "/tw2");
+        Bundle b2 = super.installWar(options, "tw2.war", true);
+        super.generalHeadersTest(options, "tw2.war", true, b2);
+        
+        
+        options = createOptions(SYMBOLICNAME3, null, "/tw2");
+        Bundle b3 = super.installWar(options, "tw3.war", true);
+        super.generalHeadersTest(options, "tw3.war", true, b3);
+        
+        
+        options = createOptions(SYMBOLICNAME4, null, "/tw4");
+        Bundle b4 = super.installWar(options, "tw4.war", true);
+        super.generalHeadersTest(options, "tw4.war", true, b4);
+        
+        options = createOptions(SYMBOLICNAME5, null, "/tw5");
+        Bundle b5 = super.installWar(options, "tw5.war", true);
+        super.generalHeadersTest(options, "tw5.war", true, b5);
+        
+        options = createOptions(null, null, "/tw1");
+        Bundle b6 = super.installWar(options, "tw1.war", true);
+        super.generalHeadersTest(options, "tw1.war", true, b6);
+        
+        options = createOptions(null, null, "/tw2");
+        Bundle b7 = super.installWar(options, "tw2.war", true);
+        super.generalHeadersTest(options, "tw2.war", true, b6);
+        
+        options = createOptions(null, null, "/tw3");
+        Bundle b8 = super.installWar(options, "tw3.war", true);
+        super.generalHeadersTest(options, "tw3.war", true, b8);
+        
+        options = createOptions(null, null, "/tw1");
+        Bundle b9 = super.installWar(options, "tw4.war", true);
+        super.generalHeadersTest(options, "tw4.war", true, b9);
+        
+        
+        options = createOptions(null, null, "/tw1");
+        Bundle b10 = super.installWar(options, "tw5.war", true);
+        super.generalHeadersTest(options, "tw5.war", true, b10);
+        
         uninstallBundle(b2);
         uninstallBundle(b3);
         uninstallBundle(b4);
@@ -204,21 +263,70 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
      */
     public void testMultipleBundleSymbolicName002() throws Exception {
         
-        this.b = generalSymbolicNameVersionTest(SYMBOLICNAME1, "/tw1", "tw1.war", true);
-        Bundle b2 = generalSymbolicNameVersionTest(SYMBOLICNAME2, "/tw2", "tw2.war", true);
-        Bundle b3 = generalSymbolicNameVersionTest(SYMBOLICNAME3, "/tw3", "tw3.war", true);
-        Bundle b4 = generalSymbolicNameVersionTest(SYMBOLICNAME4, "/tw4", "tw4.war", true);
-        Bundle b5 = generalSymbolicNameVersionTest(SYMBOLICNAME5, "/tw5", "tw5.war", true);
-        Bundle b6 = generalSymbolicNameVersionTest(null, null, "tw1.war", true);
-        Bundle b7 = generalSymbolicNameVersionTest(null, null, "tw2.war", false);
-        Bundle b8 = generalSymbolicNameVersionTest(null, null, "tw3.war", true);
-        Bundle b9 = generalSymbolicNameVersionTest(null, null, "tw4.war", true);
-        Bundle b10 = generalSymbolicNameVersionTest(null, null, "tw5.war", false);
-        Bundle b11 = generalSymbolicNameVersionTest(null, null, "wmtw1.war", true);
-        Bundle b12 = generalSymbolicNameVersionTest(null, null, "wmtw2.war", true);
-        Bundle b13 = generalSymbolicNameVersionTest(null, null, "wmtw3.war", true);
-        Bundle b14 = generalSymbolicNameVersionTest(null, null, "wmtw4.war", true);
-        Bundle b15 = generalSymbolicNameVersionTest(null, null, "wmtw5.war", true);
+        Map<String, Object> options = createOptions(SYMBOLICNAME1, null, "/tw1");
+        this.b = super.installWar(options, "tw1.war", true);
+        super.generalHeadersTest(options, "tw1.war", true, this.b);
+        
+        
+        options = createOptions(SYMBOLICNAME2, null, "/tw2");
+        Bundle b2 = super.installWar(options, "tw2.war", true);
+        super.generalHeadersTest(options, "tw2.war", true, b2);
+        
+        
+        options = createOptions(SYMBOLICNAME3, null, "/tw2");
+        Bundle b3 = super.installWar(options, "tw3.war", true);
+        super.generalHeadersTest(options, "tw3.war", true, b3);
+        
+        
+        options = createOptions(SYMBOLICNAME4, null, "/tw4");
+        Bundle b4 = super.installWar(options, "tw4.war", true);
+        super.generalHeadersTest(options, "tw4.war", true, b4);
+        
+        options = createOptions(SYMBOLICNAME5, null, "/tw5");
+        Bundle b5 = super.installWar(options, "tw5.war", true);
+        super.generalHeadersTest(options, "tw5.war", true, b5);
+        
+        options = createOptions(null, null, "/tw1");
+        Bundle b6 = super.installWar(options, "tw1.war", true);
+        super.generalHeadersTest(options, "tw1.war", true, b6);
+        
+        options = createOptions(null, null, "/tw2");
+        Bundle b7 = super.installWar(options, "tw2.war", true);
+        super.generalHeadersTest(options, "tw2.war", true, b6);
+        
+        options = createOptions(null, null, "/tw3");
+        Bundle b8 = super.installWar(options, "tw3.war", true);
+        super.generalHeadersTest(options, "tw3.war", true, b8);
+        
+        options = createOptions(null, null, "/tw1");
+        Bundle b9 = super.installWar(options, "tw4.war", true);
+        super.generalHeadersTest(options, "tw4.war", true, b9);
+        
+        
+        options = createOptions(null, null, "/tw1");
+        Bundle b10 = super.installWar(options, "tw5.war", true);
+        super.generalHeadersTest(options, "tw5.war", true, b10);
+        
+        options = createOptions(null, null, "/wmtw1");
+        Bundle b11 = super.installWar(options, "wmtw1.war", true);
+        super.generalHeadersTest(options, "wmtw1.war", true, b11);
+        
+        options = createOptions(null, null, "/wmtw2");
+        Bundle b12 = super.installWar(options, "wmtw2.war", true);
+        super.generalHeadersTest(options, "wmtw2.war", true, b12);
+        
+        options = createOptions(null, null, "/wmtw3");
+        Bundle b13 = super.installWar(options, "wmtw3.war", true);
+        super.generalHeadersTest(options, "wmtw3.war", true, b13);
+        
+        options = createOptions(null, null, "/wmtw4");
+        Bundle b14 = super.installWar(options, "wmtw4.war", true);
+        super.generalHeadersTest(options, "wmtw4.war", true, b14);
+        
+        options = createOptions(null, null, "/wmtw5");
+        Bundle b15 = super.installWar(options, "wmtw5.war", true);
+        super.generalHeadersTest(options, "wmtw5.war", true, b15);
+        
         uninstallBundle(b2);
         uninstallBundle(b3);
         uninstallBundle(b4);
@@ -233,30 +341,5 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
         uninstallBundle(b13);
         uninstallBundle(b14);
         uninstallBundle(b15);
-    }
-    
-    /*
-     * generalSymbolicNameTest to be used by non-error test
-     */
-    private Bundle generalSymbolicNameTest(String name, String cp,
-            String warName, boolean start) throws Exception {
-        // specify install options
-        final Map<String, Object> options = new HashMap<String, Object>();
-        options.put(Constants.BUNDLE_SYMBOLICNAME, name);
-        options.put(WEB_CONTEXT_PATH, cp);
-        return super.generalHeadersTest(options, warName, start);
-    }
-    
-    /*
-     * generalSymbolicNameVersionTest to be used by non-error test
-     */
-    private Bundle generalSymbolicNameVersionTest(String name, String cp,
-            String warName, boolean start) throws Exception {
-        // specify install options
-        final Map<String, Object> options = new HashMap<String, Object>();
-        options.put(Constants.BUNDLE_SYMBOLICNAME, name);
-        options.put(Constants.BUNDLE_VERSION, VERSION10);
-        options.put(WEB_CONTEXT_PATH, cp);
-        return super.generalHeadersTest(options, warName, start);
     }
 }

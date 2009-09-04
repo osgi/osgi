@@ -31,25 +31,38 @@ import org.osgi.test.cases.webcontainer.ManifestHeadersTestBundleControl;
  */
 public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
 
+    private Map<String, Object> createOptions(String[] classpath, String cp) {
+        final Map<String, Object> options = new HashMap<String, Object>();
+        options.put(Constants.BUNDLE_CLASSPATH, classpath);
+        options.put(WEB_CONTEXT_PATH, cp);
+        return options;
+    }
+    
     /*
      * verify valid deployOptions overwrite original manifest Bundle-Classpath
      */
     public void testBundleClasspath001() throws Exception {
-        this.b = generalClasspathTest(CLASSPATH3, "/tw1", "tw1.war", false);
+        final Map<String, Object> options = createOptions(CLASSPATH3, "/tw1");
+        this.b = super.installWar(options, "tw1.war", false);
+        super.generalHeadersTest(options, "tw1.war", false, this.b);
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Bundle-Classpath
      */
     public void testBundleClasspath002() throws Exception {
-        this.b = generalClasspathTest(CLASSPATH3, "/tw2", "tw2.war", false);
+        final Map<String, Object> options = createOptions(CLASSPATH3, "/tw2");
+        this.b = super.installWar(options, "tw2.war", false);
+        super.generalHeadersTest(options, "tw2.war", false, this.b);
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Bundle-Classpath
      */
     public void testBundleClasspath003() throws Exception {
-        this.b = generalClasspathTest(CLASSPATH1, "/tw5", "tw5.war", true);
+        final Map<String, Object> options = createOptions(CLASSPATH1, "/tw5");
+        this.b = super.installWar(options, "tw5.war", true);
+        super.generalHeadersTest(options, "tw5.war", true, this.b);
         classpassServletTest(this.b);
     }
     
@@ -57,7 +70,9 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
      * verify valid deployOptions overwrite original manifest Bundle-Classpath
      */
     public void testBundleClasspath004() throws Exception {
-        this.b = generalClasspathTest(CLASSPATH2, "/tw5", "tw5.war", true);
+        final Map<String, Object> options = createOptions(CLASSPATH2, "/tw5");
+        this.b = super.installWar(options, "tw5.war", true);
+        super.generalHeadersTest(options, "tw5.war", true, this.b);
         classpassServletTest(this.b);
     }
 
@@ -65,7 +80,9 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
      * verify valid deployOptions overwrite original manifest Bundle-Classpath
      */
     public void testBundleClasspath005() throws Exception {
-        this.b = generalClasspathTest(CLASSPATH1, "/tw5", "wm2tw5.war", true);
+        final Map<String, Object> options = createOptions(CLASSPATH1, "/tw5");
+        this.b = super.installWar(options, "wm2tw5.war", true);
+        super.generalHeadersTest(options, "wm2tw5.war", true, this.b);
         classpassServletTest(this.b);
     }
     
@@ -73,7 +90,9 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
      * verify valid deployOptions overwrite original manifest Bundle-Classpath
      */
     public void testBundleClasspath006() throws Exception {
-        this.b = generalClasspathTest(CLASSPATH1, "/tw5", "wm2tw5.war", true);
+        final Map<String, Object> options = createOptions(CLASSPATH1, "/tw5");
+        this.b = super.installWar(options, "wm2tw5.war", true);
+        super.generalHeadersTest(options, "wm2tw5.war", true, this.b);
         classpassServletTest(this.b);
     }
     
@@ -81,7 +100,9 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
      * verify valid deployOptions overwrite original manifest Bundle-Classpath
      */
     public void testBundleClasspath007() throws Exception {
-        this.b = generalClasspathTest(CLASSPATH2, "/tw5", "wm3tw5.war", true);
+        final Map<String, Object> options = createOptions(CLASSPATH2, "/tw5");
+        this.b = super.installWar(options, "wm3tw5.war", true);
+        super.generalHeadersTest(options, "wm3tw5.war", true, this.b);
         classpassServletTest(this.b);
     }
     
@@ -89,7 +110,9 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
      * verify valid deployOptions overwrite original manifest Bundle-Classpath
      */
     public void testBundleClasspath008() throws Exception {
-        this.b = generalClasspathTest(CLASSPATH2, "/tw5", "wm3tw5.war", true);
+        final Map<String, Object> options = createOptions(CLASSPATH2, "/tw5");
+        this.b = super.installWar(options, "wm3tw5.war", true);
+        super.generalHeadersTest(options, "wm3tw5.war", true, this.b);
         classpassServletTest(this.b);
     }
 
@@ -97,7 +120,9 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
      * verify when Bundle-Classpath is not specified
      */
     public void testBundleClasspath019() throws Exception {
-        this.b = generalClasspathTest(null, "/tw5", "wm2tw5.war", true);
+        final Map<String, Object> options = createOptions(null, "/tw5");
+        this.b = super.installWar(options, "wm2tw5.war", true);
+        super.generalHeadersTest(options, "wm2tw5.war", true, this.b);
         classpassServletTest(this.b);
     }
     
@@ -105,7 +130,9 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
      * verify when Bundle-Classpath is not specified
      */
     public void testBundleClasspath020() throws Exception {
-        this.b = generalClasspathTest(null, "/tw5", "wm3tw5.war", true);
+        final Map<String, Object> options = createOptions(null, "/tw5");
+        this.b = super.installWar(options, "wm3tw5.war", true);
+        super.generalHeadersTest(options, "wm3tw5.war", true, this.b);
         classpassServletTest(this.b);
     }
 
@@ -188,17 +215,5 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
         // test unable to access /tw5 yet as it is not installed
         assertFalse("should not be able to access /tw5", super
                 .ableAccessPath("/tw5/"));
-    }
-
-    /*
-     * generalClasspathTest to be used by non-error test
-     */
-    private Bundle generalClasspathTest(String[] classpath, String cp,
-            String warName, boolean start) throws Exception {
-        // specify install options
-        final Map<String, Object> options = new HashMap<String, Object>();
-        options.put(Constants.BUNDLE_CLASSPATH, classpath);
-        options.put(WEB_CONTEXT_PATH, cp);
-        return super.generalHeadersTest(options, warName, start);
     }
 }

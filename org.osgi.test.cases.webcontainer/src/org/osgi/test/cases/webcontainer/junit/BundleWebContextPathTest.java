@@ -20,6 +20,7 @@ import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.Constants;
 import org.osgi.test.cases.webcontainer.ManifestHeadersTestBundleControl;
 
 /**
@@ -30,130 +31,168 @@ import org.osgi.test.cases.webcontainer.ManifestHeadersTestBundleControl;
  */
 public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
 
+    private Map<String, Object> createOptions(String cp) {
+        final Map<String, Object> options = new HashMap<String, Object>();
+        options.put(WEB_CONTEXT_PATH, cp);
+        return options;
+    }
+    
     /*
      * verify valid deployOptions overwrite original manifest Web-ContextPath
      */
     public void testWebContextPath001() throws Exception {
-
-        this.b = generalWebContextPathTest(WEBCONTEXTPATH1, "tw1.war", false);
+        final Map<String, Object> options = createOptions(WEBCONTEXTPATH1);
+        this.b = super.installWar(options, "tw1.war", false);
+        super.generalHeadersTest(options, "tw1.war", false, this.b);
     }
 
     /*
      * verify valid deployOptions overwrite original manifest Web-ContextPath
      */
     public void testWebContextPath002() throws Exception {
-        this.b = generalWebContextPathTest(WEBCONTEXTPATH2, "tw2.war", false);
+        final Map<String, Object> options = createOptions(WEBCONTEXTPATH2);
+        this.b = super.installWar(options, "tw2.war", false);
+        super.generalHeadersTest(options, "tw2.war", false, this.b);
     }
 
     /*
      * verify valid deployOptions overwrite original manifest Web-ContextPath
      */
     public void testWebContextPath003() throws Exception {
-        this.b = generalWebContextPathTest(WEBCONTEXTPATH3, "tw3.war", true);
+        final Map<String, Object> options = createOptions(WEBCONTEXTPATH3);
+        this.b = super.installWar(options, "tw3.war", true);
+        super.generalHeadersTest(options, "tw3.war", true, this.b);
     }
 
     /*
      * verify valid deployOptions overwrite original manifest Web-ContextPath
      */
     public void testWebContextPath004() throws Exception {
-        this.b = generalWebContextPathTest(WEBCONTEXTPATH4, "tw4.war", true);
+        final Map<String, Object> options = createOptions(WEBCONTEXTPATH4);
+        this.b = super.installWar(options, "tw4.war", true);
+        super.generalHeadersTest(options, "tw4.war", true, this.b);
     }
 
     /*
      * verify valid deployOptions overwrite original manifest Web-ContextPath
      */
     public void testWebContextPath005() throws Exception {
-        this.b = generalWebContextPathTest(WEBCONTEXTPATH5, "tw5.war", false);
+        final Map<String, Object> options = createOptions(WEBCONTEXTPATH5);
+        this.b = super.installWar(options, "tw5.war", false);
+        super.generalHeadersTest(options, "tw5.war", false, this.b);
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Web-ContextPath
      */
     public void testWebContextPath006() throws Exception {
-        this.b = generalWebContextPathTest(WEBCONTEXTPATH1, "wmtw1.war", false);
+        final Map<String, Object> options = createOptions(WEBCONTEXTPATH1);
+        this.b = super.installWar(options, "wmtw1.war", false);
+        super.generalHeadersTest(options, "wmtw1.war", false, this.b);
     }
 
     /*
      * verify valid deployOptions overwrite original manifest Web-ContextPath
      */
     public void testWebContextPath007() throws Exception {
-        this.b = generalWebContextPathTest(WEBCONTEXTPATH2, "wmtw2.war", false);
+        final Map<String, Object> options = createOptions(WEBCONTEXTPATH2);
+        this.b = super.installWar(options, "wmtw2.war", false);
+        super.generalHeadersTest(options, "wmtw2.war", false, this.b);
     }
 
     /*
      * verify valid deployOptions overwrite original manifest Web-ContextPath
      */
     public void testWebContextPath008() throws Exception {
-        this.b = generalWebContextPathTest(WEBCONTEXTPATH3, "wmtw3.war", true);
+        final Map<String, Object> options = createOptions(WEBCONTEXTPATH3);
+        this.b = super.installWar(options, "wmtw3.war", true);
+        super.generalHeadersTest(options, "wmtw3.war", true, this.b);
     }
 
     /*
      * verify valid deployOptions overwrite original manifest Web-ContextPath
      */
     public void testWebContextPath009() throws Exception {
-        this.b = generalWebContextPathTest(WEBCONTEXTPATH4, "wmtw4.war", true);
+        final Map<String, Object> options = createOptions(WEBCONTEXTPATH4);
+        this.b = super.installWar(options, "wmtw4.war", true);
+        super.generalHeadersTest(options, "wmtw4.war", true, this.b);
     }
 
     /*
      * verify valid deployOptions overwrite original manifest Web-ContextPath
      */
     public void testWebContextPath010() throws Exception {
-        this.b = generalWebContextPathTest(WEBCONTEXTPATH5, "wmtw5.war", false);
+        final Map<String, Object> options = createOptions(WEBCONTEXTPATH5);
+        this.b = super.installWar(options, "wmtw5.war", false);
+        super.generalHeadersTest(options, "wmtw5.war", false, this.b);
     }
 
     /*
      * verify long Web-ContextPath specified in deployOptions
      */
     public void testLongWebContextPath001() throws Exception {
-        this.b = generalWebContextPathTest(LONGWEBCONTEXTPATH, "tw1.war", false);
+        final Map<String, Object> options = createOptions(LONGWEBCONTEXTPATH);
+        this.b = super.installWar(options, "tw1.war", false);
+        super.generalHeadersTest(options, "tw1.war", false, this.b);
     }
 
     /*
      * verify long Web-ContextPath specified in deployOptions
      */
     public void testLongWebContextPath002() throws Exception {
-        this.b = generalWebContextPathTest(LONGWEBCONTEXTPATH2, "tw2.war", false);
+        final Map<String, Object> options = createOptions(LONGWEBCONTEXTPATH2);
+        this.b = super.installWar(options, "tw2.war", false);
+        super.generalHeadersTest(options, "tw2.war", false, this.b);
     }
 
     /*
      * verify long Web-ContextPath specified in deployOptions
      */
     public void testLongWebContextPath003() throws Exception {
-        this.b = generalWebContextPathTest(LONGWEBCONTEXTPATH3, "tw3.war", true);
+        final Map<String, Object> options = createOptions(LONGWEBCONTEXTPATH3);
+        this.b = super.installWar(options, "tw3.war", true);
+        super.generalHeadersTest(options, "tw3.war", true, this.b);
     }
 
     /*
      * verify long Web-ContextPath specified in deployOptions
      */
     public void testLongWebContextPath004() throws Exception {
-        this.b = generalWebContextPathTest(LONGWEBCONTEXTPATH, "wmtw1.war", true);
+        final Map<String, Object> options = createOptions(LONGWEBCONTEXTPATH);
+        this.b = super.installWar(options, "wmtw1.war", true);
+        super.generalHeadersTest(options, "wmtw1.war", true, this.b);
     }
 
     /*
      * verify long Web-ContextPath specified in deployOptions
      */
     public void testLongWebContextPath005() throws Exception {
-        this.b = generalWebContextPathTest(LONGWEBCONTEXTPATH2, "wmtw2.war", true);
+        final Map<String, Object> options = createOptions(LONGWEBCONTEXTPATH2);
+        this.b = super.installWar(options, "wmtw2.war", true);
+        super.generalHeadersTest(options, "wmtw2.war", true, this.b);
     }
 
     /*
      * verify long Web-ContextPath specified in deployOptions
      */
     public void testLongWebContextPath006() throws Exception {
-        this.b = generalWebContextPathTest(LONGWEBCONTEXTPATH2, "wmtw3.war", true);
+        final Map<String, Object> options = createOptions(LONGWEBCONTEXTPATH2);
+        this.b = super.installWar(options, "wmtw3.war", false);
+        super.generalHeadersTest(options, "wmtw3.war", true, this.b);
     }
 
     /*
      * verify Web-ContextPath has to be unique
      */
     public void testWebContextPathError001() throws Exception {
-        this.b = generalWebContextPathTest(WEBCONTEXTPATH3, "tw3.war", true);
+        Map<String, Object> options = createOptions(WEBCONTEXTPATH3);
+        this.b = super.installWar(options, "tw3.war", true);
+        super.generalHeadersTest(options, "tw3.war", true, this.b);
 
         // install the war file, reuse the same options as tw1
         log("attempt to install war file: tw3.war at context path /tw3");
         Bundle b2 = null;
-        Map<String, Object> options = new HashMap<String, Object>();
-        options.put(WEB_CONTEXT_PATH, WEBCONTEXTPATH3);
+        options = createOptions(WEBCONTEXTPATH3);
         try {
             b2 = installBundle(super.getWarURL("tw3.war", options), false);
             fail("bundle install should fail as "
@@ -164,7 +203,9 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
         }
         assertNull("Bundle b2 should be null as install failed", b2);
 
-        b2 = generalWebContextPathTest(null, "tw3.war", true);
+        options = createOptions(null);
+        b2 = super.installWar(options, "tw3.war", true);
+        super.generalHeadersTest(options, "tw3.war", true, b2);
         uninstallBundle(b2);
     }
 
@@ -172,19 +213,45 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
      * verify install 10 web applications
      */
     public void testMultipleWebContextPath001() throws Exception {
-        this.b = generalWebContextPathTest(WEBCONTEXTPATH1, "tw1.war", true);
-        Bundle b2 = generalWebContextPathTest(WEBCONTEXTPATH2, "tw2.war", false);
-        Bundle b3 = generalWebContextPathTest(WEBCONTEXTPATH3, "tw3.war", false);
-        Bundle b4 = generalWebContextPathTest(WEBCONTEXTPATH4, "tw4.war", true);
-        Bundle b5 = generalWebContextPathTest(WEBCONTEXTPATH5, "tw5.war", false);
-        Bundle b6 = generalWebContextPathTest(LONGWEBCONTEXTPATH, "tw1.war",
-                false);
-        Bundle b7 = generalWebContextPathTest(LONGWEBCONTEXTPATH2, "tw2.war",
-                true);
-        Bundle b8 = generalWebContextPathTest(LONGWEBCONTEXTPATH3, "tw3.war",
-                true);
-        Bundle b9 = generalWebContextPathTest(null, "tw4.war", false);
-        Bundle b10 = generalWebContextPathTest(null, "tw5.war", true);
+        Map<String, Object> options = createOptions(WEBCONTEXTPATH1);
+        this.b = super.installWar(options, "tw1.war", true);
+        super.generalHeadersTest(options, "tw1.war", true, this.b);
+        
+        options = createOptions(WEBCONTEXTPATH2);
+        Bundle b2 = super.installWar(options, "tw2.war", false);
+        super.generalHeadersTest(options, "tw2.war", false, b2);
+
+        options = createOptions(WEBCONTEXTPATH3);
+        Bundle b3 = super.installWar(options, "tw3.war", false);
+        super.generalHeadersTest(options, "tw3.war", false, b3);
+        
+        options = createOptions(WEBCONTEXTPATH4);
+        Bundle b4 = super.installWar(options, "tw4.war", true);
+        super.generalHeadersTest(options, "tw4.war", true, b4);
+        
+        options = createOptions(WEBCONTEXTPATH5);
+        Bundle b5 = super.installWar(options, "tw5.war", false);
+        super.generalHeadersTest(options, "tw5.war", false, b5);
+        
+        options = createOptions(LONGWEBCONTEXTPATH);
+        Bundle b6 = super.installWar(options, "tw1.war", false);
+        super.generalHeadersTest(options, "tw1.war", false, b6);
+        
+        options = createOptions(LONGWEBCONTEXTPATH2);
+        Bundle b7 = super.installWar(options, "tw2.war", true);
+        super.generalHeadersTest(options, "tw2.war", true, b6);
+        
+        options = createOptions(LONGWEBCONTEXTPATH3);
+        Bundle b8 = super.installWar(options, "tw3.war", true);
+        super.generalHeadersTest(options, "tw3.war", true, b8);
+        
+        options = createOptions(null);
+        Bundle b9 = super.installWar(options, "tw4.war", false);
+        super.generalHeadersTest(options, "tw4.war", false, b9);
+        
+        Bundle b10 = super.installWar(options, "tw5.war", true);
+        super.generalHeadersTest(options, "tw5.war", true, b10);
+        
         uninstallBundle(b2);
         uninstallBundle(b3);
         uninstallBundle(b4);
@@ -201,23 +268,13 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
      */
     public void testMultipleWebContextPath002() throws Exception {
         Bundle[] bundles = new Bundle[100];
+        final Map<String, Object> options = new HashMap<String, Object>();
         for (int i = 0; i < 100; i++) {
-            bundles[i] = generalWebContextPathTest(null, "tw1.war", true);
+            bundles[i] = super.installWar(options, "tw1.war", true);
+            super.generalHeadersTest(options, "tw1.war", true, bundles[i]);
         }
         for (int i = 0; i < 100; i++) {
             uninstallBundle(bundles[i]);
         }
-    }
-
-    /*
-     * generalWebContextPathTest to be used by non-error test
-     */
-    private Bundle generalWebContextPathTest(String contextPath,
-            String warName, boolean start) throws Exception {
-        // specify install options
-        final Map<String, Object> options = new HashMap<String, Object>();
-        String cp = contextPath;
-        options.put(WEB_CONTEXT_PATH, cp);
-        return super.generalHeadersTest(options, warName, start);
     }
 }

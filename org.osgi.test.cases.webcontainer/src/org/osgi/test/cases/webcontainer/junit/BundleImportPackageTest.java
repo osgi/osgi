@@ -31,102 +31,137 @@ import org.osgi.test.cases.webcontainer.ManifestHeadersTestBundleControl;
  */
 public class BundleImportPackageTest extends ManifestHeadersTestBundleControl {
 
+    private Map<String, Object> createOptions(String[] imports, String cp) {
+        final Map<String, Object> options = new HashMap<String, Object>();
+        options.put(Constants.IMPORT_PACKAGE, imports);
+        options.put(WEB_CONTEXT_PATH, cp);
+        return options;
+    }
+    
     /*
      * verify valid deployOptions overwrite original manifest Import-Package
      */
     public void testBundleImportPackage001() throws Exception {
-        this.b = generalImportPackageTest(IMPORTS1, "/tw1", "tw1.war", false);
+        final Map<String, Object> options = createOptions(IMPORTS1, "/tw1");
+        this.b = super.installWar(options, "tw1.war", false);
+        super.generalHeadersTest(options, "tw1.war", false, this.b);
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Import-Package
      */
     public void testBundleImportPackage002() throws Exception {
-        this.b = generalImportPackageTest(IMPORTS2, "/tw2", "tw2.war", true);
+        final Map<String, Object> options = createOptions(IMPORTS2, "/tw2");
+        this.b = super.installWar(options, "tw2.war", true);
+        super.generalHeadersTest(options, "tw2.war", true, this.b);
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Import-Package
      */
     public void testBundleImportPackage003() throws Exception {
-        this.b = generalImportPackageTest(IMPORTS3, "/tw3", "tw3.war", false);
+        final Map<String, Object> options = createOptions(IMPORTS3, "/tw3");
+        this.b = super.installWar(options, "tw3.war", false);
+        super.generalHeadersTest(options, "tw3.war", false, this.b);
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Import-Package
      */
     public void testBundleImportPackage004() throws Exception {
-        this.b = generalImportPackageTest(IMPORTS4, "/tw4", "tw4.war", true);
+        final Map<String, Object> options = createOptions(IMPORTS4, "/tw4");
+        this.b = super.installWar(options, "tw4.war", true);
+        super.generalHeadersTest(options, "tw4.war", true, this.b);
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Import-Package
      */
     public void testBundleImportPackage005() throws Exception {
-        this.b = generalImportPackageTest(IMPORTS4, "/tw5", "tw5.war", false);
+        final Map<String, Object> options = createOptions(IMPORTS4, "/tw5");
+        this.b = super.installWar(options, "tw5.war", false);
+        super.generalHeadersTest(options, "tw5.war", false, this.b);
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Import-Package
      */
     public void testBundleImportPackage006() throws Exception {
-        this.b = generalImportPackageTest(IMPORTS5, "/tw5", "tw5.war", false);
+        final Map<String, Object> options = createOptions(IMPORTS5, "/tw5");
+        this.b = super.installWar(options, "tw5.war", false);
+        super.generalHeadersTest(options, "tw5.war", false, this.b);
     }
 
     /*
      * verify valid deployOptions overwrite original manifest Import-Package
      */
     public void testBundleImportPackage007() throws Exception {
-        this.b = generalImportPackageTest(IMPORTS1, "/tw1", "wmtw1.war", false);
+        final Map<String, Object> options = createOptions(IMPORTS1, "/tw1");
+        this.b = super.installWar(options, "wmtw1.war", false);
+        super.generalHeadersTest(options, "wmtw1.war", false, this.b);
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Import-Package
      */
     public void testBundleImportPackage008() throws Exception {
-        this.b = generalImportPackageTest(IMPORTS2, "/tw2", "wmtw2.war", true);
+        final Map<String, Object> options = createOptions(IMPORTS2, "/tw2");
+        this.b = super.installWar(options, "wmtw2.war", true);
+        super.generalHeadersTest(options, "wmtw2.war", true, this.b);
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Import-Package
      */
     public void testBundleImportPackage009() throws Exception {
-        this.b = generalImportPackageTest(IMPORTS3, "/tw3", "wmtw3.war", false);
+        final Map<String, Object> options = createOptions(IMPORTS3, "/tw3");
+        this.b = super.installWar(options, "wmtw3.war", false);
+        super.generalHeadersTest(options, "wmtw3.war", false, this.b);
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Import-Package
      */
     public void testBundleImportPackage010() throws Exception {
-        this.b = generalImportPackageTest(IMPORTS4, "/tw4", "wmtw4.war", true);
+        final Map<String, Object> options = createOptions(IMPORTS2, "/tw4");
+        this.b = super.installWar(options, "wmtw4.war", true);
+        super.generalHeadersTest(options, "wmtw4.war", true, this.b);
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Import-Package
      */
     public void testBundleImportPackage011() throws Exception {
-        this.b = generalImportPackageTest(IMPORTS4, "/tw5", "wmtw5.war", false);
+        final Map<String, Object> options = createOptions(IMPORTS4, "/tw5");
+        this.b = super.installWar(options, "wmtw5.war", false);
+        super.generalHeadersTest(options, "wmtw5.war", false, this.b);
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Import-Package
      */
     public void testBundleImportPackage012() throws Exception {
-        this.b = generalImportPackageTest(IMPORTS5, "/tw5", "wmtw5.war", false);
+        final Map<String, Object> options = createOptions(IMPORTS5, "/tw5");
+        this.b = super.installWar(options, "wmtw5.war", false);
+        super.generalHeadersTest(options, "wmtw5.war", false, this.b);
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Import-Package
      */
     public void testBundleImportPackage013() throws Exception {
-        this.b = generalImportPackageTest(IMPORTS1, "/tw5", "wm2tw5.war", false);
+        final Map<String, Object> options = createOptions(IMPORTS1, "/tw5");
+        this.b = super.installWar(options, "wm2tw5.war", false);
+        super.generalHeadersTest(options, "wm2tw5.war", false, this.b);
     }
     
     /*
      * verify valid deployOptions overwrite original manifest Import-Package
      */
     public void testBundleImportPackage014() throws Exception {
-        this.b = generalImportPackageTest(IMPORTS3, "/tw5", "wm3tw5.war", false);
+        final Map<String, Object> options = createOptions(IMPORTS3, "/tw5");
+        this.b = super.installWar(options, "wm3tw5.war", false);
+        super.generalHeadersTest(options, "wm3tw5.war", false, this.b);
     }
 
     /*
@@ -193,17 +228,5 @@ public class BundleImportPackageTest extends ManifestHeadersTestBundleControl {
         // test unable to access /tw4 yet as it is not installed
         assertFalse("should not be able to access /tw4", super
                 .ableAccessPath("/tw4/"));
-    }
-    
-    /*
-     * generalImportPackageTest to be used by non-error test
-     */
-    private Bundle generalImportPackageTest(String[] imports, String cp,
-            String warName, boolean start) throws Exception {
-        // specify install options
-        final Map<String, Object> options = new HashMap<String, Object>();
-        options.put(Constants.IMPORT_PACKAGE, imports);
-        options.put(WEB_CONTEXT_PATH, cp);
-        return super.generalHeadersTest(options, warName, start);
     }
 }

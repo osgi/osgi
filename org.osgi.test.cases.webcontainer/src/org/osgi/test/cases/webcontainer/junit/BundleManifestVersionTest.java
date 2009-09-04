@@ -18,7 +18,6 @@ package org.osgi.test.cases.webcontainer.junit;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.test.cases.webcontainer.ManifestHeadersTestBundleControl;
@@ -31,12 +30,21 @@ import org.osgi.test.cases.webcontainer.ManifestHeadersTestBundleControl;
  */
 public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl {
 
+    private Map<String, Object> createOptions(String version, String cp) {
+        final Map<String, Object> options = new HashMap<String, Object>();
+        options.put(Constants.BUNDLE_MANIFESTVERSION, version);
+        options.put(WEB_CONTEXT_PATH, cp);
+        return options;
+    }
+    
     /*
      * verify valid deployOptions overwrite original manifest
      * Bundle-ManifestVersion
      */
     public void testBundleManifestVersion001() throws Exception {
-        generalManifestVersionTest(MANIFESTVERSION1, "/tw1", "tw1.war", false);
+        final Map<String, Object> options = createOptions(MANIFESTVERSION1, "/tw1");
+        this.b = super.installWar(options, "tw1.war", false);
+        generalHeadersTest(options, "tw1.war", false, this.b);
     }
 
     /*
@@ -44,7 +52,9 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
      * Bundle-ManifestVersion
      */
     public void testBundleManifestVersion002() throws Exception {
-        generalManifestVersionTest(MANIFESTVERSION1, "/tw2", "tw2.war", true);
+        final Map<String, Object> options = createOptions(MANIFESTVERSION1, "/tw2");
+        this.b = super.installWar(options, "tw2.war", false);
+        super.generalHeadersTest(options, "tw2.war", true, this.b);
     }
 
     /*
@@ -52,7 +62,9 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
      * Bundle-ManifestVersion
      */
     public void testBundleManifestVersion003() throws Exception {
-        generalManifestVersionTest(MANIFESTVERSION1, "/tw3", "tw3.war", true);
+        final Map<String, Object> options = createOptions(MANIFESTVERSION1, "/tw3");
+        this.b = super.installWar(options, "tw3.war", false);
+        super.generalHeadersTest(options, "tw3.war", true, this.b);
     }
 
     /*
@@ -60,7 +72,9 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
      * Bundle-ManifestVersion
      */
     public void testBundleManifestVersion004() throws Exception {
-        generalManifestVersionTest(MANIFESTVERSION1, "/tw4", "tw4.war", false);
+        final Map<String, Object> options = createOptions(MANIFESTVERSION1, "/tw4");
+        this.b = super.installWar(options, "tw4.war", false);
+        super.generalHeadersTest(options, "tw4.war", false, this.b);
     }
 
     /*
@@ -68,7 +82,9 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
      * Bundle-ManifestVersion
      */
     public void testBundleManifestVersion005() throws Exception {
-        generalManifestVersionTest(MANIFESTVERSION1, "/tw5", "wmtw5.war", false);
+        final Map<String, Object> options = createOptions(MANIFESTVERSION1, "/tw5");
+        this.b = super.installWar(options, "wmtw5.war", false);
+        generalHeadersTest(options, "wmtw5.war", false, this.b);
     }
     
     /*
@@ -76,7 +92,9 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
      * Bundle-ManifestVersion
      */
     public void testBundleManifestVersion006() throws Exception {
-        generalManifestVersionTest(MANIFESTVERSION1, "/tw1", "wmtw1.war", false);
+        final Map<String, Object> options = createOptions(MANIFESTVERSION1, "/tw1");
+        this.b = super.installWar(options, "wmtw1.war", false);
+        generalHeadersTest(options, "wmtw1.war", false, this.b);
     }
 
     /*
@@ -84,7 +102,9 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
      * Bundle-ManifestVersion
      */
     public void testBundleManifestVersion007() throws Exception {
-        generalManifestVersionTest(MANIFESTVERSION1, "/tw2", "wmtw2.war", true);
+        final Map<String, Object> options = createOptions(MANIFESTVERSION1, "/tw2");
+        this.b = super.installWar(options, "wmtw2.war", true);
+        generalHeadersTest(options, "wmtw2.war", true, this.b);
     }
 
     /*
@@ -92,7 +112,9 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
      * Bundle-ManifestVersion
      */
     public void testBundleManifestVersion008() throws Exception {
-        generalManifestVersionTest(MANIFESTVERSION1, "/tw3", "wmtw3.war", true);
+        final Map<String, Object> options = createOptions(MANIFESTVERSION1, "/tw3");
+        this.b = super.installWar(options, "wmtw3.war", false);
+        generalHeadersTest(options, "wmtw3.war", true, this.b);
     }
 
     /*
@@ -100,7 +122,9 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
      * Bundle-ManifestVersion
      */
     public void testBundleManifestVersion009() throws Exception {
-        generalManifestVersionTest(MANIFESTVERSION1, "/tw4", "wmtw4.war", false);
+        final Map<String, Object> options = createOptions(MANIFESTVERSION1, "/tw4");
+        this.b = super.installWar(options, "wmtw4.war", false);
+        generalHeadersTest(options, "wmtw4.war", false, this.b);
     }
 
     /*
@@ -108,7 +132,9 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
      * Bundle-ManifestVersion
      */
     public void testBundleManifestVersion010() throws Exception {
-        generalManifestVersionTest(MANIFESTVERSION1, "/tw5", "wmtw5.war", false);
+        final Map<String, Object> options = createOptions(MANIFESTVERSION1, "/tw5");
+        this.b = super.installWar(options, "wmtw5.war", false);
+        generalHeadersTest(options, "wmtw5.war", false, this.b);
     }
 
     /*
@@ -116,9 +142,7 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
      */
     public void testBundleManifestVersionError001() throws Exception {
         // specify install options
-        final Map<String, Object> options = new HashMap<String, Object>();
-        options.put(Constants.BUNDLE_VERSION, MANIFESTVERSION2);
-        options.put(WEB_CONTEXT_PATH, "/tw2");
+        final Map<String, Object> options = createOptions(MANIFESTVERSION2, "/tw2");
         // install the war file
         log("install war file: tw2.war at context path /tw2");
         try {
@@ -143,9 +167,7 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
      */
     public void testBundleManifestVersionError002() throws Exception {
         // specify install options
-        final Map<String, Object> options = new HashMap<String, Object>();
-        options.put(Constants.BUNDLE_VERSION, MANIFESTVERSION3);
-        options.put(WEB_CONTEXT_PATH, "/tw3");
+        final Map<String, Object> options = createOptions(MANIFESTVERSION3, "/tw3");
         // install the war file
         log("install and start war file: tw3.war at context path /tw3");
         try {
@@ -160,17 +182,5 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
         // test unable to access /tw3 yet as it is not started
         assertFalse("should not be able to access /tw3", super
                 .ableAccessPath("/tw3/"));
-    }
-
-    /*
-     * generalManifestVersionTest to be used by non-error test
-     */
-    private Bundle generalManifestVersionTest(String version, String cp,
-            String warName, boolean start) throws Exception {
-        // specify install options
-        final Map<String, Object> options = new HashMap<String, Object>();
-        options.put(Constants.BUNDLE_MANIFESTVERSION, version);
-        options.put(WEB_CONTEXT_PATH, cp);
-        return super.generalHeadersTest(options, warName, start);
     }
 }
