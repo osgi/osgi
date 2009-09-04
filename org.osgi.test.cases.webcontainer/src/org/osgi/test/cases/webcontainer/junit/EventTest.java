@@ -170,7 +170,7 @@ public class EventTest extends WebContainerTestBundleControl {
         EventFactory.clearEvents();
         assertEquals("factory should not have any event", 0, EventFactory.getEventSize());
       
-        Map options = new HashMap();
+        Map<String, Object> options = new HashMap<String, Object>();
         options.put(WEB_CONTEXT_PATH, "/tw1");
         options.put(Constants.BUNDLE_SYMBOLICNAME, "org.osgi.test.cases.webcontainer.tw2");
         

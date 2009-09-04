@@ -135,7 +135,7 @@ public class BundleImportPackageTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleImportPackageError001() throws Exception {
         // specify install options
-        final Map options = new HashMap();
+        final Map<String, Object> options = new HashMap<String, Object>();
         options.put(Constants.IMPORT_PACKAGE, IMPORTS9);
         options.put(WEB_CONTEXT_PATH, "/tw4");
         // install the war file
@@ -168,7 +168,7 @@ public class BundleImportPackageTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleImportPackageError002() throws Exception {
         // specify install options
-        final Map options = new HashMap();
+        final Map<String, Object> options = new HashMap<String, Object>();
         options.put(Constants.IMPORT_PACKAGE, IMPORTS10);
         options.put(WEB_CONTEXT_PATH, "/tw5");
         // install the war file
@@ -201,7 +201,7 @@ public class BundleImportPackageTest extends ManifestHeadersTestBundleControl {
     private Bundle generalImportPackageTest(String[] imports, String cp,
             String warName, boolean start) throws Exception {
         // specify install options
-        final Map options = new HashMap();
+        final Map<String, Object> options = new HashMap<String, Object>();
         options.put(Constants.IMPORT_PACKAGE, imports);
         options.put(WEB_CONTEXT_PATH, cp);
         return super.generalHeadersTest(options, warName, start);

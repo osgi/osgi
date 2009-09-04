@@ -47,7 +47,7 @@ public abstract class WebContainerTestBundleControl extends
     protected Server server;
     protected boolean debug;
     protected long beforeInstall;
-    protected Map options = new HashMap();
+    protected Map<String, Object> options = new HashMap<String, Object>();
     protected String warContextPath;
     protected TimeUtil timeUtil;
     protected int srSize;
@@ -133,7 +133,7 @@ public abstract class WebContainerTestBundleControl extends
         }
     }
 
-    protected String getWarURL(String name, Map options) {
+    protected String getWarURL(String name, Map<String, Object> options) {
         String query = generateQuery(options);
         if (query != null && query.length() > 0) {
         	if (debug) {
@@ -335,7 +335,7 @@ public abstract class WebContainerTestBundleControl extends
                 + ConstantsUtil.ABLEGETLOG + "<br/>" +  ConstantsUtil.ABLEGETSIMPLEHELLO + "<br/></body></html>", response);
     }
 
-    private String generateQuery(Map options) {
+    private String generateQuery(Map<String, Object> options) {
         String symbolicName = options.get(Constants.BUNDLE_SYMBOLICNAME) == null ? null
                 : (String) options.get(Constants.BUNDLE_SYMBOLICNAME);
         String version = options.get(Constants.BUNDLE_VERSION) == null ? null
@@ -398,7 +398,7 @@ public abstract class WebContainerTestBundleControl extends
         return value;
     }
 
-    // override the method in DefaultTestBundleControl
+    @Override
     public Bundle installBundle(String bundleName, boolean start)
             throws Exception {
         try {

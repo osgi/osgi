@@ -106,7 +106,7 @@ public class BundleVersionTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleVersionError001() throws Exception {
         // specify install options
-        final Map options = new HashMap();
+        final Map<String, Object> options = new HashMap<String, Object>();
         options.put(Constants.BUNDLE_VERSION, VERSION4);
         options.put(WEB_CONTEXT_PATH, "/tw4");
         // install the war file
@@ -131,7 +131,7 @@ public class BundleVersionTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleVersionError002() throws Exception {
         // specify install options
-        final Map options = new HashMap();
+        final Map<String, Object> options = new HashMap<String, Object>();
         options.put(Constants.BUNDLE_VERSION, VERSION5);
         options.put(WEB_CONTEXT_PATH, "/tw5");
         // install the war file
@@ -157,7 +157,7 @@ public class BundleVersionTest extends ManifestHeadersTestBundleControl {
     private Bundle generalVersionTest(String version, String cp,
             String warName, boolean start) throws Exception {
         // specify install options
-        final Map options = new HashMap();
+        final Map<String, Object> options = new HashMap<String, Object>();
         options.put(Constants.BUNDLE_VERSION, version);
         options.put(WEB_CONTEXT_PATH, cp);
         return super.generalHeadersTest(options, warName, start);

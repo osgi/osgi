@@ -116,7 +116,7 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleClasspathError001() throws Exception {
         // specify install options
-        final Map options = new HashMap();
+        final Map<String, Object> options = new HashMap<String, Object>();
         options.put(Constants.BUNDLE_CLASSPATH, CLASSPATH4);
         options.put(WEB_CONTEXT_PATH, "/tw4");
         // install the war file
@@ -147,7 +147,7 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleClasspathError002() throws Exception {
         // specify install options
-        final Map options = new HashMap();
+        final Map<String, Object> options = new HashMap<String, Object>();
         options.put(Constants.BUNDLE_CLASSPATH, CLASSPATH5);
         options.put(WEB_CONTEXT_PATH, "/tw5");
         // install the war file
@@ -171,7 +171,7 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleClasspathError003() throws Exception {
         // specify install options
-        final Map options = new HashMap();
+        final Map<String, Object> options = new HashMap<String, Object>();
         options.put(Constants.BUNDLE_CLASSPATH, CLASSPATH6);
         options.put(WEB_CONTEXT_PATH, "/tw5");
         // install the war file
@@ -196,7 +196,7 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
     private Bundle generalClasspathTest(String[] classpath, String cp,
             String warName, boolean start) throws Exception {
         // specify install options
-        final Map options = new HashMap();
+        final Map<String, Object> options = new HashMap<String, Object>();
         options.put(Constants.BUNDLE_CLASSPATH, classpath);
         options.put(WEB_CONTEXT_PATH, cp);
         return super.generalHeadersTest(options, warName, start);

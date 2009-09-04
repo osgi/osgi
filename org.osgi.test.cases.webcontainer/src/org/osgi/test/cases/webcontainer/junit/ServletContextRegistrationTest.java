@@ -44,61 +44,61 @@ public class ServletContextRegistrationTest extends
 	private final static String OSGI_WEB_CONTEXTPATH = "osgi.web.contextpath";
 
 	public void testSimpleServletContextReg001() throws Exception {
-		Map option = createOptions("1.0", "ct-testwar1", "/tw1");
+		Map<String, Object> option = createOptions("1.0", "ct-testwar1", "/tw1");
         this.b = installWar(option, "tw1.war", true);
 	    registerWarBundleTest(option, "tw1.war", true, this.b);
 	}
 
 	public void testSimpleServletContextReg002() throws Exception {
-		Map option = createOptions("2.0", "ct-testwar2", "/tw2");
+		Map<String, Object> option = createOptions("2.0", "ct-testwar2", "/tw2");
 		this.b = installWar(option, "tw2.war", false);
 		registerWarBundleTest(option, "tw2.war", false, this.b);
 	}
 
 	public void testSimpleServletContextReg003() throws Exception {
-		Map option = createOptions("3.0", "ct-testwar3", "/tw3");
+		Map<String, Object> option = createOptions("3.0", "ct-testwar3", "/tw3");
 		this.b = installWar(option, "tw3.war", true);
 		registerWarBundleTest(option, "tw3.war", true, this.b);
 	}
 
 	public void testSimpleServletContextReg004() throws Exception {
-		Map option = createOptions("4.0", "ct-testwar4", "/tw4");
+		Map<String, Object> option = createOptions("4.0", "ct-testwar4", "/tw4");
 		this.b = installWar(option, "tw4.war", false);
 		registerWarBundleTest(option, "tw4.war", false, this.b);
 	}
 
 	public void testSimpleServletContextReg005() throws Exception {
-		Map option = createOptions("5.0", "ct-testwar5", "/tw5");
+		Map<String, Object> option = createOptions("5.0", "ct-testwar5", "/tw5");
 		this.b = installWar(option, "tw5.war", true);
 		registerWarBundleTest(option, "tw5.war", true, this.b);
 	}
 
 	public void testSimpleServletContextReg006() throws Exception {
-		Map option = createOptions(null, null, "/tw1");
+		Map<String, Object> option = createOptions(null, null, "/tw1");
 		this.b = installWar(option, "tw1.war", false);
 		registerWarBundleTest(option, "tw1.war", false, this.b);
 	}
 
 	public void testSimpleServletContextReg007() throws Exception {
-		Map option = createOptions("1.0", "ct-testwar7", null);
+		Map<String, Object> option = createOptions("1.0", "ct-testwar7", null);
 		this.b = installWar(option, "tw2.war", false);
 		registerWarBundleTest(option, "tw2.war", false, this.b);
 	}
 
 	public void testSimpleServletContextReg008() throws Exception {
-		Map option = createOptions(null, null, null);
+		Map<String, Object> option = createOptions(null, null, null);
 		this.b = installWar(option, "tw3.war", true);
 		registerWarBundleTest(option, "tw3.war", true, this.b);
 	}
 
 	public void testSimpleServletContextReg009() throws Exception {
-		Map option = createOptions(null, "ct-testwar9", null);
+		Map<String, Object> option = createOptions(null, "ct-testwar9", null);
 		this.b = installWar(option, "tw4.war", true);
 		registerWarBundleTest(option, "tw4.war", true, this.b);
 	}
 
 	public void testSimpleServletContextReg010() throws Exception {
-		Map option = createOptions("1.0", null, "/tw5");
+		Map<String, Object> option = createOptions("1.0", null, "/tw5");
 		this.b = installWar(option, "tw5.war", false);
 		registerWarBundleTest(option, "tw5.war", false, this.b);
 	}
@@ -107,7 +107,7 @@ public class ServletContextRegistrationTest extends
 	 * test deploy a newer version of the same app
 	 */
 	public void testMultiServletContextReg001() throws Exception {
-		Map option = createOptions(null, null, null);
+		Map<String, Object> option = createOptions(null, null, null);
 		this.b = installWar(option, "tw1.war", true);	
 		Bundle b2 = installWar(option, "tw1.war", true);
 		Bundle b3 = installWar(option, "tw1.war", true);
@@ -122,7 +122,7 @@ public class ServletContextRegistrationTest extends
 	 * test deploy a newer version of the same app
 	 */
 	public void testMultiServletContextReg002() throws Exception {
-		Map option = createOptions(null, "ct-testwar1", null);
+		Map<String, Object> option = createOptions(null, "ct-testwar1", null);
 		this.b = installWar(option, "tw1.war", true);	
 		Bundle b2 = installWar(option, "tw1.war", true);
 		Bundle b3 = installWar(option, "tw1.war", true);
@@ -137,9 +137,9 @@ public class ServletContextRegistrationTest extends
 	 * test deploy a newer version of the same app
 	 */
 	public void testMultiServletContextReg003() throws Exception {
-		Map option = createOptions("1.0", null, null);
-		Map option2 = createOptions("1.1", null, null);
-		Map option3 = createOptions("1.2", null, null);
+		Map<String, Object> option = createOptions("1.0", null, null);
+		Map<String, Object> option2 = createOptions("1.1", null, null);
+		Map<String, Object> option3 = createOptions("1.2", null, null);
 		this.b = installWar(option, "tw1.war", true);	
 		Bundle b2 = installWar(option2, "tw1.war", true);
 		Bundle b3 = installWar(option3, "tw1.war", true);
@@ -157,7 +157,7 @@ public class ServletContextRegistrationTest extends
 	 */
 	public void testMultiServletContextReg004() throws Exception {
 		
-		Map option = createOptions("1.0", "ct-testwar1", "/tw1");
+		Map<String, Object> option = createOptions("1.0", "ct-testwar1", "/tw1");
 		this.b = installWar(option, "tw1.war", true);
 		registerWarBundleTest(option, "tw1.war", true, this.b);
 		
@@ -188,7 +188,7 @@ public class ServletContextRegistrationTest extends
 	 */
 	public void testMultiServletContextReg005() throws Exception {
 		Bundle[] bundles = new Bundle[100];
-		Map option = new HashMap();
+		Map<String, Object> option = new HashMap<String, Object>();
 		for (int i = 0; i < 100; i++) {
 			bundles[i] = installWar(option, "tw1.war", true);
 			registerWarBundleTest(option, "tw1.war", true, bundles[i]);
@@ -198,15 +198,15 @@ public class ServletContextRegistrationTest extends
 		}
 	}
 
-	private Map createOptions(String version, String sname, String cp) {
-		final Map options = new HashMap();
+	private Map<String, Object> createOptions(String version, String sname, String cp) {
+		final Map<String, Object> options = new HashMap<String, Object>();
 		options.put(Constants.BUNDLE_VERSION, version);
 		options.put(Constants.BUNDLE_SYMBOLICNAME, sname);
 		options.put(WEB_CONTEXT_PATH, cp);
 		return options;
 	}
 
-	private Bundle installWar(Map options, String warName,
+	private Bundle installWar(Map<String, Object> options, String warName,
 			boolean start) throws Exception {
 		// install the war file
 		log("install and start war file: " + warName);
@@ -223,7 +223,7 @@ public class ServletContextRegistrationTest extends
 		return null;
 	}
 	
-	private void registerWarBundleTest(Map options, String warName,
+	private void registerWarBundleTest(Map<String, Object> options, String warName,
 			boolean start, Bundle bundle) throws Exception {
 
 		String cp = options.get(WEB_CONTEXT_PATH) == null ? null

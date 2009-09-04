@@ -112,7 +112,7 @@ public class BundleExportPackageTest extends ManifestHeadersTestBundleControl {
     private Bundle generalExportPackageTest(String[] imports, String cp,
             String warName, boolean start) throws Exception {
         // specify install options
-        final Map options = new HashMap();
+        final Map<String, Object> options = new HashMap<String, Object>();
         options.put(Constants.EXPORT_PACKAGE, imports);
         options.put(WEB_CONTEXT_PATH, cp);
         return super.generalHeadersTest(options, warName, start);

@@ -95,7 +95,7 @@ public abstract class ManifestHeadersTestBundleControl extends
     /*
      * generalHeadersTest to be used by non-error test
      */
-    protected Bundle generalHeadersTest(Map options, String warName, boolean start)
+    protected Bundle generalHeadersTest(Map<String, Object> options, String warName, boolean start)
             throws Exception {
         // specify install options
         String cp = options.get(WEB_CONTEXT_PATH) == null ? null

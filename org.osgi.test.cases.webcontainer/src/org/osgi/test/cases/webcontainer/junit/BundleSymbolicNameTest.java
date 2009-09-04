@@ -121,7 +121,7 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
         log("attempt to install war file: tw3.war at context path /tw3");
         Bundle b2 = null;
 		Manifest originalManifest = super.getManifest("/tw3.war");
-        final Map options2 = new HashMap();
+        final Map<String, Object> options2 = new HashMap<String, Object>();
         options2.put(Constants.BUNDLE_SYMBOLICNAME, SYMBOLICNAME1);
         options.put(Constants.BUNDLE_VERSION, VERSION10);
         options2.put(WEB_CONTEXT_PATH, "/tw3");
@@ -137,7 +137,7 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
         assertFalse("should not be able to access /tw3", super.ableAccessPath("/tw3/"));
         
         // try let the system to generate a symbolic name
-        final Map options3 = new HashMap();
+        final Map<String, Object> options3 = new HashMap<String, Object>();
         options3.put(Constants.BUNDLE_SYMBOLICNAME, null);
         options.put(Constants.BUNDLE_VERSION, VERSION10);
         options3.put(WEB_CONTEXT_PATH, "/tw3");
@@ -241,7 +241,7 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
     private Bundle generalSymbolicNameTest(String name, String cp,
             String warName, boolean start) throws Exception {
         // specify install options
-        final Map options = new HashMap();
+        final Map<String, Object> options = new HashMap<String, Object>();
         options.put(Constants.BUNDLE_SYMBOLICNAME, name);
         options.put(WEB_CONTEXT_PATH, cp);
         return super.generalHeadersTest(options, warName, start);
@@ -253,7 +253,7 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
     private Bundle generalSymbolicNameVersionTest(String name, String cp,
             String warName, boolean start) throws Exception {
         // specify install options
-        final Map options = new HashMap();
+        final Map<String, Object> options = new HashMap<String, Object>();
         options.put(Constants.BUNDLE_SYMBOLICNAME, name);
         options.put(Constants.BUNDLE_VERSION, VERSION10);
         options.put(WEB_CONTEXT_PATH, cp);

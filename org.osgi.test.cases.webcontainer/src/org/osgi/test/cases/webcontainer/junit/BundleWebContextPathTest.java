@@ -152,7 +152,7 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
         // install the war file, reuse the same options as tw1
         log("attempt to install war file: tw3.war at context path /tw3");
         Bundle b2 = null;
-        Map options = new HashMap();
+        Map<String, Object> options = new HashMap<String, Object>();
         options.put(WEB_CONTEXT_PATH, WEBCONTEXTPATH3);
         try {
             b2 = installBundle(super.getWarURL("tw3.war", options), false);
@@ -215,7 +215,7 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
     private Bundle generalWebContextPathTest(String contextPath,
             String warName, boolean start) throws Exception {
         // specify install options
-        final Map options = new HashMap();
+        final Map<String, Object> options = new HashMap<String, Object>();
         String cp = contextPath;
         options.put(WEB_CONTEXT_PATH, cp);
         return super.generalHeadersTest(options, warName, start);

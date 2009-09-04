@@ -34,7 +34,7 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      * verify valid deployOptions overwrite original manifest headers
      */
     public void testManifestHeaders001() throws Exception {
-        Map options = createOptions(VERSION1, MANIFESTVERSION1, SYMBOLICNAME1,
+        Map<String, Object> options = createOptions(VERSION1, MANIFESTVERSION1, SYMBOLICNAME1,
                 CLASSPATH3, IMPORTS1, EXPORTS1, WEBCONTEXTPATH1,
                 JSPEXTRACTLOAC1);
         this.b = super.generalHeadersTest(options, "tw1.war", false);
@@ -44,7 +44,7 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      * verify valid deployOptions overwrite original manifest headers
      */
     public void testManifestHeaders002() throws Exception {
-        Map options = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME2,
+        Map<String, Object> options = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME2,
                 CLASSPATH3, IMPORTS2, EXPORTS2, WEBCONTEXTPATH2, null);
         this.b = super.generalHeadersTest(options, "tw2.war", true);
     }
@@ -53,7 +53,7 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      * verify valid deployOptions overwrite original manifest headers
      */
     public void testManifestHeaders003() throws Exception {
-        Map options = createOptions(VERSION3, MANIFESTVERSION1, SYMBOLICNAME3,
+        Map<String, Object> options = createOptions(VERSION3, MANIFESTVERSION1, SYMBOLICNAME3,
                 CLASSPATH3, IMPORTS3, EXPORTS3, WEBCONTEXTPATH3, null);
         this.b = super.generalHeadersTest(options, "tw3.war", true);
     }
@@ -62,7 +62,7 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      * verify valid deployOptions overwrite original manifest headers
      */
     public void testManifestHeaders004() throws Exception {
-        Map options = createOptions(VERSION1, MANIFESTVERSION1, SYMBOLICNAME4,
+        Map<String, Object> options = createOptions(VERSION1, MANIFESTVERSION1, SYMBOLICNAME4,
                 CLASSPATH3, IMPORTS4, EXPORTS4, WEBCONTEXTPATH4, null);
         this.b = super.generalHeadersTest(options, "tw4.war", false);
     }
@@ -71,7 +71,7 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      * verify valid deployOptions overwrite original manifest headers
      */
     public void testManifestHeaders005() throws Exception {
-        Map options = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME5,
+        Map<String, Object> options = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME5,
                 CLASSPATH1, IMPORTS5, EXPORTS5, WEBCONTEXTPATH5, null);
         this.b = super.generalHeadersTest(options, "tw5.war", true);
         classpassServletTest(this.b);
@@ -81,7 +81,7 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      * verify valid deployOptions overwrite original manifest headers
      */
     public void testManifestHeaders006() throws Exception {
-        Map options = createOptions(VERSION1, MANIFESTVERSION1, SYMBOLICNAME1,
+        Map<String, Object> options = createOptions(VERSION1, MANIFESTVERSION1, SYMBOLICNAME1,
                 CLASSPATH3, IMPORTS1, EXPORTS1, WEBCONTEXTPATH1,
                 JSPEXTRACTLOAC1);
         this.b = super.generalHeadersTest(options, "wmtw1.war", false);
@@ -91,7 +91,7 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      * verify valid deployOptions overwrite original manifest headers
      */
     public void testManifestHeaders007() throws Exception {
-        Map options = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME2,
+        Map<String, Object> options = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME2,
                 CLASSPATH3, IMPORTS2, EXPORTS2, WEBCONTEXTPATH2, null);
         this.b = super.generalHeadersTest(options, "wmtw2.war", true);
     }
@@ -100,7 +100,7 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      * verify valid deployOptions overwrite original manifest headers
      */
     public void testManifestHeaders008() throws Exception {
-        Map options = createOptions(VERSION3, MANIFESTVERSION1, SYMBOLICNAME3,
+        Map<String, Object> options = createOptions(VERSION3, MANIFESTVERSION1, SYMBOLICNAME3,
                 CLASSPATH3, IMPORTS3, EXPORTS3, WEBCONTEXTPATH3, null);
         this.b = super.generalHeadersTest(options, "wmtw3.war", true);
     }
@@ -109,7 +109,7 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      * verify valid deployOptions overwrite original manifest headers
      */
     public void testManifestHeaders009() throws Exception {
-        Map options = createOptions(VERSION1, MANIFESTVERSION1, SYMBOLICNAME4,
+        Map<String, Object> options = createOptions(VERSION1, MANIFESTVERSION1, SYMBOLICNAME4,
                 CLASSPATH3, IMPORTS4, EXPORTS4, WEBCONTEXTPATH4, null);
         this.b = super.generalHeadersTest(options, "wmtw4.war", false);
     }
@@ -118,7 +118,7 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      * verify valid deployOptions overwrite original manifest headers
      */
     public void testManifestHeaders010() throws Exception {
-        Map options = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME5,
+        Map<String, Object> options = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME5,
                 CLASSPATH1, IMPORTS5, EXPORTS5, WEBCONTEXTPATH5, null);
         this.b = super.generalHeadersTest(options, "wmtw5.war", true);
         classpassServletTest(this.b);
@@ -128,7 +128,7 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      * verify valid deployOptions overwrite original manifest headers
      */
     public void testManifestHeaders011() throws Exception {
-        Map options = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME5,
+        Map<String, Object> options = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME5,
                 CLASSPATH2, IMPORTS5, EXPORTS5, WEBCONTEXTPATH5, null);
         this.b = super.generalHeadersTest(options, "wm2tw5.war", true);
         classpassServletTest(this.b);
@@ -138,7 +138,7 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      * verify valid deployOptions overwrite original manifest headers
      */
     public void testManifestHeaders012() throws Exception {
-        Map options = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME5,
+        Map<String, Object> options = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME5,
                 CLASSPATH3, IMPORTS5, EXPORTS5, WEBCONTEXTPATH5, null);
         this.b = super.generalHeadersTest(options, "wm3tw5.war", true);
         classpassServletTest(this.b);
@@ -148,7 +148,7 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      * verify valid deployOptions overwrite original manifest headers
      */
     public void testManifestHeaders013() throws Exception {
-        Map options = createOptions(VERSION2, MANIFESTVERSION1, null,
+        Map<String, Object> options = createOptions(VERSION2, MANIFESTVERSION1, null,
                 null, IMPORTS5, EXPORTS5, WEBCONTEXTPATH5, null);
         this.b = super.generalHeadersTest(options, "wm2tw5.war", true);
         classpassServletTest(this.b);
@@ -158,7 +158,7 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      * verify valid deployOptions overwrite original manifest headers
      */
     public void testManifestHeaders014() throws Exception {
-        Map options = createOptions(null, null, SYMBOLICNAME5,
+        Map<String, Object> options = createOptions(null, null, SYMBOLICNAME5,
                 CLASSPATH3, IMPORTS5, EXPORTS5, WEBCONTEXTPATH5, null);
         this.b = super.generalHeadersTest(options, "wm3tw5.war", true);
         classpassServletTest(this.b);
@@ -168,7 +168,7 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      * verify valid deployOptions overwrite original manifest headers
      */
     public void testManifestHeaders015() throws Exception {
-        Map options = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME5,
+        Map<String, Object> options = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME5,
                 CLASSPATH3, IMPORTS5, EXPORTS5, null, null);
         this.b = super.generalHeadersTest(options, "wm3tw5.war", true);
         classpassServletTest(this.b);
@@ -179,94 +179,94 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      * verify null deployOptions
      */
     public void testEmptyDeployOptions001() throws Exception {
-        this.b = super.generalHeadersTest(new HashMap(), "tw1.war", true);
+        this.b = super.generalHeadersTest(new HashMap<String, Object>(), "tw1.war", true);
     }
 
     /*
      * verify null deployOptions
      */
     public void testEmptyDeployOptions002() throws Exception {
-        this.b = super.generalHeadersTest(new HashMap(), "tw2.war", false);
+        this.b = super.generalHeadersTest(new HashMap<String, Object>(), "tw2.war", false);
     }
 
     /*
      * verify null deployOptions
      */
     public void testEmptyDeployOptions003() throws Exception {
-        this.b = super.generalHeadersTest(new HashMap(), "tw3.war", true);
+        this.b = super.generalHeadersTest(new HashMap<String, Object>(), "tw3.war", true);
     }
 
     /*
      * verify null deployOptions
      */
     public void testEmptyDeployOptions004() throws Exception {
-        this.b = super.generalHeadersTest(new HashMap(), "tw4.war", false);
+        this.b = super.generalHeadersTest(new HashMap<String, Object>(), "tw4.war", false);
     }
 
     /*
      * verify null deployOptions
      */
     public void testEmptyDeployOptions005() throws Exception {
-        this.b = super.generalHeadersTest(new HashMap(), "tw5.war", true);
+        this.b = super.generalHeadersTest(new HashMap<String, Object>(), "tw5.war", true);
     }
 
     /*
      * verify null deployOptions
      */
     public void testEmptyDeployOptions006() throws Exception {
-        this.b = super.generalHeadersTest(new HashMap(), "wmtw1.war", false);
+        this.b = super.generalHeadersTest(new HashMap<String, Object>(), "wmtw1.war", false);
     }
 
     /*
      * verify null deployOptions
      */
     public void testEmptyDeployOptions007() throws Exception {
-        this.b = super.generalHeadersTest(new HashMap(), "wmtw2.war", true);
+        this.b = super.generalHeadersTest(new HashMap<String, Object>(), "wmtw2.war", true);
     }
 
     /*
      * verify null deployOptions
      */
     public void testEmptyDeployOptions008() throws Exception {
-        this.b = super.generalHeadersTest(new HashMap(), "wmtw3.war", true);
+        this.b = super.generalHeadersTest(new HashMap<String, Object>(), "wmtw3.war", true);
     }
 
     /*
      * verify null deployOptions
      */
     public void testEmptyDeployOptions009() throws Exception {
-        this.b = super.generalHeadersTest(new HashMap(), "wmtw4.war", false);
+        this.b = super.generalHeadersTest(new HashMap<String, Object>(), "wmtw4.war", false);
     }
 
     /*
      * verify null deployOptions
      */
     public void testEmptyDeployOptions010() throws Exception {
-        this.b = super.generalHeadersTest(new HashMap(), "wmtw5.war", true);
+        this.b = super.generalHeadersTest(new HashMap<String, Object>(), "wmtw5.war", true);
     }
 
     /*
      * verify null deployOptions
      */
     public void testEmptyDeployOptions011() throws Exception {
-        this.b = super.generalHeadersTest(new HashMap(), "wm2tw5.war", true);
+        this.b = super.generalHeadersTest(new HashMap<String, Object>(), "wm2tw5.war", true);
     }
 
     /*
      * verify null deployOptions
      */
     public void testEmptyDeployOptions012() throws Exception {
-        this.b = super.generalHeadersTest(new HashMap(), "wm3tw5.war", false);
+        this.b = super.generalHeadersTest(new HashMap<String, Object>(), "wm3tw5.war", false);
     }
     
     /*
      * verify multiple WebApps manifest headers processing
      */
     public void testMultipleManifestHeaders001() throws Exception {
-        Map options = createOptions(null, MANIFESTVERSION1, null,
+        Map<String, Object> options = createOptions(null, MANIFESTVERSION1, null,
                 CLASSPATH3, IMPORTS1, EXPORTS1, null,
                 JSPEXTRACTLOAC1);
-        Map options2 = createOptions(null, MANIFESTVERSION1, null,
+        Map<String, Object> options2 = createOptions(null, MANIFESTVERSION1, null,
                 CLASSPATH3, IMPORTS1, EXPORTS1, null,
                 JSPEXTRACTLOAC1);
         
@@ -281,10 +281,10 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      * verify multiple WebApps manifest headers processing
      */
     public void testMultipleManifestHeaders002() throws Exception {
-        Map options = createOptions(null, MANIFESTVERSION1, null,
+        Map<String, Object> options = createOptions(null, MANIFESTVERSION1, null,
                 CLASSPATH3, IMPORTS1, EXPORTS1, null,
                 JSPEXTRACTLOAC1);
-        Map options2 = createOptions(null, MANIFESTVERSION1, null,
+        Map<String, Object> options2 = createOptions(null, MANIFESTVERSION1, null,
                 CLASSPATH3, IMPORTS1, EXPORTS1, null,
                 null);
         
@@ -299,12 +299,12 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      * verify multiple WebApps manifest headers processing
      */
     public void testMultipleManifestHeaders003() throws Exception {
-        Map options = createOptions(null, MANIFESTVERSION1, null,
+        Map<String, Object> options = createOptions(null, MANIFESTVERSION1, null,
                 CLASSPATH3, IMPORTS1, EXPORTS1, null,
                 JSPEXTRACTLOAC1);
         
         this.b = super.generalHeadersTest(options, "wmtw1.war", true);
-        Bundle b2 = super.generalHeadersTest(new HashMap(), "wmtw1.war", true);
+        Bundle b2 = super.generalHeadersTest(new HashMap<String, Object>(), "wmtw1.war", true);
         // should these two bundles be identical since they are installed from the same location string?
         assertEquals(this.b, b2);
         uninstallBundle(b2);
@@ -314,12 +314,12 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      * verify multiple WebApps manifest headers processing
      */
     public void testMultipleManifestHeaders004() throws Exception {
-        Map options = createOptions(null, MANIFESTVERSION1, null,
+        Map<String, Object> options = createOptions(null, MANIFESTVERSION1, null,
                 CLASSPATH3, IMPORTS1, EXPORTS1, null,
                 JSPEXTRACTLOAC1);
         
         this.b = super.generalHeadersTest(options, "tw1.war", true);
-        Bundle b2 = super.generalHeadersTest(new HashMap(), "wmtw1.war", true);
+        Bundle b2 = super.generalHeadersTest(new HashMap<String, Object>(), "wmtw1.war", true);
         // should these two bundles be different since they are installed from the different location string?
         assertFalse(this.b == b2);
         uninstallBundle(b2);
@@ -329,16 +329,16 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      * verify multiple WebApps manifest headers processing
      */
     public void testMultipleManifestHeaders005() throws Exception {
-        Map options = createOptions(VERSION1, MANIFESTVERSION1, SYMBOLICNAME1,
+        Map<String, Object> options = createOptions(VERSION1, MANIFESTVERSION1, SYMBOLICNAME1,
                 CLASSPATH3, IMPORTS1, EXPORTS1, WEBCONTEXTPATH1,
                 JSPEXTRACTLOAC1);
-        Map options2 = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME2,
+        Map<String, Object> options2 = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME2,
                 CLASSPATH3, IMPORTS2, EXPORTS2, WEBCONTEXTPATH2, null);
-        Map options3 = createOptions(VERSION3, MANIFESTVERSION1, SYMBOLICNAME3,
+        Map<String, Object> options3 = createOptions(VERSION3, MANIFESTVERSION1, SYMBOLICNAME3,
                 CLASSPATH3, IMPORTS3, EXPORTS3, WEBCONTEXTPATH3, null);
-        Map options4 = createOptions(VERSION1, MANIFESTVERSION1, SYMBOLICNAME4,
+        Map<String, Object> options4 = createOptions(VERSION1, MANIFESTVERSION1, SYMBOLICNAME4,
                 CLASSPATH3, IMPORTS4, EXPORTS4, WEBCONTEXTPATH4, null);
-        Map options5 = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME5,
+        Map<String, Object> options5 = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME5,
                 CLASSPATH1, IMPORTS5, EXPORTS5, WEBCONTEXTPATH5, null);
         
         this.b = super.generalHeadersTest(options, "tw1.war", true);
@@ -357,16 +357,16 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      * verify multiple WebApps manifest headers processing
      */
     public void testMultipleManifestHeaders006() throws Exception {
-        Map options = createOptions(null, MANIFESTVERSION1, null,
+        Map<String, Object> options = createOptions(null, MANIFESTVERSION1, null,
                 CLASSPATH3, IMPORTS1, EXPORTS1, WEBCONTEXTPATH1,
                 JSPEXTRACTLOAC1);
-        Map options2 = createOptions(null, MANIFESTVERSION1, null,
+        Map<String, Object> options2 = createOptions(null, MANIFESTVERSION1, null,
                 CLASSPATH3, IMPORTS2, EXPORTS2, WEBCONTEXTPATH2, null);
-        Map options3 = createOptions(null, MANIFESTVERSION1, null,
+        Map<String, Object> options3 = createOptions(null, MANIFESTVERSION1, null,
                 CLASSPATH3, IMPORTS3, EXPORTS3, WEBCONTEXTPATH3, null);
-        Map options4 = createOptions(null, MANIFESTVERSION1, null,
+        Map<String, Object> options4 = createOptions(null, MANIFESTVERSION1, null,
                 CLASSPATH3, IMPORTS4, EXPORTS4, WEBCONTEXTPATH4, null);
-        Map options5 = createOptions(null, MANIFESTVERSION1, null,
+        Map<String, Object> options5 = createOptions(null, MANIFESTVERSION1, null,
                 CLASSPATH1, IMPORTS5, EXPORTS5, WEBCONTEXTPATH5, null);
         
         this.b = super.generalHeadersTest(options, "wmtw1.war", true);
@@ -385,16 +385,16 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      * verify multiple WebApps manifest headers processing
      */
     public void testMultipleManifestHeaders007() throws Exception {
-        Map options = createOptions(VERSION1, MANIFESTVERSION1, SYMBOLICNAME1,
+        Map<String, Object> options = createOptions(VERSION1, MANIFESTVERSION1, SYMBOLICNAME1,
                 CLASSPATH3, IMPORTS1, EXPORTS1, WEBCONTEXTPATH1,
                 JSPEXTRACTLOAC1);
-        Map options2 = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME2,
+        Map<String, Object> options2 = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME2,
                 CLASSPATH3, IMPORTS2, EXPORTS2, WEBCONTEXTPATH2, null);
-        Map options3 = createOptions(VERSION3, MANIFESTVERSION1, SYMBOLICNAME3,
+        Map<String, Object> options3 = createOptions(VERSION3, MANIFESTVERSION1, SYMBOLICNAME3,
                 CLASSPATH3, IMPORTS3, EXPORTS3, WEBCONTEXTPATH3, null);
-        Map options4 = createOptions(VERSION1, MANIFESTVERSION1, SYMBOLICNAME4,
+        Map<String, Object> options4 = createOptions(VERSION1, MANIFESTVERSION1, SYMBOLICNAME4,
                 CLASSPATH3, IMPORTS4, EXPORTS4, WEBCONTEXTPATH4, null);
-        Map options5 = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME5,
+        Map<String, Object> options5 = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME5,
                 CLASSPATH1, IMPORTS5, EXPORTS5, WEBCONTEXTPATH5, null);
         
         this.b = super.generalHeadersTest(options, "tw1.war", true);
@@ -404,16 +404,16 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
         Bundle b5 = super.generalHeadersTest(options5, "tw5.war", true);
         classpassServletTest(b5);
         
-        Map options6 = createOptions(null, MANIFESTVERSION1, null,
+        Map<String, Object> options6 = createOptions(null, MANIFESTVERSION1, null,
                 CLASSPATH3, IMPORTS1, EXPORTS1, null,
                 null);
-        Map options7 = createOptions(null, MANIFESTVERSION1, null,
+        Map<String, Object> options7 = createOptions(null, MANIFESTVERSION1, null,
                 CLASSPATH3, IMPORTS2, EXPORTS2, null, null);
-        Map options8 = createOptions(null, MANIFESTVERSION1, null,
+        Map<String, Object> options8 = createOptions(null, MANIFESTVERSION1, null,
                 CLASSPATH3, IMPORTS3, EXPORTS3, null, null);
-        Map options9 = createOptions(null, MANIFESTVERSION1, null,
+        Map<String, Object> options9 = createOptions(null, MANIFESTVERSION1, null,
                 CLASSPATH3, IMPORTS4, EXPORTS4, null, null);
-        Map options10 = createOptions(null, MANIFESTVERSION1, null,
+        Map<String, Object> options10 = createOptions(null, MANIFESTVERSION1, null,
                 CLASSPATH1, IMPORTS5, EXPORTS5, null, null);
 
         Bundle b6 = super.generalHeadersTest(options6, "wmtw1.war", true);
@@ -441,10 +441,10 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
     
 
 
-    private Map createOptions(String version, String mVersion, String sName,
+    private Map<String, Object> createOptions(String version, String mVersion, String sName,
             String[] classpath, String[] imports, String[] exports, String cp,
             String jspLoc) throws Exception {
-        Map options = new HashMap();
+        Map<String, Object> options = new HashMap<String, Object>();
         options.put(Constants.BUNDLE_VERSION, version);
         options.put(Constants.BUNDLE_MANIFESTVERSION, mVersion);
         options.put(Constants.BUNDLE_SYMBOLICNAME, sName);
