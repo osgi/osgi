@@ -35,7 +35,6 @@ import org.osgi.test.cases.webcontainer.util.EventFactory;
  *          bundle at certain situations defined by rfc 66
  */
 public class EventTest extends WebContainerTestBundleControl {
-    Bundle b;
     Bundle eventhandler;
     private final int WAITCOUNT = 10;
     private final String EXTENDER_BUNDLE = "extender.bundle";
@@ -43,6 +42,7 @@ public class EventTest extends WebContainerTestBundleControl {
     private final String EXTENDER_BUNDLE_VERSION = "extender.bundle.version";
     private final String EXTENDER_BUNDLE_SYMBOLICNAME = "extender.bundle.symbolicName";
 
+    @Override
     public void setUp() throws Exception {
         super.setUp();
         super.prepare("/tw1");
@@ -54,7 +54,7 @@ public class EventTest extends WebContainerTestBundleControl {
         if (this.debug) {
             log("bundleName to be passed into installBundle is " + loc);	
         }
-        this.b = installBundle(loc, false);
+        super.b = installBundle(loc, false);
         
         // verify event admin service is installed
         log("verify event admin service is installed.  The tests in this class require event admin service being installed.");
@@ -67,16 +67,10 @@ public class EventTest extends WebContainerTestBundleControl {
                 getWebServer() + "eventHandler.jar");
         this.eventhandler.start();
     }
-
-    private void uninstallWar() throws Exception {
-        // uninstall the war file
-        log("uninstall war file: tw1.war at context path "
-                + this.warContextPath);
-        uninstallBundle(this.b);
-    }
-
+   
+    @Override
     public void tearDown() throws Exception {
-        uninstallWar();
+        super.tearDown();
         this.eventhandler.uninstall();
     }
     
@@ -88,8 +82,8 @@ public class EventTest extends WebContainerTestBundleControl {
         this.b.start();
         
         // expect emit of the following events:
-        // org/osgi/service/web/DEPLOYING Ð the web extender has spotted the web application bundle and is starting it. 
-        // org/osgi/service/web/DEPLOYED Ð the web extender has finished starting the web application bundle. Formatted: Bullets and Numbering 
+        // org/osgi/service/web/DEPLOYING the web extender has spotted the web application bundle and is starting it. 
+        // org/osgi/service/web/DEPLOYED the web extender has finished starting the web application bundle. Formatted: Bullets and Numbering 
         // wait a few seconds to make sure events are delivered.
         int count = 0;
         Event eventPrevious = null;
@@ -146,8 +140,8 @@ public class EventTest extends WebContainerTestBundleControl {
         
         this.b.stop();
         // emit the following events:
-        // org/osgi/service/web/UNDEPLOYING Ð the web extender is stopping the web application bundle. 
-        // org/osgi/service/web/UNDEPLOYED Ð a web extender has stopped the web application bundle. 
+        // org/osgi/service/web/UNDEPLOYING the web extender is stopping the web application bundle. 
+        // org/osgi/service/web/UNDEPLOYED a web extender has stopped the web application bundle. 
         // wait a few seconds to make sure events are delivered.
         count = 0;
         while(eventCurrent == null && count < WAITCOUNT) {
@@ -186,7 +180,7 @@ public class EventTest extends WebContainerTestBundleControl {
         
         b2.start();
         // emit the following events:
-        // org/osgi/service/web/DEPLOYING Ð the web extender has spotted the web application bundle and is starting it.
+        // org/osgi/service/web/DEPLOYING ï¿½ the web extender has spotted the web application bundle and is starting it.
         // org/osgi/service/web/FAILED - a web extender cannot start the bundle, this will be fired after a DEPLOYING 
         // event has been fired if the bundle cannot be started for any reason. 
         // wait a few seconds to make sure events are delivered.

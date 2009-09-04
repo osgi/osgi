@@ -25,8 +25,11 @@ import java.util.Map;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
+import javax.servlet.ServletContext;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceReference;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
 import org.osgi.test.cases.webcontainer.util.Server;
@@ -47,6 +50,8 @@ public abstract class WebContainerTestBundleControl extends
     protected Map options = new HashMap();
     protected String warContextPath;
     protected TimeUtil timeUtil;
+    protected int srSize;
+    protected Bundle b;
     protected static final String WARSCHEMA = "webbundle:";
     protected static final String WEB_CONTEXT_PATH = Validator.WEB_CONTEXT_PATH;
     protected static final String WEB_JSP_EXTRACT_LOCATION = Validator.WEB_JSP_EXTRACT_LOCATION;
@@ -58,7 +63,24 @@ public abstract class WebContainerTestBundleControl extends
 
         // capture a time before install
         this.beforeInstall = System.currentTimeMillis();
+		ServiceReference[] sr = getContext().getAllServiceReferences(ServletContext.class.getName(), null);
+		this.srSize = (sr == null ? 0 : sr.length);
     }
+    
+	public void tearDown() throws Exception {
+		if (this.b != null && this.b.getState() != Bundle.UNINSTALLED) {
+			this.b.uninstall();
+			if (debug) {
+				log("uninstalled bundle " + this.b.getSymbolicName() + " "
+						+ this.b.getVersion().toString());
+			}
+		}
+
+		// make sure all war/wab are uninstalled
+		ServiceReference[] sr = getContext().getAllServiceReferences(ServletContext.class.getName(), null);
+		assertEquals("service registry size should be the same", this.srSize, sr == null ? 0 : sr.length);
+		this.b = null;
+	}
 
     protected void prepare(String wcp) throws Exception {
         this.warContextPath = wcp;

@@ -30,17 +30,6 @@ import org.osgi.test.cases.webcontainer.ManifestHeadersTestBundleControl;
  */
 public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
 
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-    public void tearDown() throws Exception {
-        if (this.b != null && this.b.getState() != Bundle.UNINSTALLED) {
-            this.b.uninstall();
-        }
-        this.b = null;
-    }
-
     /*
      * verify valid deployOptions overwrite original manifest Web-ContextPath
      */

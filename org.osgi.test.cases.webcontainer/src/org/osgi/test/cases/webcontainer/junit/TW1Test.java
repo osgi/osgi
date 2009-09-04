@@ -20,7 +20,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.jar.Manifest;
 
-import org.osgi.framework.Bundle;
 import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
@@ -32,8 +31,8 @@ import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
  *          test class for tw1.war
  */
 public class TW1Test extends WebContainerTestBundleControl {
-    Bundle b;
-
+	
+    @Override
     public void setUp() throws Exception {
         super.setUp();
         super.prepare("/tw1");
@@ -44,17 +43,6 @@ public class TW1Test extends WebContainerTestBundleControl {
             log("bundleName to be passed into installBundle is " + loc);	
         }
         this.b = installBundle(loc, true);
-    }
-
-    private void uninstallWar() throws Exception {
-        // uninstall the war file
-        log("uninstall war file: tw1.war at context path "
-                + this.warContextPath);
-        uninstallBundle(this.b);
-    }
-
-    public void tearDown() throws Exception {
-        uninstallWar();
     }
 
     /*

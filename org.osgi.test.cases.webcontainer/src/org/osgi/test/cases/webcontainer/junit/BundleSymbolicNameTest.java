@@ -33,14 +33,6 @@ import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
  */
 public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
 
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-    
-    public void tearDown() throws Exception {
-        
-    }
-
     /*
      * verify valid deployOptions overwrite original manifest Bundle-SymbolicName
      */

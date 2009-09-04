@@ -31,14 +31,6 @@ import org.osgi.test.cases.webcontainer.ManifestHeadersTestBundleControl;
  */
 public class BundleImportPackageTest extends ManifestHeadersTestBundleControl {
 
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-    public void tearDown() throws Exception {
-        super.tearDown();
-    }
-
     /*
      * verify valid deployOptions overwrite original manifest Import-Package
      */

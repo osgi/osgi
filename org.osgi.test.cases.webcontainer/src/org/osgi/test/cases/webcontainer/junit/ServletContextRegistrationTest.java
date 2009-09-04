@@ -39,32 +39,9 @@ import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
 public class ServletContextRegistrationTest extends
 		WebContainerTestBundleControl {
 
-	Bundle b;
-	int srSize;
 	private final static String OSGI_WEB_SYMBOLICNAME = "osgi.web.symbolicname";
 	private final static String OSGI_WEB_VERSION = "osgi.web.version";
 	private final static String OSGI_WEB_CONTEXTPATH = "osgi.web.contextpath";
-
-	public void setUp() throws Exception {
-		super.setUp();
-		ServiceReference[] sr = getContext().getAllServiceReferences(ServletContext.class.getName(), null);
-		this.srSize = (sr == null ? 0 : sr.length);
-	}
-
-	public void tearDown() throws Exception {
-		if (this.b != null && this.b.getState() != Bundle.UNINSTALLED) {
-			this.b.uninstall();
-			if (debug) {
-				log("uninstalled bundle " + this.b.getSymbolicName() + " "
-						+ this.b.getVersion().toString());
-			}
-		}
-
-		// make sure all war/wab are uninstalled
-		ServiceReference[] sr = getContext().getAllServiceReferences(ServletContext.class.getName(), null);
-		assertEquals("service registry size should be the same", this.srSize, sr == null ? 0 : sr.length);
-		this.b = null;
-	}
 
 	public void testSimpleServletContextReg001() throws Exception {
 		Map option = createOptions("1.0", "ct-testwar1", "/tw1");

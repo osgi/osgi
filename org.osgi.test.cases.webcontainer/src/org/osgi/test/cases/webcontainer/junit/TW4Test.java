@@ -22,7 +22,6 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.jar.Manifest;
 
-import org.osgi.framework.Bundle;
 import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
@@ -34,8 +33,8 @@ import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
  *          test class for tw4
  */
 public class TW4Test extends WebContainerTestBundleControl {
-    Bundle b;
-    
+
+	@Override
     public void setUp() throws Exception {
         super.setUp();
         super.prepare("/tw4");
@@ -46,17 +45,6 @@ public class TW4Test extends WebContainerTestBundleControl {
             log("bundleName to be passed into installBundle is " + loc);	
         }
         this.b = installBundle(loc, true);
-    }
-
-    private void uninstallWar() throws Exception {
-        // uninstall the war file
-        log("uninstall war file: tw4.war at context path "
-                + this.warContextPath);
-        uninstallBundle(this.b);
-    }
-
-    public void tearDown() throws Exception {
-        uninstallWar();
     }
 
     /*

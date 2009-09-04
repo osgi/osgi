@@ -18,7 +18,6 @@ package org.osgi.test.cases.webcontainer.junit;
 import java.util.Enumeration;
 import java.util.jar.Manifest;
 
-import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogReaderService;
@@ -34,9 +33,9 @@ import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
  *          OSGi log service.
  */
 public class AccessBundleContextTest extends WebContainerTestBundleControl {
-    Bundle b;
     LogReaderService logReaderService;
 
+    @Override
     public void setUp() throws Exception {
         super.setUp();
         super.prepare("/tw5");
@@ -53,17 +52,6 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
                 .getServiceReference(LogReaderService.class.getName());
         this.logReaderService = (LogReaderService) getContext().getService(
                 logReaderServiceReference);
-    }
-
-    private void uninstallWar() throws Exception {
-        // uninstall the war file
-        log("uninstall war file: tw5.war at context path "
-                + this.warContextPath);
-        uninstallBundle(this.b);
-    }
-
-    public void tearDown() throws Exception {
-        uninstallWar();
     }
 
     /*

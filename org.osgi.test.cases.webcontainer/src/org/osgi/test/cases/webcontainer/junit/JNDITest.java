@@ -21,7 +21,6 @@ import javax.naming.InitialContext;
 import javax.naming.spi.InitialContextFactory;
 import javax.naming.spi.InitialContextFactoryBuilder;
 
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogEntry;
@@ -36,8 +35,8 @@ import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
  *          JNDITest to verify integration between RFC 66 and RFC 142
  */
 public class JNDITest extends WebContainerTestBundleControl {
-    Bundle b;
 
+    @Override
     public void setUp() throws Exception {
         super.setUp();
         super.prepare("/tw5");
@@ -67,17 +66,6 @@ public class JNDITest extends WebContainerTestBundleControl {
                     (InitialContextFactoryBuilder) getContext().getService(sr));
         }
 
-    }
-
-    private void uninstallWar() throws Exception {
-        // uninstall the war file
-        log("uninstall war file: tw5.war at context path "
-                + this.warContextPath);
-        uninstallBundle(this.b);
-    }
-
-    public void tearDown() throws Exception {
-        uninstallWar();
     }
 
     // simple JNDI lookup test with the need to have rfc 66 to 
