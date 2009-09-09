@@ -134,6 +134,8 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		testFilter("(", props, ISILLEGAL);
 		testFilter("(abc = ))", props, ISILLEGAL);
 		testFilter("(!ab=b)", props, ISILLEGAL);
+		testFilter("(|ab=b)", props, ISILLEGAL);
+		testFilter("(&ab=b)", props, ISILLEGAL);
 		testFilter("(& (abc = xyz) (& (345))", props, ISILLEGAL);
 		testFilter("  (room = b**oo!*m*) ) ", props, ISILLEGAL);
 		testFilter("  (room = b**oo)*m*) ) ", props, ISILLEGAL);
