@@ -1,0 +1,26 @@
+javac.source=1.5
+javac.target=1.5
+
+Private-Package:        osgi.jndi.test
+
+Bundle-RequiredExecutionEnvironment = J2SE-1.5
+Include-Resource: jndisystem.jar
+
+Test-Cases: osgi.jndi.test.TestJNDI
+
+-runbundles = \
+    org.eclipse.equinox.ds; version=latest, \
+    org.eclipse.equinox.util; version=latest, \
+    org.apache.felix.configadmin; version=latest, \
+    org.osgi.impl.service.log; version=latest, \
+    osgi.cmpn; version=latest, \
+    org.osgi.tools.console, \
+    jndisystem.jar;version=file
+    
+-runproperties = report=true
+
+-buildpath = \
+	osgi.core;			version=4.2, \
+	osgi.cmpn;          version=4.2, \
+	${junit}
+	
