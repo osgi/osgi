@@ -242,6 +242,19 @@ public interface BundleStateMBean {
 	String getSymbolicName(long bundleId) throws IOException;
 
 	/**
+	 * Answer the version of the bundle
+	 * 
+	 * @param bundleId
+	 *            - the identifier of the bundle
+	 * @return the version
+	 * @throws IOException
+	 *             if the operation fails
+	 * @throws IllegalArgumentException
+	 *             if the bundle indicated does not exist
+	 */
+	String getVersion(long bundleId) throws IOException;
+
+	/**
 	 * Answer if the bundle is persistently started when its start level is
 	 * reached
 	 * 
@@ -407,6 +420,11 @@ public interface BundleStateMBean {
 	String BUNDLE_SYMBOLIC_NAME = "BundleSymbolicName";
 
 	/**
+	 * The name of the item containing the symbolic name in the CompositeData
+	 */
+	String BUNDLE_VERSION = "BundleVersion";
+
+	/**
 	 * The name CompositeData type for a bundle
 	 */
 	String BUNDLE_TYPE_NAME = "Bundle";
@@ -420,12 +438,13 @@ public interface BundleStateMBean {
 	 * The item names in the CompositeData representing an OSGi Bundle
 	 */
 	String[] BUNDLE = { BUNDLE_LOCATION, BUNDLE_ID, BUNDLE_SYMBOLIC_NAME,
-			BUNDLE_START_LEVEL, BUNDLE_STATE, BUNDLE_LAST_MODIFIED,
-			BUNDLE_PERSISTENTLY_STARTED, BUNDLE_REMOVAL_PENDING,
-			BUNDLE_REQUIRED, BUNDLE_FRAGMENT, BUNDLE_REGISTERED_SERVICES,
-			BUNDLE_SERVICES_IN_USE, BUNDLE_HEADERS, BUNDLE_EXPORTED_PACKAGES,
-			BUNDLE_IMPORTED_PACKAGES, BUNDLE_FRAGMENTS, BUNDLE_HOSTS,
-			BUNDLE_REQUIRED_BUNDLES, BUNDLE_REQUIRING_BUNDLES };
+			BUNDLE_VERSION, BUNDLE_START_LEVEL, BUNDLE_STATE,
+			BUNDLE_LAST_MODIFIED, BUNDLE_PERSISTENTLY_STARTED,
+			BUNDLE_REMOVAL_PENDING, BUNDLE_REQUIRED, BUNDLE_FRAGMENT,
+			BUNDLE_REGISTERED_SERVICES, BUNDLE_SERVICES_IN_USE, BUNDLE_HEADERS,
+			BUNDLE_EXPORTED_PACKAGES, BUNDLE_IMPORTED_PACKAGES,
+			BUNDLE_FRAGMENTS, BUNDLE_HOSTS, BUNDLE_REQUIRED_BUNDLES,
+			BUNDLE_REQUIRING_BUNDLES };
 
 	/**
 	 * The item names in the CompositeData representing the event raised for

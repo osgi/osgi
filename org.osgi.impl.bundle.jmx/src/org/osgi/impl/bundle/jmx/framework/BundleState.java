@@ -195,6 +195,15 @@ public class BundleState extends Monitor implements BundleStateMBean {
 	/*
 	 * (non-Javadoc)
 	 * 
+	 * @see org.osgi.jmx.core.BundleStateMBean#getVersion(long)
+	 */
+	public String getVersion(long bundleId) throws IOException {
+		return bundle(bundleId).getVersion().toString();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.osgi.jmx.core.BundleStateMBean#isBundlePersistentlyStarted(long)
 	 */
 	public boolean isPersistentlyStarted(long bundleId) throws IOException {

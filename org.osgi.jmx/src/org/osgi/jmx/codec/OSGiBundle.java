@@ -166,6 +166,7 @@ public class OSGiBundle {
 				(String) data.get(BundleStateMBean.BUNDLE_LOCATION),
 				((Long) data.get(BundleStateMBean.BUNDLE_ID)).longValue(),
 				(String) data.get(BundleStateMBean.BUNDLE_SYMBOLIC_NAME),
+				(String) data.get(BundleStateMBean.BUNDLE_VERSION),
 				((Integer) data.get(BundleStateMBean.BUNDLE_START_LEVEL))
 						.intValue(),
 				(String) data.get(BundleStateMBean.BUNDLE_STATE),
@@ -207,9 +208,10 @@ public class OSGiBundle {
 	 */
 	public OSGiBundle(BundleContext bc, PackageAdmin admin, StartLevel sl,
 			Bundle b) {
-		this(b.getLocation(), b.getBundleId(), b.getSymbolicName(), sl
-				.getBundleStartLevel(b), getBundleState(b),
-				b.getLastModified(), isBundlePersistentlyStarted(b, sl),
+		this(b.getLocation(), b.getBundleId(), b.getSymbolicName(), b
+				.getVersion().toString(), sl.getBundleStartLevel(b),
+				getBundleState(b), b.getLastModified(),
+				isBundlePersistentlyStarted(b, sl),
 				isRequiredBundleRemovalPending(b, bc, admin), isBundleRequired(
 						b, bc, admin), isBundleFragment(b, admin), serviceIds(b
 						.getRegisteredServices()), serviceIds(b
@@ -226,6 +228,7 @@ public class OSGiBundle {
 	 * @param location
 	 * @param identifier
 	 * @param symbolicName
+	 * @param version
 	 * @param startLevel
 	 * @param state
 	 * @param lastModified
@@ -244,7 +247,7 @@ public class OSGiBundle {
 	 * @param requiringBundles
 	 */
 	public OSGiBundle(String location, long identifier, String symbolicName,
-			int startLevel, String state, long lastModified,
+			String version, int startLevel, String state, long lastModified,
 			boolean persistentlyStarted, boolean removalPending,
 			boolean required, boolean fragment, long[] registeredServices,
 			long[] servicesInUse, Map<String, String> headers,
@@ -308,6 +311,7 @@ public class OSGiBundle {
 
 	/**
 	 * Answer the TabularData representing the supplied map of bundle headers
+	 * 
 	 * @param headers
 	 * @return the bundle headers
 	 */
@@ -329,6 +333,7 @@ public class OSGiBundle {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private static CompositeType createBundleType() {
 		String description = "This type encapsulates OSGi bundles";
 		String[] itemNames = BundleStateMBean.BUNDLE;
@@ -381,6 +386,7 @@ public class OSGiBundle {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private static CompositeType createBundleHeaderType() {
 		String description = "This type encapsulates OSGi bundle header key/value pairs";
 		String[] itemNames = HEADER_PROPERTY_ITEM_NAMES;
@@ -568,6 +574,13 @@ public class OSGiBundle {
 	public String getSymbolicName() {
 		return symbolicName;
 	}
+	
+	/**
+	 * @return the version of this bundle
+	 */
+	public String getVersion() {
+		return version;
+	}
 
 	/**
 	 * @return true if this bundle represents a fragment
@@ -600,7 +613,7 @@ public class OSGiBundle {
 	@SuppressWarnings("unchecked")
 	private static Map<String, String> mapFrom(TabularData data) {
 		Map<String, String> headers = new HashMap<String, String>();
-		Set<List< ? >> keySet = (Set<List< ? >>) data.keySet();
+		Set<List<?>> keySet = (Set<List<?>>) data.keySet();
 		for (List<?> key : keySet) {
 			headers.put((String) key.get(0), (String) data.get(
 					new Object[] { key.get(0) }).get(VALUE));
@@ -648,4 +661,5 @@ public class OSGiBundle {
 	private int startLevel;
 	private String state;
 	private String symbolicName;
+	private String version;
 }
