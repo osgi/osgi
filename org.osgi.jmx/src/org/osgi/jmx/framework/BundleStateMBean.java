@@ -435,25 +435,6 @@ public interface BundleStateMBean {
 	String EVENT_TYPE = "Type";
 
 	/**
-	 * The item names in the CompositeData representing an OSGi Bundle
-	 */
-	String[] BUNDLE = { BUNDLE_LOCATION, BUNDLE_ID, BUNDLE_SYMBOLIC_NAME,
-			BUNDLE_VERSION, BUNDLE_START_LEVEL, BUNDLE_STATE,
-			BUNDLE_LAST_MODIFIED, BUNDLE_PERSISTENTLY_STARTED,
-			BUNDLE_REMOVAL_PENDING, BUNDLE_REQUIRED, BUNDLE_FRAGMENT,
-			BUNDLE_REGISTERED_SERVICES, BUNDLE_SERVICES_IN_USE, BUNDLE_HEADERS,
-			BUNDLE_EXPORTED_PACKAGES, BUNDLE_IMPORTED_PACKAGES,
-			BUNDLE_FRAGMENTS, BUNDLE_HOSTS, BUNDLE_REQUIRED_BUNDLES,
-			BUNDLE_REQUIRING_BUNDLES };
-
-	/**
-	 * The item names in the CompositeData representing the event raised for
-	 * bundle events within the OSGi container by this bean
-	 */
-	String[] BUNDLE_EVENT = { BUNDLE_ID, BUNDLE_LOCATION, BUNDLE_SYMBOLIC_NAME,
-			EVENT_TYPE };
-
-	/**
 	 * The type of the headers
 	 */
 	public static final String BUNDLE_HEADERS_TYPE = "BundleHeaders";

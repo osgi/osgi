@@ -16,6 +16,9 @@
 
 package org.osgi.jmx.codec;
 
+import static org.osgi.jmx.useradmin.UserManagerMBean.ROLE_NAMES;
+import static org.osgi.jmx.useradmin.UserManagerMBean.USER_NAME;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,7 +35,14 @@ import org.osgi.service.useradmin.Authorization;
 /** 
  * 
  */
+@SuppressWarnings("unchecked")
 public class OSGiAuthorization {
+	/**
+	 * The members of an authorization
+	 */
+	public static final String[] AUTHORIZATION_ITEM_NAMES = { USER_NAME,
+			ROLE_NAMES };
+
 	private static final Logger log = Logger.getLogger(OSGiAuthorization.class
 			.getCanonicalName());
 	/**
@@ -78,7 +88,7 @@ public class OSGiAuthorization {
 
 	private static CompositeType createAuthorizationType() {
 		String description = "An authorization object defines which roles has a user got";
-		String[] itemNames = UserManagerMBean.AUTHORIZATION;
+		String[] itemNames = AUTHORIZATION_ITEM_NAMES;
 		String[] itemDescriptions = new String[2];
 		itemDescriptions[0] = "The user name for this authorization object";
 		itemDescriptions[1] = "The names of the roles encapsulated by this auth object";
@@ -103,7 +113,7 @@ public class OSGiAuthorization {
 	 */
 	public CompositeData asCompositeData() throws OpenDataException {
 		Object[] itemValues = new Object[2];
-		String[] itemNames = UserManagerMBean.AUTHORIZATION;
+		String[] itemNames = AUTHORIZATION_ITEM_NAMES;
 		itemValues[0] = name;
 		itemValues[1] = roles;
 		return new CompositeDataSupport(AUTHORIZATION, itemNames, itemValues);

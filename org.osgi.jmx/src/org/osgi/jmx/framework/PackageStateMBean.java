@@ -122,10 +122,4 @@ public interface PackageStateMBean {
 	 * The name of the item containing the package version in the CompositeData
 	 */
 	String PACKAGE_VERSION = "Version";
-
-	/**
-	 * The item names in the CompositeData representing the OSGi Package
-	 */
-	String[] PACKAGE = { PACKAGE_NAME, PACKAGE_VERSION,
-			PACKAGE_PENDING_REMOVAL, BUNDLE_IDENTIFIER, IMPORTING_BUNDLES };
 }

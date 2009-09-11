@@ -60,7 +60,8 @@ import org.osgi.jmx.framework.FrameworkMBean;
  * </tr>
  * </table>
  */
-public class BundleBatchInstallResult {
+@SuppressWarnings("unchecked")
+public class BundleBatchInstallResult extends BundleBatchResult {
 	/**
 	 * Construct a result representing the contents of the supplied
 	 * CompositeData returned from a batch operation.
@@ -70,7 +71,8 @@ public class BundleBatchInstallResult {
 	 *            operation.
 	 */
 	public BundleBatchInstallResult(CompositeData compositeData) {
-	    success = ((Boolean) compositeData.get(FrameworkMBean.BUNDLE_SUCCESS)).booleanValue();
+		success = ((Boolean) compositeData.get(FrameworkMBean.BUNDLE_SUCCESS))
+				.booleanValue();
 		errorMessage = (String) compositeData
 				.get(FrameworkMBean.BUNDLE_ERROR_MESSAGE);
 		Long[] c = (Long[]) compositeData.get(FrameworkMBean.BUNDLE_COMPLETED);
@@ -124,7 +126,7 @@ public class BundleBatchInstallResult {
 
 	private static CompositeType createResultType() {
 		String description = "This type encapsulates a bundle batch install action result";
-		String[] itemNames = FrameworkMBean.BUNDLE_ACTION_RESULT;
+		String[] itemNames = BUNDLE_ACTION_RESULT;
 		OpenType[] itemTypes = new OpenType[itemNames.length];
 		String[] itemDescriptions = new String[itemNames.length];
 		itemTypes[0] = SimpleType.BOOLEAN;
@@ -156,7 +158,7 @@ public class BundleBatchInstallResult {
 	 * @return the CompositeData encoding of the receiver.
 	 */
 	public CompositeData asCompositeData() {
-		String[] itemNames = FrameworkMBean.BUNDLE_ACTION_RESULT;
+		String[] itemNames = BUNDLE_ACTION_RESULT;
 		Object[] itemValues = new Object[itemNames.length];
 		itemValues[0] = success;
 		itemValues[1] = errorMessage;
@@ -184,31 +186,6 @@ public class BundleBatchInstallResult {
 	}
 
 	/**
-	 * Answer the list of bundle identifiers that successfully completed the
-	 * batch operation. If the operation was unsuccessful, this will be a
-	 * partial list. If this operation was successful, this will be the full
-	 * list of bundle ids. This list corresponds one to one with the supplied
-	 * list of bundle locations provided to the batch install operations.
-	 * 
-	 * @return the list of identifiers of the bundles that successfully
-	 *         installed
-	 */
-	public long[] getCompleted() {
-		return completed;
-	}
-
-	/**
-	 * Answer the error message indicating the error that occurred during the
-	 * batch operation or null if the operation was successful
-	 * 
-	 * @return the String error message if the operation was unsuccessful, or
-	 *         null if the operation was successful
-	 */
-	public String getErrorMessage() {
-		return errorMessage;
-	}
-
-	/**
 	 * Answer the list of locations of the bundles that were not processed
 	 * during the batch operation, or null if the operation was successsful
 	 * 
@@ -220,15 +197,6 @@ public class BundleBatchInstallResult {
 	}
 
 	/**
-	 * Answer true if the batch operation was successful, false otherwise.
-	 * 
-	 * @return the success of the batch operation
-	 */
-	public boolean isSuccess() {
-		return success;
-	}
-
-	/**
 	 * The CompositeType which represents the result of batch install operations
 	 * on the <link>FrameworkMBean</link>
 	 */
@@ -236,11 +204,5 @@ public class BundleBatchInstallResult {
 
 	private String bundleInError;
 
-	private long[] completed;
-
-	private String errorMessage;
-
 	private String[] remaining;
-
-	private boolean success = true;
 }

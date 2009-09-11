@@ -32,7 +32,7 @@ import static org.osgi.jmx.codec.Util.isBundleRequired;
 import static org.osgi.jmx.codec.Util.isRequiredBundleRemovalPending;
 import static org.osgi.jmx.codec.Util.longArrayFrom;
 import static org.osgi.jmx.codec.Util.serviceIds;
-import static org.osgi.jmx.framework.BundleStateMBean.BUNDLE_ID;
+import static org.osgi.jmx.framework.BundleStateMBean.*;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
@@ -147,6 +147,18 @@ import org.osgi.service.startlevel.StartLevel;
  * </table>
  */
 public class OSGiBundle {
+
+	/**
+	 * The item names in the CompositeData representing an OSGi Bundle
+	 */
+	private static final String[] BUNDLE_ITEM_NAMES = { BUNDLE_LOCATION,
+			BUNDLE_ID, BUNDLE_SYMBOLIC_NAME, BUNDLE_VERSION,
+			BUNDLE_START_LEVEL, BUNDLE_STATE, BUNDLE_LAST_MODIFIED,
+			BUNDLE_PERSISTENTLY_STARTED, BUNDLE_REMOVAL_PENDING,
+			BUNDLE_REQUIRED, BUNDLE_FRAGMENT, BUNDLE_REGISTERED_SERVICES,
+			BUNDLE_SERVICES_IN_USE, BUNDLE_HEADERS, BUNDLE_EXPORTED_PACKAGES,
+			BUNDLE_IMPORTED_PACKAGES, BUNDLE_FRAGMENTS, BUNDLE_HOSTS,
+			BUNDLE_REQUIRED_BUNDLES, BUNDLE_REQUIRING_BUNDLES };
 
 	private static final String VALUE = "Value";
 
@@ -337,7 +349,7 @@ public class OSGiBundle {
 	@SuppressWarnings("unchecked")
 	private static CompositeType createBundleType() {
 		String description = "This type encapsulates OSGi bundles";
-		String[] itemNames = BundleStateMBean.BUNDLE;
+		String[] itemNames = BUNDLE_ITEM_NAMES;
 		OpenType[] itemTypes = new OpenType[itemNames.length];
 		String[] itemDescriptions = new String[itemNames.length];
 		itemTypes[0] = SimpleType.STRING;
@@ -401,8 +413,8 @@ public class OSGiBundle {
 		itemDescriptions[0] = "The bundle header key";
 		itemDescriptions[1] = "The bundle header value";
 		try {
-			return new CompositeType(BundleStateMBean.BUNDLE_HEADER_TYPE,
-					description, itemNames, itemDescriptions, itemTypes);
+			return new CompositeType(BUNDLE_HEADER_TYPE, description,
+					itemNames, itemDescriptions, itemTypes);
 		} catch (OpenDataException e) {
 			throw new IllegalStateException(
 					"Unable to build bundle header type", e);
@@ -411,7 +423,7 @@ public class OSGiBundle {
 
 	private static TabularType createBundleHeaderTableType() {
 		try {
-			return new TabularType(BundleStateMBean.BUNDLE_HEADERS_TYPE,
+			return new TabularType(BUNDLE_HEADER_TYPE,
 					"The table of bundle headers", BUNDLE_HEADER,
 					new String[] { KEY });
 		} catch (OpenDataException e) {
@@ -440,7 +452,7 @@ public class OSGiBundle {
 	 * @return the CompositeData encoding of the receiver.
 	 */
 	public CompositeData asCompositeData() {
-		String[] itemNames = BundleStateMBean.BUNDLE;
+		String[] itemNames = BUNDLE_ITEM_NAMES;
 		Object[] itemValues = new Object[itemNames.length];
 		itemValues[0] = location;
 		itemValues[1] = identifier;
@@ -578,7 +590,7 @@ public class OSGiBundle {
 	public String getSymbolicName() {
 		return symbolicName;
 	}
-	
+
 	/**
 	 * @return the version of this bundle
 	 */

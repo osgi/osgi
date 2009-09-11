@@ -156,17 +156,4 @@ public interface ServiceStateMBean {
 	 * CompositeData
 	 */
 	String USING_BUNDLES = "UsingBundles";
-
-	/**
-	 * The item names in the CompositeData representing the service
-	 */
-	String[] SERVICE = { SERVICE_ID, OBJECT_CLASS, BUNDLE_IDENTIFIER,
-			USING_BUNDLES };
-
-	/**
-	 * The item names in the CompositeData representing the
-	 * <link>ServiceEvent</link>
-	 */
-	String[] SERVICE_EVENT = { SERVICE_ID, BUNDLE_IDENTIFIER, BUNDLE_LOCATION,
-			OBJECT_CLASS, EVENT_TYPE };
 }

@@ -58,7 +58,8 @@ import org.osgi.jmx.framework.FrameworkMBean;
  * </tr>
  * </table>
  */
-public class BundleBatchActionResult {
+@SuppressWarnings("unchecked")
+public class BundleBatchActionResult extends BundleBatchResult {
 
 	/**
 	 * Construct a result signifying the successful completion of the batch
@@ -77,7 +78,8 @@ public class BundleBatchActionResult {
 	 *            operation.
 	 */
 	public BundleBatchActionResult(CompositeData compositeData) {
-	    success = ((Boolean) compositeData.get(FrameworkMBean.BUNDLE_SUCCESS)).booleanValue();
+		success = ((Boolean) compositeData.get(FrameworkMBean.BUNDLE_SUCCESS))
+				.booleanValue();
 		errorMessage = (String) compositeData
 				.get(FrameworkMBean.BUNDLE_ERROR_MESSAGE);
 		Long[] c = (Long[]) compositeData.get(FrameworkMBean.BUNDLE_COMPLETED);
@@ -126,7 +128,7 @@ public class BundleBatchActionResult {
 
 	private static CompositeType createResultType() {
 		String description = "This type encapsulates a bundle batch install action result";
-		String[] itemNames = FrameworkMBean.BUNDLE_ACTION_RESULT;
+		String[] itemNames = BUNDLE_ACTION_RESULT;
 		OpenType[] itemTypes = new OpenType[itemNames.length];
 		String[] itemDescriptions = new String[itemNames.length];
 		itemTypes[0] = SimpleType.BOOLEAN;
@@ -157,7 +159,7 @@ public class BundleBatchActionResult {
 	 * @return the CompositeData encoding of the receiver.
 	 */
 	public CompositeData asCompositeData() {
-		String[] itemNames = FrameworkMBean.BUNDLE_ACTION_RESULT;
+		String[] itemNames = BUNDLE_ACTION_RESULT;
 		Object[] itemValues = new Object[itemNames.length];
 		itemValues[0] = success;
 		itemValues[1] = errorMessage;
@@ -185,28 +187,6 @@ public class BundleBatchActionResult {
 	}
 
 	/**
-	 * If the operation failed, answer the list of bundle identifiers that
-	 * successfully completed the batch operation. If the operation was
-	 * successful, then the list is null;
-	 * 
-	 * @return the list of bundle identifiers or null if the operation was
-	 *         successful
-	 */
-	public long[] getCompleted() {
-		return completed;
-	}
-
-	/**
-	 * Answer the error message indicating the error that occurred during the
-	 * batch operation or null, if the operation was a success.
-	 * 
-	 * @return the String error message
-	 */
-	public String getErrorMessage() {
-		return errorMessage;
-	}
-
-	/**
 	 * If the operation was unsuccessful, answer the list of bundle identifiers
 	 * of the bundles that were not processed during the batch operation. If the
 	 * operation was a success, then answer null
@@ -219,15 +199,6 @@ public class BundleBatchActionResult {
 	}
 
 	/**
-	 * Answer true if the batch operation was successful, false otherwise.
-	 * 
-	 * @return the success of the batch operation
-	 */
-	public boolean isSuccess() {
-		return success;
-	}
-
-	/**
 	 * The CompositeType which represents the result of batch operations on the
 	 * <link>FrameworkMBean</link>
 	 */
@@ -235,11 +206,5 @@ public class BundleBatchActionResult {
 
 	private long bundleInError;
 
-	private long[] completed;
-
-	private String errorMessage;
-
 	private long[] remaining;
-
-	private boolean success = true;
 }

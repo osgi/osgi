@@ -16,6 +16,10 @@
 
 package org.osgi.jmx.codec;
 
+import static org.osgi.jmx.useradmin.UserManagerMBean.ENCODED_USER;
+import static org.osgi.jmx.useradmin.UserManagerMBean.GROUP_MEMBERS;
+import static org.osgi.jmx.useradmin.UserManagerMBean.GROUP_REQUIRED_MEMBERS;
+
 import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.CompositeDataSupport;
 import javax.management.openmbean.CompositeType;
@@ -28,7 +32,13 @@ import org.osgi.service.useradmin.Role;
 
 /** 
  */
+@SuppressWarnings("unchecked")
 public class OSGiGroup {
+	/**
+	 * The members of a group
+	 */
+	private static final String[] GROUP_ITEM_NAMES = { ENCODED_USER,
+			GROUP_MEMBERS, GROUP_REQUIRED_MEMBERS };
 	/**
 	 * The user
 	 */
@@ -91,7 +101,7 @@ public class OSGiGroup {
 	 * @throws OpenDataException
 	 */
 	public CompositeData asCompositeData() throws OpenDataException {
-		String[] itemNames = UserManagerMBean.GROUP;
+		String[] itemNames = GROUP_ITEM_NAMES;
 		Object[] itemValues = new Object[3];
 		itemValues[0] = user.asCompositeData();
 		itemValues[1] = members;
@@ -101,7 +111,7 @@ public class OSGiGroup {
 
 	private static CompositeType createGroupType() {
 		String description = "Mapping of org.osgi.service.useradmin.Group for remote management purposes. Group extends User which in turn extends Role";
-		String[] itemNames = UserManagerMBean.GROUP;
+		String[] itemNames = GROUP_ITEM_NAMES;
 		/*
 		 * itemNames[0] = "User"; itemNames[1] = "members"; itemNames[2] =
 		 * "requiredMembers";

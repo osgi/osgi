@@ -19,6 +19,7 @@ package org.osgi.jmx.codec;
 import static org.osgi.jmx.codec.Util.STRING_ARRAY_TYPE;
 import static org.osgi.jmx.framework.ServiceStateMBean.BUNDLE_IDENTIFIER;
 import static org.osgi.jmx.framework.ServiceStateMBean.BUNDLE_LOCATION;
+import static org.osgi.jmx.framework.ServiceStateMBean.EVENT_TYPE;
 import static org.osgi.jmx.framework.ServiceStateMBean.OBJECT_CLASS;
 import static org.osgi.jmx.framework.ServiceStateMBean.SERVICE_ID;
 
@@ -68,7 +69,16 @@ import org.osgi.jmx.framework.ServiceStateMBean;
  * </tr>
  * </table>
  */
+@SuppressWarnings("unchecked")
 public class OSGiServiceEvent {
+
+	/**
+	 * The item names in the CompositeData representing the
+	 * <link>ServiceEvent</link>
+	 */
+	private static final String[] SERVICE_EVENT_ITEM_NAMES = { SERVICE_ID,
+			BUNDLE_IDENTIFIER, BUNDLE_LOCATION, OBJECT_CLASS, EVENT_TYPE };
+
 	/**
 	 * Construct an OSGiServiceEvent from the CompositeData representing the
 	 * event
@@ -119,7 +129,7 @@ public class OSGiServiceEvent {
 
 	private static CompositeType createServiceEventType() {
 		String description = "This eventType encapsulates OSGi service events";
-		String[] itemNames = ServiceStateMBean.SERVICE_EVENT;
+		String[] itemNames = SERVICE_EVENT_ITEM_NAMES;
 		OpenType[] itemTypes = new OpenType[5];
 		String[] itemDescriptions = new String[5];
 		itemTypes[0] = SimpleType.LONG;
@@ -150,7 +160,7 @@ public class OSGiServiceEvent {
 	 * @return the CompositeData encoding of the receiver.
 	 */
 	public CompositeData asCompositeData() {
-		String[] itemNames = ServiceStateMBean.SERVICE_EVENT;
+		String[] itemNames = SERVICE_EVENT_ITEM_NAMES;
 		Object[] itemValues = new Object[5];
 		itemValues[0] = serviceId;
 		itemValues[1] = bundleId;

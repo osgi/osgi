@@ -418,13 +418,6 @@ public interface FrameworkMBean {
 	String BUNDLE_SUCCESS = "Success";
 
 	/**
-	 * The item names in the CompositeData representing the result of a batch
-	 * operation
-	 */
-	String[] BUNDLE_ACTION_RESULT = { BUNDLE_SUCCESS, BUNDLE_ERROR_MESSAGE,
-			BUNDLE_COMPLETED, BUNDLE_IN_ERROR, BUNDLE_REMAINING };
-
-	/**
 	 * The name of the CompositeType which represents the result of a batch
 	 * operation
 	 */

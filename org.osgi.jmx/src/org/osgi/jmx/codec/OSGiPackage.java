@@ -20,7 +20,10 @@ import static org.osgi.jmx.codec.Util.LONG_ARRAY_TYPE;
 import static org.osgi.jmx.codec.Util.LongArrayFrom;
 import static org.osgi.jmx.codec.Util.longArrayFrom;
 import static org.osgi.jmx.framework.PackageStateMBean.BUNDLE_IDENTIFIER;
+import static org.osgi.jmx.framework.PackageStateMBean.IMPORTING_BUNDLES;
 import static org.osgi.jmx.framework.PackageStateMBean.PACKAGE_NAME;
+import static org.osgi.jmx.framework.PackageStateMBean.PACKAGE_PENDING_REMOVAL;
+import static org.osgi.jmx.framework.PackageStateMBean.PACKAGE_VERSION;
 
 import java.util.Set;
 
@@ -69,7 +72,16 @@ import org.osgi.service.packageadmin.ExportedPackage;
  * </tr>
  * </table>
  */
+@SuppressWarnings("unchecked")
 public class OSGiPackage {
+
+	/**
+	 * The item names in the CompositeData representing the OSGi Package
+	 */
+	private static final String[] PACKAGE_ITEM_NAMES = { PACKAGE_NAME,
+			PACKAGE_VERSION, PACKAGE_PENDING_REMOVAL, BUNDLE_IDENTIFIER,
+			IMPORTING_BUNDLES };
+
 	/**
 	 * Construct an OSGiPackage from the encoded <link>CompositeData</link>
 	 * 
@@ -141,7 +153,7 @@ public class OSGiPackage {
 
 	private static CompositeType createPackageType() {
 		String description = "This type encapsulates an OSGi package";
-		String[] itemNames = PackageStateMBean.PACKAGE;
+		String[] itemNames = PACKAGE_ITEM_NAMES;
 		OpenType[] itemTypes = new OpenType[itemNames.length];
 		String[] itemDescriptions = new String[itemNames.length];
 		itemTypes[0] = SimpleType.STRING;
@@ -172,7 +184,7 @@ public class OSGiPackage {
 	 * @return the CompositeData encoding of the receiver.
 	 */
 	public CompositeData asCompositeData() {
-		String[] itemNames = PackageStateMBean.PACKAGE;
+		String[] itemNames = PACKAGE_ITEM_NAMES;
 		Object[] itemValues = new Object[5];
 		itemValues[0] = name;
 		itemValues[1] = version;

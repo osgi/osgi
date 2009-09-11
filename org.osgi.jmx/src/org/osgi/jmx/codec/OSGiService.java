@@ -22,6 +22,9 @@ import static org.osgi.jmx.codec.Util.LONG_ARRAY_TYPE;
 import static org.osgi.jmx.codec.Util.LongArrayFrom;
 import static org.osgi.jmx.codec.Util.STRING_ARRAY_TYPE;
 import static org.osgi.jmx.codec.Util.longArrayFrom;
+import static org.osgi.jmx.framework.ServiceStateMBean.BUNDLE_IDENTIFIER;
+import static org.osgi.jmx.framework.ServiceStateMBean.OBJECT_CLASS;
+import static org.osgi.jmx.framework.ServiceStateMBean.USING_BUNDLES;
 
 import java.util.ArrayList;
 
@@ -66,7 +69,14 @@ import org.osgi.jmx.framework.ServiceStateMBean;
  * </tr>
  * </table>
  */
+@SuppressWarnings("unchecked")
 public class OSGiService {
+
+	/**
+	 * The item names in the CompositeData representing the service
+	 */
+	private static final String[] SERVICE_ITEM_NAMES = { SERVICE_ID,
+			OBJECT_CLASS, BUNDLE_IDENTIFIER, USING_BUNDLES };
 
 	/**
 	 * Construct an OSGiService encoded in the <link>CompositeData</link>
@@ -139,7 +149,7 @@ public class OSGiService {
 
 	private static CompositeType createServiceType() {
 		String description = "This type encapsulates an OSGi service";
-		String[] itemNames = ServiceStateMBean.SERVICE;
+		String[] itemNames = SERVICE_ITEM_NAMES;
 		OpenType[] itemTypes = new OpenType[itemNames.length];
 		String[] itemDescriptions = new String[itemNames.length];
 		itemTypes[0] = SimpleType.LONG;
@@ -167,7 +177,7 @@ public class OSGiService {
 	 * @return the CompositeData encoding of the receiver.
 	 */
 	public CompositeData asCompositeData() {
-		String[] itemNames = ServiceStateMBean.SERVICE;
+		String[] itemNames = SERVICE_ITEM_NAMES;
 		Object[] itemValues = new Object[4];
 		itemValues[0] = identifier;
 		itemValues[1] = interfaces;

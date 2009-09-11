@@ -29,7 +29,6 @@ import javax.management.openmbean.OpenType;
 import javax.management.openmbean.SimpleType;
 
 import org.osgi.framework.BundleEvent;
-import org.osgi.jmx.framework.BundleStateMBean;
 
 /**
  * <p>
@@ -60,6 +59,13 @@ import org.osgi.jmx.framework.BundleStateMBean;
  * </table>
  */
 public class OSGiBundleEvent {
+
+	/**
+	 * The item names in the CompositeData representing the event raised for
+	 * bundle events within the OSGi container by this bean
+	 */
+	private static final String[] BUNDLE_EVENT_ITEMS = { BUNDLE_ID,
+			BUNDLE_LOCATION, BUNDLE_SYMBOLIC_NAME, EVENT_TYPE };
 
 	/**
 	 * Construct an OSGiBundleEvent from the supplied <ling>BundleEvent</link>
@@ -102,9 +108,10 @@ public class OSGiBundleEvent {
 		this.eventType = eventType;
 	}
 
+	@SuppressWarnings("unchecked")
 	private static CompositeType createBundleEventType() {
 		String description = "This type encapsulates OSGi bundle events";
-		String[] itemNames = BundleStateMBean.BUNDLE_EVENT;
+		String[] itemNames = BUNDLE_EVENT_ITEMS;
 		OpenType[] itemTypes = new OpenType[4];
 		String[] itemDescriptions = new String[4];
 		itemTypes[0] = SimpleType.LONG;
@@ -131,7 +138,7 @@ public class OSGiBundleEvent {
 	 * @return the CompositeData encoding of the receiver.
 	 */
 	public CompositeData asCompositeData() {
-		String[] itemNames = BundleStateMBean.BUNDLE_EVENT;
+		String[] itemNames = BUNDLE_EVENT_ITEMS;
 		Object[] itemValues = new Object[4];
 		itemValues[0] = bundleId;
 		itemValues[1] = location;

@@ -86,6 +86,7 @@ import org.osgi.framework.ServiceReference;
  * <p>
  * The
  */
+@SuppressWarnings("unchecked")
 public class OSGiProperties {
 
 	/**
@@ -93,8 +94,7 @@ public class OSGiProperties {
 	 * 
 	 * @param properties
 	 * @return the tabular data representation of the properties
-	 */
-	@SuppressWarnings("unchecked")
+	 */ 
 	public static TabularData tableFrom(Dictionary properties) {
 		TabularDataSupport table = new TabularDataSupport(PROPERTY_TABLE);
 		for (Enumeration keys = properties.keys(); keys.hasMoreElements();) {
@@ -125,8 +125,7 @@ public class OSGiProperties {
 	 * @param key
 	 * @param value
 	 * @return the encoded composite data of the key and value
-	 */
-	@SuppressWarnings("unchecked")
+	 */ 
 	public static CompositeData encode(String key, Object value) {
 		Class<?> clazz = value.getClass();
 
@@ -143,8 +142,7 @@ public class OSGiProperties {
 	 * 
 	 * @param table
 	 * @return the hashtable represented by the tabular data
-	 */
-	@SuppressWarnings("unchecked")
+	 */ 
 	public static Hashtable<String, Object> propertiesFrom(TabularData table) {
 		Hashtable props = new Hashtable();
 		if (table == null) {
@@ -244,8 +242,7 @@ public class OSGiProperties {
 	 * @param key
 	 * @param value
 	 * @return the composite data representation
-	 */
-	@SuppressWarnings("unchecked")
+	 */ 
 	protected static CompositeData encodeVector(String key, Vector value) {
 		String type = "String";
 		if (value.size() > 0) {

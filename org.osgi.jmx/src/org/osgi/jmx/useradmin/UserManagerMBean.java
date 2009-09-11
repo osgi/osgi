@@ -439,22 +439,4 @@ public interface UserManagerMBean {
 	 * The encoded credentials
 	 */
 	public static final String ENCODED_CREDENTIALS = "Credentials";
-	/**
-	 * The members of an authorization
-	 */
-	public static final String[] AUTHORIZATION = { USER_NAME, ROLE_NAMES };
-	/**
-	 * The members of a user
-	 */
-	public static final String[] USER = { ENCODED_ROLE, ENCODED_CREDENTIALS };
-	/**
-	 * The members of a role
-	 */
-	public static final String[] ROLE = { ROLE_NAME, ROLE_TYPE,
-			ROLE_ENCODED_PROPERTIES };
-	/**
-	 * The members of a group
-	 */
-	public static final String[] GROUP = { ENCODED_USER, GROUP_MEMBERS,
-			GROUP_REQUIRED_MEMBERS };
 }

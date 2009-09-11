@@ -16,6 +16,9 @@
 
 package org.osgi.jmx.codec;
 
+import static org.osgi.jmx.useradmin.UserManagerMBean.ENCODED_CREDENTIALS;
+import static org.osgi.jmx.useradmin.UserManagerMBean.ENCODED_ROLE;
+
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -34,7 +37,13 @@ import org.osgi.service.useradmin.User;
 /** 
  * 
  */
+@SuppressWarnings("unchecked")
 public class OSGiUser {
+	/**
+	 * The members of a user
+	 */
+	private static final String[] USER_ITEM_NAMES = { ENCODED_ROLE,
+			ENCODED_CREDENTIALS };
 	/**
 	 * The role of the user
 	 */
@@ -48,8 +57,7 @@ public class OSGiUser {
 	 * Construct an instance from the supplied OSGi user
 	 * 
 	 * @param user
-	 */
-	@SuppressWarnings("unchecked")
+	 */ 
 	public OSGiUser(User user) {
 		role = new OSGiRole(user);
 		credentials = new Hashtable<String, Object>();
@@ -79,7 +87,7 @@ public class OSGiUser {
 	 * @throws OpenDataException
 	 */
 	public CompositeData asCompositeData() throws OpenDataException {
-		String[] itemNames = UserManagerMBean.USER;
+		String[] itemNames = USER_ITEM_NAMES;
 		Object[] itemValues = new Object[2];
 		itemValues[0] = role.asCompositeData();
 		itemValues[1] = OSGiProperties.tableFrom(credentials);
@@ -88,7 +96,7 @@ public class OSGiUser {
 
 	private static CompositeType createUserType() {
 		String description = "Mapping of org.osgi.service.useradmin.User for remote management purposes. User extends Role";
-		String[] itemNames = UserManagerMBean.USER;
+		String[] itemNames = USER_ITEM_NAMES;
 		String[] itemDescriptions = new String[2];
 		itemDescriptions[0] = "The role object that is extended by this user object";
 		itemDescriptions[1] = "The credentials for this user";
