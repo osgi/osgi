@@ -22,9 +22,9 @@ import static org.osgi.jmx.codec.Util.LONG_ARRAY_TYPE;
 import static org.osgi.jmx.codec.Util.LongArrayFrom;
 import static org.osgi.jmx.codec.Util.STRING_ARRAY_TYPE;
 import static org.osgi.jmx.codec.Util.longArrayFrom;
-import static org.osgi.jmx.framework.ServiceStateMBean.BUNDLE_IDENTIFIER;
-import static org.osgi.jmx.framework.ServiceStateMBean.OBJECT_CLASS;
-import static org.osgi.jmx.framework.ServiceStateMBean.USING_BUNDLES;
+import static org.osgi.jmx.service.framework.ServiceStateMBean.BUNDLE_IDENTIFIER;
+import static org.osgi.jmx.service.framework.ServiceStateMBean.OBJECT_CLASS;
+import static org.osgi.jmx.service.framework.ServiceStateMBean.USING_BUNDLES;
 
 import java.util.ArrayList;
 
@@ -39,7 +39,7 @@ import javax.management.openmbean.TabularDataSupport;
 import javax.management.openmbean.TabularType;
 
 import org.osgi.framework.ServiceReference;
-import org.osgi.jmx.framework.ServiceStateMBean;
+import org.osgi.jmx.service.framework.ServiceStateMBean;
 
 /**
  * <p>

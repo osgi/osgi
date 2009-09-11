@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.osgi.framework.Bundle;
 import org.osgi.jmx.JmxConstants;
-import org.osgi.jmx.permissionadmin.PermissionManagerMBean;
+import org.osgi.jmx.service.permissionadmin.PermissionManagerMBean;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 
 public class PermissionManagerMBeanTestCase extends MBeanGeneralTestCase {

@@ -32,7 +32,7 @@ import static org.osgi.jmx.codec.Util.isBundleRequired;
 import static org.osgi.jmx.codec.Util.isRequiredBundleRemovalPending;
 import static org.osgi.jmx.codec.Util.longArrayFrom;
 import static org.osgi.jmx.codec.Util.serviceIds;
-import static org.osgi.jmx.framework.BundleStateMBean.*;
+import static org.osgi.jmx.service.framework.BundleStateMBean.*;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
@@ -54,7 +54,7 @@ import javax.management.openmbean.TabularType;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.jmx.framework.BundleStateMBean;
+import org.osgi.jmx.service.framework.BundleStateMBean;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.startlevel.StartLevel;
 

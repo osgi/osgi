@@ -6,7 +6,7 @@ import java.util.Hashtable;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.jmx.JmxConstants;
-import org.osgi.jmx.cm.ConfigAdminManagerMBean;
+import org.osgi.jmx.service.cm.ConfigAdminManagerMBean;
 import org.osgi.jmx.codec.OSGiProperties;
 import org.osgi.service.cm.ConfigurationAdmin;
 

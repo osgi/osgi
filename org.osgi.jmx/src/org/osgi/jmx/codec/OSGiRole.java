@@ -16,9 +16,9 @@
 
 package org.osgi.jmx.codec;
 
-import static org.osgi.jmx.useradmin.UserManagerMBean.ROLE_ENCODED_PROPERTIES;
-import static org.osgi.jmx.useradmin.UserManagerMBean.ROLE_NAME;
-import static org.osgi.jmx.useradmin.UserManagerMBean.ROLE_TYPE;
+import static org.osgi.jmx.service.useradmin.UserManagerMBean.ROLE_ENCODED_PROPERTIES;
+import static org.osgi.jmx.service.useradmin.UserManagerMBean.ROLE_NAME;
+import static org.osgi.jmx.service.useradmin.UserManagerMBean.ROLE_TYPE;
 
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -33,7 +33,7 @@ import javax.management.openmbean.OpenType;
 import javax.management.openmbean.SimpleType;
 import javax.management.openmbean.TabularData;
 
-import org.osgi.jmx.useradmin.UserManagerMBean;
+import org.osgi.jmx.service.useradmin.UserManagerMBean;
 import org.osgi.service.useradmin.Role;
 
 /** 

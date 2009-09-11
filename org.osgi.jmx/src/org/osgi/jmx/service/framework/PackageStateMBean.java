@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.jmx.framework;
+package org.osgi.jmx.service.framework;
 
 import java.io.IOException;
 

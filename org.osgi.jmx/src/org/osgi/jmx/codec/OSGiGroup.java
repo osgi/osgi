@@ -16,9 +16,9 @@
 
 package org.osgi.jmx.codec;
 
-import static org.osgi.jmx.useradmin.UserManagerMBean.ENCODED_USER;
-import static org.osgi.jmx.useradmin.UserManagerMBean.GROUP_MEMBERS;
-import static org.osgi.jmx.useradmin.UserManagerMBean.GROUP_REQUIRED_MEMBERS;
+import static org.osgi.jmx.service.useradmin.UserManagerMBean.ENCODED_USER;
+import static org.osgi.jmx.service.useradmin.UserManagerMBean.GROUP_MEMBERS;
+import static org.osgi.jmx.service.useradmin.UserManagerMBean.GROUP_REQUIRED_MEMBERS;
 
 import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.CompositeDataSupport;
@@ -26,7 +26,7 @@ import javax.management.openmbean.CompositeType;
 import javax.management.openmbean.OpenDataException;
 import javax.management.openmbean.OpenType;
 
-import org.osgi.jmx.useradmin.UserManagerMBean;
+import org.osgi.jmx.service.useradmin.UserManagerMBean;
 import org.osgi.service.useradmin.Group;
 import org.osgi.service.useradmin.Role;
 

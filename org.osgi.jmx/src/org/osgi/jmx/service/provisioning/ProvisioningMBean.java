@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.jmx.provisioning;
+package org.osgi.jmx.service.provisioning;
 
 import java.io.IOException;
 

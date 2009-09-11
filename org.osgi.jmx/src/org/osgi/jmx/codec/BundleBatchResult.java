@@ -16,11 +16,11 @@
 
 package org.osgi.jmx.codec;
 
-import static org.osgi.jmx.framework.FrameworkMBean.BUNDLE_COMPLETED;
-import static org.osgi.jmx.framework.FrameworkMBean.BUNDLE_ERROR_MESSAGE;
-import static org.osgi.jmx.framework.FrameworkMBean.BUNDLE_IN_ERROR;
-import static org.osgi.jmx.framework.FrameworkMBean.BUNDLE_REMAINING;
-import static org.osgi.jmx.framework.FrameworkMBean.BUNDLE_SUCCESS;
+import static org.osgi.jmx.service.framework.FrameworkMBean.BUNDLE_COMPLETED;
+import static org.osgi.jmx.service.framework.FrameworkMBean.BUNDLE_ERROR_MESSAGE;
+import static org.osgi.jmx.service.framework.FrameworkMBean.BUNDLE_IN_ERROR;
+import static org.osgi.jmx.service.framework.FrameworkMBean.BUNDLE_REMAINING;
+import static org.osgi.jmx.service.framework.FrameworkMBean.BUNDLE_SUCCESS;
 
 /**
  */

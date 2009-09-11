@@ -29,7 +29,7 @@ import org.osgi.jmx.codec.OSGiGroup;
 import org.osgi.jmx.codec.OSGiProperties;
 import org.osgi.jmx.codec.OSGiRole;
 import org.osgi.jmx.codec.OSGiUser;
-import org.osgi.jmx.useradmin.UserManagerMBean;
+import org.osgi.jmx.service.useradmin.UserManagerMBean;
 import org.osgi.service.useradmin.Group;
 import org.osgi.service.useradmin.Role;
 import org.osgi.service.useradmin.User;

@@ -26,7 +26,7 @@ import javax.management.openmbean.OpenDataException;
 import javax.management.openmbean.OpenType;
 import javax.management.openmbean.SimpleType;
 
-import org.osgi.jmx.framework.FrameworkMBean;
+import org.osgi.jmx.service.framework.FrameworkMBean;
 
 /**
  * This class represents the CODEC for the resulting composite data from the

@@ -29,7 +29,7 @@ import org.osgi.impl.bundle.jmx.Monitor;
 import org.osgi.jmx.codec.OSGiBundle;
 import org.osgi.jmx.codec.OSGiBundleEvent;
 import org.osgi.jmx.codec.Util;
-import org.osgi.jmx.framework.BundleStateMBean;
+import org.osgi.jmx.service.framework.BundleStateMBean;
 import org.osgi.service.packageadmin.ExportedPackage;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.startlevel.StartLevel;

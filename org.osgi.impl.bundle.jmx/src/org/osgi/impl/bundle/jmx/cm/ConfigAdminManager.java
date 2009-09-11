@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 import javax.management.openmbean.TabularData;
 
 import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.jmx.cm.ConfigAdminManagerMBean;
+import org.osgi.jmx.service.cm.ConfigAdminManagerMBean;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 

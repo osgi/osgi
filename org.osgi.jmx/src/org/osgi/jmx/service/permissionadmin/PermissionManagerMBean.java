@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.jmx.permissionadmin;
+package org.osgi.jmx.service.permissionadmin;
 
 import java.io.IOException;
 

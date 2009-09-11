@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.jmx.cm;
+package org.osgi.jmx.service.cm;
 
 import java.io.IOException;
 

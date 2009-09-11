@@ -7,7 +7,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.jmx.JmxConstants;
 import org.osgi.jmx.codec.OSGiProperties;
-import org.osgi.jmx.framework.BundleStateMBean;
+import org.osgi.jmx.service.framework.BundleStateMBean;
 
 public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 	private Bundle testBundle1;

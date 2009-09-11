@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.osgi.framework.Bundle;
 import org.osgi.jmx.JmxConstants;
-import org.osgi.jmx.framework.PackageStateMBean;
+import org.osgi.jmx.service.framework.PackageStateMBean;
 import org.osgi.service.packageadmin.ExportedPackage;
 import org.osgi.service.packageadmin.PackageAdmin;
 

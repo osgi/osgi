@@ -17,11 +17,11 @@
 package org.osgi.jmx.codec;
 
 import static org.osgi.jmx.codec.Util.STRING_ARRAY_TYPE;
-import static org.osgi.jmx.framework.ServiceStateMBean.BUNDLE_IDENTIFIER;
-import static org.osgi.jmx.framework.ServiceStateMBean.BUNDLE_LOCATION;
-import static org.osgi.jmx.framework.ServiceStateMBean.EVENT_TYPE;
-import static org.osgi.jmx.framework.ServiceStateMBean.OBJECT_CLASS;
-import static org.osgi.jmx.framework.ServiceStateMBean.SERVICE_ID;
+import static org.osgi.jmx.service.framework.ServiceStateMBean.BUNDLE_IDENTIFIER;
+import static org.osgi.jmx.service.framework.ServiceStateMBean.BUNDLE_LOCATION;
+import static org.osgi.jmx.service.framework.ServiceStateMBean.EVENT_TYPE;
+import static org.osgi.jmx.service.framework.ServiceStateMBean.OBJECT_CLASS;
+import static org.osgi.jmx.service.framework.ServiceStateMBean.SERVICE_ID;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,7 +35,7 @@ import javax.management.openmbean.SimpleType;
 
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceEvent;
-import org.osgi.jmx.framework.ServiceStateMBean;
+import org.osgi.jmx.service.framework.ServiceStateMBean;
 
 /**
  * <p>

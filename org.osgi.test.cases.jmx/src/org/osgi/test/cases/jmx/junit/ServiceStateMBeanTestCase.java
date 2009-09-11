@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.jmx.JmxConstants;
-import org.osgi.jmx.framework.ServiceStateMBean;
+import org.osgi.jmx.service.framework.ServiceStateMBean;
 
 public class ServiceStateMBeanTestCase extends MBeanGeneralTestCase {
 

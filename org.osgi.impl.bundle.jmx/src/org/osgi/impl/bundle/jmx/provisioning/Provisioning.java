@@ -25,7 +25,7 @@ import java.util.zip.ZipInputStream;
 
 import javax.management.openmbean.TabularData;
 
-import org.osgi.jmx.provisioning.ProvisioningMBean;
+import org.osgi.jmx.service.provisioning.ProvisioningMBean;
 import org.osgi.service.provisioning.ProvisioningService;
 
 /** 

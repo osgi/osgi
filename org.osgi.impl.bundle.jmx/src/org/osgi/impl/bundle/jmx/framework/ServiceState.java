@@ -36,7 +36,7 @@ import org.osgi.impl.bundle.jmx.Monitor;
 import org.osgi.jmx.codec.OSGiProperties;
 import org.osgi.jmx.codec.OSGiService;
 import org.osgi.jmx.codec.OSGiServiceEvent;
-import org.osgi.jmx.framework.ServiceStateMBean;
+import org.osgi.jmx.service.framework.ServiceStateMBean;
 import org.osgi.util.tracker.ServiceTracker;
 
 /** 

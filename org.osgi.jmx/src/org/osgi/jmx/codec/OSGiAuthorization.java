@@ -16,8 +16,8 @@
 
 package org.osgi.jmx.codec;
 
-import static org.osgi.jmx.useradmin.UserManagerMBean.ROLE_NAMES;
-import static org.osgi.jmx.useradmin.UserManagerMBean.USER_NAME;
+import static org.osgi.jmx.service.useradmin.UserManagerMBean.ROLE_NAMES;
+import static org.osgi.jmx.service.useradmin.UserManagerMBean.USER_NAME;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,7 +29,7 @@ import javax.management.openmbean.OpenDataException;
 import javax.management.openmbean.OpenType;
 import javax.management.openmbean.SimpleType;
 
-import org.osgi.jmx.useradmin.UserManagerMBean;
+import org.osgi.jmx.service.useradmin.UserManagerMBean;
 import org.osgi.service.useradmin.Authorization;
 
 /** 

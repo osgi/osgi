@@ -16,8 +16,8 @@
 
 package org.osgi.jmx.codec;
 
-import static org.osgi.jmx.useradmin.UserManagerMBean.ENCODED_CREDENTIALS;
-import static org.osgi.jmx.useradmin.UserManagerMBean.ENCODED_ROLE;
+import static org.osgi.jmx.service.useradmin.UserManagerMBean.ENCODED_CREDENTIALS;
+import static org.osgi.jmx.service.useradmin.UserManagerMBean.ENCODED_ROLE;
 
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -31,7 +31,7 @@ import javax.management.openmbean.OpenDataException;
 import javax.management.openmbean.OpenType;
 import javax.management.openmbean.TabularData;
 
-import org.osgi.jmx.useradmin.UserManagerMBean;
+import org.osgi.jmx.service.useradmin.UserManagerMBean;
 import org.osgi.service.useradmin.User;
 
 /** 

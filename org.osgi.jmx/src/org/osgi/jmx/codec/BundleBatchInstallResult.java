@@ -27,7 +27,7 @@ import javax.management.openmbean.OpenDataException;
 import javax.management.openmbean.OpenType;
 import javax.management.openmbean.SimpleType;
 
-import org.osgi.jmx.framework.FrameworkMBean;
+import org.osgi.jmx.service.framework.FrameworkMBean;
 
 /**
  * <p>

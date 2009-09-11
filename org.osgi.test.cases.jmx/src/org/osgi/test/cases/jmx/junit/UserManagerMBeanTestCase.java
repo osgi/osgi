@@ -3,7 +3,7 @@ package org.osgi.test.cases.jmx.junit;
 import java.io.IOException;
 
 import org.osgi.jmx.JmxConstants;
-import org.osgi.jmx.useradmin.UserManagerMBean;
+import org.osgi.jmx.service.useradmin.UserManagerMBean;
 
 public class UserManagerMBeanTestCase extends MBeanGeneralTestCase {
 	private UserManagerMBean userManagerMBean;

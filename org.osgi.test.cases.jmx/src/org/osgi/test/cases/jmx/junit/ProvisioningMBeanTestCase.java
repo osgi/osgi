@@ -7,7 +7,7 @@ import java.util.Hashtable;
 
 import org.osgi.jmx.JmxConstants;
 import org.osgi.jmx.codec.OSGiProperties;
-import org.osgi.jmx.provisioning.ProvisioningMBean;
+import org.osgi.jmx.service.provisioning.ProvisioningMBean;
 import org.osgi.service.provisioning.ProvisioningService;
 
 public class ProvisioningMBeanTestCase extends MBeanGeneralTestCase {

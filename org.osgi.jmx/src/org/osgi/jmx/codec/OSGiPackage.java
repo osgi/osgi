@@ -19,11 +19,11 @@ package org.osgi.jmx.codec;
 import static org.osgi.jmx.codec.Util.LONG_ARRAY_TYPE;
 import static org.osgi.jmx.codec.Util.LongArrayFrom;
 import static org.osgi.jmx.codec.Util.longArrayFrom;
-import static org.osgi.jmx.framework.PackageStateMBean.BUNDLE_IDENTIFIER;
-import static org.osgi.jmx.framework.PackageStateMBean.IMPORTING_BUNDLES;
-import static org.osgi.jmx.framework.PackageStateMBean.PACKAGE_NAME;
-import static org.osgi.jmx.framework.PackageStateMBean.PACKAGE_PENDING_REMOVAL;
-import static org.osgi.jmx.framework.PackageStateMBean.PACKAGE_VERSION;
+import static org.osgi.jmx.service.framework.PackageStateMBean.BUNDLE_IDENTIFIER;
+import static org.osgi.jmx.service.framework.PackageStateMBean.IMPORTING_BUNDLES;
+import static org.osgi.jmx.service.framework.PackageStateMBean.PACKAGE_NAME;
+import static org.osgi.jmx.service.framework.PackageStateMBean.PACKAGE_PENDING_REMOVAL;
+import static org.osgi.jmx.service.framework.PackageStateMBean.PACKAGE_VERSION;
 
 import java.util.Set;
 
@@ -37,7 +37,7 @@ import javax.management.openmbean.TabularData;
 import javax.management.openmbean.TabularDataSupport;
 import javax.management.openmbean.TabularType;
 
-import org.osgi.jmx.framework.PackageStateMBean;
+import org.osgi.jmx.service.framework.PackageStateMBean;
 import org.osgi.service.packageadmin.ExportedPackage;
 
 /**

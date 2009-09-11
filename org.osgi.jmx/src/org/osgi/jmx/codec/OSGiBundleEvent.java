@@ -16,10 +16,10 @@
 
 package org.osgi.jmx.codec;
 
-import static org.osgi.jmx.framework.BundleStateMBean.BUNDLE_ID;
-import static org.osgi.jmx.framework.BundleStateMBean.BUNDLE_LOCATION;
-import static org.osgi.jmx.framework.BundleStateMBean.BUNDLE_SYMBOLIC_NAME;
-import static org.osgi.jmx.framework.BundleStateMBean.EVENT_TYPE;
+import static org.osgi.jmx.service.framework.BundleStateMBean.BUNDLE_ID;
+import static org.osgi.jmx.service.framework.BundleStateMBean.BUNDLE_LOCATION;
+import static org.osgi.jmx.service.framework.BundleStateMBean.BUNDLE_SYMBOLIC_NAME;
+import static org.osgi.jmx.service.framework.BundleStateMBean.EVENT_TYPE;
 
 import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.CompositeDataSupport;

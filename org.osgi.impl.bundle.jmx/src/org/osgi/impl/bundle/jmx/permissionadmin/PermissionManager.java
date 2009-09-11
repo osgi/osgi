@@ -17,7 +17,7 @@ package org.osgi.impl.bundle.jmx.permissionadmin;
 
 import java.io.IOException;
 
-import org.osgi.jmx.permissionadmin.PermissionManagerMBean;
+import org.osgi.jmx.service.permissionadmin.PermissionManagerMBean;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
