@@ -1281,11 +1281,12 @@ public class FrameworkUtil {
 			}
 
 			private FilterImpl parse_and() throws InvalidSyntaxException {
+				int lookahead = pos;
 				skipWhiteSpace();
 
 				if (filterChars[pos] != '(') {
-					throw new InvalidSyntaxException("Missing '(': "
-							+ filterstring.substring(pos), filterstring);
+					pos = lookahead - 1;
+					return parse_item();
 				}
 
 				List operands = new ArrayList(10);
@@ -1300,11 +1301,12 @@ public class FrameworkUtil {
 			}
 
 			private FilterImpl parse_or() throws InvalidSyntaxException {
+				int lookahead = pos;
 				skipWhiteSpace();
 
 				if (filterChars[pos] != '(') {
-					throw new InvalidSyntaxException("Missing '(': "
-							+ filterstring.substring(pos), filterstring);
+					pos = lookahead - 1;
+					return parse_item();
 				}
 
 				List operands = new ArrayList(10);
@@ -1319,11 +1321,12 @@ public class FrameworkUtil {
 			}
 
 			private FilterImpl parse_not() throws InvalidSyntaxException {
+				int lookahead = pos;
 				skipWhiteSpace();
 
 				if (filterChars[pos] != '(') {
-					throw new InvalidSyntaxException("Missing '(': "
-							+ filterstring.substring(pos), filterstring);
+					pos = lookahead - 1;
+					return parse_item();
 				}
 
 				FilterImpl child = parse_filter();

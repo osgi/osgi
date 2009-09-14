@@ -73,6 +73,9 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		props.put("bigintvalue", new BigInteger("4123456"));
 		props.put("bigdecvalue", new BigDecimal("4.123456"));   
 		props.put("*", "foo");
+		props.put("!  ab", "b");
+		props.put("|   ab", "b");
+		props.put("&    ab", "b");
 		return props;
 	}
 
@@ -124,6 +127,12 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 				props, ISTRUE);
 		testFilter("(room=bedroom)", null, ISFALSE); 
 		testFilter("(*=foo)", props, ISTRUE);
+		testFilter("(!  ab=b)", props, ISTRUE);
+		testFilter("(|   ab=b)", props, ISTRUE);
+		testFilter("(&    ab=b)", props, ISTRUE);
+		testFilter("(!ab=*)", props, ISFALSE);
+		testFilter("(|ab=*)", props, ISFALSE);
+		testFilter("(&ab=*)", props, ISFALSE);
 	}
 
 	public void testIllegal() {
@@ -133,9 +142,6 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		testFilter("(=foo)", props, ISILLEGAL);
 		testFilter("(", props, ISILLEGAL);
 		testFilter("(abc = ))", props, ISILLEGAL);
-		testFilter("(!ab=b)", props, ISILLEGAL);
-		testFilter("(|ab=b)", props, ISILLEGAL);
-		testFilter("(&ab=b)", props, ISILLEGAL);
 		testFilter("(& (abc = xyz) (& (345))", props, ISILLEGAL);
 		testFilter("  (room = b**oo!*m*) ) ", props, ISILLEGAL);
 		testFilter("  (room = b**oo)*m*) ) ", props, ISILLEGAL);
