@@ -76,6 +76,9 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		props.put("!  ab", "b");
 		props.put("|   ab", "b");
 		props.put("&    ab", "b");
+		props.put("!", "c");
+		props.put("|", "c");
+		props.put("&", "c");
 		return props;
 	}
 
@@ -129,6 +132,9 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		testFilter("(*=foo)", props, ISTRUE);
 		testFilter("(!  ab=b)", props, ISTRUE);
 		testFilter("(|   ab=b)", props, ISTRUE);
+		testFilter("(&=c)", props, ISTRUE);
+		testFilter("(!=c)", props, ISTRUE);
+		testFilter("(|=c)", props, ISTRUE);
 		testFilter("(&    ab=b)", props, ISTRUE);
 		testFilter("(!ab=*)", props, ISFALSE);
 		testFilter("(|ab=*)", props, ISFALSE);
