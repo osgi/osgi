@@ -43,6 +43,7 @@
 		    tofile="${target}/javadoc/LICENSE.html"
 	    	verbose="${verbose}"
 	      	preservelastmodified="true" />
+		<zip destfile="${target}/javadoc.zip" basedir="${target}/javadoc"></zip>
     </target>
 	
 	<target name="japitools" depends="init">
