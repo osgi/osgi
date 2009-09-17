@@ -25,13 +25,11 @@ import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.RuntimeException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -293,47 +291,13 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 			return;
 
 		Set set = new TreeSet(Arrays.asList(exceptions));
-        for (int i = 0; exceptionTypes != null && i < exceptionTypes.length; i++) {
-            String name = exceptionTypes[i].getName().replace('.', '/');
-            if (!set.remove(name)) {
-                // check to see if exceptionTypes[i] is unchecked exception by
-                // checking whether it extends the RuntimeException
-                // if so, it is not required to be there.
-                Class superClass = exceptionTypes[i].getSuperclass();
-                if (superClass != null
-                        && superClass.getName().equals(
-                                RuntimeException.class.getName())) {
-                    continue;
-                }
-                fail("Superfluous Exception " + exceptionTypes[i]);
-            }
-        }
-        if (!set.isEmpty()) {
-            // check the content of the set. if the remaining exception
-            // is unchecked exception, remove it off the set.
-            Iterator it = set.iterator();
-            while (it.hasNext()) {
-                String ex = (String) it.next();
-                ex = ex.replace('/', '.');
-                Class exClazz;
-                try {
-                    exClazz = Class.forName(ex);
-                    if (exClazz != null
-                            && exClazz.getSuperclass() != null
-                            && exClazz.getSuperclass().getName().equals(
-                                    RuntimeException.class.getName())) {
-                        it.remove();
-                    }
-                } catch (ClassNotFoundException e) {
-                    // ignore - if unable to load the class do nothing
-                }
-            }
-
-            // recheck if set is still empty, if not fail the test
-            if (!set.isEmpty()) {
-                fail("Missing declared exceptions: " + set);
-            }
-        }
+		for (int i = 0; exceptionTypes != null && i < exceptionTypes.length; i++) {
+			String name = exceptionTypes[i].getName().replace('.', '/');
+			if (!set.remove(name))
+				fail("Superfluous Exception " + exceptionTypes[i]);
+		}
+		if (!set.isEmpty())
+			fail("Missing declared exceptions: " + set);
 	}
 
 	private void checkInterfaces(Class c, String[] interfaces) {
