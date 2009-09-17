@@ -79,6 +79,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		props.put("!", "c");
 		props.put("|", "c");
 		props.put("&", "c");
+		props.put("empty", "");
 		return props;
 	}
 
@@ -139,6 +140,35 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		testFilter("(!ab=*)", props, ISFALSE);
 		testFilter("(|ab=*)", props, ISFALSE);
 		testFilter("(&ab=*)", props, ISFALSE);
+		testFilter("(empty=)", props, ISTRUE);
+		testFilter("(empty=*)", props, ISTRUE);
+	}
+
+	public void testInvalidValues() {
+		Dictionary props = new Hashtable();
+		props.put("a", new Integer(1));
+		testFilter("(a=b)", props, ISFALSE);
+		testFilter("(a=)", props, ISFALSE);
+		props.put("a", new Long(1l));
+		testFilter("(a=b)", props, ISFALSE);
+		testFilter("(a=)", props, ISFALSE);
+		props.put("a", new Short((short) 1));
+		testFilter("(a=b)", props, ISFALSE);
+		testFilter("(a=)", props, ISFALSE);
+		props.put("a", new Byte((byte) 1));
+		testFilter("(a=b)", props, ISFALSE);
+		testFilter("(a=)", props, ISFALSE);
+		props.put("a", new Character('a'));
+		testFilter("(a=)", props, ISFALSE);
+		props.put("a", new Float(1.0f));
+		testFilter("(a=b)", props, ISFALSE);
+		testFilter("(a=)", props, ISFALSE);
+		props.put("a", new Double(1.0d));
+		testFilter("(a=b)", props, ISFALSE);
+		testFilter("(a=)", props, ISFALSE);
+		props.put("a", new Boolean(true));
+		testFilter("(a=b)", props, ISFALSE);
+		testFilter("(a=)", props, ISFALSE);
 	}
 
 	public void testIllegal() {

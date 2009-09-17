@@ -919,7 +919,13 @@ public class FrameworkUtil {
 			if (operation == SUBSTRING) {
 				return false;
 			}
-			int intval2 = Integer.parseInt(((String) value2).trim());
+			int intval2;
+			try {
+				intval2 = Integer.parseInt(((String) value2).trim());
+			}
+			catch (IllegalArgumentException e) {
+				return false;
+			}
 			switch (operation) {
 				case APPROX :
 				case EQUAL : {
@@ -939,7 +945,14 @@ public class FrameworkUtil {
 			if (operation == SUBSTRING) {
 				return false;
 			}
-			long longval2 = Long.parseLong(((String) value2).trim());
+			long longval2;
+			try {
+				longval2 = Long.parseLong(((String) value2).trim());
+			}
+			catch (IllegalArgumentException e) {
+				return false;
+			}
+
 			switch (operation) {
 				case APPROX :
 				case EQUAL : {
@@ -959,7 +972,14 @@ public class FrameworkUtil {
 			if (operation == SUBSTRING) {
 				return false;
 			}
-			byte byteval2 = Byte.parseByte(((String) value2).trim());
+			byte byteval2;
+			try {
+				byteval2 = Byte.parseByte(((String) value2).trim());
+			}
+			catch (IllegalArgumentException e) {
+				return false;
+			}
+
 			switch (operation) {
 				case APPROX :
 				case EQUAL : {
@@ -980,7 +1000,14 @@ public class FrameworkUtil {
 			if (operation == SUBSTRING) {
 				return false;
 			}
-			short shortval2 = Short.parseShort(((String) value2).trim());
+			short shortval2;
+			try {
+				shortval2 = Short.parseShort(((String) value2).trim());
+			}
+			catch (IllegalArgumentException e) {
+				return false;
+			}
+
 			switch (operation) {
 				case APPROX :
 				case EQUAL : {
@@ -1001,7 +1028,14 @@ public class FrameworkUtil {
 			if (operation == SUBSTRING) {
 				return false;
 			}
-			char charval2 = (((String) value2).trim()).charAt(0);
+			char charval2;
+			try {
+				charval2 = (((String) value2).trim()).charAt(0);
+			}
+			catch (IndexOutOfBoundsException e) {
+				return false;
+			}
+
 			switch (operation) {
 				case EQUAL : {
 					return charval == charval2;
@@ -1046,7 +1080,14 @@ public class FrameworkUtil {
 			if (operation == SUBSTRING) {
 				return false;
 			}
-			float floatval2 = Float.parseFloat(((String) value2).trim());
+			float floatval2;
+			try {
+				floatval2 = Float.parseFloat(((String) value2).trim());
+			}
+			catch (IllegalArgumentException e) {
+				return false;
+			}
+
 			switch (operation) {
 				case APPROX :
 				case EQUAL : {
@@ -1067,7 +1108,14 @@ public class FrameworkUtil {
 			if (operation == SUBSTRING) {
 				return false;
 			}
-			double doubleval2 = Double.parseDouble(((String) value2).trim());
+			double doubleval2;
+			try {
+				doubleval2 = Double.parseDouble(((String) value2).trim());
+			}
+			catch (IllegalArgumentException e) {
+				return false;
+			}
+
 			switch (operation) {
 				case APPROX :
 				case EQUAL : {
@@ -1511,8 +1559,7 @@ public class FrameworkUtil {
 				int size = operands.size();
 
 				if (size == 0) {
-					throw new InvalidSyntaxException("Missing value: "
-							+ filterstring.substring(pos), filterstring);
+					return "";
 				}
 
 				if (size == 1) {
