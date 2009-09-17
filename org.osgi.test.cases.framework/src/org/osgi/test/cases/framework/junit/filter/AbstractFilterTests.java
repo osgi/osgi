@@ -57,7 +57,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		props.put("floatvalue", new Float(1.01));
 		props.put("doublevalue", new Double(2.01));
 		props.put("charvalue", new Character('A'));
-		props.put("booleanvalue", new Boolean(false));
+		props.put("booleanvalue", new Boolean(true));
 		props.put("weirdvalue", new Hashtable());
 		props.put("primintarrayvalue", new int[] {1, 2, 3});
 		props.put("primlongarrayvalue", new long[] {1, 2, 3});
@@ -118,7 +118,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		testFilter("(floatValue >=1.0) ", props, ISTRUE);
 		testFilter("(doubleValue <=2.011) ", props, ISTRUE);
 		testFilter("(charValue ~=a) ", props, ISTRUE);
-		testFilter("(booleanValue =false) ", props, ISTRUE);
+		testFilter("(booleanValue =true) ", props, ISTRUE);
 		testFilter("(primIntArrayValue =1) ", props, ISTRUE);
 		testFilter("(primLongArrayValue =2) ", props, ISTRUE);
 		testFilter("(primByteArrayValue =3) ", props, ISTRUE);
@@ -148,30 +148,30 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 	}
 
 	public void testInvalidValues() {
-		Dictionary props = new Hashtable();
-		props.put("a", new Integer(1));
-		testFilter("(a=b)", props, ISFALSE);
-		testFilter("(a=)", props, ISFALSE);
-		props.put("a", new Long(1l));
-		testFilter("(a=b)", props, ISFALSE);
-		testFilter("(a=)", props, ISFALSE);
-		props.put("a", new Short((short) 1));
-		testFilter("(a=b)", props, ISFALSE);
-		testFilter("(a=)", props, ISFALSE);
-		props.put("a", new Byte((byte) 1));
-		testFilter("(a=b)", props, ISFALSE);
-		testFilter("(a=)", props, ISFALSE);
-		props.put("a", new Character('a'));
-		testFilter("(a=)", props, ISFALSE);
-		props.put("a", new Float(1.0f));
-		testFilter("(a=b)", props, ISFALSE);
-		testFilter("(a=)", props, ISFALSE);
-		props.put("a", new Double(1.0d));
-		testFilter("(a=b)", props, ISFALSE);
-		testFilter("(a=)", props, ISFALSE);
-		props.put("a", new Boolean(true));
-		testFilter("(a=b)", props, ISFALSE);
-		testFilter("(a=)", props, ISFALSE);
+		Dictionary props = getProperties();
+		testFilter("(intvalue=*)", props, ISTRUE);
+		testFilter("(intvalue=b)", props, ISFALSE);
+		testFilter("(intvalue=)", props, ISFALSE);
+		testFilter("(longvalue=*)", props, ISTRUE);
+		testFilter("(longvalue=b)", props, ISFALSE);
+		testFilter("(longvalue=)", props, ISFALSE);
+		testFilter("(shortvalue=*)", props, ISTRUE);
+		testFilter("(shortvalue=b)", props, ISFALSE);
+		testFilter("(shortvalue=)", props, ISFALSE);
+		testFilter("(bytevalue=*)", props, ISTRUE);
+		testFilter("(bytevalue=b)", props, ISFALSE);
+		testFilter("(bytevalue=)", props, ISFALSE);
+		testFilter("(charvalue=*)", props, ISTRUE);
+		testFilter("(charvalue=)", props, ISFALSE);
+		testFilter("(floatvalue=*)", props, ISTRUE);
+		testFilter("(floatvalue=b)", props, ISFALSE);
+		testFilter("(floatvalue=)", props, ISFALSE);
+		testFilter("(doublevalue=*)", props, ISTRUE);
+		testFilter("(doublevalue=b)", props, ISFALSE);
+		testFilter("(doublevalue=)", props, ISFALSE);
+		testFilter("(booleanvalue=*)", props, ISTRUE);
+		testFilter("(booleanvalue=b)", props, ISFALSE);
+		testFilter("(booleanvalue=)", props, ISFALSE);
 	}
 
 	public void testIllegal() {
@@ -199,7 +199,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		testFilter("(floatValue =1*0) ", props, ISFALSE);
 		testFilter("(doubleValue =2*011) ", props, ISFALSE);
 		testFilter("(charValue =a*) ", props, ISFALSE);
-		testFilter("(booleanValue =f*lse) ", props, ISFALSE);
+		testFilter("(booleanValue =t*ue) ", props, ISFALSE);
 	}
 
 	public void testNormalization() {
