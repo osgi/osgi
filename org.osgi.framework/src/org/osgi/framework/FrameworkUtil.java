@@ -1030,7 +1030,7 @@ public class FrameworkUtil {
 			}
 			char charval2;
 			try {
-				charval2 = (((String) value2).trim()).charAt(0);
+				charval2 = ((String) value2).charAt(0);
 			}
 			catch (IndexOutOfBoundsException e) {
 				return false;

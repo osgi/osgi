@@ -80,6 +80,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		props.put("|", "c");
 		props.put("&", "c");
 		props.put("empty", "");
+		props.put("space", new Character(' '));
 		return props;
 	}
 
@@ -142,6 +143,8 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		testFilter("(&ab=*)", props, ISFALSE);
 		testFilter("(empty=)", props, ISTRUE);
 		testFilter("(empty=*)", props, ISTRUE);
+		testFilter("(space= )", props, ISTRUE);
+		testFilter("(space=*)", props, ISTRUE);
 	}
 
 	public void testInvalidValues() {
