@@ -38,7 +38,7 @@ import org.osgi.framework.*;
  * <code>EndpointPermission</code> to get the specific service.
  * 
  * @ThreadSafe
- * @version $Revision: 7189 $
+ * @version $Revision$
  */
 
 public final class EndpointPermission extends BasicPermission {

@@ -33,7 +33,7 @@ import org.osgi.framework.*;
  * bundles that need a service.
  * 
  * @Immutable
- * @version $Revision: 7190 $
+ * @version $Revision$
  */
 public class EndpointDescription implements Serializable {
     private static final long serialVersionUID = 1L;
