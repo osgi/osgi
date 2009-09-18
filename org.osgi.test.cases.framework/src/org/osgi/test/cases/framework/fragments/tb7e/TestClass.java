@@ -1,5 +1,5 @@
 /*
- * $Id: TestClass.java 4779 2007-04-06 02:46:49Z bjhargrave $
+ * $Id$
  * 
  * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
  * 
@@ -30,7 +30,7 @@ package org.osgi.test.cases.framework.fragments.tb7e;
 /**
  * Some test resource.
  *
- * @version $Revision: 4779 $
+ * @version $Revision$
  */
 public class TestClass {
 	

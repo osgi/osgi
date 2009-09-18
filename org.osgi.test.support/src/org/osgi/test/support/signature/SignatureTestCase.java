@@ -39,7 +39,7 @@ import org.osgi.test.support.OSGiTestCase;
 
 /**
  * 
- * @version $Revision: 7050 $
+ * @version $Revision$
  */
 public abstract class SignatureTestCase extends OSGiTestCase implements
 		ParserCallback {

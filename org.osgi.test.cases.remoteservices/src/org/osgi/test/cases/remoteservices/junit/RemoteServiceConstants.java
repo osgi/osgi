@@ -20,7 +20,7 @@ package org.osgi.test.cases.remoteservices.junit;
  * suitable for exporting remotely and/or on imported services.
  * 
  * @ThreadSafe
- * @version $Revision: 7220 $
+ * @version $Revision$
  */
 public interface RemoteServiceConstants {
 	/**

@@ -1,5 +1,5 @@
 /*
- * $Id: TBCService.java 4732 2007-04-06 02:38:19Z bjhargrave $
+ * $Id$
  * 
  * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
  * 
@@ -34,7 +34,7 @@ import org.osgi.service.event.Event;
 /**
  * Dummy service to check exporter
  * 
- * @version $Revision: 4732 $
+ * @version $Revision$
  */
 public interface TBCService {
   

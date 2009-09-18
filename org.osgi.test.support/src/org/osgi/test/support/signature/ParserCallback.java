@@ -1,5 +1,5 @@
 /*
- * $Id: ParserCallback.java 4756 2007-04-06 02:42:28Z bjhargrave $
+ * $Id$
  * 
  * Copyright (c) The OSGi Alliance (2006). All Rights Reserved.
  * 

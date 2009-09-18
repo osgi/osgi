@@ -1,5 +1,5 @@
 /*
- * $Id: GetBundle.java 6461 2009-02-24 16:52:28Z tjwatson@us.ibm.com $
+ * $Id$
  * 
  * Copyright (c) OSGi Alliance (2005). All Rights Reserved.
  * 
@@ -40,7 +40,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * Test the method org.osgi.service.packageadmin.PackageAdmin.getBundle().
  * 
  * @author left
- * @version $Revision: 6461 $
+ * @version $Revision$
  */
 public class GetBundle {
 

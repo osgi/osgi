@@ -1,5 +1,5 @@
 /*
- * $Id: Activator.java $
+ * $Id$
  * 
  * Copyright (c) The OSGi Alliance (2007). All Rights Reserved.
  * 
