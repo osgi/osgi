@@ -75,7 +75,7 @@ public interface ServiceRegistration {
 	 * @throws IllegalArgumentException If <code>properties</code> contains
 	 *         case variants of the same key name.
 	 */
-	public void setProperties(Dictionary properties);
+	public void setProperties(Dictionary<String, Object> properties);
 
 	/**
 	 * Unregisters a service. Remove a <code>ServiceRegistration</code> object

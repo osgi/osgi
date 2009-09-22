@@ -435,7 +435,7 @@ public interface BundleContext {
 	 * @see ServiceFactory
 	 */
 	public ServiceRegistration registerService(String[] clazzes,
-			Object service, Dictionary properties);
+			Object service, Dictionary<String, Object> properties);
 
 	/**
 	 * Registers the specified service object with the specified properties
@@ -460,7 +460,7 @@ public interface BundleContext {
 	 * @see #registerService(String[], Object, Dictionary)
 	 */
 	public ServiceRegistration registerService(String clazz, Object service,
-			Dictionary properties);
+			Dictionary<String, Object> properties);
 
 	/**
 	 * Returns an array of <code>ServiceReference</code> objects. The returned

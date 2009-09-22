@@ -71,14 +71,15 @@ class SignerProperty {
 		SignerProperty other = (SignerProperty) o;
 		Bundle matchBundle = bundle != null ? bundle : other.bundle;
 		String matchPattern = bundle != null ? other.pattern : pattern;
-		Map/* <X509Certificate, List<X509Certificate>> */signers = matchBundle
+		Map<X509Certificate, List<X509Certificate>> signers = matchBundle
 				.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
-		for (Iterator iSigners = signers.values().iterator(); iSigners
-				.hasNext();) {
-			List/* <X509Certificate> */signerCerts = (List) iSigners.next();
-			List/* <String> */dnChain = new ArrayList(signerCerts.size());
-			for (Iterator iCerts = signerCerts.iterator(); iCerts.hasNext();) {
-				dnChain.add(((X509Certificate) iCerts.next()).getSubjectDN()
+		for (Iterator<List<X509Certificate>> iSigners = signers.values()
+				.iterator(); iSigners.hasNext();) {
+			List<X509Certificate> signerCerts = iSigners.next();
+			List<String> dnChain = new ArrayList<String>(signerCerts.size());
+			for (Iterator<X509Certificate> iCerts = signerCerts.iterator(); iCerts
+					.hasNext();) {
+				dnChain.add(iCerts.next().getSubjectDN()
 						.getName());
 			}
 			if (FrameworkUtil
@@ -106,7 +107,7 @@ class SignerProperty {
 		if (bundle == null) {
 			return false;
 		}
-		Map/* <X509Certificate, List<X509Certificate>> */signers = bundle
+		Map<X509Certificate, List<X509Certificate>> signers = bundle
 				.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
 		return !signers.isEmpty();
 	}

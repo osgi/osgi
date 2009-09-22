@@ -19,8 +19,10 @@ package org.osgi.framework;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.security.cert.X509Certificate;
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -693,7 +695,7 @@ public interface Bundle {
 	 *         the Java Runtime Environment supports permissions.
 	 * @see Constants#BUNDLE_LOCALIZATION
 	 */
-	public Dictionary/* <String,String> */getHeaders();
+	public Dictionary<String,String> getHeaders();
 
 	/**
 	 * Returns this bundle's unique identifier. This bundle is assigned a unique
@@ -910,7 +912,7 @@ public interface Bundle {
 	 * @see Constants#BUNDLE_LOCALIZATION
 	 * @since 1.3
 	 */
-	public Dictionary/* <String,String> */getHeaders(String locale);
+	public Dictionary<String, String> getHeaders(String locale);
 
 	/**
 	 * Returns the symbolic name of this bundle as specified by its
@@ -961,7 +963,7 @@ public interface Bundle {
 	 *         uninstalled.
 	 * @since 1.3
 	 */
-	public Class loadClass(String name) throws ClassNotFoundException;
+	public Class< ? > loadClass(String name) throws ClassNotFoundException;
 
 	/**
 	 * Find the specified resources from this bundle's class loader.
@@ -990,7 +992,7 @@ public interface Bundle {
 	 * @throws IOException If there is an I/O error.
 	 * @since 1.3
 	 */
-	public Enumeration/* <URL> */getResources(String name) throws IOException;
+	public Enumeration<URL> getResources(String name) throws IOException;
 
 	/**
 	 * Returns an Enumeration of all the paths (<code>String</code> objects)
@@ -1020,7 +1022,7 @@ public interface Bundle {
 	 *         uninstalled.
 	 * @since 1.3
 	 */
-	public Enumeration/* <String> */getEntryPaths(String path);
+	public Enumeration<String> getEntryPaths(String path);
 
 	/**
 	 * Returns a URL to the entry at the specified path in this bundle. This
@@ -1125,7 +1127,7 @@ public interface Bundle {
 	 * @throws IllegalStateException If this bundle has been uninstalled.
 	 * @since 1.3
 	 */
-	public Enumeration/* <URL> */findEntries(String path, String filePattern,
+	public Enumeration<URL> findEntries(String path, String filePattern,
 			boolean recurse);
 
 	/**
@@ -1175,7 +1177,7 @@ public interface Bundle {
 	 *         {@link #SIGNERS_TRUSTED}.
 	 * @since 1.5
 	 */
-	public Map/* <X509Certificate, List<X509Certificate>> */getSignerCertificates(
+	public Map<X509Certificate, List<X509Certificate>> getSignerCertificates(
 			int signersType);
 	
 	/**

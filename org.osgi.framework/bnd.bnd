@@ -1,5 +1,7 @@
+javac.source            = 1.5
+javac.target            = 1.5
 -nope							=true
 nodeploy						=true
 
 -buildpath = \
-	ee.minimum;					version=1.2
+	ee.j2se;					version=1.5
