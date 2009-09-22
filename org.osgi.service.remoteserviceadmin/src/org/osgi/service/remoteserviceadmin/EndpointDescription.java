@@ -15,10 +15,17 @@
  */
 package org.osgi.service.remoteserviceadmin;
 
-import java.io.*;
-import java.util.*;
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
-import org.osgi.framework.*;
+import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.Version;
 
 /**
  * A description of an endpoint that provides sufficient information for a
@@ -35,14 +42,25 @@ import org.osgi.framework.*;
  * @Immutable
  * @version $Revision$
  */
+/*
+ * TODO Why is this serializable? That makes the serializable form public API!
+ * There is no serializable code in here. You really want the default
+ * serialization of HashMap for the properties and whatever concrete list that
+ * interfaces holds? Also, since this class is immutable, you can also be
+ * serializable without mucho effort and care.
+ */
 public class EndpointDescription implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private static final Version nullVersion = new Version("0");
 
-	final Map/* <String,Object> */properties = new Hashtable/* <String,Object> */();
-	final List /* String */interfaces;
-	final String remoteServiceId;
-	final String uri;
+	private final Map			/* <String,Object> */properties	= new HashMap/*
+																			 * <String
+																			 * ,
+																			 * Object
+																			 * >
+																			 */();
+	private final List			/* String */interfaces;
+	private final String		remoteServiceId;
+	private final String		uri;
 
 	/**
 	 * Create an Endpoint Description based on a Map.
@@ -132,7 +150,7 @@ public class EndpointDescription implements Serializable {
 	 * @throws IllegalArgumentException
 	 *             when
 	 */
-	protected List /* <String> */verifyInterfacesProperty() {
+	private List /* <String> */verifyInterfacesProperty() {
 		List l = null;
 
 		Object objectClass = properties.get(Constants.OBJECTCLASS);
@@ -167,7 +185,7 @@ public class EndpointDescription implements Serializable {
 	 *             when the property is not set or doesn't have the correct data
 	 *             type.
 	 */
-	protected String verifyStringProperty(String propName) {
+	private String verifyStringProperty(String propName) {
 		Object r = properties.get(propName);
 		if (r == null) {
 			throw new IllegalArgumentException("Required property not set: "
@@ -231,7 +249,7 @@ public class EndpointDescription implements Serializable {
 	public Version getInterfaceVersion(String name) {
 		String v = (String) properties.get("endpoint.version." + name);
 		if (v == null) {
-			return nullVersion;
+			return Version.emptyVersion;
 		} else {
 			return new Version(v);
 		}

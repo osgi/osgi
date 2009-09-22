@@ -1,8 +1,10 @@
 package org.osgi.service.remoteserviceadmin;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
-import org.osgi.framework.*;
+import org.osgi.framework.ServiceReference;
 
 /**
  * A Remote Service Admin manages the import and export of services.
@@ -80,13 +82,13 @@ public interface RemoteServiceAdmin {
 	 * 
 	 * @return A collection of Export Registrations that are currently active.
 	 */
-	Collection/*<? extends ExportRegistration>*/ getExportedServices();
+	Collection/* <ExportRegistration> */getExportedServices();
 
 	/**
 	 * Answer the currently active Import Registrations.
 	 * 
 	 * @return A collection of Import Registrations that are currently active.
 	 */
-	Collection/*<? extends ImportRegistration>*/ getImportedEndpoints();
+	Collection/* <ImportRegistration> */getImportedEndpoints();
 
 }

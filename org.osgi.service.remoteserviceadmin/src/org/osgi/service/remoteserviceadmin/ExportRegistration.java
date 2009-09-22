@@ -1,13 +1,13 @@
 package org.osgi.service.remoteserviceadmin;
 
-import org.osgi.framework.*;
+import org.osgi.framework.ServiceReference;
 
 /**
  * An Export Registration associates a service to a local endpoint.
  * 
  * The Export Registration can be used to delete the endpoint associated with an
- * this registration. It is created with the{@link RemoteAdmin#exportService(ServiceReference)}
- * method.
+ * this registration. It is created with the
+ * {@link RemoteServiceAdmin#exportService(ServiceReference)} method.
  * 
  * When this Export Registration has been unregistered, the methods must all
  * return <code>null</code>.

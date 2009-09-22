@@ -1,6 +1,6 @@
 package org.osgi.service.remoteserviceadmin;
 
-import org.osgi.framework.*;
+import org.osgi.framework.Bundle;
 
 /**
  * 
@@ -16,7 +16,7 @@ public class RemoteAdminEvent {
 	 * Registrations.
 	 * 
 	 */
-	public static int IMPORT_REGISTRATION = 1;
+	public static final int				IMPORT_REGISTRATION		= 1;
 
 	/**
 	 * Add an export registration. The Remote Services Admin will call this
@@ -24,49 +24,58 @@ public class RemoteAdminEvent {
 	 * Remote Service Admin must notify the listener of all existing Export
 	 * Registrations.
 	 */
-	public static int EXPORT_REGISTRATION = 2;
+	public static final int				EXPORT_REGISTRATION		= 2;
 
 	/**
 	 * Remove an export registration. The Remote Services Admin will call this
 	 * method when it removes the export of a service.
 	 * 
 	 */
-	public static int EXPORT_UNREGISTRATION = 3;
+	public static final int				EXPORT_UNREGISTRATION	= 3;
 
 	/**
 	 * Remove an import registration. The Remote Services Admin will call this
 	 * method when it removes the import of a service.
 	 * 
 	 */
-	public static int IMPORT_UNREGISTRATION = 4;
+	public static final int				IMPORT_UNREGISTRATION	= 4;
 
 	/**
 	 * A fatal importing error occurred. The Import Registration has been
 	 * closed.
 	 */
-	public static int IMPORT_ERROR = 5;
+	public static final int				IMPORT_ERROR			= 5;
 
 	/**
 	 * A fatal exporting error occurred. The Export Registration has been
 	 * closed.
 	 */
-	public static int EXPORT_ERROR = 6;
+	public static final int				EXPORT_ERROR			= 6;
 
 	/**
 	 * A problematic situation occurred, the export is still active.
 	 */
-	public static int EXPORT_WARNING = 7;
+	public static final int				EXPORT_WARNING			= 7;
 	/**
 	 * A problematic situation occurred, the import is still active.
 	 */
-	public static int IMPORT_WARNING = 8;
+	public static final int				IMPORT_WARNING			= 8;
 
-	private ImportRegistration importRegistration;
-	private ExportRegistration exportRegistration;
-	private Throwable exception;
-	private int type;
-	private Bundle source;
+	private final ImportRegistration	importRegistration;
+	private final ExportRegistration	exportRegistration;
+	private final Throwable				exception;
+	private final int					type;
+	private final Bundle				source;
 
+	/**
+	 * TODO Write Javadoc
+	 * 
+	 * @param type
+	 * @param source
+	 * @param importRegistration
+	 * @param exportRegistration
+	 * @param exception
+	 */
 	RemoteAdminEvent(int type, Bundle source,
 			ImportRegistration importRegistration,
 			ExportRegistration exportRegistration, Throwable exception) {

@@ -147,11 +147,13 @@ public class RemoteConstants {
 	final public static String ENDPOINT_REMOTE_SERVICE_ID = "endpoint.remote.service.id";
 
 	/**
-	 * The key for a framework property that defines the UUID of the framework.
+	 * TODO This constant needs to be defined in the framework. The key for a
+	 * framework property that defines the UUID of the framework.
 	 * 
 	 * The property must be set by the framework or through configuration before
 	 * the VM is started or some bundle. The value must be a Universally Unique
-	 * Id, it must not contain any dots ('.' \u002E).
+	 * Id, it must not contain any dots ('.' \u002E). TODO Why must it not
+	 * contain .?
 	 */
 	public final static String FRAMEWORK_UUID = "org.osgi.framework.uuid";
 }
