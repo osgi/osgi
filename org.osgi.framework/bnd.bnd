@@ -1,6 +1,0 @@
-bin                     = bin
--nope							=true
-nodeploy						=true
-
--buildpath = \
-	ee.j2se;					version=1.5
