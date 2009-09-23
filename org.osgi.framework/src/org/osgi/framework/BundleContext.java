@@ -311,7 +311,7 @@ public interface BundleContext extends Framework {
 	 * @see ServiceRegistration
 	 * @see ServiceFactory
 	 */
-	public ServiceRegistration<Object> registerService(String[] clazzes,
+	public ServiceRegistration< ? > registerService(String[] clazzes,
 			Object service, Dictionary<String, Object> properties);
 
 	/**
@@ -336,7 +336,7 @@ public interface BundleContext extends Framework {
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @see #registerService(String[], Object, Dictionary)
 	 */
-	public ServiceRegistration<Object> registerService(String clazz,
+	public ServiceRegistration< ? > registerService(String clazz,
 			Object service, Dictionary<String, Object> properties);
 
 	/**

@@ -1138,8 +1138,7 @@ public class FrameworkUtil {
 		private static final Class[]	constructorType	= new Class[] {String.class};
 
 		private boolean compare_Comparable(int operation,
-				Comparable<Object> value1,
-				Object value2) {
+				Comparable<Object> value1, Object value2) {
 			if (operation == SUBSTRING) {
 				return false;
 			}

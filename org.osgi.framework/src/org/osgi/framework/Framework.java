@@ -206,7 +206,7 @@ public interface Framework {
 	 *         contains an invalid filter expression that cannot be parsed.
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 */
-	public ServiceReference<Object>[] getServiceReferences(String clazz,
+	public ServiceReference< ? >[] getServiceReferences(String clazz,
 			String filter)
 			throws InvalidSyntaxException;
 
@@ -259,7 +259,7 @@ public interface Framework {
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @since 1.3
 	 */
-	public ServiceReference<Object>[] getAllServiceReferences(String clazz,
+	public ServiceReference< ? >[] getAllServiceReferences(String clazz,
 			String filter) throws InvalidSyntaxException;
 
 	/**
@@ -291,7 +291,7 @@ public interface Framework {
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @see #getServiceReferences(String, String)
 	 */
-	public ServiceReference<Object> getServiceReference(String clazz);
+	public ServiceReference< ? > getServiceReference(String clazz);
 
 	/**
 	 * Creates a <code>Filter</code> object. This <code>Filter</code> object may
