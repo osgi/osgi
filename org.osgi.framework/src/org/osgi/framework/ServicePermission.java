@@ -87,7 +87,7 @@ public final class ServicePermission extends BasicPermission {
 	 * The service used by this ServicePermission. Must be null if not
 	 * constructed with a service.
 	 */
-	transient final ServiceReference		service;
+	transient final ServiceReference< ? >					service;
 
 	/**
 	 * The object classes for this ServicePermission. Must be null if not
@@ -192,7 +192,7 @@ public final class ServicePermission extends BasicPermission {
 	 *         <code>get</code> or reference is <code>null</code>.
 	 * @since 1.5
 	 */
-	public ServicePermission(ServiceReference reference, String actions) {
+	public ServicePermission(ServiceReference< ? > reference, String actions) {
 		super(createName(reference));
 		setTransients(null, parseActions(actions));
 		this.service = reference;
@@ -209,7 +209,7 @@ public final class ServicePermission extends BasicPermission {
 	 * @param reference ServiceReference to use to create permission name.
 	 * @return permission name.
 	 */
-	private static String createName(ServiceReference reference) {
+	private static String createName(ServiceReference< ? > reference) {
 		if (reference == null) {
 			throw new IllegalArgumentException("reference must not be null");
 		}
@@ -599,9 +599,9 @@ public final class ServicePermission extends BasicPermission {
 	
 	private static class Properties extends Dictionary<String, Object> {
 		private final Map<String, Object>	properties;
-		private final ServiceReference	service;
+		private final ServiceReference< ? >	service;
 
-		Properties(Map<String, Object> properties, ServiceReference service) {
+		Properties(Map<String, Object> properties, ServiceReference< ? > service) {
 			this.properties = properties;
 			this.service = service;
 		}

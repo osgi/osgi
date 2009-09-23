@@ -55,7 +55,7 @@ public interface Filter {
 	 * @return <code>true</code> if the service's properties match this
 	 *         <code>Filter</code>; <code>false</code> otherwise.
 	 */
-	public boolean match(ServiceReference reference);
+	public boolean match(ServiceReference< ? > reference);
 
 	/**
 	 * Filter using a <code>Dictionary</code>. This <code>Filter</code> is

@@ -59,5 +59,5 @@ public interface FindHook {
 	 *        synchronized.
 	 */
 	void find(BundleContext context, String name, String filter,
-			boolean allServices, Collection<ServiceReference> references);
+			boolean allServices, Collection<ServiceReference< ? >> references);
 }

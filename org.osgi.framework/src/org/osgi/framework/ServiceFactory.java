@@ -21,10 +21,9 @@ package org.osgi.framework;
  * environment.
  * 
  * <p>
- * When registering a service, a <code>ServiceFactory</code> object can be
- * used instead of a service object, so that the bundle developer can gain
- * control of the specific service object granted to a bundle that is using the
- * service.
+ * When registering a service, a <code>ServiceFactory</code> object can be used
+ * instead of a service object, so that the bundle developer can gain control of
+ * the specific service object granted to a bundle that is using the service.
  * 
  * <p>
  * When this happens, the
@@ -44,12 +43,13 @@ package org.osgi.framework;
  * not made available to other bundles in the OSGi environment. The Framework
  * may concurrently call a <code>ServiceFactory</code>.
  * 
+ * @param <S> Type of Service
  * @see BundleContext#getService
  * @ThreadSafe
  * @version $Revision$
  */
 
-public interface ServiceFactory {
+public interface ServiceFactory<S> {
 	/**
 	 * Creates a new service object.
 	 * 
@@ -79,7 +79,7 @@ public interface ServiceFactory {
 	 *         the classes named when the service was registered.
 	 * @see BundleContext#getService
 	 */
-	public Object getService(Bundle bundle, ServiceRegistration registration);
+	public S getService(Bundle bundle, ServiceRegistration<S> registration);
 
 	/**
 	 * Releases a service object.
@@ -95,6 +95,6 @@ public interface ServiceFactory {
 	 *        <code>ServiceFactory.getService</code> method.
 	 * @see BundleContext#ungetService
 	 */
-	public void ungetService(Bundle bundle, ServiceRegistration registration,
-			Object service);
+	public void ungetService(Bundle bundle, ServiceRegistration<S> registration,
+			S service);
 }

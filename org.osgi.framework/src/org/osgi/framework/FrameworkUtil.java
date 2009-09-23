@@ -396,7 +396,7 @@ public class FrameworkUtil {
 		 * @return <code>true</code> if the service's properties match this
 		 *         <code>Filter</code>; <code>false</code> otherwise.
 		 */
-		public boolean match(ServiceReference reference) {
+		public boolean match(ServiceReference< ? > reference) {
 			return match0(new ServiceReferenceDictionary(reference));
 		}
 
@@ -1672,9 +1672,9 @@ public class FrameworkUtil {
 	 */
 	private static class ServiceReferenceDictionary extends
 			Dictionary<String, Object> {
-		private final ServiceReference	reference;
+		private final ServiceReference< ? >	reference;
 
-		ServiceReferenceDictionary(ServiceReference reference) {
+		ServiceReferenceDictionary(ServiceReference< ? > reference) {
 			this.reference = reference;
 		}
 
