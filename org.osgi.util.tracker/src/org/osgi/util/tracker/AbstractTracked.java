@@ -34,7 +34,7 @@ import java.util.Map;
  * @version $Revision$
  * @since 1.4
  */
-abstract class AbstractTracked {
+abstract class AbstractTracked<S, R, T> {
 	/* set this to true to compile in debug messages */
 	static final boolean		DEBUG	= false;
 
@@ -43,7 +43,7 @@ abstract class AbstractTracked {
 	 * 
 	 * @GuardedBy this
 	 */
-	private final Map			tracked;
+	private final Map<S, T>		tracked;
 
 	/**
 	 * Modification count. This field is initialized to zero and incremented by
@@ -67,7 +67,7 @@ abstract class AbstractTracked {
 	 * 
 	 * @GuardedBy this
 	 */
-	private final List			adding;
+	private final List<S>		adding;
 
 	/**
 	 * true if the tracked object is closed.
@@ -94,16 +94,16 @@ abstract class AbstractTracked {
 	 * 
 	 * @GuardedBy this
 	 */
-	private final LinkedList	initial;
+	private final LinkedList<S>	initial;
 
 	/**
 	 * AbstractTracked constructor.
 	 */
 	AbstractTracked() {
-		tracked = new HashMap();
+		tracked = new HashMap<S, T>();
 		trackingCount = 0;
-		adding = new ArrayList(6);
-		initial = new LinkedList();
+		adding = new ArrayList<S>(6);
+		initial = new LinkedList<S>();
 		closed = false;
 	}
 
@@ -118,13 +118,13 @@ abstract class AbstractTracked {
 	 *        entries in the list are ignored.
 	 * @GuardedBy this
 	 */
-	void setInitial(Object[] list) {
+	void setInitial(S[] list) {
 		if (list == null) {
 			return;
 		}
 		int size = list.length;
 		for (int i = 0; i < size; i++) {
-			Object item = list[i];
+			S item = list[i];
 			if (item == null) {
 				continue;
 			}
@@ -145,7 +145,7 @@ abstract class AbstractTracked {
 	 */
 	void trackInitial() {
 		while (true) {
-			Object item;
+			S item;
 			synchronized (this) {
 				if (closed || (initial.size() == 0)) {
 					/*
@@ -202,8 +202,8 @@ abstract class AbstractTracked {
 	 * @param item Item to be tracked.
 	 * @param related Action related object.
 	 */
-	void track(final Object item, final Object related) {
-		final Object object;
+	void track(final S item, final R related) {
+		final T object;
 		synchronized (this) {
 			if (closed) {
 				return;
@@ -250,11 +250,11 @@ abstract class AbstractTracked {
 	 * @param item Item to be tracked.
 	 * @param related Action related object.
 	 */
-	private void trackAdding(final Object item, final Object related) {
+	private void trackAdding(final S item, final R related) {
 		if (DEBUG) {
 			System.out.println("AbstractTracked.trackAdding: " + item); //$NON-NLS-1$
 		}
-		Object object = null;
+		T object = null;
 		boolean becameUntracked = false;
 		/* Call customizer outside of synchronized region */
 		try {
@@ -305,8 +305,8 @@ abstract class AbstractTracked {
 	 * @param item Item to be untracked.
 	 * @param related Action related object.
 	 */
-	void untrack(final Object item, final Object related) {
-		final Object object;
+	void untrack(final S item, final R related) {
+		final T object;
 		synchronized (this) {
 			if (initial.remove(item)) { /*
 										 * if this item is already in the list
@@ -374,7 +374,7 @@ abstract class AbstractTracked {
 	 * 
 	 * @GuardedBy this
 	 */
-	Object getCustomizedObject(final Object item) {
+	T getCustomizedObject(final S item) {
 		return tracked.get(item);
 	}
 
@@ -386,7 +386,7 @@ abstract class AbstractTracked {
 	 *         items or a new array large enough to hold the tracked items.
 	 * @GuardedBy this
 	 */
-	Object[] getTracked(final Object[] list) {
+	S[] getTracked(final S[] list) {
 		return tracked.keySet().toArray(list);
 	}
 
@@ -423,7 +423,7 @@ abstract class AbstractTracked {
 	 * @return Customized object for the tracked item or <code>null</code> if
 	 *         the item is not to be tracked.
 	 */
-	abstract Object customizerAdding(final Object item, final Object related);
+	abstract T customizerAdding(final S item, final R related);
 
 	/**
 	 * Call the specific customizer modified method. This method must not be
@@ -433,8 +433,8 @@ abstract class AbstractTracked {
 	 * @param related Action related object.
 	 * @param object Customized object for the tracked item.
 	 */
-	abstract void customizerModified(final Object item, final Object related,
-			final Object object);
+	abstract void customizerModified(final S item, final R related,
+			final T object);
 
 	/**
 	 * Call the specific customizer removed method. This method must not be
@@ -444,6 +444,6 @@ abstract class AbstractTracked {
 	 * @param related Action related object.
 	 * @param object Customized object for the tracked item.
 	 */
-	abstract void customizerRemoved(final Object item, final Object related,
-			final Object object);
+	abstract void customizerRemoved(final S item, final R related,
+			final T object);
 }
