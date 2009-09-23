@@ -1,7 +1,0 @@
-javac.source            = 1.5
-javac.target            = 1.5
--nope							= true
-nodeploy						= true
-
--buildpath = \
-	org.osgi.framework;			version=project
