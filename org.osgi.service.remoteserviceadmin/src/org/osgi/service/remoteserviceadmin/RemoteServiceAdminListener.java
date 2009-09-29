@@ -7,9 +7,10 @@ package org.osgi.service.remoteserviceadmin;
  * @ThreadSafe
  */
 
-public interface RemoteAdminListener {
+public interface RemoteServiceAdminListener {
 	/**
+	 * Receive a Remote Service Admin event.
 	 * @param event
 	 */
-	void remoteAdminEvent( RemoteAdminEvent event);
+	void remoteAdminEvent( RemoteServiceAdminEvent event);
 }

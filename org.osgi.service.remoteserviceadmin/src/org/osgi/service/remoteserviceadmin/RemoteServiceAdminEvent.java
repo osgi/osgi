@@ -8,7 +8,7 @@ import org.osgi.framework.Bundle;
  * 
  * @Immutable
  */
-public class RemoteAdminEvent {
+public class RemoteServiceAdminEvent {
 	/**
 	 * Add an import registration. The Remote Services Admin will call this
 	 * method when it imports a service. When this service is registered, the
@@ -68,15 +68,15 @@ public class RemoteAdminEvent {
 	private final Bundle				source;
 
 	/**
-	 * TODO Write Javadoc
+	 * Private constructor.
 	 * 
-	 * @param type
-	 * @param source
-	 * @param importRegistration
-	 * @param exportRegistration
-	 * @param exception
+	 * @param type The event type
+	 * @param source The source bundle, must not be <code>null</code>.
+	 * @param importRegistration The importRegistration, can be <code>null</code>.
+	 * @param exportRegistration The exportRegistration, can be <code>null</code>.
+	 * @param exception Any exceptions encountered, can be <code>null</code>
 	 */
-	RemoteAdminEvent(int type, Bundle source,
+	RemoteServiceAdminEvent(int type, Bundle source,
 			ImportRegistration importRegistration,
 			ExportRegistration exportRegistration, Throwable exception) {
 		this.type = type;
@@ -87,21 +87,47 @@ public class RemoteAdminEvent {
 	}
 
 	/**
-	 * @return the importRegistration
+	 * Create a Remote Service Admin Event for an export issue.
+	 * 
+	 * @param type The event type
+	 * @param source The source bundle, must not be <code>null</code>.
+	 * @param exportRegistration The exportRegistration, can not be <code>null</code>.
+	 * @param exception Any exceptions encountered, can be <code>null</code>
+	 */
+	public RemoteServiceAdminEvent(int type, Bundle source,
+			ExportRegistration exportRegistration, Throwable exception) {
+		this(type, source, null, exportRegistration, exception);
+	}
+
+	/**
+	 * Create a Remote Service Admin Event for an import issue.
+	 * 
+	 * @param type The event type
+	 * @param source The source bundle, must not be <code>null</code>.
+	 * @param importRegistration The importRegistration, can not be <code>null</code>.
+	 * @param exception Any exceptions encountered, can be <code>null</code>
+	 */
+	public RemoteServiceAdminEvent(int type, Bundle source,
+			ImportRegistration importRegistration, Throwable exception) {
+		this(type, source, importRegistration, null, exception);
+	}
+
+	/**
+	 * @return the importRegistration or <code>null</code>
 	 */
 	public ImportRegistration getImportRegistration() {
 		return importRegistration;
 	}
 
 	/**
-	 * @return the exportRegistration
+	 * @return the exportRegistration or <code>null</code>
 	 */
 	public ExportRegistration getExportRegistration() {
 		return exportRegistration;
 	}
 
 	/**
-	 * @return the exception
+	 * @return the exception or <code>null</code>
 	 */
 	public Throwable getException() {
 		return exception;

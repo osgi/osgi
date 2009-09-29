@@ -2,19 +2,19 @@ package org.osgi.service.remoteserviceadmin;
 
 
 /**
- * A whiteboard service that represents a listener for endpoints.
+ * A white board service that represents a listener for endpoints.
  * 
  * An Endpoint Listener represents a participant in the distributed model that
  * is interested in Endpoint Descriptions.
  * 
- * This whiteboard service can be used in many different scenarios. However, the
- * primary use case is to allow a remote controller to be informed of End Point
+ * This white board service can be used in many different scenarios. However, the
+ * primary use case is to allow a remote manager to be informed of End Point
  * Descriptions available in the network and inform the network about available
  * End Point Descriptions.
  * 
- * Both the network bundle and the controller bundle register a Endpoint
- * Listener service. The controller informs the network bundle about End Points
- * that it creates. The network bundles then uses a protocol like for example
+ * Both the network bundle and the manager bundle register an Endpoint
+ * Listener service. The manager informs the network bundle about End Points
+ * that it creates. The network bundles then uses a protocol like
  * SLP to announce these local end-points to the network.
  * 
  * If the network bundle discovers a new Endpoint through its discovery
@@ -36,7 +36,7 @@ package org.osgi.service.remoteserviceadmin;
  *   (org.osgi.framework.uuid=72dc5fd9-5f8f-4f8f-9821-9ebb433a5b72)
  * </pre>
  * 
- * In the same vein, a controller that is only interested in remote Endpoint
+ * In the same vein, a manager that is only interested in remote Endpoint
  * Descriptions can use a filter like:
  * 
  * <pre>
@@ -47,7 +47,7 @@ package org.osgi.service.remoteserviceadmin;
  * can be found in the Framework properties.
  * 
  * The Endpoint Listener's scope maps very well to the service hooks. A
- * controller can just register all filters found from the Listener Hook as its
+ * manager can just register all filters found from the Listener Hook as its
  * scope. This will automatically provide it with all known endpoints that match
  * the given scope, without having to inspect the filter string.
  * 
@@ -90,12 +90,12 @@ public interface EndpointListener {
 	 *            The filter from the {@link #ENDPOINT_LISTENER_SCOPE} that
 	 *            matched the endpoint, must not be <code>null</code>.
 	 */
-	void addEndpoint(EndpointDescription endpoint, String matchedFilter);
+	void endpointAdded(EndpointDescription endpoint, String matchedFilter);
 
 	/**
 	 * Remove the registration of an endpoint.
 	 * 
-	 * If an endpoint that was registered with the {@link #addEndpoint}
+	 * If an endpoint that was registered with the {@link #endpointAdded(EndpointDescription, String)}
 	 * method is no longer available then this method should be called. This
 	 * will remove the endpoint from the listener.
 	 * 
@@ -105,6 +105,9 @@ public interface EndpointListener {
 	 * 
 	 * @param endpoint
 	 *            The Endpoint Description that is no longer valid.
+	 * @param matchedFilter
+	 *            The filter from the {@link #ENDPOINT_LISTENER_SCOPE} that
+	 *            matched the endpoint, must not be <code>null</code>.
 	 */
-	void removeEndpoint(EndpointDescription endpoint);
+	void endpointRemoved(EndpointDescription endpoint, String matchedFilter);
 }

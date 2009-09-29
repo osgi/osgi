@@ -15,17 +15,9 @@
  */
 package org.osgi.service.remoteserviceadmin;
 
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import org.osgi.framework.Constants;
-import org.osgi.framework.ServiceReference;
-import org.osgi.framework.Version;
+import org.osgi.framework.*;
 
 /**
  * A description of an endpoint that provides sufficient information for a
@@ -42,16 +34,8 @@ import org.osgi.framework.Version;
  * @Immutable
  * @version $Revision$
  */
-/*
- * TODO Why is this serializable? That makes the serializable form public API!
- * There is no serializable code in here. You really want the default
- * serialization of HashMap for the properties and whatever concrete list that
- * interfaces holds? Also, since this class is immutable, you can also be
- * serializable without mucho effort and care.
- */
-public class EndpointDescription implements Serializable {
-	private static final long serialVersionUID = 1L;
 
+public class EndpointDescription {
 	private final Map			/* <String,Object> */properties	= new HashMap/*
 																			 * <String
 																			 * ,
@@ -85,7 +69,7 @@ public class EndpointDescription implements Serializable {
 	 * of additional properties.
 	 * 
 	 * @param ref
-	 *            A service reference that is exportable
+	 *            A service reference that can be exported
 	 * @param properties
 	 *            Additional properties to add. Can be <code>null</code>.
 	 * @throws IllegalArgumentException
@@ -107,11 +91,11 @@ public class EndpointDescription implements Serializable {
 	}
 
 	/**
-	 * Create an Endpoint Description based on the uri, the remote service ID
+	 * Create an Endpoint Description based on the URI, the remote service ID
 	 * and the interface names, and optionally service properties.
 	 * 
 	 * @param uri
-	 *            The uri of the remote service.
+	 *            The URI of the remote service.
 	 * @param interfaceNames
 	 *            The names of the interfaces of the service to consider.
 	 * @param remoteServiceId
@@ -208,7 +192,7 @@ public class EndpointDescription implements Serializable {
 	 * The value of the URI is stored in the
 	 * {@link RemoteConstants#ENDPOINT_URI} property.
 	 * 
-	 * @return The URI of the endpoint, never null.
+	 * @return The URI of the endpoint, never <code>null</code>.
 	 */
 	public String getURI() {
 		return uri;
@@ -283,7 +267,7 @@ public class EndpointDescription implements Serializable {
 	 * service UUID. If two endpoints have the same URI, then they must refer to
 	 * the same OSGi service.
 	 * 
-	 * Starting . is not an OSGi service.
+	 * If the UUID starts with a dot ('.') then it does not identify an OSGi service.
 	 * 
 	 * @return Unique id of a service or <code>null</code> if this Endpoint
 	 *         Description does not relate to an OSGi service
@@ -336,7 +320,7 @@ public class EndpointDescription implements Serializable {
 	/**
 	 * Returns all endpoint properties.
 	 * 
-	 * @return An immutable map referring to the properties of this Endpoint
+	 * @return An unmodifiable map referring to the properties of this Endpoint
 	 *         Description.
 	 */
 	public Map/* <String, Object> */getProperties() {
