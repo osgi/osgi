@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.composite;
+package org.osgi.service.component;
 
 /**
  * Defines standard names for Service Component constants.

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.composite;
+package org.osgi.service.component;
 
 /**
  * A ComponentInstance encapsulates a component instance of an activated

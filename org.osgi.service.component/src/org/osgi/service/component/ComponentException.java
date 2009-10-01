@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.composite;
+package org.osgi.service.component;
 
 /**
  * Unchecked exception which may be thrown by the Service Component Runtime.
