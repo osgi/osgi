@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.component;
+package org.osgi.service.composite;
 
 import java.util.Dictionary;
 
