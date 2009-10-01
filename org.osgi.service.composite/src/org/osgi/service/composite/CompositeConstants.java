@@ -29,7 +29,12 @@ import org.osgi.framework.Constants;
  *             of final publication. You are cautioned against relying upon this
  *             API.
  */
-public interface CompositeConstants {
+public class CompositeConstants {
+	/**
+	 * Private constructor to prevent objects of this type.
+	 */
+	private CompositeConstants() {
+	}
 	/**
 	 * Manifest header directive identifying whether a bundle is a composite.
 	 * The default value is <code>false</code>.
