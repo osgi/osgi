@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,92 +13,63 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.composite;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.util.Enumeration;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
-import org.osgi.framework.launch.Framework;
+import org.osgi.framework.FrameworkEvent;
 
 /**
- * Composite bundles are composed of other bundles. The component bundles which
- * make up the content of a composite bundle are installed into a child
- * framework. Like a normal bundle, a composite bundle may import packages and
- * use services from other bundles which are installed in the same framework as
- * the composite bundle. The packages imported and the services used by a
- * composite bundle are shared with the components of a composite bundle through
- * a surrogate bundle installed in the child framework. Also like a normal
- * bundle, a composite bundle may export packages and register services which
- * can be used by bundles installed in the same framework as the composite
- * bundle. The packages exported and the services registered by a composite
- * bundle are acquired from the components of a composite bundle by the
- * surrogate bundle installed in the child framework
- * <p>
- * A framework has one composite bundle for each of its child frameworks. A
- * framework can have zero or more composite bundles installed. A child
- * framework must have one and only one surrogate bundle which represents the
- * composite bundle in the parent framework. In other words, a parent framework
- * can have many child frameworks but a child framework can have only one
- * parent.
- * <p>
- * A composite bundle does the following as specified by the composite manifest
- * map:
+ * A composite bundle is a bundle for which the content is composed of meta-data 
+ * describing the composite and a set of bundles called constituent bundles.
+ * Constituent bundles are isolated from other bundles which are not 
+ * constituents of the same composite bundle.  Composites provide isolation
+ * for constituent bundles in the following ways.
  * <ul>
- * <li>Exports packages to the parent framework from the child framework. These
- * packages are imported by the surrogate bundle installed in the child
- * framework.</li>
- * <li>Imports packages from the parent framework. These packages are exported
- * by the surrogate bundle installed in the child framework.</li>
- * <li>Registers services to the parent framework from the child framework.
- * These services are acquired by the surrogate bundle installed in the child
- * framework.</li>
- * <li>Acquires services from the parent framework. These services are
- * registered by the surrogate bundle installed in the child framework.</li>
- * </ul>
- * 
- * A newly created child <code>Framework</code> will be in the
- * {@link Bundle#STARTING STARTING} state. This child <code>Framework</code> can
- * then be used to manage and control the child framework instance. The child
- * framework instance is persistent and uses a storage area associated with the
- * installed composite bundle. The child framework's lifecycle is tied to its
- * composite bundle's lifecycle in the following ways:
- * <p>
- * <ul>
- * <li>If the composite bundle is marked to be persistently started (see
- * StartLevel.isBundlePersistentlyStarted(Bundle)) then the child framework
- * instance will automatically be started when the composite bundle's
- * start-level is met.</li>
- * <li>The child framework instance will be stopped if the composite bundle is
- * persistently stopped or its start level is no longer met. Performing
- * operations which transiently stop a composite bundle do not cause the child
- * framework to stop (e.g. {@link Bundle#stop(int) stop(Bundle.STOP_TRANSIENT)},
- * {@link Bundle#update() update}, refreshPackages etc.).</li>
- * <li>If the composite bundle is uninstalled, the child framework's persistent
- * storage area is also uninstalled.</li>
+ * <li>Class space: Constraints specified by constituent bundles (e.g.
+ *     Import-Package, Require-Bundle, Fragment-Host) can only be resolved
+ *     against capabilities provided by other constituents within the same 
+ *     composite bundle (Export-Package, Bundle-SymbolicName/Bundle-Version).</li>
+ * <li>Service Registry: Constituent bundles only have access to services 
+ *     registered by other constituents within the same composite bundle.  
+ *     This includes service events and service references.</li>
+ * <li>Bundles: Constituent bundles only have access to other Bundle objects 
+ *     that represent constituents within the same composite bundle.  This 
+ *     includes bundle events and core API like BundleContext.getBundles, 
+ *     PackageAdmin and StartLevel.</li>
  * </ul>
  * <p>
- * The child framework may be persistently started and stopped by persistently
- * starting and stopping the composite bundle, but it is still possible to
- * initialize and start the child framework explicitly while the composite
- * bundle is not persistently started. This allows for the child framework to be
- * initialized and populated with a set of bundles before starting the composite
- * bundle. The set of bundles installed into the child framework are the
- * component bundles which comprise the composite bundle.
+ * A parent framework refers to the OSGi framework where a composite bundle 
+ * is installed.  A composite framework refers the framework where the 
+ * constituent bundles are installed and provides the isolation for the
+ * constituent bundles.  Constituent bundles are isolated
+ * but there are many cases where capabilities (packages and services) need 
+ * to be shared between bundles installed in the parent framework and the 
+ * constituents within a composite bundle.
+ * </p>
  * <p>
- * The child framework's lifecycle is also tied to the lifecycle of its parent
- * framework. When the parent <code>Framework</code> enters the
- * {@link Bundle#STOPPING STOPPING} state, all active child frameworks of that
- * parent are shutdown using the {@link Framework#stop()} method. The parent
- * framework must not enter the {@link Bundle#RESOLVED} state until all the
- * child frameworks have completed their shutdown process. Just as with other
- * Bundles, references to child frameworks (or the associated composite and
- * surrogate bundles) become invalid after the parent framework has completed
- * the shutdown process, and must not be allowed to re-initialize or re-start
- * the child framework.
+ * Through a sharing policy the composite is in control of what capabilities
+ * are shared across framework boundaries.  The sharing policy controls what
+ * capabilities provided by bundles installed in the parent framework are 
+ * imported into the composite and made available to constituent bundles.
+ * The sharing policy also controls what capabilities provided by 
+ * constituent bundles are exported out of the composite and made available
+ * to bundles installed in the parent framework.
+ * </p>
+ * <p>
+ * The lifecycle of constituent bundles are tied to the lifecycle of composite 
+ * bundles. See {@link #start}
+ * </p>
  * 
- * @see SurrogateBundle
  * @ThreadSafe
  * @version $Revision$
  * @deprecated This is proposed API. As a result, this API may never be
@@ -108,38 +79,88 @@ import org.osgi.framework.launch.Framework;
  */
 public interface CompositeBundle extends Bundle {
 	/**
-	 * Returns the child framework associated with this composite bundle.
-	 * 
-	 * @return the child framework.
+	 * Returns the system bundle context for the composite framework.  This 
+	 * method must return a valid {@link BundleContext} as long as this 
+	 * composite bundle is installed.  Once a composite bundle is 
+	 * uninstalled this method must return <code>null</code>.  The composite system 
+	 * bundle context can be used to install and manage the constituent bundles.
+	 * @return the system bundle context for the composite framework
 	 */
-	Framework getCompositeFramework();
-
+	public BundleContext getSystemBundleContext();
+	
 	/**
-	 * Returns the surrogate bundle associated with this composite bundle. The
-	 * surrogate bundle is installed in the child framework.
+	 * Starts this composite with no options.
 	 * 
-	 * @return the surrogate bundle.
-	 */
-	SurrogateBundle getSurrogateBundle();
-
-	/**
-	 * Updates this composite bundle with the specified manifest.
 	 * <p>
-	 * Similar to normal bundle updates, the packages exported by a composite or
-	 * surrogate bundle can not change as a result of calling update: the
-	 * previous package exports must be available to other consuming bundles (in
-	 * either the parent or child framework) until the
-	 * PackageAdmin.refreshPackages method has been called to refresh the
-	 * composite, or the parent Framework is re-launched.
+	 * This method performs the same function as calling <code>start(0)</code>.
 	 * 
-	 * @param compositeManifest
-	 *            the new composite manifest.
-	 * @throws BundleException
-	 *             If the update fails.
-	 * @see CompositeBundleFactory#installCompositeBundle(Map, String, Map)
+	 * @throws BundleException If this composite could not be started.
+	 * @throws IllegalStateException If this composite has been uninstalled.
+	 * @throws SecurityException If the caller does not have the appropriate
+	 *         <code>AdminPermission[this,EXECUTE]</code>, and the Java Runtime
+	 *         Environment supports permissions.
+	 * @see #start(int)
 	 */
-	void update(Map /* <String, String> */compositeManifest)
-			throws BundleException;
+	public void start() throws BundleException;
+
+	/**
+	 * Starts this composite according to {@link Bundle#start(int)}.
+	 * When the composite bundles state is set to {@link Bundle#ACTIVE} state 
+	 * the following steps are required to activate the constiuents:
+	 * <ol>
+	 * <li>The composite framework start-level is set to the beginning start-level
+	 * and the {@link FrameworkEvent#STARTED} event is fired.  The constituent
+	 * bundles are started according to the start-level specification.</li>
+	 * <li>The bundle event of type {@link BundleEvent#STARTED} is fired for the 
+	 * composite.</li>
+	 * </ol>
+	 * @param options The options for starting this composite. See
+	 *        {@link #START_TRANSIENT} and {@link #START_ACTIVATION_POLICY}. The
+	 *        Framework must ignore unrecognized options.
+	 * @throws BundleException If this composite could not be started.
+	 * @throws IllegalStateException If this composite has been uninstalled.
+	 * @throws SecurityException If the caller does not have the appropriate
+	 *         <code>AdminPermission[this,EXECUTE]</code>, and the Java Runtime
+	 *         Environment supports permissions.
+	 */
+	public void start(int options) throws BundleException;
+
+	/**
+	 * Stops this composite with no options.
+	 * 
+	 * <p>
+	 * This method performs the same function as calling <code>stop(0)</code>.
+	 * 
+	 * @throws BundleException If an error occurred while stopping this composite
+	 * @throws IllegalStateException If this composite has been uninstalled.
+	 * @throws SecurityException If the caller does not have the appropriate
+	 *         <code>AdminPermission[this,EXECUTE]</code>, and the Java Runtime
+	 *         Environment supports permissions.
+	 * @see #start(int)
+	 */
+	public void stop() throws BundleException;
+
+	/**
+	 * @param options The options for stopping this bundle. See
+	 *        {@link #STOP_TRANSIENT}. The Framework must ignore unrecognized
+	 *        options.
+	 * @throws BundleException If an error occurred while stopping this composite
+	 * @throws IllegalStateException If this composite has been uninstalled.
+	 * @throws SecurityException If the caller does not have the appropriate
+	 *         <code>AdminPermission[this,EXECUTE]</code>, and the Java Runtime
+	 *         Environment supports permissions.
+	 * @since 1.4
+	 */
+	public void stop(int options) throws BundleException;
+
+	public void uninstall() throws BundleException;
+	/**
+	 * This operation is not supported for composite bundles. A
+	 * <code>BundleException</code> of type
+	 * {@link BundleException#INVALID_OPERATION invalid operation} must be
+	 * thrown.
+	 */
+	public void update() throws BundleException;
 
 	/**
 	 * This operation is not supported for composite bundles. A
@@ -147,19 +168,15 @@ public interface CompositeBundle extends Bundle {
 	 * {@link BundleException#INVALID_OPERATION invalid operation} must be
 	 * thrown.
 	 */
-	void update() throws BundleException;
+	public void update(InputStream input);
 
-	/**
-	 * This operation is not supported for composite bundles. A
-	 * <code>BundleException</code> of type
-	 * {@link BundleException#INVALID_OPERATION invalid operation} must be
-	 * thrown.
-	 */
-	void update(InputStream input) throws BundleException;
+	public void update(Map compositeManifest);
 
-	/**
-	 * Uninstalls this composite bundle. The associated child framework
-	 * is shutdown, and its persistent storage area is deleted.
-	 */
-	void uninstall() throws BundleException;
+	public Class loadClass(String name) throws ClassNotFoundException;
+	public URL getResource(String name);
+	public Enumeration/* <URL> */getResources(String name) throws IOException;
+	public URL getEntry(String path);
+	public Enumeration/* <String> */getEntryPaths(String path);
+	public Enumeration/* <URL> */findEntries(String path, String filePattern,
+			boolean recurse);
 }
