@@ -105,12 +105,14 @@ public interface CompositeBundle extends Bundle {
 
 	/**
 	 * Starts this composite according to {@link Bundle#start(int)}.
-	 * When the composite bundles state is set to {@link Bundle#ACTIVE} state 
-	 * the following steps are required to activate the constiuents:
+	 * When the composite bundle's state is set to {@link Bundle#ACTIVE},
+	 * the following steps are required to activate the constituents:
 	 * <ol>
-	 * <li>The composite framework start-level is set to the beginning start-level
-	 * and the {@link FrameworkEvent#STARTED} event is fired.  The constituent
-	 * bundles are started according to the start-level specification.</li>
+	 * <li>The composite framework start-level is set to the beginning start-level.</li>
+	 * <li>The constituent bundles are started according to the start-level 
+	 * specification.
+	 * <li>The {@link FrameworkEvent#STARTED} event is fired for the
+	 * composite framework.</li>
 	 * <li>The bundle event of type {@link BundleEvent#STARTED} is fired for the 
 	 * composite.</li>
 	 * </ol>
@@ -141,6 +143,16 @@ public interface CompositeBundle extends Bundle {
 	public void stop() throws BundleException;
 
 	/**
+	 * Stops this composite according to {@link Bundle#stop(int)}.
+	 * When the composite bundle's state is set to {@link Bundle#STOPPING}, 
+	 * the following steps are required to stop the constituents:
+	 * <ol>
+	 * <li>The composite framework start-level is set to the 0.</li>
+	 * <li>The constituent bundles are stopped according to the start-level 
+	 * specification.</li>
+	 * <li>The bundle event of type {@link BundleEvent#STARTED} is fired for the 
+	 * composite.</li>
+	 * </ol>
 	 * @param options The options for stopping this bundle. See
 	 *        {@link #STOP_TRANSIENT}. The Framework must ignore unrecognized
 	 *        options.
@@ -153,6 +165,18 @@ public interface CompositeBundle extends Bundle {
 	 */
 	public void stop(int options) throws BundleException;
 
+	/**
+	 * Uninstalls this composite according to {@link Bundle#uninstall()}.
+	 * When the composite bundle is uninstalled the following steps are 
+	 * required:
+	 * <ol>
+	 * <li>After a composite's state is set to {@linkplain Bundle#INSTALLED}
+	 * and before a composite's state is set to {@linkplain Bundle#UNINSTALLED},
+	 * all the constituent bundles are uninstalled.</li>
+	 * <li>When a composite's state is set to {@linkplain Bundle#UNINSTALLED},
+	 * the composite system bundle context becomes invalid.
+	 * </ol>
+	 */
 	public void uninstall() throws BundleException;
 	/**
 	 * This operation is not supported for composite bundles. A
@@ -168,15 +192,51 @@ public interface CompositeBundle extends Bundle {
 	 * {@link BundleException#INVALID_OPERATION invalid operation} must be
 	 * thrown.
 	 */
-	public void update(InputStream input);
+	public void update(InputStream input) throws BundleException;
 
-	public void update(Map compositeManifest);
+	/**
+	 * Updates the composite meta-data for this composite bundle.
+	 *
+	 * @param compositeManifest
+	 */
+	// TODO need to fill in the details of update
+	public void update(Map compositeManifest) throws BundleException;
 
+	/**
+	 * Composite bundles do not have class content.  This method must 
+	 * throw a {@link ClassNotFoundException}
+	 * @throws ClassNotFoundException Always thrown for composite bundles.
+	 */
 	public Class loadClass(String name) throws ClassNotFoundException;
+	/**
+	 * Composite bundles do not have content.  This method must return
+	 * <code>null</code>.
+	 * @return A <code>null</code> value is always returned for composites.
+	 */
 	public URL getResource(String name);
+	/**
+	 * Composite bundles do not have content.  This method must return
+	 * <code>null</code>.
+	 * @return A <code>null</code> value is always returned for composites.
+	 */
 	public Enumeration/* <URL> */getResources(String name) throws IOException;
+	/**
+	 * Composite bundles do not have content.  This method must return
+	 * <code>null</code>.
+	 * @return A <code>null</code> value is always returned for composites.
+	 */
 	public URL getEntry(String path);
+	/**
+	 * Composite bundles do not have content.  This method must return
+	 * <code>null</code>.
+	 * @return A <code>null</code> value is always returned for composites.
+	 */
 	public Enumeration/* <String> */getEntryPaths(String path);
+	/**
+	 * Composite bundles do not have content.  This method must return
+	 * <code>null</code>.
+	 * @return A <code>null</code> value is always returned for composites.
+	 */
 	public Enumeration/* <URL> */findEntries(String path, String filePattern,
 			boolean recurse);
 }
