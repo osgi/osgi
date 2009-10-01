@@ -16,7 +16,9 @@
 
 package org.osgi.service.composite;
 
+import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
+import org.osgi.framework.Filter;
 
 
 /**
@@ -35,6 +37,7 @@ public class CompositeConstants {
 	 */
 	private CompositeConstants() {
 	}
+
 	/**
 	 * Manifest header directive identifying whether a bundle is a composite.
 	 * The default value is <code>false</code>.
@@ -51,36 +54,67 @@ public class CompositeConstants {
 	 * The attribute value may be retrieved from the <code>Dictionary</code>
 	 * object returned by the <code>Bundle.getHeaders</code> method.
 	 * 
+	 * <p>
+	 * A valid manifest for a composite bundle must have this directive set
+	 * to <code>true</code>.  Any attempt to install a composite which does 
+	 * not have this directive set to <code>true</code> must result in a
+	 * {@linkplain BundleException}.
+	 * 
 	 * @see Constants#BUNDLE_SYMBOLICNAME
 	 */
 	public final static String	COMPOSITE_DIRECTIVE						= "composite";
 
 	/**
-	 * Manifest header (named &quot;Composite-PackageImportPolicy&quot;)
+	 * Composite manifest header (named &quot;Composite-PackageImportPolicy&quot;)
 	 * identifying a list of package constraints to import into the composite.  
 	 * Any exported package from a bundle installed in the parent framework which 
 	 * satisfies one of the specified package constraints is available to satisfy 
 	 * Import-Package constraints from constituent bundles.
+	 * <p>
+	 * This header uses the same syntax as the {@linkplain Constants#IMPORT_PACKAGE
+	 * Import-Package} header.
 	 */
 	public static final String COMPOSITE_PACKAGE_IMPORT_POLICY = "Composite-PackageImportPolicy";
+
 	/**
-	 * Manifest header (named &quot;Composite-PackageExportPolicy&quot;)
-	 * identifying...
+	 * Composite manifest header (named &quot;Composite-PackageExportPolicy&quot;)
+	 * identifying a list of package constraints to export out of a composite.
+	 * Any exported package from a constituent bundle in the composite which 
+	 * satisfies one of the specified package constraints is available to satisfy 
+	 * Import-Package constraints from bundles installed in the parent framework.
+	 * <p>
+	 * This header uses the same syntax as the {@linkplain Constants#IMPORT_PACKAGE 
+	 * Import-Package} header.
 	 */
 	public static final String COMPOSITE_PACKAGE_EXPORT_POLICY = "Composite-PackageExportPolicy";
+
 	/**
-	 * Manifest header (named &quot;Composite-BundleRequirePolicy&quot;)
-	 * identifying...
+	 * Composite manifest header (named &quot;Composite-BundleRequirePolicy&quot;)
+	 * identifying a list of require bundle constraints to import into the composite.
+	 * Any bundle installed in the parent framework which satisfies one of the 
+	 * specified require bundle constraints is available to satisfy Require-Bundle
+	 * constraints from constituent bundles.
+	 * <p>
+	 * This header uses the same syntax as the {@linkplain Constants#REQUIRE_BUNDLE
+	 * Require-Bundle} header.
 	 */
 	public static final String COMPOSITE_BUNDLE_REQUIRE_POLICY = "Composite-BundleRequirePolicy";
+
 	/**
-	 * Manifest header (named &quot;Composite-ServiceImportPolicy&quot;)
-	 * identifying...
+	 * Composite manifest header (named &quot;Composite-ServiceImportPolicy&quot;)
+	 * identifying a service filter that controls the services to import into the
+	 * composite.  See {@link Filter} for a description of the filter syntax.  Any 
+	 * services registered by bundles installed in the parent framework that match
+	 * the specified service filter is available to constituent bundles.
 	 */
 	public static final String COMPOSITE_SERVICE_IMPORT_POLICY = "Composite-ServiceImportPolicy";
+
 	/**
-	 * Manifest header (named &quot;Composite-ServiceExportPolicy&quot;)
-	 * identifying...
+	 * Composite manifest header (named &quot;Composite-ServiceExportPolicy&quot;)
+	 * identifying a service filter that controls the services to export out of the
+	 * composite.  See {@link Filter} for a description of the filter syntax.  Any 
+	 * services registered by constituent bundles that match the specified service 
+	 * filter is available to bundles installed in the parent framework.
 	 */
 	public static final String COMPOSITE_SERVICE_EXPORT_POLICY = "Composite-ServiceExportPolicy";
 
