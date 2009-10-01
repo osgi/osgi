@@ -451,7 +451,7 @@ public interface Bundle {
 	 * {@link #STOP_TRANSIENT} option was set.
 	 * </ul>
 	 * 
-	 * @param options The options for stoping this bundle. See
+	 * @param options The options for stopping this bundle. See
 	 *        {@link #STOP_TRANSIENT}. The Framework must ignore unrecognized
 	 *        options.
 	 * @throws BundleException If this bundle's <code>BundleActivator</code>
