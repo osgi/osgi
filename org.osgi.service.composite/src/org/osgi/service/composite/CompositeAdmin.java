@@ -74,9 +74,8 @@ public interface CompositeAdmin {
 	 *        {@link CompositeConstants} for the supported configuration parameters.
 	 * @return the installed composite bundle.
 	 * @throws BundleException if the installation failed.
-	 * @throws SecurityException If the caller does not have the appropriate
-	 *         <code>AdminPermission[installed bundle,LIFECYCLE]</code>, and the
-	 *         Java Runtime Environment supports permissions.
+	 * @throws SecurityException If the caller does not have
+	 *         <code>AllPermission</code>.
 	 * @throws IllegalStateException If this composite admin service is no longer valid.  
 	 *         For example, if the framework has shutdown.
 	 */
