@@ -26,6 +26,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
 
 /**
@@ -66,8 +67,9 @@ import org.osgi.framework.FrameworkEvent;
  * to bundles installed in the parent framework.
  * </p>
  * <p>
- * The lifecycle of constituent bundles are tied to the lifecycle of composite 
- * bundles. See {@link #start}
+ * The lifecycle of the constituent bundles are tied to the lifecycle of 
+ * the composite bundle. See {@link #start(int)}, {@link #stop(int)}, 
+ * {@link #update(Map)} and {@link #uninstall}.
  * </p>
  * 
  * @ThreadSafe
@@ -195,11 +197,75 @@ public interface CompositeBundle extends Bundle {
 	public void update(InputStream input) throws BundleException;
 
 	/**
-	 * Updates the composite meta-data for this composite bundle.
-	 *
-	 * @param compositeManifest
+	 * Updates the meta-data for this composite from a <code>Map</code>.
+	 * 
+	 * <p>
+	 * The specified <code>Map</code> must not be <code>null</code>.
+	 * 
+	 * <p>
+	 * If this composite's state is <code>ACTIVE</code>, it must be stopped before
+	 * the update and started after the update successfully completes.
+	 * 
+	 * <p>
+	 * If this composite has a sharing policy for packages, any packages that are 
+	 * imported by other bundles through the current sharing policy must remain exported 
+	 * for existing importers.  A call <code>PackageAdmin.refreshPackages</code> method 
+	 * will force all constituent bundles for this composite to be refreshed, causing the 
+	 * new package sharing policy to be used for all constituent bundles.
+	 * <p>
+	 * The following steps are required to update a composite:
+	 * <ol>
+	 * <li>If this composite's state is <code>UNINSTALLED</code> then an
+	 * <code>IllegalStateException</code> is thrown.
+	 * <li>The component manifest <code>Map</code> is verified.  If this fails, 
+	 * a {@linkplain BundleException} is thrown.
+	 * 
+	 * <li>If this composite's state is <code>ACTIVE</code>, <code>STARTING</code>
+	 * or <code>STOPPING</code>, this bundle is stopped as described in the
+	 * <code>CompositeBundle.stop</code> method. If <code>CompositeBundle.stop</code>
+	 * throws an exception, the exception is rethrown terminating the update.
+	 * 
+	 * <li>The meta-data of this composite is updated from the <code>Map</code>.
+	 * 
+	 * <li>This composite's state is set to <code>INSTALLED</code>.
+	 * 
+	 * <li>If the updated version of this composite was successfully installed, a
+	 * bundle event of type {@link BundleEvent#UPDATED} is fired.
+	 * 
+	 * <li>If this composite's state was originally <code>ACTIVE</code>, the
+	 * updated composite is started as described in the <code>CompositeBundle.start</code>
+	 * method. If <code>CompositeBundle.start</code> throws an exception, a Framework
+	 * event of type {@link FrameworkEvent#ERROR} is fired containing the
+	 * exception.
+	 * </ol>
+	 * 
+	 * <b>Preconditions </b>
+	 * <ul>
+	 * <li><code>getState()</code> not in &#x007B; <code>UNINSTALLED</code>
+	 * &#x007D;.
+	 * </ul>
+	 * <b>Postconditions, no exceptions thrown </b>
+	 * <ul>
+	 * <li><code>getState()</code> in &#x007B; <code>INSTALLED</code>,
+	 * <code>RESOLVED</code>, <code>ACTIVE</code> &#x007D;.
+	 * <li>This composite has been updated.
+	 * </ul>
+	 * <b>Postconditions, when an exception is thrown </b>
+	 * <ul>
+	 * <li><code>getState()</code> in &#x007B; <code>INSTALLED</code>,
+	 * <code>RESOLVED</code>, <code>ACTIVE</code> &#x007D;.
+	 * <li>Original composite is still used; no update occurred.
+	 * </ul>
+	 * 
+	 * @param compositeManifest The <code>Map</code> from which to read the new
+	 *        composite meta-data from.  Must not be <code>null</code>.
+	 * @throws BundleException If the the update fails.
+	 * @throws IllegalStateException If this composite has been uninstalled.
+	 * @throws SecurityException If the caller does not have
+	 *         <code>AllPermission</code>.
+	 * @see #stop()
+	 * @see #start()
 	 */
-	// TODO need to fill in the details of update
 	public void update(Map compositeManifest) throws BundleException;
 
 	/**

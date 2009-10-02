@@ -43,8 +43,8 @@ public interface CompositeAdmin {
 	 * <ol>
 	 * <li>If a bundle containing the same location identifier is already installed, a 
 	 * {@link BundleException} is thrown.</li>
-	 * <li>The context manifest is verified.  If this fails, a {@linkplain BundleException}
-	 * is thrown</li>
+	 * <li>The composite manifest is verified.  If this fails, a {@linkplain BundleException}
+	 * is thrown.</li>
 	 * <li>The composite's associated resources are allocated.  The associated resources 
 	 * minimally consist of a unique identifier and a composite framework.  If this 
 	 * step fails, a {@linkplain BundleException} is thrown.</li>
