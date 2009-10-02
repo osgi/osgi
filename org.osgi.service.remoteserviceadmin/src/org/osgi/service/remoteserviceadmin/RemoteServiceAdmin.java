@@ -15,6 +15,8 @@ import org.osgi.framework.ServiceReference;
  * The API allows a remote manager to export a service, to import a service, and
  * find out about the current imports and exports.
  * 
+ * 
+ * 
  * @ThreadSafe
  */
 public interface RemoteServiceAdmin {
@@ -31,6 +33,10 @@ public interface RemoteServiceAdmin {
 	 * properties on a <code>properties</code> are case sensitive. A value in
 	 * the <code>properties</code> must therefore override any case variant in
 	 * the properties of the Service Reference.
+	 * 
+	 * If an endpoint can not be created because no {@link EndpointPermission#EXPORT} can be
+	 * obtained to export this service, then this endpoint must be ignored and
+	 * no Export Registration must be included in the returned list.
 	 * 
 	 * @param ref The Service Reference to export
 	 * @param properties The properties to create a local endpoint that can be
@@ -59,6 +65,10 @@ public interface RemoteServiceAdmin {
 	 * given endpoint to create a proxy. This method can return null if the
 	 * service could not be imported. ### do we need exceptions?
 	 * 
+	 * If an endpoint can not be imported because no {@link EndpointPermission#IMPORT} can be
+	 * obtained, then this endpoint must be ignored and
+	 * no Import Registration must included in the returned list.
+	 * 
 	 * @param endpoint The Endpoint Description to be used for import
 	 * @return An Import Registration that combines the Endpoint Description and
 	 *         the Service Reference or <code>null</code> if the endpoint
@@ -70,13 +80,16 @@ public interface RemoteServiceAdmin {
 	 * Answer the currently active Export Registrations.
 	 * 
 	 * @return A collection of Export Registrations that are currently active.
+	 * @throws SecurityException When the caller no {@link EndpointPermission#READ} could be obtained 
 	 */
 	Collection/* <ExportRegistration> */getExportedServices();
 
 	/**
 	 * Answer the currently active Import Registrations.
 	 * 
+	 * @throws SecurityException When the caller no EndpointPermission LIST could be obtained 
 	 * @return A collection of Import Registrations that are currently active.
+	 * @throws SecurityException When the caller no {@link EndpointPermission#READ} could be obtained 
 	 */
 	Collection/* <ImportRegistration> */getImportedEndpoints();
 

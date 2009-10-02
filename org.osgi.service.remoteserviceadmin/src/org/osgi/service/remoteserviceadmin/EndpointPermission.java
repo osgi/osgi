@@ -53,6 +53,8 @@ public final class EndpointPermission extends BasicPermission {
 	public final static String IMPORT = "import";
 	
 	public final static String LISTENING = "listening";
+	
+	public final static String READ = "listening";
 
 	private final static int ACTION_EXPORT = 0x00000001;
 	private final static int ACTION_IMPORT = 0x00000002;

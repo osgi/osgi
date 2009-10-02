@@ -31,28 +31,36 @@ import org.osgi.framework.*;
  * property keys have been chosen to match filters that are created by client
  * bundles that need a service.
  * 
+ * TODO Automatically calculate versions of interface packages?
+ * 
+ * TODO Constructor that takes a class?
+ * 
+ * TODO Skipping of service.exported.* properties?
+ * 
+ * TODO qualified intents?
+ * 
+ * 
+ * 
  * @Immutable
  * @version $Revision$
  */
 
 public class EndpointDescription {
-	private final Map			/* <String,Object> */properties	= new HashMap/*
-																			 * <String
-																			 * ,
-																			 * Object
-																			 * >
+	private final Map		/* <String,Object> */properties	= new HashMap/*
+																			 * <String ,
+																			 * Object >
 																			 */();
-	private final List			/* String */interfaces;
-	private final String		remoteServiceId;
-	private final String		uri;
+	private final List		/* String */interfaces;
+	private final long		remoteServiceId;
+	private final String	remoteFrameworkUUID;
+	private final String	remoteUri;
 
 	/**
 	 * Create an Endpoint Description based on a Map.
 	 * 
 	 * @param properties
-	 * @throws IllegalArgumentException
-	 *             When the properties are not proper for an Endpoint
-	 *             Description
+	 * @throws IllegalArgumentException When the properties are not proper for
+	 *         an Endpoint Description
 	 */
 
 	public EndpointDescription(Map/* <String,Object> */properties)
@@ -60,18 +68,17 @@ public class EndpointDescription {
 		this.properties.putAll(properties);
 
 		interfaces = verifyInterfacesProperty();
-		remoteServiceId = verifyStringProperty(RemoteConstants.ENDPOINT_REMOTE_SERVICE_ID);
-		uri = verifyStringProperty(RemoteConstants.ENDPOINT_URI);
+		remoteServiceId = Long.parseLong(RemoteConstants.SERVICE_REMOTE_ID);
+		remoteFrameworkUUID = verifyStringProperty(RemoteConstants.SERVICE_REMOTE_FRAMEWORK_UUID);
+		remoteUri = verifyStringProperty(RemoteConstants.SERVICE_REMOTE_URI);
 	}
 
 	/**
 	 * Create an Endpoint Description based on a reference and optionally a map
 	 * of additional properties.
 	 * 
-	 * @param ref
-	 *            A service reference that can be exported
-	 * @param properties
-	 *            Additional properties to add. Can be <code>null</code>.
+	 * @param ref A service reference that can be exported
+	 * @param properties Additional properties to add. Can be <code>null</code>.
 	 * @throws IllegalArgumentException
 	 */
 	public EndpointDescription(ServiceReference ref,
@@ -86,44 +93,44 @@ public class EndpointDescription {
 			properties.put(keys[i], ref.getProperty(keys[i]));
 
 		interfaces = verifyInterfacesProperty();
-		remoteServiceId = verifyStringProperty(RemoteConstants.ENDPOINT_REMOTE_SERVICE_ID);
-		uri = verifyStringProperty(RemoteConstants.ENDPOINT_URI);
+		remoteServiceId = Long.parseLong(RemoteConstants.SERVICE_REMOTE_ID);
+		remoteFrameworkUUID = verifyStringProperty(RemoteConstants.SERVICE_REMOTE_FRAMEWORK_UUID);
+		remoteUri = verifyStringProperty(RemoteConstants.SERVICE_REMOTE_URI);
 	}
 
 	/**
 	 * Create an Endpoint Description based on the URI, the remote service ID
 	 * and the interface names, and optionally service properties.
 	 * 
-	 * @param uri
-	 *            The URI of the remote service.
-	 * @param interfaceNames
-	 *            The names of the interfaces of the service to consider.
-	 * @param remoteServiceId
-	 *            the remote service ID.
-	 * @param properties
-	 *            Optionally service properties.
+	 * @param uri The URI of the remote service.
+	 * @param interfaceNames The names of the interfaces of the service to
+	 *        consider.
+	 * @param remoteServiceId the remote service ID.
+	 * @param properties Optionally service properties.
 	 */
-	public EndpointDescription(String uri,
-			String[] interfaceNames,  String remoteServiceId, Map properties) {
+	public EndpointDescription(String uri, String[] interfaceNames,
+			int remoteServiceId, Map properties) {
 		if (uri == null) {
 			throw new IllegalArgumentException("URI must not be null");
 		}
 		if (interfaceNames == null) {
 			throw new IllegalArgumentException("Interfaces must not be null");
 		}
-		this.uri = uri;
+		this.remoteUri = uri;
 		this.interfaces = Arrays.asList(interfaceNames);
 		this.remoteServiceId = remoteServiceId;
+		this.remoteFrameworkUUID = (String) properties
+				.get(RemoteConstants.SERVICE_REMOTE_FRAMEWORK_UUID);
 		if (properties != null) {
 			this.properties.putAll(properties);
 		}
 		if (interfaceNames != null) {
 			this.properties.put(Constants.OBJECTCLASS, interfaceNames);
 		}
-		this.properties.put(RemoteConstants.ENDPOINT_URI, uri);
-		if (remoteServiceId != null) {
-		this.properties.put(RemoteConstants.ENDPOINT_REMOTE_SERVICE_ID,
-				remoteServiceId);
+		this.properties.put(RemoteConstants.SERVICE_REMOTE_URI, uri);
+		if (remoteServiceId <= 0) {
+			this.properties.put(RemoteConstants.SERVICE_REMOTE_ID, new Integer(
+					remoteServiceId));
 		}
 	}
 
@@ -131,8 +138,7 @@ public class EndpointDescription {
 	 * Verify and obtain the interface list from the properties.
 	 * 
 	 * @return A list with the interface names.
-	 * @throws IllegalArgumentException
-	 *             when
+	 * @throws IllegalArgumentException when
 	 */
 	private List /* <String> */verifyInterfacesProperty() {
 		List l = null;
@@ -140,34 +146,35 @@ public class EndpointDescription {
 		Object objectClass = properties.get(Constants.OBJECTCLASS);
 		if (objectClass == null)
 			l = Collections.EMPTY_LIST;
-		else if (!(objectClass instanceof String[]))
-			throw new IllegalArgumentException("objectClass must be a String[]");
-		else {
-			l = Collections.unmodifiableList(Arrays
-					.asList((String[]) objectClass));
-			for (Iterator i = l.iterator(); i.hasNext();) {
-				String interf = (String) i.next();
-				try {
-					getInterfaceVersion(interf);
-				} catch (Exception e) {
-					throw new IllegalArgumentException(
-							"Improper version for interface " + interf
-									+ " caused by " + e);
+		else
+			if (!(objectClass instanceof String[]))
+				throw new IllegalArgumentException(
+						"objectClass must be a String[]");
+			else {
+				l = Collections.unmodifiableList(Arrays
+						.asList((String[]) objectClass));
+				for (Iterator i = l.iterator(); i.hasNext();) {
+					String interf = (String) i.next();
+					try {
+						getInterfaceVersion(interf);
+					}
+					catch (Exception e) {
+						throw new IllegalArgumentException(
+								"Improper version for interface " + interf
+										+ " caused by " + e);
+					}
 				}
 			}
-		}
 		return l;
 	}
 
 	/**
 	 * Verify and obtain the a required String property.
 	 * 
-	 * @param propName
-	 *            The name of the
+	 * @param propName The name of the
 	 * @return The value of the property.
-	 * @throws IllegalArgumentException
-	 *             when the property is not set or doesn't have the correct data
-	 *             type.
+	 * @throws IllegalArgumentException when the property is not set or doesn't
+	 *         have the correct data type.
 	 */
 	private String verifyStringProperty(String propName) {
 		Object r = properties.get(propName);
@@ -190,12 +197,12 @@ public class EndpointDescription {
 	 * URI must represent the same endpoint.
 	 * 
 	 * The value of the URI is stored in the
-	 * {@link RemoteConstants#ENDPOINT_URI} property.
+	 * {@link RemoteConstants#SERVICE_REMOTE_URI} property.
 	 * 
 	 * @return The URI of the endpoint, never <code>null</code>.
 	 */
-	public String getURI() {
-		return uri;
+	public String getRemoteURI() {
+		return remoteUri;
 	}
 
 	/**
@@ -225,8 +232,7 @@ public class EndpointDescription {
 	 * endpoint.version.com.acme.Foo
 	 * </pre>
 	 * 
-	 * @param name
-	 *            The name of the interface for which a version is requested
+	 * @param name The name of the interface for which a version is requested
 	 * @return The version of the given interface or <code>null</code> if the
 	 *         interface has no version in this Endpoint Description
 	 */
@@ -234,46 +240,24 @@ public class EndpointDescription {
 		String v = (String) properties.get("endpoint.version." + name);
 		if (v == null) {
 			return Version.emptyVersion;
-		} else {
+		}
+		else {
 			return new Version(v);
 		}
 	}
 
 	/**
-	 * Returns the universally unique id for the service exported through this
+	 * Returns the service id for the service exported through this
 	 * endpoint.
 	 * 
-	 * Each service in the OSGi service registry has a universally unique id.
-	 * The UUID can be used to detect that two Endpoint Descriptions really
-	 * refer to the same registered service instance in some remote framework.
-	 * This UUID can be used to filter out duplicate ways of communicating with
-	 * the same service.
+	 * This is the service id under which the framework has registered the service. This
+	 * field together with the Framework UUID is a globally unique id for a service.
 	 * 
-	 * The service UUID is constructed from two properties. It is first the
-	 * <code>org.osgi.framework.uuid</code> System property set by the framework
-	 * or through configuration. This property must uniquely represents the UUID
-	 * of a framework instance. This UUID must not contain any dots ('.'
-	 * \u002E). This is suffixed with a dot and then the <code>service.id</code>
-	 * service property of the service.
-	 * 
-	 * For example:
-	 * 
-	 * <pre>
-	 *   72dc5fd9-5f8f-4f8f-9821-9ebb433a5b72.121
-	 * </pre>
-	 * 
-	 * If this Endpoint Description does not map to a remote OSGi service, for
-	 * example some web service, then the Endpoint Description must not have a
-	 * service UUID. If two endpoints have the same URI, then they must refer to
-	 * the same OSGi service.
-	 * 
-	 * If the UUID starts with a dot ('.') then it does not identify an OSGi service.
-	 * 
-	 * @return Unique id of a service or <code>null</code> if this Endpoint
+	 * @return Service id of a service or 0 if this Endpoint
 	 *         Description does not relate to an OSGi service
 	 * 
 	 */
-	public String getRemoteServiceID() {
+	public long getRemoteServiceID() {
 		return remoteServiceId;
 	}
 
@@ -318,6 +302,18 @@ public class EndpointDescription {
 	}
 
 	/**
+	 * Return the framework UUID, if present.
+	 * 
+	 * The property the intents come from is
+	 * {@link RemoteConstants#SERVICE_REMOTE_FRAMEWORK_UUID}
+	 * 
+	 * @return Remote Framework UUID, or null if this endpoint is not associated with an OSGi service
+	 */
+	public String getRemoteFrameworkUUID() {
+		return remoteFrameworkUUID;
+	}
+
+	/**
 	 * Returns all endpoint properties.
 	 * 
 	 * @return An unmodifiable map referring to the properties of this Endpoint
@@ -329,12 +325,35 @@ public class EndpointDescription {
 	}
 
 	/**
+	 * Answers if this Endpoint Description refers to the same service instance
+	 * as the given Endpoint Description.
+	 * 
+	 * Two Endpoint Descriptions point to the same service if they have the same
+	 * URI or their framework UUIDs and remote service ids are equal.
+	 * 
+	 * @param other The Endpoint Description to look at
+	 * @return True if this endpoint description points to the same service as
+	 *         the other
+	 */
+	public boolean isSameService(EndpointDescription other) {
+		if (remoteUri.equals(other.remoteUri))
+			return true;
+
+		if (remoteFrameworkUUID == null)
+			return false;
+
+		return remoteServiceId == other.remoteServiceId
+				&& remoteFrameworkUUID.equals(other.remoteFrameworkUUID);
+	}
+	
+	
+	/**
 	 * Two endpoints are equal if their URIs are equal, the hash code is
 	 * therefore derived from the URI.
 	 */
 	public int hashCode() {
 		// TODO
-		return getURI().hashCode();
+		return getRemoteURI().hashCode();
 	}
 
 	/**
@@ -342,9 +361,11 @@ public class EndpointDescription {
 	 */
 	public boolean equals(Object other) {
 		if (other instanceof EndpointDescription) {
-			return getURI().equals(((EndpointDescription) other).getURI());
+			return getRemoteURI().equals(
+					((EndpointDescription) other).getRemoteURI());
 		}
 		return false;
 	}
 
+	
 }

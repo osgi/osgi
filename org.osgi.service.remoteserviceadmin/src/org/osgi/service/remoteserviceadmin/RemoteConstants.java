@@ -3,6 +3,7 @@ package org.osgi.service.remoteserviceadmin;
 /**
  * Provide the definition of the constants used in the Remote Services API.
  * 
+ * TODO Should some of the properties in chapter 13 go the framework constants?
  */
 public class RemoteConstants {
 	private RemoteConstants() {
@@ -137,23 +138,19 @@ public class RemoteConstants {
 	 * endpoint following the URI syntax. As far as this specification is
 	 * concerned, this unique id is opaque.
 	 */
-	final public static String ENDPOINT_URI = "endpoint.uri";
+	final public static String SERVICE_REMOTE_URI = "service.remote.uri";
 
 	/**
 	 * The property key for the endpoint service id. This is a unique id for a
 	 * service based on the framework id '.' service id or another model. As far as this specification is
 	 * concerned, this unique id is opaque.
 	 */
-	final public static String ENDPOINT_REMOTE_SERVICE_ID = "endpoint.remote.service.id";
+	final public static String SERVICE_REMOTE_ID = "service.remote.id";
 
 	/**
-	 * TODO This constant needs to be defined in the framework. The key for a
-	 * framework property that defines the UUID of the framework.
-	 * 
-	 * The property must be set by the framework or through configuration before
-	 * the VM is started or some bundle. The value must be a Universally Unique
-	 * Id, it must not contain any dots ('.' \u002E). TODO Why must it not
-	 * contain .?
+	 * The property key for the endpoint service id. This is a unique id for a
+	 * service based on the framework id '.' service id or another model. As far as this specification is
+	 * concerned, this unique id is opaque.
 	 */
-	public final static String FRAMEWORK_UUID = "org.osgi.framework.uuid";
+	final public static String SERVICE_REMOTE_FRAMEWORK_UUID = "service.remote.framework.id";
 }
