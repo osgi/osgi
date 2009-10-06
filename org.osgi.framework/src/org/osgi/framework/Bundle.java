@@ -453,7 +453,7 @@ public interface Bundle {
 	 * {@link #STOP_TRANSIENT} option was set.
 	 * </ul>
 	 * 
-	 * @param options The options for stoping this bundle. See
+	 * @param options The options for stopping this bundle. See
 	 *        {@link #STOP_TRANSIENT}. The Framework must ignore unrecognized
 	 *        options.
 	 * @throws BundleException If this bundle's <code>BundleActivator</code>
@@ -501,8 +501,7 @@ public interface Bundle {
 	 * 
 	 * <p>
 	 * If this bundle has exported any packages that are imported by another
-	 * bundle, these packages must not be updated. Instead, the previous package
-	 * version must remain exported until the
+	 * bundle, these packages must remain exported until the
 	 * <code>PackageAdmin.refreshPackages</code> method has been has been called
 	 * or the Framework is relaunched.
 	 * 
