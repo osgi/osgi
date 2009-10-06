@@ -499,8 +499,7 @@ public interface Bundle {
 	 * 
 	 * <p>
 	 * If this bundle has exported any packages that are imported by another
-	 * bundle, these packages must not be updated. Instead, the previous package
-	 * version must remain exported until the
+	 * bundle, these packages must remain exported until the
 	 * <code>PackageAdmin.refreshPackages</code> method has been has been called
 	 * or the Framework is relaunched.
 	 * 
