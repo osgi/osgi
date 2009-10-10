@@ -51,6 +51,8 @@ public interface ImportRegistration {
 	 * The error must be set before this Import Registration is returned.
 	 * Asynchronously occurring errors must be reported to the log.
 	 * 
+	 * TODO can we assume the proxy service is registered when getException==null?
+	 * 
 	 * @return The exception that occurred during the creation of the
 	 *         registration or <code>null</code> if no exception occurred.
 	 */

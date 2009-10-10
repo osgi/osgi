@@ -34,9 +34,10 @@ public interface RemoteServiceAdmin {
 	 * the <code>properties</code> must therefore override any case variant in
 	 * the properties of the Service Reference.
 	 * 
-	 * If an endpoint can not be created because no {@link EndpointPermission#EXPORT} can be
-	 * obtained to export this service, then this endpoint must be ignored and
-	 * no Export Registration must be included in the returned list.
+	 * If an endpoint can not be created because no
+	 * {@link EndpointPermission#EXPORT} can be obtained to export this service,
+	 * then this endpoint must be ignored and no Export Registration must be
+	 * included in the returned list.
 	 * 
 	 * @param ref The Service Reference to export
 	 * @param properties The properties to create a local endpoint that can be
@@ -55,6 +56,7 @@ public interface RemoteServiceAdmin {
 	 * TODO discuss case difference in properties
 	 * 
 	 * TODO More exceptions?
+	 * TODO Can you export ANY service by providing the proper properties?
 	 */
 	List/* <ExportRegistration> */exportService(ServiceReference ref,
 			Map/* <String,Object> */properties)
@@ -63,11 +65,15 @@ public interface RemoteServiceAdmin {
 	/**
 	 * Import a service from an endpoint. The Remote Service Admin must use the
 	 * given endpoint to create a proxy. This method can return null if the
-	 * service could not be imported. ### do we need exceptions?
+	 * service could not be imported.
 	 * 
-	 * If an endpoint can not be imported because no {@link EndpointPermission#IMPORT} can be
-	 * obtained, then this endpoint must be ignored and
-	 * no Import Registration must included in the returned list.
+	 * TODO if the import reg. is valid (getException==null), can we then assume the 
+	 * service is registered?
+	 * 
+	 * If an endpoint can not be imported because no
+	 * {@link EndpointPermission#IMPORT} can be obtained, then this endpoint
+	 * must be ignored and no Import Registration must included in the returned
+	 * list.
 	 * 
 	 * @param endpoint The Endpoint Description to be used for import
 	 * @return An Import Registration that combines the Endpoint Description and
@@ -80,16 +86,25 @@ public interface RemoteServiceAdmin {
 	 * Answer the currently active Export Registrations.
 	 * 
 	 * @return A collection of Export Registrations that are currently active.
-	 * @throws SecurityException When the caller no {@link EndpointPermission#READ} could be obtained 
+	 * @throws SecurityException When the caller no
+	 *         {@link EndpointPermission#READ} could be obtained
+	 *         
+	 * TODO I guess we must ensure these registrations cannot be closed? Only the owners should be able to close them,
+	 * TODO should we make sure that the list contains the registration objects that the caller created?
 	 */
 	Collection/* <ExportRegistration> */getExportedServices();
 
 	/**
 	 * Answer the currently active Import Registrations.
 	 * 
-	 * @throws SecurityException When the caller no EndpointPermission LIST could be obtained 
+	 * @throws SecurityException When the caller no EndpointPermission LIST
+	 *         could be obtained
 	 * @return A collection of Import Registrations that are currently active.
-	 * @throws SecurityException When the caller no {@link EndpointPermission#READ} could be obtained 
+	 * @throws SecurityException When the caller no
+	 *         {@link EndpointPermission#READ} could be obtained
+	 *         
+	 * TODO I guess we must ensure these registrations cannot be closed? Only the owners should be able to close them,
+	 * TODO should we make sure that the list contains the registration objects that the caller created?
 	 */
 	Collection/* <ImportRegistration> */getImportedEndpoints();
 
