@@ -68,7 +68,7 @@ public class EndpointDescription {
 		this.properties.putAll(properties);
 
 		interfaces = verifyInterfacesProperty();
-		remoteServiceId = Long.parseLong(RemoteConstants.SERVICE_REMOTE_ID);
+		remoteServiceId = verifyLongProperty(RemoteConstants.SERVICE_REMOTE_ID);
 		remoteFrameworkUUID = verifyStringProperty(RemoteConstants.SERVICE_REMOTE_FRAMEWORK_UUID);
 		remoteUri = verifyStringProperty(RemoteConstants.SERVICE_REMOTE_URI);
 	}
@@ -93,7 +93,7 @@ public class EndpointDescription {
 			properties.put(keys[i], ref.getProperty(keys[i]));
 
 		interfaces = verifyInterfacesProperty();
-		remoteServiceId = Long.parseLong(RemoteConstants.SERVICE_REMOTE_ID);
+		remoteServiceId = verifyLongProperty(RemoteConstants.SERVICE_REMOTE_ID);
 		remoteFrameworkUUID = verifyStringProperty(RemoteConstants.SERVICE_REMOTE_FRAMEWORK_UUID);
 		remoteUri = verifyStringProperty(RemoteConstants.SERVICE_REMOTE_URI);
 	}
@@ -169,9 +169,9 @@ public class EndpointDescription {
 	}
 
 	/**
-	 * Verify and obtain the a required String property.
+	 * Verify and obtain a required String property.
 	 * 
-	 * @param propName The name of the
+	 * @param propName The name of the property
 	 * @return The value of the property.
 	 * @throws IllegalArgumentException when the property is not set or doesn't
 	 *         have the correct data type.
@@ -189,6 +189,34 @@ public class EndpointDescription {
 		return (String) r;
 	}
 
+	/**
+	 * Verify and obtain a required long property.
+	 * 
+	 * @param propName The name of the property
+	 * @return The value of the property.
+	 * @throws IllegalArgumentException when the property is not set or doesn't
+	 *         have the correct data type.
+	 */
+	private long verifyLongProperty(String propName) {
+		Object r = properties.get(propName);
+		long result;
+		if (r == null) {
+			throw new IllegalArgumentException("Required property not set: "
+					+ propName);
+		}
+		if (!(r instanceof String)) {
+			throw new IllegalArgumentException(
+					"Required property is not a string: " + propName);
+		}
+		try {
+			result = Long.parseLong((String)r);
+		} catch (NumberFormatException e) {
+			throw new IllegalArgumentException(
+					"Required property cannot be parsed as a long: " + propName);
+		}
+		return result;
+	}	
+	
 	/**
 	 * Returns the endpoint's URI.
 	 * 
