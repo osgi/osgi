@@ -86,6 +86,9 @@ public interface CompositeBundle extends Bundle {
 	 * uninstalled this method must return <code>null</code>.  The composite system 
 	 * bundle context can be used to install and manage the constituent bundles.
 	 * @return the system bundle context for the composite framework
+	 * @throws SecurityException If the caller does not have the
+	 *         appropriate <code>AdminPermission[system.bundle,CONTEXT]</code>, and
+	 *         the Java Runtime Environment supports permissions.
 	 */
 	public BundleContext getSystemBundleContext();
 	
