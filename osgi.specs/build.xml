@@ -4,17 +4,18 @@
 
 
 	<target name="javadoc" depends="init">
+        <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${workspacedir}/licensed/ant/lib/ant-contrib-0.6.jar" />        
 		<echo>${javadoc}</echo>
 		<mkdir dir="mif" />
 		<delete>
 			<fileset dir="xml" includes="*.xml" />
 		</delete>
 		<echo>${javadoc}</echo>
-		<javadoc doclet="org.osgi.tools.xmldoclet.XmlDoclet" docletpath="../org.osgi.tools/${bin}" encoding="utf-8" packagenames="${javadoc},org.osgi.service.remoteadmin">
+		<javadoc doclet="org.osgi.tools.xmldoclet.XmlDoclet" docletpath="../org.osgi.tools/${bin}" encoding="utf-8" packagenames="${javadoc}">
 			<sourcepath>
 				<dirset dir="${project.workspace}">
-					<include name="*/src" />
-					<exclude name="r5*"/>
+					<include name="org.osgi.*/src" />
+					<include name="info.dmtree.*/src"/>
 				</dirset>
 			</sourcepath>
 			<classpath>

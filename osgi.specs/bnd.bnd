@@ -1,5 +1,4 @@
 -include : ../osgi.companion/layout.bnd
-javadoc					= org.osgi.framework.*,org.osgi.service.*,org.osgi.util.*,info.dmtree.*
 
 minimum-latest 			= 1.2.0
 minimum-previous		= 1.1.3
@@ -8,8 +7,8 @@ foundation-previous		= 1.0.0
 
 servlet 				= ${repo;org.osgi.impl.bundle.servlet}
 saxon 					= ${repo;com.icl.saxon}
-jar2xml					= ../org.osgi.tools/src:${repo;org.apache.bcel}:../org.osgi.test.tool/src
-xml2mif					= ../org.osgi.tools/src
+jar2xml					= ../org.osgi.tools/${bin}:${repo;org.apache.bcel}:../org.osgi.test.tool/${bin}
+xml2mif					= ../org.osgi.tools/${bin}
 
 dependencyfinder 		= ${repo;org.apache.jakarta.oro}:${repo;org.apache.log4j}:${repo;com.jeantessier.dependencyfinder}
 
