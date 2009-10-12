@@ -142,6 +142,7 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 
 	public void testServiceRanking() throws Exception {
 		// Install the necessary bundles
+		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
 		Bundle testBundle = installBundle("objectFactory2.jar");
 		// Use the default context to grab one of the factories and make sure
 		// it's the right one
@@ -158,6 +159,7 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 				ctx.close();
 			}
 			uninstallBundle(testBundle);
+			uninstallBundle(factoryBundle);
 		}
 	}
 

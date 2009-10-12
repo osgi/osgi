@@ -149,7 +149,8 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 	}
 	
 	public void testInitialContextFactoryFromPropertiesFile() throws Exception {
-		// No bundles need to be installed.  Everything should be pulled from test bundle
+		// Install bundle containing the initialContextFactory we are configuring via the jndi.properties file
+		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
 		int invokeCountBefore = CTContext.getInvokeCount();
 		InitialContext ctx = new InitialContext();
 		try {
@@ -168,6 +169,8 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 			if (ctx != null) {
 				ctx.close();
 			}
+			
+			uninstallBundle(factoryBundle);
 		}
 	}
 

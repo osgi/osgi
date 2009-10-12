@@ -35,6 +35,7 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 
 	public void testServiceLookup() throws Exception {
 		// Install the bundle needed for this test
+		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
 		Bundle testBundle = installBundle("service1.jar");
 		// Grab the default initialContext so we can access the service registry
 		Context ctx = new InitialContext();
@@ -50,11 +51,13 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 				ctx.close();
 			}
 			uninstallBundle(testBundle);
+			uninstallBundle(factoryBundle);
 		}
 	}
 
 	public void testServiceNameProperty() throws Exception {
 		// Install the bundles need for this test
+		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
 		Bundle testBundle = installBundle("service1.jar");
 		// Grab the default InitialContext so we can access the service registry
 		Context ctx = new InitialContext();
@@ -70,6 +73,7 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 				ctx.close();
 			}
 			uninstallBundle(testBundle);
+			uninstallBundle(factoryBundle);
 		}
 	}
 
