@@ -23,7 +23,7 @@ public class TB3Activator implements BundleActivator {
 	 * Starts the bundle. Installs several services later filtered by the tbc
 	 */
 	public void start(BundleContext bc) {
-		Hashtable ts3Props = new Hashtable();
+		Hashtable<String, Object> ts3Props = new Hashtable<String, Object>();
 		ts3Props.put("name", "TestService3");
 		ts3Props.put("version", new Float(1.0));
 		ts3Props.put("compatible", new Float(1.0));
