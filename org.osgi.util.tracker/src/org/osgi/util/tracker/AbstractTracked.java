@@ -122,9 +122,7 @@ abstract class AbstractTracked<S, R, T> {
 		if (list == null) {
 			return;
 		}
-		int size = list.length;
-		for (int i = 0; i < size; i++) {
-			S item = list[i];
+		for (S item : list) {
 			if (item == null) {
 				continue;
 			}

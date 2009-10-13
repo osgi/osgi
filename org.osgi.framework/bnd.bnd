@@ -1,7 +1,9 @@
 javac.source            = 1.5
-javac.target            = 1.5
--nope							=true
+javac.target            = jsr14
+#-nope							=true
 nodeploy						=true
+Export-Package: ${p}.*
+-buildpath =
+-runpath =
 
--buildpath = \
-	ee.j2se;					version=1.5
+
