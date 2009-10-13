@@ -3,20 +3,20 @@ Bundle-Version					= 4.2.0.${project.build}
 
 Private-Package = ${p}.*, \
 	org.apache.*, \
-	javax.resource.*
+	javax.resource.*, \
+	org.slf4j.*
  
 Bundle-Activator: ${p}.Activator
 Bundle-RequiredExecutionEnvironment = J2SE-1.5
 Import-Package = \
+	org.slf4j;resolution:=optional, \
+	org.slf4j.impl;resolution:=optional, \
+	org.objectweb.howl.log;resolution:=optional, \
+	org.objectweb.howl.log.xa;resolution:=optional, \
 	javax.naming, \
 	javax.security.auth, \
  	javax.transaction;version=1.1, \
 	javax.transaction.xa;version=1.1, \
-    org.apache.avalon.framework.logger;resolution:=optional, \
-    org.apache.log;resolution:=optional, \
-    org.apache.log4j;resolution:=optional, \
-    org.objectweb.howl.log;resolution:=optional, \
-    org.objectweb.howl.log.xa;resolution:=optional, \
  	*
 
 Export-Package = \
@@ -28,6 +28,8 @@ Export-Package = \
 	org.apache.geronimo.specs.geronimo-jta_1.1_spec;version=1.1.1, \
 	ee.j2se;version=1.4, \
 	osgi.core;version=4.2, \
-	org.apache.geronimo.transaction;version=2.1.1, \
-    org.apache.commons-logging;version=1.0.4
+	org.apache.geronimo.transaction;version=2.1.2, \
+	org.slf4j;version=1.4.3, \
+	org.slf4j.impl;version=1.4.3, \
+	${junit}
 
