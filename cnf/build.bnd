@@ -90,6 +90,12 @@ junit					= com.springsource.junit;version=3.8;export="junit.framework;version=3
 -runpath							= \
 	org.eclipse.osgi;		version=3.5.1, \
 	${junit}
+# Use the following for 4.3 framework RI development	
+#-runpath							= \
+#	org.osgi.framework;						version=project, \
+#	org.osgi.util.tracker;					version=project, \
+#	org.eclipse.osgi;		version=project, \
+#	${junit}
 
 testcases = ${classes;extending;junit.framework.TestCase|*DefaultTestBundleControl;concrete}
 
