@@ -94,6 +94,7 @@ junit					= com.springsource.junit;version=3.8;export="junit.framework;version=3
 #-runpath							= \
 #	org.osgi.framework;						version=project, \
 #	org.osgi.util.tracker;					version=project, \
+#	org.osgi.service.composite;				version=project, \
 #	org.eclipse.osgi;		version=project, \
 #	${junit}
 
