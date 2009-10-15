@@ -79,7 +79,10 @@ public interface CompositeAdmin {
 	 * @throws IllegalStateException If this composite admin service is no longer valid.  
 	 *         For example, if the framework has shutdown.
 	 */
-	CompositeBundle installCompositeBundle(String location, Map compositeManifest, Map configuration) throws BundleException;
+	CompositeBundle installCompositeBundle(String location,
+			Map<String, String> compositeManifest,
+			Map<String, String> configuration)
+			throws BundleException;
 
 	/**
 	 * Returns the parent composite bundle associated with the framework with which 

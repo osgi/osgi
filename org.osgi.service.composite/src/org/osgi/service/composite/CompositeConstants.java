@@ -36,6 +36,7 @@ public class CompositeConstants {
 	 * Private constructor to prevent objects of this type.
 	 */
 	private CompositeConstants() {
+		// non-instantiable
 	}
 
 	/**

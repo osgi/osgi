@@ -268,14 +268,15 @@ public interface CompositeBundle extends Bundle {
 	 * @see #stop()
 	 * @see #start()
 	 */
-	public void update(Map compositeManifest) throws BundleException;
+	public void update(Map<String, String> compositeManifest)
+			throws BundleException;
 
 	/**
 	 * Composite bundles do not have class content.  This method must 
 	 * throw a {@link ClassNotFoundException}
 	 * @throws ClassNotFoundException Always thrown for composite bundles.
 	 */
-	public Class loadClass(String name) throws ClassNotFoundException;
+	public Class< ? > loadClass(String name) throws ClassNotFoundException;
 	/**
 	 * Composite bundles do not have content.  This method must return
 	 * <code>null</code>.
@@ -287,7 +288,7 @@ public interface CompositeBundle extends Bundle {
 	 * <code>null</code>.
 	 * @return A <code>null</code> value is always returned for composites.
 	 */
-	public Enumeration/* <URL> */getResources(String name) throws IOException;
+	public Enumeration<URL> getResources(String name) throws IOException;
 	/**
 	 * Composite bundles do not have content.  This method must return
 	 * <code>null</code>.
@@ -299,12 +300,12 @@ public interface CompositeBundle extends Bundle {
 	 * <code>null</code>.
 	 * @return A <code>null</code> value is always returned for composites.
 	 */
-	public Enumeration/* <String> */getEntryPaths(String path);
+	public Enumeration<String> getEntryPaths(String path);
 	/**
 	 * Composite bundles do not have content.  This method must return
 	 * <code>null</code>.
 	 * @return A <code>null</code> value is always returned for composites.
 	 */
-	public Enumeration/* <URL> */findEntries(String path, String filePattern,
+	public Enumeration<URL> findEntries(String path, String filePattern,
 			boolean recurse);
 }
