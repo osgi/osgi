@@ -1,7 +1,10 @@
-import java.util.*;
+import java.util.Map;
 
-import aQute.bnd.service.*;
-import aQute.lib.osgi.*;
+import aQute.bnd.service.AnalyzerPlugin;
+import aQute.lib.osgi.Analyzer;
+import aQute.lib.osgi.Instruction;
+import aQute.lib.osgi.Jar;
+import aQute.lib.osgi.Resource;
 
 public class SignatureTest implements AnalyzerPlugin {
 
@@ -14,6 +17,7 @@ public class SignatureTest implements AnalyzerPlugin {
                 analyzer.error("Can not use negatives for signature test: %s",
                         key);
 
+			foreachclasspathentry:
             for (Jar cpe : analyzer.getClasspath()) {
 
                 for (String packageName : cpe.getDirectories().keySet()) {
@@ -32,6 +36,11 @@ public class SignatureTest implements AnalyzerPlugin {
                                         r.getValue());
                             }
                         }
+						/*
+						 * Only use the first instance of the package
+						 * encountered. Do not merge.
+						 */
+						break foreachclasspathentry;
                     }
                 }
             }
