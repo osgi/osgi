@@ -2185,12 +2185,12 @@ public class FrameworkUtil {
 			return dnChainMatch(parsedDNChain, 0, parsedDNPattern, 0);
 		}
 
-		private static String toString(List<String> dnChain) {
+		private static String toString(List< ? > dnChain) {
 			if (dnChain == null) {
 				return null;
 			}
 			StringBuffer sb = new StringBuffer();
-			for (Iterator<String> iChain = dnChain.iterator(); iChain.hasNext();) {
+			for (Iterator< ? > iChain = dnChain.iterator(); iChain.hasNext();) {
 				sb.append(iChain.next());
 				if (iChain.hasNext()) {
 					sb.append("; ");
