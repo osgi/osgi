@@ -1276,8 +1276,7 @@ public interface Constants {
 	 * 
 	 * <p>
 	 * The service ranking is used by the Framework to determine the <i>natural
-	 * order</i> of services, see
-	 * {@link ServiceReference#compareTo(ServiceReference)}, and the
+	 * order</i> of services, see {@link ServiceReference#compareTo}, and the
 	 * <i>default</i> service to be returned from a call to the
 	 * {@link BundleContext#getServiceReference} method.
 	 * 

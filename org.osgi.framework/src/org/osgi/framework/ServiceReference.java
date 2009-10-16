@@ -50,7 +50,7 @@ import java.util.Dictionary;
  * @version $Revision$
  */
 
-public interface ServiceReference<S> extends Comparable<ServiceReference< ? >> {
+public interface ServiceReference<S> extends Comparable<Object> {
 	/**
 	 * Returns the property value to which the specified property key is mapped
 	 * in the properties <code>Dictionary</code> object of the service
@@ -181,5 +181,5 @@ public interface ServiceReference<S> extends Comparable<ServiceReference< ? >> {
 	 *         framework instance as this <code>ServiceReference</code>.
 	 * @since 1.4
 	 */
-	public int compareTo(ServiceReference< ? > reference);
+	public int compareTo(Object reference);
 }
