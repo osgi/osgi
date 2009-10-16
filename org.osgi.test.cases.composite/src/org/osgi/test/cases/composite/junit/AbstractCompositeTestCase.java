@@ -214,10 +214,13 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 	class TestListener {
 		protected final List events = new ArrayList();
 		synchronized public Object[] getResults(Object[] results) {
-			while (events.size() < results.length || (results.length == 0 && !isSynchronous())) {
+			if (!isSynchronous())
+			while (events.size() <= results.length) {
+				// We wait for an event even when we already have the expected number
+				// to make sure no more events are fired after the last one
 				int currentSize = events.size();
 				try {
-					wait(5000);
+					wait(1000);
 				} catch (InterruptedException e) {
 					// do nothing
 				}

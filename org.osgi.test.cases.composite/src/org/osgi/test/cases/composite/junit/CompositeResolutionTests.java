@@ -55,7 +55,8 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		PackageAdmin pa2 = (PackageAdmin) getService(composite2.getSystemBundleContext(), PackageAdmin.class.getName());
 		pa1.resolveBundles(new Bundle[] {tb2v1});
 		pa2.resolveBundles(new Bundle[] {tb2v2});
-		assertTrue("Resolution is incorrect.", tb2v1.getState() == Bundle.RESOLVED && tb2v2.getState() == Bundle.RESOLVED);
+		assertTrue("Resolution is incorrect: " + tb2v1.getVersion(), tb2v1.getState() == Bundle.RESOLVED);
+		assertTrue("Resolution is incorrect: " + tb2v2.getVersion(), tb2v2.getState() == Bundle.RESOLVED);
 		uninstallCompositeBundle(composite1);
 		uninstallCompositeBundle(composite2);
 	}
