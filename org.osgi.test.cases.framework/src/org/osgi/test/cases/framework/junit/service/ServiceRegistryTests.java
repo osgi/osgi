@@ -686,7 +686,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 			registrations[i].unregister();
 		}
 
-		reference = getContext().getServiceReferences(null,
+		reference = getContext().getServiceReferences((String) null,
 				"(objectClass=" + Marker1.class.getName() + ")");
 		assertEquals("Should have 500 references (via filter)", 500,
 				reference.length);

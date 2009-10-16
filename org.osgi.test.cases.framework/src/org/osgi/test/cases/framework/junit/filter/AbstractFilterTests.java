@@ -25,10 +25,10 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
-import org.osgi.framework.Bundle;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.test.support.MockFactory;
 import org.osgi.test.support.OSGiTestCase;
 
 public abstract class AbstractFilterTests extends OSGiTestCase {
@@ -218,7 +218,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 	}
 
 	private void testFilter(String query, Dictionary props, int expect) {
-		final ServiceReference ref = new DictionaryServiceReference(props);
+		final ServiceReference ref = newDictionaryServiceReference(props);
 		Filter f1;
 		try {
 			f1 = createFilter(query);
@@ -274,12 +274,12 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		hash.put("comparable", comp42);
 		assertTrue("does not match filter", f1.match(hash));
 		assertTrue("does not match filter", f1
-				.match(new DictionaryServiceReference(hash))); 
+				.match(newDictionaryServiceReference(hash)));
 
 		hash.put("comparable", comp43);
 		assertFalse("does match filter", f1.match(hash));
 		assertFalse("does match filter", f1
-				.match(new DictionaryServiceReference(hash))); 
+				.match(newDictionaryServiceReference(hash)));
 
 		try {
 			f1 = createFilter("(comparable<=42)");
@@ -291,12 +291,12 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		hash.put("comparable", comp42);
 		assertTrue("does not match filter", f1.match(hash));
 		assertTrue("does not match filter", f1
-				.match(new DictionaryServiceReference(hash)));
+				.match(newDictionaryServiceReference(hash)));
 
 		hash.put("comparable", comp43);
 		assertFalse("does match filter", f1.match(hash));
 		assertFalse("does match filter", f1
-				.match(new DictionaryServiceReference(hash))); 
+				.match(newDictionaryServiceReference(hash)));
 
 		try {
 			f1 = createFilter("(comparable>=42)");
@@ -308,12 +308,12 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		hash.put("comparable", comp42);
 		assertTrue("does not match filter", f1.match(hash));
 		assertTrue("does not match filter", f1
-				.match(new DictionaryServiceReference(hash)));
+				.match(newDictionaryServiceReference(hash)));
 
 		hash.put("comparable", comp43);
 		assertTrue("does not match filter", f1.match(hash));
 		assertTrue("does not match filter", f1
-				.match(new DictionaryServiceReference(hash))); 
+				.match(newDictionaryServiceReference(hash)));
 
 		try {
 			f1 = createFilter("(comparable=4*2)");
@@ -325,7 +325,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		hash.put("comparable", comp42);
 		assertFalse("does match filter", f1.match(hash));
 		assertFalse("does match filter", f1
-				.match(new DictionaryServiceReference(hash))); 
+				.match(newDictionaryServiceReference(hash))); 
 	}
 
 	public void testObject() {
@@ -344,12 +344,12 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		hash.put("object", obj42);
 		assertTrue("does not match filter", f1.match(hash));
 		assertTrue("does not match filter", f1
-				.match(new DictionaryServiceReference(hash)));
+				.match(newDictionaryServiceReference(hash)));
 
 		hash.put("object", obj43);
 		assertFalse("does match filter", f1.match(hash));
 		assertFalse("does match filter", f1
-				.match(new DictionaryServiceReference(hash)));
+				.match(newDictionaryServiceReference(hash)));
 
 		try {
 			f1 = createFilter("(object=4*2)");
@@ -361,7 +361,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		hash.put("object", obj42);
 		assertFalse("does match filter", f1.match(hash));
 		assertFalse("does match filter", f1
-				.match(new DictionaryServiceReference(hash)));
+				.match(newDictionaryServiceReference(hash)));
 	}
 	
 	public static class SampleComparable implements Comparable {
@@ -399,7 +399,13 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		}
 	}
 	
-	private static class DictionaryServiceReference implements ServiceReference {
+	public static ServiceReference newDictionaryServiceReference(
+			Dictionary dictionary) {
+		return (ServiceReference) MockFactory.newMock(ServiceReference.class,
+				new DictionaryServiceReference(dictionary));
+	}
+
+	private static class DictionaryServiceReference {
 		private final Dictionary dictionary;
 		private final String[] keys;
 
@@ -438,22 +444,6 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 
 		public String[] getPropertyKeys() {
 			return (String[]) keys.clone();
-		}
-
-		public int compareTo(Object reference) {
-			throw new UnsupportedOperationException();
-		}
-
-		public Bundle getBundle() {
-			throw new UnsupportedOperationException();
-		}
-		
-		public Bundle[] getUsingBundles() {
-			throw new UnsupportedOperationException();
-		}
-
-		public boolean isAssignableTo(Bundle bundle, String className) {
-			throw new UnsupportedOperationException();
 		}
 	}
 }
