@@ -18,7 +18,7 @@ Bundle-NativeCode: \
  solaris_sparc/libNative.so; osname=SunOS; processor=sparc; selection-filter="(${p}.div.tb16=xyz)", \
  windows_arm/Native.dll; osname="windows ce"; processor=arm_le; selection-filter="(${p}.div.tb16=xyz)", \
  macosx_x86/libNative.jnilib; osname="mac os x"; processor=x86; selection-filter="(${p}.div.tb16=xyz)", \
- macosx_x86/libNative.jnilib; osname="mac os x"; processor=x86-64; selection-filter="(${p}.div.tb16=xyz)", \
+ macosx_x86-64/libNative.jnilib; osname="mac os x"; processor=x86-64; selection-filter="(${p}.div.tb16=xyz)", \
  macosx_x86/libNative.jnilib; osname="mac os x"; processor=ppc; selection-filter="(${p}.div.tb16=xyz)"
 Include-Resource = resources/div.tb2
 Private-Package:                         ${p}.div.tb16, org.osgi.test.cases.div.tb2
