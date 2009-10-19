@@ -16,6 +16,9 @@
 
 package org.osgi.test.cases.tracker.junit;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.test.support.OSGiTestCase;
@@ -270,6 +273,14 @@ public class BundleTrackerTests extends OSGiTestCase {
 	}
 
 	public void testEvents() throws Exception {
+		Bundle[] bundles = getContext().getBundles();
+		final List<Bundle> extraneousBundles = new ArrayList<Bundle>(
+				bundles.length);
+		for (Bundle b : bundles) {
+			if ((b.getState() & (Bundle.INSTALLED | Bundle.RESOLVED)) != 0) {
+				extraneousBundles.add(b);
+			}
+		}
 		final BundleEvent[] events = new BundleEvent[] {null, null, null};
 		BundleTracker<Bundle> bt = new BundleTracker<Bundle>(getContext(),
 				Bundle.INSTALLED
@@ -277,6 +288,9 @@ public class BundleTrackerTests extends OSGiTestCase {
 				null) {
 
 			public Bundle addingBundle(Bundle bundle, BundleEvent event) {
+				if (extraneousBundles.contains(bundle)) {
+					return null;
+				}
 				synchronized (events) {
 					events[0] = event;
 				}
@@ -302,7 +316,6 @@ public class BundleTrackerTests extends OSGiTestCase {
 			assertNull("modified called", events[1]);
 			assertNull("removed called", events[2]);
 		}
-		Bundle[] bundles;
 		bt.open();
 		try {
 			bundles = bt.getBundles();
