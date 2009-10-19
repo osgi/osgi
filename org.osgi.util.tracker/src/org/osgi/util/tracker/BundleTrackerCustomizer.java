@@ -43,7 +43,7 @@ import org.osgi.framework.BundleEvent;
  * <code>BundleTrackerCustomizer</code> implementations must also be
  * thread-safe.
  * 
- * @param <T> TODO
+ * @param <T> The type of the tracked object.
  * @ThreadSafe
  * @version $Revision$
  * @since 1.4

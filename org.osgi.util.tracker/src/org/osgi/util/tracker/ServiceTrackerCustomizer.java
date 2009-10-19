@@ -44,8 +44,8 @@ import org.osgi.framework.ServiceReference;
  * <code>ServiceTrackerCustomizer</code> implementations must also be
  * thread-safe.
  * 
- * @param <S> TODO
- * @param <T> TODO
+ * @param <S> The type of the service being tracked.
+ * @param <T> The type of the tracked object.
  * @ThreadSafe
  * @version $Revision$
  */
