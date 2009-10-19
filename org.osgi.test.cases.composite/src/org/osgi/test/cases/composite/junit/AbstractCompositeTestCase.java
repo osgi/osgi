@@ -21,6 +21,8 @@ package org.osgi.test.cases.composite.junit;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -100,7 +102,27 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 		}
 		for (int i = 0; i < bundles.length; i++) {
 			if (bundles[i].getBundleId() != 0)
-				assertEquals("Bundle is in the wrong state: " + bundles[i].getLocation(), Bundle.RESOLVED, bundles[i].getState());
+				assertTrue("Bundle is in the wrong state: " + bundles[i].getLocation(), ((Bundle.STARTING | Bundle.ACTIVE | Bundle.STOPPING) & bundles[i].getState()) == 0);
+			else
+				assertEquals("System Bundle is in the wrong state", Bundle.STARTING, bundles[i].getState());
+		}
+
+	}
+
+	protected void updateCompositeBundle(CompositeBundle composite, Map manifest) {
+		Bundle[] bundles = composite.getSystemBundleContext().getBundles();
+		int previousState = composite.getState();
+		try {
+			composite.update(manifest);
+		} catch (BundleException e) {
+			fail("Unexpected error updating composite", e); //$NON-NLS-1$
+		}
+		if (previousState == Bundle.ACTIVE)
+			return;
+		// Bundles must not be active
+		for (int i = 0; i < bundles.length; i++) {
+			if (bundles[i].getBundleId() != 0)
+				assertTrue("Bundle is in the wrong state: " + bundles[i].getLocation(), ((Bundle.STARTING | Bundle.ACTIVE | Bundle.STOPPING) & bundles[i].getState()) == 0);
 			else
 				assertEquals("System Bundle is in the wrong state", Bundle.STARTING, bundles[i].getState());
 		}
@@ -167,6 +189,15 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 				assertEquals("Event Type", expected.getType(), actual.getType());
 			}
 		}
+	}
+
+	public static Map createMap(Dictionary dictionary) {
+		Map result = new HashMap();
+		for (Enumeration keys = dictionary.keys(); keys.hasMoreElements();) {
+			Object key = keys.nextElement();
+			result.put(key, dictionary.get(key));
+		}
+		return result;
 	}
 
 	class SyncTestBundleListener extends TestBundleListener implements SynchronousBundleListener {
