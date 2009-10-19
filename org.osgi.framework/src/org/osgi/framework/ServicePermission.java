@@ -379,6 +379,7 @@ public final class ServicePermission extends BasicPermission {
 	 * @return <code>true</code> if the specified permission is implied by this
 	 *         object; <code>false</code> otherwise.
 	 */
+	@Override
 	public boolean implies(Permission p) {
 		if (!(p instanceof ServicePermission)) {
 			return false;
@@ -455,6 +456,7 @@ public final class ServicePermission extends BasicPermission {
 	 * 
 	 * @return The canonical string representation of the actions.
 	 */
+	@Override
 	public String getActions() {
 		String result = actions;
 		if (result == null) {
@@ -486,6 +488,7 @@ public final class ServicePermission extends BasicPermission {
 	 * @return A new <code>PermissionCollection</code> object suitable for storing
 	 * <code>ServicePermission</code> objects.
 	 */
+	@Override
 	public PermissionCollection newPermissionCollection() {
 		return new ServicePermissionCollection();
 	}
@@ -501,6 +504,7 @@ public final class ServicePermission extends BasicPermission {
 	 *         class name and actions as this <code>ServicePermission</code>
 	 *         object; <code>false</code> otherwise.
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (obj == this) {
 			return true;
@@ -523,6 +527,7 @@ public final class ServicePermission extends BasicPermission {
 	 * 
 	 * @return Hash code value for this object.
 	 */
+	@Override
 	public int hashCode() {
 		int h = 31 * 17 + getName().hashCode();
 		h = 31 * h + getActions().hashCode();
@@ -606,6 +611,7 @@ public final class ServicePermission extends BasicPermission {
 			this.service = service;
 		}
 
+		@Override
 		public Object get(Object k) {
 			if (!(k instanceof String)) {
 				return null;
@@ -621,15 +627,18 @@ public final class ServicePermission extends BasicPermission {
 			return service.getProperty(key);
 		}
 
+		@Override
 		public int size() {
 			return properties.size() + service.getPropertyKeys().length;
 		}
 
+		@Override
 		public boolean isEmpty() {
 			// we can return false because this must never be empty
 			return false;
 		}
 
+		@Override
 		public Enumeration<String> keys() {
 			Collection<String> pk = properties.keySet();
 			String spk[] = service.getPropertyKeys();
@@ -648,6 +657,7 @@ public final class ServicePermission extends BasicPermission {
 			return Collections.enumeration(all);
 		}
 
+		@Override
 		public Enumeration<Object> elements() {
 			Collection<String> pk = properties.keySet();
 			String spk[] = service.getPropertyKeys();
@@ -666,10 +676,12 @@ public final class ServicePermission extends BasicPermission {
 			return Collections.enumeration(all);
 		}
 
+		@Override
 		public Object put(String key, Object value) {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public Object remove(Object key) {
 			throw new UnsupportedOperationException();
 		}
@@ -726,6 +738,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 	 *         <code>ServicePermissionCollection</code> object has been marked
 	 *         read-only.
 	 */
+	@Override
 	public void add(final Permission permission) {
 		if (!(permission instanceof ServicePermission)) {
 			throw new IllegalArgumentException("invalid permission: "
@@ -788,6 +801,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 	 *         subset of a permission in the set; <code>false</code>
 	 *         otherwise.
 	 */
+	@Override
 	public boolean implies(final Permission permission) {
 		if (!(permission instanceof ServicePermission)) {
 			return false;
@@ -896,6 +910,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 	 * 
 	 * @return Enumeration of all the ServicePermission objects.
 	 */
+	@Override
 	public synchronized Enumeration<Permission> elements() {
 		List<ServicePermission> all = new ArrayList<ServicePermission>(
 				permissions.values());

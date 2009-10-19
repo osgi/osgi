@@ -186,7 +186,8 @@ public class BundleException extends Exception {
 	 *         set.
 	 * @since 1.3
 	 */
-    public Throwable getCause() {
+	@Override
+	public Throwable getCause() {
 		return super.getCause();
 	}
 
@@ -201,6 +202,7 @@ public class BundleException extends Exception {
 	 *         been set.
 	 * @since 1.3
 	 */
+	@Override
 	public Throwable initCause(Throwable cause) {
 		return super.initCause(cause);
 	}

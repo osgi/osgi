@@ -28,6 +28,7 @@ package org.osgi.framework;
  * @deprecated As of 1.2. Please use Configuration Admin service.
  * @version $Revision$
  */
+@Deprecated
 public interface Configurable {
 	/**
 	 * Returns this service's configuration object.
@@ -47,5 +48,6 @@ public interface Configurable {
 	 *         permissions.
 	 * @deprecated As of 1.2. Please use Configuration Admin service.
 	 */
+	@Deprecated
 	public Object getConfigurationObject();
 }

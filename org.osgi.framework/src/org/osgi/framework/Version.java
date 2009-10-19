@@ -264,6 +264,7 @@ public class Version implements Comparable<Version> {
 	 * 
 	 * @return The string representation of this version identifier.
 	 */
+	@Override
 	public String toString() {
 		int q = qualifier.length();
 		StringBuffer result = new StringBuffer(20 + q);
@@ -284,6 +285,7 @@ public class Version implements Comparable<Version> {
 	 * 
 	 * @return An integer which is a hash code value for this object.
 	 */
+	@Override
 	public int hashCode() {
 		return (major << 24) + (minor << 16) + (micro << 8)
 				+ qualifier.hashCode();
@@ -302,6 +304,7 @@ public class Version implements Comparable<Version> {
 	 *         <code>Version</code> and is equal to this object;
 	 *         <code>false</code> otherwise.
 	 */
+	@Override
 	public boolean equals(Object object) {
 		if (object == this) { // quicktest
 			return true;
