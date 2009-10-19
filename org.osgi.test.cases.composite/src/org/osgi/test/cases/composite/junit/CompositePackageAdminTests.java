@@ -375,42 +375,28 @@ public class CompositePackageAdminTests extends AbstractCompositeTestCase {
 			// TODO need to decide if listeners on the system context should outlive stop/start of composite
 			composite.getSystemBundleContext().addBundleListener(testListener);
 			parentPA.refreshPackages(null);
-//			BundleEvent[] expected = new BundleEvent[] {
-//				new BundleEvent(BundleEvent.STOPPED, tb3client),
-//				new BundleEvent(BundleEvent.UNRESOLVED, tb3client),
-//				new BundleEvent(BundleEvent.RESOLVED, tb3client),
-//				new BundleEvent(BundleEvent.STARTED, tb3client)
-//			};
-//			BundleEvent[] results = (BundleEvent[]) testListener.getResults(new BundleEvent[expected.length]);
-//			compareEvents(expected, results);
-
-			// TODO need to wait for refresh to end
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				// nothing
-			}
-			assertEquals("Wrong state for test bundle", Bundle.ACTIVE, tb3client.getState());
-
+			BundleEvent[] expected = new BundleEvent[] {
+				new BundleEvent(BundleEvent.STOPPED, tb3client),
+				new BundleEvent(BundleEvent.UNRESOLVED, tb3client),
+				new BundleEvent(BundleEvent.RESOLVED, tb3client),
+				new BundleEvent(BundleEvent.STARTED, tb3client)
+			};
+			BundleEvent[] results = (BundleEvent[]) testListener.getResults(new BundleEvent[expected.length]);
+			compareEvents(expected, results);
+			
 			// remove import policy
 			manifest.remove(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY);
 			updateCompositeBundle(composite, manifest);
 
 			parentPA.refreshPackages(null);
-//			expected = new BundleEvent[] {
-//					new BundleEvent(BundleEvent.STOPPED, tb3client),
-//					new BundleEvent(BundleEvent.UNRESOLVED, tb3client)
-//			};
-//			results = (BundleEvent[]) testListener.getResults(new BundleEvent[expected.length]);
-//			compareEvents(expected, results);
-			// TODO need to wait for refresh to end
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				// nothing
-			}
-			assertEquals("Wrong state for test bundle", Bundle.INSTALLED, tb3client.getState());
-
+			expected = new BundleEvent[] {
+					new BundleEvent(BundleEvent.STOPPED, tb3client), // STOPPED and STARTED are a result of the composite update
+					new BundleEvent(BundleEvent.STARTED, tb3client),
+					new BundleEvent(BundleEvent.STOPPED, tb3client), // Second stop is because of refreshing composite
+					new BundleEvent(BundleEvent.UNRESOLVED, tb3client) // Unresolved because composite refresh
+			};
+			results = (BundleEvent[]) testListener.getResults(new BundleEvent[expected.length]);
+			compareEvents(expected, results);
 			uninstallCompositeBundle(composite);
 		} finally {
 			try {
