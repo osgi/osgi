@@ -1,6 +1,6 @@
 Bundle-SymbolicName: ${p}.tb3
 Bundle-Name: ${p}.tb3
-Bundle-Version: 4.2.0.${project.build}
+Bundle-Version: 1.2.0.${project.build}
 Bundle-Vendor: IBM
 Bundle-DocURL: http://www.osgi.org/
 Bundle-ContactAddress: info@mail.osgi.org
@@ -8,5 +8,6 @@ Bundle-Category: osgi,test
 Bundle-Copyright: ${copyright}
 
 Export-Package						= \
-	${p}.tb3.*
+	${p}.tb3; tb3version=2, \
+	${p}.tb3.params; tb3version=2
 

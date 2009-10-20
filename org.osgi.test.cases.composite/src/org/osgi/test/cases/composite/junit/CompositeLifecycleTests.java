@@ -18,10 +18,14 @@
 package org.osgi.test.cases.composite.junit;
 
 
+import java.util.Dictionary;
+import java.util.Map;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.FrameworkEvent;
+import org.osgi.service.composite.CompositeAdmin;
 import org.osgi.service.composite.CompositeBundle;
 import org.osgi.test.support.OSGiTestCase;
 
@@ -38,6 +42,34 @@ public class CompositeLifecycleTests extends AbstractCompositeTestCase {
 		startCompositeBundle(composite);
 		stopCompositeBundle(composite);
 		uninstallCompositeBundle(composite);
+	}
+
+	public void testCompositeCreate03() {
+		// test creating nested composites
+		CompositeBundle composite1 = createCompositeBundle(compAdmin, getName(), null, null);
+
+		// create two nested composites under composite1
+		CompositeAdmin compAdmin1 = (CompositeAdmin) getService(composite1.getSystemBundleContext(), CompositeAdmin.class.getName());
+		CompositeBundle composite1_1 = createCompositeBundle(compAdmin1, getName()+".1_1", null, null);
+		CompositeBundle composite1_2 = createCompositeBundle(compAdmin1, getName()+".1_2", null, null);
+
+		// create two nested composites under each composite
+		CompositeAdmin compAdmin1_1 = (CompositeAdmin) getService(composite1_1.getSystemBundleContext(), CompositeAdmin.class.getName());
+		CompositeBundle composite1_1_1 = createCompositeBundle(compAdmin1_1, getName()+".1_1_1", null, null);
+		CompositeBundle composite1_1_2 = createCompositeBundle(compAdmin1_1, getName()+".1_1_2", null, null);
+
+		CompositeAdmin compAdmin1_2 = (CompositeAdmin) getService(composite1_2.getSystemBundleContext(), CompositeAdmin.class.getName());
+		CompositeBundle composite1_2_1 = createCompositeBundle(compAdmin1_2, getName()+".1_2_1", null, null);
+		CompositeBundle composite1_2_2 = createCompositeBundle(compAdmin1_2, getName()+".1_2_2", null, null);
+
+		startCompositeBundle(composite1);
+		startCompositeBundle(composite1_1);
+		startCompositeBundle(composite1_1_1);
+		startCompositeBundle(composite1_1_2);
+		startCompositeBundle(composite1_2);
+		startCompositeBundle(composite1_2_1);
+		startCompositeBundle(composite1_2_2);
+		uninstallCompositeBundle(composite1);
 	}
 
 	public void testConstituentLifeCycle01() {
@@ -115,6 +147,44 @@ public class CompositeLifecycleTests extends AbstractCompositeTestCase {
 			AbstractCompositeTestCase.compareEvents(expectedEvents , compositeEvents);
 			FrameworkEvent[] parentEvents = (FrameworkEvent[]) parentListener.getResults(new FrameworkEvent[0]);
 			assertEquals("Wrong number of parent events", 0, parentEvents.length);
+		} finally {
+			composite.getSystemBundleContext().removeFrameworkListener(compositeListener);
+			getContext().removeFrameworkListener(parentListener);
+			uninstallCompositeBundle(composite);
+		}
+	}
+
+	public void testFrameworkEvent02() {
+		// Test scoping of framework events for STOPPED
+		// TODO Need to decide of STOPPED_UPDATE FrameworkEvent makes sense for CompositeBundle.update operation
+		CompositeBundle composite = createCompositeBundle(compAdmin, getName(), null, null);
+		TestFrameworkListener compositeListener = new TestFrameworkListener(FrameworkEvent.STOPPED | FrameworkEvent.STARTED);
+		TestFrameworkListener parentListener= new TestFrameworkListener(FrameworkEvent.STOPPED | FrameworkEvent.STARTED);
+		getContext().addFrameworkListener(parentListener);
+		try {
+			startCompositeBundle(composite);
+			composite.getSystemBundleContext().addFrameworkListener(compositeListener);
+
+			Map manifest = createMap(composite.getHeaders(""));
+			updateCompositeBundle(composite, manifest);
+			FrameworkEvent[] expectedEvents = new FrameworkEvent[] {
+					new FrameworkEvent(FrameworkEvent.STOPPED, composite.getSystemBundleContext().getBundle(), null),
+					new FrameworkEvent(FrameworkEvent.STARTED, composite.getSystemBundleContext().getBundle(), null)
+			};
+			FrameworkEvent[] compositeEvents = (FrameworkEvent[]) compositeListener.getResults(new FrameworkEvent[expectedEvents.length]);
+			AbstractCompositeTestCase.compareEvents(expectedEvents , compositeEvents);
+
+			FrameworkEvent[] parentEvents = (FrameworkEvent[]) parentListener.getResults(new FrameworkEvent[0]);
+			assertEquals("Wrong number of parent events", 0, parentEvents.length);
+
+			stopCompositeBundle(composite);
+			expectedEvents = new FrameworkEvent[] {
+				new FrameworkEvent(FrameworkEvent.STOPPED, composite.getSystemBundleContext().getBundle(), null)
+			};
+			compositeEvents = (FrameworkEvent[]) compositeListener.getResults(new FrameworkEvent[expectedEvents.length]);
+			AbstractCompositeTestCase.compareEvents(expectedEvents , compositeEvents);
+
+			assertEquals("Wrong number of parent events", 0, parentEvents.length);	
 		} finally {
 			composite.getSystemBundleContext().removeFrameworkListener(compositeListener);
 			getContext().removeFrameworkListener(parentListener);

@@ -46,12 +46,18 @@ import org.osgi.test.support.OSGiTestCase;
 public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 	protected ServiceReference compRef;
 	protected CompositeAdmin compAdmin;
+	protected ServiceReference paRef;
+	protected PackageAdmin pa;
 
 	public void setUp() {
 		compRef = getContext().getServiceReference(CompositeAdmin.class.getName());
 		assertNotNull(compRef);
 		compAdmin = (CompositeAdmin) getContext().getService(compRef);
 		assertNotNull(compAdmin);
+		paRef = getContext().getServiceReference(PackageAdmin.class.getName());
+		assertNotNull(paRef);
+		pa = (PackageAdmin) getContext().getService(paRef);
+		assertNotNull(pa);
 	}
 
 	public void tearDown() {
@@ -59,6 +65,18 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 			getContext().ungetService(compRef);
 		compAdmin = null;
 		compRef = null;
+		refreshRootPackages();
+		if (pa != null)
+			getContext().ungetService(paRef);
+		pa = null;
+		paRef = null;
+	}
+
+	public void refreshRootPackages() {
+		TestFrameworkListener listener = new TestFrameworkListener(FrameworkEvent.PACKAGES_REFRESHED);
+		getContext().addFrameworkListener(listener);
+		pa.refreshPackages(null);
+		listener.getResults(new FrameworkEvent[1], false);
 	}
 
 	CompositeBundle createCompositeBundle(CompositeAdmin factory, String location, Map compositeManifest, Map configuration) {
@@ -245,25 +263,30 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 	class TestListener {
 		protected final List events = new ArrayList();
 		synchronized public Object[] getResults(Object[] results) {
+			return getResults(results, true);
+		}
+
+		synchronized public Object[] getResults(Object[] results, boolean ensureLast) {
 			if (!isSynchronous())
-			while (events.size() <= results.length) {
-				// We wait for an event even when we already have the expected number
-				// to make sure no more events are fired after the last one
-				int currentSize = events.size();
-				try {
-					wait(1000);
-				} catch (InterruptedException e) {
-					// do nothing
+				while (events.size() <= results.length) {
+					if (!ensureLast && events.size() == results.length)
+						break; // do not wait after last
+					// We wait for an event even when we already have the expected number
+					// to make sure no more events are fired after the last one
+					int currentSize = events.size();
+					try {
+						wait(1000);
+					} catch (InterruptedException e) {
+						// do nothing
+					}
+					if (currentSize == events.size())
+						break; // no new events occurred; break out
 				}
-				if (currentSize == events.size())
-					break; // no new events occurred; break out
-			}
 			assertEquals("Did not fire expected number of events", results.length, events.size());
 			results = events.toArray(results);
 			events.clear();
 			return results;
 		}
-	
 		protected boolean isSynchronous() {
 			return false;
 		}

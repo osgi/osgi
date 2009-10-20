@@ -52,7 +52,7 @@ public class CompositePackageAdminTests extends AbstractCompositeTestCase {
 			manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 			manifest.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.tb3, org.osgi.test.cases.composite.tb3.params");
 			CompositeBundle composite = createCompositeBundle(compAdmin, getName(), manifest, null);
-			Bundle tb3 = installConstituent(composite, "tb3", "tb3.jar");
+			Bundle tb3 = installConstituent(composite, "tb3", "tb3v1.jar");
 	
 	
 			PackageAdmin compositePA = (PackageAdmin) getService(composite.getSystemBundleContext(), PackageAdmin.class.getName());
@@ -94,7 +94,7 @@ public class CompositePackageAdminTests extends AbstractCompositeTestCase {
 		// Tests refreshing a parent bundle which a constituent imports a package from.
 		Bundle tb3 = null;
 		try {
-			tb3 = install("tb3.jar");
+			tb3 = install("tb3v1.jar");
 		} catch (Exception e) {
 			fail("Unexpected error installing test bundle", e);
 		}
@@ -158,7 +158,7 @@ public class CompositePackageAdminTests extends AbstractCompositeTestCase {
 			manifest.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.tb3, org.osgi.test.cases.composite.tb3.params");
 			CompositeBundle composite = createCompositeBundle(compAdmin, getName(), manifest, null);
 			startCompositeBundle(composite);
-			Bundle tb3 = installConstituent(composite, "tb3", "tb3.jar");
+			Bundle tb3 = installConstituent(composite, "tb3", "tb3v1.jar");
 	
 	
 			PackageAdmin compositePA = (PackageAdmin) getService(composite.getSystemBundleContext(), PackageAdmin.class.getName());
@@ -214,7 +214,7 @@ public class CompositePackageAdminTests extends AbstractCompositeTestCase {
 			manifest.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.tb3, org.osgi.test.cases.composite.tb3.params");
 			CompositeBundle composite = createCompositeBundle(compAdmin, getName(), manifest, null);
 			startCompositeBundle(composite);
-			Bundle tb3 = installConstituent(composite, "tb3", "tb3.jar");
+			Bundle tb3 = installConstituent(composite, "tb3", "tb3v1.jar");
 	
 	
 			PackageAdmin compositePA = (PackageAdmin) getService(composite.getSystemBundleContext(), PackageAdmin.class.getName());
@@ -274,7 +274,7 @@ public class CompositePackageAdminTests extends AbstractCompositeTestCase {
 		try {
 			// install composite with no exports
 			CompositeBundle composite = createCompositeBundle(compAdmin, getName(), null, null);
-			Bundle tb3 = installConstituent(composite, "tb3", "tb3.jar");
+			Bundle tb3 = installConstituent(composite, "tb3", "tb3v1.jar");
 	
 	
 			PackageAdmin compositePA = (PackageAdmin) getService(composite.getSystemBundleContext(), PackageAdmin.class.getName());
@@ -337,7 +337,7 @@ public class CompositePackageAdminTests extends AbstractCompositeTestCase {
 		// Test update a composite with a constituent which a parent bundle imports a package from.
 		Bundle tb3 = null;
 		try {
-			tb3 = install("tb3.jar");
+			tb3 = install("tb3v1.jar");
 		} catch (Exception e) {
 			fail("Unexpected error installing test bundle", e);
 		}
