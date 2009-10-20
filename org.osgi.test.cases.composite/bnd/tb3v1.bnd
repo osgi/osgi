@@ -8,6 +8,6 @@ Bundle-Category: osgi,test
 Bundle-Copyright: ${copyright}
 
 Export-Package						= \
-	${p}.tb3; tb3version=1, \
-	${p}.tb3.params; tb3version=1
+	${p}.tb3; tb3version=1; -noimport:=true, \
+	${p}.tb3.params; tb3version=1; -noimport:=true
 

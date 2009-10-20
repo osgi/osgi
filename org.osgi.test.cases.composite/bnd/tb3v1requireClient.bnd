@@ -1,0 +1,18 @@
+Bundle-SymbolicName: ${p}.tb3v1client
+Bundle-Name: ${p}.tb3v1client
+Bundle-Version: 4.2.0.${project.build}
+Bundle-Activator: ${p}.tb3client.Client
+Bundle-Vendor: IBM
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+Bundle-Copyright: ${copyright}
+
+Require-Bundle = \
+	${p}.tb3; bundle-version="[1.0,1.1)
+Import-Package = \
+	!${p}.tb3, \
+	!${p}.tb3.params, \
+	org.osgi.framework
+Private-Package						= \
+	${p}.tb3client.*
