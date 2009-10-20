@@ -14,14 +14,15 @@
 		<javadoc doclet="org.osgi.tools.xmldoclet.XmlDoclet" docletpath="../org.osgi.tools/${bin}" encoding="utf-8" packagenames="${javadoc}">
 			<sourcepath>
 				<dirset dir="${project.workspace}">
+
+<include name="jmx/src"/>
+<exclude name="org.osgi.jmx/src"/>
 					<include name="org.osgi.*/src" />
 					<include name="info.dmtree.*/src"/>
 				</dirset>
 			</sourcepath>
 			<classpath>
-				<dirset dir="${project.workspace}">
-					<include name="*/src" />
-				</dirset>
+                                <pathelement location="${project.workspace}/ee.foundation/bin"/>
 				<pathelement location="${servlet}" />
 			</classpath>
 		</javadoc>
