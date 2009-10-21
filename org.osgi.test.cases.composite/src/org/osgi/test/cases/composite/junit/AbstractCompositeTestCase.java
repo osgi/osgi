@@ -79,6 +79,14 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 		listener.getResults(new FrameworkEvent[1], false);
 	}
 
+	public CompositeBundle createCompositeBundle(CompositeBundle parent, String location, Map compositeManifest, Map configuration, String[] constituents) {
+		CompositeAdmin ca = (CompositeAdmin) (parent == null ? compAdmin : getService(parent.getSystemBundleContext(), CompositeAdmin.class.getName()));
+		CompositeBundle composite = createCompositeBundle(ca, location, compositeManifest, configuration);
+		for (int i = 0; i < constituents.length; i++)
+			installConstituent(composite, location + '.' + constituents[i], constituents[i]);
+		return composite;
+	}
+	
 	CompositeBundle createCompositeBundle(CompositeAdmin factory, String location, Map compositeManifest, Map configuration) {
 		if (configuration == null)
 			configuration = new HashMap();

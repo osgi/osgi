@@ -212,6 +212,32 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		doTestImportPolicy01(manifest, "tb3v1.jar", "tb3v1client.jar", true);
 	}
 
+	// TODO this is experimental to support RFP 121 requirement to import all
+	public void testPackageImport01i() {
+		Map manifest = new HashMap();
+		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
+				"*; tb3version=1");
+		doTestImportPolicy01(manifest, "tb3v1.jar", "tb3v1client.jar", false);
+	}
+
+	// TODO this is experimental to support RFP 121 requirement to import all
+	public void testPackageImport01j() {
+		Map manifest = new HashMap();
+		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
+				"*; tb3version=2");
+		doTestImportPolicy01(manifest, "tb3v1.jar", "tb3v1client.jar", true);
+	}
+
+	// TODO this is experimental to support RFP 121 requirement to import all
+	public void testPackageImport01k() {
+		Map manifest = new HashMap();
+		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.*");
+		doTestImportPolicy01(manifest, "tb3v1.jar", "tb3v1client.jar", false);
+	}
+
 	private void doTestImportPolicy01(Map manifest, String tb3_1_Loc, String tb3vClient, boolean clientFail) {
 		doTestImportPolicy01(manifest, tb3_1_Loc, null, tb3vClient, clientFail);
 	}
@@ -388,7 +414,6 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		}
 	}
 
-
 	public void testPackageExport01a() {
 		Map manifest = new HashMap();
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
@@ -449,6 +474,30 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"[1.1,2.0)\", org.osgi.test.cases.composite.tb3.params; version=\"[1.1,2.0)\"");
 		doTestExportPackage01(manifest, "tb3v1.jar", "tb3v1client.jar", true);
+	}
+
+	// TODO this is experimental to support RFP 121 requirement to import all
+	public void testPackageExport01i() {
+		Map manifest = new HashMap();
+		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "*; tb3version=1");
+		doTestExportPackage01(manifest, "tb3v1.jar", "tb3v1client.jar", false);
+	}
+
+	// TODO this is experimental to support RFP 121 requirement to import all
+	public void testPackageExport01j() {
+		Map manifest = new HashMap();
+		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "*; tb3version=2");
+		doTestExportPackage01(manifest, "tb3v1.jar", "tb3v1client.jar", true);
+	}
+
+	// TODO this is experimental to support RFP 121 requirement to import all
+	public void testPackageExport01k() {
+		Map manifest = new HashMap();
+		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.*");
+		doTestExportPackage01(manifest, "tb3v1.jar", "tb3v1client.jar", false);
 	}
 
 	private void doTestExportPackage01(Map manifest, String tb3_1_Loc, String tb3vClient, boolean clientFail) {

@@ -1,0 +1,12 @@
+Bundle-SymbolicName: ${p}.tb4v1impl
+Bundle-Name: ${p}.tb4v1impl
+Bundle-Version: 1.0.0.${project.build}
+Bundle-Vendor: IBM
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+Bundle-Copyright: ${copyright}
+Test-Property: v1
+Private-Package:	= \
+	${p}.tb4impl.*
+
