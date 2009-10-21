@@ -7,12 +7,8 @@ Bundle-DocURL: http://www.osgi.org/
 Bundle-ContactAddress: info@mail.osgi.org
 Bundle-Category: osgi,test
 Bundle-Copyright: ${copyright}
-Import-Package = \
-	${p}.tb4; tb4version=1, \
-	${p}.tb4.params; tb4version=1, \
-	org.osgi.framework, \
-	junit.framework, \
-	${p}.junit.exceptions
+Test-Property: v1
+
 Private-Package						= \
 	${p}.tb4client.*
 

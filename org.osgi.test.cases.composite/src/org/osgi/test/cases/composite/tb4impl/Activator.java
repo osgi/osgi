@@ -27,7 +27,7 @@ public class Activator implements BundleActivator {
 	private static String TEST_HEADER = "Test-Property";
 	private static String TEST_KEY = "test.property";
 	public void start(BundleContext context) throws Exception {
-		String testPropValue = (String) context.getBundle().getHeaders("").get(TEST_KEY);
+		String testPropValue = (String) context.getBundle().getHeaders("").get(TEST_HEADER);
 		Hashtable serviceProps = new Hashtable();
 		if (testPropValue != null)
 			serviceProps.put(TEST_KEY, testPropValue);

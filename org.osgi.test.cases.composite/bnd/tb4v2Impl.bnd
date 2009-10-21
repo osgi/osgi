@@ -1,6 +1,6 @@
 Bundle-SymbolicName: ${p}.tb4impl
 Bundle-Name: ${p}.tb4impl
-Bundle-Version: 1.0.0.${project.build}
+Bundle-Version: 2.0.0.${project.build}
 Bundle-Vendor: IBM
 Bundle-DocURL: http://www.osgi.org/
 Bundle-ContactAddress: info@mail.osgi.org

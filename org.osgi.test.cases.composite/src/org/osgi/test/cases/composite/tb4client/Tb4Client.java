@@ -37,7 +37,7 @@ public class Tb4Client implements BundleActivator {
 		ServiceReference ref = context.getServiceReference(SomeService.class.getName());
 		if (ref == null)
 			throw new TestException("Could not find service reference.", TestException.NO_SERVICE_REFERENCE);
-		String testPropValue = (String) context.getBundle().getHeaders("").get(TEST_KEY);
+		String testPropValue = (String) context.getBundle().getHeaders("").get(TEST_HEADER);
 		if (testPropValue != null && !testPropValue.equals(ref.getProperty(TEST_KEY)))
 			throw new TestException("Wrong service property value, expected: " + testPropValue + " but found: " + ref.getProperty(TEST_KEY), TestException.WRONG_SERVICE_PROPERTY);
 
