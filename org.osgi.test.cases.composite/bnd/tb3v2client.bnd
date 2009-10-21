@@ -1,6 +1,6 @@
-Bundle-SymbolicName: ${p}.tb3v2client
-Bundle-Name: ${p}.tb3v2client
-Bundle-Version: 4.2.0.${project.build}
+Bundle-SymbolicName: ${p}.tb3client
+Bundle-Name: ${p}.tb3client
+Bundle-Version: 2.0.0.${project.build}
 Bundle-Activator: ${p}.tb3client.Client
 Bundle-Vendor: IBM
 Bundle-DocURL: http://www.osgi.org/

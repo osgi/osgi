@@ -24,13 +24,11 @@ import org.osgi.test.cases.composite.tb4.params.Work2;
 public class SomeServiceImpl implements SomeService {
 
 	public void doWork(Work1 type) {
-		// TODO Auto-generated method stub
-
+		// nothing to do
 	}
 
 	public void doWork(Work2 type) {
-		// TODO Auto-generated method stub
-
+		// nothing to do
 	}
 
 }

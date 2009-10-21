@@ -15,11 +15,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.test.cases.composite.junit;
+package org.osgi.test.cases.composite.junit.exceptions;
 
+public class TestException extends RuntimeException {
+	public static int NO_SERVICE_REFERENCE = 1;
+	public static int NO_SERVICE = 2;
+	public static int WRONG_SERVICE_PROPERTY = 3;
+	private final int testCode;
+	
+	public TestException(String message, int testCode) {
+		super(message);
+		this.testCode = testCode;
+	}
 
-public class CompositeServiceTests extends AbstractCompositeTestCase {
-	public void testServiceImportPolicy01() {
-		// place holder
+	public int getTestCode() {
+		return testCode;
 	}
 }

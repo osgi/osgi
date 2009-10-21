@@ -25,7 +25,6 @@ import java.util.Map;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
-import org.osgi.service.composite.CompositeAdmin;
 import org.osgi.service.composite.CompositeBundle;
 import org.osgi.service.composite.CompositeConstants;
 import org.osgi.service.packageadmin.PackageAdmin;
@@ -154,7 +153,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		Map manifest = new HashMap();
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"1.0\", org.osgi.test.cases.composite.tb3.params; version=\"1.0\"");
-		doTestImportPolicy01(manifest, "tb3v1.jar", "tb3v1client.jar", false);
+		doTestImportPolicy01(manifest, "tb3v1.jar", "tb3v1client.jar", false, null);
 	}
 
 	public void testPackageImport01b() {
@@ -162,7 +161,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
 				"org.osgi.test.cases.composite.tb3; tb3version=1, org.osgi.test.cases.composite.tb3.params; tb3version=1");
-		doTestImportPolicy01(manifest, "tb3v1.jar", "tb3v1client.jar", false);
+		doTestImportPolicy01(manifest, "tb3v1.jar", "tb3v1client.jar", false, null);
 	}
 
 	public void testPackageImport01c() {
@@ -170,7 +169,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
 				"org.osgi.test.cases.composite.tb3; tb3version=2, org.osgi.test.cases.composite.tb3.params; tb3version=2");
-		doTestImportPolicy01(manifest, "tb3v1.jar", "tb3v1client.jar", true);
+		doTestImportPolicy01(manifest, "tb3v1.jar", "tb3v1client.jar", true, null);
 	}
 
 	public void testPackageImport01d() {
@@ -178,7 +177,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
 				"org.osgi.test.cases.composite.tb3; tb3version=2, org.osgi.test.cases.composite.tb3.params; tb3version=2");
-		doTestImportPolicy01(manifest, "tb3v2.jar", "tb3v1client.jar", true);
+		doTestImportPolicy01(manifest, "tb3v2.jar", "tb3v1client.jar", true, null);
 	}
 
 	public void testPackageImport01e() {
@@ -186,7 +185,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
 				"org.osgi.test.cases.composite.tb3; tb3version=2, org.osgi.test.cases.composite.tb3.params; tb3version=2");
-		doTestImportPolicy01(manifest, "tb3v2.jar", "tb3v2client.jar", false);
+		doTestImportPolicy01(manifest, "tb3v2.jar", "tb3v2client.jar", false, null);
 	}
 
 	public void testPackageImport01f() {
@@ -194,7 +193,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
 				"org.osgi.test.cases.composite.tb3; tb3version=1, org.osgi.test.cases.composite.tb3.params; tb3version=2");
-		doTestImportPolicy01(manifest, "tb3v1.jar", "tb3v2.jar", "tb3client.jar", true);
+		doTestImportPolicy01(manifest, "tb3v1.jar", "tb3v2.jar", "tb3client.jar", true, null);
 	}
 
 	public void testPackageImport01g() {
@@ -202,14 +201,14 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
 				"org.osgi.test.cases.composite.tb3; tb3version=2, org.osgi.test.cases.composite.tb3.params; tb3version=2");
-		doTestImportPolicy01(manifest, "tb3v1.jar", "tb3v2.jar", "tb3v2client.jar", false);
+		doTestImportPolicy01(manifest, "tb3v1.jar", "tb3v2.jar", "tb3v2client.jar", false, null);
 	}
 
 	public void testPackageImport01h() {
 		Map manifest = new HashMap();
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"[1.1,2.0)\", org.osgi.test.cases.composite.tb3.params; version=\"[1.1,2.0)\"");
-		doTestImportPolicy01(manifest, "tb3v1.jar", "tb3v1client.jar", true);
+		doTestImportPolicy01(manifest, "tb3v1.jar", "tb3v1client.jar", true, null);
 	}
 
 	// TODO this is experimental to support RFP 121 requirement to import all
@@ -218,7 +217,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
 				"*; tb3version=1");
-		doTestImportPolicy01(manifest, "tb3v1.jar", "tb3v1client.jar", false);
+		doTestImportPolicy01(manifest, "tb3v1.jar", "tb3v1client.jar", false, null);
 	}
 
 	// TODO this is experimental to support RFP 121 requirement to import all
@@ -227,7 +226,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
 				"*; tb3version=2");
-		doTestImportPolicy01(manifest, "tb3v1.jar", "tb3v1client.jar", true);
+		doTestImportPolicy01(manifest, "tb3v1.jar", "tb3v1client.jar", true, null);
 	}
 
 	// TODO this is experimental to support RFP 121 requirement to import all
@@ -235,54 +234,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		Map manifest = new HashMap();
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.*");
-		doTestImportPolicy01(manifest, "tb3v1.jar", "tb3v1client.jar", false);
-	}
-
-	private void doTestImportPolicy01(Map manifest, String tb3_1_Loc, String tb3vClient, boolean clientFail) {
-		doTestImportPolicy01(manifest, tb3_1_Loc, null, tb3vClient, clientFail);
-	}
-
-	private void doTestImportPolicy01(Map manifest, String tb3_1_Loc, String tb3_2_Loc, String tb3vClient, boolean clientFail) {
-		// Test importing packages into a composite
-		Bundle tb3_1 = null;
-		Bundle tb3_2 = null;
-		try {
-			tb3_1 = install(tb3_1_Loc);
-			if (tb3_2_Loc != null)
-				tb3_2 = install(tb3_2_Loc);
-		} catch (Exception e) {
-			fail("Unexpected error installing test bundle", e);
-		}
-		try {
-			CompositeBundle composite = createCompositeBundle(compAdmin, getName(), manifest, null);
-			startCompositeBundle(composite);
-			Bundle tb3client = installConstituent(composite, "tb3client", tb3vClient);
-
-			try {
-				tb3_1.start();
-				if (tb3_2 != null)
-					tb3_2.start();
-			} catch (BundleException e) {
-				fail("Unexpected error starting", e);
-			}	
-			try {
-				tb3client.start();
-				if (clientFail)
-					fail("Expected client to fail to start: " + tb3client.getLocation());
-			} catch (BundleException e) {
-				if (!clientFail)
-					fail("Unexpected error starting", e);
-			}
-			uninstallCompositeBundle(composite);
-		} finally {
-			try {
-				tb3_1.uninstall();
-				if (tb3_2 != null)
-					tb3_2.uninstall();
-			} catch (BundleException e) {
-				// nothing
-			}
-		}
+		doTestImportPolicy01(manifest, "tb3v1.jar", "tb3v1client.jar", false, null);
 	}
 
 	public void testPackageImport02a() {
@@ -292,7 +244,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		Map manifest2 = new HashMap(manifest1);
 		manifest2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + "_2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 
-		doTestImportPolicy02(manifest1, manifest2, "tb3v1.jar", "tb3v1client.jar", false);
+		doTestImportPolicy02(manifest1, manifest2, "tb3v1.jar", "tb3v1client.jar", false, null);
 	}
 	
 	public void testPackageImport02b() {
@@ -302,7 +254,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 				"org.osgi.test.cases.composite.tb3; tb3version=1, org.osgi.test.cases.composite.tb3.params; tb3version=1");
 		Map manifest2 = new HashMap(manifest1);
 		manifest2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + "_2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
-		doTestImportPolicy02(manifest1, manifest2, "tb3v1.jar", "tb3v1client.jar", false);
+		doTestImportPolicy02(manifest1, manifest2, "tb3v1.jar", "tb3v1client.jar", false, null);
 	}
 
 	public void testPackageImport02c() {
@@ -312,7 +264,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 				"org.osgi.test.cases.composite.tb3; tb3version=2, org.osgi.test.cases.composite.tb3.params; tb3version=2");
 		Map manifest2 = new HashMap(manifest1);
 		manifest2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + "_2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
-		doTestImportPolicy02(manifest1, manifest2, "tb3v1.jar", "tb3v1client.jar", true);
+		doTestImportPolicy02(manifest1, manifest2, "tb3v1.jar", "tb3v1client.jar", true, null);
 	}
 
 	public void testPackageImport02d() {
@@ -322,7 +274,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 				"org.osgi.test.cases.composite.tb3; tb3version=2, org.osgi.test.cases.composite.tb3.params; tb3version=2");
 		Map manifest2 = new HashMap(manifest1);
 		manifest2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + "_2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
-		doTestImportPolicy02(manifest1, manifest2, "tb3v2.jar", "tb3v1client.jar", true);
+		doTestImportPolicy02(manifest1, manifest2, "tb3v2.jar", "tb3v1client.jar", true, null);
 	}
 
 	public void testPackageImport02e() {
@@ -332,7 +284,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 				"org.osgi.test.cases.composite.tb3; tb3version=2, org.osgi.test.cases.composite.tb3.params; tb3version=2");
 		Map manifest2 = new HashMap(manifest1);
 		manifest2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + "_2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
-		doTestImportPolicy02(manifest1, manifest2, "tb3v2.jar", "tb3v2client.jar", false);
+		doTestImportPolicy02(manifest1, manifest2, "tb3v2.jar", "tb3v2client.jar", false, null);
 	}
 
 	public void testPackageImport02f() {
@@ -342,7 +294,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 				"org.osgi.test.cases.composite.tb3; tb3version=1, org.osgi.test.cases.composite.tb3.params; tb3version=2");
 		Map manifest2 = new HashMap(manifest1);
 		manifest2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + "_2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
-		doTestImportPolicy02(manifest1, manifest2, "tb3v1.jar", "tb3v2.jar", "tb3client.jar", true);
+		doTestImportPolicy02(manifest1, manifest2, "tb3v1.jar", "tb3v2.jar", "tb3client.jar", true, null);
 	}
 
 	public void testPackageImport02g() {
@@ -352,7 +304,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 				"org.osgi.test.cases.composite.tb3; tb3version=2, org.osgi.test.cases.composite.tb3.params; tb3version=2");
 		Map manifest2 = new HashMap(manifest1);
 		manifest2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + "_2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
-		doTestImportPolicy02(manifest1, manifest2, "tb3v1.jar", "tb3v2.jar", "tb3v2client.jar", false);
+		doTestImportPolicy02(manifest1, manifest2, "tb3v1.jar", "tb3v2.jar", "tb3v2client.jar", false, null);
 	}
 
 	public void testPackageImport02h() {
@@ -361,64 +313,14 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifest1.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"[1.1,2.0)\", org.osgi.test.cases.composite.tb3.params; version=\"[1.1,2.0)\"");
 		Map manifest2 = new HashMap(manifest1);
 		manifest2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + "_2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
-		doTestImportPolicy02(manifest1, manifest2, "tb3v1.jar", "tb3v1client.jar", true);
-	}
-
-	private void doTestImportPolicy02(Map manifest1, Map manifest2, String tb3_1_Loc, String tb3vClient, boolean clientFail) {
-		doTestImportPolicy02(manifest1, manifest2, tb3_1_Loc, null, tb3vClient, clientFail);
-	}
-
-	private void doTestImportPolicy02(Map manifest1, Map manifest2, String tb3_1_Loc, String tb3_2_Loc, String tb3vClient, boolean clientFail) {
-		// Test importing packages into two level nested composite
-		Bundle tb3_1 = null;
-		Bundle tb3_2 = null;
-		try {
-			tb3_1 = install(tb3_1_Loc);
-			if (tb3_2_Loc != null)
-				tb3_2 = install(tb3_2_Loc);
-		} catch (Exception e) {
-			fail("Unexpected error installing test bundle", e);
-		}
-		try {
-			CompositeBundle composite1 = createCompositeBundle(compAdmin, getName() + "_1", manifest1, null);
-			startCompositeBundle(composite1);
-			CompositeAdmin compAdmin1 = (CompositeAdmin) getService(composite1.getSystemBundleContext(), CompositeAdmin.class.getName());
-			CompositeBundle composite2 = createCompositeBundle(compAdmin1, getName() + "_2", manifest2, null);
-			startCompositeBundle(composite2);
-			Bundle tb3client = installConstituent(composite2, "tb3client", tb3vClient);
-
-			try {
-				tb3_1.start();
-				if (tb3_2 != null)
-					tb3_2.start();
-			} catch (BundleException e) {
-				fail("Unexpected error starting", e);
-			}	
-			try {
-				tb3client.start();
-				if (clientFail)
-					fail("Expected client to fail to start: " + tb3client.getLocation());
-			} catch (BundleException e) {
-				if (!clientFail)
-					fail("Unexpected error starting", e);
-			}
-			uninstallCompositeBundle(composite1);
-		} finally {
-			try {
-				tb3_1.uninstall();
-				if (tb3_2 != null)
-					tb3_2.uninstall();
-			} catch (BundleException e) {
-				// nothing
-			}
-		}
+		doTestImportPolicy02(manifest1, manifest2, "tb3v1.jar", "tb3v1client.jar", true, null);
 	}
 
 	public void testPackageExport01a() {
 		Map manifest = new HashMap();
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"1.0\", org.osgi.test.cases.composite.tb3.params; version=\"1.0\"");
-		doTestExportPackage01(manifest, "tb3v1.jar", "tb3v1client.jar", false);
+		doTestExportPolicy01(manifest, "tb3v1.jar", "tb3v1client.jar", false, null);
 	}
 
 	public void testPackageExport01b() {
@@ -426,7 +328,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, 
 				"org.osgi.test.cases.composite.tb3; tb3version=1, org.osgi.test.cases.composite.tb3.params; tb3version=1");
-		doTestExportPackage01(manifest, "tb3v1.jar", "tb3v1client.jar", false);
+		doTestExportPolicy01(manifest, "tb3v1.jar", "tb3v1client.jar", false, null);
 	}
 
 	public void testPackageExport01c() {
@@ -434,7 +336,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, 
 				"org.osgi.test.cases.composite.tb3; tb3version=2, org.osgi.test.cases.composite.tb3.params; tb3version=2");
-		doTestExportPackage01(manifest, "tb3v1.jar", "tb3v1client.jar", true);
+		doTestExportPolicy01(manifest, "tb3v1.jar", "tb3v1client.jar", true, null);
 	}
 
 	public void testPackageExport01d() {
@@ -442,7 +344,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, 
 				"org.osgi.test.cases.composite.tb3; tb3version=2, org.osgi.test.cases.composite.tb3.params; tb3version=2");
-		doTestExportPackage01(manifest, "tb3v2.jar", "tb3v1client.jar", true);
+		doTestExportPolicy01(manifest, "tb3v2.jar", "tb3v1client.jar", true, null);
 	}
 
 	public void testPackageExport01e() {
@@ -450,7 +352,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, 
 				"org.osgi.test.cases.composite.tb3; tb3version=2, org.osgi.test.cases.composite.tb3.params; tb3version=2");
-		doTestExportPackage01(manifest, "tb3v2.jar", "tb3v2client.jar", false);
+		doTestExportPolicy01(manifest, "tb3v2.jar", "tb3v2client.jar", false, null);
 	}
 
 	public void testPackageExport01f() {
@@ -458,7 +360,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, 
 				"org.osgi.test.cases.composite.tb3; tb3version=1, org.osgi.test.cases.composite.tb3.params; tb3version=2");
-		doTestExportPackage01(manifest, "tb3v1.jar", "tb3v2.jar", "tb3client.jar", true);
+		doTestExportPolicy01(manifest, "tb3v1.jar", "tb3v2.jar", "tb3client.jar", true, null);
 	}
 
 	public void testPackageExport01g() {
@@ -466,14 +368,14 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, 
 				"org.osgi.test.cases.composite.tb3; tb3version=2, org.osgi.test.cases.composite.tb3.params; tb3version=2");
-		doTestExportPackage01(manifest, "tb3v1.jar", "tb3v2.jar", "tb3v2client.jar", false);
+		doTestExportPolicy01(manifest, "tb3v1.jar", "tb3v2.jar", "tb3v2client.jar", false, null);
 	}
 
 	public void testPackageExport01h() {
 		Map manifest = new HashMap();
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"[1.1,2.0)\", org.osgi.test.cases.composite.tb3.params; version=\"[1.1,2.0)\"");
-		doTestExportPackage01(manifest, "tb3v1.jar", "tb3v1client.jar", true);
+		doTestExportPolicy01(manifest, "tb3v1.jar", "tb3v1client.jar", true, null);
 	}
 
 	// TODO this is experimental to support RFP 121 requirement to import all
@@ -481,7 +383,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		Map manifest = new HashMap();
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "*; tb3version=1");
-		doTestExportPackage01(manifest, "tb3v1.jar", "tb3v1client.jar", false);
+		doTestExportPolicy01(manifest, "tb3v1.jar", "tb3v1client.jar", false, null);
 	}
 
 	// TODO this is experimental to support RFP 121 requirement to import all
@@ -489,7 +391,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		Map manifest = new HashMap();
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "*; tb3version=2");
-		doTestExportPackage01(manifest, "tb3v1.jar", "tb3v1client.jar", true);
+		doTestExportPolicy01(manifest, "tb3v1.jar", "tb3v1client.jar", true, null);
 	}
 
 	// TODO this is experimental to support RFP 121 requirement to import all
@@ -497,51 +399,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		Map manifest = new HashMap();
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.*");
-		doTestExportPackage01(manifest, "tb3v1.jar", "tb3v1client.jar", false);
-	}
-
-	private void doTestExportPackage01(Map manifest, String tb3_1_Loc, String tb3vClient, boolean clientFail) {
-		doTestExportPackage01(manifest, tb3_1_Loc, null, tb3vClient, clientFail);
-	}
-
-	private void doTestExportPackage01(Map manifest, String tb3_1_Loc, String tb3_2_Loc, String tb3vClient, boolean clientFail) {
-		// Test exporting packages to parent
-		Bundle tb3client = null;
-		try {
-			tb3client = install(tb3vClient);
-		} catch (Exception e) {
-			fail("Unexpected error installing test bundle", e);
-		}
-		try {
-			CompositeBundle composite = createCompositeBundle(compAdmin, getName(), manifest, null);
-			startCompositeBundle(composite);
-			Bundle tb3_1 = installConstituent(composite, "tb3_1", tb3_1_Loc);
-			Bundle tb3_2 = null;
-			if (tb3_2_Loc != null)
-				tb3_2 = installConstituent(composite, "tb3_2", tb3_2_Loc);
-			try {
-				tb3_1.start();
-				if (tb3_2 != null)
-					tb3_2.start();
-			} catch (BundleException e) {
-				fail("Unexpected error starting", e);
-			}	
-			try {
-				tb3client.start();
-				if (clientFail)
-					fail("Expected client to fail to start: " + tb3client.getLocation());
-			} catch (BundleException e) {
-				if (!clientFail)
-					fail("Unexpected error starting", e);
-			}
-			uninstallCompositeBundle(composite);
-		} finally {
-			try {
-				tb3client.uninstall();
-			} catch (BundleException e) {
-				// nothing
-			}
-		}
+		doTestExportPolicy01(manifest, "tb3v1.jar", "tb3v1client.jar", false, null);
 	}
 
 	public void testPackageExport02a() {
@@ -551,7 +409,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		Map manifest2 = new HashMap(manifest1);
 		manifest2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + "_2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 
-		doTestExportPackage02(manifest1, manifest2, "tb3v1.jar", "tb3v1client.jar", false);
+		doTestExportPolicy02(manifest1, manifest2, "tb3v1.jar", "tb3v1client.jar", false, null);
 	}
 	
 	public void testPackageExport02b() {
@@ -561,7 +419,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 				"org.osgi.test.cases.composite.tb3; tb3version=1, org.osgi.test.cases.composite.tb3.params; tb3version=1");
 		Map manifest2 = new HashMap(manifest1);
 		manifest2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + "_2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
-		doTestExportPackage02(manifest1, manifest2, "tb3v1.jar", "tb3v1client.jar", false);
+		doTestExportPolicy02(manifest1, manifest2, "tb3v1.jar", "tb3v1client.jar", false, null);
 	}
 
 	public void testPackageExport02c() {
@@ -571,7 +429,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 				"org.osgi.test.cases.composite.tb3; tb3version=2, org.osgi.test.cases.composite.tb3.params; tb3version=2");
 		Map manifest2 = new HashMap(manifest1);
 		manifest2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + "_2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
-		doTestExportPackage02(manifest1, manifest2, "tb3v1.jar", "tb3v1client.jar", true);
+		doTestExportPolicy02(manifest1, manifest2, "tb3v1.jar", "tb3v1client.jar", true, null);
 	}
 
 	public void testPackageExport02d() {
@@ -581,7 +439,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 				"org.osgi.test.cases.composite.tb3; tb3version=2, org.osgi.test.cases.composite.tb3.params; tb3version=2");
 		Map manifest2 = new HashMap(manifest1);
 		manifest2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + "_2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
-		doTestExportPackage02(manifest1, manifest2, "tb3v2.jar", "tb3v1client.jar", true);
+		doTestExportPolicy02(manifest1, manifest2, "tb3v2.jar", "tb3v1client.jar", true, null);
 	}
 
 	public void testPackageExport02e() {
@@ -591,7 +449,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 				"org.osgi.test.cases.composite.tb3; tb3version=2, org.osgi.test.cases.composite.tb3.params; tb3version=2");
 		Map manifest2 = new HashMap(manifest1);
 		manifest2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + "_2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
-		doTestExportPackage02(manifest1, manifest2, "tb3v2.jar", "tb3v2client.jar", false);
+		doTestExportPolicy02(manifest1, manifest2, "tb3v2.jar", "tb3v2client.jar", false, null);
 	}
 
 	public void testPackageExport02f() {
@@ -601,7 +459,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 				"org.osgi.test.cases.composite.tb3; tb3version=1, org.osgi.test.cases.composite.tb3.params; tb3version=2");
 		Map manifest2 = new HashMap(manifest1);
 		manifest2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + "_2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
-		doTestExportPackage02(manifest1, manifest2, "tb3v1.jar", "tb3v2.jar", "tb3client.jar", true);
+		doTestExportPolicy02(manifest1, manifest2, "tb3v1.jar", "tb3v2.jar", "tb3client.jar", true, null);
 	}
 
 	public void testPackageExport02g() {
@@ -611,7 +469,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 				"org.osgi.test.cases.composite.tb3; tb3version=2, org.osgi.test.cases.composite.tb3.params; tb3version=2");
 		Map manifest2 = new HashMap(manifest1);
 		manifest2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + "_2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
-		doTestExportPackage02(manifest1, manifest2, "tb3v1.jar", "tb3v2.jar", "tb3v2client.jar", false);
+		doTestExportPolicy02(manifest1, manifest2, "tb3v1.jar", "tb3v2.jar", "tb3v2client.jar", false, null);
 	}
 
 	public void testPackageExport02h() {
@@ -620,91 +478,43 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifest1.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"[1.1,2.0)\", org.osgi.test.cases.composite.tb3.params; version=\"[1.1,2.0)\"");
 		Map manifest2 = new HashMap(manifest1);
 		manifest2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + "_2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
-		doTestExportPackage02(manifest1, manifest2, "tb3v1.jar", "tb3v1client.jar", true);
+		doTestExportPolicy02(manifest1, manifest2, "tb3v1.jar", "tb3v1client.jar", true, null);
 	}
-
-	private void doTestExportPackage02(Map manifest1, Map manifest2, String tb3_1_Loc, String tb3vClient, boolean clientFail) {
-		doTestExportPackage02(manifest1, manifest2, tb3_1_Loc, null, tb3vClient, clientFail);
-	}
-
-	private void doTestExportPackage02(Map manifest1, Map manifest2, String tb3_1_Loc, String tb3_2_Loc, String tb3vClient, boolean clientFail) {
-		// test exporting packages to parent from two level nested composite
-		Bundle tb3client = null;
-		try {
-			tb3client = install(tb3vClient);
-		} catch (Exception e) {
-			fail("Unexpected error installing test bundle", e);
-		}
-		try {
-			CompositeBundle composite1 = createCompositeBundle(compAdmin, getName() + "_1", manifest1, null);
-			startCompositeBundle(composite1);
-			CompositeAdmin compAdmin1 = (CompositeAdmin) getService(composite1.getSystemBundleContext(), CompositeAdmin.class.getName());
-			CompositeBundle composite2 = createCompositeBundle(compAdmin1, getName() + "_2", manifest2, null);
-			startCompositeBundle(composite2);
-			Bundle tb3_1 = installConstituent(composite2, "tb3_1", tb3_1_Loc);
-			Bundle tb3_2 = null;
-			if (tb3_2_Loc != null)
-				tb3_2 = installConstituent(composite2, "tb3_2", tb3_2_Loc);
-			try {
-				tb3_1.start();
-				if (tb3_2 != null)
-					tb3_2.start();
-			} catch (BundleException e) {
-				fail("Unexpected error starting", e);
-			}	
-			try {
-				tb3client.start();
-				if (clientFail)
-					fail("Expected client to fail to start: " + tb3client.getLocation());
-			} catch (BundleException e) {
-				if (!clientFail)
-					fail("Unexpected error starting", e);
-			}
-			uninstallCompositeBundle(composite1);
-		} finally {
-			try {
-				tb3client.uninstall();
-			} catch (BundleException e) {
-				// nothing
-			}
-		}
-	}
-
 
 	public void testRequireBundle01a() {
 		// test requiring bundles into a composite
 		Map manifest = new HashMap();
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_BUNDLE_REQUIRE_POLICY, "org.osgi.test.cases.composite.tb3; bundle-version=\"[1.0, 1.1)\"");
-		doTestImportPolicy01(manifest, "tb3v1.jar", "tb3v1requireClient.jar", false);
+		doTestImportPolicy01(manifest, "tb3v1.jar", "tb3v1requireClient.jar", false, null);
 	}
 
 	public void testRequireBundle01b() {
 		Map manifest = new HashMap();
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_BUNDLE_REQUIRE_POLICY, "org.osgi.test.cases.composite.tb3; bundle-version=\"[1.1,1.2)\"");
-		doTestImportPolicy01(manifest, "tb3v1.jar", "tb3v1requireClient.jar", true);
+		doTestImportPolicy01(manifest, "tb3v1.jar", "tb3v1requireClient.jar", true, null);
 	}
 
 	public void testRequireBundle01c() {
 		Map manifest = new HashMap();
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_BUNDLE_REQUIRE_POLICY, "org.osgi.test.cases.composite.tb3; bundle-version=\"[1.1,1.2)\"");
-		doTestImportPolicy01(manifest, "tb3v2.jar", "tb3v1requireClient.jar", true);
+		doTestImportPolicy01(manifest, "tb3v2.jar", "tb3v1requireClient.jar", true, null);
 	}
 
 	public void testRequireBundle01d() {
 		Map manifest = new HashMap();
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_BUNDLE_REQUIRE_POLICY, "org.osgi.test.cases.composite.tb3; bundle-version=\"[1.1,1.2)\"");
-		doTestImportPolicy01(manifest, "tb3v2.jar", "tb3v2requireClient.jar", false);
+		doTestImportPolicy01(manifest, "tb3v2.jar", "tb3v2requireClient.jar", false, null);
 	}
 
 	public void testRequireBundle01e() {
 		Map manifest = new HashMap();
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_BUNDLE_REQUIRE_POLICY, "org.osgi.test.cases.composite.tb3; bundle-version=\"[1.1,1.2)\"");
-		doTestImportPolicy01(manifest, "tb3v1.jar", "tb3v2.jar", "tb3v2requireClient.jar", false);
+		doTestImportPolicy01(manifest, "tb3v1.jar", "tb3v2.jar", "tb3v2requireClient.jar", false, null);
 	}
 
 	public void testRequireBundle02a() {
@@ -715,7 +525,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		Map manifest2 = new HashMap(manifest1);
 		manifest2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + "_2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 
-		doTestImportPolicy02(manifest1, manifest2, "tb3v1.jar", "tb3v1requireClient.jar", false);
+		doTestImportPolicy02(manifest1, manifest2, "tb3v1.jar", "tb3v1requireClient.jar", false, null);
 	}
 	
 
@@ -725,7 +535,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifest1.put(CompositeConstants.COMPOSITE_BUNDLE_REQUIRE_POLICY, "org.osgi.test.cases.composite.tb3; bundle-version=\"[1.1,1.2)\"");
 		Map manifest2 = new HashMap(manifest1);
 		manifest2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + "_2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
-		doTestImportPolicy02(manifest1, manifest2, "tb3v1.jar", "tb3v1requireClient.jar", true);
+		doTestImportPolicy02(manifest1, manifest2, "tb3v1.jar", "tb3v1requireClient.jar", true, null);
 	}
 
 	public void testRequireBundle02c() {
@@ -734,7 +544,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifest1.put(CompositeConstants.COMPOSITE_BUNDLE_REQUIRE_POLICY, "org.osgi.test.cases.composite.tb3; bundle-version=\"[1.1,1.2)\"");
 		Map manifest2 = new HashMap(manifest1);
 		manifest2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + "_2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
-		doTestImportPolicy02(manifest1, manifest2, "tb3v2.jar", "tb3v1requireClient.jar", true);
+		doTestImportPolicy02(manifest1, manifest2, "tb3v2.jar", "tb3v1requireClient.jar", true, null);
 	}
 
 	public void testRequireBundle02d() {
@@ -743,7 +553,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifest1.put(CompositeConstants.COMPOSITE_BUNDLE_REQUIRE_POLICY, "org.osgi.test.cases.composite.tb3; bundle-version=\"[1.1,1.2)\"");
 		Map manifest2 = new HashMap(manifest1);
 		manifest2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + "_2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
-		doTestImportPolicy02(manifest1, manifest2, "tb3v2.jar", "tb3v2requireClient.jar", false);
+		doTestImportPolicy02(manifest1, manifest2, "tb3v2.jar", "tb3v2requireClient.jar", false, null);
 	}
 
 	public void testRequireBundle02e() {
@@ -752,7 +562,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifest1.put(CompositeConstants.COMPOSITE_BUNDLE_REQUIRE_POLICY, "org.osgi.test.cases.composite.tb3; bundle-version=\"[1.1,1.2)\"");
 		Map manifest2 = new HashMap(manifest1);
 		manifest2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + "_2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
-		doTestImportPolicy02(manifest1, manifest2, "tb3v1.jar", "tb3v2.jar", "tb3v2requireClient.jar", false);
+		doTestImportPolicy02(manifest1, manifest2, "tb3v1.jar", "tb3v2.jar", "tb3v2requireClient.jar", false, null);
 	}
 
 	public void testPackageExportImport01a() {
@@ -763,7 +573,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		Map manifestImport = new HashMap();
 		manifestImport.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifestImport.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"1.0\", org.osgi.test.cases.composite.tb3.params; version=\"1.0\"");
-		doTestExportImportPolicy01(manifestExport, manifestImport, "tb3v1.jar", "tb3v1client.jar", false);
+		doTestExportImportPolicy01(manifestExport, manifestImport, "tb3v1.jar", "tb3v1client.jar", false, null);
 	}
 
 	public void testPackageExportImport01b() {
@@ -773,7 +583,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		Map manifestImport = new HashMap();
 		manifestImport.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifestImport.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"1.0\", org.osgi.test.cases.composite.tb3.params; version=\"1.0\"");
-		doTestExportImportPolicy01(manifestExport, manifestImport, "tb3v1.jar", "tb3v1client.jar", false);
+		doTestExportImportPolicy01(manifestExport, manifestImport, "tb3v1.jar", "tb3v1client.jar", false, null);
 	}
 
 	public void testPackageExportImport01c() {
@@ -783,7 +593,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		Map manifestImport = new HashMap();
 		manifestImport.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifestImport.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"1.0\", org.osgi.test.cases.composite.tb3.params; version=\"1.0\"");
-		doTestExportImportPolicy01(manifestExport, manifestImport, "tb3v1.jar", "tb3v1client.jar", true);
+		doTestExportImportPolicy01(manifestExport, manifestImport, "tb3v1.jar", "tb3v1client.jar", true, null);
 	}
 
 	public void testPackageExportImport01d() {
@@ -793,7 +603,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		Map manifestImport = new HashMap();
 		manifestImport.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifestImport.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"1.1\", org.osgi.test.cases.composite.tb3.params; version=\"1.1\"");
-		doTestExportImportPolicy01(manifestExport, manifestImport, "tb3v1.jar", "tb3v1client.jar", true);
+		doTestExportImportPolicy01(manifestExport, manifestImport, "tb3v1.jar", "tb3v1client.jar", true, null);
 	}
 
 	public void testPackageExportImport01e() {
@@ -803,7 +613,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		Map manifestImport = new HashMap();
 		manifestImport.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifestImport.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"1.1\", org.osgi.test.cases.composite.tb3.params; version=\"1.1\"");
-		doTestExportImportPolicy01(manifestExport, manifestImport, "tb3v2.jar", "tb3v1client.jar", true);
+		doTestExportImportPolicy01(manifestExport, manifestImport, "tb3v2.jar", "tb3v1client.jar", true, null);
 	}
 
 	public void testPackageExportImport01f() {
@@ -813,7 +623,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		Map manifestImport = new HashMap();
 		manifestImport.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifestImport.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb3; tb3version=2, org.osgi.test.cases.composite.tb3.params; tb3version=2");
-		doTestExportImportPolicy01(manifestExport, manifestImport, "tb3v2.jar", "tb3v2client.jar", false);
+		doTestExportImportPolicy01(manifestExport, manifestImport, "tb3v2.jar", "tb3v2client.jar", false, null);
 	}
 
 	public void testPackageExportImport01g() {
@@ -823,7 +633,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		Map manifestImport = new HashMap();
 		manifestImport.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifestImport.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb3; tb3version=1, org.osgi.test.cases.composite.tb3.params; tb3version=2");
-		doTestExportImportPolicy01(manifestExport, manifestImport, "tb3v1.jar", "tb3v2.jar", "tb3client.jar", true);
+		doTestExportImportPolicy01(manifestExport, manifestImport, "tb3v1.jar", "tb3v2.jar", "tb3client.jar", true, null);
 	}
 
 	public void testPackageExportImport01h() {
@@ -833,7 +643,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		Map manifestImport = new HashMap();
 		manifestImport.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifestImport.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb3; tb3version=2, org.osgi.test.cases.composite.tb3.params; tb3version=2");
-		doTestExportImportPolicy01(manifestExport, manifestImport, "tb3v1.jar", "tb3v2.jar", "tb3client.jar", false);
+		doTestExportImportPolicy01(manifestExport, manifestImport, "tb3v1.jar", "tb3v2.jar", "tb3client.jar", false, null);
 	}
 
 	public void testPackageExportImport01i() {
@@ -843,41 +653,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		Map manifestImport = new HashMap();
 		manifestImport.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifestImport.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb3, org.osgi.test.cases.composite.tb3.params");
-		doTestExportImportPolicy01(manifestExport, manifestImport, "tb3v1.jar", "tb3v2.jar", "tb3client.jar", false);
-	}
-
-	private void doTestExportImportPolicy01(Map manifestExport, Map manifestImport, String tb3_1_Loc, String tb3vClient, boolean clientFail) {
-		doTestExportImportPolicy01(manifestExport, manifestImport, tb3_1_Loc, null, tb3vClient, clientFail);
-	}
-
-	private void doTestExportImportPolicy01(Map manifestExport, Map manifestImport, String tb3_1_Loc, String tb3_2_Loc, String tb3vClient, boolean clientFail) {
-		// test exporting packages to parent and importing into another composite
-		CompositeBundle compositeExport = createCompositeBundle(compAdmin, getName() + "_export", manifestExport, null);
-		startCompositeBundle(compositeExport);
-		Bundle tb3_1 = installConstituent(compositeExport, "tb3_1", tb3_1_Loc);
-		Bundle tb3_2 = null;
-		if (tb3_2_Loc != null)
-			tb3_2 = installConstituent(compositeExport, "tb3_2", tb3_2_Loc);
-		try {
-			tb3_1.start();
-			if (tb3_2 != null)
-				tb3_2.start();
-		} catch (BundleException e) {
-			fail("Unexpected error starting", e);
-		}
-		CompositeBundle compositeImport = createCompositeBundle(compAdmin, getName() + "_import", manifestImport, null);
-		startCompositeBundle(compositeImport);
-		Bundle tb3client = installConstituent(compositeImport, "tb3client", tb3vClient);
-		try {
-			tb3client.start();
-			if (clientFail)
-				fail("Expected client to fail to start: " + tb3client.getLocation());
-		} catch (BundleException e) {
-			if (!clientFail)
-				fail("Unexpected error starting", e);
-		}
-		uninstallCompositeBundle(compositeExport);
-		uninstallCompositeBundle(compositeImport);
+		doTestExportImportPolicy01(manifestExport, manifestImport, "tb3v1.jar", "tb3v2.jar", "tb3client.jar", false, null);
 	}
 
 	public void testPackageExportImport02a() {
@@ -893,7 +669,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		Map manifestImport2 = new HashMap(manifestImport1);
 		manifestImport2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 
-		doTestExportImportPolicy02(manifestExport1, manifestExport2, manifestImport1, manifestImport2, "tb3v1.jar", "tb3v1client.jar", false);
+		doTestExportImportPolicy02(manifestExport1, manifestExport2, manifestImport1, manifestImport2, "tb3v1.jar", "tb3v1client.jar", false, null);
 	}
 
 	public void testPackageExportImport02b() {
@@ -909,48 +685,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		Map manifestImport2 = new HashMap(manifestImport1);
 		manifestImport2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 
-		doTestExportImportPolicy02(manifestExport1, manifestExport2, manifestImport1, manifestImport2, "tb3v1.jar", "tb3v1client.jar", true);
-	}
-
-	private void doTestExportImportPolicy02(Map manifestExport1, Map manifestExport2, Map manifestImport1, Map manifestImport2, String tb3_1_Loc, String tb3vClient, boolean clientFail) {
-		doTestExportImportPolicy02(manifestExport1, manifestExport2, manifestImport1, manifestImport2, tb3_1_Loc, null, tb3vClient, clientFail);
-	}
-
-	private void doTestExportImportPolicy02(Map manifestExport1, Map manifestExport2, Map manifestImport1, Map manifestImport2, String tb3_1_Loc, String tb3_2_Loc, String tb3vClient, boolean clientFail) {
-		// test exporting packages to parent from two level nested composite 
-		// and importing into another two level nested composite
-		CompositeBundle compositeExport1 = createCompositeBundle(compAdmin, getName() + "_export1", manifestExport1, null);
-		startCompositeBundle(compositeExport1);
-		CompositeAdmin compAdminExport1 = (CompositeAdmin) getService(compositeExport1.getSystemBundleContext(), CompositeAdmin.class.getName());
-		CompositeBundle compositeExport2 = createCompositeBundle(compAdminExport1, getName() + "_export2", manifestExport2, null);
-		startCompositeBundle(compositeExport2);
-		Bundle tb3_1 = installConstituent(compositeExport2, "tb3_1", tb3_1_Loc);
-		Bundle tb3_2 = null;
-		if (tb3_2_Loc != null)
-			tb3_2 = installConstituent(compositeExport2, "tb3_2", tb3_2_Loc);
-		try {
-			tb3_1.start();
-			if (tb3_2 != null)
-				tb3_2.start();
-		} catch (BundleException e) {
-			fail("Unexpected error starting", e);
-		}
-		CompositeBundle compositeImport1 = createCompositeBundle(compAdmin, getName() + "_import1", manifestImport1, null);
-		startCompositeBundle(compositeImport1);
-		CompositeAdmin compAdminImport1 = (CompositeAdmin) getService(compositeImport1.getSystemBundleContext(), CompositeAdmin.class.getName());
-		CompositeBundle compositeImport2 = createCompositeBundle(compAdminImport1, getName() + "_import2", manifestImport2, null);
-		startCompositeBundle(compositeImport2);
-		Bundle tb3client = installConstituent(compositeImport2, "tb3client", tb3vClient);
-		try {
-			tb3client.start();
-			if (clientFail)
-				fail("Expected client to fail to start: " + tb3client.getLocation());
-		} catch (BundleException e) {
-			if (!clientFail)
-				fail("Unexpected error starting", e);
-		}
-		uninstallCompositeBundle(compositeExport1);
-		uninstallCompositeBundle(compositeImport1);
+		doTestExportImportPolicy02(manifestExport1, manifestExport2, manifestImport1, manifestImport2, "tb3v1.jar", "tb3v1client.jar", true, null);
 	}
 
 }

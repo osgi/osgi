@@ -200,6 +200,281 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 		return service;
 	}
 
+	protected void doTestExportImportPolicy01(Map manifestExport, Map manifestImport, String tb3_1_Loc, String tb3vClient, boolean clientFail, TestExceptionHandler handler) {
+		doTestExportImportPolicy01(manifestExport, manifestImport, tb3_1_Loc, null, tb3vClient, clientFail, handler);
+	}
+
+	protected void doTestExportImportPolicy01(Map manifestExport, Map manifestImport, String tb3_1_Loc, String tb3_2_Loc, String tb3vClient, boolean clientFail, TestExceptionHandler handler) {
+		// test export policy to parent and import policy to another composite
+		CompositeBundle compositeExport = createCompositeBundle(compAdmin, getName() + "_export", manifestExport, null);
+		startCompositeBundle(compositeExport);
+		Bundle tb3_1 = installConstituent(compositeExport, "tb3_1", tb3_1_Loc);
+		Bundle tb3_2 = null;
+		if (tb3_2_Loc != null)
+			tb3_2 = installConstituent(compositeExport, "tb3_2", tb3_2_Loc);
+		try {
+			tb3_1.start();
+			if (tb3_2 != null)
+				tb3_2.start();
+		} catch (BundleException e) {
+			fail("Unexpected error starting", e);
+		}
+		CompositeBundle compositeImport = createCompositeBundle(compAdmin, getName() + "_import", manifestImport, null);
+		startCompositeBundle(compositeImport);
+		Bundle tb3client = installConstituent(compositeImport, "tb3client", tb3vClient);
+		try {
+			tb3client.start();
+			if (clientFail)
+				fail("Expected client to fail to start: " + tb3client.getLocation());
+		} catch (BundleException e) {
+			if (clientFail) {
+				if (handler != null)
+					handler.handleException(e);
+			} else
+				fail("Unexpected error starting", e);
+		}
+		uninstallCompositeBundle(compositeExport);
+		uninstallCompositeBundle(compositeImport);
+	}
+
+	protected void doTestExportImportPolicy02(Map manifestExport1, Map manifestExport2, Map manifestImport1, Map manifestImport2, String tb3_1_Loc, String tb3vClient, boolean clientFail, TestExceptionHandler handler) {
+		doTestExportImportPolicy02(manifestExport1, manifestExport2, manifestImport1, manifestImport2, tb3_1_Loc, null, tb3vClient, clientFail, handler);
+	}
+
+	protected void doTestExportImportPolicy02(Map manifestExport1, Map manifestExport2, Map manifestImport1, Map manifestImport2, String tb3_1_Loc, String tb3_2_Loc, String tb3vClient, boolean clientFail, TestExceptionHandler handler) {
+		// test export policy to a parent from two level nested composite 
+		// and import policy into another two level nested composite
+		CompositeBundle compositeExport1 = createCompositeBundle(compAdmin, getName() + "_export1", manifestExport1, null);
+		startCompositeBundle(compositeExport1);
+		CompositeAdmin compAdminExport1 = (CompositeAdmin) getService(compositeExport1.getSystemBundleContext(), CompositeAdmin.class.getName());
+		CompositeBundle compositeExport2 = createCompositeBundle(compAdminExport1, getName() + "_export2", manifestExport2, null);
+		startCompositeBundle(compositeExport2);
+		Bundle tb3_1 = installConstituent(compositeExport2, "tb3_1", tb3_1_Loc);
+		Bundle tb3_2 = null;
+		if (tb3_2_Loc != null)
+			tb3_2 = installConstituent(compositeExport2, "tb3_2", tb3_2_Loc);
+		try {
+			tb3_1.start();
+			if (tb3_2 != null)
+				tb3_2.start();
+		} catch (BundleException e) {
+			fail("Unexpected error starting", e);
+		}
+		CompositeBundle compositeImport1 = createCompositeBundle(compAdmin, getName() + "_import1", manifestImport1, null);
+		startCompositeBundle(compositeImport1);
+		CompositeAdmin compAdminImport1 = (CompositeAdmin) getService(compositeImport1.getSystemBundleContext(), CompositeAdmin.class.getName());
+		CompositeBundle compositeImport2 = createCompositeBundle(compAdminImport1, getName() + "_import2", manifestImport2, null);
+		startCompositeBundle(compositeImport2);
+		Bundle tb3client = installConstituent(compositeImport2, "tb3client", tb3vClient);
+		try {
+			tb3client.start();
+			if (clientFail)
+				fail("Expected client to fail to start: " + tb3client.getLocation());
+		} catch (BundleException e) {
+			if (clientFail) {
+				if (handler != null)
+					handler.handleException(e);
+			} else
+				fail("Unexpected error starting", e);
+		}
+		uninstallCompositeBundle(compositeExport1);
+		uninstallCompositeBundle(compositeImport1);
+	}
+
+	protected void doTestExportPolicy01(Map manifest, String tb3_1_Loc, String tb3vClient, boolean clientFail, TestExceptionHandler handler) {
+		doTestExportPolicy01(manifest, tb3_1_Loc, null, tb3vClient, clientFail, handler);
+	}
+
+	protected void doTestExportPolicy01(Map manifest, String tb3_1_Loc, String tb3_2_Loc, String tb3vClient, boolean clientFail, TestExceptionHandler handler) {
+		// Test export policy to parent
+		Bundle tb3client = null;
+		try {
+			tb3client = install(tb3vClient);
+		} catch (Exception e) {
+			fail("Unexpected error installing test bundle", e);
+		}
+		try {
+			CompositeBundle composite = createCompositeBundle(compAdmin, getName(), manifest, null);
+			startCompositeBundle(composite);
+			Bundle tb3_1 = installConstituent(composite, "tb3_1", tb3_1_Loc);
+			Bundle tb3_2 = null;
+			if (tb3_2_Loc != null)
+				tb3_2 = installConstituent(composite, "tb3_2", tb3_2_Loc);
+			try {
+				tb3_1.start();
+				if (tb3_2 != null)
+					tb3_2.start();
+			} catch (BundleException e) {
+				fail("Unexpected error starting", e);
+			}	
+			try {
+				tb3client.start();
+				if (clientFail)
+					fail("Expected client to fail to start: " + tb3client.getLocation());
+			} catch (BundleException e) {
+				if (clientFail) {
+					if (handler != null)
+						handler.handleException(e);
+				} else
+					fail("Unexpected error starting", e);
+			}
+			uninstallCompositeBundle(composite);
+		} finally {
+			try {
+				tb3client.uninstall();
+			} catch (BundleException e) {
+				// nothing
+			}
+		}
+	}
+
+	protected void doTestExportPolicy02(Map manifest1, Map manifest2, String tb3_1_Loc, String tb3vClient, boolean clientFail, TestExceptionHandler handler) {
+		doTestExportPolicy02(manifest1, manifest2, tb3_1_Loc, null, tb3vClient, clientFail, handler);
+	}
+
+	protected void doTestExportPolicy02(Map manifest1, Map manifest2, String tb3_1_Loc, String tb3_2_Loc, String tb3vClient, boolean clientFail, TestExceptionHandler handler) {
+		// test export policy to parent from two level nested composite
+		Bundle tb3client = null;
+		try {
+			tb3client = install(tb3vClient);
+		} catch (Exception e) {
+			fail("Unexpected error installing test bundle", e);
+		}
+		try {
+			CompositeBundle composite1 = createCompositeBundle(compAdmin, getName() + "_1", manifest1, null);
+			startCompositeBundle(composite1);
+			CompositeAdmin compAdmin1 = (CompositeAdmin) getService(composite1.getSystemBundleContext(), CompositeAdmin.class.getName());
+			CompositeBundle composite2 = createCompositeBundle(compAdmin1, getName() + "_2", manifest2, null);
+			startCompositeBundle(composite2);
+			Bundle tb3_1 = installConstituent(composite2, "tb3_1", tb3_1_Loc);
+			Bundle tb3_2 = null;
+			if (tb3_2_Loc != null)
+				tb3_2 = installConstituent(composite2, "tb3_2", tb3_2_Loc);
+			try {
+				tb3_1.start();
+				if (tb3_2 != null)
+					tb3_2.start();
+			} catch (BundleException e) {
+				fail("Unexpected error starting", e);
+			}	
+			try {
+				tb3client.start();
+				if (clientFail)
+					fail("Expected client to fail to start: " + tb3client.getLocation());
+			} catch (BundleException e) {
+				if (!clientFail)
+					fail("Unexpected error starting", e);
+			}
+			uninstallCompositeBundle(composite1);
+		} finally {
+			try {
+				tb3client.uninstall();
+			} catch (BundleException e) {
+				// nothing
+			}
+		}
+	}
+
+	protected void doTestImportPolicy01(Map manifest, String tb3_1_Loc, String tb3vClient, boolean clientFail, TestExceptionHandler handler) {
+		doTestImportPolicy01(manifest, tb3_1_Loc, null, tb3vClient, clientFail, handler);
+	}
+
+	protected void doTestImportPolicy01(Map manifest, String tb3_1_Loc, String tb3_2_Loc, String tb3vClient, boolean clientFail, TestExceptionHandler handler) {
+		// Test import policy into a composite
+		Bundle tb3_1 = null;
+		Bundle tb3_2 = null;
+		try {
+			tb3_1 = install(tb3_1_Loc);
+			if (tb3_2_Loc != null)
+				tb3_2 = install(tb3_2_Loc);
+		} catch (Exception e) {
+			fail("Unexpected error installing test bundle", e);
+		}
+		try {
+			CompositeBundle composite = createCompositeBundle(compAdmin, getName(), manifest, null);
+			startCompositeBundle(composite);
+			Bundle tb3client = installConstituent(composite, "tb3client", tb3vClient);
+	
+			try {
+				tb3_1.start();
+				if (tb3_2 != null)
+					tb3_2.start();
+			} catch (BundleException e) {
+				fail("Unexpected error starting", e);
+			}	
+			try {
+				tb3client.start();
+				if (clientFail)
+					fail("Expected client to fail to start: " + tb3client.getLocation());
+			} catch (BundleException e) {
+				if (clientFail) {
+					if (handler != null)
+						handler.handleException(e);
+				} else
+					fail("Unexpected error starting", e);
+			}
+			uninstallCompositeBundle(composite);
+		} finally {
+			try {
+				tb3_1.uninstall();
+				if (tb3_2 != null)
+					tb3_2.uninstall();
+			} catch (BundleException e) {
+				// nothing
+			}
+		}
+	}
+
+	protected void doTestImportPolicy02(Map manifest1, Map manifest2, String tb3_1_Loc, String tb3vClient, boolean clientFail, TestExceptionHandler handler) {
+		doTestImportPolicy02(manifest1, manifest2, tb3_1_Loc, null, tb3vClient, clientFail, handler);
+	}
+
+	protected void doTestImportPolicy02(Map manifest1, Map manifest2, String tb3_1_Loc, String tb3_2_Loc, String tb3vClient, boolean clientFail, TestExceptionHandler handler) {
+		// Test import policy into two level nested composite
+		Bundle tb3_1 = null;
+		Bundle tb3_2 = null;
+		try {
+			tb3_1 = install(tb3_1_Loc);
+			if (tb3_2_Loc != null)
+				tb3_2 = install(tb3_2_Loc);
+		} catch (Exception e) {
+			fail("Unexpected error installing test bundle", e);
+		}
+		try {
+			CompositeBundle composite1 = createCompositeBundle(compAdmin, getName() + "_1", manifest1, null);
+			startCompositeBundle(composite1);
+			CompositeAdmin compAdmin1 = (CompositeAdmin) getService(composite1.getSystemBundleContext(), CompositeAdmin.class.getName());
+			CompositeBundle composite2 = createCompositeBundle(compAdmin1, getName() + "_2", manifest2, null);
+			startCompositeBundle(composite2);
+			Bundle tb3client = installConstituent(composite2, "tb3client", tb3vClient);
+	
+			try {
+				tb3_1.start();
+				if (tb3_2 != null)
+					tb3_2.start();
+			} catch (BundleException e) {
+				fail("Unexpected error starting", e);
+			}	
+			try {
+				tb3client.start();
+				if (clientFail)
+					fail("Expected client to fail to start: " + tb3client.getLocation());
+			} catch (BundleException e) {
+				if (!clientFail)
+					fail("Unexpected error starting", e);
+			}
+			uninstallCompositeBundle(composite1);
+		} finally {
+			try {
+				tb3_1.uninstall();
+				if (tb3_2 != null)
+					tb3_2.uninstall();
+			} catch (BundleException e) {
+				// nothing
+			}
+		}
+	}
+
 	public static void compareEvents(Object[] expectedEvents, Object[] actualEvents) {
 		assertEquals("number of results", expectedEvents.length, actualEvents.length);
 		for (int i = 0; i < actualEvents.length; i++) {

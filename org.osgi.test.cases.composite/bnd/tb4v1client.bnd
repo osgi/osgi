@@ -1,17 +1,18 @@
-Bundle-SymbolicName: ${p}.tb4impl
-Bundle-Name: ${p}.tb4impl
+Bundle-SymbolicName: ${p}.tb4client
+Bundle-Name: ${p}.tb4client
 Bundle-Version: 1.0.0.${project.build}
+Bundle-Activator: ${p}.tb4client.Tb4Client
 Bundle-Vendor: IBM
 Bundle-DocURL: http://www.osgi.org/
 Bundle-ContactAddress: info@mail.osgi.org
 Bundle-Category: osgi,test
 Bundle-Copyright: ${copyright}
-Bundle-Activator: ${p}.tb4impl.Activator
-Test-Property: v1
 Import-Package = \
 	${p}.tb4; tb4version=1, \
 	${p}.tb4.params; tb4version=1, \
-	org.osgi.framework
-Private-Package	= \
-	${p}.tb4impl.*
+	org.osgi.framework, \
+	junit.framework, \
+	${p}.junit.exceptions
+Private-Package						= \
+	${p}.tb4client.*
 

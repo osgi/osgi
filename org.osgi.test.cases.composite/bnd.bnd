@@ -2,7 +2,10 @@ Bundle-Version: 4.2.0.${project.build}
 
 Private-Package						= \
 	org.osgi.test.support.*, \
-	${p}.junit
+	${p}.junit.*
+
+Export-Package						= \
+	${p}.junit.exceptions
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
@@ -24,8 +27,14 @@ Include-Resource					= \
 	tb3v2client.jar, \
 	tb3v2requireClient.jar, \
 	tb3client.jar, \
-	tb4.jar, \
-	tb4v1Impl.jar
+	tb4v1.jar, \
+	tb4v2.jar, \
+	tb4client.jar, \
+	tb4v1client.jar, \
+	tb4v2client.jar, \
+	tb4Impl.jar, \
+	tb4v1Impl.jar, \
+	tb4v2Impl.jar
 
 -runbundles						= 
 

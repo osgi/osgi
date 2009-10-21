@@ -1,7 +1,7 @@
-Bundle-SymbolicName: ${p}.tb3client
-Bundle-Name: ${p}.tb3client
+Bundle-SymbolicName: ${p}.tb4client
+Bundle-Name: ${p}.tb4client
 Bundle-Version: 0.0.0.${project.build}
-Bundle-Activator: ${p}.tb3client.Client
+Bundle-Activator: ${p}.tb4client.Tb4Client
 Bundle-Vendor: IBM
 Bundle-DocURL: http://www.osgi.org/
 Bundle-ContactAddress: info@mail.osgi.org
@@ -9,5 +9,5 @@ Bundle-Category: osgi,test
 Bundle-Copyright: ${copyright}
 
 Private-Package						= \
-	${p}.tb3client.*
+	${p}.tb4client.*
 

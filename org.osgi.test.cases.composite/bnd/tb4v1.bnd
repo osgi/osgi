@@ -8,4 +8,5 @@ Bundle-Category: osgi,test
 Bundle-Copyright: ${copyright}
 
 Export-Package						= \
-	${p}.tb4.*
+	${p}.tb4; tb4version=1, \
+	${p}.tb4.params; tb4version=1

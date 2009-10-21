@@ -17,9 +17,6 @@
  */
 package org.osgi.test.cases.composite.junit;
 
-
-public class CompositeServiceTests extends AbstractCompositeTestCase {
-	public void testServiceImportPolicy01() {
-		// place holder
-	}
+public interface TestExceptionHandler {
+	public void handleException(Throwable t);
 }

@@ -17,18 +17,25 @@
  */
 package org.osgi.test.cases.composite.tb4impl;
 
+import java.util.Hashtable;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.test.cases.composite.tb4.SomeService;
 
 public class Activator implements BundleActivator {
-
+	private static String TEST_HEADER = "Test-Property";
+	private static String TEST_KEY = "test.property";
 	public void start(BundleContext context) throws Exception {
-		
+		String testPropValue = (String) context.getBundle().getHeaders("").get(TEST_KEY);
+		Hashtable serviceProps = new Hashtable();
+		if (testPropValue != null)
+			serviceProps.put(TEST_KEY, testPropValue);
+		context.registerService(SomeService.class.getName(), new SomeServiceImpl(), serviceProps);
 	}
 
 	public void stop(BundleContext context) throws Exception {
-		// TODO Auto-generated method stub
-
+		// nothing
 	}
 
 }
