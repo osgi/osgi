@@ -211,28 +211,35 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 					try {
 						bundles[i] = install(names[i]);
 					} catch (Exception e) {
-						fail("Unexpected error starting", e);
+						fail("Unexpected installing bundle: " + names[i], e);
 					}
 			}
 		}
-		try {
-			for (int i = 0; i < bundles.length; i++)
-				bundles[i].start();
-		} catch (BundleException e) {
-			fail("Unexpected error starting", e);
-		}
 		return bundles;
 	}
+	private void startConstituents(Bundle[] bundles) {
+		int i = 0;
+		try {
+			for (; i < bundles.length; i++)
+				bundles[i].start();
+		} catch (BundleException e) {
+			fail("Unexpected error starting bundle: " + bundles[i].getLocation(), e);
+		}
+	}
 
-	protected void doTestExportImportPolicy01(Map manifestExport, Map manifestImport, String[] exportNames, String[] importNames, String clientName, boolean clientFail, TestExceptionHandler handler) {
+	protected void doTestExportImportPolicy01(Map manifestExport, Map manifestImport, String[] exportNames, String[] importNames, String clientName, boolean clientFail, TestHandler handler) {
 		// test export policy to parent and import policy to another composite
 		CompositeBundle compositeExport = createCompositeBundle(compAdmin, getName() + "_export", manifestExport, null);
 		startCompositeBundle(compositeExport);
-		installConstituents(compositeExport, exportNames);
+		Bundle[] exportConstituents = installConstituents(compositeExport, exportNames);
 
 		CompositeBundle compositeImport = createCompositeBundle(compAdmin, getName() + "_import", manifestImport, null);
 		startCompositeBundle(compositeImport);
-		installConstituents(compositeImport, importNames);
+		Bundle[] importConstituents = installConstituents(compositeImport, importNames);
+		
+		startConstituents(exportConstituents);
+		startConstituents(importConstituents);
+
 		Bundle client = installConstituent(compositeImport, null, clientName);
 
 		try {
@@ -246,11 +253,13 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 			} else
 				fail("Unexpected error starting", e);
 		}
+		if (handler != null)
+			handler.handleBundles(exportConstituents, importConstituents, client);
 		uninstallCompositeBundle(compositeExport);
 		uninstallCompositeBundle(compositeImport);
 	}
 
-	protected void doTestExportImportPolicy02(Map manifestExport1, Map manifestExport2, Map manifestImport1, Map manifestImport2, String[] exportNames, String[] importNames, String clientName, boolean clientFail, TestExceptionHandler handler) {
+	protected void doTestExportImportPolicy02(Map manifestExport1, Map manifestExport2, Map manifestImport1, Map manifestImport2, String[] exportNames, String[] importNames, String clientName, boolean clientFail, TestHandler handler) {
 		// test export policy to a parent from two level nested composite 
 		// and import policy into another two level nested composite
 		CompositeBundle compositeExport1 = createCompositeBundle(compAdmin, getName() + "_export1", manifestExport1, null);
@@ -258,14 +267,17 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 		CompositeAdmin compAdminExport1 = (CompositeAdmin) getService(compositeExport1.getSystemBundleContext(), CompositeAdmin.class.getName());
 		CompositeBundle compositeExport2 = createCompositeBundle(compAdminExport1, getName() + "_export2", manifestExport2, null);
 		startCompositeBundle(compositeExport2);
-		installConstituents(compositeExport2, exportNames);
+		Bundle[] exportConstituents = installConstituents(compositeExport2, exportNames);
 
 		CompositeBundle compositeImport1 = createCompositeBundle(compAdmin, getName() + "_import1", manifestImport1, null);
 		startCompositeBundle(compositeImport1);
 		CompositeAdmin compAdminImport1 = (CompositeAdmin) getService(compositeImport1.getSystemBundleContext(), CompositeAdmin.class.getName());
 		CompositeBundle compositeImport2 = createCompositeBundle(compAdminImport1, getName() + "_import2", manifestImport2, null);
 		startCompositeBundle(compositeImport2);
-		installConstituents(compositeImport2, importNames);
+		Bundle[] importConstituents = installConstituents(compositeImport2, importNames);
+		
+		startConstituents(exportConstituents);
+		startConstituents(importConstituents);
 
 		Bundle client = installConstituent(compositeImport2, null, clientName);
 		try {
@@ -279,11 +291,13 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 			} else
 				fail("Unexpected error starting", e);
 		}
+		if (handler != null)
+			handler.handleBundles(exportConstituents, importConstituents, client);
 		uninstallCompositeBundle(compositeExport1);
 		uninstallCompositeBundle(compositeImport1);
 	}
 
-	protected void doTestExportPolicy01(Map manifest, String[] exportNames, String[] importNames, String clientName, boolean clientFail, TestExceptionHandler handler) {
+	protected void doTestExportPolicy01(Map manifest, String[] exportNames, String[] importNames, String clientName, boolean clientFail, TestHandler handler) {
 		// Test export policy to parent
 		Bundle client = null;
 		try {
@@ -295,7 +309,11 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 		try {
 			CompositeBundle composite = createCompositeBundle(compAdmin, getName(), manifest, null);
 			startCompositeBundle(composite);
-			installConstituents(composite, exportNames);
+			Bundle[] constituentBundles = installConstituents(composite, exportNames);
+
+			startConstituents(parentBundles);
+			startConstituents(constituentBundles);
+
 			try {
 				client.start();
 				if (clientFail)
@@ -307,6 +325,8 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 				} else
 					fail("Unexpected error starting", e);
 			}
+			if (handler != null)
+				handler.handleBundles(constituentBundles, parentBundles, client);
 			uninstallCompositeBundle(composite);
 		} finally {
 			try {
@@ -323,7 +343,7 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 		}
 	}
 
-	protected void doTestExportPolicy02(Map manifest1, Map manifest2, String[] exportNames, String[] importNames, String clientName, boolean clientFail, TestExceptionHandler handler) {
+	protected void doTestExportPolicy02(Map manifest1, Map manifest2, String[] exportNames, String[] importNames, String clientName, boolean clientFail, TestHandler handler) {
 		// test export policy to parent from two level nested composite
 		Bundle client = null;
 		try {
@@ -338,7 +358,10 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 			CompositeAdmin compAdmin1 = (CompositeAdmin) getService(composite1.getSystemBundleContext(), CompositeAdmin.class.getName());
 			CompositeBundle composite2 = createCompositeBundle(compAdmin1, getName() + "_2", manifest2, null);
 			startCompositeBundle(composite2);
-			installConstituents(composite2, exportNames);
+			Bundle[] constituentBundles = installConstituents(composite2, exportNames);
+
+			startConstituents(parentBundles);
+			startConstituents(constituentBundles);
 
 			try {
 				client.start();
@@ -348,6 +371,8 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 				if (!clientFail)
 					fail("Unexpected error starting", e);
 			}
+			if (handler != null)
+				handler.handleBundles(constituentBundles, parentBundles, client);
 			uninstallCompositeBundle(composite1);
 		} finally {
 			try {
@@ -364,15 +389,18 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 		}
 	}
 
-	protected void doTestImportPolicy01(Map manifest, String[] exportNames, String[] importNames, String clientName, boolean clientFail, TestExceptionHandler handler) {
+	protected void doTestImportPolicy01(Map manifest, String[] exportNames, String[] importNames, String clientName, boolean clientFail, TestHandler handler) {
 		// Test import policy into a composite
 		Bundle[] parentBundles = installConstituents(null, exportNames);
 		try {
 			CompositeBundle composite = createCompositeBundle(compAdmin, getName(), manifest, null);
 			startCompositeBundle(composite);
-			installConstituents(composite, importNames);
+			Bundle[] constituentBundles = installConstituents(composite, importNames);
 			Bundle client = installConstituent(composite, null, clientName);
-	
+
+			startConstituents(parentBundles);
+			startConstituents(constituentBundles);
+
 			try {
 				client.start();
 				if (clientFail)
@@ -384,6 +412,8 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 				} else
 					fail("Unexpected error starting", e);
 			}
+			if (handler != null)
+				handler.handleBundles(parentBundles, constituentBundles, client);
 			uninstallCompositeBundle(composite);
 		} finally {
 			for (int i = 0; i < parentBundles.length; i++)
@@ -395,7 +425,7 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 		}
 	}
 
-	protected void doTestImportPolicy02(Map manifest1, Map manifest2, String[] exportNames, String[] importNames, String client, boolean clientFail, TestExceptionHandler handler) {
+	protected void doTestImportPolicy02(Map manifest1, Map manifest2, String[] exportNames, String[] importNames, String clientName, boolean clientFail, TestHandler handler) {
 		// Test import policy into two level nested composite
 		Bundle[] parentBundles = installConstituents(null, exportNames);
 		try {
@@ -404,17 +434,25 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 			CompositeAdmin compAdmin1 = (CompositeAdmin) getService(composite1.getSystemBundleContext(), CompositeAdmin.class.getName());
 			CompositeBundle composite2 = createCompositeBundle(compAdmin1, getName() + "_2", manifest2, null);
 			startCompositeBundle(composite2);
-			installConstituents(composite2, importNames);
-			Bundle tb3client = installConstituent(composite2, "tb3client", client);
-	
+			Bundle[] constituentBundles = installConstituents(composite2, importNames);
+			Bundle client = installConstituent(composite2, "tb3client", clientName);
+
+			startConstituents(parentBundles);
+			startConstituents(constituentBundles);
+
 			try {
-				tb3client.start();
+				client.start();
 				if (clientFail)
-					fail("Expected client to fail to start: " + tb3client.getLocation());
+					fail("Expected client to fail to start: " + client.getLocation());
 			} catch (BundleException e) {
-				if (!clientFail)
-					fail("Unexpected error starting", e);
+				if (clientFail) {
+					if (handler != null)
+						handler.handleException(e);
+				} else
+					fail("Unexpected error starting: " +client.getLocation(), e);
 			}
+			if (handler != null)
+				handler.handleBundles(parentBundles, constituentBundles, client);
 			uninstallCompositeBundle(composite1);
 		} finally {
 			for (int i = 0; i < parentBundles.length; i++)

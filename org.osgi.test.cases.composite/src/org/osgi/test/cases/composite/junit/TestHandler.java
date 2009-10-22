@@ -17,6 +17,9 @@
  */
 package org.osgi.test.cases.composite.junit;
 
-public interface TestExceptionHandler {
+import org.osgi.framework.Bundle;
+
+public interface TestHandler {
 	public void handleException(Throwable t);
+	public void handleBundles(Bundle[] exportBundles, Bundle[] importBundles, Bundle client);
 }
