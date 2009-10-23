@@ -38,9 +38,10 @@ public interface FrameworkMBean {
 																		+ ":type=framework,version=1.5";
 
 	/**
-	 * The SUCCESS.
+	 * The SUCCESS, used in {@link #SUCCESS_ITEM}.
 	 */
 	String						SUCCESS							= "Success";
+
 	/**
 	 * The item that indicates if this operation was successful. The key is
 	 * {@link #SUCCESS} and the type is {@link SimpleType#BOOLEAN}. It is used
@@ -53,7 +54,7 @@ public interface FrameworkMBean {
 																		SimpleType.BOOLEAN);
 
 	/**
-	 * The key ERROR.
+	 * The key ERROR, used in {@link #ERROR_ITEM}.
 	 */
 	String						ERROR							= "Error";
 
@@ -68,9 +69,10 @@ public interface FrameworkMBean {
 																		SimpleType.STRING);
 
 	/**
-	 * The key COMPLETED.
+	 * The key COMPLETED, used in {@link #COMPLETED_ITEM}.
 	 */
 	String						COMPLETED						= "Completed";
+
 	/**
 	 * The item containing the list of bundles completing the batch operation.
 	 * The key is {@link #COMPLETED} and the type is
@@ -90,6 +92,7 @@ public interface FrameworkMBean {
 	 * {@link #BATCH_INSTALL_RESULT_TYPE}.
 	 */
 	String						BUNDLE_IN_ERROR					= "BundleInError";
+
 	/**
 	 * The item containing the bundle which caused the error during the batch
 	 * operation. This item describes the bundle in error as an id. The key is
@@ -105,9 +108,11 @@ public interface FrameworkMBean {
 																		SimpleType.LONG);
 
 	/**
-	 * The key REMAINING.
+	 * The key REMAINING, used in {@link #REMAINING_ID_ITEM} and
+	 * {@link #REMAINING_LOCATION_ITEM}.
 	 */
 	String						REMAINING						= "Remaining";
+	
 	/**
 	 * The item containing the list of remaining bundles unprocessed by the
 	 * failing batch operation. The key is {@link #REMAINING} and the type is

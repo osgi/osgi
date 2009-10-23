@@ -33,7 +33,7 @@ public interface UserAdminMBean {
 													+ ":service=useradmin,version=1.1";
 
 	/**
-	 * The key NAME.
+	 * The key NAME, used in {@link #NAME_ITEM}.
 	 */
 	String			NAME					= "Name";
 
@@ -47,7 +47,7 @@ public interface UserAdminMBean {
 													SimpleType.STRING);
 
 	/**
-	 * The key ROLES.
+	 * The key ROLES, used in {@link #ROLES_ITEM}.
 	 */
 	String			ROLES					= "Roles";
 
@@ -61,8 +61,8 @@ public interface UserAdminMBean {
 													JmxConstants.STRING_ARRAY_TYPE);
 
 	/**
-	 * The Composite Type for an Authorization object. It consists of
-	 * the {@link #NAME_ITEM} and {@link #TYPE_ITEM} items.
+	 * The Composite Type for an Authorization object. It consists of the
+	 * {@link #NAME_ITEM} and {@link #TYPE_ITEM} items.
 	 */
 	CompositeType	AUTORIZATION_TYPE		= Item
 													.compositeType(
@@ -71,9 +71,10 @@ public interface UserAdminMBean {
 															NAME_ITEM,
 															ROLES_ITEM);
 	/**
-	 * The Role type key.
+	 * The Role TYPE key, used in {@link #TYPE_ITEM}.
 	 */
 	String			TYPE					= "Type";
+
 	/**
 	 * The item containing the type of the roles encapsulated by this
 	 * authorization object. The key is {@link #TYPE} and the type is
@@ -85,7 +86,7 @@ public interface UserAdminMBean {
 													SimpleType.INTEGER);
 
 	/**
-	 * The ROLE_PROPERTIES key.
+	 * The PROPERTIES key, used in {@link #PROPERTIES_ITEM}.
 	 */
 	String			PROPERTIES				= "Properties";
 
@@ -99,11 +100,13 @@ public interface UserAdminMBean {
 													JmxConstants.PROPERTIES_TYPE);
 	/**
 	 * The item containing the type of Composite Type for a Role. It contains
-	 * the following items: {@link #NAME_ITEM}, {@link #TYPE_ITEM},
-	 * {@link #PROPERTIES_ITEM}.
+	 * the following items:
+	 * <ul>
+	 * <li>{@link #NAME}</li
+	 * <li>{@link #TYPE}</li>
+	 * <li>{@link #PROPERTIES}</li>
+	 * </ul>
 	 * 
-	 * TODO why do you need a type? As far as I can see this is always a role?
-	 * The other types are returned differently?
 	 */
 	CompositeType	ROLE_TYPE				= Item
 													.compositeType(
@@ -113,9 +116,8 @@ public interface UserAdminMBean {
 															TYPE_ITEM,
 															PROPERTIES_ITEM);
 
-
 	/**
-	 * The CREDENTIALS key.
+	 * The CREDENTIALS key, used in {@link #CREDENTIALS_ITEM}.
 	 */
 	String			CREDENTIALS				= "Credentials";
 
@@ -133,7 +135,10 @@ public interface UserAdminMBean {
 	 * adds the credentials. It extends {@link #ROLE_TYPE} and adds
 	 * {@link #CREDENTIALS_ITEM}.
 	 * 
-	 * This type extends the {@link #ROLE_TYPE};
+	 * This type extends the {@link #ROLE_TYPE}. It adds:
+	 * <ul>
+	 * <li>{@link #CREDENTIALS}</li
+	 * </ul>
 	 */
 	CompositeType	USER_TYPE				= Item
 													.extend(
@@ -142,11 +147,11 @@ public interface UserAdminMBean {
 															"Mapping of org.osgi.service.useradmin.User for remote management purposes. User extends Role",
 															CREDENTIALS_ITEM);
 
-
 	/**
-	 * The MEMBERS key.
+	 * The MEMBERS key, used in {@link #MEMBERS_ITEM}.
 	 */
 	String			MEMBERS					= "Members";
+
 	/**
 	 * The item containing the members of a group. The key is {@link #MEMBERS}
 	 * and the type is {@link JmxConstants#STRING_ARRAY_TYPE}. It is used in
@@ -158,7 +163,7 @@ public interface UserAdminMBean {
 													JmxConstants.STRING_ARRAY_TYPE);
 
 	/**
-	 * The REQUIRED_MEMBERS key.
+	 * The REQUIRED_MEMBERS key, used in {@link #REQUIRED_MEMBERS_ITEM}.
 	 */
 	String			REQUIRED_MEMBERS		= "RequiredMembers";
 
@@ -177,7 +182,11 @@ public interface UserAdminMBean {
 	 * The Composite Type for a Group. It extends {@link #USER_TYPE} and adds
 	 * {@link #MEMBERS_ITEM}, and {@link #REQUIRED_MEMBERS_ITEM}.
 	 * 
-	 * This type extends the {@link #USER_TYPE};
+	 * This type extends the {@link #USER_TYPE}. It adds:
+	 * <ul>
+	 * <li>{@link #MEMBERS}</li
+	 * <li>{@link #REQUIRED_MEMBERS}</li
+	 * </ul>
 	 */
 	CompositeType	GROUP_TYPE				= Item
 													.extend(
@@ -466,7 +475,8 @@ public interface UserAdminMBean {
 	 * Remove the credential associated with the given user
 	 * 
 	 * @param key The key of the credential to remove
-	 * @param username The name of the user for which the credential must be removed
+	 * @param username The name of the user for which the credential must be
+	 *        removed
 	 * @throws IOException if the operation fails
 	 * @throws IllegalArgumentException if the username is not a User
 	 */
@@ -475,7 +485,7 @@ public interface UserAdminMBean {
 	/**
 	 * Remove a role from the group
 	 * 
-	 * @param groupname The group name 
+	 * @param groupname The group name
 	 * @param rolename
 	 * @return true if the role was removed from the group
 	 * @throws IOException if the operation fails

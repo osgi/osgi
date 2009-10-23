@@ -35,7 +35,7 @@ public interface ServiceStateMBean {
 	public static final String	OBJECTNAME				= JmxConstants.OSGI_CORE
 																+ ":type=serviceState,version=1.5";
 	/**
-	 * The key BUNDLE_IDENTIFIER.
+	 * The key BUNDLE_IDENTIFIER, used in {@link #BUNDLE_IDENTIFIER_ITEM}.
 	 */
 	String						BUNDLE_IDENTIFIER		= "BundleIdentifier";
 	/**
@@ -48,9 +48,10 @@ public interface ServiceStateMBean {
 																SimpleType.LONG);
 
 	/**
-	 * The key OBJECT_CLASS.
+	 * The key OBJECT_CLASS, used {@link #OBJECT_CLASS_ITEM}.
 	 */
 	String						OBJECT_CLASS			= "objectClass";
+
 	/**
 	 * The item containing the interfaces of the service in
 	 * {@link #SERVICE_TYPE}. The key is {@link #OBJECT_CLASS} and the type is
@@ -62,9 +63,10 @@ public interface ServiceStateMBean {
 																JmxConstants.STRING_ARRAY_TYPE);
 
 	/**
-	 * The key IDENTIFIER.
+	 * The key IDENTIFIER, used {@link #IDENTIFIER_ITEM}.
 	 */
 	String						IDENTIFIER				= "Identifier";
+
 	/**
 	 * The item containing the service identifier in {@link #SERVICE_TYPE}. The
 	 * key is {@link #IDENTIFIER} and the type is {@link SimpleType#LONG}.
@@ -75,9 +77,10 @@ public interface ServiceStateMBean {
 																SimpleType.LONG);
 
 	/**
-	 * The key USING_BUNDLES.
+	 * The key USING_BUNDLES, used in {@link #USING_BUNDLES_ITEM}.
 	 */
 	String						USING_BUNDLES			= "UsingBundles";
+
 	/**
 	 * The item containing the bundles using the service in
 	 * {@link #SERVICE_TYPE}. The key is {@link #USING_BUNDLES} and the type is
@@ -89,13 +92,13 @@ public interface ServiceStateMBean {
 																JmxConstants.LONG_ARRAY_TYPE);
 
 	/**
-	 * The key USING_BUNDLES.
+	 * The key PROPERTIES, used in {@link #PROPERTIES_ITEM}.
 	 */
-	String						PROPERTIES				= "UsingBundles";
+	String						PROPERTIES				= "Properties";
+
 	/**
-	 * The item containing the bundles using the service in
-	 * {@link #SERVICE_TYPE}. The key is {@link #USING_BUNDLES} and the type is
-	 * {@link JmxConstants#LONG_ARRAY_TYPE}.
+	 * The item containing service properties. The key is {@link #PROPERTIES}
+	 * and the type is {@link JmxConstants#PROPERTIES_TYPE}.
 	 */
 	Item						PROPERTIES_ITEM			= new Item(
 																PROPERTIES,
