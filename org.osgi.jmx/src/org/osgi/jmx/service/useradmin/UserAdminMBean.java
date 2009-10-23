@@ -61,8 +61,7 @@ public interface UserAdminMBean {
 													JmxConstants.STRING_ARRAY_TYPE);
 
 	/**
-	 * The Composite Type for an
-	 * {@link org.osgi.service.useradmin.Authorization} object. It consists of
+	 * The Composite Type for an Authorization object. It consists of
 	 * the {@link #NAME_ITEM} and {@link #TYPE_ITEM} items.
 	 */
 	CompositeType	AUTORIZATION_TYPE		= Item

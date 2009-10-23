@@ -30,7 +30,7 @@ public interface PackageStateMBean {
 	 * The fully qualified object name of this MBean.
 	 */
 	public static final String	OBJECTNAME	= JmxConstants.OSGI_CORE
-													+ ":type=packageState;version=1.5";
+													+ ":type=packageState,version=1.5";
 
 	/**
 	 * Answer the identifier of the bundle exporting the package
