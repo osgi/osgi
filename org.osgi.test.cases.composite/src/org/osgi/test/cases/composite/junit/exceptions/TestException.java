@@ -18,9 +18,12 @@
 package org.osgi.test.cases.composite.junit.exceptions;
 
 public class TestException extends RuntimeException {
-	public static int NO_SERVICE_REFERENCE = 1;
-	public static int NO_SERVICE = 2;
-	public static int WRONG_SERVICE_PROPERTY = 3;
+		public static int NO_SERVICE_REFERENCE = 1;
+	public static final int NO_SERVICE = 2;
+	public static final int WRONG_SERVICE_PROPERTY = 3;
+	public static final int WRONG_CONTENT_HANDER = 4;
+	public static final int WRONG_STREAM_HANDER = 5;
+	public static final int NO_PROTOCOL = 6;
 	private final int testCode;
 	
 	public TestException(String message, int testCode) {

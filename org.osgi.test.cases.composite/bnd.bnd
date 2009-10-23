@@ -34,7 +34,11 @@ Include-Resource					= \
 	tb4v2client.jar, \
 	tb4Impl.jar, \
 	tb4v1Impl.jar, \
-	tb4v2Impl.jar
+	tb4v2Impl.jar, \
+	tb5a.jar, \
+	tb5aclient.jar, \
+	tb5b.jar, \
+	tb5bclient.jar
 
 -runbundles						= 
 

@@ -1,0 +1,17 @@
+Bundle-SymbolicName: ${p}.tb5a
+Bundle-Name: ${p}.tb5a
+Bundle-Version: 1.0.0.${project.build}
+Bundle-Vendor: IBM
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+Bundle-Copyright: ${copyright}
+Bundle-Activator: ${p}.tb5.Activator
+Test-Protocol1: osgitest1
+Test-Protocol2: osgitest2
+Test-MimeType: osgi/test
+Test-Handler: 1
+
+Private-Package	= \
+	${p}.tb5
+

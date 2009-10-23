@@ -44,6 +44,7 @@ import org.osgi.service.composite.CompositeAdmin;
 import org.osgi.service.composite.CompositeBundle;
 import org.osgi.service.composite.CompositeConstants;
 import org.osgi.service.packageadmin.PackageAdmin;
+import org.osgi.test.cases.composite.junit.exceptions.TestException;
 import org.osgi.test.support.OSGiTestCase;
 
 public abstract class AbstractCompositeTestCase extends OSGiTestCase {
@@ -594,6 +595,26 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 		}
 		protected boolean isSynchronous() {
 			return false;
+		}
+	}
+
+	static class SimpleTestHandler implements TestHandler {
+		private final int testCode;
+		
+		public SimpleTestHandler(int testCode) {
+			this.testCode = testCode;
+		}
+	
+		public void handleException(Throwable t) {
+			if (!(t.getCause() instanceof TestException))
+				fail("Unexpected exception type.", t);
+			TestException cause = (TestException) t.getCause();
+			if (testCode != cause.getTestCode())
+				fail("Unexpected exception type.", cause);
+		}
+	
+		public void handleBundles(Bundle[] exportBundles, Bundle[] importBundles, Bundle client) {
+			// do nothing
 		}
 	}
 }

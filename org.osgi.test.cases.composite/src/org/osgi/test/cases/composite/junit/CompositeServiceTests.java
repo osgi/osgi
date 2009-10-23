@@ -33,9 +33,9 @@ import org.osgi.test.cases.composite.junit.exceptions.TestException;
 
 
 public class CompositeServiceTests extends AbstractCompositeTestCase {
-	private static SimpleServiceTestHandler noService = new SimpleServiceTestHandler(TestException.NO_SERVICE);
-	private static SimpleServiceTestHandler noServiceRef = new SimpleServiceTestHandler(TestException.NO_SERVICE_REFERENCE);
-	private static SimpleServiceTestHandler wrongServiceProp = new SimpleServiceTestHandler(TestException.WRONG_SERVICE_PROPERTY);
+	private static AbstractCompositeTestCase.SimpleTestHandler noService = new AbstractCompositeTestCase.SimpleTestHandler(TestException.NO_SERVICE);
+	private static AbstractCompositeTestCase.SimpleTestHandler noServiceRef = new AbstractCompositeTestCase.SimpleTestHandler(TestException.NO_SERVICE_REFERENCE);
+	private static AbstractCompositeTestCase.SimpleTestHandler wrongServiceProp = new AbstractCompositeTestCase.SimpleTestHandler(TestException.WRONG_SERVICE_PROPERTY);
 
 	public void testServiceImport01a() {
 		Map manifest = new HashMap();
@@ -313,26 +313,6 @@ public class CompositeServiceTests extends AbstractCompositeTestCase {
 		manifestImport2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 
 		doTestExportImportPolicy02(manifestExport1, manifestExport2, manifestImport1, manifestImport2, new String[] {"tb4Impl.jar"}, new String[] {"tb4v1.jar"}, "tb4client.jar", false, null);
-	}
-
-	static class SimpleServiceTestHandler implements TestHandler {
-		private final int testCode;
-		
-		public SimpleServiceTestHandler(int testCode) {
-			this.testCode = testCode;
-		}
-
-		public void handleException(Throwable t) {
-			if (!(t.getCause() instanceof TestException))
-				fail("Unexpected exception type.", t);
-			TestException cause = (TestException) t.getCause();
-			if (testCode != cause.getTestCode())
-				fail("Unexpected exception type.", cause);
-		}
-
-		public void handleBundles(Bundle[] exportBundles, Bundle[] importBundles, Bundle client) {
-			// do nothing
-		}
 	}
 
 	class ServiceReferenceTestHandler implements TestHandler {
