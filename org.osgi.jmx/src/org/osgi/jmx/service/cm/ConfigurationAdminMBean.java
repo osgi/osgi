@@ -147,7 +147,7 @@ public interface ConfigurationAdminMBean {
 	 * @throws IOException if the operation failed
 	 * @throws IllegalArgumentException if the filter is invalid
 	 */
-	String[][] listConfigurations(String filter) throws IOException;
+	String[][] getConfigurations(String filter) throws IOException;
 
 	/**
 	 * Set the bundle location the configuration is bound to

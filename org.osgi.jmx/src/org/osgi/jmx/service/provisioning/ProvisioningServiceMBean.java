@@ -76,7 +76,7 @@ public interface ProvisioningServiceMBean {
 	 * @throws IOException if the operation fails
 	 * @return The table representing the manager dictionary.
 	 */
-	public TabularData getInformation() throws IOException;
+	public TabularData listInformation() throws IOException;
 
 	/**
 	 * Replaces the Provisioning Information dictionary with the entries of the

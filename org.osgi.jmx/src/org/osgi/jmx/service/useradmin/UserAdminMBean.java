@@ -328,7 +328,7 @@ public interface UserAdminMBean {
 	 * @return The list of group names
 	 * @throws IOException if the operation fails
 	 */
-	String[] getGroups() throws IOException;
+	String[] listGroups() throws IOException;
 
 	/**
 	 * Answer the list of group names
@@ -406,7 +406,7 @@ public interface UserAdminMBean {
 	 * @return The list of role names
 	 * @throws IOException if the operation fails
 	 */
-	String[] getRoles() throws IOException;
+	String[] listRoles() throws IOException;
 
 	/**
 	 * Answer the list of role names which match the supplied filter
@@ -451,7 +451,7 @@ public interface UserAdminMBean {
 	 * @return The list of user names
 	 * @throws IOException if the operation fails
 	 */
-	String[] getUsers() throws IOException;
+	String[] listUsers() throws IOException;
 
 	/**
 	 * Answer the list of user names in the User Admin database

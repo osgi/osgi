@@ -36,7 +36,7 @@ public interface PermissionAdminMBean {
 	 * @return the bundle locations
 	 * @throws IOException if the operation fails
 	 */
-	String[] getLocations() throws IOException;
+	String[] listLocations() throws IOException;
 
 	/**
 	 * Answer the list of encoded permissions of the bundle specified by the
@@ -65,7 +65,7 @@ public interface PermissionAdminMBean {
 	 * @return the array of String encoded permissions
 	 * @throws IOException if the operation fails
 	 */
-	String[] getDefaultPermissions() throws IOException;
+	String[] listDefaultPermissions() throws IOException;
 
 	/**
 	 * Set the permissions on the bundle specified by the bundle location
