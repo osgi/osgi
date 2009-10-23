@@ -4,5 +4,5 @@ javac.target=1.5
 nodeploy=true
 
 -buildpath = \
-	osgi.core;					version=4.2, \
-	osgi.cmpn;					version=4.2
+	osgi.core;					version=${osgi.version}, \
+	osgi.cmpn;					version=${osgi.version}
