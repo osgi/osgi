@@ -16,65 +16,293 @@
 
 package org.osgi.jmx;
 
-/** 
+import java.util.*;
+
+import javax.management.openmbean.*;
+
+/**
  * 
+ * Additionally, this class contains a number of utility types that are used in
+ * different places in the specification. These are {@link #LONG_ARRAY_TYPE},
+ * {@link #STRING_ARRAY_TYPE}, and {@link #PROPERTIES_TYPE}.
  */
 public class JmxConstants {
+
+	/*
+	 * Empty constructor to make sure this is not used as an object.
+	 */
 	private JmxConstants() {
 		// empty
 	}
 
 	/**
+	 * The MBean Open type for an array of strings
+	 */
+	public static final ArrayType		STRING_ARRAY_TYPE	= Item
+																	.arrayType(
+																			1,
+																			SimpleType.STRING);
+	/**
+	 * The MBean Open type for an array of longs
+	 */
+	public static final ArrayType		LONG_ARRAY_TYPE		= Item
+																	.arrayType(
+																			1,
+																			SimpleType.LONG);
+	
+	/**
+	 * For an encoded array we need to start with ARRAY_OF. This must be
+	 * followed by one of the names in {@link #SCALAR}.
+	 * 
+	 */
+	public final static String			ARRAY_OF			= "Array of ";
+
+	/**
+	 * For an encoded vector we need to start with ARRAY_OF. This must be
+	 * followed by one of the names in {@link #SCALAR}.
+	 */
+	public final static String			VECTOR_OF			= "Vector of ";
+
+
+	/**
+	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * {@link java.lang.String}
+	 */
+	public static final String			STRING				= "String";
+	/**
+	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * {@link java.lang.Integer}
+	 */
+	public static final String			INTEGER				= "Integer";
+	/**
+	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * {@link java.lang.Long}
+	 */
+	public static final String			LONG				= "Long";
+	/**
+	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * {@link java.lang.Float}
+	 */
+	public static final String			FLOAT				= "Float";
+	/**
+	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * {@link java.lang.Double}
+	 */
+	public static final String			DOUBLE				= "Double";
+	/**
+	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * {@link java.lang.Byte}
+	 */
+	public static final String			BYTE				= "Byte";
+	/**
+	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * {@link java.lang.Short}
+	 */
+	public static final String			SHORT				= "Short";
+	/**
+	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * {@link java.lang.Character}
+	 */
+	public static final String			CHARACTER			= "Character";
+	/**
+	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * {@link java.lang.Boolean}
+	 */
+	public static final String			BOOLEAN				= "Boolean";
+	/**
+	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * {@link java.math.BigDecimal}
+	 */
+	public static final String			BIGDECIMAL			= "BigDecimal";
+	/**
+	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * {@link java.math.BigInteger}
+	 */
+	public static final String			BIGINTEGER			= "BigInteger";
+	/**
+	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * the <code>double</code> primitive type.
+	 */
+	public static final String			P_DOUBLE			= "double";
+	/**
+	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * the <code>float</code> primitive type.
+	 */
+	public static final String			P_FLOAT				= "float";
+	/**
+	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * the <code>long</code> primitive type.
+	 */
+	public static final String			P_LONG				= "long";
+	/**
+	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * the <code>int</code> primitive type.
+	 */
+	public static final String			P_INT				= "int";
+	/**
+	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * the <code>short</code> primitive type.
+	 */
+	public static final String			P_SHORT				= "short";
+	/**
+	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * the <code>byte</code> primitive type.
+	 */
+	public static final String			P_BYTE				= "byte";
+	/**
+	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * the <code>char</code> primitive type.
+	 */
+	public static final String			P_CHAR				= "char";
+	/**
+	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * the <code>boolean</code> primitive type.
+	 */
+	public static final String			P_BOOLEAN			= "boolean";
+
+	/**
+	 * A set of all scalars that can be used in the {@link #TYPE} property of a
+	 * {@link #PROPERTIES_TYPE}. This contains the following names:
+	 * <ul>
+	 * <li>{@link #BIGDECIMAL}</li>
+	 * <li>{@link #BIGINTEGER}</li>
+	 * <li>{@link #BOOLEAN}</li>
+	 * <li>{@link #BYTE}</li>
+	 * <li>{@link #CHARACTER}</li>
+	 * <li>{@link #DOUBLE}</li>
+	 * <li>{@link #FLOAT}</li>
+	 * <li>{@link #INTEGER}</li>
+	 * <li>{@link #LONG}</li>
+	 * <li>{@link #SHORT}</li>
+	 * <li>{@link #STRING}</li>
+	 * <li>{@link #P_BYTE}</li>
+	 * <li>{@link #P_CHAR}</li>
+	 * <li>{@link #P_DOUBLE}</li>
+	 * <li>{@link #P_FLOAT}</li>
+	 * <li>{@link #P_INT}</li>
+	 * <li>{@link #P_LONG}</li>
+	 * <li>{@link #P_SHORT}</li>
+	 */
+	public final static Set<String>		SCALAR				= new HashSet<String>(
+																	Arrays
+																			.asList(
+																					STRING,
+																					INTEGER,
+																					LONG,
+																					FLOAT,
+																					DOUBLE,
+																					BYTE,
+																					SHORT,
+																					CHARACTER,
+																					BOOLEAN,
+																					BIGDECIMAL,
+																					BIGINTEGER,
+																					P_BYTE,
+																					P_CHAR,
+																					P_SHORT,
+																					P_INT,
+																					P_LONG,
+																					P_DOUBLE,
+																					P_FLOAT));
+	/**
+	 * The key KEY.
+	 */
+	public static final String			KEY					= "Key";
+	/**
+	 * The key of a property. The key is {@link #KEY} and the type is
+	 * {@link SimpleType#STRING}.
+	 */
+	public static final Item			KEY_ITEM			= new Item(
+																	KEY,
+																	"The key of the property",
+																	SimpleType.STRING);
+
+	/**
+	 * The key VALUE.
+	 */
+	public static final String			VALUE				= "Value";
+
+	/**
+	 * The value of a property. The key is {@link #VALUE} and the type is
+	 * {@link SimpleType#STRING}. A value will be encoded by the string given
+	 * in {@link #TYPE}. The syntax for this type is given in
+	 * {@link #TYPE_ITEM}.
+	 */
+	public static final Item			VALUE_ITEM			= new Item(
+																	VALUE,
+																	"The value of the property",
+																	SimpleType.STRING);
+
+	/**
+	 * The key PROPERTY_TYPE. TODO can we call this value PropertyType and
+	 * service type ServiceType?
+	 */
+	public static final String			TYPE				= "Type";
+
+	/**
+	 * The type of the property. The key is {@link #TYPE} and the type is
+	 * {@link SimpleType#STRING}. This string must follow the following syntax:
+	 * 
+	 * TYPE ::= ( 'Array of ' | 'Vector of ' )? {@link #SCALAR}
+	 * 
+	 * TODO why can't we just use the class name?
+	 * TODO why do we have to distinguish between primitives and wrappers?
+	 */
+	public static final Item			TYPE_ITEM			= new Item(
+																	TYPE,
+																	"The type of the property",
+																	SimpleType.STRING, //
+																	STRING,
+																	INTEGER,
+																	LONG,
+																	FLOAT,
+																	DOUBLE,
+																	BYTE,
+																	SHORT,
+																	CHARACTER,
+																	BOOLEAN,
+																	BIGDECIMAL,
+																	BIGINTEGER,
+																	P_DOUBLE,
+																	P_FLOAT,
+																	P_LONG,
+																	P_INT,
+																	P_SHORT,
+																	P_CHAR,
+																	P_BYTE,
+																	P_BOOLEAN);
+
+	/**
+	 * A Composite Type describing a a single property. A property consists of
+	 * the following items {@link #KEY_ITEM}, {@link #VALUE_ITEM}, and
+	 * {@link #TYPE_ITEM}.
+	 */
+	public static final CompositeType	PROPERTY_TYPE		= Item
+																	.compositeType(
+																			"PROPERTY",
+																			"This type encapsulates a key/value pair",
+																			KEY_ITEM,
+																			VALUE_ITEM,
+																			TYPE_ITEM);
+
+	/**
+	 * Describes a map with properties. The row type is {@link #PROPERTY_TYPE}.
+	 * The index is defined to the {@link #KEY} of the property.
+	 */
+	public static final TabularType		PROPERTIES_TYPE		= Item
+																	.tabularType(
+																			"PROPERTIES",
+																			"A table of PROPERTY",
+																			PROPERTY_TYPE,
+																			KEY);
+
+	/**
 	 * The domain name of the core OSGi MBeans
 	 */
-	public static final String CORE = "osgi.core";
+	public static final String			OSGI_CORE			= "osgi.core";
 
 	/**
 	 * The domain name of the selected OSGi compendium MBeans
 	 */
-	public static final String COMPENDIUM = "osgi.compendium";
-
-	/**
-	 * The fully qualified object name of the <link>BundleStateMBean</link>
-	 */
-	public static final String BUNDLE_STATE = CORE + ":type=bundleState";
-
-	/**
-	 * The fully qualified object name of the
-	 * <link>ConfigAdminManagerMBean</link>
-	 */
-	public static final String CM_SERVICE = COMPENDIUM + ":service=cm";
-
-	/**
-	 * The fully qualified object name of the <link>FrameworkMBean</link>
-	 */
-	public static final String FRAMEWORK = CORE + ":type=framework";
-
-	/**
-	 * The fully qualified object name of the
-	 * <link>PermissionManagerMBean</link>
-	 */
-	public static final String PA_SERVICE = COMPENDIUM
-			+ ":service=permissionadmin";
-
-	/**
-	 * The fully qualified object name of the <link>PackageStateMBean</link>
-	 */
-	public static final String PACKAGE_STATE = CORE + ":type=packageState";
-
-	/**
-	 * The fully qualified object name of the <link>ProvisioningMBean</link>
-	 */
-	public static final String PS_SERVICE = COMPENDIUM + ":service=manager";
-
-	/**
-	 * The fully qualified object name of the <link>ServiceStateMBean</link>
-	 */
-	public static final String SERVICE_STATE = CORE + ":type=serviceState";
-
-	/**
-	 * The fully qualified object name of the <link>UserManagerMBean</link>
-	 */
-	public static final String UA_SERVICE = COMPENDIUM + ":service=userAdmin";
-
+	public static final String			OSGI_COMPENDIUM		= "osgi.compendium";
 }
