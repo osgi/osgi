@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +36,8 @@ import org.osgi.framework.BundleListener;
 import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
+import org.osgi.framework.ServiceEvent;
+import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.SynchronousBundleListener;
 import org.osgi.service.composite.CompositeAdmin;
@@ -48,6 +51,7 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 	protected CompositeAdmin compAdmin;
 	protected ServiceReference paRef;
 	protected PackageAdmin pa;
+	protected List installedBundles;
 
 	public void setUp() {
 		compRef = getContext().getServiceReference(CompositeAdmin.class.getName());
@@ -58,6 +62,7 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 		assertNotNull(paRef);
 		pa = (PackageAdmin) getContext().getService(paRef);
 		assertNotNull(pa);
+		installedBundles = new ArrayList();
 	}
 
 	public void tearDown() {
@@ -65,6 +70,14 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 			getContext().ungetService(compRef);
 		compAdmin = null;
 		compRef = null;
+		for (Iterator iBundles = installedBundles.iterator(); iBundles.hasNext();) {
+			try {
+				((Bundle) iBundles.next()).uninstall();
+			} catch (Exception e) {
+				// do nothing; just trying to clean up.
+			}
+		}
+		installedBundles = null;
 		refreshRootPackages();
 		if (pa != null)
 			getContext().ungetService(paRef);
@@ -79,7 +92,15 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 		listener.getResults(new FrameworkEvent[1], false);
 	}
 
-	public CompositeBundle createCompositeBundle(CompositeBundle parent, String location, Map compositeManifest, Map configuration, String[] constituents) {
+	public Bundle install(String bundle) throws BundleException, IOException {
+		URL entry = getContext().getBundle().getEntry(bundle);
+		assertNotNull("Can not find bundle: " + bundle, entry);
+		Bundle b = getContext().installBundle(entry.toExternalForm());
+		installedBundles.add(b);
+		return b;
+	}
+
+	CompositeBundle createCompositeBundle(CompositeBundle parent, String location, Map compositeManifest, Map configuration, String[] constituents) {
 		CompositeAdmin ca = (CompositeAdmin) (parent == null ? compAdmin : getService(parent.getSystemBundleContext(), CompositeAdmin.class.getName()));
 		CompositeBundle composite = createCompositeBundle(ca, location, compositeManifest, configuration);
 		for (int i = 0; i < constituents.length; i++)
@@ -100,6 +121,7 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 		CompositeBundle composite = null;
 		try {
 			composite = factory.installCompositeBundle(location, compositeManifest, configuration);
+			installedBundles.add(composite);
 		} catch (BundleException e) {
 			fail("Unexpected exception creating composite bundle", e); //$NON-NLS-1$
 		}
@@ -512,7 +534,7 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 		public synchronized void bundleChanged(BundleEvent event) {
 			if (target == event.getBundle() && (types == 0 || (types & event.getType()) != 0)) {
 				events.add(event);
-				notify();
+				notifyAll();
 			}
 		}
 	}
@@ -527,11 +549,22 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 		public synchronized void frameworkEvent(FrameworkEvent event) {
 			if ((types == 0 || (types & event.getType()) != 0)) {
 					events.add(event);
-					notify();
+					notifyAll();
 			}
 		}
 	}
-	
+
+	class TestServiceListener extends TestListener implements ServiceListener {
+
+		public synchronized void serviceChanged(ServiceEvent event) {
+			events.add(event);
+			notifyAll();
+		}
+		protected boolean isSynchronous() {
+			return true;
+		}
+	}
+
 	class TestListener {
 		protected final List events = new ArrayList();
 		synchronized public Object[] getResults(Object[] results) {
