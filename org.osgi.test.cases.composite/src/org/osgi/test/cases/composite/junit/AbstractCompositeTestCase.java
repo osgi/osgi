@@ -93,10 +93,15 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 		listener.getResults(new FrameworkEvent[1], false);
 	}
 
-	public Bundle install(String bundle) throws BundleException, IOException {
+	public Bundle install(String bundle) {
 		URL entry = getContext().getBundle().getEntry(bundle);
 		assertNotNull("Can not find bundle: " + bundle, entry);
-		Bundle b = getContext().installBundle(entry.toExternalForm());
+		Bundle b = null;
+		try {
+			b = getContext().installBundle(entry.toExternalForm());
+		} catch (BundleException e) {
+			fail("Unexpected install error: " + entry, e);
+		}
 		installedBundles.add(b);
 		return b;
 	}
@@ -231,11 +236,7 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 				if (composite != null)
 					bundles[i] = installConstituent(composite, null, names[i]);
 				else
-					try {
-						bundles[i] = install(names[i]);
-					} catch (Exception e) {
-						fail("Unexpected installing bundle: " + names[i], e);
-					}
+					bundles[i] = install(names[i]);
 			}
 		}
 		return bundles;
@@ -323,11 +324,8 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 	protected void doTestExportPolicy01(Map manifest, String[] exportNames, String[] importNames, String clientName, boolean clientFail, TestHandler handler) {
 		// Test export policy to parent
 		Bundle client = null;
-		try {
-			client = install(clientName);
-		} catch (Exception e) {
-			fail("Unexpected error installing test bundle", e);
-		}
+		client = install(clientName);
+
 		Bundle[] parentBundles = installConstituents(null, importNames);
 		try {
 			CompositeBundle composite = createCompositeBundle(compAdmin, getName(), manifest, null);
@@ -369,11 +367,8 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 	protected void doTestExportPolicy02(Map manifest1, Map manifest2, String[] exportNames, String[] importNames, String clientName, boolean clientFail, TestHandler handler) {
 		// test export policy to parent from two level nested composite
 		Bundle client = null;
-		try {
-			client = install(clientName);
-		} catch (Exception e) {
-			fail("Unexpected error installing test bundle", e);
-		}
+		client = install(clientName);
+
 		Bundle[] parentBundles = installConstituents(null, importNames);
 		try {
 			CompositeBundle composite1 = createCompositeBundle(compAdmin, getName() + "_1", manifest1, null);

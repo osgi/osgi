@@ -39,12 +39,8 @@ public class CompositePackageAdminTests extends AbstractCompositeTestCase {
 
 	public void testRefresh01() {
 		// Tests refreshing a constituent which a parent bundle imports a package from.
-		Bundle tb3client = null;
-		try {
-			tb3client = install("tb3client.jar");
-		} catch (Exception e) {
-			fail("Unexpected error installing test bundle", e);
-		}
+		Bundle tb3client = install("tb3client.jar");
+
 		TestBundleListener testListener = new TestBundleListener(tb3client, BundleEvent.STARTED | BundleEvent.STOPPED | BundleEvent.UNRESOLVED | BundleEvent.RESOLVED);
 		try {
 			// test refreshing a bundle in a composite
@@ -92,12 +88,8 @@ public class CompositePackageAdminTests extends AbstractCompositeTestCase {
 
 	public void testRefresh02() {
 		// Tests refreshing a parent bundle which a constituent imports a package from.
-		Bundle tb3 = null;
-		try {
-			tb3 = install("tb3v1.jar");
-		} catch (Exception e) {
-			fail("Unexpected error installing test bundle", e);
-		}
+		Bundle tb3 = install("tb3v1.jar");
+		
 		try {
 			// test refreshing a bundle in a composite
 			Map manifest = new HashMap();
@@ -144,12 +136,8 @@ public class CompositePackageAdminTests extends AbstractCompositeTestCase {
 
 	public void testRefresh03() {
 		// Tests refreshing a composite with a constituent which a parent bundle imports a package from.
-		Bundle tb3client = null;
-		try {
-			tb3client = install("tb3client.jar");
-		} catch (Exception e) {
-			fail("Unexpected error installing test bundle", e);
-		}
+		Bundle tb3client = install("tb3client.jar");
+
 		TestBundleListener testParentListener = new TestBundleListener(tb3client, BundleEvent.STARTED | BundleEvent.STOPPED | BundleEvent.UNRESOLVED | BundleEvent.RESOLVED);
 		try {
 			// test refreshing a bundle in a composite
@@ -200,12 +188,8 @@ public class CompositePackageAdminTests extends AbstractCompositeTestCase {
 
 	public void testRefresh04() {
 		// Tests lazy  uninstall of a composite and refreshing a composite with a constituent which a parent bundle imports a package from.
-		Bundle tb3client = null;
-		try {
-			tb3client = install("tb3client.jar");
-		} catch (Exception e) {
-			fail("Unexpected error installing test bundle", e);
-		}
+		Bundle tb3client = install("tb3client.jar");
+
 		TestBundleListener testParentListener = new TestBundleListener(tb3client, BundleEvent.STARTED | BundleEvent.STOPPED | BundleEvent.UNRESOLVED | BundleEvent.RESOLVED);
 		try {
 			// test refreshing a bundle in a composite
@@ -264,12 +248,8 @@ public class CompositePackageAdminTests extends AbstractCompositeTestCase {
 
 	public void testUpdate01() {
 		// Test update a composite with a constituent which a parent bundle imports a package from.
-		Bundle tb3client = null;
-		try {
-			tb3client = install("tb3client.jar");
-		} catch (Exception e) {
-			fail("Unexpected error installing test bundle", e);
-		}
+		Bundle tb3client = install("tb3client.jar");
+
 		TestBundleListener testListener = new TestBundleListener(tb3client, BundleEvent.STARTED | BundleEvent.STOPPED | BundleEvent.UNRESOLVED | BundleEvent.RESOLVED);
 		try {
 			// install composite with no exports
@@ -335,12 +315,8 @@ public class CompositePackageAdminTests extends AbstractCompositeTestCase {
 
 	public void testUpdate02() {
 		// Test update a composite with a constituent which a parent bundle imports a package from.
-		Bundle tb3 = null;
-		try {
-			tb3 = install("tb3v1.jar");
-		} catch (Exception e) {
-			fail("Unexpected error installing test bundle", e);
-		}
+		Bundle tb3 = install("tb3v1.jar");
+
 		TestBundleListener testListener = null;
 		try {
 			// install composite with no exports

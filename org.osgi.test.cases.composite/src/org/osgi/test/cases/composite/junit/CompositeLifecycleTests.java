@@ -18,7 +18,6 @@
 package org.osgi.test.cases.composite.junit;
 
 
-import java.util.Dictionary;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
@@ -27,7 +26,6 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.service.composite.CompositeAdmin;
 import org.osgi.service.composite.CompositeBundle;
-import org.osgi.test.support.OSGiTestCase;
 
 public class CompositeLifecycleTests extends AbstractCompositeTestCase {
 	public void testCompositeCreate01() {

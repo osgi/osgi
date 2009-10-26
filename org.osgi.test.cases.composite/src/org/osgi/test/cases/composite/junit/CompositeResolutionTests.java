@@ -58,7 +58,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		uninstallCompositeBundle(composite2);
 	}
 
-	public void testSingletons03() throws BundleException, IOException {
+	public void testSingletons03() {
 		// Test singletons in nested composites which does not require a bundle with same BSN from the parent
 		CompositeBundle composite = createCompositeBundle(compAdmin, getName(), null, null);
 		Bundle tb2v2 = installConstituent(composite, "tb2v2", "tb2v2.jar");
@@ -70,11 +70,15 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 			assertTrue("Resolution is incorrect: " + tb2v2.getVersion(), tb2v2.getState() == Bundle.RESOLVED);
 			uninstallCompositeBundle(composite);
 		} finally {
-			tb2v1.uninstall();
+			try {
+				tb2v1.uninstall();
+			} catch (BundleException e) {
+				// just trying to clean up.
+			}
 		}
 	}
 
-	public void testSingletons04() throws BundleException, IOException {
+	public void testSingletons04() {
 		// Test singletons in nested composites which requires a bundle with same BSN from the parent
 		Map manifest = new HashMap();
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
@@ -89,7 +93,11 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 			assertTrue("Resolution is incorrect: " + tb2v2.getVersion(), tb2v2.getState() != Bundle.RESOLVED);
 			uninstallCompositeBundle(composite);
 		} finally {
-			tb2v1.uninstall();
+			try {
+				tb2v1.uninstall();
+			} catch (BundleException e) {
+				// just trying to clean up.
+			}
 		}
 	}
 
@@ -113,7 +121,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		uninstallCompositeBundle(composite);
 	}
 
-	public void testFragments02() throws BundleException, IOException {
+	public void testFragments02() {
 		// Test fragment resolution in a composite which does not require a bundle with the BSN of the host
 		CompositeBundle composite = createCompositeBundle(compAdmin, getName(), null, null);
 		Bundle tb1Frag1 = installConstituent(composite, "tb1Frag1", "tb1Frag1.jar");
@@ -125,11 +133,15 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 			assertTrue("Resolution is incorrect: " + tb1Frag1.getSymbolicName(), tb1Frag1.getState() != Bundle.RESOLVED);
 			uninstallCompositeBundle(composite);
 		} finally {
-			tb1.uninstall();
+			try {
+				tb1.uninstall();
+			} catch (BundleException e) {
+				// just trying to clean up.
+			}
 		}
 	}
 
-	public void testFragments03() throws BundleException, IOException {
+	public void testFragments03() {
 		// Test fragment resolution in a composite which does require a bundle with the BSN of the host
 		// Fragment should still not resolve
 		Map manifest = new HashMap();
@@ -145,7 +157,11 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 			assertTrue("Resolution is incorrect: " + tb1Frag1.getSymbolicName(), tb1Frag1.getState() != Bundle.RESOLVED);
 			uninstallCompositeBundle(composite);
 		} finally {
-			tb1.uninstall();
+			try {
+				tb1.uninstall();
+			} catch (BundleException e) {
+				// just trying to clean up.
+			}
 		}
 	}
 
