@@ -16,31 +16,36 @@
 
 package org.osgi.jmx.framework;
 
-import java.io.*;
+import java.io.IOException;
 
-import javax.management.openmbean.*;
+import javax.management.openmbean.CompositeData;
+import javax.management.openmbean.CompositeType;
+import javax.management.openmbean.SimpleType;
 
-import org.osgi.jmx.*;
+import org.osgi.jmx.Item;
+import org.osgi.jmx.JmxConstants;
 
 /**
  * The FrameworkMbean provides mechanisms to exert control over the framework.
  * For many operations, it provides a batch mechanism to avoid excessive message
  * passing when interacting remotely.
  * 
- * TODO Need to indicate which fields are mandatory and which fields are
+ * ### Need to indicate which fields are mandatory and which fields are
  * optional?
+ * 
+ * @version $Revision$
  */
 public interface FrameworkMBean {
 	/**
 	 * The fully qualified object name of this mbean.
 	 */
-	public static final String	OBJECTNAME						= JmxConstants.OSGI_CORE
-																		+ ":type=framework,version=1.5";
+	String			OBJECTNAME						= JmxConstants.OSGI_CORE
+															+ ":type=framework,version=1.5";
 
 	/**
 	 * The SUCCESS, used in {@link #SUCCESS_ITEM}.
 	 */
-	String						SUCCESS							= "Success";
+	String			SUCCESS							= "Success";
 
 	/**
 	 * The item that indicates if this operation was successful. The key is
@@ -48,30 +53,30 @@ public interface FrameworkMBean {
 	 * in {@link #BATCH_ACTION_RESULT_TYPE} and
 	 * {@link #BATCH_INSTALL_RESULT_TYPE}.
 	 */
-	Item						SUCCESS_ITEM					= new Item(
-																		SUCCESS,
-																		"Whether the operation was successful",
-																		SimpleType.BOOLEAN);
+	Item			SUCCESS_ITEM					= new Item(
+															SUCCESS,
+															"Whether the operation was successful",
+															SimpleType.BOOLEAN);
 
 	/**
 	 * The key ERROR, used in {@link #ERROR_ITEM}.
 	 */
-	String						ERROR							= "Error";
+	String			ERROR							= "Error";
 
 	/**
 	 * The item containing the error message of the batch operation. The key is
 	 * {@link #ERROR} and the type is {@link SimpleType#STRING}. It is used in
 	 * {@link #BATCH_ACTION_RESULT_TYPE} and {@link #BATCH_INSTALL_RESULT_TYPE}.
 	 */
-	Item						ERROR_ITEM						= new Item(
-																		ERROR,
-																		"The error message if unsuccessful",
-																		SimpleType.STRING);
+	Item			ERROR_ITEM						= new Item(
+															ERROR,
+															"The error message if unsuccessful",
+															SimpleType.STRING);
 
 	/**
 	 * The key COMPLETED, used in {@link #COMPLETED_ITEM}.
 	 */
-	String						COMPLETED						= "Completed";
+	String			COMPLETED						= "Completed";
 
 	/**
 	 * The item containing the list of bundles completing the batch operation.
@@ -79,10 +84,10 @@ public interface FrameworkMBean {
 	 * {@link JmxConstants#LONG_ARRAY_TYPE}. It is used in
 	 * {@link #BATCH_ACTION_RESULT_TYPE} and {@link #BATCH_INSTALL_RESULT_TYPE}.
 	 */
-	Item						COMPLETED_ITEM					= new Item(
-																		COMPLETED,
-																		"The bundle ids of the successfully completed installs",
-																		JmxConstants.LONG_ARRAY_TYPE);
+	Item			COMPLETED_ITEM					= new Item(
+															COMPLETED,
+															"The bundle ids of the successfully completed installs",
+															JmxConstants.LONG_ARRAY_TYPE);
 
 	/**
 	 * The key for BUNDLE_IN_ERROR. This key is used with two different items:
@@ -91,7 +96,7 @@ public interface FrameworkMBean {
 	 * for this key. It is used in {@link #BATCH_ACTION_RESULT_TYPE} and
 	 * {@link #BATCH_INSTALL_RESULT_TYPE}.
 	 */
-	String						BUNDLE_IN_ERROR					= "BundleInError";
+	String			BUNDLE_IN_ERROR					= "BundleInError";
 
 	/**
 	 * The item containing the bundle which caused the error during the batch
@@ -102,27 +107,27 @@ public interface FrameworkMBean {
 	 * @see #BUNDLE_IN_ERROR_LOCATION_ITEM for the item that has a location for
 	 *      the bundle in error.
 	 */
-	Item						BUNDLE_IN_ERROR_ID_ITEM			= new Item(
-																		BUNDLE_IN_ERROR,
-																		"The id of the bundle causing the error",
-																		SimpleType.LONG);
+	Item			BUNDLE_IN_ERROR_ID_ITEM			= new Item(
+															BUNDLE_IN_ERROR,
+															"The id of the bundle causing the error",
+															SimpleType.LONG);
 
 	/**
 	 * The key REMAINING, used in {@link #REMAINING_ID_ITEM} and
 	 * {@link #REMAINING_LOCATION_ITEM}.
 	 */
-	String						REMAINING						= "Remaining";
-	
+	String			REMAINING						= "Remaining";
+
 	/**
 	 * The item containing the list of remaining bundles unprocessed by the
 	 * failing batch operation. The key is {@link #REMAINING} and the type is
 	 * {@link JmxConstants#LONG_ARRAY_TYPE}. It is used in
 	 * {@link #BATCH_ACTION_RESULT_TYPE} and {@link #BATCH_INSTALL_RESULT_TYPE}.
 	 */
-	Item						REMAINING_ID_ITEM				= new Item(
-																		REMAINING,
-																		"The ids of the remaining bundles",
-																		JmxConstants.LONG_ARRAY_TYPE);
+	Item			REMAINING_ID_ITEM				= new Item(
+															REMAINING,
+															"The ids of the remaining bundles",
+															JmxConstants.LONG_ARRAY_TYPE);
 
 	/**
 	 * The Composite Type for a batch action result.
@@ -140,16 +145,16 @@ public interface FrameworkMBean {
 	 * <li>{@link #SUCCESS_ITEM}</li>
 	 * </ul>
 	 */
-	CompositeType				BATCH_ACTION_RESULT_TYPE		= Item
-																		.compositeType(
-																				"BUNDLE_ACTION_RESULT",
-																				"This type encapsulates a bundle batch install action result",
-																				BUNDLE_IN_ERROR_ID_ITEM,
-																				COMPLETED_ITEM,
-																				ERROR_ITEM,
-																				REMAINING_ID_ITEM,
-																				SUCCESS_ITEM //
-																		);
+	CompositeType	BATCH_ACTION_RESULT_TYPE		= Item
+															.compositeType(
+																	"BUNDLE_ACTION_RESULT",
+																	"This type encapsulates a bundle batch install action result",
+																	BUNDLE_IN_ERROR_ID_ITEM,
+																	COMPLETED_ITEM,
+																	ERROR_ITEM,
+																	REMAINING_ID_ITEM,
+																	SUCCESS_ITEM //
+															);
 
 	/**
 	 * The item containing the bundle which caused the error during the batch
@@ -160,10 +165,10 @@ public interface FrameworkMBean {
 	 * @see #BUNDLE_IN_ERROR_ID_ITEM for the item that has a location for the
 	 *      bundle in error.
 	 */
-	Item						BUNDLE_IN_ERROR_LOCATION_ITEM	= new Item(
-																		BUNDLE_IN_ERROR,
-																		"The location of the bundle causing the error",
-																		SimpleType.LONG);
+	Item			BUNDLE_IN_ERROR_LOCATION_ITEM	= new Item(
+															BUNDLE_IN_ERROR,
+															"The location of the bundle causing the error",
+															SimpleType.LONG);
 
 	/**
 	 * The item containing the list of remaining bundles unprocessed by the
@@ -171,10 +176,10 @@ public interface FrameworkMBean {
 	 * {@link JmxConstants#STRING_ARRAY_TYPE}. It is used in
 	 * {@link #BATCH_ACTION_RESULT_TYPE} and {@link #BATCH_INSTALL_RESULT_TYPE}.
 	 */
-	Item						REMAINING_LOCATION_ITEM			= new Item(
-																		REMAINING,
-																		"The locations of the remaining bundles",
-																		JmxConstants.STRING_ARRAY_TYPE);
+	Item			REMAINING_LOCATION_ITEM			= new Item(
+															REMAINING,
+															"The locations of the remaining bundles",
+															JmxConstants.STRING_ARRAY_TYPE);
 
 	/**
 	 * The Composite Type which represents the result of a batch install
@@ -190,16 +195,16 @@ public interface FrameworkMBean {
 	 * <li>{@link #SUCCESS_ITEM}</li>
 	 * </ul>
 	 */
-	CompositeType				BATCH_INSTALL_RESULT_TYPE		= Item
-																		.compositeType(
-																				"BATCH_INSTALL_RESULT",
-																				"This type encapsulates a bundle batch install action result",
-																				BUNDLE_IN_ERROR_LOCATION_ITEM,
-																				COMPLETED_ITEM,
-																				ERROR_ITEM,
-																				REMAINING_LOCATION_ITEM,
-																				SUCCESS_ITEM //
-																		);
+	CompositeType	BATCH_INSTALL_RESULT_TYPE		= Item
+															.compositeType(
+																	"BATCH_INSTALL_RESULT",
+																	"This type encapsulates a bundle batch install action result",
+																	BUNDLE_IN_ERROR_LOCATION_ITEM,
+																	COMPLETED_ITEM,
+																	ERROR_ITEM,
+																	REMAINING_LOCATION_ITEM,
+																	SUCCESS_ITEM //
+															);
 
 	/**
 	 * Retrieve the framework start level
@@ -272,7 +277,7 @@ public interface FrameworkMBean {
 	 * @see #BATCH_ACTION_RESULT_TYPE for the precise specification of the
 	 *      CompositeData type representing the returned result.
 	 * 
-	 * ### there is not result???
+	 *      ### there is not result???
 	 * @param bundleIdentifier the bundle identifier
 	 * @throws IOException if the operation failed
 	 */

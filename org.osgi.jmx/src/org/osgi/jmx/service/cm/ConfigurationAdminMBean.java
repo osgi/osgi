@@ -16,16 +16,17 @@
 
 package org.osgi.jmx.service.cm;
 
-import java.io.*;
+import java.io.IOException;
 
-import javax.management.openmbean.*;
+import javax.management.openmbean.TabularData;
 
-import org.osgi.jmx.*;
+import org.osgi.jmx.JmxConstants;
 
 /**
  * This MBean provides the management interface to the OSGi Configuration
  * Administration Service.
  * 
+ * @version $Revision$
  */
 public interface ConfigurationAdminMBean {
 	/**

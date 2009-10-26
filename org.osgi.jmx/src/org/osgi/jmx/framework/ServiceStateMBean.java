@@ -16,11 +16,15 @@
 
 package org.osgi.jmx.framework;
 
-import java.io.*;
+import java.io.IOException;
 
-import javax.management.openmbean.*;
+import javax.management.openmbean.CompositeType;
+import javax.management.openmbean.SimpleType;
+import javax.management.openmbean.TabularData;
+import javax.management.openmbean.TabularType;
 
-import org.osgi.jmx.*;
+import org.osgi.jmx.Item;
+import org.osgi.jmx.JmxConstants;
 
 /**
  * This MBean represents the Service state of the framework. This MBean also
@@ -32,78 +36,79 @@ public interface ServiceStateMBean {
 	/**
 	 * The fully qualified object name of this mbean.
 	 */
-	public static final String	OBJECTNAME				= JmxConstants.OSGI_CORE
-																+ ":type=serviceState,version=1.5";
+	String			OBJECTNAME				= JmxConstants.OSGI_CORE
+													+ ":type=serviceState,version=1.5";
 	/**
 	 * The key BUNDLE_IDENTIFIER, used in {@link #BUNDLE_IDENTIFIER_ITEM}.
 	 */
-	String						BUNDLE_IDENTIFIER		= "BundleIdentifier";
+	String			BUNDLE_IDENTIFIER		= "BundleIdentifier";
 	/**
 	 * The item containing the bundle identifier in {@link #SERVICE_TYPE}. The
-	 * key is {@link #BUNDLE_IDENTIFIER} and the type is {@link SimpleType#LONG}.
+	 * key is {@link #BUNDLE_IDENTIFIER} and the type is {@link SimpleType#LONG}
+	 * .
 	 */
-	Item						BUNDLE_IDENTIFIER_ITEM	= new Item(
-																BUNDLE_IDENTIFIER,
-																"The identifier of the bundle the service belongs to",
-																SimpleType.LONG);
+	Item			BUNDLE_IDENTIFIER_ITEM	= new Item(
+													BUNDLE_IDENTIFIER,
+													"The identifier of the bundle the service belongs to",
+													SimpleType.LONG);
 
 	/**
 	 * The key OBJECT_CLASS, used {@link #OBJECT_CLASS_ITEM}.
 	 */
-	String						OBJECT_CLASS			= "objectClass";
+	String			OBJECT_CLASS			= "objectClass";
 
 	/**
 	 * The item containing the interfaces of the service in
 	 * {@link #SERVICE_TYPE}. The key is {@link #OBJECT_CLASS} and the type is
 	 * {@link JmxConstants#STRING_ARRAY_TYPE}.
 	 */
-	Item						OBJECT_CLASS_ITEM		= new Item(
-																OBJECT_CLASS,
-																"An string array containing the interfaces under which the service has been registered",
-																JmxConstants.STRING_ARRAY_TYPE);
+	Item			OBJECT_CLASS_ITEM		= new Item(
+													OBJECT_CLASS,
+													"An string array containing the interfaces under which the service has been registered",
+													JmxConstants.STRING_ARRAY_TYPE);
 
 	/**
 	 * The key IDENTIFIER, used {@link #IDENTIFIER_ITEM}.
 	 */
-	String						IDENTIFIER				= "Identifier";
+	String			IDENTIFIER				= "Identifier";
 
 	/**
 	 * The item containing the service identifier in {@link #SERVICE_TYPE}. The
 	 * key is {@link #IDENTIFIER} and the type is {@link SimpleType#LONG}.
 	 */
-	Item						IDENTIFIER_ITEM			= new Item(
-																IDENTIFIER,
-																"The identifier of the service",
-																SimpleType.LONG);
+	Item			IDENTIFIER_ITEM			= new Item(
+													IDENTIFIER,
+													"The identifier of the service",
+													SimpleType.LONG);
 
 	/**
 	 * The key USING_BUNDLES, used in {@link #USING_BUNDLES_ITEM}.
 	 */
-	String						USING_BUNDLES			= "UsingBundles";
+	String			USING_BUNDLES			= "UsingBundles";
 
 	/**
 	 * The item containing the bundles using the service in
 	 * {@link #SERVICE_TYPE}. The key is {@link #USING_BUNDLES} and the type is
 	 * {@link JmxConstants#LONG_ARRAY_TYPE}.
 	 */
-	Item						USING_BUNDLES_ITEM		= new Item(
-																USING_BUNDLES,
-																"The bundles using the service",
-																JmxConstants.LONG_ARRAY_TYPE);
+	Item			USING_BUNDLES_ITEM		= new Item(
+													USING_BUNDLES,
+													"The bundles using the service",
+													JmxConstants.LONG_ARRAY_TYPE);
 
 	/**
 	 * The key PROPERTIES, used in {@link #PROPERTIES_ITEM}.
 	 */
-	String						PROPERTIES				= "Properties";
+	String			PROPERTIES				= "Properties";
 
 	/**
 	 * The item containing service properties. The key is {@link #PROPERTIES}
 	 * and the type is {@link JmxConstants#PROPERTIES_TYPE}.
 	 */
-	Item						PROPERTIES_ITEM			= new Item(
-																PROPERTIES,
-																"The service properties",
-																JmxConstants.PROPERTIES_TYPE);
+	Item			PROPERTIES_ITEM			= new Item(
+													PROPERTIES,
+													"The service properties",
+													JmxConstants.PROPERTIES_TYPE);
 
 	/**
 	 * The item names in the CompositeData representing the service. This type
@@ -116,26 +121,27 @@ public interface ServiceStateMBean {
 	 * <li>{@link #USING_BUNDLES}</li>
 	 * </ul>
 	 */
-	CompositeType				SERVICE_TYPE			= Item
-																.compositeType(
-																		"SERVICE",
-																		"This type encapsulates an OSGi service",
-																		BUNDLE_IDENTIFIER_ITEM,
-																		IDENTIFIER_ITEM,
-																		OBJECT_CLASS_ITEM,
-																		PROPERTIES_ITEM,
-																		USING_BUNDLES_ITEM);
+	CompositeType	SERVICE_TYPE			= Item
+													.compositeType(
+															"SERVICE",
+															"This type encapsulates an OSGi service",
+															BUNDLE_IDENTIFIER_ITEM,
+															IDENTIFIER_ITEM,
+															OBJECT_CLASS_ITEM,
+															PROPERTIES_ITEM,
+															USING_BUNDLES_ITEM);
 
 	/**
 	 * The Tabular Type for a Service table. The rows consists of
-	 * {@link #SERVICE_TYPE} Composite Data and the index is {@link #IDENTIFIER}.
+	 * {@link #SERVICE_TYPE} Composite Data and the index is {@link #IDENTIFIER}
+	 * .
 	 */
-	TabularType					SERVICES_TYPE			= Item
-																.tabularType(
-																		"SERVICES",
-																		"The table of all services",
-																		SERVICE_TYPE,
-																		IDENTIFIER);
+	TabularType		SERVICES_TYPE			= Item
+													.tabularType(
+															"SERVICES",
+															"The table of all services",
+															SERVICE_TYPE,
+															IDENTIFIER);
 
 	/**
 	 * Answer the list of interfaces that this service implements

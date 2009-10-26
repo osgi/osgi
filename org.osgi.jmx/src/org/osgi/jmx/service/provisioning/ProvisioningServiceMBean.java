@@ -20,11 +20,13 @@ import java.io.IOException;
 
 import javax.management.openmbean.TabularData;
 
-import org.osgi.jmx.*;
+import org.osgi.jmx.JmxConstants;
 
 /**
  * This MBean represents the management interface to the OSGi Initial
  * Provisioning Service
+ * 
+ * @version $Revision$
  */
 public interface ProvisioningServiceMBean {
 	/**

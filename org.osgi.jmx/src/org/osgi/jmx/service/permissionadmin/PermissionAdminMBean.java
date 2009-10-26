@@ -16,12 +16,14 @@
 
 package org.osgi.jmx.service.permissionadmin;
 
-import java.io.*;
+import java.io.IOException;
 
-import org.osgi.jmx.*;
+import org.osgi.jmx.JmxConstants;
 
 /**
  * This MBean represents the OSGi Permission Manager Service
+ * 
+ * @version $Revision$
  */
 public interface PermissionAdminMBean {
 	/**
