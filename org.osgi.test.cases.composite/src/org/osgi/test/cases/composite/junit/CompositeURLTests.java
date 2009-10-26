@@ -18,6 +18,7 @@
 package org.osgi.test.cases.composite.junit;
 
 import java.io.IOException;
+import java.net.ContentHandler;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,7 +51,7 @@ public class CompositeURLTests extends AbstractCompositeTestCase {
 		Map manifest = new HashMap();
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.junit.exceptions");
-		manifest.put(CompositeConstants.COMPOSITE_SERVICE_IMPORT_POLICY, "(objectClass=" + URLStreamHandlerService.class.getName() + ")");
+		manifest.put(CompositeConstants.COMPOSITE_SERVICE_IMPORT_POLICY, "(|(objectClass=" + ContentHandler.class.getName() + ")(objectClass=" + URLStreamHandlerService.class.getName() + "))");
 		doTestImportPolicy01(manifest, new String[] {"tb5a.jar"}, null, "tb5aclient.jar", false, null);
 	}
 
@@ -60,5 +61,13 @@ public class CompositeURLTests extends AbstractCompositeTestCase {
 		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.junit.exceptions");
 		manifest.put(CompositeConstants.COMPOSITE_SERVICE_IMPORT_POLICY, "(&(match=fail)(objectClass=" + URLStreamHandlerService.class.getName() + "))");
 		doTestImportPolicy01(manifest, new String[] {"tb5a.jar"}, null, "tb5aclient.jar", true, new SimpleTestHandler(TestException.NO_PROTOCOL));
+	}
+
+	public void testURLImport01c() {
+		Map manifest = new HashMap();
+		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.junit.exceptions");
+		manifest.put(CompositeConstants.COMPOSITE_SERVICE_IMPORT_POLICY, "(|(&(match=fail)(objectClass=" + ContentHandler.class.getName() + "))(objectClass=" + URLStreamHandlerService.class.getName() + "))");
+		doTestImportPolicy01(manifest, new String[] {"tb5a.jar"}, null, "tb5aclient.jar", true, new SimpleTestHandler(TestException.WRONG_CONTENT_HANDER));
 	}
 }
