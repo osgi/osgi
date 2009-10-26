@@ -19,6 +19,7 @@ package org.osgi.test.cases.composite.junit;
 
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.HashMap;
@@ -57,11 +58,11 @@ public class CompositeStartLevelTests extends AbstractCompositeTestCase {
 		StartLevel parentStartLevel = (StartLevel) getService(getContext(), StartLevel.class.getName());
 		StartLevel composite1StartLevel = (StartLevel) getService(composite1.getSystemBundleContext(), StartLevel.class.getName());
 		StartLevel composite2StartLevel = (StartLevel) getService(composite2.getSystemBundleContext(), StartLevel.class.getName());
-		final int parentInitBundleStartLevel = parentStartLevel.getInitialBundleStartLevel();
-		final int parentCurStartLevel = parentStartLevel.getStartLevel();
-		if (parentInitBundleStartLevel != 2)
+		final int previousInitBundleStartLevel = parentStartLevel.getInitialBundleStartLevel();
+		final int previousStartLevel = parentStartLevel.getStartLevel();
+		if (previousInitBundleStartLevel != 2)
 			parentStartLevel.setInitialBundleStartLevel(2);
-		if (parentCurStartLevel != 1) {
+		if (previousStartLevel != 1) {
 			parentStartLevel.setStartLevel(1);
 			try {
 				// hack to wait for start-level change
@@ -82,7 +83,7 @@ public class CompositeStartLevelTests extends AbstractCompositeTestCase {
 			Bundle composite2Tb1 = installConstituent(composite2, "tb1_2", "tb1.jar");
 
 			assertEquals("Wrong start level for bundle: " + parentTb1.getLocation(), 2, parentStartLevel.getBundleStartLevel(parentTb1));
-			assertEquals("Wrong start level for bundle: " + composite1Tb1.getLocation(), 4, composite2StartLevel.getBundleStartLevel(composite1Tb1));
+			assertEquals("Wrong start level for bundle: " + composite1Tb1.getLocation(), 4, composite1StartLevel.getBundleStartLevel(composite1Tb1));
 			assertEquals("Wrong start level for bundle: " + composite2Tb1.getLocation(), 5, composite2StartLevel.getBundleStartLevel(composite2Tb1));
 
 			try {
@@ -101,24 +102,54 @@ public class CompositeStartLevelTests extends AbstractCompositeTestCase {
 			composite1.getSystemBundleContext().addFrameworkListener(composite1Listener);
 			composite2.getSystemBundleContext().addFrameworkListener(composite2Listener);
 
+			// increment start-level
 			doTestStartLevel(parentStartLevel, getContext().getBundle(0).getBundleContext(), 2, parentTb1, parentListener, 
 					new Bundle[] {composite1Tb1, composite2Tb1}, new TestListener[] {composite1Listener, composite2Listener});
+			// decrement start-level
+			doTestStartLevel(parentStartLevel, getContext().getBundle(0).getBundleContext(), 1, parentTb1, parentListener, 
+					new Bundle[] {composite1Tb1, composite2Tb1}, new TestListener[] {composite1Listener, composite2Listener});
+
+			// increment start-level
 			doTestStartLevel(composite1StartLevel, composite1.getSystemBundleContext(), 4, composite1Tb1, composite1Listener, 
 					new Bundle[] {parentTb1, composite2Tb1}, new TestListener[] {parentListener, composite2Listener});
+			// decrement start-level
+			doTestStartLevel(composite1StartLevel, composite1.getSystemBundleContext(), 1, composite1Tb1, composite1Listener, 
+					new Bundle[] {parentTb1, composite2Tb1}, new TestListener[] {parentListener, composite2Listener});
+
+			// increment start-level
 			doTestStartLevel(composite2StartLevel, composite2.getSystemBundleContext(), 5, composite2Tb1, composite2Listener, 
 					new Bundle[] {parentTb1, composite1Tb1}, new TestListener[] {parentListener, composite1Listener});
+			// decrement start-level
+			doTestStartLevel(composite2StartLevel, composite2.getSystemBundleContext(), 1, composite2Tb1, composite2Listener, 
+					new Bundle[] {parentTb1, composite1Tb1}, new TestListener[] {parentListener, composite1Listener});
 		} finally {
-			parentStartLevel.setInitialBundleStartLevel(parentInitBundleStartLevel);
-			parentStartLevel.setStartLevel(parentCurStartLevel);
-			composite1.getSystemBundleContext().removeFrameworkListener(composite1Listener);
+			parentStartLevel.setInitialBundleStartLevel(previousInitBundleStartLevel);
+			parentStartLevel.setStartLevel(previousStartLevel);
 			getContext().removeFrameworkListener(parentListener);
-			uninstallCompositeBundle(composite1);
 		}
+	}
+
+	public void testStartLevel02() {
+		// Test start-level service with invalid bundles
+		Map configuration1 = new HashMap();
+		configuration1.put(Constants.FRAMEWORK_BEGINNING_STARTLEVEL, "3");
+		CompositeBundle composite1 = createCompositeBundle(compAdmin, getName() + "_1", null, configuration1);
+
+		StartLevel parentStartLevel = (StartLevel) getService(getContext(), StartLevel.class.getName());
+		StartLevel composite1StartLevel = (StartLevel) getService(composite1.getSystemBundleContext(), StartLevel.class.getName());
+
+		Bundle parentTb1 = install("tb1.jar");
+		Bundle composite1Tb1 = installConstituent(composite1, "tb1_1", "tb1.jar");
+
+		doTestInvalid(parentStartLevel, composite1Tb1);
+		doTestInvalid(composite1StartLevel, parentTb1);
 	}
 
 	private void doTestStartLevel(StartLevel service, BundleContext slContext, int startLevel, Bundle activeBundle, TestListener activeListener, Bundle[] resolvedBundles, TestListener[] resolvedListeners) {
 		int prevSL = service.getStartLevel();
-		try {
+
+			int activeBundleSL = service.getBundleStartLevel(activeBundle);
+			int curFrameworkSL = service.getStartLevel();
 			service.setStartLevel(startLevel);
 	
 			FrameworkEvent[] activeEvents = (FrameworkEvent[]) activeListener.getResults(new FrameworkEvent[1]);
@@ -126,7 +157,10 @@ public class CompositeStartLevelTests extends AbstractCompositeTestCase {
 			expectedEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, slContext.getBundle(), null);
 			AbstractCompositeTestCase.compareEvents(expectedEvents , activeEvents);
 
-			assertEquals("Bundle should be active: " + activeBundle.getLocation(), Bundle.ACTIVE, activeBundle.getState());
+			if (activeBundleSL > curFrameworkSL && activeBundleSL <= startLevel)
+				assertEquals("Bundle should be active: " + activeBundle.getLocation(), Bundle.ACTIVE, activeBundle.getState());
+			else
+				assertTrue("Bundle should not be active: " + activeBundle.getLocation(), Bundle.ACTIVE != activeBundle.getState());
 
 			FrameworkEvent[] noEvents = new FrameworkEvent[0];
 			for (int i = 0; i < resolvedListeners.length; i++) {
@@ -134,13 +168,33 @@ public class CompositeStartLevelTests extends AbstractCompositeTestCase {
 				assertEquals("Wrong number of events", 0, actualEvents.length);
 				assertTrue("Bundle should not be started: " + resolvedBundles[i].getLocation(), Bundle.ACTIVE != resolvedBundles[i].getState());
 			}
-		} finally {
-			service.setStartLevel(prevSL);
-			try {
-				activeListener.getResults(new FrameworkEvent[1]);
-			} catch (Exception e) {
-				// just trying to clean up.
-			}
+
+	}
+
+	private void doTestInvalid(StartLevel startLevel, Bundle bundle) {
+		try {
+			startLevel.isBundleActivationPolicyUsed(bundle);
+			fail("Expected to fail with illegal argument: " + bundle.getLocation());
+		} catch (IllegalArgumentException e) {
+			// expected
+		}
+		try {
+			startLevel.isBundlePersistentlyStarted(bundle);
+			fail("Expected to fail with illegal argument: " + bundle.getLocation());
+		} catch (IllegalArgumentException e) {
+			// expected
+		}
+		try {
+			startLevel.getBundleStartLevel(bundle);
+			fail("Expected to fail with illegal argument: " + bundle.getLocation());
+		} catch (IllegalArgumentException e) {
+			// expected
+		}
+		try {
+			startLevel.setBundleStartLevel(bundle, 1);
+			fail("Expected to fail with illegal argument: " + bundle.getLocation());
+		} catch (IllegalArgumentException e) {
+			// expected
 		}
 	}
 }
