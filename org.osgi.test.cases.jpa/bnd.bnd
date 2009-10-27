@@ -1,20 +1,22 @@
+javac.source 			= 1.5
+javac.target 			= 1.5
+
 Bundle-Version: 4.2.0.${project.build}
 
 Private-Package						= ${p}.*
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
-	org.osgi.service.template;					version=project	, \
-	osgi.core;									version=4.2		, \
-	osgi.cmpn;									version=4.2		, \
-	ee.minimum;									version=1.2		, \
+	org.osgi.service.jpa;					version=project	, \
+	osgi.core;								version=4.2		, \
+	org.apache.geronimo.specs.geronimo-jpa_3.0_spec; version=latest, \
 	${junit}
 
 -runbundles						= \
-	org.osgi.impl.service.template; version=project
+	org.osgi.impl.service.jpa; version=project
 
 -runproperties					= report=true
 
 Test-Cases							= ${testcases}
--signaturetest                      = org.osgi.service.template
+-signaturetest                      = org.osgi.service.jpa
 	

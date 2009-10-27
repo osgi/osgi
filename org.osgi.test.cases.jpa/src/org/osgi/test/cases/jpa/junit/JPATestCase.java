@@ -1,5 +1,7 @@
 /*
- * Copyright (c) OSGi Alliance (2009). All Rights Reserved.
+ * $Header$
+ * 
+ * Copyright (c) OSGi Alliance (2008). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +16,10 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.template.junit;
+package org.osgi.test.cases.jpa.junit;
 
-public class SignatureTestCase extends
-		org.osgi.test.support.signature.SignatureTestCase {
-	// concrete subclass
+import org.osgi.test.support.OSGiTestCase;
+
+public class JPATestCase extends OSGiTestCase {
+	// need to add JPA tests
 }
