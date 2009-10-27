@@ -71,4 +71,22 @@ public class CompositeURLTests extends AbstractCompositeTestCase {
 		manifest.put(CompositeConstants.COMPOSITE_SERVICE_IMPORT_POLICY, "(|(&(match=fail)(objectClass=" + ContentHandler.class.getName() + "))(objectClass=" + URLStreamHandlerService.class.getName() + "))");
 		doTestImportPolicy01(manifest, new String[] {"tb5a.jar"}, null, "tb5aclient.jar", true, new SimpleTestHandler(TestException.WRONG_CONTENT_HANDER));
 	}
+
+	public void testURLExport01a() {
+		Map manifest = new HashMap();
+		manifest.put(CompositeConstants.COMPOSITE_SERVICE_EXPORT_POLICY, "(|(objectClass=" + ContentHandler.class.getName() + ")(objectClass=" + URLStreamHandlerService.class.getName() + "))");
+		doTestExportPolicy01(manifest, new String[] {"tb5a.jar"}, null, "tb5aclient.jar", false, null);
+	}
+
+	public void testURLExport01b() {
+		Map manifest = new HashMap();
+		manifest.put(CompositeConstants.COMPOSITE_SERVICE_EXPORT_POLICY, "(&(match=fail)(objectClass=" + URLStreamHandlerService.class.getName() + "))");
+		doTestExportPolicy01(manifest, new String[] {"tb5a.jar"}, null, "tb5aclient.jar", true, new SimpleTestHandler(TestException.NO_PROTOCOL));
+	}
+
+	public void testURLExport01c() {
+		Map manifest = new HashMap();
+		manifest.put(CompositeConstants.COMPOSITE_SERVICE_EXPORT_POLICY, "(|(&(match=fail)(objectClass=" + ContentHandler.class.getName() + "))(objectClass=" + URLStreamHandlerService.class.getName() + "))");
+		doTestExportPolicy01(manifest, new String[] {"tb5a.jar"}, null, "tb5aclient.jar", true, new SimpleTestHandler(TestException.WRONG_CONTENT_HANDER));
+	}
 }
