@@ -43,7 +43,7 @@ public class Item {
 	/**
 	 * The type of this item.
 	 */
-	private final OpenType< ? >	type;
+	private final OpenType	type;
 
 	/**
 	 * Create a triple of name, description, and type. This triplet is used in
@@ -54,7 +54,7 @@ public class Item {
 	 * @param type The Open Type of this item.
 	 * @param restrictions Ignored, contains list of restrictions
 	 */
-	public Item(String name, String description, OpenType< ? > type,
+	public Item(String name, String description, OpenType type,
 			String... restrictions) {
 		this.name = name;
 		this.description = description;
@@ -108,9 +108,9 @@ public class Item {
 	 * @param elementType The element type
 	 * @return A new Array Type
 	 */
-	public static ArrayType< ? > arrayType(int dim, OpenType< ? > elementType) {
+	public static ArrayType arrayType(int dim, OpenType elementType) {
 		try {
-			return new ArrayType<Object>(dim, elementType);
+			return new ArrayType(dim, elementType);
 		}
 		catch (OpenDataException e) {
 			throw new RuntimeException(e);
@@ -144,7 +144,7 @@ public class Item {
 
 		String names[] = new String[all.size()];
 		String descriptions[] = new String[all.size()];
-		OpenType< ? > types[] = new OpenType[all.size()];
+		OpenType types[] = new OpenType[all.size()];
 
 		for (int n = 0; n < types.length; n++) {
 			names[n] = items[n].name;
