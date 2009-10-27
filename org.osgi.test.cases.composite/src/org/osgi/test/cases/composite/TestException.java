@@ -24,6 +24,9 @@ public class TestException extends RuntimeException {
 	public static final int WRONG_CONTENT_HANDER = 4;
 	public static final int WRONG_STREAM_HANDER = 5;
 	public static final int NO_PROTOCOL = 6;
+	public static final int EVENT_HOOK = 7;
+	public static final int FIND_HOOK = 8;
+	public static final int LISTENER_HOOK = 9;
 	private final int testCode;
 	
 	public TestException(String message, int testCode) {

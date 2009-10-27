@@ -39,7 +39,9 @@ Include-Resource					= \
 	tb5a.jar, \
 	tb5aclient.jar, \
 	tb5b.jar, \
-	tb5bclient.jar
+	tb5bclient.jar, \
+	tb6.jar, \
+	tb6client.jar
 
 -runbundles						= 
 
