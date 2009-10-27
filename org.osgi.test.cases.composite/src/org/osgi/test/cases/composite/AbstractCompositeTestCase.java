@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.composite.junit;
+package org.osgi.test.cases.composite;
 
 import java.io.IOException;
 import java.net.URL;
@@ -44,7 +44,6 @@ import org.osgi.service.composite.CompositeAdmin;
 import org.osgi.service.composite.CompositeBundle;
 import org.osgi.service.composite.CompositeConstants;
 import org.osgi.service.packageadmin.PackageAdmin;
-import org.osgi.test.cases.composite.junit.exceptions.TestException;
 import org.osgi.test.support.OSGiTestCase;
 
 public abstract class AbstractCompositeTestCase extends OSGiTestCase {
@@ -106,7 +105,7 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 		return b;
 	}
 
-	CompositeBundle createCompositeBundle(CompositeBundle parent, String location, Map compositeManifest, Map configuration, String[] constituents) {
+	protected CompositeBundle createCompositeBundle(CompositeBundle parent, String location, Map compositeManifest, Map configuration, String[] constituents) {
 		CompositeAdmin ca = (CompositeAdmin) (parent == null ? compAdmin : getService(parent.getSystemBundleContext(), CompositeAdmin.class.getName()));
 		CompositeBundle composite = createCompositeBundle(ca, location, compositeManifest, configuration);
 		for (int i = 0; i < constituents.length; i++)
@@ -114,7 +113,7 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 		return composite;
 	}
 	
-	CompositeBundle createCompositeBundle(CompositeAdmin factory, String location, Map compositeManifest, Map configuration) {
+	protected CompositeBundle createCompositeBundle(CompositeAdmin factory, String location, Map compositeManifest, Map configuration) {
 		if (configuration == null)
 			configuration = new HashMap();
 
@@ -508,7 +507,7 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 		return result;
 	}
 
-	class SyncTestBundleListener extends TestBundleListener implements SynchronousBundleListener {
+	public static class SyncTestBundleListener extends TestBundleListener implements SynchronousBundleListener {
 		public SyncTestBundleListener(Bundle target, int types) {
 			super(target, types);
 		}
@@ -518,7 +517,7 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 		}	
 	}
 	
-	class TestBundleListener extends TestListener implements BundleListener {
+	public static class TestBundleListener extends TestListener implements BundleListener {
 		private final Bundle target;
 		private final int types;
 		
@@ -535,7 +534,7 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 		}
 	}
 	
-	class TestFrameworkListener extends TestListener implements FrameworkListener {
+	public static class TestFrameworkListener extends TestListener implements FrameworkListener {
 		private final int types;
 		
 		public TestFrameworkListener(int types) {
@@ -550,7 +549,7 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 		}
 	}
 
-	class TestServiceListener extends TestListener implements ServiceListener {
+	public static class TestServiceListener extends TestListener implements ServiceListener {
 
 		public synchronized void serviceChanged(ServiceEvent event) {
 			events.add(event);
@@ -561,7 +560,7 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 		}
 	}
 
-	class TestListener {
+	public static class TestListener {
 		protected final List events = new ArrayList();
 		synchronized public Object[] getResults(Object[] results) {
 			return getResults(results, true);
@@ -593,7 +592,7 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 		}
 	}
 
-	static class SimpleTestHandler implements TestHandler {
+	public static class SimpleTestHandler implements TestHandler {
 		private final int testCode;
 		
 		public SimpleTestHandler(int testCode) {

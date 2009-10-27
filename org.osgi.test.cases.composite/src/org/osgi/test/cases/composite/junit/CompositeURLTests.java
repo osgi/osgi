@@ -27,7 +27,8 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.service.composite.CompositeConstants;
 import org.osgi.service.url.URLStreamHandlerService;
-import org.osgi.test.cases.composite.junit.exceptions.TestException;
+import org.osgi.test.cases.composite.AbstractCompositeTestCase;
+import org.osgi.test.cases.composite.TestException;
 
 
 
@@ -50,7 +51,7 @@ public class CompositeURLTests extends AbstractCompositeTestCase {
 	public void testURLImport01a() {
 		Map manifest = new HashMap();
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
-		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.junit.exceptions");
+		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite");
 		manifest.put(CompositeConstants.COMPOSITE_SERVICE_IMPORT_POLICY, "(|(objectClass=" + ContentHandler.class.getName() + ")(objectClass=" + URLStreamHandlerService.class.getName() + "))");
 		doTestImportPolicy01(manifest, new String[] {"tb5a.jar"}, null, "tb5aclient.jar", false, null);
 	}
@@ -58,7 +59,7 @@ public class CompositeURLTests extends AbstractCompositeTestCase {
 	public void testURLImport01b() {
 		Map manifest = new HashMap();
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
-		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.junit.exceptions");
+		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite");
 		manifest.put(CompositeConstants.COMPOSITE_SERVICE_IMPORT_POLICY, "(&(match=fail)(objectClass=" + URLStreamHandlerService.class.getName() + "))");
 		doTestImportPolicy01(manifest, new String[] {"tb5a.jar"}, null, "tb5aclient.jar", true, new SimpleTestHandler(TestException.NO_PROTOCOL));
 	}
@@ -66,7 +67,7 @@ public class CompositeURLTests extends AbstractCompositeTestCase {
 	public void testURLImport01c() {
 		Map manifest = new HashMap();
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
-		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.junit.exceptions");
+		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite");
 		manifest.put(CompositeConstants.COMPOSITE_SERVICE_IMPORT_POLICY, "(|(&(match=fail)(objectClass=" + ContentHandler.class.getName() + "))(objectClass=" + URLStreamHandlerService.class.getName() + "))");
 		doTestImportPolicy01(manifest, new String[] {"tb5a.jar"}, null, "tb5aclient.jar", true, new SimpleTestHandler(TestException.WRONG_CONTENT_HANDER));
 	}

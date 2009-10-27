@@ -2,10 +2,11 @@ Bundle-Version: 4.2.0.${project.build}
 
 Private-Package						= \
 	org.osgi.test.support.*, \
+	${p} ,\
 	${p}.junit.*
 
 Export-Package						= \
-	${p}.junit.exceptions
+	${p}
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
@@ -43,7 +44,8 @@ Include-Resource					= \
 -runbundles						= 
 
 -runproperties = report=true, \
-	osgi.compatibility.bootdelegation=false
+	osgi.compatibility.bootdelegation=false, \
+	osgi.support.multipleHosts=true
 
 Test-Cases							= ${testcases}
 

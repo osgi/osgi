@@ -25,7 +25,7 @@ import java.util.Dictionary;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.test.cases.composite.junit.exceptions.TestException;
+import org.osgi.test.cases.composite.TestException;
 
 public class Activator implements BundleActivator {
 	private static String TEST_PROTOCOL = "Test-Protocol";

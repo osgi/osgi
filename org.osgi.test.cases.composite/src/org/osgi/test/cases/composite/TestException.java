@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.test.cases.composite.junit.exceptions;
+package org.osgi.test.cases.composite;
 
 public class TestException extends RuntimeException {
 		public static int NO_SERVICE_REFERENCE = 1;

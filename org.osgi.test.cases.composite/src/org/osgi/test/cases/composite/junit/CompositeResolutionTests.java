@@ -28,6 +28,7 @@ import org.osgi.framework.Constants;
 import org.osgi.service.composite.CompositeBundle;
 import org.osgi.service.composite.CompositeConstants;
 import org.osgi.service.packageadmin.PackageAdmin;
+import org.osgi.test.cases.composite.AbstractCompositeTestCase;
 
 public class CompositeResolutionTests extends AbstractCompositeTestCase {
 

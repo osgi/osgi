@@ -18,26 +18,17 @@
 package org.osgi.test.cases.composite.junit;
 
 
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.service.composite.CompositeBundle;
-import org.osgi.service.composite.CompositeConstants;
-import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.startlevel.StartLevel;
-import org.osgi.test.cases.composite.junit.AbstractCompositeTestCase.TestFrameworkListener;
-import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.cases.composite.AbstractCompositeTestCase;
 
 public class CompositeStartLevelTests extends AbstractCompositeTestCase {
 

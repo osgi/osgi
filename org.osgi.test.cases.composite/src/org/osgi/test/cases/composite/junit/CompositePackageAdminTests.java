@@ -33,6 +33,7 @@ import org.osgi.framework.FrameworkEvent;
 import org.osgi.service.composite.CompositeBundle;
 import org.osgi.service.composite.CompositeConstants;
 import org.osgi.service.packageadmin.PackageAdmin;
+import org.osgi.test.cases.composite.AbstractCompositeTestCase;
 import org.osgi.test.support.OSGiTestCase;
 
 public class CompositePackageAdminTests extends AbstractCompositeTestCase {

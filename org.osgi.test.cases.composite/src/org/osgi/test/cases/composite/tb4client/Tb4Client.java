@@ -22,7 +22,7 @@ import junit.framework.TestCase;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.test.cases.composite.junit.exceptions.TestException;
+import org.osgi.test.cases.composite.TestException;
 import org.osgi.test.cases.composite.tb4.SomeService;
 import org.osgi.test.cases.composite.tb4.params.Work1;
 import org.osgi.test.cases.composite.tb4.params.Work2;

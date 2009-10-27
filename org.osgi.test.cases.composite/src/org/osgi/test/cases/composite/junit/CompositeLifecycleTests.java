@@ -26,6 +26,7 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.service.composite.CompositeAdmin;
 import org.osgi.service.composite.CompositeBundle;
+import org.osgi.test.cases.composite.AbstractCompositeTestCase;
 
 public class CompositeLifecycleTests extends AbstractCompositeTestCase {
 	public void testCompositeCreate01() {
