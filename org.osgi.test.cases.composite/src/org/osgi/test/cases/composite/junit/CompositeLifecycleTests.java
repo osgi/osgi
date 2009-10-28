@@ -130,6 +130,17 @@ public class CompositeLifecycleTests extends AbstractCompositeTestCase {
 		}
 	}
 
+	public void testConstituentLifeCycle04() {
+		// test create, install framework extension constituent
+		// finally uninstall
+		CompositeBundle composite = createCompositeBundle(compAdmin, getName(), null, null);
+		try {
+			installConstituent(composite, null, "tb7Frag.jar", true);
+		} finally {
+			uninstallCompositeBundle(composite);
+		}
+	}
+
 	public void testFrameworkEvent01() {
 		// Test scoping of framework events for STARTED and STARTLEVEL_CHAGED
 		CompositeBundle composite = createCompositeBundle(compAdmin, getName(), null, null);

@@ -1,0 +1,9 @@
+Bundle-SymbolicName: ${p}.tb7frag
+Bundle-Name: ${p}.tb7frag
+Bundle-Version: 1.0.0.${project.build}
+Bundle-Vendor: IBM
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+Bundle-Copyright: ${copyright}
+Fragment-Host: system.bundle; extension:="framework"

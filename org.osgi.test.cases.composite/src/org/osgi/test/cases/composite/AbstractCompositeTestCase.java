@@ -197,15 +197,23 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 	}
 
 	protected Bundle installConstituent(CompositeBundle composite, String location, String name) {
+		return installConstituent(composite, location, name, false);
+	}
+
+	protected Bundle installConstituent(CompositeBundle composite, String location, String name, boolean expectFail) {
 		try {
 			URL content = getBundleContent(name);
 			String externalForm = content.toExternalForm();
 			if (location == null)
 				location = externalForm;
 			BundleContext context = composite.getSystemBundleContext();
-			return (externalForm.equals(location)) ? context.installBundle(location) : context.installBundle(location, content.openStream());		
+			Bundle result = (externalForm.equals(location)) ? context.installBundle(location) : context.installBundle(location, content.openStream());		
+			if (expectFail)
+				fail("Expected a failure to install test bundle: " + name);
+			return result;
 		} catch (BundleException e) {
-			fail("failed to install test bundle", e); //$NON-NLS-1$
+			if (!expectFail)
+				fail("failed to install test bundle", e); //$NON-NLS-1$
 		} catch (IOException e) {
 			fail("failed to install test bundle", e); //$NON-NLS-1$
 		}
