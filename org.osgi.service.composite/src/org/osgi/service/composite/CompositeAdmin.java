@@ -41,10 +41,11 @@ public interface CompositeAdmin {
 	 * <p>
 	 * The following steps are required to install a composite:
 	 * <ol>
-	 * <li>If a bundle containing the same location identifier is already installed, a 
-	 * {@link BundleException} is thrown.</li>
 	 * <li>The composite manifest is verified.  If this fails, a {@linkplain BundleException}
 	 * is thrown.</li>
+	 * <li>If a bundle containing the same location identifier is already installed, if 
+	 * that bundle is a composite bundle the CompositeBundle object for that bundle is returned
+	 * otherwise a {@link BundleException} is thrown.</li>
 	 * <li>The composite's associated resources are allocated.  The associated resources 
 	 * minimally consist of a unique identifier and a composite framework.  If this 
 	 * step fails, a {@linkplain BundleException} is thrown.</li>
