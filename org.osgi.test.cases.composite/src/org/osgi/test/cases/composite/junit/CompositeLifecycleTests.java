@@ -71,6 +71,20 @@ public class CompositeLifecycleTests extends AbstractCompositeTestCase {
 		uninstallCompositeBundle(composite1);
 	}
 
+	public void testCompositeCreate04() {
+		// test create and uninstall
+		Bundle tb1 = install("tb1.jar");
+		createCompositeBundle(compAdmin, tb1.getLocation(), null, null, true);
+	}
+
+	public void testCompositeCreate05() {
+		// test create and uninstall
+		CompositeBundle composite1 = createCompositeBundle(compAdmin, getName(), null, null);
+		CompositeBundle composite2 = createCompositeBundle(compAdmin, getName(), null, null);
+		assertTrue("Expected the CompositeBundle objects to be identical", composite1 == composite2);
+		uninstallCompositeBundle(composite1);
+	}
+
 	public void testConstituentLifeCycle01() {
 		// test create, install constituent and uninstall
 		CompositeBundle composite = createCompositeBundle(compAdmin, getName(), null, null);

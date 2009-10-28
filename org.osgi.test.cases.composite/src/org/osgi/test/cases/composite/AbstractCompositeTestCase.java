@@ -114,6 +114,10 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 	}
 	
 	protected CompositeBundle createCompositeBundle(CompositeAdmin factory, String location, Map compositeManifest, Map configuration) {
+		return createCompositeBundle(factory, location, compositeManifest, configuration, false);
+	}
+
+	protected CompositeBundle createCompositeBundle(CompositeAdmin factory, String location, Map compositeManifest, Map configuration, boolean expectedFail) {
 		if (configuration == null)
 			configuration = new HashMap();
 
@@ -127,8 +131,12 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 		try {
 			composite = factory.installCompositeBundle(location, compositeManifest, configuration);
 			installedBundles.add(composite);
+			if (expectedFail)
+				fail("Expected to fail composite installation: " + location);
 		} catch (BundleException e) {
-			fail("Unexpected exception creating composite bundle", e); //$NON-NLS-1$
+			if (!expectedFail)
+				fail("Unexpected exception creating composite bundle", e); //$NON-NLS-1$
+			return null;
 		}
 		assertNotNull("Composite is null", composite); //$NON-NLS-1$
 		assertEquals("Wrong composite location", location, composite.getLocation()); //$NON-NLS-1$
