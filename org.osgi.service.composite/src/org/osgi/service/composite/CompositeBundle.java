@@ -109,15 +109,18 @@ public interface CompositeBundle extends Bundle {
 
 	/**
 	 * Starts this composite according to {@link Bundle#start(int)}.
-	 * When the composite bundle's state is set to {@link Bundle#ACTIVE},
-	 * the following steps are required to activate the constituents:
+	 * When the composite bundle's state is set to {@link Bundle#STARTING} and
+	 * after the {@link BundleEvent#STARTING} event has been fired for this 
+	 * composite bundle, the following steps are required to activate the 
+	 * constituents:
 	 * <ol>
 	 * <li>The composite framework start-level is set to the beginning start-level.</li>
 	 * <li>The constituent bundles are started according to the start-level 
 	 * specification.
 	 * <li>The {@link FrameworkEvent#STARTED} event is fired for the
 	 * composite framework.</li>
-	 * <li>The bundle event of type {@link BundleEvent#STARTED} is fired for the 
+	 * <li>The composite bundle state is set to {@link Bundle#ACTIVE}</li>
+	 * <li>The bundle event of type {@link BundleEvent#STARTED} is fired for this 
 	 * composite.</li>
 	 * </ol>
 	 * @param options The options for starting this composite. See
