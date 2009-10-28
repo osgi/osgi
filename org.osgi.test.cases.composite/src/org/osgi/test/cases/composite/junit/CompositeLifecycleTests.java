@@ -155,6 +155,15 @@ public class CompositeLifecycleTests extends AbstractCompositeTestCase {
 		}
 	}
 
+	public void testConstituentLifeCycle05() {
+		// test installing a bundle in a constituent using the same location
+		// as another bundle installed in another constituent.
+		CompositeBundle composite1 = createCompositeBundle(compAdmin, getName() + ".1", null, null);
+		CompositeBundle composite2 = createCompositeBundle(compAdmin, getName() + ".2", null, null);
+		installConstituent(composite1, "tb1", "tb1.jar");
+		installConstituent(composite2, "tb1", "tb1.jar", true);
+	}
+
 	public void testFrameworkEvent01() {
 		// Test scoping of framework events for STARTED and STARTLEVEL_CHAGED
 		CompositeBundle composite = createCompositeBundle(compAdmin, getName(), null, null);
