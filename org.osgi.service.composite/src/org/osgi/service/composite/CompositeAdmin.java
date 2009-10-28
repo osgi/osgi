@@ -91,12 +91,4 @@ public interface CompositeAdmin {
 	 * @return The parent composite bundle or <code>null</code>.
 	 */
 	CompositeBundle getParentCompositeBundle();
-
-	/**
-	 * Returns the <code>String</code> representation of the UUID for the framework 
-	 * with which this composite admin service is registered.
-	 * @return The UUID for the framework.
-	 */
-	String getFrameworkUUID();
-	
 }
