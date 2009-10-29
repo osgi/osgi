@@ -2,5 +2,5 @@ Bundle-Description					: Contains the Java 2 SE 1.4 execution environment stubbe
 Bundle-Version						: 1.4.0.$(project.build)
 Bundle-RequiredExecutionEnvironment	: J2SE-1.4
 
-Export-Package						: java.*, javax.*, org.*
+Export-Package						: java.*;-noimport:=true, javax.*;-noimport:=true, org.*;-noimport:=true
 Include-Resource 					: legal/about.html, legal/LICENSE

@@ -1,6 +1,4 @@
 /*
- * $Revision$
- *
  * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,7 +23,7 @@ public class StateEdit extends javax.swing.undo.AbstractUndoableEdit {
 	public void redo() { }
 	protected void removeRedundantState() { }
 	public void undo() { }
-	protected final static java.lang.String RCSID = "$Id$";
+	protected final static java.lang.String RCSID = "$Id: StateEdit.java,v 1.6 1997/10/01 20:05:51 sandipc Exp $";
 	protected javax.swing.undo.StateEditable object;
 	protected java.util.Hashtable postState;
 	protected java.util.Hashtable preState;

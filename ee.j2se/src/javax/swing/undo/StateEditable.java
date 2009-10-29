@@ -1,6 +1,4 @@
 /*
- * $Revision$
- *
  * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +18,6 @@ package javax.swing.undo;
 public abstract interface StateEditable {
 	public abstract void restoreState(java.util.Hashtable var0);
 	public abstract void storeState(java.util.Hashtable var0);
-	public final static java.lang.String RCSID = "$Id$";
+	public final static java.lang.String RCSID = "$Id: StateEditable.java,v 1.2 1997/09/08 19:39:08 marklin Exp $";
 }
 

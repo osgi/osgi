@@ -1,6 +1,4 @@
 /*
- * $Revision$
- *
  * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -93,7 +91,7 @@ public abstract class Toolkit {
 	public void setDynamicLayout(boolean var0) { }
 	public void setLockingKeyState(int var0, boolean var1) { }
 	public abstract void sync();
-	protected final java.util.Map desktopProperties = null;
-	protected final java.beans.PropertyChangeSupport desktopPropsSupport = null;
+	protected final java.util.Map desktopProperties; { desktopProperties = null; }
+	protected final java.beans.PropertyChangeSupport desktopPropsSupport; { desktopPropsSupport = null; }
 }
 
