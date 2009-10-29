@@ -1,0 +1,24 @@
+#!/bin/bash
+
+cd /home/sballard/japiout/cvs
+
+JAPIDIR=/home/sballard/japicvs/japitools
+JDKJARSDIR=/home/sballard/jdkjars
+
+japize=$JAPIDIR/bin/japize
+
+for n in jdk10 jdk11; do
+  if [ -f $n.japi.gz ]; then mv $n.japi.gz $n.bak.japi.gz; fi
+
+  echo -n "Japizing $n"
+  $japize as $n lint $n.crapi.txt packages $JDKJARSDIR/$n/classes.zip @$n.pkgs
+done
+for n in jdk12 jdk13 jdk14 jdk15; do
+  if [ -f $n.japi.gz ]; then mv $n.japi.gz $n.bak.japi.gz; fi
+
+  echo -n "Japizing $n"
+  $japize as $n lint $n.crapi.txt packages $JDKJARSDIR/$n/*.jar @$n.pkgs -javax.swing:serial
+done
+echo "Finished japizing."
+
+tar cvf jdkjapis.tar jdk1?.japi.gz

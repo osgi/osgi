@@ -44,6 +44,8 @@ import java.io.OutputStreamWriter;
 import java.util.zip.GZIPOutputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.LineNumberReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -120,6 +122,10 @@ public class Japize {
     exact = new TreeSet();
     serialExclusions = new TreeSet();
     serialRoots = new TreeSet(Arrays.asList(new String[] {","}));
+
+    // Interpret any arguments that start with @ as filenames, and replace the argument with the
+    // contents of those files.
+    args = scanForFileArgs(args);
 
     // Scan the arguments until the end of keywords is reached, interpreting
     // all the intermediate arguments and dealing with them as appropriate.
@@ -312,6 +318,33 @@ public class Japize {
       out.close();
       if (lintOut != null) lintOut.close();
     }
+  }
+
+  private static String[] scanForFileArgs(String[] args) throws IOException {
+    ArrayList result = new ArrayList();
+
+    for (int i = 0; i < args.length; i++) {
+      if (args[i].startsWith("@")) {
+        FileReader file = new FileReader(args[i].substring(1));
+        try {
+          LineNumberReader lines = new LineNumberReader(file);
+          try {
+            String line;
+            while ((line = lines.readLine()) != null) {
+              result.add(line);
+            }
+          } finally {
+            lines.close();
+          }
+        } finally {
+          file.close();
+        }
+      } else {
+        result.add(args[i]);
+      }
+    }
+
+    return (String[]) result.toArray(args);
   }
 
   private static String toClassRoot(String pkgpath) {
@@ -715,8 +748,7 @@ public class Japize {
       ClassWrapper c = getClassWrapper(n);
 
       // Load the class and check its accessibility.
-      int mods = c.getModifiers();
-      if (!Modifier.isPublic(mods) && !Modifier.isProtected(mods)) {
+      if (!isEntirelyVisible(c)) {
         progress('-');
         return false;
       }
@@ -736,11 +768,18 @@ public class Japize {
       }
 
       type += getTypeParamStr(c);
-      
+
+      int mods = c.getModifiers();
       if (c.isInterface()) {
         mods |= Modifier.ABSTRACT; // Interfaces are abstract by definition,
 
       } else {
+
+        // Enums are considered non-abstract and final
+        if (c.isEnum()) {
+          mods |= Modifier.FINAL;
+          mods &= ~Modifier.ABSTRACT;
+        }
 
         // Classes that happen to be Serializable get their SerialVersionUID
         // output as well. The separation by the '#' character from the rest
@@ -773,9 +812,6 @@ public class Japize {
         }
       }
       type += mkIfaceString(c, "");
-
-      // Skip things that aren't entirely visible as defined below.
-      if (!isEntirelyVisible(c)) return false;
 
       // Print out the japi entry for the class itself.
       printEntry(entry, type, mods, c.isDeprecated(), false, false);
@@ -984,6 +1020,12 @@ public class Japize {
           mmods |= Modifier.FINAL;
         }
 
+        // Methods of enums are by definition final and non-abstract
+        if (c.isEnum()) {
+          mmods |= Modifier.FINAL;
+          mmods &= ~Modifier.ABSTRACT;
+        }
+
         // Constructors are never final. The verifier should enforce this
         // so this should always be a no-op, except for when the line above
         // set it.
@@ -1158,14 +1200,22 @@ public class Japize {
 
   /**
    * Determine whether a class is entirely visible. If it's not then it should be skipped.
-   * A class is entirely visible if it's public or protected, its containing
-   * class, if any, is entirely visible, and all the bounds of its
+   * A class is entirely visible if it's public or protected, its declaring
+   * / containing class, if any, is entirely visible, and all the bounds of its
    * type parameters are entirely visible.
    */
   static boolean isEntirelyVisible(ClassWrapper cls) {
-    if (!Modifier.isPublic(cls.getModifiers()) && !Modifier.isProtected(cls.getModifiers())) {
+    if (!cls.isPublicOrProtected()) {
       return false;
     }
+
+    // Declaring and containing class should be the same but a redundant
+    // check doesn't harm anything. The difference is subtle and I'm not
+    // 100% sure.
+
+    ClassWrapper declaring = cls.getDeclaringClass();
+    if (declaring != null && !isEntirelyVisible(declaring)) return false;
+
     ClassWrapper containing = (ClassWrapper) cls.getContainingWrapper();
     if (containing != null && !isEntirelyVisible(containing)) return false;
 

@@ -24,6 +24,7 @@ public interface ClassWrapper extends GenericWrapper {
   ClassType getSuperclass();
   ClassType[] getInterfaces();
   boolean isSerializable();
+  ClassWrapper getDeclaringClass();
 
   /**
    * Return the class's serialVersionUID, or null if a blank final
@@ -45,5 +46,9 @@ public interface ClassWrapper extends GenericWrapper {
    * True if this class is actually an enum.
    */
   boolean isEnum();
+  /**
+   * True if this class is visible.
+   */
+  boolean isPublicOrProtected();
 }
 

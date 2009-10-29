@@ -1,0 +1,153 @@
+#!/bin/bash
+
+# Modify these lines to provide a list of VMs to test, a technique to obtain a
+# japi file for each VM, and a list of JDK versions to test against. The last
+# listed JDK will be tested bidirectionally.
+TESTEES="classpath classpath-generics harmony"
+JDKS="jdk10 jdk11 jdk12 jdk13 jdk14 jdk15"
+BETAJDKS="jdk6 jdk7"
+WORKDIR=/home/sballard/japiout/cvs
+JAPIDIR=/home/sballard/japicvs/japitools
+JAPIZEJDKS=true
+JAPIZEBETAS=true
+GENIGNORE=true
+MAILDIFFS=true
+
+# Q should be either nothing or "-q". Currently we just assume that the user
+# knows about the use of -q to make the script quiet, and doesn't specify
+# anything else (if they do, things will go wrong).
+Q=$1
+#set -e
+export CVS_RSH=ssh
+
+cd $JAPIDIR
+cvs update -dP
+chmod +x $JAPIDIR/bin/japicompat
+chmod +x $JAPIDIR/bin/japize
+chmod +x $JAPIDIR/bin/japiotext
+chmod +x $JAPIDIR/bin/japiohtml
+ant -Dbuild.compiler=jikes
+cd $WORKDIR
+
+function uploadem() {
+  if [ "$FILESTOCOPY" != "" ]; then
+    if [ "$Q" = "" ]; then
+      echo "Uploading files: $FILESTOCOPY"
+    fi
+    scp $Q $FILESTOCOPY stuart@kaffe.org:public_html/japi/htmlout
+    FILESTOCOPY=
+  fi
+}
+FILESTOCOPY=
+
+function docompare() {
+  orig="$1"
+  new="$2"
+  diffsto="$3"
+  extra="$4"
+
+  $JAPIDIR/bin/japicompat $Q -jvo j-$orig-$new.japio $extra $orig.japi.gz $new.japi.gz
+  if [ -f t-$orig-$new.txt ]; then mv t-$orig-$new.txt t-$orig-$new-last.txt; fi
+  $JAPIDIR/bin/japiotext <j-$orig-$new.japio >t-$orig-$new.txt
+  $JAPIDIR/bin/japiohtml <j-$orig-$new.japio >h-$orig-$new.html
+  if [ -f t-$orig-$new-last.txt ]; then
+    diff -u t-$orig-$new{-last,}.txt | grep '^[+-]' | grep -v '^+++' | grep -v '^---' > diff-$orig-$new.txt
+    if [ `grep -v 'Comparison run at' diff-$orig-$new.txt |
+          grep -v 'API scanned at' |
+          wc -l` == 0 ]; then
+      rm diff-$orig-$new.txt
+    else
+      (echo -e "Japi diff $orig vs $new:\nFull results:\nhttp://www.kaffe.org/~stuart/japi/htmlout/h-$orig-$new.html\n\nChanges since last run:\n";
+       cat diff-$orig-$new.txt;
+       echo -e "\n") >> $diffsto.diffs.txt
+    fi
+  fi
+
+  FILESTOCOPY="$FILESTOCOPY h-$orig-$new.html"
+}
+
+# Regenerate the JDK japis in case there are file format changes in CVS
+if $JAPIZEJDKS; then
+  /home/sballard/bin/japizejdkscvs
+  FILESTOCOPY="$FILESTOCOPY jdkjapis.tar"
+fi
+if $JAPIZEBETAS; then
+  /home/sballard/bin/grabjdk6
+  /home/sballard/bin/grabjdk6 7
+  FILESTOCOPY="$FILESTOCOPY jdk6.japi.gz jdk7.japi.gz jdk6.crapi.txt jdk7.crapi.txt"
+fi
+
+# Simple trick for getting the last out of a list: set a variable to each one
+# in turn, and at the end of the loop it's set to the last one.
+for n in $JDKS; do
+  LASTJDK=$n
+done
+
+# Generate ignore files
+if $GENIGNORE; then
+  prev=""
+  for n in $JDKS $BETAJDKS; do
+    for m in $JDKS $BETAJDKS; do
+      if [ $n '<' $m ]; then
+        $JAPIDIR/bin/japicompat $Q -jvo j-$n-$m.japio $n.japi.gz $m.japi.gz
+        $JAPIDIR/bin/japiohtml <j-$n-$m.japio >h-$n-$m.html
+        FILESTOCOPY="$FILESTOCOPY h-$n-$m.html"
+      fi
+    done
+    if [ -n "$prev" ]; then
+      $JAPIDIR/bin/japicompat $Q -hvo h-$n-$prev.html $n.japi.gz $prev.japi.gz
+      FILESTOCOPY="$FILESTOCOPY h-$n-$prev.html"
+    fi
+    prev=$n
+  done
+fi
+
+uploadem
+
+# Loop over the VMs being tested.
+for m in $TESTEES; do
+  if [ -f $m.diffs.txt ]; then rm $m.diffs.txt; fi
+  if [ -f $m.japi.gz ]; then mv $m.japi.gz $m.japi.gz.last; fi
+  ~/bin/japize$m "$Q"
+  FILESTOCOPY="$FILESTOCOPY $m.japi.gz"
+
+  # Compare against each JDK.
+  for n in $JDKS; do
+    if [ $n != $LASTJDK ]; then
+      IGNFILE="-i "
+      for o in $JDKS; do
+        if [ $n '<' $o ]; then
+          IGNFILE="${IGNFILE}j-$n-$o.japio,"
+        fi
+      done
+      IGNFILE="${IGNFILE:0:${#IGNFILE}-1}"
+    else
+      IGNFILE=""
+    fi
+
+    docompare $n $m $m "$IGNFILE"
+  done
+
+  # Compare in reverse against the LASTJDK.
+  docompare $m $LASTJDK $m "-p"
+
+  # Compare against beta JDKs
+  for n in $BETAJDKS; do
+    docompare $n $m $m
+    docompare $m $n $m "-p"
+  done
+
+  # Mail the report
+  if $MAILDIFFS; then
+    if [ "$m" = "harmony" ]; then
+      ADDR=commits@harmony.apache.org
+    else
+      ADDR=classpath-testresults@gnu.org
+    fi
+    if [ -f $m.diffs.txt ]; then
+      ssh stuart@kaffe.org mail -s "\"Japi diffs for $m\"" stuart.a.ballard@gmail.com japitools-results@nongnu.org $ADDR < $m.diffs.txt
+    fi
+  fi
+  uploadem
+done
+

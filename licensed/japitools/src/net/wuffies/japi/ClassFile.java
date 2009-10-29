@@ -45,6 +45,7 @@ public class ClassFile implements ClassWrapper
     private static final int CONSTANT_NameAndType = 12;
     private static final int CONSTANT_Utf8 = 1;
 
+    private DataInputStream todo;
     private ConstantPoolItem[] constant_pool;
     private int access_flags;
     private int raw_access_flags;
@@ -60,6 +61,7 @@ public class ClassFile implements ClassWrapper
     private ClassType superclassType;
     private ClassType[] interfaceTypes;
     private GenericWrapper containingWrapper;
+    private ClassFile declaringClass;
 
     private class ConstantPoolItem
     {
@@ -368,6 +370,32 @@ public class ClassFile implements ClassWrapper
                         i = sig.indexOf(';', i);
                     l.add(Type.fromNonGenericSig(sig.substring(start, i + 1)));
                 }
+                // The first parameter of a nonstatic inner class constructor is the enclosing
+                // instance, rather than a real parameter. Identify this case and skip it.
+                // Note: this doesn't handle anonymous classes which are scoped to a method since
+                // getContainingWrapper() isn't a ClassWrapper in that case; these are handled
+                // wrong but they are never public, so they never show up in japi files, so
+                // having an incorrect view of their constructor parameters is irrelevant.
+                if ("".equals(getName()) &&
+                    !Modifier.isStatic(ClassFile.this.getModifiers()) &&
+                    ClassFile.this.getContainingWrapper() != null &&
+                    ClassFile.this.getContainingWrapper() instanceof ClassWrapper)
+                {
+                    // As far as I can tell all the things I check here are required by the JLS so
+                    // I just throw if they're violated.
+                    if (l.size() == 0)
+                        throw new RuntimeException("Nonstatic inner class " + ClassFile.this.getName() + " constructor has no parameters!");
+
+                    if (!(l.get(0) instanceof ClassType))
+                        throw new RuntimeException("First parameter of nonstatic inner class " + ClassFile.this.getName() + " constructor is not a class type");
+
+                    ClassType t = (ClassType) l.get(0);
+                    ClassWrapper cw = (ClassWrapper) ClassFile.this.getContainingWrapper();
+                    if (!t.getName().equals(cw.getName()))
+                        throw new RuntimeException("First parameter of nonstatic inner class " + ClassFile.this.getName() + " constructor is " + t.getName() + ", not " + cw.getName());
+
+                    l.remove(0);
+                }
                 parameterTypes = new Type[l.size()];
                 l.toArray(parameterTypes);
             }
@@ -412,35 +440,6 @@ public class ClassFile implements ClassWrapper
 
 	public Type[] getParameterTypes()
 	{
-	    // The first parameter of a nonstatic inner class constructor is the enclosing
-	    // instance, rather than a real parameter. Identify this case and skip it.
-	    // Note: this doesn't handle anonymous classes which are scoped to a method since
-	    // getContainingWrapper() isn't a ClassWrapper in that case; these are handled
-	    // wrong but they are never public, so they never show up in japi files, so
-	    // having an incorrect view of their constructor parameters is irrelevant.
-	    if ("".equals(getName()) &&
-		!Modifier.isStatic(ClassFile.this.getModifiers()) &&
-		ClassFile.this.getContainingWrapper() != null &&
-		ClassFile.this.getContainingWrapper() instanceof ClassWrapper)
-	    {
-		// As far as I can tell all the things I check here are required by the JLS so
-		// I just throw if they're violated.
-		if (parameterTypes.length == 0)
-		    throw new RuntimeException("Nonstatic inner class " + ClassFile.this.getName() + " constructor has no parameters!");
-
-		if (!(parameterTypes[0] instanceof ClassType))
-		    throw new RuntimeException("First parameter of nonstatic inner class " + ClassFile.this.getName() + " constructor is not a class type");
-
-		ClassType t = (ClassType) parameterTypes[0];
-		ClassWrapper cw = (ClassWrapper) ClassFile.this.getContainingWrapper();
-		if (!t.getName().equals(cw.getName()))
-		    throw new RuntimeException("First parameter of nonstatic inner class " + ClassFile.this.getName() + " constructor is " + t.getName() + ", not " + cw.getName());
-
-		List paramList = Arrays.asList(parameterTypes);
-		List realParamList = paramList.subList(1, parameterTypes.length);
-		return (Type[]) realParamList.toArray(new Type[parameterTypes.length - 1]);
-	    }
-
 	    return parameterTypes;
 	}
 
@@ -555,9 +554,10 @@ public class ClassFile implements ClassWrapper
 	}
     }
 
-    private ClassFile(InputStream inStream) throws IOException
+    private ClassFile(byte[] buf) throws IOException
     {
-	DataInputStream in = new DataInputStream(inStream);
+	DataInputStream in = new DataInputStream(new ByteArrayInputStream(buf));
+        todo = in;
 	if(in.readInt() != 0xCAFEBABE)
 	{
 	    throw new IOException("Illegal magic");
@@ -611,6 +611,27 @@ public class ClassFile implements ClassWrapper
 	name = this_class == 0 ? null : getClassConstantName(this_class);
 	int super_class = in.readUnsignedShort();
 	superClass = (super_class == 0 || Modifier.isInterface(access_flags)) ? null : getClassConstantName(super_class);
+    }
+
+    private void ensureParsed()
+    {
+        if (todo != null)
+        {
+            try
+            {
+                DataInputStream in = todo;
+                todo = null;
+                readSecondPart(in);
+            }
+            catch (IOException x)
+            {
+                throw new RuntimeException(x);
+            }
+        }
+    }
+
+    private void readSecondPart(DataInputStream in) throws IOException
+    {
 	int interfaces_count = in.readUnsignedShort();
 	interfaces = new String[interfaces_count];
 	for(int i = 0; i < interfaces_count; i++)
@@ -649,9 +670,13 @@ public class ClassFile implements ClassWrapper
                         int mask = Modifier.PUBLIC | Modifier.PROTECTED | Modifier.PRIVATE | Modifier.STATIC;
 			this.access_flags &= ~mask;
                         this.access_flags |= access_flags & mask;
-                        if(outer_class != 0 && !Modifier.isStatic(access_flags))
+                        if(outer_class != 0)
                         {
-                            containingWrapper = ClassFile.forName(getClassConstantName(outer_class));
+                            declaringClass = ClassFile.forName(getClassConstantName(outer_class));
+                            if(!Modifier.isStatic(access_flags))
+                            {
+                                containingWrapper = declaringClass;
+                            }
                         }
 		    }
 		}
@@ -1122,13 +1147,20 @@ public class ClassFile implements ClassWrapper
 	return ((Utf8ConstantPoolItem)constant_pool[idx]).string;
     }
 
+    public boolean isPublicOrProtected()
+    {
+        return (raw_access_flags & Modifier.PUBLIC) != 0;
+    }
+
     public int getModifiers()
     {
-	return access_flags;
+        ensureParsed();
+        return access_flags;
     }
 
     public boolean isDeprecated()
     {
+        ensureParsed();
 	return deprecated;
     }
 
@@ -1154,7 +1186,8 @@ public class ClassFile implements ClassWrapper
 
     public boolean isSerializable()
     {
-	if (!gotSerializable)
+        ensureParsed();
+        if (!gotSerializable)
 	{
 	    gotSerializable = true;
 	    try
@@ -1168,7 +1201,8 @@ public class ClassFile implements ClassWrapper
 
     public boolean isSubTypeOf(ClassFile c)
     {
-	if(this == c)
+        ensureParsed();
+        if(this == c)
 	    return true;
 
 	for(int i = 0; i < interfaces.length; i++)
@@ -1183,11 +1217,33 @@ public class ClassFile implements ClassWrapper
 	    return false;
     }
 
+    private static boolean gotEnum = false;
+    private static ClassFile enumClass = null;
+
+    private boolean isEnumOrSubClass()
+    {
+	if (!gotEnum)
+	{
+	    gotEnum = true;
+	    try
+	    {
+		enumClass = forName("java.lang.Enum");
+	    }
+	    catch (RuntimeException e) { }
+	}
+	return enumClass != null && isSubTypeOf(enumClass);
+    }
+
     // This code is partially based on GNU Classpath's implementation which is
     // (c) FSF and licensed under the GNU Library General Public License.
     public Long getSerialVersionUID()
     {
-	for(int i = 0; i < fields.length; i++)
+        ensureParsed();
+	if(isEnumOrSubClass())
+	{
+	    return Long.valueOf(0L);
+	}
+        for(int i = 0; i < fields.length; i++)
 	{
 	    if(fields[i].getName().equals("serialVersionUID") &&
 		fields[i].getType() == PrimitiveType.LONG &&
@@ -1269,7 +1325,8 @@ public class ClassFile implements ClassWrapper
 	    for (int i = 0; i < fields.length; i++) 
 	    {
 		FieldInfoItem field = fields[i];
-		modifiers = field.getModifiers();
+		modifiers = field.getModifiers()
+		    & (Modifier.PUBLIC | Modifier.PRIVATE | Modifier.PROTECTED | Modifier.STATIC | Modifier.FINAL | Modifier.VOLATILE | Modifier.TRANSIENT);
 		if (Modifier.isPrivate (modifiers) &&
 		    (Modifier.isStatic(modifiers) ||
 		    Modifier.isTransient(modifiers))) 
@@ -1304,7 +1361,8 @@ public class ClassFile implements ClassWrapper
 	    for (int i = 0; i < methods.length; i++) 
 	    {
 		MethodInfoItem method = methods[i];
-		modifiers = method.getModifiers();
+		modifiers = method.getModifiers()
+		    & (Modifier.PUBLIC | Modifier.PRIVATE | Modifier.PROTECTED | Modifier.STATIC | Modifier.FINAL | Modifier.SYNCHRONIZED | Modifier.NATIVE | Modifier.ABSTRACT | Modifier.STRICT);
 		if (Modifier.isPrivate(modifiers)) 
 		{
 		    continue;
@@ -1355,7 +1413,8 @@ public class ClassFile implements ClassWrapper
 
     public CallWrapper[] getCalls()
     {
-	// FIXME - should we take a copy here to make sure the caller can't mess
+        ensureParsed();
+        // FIXME - should we take a copy here to make sure the caller can't mess
 	// with this class's internal state?
 	return methods;
 
@@ -1397,29 +1456,41 @@ public class ClassFile implements ClassWrapper
 
     public boolean isInterface()
     {
-	return Modifier.isInterface(access_flags);
+        ensureParsed();
+        return Modifier.isInterface(access_flags);
     }
     public boolean isAnnotation()
     {
-	return (access_flags & 0x2000) != 0;
+        ensureParsed();
+        return (access_flags & 0x2000) != 0;
     }
     public boolean isEnum()
     {
+        ensureParsed();
         return (access_flags & 0x4000) != 0;
     }
     public GenericWrapper getContainingWrapper()
     {
-	return containingWrapper;
+        ensureParsed();
+        return containingWrapper;
+    }
+
+    public ClassWrapper getDeclaringClass()
+    {
+        ensureParsed();
+        return declaringClass;
     }
 
     public ClassType[] getInterfaces()
     {
+        ensureParsed();
         return interfaceTypes;
     }
 
     public FieldWrapper[] getFields()
     {
-	// FIXME - should we take a copy here to make sure the caller can't mess
+        ensureParsed();
+        // FIXME - should we take a copy here to make sure the caller can't mess
 	// with this class's internal state?
 	return fields;
 
@@ -1457,7 +1528,8 @@ public class ClassFile implements ClassWrapper
 
     public TypeParam[] getTypeParams()
     {
-	return typeParameters;
+        ensureParsed();
+        return typeParameters;
     }
 
     private static ClassPathEntry[] classpath;
@@ -1484,14 +1556,16 @@ public class ClassFile implements ClassWrapper
 		ZipEntry entry = zf.getEntry(name.replace('.', '/') + ".class");
 		if(entry != null)
 		{
-		    InputStream in = zf.getInputStream(entry);
+		    DataInputStream dis = new DataInputStream(zf.getInputStream(entry));
                     try
                     {
-                        return new ClassFile(in);
+                        byte[] buf = new byte[(int)entry.getSize()];
+                        dis.readFully(buf);
+                        return new ClassFile(buf);
                     }
                     finally
                     {
-		        in.close();
+		        dis.close();
                     }
 		}
 	    }
@@ -1516,14 +1590,16 @@ public class ClassFile implements ClassWrapper
             try
             {
                 File f = new File(dir, name.replace('.', File.separatorChar) + ".class");
-                FileInputStream in = new FileInputStream(f);
+                DataInputStream dis = new DataInputStream(new FileInputStream(f));
                 try
                 {
-                    return new ClassFile(in);
+                    byte[] buf = new byte[(int)f.length()];
+                    dis.readFully(buf);
+                    return new ClassFile(buf);
                 }
                 finally
                 {
-                    in.close();
+                    dis.close();
                 }
             }
             catch(IOException x)

@@ -56,6 +56,9 @@ EOF
   exit(1);
 }
 
+# simply skip argument checking at this point for now. No time to re-figure
+# it out in the presence of @filename arguments in time for 0.9.7 release
+if (0) {
 my @args = @ARGV;
 my $fn = "";
 my $zip = 1;
@@ -80,6 +83,8 @@ foreach my $arg (@args) {
 printusage unless $plusses && $paths;
 $errarg = $fn;
 zipfnerror if !$zip && $fn =~ /\.gz$/;
+
+}
 
 $ENV{JAVA} = 'java' unless defined $ENV{JAVA};
 $ENV{CLASSPATH} = "$progdir/../share/java/japitools.jar:$ENV{CLASSPATH}";

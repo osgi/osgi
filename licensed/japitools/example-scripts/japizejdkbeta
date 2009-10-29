@@ -1,0 +1,27 @@
+#!/bin/bash
+
+N=$1
+if [ -z "$1" ]; then N=6; fi
+
+JDK=jdk$N
+JDKV=jdk1.$N.0
+GRAB=true
+
+if $GRAB; then
+  if [ -d "$HOME/defunct/$JDK" ]; then rm -rf "$HOME/defunct/$JDK"; fi
+  mkdir "$HOME/defunct/$JDK"
+  cd "$HOME/defunct/$JDK"
+  wget -O $JDK.zip `wget -O- -q http://download.java.net/$JDK/binaries/ | perl -ne 'print "$1\n" if /<a href="([-A-Za-z0-9:\.?=\/&_#~^]+)"/' | grep linux | grep -v jre | grep -v rpm | grep -v jar | grep i586`
+  unzip $JDK.zip $JDKV/jre/lib/*.{jar,pack}
+  cd $JDKV/jre/lib
+  for n in *.pack; do
+    echo -n "Unpack200ing $n..."
+    unpack200 $n `echo $n | sed -e s/pack/jar/`
+    echo " done."
+  done 
+fi
+wget -O- -q http://download.java.net/$JDK/docs/api/overview-frame.html | ~/bin/japiextractpkgs > $JDK.pkgs
+$HOME/japicvs/japitools/bin/japize as $JDK lint $JDK.crapi.txt packages *.jar @$JDK.pkgs -javax.swing:serial
+mv $JDK.crapi.txt $JDK.japi.gz $JDK.pkgs "$HOME/japiout/cvs"
+cd $HOME
+rm -rf "$HOME/defunct/$JDK"
