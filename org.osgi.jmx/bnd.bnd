@@ -4,3 +4,4 @@ javac.target=1.5
 nodeploy=true
 
 # Remarkably, this project MUST not have the OSGi libs!
+-buildpath =	ee.j2se; version=1.5 

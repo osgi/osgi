@@ -5,7 +5,7 @@ Bundle-Version: 4.2.0.${project.build}
 
 Private-Package						= ${p}.*
 
--buildpath							= \
+-buildpath							= ee.j2se; version=1.5, \
     org.osgi.test.support;                  version=project , \
 	org.osgi.service.jpa;					version=project	, \
 	osgi.core;								version=4.2		, \

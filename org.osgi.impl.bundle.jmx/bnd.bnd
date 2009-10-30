@@ -11,7 +11,7 @@ Bundle-Version: 		4.2.0.${project.build}
 Bundle-Category: 		osgi
 Bundle-RequiredExecutionEnvironment = J2SE-1.5
 
--buildpath = \
+-buildpath = ee.j2se; version=1.5, \
 	org.osgi.jmx; 	version=project, \
 	osgi.core;			version=4.2, \
 	osgi.cmpn;			version=4.2

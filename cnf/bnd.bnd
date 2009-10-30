@@ -2,4 +2,5 @@
 javac.source            = 1.5
 javac.target            = 1.5
 
--buildpath = biz.aQute.bnd; version=latest
+-buildpath = biz.aQute.bnd; version=latest, \
+			ee.j2se; version=1.5 

@@ -27,7 +27,7 @@ Include-Resource					= \
 
 Test-Cases							= ${testcases}
 
--buildpath							= \
+-buildpath							= ee.j2se; version=1.5, \
     org.osgi.test.support;                  version=project , \
     org.osgi.service.blueprint;             version=project , \
     org.osgi.test.cases.blueprint;          version=project , \
