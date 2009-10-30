@@ -17,10 +17,10 @@
 package java.lang;
 public final class ProcessBuilder {
 	public ProcessBuilder(java.util.List<java.lang.String> var0) { } 
-	public ProcessBuilder(java.lang.String[] var0) { } 
+	public ProcessBuilder(java.lang.String... var0) { } 
 	public java.util.List<java.lang.String> command() { return null; }
 	public java.lang.ProcessBuilder command(java.util.List<java.lang.String> var0) { return null; }
-	public java.lang.ProcessBuilder command(java.lang.String[] var0) { return null; }
+	public java.lang.ProcessBuilder command(java.lang.String... var0) { return null; }
 	public java.io.File directory() { return null; }
 	public java.lang.ProcessBuilder directory(java.io.File var0) { return null; }
 	public java.util.Map<java.lang.String,java.lang.String> environment() { return null; }

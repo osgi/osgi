@@ -19,7 +19,7 @@ public class Collections {
 	public final static java.util.List EMPTY_LIST; static { EMPTY_LIST = null; }
 	public final static java.util.Map EMPTY_MAP; static { EMPTY_MAP = null; }
 	public final static java.util.Set EMPTY_SET; static { EMPTY_SET = null; }
-	public static <T> boolean addAll(java.util.Collection<? super T> var0, T[] var1) { return false; }
+	public static <T> boolean addAll(java.util.Collection<? super T> var0, T... var1) { return false; }
 	public static <T> int binarySearch(java.util.List<? extends java.lang.Comparable<? super T>> var0, T var1) { return 0; }
 	public static <T> int binarySearch(java.util.List<? extends T> var0, T var1, java.util.Comparator<? super T> var2) { return 0; }
 	public static <E> java.util.Collection<E> checkedCollection(java.util.Collection<E> var0, java.lang.Class<E> var1) { return null; }

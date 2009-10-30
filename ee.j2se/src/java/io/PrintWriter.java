@@ -31,8 +31,8 @@ public class PrintWriter extends java.io.Writer {
 	public boolean checkError() { return false; }
 	public void close() { }
 	public void flush() { }
-	public java.io.PrintWriter format(java.lang.String var0, java.lang.Object[] var1) { return null; }
-	public java.io.PrintWriter format(java.util.Locale var0, java.lang.String var1, java.lang.Object[] var2) { return null; }
+	public java.io.PrintWriter format(java.lang.String var0, java.lang.Object... var1) { return null; }
+	public java.io.PrintWriter format(java.util.Locale var0, java.lang.String var1, java.lang.Object... var2) { return null; }
 	public void print(char var0) { }
 	public void print(double var0) { }
 	public void print(float var0) { }
@@ -42,8 +42,8 @@ public class PrintWriter extends java.io.Writer {
 	public void print(java.lang.String var0) { }
 	public void print(boolean var0) { }
 	public void print(char[] var0) { }
-	public java.io.PrintWriter printf(java.lang.String var0, java.lang.Object[] var1) { return null; }
-	public java.io.PrintWriter printf(java.util.Locale var0, java.lang.String var1, java.lang.Object[] var2) { return null; }
+	public java.io.PrintWriter printf(java.lang.String var0, java.lang.Object... var1) { return null; }
+	public java.io.PrintWriter printf(java.util.Locale var0, java.lang.String var1, java.lang.Object... var2) { return null; }
 	public void println() { }
 	public void println(char var0) { }
 	public void println(double var0) { }

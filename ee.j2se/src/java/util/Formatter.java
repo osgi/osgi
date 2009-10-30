@@ -36,8 +36,8 @@ public final class Formatter implements java.io.Closeable, java.io.Flushable {
 	public Formatter(java.util.Locale var0) { } 
 	public void close() { }
 	public void flush() { }
-	public java.util.Formatter format(java.lang.String var0, java.lang.Object[] var1) { return null; }
-	public java.util.Formatter format(java.util.Locale var0, java.lang.String var1, java.lang.Object[] var2) { return null; }
+	public java.util.Formatter format(java.lang.String var0, java.lang.Object... var1) { return null; }
+	public java.util.Formatter format(java.util.Locale var0, java.lang.String var1, java.lang.Object... var2) { return null; }
 	public java.io.IOException ioException() { return null; }
 	public java.util.Locale locale() { return null; }
 	public java.lang.Appendable out() { return null; }

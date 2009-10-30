@@ -27,15 +27,15 @@ public final class Class<T> implements java.io.Serializable, java.lang.reflect.A
 	public java.lang.ClassLoader getClassLoader() { return null; }
 	public java.lang.Class[] getClasses() { return null; }
 	public native java.lang.Class<?> getComponentType();
-	public java.lang.reflect.Constructor<T> getConstructor(java.lang.Class[] var0) throws java.lang.NoSuchMethodException { return null; }
+	public java.lang.reflect.Constructor<T> getConstructor(java.lang.Class... var0) throws java.lang.NoSuchMethodException { return null; }
 	public java.lang.reflect.Constructor[] getConstructors() { return null; }
 	public java.lang.annotation.Annotation[] getDeclaredAnnotations() { return null; }
 	public java.lang.Class[] getDeclaredClasses() { return null; }
-	public java.lang.reflect.Constructor<T> getDeclaredConstructor(java.lang.Class[] var0) throws java.lang.NoSuchMethodException { return null; }
+	public java.lang.reflect.Constructor<T> getDeclaredConstructor(java.lang.Class... var0) throws java.lang.NoSuchMethodException { return null; }
 	public java.lang.reflect.Constructor[] getDeclaredConstructors() { return null; }
 	public java.lang.reflect.Field getDeclaredField(java.lang.String var0) throws java.lang.NoSuchFieldException { return null; }
 	public java.lang.reflect.Field[] getDeclaredFields() { return null; }
-	public java.lang.reflect.Method getDeclaredMethod(java.lang.String var0, java.lang.Class[] var1) throws java.lang.NoSuchMethodException { return null; }
+	public java.lang.reflect.Method getDeclaredMethod(java.lang.String var0, java.lang.Class... var1) throws java.lang.NoSuchMethodException { return null; }
 	public java.lang.reflect.Method[] getDeclaredMethods() { return null; }
 	public native java.lang.Class<?> getDeclaringClass();
 	public java.lang.Class<?> getEnclosingClass() { return null; }
@@ -47,7 +47,7 @@ public final class Class<T> implements java.io.Serializable, java.lang.reflect.A
 	public java.lang.reflect.Type[] getGenericInterfaces() { return null; }
 	public java.lang.reflect.Type getGenericSuperclass() { return null; }
 	public native java.lang.Class[] getInterfaces();
-	public java.lang.reflect.Method getMethod(java.lang.String var0, java.lang.Class[] var1) throws java.lang.NoSuchMethodException { return null; }
+	public java.lang.reflect.Method getMethod(java.lang.String var0, java.lang.Class... var1) throws java.lang.NoSuchMethodException { return null; }
 	public java.lang.reflect.Method[] getMethods() { return null; }
 	public native int getModifiers();
 	public java.lang.String getName() { return null; }

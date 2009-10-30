@@ -44,8 +44,8 @@ public final class String implements java.io.Serializable, java.lang.CharSequenc
 	public static java.lang.String copyValueOf(char[] var0, int var1, int var2) { return null; }
 	public boolean endsWith(java.lang.String var0) { return false; }
 	public boolean equalsIgnoreCase(java.lang.String var0) { return false; }
-	public static java.lang.String format(java.lang.String var0, java.lang.Object[] var1) { return null; }
-	public static java.lang.String format(java.util.Locale var0, java.lang.String var1, java.lang.Object[] var2) { return null; }
+	public static java.lang.String format(java.lang.String var0, java.lang.Object... var1) { return null; }
+	public static java.lang.String format(java.util.Locale var0, java.lang.String var1, java.lang.Object... var2) { return null; }
 	public byte[] getBytes() { return null; }
 	/** @deprecated */ public void getBytes(int var0, int var1, byte[] var2, int var3) { }
 	public byte[] getBytes(java.lang.String var0) throws java.io.UnsupportedEncodingException { return null; }

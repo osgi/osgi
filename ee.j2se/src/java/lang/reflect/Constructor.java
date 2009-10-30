@@ -28,7 +28,7 @@ public final class Constructor<T> extends java.lang.reflect.AccessibleObject imp
 	public int hashCode() { return 0; }
 	public boolean isSynthetic() { return false; }
 	public boolean isVarArgs() { return false; }
-	public T newInstance(java.lang.Object[] var0) throws java.lang.IllegalAccessException, java.lang.InstantiationException, java.lang.reflect.InvocationTargetException { return null; }
+	public T newInstance(java.lang.Object... var0) throws java.lang.IllegalAccessException, java.lang.InstantiationException, java.lang.reflect.InvocationTargetException { return null; }
 	public java.lang.String toGenericString() { return null; }
 	private Constructor() { } /* generated constructor to prevent compiler adding default public constructor */
 }

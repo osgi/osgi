@@ -16,7 +16,7 @@
 
 package java.util;
 public class Arrays {
-	public static <T> java.util.List<T> asList(T[] var0) { return null; }
+	public static <T> java.util.List<T> asList(T... var0) { return null; }
 	public static int binarySearch(byte[] var0, byte var1) { return 0; }
 	public static int binarySearch(char[] var0, char var1) { return 0; }
 	public static int binarySearch(double[] var0, double var1) { return 0; }
