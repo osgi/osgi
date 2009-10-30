@@ -16,7 +16,7 @@ public class RemoteServiceAdminEvent {
 	 * Registrations.
 	 * 
 	 */
-	public static final int				IMPORT_REGISTRATION		= 1;
+	public static final int			IMPORT_REGISTRATION		= 1;
 
 	/**
 	 * Add an export registration. The Remote Services Admin will call this
@@ -24,65 +24,65 @@ public class RemoteServiceAdminEvent {
 	 * Remote Service Admin must notify the listener of all existing Export
 	 * Registrations.
 	 */
-	public static final int				EXPORT_REGISTRATION		= 2;
+	public static final int			EXPORT_REGISTRATION		= 2;
 
 	/**
 	 * Remove an export registration. The Remote Services Admin will call this
 	 * method when it removes the export of a service.
 	 * 
 	 */
-	public static final int				EXPORT_UNREGISTRATION	= 3;
+	public static final int			EXPORT_UNREGISTRATION	= 3;
 
 	/**
 	 * Remove an import registration. The Remote Services Admin will call this
 	 * method when it removes the import of a service.
 	 * 
 	 */
-	public static final int				IMPORT_UNREGISTRATION	= 4;
+	public static final int			IMPORT_UNREGISTRATION	= 4;
 
 	/**
 	 * A fatal importing error occurred. The Import Registration has been
 	 * closed.
 	 */
-	public static final int				IMPORT_ERROR			= 5;
+	public static final int			IMPORT_ERROR			= 5;
 
 	/**
 	 * A fatal exporting error occurred. The Export Registration has been
 	 * closed.
 	 */
-	public static final int				EXPORT_ERROR			= 6;
+	public static final int			EXPORT_ERROR			= 6;
 
 	/**
 	 * A problematic situation occurred, the export is still active.
 	 */
-	public static final int				EXPORT_WARNING			= 7;
+	public static final int			EXPORT_WARNING			= 7;
 	/**
 	 * A problematic situation occurred, the import is still active.
 	 */
-	public static final int				IMPORT_WARNING			= 8;
+	public static final int			IMPORT_WARNING			= 8;
 
-	private final ImportRegistration	importRegistration;
-	private final ExportRegistration	exportRegistration;
-	private final Throwable				exception;
-	private final int					type;
-	private final Bundle				source;
+	private final ImportReference	importReference;
+	private final ExportReference	exportReference;
+	private final Throwable			exception;
+	private final int				type;
+	private final Bundle			source;
 
 	/**
 	 * Private constructor.
 	 * 
 	 * @param type The event type
 	 * @param source The source bundle, must not be <code>null</code>.
-	 * @param importRegistration The importRegistration, can be <code>null</code>.
-	 * @param exportRegistration The exportRegistration, can be <code>null</code>.
+	 * @param importReference The importReference, can be <code>null</code>.
+	 * @param exportReference The exportReference, can be <code>null</code>.
 	 * @param exception Any exceptions encountered, can be <code>null</code>
 	 */
 	RemoteServiceAdminEvent(int type, Bundle source,
-			ImportRegistration importRegistration,
-			ExportRegistration exportRegistration, Throwable exception) {
+			ImportReference importReference, ExportReference exportReference,
+			Throwable exception) {
 		this.type = type;
 		this.source = source;
-		this.importRegistration = importRegistration;
-		this.exportRegistration = exportRegistration;
+		this.importReference = importReference;
+		this.exportReference = exportReference;
 		this.exception = exception;
 	}
 
@@ -91,11 +91,12 @@ public class RemoteServiceAdminEvent {
 	 * 
 	 * @param type The event type
 	 * @param source The source bundle, must not be <code>null</code>.
-	 * @param exportRegistration The exportRegistration, can not be <code>null</code>.
+	 * @param exportRegistration The exportRegistration, can not be
+	 *        <code>null</code>.
 	 * @param exception Any exceptions encountered, can be <code>null</code>
 	 */
 	public RemoteServiceAdminEvent(int type, Bundle source,
-			ExportRegistration exportRegistration, Throwable exception) {
+			ExportReference exportRegistration, Throwable exception) {
 		this(type, source, null, exportRegistration, exception);
 	}
 
@@ -104,26 +105,27 @@ public class RemoteServiceAdminEvent {
 	 * 
 	 * @param type The event type
 	 * @param source The source bundle, must not be <code>null</code>.
-	 * @param importRegistration The importRegistration, can not be <code>null</code>.
+	 * @param importRegistration The importRegistration, can not be
+	 *        <code>null</code>.
 	 * @param exception Any exceptions encountered, can be <code>null</code>
 	 */
 	public RemoteServiceAdminEvent(int type, Bundle source,
-			ImportRegistration importRegistration, Throwable exception) {
+			ImportReference importRegistration, Throwable exception) {
 		this(type, source, importRegistration, null, exception);
 	}
 
 	/**
 	 * @return the importRegistration or <code>null</code>
 	 */
-	public ImportRegistration getImportRegistration() {
-		return importRegistration;
+	public ImportReference getImportReference() {
+		return importReference;
 	}
 
 	/**
 	 * @return the exportRegistration or <code>null</code>
 	 */
-	public ExportRegistration getExportRegistration() {
-		return exportRegistration;
+	public ExportReference getExportReference() {
+		return exportReference;
 	}
 
 	/**

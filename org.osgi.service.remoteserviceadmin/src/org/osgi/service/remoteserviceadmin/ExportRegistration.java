@@ -16,21 +16,13 @@ import org.osgi.framework.ServiceReference;
  */
 public interface ExportRegistration {
 	/**
-	 * Return the service being exported.
+	 * Return the Export Reference for the exported service.
 	 * 
-	 * @return The service being exported, must be <code>null</code> when this
-	 *         registration is unregistered.
+	 * @return An Export Reference for this registration 
 	 * @throws IllegalStateException Thrown when this object was not properly initialized, see {@link #getException()}
 	 */
-	ServiceReference getExportedService() throws IllegalStateException;
+	ExportReference getExportReference() throws IllegalStateException;
 
-	/**
-	 * Return the Endpoint Description that is created for this registration.
-	 * 
-	 * @return the local Endpoint Description
-	 * @throws IllegalStateException Thrown when this object was not properly initialized, see {@link #getException()}
-	 */
-	EndpointDescription getEndpointDescription();
 
 	/**
 	 * Delete the local endpoint and disconnect any remote distribution

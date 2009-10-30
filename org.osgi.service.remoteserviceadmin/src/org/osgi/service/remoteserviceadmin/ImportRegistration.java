@@ -1,6 +1,5 @@
 package org.osgi.service.remoteserviceadmin;
 
-import org.osgi.framework.ServiceReference;
 
 /**
  * An Import Registration associates an active proxy service to a remote
@@ -14,20 +13,12 @@ import org.osgi.framework.ServiceReference;
  */
 public interface ImportRegistration {
 	/**
-	 * Answer the associated Service Reference for the proxy to the endpoint.
+	 * Answer the associated Export Reference.
 	 * 
-	 * @return A Service Reference to the proxy for the endpoint.
+	 * @return An Import Reference for this registration
 	 * @throws IllegalStateException Thrown when this object was not properly initialized, see {@link #getException()}
 	 */
-	ServiceReference getImportedService();
-
-	/**
-	 * Answer the associated remote Endpoint Description.
-	 * 
-	 * @return A Endpoint Description for the remote endpoint.
-	 * @throws IllegalStateException Thrown when this object was not properly initialized, see {@link #getException()}
-	 */
-	EndpointDescription getImportedEndpointDescription();
+	ImportReference getImportedReference();
 
 	/**
 	 * Unregister this Import Registration. This must close the connection 

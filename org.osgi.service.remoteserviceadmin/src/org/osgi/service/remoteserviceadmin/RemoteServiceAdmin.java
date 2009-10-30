@@ -83,29 +83,23 @@ public interface RemoteServiceAdmin {
 	ImportRegistration importService(EndpointDescription endpoint);
 
 	/**
-	 * Answer the currently active Export Registrations.
+	 * Answer the currently active Export References.
 	 * 
 	 * @return A collection of Export Registrations that are currently active.
 	 * @throws SecurityException When the caller no
 	 *         {@link EndpointPermission#READ} could be obtained
-	 *         
-	 * TODO I guess we must ensure these registrations cannot be closed? Only the owners should be able to close them,
-	 * TODO should we make sure that the list contains the registration objects that the caller created?
 	 */
-	Collection/* <ExportRegistration> */getExportedServices();
+	Collection/* <ExportReference> */getExportedServices();
 
 	/**
-	 * Answer the currently active Import Registrations.
+	 * Answer the currently active Import References.
 	 * 
 	 * @throws SecurityException When the caller no EndpointPermission LIST
 	 *         could be obtained
 	 * @return A collection of Import Registrations that are currently active.
 	 * @throws SecurityException When the caller no
 	 *         {@link EndpointPermission#READ} could be obtained
-	 *         
-	 * TODO I guess we must ensure these registrations cannot be closed? Only the owners should be able to close them,
-	 * TODO should we make sure that the list contains the registration objects that the caller created?
 	 */
-	Collection/* <ImportRegistration> */getImportedEndpoints();
+	Collection/* <ImportReference> */getImportedEndpoints();
 
 }

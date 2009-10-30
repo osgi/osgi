@@ -31,15 +31,8 @@ import org.osgi.framework.*;
  * property keys have been chosen to match filters that are created by client
  * bundles that need a service.
  * 
- * TODO Automatically calculate versions of interface packages?
- * 
- * TODO Constructor that takes a class?
- * 
- * TODO Skipping of service.exported.* properties?
- * 
+ * TODO Skipping of service.exported.*
  * TODO qualified intents?
- * 
- * 
  * 
  * @Immutable
  * @version $Revision$
@@ -96,42 +89,6 @@ public class EndpointDescription {
 		remoteServiceId = verifyLongProperty(RemoteConstants.SERVICE_REMOTE_ID);
 		remoteFrameworkUUID = verifyStringProperty(RemoteConstants.SERVICE_REMOTE_FRAMEWORK_UUID);
 		remoteUri = verifyStringProperty(RemoteConstants.SERVICE_REMOTE_URI);
-	}
-
-	/**
-	 * Create an Endpoint Description based on the URI, the remote service ID
-	 * and the interface names, and optionally service properties.
-	 * 
-	 * @param uri The URI of the remote service.
-	 * @param interfaceNames The names of the interfaces of the service to
-	 *        consider.
-	 * @param remoteServiceId the remote service ID.
-	 * @param properties Optionally service properties.
-	 */
-	public EndpointDescription(String uri, String[] interfaceNames,
-			int remoteServiceId, Map properties) {
-		if (uri == null) {
-			throw new IllegalArgumentException("URI must not be null");
-		}
-		if (interfaceNames == null) {
-			throw new IllegalArgumentException("Interfaces must not be null");
-		}
-		this.remoteUri = uri;
-		this.interfaces = Arrays.asList(interfaceNames);
-		this.remoteServiceId = remoteServiceId;
-		this.remoteFrameworkUUID = (String) properties
-				.get(RemoteConstants.SERVICE_REMOTE_FRAMEWORK_UUID);
-		if (properties != null) {
-			this.properties.putAll(properties);
-		}
-		if (interfaceNames != null) {
-			this.properties.put(Constants.OBJECTCLASS, interfaceNames);
-		}
-		this.properties.put(RemoteConstants.SERVICE_REMOTE_URI, uri);
-		if (remoteServiceId <= 0) {
-			this.properties.put(RemoteConstants.SERVICE_REMOTE_ID, new Integer(
-					remoteServiceId));
-		}
 	}
 
 	/**
